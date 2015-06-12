@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EDDiscovery2</RootNamespace>
+    <AssemblyName>EDDiscovery2</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>ftp://robert.astronet.se/homepage/Elite/EDDiscovery2/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://robert.astronet.se/Elite/EDDiscovery2/</InstallUrl>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2.1.25.0</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>6586052CF2C6A2D8348CC25AA17842FA028AED2F</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>EDDiscovery_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>fge-logo-001-dark.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>..\packages\OpenTK.GLControl.1.1.1589.5942\lib\NET40\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.94.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>SQLite\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.94.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>SQLite\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DB\StationClass.cs" />
+    <Compile Include="EDDB\EDDBClass.cs" />
+    <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
+    <Compile Include="EliteDangerous\AppConfig.cs" />
+    <Compile Include="EliteDangerous\EliteDangerous.cs" />
+    <Compile Include="EliteDangerous\GameSettings.cs" />
+    <Compile Include="3DMap\FormMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="3DMap\FormMap.Designer.cs">
+      <DependentUpon>FormMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="3DMap\OpenTKTest.cs" />
+    <Compile Include="DataGridViewSorter.cs" />
+    <Compile Include="DB\DistanceClass.cs" />
+    <Compile Include="DB\SQLiteDBClass.cs" />
+    <Compile Include="DB\SystemClass.cs" />
+    <Compile Include="DB\SystemNoteClass.cs" />
+    <Compile Include="EDSCClass.cs" />
+    <Compile Include="EMK\Arc.cs" />
+    <Compile Include="EMK\AStar.cs" />
+    <Compile Include="EMK\Graph.cs" />
+    <Compile Include="EMK\Node.cs" />
+    <Compile Include="EMK\Point3D.cs" />
+    <Compile Include="EMK\SortableList.cs" />
+    <Compile Include="EMK\Track.cs" />
+    <Compile Include="EMK\Vector3D.cs" />
+    <Compile Include="EDDiscoveryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EDDiscoveryForm.Designer.cs">
+      <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EliteDangerous\NetLogClass.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RouteControl.Designer.cs">
+      <DependentUpon>RouteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatsForm.Designer.cs">
+      <DependentUpon>StatsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SystemData.cs" />
+    <Compile Include="SystemPosition.cs" />
+    <Compile Include="Tools.cs" />
+    <Compile Include="TravelHistoryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TravelHistoryControl.Designer.cs">
+      <DependentUpon>TravelHistoryControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TrilaterationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TrilaterationControl.Designer.cs">
+      <DependentUpon>TrilaterationControl.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="EDDiscoveryForm.resx">
+      <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="3DMap\FormMap.resx">
+      <DependentUpon>FormMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Content Include="fge-logo-001-dark.ico" />
+    <Content Include="SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="RouteControl.resx">
+      <DependentUpon>RouteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatsForm.resx">
+      <DependentUpon>StatsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TravelHistoryControl.resx">
+      <DependentUpon>TravelHistoryControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrilaterationControl.resx">
+      <DependentUpon>TrilaterationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="EDDiscovery_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SQLite\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+copy ..\..\SQLite.Interop.dll  .</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
