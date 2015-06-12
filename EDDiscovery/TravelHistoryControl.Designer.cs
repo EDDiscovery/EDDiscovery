@@ -46,6 +46,9 @@
             this.buttonMap = new System.Windows.Forms.Button();
             this.textBoxSystem = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.textBoxVisits = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.richTextBoxNote = new System.Windows.Forms.RichTextBox();
             this.textBoxDistText = new System.Windows.Forms.TextBox();
             this.buttonUpdate = new System.Windows.Forms.Button();
@@ -62,9 +65,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxCmdrName = new System.Windows.Forms.TextBox();
             this.buttonSync = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBoxVisits = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -155,8 +155,12 @@
             this.comboBoxHistoryWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxHistoryWindow.FormattingEnabled = true;
             this.comboBoxHistoryWindow.Items.AddRange(new object[] {
-            "24 hours",
+            "6 Hours",
+            "12 Hours",
+            "24 Hours",
+            "3 days",
             "Week",
+            "2 Weeks",
             "Month",
             "All"});
             this.comboBoxHistoryWindow.Location = new System.Drawing.Point(242, 78);
@@ -256,6 +260,32 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(270, 235);
             this.panel1.TabIndex = 16;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(145, 28);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(31, 13);
+            this.label9.TabIndex = 30;
+            this.label9.Text = "Visits";
+            // 
+            // textBoxVisits
+            // 
+            this.textBoxVisits.Location = new System.Drawing.Point(182, 25);
+            this.textBoxVisits.Name = "textBoxVisits";
+            this.textBoxVisits.ReadOnly = true;
+            this.textBoxVisits.Size = new System.Drawing.Size(71, 20);
+            this.textBoxVisits.TabIndex = 29;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 159);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(30, 13);
+            this.label8.TabIndex = 28;
+            this.label8.Text = "Note";
             // 
             // richTextBoxNote
             // 
@@ -409,32 +439,6 @@
             this.buttonSync.Text = "Send Distances to EDSC";
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 159);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(30, 13);
-            this.label8.TabIndex = 28;
-            this.label8.Text = "Note";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(145, 28);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(31, 13);
-            this.label9.TabIndex = 30;
-            this.label9.Text = "Visits";
-            // 
-            // textBoxVisits
-            // 
-            this.textBoxVisits.Location = new System.Drawing.Point(182, 25);
-            this.textBoxVisits.Name = "textBoxVisits";
-            this.textBoxVisits.ReadOnly = true;
-            this.textBoxVisits.Size = new System.Drawing.Size(71, 20);
-            this.textBoxVisits.TabIndex = 29;
             // 
             // TravelHistoryControl
             // 
