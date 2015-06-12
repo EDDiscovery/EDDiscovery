@@ -1,0 +1,82 @@
+Searching route from Ross 214 to Shama
+Total distance: 39,72
+Max jumprange:15
+Ross 214 -> HIP 114769 	Dist: 10,99 ly
+HIP 114769 -> Wathlanukh 	Dist: 12,36 ly
+Wathlanukh -> Jetes 	Dist: 13,70 ly
+Jetes -> Kushentinoni 	Dist: 10,60 ly
+Kushentinoni -> HIP 109479 	Dist: 12,79 ly
+HIP 109479 -> Kurngali 	Dist: 7,82 ly
+Kurngali -> Lucab Ku 	Dist: 13,50 ly
+Lucab Ku -> Shama 	Dist: 11,35 ly
+Total distance: 93,10
+Jumps: 8
+
+
+
+Good job commander! Thank you for your assistance.
+Trilateration succesful. Coordinates found for HR 8099: [-146, 43.96875, -44.96875]
+Distance added. Dist: HR 8099->Shama: 6.38 LY.
+Distance added. Dist: HR 8099->Kumana: 219.87 LY.
+Distance added. Dist: HR 8099->Jetes: 31.55 LY.
+Distance added. Dist: HR 8099->HIP 114769: 38.93 LY.
+Distance added. Dist: HR 8099->HIP 109479: 23.52 LY.
+System cr incremented. - HR 8099
+System added. - HR 8099
+Success
+Submitting data.
+Good job commander! Thank you for your assistance.
+Trilateration succesful. Coordinates found for Skokolochoeri: [-154.4375, 49.1875, -46.25]
+Distance added. Dist: Skokolochoeri->Shama: 11.18 LY.
+Distance added. Dist: Skokolochoeri->Pachanu: 14.09 LY.
+Distance added. Dist: Skokolochoeri->Krumine: 45.57 LY.
+Distance added. Dist: Skokolochoeri->HIP 113905: 29.06 LY.
+Distance added. Dist: Skokolochoeri->Altais: 74.27 LY.
+System cr incremented. - Skokolochoeri
+System added. - Skokolochoeri
+Success
+Submitting data.
+Good job commander! Thank you for your assistance.
+Trilateration succesful. Coordinates found for COL 285 SECTOR NP-C B14-5: [-157.5625, 46.3125, -54.5625]
+Distance added. Dist: COL 285 SECTOR NP-C B14-5->Tarasa: 7.44 LY.
+Distance added. Dist: COL 285 SECTOR NP-C B14-5->Shama: 17.33 LY.
+Distance added. Dist: COL 285 SECTOR NP-C B14-5->Pachanu: 6.47 LY.
+Distance added. Dist: COL 285 SECTOR NP-C B14-5->HIP 113905: 24.08 LY.
+Distance added. Dist: COL 285 SECTOR NP-C B14-5->HIP 110773: 37.69 LY.
+System cr incremented. - COL 285 SECTOR NP-C B14-5
+System added. - COL 285 SECTOR NP-C B14-5
+Success
+Submitting data.
+Good job commander! Thank you for your assistance.
+Trilateration un-succesful - Found zero candidates.
+Distance added, but failed to verify coordinates. Dist: HIP 107055->Ross 214: 24.64 LY.
+Distance added, but failed to verify coordinates. Dist: HIP 107055->Shama: 23.15 LY.
+Distance added, but failed to verify coordinates. Dist: HIP 107055->Pachanu: 3.15 LY.
+Distance added, but failed to verify coordinates. Dist: HIP 107055->Kurngali: 33.98 LY.
+Distance added, but failed to verify coordinates. Dist: HIP 107055->Sol: 176.81 LY.
+System added. - HIP 107055
+Success
+Submitting data.
+Good job commander! Thank you for your assistance.
+Distance added. Dist: COL 285 SECTOR NP-C B14-1->Shama: 23.75 LY.
+Distance added. Dist: COL 285 SECTOR NP-C B14-1->Pachanu: 3.89 LY.
+Distance added. Dist: COL 285 SECTOR NP-C B14-1->11 Cephei: 9.58 LY.
+Distance added. Dist: COL 285 SECTOR NP-C B14-1->HIP 109384: 8.74 LY.
+Distance added. Dist: COL 285 SECTOR NP-C B14-1->HIP 107055: 6.34 LY.
+System added. - 11 Cephei
+System added. - HIP 109384
+System added. - HIP 107055
+System added. - COL 285 SECTOR NP-C B14-1
+Success
+Submitting data.
+Good job commander! Thank you for your assistance.
+Trilateration succesful. Coordinates found for Col 285 Sector LE-E B13-1: [-156.25, 24.59375, -65.34375]
+Distance added. Dist: Col 285 Sector LE-E B13-1->Ross 214: 11.49 LY.
+Distance added. Dist: Col 285 Sector LE-E B13-1->Shama: 34.66 LY.
+Distance added. Dist: Col 285 Sector LE-E B13-1->Maitaokona: 9.72 LY.
+Distance added. Dist: Col 285 Sector LE-E B13-1->HIP 114769: 11.24 LY.
+Distance added. Dist: Col 285 Sector LE-E B13-1->HIP 114099: 5.39 LY.
+System cr incremented. - Col 285 Sector LE-E B13-1
+System added. - Col 285 Sector LE-E B13-1
+Success
+Submitting data.
