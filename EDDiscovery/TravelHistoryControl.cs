@@ -101,21 +101,42 @@ namespace EDDiscovery
 
 
             sw1.Start();
-            
 
-            TimeSpan maxDataAge = new TimeSpan(7 * 24, 0, 0);   // 1 vecka
-            DateTime oldestData;
 
-            if (comboBoxHistoryWindow.SelectedIndex == 0)  // Day
-                maxDataAge = new TimeSpan(2 * 24, 0, 0);
+            TimeSpan maxDataAge;
 
-            if (comboBoxHistoryWindow.SelectedIndex == 2)  // Month
-                maxDataAge = new TimeSpan(31, 0, 0, 0);
+            switch (comboBoxHistoryWindow.SelectedIndex)
+            {
+                case 0:
+                    maxDataAge = new TimeSpan(6, 0, 0); // 6 hours
+                    break;
+                case 1:
+                    maxDataAge = new TimeSpan(12, 0, 0); // 12 hours
+                    break;
+                case 2:
+                    maxDataAge = new TimeSpan(24, 0, 0); // 24 hours
+                    break;
+                case 3:
+                    maxDataAge = new TimeSpan(3 * 24, 0, 0); // 3 days
+                    break;
+                case 4:
+                    maxDataAge = new TimeSpan(7 * 24, 0, 0); // 1 week
+                    break;
+                case 5:
+                    maxDataAge = new TimeSpan(14 * 24, 0, 0); // 2 weeks
+                    break;
+                case 6:
+                    maxDataAge = new TimeSpan(30, 0, 0, 0); // 30 days (month)
+                    break;
+                case 7:
+                    maxDataAge = new TimeSpan(100000, 24, 0, 0); // all
+                    break;
+                default:
+                    maxDataAge = new TimeSpan(7 * 24, 0, 0); // 1 week (default)
+                    break;
+            }
 
-            if (comboBoxHistoryWindow.SelectedIndex == 3)  // All
-                maxDataAge = new TimeSpan(100000, 24, 0, 0);
-
-            oldestData = DateTime.Now.Subtract(maxDataAge);
+            DateTime oldestData = DateTime.Now.Subtract(maxDataAge);
 
             if (visitedSystems==null || visitedSystems.Count == 0)
                 visitedSystems = netlog.ParseFiles(richTextBox_History);
@@ -381,7 +402,7 @@ namespace EDDiscovery
         {
             //if (!this.DesignMode)
             //    RefreshHistory();
-            comboBoxHistoryWindow.SelectedIndex = 1;
+            comboBoxHistoryWindow.SelectedIndex = 4;
 
 
         }
