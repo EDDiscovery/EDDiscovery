@@ -12,6 +12,7 @@ using EDDiscovery.DB;
 using System.Diagnostics;
 using EDDiscovery2;
 using EDDiscovery2.DB;
+using System.Globalization;
 
 
 
@@ -465,6 +466,14 @@ namespace EDDiscovery
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
             double dist;
+
+            NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
+            string decimalSeparator = numberFormatInfo.NumberDecimalSeparator;
+
+            if (decimalSeparator.Equals(","))  // Allow regions with , as decimal separator to  also use . as decimal separator
+                textBoxDistance.Text = textBoxDistance.Text.Replace(".", ",");
+
+
             if (!Double.TryParse(textBoxDistance.Text.Trim(), out dist))
                 MessageBox.Show("Distance in wrong format!");
             else
