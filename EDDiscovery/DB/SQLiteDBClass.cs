@@ -509,6 +509,73 @@ namespace EDDiscovery.DB
 
 
 
+        public int QueryValueInt(string query, int defaultvalue)
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = query;
+                        object ob = SqlScalar(cn, cmd);
+
+                        if (ob == null)
+                            return defaultvalue;
+
+                        int val = Convert.ToInt32(ob);
+
+                        return val;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return defaultvalue;
+            }
+        }
+
+        public Object QueryValue(string query)
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        DataSet ds = null;
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = query;
+
+                        ds = SqlQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0)
+                        {
+                            return null;
+                        }
+                        //
+                        if (ds.Tables[0].Rows.Count == 0)
+                        {
+                            return null;
+                        }
+
+
+                        return ds.Tables[0].Rows[0];
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
         static private void LogLine(string text)
         {
             System.Diagnostics.Trace.WriteLine(text);
