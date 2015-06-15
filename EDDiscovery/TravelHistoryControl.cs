@@ -405,7 +405,14 @@ namespace EDDiscovery
             //    RefreshHistory();
             comboBoxHistoryWindow.SelectedIndex = 4;
 
-
+            // this improves dataGridView's scrolling performance
+            typeof(DataGridView).InvokeMember(
+                "DoubleBuffered",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.SetProperty,
+                null,
+                dataGridView1,
+                new object[] { true }
+            );
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
