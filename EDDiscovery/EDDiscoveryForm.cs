@@ -1,5 +1,6 @@
 ﻿using EDDiscovery.DB;
 using EDDiscovery2;
+using EDDiscovery2.DB;
 using EDDiscovery2.EDDB;
 using EMK.Cartography;
 using Newtonsoft.Json;
@@ -89,6 +90,10 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + Environment.NewLine);
 
                 }
+
+                if (File.Exists("test.txt"))
+                    button1.Visible = true;
+
 
             }
             catch (Exception ex)
@@ -515,8 +520,10 @@ namespace EDDiscovery
 
             EDDBClass eddb = new EDDBClass();
 
-            eddb.ReadSystems();
-            eddb.ReadStations();
+            List<SystemClass> eddbsystems = eddb.ReadSystems();
+            List<StationClass> eddbstations = eddb.ReadStations();
+
+            eddb.Add2DB(eddbsystems, eddbstations);
 
 
         }

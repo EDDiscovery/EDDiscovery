@@ -33,7 +33,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.button1 = new System.Windows.Forms.Button();
+            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.button_Save = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -51,8 +53,6 @@
             this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryFGESupportThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
-            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -77,7 +77,6 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.travelHistoryControl1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -89,14 +88,23 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(610, 79);
+            this.button1.Location = new System.Drawing.Point(823, 1);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
+            this.button1.Text = "Test";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // travelHistoryControl1
+            // 
+            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl1.Name = "travelHistoryControl1";
+            this.travelHistoryControl1.Size = new System.Drawing.Size(891, 561);
+            this.travelHistoryControl1.TabIndex = 0;
+            this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
             // 
             // tabPage2
             // 
@@ -108,6 +116,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Route";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // routeControl1
+            // 
+            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.routeControl1.Location = new System.Drawing.Point(3, 3);
+            this.routeControl1.Name = "routeControl1";
+            this.routeControl1.Size = new System.Drawing.Size(891, 561);
+            this.routeControl1.TabIndex = 0;
+            this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
             // 
             // tabPage3
             // 
@@ -269,29 +286,12 @@
             this.eDDiscoveryFGESupportThreadToolStripMenuItem.Text = "FGE support thread";
             this.eDDiscoveryFGESupportThreadToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryFGESupportThreadToolStripMenuItem_Click);
             // 
-            // travelHistoryControl1
-            // 
-            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl1.Name = "travelHistoryControl1";
-            this.travelHistoryControl1.Size = new System.Drawing.Size(891, 561);
-            this.travelHistoryControl1.TabIndex = 0;
-            this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
-            // 
-            // routeControl1
-            // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(891, 561);
-            this.routeControl1.TabIndex = 0;
-            this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
-            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(908, 626);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

@@ -1,4 +1,5 @@
-﻿using EDDiscovery.DB;
+﻿using EDDiscovery;
+using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
@@ -148,7 +149,46 @@ namespace EDDiscovery2.EDDB
             return eddbstations;
         }
 
+        public bool Add2DB(List<SystemClass> eddbsystems, List<StationClass> eddbstations)
+        {
+            SQLiteDBClass db = new SQLiteDBClass();
 
+            db.Connect2DB();
+
+            int lastupdated =  db.QueryValueInt("SELECT Max(eddb_updated_at ) FROM Systems", -1);
+
+            var result = from a in eddbsystems where a.eddb_updated_at > lastupdated  orderby a.eddb_updated_at  select a;
+
+            foreach (SystemClass sys in result)
+            {
+                SystemClass sysdb =  SystemData.GetSystem(sys.name);
+
+                if (sysdb != null)  // Update system
+                {
+                    System.Diagnostics.Trace.WriteLine("Update system " + sys.name);
+                    sysdb.id_eddb = sys.id_eddb;
+                    sysdb.faction = sys.faction;
+                    sysdb.population = sys.population;
+                    sysdb.government = sys.government;
+                    sysdb.allegiance = sys.allegiance;
+                    sysdb.state = sys.state;
+                    sysdb.security = sys.security;
+                    sysdb.primary_economy = sys.primary_economy;
+                    sysdb.needs_permit = sys.needs_permit;
+                    sysdb.eddb_updated_at = sys.eddb_updated_at;
+
+                    sysdb.Store();
+
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLine("New system " + sys.name);
+                }
+
+            }
+
+            return true;
+        }
 
     }
 }
