@@ -177,6 +177,8 @@ namespace EDDiscovery2.EDDB
                     sysdb.needs_permit = sys.needs_permit;
                     sysdb.eddb_updated_at = sys.eddb_updated_at;
 
+                    if (sys.government != EDGovernment.Unknown)
+                        System.Diagnostics.Trace.WriteLine("Gov " + sys.government);
                     sysdb.Store();
 
                 }

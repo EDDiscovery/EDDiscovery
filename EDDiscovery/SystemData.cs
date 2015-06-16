@@ -99,12 +99,31 @@ namespace EDDiscovery
                 return null;
 
             string lname = name.ToLower();
+
+
+            if (SQLiteDBClass.dictSystems.ContainsKey(lname))
+                return SQLiteDBClass.dictSystems[lname];
+            else 
+                return null;
+        }
+
+
+        static public SystemClass GetSystemOld(string name)
+        {
+            if (name == null)
+                return null;
+
+            string lname = name.ToLower();
+
+            
             var obj = from p in SystemList where p.SearchName == lname select p;
 
             if (obj.Count() < 1)
                 return null;
 
             return (SystemClass)obj.First();
+
+            return SQLiteDBClass.dictSystems[lname];
         }
 
 
