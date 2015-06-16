@@ -19,7 +19,11 @@ namespace EDDiscovery.DB
         string dbfile;
 
         public static List<SystemClass> globalSystems = new List<SystemClass>();
+        public static Dictionary<string, SystemClass> dictSystems = new Dictionary<string, SystemClass>(); 
+        
         public static List<DistanceClass> globalDistances = new List<DistanceClass>();
+        public static Dictionary<string, DistanceClass> dictDistances = new Dictionary<string, DistanceClass>(); 
+
         public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
 
 
@@ -372,7 +376,7 @@ namespace EDDiscovery.DB
                         cmd.Connection = cn;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from Systems";
+                        cmd.CommandText = "select * from Systems Order By name";
 
                         ds = SqlQueryText(cn, cmd);
                         if (ds.Tables.Count == 0)
@@ -386,6 +390,7 @@ namespace EDDiscovery.DB
                         }
 
                         globalSystems.Clear();
+                        dictSystems.Clear();
 
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
@@ -397,8 +402,11 @@ namespace EDDiscovery.DB
                             }
 
 
-                            globalSystems.Add(sys);
+                            
+                            dictSystems[sys.SearchName] = sys;
                         }
+
+                        globalSystems = dictSystems.Values.ToList<SystemClass>();
 
                         return true;
 
@@ -440,11 +448,17 @@ namespace EDDiscovery.DB
                         }
 
                         globalDistances.Clear();
+                        dictDistances.Clear();
 
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
                             DistanceClass sys = new DistanceClass(dr);
+
+
                             globalDistances.Add(sys);
+
+                            dictDistances[sys.NameA.ToLower() + ":" + sys.NameB.ToLower()] = sys;
+                            dictDistances[sys.NameB.ToLower() + ":" + sys.NameA.ToLower()] = sys;
                         }
 
                         return true;
@@ -581,7 +595,7 @@ namespace EDDiscovery.DB
             System.Diagnostics.Trace.WriteLine(text);
         }
 
-        static public DataSet SqlQueryText(SQLiteConnection cn, SQLiteCommand cmd)
+        public DataSet SqlQueryText(SQLiteConnection cn, SQLiteCommand cmd)
         {
 
             //LogLine("SqlQueryText: " + cmd.CommandText);

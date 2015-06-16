@@ -229,7 +229,10 @@ namespace EDDiscovery
                 if (sys1.HasCoordinate && sys2.HasCoordinate)
                     dist = SystemData.Distance(sys1, sys2);
                 else
+                {
+
                     dist = DistanceClass.Distance(sys1, sys2);
+                }
 
                 if (dist > 0)
                     diststr = dist.ToString("0.00");

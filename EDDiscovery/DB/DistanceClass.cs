@@ -302,6 +302,14 @@ namespace EDDiscovery.DB
             name1 = s1.SearchName;
             name2 = s2.SearchName;
 
+            string key = name1 + ":" + name2;
+
+            if (SQLiteDBClass.dictDistances.ContainsKey(key))
+                return SQLiteDBClass.dictDistances[key].Dist;
+            else
+                return -1;
+
+            /*
             var obj3 = from p in SQLiteDBClass.globalDistances where (p.NameA.ToLower() == name2 && p.NameB.ToLower() == name1) || (p.NameA.ToLower() == name1 && p.NameB.ToLower() == name2) orderby p.CreateTime descending select p;
 
 
@@ -314,6 +322,32 @@ namespace EDDiscovery.DB
                 return -1;
 
             return dists.First().Dist;  
+             * */
+        }
+
+        static public DataSet SqlQueryText(SQLiteConnection cn, SQLiteCommand cmd)
+        {
+
+            //LogLine("SqlQueryText: " + cmd.CommandText);
+
+            try
+            {
+                DataSet ds = new DataSet();
+                SQLiteDataAdapter da = default(SQLiteDataAdapter);
+                cmd.CommandType = CommandType.Text;
+                cmd.Connection = cn;
+                da = new SQLiteDataAdapter(cmd);
+                cn.Open();
+                da.Fill(ds);
+                cn.Close();
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("SqlQuery Exception: " + ex.Message);
+                throw;
+            }
+
         }
 
 
@@ -337,12 +371,12 @@ namespace EDDiscovery.DB
                         cmd.Parameters.AddWithValue("@NameA", s1.name);
                         cmd.Parameters.AddWithValue("@NameB", s2.name);
 
-                        ds = SQLiteDBClass.SqlQueryText(cn, cmd);
+                        ds = SqlQueryText(cn, cmd);
 
                         cmd.Parameters.Clear();
                         cmd.Parameters.AddWithValue("@NameA", s2.name);
                         cmd.Parameters.AddWithValue("@NameB", s1.name);
-                        ds2 = SQLiteDBClass.SqlQueryText(cn, cmd);
+                        ds2 = SqlQueryText(cn, cmd);
 
 
                         if (ds.Tables.Count > 0)
