@@ -590,9 +590,16 @@ namespace EDDiscovery
             {
                 string json;
 
-                LogText("Add distance: "+ dist.NameA + " => " + dist.NameB + " :" + dist.Dist.ToString("0.00")+ "ly"+Environment.NewLine);
-                json = edsc.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
-
+                if (dist.Dist > 0)
+                {
+                    LogText("Add distance: " + dist.NameA + " => " + dist.NameB + " :" + dist.Dist.ToString("0.00") + "ly" + Environment.NewLine);
+                    json = edsc.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
+                }
+                else
+                {
+                    dist.Delete();
+                    return;
+                }
                 if (json != null)
                 {
                     string str="";
