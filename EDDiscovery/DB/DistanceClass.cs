@@ -290,6 +290,33 @@ namespace EDDiscovery.DB
         }
 
 
+        public bool Delete()
+        {
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            {
+                return Delete(cn);
+            }
+        }
+
+        private bool Delete(SQLiteConnection cn)
+        {
+            using (SQLiteCommand cmd = new SQLiteCommand())
+            {
+                cmd.Connection = cn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandTimeout = 30;
+                cmd.CommandText = "Delete From  Distances where ID=@id";
+                cmd.Parameters.AddWithValue("@ID", id);
+
+
+                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                return true;
+            }
+        }
+
+
+
+
         static public double Distance(SystemClass s1, SystemClass s2)
         {
             List<DistanceClass> dists = new List<DistanceClass>();
