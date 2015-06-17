@@ -356,7 +356,9 @@ namespace EDDiscovery
                 }
                 else
                     LogText("Failed." + Environment.NewLine, Color.Red);
-                    
+
+
+                eddb.GetCommodities();
             }
 
 
@@ -518,31 +520,15 @@ namespace EDDiscovery
 //                srv.AddSystem(system);
 //            }
 
-            /*
+
             EDDBClass eddb = new EDDBClass();
 
             List<SystemClass> eddbsystems = eddb.ReadSystems();
             List<StationClass> eddbstations = eddb.ReadStations();
 
             eddb.Add2DB(eddbsystems, eddbstations);
-            */
 
-            Stopwatch sw1 = new Stopwatch();
-            SystemClass ss;
-            //richTextBox_History.Clear();
-            sw1.Start();
-            foreach (SystemClass sys in SQLiteDBClass.globalSystems)
-                ss = SystemData.GetSystem(sys.name);
 
-            sw1.Stop();
-            System.Diagnostics.Trace.WriteLine("TSW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-
-            sw1.Start();
-            foreach (SystemClass sys in SQLiteDBClass.globalSystems)
-                ss = SystemData.GetSystemOld(sys.name);
-
-            sw1.Stop();
-            System.Diagnostics.Trace.WriteLine("TSW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
 
 
 
