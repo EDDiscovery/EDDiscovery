@@ -19,6 +19,9 @@ namespace EDDiscovery2.EDDB
         private string systemFileNameTemp = "eddbsystems_temp.json";
         private string systemFileName = "eddbsystems.json";
 
+        private string commoditiesFileNameTemp = "commodities_temp.json";
+        private string commoditiesFileName = "commodities.json";	
+
         public bool GetSystems()
         {
             try
@@ -27,12 +30,38 @@ namespace EDDiscovery2.EDDB
                     File.Delete(systemFileNameTemp);
 
                 WebClient webClient = new WebClient();
-                webClient.DownloadFile("http://eddb.io/archive/v3/systems.json", systemFileNameTemp);
+                webClient.DownloadFile("http://robert.astronet.se/Elite/eddb/systems.json", systemFileNameTemp);
 
                 if (File.Exists(systemFileName))
                     File.Delete(systemFileName);
 
                 File.Copy(systemFileNameTemp, systemFileName);
+
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception:" + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                return false;
+            }
+        }
+
+        public bool GetCommodities()
+        {
+            try
+            {
+                if (File.Exists(commoditiesFileNameTemp))
+                    File.Delete(commoditiesFileNameTemp);
+
+                WebClient webClient = new WebClient();
+                webClient.DownloadFile("http://robert.astronet.se/Elite/eddb/commodities.json", commoditiesFileNameTemp);
+
+                if (File.Exists(commoditiesFileName))
+                    File.Delete(commoditiesFileName);
+
+                File.Copy(commoditiesFileNameTemp, commoditiesFileName);
 
                 return true;
             }
@@ -55,7 +84,7 @@ namespace EDDiscovery2.EDDB
                     File.Delete(stationFileNameTemp);
 
                 WebClient webClient = new WebClient();
-                webClient.DownloadFile("http://eddb.io/archive/v3/stations_lite.json", stationFileNameTemp);
+                webClient.DownloadFile("http://robert.astronet.se/Elite/eddb/stations_lite.json", stationFileNameTemp);
 
                 if (File.Exists(stationFileName))
                     File.Delete(stationFileName);
