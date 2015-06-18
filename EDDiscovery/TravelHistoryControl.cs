@@ -327,8 +327,7 @@ namespace EDDiscovery
 
             textBoxDistance.Enabled = distedit;
             buttonUpdate.Enabled = distedit;
-            
-
+            buttonTrilaterate.Enabled = !syspos.curSystem.HasCoordinate && syspos.curSystem == GetCurrentSystem();
 
 
             ShowClosestSystems(syspos.Name);
@@ -425,6 +424,16 @@ namespace EDDiscovery
                
             }
 
+        }
+
+
+        public SystemClass GetCurrentSystem()
+        {
+            if (visitedSystems.Count == 0)
+            {
+                return null;
+            }
+            return (from systems in visitedSystems orderby systems.time descending select systems.curSystem).First();
         }
 
 
@@ -726,9 +735,26 @@ namespace EDDiscovery
                 Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
         }
 
+        private void buttonTrilaterate_Click(object sender, EventArgs e)
+        {
+            if (TrilaterationControl.Visible == false)
+            {
 
+            }
 
+            dataGridView1.Visible = false;
+            TrilaterationControl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
+            TrilaterationControl.Visible = true;
+            buttonCloseTrilateration.Visible = true;
+        }
 
+        private void buttonCloseTrilateration_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl.Visible = false;
+            TrilaterationControl.TargetSystem = null;
+            buttonCloseTrilateration.Visible = false;
+            dataGridView1.Visible = true;
+        }
     }
 
 
