@@ -4,6 +4,8 @@ using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -188,34 +190,61 @@ namespace EDDiscovery2.EDDB
 
             var result = from a in eddbsystems where a.eddb_updated_at > lastupdated  orderby a.eddb_updated_at  select a;
 
-            foreach (SystemClass sys in result)
+            if (result.Count() == 0)
+                return true ;
+
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
-                SystemClass sysdb =  SystemData.GetSystem(sys.name);
+                cn.Open();
+                int nr=0;
 
-                if (sysdb != null)  // Update system
+                using (var tra = cn.BeginTransaction())
                 {
-                    System.Diagnostics.Trace.WriteLine("Update system " + sys.name);
-                    sysdb.id_eddb = sys.id_eddb;
-                    sysdb.faction = sys.faction;
-                    sysdb.population = sys.population;
-                    sysdb.government = sys.government;
-                    sysdb.allegiance = sys.allegiance;
-                    sysdb.state = sys.state;
-                    sysdb.security = sys.security;
-                    sysdb.primary_economy = sys.primary_economy;
-                    sysdb.needs_permit = sys.needs_permit;
-                    sysdb.eddb_updated_at = sys.eddb_updated_at;
+                    try
+                    {
+                        foreach (SystemClass sys in result)
+                        {
+                            SystemClass sysdb = SystemData.GetSystem(sys.name);
 
-                    if (sys.government != EDGovernment.Unknown)
-                        System.Diagnostics.Trace.WriteLine("Gov " + sys.government);
-                    sysdb.Store();
+                            if (sysdb != null)  // Update system
+                            {
+                                sysdb.id_eddb = sys.id_eddb;
+                                sysdb.faction = sys.faction;
+                                sysdb.population = sys.population;
+                                sysdb.government = sys.government;
+                                sysdb.allegiance = sys.allegiance;
+                                sysdb.state = sys.state;
+                                sysdb.security = sys.security;
+                                sysdb.primary_economy = sys.primary_economy;
+                                sysdb.needs_permit = sys.needs_permit;
+                                sysdb.eddb_updated_at = sys.eddb_updated_at;
+
+
+                                sysdb.Update(cn, sysdb.id, tra);
+                                nr++;
+                            }
+                            else
+                            {
+                                System.Diagnostics.Trace.WriteLine("New system " + sys.name);
+                            }
+                        }
+                        System.Diagnostics.Trace.WriteLine("Add2DB  " + nr.ToString() + " eddb systems: " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
+                        tra.Commit();
+                        sw.Stop();
+                        System.Diagnostics.Trace.WriteLine("Add2DB  " + nr.ToString() + " eddb systems: " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
+                    }
+                    catch (Exception ex)
+                    {
+                        tra.Rollback();
+                        System.Diagnostics.Trace.WriteLine("Add2DB error: {0}" + ex.Message);
+                        throw;
+                    }
 
                 }
-                else
-                {
-                    System.Diagnostics.Trace.WriteLine("New system " + sys.name);
-                }
-
             }
 
             return true;

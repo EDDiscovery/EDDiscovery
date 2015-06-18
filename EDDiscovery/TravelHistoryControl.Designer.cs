@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("ListViewGroup", System.Windows.Forms.HorizontalAlignment.Left);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
             this.richTextBox_History = new System.Windows.Forms.RichTextBox();
             this.button_RefreshHistory = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -46,6 +48,16 @@
             this.buttonMap = new System.Windows.Forms.Button();
             this.textBoxSystem = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonRoss = new System.Windows.Forms.Button();
+            this.buttonEDDB = new System.Windows.Forms.Button();
+            this.textBoxState = new System.Windows.Forms.TextBox();
+            this.textBoxEconomy = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBoxGovernment = new System.Windows.Forms.TextBox();
+            this.textBoxAllegiance = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.textBoxVisits = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -65,6 +77,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxCmdrName = new System.Windows.Forms.TextBox();
             this.buttonSync = new System.Windows.Forms.Button();
+            this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -239,6 +252,16 @@
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.buttonRoss);
+            this.panel1.Controls.Add(this.buttonEDDB);
+            this.panel1.Controls.Add(this.textBoxState);
+            this.panel1.Controls.Add(this.textBoxEconomy);
+            this.panel1.Controls.Add(this.label12);
+            this.panel1.Controls.Add(this.label13);
+            this.panel1.Controls.Add(this.textBoxGovernment);
+            this.panel1.Controls.Add(this.textBoxAllegiance);
+            this.panel1.Controls.Add(this.label11);
+            this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.textBoxVisits);
             this.panel1.Controls.Add(this.label8);
@@ -258,8 +281,108 @@
             this.panel1.Controls.Add(this.textBoxSystem);
             this.panel1.Location = new System.Drawing.Point(524, 106);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(270, 235);
+            this.panel1.Size = new System.Drawing.Size(293, 235);
             this.panel1.TabIndex = 16;
+            // 
+            // buttonRoss
+            // 
+            this.buttonRoss.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonRoss.BackgroundImage")));
+            this.buttonRoss.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonRoss.FlatAppearance.BorderSize = 0;
+            this.buttonRoss.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRoss.Location = new System.Drawing.Point(274, 6);
+            this.buttonRoss.Name = "buttonRoss";
+            this.buttonRoss.Size = new System.Drawing.Size(16, 20);
+            this.buttonRoss.TabIndex = 40;
+            this.toolTipEddb.SetToolTip(this.buttonRoss, "Click to edit in Ross");
+            this.buttonRoss.UseVisualStyleBackColor = true;
+            this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
+            // 
+            // buttonEDDB
+            // 
+            this.buttonEDDB.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonEDDB.BackgroundImage")));
+            this.buttonEDDB.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonEDDB.FlatAppearance.BorderSize = 0;
+            this.buttonEDDB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonEDDB.Location = new System.Drawing.Point(259, 6);
+            this.buttonEDDB.Name = "buttonEDDB";
+            this.buttonEDDB.Size = new System.Drawing.Size(16, 20);
+            this.buttonEDDB.TabIndex = 39;
+            this.toolTipEddb.SetToolTip(this.buttonEDDB, "Click to show in EDDB");
+            this.buttonEDDB.UseVisualStyleBackColor = true;
+            this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
+            // 
+            // textBoxState
+            // 
+            this.textBoxState.Location = new System.Drawing.Point(182, 78);
+            this.textBoxState.Name = "textBoxState";
+            this.textBoxState.ReadOnly = true;
+            this.textBoxState.Size = new System.Drawing.Size(71, 20);
+            this.textBoxState.TabIndex = 37;
+            // 
+            // textBoxEconomy
+            // 
+            this.textBoxEconomy.Location = new System.Drawing.Point(182, 61);
+            this.textBoxEconomy.Name = "textBoxEconomy";
+            this.textBoxEconomy.ReadOnly = true;
+            this.textBoxEconomy.Size = new System.Drawing.Size(71, 20);
+            this.textBoxEconomy.TabIndex = 33;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(144, 81);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(32, 13);
+            this.label12.TabIndex = 38;
+            this.label12.Text = "State";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(17, 81);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(27, 13);
+            this.label13.TabIndex = 36;
+            this.label13.Text = "Gov";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textBoxGovernment
+            // 
+            this.textBoxGovernment.Location = new System.Drawing.Point(50, 78);
+            this.textBoxGovernment.Name = "textBoxGovernment";
+            this.textBoxGovernment.ReadOnly = true;
+            this.textBoxGovernment.Size = new System.Drawing.Size(67, 20);
+            this.textBoxGovernment.TabIndex = 35;
+            // 
+            // textBoxAllegiance
+            // 
+            this.textBoxAllegiance.Location = new System.Drawing.Point(182, 43);
+            this.textBoxAllegiance.Name = "textBoxAllegiance";
+            this.textBoxAllegiance.ReadOnly = true;
+            this.textBoxAllegiance.Size = new System.Drawing.Size(71, 20);
+            this.textBoxAllegiance.TabIndex = 31;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(125, 64);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(51, 13);
+            this.label11.TabIndex = 34;
+            this.label11.Text = "Economy";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(120, 46);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(56, 13);
+            this.label10.TabIndex = 32;
+            this.label10.Text = "Allegiance";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label9
             // 
@@ -269,6 +392,7 @@
             this.label9.Size = new System.Drawing.Size(31, 13);
             this.label9.TabIndex = 30;
             this.label9.Text = "Visits";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // textBoxVisits
             // 
@@ -281,7 +405,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 159);
+            this.label8.Location = new System.Drawing.Point(3, 98);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(30, 13);
             this.label8.TabIndex = 28;
@@ -290,9 +414,9 @@
             // richTextBoxNote
             // 
             this.richTextBoxNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBoxNote.Location = new System.Drawing.Point(6, 176);
+            this.richTextBoxNote.Location = new System.Drawing.Point(29, 114);
             this.richTextBoxNote.Name = "richTextBoxNote";
-            this.richTextBoxNote.Size = new System.Drawing.Size(261, 56);
+            this.richTextBoxNote.Size = new System.Drawing.Size(238, 56);
             this.richTextBoxNote.TabIndex = 27;
             this.richTextBoxNote.Text = "";
             this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
@@ -302,7 +426,7 @@
             this.textBoxDistText.BackColor = System.Drawing.SystemColors.Control;
             this.textBoxDistText.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxDistText.ForeColor = System.Drawing.Color.Red;
-            this.textBoxDistText.Location = new System.Drawing.Point(4, 128);
+            this.textBoxDistText.Location = new System.Drawing.Point(2, 211);
             this.textBoxDistText.Multiline = true;
             this.textBoxDistText.Name = "textBoxDistText";
             this.textBoxDistText.ReadOnly = true;
@@ -313,7 +437,7 @@
             // 
             // buttonUpdate
             // 
-            this.buttonUpdate.Location = new System.Drawing.Point(6, 103);
+            this.buttonUpdate.Location = new System.Drawing.Point(6, 186);
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.Size = new System.Drawing.Size(69, 22);
             this.buttonUpdate.TabIndex = 24;
@@ -324,7 +448,7 @@
             // textBoxDistance
             // 
             this.textBoxDistance.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.textBoxDistance.Location = new System.Drawing.Point(81, 105);
+            this.textBoxDistance.Location = new System.Drawing.Point(81, 188);
             this.textBoxDistance.Name = "textBoxDistance";
             this.textBoxDistance.Size = new System.Drawing.Size(186, 20);
             this.textBoxDistance.TabIndex = 23;
@@ -332,7 +456,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 90);
+            this.label7.Location = new System.Drawing.Point(3, 173);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(72, 13);
             this.label7.TabIndex = 22;
@@ -341,7 +465,7 @@
             // textBoxPrevSystem
             // 
             this.textBoxPrevSystem.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxPrevSystem.Location = new System.Drawing.Point(81, 88);
+            this.textBoxPrevSystem.Location = new System.Drawing.Point(81, 173);
             this.textBoxPrevSystem.Name = "textBoxPrevSystem";
             this.textBoxPrevSystem.ReadOnly = true;
             this.textBoxPrevSystem.Size = new System.Drawing.Size(186, 13);
@@ -350,45 +474,48 @@
             // label_Z
             // 
             this.label_Z.AutoSize = true;
-            this.label_Z.Location = new System.Drawing.Point(3, 64);
+            this.label_Z.Location = new System.Drawing.Point(30, 64);
             this.label_Z.Name = "label_Z";
             this.label_Z.Size = new System.Drawing.Size(14, 13);
             this.label_Z.TabIndex = 20;
             this.label_Z.Text = "Z";
+            this.label_Z.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // textBoxZ
             // 
             this.textBoxZ.Location = new System.Drawing.Point(50, 61);
             this.textBoxZ.Name = "textBoxZ";
             this.textBoxZ.ReadOnly = true;
-            this.textBoxZ.Size = new System.Drawing.Size(71, 20);
+            this.textBoxZ.Size = new System.Drawing.Size(67, 20);
             this.textBoxZ.TabIndex = 19;
             // 
             // labelDistEnter
             // 
             this.labelDistEnter.AutoSize = true;
             this.labelDistEnter.ForeColor = System.Drawing.Color.Black;
-            this.labelDistEnter.Location = new System.Drawing.Point(3, 46);
+            this.labelDistEnter.Location = new System.Drawing.Point(30, 46);
             this.labelDistEnter.Name = "labelDistEnter";
             this.labelDistEnter.Size = new System.Drawing.Size(14, 13);
             this.labelDistEnter.TabIndex = 18;
             this.labelDistEnter.Text = "Y";
+            this.labelDistEnter.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 28);
+            this.label5.Location = new System.Drawing.Point(30, 28);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(14, 13);
             this.label5.TabIndex = 18;
             this.label5.Text = "X";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // textBoxY
             // 
             this.textBoxY.Location = new System.Drawing.Point(50, 43);
             this.textBoxY.Name = "textBoxY";
             this.textBoxY.ReadOnly = true;
-            this.textBoxY.Size = new System.Drawing.Size(71, 20);
+            this.textBoxY.Size = new System.Drawing.Size(67, 20);
             this.textBoxY.TabIndex = 17;
             // 
             // textBoxX
@@ -396,7 +523,7 @@
             this.textBoxX.Location = new System.Drawing.Point(50, 25);
             this.textBoxX.Name = "textBoxX";
             this.textBoxX.ReadOnly = true;
-            this.textBoxX.Size = new System.Drawing.Size(71, 20);
+            this.textBoxX.Size = new System.Drawing.Size(67, 20);
             this.textBoxX.TabIndex = 17;
             // 
             // label4
@@ -506,5 +633,16 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBoxVisits;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox textBoxEconomy;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox textBoxAllegiance;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBoxState;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBoxGovernment;
+        private System.Windows.Forms.Button buttonEDDB;
+        private System.Windows.Forms.ToolTip toolTipEddb;
+        private System.Windows.Forms.Button buttonRoss;
     }
 }

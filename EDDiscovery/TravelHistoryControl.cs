@@ -296,7 +296,23 @@ namespace EDDiscovery
             int count = GetVisitsCount(syspos.curSystem.name);
             textBoxVisits.Text = count.ToString();
 
-            richTextBoxNote.Text = syspos.curSystem.Note;
+            if (currentSysPos.curSystem.id_eddb > 0)  // Only enable eddb/ross for system that it knows about
+            {
+                buttonEDDB.Visible = true;
+                buttonRoss.Visible = true;
+            }
+            else
+            {
+                buttonEDDB.Visible = false;
+                buttonRoss.Visible = false;
+            }
+
+
+            textBoxAllegiance.Text = EnumStringFormat(syspos.curSystem.allegiance.ToString());
+            textBoxEconomy.Text = EnumStringFormat(syspos.curSystem.primary_economy.ToString());
+            textBoxGovernment.Text = EnumStringFormat(syspos.curSystem.government.ToString());
+            textBoxState.Text = EnumStringFormat(syspos.curSystem.state.ToString());
+            richTextBoxNote.Text = EnumStringFormat(syspos.curSystem.Note);
 
             bool distedit = false;
 
@@ -316,6 +332,16 @@ namespace EDDiscovery
 
 
             ShowClosestSystems(syspos.Name);
+        }
+
+        private string EnumStringFormat(string str)
+        {
+            if (str == null)
+                return "";
+            if (str.Equals("Unknown"))
+                return "";
+
+            return str.Replace("_", " ");
         }
 
         private void ShowClosestSystems(string name)
@@ -686,6 +712,18 @@ namespace EDDiscovery
             var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
             e.Graphics.DrawString(rowIdx, this.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
 
+        }
+
+        private void buttonEDDB_Click(object sender, EventArgs e)
+        {
+            if (currentSysPos.curSystem.id_eddb>0)
+                Process.Start("http://eddb.io/system/" + currentSysPos.curSystem.id_eddb.ToString());
+        }
+
+        private void buttonRoss_Click(object sender, EventArgs e)
+        {
+            if (currentSysPos.curSystem.id_eddb>0)
+                Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
         }
 
 

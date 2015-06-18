@@ -648,7 +648,7 @@ namespace EDDiscovery.DB
         {
             object ret = null;
 
-            LogLine("SqlScalar: " + cmd.CommandText);
+            //LogLine("SqlScalar: " + cmd.CommandText);
             try
             {
                 cn.Open();
