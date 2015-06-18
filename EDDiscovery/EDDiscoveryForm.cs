@@ -413,7 +413,7 @@ namespace EDDiscovery
                 List<SystemClass> eddbsystems = eddb.ReadSystems();
                 List<StationClass> eddbstations = eddb.ReadStations();
 
-                LogText("Add ned EDDB data to database." + Environment.NewLine);
+                LogText("Add new EDDB data to database." + Environment.NewLine);
                 eddb.Add2DB(eddbsystems, eddbstations);
             }
 
