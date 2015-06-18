@@ -176,11 +176,13 @@ namespace EDDiscovery.DB
         {
             try
             {
+                Object o;
+
                 id = (int)(long)dr["id"];
                 name = (string)dr["name"];
 
-            
-                
+
+
                 SearchName = name.ToLower();
 
 
@@ -192,7 +194,7 @@ namespace EDDiscovery.DB
                     y = double.NaN;
                     z = double.NaN;
 
-                    
+
                 }
                 else
                 {
@@ -208,6 +210,36 @@ namespace EDDiscovery.DB
 
                 status = (SystemStatusEnum)((long)dr["status"]);
                 Note = dr["Note"].ToString();
+
+                o = dr["id_eddb"];
+                id_eddb = o == DBNull.Value ? 0 : (int)((long)o);
+
+                o = dr["faction"];
+                faction = o == DBNull.Value ? null : (string)o;
+
+                o = dr["government_id"];
+                government = o == DBNull.Value ? EDGovernment.Unknown : (EDGovernment)((long)o);
+
+                o = dr["allegiance_id"];
+                allegiance = o == DBNull.Value ? EDAllegiance.Unknown : (EDAllegiance)((long)o);
+
+                o = dr["primary_economy_id"];
+                primary_economy = o == DBNull.Value ? EDEconomy.Unknown : (EDEconomy)((long)o);
+
+                o = dr["security"];
+                security = o == DBNull.Value ? EDSecurity.Unknown : (EDSecurity)((long)o);
+
+                o = dr["eddb_updated_at"];
+                eddb_updated_at = o == DBNull.Value ? 0 : (int)((long)o);
+
+                o = dr["state"];
+                state = o == DBNull.Value ? EDState.Unknown : (EDState)((long)o);
+
+                o = dr["needs_permit"];
+                needs_permit = o == DBNull.Value ? 0 : (int)((long)o);
+
+
+
             }
             catch (Exception ex)
             {
@@ -319,10 +351,10 @@ namespace EDDiscovery.DB
 
                         if (sys != null)
                         {
-                            system.Update(cn, sys.id);
+                            system.Update(cn, sys.id, transaction);
                         }
                         else
-                            system.Store(cn);
+                            system.Store(cn, transaction);
                     }
 
                     transaction.Commit();
@@ -345,17 +377,18 @@ namespace EDDiscovery.DB
         {
             using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
-                return Store(cn);
+                return Store(cn, null);
             }
         }
 
-        private bool Store(SQLiteConnection cn)
+        public bool Store(SQLiteConnection cn, SQLiteTransaction transaction)
         {
             using (SQLiteCommand cmd = new SQLiteCommand())
             {
                 if (id_eddb != null)
                 {
                     cmd.Connection = cn;
+                    cmd.Transaction = transaction;
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
                     cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, faction, government_id, allegiance_id, primary_economy_id,  security, eddb_updated_at, state, needs_permit) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit)";
@@ -386,8 +419,8 @@ namespace EDDiscovery.DB
                         Note = "";
                     cmd.Parameters.AddWithValue("@Note", Note);
 
-
                     SQLiteDBClass.SqlNonQueryText(cn, cmd);
+
                     return true;
                 }
                 else
@@ -412,6 +445,8 @@ namespace EDDiscovery.DB
                     cmd.Parameters.AddWithValue("@Note", Note);
 
 
+
+
                     SQLiteDBClass.SqlNonQueryText(cn, cmd);
                     return true;
 
@@ -419,14 +454,13 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Update(SQLiteConnection cn, int id)
+        public bool Update(SQLiteConnection cn, int id, SQLiteTransaction transaction)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = new SQLiteCommand("Update", cn, transaction))
             {
-                cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note  where ID=@id";
+                cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit  where ID=@id";
 
                 cmd.Parameters.AddWithValue("@id", id); 
                 cmd.Parameters.AddWithValue("@name", name);
@@ -444,10 +478,15 @@ namespace EDDiscovery.DB
                 cmd.Parameters.AddWithValue("@Note", Note);
 
 
-                if (name.Equals("Sol"))
-                {
-                    System.Diagnostics.Trace.WriteLine("Sol");
-                }
+                cmd.Parameters.AddWithValue("@id_eddb", id_eddb);
+                cmd.Parameters.AddWithValue("@faction", faction);
+                cmd.Parameters.AddWithValue("@government_id", government);
+                cmd.Parameters.AddWithValue("@allegiance_id", allegiance);
+                cmd.Parameters.AddWithValue("@primary_economy_id", primary_economy);
+                cmd.Parameters.AddWithValue("@security", security);
+                cmd.Parameters.AddWithValue("@eddb_updated_at", eddb_updated_at);
+                cmd.Parameters.AddWithValue("@state", state);
+                cmd.Parameters.AddWithValue("@needs_permit", needs_permit);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
                 return true;

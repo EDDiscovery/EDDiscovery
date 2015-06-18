@@ -32,10 +32,7 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
-            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.button_Save = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -43,6 +40,7 @@
             this.textBoxNetLogDir = new System.Windows.Forms.TextBox();
             this.radioButton_Manual = new System.Windows.Forms.RadioButton();
             this.radioButton_Auto = new System.Windows.Forms.RadioButton();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewStarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,12 +51,17 @@
             this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryFGESupportThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelInfo = new System.Windows.Forms.Panel();
+            this.labelPanelText = new System.Windows.Forms.Label();
+            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
+            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.panelInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -86,26 +89,6 @@
             this.tabPage1.Text = "Travel history";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(823, 1);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // travelHistoryControl1
-            // 
-            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl1.Name = "travelHistoryControl1";
-            this.travelHistoryControl1.Size = new System.Drawing.Size(891, 561);
-            this.travelHistoryControl1.TabIndex = 0;
-            this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.routeControl1);
@@ -116,15 +99,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Route";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // routeControl1
-            // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(891, 561);
-            this.routeControl1.TabIndex = 0;
-            this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
             // 
             // tabPage3
             // 
@@ -204,6 +178,17 @@
             this.radioButton_Auto.TabStop = true;
             this.radioButton_Auto.Text = "Auto";
             this.radioButton_Auto.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(823, 1);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // menuStrip1
             // 
@@ -286,12 +271,52 @@
             this.eDDiscoveryFGESupportThreadToolStripMenuItem.Text = "FGE support thread";
             this.eDDiscoveryFGESupportThreadToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryFGESupportThreadToolStripMenuItem_Click);
             // 
+            // panelInfo
+            // 
+            this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelInfo.BackColor = System.Drawing.Color.Salmon;
+            this.panelInfo.Controls.Add(this.labelPanelText);
+            this.panelInfo.Location = new System.Drawing.Point(514, 1);
+            this.panelInfo.Name = "panelInfo";
+            this.panelInfo.Size = new System.Drawing.Size(394, 23);
+            this.panelInfo.TabIndex = 17;
+            // 
+            // labelPanelText
+            // 
+            this.labelPanelText.AutoSize = true;
+            this.labelPanelText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPanelText.Location = new System.Drawing.Point(3, 0);
+            this.labelPanelText.Name = "labelPanelText";
+            this.labelPanelText.Size = new System.Drawing.Size(158, 20);
+            this.labelPanelText.TabIndex = 0;
+            this.labelPanelText.Text = "Loading. Please wait!";
+            this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // travelHistoryControl1
+            // 
+            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl1.Name = "travelHistoryControl1";
+            this.travelHistoryControl1.Size = new System.Drawing.Size(891, 561);
+            this.travelHistoryControl1.TabIndex = 0;
+            this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
+            // 
+            // routeControl1
+            // 
+            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.routeControl1.Location = new System.Drawing.Point(3, 3);
+            this.routeControl1.Name = "routeControl1";
+            this.routeControl1.Size = new System.Drawing.Size(891, 561);
+            this.routeControl1.TabIndex = 0;
+            this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(908, 626);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.panelInfo);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -309,6 +334,8 @@
             this.groupBox1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panelInfo.ResumeLayout(false);
+            this.panelInfo.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -340,6 +367,8 @@
         private System.Windows.Forms.ToolStripMenuItem openEliteDangerousDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem statisticsToolStripMenuItem;
+        private System.Windows.Forms.Panel panelInfo;
+        private System.Windows.Forms.Label labelPanelText;
     }
 }
 

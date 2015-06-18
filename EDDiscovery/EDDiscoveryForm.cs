@@ -43,11 +43,17 @@ namespace EDDiscovery
         {
             try
             {
+
                 // Click once   System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVe‌​rsion
                 var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
                 var version = assemblyFullName.Split(',')[1].Split('=')[1];
                 Text = "EDDiscovery v" + version;
                 EliteDangerous.CheckED();
+
+                labelPanelText.Text = "Loading. Please wait!";
+                panelInfo.Visible = true;
+                panelInfo.BackColor = Color.Gold;
+
 
 
                 SystemData sdata = new SystemData();
@@ -84,12 +90,15 @@ namespace EDDiscovery
 
                 if (!EliteDangerous.CheckStationLogging())
                 {
-                    TravelHistoryControl.LogText("EliteDangerous is not logging station names!!! ", Color.Red);
+                    TravelHistoryControl.LogText("Elite Dangerous is not logging system names!!! ", Color.Red);
                     TravelHistoryControl.LogText("Add ");
                     TravelHistoryControl.LogText("VerboseLogging=\"1\" ", Color.Blue);
-                    TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + Environment.NewLine);
+                    TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " Restart Elite After!" + Environment.NewLine);
 
+                    labelPanelText.Text = "Elite Dangerous is not logging system names!";
+                    panelInfo.BackColor = Color.Salmon;
                 }
+
 
                 if (File.Exists("test.txt"))
                     button1.Visible = true;
@@ -109,9 +118,15 @@ namespace EDDiscovery
         {
             try
             {
+                travelHistoryControl1.Enabled = false;
+
+                Application.DoEvents();
                 GetRedWizzardFiles();
+                Application.DoEvents();
                 GetEDSCSystems();
+                Application.DoEvents();
                 GetEDSCDistancesAsync();
+                Application.DoEvents();
                 GetEDDBAsync();
 
                 if (SystemData.SystemList.Count == 0)
@@ -132,14 +147,23 @@ namespace EDDiscovery
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(routeControl1.NewPosition);
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
 
+                TravelHistoryControl.LogText("Reading travelhistory ");
                 travelHistoryControl1.RefreshHistory();
                 travelHistoryControl1.netlog.StartMonitor();
+
+                travelHistoryControl1.Enabled = true;
+                if (EliteDangerous.CheckStationLogging())
+                {
+                    panelInfo.Visible = false;
+                }
 
             }
             catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show("Form1_Load exception: " + ex.Message);
                 System.Windows.Forms.MessageBox.Show("Trace: " + ex.StackTrace);
+                travelHistoryControl1.Enabled = true;
+
             }
         }
 
@@ -150,6 +174,7 @@ namespace EDDiscovery
 
             try
             {
+                TravelHistoryControl.LogText("Checking for new EDDiscovery data" + Environment.NewLine);
                 string webstr =  web.DownloadString("http://robert.astronet.se/Elite/ed-systems/eddisc.php");
 
                 string[] filesizes = webstr.Split(' ');
@@ -343,8 +368,9 @@ namespace EDDiscovery
             SQLiteDBClass db = new SQLiteDBClass();
             timestr = db.GetSettingString("EDDBSystemsTime", "0");
             time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
+            bool updatedb = false;
 
-            if (DateTime.UtcNow.Subtract(time).TotalDays > 1)
+            if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
             {
                 LogText("Get systems from EDDB. ");
                   
@@ -353,6 +379,7 @@ namespace EDDiscovery
                    LogText("OK." + Environment.NewLine);
                       
                     db.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
+                    updatedb = true;
                 }
                 else
                     LogText("Failed." + Environment.NewLine, Color.Red);
@@ -365,7 +392,7 @@ namespace EDDiscovery
             timestr = db.GetSettingString("EDDBStationsLiteTime", "0");
             time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
 
-            if (DateTime.UtcNow.Subtract(time).TotalDays > 1)
+            if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
             {
 
                 LogText("Get stations from EDDB. ");
@@ -373,11 +400,21 @@ namespace EDDiscovery
                 {
                     LogText("OK." + Environment.NewLine);
                     db.PutSettingString("EDDBStationsLiteTime", DateTime.UtcNow.Ticks.ToString());
-
+                    updatedb = true;
                 }
                 else
                     LogText("Failed." + Environment.NewLine, Color.Red);
 
+            }
+
+
+            if (updatedb)
+            {
+                List<SystemClass> eddbsystems = eddb.ReadSystems();
+                List<StationClass> eddbstations = eddb.ReadStations();
+
+                LogText("Add ned EDDB data to database." + Environment.NewLine);
+                eddb.Add2DB(eddbsystems, eddbstations);
             }
 
             return ;
@@ -587,6 +624,11 @@ namespace EDDiscovery
 
             frm.travelhistoryctrl = travelHistoryControl1;
             frm.Show();
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
 
         }
 

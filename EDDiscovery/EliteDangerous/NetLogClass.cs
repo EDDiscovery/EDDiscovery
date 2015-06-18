@@ -210,7 +210,7 @@ namespace EDDiscovery
                             visitedSystems.Add(ps);
                             count++;
 
-                            System.Diagnostics.Trace.WriteLine("Added system: " + ps.Name);
+                            //System.Diagnostics.Trace.WriteLine("Added system: " + ps.Name);
                         }
 
                         //Console.WriteLine(line);
