@@ -28,29 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnError = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textBoxSystemName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.buttonSubmit = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dataGridViewDistances
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewDistances.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewDistances.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnSystem,
             this.ColumnDistance,
             this.ColumnCalculated,
-            this.ColumnError});
-            this.dataGridView1.Location = new System.Drawing.Point(16, 86);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(451, 240);
-            this.dataGridView1.TabIndex = 0;
+            this.ColumnStatus});
+            this.dataGridViewDistances.Location = new System.Drawing.Point(16, 86);
+            this.dataGridViewDistances.Name = "dataGridViewDistances";
+            this.dataGridViewDistances.Size = new System.Drawing.Size(482, 240);
+            this.dataGridViewDistances.TabIndex = 0;
+            this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
+            this.dataGridViewDistances.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView1_CellValidating);
+            this.dataGridViewDistances.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView1_EditingControlShowing);
             // 
             // ColumnSystem
             // 
@@ -68,48 +71,51 @@
             this.ColumnCalculated.Name = "ColumnCalculated";
             this.ColumnCalculated.ReadOnly = true;
             // 
-            // ColumnError
+            // ColumnStatus
             // 
-            this.ColumnError.HeaderText = "Error";
-            this.ColumnError.Name = "ColumnError";
-            this.ColumnError.ReadOnly = true;
+            this.ColumnStatus.HeaderText = "Status";
+            this.ColumnStatus.Name = "ColumnStatus";
+            this.ColumnStatus.ReadOnly = true;
             // 
-            // textBox1
+            // textBoxSystemName
             // 
-            this.textBox1.Location = new System.Drawing.Point(16, 40);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(178, 20);
-            this.textBox1.TabIndex = 1;
+            this.textBoxSystemName.Enabled = false;
+            this.textBoxSystemName.Location = new System.Drawing.Point(16, 40);
+            this.textBoxSystemName.Name = "textBoxSystemName";
+            this.textBoxSystemName.Size = new System.Drawing.Size(178, 20);
+            this.textBoxSystemName.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 14);
+            this.label1.Location = new System.Drawing.Point(13, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 13);
+            this.label1.Size = new System.Drawing.Size(78, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Target System";
+            this.label1.Text = "Target System:";
             // 
-            // button1
+            // buttonSubmit
             // 
-            this.button1.Location = new System.Drawing.Point(382, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.buttonSubmit.Enabled = false;
+            this.buttonSubmit.Location = new System.Drawing.Point(389, 38);
+            this.buttonSubmit.Name = "buttonSubmit";
+            this.buttonSubmit.Size = new System.Drawing.Size(109, 23);
+            this.buttonSubmit.TabIndex = 4;
+            this.buttonSubmit.Text = "Submit Distances";
+            this.buttonSubmit.UseVisualStyleBackColor = true;
             // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonSubmit);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.textBoxSystemName);
+            this.Controls.Add(this.dataGridViewDistances);
             this.Name = "TrilaterationControl";
-            this.Size = new System.Drawing.Size(640, 522);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.Size = new System.Drawing.Size(511, 522);
+            this.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -117,13 +123,13 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridViewDistances;
+        private System.Windows.Forms.TextBox textBoxSystemName;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button buttonSubmit;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnError;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
     }
 }

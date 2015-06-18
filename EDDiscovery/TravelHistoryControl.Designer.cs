@@ -48,6 +48,7 @@
             this.buttonMap = new System.Windows.Forms.Button();
             this.textBoxSystem = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonTrilaterate = new System.Windows.Forms.Button();
             this.buttonRoss = new System.Windows.Forms.Button();
             this.buttonEDDB = new System.Windows.Forms.Button();
             this.textBoxState = new System.Windows.Forms.TextBox();
@@ -78,6 +79,8 @@
             this.textBoxCmdrName = new System.Windows.Forms.TextBox();
             this.buttonSync = new System.Windows.Forms.Button();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonCloseTrilateration = new System.Windows.Forms.Button();
+            this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -252,6 +255,7 @@
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.buttonTrilaterate);
             this.panel1.Controls.Add(this.buttonRoss);
             this.panel1.Controls.Add(this.buttonEDDB);
             this.panel1.Controls.Add(this.textBoxState);
@@ -283,6 +287,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(293, 235);
             this.panel1.TabIndex = 16;
+            // 
+            // buttonTrilaterate
+            // 
+            this.buttonTrilaterate.Location = new System.Drawing.Point(168, 186);
+            this.buttonTrilaterate.Name = "buttonTrilaterate";
+            this.buttonTrilaterate.Size = new System.Drawing.Size(99, 22);
+            this.buttonTrilaterate.TabIndex = 41;
+            this.buttonTrilaterate.Text = "Trilaterate";
+            this.buttonTrilaterate.UseVisualStyleBackColor = true;
+            this.buttonTrilaterate.Click += new System.EventHandler(this.buttonTrilaterate_Click);
             // 
             // buttonRoss
             // 
@@ -450,7 +464,7 @@
             this.textBoxDistance.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxDistance.Location = new System.Drawing.Point(81, 188);
             this.textBoxDistance.Name = "textBoxDistance";
-            this.textBoxDistance.Size = new System.Drawing.Size(186, 20);
+            this.textBoxDistance.Size = new System.Drawing.Size(70, 20);
             this.textBoxDistance.TabIndex = 23;
             // 
             // label7
@@ -567,10 +581,33 @@
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
+            // buttonCloseTrilateration
+            // 
+            this.buttonCloseTrilateration.Location = new System.Drawing.Point(443, 112);
+            this.buttonCloseTrilateration.Name = "buttonCloseTrilateration";
+            this.buttonCloseTrilateration.Size = new System.Drawing.Size(75, 23);
+            this.buttonCloseTrilateration.TabIndex = 21;
+            this.buttonCloseTrilateration.Text = "Close";
+            this.buttonCloseTrilateration.UseVisualStyleBackColor = true;
+            this.buttonCloseTrilateration.Visible = false;
+            this.buttonCloseTrilateration.Click += new System.EventHandler(this.buttonCloseTrilateration_Click);
+            // 
+            // TrilaterationControl
+            // 
+            this.TrilaterationControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TrilaterationControl.Location = new System.Drawing.Point(21, 105);
+            this.TrilaterationControl.Name = "TrilaterationControl";
+            this.TrilaterationControl.Size = new System.Drawing.Size(499, 472);
+            this.TrilaterationControl.TabIndex = 20;
+            this.TrilaterationControl.Visible = false;
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonCloseTrilateration);
             this.Controls.Add(this.buttonSync);
             this.Controls.Add(this.textBoxCmdrName);
             this.Controls.Add(this.label6);
@@ -580,10 +617,11 @@
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBoxHistoryWindow);
-            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox_History);
             this.Controls.Add(this.button_RefreshHistory);
+            this.Controls.Add(this.TrilaterationControl);
+            this.Controls.Add(this.dataGridView1);
             this.Name = "TravelHistoryControl";
             this.Size = new System.Drawing.Size(820, 586);
             this.Load += new System.EventHandler(this.TravelHistoryControl_Load);
@@ -644,5 +682,8 @@
         private System.Windows.Forms.Button buttonEDDB;
         private System.Windows.Forms.ToolTip toolTipEddb;
         private System.Windows.Forms.Button buttonRoss;
+        private System.Windows.Forms.Button buttonTrilaterate;
+        private TrilaterationControl TrilaterationControl;
+        private System.Windows.Forms.Button buttonCloseTrilateration;
     }
 }
