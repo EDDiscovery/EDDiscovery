@@ -294,7 +294,7 @@
             this.buttonRoss.Name = "buttonRoss";
             this.buttonRoss.Size = new System.Drawing.Size(16, 20);
             this.buttonRoss.TabIndex = 40;
-            this.toolTipEddb.SetToolTip(this.buttonRoss, "Click to edit in Ross");
+            this.toolTipEddb.SetToolTip(this.buttonRoss, "Click to edit system in Ross");
             this.buttonRoss.UseVisualStyleBackColor = true;
             this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
             // 
@@ -308,7 +308,7 @@
             this.buttonEDDB.Name = "buttonEDDB";
             this.buttonEDDB.Size = new System.Drawing.Size(16, 20);
             this.buttonEDDB.TabIndex = 39;
-            this.toolTipEddb.SetToolTip(this.buttonEDDB, "Click to show in EDDB");
+            this.toolTipEddb.SetToolTip(this.buttonEDDB, "Click to show system in EDDB");
             this.buttonEDDB.UseVisualStyleBackColor = true;
             this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
             // 
