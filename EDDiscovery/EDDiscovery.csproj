@@ -168,6 +168,12 @@
     <Compile Include="TrilaterationControl.Designer.cs">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </Compile>
+    <Content Include="fround.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="trilateration.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="EDDiscoveryForm.resx">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </EmbeddedResource>
