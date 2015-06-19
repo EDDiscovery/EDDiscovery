@@ -327,7 +327,8 @@ namespace EDDiscovery
 
             textBoxDistance.Enabled = distedit;
             buttonUpdate.Enabled = distedit;
-            buttonTrilaterate.Enabled = !syspos.curSystem.HasCoordinate && syspos.curSystem == GetCurrentSystem();
+            //buttonTrilaterate.Enabled = !syspos.curSystem.HasCoordinate && syspos.curSystem == GetCurrentSystem();
+            buttonTrilaterate.Enabled = true; // FIXME for debugging only
 
 
             ShowClosestSystems(syspos.Name);
@@ -737,11 +738,6 @@ namespace EDDiscovery
 
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
-            if (TrilaterationControl.Visible == false)
-            {
-
-            }
-
             dataGridView1.Visible = false;
             TrilaterationControl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
             TrilaterationControl.Visible = true;

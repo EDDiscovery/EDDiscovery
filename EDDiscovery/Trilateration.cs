@@ -23,12 +23,18 @@ namespace EDDiscovery
                 this.y = y;
                 this.z = z;
             }
+
+            public static double operator%(Coordinate a, Coordinate b)
+            {
+                return Math.Round(Math.Sqrt(Math.Pow(a.x - b.x, 2) + Math.Pow(a.y - b.y, 2) + Math.Pow(a.z - b.z, 2)), 2);
+            }
         }
 
         public class Entry
         {
             public Coordinate Coordinate { get { return coordinate; } }
             private Coordinate coordinate;
+
             public double Distance { get { return distance; } }
             private double distance;
 
@@ -43,6 +49,40 @@ namespace EDDiscovery
             }
         }
 
+        public enum ResultState
+        {
+            Exact,
+            NotExact,
+            NeedMoreDistances
+        }
+
+        public class Result
+        {
+            public ResultState State { get { return state; } }
+            private ResultState state;
+
+            public Coordinate Coordinate { get { return coordinate; } }
+            private Coordinate coordinate;
+
+            public Dictionary<Entry, double> EntriesDistances { get { return entriesDistances; } }
+            private Dictionary<Entry, double> entriesDistances;
+
+            public Result(ResultState state)
+            {
+                this.state = state;
+            }
+
+            public Result(ResultState state, Coordinate coordinate) : this(state)
+            {
+                this.coordinate = coordinate;
+            }
+
+            public Result(ResultState state, Coordinate coordinate, Dictionary<Entry, double> entriesDistances) : this(state, coordinate)
+            {
+                this.entriesDistances = entriesDistances;
+            }
+        }
+
         public delegate void Log(string message);
         public Log Logger {
             get { return logger; }
@@ -50,33 +90,33 @@ namespace EDDiscovery
         }
         private Log logger = delegate { };
 
-        private List<Entry> distances = new List<Entry>();
+        private List<Entry> entries = new List<Entry>();
 
         public Trilateration()
         {
         }
 
-        public void addDistance(Entry distance)
+        public void AddEntry(Entry distance)
         {
-            distances.Add(distance);
+            entries.Add(distance);
         }
 
-        public void addDistance(double x, double y, double z, double distance)
+        public void AddEntry(double x, double y, double z, double distance)
         {
-            addDistance(new Entry(new Coordinate(x, y, z), distance));
+            AddEntry(new Entry(new Coordinate(x, y, z), distance));
         }
 
         /// <summary>
         /// Executes trilateration based on given distances.
         /// </summary>
-        /// <returns>Exact coordinate, if found.</returns>
-        public Coordinate run()
+        /// <returns>Result information, including coordinate and corrected Entry distances if found.</returns>
+        public Result Run()
         {
-            var engine = prepareEngine();
+            var engine = PrepareEngine();
 
-            var trilat = engine.Execute("var trilat = new Trilateration();").GetCompletionValue();
+            engine.Execute("var trilat = new Trilateration();").GetCompletionValue();
 
-            foreach (var entry in distances)
+            foreach (var entry in entries)
             {
                 engine.SetValue("distance", new {
                     x = entry.Coordinate.X,
@@ -90,22 +130,45 @@ namespace EDDiscovery
             // engine.Execute("trilat.addDistance({ x: 0, y: 0, z: 0, distance: 0 });");
 
             var hasBestCandidate = engine.Execute("trilat.best && trilat.best.length === 1").GetCompletionValue().AsBoolean();
+
+            // TODO result validation (https://github.com/SteveHodge/ed-systems/blob/master/entry.html#L703)
+
             if (hasBestCandidate)
             {
-                var result = engine.Execute("trilat.best[0]").GetCompletionValue().AsObject();
                 engine.Execute("EDDlog('x = ' + trilat.best[0].x + ', y = ' + trilat.best[0].y  + ', z = ' + trilat.best[0].z);");
 
-                // TODO result validation (https://github.com/SteveHodge/ed-systems/blob/master/entry.html#L703)
+                var result = engine.Execute("trilat.best[0]").GetCompletionValue().AsObject();
+                var coordinate = new Coordinate(result.Get("x").AsNumber(), result.Get("y").AsNumber(), result.Get("z").AsNumber());
+                var correctEntriesCount = 0;
+                var correctedEntries = new Dictionary<Entry, double>();
 
-                return new Coordinate(result.Get("x").AsNumber(), result.Get("y").AsNumber(), result.Get("z").AsNumber());
-            }
-            else
+                foreach (var entry in entries)
+                {
+                    var correctedDistance = entry.Coordinate % coordinate;
+                    if (correctedDistance == entry.Distance)
+                    {
+                        correctEntriesCount++;
+                    }
+                    correctedEntries.Add(entry, correctedDistance);
+                }
+
+                engine.Execute("EDDlog('trilat.bestCount: ' + trilat.bestCount);");
+                engine.Execute("EDDlog('trilat.nextBest: ' + trilat.nextBest);");
+                var isPreciseEnough = engine.Execute("(trilat.bestCount - trilat.nextBest) >= 2").GetCompletionValue().AsBoolean();
+                if (isPreciseEnough && correctEntriesCount >= 5)
+                {
+                    return new Result(ResultState.Exact, coordinate, correctedEntries);
+                } else
+                {
+                    return new Result(ResultState.NotExact, coordinate, correctedEntries);
+                }
+            } else
             {
-                throw new MoreDistancesNeededException();
+                return new Result(ResultState.NeedMoreDistances);
             }
         }
 
-        private Jint.Engine prepareEngine()
+        private Jint.Engine PrepareEngine()
         {
             Jint.Engine engine = new Jint.Engine();
 
@@ -115,8 +178,7 @@ namespace EDDiscovery
 
             return engine;
         }
-
-        public class MoreDistancesNeededException : Exception { }
+        
         public class CalculationErrorException : Exception { }
     }
 }
