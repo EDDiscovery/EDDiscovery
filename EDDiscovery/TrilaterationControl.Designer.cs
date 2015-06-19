@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
-            this.textBoxSystemName = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.buttonSubmit = new System.Windows.Forms.Button();
-            this.backgroundWorkerRunTrilateration = new System.ComponentModel.BackgroundWorker();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textBoxSystemName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.buttonSubmit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,6 +54,32 @@
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
             this.dataGridViewDistances.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView1_CellValidating);
             this.dataGridViewDistances.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView1_EditingControlShowing);
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.Width = 200;
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.Name = "ColumnDistance";
+            this.ColumnDistance.Width = 75;
+            // 
+            // ColumnCalculated
+            // 
+            this.ColumnCalculated.HeaderText = "Calculated";
+            this.ColumnCalculated.Name = "ColumnCalculated";
+            this.ColumnCalculated.ReadOnly = true;
+            this.ColumnCalculated.Width = 75;
+            // 
+            // ColumnStatus
+            // 
+            this.ColumnStatus.HeaderText = "Status";
+            this.ColumnStatus.Name = "ColumnStatus";
+            this.ColumnStatus.ReadOnly = true;
+            this.ColumnStatus.Width = 105;
             // 
             // textBoxSystemName
             // 
@@ -83,39 +108,6 @@
             this.buttonSubmit.Text = "Submit Distances";
             this.buttonSubmit.UseVisualStyleBackColor = true;
             // 
-            // backgroundWorkerRunTrilateration
-            // 
-            this.backgroundWorkerRunTrilateration.WorkerReportsProgress = true;
-            this.backgroundWorkerRunTrilateration.WorkerSupportsCancellation = true;
-            this.backgroundWorkerRunTrilateration.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerRunTrilateration_DoWork);
-            this.backgroundWorkerRunTrilateration.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerRunTrilateration_RunWorkerCompleted);
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.Name = "ColumnSystem";
-            this.ColumnSystem.Width = 200;
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.Name = "ColumnDistance";
-            this.ColumnDistance.Width = 75;
-            // 
-            // ColumnCalculated
-            // 
-            this.ColumnCalculated.HeaderText = "Calculated";
-            this.ColumnCalculated.Name = "ColumnCalculated";
-            this.ColumnCalculated.ReadOnly = true;
-            this.ColumnCalculated.Width = 75;
-            // 
-            // ColumnStatus
-            // 
-            this.ColumnStatus.HeaderText = "Status";
-            this.ColumnStatus.Name = "ColumnStatus";
-            this.ColumnStatus.ReadOnly = true;
-            this.ColumnStatus.Width = 105;
-            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -139,7 +131,6 @@
         private System.Windows.Forms.TextBox textBoxSystemName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonSubmit;
-        private System.ComponentModel.BackgroundWorker backgroundWorkerRunTrilateration;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
