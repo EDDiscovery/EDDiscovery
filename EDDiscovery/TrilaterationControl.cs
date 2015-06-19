@@ -206,6 +206,11 @@ namespace EDDiscovery
             }
 
             TravelHistoryControl.LogText("Trilaterating..." + Environment.NewLine);
+            while (backgroundWorkerRunTrilateration.CancellationPending)
+            {
+                System.Threading.Thread.Sleep(200);
+                Application.DoEvents();
+            }
             backgroundWorkerRunTrilateration.RunWorkerAsync(distances);
         }
 
