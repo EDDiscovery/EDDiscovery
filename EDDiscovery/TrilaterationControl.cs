@@ -8,12 +8,14 @@ using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.DB;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace EDDiscovery
 {
     public partial class TrilaterationControl : UserControl
     {
         public SystemClass TargetSystem;
+        private Thread trilaterationThread;
 
         public TrilaterationControl()
         {
@@ -127,7 +129,15 @@ namespace EDDiscovery
             }
 
             // trigger trilateration calculation
-            TryRunTrilateration();
+            if (trilaterationThread != null)
+            {
+                TravelHistoryControl.LogText("Aborting previous trilateration attempt." + Environment.NewLine);
+                trilaterationThread.Abort();
+            }
+            trilaterationThread = new Thread(new ThreadStart(RunTrilateration));
+            trilaterationThread.Name = "Trilateration";
+            
+            trilaterationThread.Start();
         }
 
         private void TrilaterationControl_VisibleChanged(object sender, EventArgs e)
@@ -158,6 +168,12 @@ namespace EDDiscovery
 
             if (Visible == false)
             {
+                if (trilaterationThread != null)
+                {
+                    trilaterationThread.Abort();
+                    trilaterationThread = null;
+                }
+
                 textBoxSystemName.Text = null;
 
                 // keep systems, clear distances
@@ -171,14 +187,12 @@ namespace EDDiscovery
                     calculatedDistanceCell.Value = null;
                     statusCell.Value = null;
                 }
-
-                backgroundWorkerRunTrilateration.CancelAsync();
             }
         }
 
-        private void TryRunTrilateration()
+        private void RunTrilateration()
         {
-            var distances = new Dictionary<SystemClass, Trilateration.Entry>();
+            var systemsEntries = new Dictionary<SystemClass, Trilateration.Entry>();
             
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
@@ -195,77 +209,58 @@ namespace EDDiscovery
 
                 var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
 
-                distances.Add(system, entry);
+                systemsEntries.Add(system, entry);
             }
 
-            backgroundWorkerRunTrilateration.CancelAsync();
-
-            if (distances.Count < 3)
+            if (systemsEntries.Count < 3)
             {
                 return;
             }
 
-            TravelHistoryControl.LogText("Trilaterating..." + Environment.NewLine);
-            while (backgroundWorkerRunTrilateration.CancellationPending)
+            Invoke((MethodInvoker) delegate
             {
-                System.Threading.Thread.Sleep(200);
-                Application.DoEvents();
-            }
-            backgroundWorkerRunTrilateration.RunWorkerAsync(distances);
-        }
-
-        private void backgroundWorkerRunTrilateration_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var distances = (Dictionary<SystemClass, Trilateration.Entry>) e.Argument;
+                TravelHistoryControl.LogText("Starting trilateration..." + Environment.NewLine);
+            });
 
             var trilateration = new Trilateration();
             trilateration.Logger = (s) => System.Console.WriteLine(s);
 
-            foreach (var item in distances)
+            foreach (var item in systemsEntries)
             {
                 trilateration.AddEntry(item.Value);
             }
 
-            e.Result = Tuple.Create(distances, trilateration.Run());
-        }
-
-        private void backgroundWorkerRunTrilateration_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Cancelled)
-            {
-                return;
-            }
-
-            if (e.Error != null)
-            {
-                TravelHistoryControl.LogText("Trilateration failed: " + e.Error.Message);
-                return;
-            }
-
-            var result = (Tuple<Dictionary<SystemClass, Trilateration.Entry>, Trilateration.Result>) e.Result;
-            var systemsEntriesDict = result.Item1;
-            var trilaterationResult = result.Item2;
+            var trilaterationResult = trilateration.Run();
 
             if (trilaterationResult.State == Trilateration.ResultState.Exact)
             {
-                TravelHistoryControl.LogText("Trilateration successful, exact coordinates found." + Environment.NewLine);
-                TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
+                Invoke((MethodInvoker) delegate
+                {
+                    TravelHistoryControl.LogText("Trilateration successful, exact coordinates found." + Environment.NewLine);
+                    TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
+                });
             } else if (trilaterationResult.State == Trilateration.ResultState.NotExact)
             {
-                TravelHistoryControl.LogText("Trilateration not successful, only approximate coordinates found." + Environment.NewLine);
-                TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
-                TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText("Trilateration not successful, only approximate coordinates found." + Environment.NewLine);
+                    TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
+                    TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
+                });
             } else if (trilaterationResult.State == Trilateration.ResultState.NeedMoreDistances)
             {
-                TravelHistoryControl.LogText("Trilateration not successful, coordinates not found." + Environment.NewLine);
-                TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText("Trilateration not successful, coordinates not found." + Environment.NewLine);
+                    TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
+                });
             }
 
             // update dataGrid with calculated distances and status
             if (trilaterationResult.EntriesDistances != null)
             {
                 var entriesDistances = trilaterationResult.EntriesDistances;
-                var inversedSystemEntriesDict = systemsEntriesDict.ToDictionary(x => x.Value, x => x.Key);
+                var inversedSystemEntriesDict = systemsEntries.ToDictionary(x => x.Value, x => x.Key);
                 
                 for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
                 {
@@ -283,12 +278,12 @@ namespace EDDiscovery
 
                     var system = (SystemClass) systemCell.Tag;
 
-                    if (!systemsEntriesDict.ContainsKey(system)) // calculated without this system, so skip the row
+                    if (!systemsEntries.ContainsKey(system)) // calculated without this system, so skip the row
                     {
                         continue;
                     }
 
-                    var systemEntry = systemsEntriesDict[system];
+                    var systemEntry = systemsEntries[system];
                     var calculatedDistance = entriesDistances[systemEntry];
 
                     calculatedDistanceCell.Value = calculatedDistance.ToString();
