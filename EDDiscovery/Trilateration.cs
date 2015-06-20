@@ -116,6 +116,101 @@ namespace EDDiscovery
             }
         }
 
+        public class Region 
+        {
+	        public int regionSize = 1;	// 1/32 Ly grid locations to search around candidate coordinate
+            public double minx, maxx;
+            public double miny, maxy;
+            public double minz, maxz;
+
+	        List<Coordinate> origins;
+            
+            public Region(Coordinate center)
+            {
+                origins = new List<Coordinate>();
+
+                origins.Add(center);
+	            this.minx = Math.Floor(center.X*32-regionSize)/32;
+	            this.maxx = Math.Ceiling(center.X*32+regionSize)/32;
+	            this.miny = Math.Floor(center.Y*32-regionSize)/32;
+	            this.maxy = Math.Ceiling(center.Y*32+regionSize)/32;
+	            this.minz = Math.Floor(center.Z*32-regionSize)/32;
+	            this.maxz = Math.Ceiling(center.Z*32+regionSize)/32;
+	
+            }
+
+	    // number of grid coordinates in the region
+	    // for a region that has not been merged this is typically (2*regionSize)^3 (though if the center
+	    // was grid aligned it will be (2*regionsize-1)^3)
+	    public int Volume()
+        {
+		    return (int)(32768*(this.maxx-this.minx+1/32)*(this.maxy-this.miny+1/32)*(this.maxz-this.minz+1/32));
+	    }
+
+	    // p has properties x, y, z. returns true if p is in this region, false otherwise
+	    public bool contains(Coordinate p) 
+        {
+		    return (p.X >= this.minx && p.X <= this.maxx
+				    && p.Y >= this.miny && p.Y <= this.maxy
+				    && p.Z >= this.minz && p.Z <= this.maxz);
+	    }
+
+
+        public Region()
+        {
+        }
+
+	    // returns a new region that represents the union of this and r
+	    public Region union(Region r) 
+        {
+		//    if (!(r instanceof Region)) return null;
+
+		    Region u = new Region();
+
+            u.origins = new List<Coordinate>();
+
+            u.origins.AddRange(origins);
+            u.origins.AddRange(r.origins);
+
+		    u.minx = Math.Min(this.minx, r.minx);
+		    u.miny = Math.Min(this.miny, r.miny);
+		    u.minz = Math.Min(this.minz, r.minz);
+		    u.maxx = Math.Max(this.maxx, r.maxx);
+		    u.maxy = Math.Max(this.maxy, r.maxy);
+		    u.maxz = Math.Max(this.maxz, r.maxz);
+
+		    return u;
+	    }
+	
+	    // returns the highest coordinate of the vector from p to the closest origin point. this is the
+	    // minimum value of region size (in Ly) that would include the specified point
+	    public double centrality(Coordinate p)
+        {
+            double d, best;
+		    best = 0;
+		    for (int i = 0; i < this.origins.Count; i++) 
+            {
+			    d = Math.Max(
+				    Math.Abs(this.origins[i].X - p.X),
+				    Math.Max(Math.Abs(this.origins[i].Y - p.Y),
+				    Math.Abs(this.origins[i].Z - p.Z))
+			    );
+			    if (d < best || best == 0) 
+                    best = d;
+		    }
+		    return best;
+	    }
+	
+            /*
+	    this.toString = function() {
+		    return "Region ["+this.minx+", "+this.miny+", "+this.minz
+			    +"] - ["+this.maxx+", "+this.maxy+", "+this.maxz+"] ("+this.volume()+" points)";
+	    };*/
+    };
+
+
+
+
         public delegate void Log(string message);
         public Log Logger {
             get { return logger; }
@@ -128,6 +223,172 @@ namespace EDDiscovery
         public Trilateration()
         {
         }
+
+
+
+
+
+        //private Regions regions;
+
+
+        private List<Region>  getRegions() 
+        {
+		List<Region>  regions = new List<Region>();
+
+		// find candidate locations by trilateration on all combinations of the input distances
+		// expand candidate locations to regions, combining as necessary
+		for (int i1 = 0; i1 < this.entries.Count; i1++) {
+			for (int i2 = i1+1; i2 < this.entries.Count; i2++) {
+				for (int i3 = i2+1; i3 < this.entries.Count; i3++) {
+			 		Candidate[] candidates = getCandidates(this.entries.ToArray(), i1, i2, i3);
+
+			 		//candidates.forEach(function(candidate) 
+                    foreach (Candidate  candidate in candidates)
+                    {
+						var r = new Region(candidate);
+						// see if there is existing region we can merge this new one into
+						for (var j = 0; j < regions.Count; j++) {
+							Region u = r.union(regions[j]);
+							if (u.Volume() < r.Volume() + regions[j].Volume()) {
+								// volume of union is less than volume of individual regions so merge them
+								regions[j] = u;
+								// TODO should really rescan regions to see if there are other existing regions that can be merged into this
+								r = null;	// clear r so we know not to add it
+								break;
+							}
+						}
+						if (r != null) 
+                        {
+							regions.Add(r);
+						}
+			 		}
+				}
+			}
+		}
+
+//		console.log("Candidate regions:");
+//		$.each(regions, function() {
+//			console.log(this.toString());
+//		});
+		return regions;
+	}
+
+	private int checkDistances(Coordinate p) 
+    {
+		var count = 0;
+		
+        foreach (Entry entry in entries)
+        
+		//self.distances.forEach(function(dist) 
+        {
+			var dp = 2;
+/*
+			if (typeof dist.distance === 'string') {
+				// if dist is a string then check if it has exactly 3 decimal places:
+				if (dist.distance.indexOf('.') === dist.distance.length-4) dp = 3;
+			} else if (dist.distance.toFixed(3) === dist.distance.toString()) {
+				// assume it's 3 dp if its 3 dp rounded string matches the string version
+				dp = 3;
+			}
+            */
+
+            
+			if (entry.Distance == eddist(p, entry.Coordinate, dp)) 
+                count++;
+
+		}
+
+		return count;
+	}
+
+
+        private List<Region> regions;
+        private int bestCount;
+        private int nextBest;
+        private List<Coordinate> best;
+        private List<Coordinate> next;
+
+
+	    public bool runTril() 
+        {
+
+		this.regions = getRegions();
+		// check the number of matching distances for each grid location in each region
+		// track the best number of matches (and the corresponding locations) and the next
+		// best number
+		this.bestCount = 0;
+		this.best = new List<Coordinate>();
+		this.nextBest = 0;
+		this.next = new List<Coordinate>();
+
+            foreach (Region region in regions)
+            {
+		//this.regions.forEach(function(region) {
+			bestCount = 0;
+			best = new List<Coordinate>();
+			nextBest = 0;
+			next = new List<Coordinate>();
+
+			for (var x = region.minx; x <= region.maxx; x+= 1/32) {
+				for (var y = region.miny; y <= region.maxy; y+= 1/32) {
+					for (var z = region.minz; z <= region.maxz; z+= 1/32) {
+						Coordinate p = new Coordinate(x, y, z);
+						var matches = checkDistances(p);
+						if (matches > this.bestCount) {
+							this.nextBest = this.bestCount;
+							this.next = this.best;
+							this.bestCount = matches;
+							this.best = new List<Coordinate>();
+                            this.best.Add(p);
+
+						} else if (matches == this.bestCount) {
+							this.best.Add(p);
+						} else if (matches > this.nextBest) {
+							this.nextBest = matches;
+							this.next = new List<Coordinate>();
+                            this.next.Add(p);
+			
+						} else if (matches == this.nextBest) {
+							this.next.Add(p);
+						}
+						if (matches > this.bestCount) {
+							this.nextBest = this.bestCount;
+							this.next = this.best;
+							this.bestCount = matches;
+						    this.best = new List<Coordinate>();
+                            this.best.Add(p);
+						} else if (matches == this.bestCount) {
+							var found = false;
+                            foreach (var e in this.best)
+                            {
+							//this.best.forEach(function(e) {
+								if (e.X == p.X && e.Y == p.Y && e.Z == p.Z) {
+									found = true;
+									return false;
+								}
+							}
+							if (!found) this.best.Add(p);
+						} else if (matches > this.nextBest) {
+							this.nextBest = matches;
+							this.next = new List<Coordinate>();
+                            this.next.Add(p);
+						} else if (matches == this.nextBest) {
+							var found = false;
+                            foreach (var e in this.best)
+							{
+								if (e.X == p.X && e.Y == p.Y && e.Z == p.Z) {
+									found = true;
+									return false;
+								}
+							}
+							if (!found) this.next.Add(p);
+						}
+					}
+				}
+			}
+		}
+            return true;
+	}
 
 
 //  / p1 and p2 are objects that have x, y, and z properties
