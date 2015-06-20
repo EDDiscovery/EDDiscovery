@@ -34,8 +34,16 @@
             this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textBoxSystemName = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelTargetSystem = new System.Windows.Forms.Label();
             this.buttonSubmit = new System.Windows.Forms.Button();
+            this.labelCoordinates = new System.Windows.Forms.Label();
+            this.textBoxCoordinateX = new System.Windows.Forms.TextBox();
+            this.labelCoordinateX = new System.Windows.Forms.Label();
+            this.labelCoordinateY = new System.Windows.Forms.Label();
+            this.textBoxCoordinateY = new System.Windows.Forms.TextBox();
+            this.labelCoordinateZ = new System.Windows.Forms.Label();
+            this.textBoxCoordinateZ = new System.Windows.Forms.TextBox();
+            this.labelStatus = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,9 +59,9 @@
             this.dataGridViewDistances.Name = "dataGridViewDistances";
             this.dataGridViewDistances.Size = new System.Drawing.Size(500, 240);
             this.dataGridViewDistances.TabIndex = 0;
-            this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
-            this.dataGridViewDistances.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView1_CellValidating);
-            this.dataGridViewDistances.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView1_EditingControlShowing);
+            this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
+            this.dataGridViewDistances.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewDistances_CellValidating);
+            this.dataGridViewDistances.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridViewDistances_EditingControlShowing);
             // 
             // ColumnSystem
             // 
@@ -83,20 +91,20 @@
             // 
             // textBoxSystemName
             // 
-            this.textBoxSystemName.Enabled = false;
             this.textBoxSystemName.Location = new System.Drawing.Point(16, 40);
             this.textBoxSystemName.Name = "textBoxSystemName";
-            this.textBoxSystemName.Size = new System.Drawing.Size(178, 20);
+            this.textBoxSystemName.ReadOnly = true;
+            this.textBoxSystemName.Size = new System.Drawing.Size(146, 20);
             this.textBoxSystemName.TabIndex = 1;
             // 
-            // label1
+            // labelTargetSystem
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Target System:";
+            this.labelTargetSystem.AutoSize = true;
+            this.labelTargetSystem.Location = new System.Drawing.Point(13, 24);
+            this.labelTargetSystem.Name = "labelTargetSystem";
+            this.labelTargetSystem.Size = new System.Drawing.Size(78, 13);
+            this.labelTargetSystem.TabIndex = 2;
+            this.labelTargetSystem.Text = "Target System:";
             // 
             // buttonSubmit
             // 
@@ -108,12 +116,96 @@
             this.buttonSubmit.Text = "Submit Distances";
             this.buttonSubmit.UseVisualStyleBackColor = true;
             // 
+            // labelCoordinates
+            // 
+            this.labelCoordinates.AutoSize = true;
+            this.labelCoordinates.Location = new System.Drawing.Point(174, 24);
+            this.labelCoordinates.Name = "labelCoordinates";
+            this.labelCoordinates.Size = new System.Drawing.Size(122, 13);
+            this.labelCoordinates.TabIndex = 5;
+            this.labelCoordinates.Text = "Trilaterated Coordinates:";
+            // 
+            // textBoxCoordinateX
+            // 
+            this.textBoxCoordinateX.Location = new System.Drawing.Point(191, 40);
+            this.textBoxCoordinateX.Name = "textBoxCoordinateX";
+            this.textBoxCoordinateX.ReadOnly = true;
+            this.textBoxCoordinateX.Size = new System.Drawing.Size(50, 20);
+            this.textBoxCoordinateX.TabIndex = 6;
+            this.textBoxCoordinateX.Text = "?";
+            this.textBoxCoordinateX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // labelCoordinateX
+            // 
+            this.labelCoordinateX.AutoSize = true;
+            this.labelCoordinateX.Location = new System.Drawing.Point(174, 43);
+            this.labelCoordinateX.Name = "labelCoordinateX";
+            this.labelCoordinateX.Size = new System.Drawing.Size(17, 13);
+            this.labelCoordinateX.TabIndex = 7;
+            this.labelCoordinateX.Text = "X:";
+            // 
+            // labelCoordinateY
+            // 
+            this.labelCoordinateY.AutoSize = true;
+            this.labelCoordinateY.Location = new System.Drawing.Point(241, 43);
+            this.labelCoordinateY.Name = "labelCoordinateY";
+            this.labelCoordinateY.Size = new System.Drawing.Size(17, 13);
+            this.labelCoordinateY.TabIndex = 9;
+            this.labelCoordinateY.Text = "Y:";
+            // 
+            // textBoxCoordinateY
+            // 
+            this.textBoxCoordinateY.Location = new System.Drawing.Point(258, 40);
+            this.textBoxCoordinateY.Name = "textBoxCoordinateY";
+            this.textBoxCoordinateY.ReadOnly = true;
+            this.textBoxCoordinateY.Size = new System.Drawing.Size(50, 20);
+            this.textBoxCoordinateY.TabIndex = 8;
+            this.textBoxCoordinateY.Text = "?";
+            this.textBoxCoordinateY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // labelCoordinateZ
+            // 
+            this.labelCoordinateZ.AutoSize = true;
+            this.labelCoordinateZ.Location = new System.Drawing.Point(308, 43);
+            this.labelCoordinateZ.Name = "labelCoordinateZ";
+            this.labelCoordinateZ.Size = new System.Drawing.Size(17, 13);
+            this.labelCoordinateZ.TabIndex = 11;
+            this.labelCoordinateZ.Text = "Z:";
+            // 
+            // textBoxCoordinateZ
+            // 
+            this.textBoxCoordinateZ.Location = new System.Drawing.Point(325, 40);
+            this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
+            this.textBoxCoordinateZ.ReadOnly = true;
+            this.textBoxCoordinateZ.Size = new System.Drawing.Size(50, 20);
+            this.textBoxCoordinateZ.TabIndex = 10;
+            this.textBoxCoordinateZ.Text = "?";
+            this.textBoxCoordinateZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // labelStatus
+            // 
+            this.labelStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelStatus.Location = new System.Drawing.Point(134, 4);
+            this.labelStatus.Name = "labelStatus";
+            this.labelStatus.Size = new System.Drawing.Size(241, 19);
+            this.labelStatus.TabIndex = 12;
+            this.labelStatus.Text = "Status";
+            this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.labelStatus);
+            this.Controls.Add(this.labelCoordinateZ);
+            this.Controls.Add(this.textBoxCoordinateZ);
+            this.Controls.Add(this.labelCoordinateY);
+            this.Controls.Add(this.textBoxCoordinateY);
+            this.Controls.Add(this.labelCoordinateX);
+            this.Controls.Add(this.textBoxCoordinateX);
+            this.Controls.Add(this.labelCoordinates);
             this.Controls.Add(this.buttonSubmit);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelTargetSystem);
             this.Controls.Add(this.textBoxSystemName);
             this.Controls.Add(this.dataGridViewDistances);
             this.Name = "TrilaterationControl";
@@ -129,11 +221,19 @@
 
         private System.Windows.Forms.DataGridView dataGridViewDistances;
         private System.Windows.Forms.TextBox textBoxSystemName;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelTargetSystem;
         private System.Windows.Forms.Button buttonSubmit;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
+        private System.Windows.Forms.Label labelCoordinates;
+        private System.Windows.Forms.TextBox textBoxCoordinateX;
+        private System.Windows.Forms.Label labelCoordinateX;
+        private System.Windows.Forms.Label labelCoordinateY;
+        private System.Windows.Forms.TextBox textBoxCoordinateY;
+        private System.Windows.Forms.Label labelCoordinateZ;
+        private System.Windows.Forms.TextBox textBoxCoordinateZ;
+        private System.Windows.Forms.Label labelStatus;
     }
 }

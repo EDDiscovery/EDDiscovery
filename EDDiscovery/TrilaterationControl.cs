@@ -36,7 +36,7 @@ namespace EDDiscovery
             return systems;
         }
 
-        private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        private void dataGridViewDistances_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             var textbox = (TextBox)e.Control;
 
@@ -62,7 +62,7 @@ namespace EDDiscovery
             textbox.AutoCompleteCustomSource = items;
         }
 
-        private void dataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        private void dataGridViewDistances_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
@@ -102,7 +102,7 @@ namespace EDDiscovery
             }
         }
 
-        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewDistances_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
@@ -145,7 +145,8 @@ namespace EDDiscovery
             if (Visible == true && TargetSystem != null)
             {
                 textBoxSystemName.Text = TargetSystem.name;
-
+                labelStatus.Text = "Enter Distances";
+                labelStatus.BackColor = Color.LightBlue;
 
                 //var trilat = new Trilateration();
                 //trilat.Logger = (s) => TravelHistoryControl.LogText(s + Environment.NewLine);
@@ -175,18 +176,11 @@ namespace EDDiscovery
                 }
 
                 textBoxSystemName.Text = null;
+                textBoxCoordinateX.Text = "?";
+                textBoxCoordinateY.Text = "?";
+                textBoxCoordinateZ.Text = "?";
 
-                // keep systems, clear distances
-                for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
-                {
-                    var distanceCell = dataGridViewDistances[1, i];
-                    var calculatedDistanceCell = dataGridViewDistances[2, i];
-                    var statusCell = dataGridViewDistances[3, i];
-
-                    distanceCell.Value = null;
-                    calculatedDistanceCell.Value = null;
-                    statusCell.Value = null;
-                }
+                ClearDataGridRows();
             }
         }
 
@@ -238,21 +232,48 @@ namespace EDDiscovery
                 {
                     TravelHistoryControl.LogText("Trilateration successful, exact coordinates found." + Environment.NewLine);
                     TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
+                    labelStatus.Text = "Success, coordinates found!";
+                    labelStatus.BackColor = Color.LawnGreen;
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NotExact)
             {
-                Invoke((MethodInvoker)delegate
+                Invoke((MethodInvoker) delegate
                 {
                     TravelHistoryControl.LogText("Trilateration not successful, only approximate coordinates found." + Environment.NewLine);
                     TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
                     TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
+                    labelStatus.Text = "Enter More Distances";
+                    labelStatus.BackColor = Color.Orange;
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NeedMoreDistances)
             {
-                Invoke((MethodInvoker)delegate
+                Invoke((MethodInvoker) delegate
                 {
                     TravelHistoryControl.LogText("Trilateration not successful, coordinates not found." + Environment.NewLine);
                     TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
+                    labelStatus.Text = "Enter More Distances";
+                    labelStatus.BackColor = Color.Red;
+                    ClearCalculatedDataGridRows();
+                });
+            }
+            
+            // update trilaterated coordinates
+            if (trilaterationResult.Coordinate != null)
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    textBoxCoordinateX.Text = trilaterationResult.Coordinate.X.ToString();
+                    textBoxCoordinateY.Text = trilaterationResult.Coordinate.Y.ToString();
+                    textBoxCoordinateZ.Text = trilaterationResult.Coordinate.Z.ToString();
+                });
+            }
+            else
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    textBoxCoordinateX.Text = "?";
+                    textBoxCoordinateY.Text = "?";
+                    textBoxCoordinateZ.Text = "?";
                 });
             }
 
@@ -292,13 +313,42 @@ namespace EDDiscovery
                     {
                         calculatedDistanceCell.Style.ForeColor = Color.Green;
                         statusCell.Value = "OK";
+                        statusCell.Style.ForeColor = Color.Green;
                     } else
                     {
                         calculatedDistanceCell.Style.ForeColor = Color.Red;
                         statusCell.Value = "Wrong distance";
+                        statusCell.Style.ForeColor = Color.Red;
                     }
-
                 }
+            }
+        }
+
+        private void ClearDataGridRows()
+        {
+            // keep systems, clear distances
+            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            {
+                var distanceCell = dataGridViewDistances[1, i];
+                var calculatedDistanceCell = dataGridViewDistances[2, i];
+                var statusCell = dataGridViewDistances[3, i];
+
+                distanceCell.Value = null;
+                calculatedDistanceCell.Value = null;
+                statusCell.Value = null;
+            }
+        }
+
+        private void ClearCalculatedDataGridRows()
+        {
+            // keep systems and distances, clear calculated distances and statuses
+            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            {
+                var calculatedDistanceCell = dataGridViewDistances[2, i];
+                var statusCell = dataGridViewDistances[3, i];
+
+                calculatedDistanceCell.Value = null;
+                statusCell.Value = null;
             }
         }
     }
