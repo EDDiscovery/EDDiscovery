@@ -148,6 +148,8 @@ namespace EDDiscovery
                 labelStatus.Text = "Enter Distances";
                 labelStatus.BackColor = Color.LightBlue;
 
+                PopulateDataGridViewSuggestedSystems();
+
                 //var trilat = new Trilateration();
                 //trilat.Logger = (s) => TravelHistoryControl.LogText(s + Environment.NewLine);
 
@@ -180,7 +182,9 @@ namespace EDDiscovery
                 textBoxCoordinateY.Text = "?";
                 textBoxCoordinateZ.Text = "?";
 
-                ClearDataGridRows();
+                ClearDataGridViewDistancesRows();
+                ClearDataGridViewClosestSystemsRows();
+                ClearDataGridViewSuggestedSystemsRows();
             }
         }
 
@@ -255,7 +259,7 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
                     labelStatus.Text = "Enter More Distances";
                     labelStatus.BackColor = Color.Red;
-                    ClearCalculatedDataGridRows();
+                    ClearCalculatedDataGridViewDistancesRows();
                 });
             }
             
@@ -326,7 +330,7 @@ namespace EDDiscovery
             }
         }
 
-        private void ClearDataGridRows()
+        private void ClearDataGridViewDistancesRows()
         {
             // keep systems, clear distances
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
@@ -341,7 +345,7 @@ namespace EDDiscovery
             }
         }
 
-        private void ClearCalculatedDataGridRows()
+        private void ClearCalculatedDataGridViewDistancesRows()
         {
             // keep systems and distances, clear calculated distances and statuses
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
@@ -352,6 +356,59 @@ namespace EDDiscovery
                 calculatedDistanceCell.Value = null;
                 statusCell.Value = null;
             }
+        }
+
+        private void ClearDataGridViewClosestSystemsRows()
+        {
+            dataGridViewClosestSystems.Rows.Clear();
+        }
+
+        private void ClearDataGridViewSuggestedSystemsRows()
+        {
+            dataGridViewSuggestedSystems.Rows.Clear();
+        }
+
+        private void PopulateDataGridViewSuggestedSystems()
+        {
+            // TODO for now, just add few systems at different locations
+            // later, we'll implement something more clever, possibly
+            // based on distance and direction
+            var suggestedSystems = new List<string>() { "Sol", "Pars", "Maia", "Polaris", "HIP 1069" };
+            foreach (var system in SystemData.SystemList)
+            {
+                if (suggestedSystems.Contains(system.name))
+                {
+                    var index = dataGridViewSuggestedSystems.Rows.Add(system.name);
+                    dataGridViewSuggestedSystems[0, index].Tag = system;
+                }
+            }
+        }
+
+        private void dataGridViewClosestSystems_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            var system = (SystemClass) dataGridViewClosestSystems[0, e.RowIndex].Tag;
+            AddSystemToDataGridViewDistances(system);
+        }
+
+        private void dataGridViewSuggestedSystems_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var system = (SystemClass)dataGridViewSuggestedSystems[0, e.RowIndex].Tag;
+            AddSystemToDataGridViewDistances(system);
+        }
+
+        private void AddSystemToDataGridViewDistances(SystemClass system)
+        {
+            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            {
+                var cell = dataGridViewDistances[0, i];
+                if (cell.Tag != null && (SystemClass)cell.Tag == system)
+                {
+                    return;
+                }
+            }
+
+            var index = dataGridViewDistances.Rows.Add(system.name);
+            dataGridViewDistances[0, index].Tag = system;
         }
     }
 }
