@@ -142,9 +142,9 @@ namespace EDDiscovery
 	    // number of grid coordinates in the region
 	    // for a region that has not been merged this is typically (2*regionSize)^3 (though if the center
 	    // was grid aligned it will be (2*regionsize-1)^3)
-	    public int Volume()
+	    public double Volume()
         {
-		    return (int)(32768*(this.maxx-this.minx+1/32)*(this.maxy-this.miny+1/32)*(this.maxz-this.minz+1/32));
+		    return (32768*(this.maxx-this.minx+1/32)*(this.maxy-this.miny+1/32)*(this.maxz-this.minz+1/32));
 	    }
 
 	    // p has properties x, y, z. returns true if p is in this region, false otherwise
@@ -329,9 +329,9 @@ namespace EDDiscovery
 			nextBest = 0;
 			next = new List<Coordinate>();
 
-			for (var x = region.minx; x <= region.maxx; x+= 1/32) {
-				for (var y = region.miny; y <= region.maxy; y+= 1/32) {
-					for (var z = region.minz; z <= region.maxz; z+= 1/32) {
+			for (var x = region.minx; x <= region.maxx; x+= 1/32.0) {
+				for (var y = region.miny; y <= region.maxy; y+= 1/32.0) {
+					for (var z = region.minz; z <= region.maxz; z+= 1/32.0) {
 						Coordinate p = new Coordinate(x, y, z);
 						var matches = checkDistances(p);
 						if (matches > this.bestCount) {
@@ -364,7 +364,8 @@ namespace EDDiscovery
 							//this.best.forEach(function(e) {
 								if (e.X == p.X && e.Y == p.Y && e.Z == p.Z) {
 									found = true;
-									return false;
+									//return false;
+                                    break;
 								}
 							}
 							if (!found) this.best.Add(p);
@@ -378,7 +379,8 @@ namespace EDDiscovery
 							{
 								if (e.X == p.X && e.Y == p.Y && e.Z == p.Z) {
 									found = true;
-									return false;
+									//return false;
+                                    break;
 								}
 							}
 							if (!found) this.next.Add(p);

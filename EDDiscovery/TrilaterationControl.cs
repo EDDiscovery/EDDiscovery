@@ -224,6 +224,8 @@ namespace EDDiscovery
                 trilateration.AddEntry(item.Value);
             }
 
+            trilateration.runTril();
+
             var trilaterationResult = trilateration.Run();
 
             if (trilaterationResult.State == Trilateration.ResultState.Exact)
