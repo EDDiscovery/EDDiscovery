@@ -381,8 +381,12 @@ namespace EDDiscovery
                 engine.Run("EDDlog('x = ' + trilat.best[0].x + ', y = ' + trilat.best[0].y  + ', z = ' + trilat.best[0].z);");
 
                 engine.Run("var bestResult = trilat.best[0];");
-                var result = (Dictionary<string, object>) engine.GetParameter("bestResult");
-                var coordinate = new Coordinate((double) result["x"], (double)result["y"], (double)result["z"]);
+                var result = (Dictionary<string, object>) engine.GetParameter("bestResult"); // contains either int or double
+                var coordinate = new Coordinate(
+                    result["x"] is int ? (int)result["x"] * 1.0 : (double)result["x"],
+                    result["y"] is int ? (int)result["y"] * 1.0 : (double)result["y"],
+                    result["z"] is int ? (int)result["z"] * 1.0 : (double)result["z"]
+                );
                 var correctEntriesCount = 0;
                 var correctedEntries = new Dictionary<Entry, double>();
 
