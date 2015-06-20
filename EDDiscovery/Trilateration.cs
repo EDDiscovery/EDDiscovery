@@ -324,10 +324,10 @@ namespace EDDiscovery
             foreach (Region region in regions)
             {
 		//this.regions.forEach(function(region) {
-			bestCount = 0;
-			best = new List<Coordinate>();
-			nextBest = 0;
-			next = new List<Coordinate>();
+            //bestCount = 0;
+            //best = new List<Coordinate>();
+            //nextBest = 0;
+            //next = new List<Coordinate>();
 
 			for (var x = region.minx; x <= region.maxx; x+= 1/32.0) {
 				for (var y = region.miny; y <= region.maxy; y+= 1/32.0) {
