@@ -145,7 +145,8 @@ namespace EDDiscovery
             if (Visible == true && TargetSystem != null)
             {
                 textBoxSystemName.Text = TargetSystem.name;
-
+                labelStatus.Text = "Enter Distances";
+                labelStatus.BackColor = Color.LightBlue;
 
                 //var trilat = new Trilateration();
                 //trilat.Logger = (s) => TravelHistoryControl.LogText(s + Environment.NewLine);
@@ -241,21 +242,27 @@ namespace EDDiscovery
                 {
                     TravelHistoryControl.LogText("Trilateration successful, exact coordinates found." + Environment.NewLine);
                     TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
+                    labelStatus.Text = "Success, coordinates found!";
+                    labelStatus.BackColor = Color.LawnGreen;
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NotExact)
             {
-                Invoke((MethodInvoker)delegate
+                Invoke((MethodInvoker) delegate
                 {
                     TravelHistoryControl.LogText("Trilateration not successful, only approximate coordinates found." + Environment.NewLine);
                     TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
                     TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
+                    labelStatus.Text = "Enter More Distances";
+                    labelStatus.BackColor = Color.Orange;
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NeedMoreDistances)
             {
-                Invoke((MethodInvoker)delegate
+                Invoke((MethodInvoker) delegate
                 {
                     TravelHistoryControl.LogText("Trilateration not successful, coordinates not found." + Environment.NewLine);
                     TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
+                    labelStatus.Text = "Enter More Distances";
+                    labelStatus.BackColor = Color.Red;
                 });
             }
             
@@ -315,10 +322,12 @@ namespace EDDiscovery
                     {
                         calculatedDistanceCell.Style.ForeColor = Color.Green;
                         statusCell.Value = "OK";
+                        statusCell.Style.ForeColor = Color.Green;
                     } else
                     {
                         calculatedDistanceCell.Style.ForeColor = Color.Red;
                         statusCell.Value = "Wrong distance";
+                        statusCell.Style.ForeColor = Color.Red;
                     }
 
                 }

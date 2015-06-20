@@ -43,6 +43,7 @@
             this.textBoxCoordinateY = new System.Windows.Forms.TextBox();
             this.labelCoordinateZ = new System.Windows.Forms.Label();
             this.textBoxCoordinateZ = new System.Windows.Forms.TextBox();
+            this.labelStatus = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.SuspendLayout();
             // 
@@ -181,10 +182,21 @@
             this.textBoxCoordinateZ.Text = "?";
             this.textBoxCoordinateZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // labelStatus
+            // 
+            this.labelStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelStatus.Location = new System.Drawing.Point(134, 4);
+            this.labelStatus.Name = "labelStatus";
+            this.labelStatus.Size = new System.Drawing.Size(241, 19);
+            this.labelStatus.TabIndex = 12;
+            this.labelStatus.Text = "Status";
+            this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.labelCoordinateZ);
             this.Controls.Add(this.textBoxCoordinateZ);
             this.Controls.Add(this.labelCoordinateY);
@@ -222,5 +234,6 @@
         private System.Windows.Forms.TextBox textBoxCoordinateY;
         private System.Windows.Forms.Label labelCoordinateZ;
         private System.Windows.Forms.TextBox textBoxCoordinateZ;
+        private System.Windows.Forms.Label labelStatus;
     }
 }
