@@ -321,74 +321,98 @@ namespace EDDiscovery
 		this.nextBest = 0;
 		this.next = new List<Coordinate>();
 
-            foreach (Region region in regions)
-            {
-		//this.regions.forEach(function(region) {
+        foreach (Region region in regions)
+        {
+            //this.regions.forEach(function(region) {
             //bestCount = 0;
             //best = new List<Coordinate>();
             //nextBest = 0;
             //next = new List<Coordinate>();
 
-			for (var x = region.minx; x <= region.maxx; x+= 1/32.0) {
-				for (var y = region.miny; y <= region.maxy; y+= 1/32.0) {
-					for (var z = region.minz; z <= region.maxz; z+= 1/32.0) {
-						Coordinate p = new Coordinate(x, y, z);
-						var matches = checkDistances(p);
-						if (matches > this.bestCount) {
-							this.nextBest = this.bestCount;
-							this.next = this.best;
-							this.bestCount = matches;
-							this.best = new List<Coordinate>();
+            for (var x = region.minx; x <= region.maxx; x += 1 / 32.0)
+            {
+                for (var y = region.miny; y <= region.maxy; y += 1 / 32.0)
+                {
+                    for (var z = region.minz; z <= region.maxz; z += 1 / 32.0)
+                    {
+                        Coordinate p = new Coordinate(x, y, z);
+                        var matches = checkDistances(p);
+                        if (matches > this.bestCount)
+                        {
+                            this.nextBest = this.bestCount;
+                            this.next = this.best;
+                            this.bestCount = matches;
+                            this.best = new List<Coordinate>();
                             this.best.Add(p);
 
-						} else if (matches == this.bestCount) {
-							this.best.Add(p);
-						} else if (matches > this.nextBest) {
-							this.nextBest = matches;
-							this.next = new List<Coordinate>();
-                            this.next.Add(p);
-			
-						} else if (matches == this.nextBest) {
-							this.next.Add(p);
-						}
-						if (matches > this.bestCount) {
-							this.nextBest = this.bestCount;
-							this.next = this.best;
-							this.bestCount = matches;
-						    this.best = new List<Coordinate>();
+                        }
+                        else if (matches == this.bestCount)
+                        {
                             this.best.Add(p);
-						} else if (matches == this.bestCount) {
-							var found = false;
+                        }
+                        else if (matches > this.nextBest)
+                        {
+                            this.nextBest = matches;
+                            this.next = new List<Coordinate>();
+                            this.next.Add(p);
+
+                        }
+                        else if (matches == this.nextBest)
+                        {
+                            this.next.Add(p);
+                        }
+                        if (matches > this.bestCount)
+                        {
+                            this.nextBest = this.bestCount;
+                            this.next = this.best;
+                            this.bestCount = matches;
+                            this.best = new List<Coordinate>();
+                            this.best.Add(p);
+                        }
+                        else if (matches == this.bestCount)
+                        {
+                            var found = false;
                             foreach (var e in this.best)
                             {
-							//this.best.forEach(function(e) {
-								if (e.X == p.X && e.Y == p.Y && e.Z == p.Z) {
-									found = true;
-									//return false;
+                                //this.best.forEach(function(e) {
+                                if (e.X == p.X && e.Y == p.Y && e.Z == p.Z)
+                                {
+                                    found = true;
+                                    //return false;
                                     break;
-								}
-							}
-							if (!found) this.best.Add(p);
-						} else if (matches > this.nextBest) {
-							this.nextBest = matches;
-							this.next = new List<Coordinate>();
+                                }
+                            }
+                            if (!found) this.best.Add(p);
+                        }
+                        else if (matches > this.nextBest)
+                        {
+                            this.nextBest = matches;
+                            this.next = new List<Coordinate>();
                             this.next.Add(p);
-						} else if (matches == this.nextBest) {
-							var found = false;
+                        }
+                        else if (matches == this.nextBest)
+                        {
+                            var found = false;
                             foreach (var e in this.best)
-							{
-								if (e.X == p.X && e.Y == p.Y && e.Z == p.Z) {
-									found = true;
-									//return false;
+                            {
+                                if (e.X == p.X && e.Y == p.Y && e.Z == p.Z)
+                                {
+                                    found = true;
+                                    //return false;
                                     break;
-								}
-							}
-							if (!found) this.next.Add(p);
-						}
-					}
-				}
-			}
-		}
+                                }
+                            }
+                            if (!found) this.next.Add(p);
+                        }
+                    }
+                }
+            }
+
+
+            if (bestCount >= 5 && (bestCount - nextBest) >= 2)
+                return true;
+
+        }
             return true;
 	}
 
@@ -692,5 +716,8 @@ namespace EDDiscovery
         }
         
         public class CalculationErrorException : Exception { }
+
+
+
     }
 }
