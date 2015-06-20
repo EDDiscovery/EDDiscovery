@@ -36,7 +36,7 @@ namespace EDDiscovery
             return systems;
         }
 
-        private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        private void dataGridViewDistances_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             var textbox = (TextBox)e.Control;
 
@@ -62,7 +62,7 @@ namespace EDDiscovery
             textbox.AutoCompleteCustomSource = items;
         }
 
-        private void dataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        private void dataGridViewDistances_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
@@ -102,7 +102,7 @@ namespace EDDiscovery
             }
         }
 
-        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewDistances_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
