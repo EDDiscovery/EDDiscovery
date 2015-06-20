@@ -180,17 +180,7 @@ namespace EDDiscovery
                 textBoxCoordinateY.Text = "?";
                 textBoxCoordinateZ.Text = "?";
 
-                // keep systems, clear distances
-                for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
-                {
-                    var distanceCell = dataGridViewDistances[1, i];
-                    var calculatedDistanceCell = dataGridViewDistances[2, i];
-                    var statusCell = dataGridViewDistances[3, i];
-
-                    distanceCell.Value = null;
-                    calculatedDistanceCell.Value = null;
-                    statusCell.Value = null;
-                }
+                ClearDataGridRows();
             }
         }
 
@@ -263,6 +253,7 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
                     labelStatus.Text = "Enter More Distances";
                     labelStatus.BackColor = Color.Red;
+                    ClearCalculatedDataGridRows();
                 });
             }
             
@@ -329,8 +320,35 @@ namespace EDDiscovery
                         statusCell.Value = "Wrong distance";
                         statusCell.Style.ForeColor = Color.Red;
                     }
-
                 }
+            }
+        }
+
+        private void ClearDataGridRows()
+        {
+            // keep systems, clear distances
+            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            {
+                var distanceCell = dataGridViewDistances[1, i];
+                var calculatedDistanceCell = dataGridViewDistances[2, i];
+                var statusCell = dataGridViewDistances[3, i];
+
+                distanceCell.Value = null;
+                calculatedDistanceCell.Value = null;
+                statusCell.Value = null;
+            }
+        }
+
+        private void ClearCalculatedDataGridRows()
+        {
+            // keep systems and distances, clear calculated distances and statuses
+            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            {
+                var calculatedDistanceCell = dataGridViewDistances[2, i];
+                var statusCell = dataGridViewDistances[3, i];
+
+                calculatedDistanceCell.Value = null;
+                statusCell.Value = null;
             }
         }
     }
