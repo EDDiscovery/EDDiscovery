@@ -175,6 +175,9 @@ namespace EDDiscovery
                 }
 
                 textBoxSystemName.Text = null;
+                textBoxCoordinateX.Text = "?";
+                textBoxCoordinateY.Text = "?";
+                textBoxCoordinateZ.Text = "?";
 
                 // keep systems, clear distances
                 for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
@@ -253,6 +256,26 @@ namespace EDDiscovery
                 {
                     TravelHistoryControl.LogText("Trilateration not successful, coordinates not found." + Environment.NewLine);
                     TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
+                });
+            }
+            
+            // update trilaterated coordinates
+            if (trilaterationResult.Coordinate != null)
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    textBoxCoordinateX.Text = trilaterationResult.Coordinate.X.ToString();
+                    textBoxCoordinateY.Text = trilaterationResult.Coordinate.Y.ToString();
+                    textBoxCoordinateZ.Text = trilaterationResult.Coordinate.Z.ToString();
+                });
+            }
+            else
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    textBoxCoordinateX.Text = "?";
+                    textBoxCoordinateY.Text = "?";
+                    textBoxCoordinateZ.Text = "?";
                 });
             }
 
