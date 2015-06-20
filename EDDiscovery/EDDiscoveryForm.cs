@@ -558,15 +558,15 @@ namespace EDDiscovery
 //            }
 
 
-            EDDBClass eddb = new EDDBClass();
+            //EDDBClass eddb = new EDDBClass();
 
-            List<SystemClass> eddbsystems = eddb.ReadSystems();
-            List<StationClass> eddbstations = eddb.ReadStations();
+            //List<SystemClass> eddbsystems = eddb.ReadSystems();
+            //List<StationClass> eddbstations = eddb.ReadStations();
 
-            eddb.Add2DB(eddbsystems, eddbstations);
+            //eddb.Add2DB(eddbsystems, eddbstations);
 
 
-
+            TestTrileteration();
 
 
         }
@@ -630,6 +630,72 @@ namespace EDDiscovery
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+
+
+        private void TestTrileteration()
+        {
+
+            Trilateration trilC, trilJS;
+
+
+
+            foreach (SystemClass System in SQLiteDBClass.globalSystems)
+            {
+                if (DateTime.Now.Subtract(System.CreateDate).TotalDays < 60)
+                {
+                    trilC = new Trilateration();
+                    trilJS = new Trilateration();
+
+                    //var Distances = from SQLiteDBClass.globalDistances
+
+                    var distances1 = from p in SQLiteDBClass.globalDistances where p.NameA.ToLower() == System.SearchName select p;
+                    var distances2 = from p in SQLiteDBClass.globalDistances where p.NameB.ToLower() == System.SearchName select p;
+
+                    int nr = distances1.Count();
+                    //nr = distances2.Count();
+
+
+                    if (nr > 4)
+                    {
+                        var trilateration = new Trilateration();
+                        //                    trilateration.Logger = (s) => System.Console.WriteLine(s);
+
+                        foreach (var item in distances1)
+                        {
+                            SystemClass distsys = SystemData.GetSystem(item.NameB);
+                            if (distsys != null)
+                            {
+                                if (distsys.HasCoordinate)
+                                {
+                                    Trilateration.Entry entry = new Trilateration.Entry(distsys.x, distsys.y, distsys.z, item.Dist);
+                                    trilateration.AddEntry(entry);
+                                }
+                            }
+                        }
+
+                        foreach (var item in distances2)
+                        {
+                            SystemClass distsys = SystemData.GetSystem(item.NameA);
+                            if (distsys != null)
+                            {
+                                if (distsys.HasCoordinate)
+                                {
+                                    Trilateration.Entry entry = new Trilateration.Entry(distsys.x, distsys.y, distsys.z, item.Dist);
+                                    trilateration.AddEntry(entry);
+                                }
+                            }
+                        }
+
+
+                        trilateration.runTril();
+                        var trilaterationResult = trilateration.Run();
+                        if (trilaterationResult.State == Trilateration.ResultState.Exact)
+                            nr++;
+                    }
+                }
+            }
         }
 
 
