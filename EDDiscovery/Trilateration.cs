@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Noesis.Javascript;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -353,31 +354,35 @@ namespace EDDiscovery
         {
             var engine = PrepareEngine();
 
-            engine.Execute("var trilat = new Trilateration();").GetCompletionValue();
+            engine.Run("var trilat = new Trilateration();");
 
             foreach (var entry in entries)
             {
-                engine.SetValue("distance", new {
-                    x = entry.Coordinate.X,
-                    y = entry.Coordinate.Y,
-                    z = entry.Coordinate.Z,
-                    distance = entry.Distance
-                });
-                engine.Execute("trilat.addDistance(distance);");
+                var coord = entry.Coordinate;
+                var entryDict = new Dictionary<string, double>() {
+                    {  "x",  coord.X },
+                    {  "y",  coord.Y },
+                    {  "z",  coord.Z },
+                    {  "distance",  entry.Distance }
+                };
+                engine.SetParameter("distance", entryDict);
+                engine.Run("trilat.addDistance(distance);");
             }
 
-            // engine.Execute("trilat.addDistance({ x: 0, y: 0, z: 0, distance: 0 });");
+            engine.Run("trilat.addDistance({ x: 0, y: 0, z: 0, distance: 0 });");
 
-            var hasBestCandidate = engine.Execute("trilat.best && trilat.best.length === 1").GetCompletionValue().AsBoolean();
+            engine.Run("var hasBestCandidate = trilat.best && trilat.best.length === 1;");
+            var hasBestCandidate = (bool) engine.GetParameter("hasBestCandidate");
 
             // TODO result validation (https://github.com/SteveHodge/ed-systems/blob/master/entry.html#L703)
 
             if (hasBestCandidate)
             {
-                engine.Execute("EDDlog('x = ' + trilat.best[0].x + ', y = ' + trilat.best[0].y  + ', z = ' + trilat.best[0].z);");
+                engine.Run("EDDlog('x = ' + trilat.best[0].x + ', y = ' + trilat.best[0].y  + ', z = ' + trilat.best[0].z);");
 
-                var result = engine.Execute("trilat.best[0]").GetCompletionValue().AsObject();
-                var coordinate = new Coordinate(result.Get("x").AsNumber(), result.Get("y").AsNumber(), result.Get("z").AsNumber());
+                engine.Run("var bestResult = trilat.best[0];");
+                var result = (Dictionary<string, object>) engine.GetParameter("bestResult");
+                var coordinate = new Coordinate((double) result["x"], (double)result["y"], (double)result["z"]);
                 var correctEntriesCount = 0;
                 var correctedEntries = new Dictionary<Entry, double>();
 
@@ -391,9 +396,10 @@ namespace EDDiscovery
                     correctedEntries.Add(entry, correctedDistance);
                 }
 
-                engine.Execute("EDDlog('trilat.bestCount: ' + trilat.bestCount);");
-                engine.Execute("EDDlog('trilat.nextBest: ' + trilat.nextBest);");
-                var isPreciseEnough = engine.Execute("(trilat.bestCount - trilat.nextBest) >= 2").GetCompletionValue().AsBoolean();
+                engine.Run("EDDlog('trilat.bestCount: ' + trilat.bestCount);");
+                engine.Run("EDDlog('trilat.nextBest: ' + trilat.nextBest);");
+                engine.Run("var isPreciseEnough = (trilat.bestCount - trilat.nextBest) >= 2;");
+                var isPreciseEnough = (bool) engine.GetParameter("isPreciseEnough");
                 if (isPreciseEnough && correctEntriesCount >= 5)
                 {
                     return new Result(ResultState.Exact, coordinate, correctedEntries);
@@ -407,15 +413,15 @@ namespace EDDiscovery
             }
         }
 
-        private Jint.Engine PrepareEngine()
+        private JavascriptContext PrepareEngine()
         {
-            Jint.Engine engine = new Jint.Engine();
+            JavascriptContext context = new JavascriptContext();
 
-            engine.Execute(File.ReadAllText("fround.js"));
-            engine.Execute(File.ReadAllText("trilateration.js"));
-            engine.SetValue("EDDlog", new Action<object>(delegate (object o) { logger(o.ToString()); }));
+            context.Run(File.ReadAllText("fround.js"));
+            context.Run(File.ReadAllText("trilateration.js"));
+            context.SetParameter("EDDlog", new Action<object>(delegate (object o) { logger(o.ToString()); }));
 
-            return engine;
+            return context;
         }
         
         public class CalculationErrorException : Exception { }
