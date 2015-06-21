@@ -500,6 +500,7 @@ namespace EDDiscovery
                 Invoke((MethodInvoker) delegate
                 {
                     Visible = false;
+                    travelHistoryControl.TriggerEDSCRefresh(); // TODO we might eventually avoid this by further parsing EDSC response
                     travelHistoryControl.RefreshHistory();
                 });
             }
