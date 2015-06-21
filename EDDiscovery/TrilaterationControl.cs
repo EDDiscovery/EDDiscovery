@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -16,6 +17,9 @@ namespace EDDiscovery
     {
         public SystemClass TargetSystem;
         private Thread trilaterationThread;
+        private Trilateration.Result lastTrilatelationResult;
+        private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
+        private Thread EDSCSubmissionThread;
 
         public TrilaterationControl()
         {
@@ -148,6 +152,7 @@ namespace EDDiscovery
                 labelStatus.Text = "Enter Distances";
                 labelStatus.BackColor = Color.LightBlue;
 
+                UnfreezeTrilaterationUI();
                 PopulateDataGridViewSuggestedSystems();
 
                 //var trilat = new Trilateration();
@@ -185,6 +190,9 @@ namespace EDDiscovery
                 ClearDataGridViewDistancesRows();
                 ClearDataGridViewClosestSystemsRows();
                 ClearDataGridViewSuggestedSystemsRows();
+
+                lastTrilatelationResult = null;
+                lastTrilatelationEntries = null;
             }
         }
 
@@ -203,7 +211,8 @@ namespace EDDiscovery
                 }
 
                 var system = (SystemClass)systemCell.Tag;
-                var distance = Double.Parse(distanceCell.Value.ToString().Replace(".", ",")); // TODO i18n for delimiter
+                CultureInfo culture = new CultureInfo("en-US");
+                var distance = Double.Parse(distanceCell.Value.ToString().Replace(",", "."), culture);
 
                 var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
 
@@ -231,6 +240,9 @@ namespace EDDiscovery
             trilateration.runTril();
 
             var trilaterationResult = trilateration.Run();
+
+            lastTrilatelationResult = trilaterationResult;
+            lastTrilatelationEntries = systemsEntries;
 
             if (trilaterationResult.State == Trilateration.ResultState.Exact)
             {
@@ -283,11 +295,12 @@ namespace EDDiscovery
                 });
             }
 
+            var hasInvalidDistances = false;
+
             // update dataGrid with calculated distances and status
             if (trilaterationResult.EntriesDistances != null)
             {
                 var entriesDistances = trilaterationResult.EntriesDistances;
-                var inversedSystemEntriesDict = systemsEntries.ToDictionary(x => x.Value, x => x.Key);
                 
                 for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
                 {
@@ -322,11 +335,17 @@ namespace EDDiscovery
                         statusCell.Style.ForeColor = Color.Green;
                     } else
                     {
+                        hasInvalidDistances = true;
                         calculatedDistanceCell.Style.ForeColor = Color.Red;
                         statusCell.Value = "Wrong distance";
                         statusCell.Style.ForeColor = Color.Red;
                     }
                 }
+
+                Invoke((MethodInvoker) delegate
+                {
+                    buttonSubmitToEDSC.Enabled = trilaterationResult.State == Trilateration.ResultState.Exact && !hasInvalidDistances;
+                });
             }
         }
 
@@ -409,6 +428,130 @@ namespace EDDiscovery
 
             var index = dataGridViewDistances.Rows.Add(system.name);
             dataGridViewDistances[0, index].Tag = system;
+        }
+
+        private void buttonSubmit_Click(object sender, EventArgs e)
+        {
+            TravelHistoryControl.LogText("Submitting system to EDSC, please wait..." + Environment.NewLine);
+            FreezeTrilaterationUI();
+
+            if (trilaterationThread != null)
+            {
+                trilaterationThread.Join();
+                trilaterationThread = null;
+            }
+
+            // edge case - make sure distances were trilaterated
+            if (lastTrilatelationResult == null)
+            {
+                TravelHistoryControl.LogText("EDSC submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
+                UnfreezeTrilaterationUI();
+                return;
+            }
+
+            // edge case - should not happen, usually, but, just in case...
+            if (lastTrilatelationResult.State != Trilateration.ResultState.Exact)
+            {
+                TravelHistoryControl.LogText("EDSC submission aborted, local trilateration failed." + Environment.NewLine, Color.Red);
+                UnfreezeTrilaterationUI();
+                return;
+            }
+
+            EDSCSubmissionThread = new Thread(new ThreadStart(SubmitToEDSC));
+            EDSCSubmissionThread.Name = "EDSC Submission";
+            EDSCSubmissionThread.Start();
+        }
+
+        private void SubmitToEDSC()
+        {
+            var travelHistoryControl = (TravelHistoryControl)Parent;
+            string commanderName = travelHistoryControl.GetCommanderName();
+
+            if (string.IsNullOrEmpty(commanderName))
+            {
+                MessageBox.Show("Please enter commander name before submitting the system!");
+                UnfreezeTrilaterationUI();
+                return;
+            }
+
+            var distances = new Dictionary<string, double>();
+            foreach (var item in lastTrilatelationEntries)
+            {
+                var system = item.Key;
+                var entry = item.Value;
+                distances.Add(system.name, entry.Distance);
+            }
+
+            var edsc = new EDSCClass();
+            
+            if (!EDSCClass.UseTest)
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    // TODO temporarily mess with EDSC in test mode only
+                    TravelHistoryControl.LogText("Forcibly switching to EDSC UseTest mode." + Environment.NewLine, Color.OrangeRed);
+                });
+                EDSCClass.UseTest = true;
+            }
+            
+            var response = edsc.SubmitDistances(commanderName, TargetSystem.name, distances);
+            
+            Console.WriteLine(response);
+
+            string info;
+            var responseOk = edsc.ShowDistanceResponce(response, out info);
+            var trilaterationOk = info.IndexOf("Trilateration succesful") != -1; // FIXME this is ugly
+            Console.WriteLine(info);
+
+            Invoke((MethodInvoker) delegate
+            {
+                if (responseOk && trilaterationOk)
+                {
+                    TravelHistoryControl.LogText("EDSC submission succeeded, trilateration successful." + Environment.NewLine, Color.Green);
+                }
+                else if (responseOk && !trilaterationOk)
+                {
+                    TravelHistoryControl.LogText("EDSC submission succeeded, but trilateration failed. Try adding more distances." + Environment.NewLine, Color.Orange);
+                }
+                else
+                {
+                    TravelHistoryControl.LogText("EDSC submission failed." + Environment.NewLine, Color.Red);
+                }
+            });
+
+            if (responseOk && trilaterationOk)
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    Visible = false;
+                    travelHistoryControl.RefreshHistory();
+                });
+            }
+            else
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    UnfreezeTrilaterationUI();
+                });
+                lastTrilatelationResult = null;
+                lastTrilatelationEntries = null;
+            }
+        }
+
+        private void FreezeTrilaterationUI()
+        {
+            buttonSubmitToEDSC.Enabled = false;
+            dataGridViewDistances.Enabled = false;
+            dataGridViewClosestSystems.Enabled = false;
+            dataGridViewSuggestedSystems.Enabled = false;
+        }
+
+        private void UnfreezeTrilaterationUI()
+        {
+            buttonSubmitToEDSC.Enabled = lastTrilatelationResult != null && lastTrilatelationResult.State == Trilateration.ResultState.Exact;
+            dataGridViewDistances.Enabled = true;
+            dataGridViewClosestSystems.Enabled = true;
+            dataGridViewSuggestedSystems.Enabled = true;
         }
     }
 }
