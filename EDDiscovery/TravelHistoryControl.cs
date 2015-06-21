@@ -14,9 +14,7 @@ using System.Diagnostics;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using System.Globalization;
-
-
-
+using System.Text.RegularExpressions;
 
 
 namespace EDDiscovery
@@ -691,6 +689,24 @@ namespace EDDiscovery
                     else
                         item2 = null;
 
+                    // grab distance to next (this) system
+                    if (textBoxDistanceToNextSystem.Text.Length > 0 && item2 != null)
+                    {
+                        var distance = new DistanceClass
+                        {
+                            Dist = StringToDouble(textBoxDistanceToNextSystem.Text),
+                            CreateTime = DateTime.UtcNow,
+                            CommanderCreate = textBoxCmdrName.Text.Trim(),
+                            NameA = item.Name,
+                            NameB = item2.Name,
+                            Status = DistancsEnum.EDDiscovery
+                        };
+                        
+                        distance.Store();
+                        SQLiteDBClass.globalDistances.Add(distance);
+
+                        textBoxDistanceToNextSystem.Clear();
+                    }
 
                     AddHistoryRow(new DateTime(1990, 1, 1), item, item2);
                     lastRowIndex += 1;
@@ -740,7 +756,7 @@ namespace EDDiscovery
             if (currentSysPos.curSystem.id_eddb>0)
                 Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
         }
-
+        
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
             dataGridView1.Visible = false;
@@ -772,6 +788,28 @@ namespace EDDiscovery
         {
             var value = textBoxCmdrName.Text;
             return !string.IsNullOrEmpty(value) ? value : null;
+        }
+
+        private void textBoxDistanceToNextSystem_Validating(object sender, CancelEventArgs e)
+        {
+            var value = textBoxDistanceToNextSystem.Text;
+            if (value == "" || !new Regex(@"^\d{1,2}([.,]\d{0,2})?$").IsMatch(value))
+            {
+                e.Cancel = true;
+                return;
+            }
+            
+            var valueDouble = StringToDouble(value);
+            if (valueDouble < 0 || valueDouble >= 45) // max jump range is ~42Ly
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private double StringToDouble(string value)
+        {
+            var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            return double.Parse(decimalSeparator == "," ? value.Replace(".", ",") : value.Replace(",", "."));
         }
     }
 
