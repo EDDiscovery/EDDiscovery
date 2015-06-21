@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using EDDiscovery.DB;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
+using EDDiscovery.DB;
 
 namespace EDDiscovery
 {
@@ -82,7 +79,7 @@ namespace EDDiscovery
                 var enteredSystems = GetEnteredSystems();
                 if (cell.Value != null)
                 {
-                    enteredSystems.RemoveAll((SystemClass s) => s.name == cell.Value.ToString());
+                    enteredSystems.RemoveAll(s => s.name == cell.Value.ToString());
                 }
 
                 if (system == null || (enteredSystems.Contains(system)))
@@ -138,9 +135,8 @@ namespace EDDiscovery
                 TravelHistoryControl.LogText("Aborting previous trilateration attempt." + Environment.NewLine);
                 trilaterationThread.Abort();
             }
-            trilaterationThread = new Thread(new ThreadStart(RunTrilateration));
-            trilaterationThread.Name = "Trilateration";
-            
+            trilaterationThread = new Thread(new ThreadStart(RunTrilateration)) {Name = "Trilateration"};
+
             trilaterationThread.Start();
         }
 
@@ -154,24 +150,6 @@ namespace EDDiscovery
 
                 UnfreezeTrilaterationUI();
                 PopulateDataGridViewSuggestedSystems();
-
-                //var trilat = new Trilateration();
-                //trilat.Logger = (s) => TravelHistoryControl.LogText(s + Environment.NewLine);
-
-                //// WIP: just for testing now...
-                //trilat.addDistance(28.3125, -75.71875, 42.28125, 8.23);
-                //trilat.addDistance(30.4375, -79.1875, 26.34375, 13.26);
-                //trilat.addDistance(44.8125, -82.53125, 24.09375, 17.93);
-                //trilat.addDistance(-29.21875, -341.3125, -17.34375, 276.79);
-
-                //try
-                //{
-                //    var result = trilat.run();
-                //}
-                //catch (Trilateration.MoreDistancesNeededException ex)
-                //{
-                //    TravelHistoryControl.LogText("Need more distances.");
-                //}
             }
 
             if (Visible == false)
@@ -211,8 +189,8 @@ namespace EDDiscovery
                 }
 
                 var system = (SystemClass)systemCell.Tag;
-                CultureInfo culture = new CultureInfo("en-US");
-                var distance = Double.Parse(distanceCell.Value.ToString().Replace(",", "."), culture);
+                var culture = new CultureInfo("en-US");
+                var distance = double.Parse(distanceCell.Value.ToString().Replace(",", "."), culture);
 
                 var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
 
@@ -229,8 +207,7 @@ namespace EDDiscovery
                 TravelHistoryControl.LogText("Starting trilateration..." + Environment.NewLine);
             });
 
-            var trilateration = new Trilateration();
-            trilateration.Logger = (s) => System.Console.WriteLine(s);
+            var trilateration = new Trilateration {Logger = Console.WriteLine};
 
             foreach (var item in systemsEntries)
             {
@@ -457,8 +434,7 @@ namespace EDDiscovery
                 return;
             }
 
-            EDSCSubmissionThread = new Thread(new ThreadStart(SubmitToEDSC));
-            EDSCSubmissionThread.Name = "EDSC Submission";
+            EDSCSubmissionThread = new Thread(SubmitToEDSC) {Name = "EDSC Submission"};
             EDSCSubmissionThread.Start();
         }
 
@@ -509,7 +485,7 @@ namespace EDDiscovery
                 {
                     TravelHistoryControl.LogText("EDSC submission succeeded, trilateration successful." + Environment.NewLine, Color.Green);
                 }
-                else if (responseOk && !trilaterationOk)
+                else if (responseOk)
                 {
                     TravelHistoryControl.LogText("EDSC submission succeeded, but trilateration failed. Try adding more distances." + Environment.NewLine, Color.Orange);
                 }
@@ -529,10 +505,7 @@ namespace EDDiscovery
             }
             else
             {
-                Invoke((MethodInvoker) delegate
-                {
-                    UnfreezeTrilaterationUI();
-                });
+                Invoke((MethodInvoker) UnfreezeTrilaterationUI);
                 lastTrilatelationResult = null;
                 lastTrilatelationEntries = null;
             }
