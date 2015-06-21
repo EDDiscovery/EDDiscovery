@@ -742,6 +742,7 @@ namespace EDDiscovery
             TrilaterationControl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
             TrilaterationControl.Visible = true;
             buttonCloseTrilateration.Visible = true;
+            buttonTrilaterate.Enabled = false;
             labelHeader.Text = "Trilateration";
         }
 
@@ -750,6 +751,7 @@ namespace EDDiscovery
             TrilaterationControl.Visible = false;
             TrilaterationControl.TargetSystem = null;
             buttonCloseTrilateration.Visible = false;
+            buttonTrilaterate.Enabled = true;
             dataGridView1.Visible = true;
             labelHeader.Text = "Travel history";
         }
