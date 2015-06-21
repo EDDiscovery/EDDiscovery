@@ -91,14 +91,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox_History.Location = new System.Drawing.Point(21, 3);
             this.richTextBox_History.Name = "richTextBox_History";
-            this.richTextBox_History.Size = new System.Drawing.Size(499, 70);
+            this.richTextBox_History.Size = new System.Drawing.Size(570, 70);
             this.richTextBox_History.TabIndex = 6;
             this.richTextBox_History.Text = "";
             // 
             // button_RefreshHistory
             // 
             this.button_RefreshHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_RefreshHistory.Location = new System.Drawing.Point(437, 77);
+            this.button_RefreshHistory.Location = new System.Drawing.Point(508, 77);
             this.button_RefreshHistory.Name = "button_RefreshHistory";
             this.button_RefreshHistory.Size = new System.Drawing.Size(83, 23);
             this.button_RefreshHistory.TabIndex = 5;
@@ -131,7 +131,7 @@
             this.ColumnNote});
             this.dataGridView1.Location = new System.Drawing.Point(21, 106);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(499, 471);
+            this.dataGridView1.Size = new System.Drawing.Size(570, 471);
             this.dataGridView1.TabIndex = 8;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
@@ -179,7 +179,7 @@
             "2 Weeks",
             "Month",
             "All"});
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(242, 78);
+            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(313, 78);
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(121, 21);
             this.comboBoxHistoryWindow.TabIndex = 9;
@@ -189,7 +189,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(135, 81);
+            this.label2.Location = new System.Drawing.Point(206, 81);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(101, 13);
             this.label2.TabIndex = 10;
@@ -206,7 +206,7 @@
             listViewGroup1.Name = "Name";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
             listViewGroup1});
-            this.listView1.Location = new System.Drawing.Point(528, 360);
+            this.listView1.Location = new System.Drawing.Point(599, 360);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(267, 218);
             this.listView1.TabIndex = 11;
@@ -227,7 +227,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(527, 344);
+            this.label3.Location = new System.Drawing.Point(598, 344);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(206, 13);
             this.label3.TabIndex = 12;
@@ -236,7 +236,7 @@
             // buttonMap
             // 
             this.buttonMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonMap.Location = new System.Drawing.Point(716, 76);
+            this.buttonMap.Location = new System.Drawing.Point(787, 76);
             this.buttonMap.Name = "buttonMap";
             this.buttonMap.Size = new System.Drawing.Size(83, 23);
             this.buttonMap.TabIndex = 14;
@@ -283,7 +283,7 @@
             this.panel1.Controls.Add(this.textBoxX);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.textBoxSystem);
-            this.panel1.Location = new System.Drawing.Point(524, 106);
+            this.panel1.Location = new System.Drawing.Point(595, 106);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(293, 235);
             this.panel1.TabIndex = 16;
@@ -554,7 +554,7 @@
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(526, 3);
+            this.label6.Location = new System.Drawing.Point(597, 3);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(96, 20);
             this.label6.TabIndex = 17;
@@ -564,7 +564,7 @@
             // 
             this.textBoxCmdrName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxCmdrName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCmdrName.Location = new System.Drawing.Point(631, 2);
+            this.textBoxCmdrName.Location = new System.Drawing.Point(702, 2);
             this.textBoxCmdrName.Name = "textBoxCmdrName";
             this.textBoxCmdrName.Size = new System.Drawing.Size(167, 26);
             this.textBoxCmdrName.TabIndex = 18;
@@ -573,7 +573,7 @@
             // buttonSync
             // 
             this.buttonSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSync.Location = new System.Drawing.Point(631, 34);
+            this.buttonSync.Location = new System.Drawing.Point(702, 34);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(164, 23);
             this.buttonSync.TabIndex = 19;
@@ -583,7 +583,7 @@
             // 
             // buttonCloseTrilateration
             // 
-            this.buttonCloseTrilateration.Location = new System.Drawing.Point(443, 112);
+            this.buttonCloseTrilateration.Location = new System.Drawing.Point(513, 116);
             this.buttonCloseTrilateration.Name = "buttonCloseTrilateration";
             this.buttonCloseTrilateration.Size = new System.Drawing.Size(75, 23);
             this.buttonCloseTrilateration.TabIndex = 21;
@@ -599,7 +599,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TrilaterationControl.Location = new System.Drawing.Point(21, 105);
             this.TrilaterationControl.Name = "TrilaterationControl";
-            this.TrilaterationControl.Size = new System.Drawing.Size(499, 472);
+            this.TrilaterationControl.Size = new System.Drawing.Size(570, 472);
             this.TrilaterationControl.TabIndex = 20;
             this.TrilaterationControl.Visible = false;
             // 
@@ -623,7 +623,7 @@
             this.Controls.Add(this.TrilaterationControl);
             this.Controls.Add(this.dataGridView1);
             this.Name = "TravelHistoryControl";
-            this.Size = new System.Drawing.Size(820, 586);
+            this.Size = new System.Drawing.Size(891, 586);
             this.Load += new System.EventHandler(this.TravelHistoryControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);
