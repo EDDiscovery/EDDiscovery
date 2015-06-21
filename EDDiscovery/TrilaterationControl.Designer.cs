@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
@@ -50,9 +51,15 @@
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panelImplementation = new System.Windows.Forms.Panel();
+            this.radioButtonAlgorithmJs = new System.Windows.Forms.RadioButton();
+            this.radioButtonAlgorithmCsharp = new System.Windows.Forms.RadioButton();
+            this.labelAlgorithm = new System.Windows.Forms.Label();
+            this.toolTipAlgorithm = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuggestedSystems)).BeginInit();
+            this.panelImplementation.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewDistances
@@ -265,10 +272,55 @@
             this.ColumnStatus.ReadOnly = true;
             this.ColumnStatus.Width = 121;
             // 
+            // panelImplementation
+            // 
+            this.panelImplementation.Controls.Add(this.labelAlgorithm);
+            this.panelImplementation.Controls.Add(this.radioButtonAlgorithmJs);
+            this.panelImplementation.Controls.Add(this.radioButtonAlgorithmCsharp);
+            this.panelImplementation.Location = new System.Drawing.Point(403, 5);
+            this.panelImplementation.Name = "panelImplementation";
+            this.panelImplementation.Size = new System.Drawing.Size(49, 60);
+            this.panelImplementation.TabIndex = 16;
+            // 
+            // radioButtonAlgorithmJs
+            // 
+            this.radioButtonAlgorithmJs.AutoSize = true;
+            this.radioButtonAlgorithmJs.Checked = true;
+            this.radioButtonAlgorithmJs.Location = new System.Drawing.Point(3, 27);
+            this.radioButtonAlgorithmJs.Name = "radioButtonAlgorithmJs";
+            this.radioButtonAlgorithmJs.Size = new System.Drawing.Size(37, 17);
+            this.radioButtonAlgorithmJs.TabIndex = 1;
+            this.radioButtonAlgorithmJs.TabStop = true;
+            this.radioButtonAlgorithmJs.Text = "JS";
+            this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmJs, "Original algoritthm from ed-systems, written in Javascript (slower)");
+            this.radioButtonAlgorithmJs.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonAlgorithmCsharp
+            // 
+            this.radioButtonAlgorithmCsharp.AutoSize = true;
+            this.radioButtonAlgorithmCsharp.Location = new System.Drawing.Point(3, 44);
+            this.radioButtonAlgorithmCsharp.Name = "radioButtonAlgorithmCsharp";
+            this.radioButtonAlgorithmCsharp.Size = new System.Drawing.Size(39, 17);
+            this.radioButtonAlgorithmCsharp.TabIndex = 0;
+            this.radioButtonAlgorithmCsharp.Text = "C#";
+            this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmCsharp, "Algorithm from ed-systems rewritten to C# (fast, experimental)");
+            this.radioButtonAlgorithmCsharp.UseVisualStyleBackColor = true;
+            // 
+            // labelAlgorithm
+            // 
+            this.labelAlgorithm.AutoSize = true;
+            this.labelAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelAlgorithm.Location = new System.Drawing.Point(0, 12);
+            this.labelAlgorithm.Name = "labelAlgorithm";
+            this.labelAlgorithm.Size = new System.Drawing.Size(48, 12);
+            this.labelAlgorithm.TabIndex = 2;
+            this.labelAlgorithm.Text = "Algorithm:";
+            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panelImplementation);
             this.Controls.Add(this.dataGridViewSuggestedSystems);
             this.Controls.Add(this.dataGridViewClosestSystems);
             this.Controls.Add(this.labelStatus);
@@ -289,6 +341,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuggestedSystems)).EndInit();
+            this.panelImplementation.ResumeLayout(false);
+            this.panelImplementation.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -316,5 +370,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
+        private System.Windows.Forms.Panel panelImplementation;
+        private System.Windows.Forms.RadioButton radioButtonAlgorithmJs;
+        private System.Windows.Forms.RadioButton radioButtonAlgorithmCsharp;
+        private System.Windows.Forms.Label labelAlgorithm;
+        private System.Windows.Forms.ToolTip toolTipAlgorithm;
     }
 }
