@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Collections;
+using System.Data.SQLite;
 using EDDiscovery.DB;
 using System.Diagnostics;
 using EDDiscovery2;
@@ -749,11 +750,24 @@ namespace EDDiscovery
         private void buttonCloseTrilateration_Click(object sender, EventArgs e)
         {
             TrilaterationControl.Visible = false;
-            TrilaterationControl.TargetSystem = null;
-            buttonCloseTrilateration.Visible = false;
-            buttonTrilaterate.Enabled = true;
-            dataGridView1.Visible = true;
-            labelHeader.Text = "Travel history";
+        }
+
+        private void TrilaterationControl_VisibleChanged(object sender, EventArgs e)
+        {
+            if (TrilaterationControl.Visible == false)
+            {
+                TrilaterationControl.TargetSystem = null;
+                buttonCloseTrilateration.Visible = false;
+                buttonTrilaterate.Enabled = true;
+                dataGridView1.Visible = true;
+                labelHeader.Text = "Travel history";
+            }
+        }
+
+        public string GetCommanderName()
+        {
+            var value = textBoxCmdrName.Text;
+            return !string.IsNullOrEmpty(value) ? value : null;
         }
     }
 

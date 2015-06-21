@@ -85,10 +85,30 @@ namespace EDDiscovery
 
         public string SubmitDistances(string cmdr, string from, string to, double dist)
         {
-            CultureInfo culture  = new CultureInfo("en-US"); 
-            string diststr = dist.ToString("0.00", culture); 
-            //string query = "{ver:2, test:true, commander:\"" +cmdr + "\", p0: { name: \"" + from + "\" },   refs: [ { name: \"" + to + "\",  dist: " + diststr + "}  ] } ";
-            string query = "{ver:2," + (UseTest ? " test: true," : "") + " commander:\"" + cmdr + "\", p0: { name: \"" + from + "\" },   refs: [ { name: \"" + to + "\",  dist: " + diststr + "}  ] } ";
+            return SubmitDistances(cmdr, from, new Dictionary<string, double> { { to, dist } });
+        }
+
+        public string SubmitDistances(string cmdr, string from, Dictionary<string, double> distances)
+        {
+            CultureInfo culture = new CultureInfo("en-US");
+            string query = "{ver:2," + (UseTest ? " test: true," : "") + " commander:\"" + cmdr + "\", p0: { name: \"" + from + "\" },   refs: [";
+
+            var counter = 0;
+            foreach (var item in distances)
+            {
+                if (counter++ > 0)
+                {
+                    query += ",";
+                }
+
+                var to = item.Key;
+                var distance = item.Value.ToString("0.00", culture);
+
+                query += " { name: \"" + to + "\",  dist: " + distance + " } ";
+            }
+
+
+            query += "] } ";
 
             return EDSCRequest(query, "SubmitDistances");
         }

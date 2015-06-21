@@ -602,6 +602,7 @@
             this.TrilaterationControl.Size = new System.Drawing.Size(570, 472);
             this.TrilaterationControl.TabIndex = 20;
             this.TrilaterationControl.Visible = false;
+            this.TrilaterationControl.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
             // 
             // TravelHistoryControl
             // 
