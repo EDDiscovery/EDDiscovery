@@ -43,16 +43,20 @@ namespace EDDiscovery
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
             visitedSystems = null;
-            SQLiteDBClass db = new SQLiteDBClass();
 
-            edsc.EDSCGetNewSystems(db);
-            db.GetAllSystems();
+            TriggerEDSCRefresh();
             RefreshHistory();
 
             EliteDangerous.CheckED();
         }
 
+        public void TriggerEDSCRefresh()
+        {
+            SQLiteDBClass db = new SQLiteDBClass();
 
+            edsc.EDSCGetNewSystems(db);
+            db.GetAllSystems();
+        }
      
 
         static public void LogText(string text)
