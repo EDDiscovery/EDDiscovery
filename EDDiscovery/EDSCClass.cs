@@ -13,6 +13,8 @@ namespace EDDiscovery
 {
     public class EDSCClass
     {
+        public static bool UseTest = false;
+
         private string EDSCRequest(string query, string action)
         {
             try
@@ -69,14 +71,14 @@ namespace EDDiscovery
 
         public string RequestSystems(string date)
         {
-            string query = "{\"ver\":\"2\",  \"outputmode\":2, \"filter\": { \"knownstatus\":0, \"cr\":1,  \"date\":\"" + date + "\" }} ";
+            string query = "{\"ver\":\"2\", " + (UseTest ? "test: true," : "") + "  \"outputmode\":2, \"filter\": { \"knownstatus\":0, \"cr\":1,  \"date\":\"" + date + "\" }} ";
 
             return EDSCRequest(query, "GetSystems");
         }
 
         public string RequestDistances(string date)
         {
-            string query = "{\"ver\":\"2\",  \"outputmode\":2, \"filter\": { \"knownstatus\":0, \"cr\":1,  \"date\":\"" + date + "\" }} ";
+            string query = "{\"ver\":\"2\", " + (UseTest ? "test: true," : "") + " \"outputmode\":2, \"filter\": { \"knownstatus\":0, \"cr\":1,  \"date\":\"" + date + "\" }} ";
 
             return EDSCRequest(query, "GetDistances");
         }
@@ -86,7 +88,7 @@ namespace EDDiscovery
             CultureInfo culture  = new CultureInfo("en-US"); 
             string diststr = dist.ToString("0.00", culture); 
             //string query = "{ver:2, test:true, commander:\"" +cmdr + "\", p0: { name: \"" + from + "\" },   refs: [ { name: \"" + to + "\",  dist: " + diststr + "}  ] } ";
-            string query = "{ver:2, commander:\"" + cmdr + "\", p0: { name: \"" + from + "\" },   refs: [ { name: \"" + to + "\",  dist: " + diststr + "}  ] } ";
+            string query = "{ver:2," + (UseTest ? " test: true," : "") + " commander:\"" + cmdr + "\", p0: { name: \"" + from + "\" },   refs: [ { name: \"" + to + "\",  dist: " + diststr + "}  ] } ";
 
             return EDSCRequest(query, "SubmitDistances");
         }
