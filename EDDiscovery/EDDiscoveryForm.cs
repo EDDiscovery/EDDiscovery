@@ -120,21 +120,39 @@ namespace EDDiscovery
             {
                 travelHistoryControl1.Enabled = false;
 
-                Application.DoEvents();
-                GetRedWizzardFiles();
-                Application.DoEvents();
-                GetEDSCSystems();
-                Application.DoEvents();
+                var redWizzardThread = new Thread(GetRedWizzardFiles);
+                redWizzardThread.Name = "Downloading Red Wizzard Files";
+                var edscThread = new Thread(GetEDSCSystems);
+                edscThread.Name = "Downloading EDSC Systems";
+
+                redWizzardThread.Start();
+                edscThread.Start();
+
+                while (redWizzardThread.IsAlive || edscThread.IsAlive)
+                {
+                    Thread.Sleep(50);
+                    Application.DoEvents();
+                }
+
+                redWizzardThread.Join();
+                edscThread.Join();
+
+                //Application.DoEvents();
+                //GetRedWizzardFiles();
+                //Application.DoEvents();
+                //GetEDSCSystems();
+
+
+                //Application.DoEvents();
                 GetEDSCDistancesAsync();
-                Application.DoEvents();
+                //Application.DoEvents();
                 GetEDDBAsync();
+
 
                 if (SystemData.SystemList.Count == 0)
                 {
                     //sdata.ReadData();
                 }
-
-
 
 
 
@@ -174,7 +192,7 @@ namespace EDDiscovery
 
             try
             {
-                TravelHistoryControl.LogText("Checking for new EDDiscovery data" + Environment.NewLine);
+                LogText("Checking for new EDDiscovery data" + Environment.NewLine);
                 string webstr =  web.DownloadString("http://robert.astronet.se/Elite/ed-systems/eddisc.php");
 
                 string[] filesizes = webstr.Split(' ');
@@ -186,12 +204,12 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                TravelHistoryControl.LogText("GetRedWizzardFiles exception:" + ex.Message + Environment.NewLine);
+                LogText("GetRedWizzardFiles exception:" + ex.Message + Environment.NewLine);
                 return;
             }
         }
 
-        private static void GetNewRedWizzardFile(string remotetgcsystemslen, string filename, string url)
+        private void GetNewRedWizzardFile(string remotetgcsystemslen, string filename, string url)
         {
             bool downloadfile = false;
             if (File.Exists(filename))
@@ -207,7 +225,8 @@ namespace EDDiscovery
             {
                 WebClient webclient = new WebClient();
 
-                TravelHistoryControl.LogText("Downloading " + filename + " " +  (Convert.ToInt32(remotetgcsystemslen)/1000000.0).ToString("0.0") + "MB" + Environment.NewLine);
+                LogText("Downloading " + filename + " " +  (Convert.ToInt32(remotetgcsystemslen)/1000000.0).ToString("0.0") + "MB" + Environment.NewLine);
+
                 webclient.DownloadFile(url, filename + ".tmp");
 
                 if (File.Exists(filename))
@@ -231,7 +250,9 @@ namespace EDDiscovery
                 string rwsysfiletime = "";
 
                 CommanderName = db.GetSettingString("CommanderName", "");
-                travelHistoryControl1.textBoxCmdrName.Text = CommanderName;
+                Invoke((MethodInvoker) delegate {
+                    travelHistoryControl1.textBoxCmdrName.Text = CommanderName;
+                });
 
 
                 json = LoadJsonArray(filetgcSystems);
@@ -244,7 +265,9 @@ namespace EDDiscovery
                     
                     db.PutSettingString("RWLastSystems", rwsysfiletime);
                     db.PutSettingString("EDSCLastSystems", rwsysfiletime);
-                    TravelHistoryControl.LogText("Adding data from tgcsystems.json " + Environment.NewLine);
+                    Invoke((MethodInvoker) delegate {
+                        TravelHistoryControl.LogText("Adding data from tgcsystems.json " + Environment.NewLine);
+                    });
                     SystemClass.Store(systems);
                 }
 
@@ -263,7 +286,9 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                TravelHistoryControl.LogText("GetEDSCSystems exception:" + ex.Message + Environment.NewLine);
+                Invoke((MethodInvoker) delegate {
+                    TravelHistoryControl.LogText("GetEDSCSystems exception:" + ex.Message + Environment.NewLine);
+                });
             }
 
         }
