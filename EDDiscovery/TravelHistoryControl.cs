@@ -690,23 +690,34 @@ namespace EDDiscovery
                         item2 = null;
 
                     // grab distance to next (this) system
+                    textBoxDistanceToNextSystem.Enabled = false;
                     if (textBoxDistanceToNextSystem.Text.Length > 0 && item2 != null)
                     {
-                        var distance = new DistanceClass
+                        SystemClass currentSystem = null, previousSystem = null;
+                        SystemData.SystemList.ForEach(s =>
                         {
-                            Dist = StringToDouble(textBoxDistanceToNextSystem.Text),
-                            CreateTime = DateTime.UtcNow,
-                            CommanderCreate = textBoxCmdrName.Text.Trim(),
-                            NameA = item.Name,
-                            NameB = item2.Name,
-                            Status = DistancsEnum.EDDiscovery
-                        };
+                            if (s.name == item.Name) currentSystem = s;
+                            if (s.name == item2.Name) previousSystem = s;
+                        });
                         
-                        distance.Store();
-                        SQLiteDBClass.globalDistances.Add(distance);
-
-                        textBoxDistanceToNextSystem.Clear();
+                        if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
+                        {
+                            var distance = new DistanceClass
+                            {
+                                Dist = StringToDouble(textBoxDistanceToNextSystem.Text),
+                                CreateTime = DateTime.UtcNow,
+                                CommanderCreate = textBoxCmdrName.Text.Trim(),
+                                NameA = item.Name,
+                                NameB = item2.Name,
+                                Status = DistancsEnum.EDDiscovery
+                            };
+                            Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
+                            distance.Store();
+                            SQLiteDBClass.globalDistances.Add(distance);
+                        }
                     }
+                    textBoxDistanceToNextSystem.Clear();
+                    textBoxDistanceToNextSystem.Enabled = true;
 
                     AddHistoryRow(new DateTime(1990, 1, 1), item, item2);
                     lastRowIndex += 1;
@@ -793,7 +804,12 @@ namespace EDDiscovery
         private void textBoxDistanceToNextSystem_Validating(object sender, CancelEventArgs e)
         {
             var value = textBoxDistanceToNextSystem.Text;
-            if (value == "" || !new Regex(@"^\d{1,2}([.,]\d{0,2})?$").IsMatch(value))
+            if (value.Length == 0)
+            {
+                return;
+            }
+
+            if (!new Regex(@"^\d{1,2}([.,]\d{0,2})?$").IsMatch(value))
             {
                 e.Cancel = true;
                 return;
