@@ -86,7 +86,8 @@ namespace EDDiscovery
         {
             Exact,
             NotExact,
-            NeedMoreDistances
+            NeedMoreDistances,
+            MultipleSolutions,
         }
 
         public class Result
@@ -309,7 +310,7 @@ namespace EDDiscovery
         private List<Coordinate> next;
 
 
-	    public bool runTril() 
+        public Result runTril() 
         {
 
 		this.regions = getRegions();
@@ -410,10 +411,23 @@ namespace EDDiscovery
 
 
             if (bestCount >= 5 && (bestCount - nextBest) >= 2)
-                return true;
+            {
+                Result res = new Result(ResultState.Exact, best[0]);
+                return res;
+            }
+            else if ((bestCount - nextBest) >= 1)
+            {
+                return new Result(ResultState.NotExact, best[0]);
+            }
+            else if (best != null && best.Count > 1)
+                return new Result(ResultState.MultipleSolutions, best[0]); // Trilatation.best.Count  shows how many solutions
+            else
+                return new Result(ResultState.NeedMoreDistances);
+
+
 
         }
-            return true;
+        return new Result(ResultState.NeedMoreDistances);
 	}
 
 

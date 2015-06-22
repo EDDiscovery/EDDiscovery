@@ -214,7 +214,7 @@ namespace EDDiscovery
                 trilateration.AddEntry(item.Value);
             }
 
-            trilateration.runTril();
+            var trilaterationResultCS = trilateration.runTril();
 
             var trilaterationResult = trilateration.Run();
 
@@ -460,16 +460,16 @@ namespace EDDiscovery
 
             var edsc = new EDSCClass();
             
-            if (!EDSCClass.UseTest)
-            {
-                Invoke((MethodInvoker) delegate
-                {
-                    // TODO temporarily mess with EDSC in test mode only
-                    TravelHistoryControl.LogText("Forcibly switching to EDSC UseTest mode." + Environment.NewLine, Color.OrangeRed);
-                });
-                EDSCClass.UseTest = true;
-            }
-            
+            //if (!EDSCClass.UseTest)
+            //{
+            //    Invoke((MethodInvoker) delegate
+            //    {
+            //        // TODO temporarily mess with EDSC in test mode only
+            //        TravelHistoryControl.LogText("Forcibly switching to EDSC UseTest mode." + Environment.NewLine, Color.OrangeRed);
+            //    });
+            //    EDSCClass.UseTest = true;
+            //}
+     
             var response = edsc.SubmitDistances(commanderName, TargetSystem.name, distances);
             
             Console.WriteLine(response);
