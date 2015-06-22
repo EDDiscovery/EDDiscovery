@@ -537,11 +537,9 @@ namespace EDDiscovery
                 distance.Status = DistancsEnum.EDDiscovery;
 
                 distance.Store();
-
-                SQLiteDBClass.globalDistances.Add(distance);
+                SQLiteDBClass.AddDistanceToCache(distance);
 
                 dataGridView1.Rows[lastRowIndex].Cells[2].Value = textBoxDistance.Text.Trim();
-
             }
         }
 
@@ -713,7 +711,7 @@ namespace EDDiscovery
                             };
                             Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
                             distance.Store();
-                            SQLiteDBClass.globalDistances.Add(distance);
+                            SQLiteDBClass.AddDistanceToCache(distance);
                         }
                     }
                     textBoxDistanceToNextSystem.Clear();

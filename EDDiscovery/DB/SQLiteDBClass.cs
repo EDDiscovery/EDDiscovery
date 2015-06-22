@@ -452,13 +452,8 @@ namespace EDDiscovery.DB
 
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
-                            DistanceClass sys = new DistanceClass(dr);
-
-
-                            globalDistances.Add(sys);
-
-                            dictDistances[sys.NameA.ToLower() + ":" + sys.NameB.ToLower()] = sys;
-                            dictDistances[sys.NameB.ToLower() + ":" + sys.NameA.ToLower()] = sys;
+                            DistanceClass distance = new DistanceClass(dr);
+                            AddDistanceToCache(distance);
                         }
 
                         return true;
@@ -914,7 +909,11 @@ namespace EDDiscovery.DB
         }
 
 
-
-
+        public static void AddDistanceToCache(DistanceClass distance)
+        {
+            globalDistances.Add(distance);
+            dictDistances[distance.NameA.ToLower() + ":" + distance.NameB.ToLower()] = distance;
+            dictDistances[distance.NameB.ToLower() + ":" + distance.NameA.ToLower()] = distance;
+        }
     }
 }
