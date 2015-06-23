@@ -81,6 +81,8 @@
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
             this.buttonCloseTrilateration = new System.Windows.Forms.Button();
             this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
+            this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
+            this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -604,11 +606,32 @@
             this.TrilaterationControl.Visible = false;
             this.TrilaterationControl.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
             // 
+            // labelDistanceToNextSystem
+            // 
+            this.labelDistanceToNextSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelDistanceToNextSystem.AutoSize = true;
+            this.labelDistanceToNextSystem.Location = new System.Drawing.Point(592, 60);
+            this.labelDistanceToNextSystem.Name = "labelDistanceToNextSystem";
+            this.labelDistanceToNextSystem.Size = new System.Drawing.Size(122, 13);
+            this.labelDistanceToNextSystem.TabIndex = 20;
+            this.labelDistanceToNextSystem.Text = "Distance to next system:";
+            // 
+            // textBoxDistanceToNextSystem
+            // 
+            this.textBoxDistanceToNextSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDistanceToNextSystem.Location = new System.Drawing.Point(666, 76);
+            this.textBoxDistanceToNextSystem.Name = "textBoxDistanceToNextSystem";
+            this.textBoxDistanceToNextSystem.Size = new System.Drawing.Size(48, 20);
+            this.textBoxDistanceToNextSystem.TabIndex = 21;
+            this.textBoxDistanceToNextSystem.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDistanceToNextSystem_Validating);
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.buttonCloseTrilateration);
+            this.Controls.Add(this.textBoxDistanceToNextSystem);
+            this.Controls.Add(this.labelDistanceToNextSystem);
             this.Controls.Add(this.buttonSync);
             this.Controls.Add(this.textBoxCmdrName);
             this.Controls.Add(this.label6);
@@ -686,5 +709,7 @@
         private System.Windows.Forms.Button buttonTrilaterate;
         private TrilaterationControl TrilaterationControl;
         private System.Windows.Forms.Button buttonCloseTrilateration;
+        private System.Windows.Forms.Label labelDistanceToNextSystem;
+        private System.Windows.Forms.TextBox textBoxDistanceToNextSystem;
     }
 }
