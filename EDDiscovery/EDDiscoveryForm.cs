@@ -291,7 +291,11 @@ namespace EDDiscovery
                     SystemClass.Store(systems);
                 }
 
-                edsc.EDSCGetNewSystems(db);
+                string retstr = edsc.EDSCGetNewSystems(db);
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText(retstr);
+                });
 
                 db.GetAllSystemNotes();
                 db.GetAllSystems();
