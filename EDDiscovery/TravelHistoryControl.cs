@@ -14,9 +14,7 @@ using System.Diagnostics;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using System.Globalization;
-
-
-
+using System.Text.RegularExpressions;
 
 
 namespace EDDiscovery
@@ -539,11 +537,9 @@ namespace EDDiscovery
                 distance.Status = DistancsEnum.EDDiscovery;
 
                 distance.Store();
-
-                SQLiteDBClass.globalDistances.Add(distance);
+                SQLiteDBClass.AddDistanceToCache(distance);
 
                 dataGridView1.Rows[lastRowIndex].Cells[2].Value = textBoxDistance.Text.Trim();
-
             }
         }
 
@@ -691,6 +687,35 @@ namespace EDDiscovery
                     else
                         item2 = null;
 
+                    // grab distance to next (this) system
+                    textBoxDistanceToNextSystem.Enabled = false;
+                    if (textBoxDistanceToNextSystem.Text.Length > 0 && item2 != null)
+                    {
+                        SystemClass currentSystem = null, previousSystem = null;
+                        SystemData.SystemList.ForEach(s =>
+                        {
+                            if (s.name == item.Name) currentSystem = s;
+                            if (s.name == item2.Name) previousSystem = s;
+                        });
+                        
+                        if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
+                        {
+                            var distance = new DistanceClass
+                            {
+                                Dist = StringToDouble(textBoxDistanceToNextSystem.Text),
+                                CreateTime = DateTime.UtcNow,
+                                CommanderCreate = textBoxCmdrName.Text.Trim(),
+                                NameA = item.Name,
+                                NameB = item2.Name,
+                                Status = DistancsEnum.EDDiscovery
+                            };
+                            Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
+                            distance.Store();
+                            SQLiteDBClass.AddDistanceToCache(distance);
+                        }
+                    }
+                    textBoxDistanceToNextSystem.Clear();
+                    textBoxDistanceToNextSystem.Enabled = true;
 
                     AddHistoryRow(new DateTime(1990, 1, 1), item, item2);
                     lastRowIndex += 1;
@@ -740,7 +765,7 @@ namespace EDDiscovery
             if (currentSysPos.curSystem.id_eddb>0)
                 Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
         }
-
+        
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
             dataGridView1.Visible = false;
@@ -772,6 +797,33 @@ namespace EDDiscovery
         {
             var value = textBoxCmdrName.Text;
             return !string.IsNullOrEmpty(value) ? value : null;
+        }
+
+        private void textBoxDistanceToNextSystem_Validating(object sender, CancelEventArgs e)
+        {
+            var value = textBoxDistanceToNextSystem.Text;
+            if (value.Length == 0)
+            {
+                return;
+            }
+
+            if (!new Regex(@"^\d{1,2}([.,]\d{0,2})?$").IsMatch(value))
+            {
+                e.Cancel = true;
+                return;
+            }
+            
+            var valueDouble = StringToDouble(value);
+            if (valueDouble < 0 || valueDouble >= 45) // max jump range is ~42Ly
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private double StringToDouble(string value)
+        {
+            var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            return double.Parse(decimalSeparator == "," ? value.Replace(".", ",") : value.Replace(",", "."));
         }
     }
 
