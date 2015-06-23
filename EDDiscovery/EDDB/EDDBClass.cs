@@ -186,12 +186,12 @@ namespace EDDiscovery2.EDDB
 
             db.Connect2DB();
 
-            int lastupdated =  db.QueryValueInt("SELECT Max(eddb_updated_at ) FROM Systems", -1);
+            //int lastupdated =  db.QueryValueInt("SELECT Max(eddb_updated_at ) FROM Systems", -1);
 
-            var result = from a in eddbsystems where a.eddb_updated_at > lastupdated  orderby a.eddb_updated_at  select a;
+            //var result = from a in eddbsystems where a.eddb_updated_at > lastupdated  orderby a.eddb_updated_at  select a;
 
-            if (result.Count() == 0)
-                return true ;
+            //if (result.Count() == 0)
+            //    return true ;
 
 
             Stopwatch sw = new Stopwatch();
@@ -206,26 +206,29 @@ namespace EDDiscovery2.EDDB
                 {
                     try
                     {
-                        foreach (SystemClass sys in result)
+                        foreach (SystemClass sys in eddbsystems)
                         {
                             SystemClass sysdb = SystemData.GetSystem(sys.name);
 
                             if (sysdb != null)  // Update system
                             {
-                                sysdb.id_eddb = sys.id_eddb;
-                                sysdb.faction = sys.faction;
-                                sysdb.population = sys.population;
-                                sysdb.government = sys.government;
-                                sysdb.allegiance = sys.allegiance;
-                                sysdb.state = sys.state;
-                                sysdb.security = sys.security;
-                                sysdb.primary_economy = sys.primary_economy;
-                                sysdb.needs_permit = sys.needs_permit;
-                                sysdb.eddb_updated_at = sys.eddb_updated_at;
+                                if (sysdb.eddb_updated_at != sys.eddb_updated_at)
+                                {
+                                    sysdb.id_eddb = sys.id_eddb;
+                                    sysdb.faction = sys.faction;
+                                    sysdb.population = sys.population;
+                                    sysdb.government = sys.government;
+                                    sysdb.allegiance = sys.allegiance;
+                                    sysdb.state = sys.state;
+                                    sysdb.security = sys.security;
+                                    sysdb.primary_economy = sys.primary_economy;
+                                    sysdb.needs_permit = sys.needs_permit;
+                                    sysdb.eddb_updated_at = sys.eddb_updated_at;
 
 
-                                sysdb.Update(cn, sysdb.id, tra);
-                                nr++;
+                                    sysdb.Update(cn, sysdb.id, tra);
+                                    nr++;
+                                }
                             }
                             else
                             {

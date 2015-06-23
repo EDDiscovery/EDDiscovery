@@ -132,7 +132,8 @@ namespace EDDiscovery
             // trigger trilateration calculation
             if (trilaterationThread != null)
             {
-                TravelHistoryControl.LogText("Aborting previous trilateration attempt." + Environment.NewLine);
+                if (trilaterationThread.ThreadState != ThreadState.Stopped) 
+                    TravelHistoryControl.LogText("Aborting previous trilateration attempt." + Environment.NewLine);
                 trilaterationThread.Abort();
             }
             trilaterationThread = new Thread(new ThreadStart(RunTrilateration)) {Name = "Trilateration"};
@@ -227,6 +228,9 @@ namespace EDDiscovery
                 {
                     TravelHistoryControl.LogText("Trilateration successful, exact coordinates found." + Environment.NewLine);
                     TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
+
+                    if (trilaterationResultCS.Coordinate!=null)
+                        TravelHistoryControl.LogText("x=" + trilaterationResultCS.Coordinate.X + ", y=" + trilaterationResultCS.Coordinate.Y + ", z=" + trilaterationResultCS.Coordinate.Z + " : " +trilaterationResultCS.State.ToString()+Environment.NewLine, Color.Blue);
                     labelStatus.Text = "Success, coordinates found!";
                     labelStatus.BackColor = Color.LawnGreen;
                 });
