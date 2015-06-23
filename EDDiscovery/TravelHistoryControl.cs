@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Collections;
+using System.Data.SQLite;
 using EDDiscovery.DB;
 using System.Diagnostics;
 using EDDiscovery2;
@@ -42,16 +43,20 @@ namespace EDDiscovery
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
             visitedSystems = null;
-            SQLiteDBClass db = new SQLiteDBClass();
 
-            edsc.EDSCGetNewSystems(db);
-            db.GetAllSystems();
+            TriggerEDSCRefresh();
             RefreshHistory();
 
             EliteDangerous.CheckED();
         }
 
+        public void TriggerEDSCRefresh()
+        {
+            SQLiteDBClass db = new SQLiteDBClass();
 
+            edsc.EDSCGetNewSystems(db);
+            db.GetAllSystems();
+        }
      
 
         static public void LogText(string text)
@@ -327,8 +332,8 @@ namespace EDDiscovery
 
             textBoxDistance.Enabled = distedit;
             buttonUpdate.Enabled = distedit;
-            
-
+            buttonTrilaterate.Enabled = !syspos.curSystem.HasCoordinate && syspos.curSystem == GetCurrentSystem();
+            //buttonTrilaterate.Enabled = true; // FIXME for debugging only
 
 
             ShowClosestSystems(syspos.Name);
@@ -425,6 +430,16 @@ namespace EDDiscovery
                
             }
 
+        }
+
+
+        public SystemClass GetCurrentSystem()
+        {
+            if (visitedSystems.Count == 0)
+            {
+                return null;
+            }
+            return (from systems in visitedSystems orderby systems.time descending select systems.curSystem).First();
         }
 
 
@@ -726,9 +741,38 @@ namespace EDDiscovery
                 Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
         }
 
+        private void buttonTrilaterate_Click(object sender, EventArgs e)
+        {
+            dataGridView1.Visible = false;
+            TrilaterationControl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
+            TrilaterationControl.Visible = true;
+            buttonCloseTrilateration.Visible = true;
+            buttonTrilaterate.Enabled = false;
+            labelHeader.Text = "Trilateration";
+        }
 
+        private void buttonCloseTrilateration_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl.Visible = false;
+        }
 
+        private void TrilaterationControl_VisibleChanged(object sender, EventArgs e)
+        {
+            if (TrilaterationControl.Visible == false)
+            {
+                TrilaterationControl.TargetSystem = null;
+                buttonCloseTrilateration.Visible = false;
+                buttonTrilaterate.Enabled = true;
+                dataGridView1.Visible = true;
+                labelHeader.Text = "Travel history";
+            }
+        }
 
+        public string GetCommanderName()
+        {
+            var value = textBoxCmdrName.Text;
+            return !string.IsNullOrEmpty(value) ? value : null;
+        }
     }
 
 
