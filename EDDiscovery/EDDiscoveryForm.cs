@@ -193,14 +193,9 @@ namespace EDDiscovery
             try
             {
                 LogText("Checking for new EDDiscovery data" + Environment.NewLine);
-                string webstr =  web.DownloadString("http://robert.astronet.se/Elite/ed-systems/eddisc.php");
 
-                string[] filesizes = webstr.Split(' ');
-                string remotetgcsystemslen = filesizes[0];
-                string remotetgcdistanceslen = filesizes[1];
-
-                GetNewRedWizzardFile(remotetgcsystemslen, filetgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
-                GetNewRedWizzardFile(remotetgcdistanceslen, filetgcdistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
+                GetNewRedWizzardFile(filetgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
+                GetNewRedWizzardFile(filetgcdistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
             }
             catch (Exception ex)
             {
@@ -208,31 +203,56 @@ namespace EDDiscovery
                 return;
             }
         }
-
-        private void GetNewRedWizzardFile(string remotetgcsystemslen, string filename, string url)
+        
+        private void GetNewRedWizzardFile(string filename, string url)
         {
-            bool downloadfile = false;
-            if (File.Exists(filename))
+            string etagFilename = filename + ".etag";
+
+            var request = (HttpWebRequest) HttpWebRequest.Create(url);
+            request.UserAgent = "EDDiscovery v" + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            if (File.Exists(etagFilename))
             {
-                FileInfo fi = new FileInfo(filename);
-                if (!fi.Length.ToString().Equals(remotetgcsystemslen))
-                    downloadfile = true;
+                var etag = File.ReadAllText(etagFilename);
+                if (etag != "")
+                {
+                   request.Headers[HttpRequestHeader.IfNoneMatch] = etag;
+                }
             }
-            else
-                downloadfile = true;
 
-            if (downloadfile)
-            {
-                WebClient webclient = new WebClient();
+            try {
+                var response = (HttpWebResponse) request.GetResponse();
+                
+                LogText("Downloading " + filename + "..." + Environment.NewLine);
 
-                LogText("Downloading " + filename + " " +  (Convert.ToInt32(remotetgcsystemslen)/1000000.0).ToString("0.0") + "MB" + Environment.NewLine);
-
-                webclient.DownloadFile(url, filename + ".tmp");
+                File.WriteAllText(filename + ".etag.tmp", response.Headers[HttpResponseHeader.ETag]);
+                var destFileStream = File.Open(filename + ".tmp", FileMode.Create, FileAccess.Write);
+                response.GetResponseStream().CopyTo(destFileStream);
+                
+                destFileStream.Close();
+                response.Close();
 
                 if (File.Exists(filename))
                     File.Delete(filename);
+                if (File.Exists(etagFilename))
+                    File.Delete(etagFilename);
 
                 File.Copy(filename + ".tmp", filename);
+                File.Copy(etagFilename + ".tmp", etagFilename);
+
+                File.Delete(filename + ".tmp");
+                File.Delete(etagFilename + ".tmp");
+            } catch (WebException e)
+            {
+                var code = ((HttpWebResponse) e.Response).StatusCode;
+                if (code == HttpStatusCode.NotModified)
+                {
+                    LogText(filename + " is up to date." + Environment.NewLine);
+                } else
+                {
+                    throw e;
+                }
             }
         }
 
