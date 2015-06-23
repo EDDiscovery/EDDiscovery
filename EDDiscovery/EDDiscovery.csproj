@@ -107,6 +107,7 @@
     <Compile Include="DB\StationClass.cs" />
     <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
+    <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EliteDangerous\AppConfig.cs" />
     <Compile Include="EliteDangerous\EliteDangerous.cs" />
     <Compile Include="EliteDangerous\GameSettings.cs" />
