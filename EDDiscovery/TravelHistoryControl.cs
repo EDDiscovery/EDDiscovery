@@ -332,8 +332,8 @@ namespace EDDiscovery
 
             textBoxDistance.Enabled = distedit;
             buttonUpdate.Enabled = distedit;
-            //buttonTrilaterate.Enabled = !syspos.curSystem.HasCoordinate && syspos.curSystem == GetCurrentSystem();
-            buttonTrilaterate.Enabled = true; // FIXME for debugging only
+            buttonTrilaterate.Enabled = !syspos.curSystem.HasCoordinate && syspos.curSystem == GetCurrentSystem();
+            //buttonTrilaterate.Enabled = true; // FIXME for debugging only
 
 
             ShowClosestSystems(syspos.Name);
