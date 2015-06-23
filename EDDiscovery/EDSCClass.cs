@@ -156,7 +156,7 @@ namespace EDDiscovery
                         JObject inpstatus = (JObject)st["status"];
                         int statusnum = inpstatus["statusnum"].Value<int>();
 
-  
+
                         respstr += "System " + statusnum.ToString() + " : " + inpstatus["msg"].Value<string>() + Environment.NewLine;
 
                     }
@@ -192,24 +192,29 @@ namespace EDDiscovery
 
 
 
-        internal void EDSCGetNewSystems(SQLiteDBClass db)
+        internal string  EDSCGetNewSystems(SQLiteDBClass db)
         {
             string json;
             string date = "2010-01-01 00:00:00";
             string lstsyst = db.GetSettingString("EDSCLastSystems", "2010-01-01 00:00:00");
 
-            TravelHistoryControl.LogText("Checking for new systems from EDSC. ");
+            string retstr="";
+      
+
             Application.DoEvents();
+
             json = RequestSystems(lstsyst);
 
             db.GetAllSystems();
 
             List<SystemClass> listNewSystems = SystemClass.ParseEDSC(json, ref date);
 
-            TravelHistoryControl.LogText("Found " + listNewSystems.Count.ToString() + " new systems." + Environment.NewLine);
+            retstr = listNewSystems.Count.ToString() + " new systems from EDSC." + Environment.NewLine;
             Application.DoEvents();
             SystemClass.Store(listNewSystems);
             db.PutSettingString("EDSCLastSystems", date);
+
+            return retstr;
         }
 
 
