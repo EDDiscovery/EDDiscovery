@@ -150,6 +150,8 @@ namespace EDDiscovery
                 labelStatus.BackColor = Color.LightBlue;
 
                 UnfreezeTrilaterationUI();
+                dataGridViewDistances.Focus();
+
                 PopulateDataGridViewSuggestedSystems();
             }
 
