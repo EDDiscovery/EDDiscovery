@@ -514,22 +514,15 @@ namespace EDDiscovery
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            double dist;
-
-            NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
-            string decimalSeparator = numberFormatInfo.NumberDecimalSeparator;
-
-            if (decimalSeparator.Equals(","))  // Allow regions with , as decimal separator to  also use . as decimal separator
-                textBoxDistance.Text = textBoxDistance.Text.Replace(".", ",");
-
-
-            if (!Double.TryParse(textBoxDistance.Text.Trim(), out dist))
+            var dist = DistanceAsDouble(textBoxDistance.Text.Trim());
+            
+            if (!dist.HasValue)
                 MessageBox.Show("Distance in wrong format!");
             else
             {
                 DistanceClass distance = new DistanceClass();
 
-                distance.Dist = dist;
+                distance.Dist = dist.Value;
                 distance.CreateTime = DateTime.UtcNow;
                 distance.CommanderCreate = textBoxCmdrName.Text.Trim();
                 distance.NameA = textBoxSystem.Text;
@@ -663,7 +656,6 @@ namespace EDDiscovery
                 string name = netlog.visitedSystems.Last().Name;
                 Invoke((MethodInvoker)delegate
                 {
-
                     LogText("Arrived to system: ");
                     SystemClass sys1 = SystemData.GetSystem(name);
                     if (sys1 == null || sys1.HasCoordinate == false)
@@ -700,18 +692,22 @@ namespace EDDiscovery
                         
                         if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
                         {
-                            var distance = new DistanceClass
+                            var presetDistance = DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), 45);
+                            if (presetDistance.HasValue)
                             {
-                                Dist = StringToDouble(textBoxDistanceToNextSystem.Text),
-                                CreateTime = DateTime.UtcNow,
-                                CommanderCreate = textBoxCmdrName.Text.Trim(),
-                                NameA = item.Name,
-                                NameB = item2.Name,
-                                Status = DistancsEnum.EDDiscovery
-                            };
-                            Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
-                            distance.Store();
-                            SQLiteDBClass.AddDistanceToCache(distance);
+                                var distance = new DistanceClass
+                                {
+                                    Dist = presetDistance.Value,
+                                    CreateTime = DateTime.UtcNow,
+                                    CommanderCreate = textBoxCmdrName.Text.Trim(),
+                                    NameA = item.Name,
+                                    NameB = item2.Name,
+                                    Status = DistancsEnum.EDDiscovery
+                                };
+                                Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
+                                distance.Store();
+                                SQLiteDBClass.AddDistanceToCache(distance);
+                            }
                         }
                     }
                     textBoxDistanceToNextSystem.Clear();
@@ -801,29 +797,51 @@ namespace EDDiscovery
 
         private void textBoxDistanceToNextSystem_Validating(object sender, CancelEventArgs e)
         {
-            var value = textBoxDistanceToNextSystem.Text;
+            var value = textBoxDistanceToNextSystem.Text.Trim();
             if (value.Length == 0)
             {
                 return;
             }
-
-            if (!new Regex(@"^\d{1,2}([.,]\d{0,2})?$").IsMatch(value))
-            {
-                e.Cancel = true;
-                return;
-            }
             
-            var valueDouble = StringToDouble(value);
-            if (valueDouble < 0 || valueDouble >= 45) // max jump range is ~42Ly
+            if (!DistanceAsDouble(value, 45).HasValue) // max jump range is ~42Ly
             {
                 e.Cancel = true;
             }
         }
 
-        private double StringToDouble(string value)
+        /// <summary>
+        /// Parse a distance as a positive double, in the formats "xx", "xx.yy", "xx,yy" or "xxxx,yy".
+        /// </summary>
+        /// <param name="value">Decimal string to be parsed.</param>
+        /// <param name="maximum">Upper limit or null if not required.</param>
+        /// <returns>Parsed value or null on conversion failure.</returns>
+        private static double? DistanceAsDouble(string value, double? maximum = null)
         {
+            if (value.Length == 0)
+            {
+                return null;
+            }
+
+            if (!new Regex(@"^\d+([.,]\d{1,2})?$").IsMatch(value))
+            {
+                return null;
+            }
+
+            double valueDouble;
+
+            // Allow regions with , as decimal separator to  also use . as decimal separator and vice versa
             var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-            return double.Parse(decimalSeparator == "," ? value.Replace(".", ",") : value.Replace(",", "."));
+            if (!double.TryParse(decimalSeparator == "," ? value.Replace(".", ",") : value.Replace(",", "."), out valueDouble))
+            {
+                return null;
+            }
+
+            if (maximum.HasValue && valueDouble > maximum)
+            {
+                return null;
+            }
+
+            return valueDouble;
         }
     }
 
