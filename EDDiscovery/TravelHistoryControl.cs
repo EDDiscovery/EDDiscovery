@@ -279,6 +279,7 @@ namespace EDDiscovery
 
             currentSysPos = syspos;
             textBoxSystem.Text = syspos.curSystem.name;
+            textBoxPrevSystem.Clear();
             textBoxDistance.Text = syspos.strDistance;
           
 
