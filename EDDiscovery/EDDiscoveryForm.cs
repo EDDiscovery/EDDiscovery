@@ -28,8 +28,8 @@ namespace EDDiscovery
         static public  AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
         static public string CommanderName;
 
-        const string filetgcSystems = "tgcsystems.json";
-        const string filetgcdistances ="tgcdistances.json";
+        const string fileTgcSystems = "tgcsystems.json";
+        const string fileTgcDistances ="tgcdistances.json";
         public EDDiscoveryForm()
         {
             InitializeComponent();
@@ -194,8 +194,8 @@ namespace EDDiscovery
             {
                 LogText("Checking for new EDDiscovery data" + Environment.NewLine);
 
-                GetNewRedWizzardFile(filetgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
-                GetNewRedWizzardFile(filetgcdistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
+                GetNewRedWizzardFile(fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
+                GetNewRedWizzardFile(fileTgcDistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
             }
             catch (Exception ex)
             {
@@ -238,11 +238,8 @@ namespace EDDiscovery
                 if (File.Exists(etagFilename))
                     File.Delete(etagFilename);
 
-                File.Copy(filename + ".tmp", filename);
-                File.Copy(etagFilename + ".tmp", etagFilename);
-
-                File.Delete(filename + ".tmp");
-                File.Delete(etagFilename + ".tmp");
+                File.Move(filename + ".tmp", filename);
+                File.Move(etagFilename + ".tmp", etagFilename);
             } catch (WebException e)
             {
                 var code = ((HttpWebResponse) e.Response).StatusCode;
@@ -275,7 +272,7 @@ namespace EDDiscovery
                 });
 
 
-                json = LoadJsonArray(filetgcSystems);
+                json = LoadJsonArray(fileTgcSystems);
                 List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
 
 
@@ -596,7 +593,7 @@ namespace EDDiscovery
 ////            srv.PostSystem();
 
 
-            //            json = LoadJsonArray(filetgcSystems);
+            //            json = LoadJsonArray(fileTgcSystems);
      
 
 //            systems = SystemClass.ParseEDSC(json, ref date);

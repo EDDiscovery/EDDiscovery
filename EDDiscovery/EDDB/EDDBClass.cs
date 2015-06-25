@@ -9,95 +9,84 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 
 namespace EDDiscovery2.EDDB
 {
     public class EDDBClass
     {
-          private string stationFileNameTemp = "eddbstationslite_temp.json";
         private string stationFileName = "eddbstationslite.json";
-
-        private string systemFileNameTemp = "eddbsystems_temp.json";
         private string systemFileName = "eddbsystems.json";
-
-        private string commoditiesFileNameTemp = "commodities_temp.json";
-        private string commoditiesFileName = "commodities.json";	
+        private string commoditiesFileName = "commodities.json";
 
         public bool GetSystems()
         {
-            try
-            {
-                if (File.Exists(systemFileNameTemp))
-                    File.Delete(systemFileNameTemp);
-
-                WebClient webClient = new WebClient();
-                webClient.DownloadFile("http://robert.astronet.se/Elite/eddb/systems.json", systemFileNameTemp);
-
-                if (File.Exists(systemFileName))
-                    File.Delete(systemFileName);
-
-                File.Copy(systemFileNameTemp, systemFileName);
-
-                return true;
-            }
-
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception:" + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                return false;
-            }
+            if (File.Exists("eddbstationslite_temp.json")) File.Delete("eddbstationslite_temp.json"); // migration - remove obsolete file
+            return DownloadFile("http://robert.astronet.se/Elite/eddb/systems.json", systemFileName);
         }
 
         public bool GetCommodities()
         {
-            try
-            {
-                if (File.Exists(commoditiesFileNameTemp))
-                    File.Delete(commoditiesFileNameTemp);
-
-                WebClient webClient = new WebClient();
-                webClient.DownloadFile("http://robert.astronet.se/Elite/eddb/commodities.json", commoditiesFileNameTemp);
-
-                if (File.Exists(commoditiesFileName))
-                    File.Delete(commoditiesFileName);
-
-                File.Copy(commoditiesFileNameTemp, commoditiesFileName);
-
-                return true;
-            }
-
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception:" + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                return false;
-            }
+            if (File.Exists("eddbsystems_temp.json")) File.Delete("eddbsystems_temp.json"); // migration - remove obsolete file
+            return DownloadFile("http://robert.astronet.se/Elite/eddb/commodities.json", commoditiesFileName);
         }
 
 
         public bool GetStationsLite()
         {
+            if (File.Exists("commodities_temp.json")) File.Delete("commodities_temp.json"); // migration - remove obsolete file
+            return DownloadFile("http://robert.astronet.se/Elite/eddb/stations_lite.json", stationFileName);
+        }
 
+        private bool DownloadFile(string url, string filename)
+        {
+            var etagFilename = filename + ".etag";
+            var tmpFilename = filename + ".tmp";
+            var tmpEtagFilename = etagFilename + ".tmp";
+            
+            var request = (HttpWebRequest) HttpWebRequest.Create(url);
+            request.UserAgent = "EDDiscovery v" + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            
+            if (File.Exists(etagFilename))
+            {
+                var etag = File.ReadAllText(etagFilename);
+                if (etag != "")
+                {
+                    request.Headers[HttpRequestHeader.IfNoneMatch] = etag;
+                }
+            }
+            
             try
             {
-                if (File.Exists(stationFileNameTemp))
-                    File.Delete(stationFileNameTemp);
+                var response = (HttpWebResponse) request.GetResponse();
 
-                WebClient webClient = new WebClient();
-                webClient.DownloadFile("http://robert.astronet.se/Elite/eddb/stations_lite.json", stationFileNameTemp);
+                File.WriteAllText(tmpEtagFilename, response.Headers[HttpResponseHeader.ETag]);
+                var destFileStream = File.Open(tmpFilename, FileMode.Create, FileAccess.Write);
+                response.GetResponseStream().CopyTo(destFileStream);
+                
+                destFileStream.Close();
+                response.Close();
 
-                if (File.Exists(stationFileName))
-                    File.Delete(stationFileName);
-
-                File.Copy(stationFileNameTemp, stationFileName);
+                if (File.Exists(filename))
+                    File.Delete(filename);
+                if (File.Exists(etagFilename))
+                    File.Delete(etagFilename);
+                
+                File.Move(tmpFilename, filename);
+                File.Move(tmpEtagFilename, etagFilename);
 
                 return true;
             }
-
-            catch (Exception ex)
+            catch (WebException ex)
             {
+                var code = ((HttpWebResponse) ex.Response).StatusCode;
+                if (code == HttpStatusCode.NotModified)
+                {
+                    System.Diagnostics.Trace.WriteLine("EDDB: " + filename + " up to date (etag).");
+                    return true;
+                }
                 System.Diagnostics.Trace.WriteLine("Exception:" + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 return false;
