@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace EDDiscovery
 {
@@ -124,7 +125,7 @@ namespace EDDiscovery
             public double miny, maxy;
             public double minz, maxz;
 
-	        List<Coordinate> origins;
+	        public List<Coordinate> origins;
             
             public Region(Coordinate center)
             {
@@ -313,16 +314,19 @@ namespace EDDiscovery
         public Result runTril() 
         {
 
-		this.regions = getRegions();
-		// check the number of matching distances for each grid location in each region
-		// track the best number of matches (and the corresponding locations) and the next
-		// best number
-		this.bestCount = 0;
-		this.best = new List<Coordinate>();
-		this.nextBest = 0;
-		this.next = new List<Coordinate>();
+		    this.regions = getRegions();
+		    // check the number of matching distances for each grid location in each region
+		    // track the best number of matches (and the corresponding locations) and the next
+		    // best number
+		    this.bestCount = 0;
+		    this.best = new List<Coordinate>();
+		    this.nextBest = 0;
+		    this.next = new List<Coordinate>();
 
-        foreach (Region region in regions)
+            var sortedregions = from a in regions where a.regionSize>0 orderby a.origins.Count descending  select a;
+
+
+            foreach (Region region in sortedregions)
         {
             //this.regions.forEach(function(region) {
             //bestCount = 0;
