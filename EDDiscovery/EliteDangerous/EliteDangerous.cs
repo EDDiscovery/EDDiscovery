@@ -318,6 +318,45 @@ Onion_Head,
 
 
 
+            // Check ED local filename too
+            filename = Path.Combine(EDDirectory, "AppConfigLocal.xml");
+
+            if (!File.Exists(filename))
+            {
+                try
+                {
+                    File.Copy("AppConfigLocal.xml", filename);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine("CheckStationLogging exception: " + ex.Message);
+                }
+            }
+
+
+            if (File.Exists(filename))
+            {
+                using (Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (StreamReader sr = new StreamReader(fs))
+                    {
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            line = line.Trim().Replace(" ", "");
+                            if (line.Contains("VerboseLogging=\"1\""))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+
+
             return false;
 
         }

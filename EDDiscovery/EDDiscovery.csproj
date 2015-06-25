@@ -169,6 +169,9 @@
     <Compile Include="TrilaterationControl.Designer.cs">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </Compile>
+    <Content Include="AppConfigLocal.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
