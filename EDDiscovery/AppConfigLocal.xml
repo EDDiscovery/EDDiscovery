@@ -1,10 +1,6 @@
 <AppConfig>
   <Network
-  Port="0"
-  upnpenabled="1"
-  LogFile="netLog"
-  DatestampLog="1"
-  VerboseLogging="1"
+   VerboseLogging="1"
 >
   </Network>
 
