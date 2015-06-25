@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -222,7 +223,16 @@ Onion_Head,
             }
             else
             {
-                if (EDFileName==null || !EDFileName.Equals(processes[0].MainModule.FileName))
+                string processFilename = null;
+                try
+                {
+                    processFilename = processes[0].MainModule.FileName;
+                }
+                catch (Win32Exception)
+                {
+                }
+
+                if (processFilename != null && (EDFileName==null || !EDFileName.Equals(processes[0].MainModule.FileName)))
                 {
                     EDFileName = processes[0].MainModule.FileName;
                     EDDirectory = Path.GetDirectoryName(EDFileName);
@@ -242,7 +252,13 @@ Onion_Head,
                     
                 }
 
-                EDVersion = processes[0].MainModule.FileVersionInfo.ProductVersion.ToString();
+                try
+                {
+                    EDVersion = processes[0].MainModule.FileVersionInfo.ProductVersion;
+                }
+                catch (Win32Exception)
+                {
+                }
 
                 EDRunning = true;
 

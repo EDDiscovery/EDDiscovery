@@ -60,6 +60,11 @@ namespace EDDiscovery
                     {
                     }
 
+                    if (allFiles == null)
+                    {
+                        return null;
+                    }
+
                     DateTime newtime = new DateTime(2000, 10, 10);
                     FileInfo newfi = null;
 
