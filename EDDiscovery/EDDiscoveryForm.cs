@@ -93,7 +93,7 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText("Elite Dangerous is not logging system names!!! ", Color.Red);
                     TravelHistoryControl.LogText("Add ");
                     TravelHistoryControl.LogText("VerboseLogging=\"1\" ", Color.Blue);
-                    TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " Remeber to restart Elite!" + Environment.NewLine);
+                    TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remeber to restart Elite!" + Environment.NewLine);
 
                     labelPanelText.Text = "Elite Dangerous is not logging system names!";
                     panelInfo.BackColor = Color.Salmon;
