@@ -129,6 +129,10 @@ namespace EDDiscovery
                 cell.Tag = system;
             }
 
+            // reset any calculated distances
+            dataGridViewDistances[2, e.RowIndex].Value = null;
+            dataGridViewDistances[3, e.RowIndex].Value = null;
+
             // trigger trilateration calculation
             if (trilaterationThread != null)
             {
@@ -136,7 +140,7 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText("Aborting previous trilateration attempt." + Environment.NewLine);
                 trilaterationThread.Abort();
             }
-            trilaterationThread = new Thread(new ThreadStart(RunTrilateration)) {Name = "Trilateration"};
+            trilaterationThread = new Thread(RunTrilateration) {Name = "Trilateration"};
 
             trilaterationThread.Start();
         }
@@ -208,6 +212,8 @@ namespace EDDiscovery
             Invoke((MethodInvoker) delegate
             {
                 TravelHistoryControl.LogText("Starting trilateration..." + Environment.NewLine);
+                labelStatus.Text = "Calculating…";
+                labelStatus.BackColor = Color.Gold;
             });
 
             var trilateration = new Trilateration {Logger = Console.WriteLine};
