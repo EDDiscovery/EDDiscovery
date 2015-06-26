@@ -163,10 +163,10 @@
             // 
             // ColumnNote
             // 
+            this.ColumnNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnNote.HeaderText = "Note";
             this.ColumnNote.Name = "ColumnNote";
             this.ColumnNote.ReadOnly = true;
-            this.ColumnNote.Width = 250;
             // 
             // comboBoxHistoryWindow
             // 
