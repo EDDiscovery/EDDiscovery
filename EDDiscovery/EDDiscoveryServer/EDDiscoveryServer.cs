@@ -181,7 +181,7 @@ namespace EDDiscovery
         }
 
 
-        public bool ShowDistanceResponce(string json, out string respstr)
+        public bool ShowDistanceResponse(string json, out string respstr)
         {
             bool retval = false;
             JObject edsc = null;
@@ -252,7 +252,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                respstr += "Excpetion in ShowDistanceResponce: " + ex.Message;
+                respstr += "Excpetion in ShowDistanceResponse: " + ex.Message;
                 return false;
             }
         }
