@@ -634,7 +634,7 @@ namespace EDDiscovery
                 if (json != null)
                 {
                     string str="";
-                    if (edsc.ShowDistanceResponce(json, out str))
+                    if (edsc.ShowDistanceResponse(json, out str))
                     {
                         LogText(str);
                         dist.Status = DistancsEnum.EDDiscoverySubmitted;

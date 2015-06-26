@@ -387,7 +387,7 @@ namespace EDDiscovery
                 dists = DistanceClass.ParseEDSC(json, ref lstdist);
 
                 if (json == null)
-                    LogText("No responce from server." + Environment.NewLine);
+                    LogText("No response from server." + Environment.NewLine);
                    
                 else
                     LogText("Found " + dists.Count.ToString() + " new distances." + Environment.NewLine);
