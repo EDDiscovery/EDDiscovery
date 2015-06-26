@@ -682,18 +682,10 @@ namespace EDDiscovery
 
         private void TestTrileteration()
         {
-
-            Trilateration trilC, trilJS;
-
-
-
             foreach (SystemClass System in SQLiteDBClass.globalSystems)
             {
                 if (DateTime.Now.Subtract(System.CreateDate).TotalDays < 60)
                 {
-                    trilC = new Trilateration();
-                    trilJS = new Trilateration();
-
                     //var Distances = from SQLiteDBClass.globalDistances
 
                     var distances1 = from p in SQLiteDBClass.globalDistances where p.NameA.ToLower() == System.SearchName select p;
@@ -735,9 +727,9 @@ namespace EDDiscovery
                         }
 
 
-                        trilateration.runTril();
-                        var trilaterationResult = trilateration.Run();
-                        if (trilaterationResult.State == Trilateration.ResultState.Exact)
+                        var csharpResult = trilateration.Run(Trilateration.Algorithm.RedWizzard_Native);
+                        var javascriptResult = trilateration.Run(Trilateration.Algorithm.RedWizzard_Emulated);
+                        if (javascriptResult.State == Trilateration.ResultState.Exact)
                             nr++;
                     }
                 }

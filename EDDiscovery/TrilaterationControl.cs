@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery.DB;
+using ThreadState = System.Threading.ThreadState;
 
 namespace EDDiscovery
 {
@@ -134,15 +136,7 @@ namespace EDDiscovery
             dataGridViewDistances[3, e.RowIndex].Value = null;
 
             // trigger trilateration calculation
-            if (trilaterationThread != null)
-            {
-                if (trilaterationThread.ThreadState != ThreadState.Stopped) 
-                    TravelHistoryControl.LogText("Aborting previous trilateration attempt." + Environment.NewLine);
-                trilaterationThread.Abort();
-            }
-            trilaterationThread = new Thread(RunTrilateration) {Name = "Trilateration"};
-
-            trilaterationThread.Start();
+            RunTrilateration();;
         }
 
         private void TrilaterationControl_VisibleChanged(object sender, EventArgs e)
@@ -185,6 +179,18 @@ namespace EDDiscovery
 
         private void RunTrilateration()
         {
+            if (trilaterationThread != null)
+            {
+                if (trilaterationThread.ThreadState != ThreadState.Stopped)
+                    TravelHistoryControl.LogText("Aborting previous trilateration attempt." + Environment.NewLine);
+                trilaterationThread.Abort();
+            }
+            trilaterationThread = new Thread(RunTrilaterationWorker) { Name = "Trilateration" };
+            trilaterationThread.Start();
+        }
+
+        private void RunTrilaterationWorker()
+        { 
             var systemsEntries = new Dictionary<SystemClass, Trilateration.Entry>();
             
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
@@ -225,9 +231,18 @@ namespace EDDiscovery
                 trilateration.AddEntry(item.Value);
             }
 
-            var trilaterationResultCS = trilateration.runTril();
+            //var trilaterationResultCS = trilateration.RunCSharp();
+            var trilaterationAlgorithm = radioButtonAlgorithmJs.Checked
+                ? Trilateration.Algorithm.RedWizzard_Emulated
+                : Trilateration.Algorithm.RedWizzard_Native;
 
-            var trilaterationResult = trilateration.Run();
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            var trilaterationResult = trilateration.Run(trilaterationAlgorithm);
+
+            stopwatch.Stop();
+            var spentTimeString = (stopwatch.ElapsedMilliseconds / 1000.0).ToString("0.0000") + "ms";
 
             lastTrilatelationResult = trilaterationResult;
             lastTrilatelationEntries = systemsEntries;
@@ -236,20 +251,17 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker) delegate
                 {
-                    TravelHistoryControl.LogText("Trilateration successful, exact coordinates found." + Environment.NewLine);
-                    TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
-
-                    if (trilaterationResultCS.Coordinate!=null)
-                        TravelHistoryControl.LogText("x=" + trilaterationResultCS.Coordinate.X + ", y=" + trilaterationResultCS.Coordinate.Y + ", z=" + trilaterationResultCS.Coordinate.Z + " : " +trilaterationResultCS.State.ToString()+Environment.NewLine, Color.Blue);
+                    TravelHistoryControl.LogText("Trilateration successful (" + spentTimeString + "), exact coordinates found." + Environment.NewLine);
+                    //TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
                     labelStatus.Text = "Success, coordinates found!";
                     labelStatus.BackColor = Color.LawnGreen;
                 });
-            } else if (trilaterationResult.State == Trilateration.ResultState.NotExact)
+            } else if (trilaterationResult.State == Trilateration.ResultState.NotExact || trilaterationResult.State == Trilateration.ResultState.MultipleSolutions)
             {
                 Invoke((MethodInvoker) delegate
                 {
-                    TravelHistoryControl.LogText("Trilateration not successful, only approximate coordinates found." + Environment.NewLine);
-                    TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
+                    TravelHistoryControl.LogText("Trilateration not successful (" + spentTimeString + "), only approximate coordinates found." + Environment.NewLine);
+                    //TravelHistoryControl.LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
                     TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
                     labelStatus.Text = "Enter More Distances";
                     labelStatus.BackColor = Color.Orange;
@@ -258,7 +270,7 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker) delegate
                 {
-                    TravelHistoryControl.LogText("Trilateration not successful, coordinates not found." + Environment.NewLine);
+                    TravelHistoryControl.LogText("Trilateration not successful (" + spentTimeString + "), coordinates not found." + Environment.NewLine);
                     TravelHistoryControl.LogText("Enter more distances." + Environment.NewLine);
                     labelStatus.Text = "Enter More Distances";
                     labelStatus.BackColor = Color.Red;
@@ -289,55 +301,52 @@ namespace EDDiscovery
             var hasInvalidDistances = false;
 
             // update dataGrid with calculated distances and status
-            if (trilaterationResult.EntriesDistances != null)
-            {
-                var entriesDistances = trilaterationResult.EntriesDistances;
+            var entriesDistances = trilaterationResult.EntriesDistances;
                 
-                for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            {
+                var systemCell = dataGridViewDistances[0, i];
+                var calculatedDistanceCell = dataGridViewDistances[2, i];
+                var statusCell = dataGridViewDistances[3, i];
+
+                calculatedDistanceCell.Value = null;
+                statusCell.Value = null;
+
+                if (entriesDistances == null || systemCell.Value == null || systemCell.Tag == null)
                 {
-                    var systemCell = dataGridViewDistances[0, i];
-                    var calculatedDistanceCell = dataGridViewDistances[2, i];
-                    var statusCell = dataGridViewDistances[3, i];
-
-                    calculatedDistanceCell.Value = null;
-                    statusCell.Value = null;
-
-                    if (systemCell.Value == null || systemCell.Tag == null)
-                    {
-                        continue;
-                    }
-
-                    var system = (SystemClass) systemCell.Tag;
-
-                    if (!systemsEntries.ContainsKey(system)) // calculated without this system, so skip the row
-                    {
-                        continue;
-                    }
-
-                    var systemEntry = systemsEntries[system];
-                    var calculatedDistance = entriesDistances[systemEntry];
-
-                    calculatedDistanceCell.Value = calculatedDistance.ToString();
-
-                    if (systemEntry.Distance == calculatedDistance)
-                    {
-                        calculatedDistanceCell.Style.ForeColor = Color.Green;
-                        statusCell.Value = "OK";
-                        statusCell.Style.ForeColor = Color.Green;
-                    } else
-                    {
-                        hasInvalidDistances = true;
-                        calculatedDistanceCell.Style.ForeColor = Color.Red;
-                        statusCell.Value = "Wrong distance";
-                        statusCell.Style.ForeColor = Color.Red;
-                    }
+                    continue;
                 }
 
-                Invoke((MethodInvoker) delegate
+                var system = (SystemClass) systemCell.Tag;
+
+                if (!systemsEntries.ContainsKey(system)) // calculated without this system, so skip the row
                 {
-                    buttonSubmitToEDSC.Enabled = trilaterationResult.State == Trilateration.ResultState.Exact && !hasInvalidDistances;
-                });
+                    continue;
+                }
+
+                var systemEntry = systemsEntries[system];
+                var calculatedDistance = entriesDistances[systemEntry];
+
+                calculatedDistanceCell.Value = calculatedDistance.ToString();
+
+                if (systemEntry.Distance == calculatedDistance)
+                {
+                    calculatedDistanceCell.Style.ForeColor = Color.Green;
+                    statusCell.Value = "OK";
+                    statusCell.Style.ForeColor = Color.Green;
+                } else
+                {
+                    hasInvalidDistances = true;
+                    calculatedDistanceCell.Style.ForeColor = Color.Red;
+                    statusCell.Value = "Wrong distance";
+                    statusCell.Style.ForeColor = Color.Red;
+                }
             }
+
+            Invoke((MethodInvoker) delegate
+            {
+                buttonSubmitToEDSC.Enabled = trilaterationResult.State == Trilateration.ResultState.Exact && !hasInvalidDistances;
+            });
         }
 
         private void ClearDataGridViewDistancesRows()
@@ -581,6 +590,12 @@ namespace EDDiscovery
             dataGridViewDistances.Enabled = true;
             dataGridViewClosestSystems.Enabled = true;
             dataGridViewSuggestedSystems.Enabled = true;
+        }
+
+        private void radioButtonAlgorithm_CheckedChanged(object sender, EventArgs e)
+        {
+            // when algorithm is changed, we want to re-run trilateration
+            RunTrilateration();
         }
     }
 }
