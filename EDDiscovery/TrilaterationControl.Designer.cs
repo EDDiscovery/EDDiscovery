@@ -48,14 +48,18 @@
             this.textBoxCoordinateZ = new System.Windows.Forms.TextBox();
             this.labelStatus = new System.Windows.Forms.Label();
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
-            this.ColumnSuggestedSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnClosestSystemsDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewSuggestedSystems = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnSuggestedSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelImplementation = new System.Windows.Forms.Panel();
             this.labelAlgorithm = new System.Windows.Forms.Label();
             this.radioButtonAlgorithmJs = new System.Windows.Forms.RadioButton();
             this.radioButtonAlgorithmCsharp = new System.Windows.Forms.RadioButton();
             this.toolTipAlgorithm = new System.Windows.Forms.ToolTip(this.components);
+            this.labelSuggestedSystems = new System.Windows.Forms.Label();
+            this.labelClosestSystems = new System.Windows.Forms.Label();
+            this.labelLastKnownSystem = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuggestedSystems)).BeginInit();
@@ -214,6 +218,7 @@
             // 
             this.dataGridViewClosestSystems.AllowUserToAddRows = false;
             this.dataGridViewClosestSystems.AllowUserToDeleteRows = false;
+            this.dataGridViewClosestSystems.AllowUserToResizeRows = false;
             this.dataGridViewClosestSystems.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
@@ -225,27 +230,38 @@
             this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewClosestSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewClosestSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnSuggestedSystem});
-            this.dataGridViewClosestSystems.Location = new System.Drawing.Point(3, 306);
+            this.dataGridViewTextBoxColumnClosestSystemsSystem,
+            this.dataGridViewTextBoxColumnClosestSystemsDistance});
+            this.dataGridViewClosestSystems.Location = new System.Drawing.Point(3, 319);
             this.dataGridViewClosestSystems.Name = "dataGridViewClosestSystems";
             this.dataGridViewClosestSystems.ReadOnly = true;
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(263, 154);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(320, 130);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseDoubleClick);
             // 
-            // ColumnSuggestedSystem
+            // dataGridViewTextBoxColumnClosestSystemsSystem
             // 
-            this.ColumnSuggestedSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnSuggestedSystem.HeaderText = "Closest Systems (coming soon)";
-            this.ColumnSuggestedSystem.MinimumWidth = 100;
-            this.ColumnSuggestedSystem.Name = "ColumnSuggestedSystem";
-            this.ColumnSuggestedSystem.ReadOnly = true;
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.HeaderText = "System";
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.MinimumWidth = 100;
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumnClosestSystemsDistance
+            // 
+            this.dataGridViewTextBoxColumnClosestSystemsDistance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.dataGridViewTextBoxColumnClosestSystemsDistance.HeaderText = "Distance";
+            this.dataGridViewTextBoxColumnClosestSystemsDistance.MinimumWidth = 80;
+            this.dataGridViewTextBoxColumnClosestSystemsDistance.Name = "dataGridViewTextBoxColumnClosestSystemsDistance";
+            this.dataGridViewTextBoxColumnClosestSystemsDistance.ReadOnly = true;
+            this.dataGridViewTextBoxColumnClosestSystemsDistance.Width = 80;
             // 
             // dataGridViewSuggestedSystems
             // 
             this.dataGridViewSuggestedSystems.AllowUserToAddRows = false;
             this.dataGridViewSuggestedSystems.AllowUserToDeleteRows = false;
+            this.dataGridViewSuggestedSystems.AllowUserToResizeRows = false;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -255,23 +271,24 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewSuggestedSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewSuggestedSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSuggestedSystems.ColumnHeadersVisible = false;
             this.dataGridViewSuggestedSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1});
-            this.dataGridViewSuggestedSystems.Location = new System.Drawing.Point(299, 306);
+            this.dataGridViewTextBoxColumnSuggestedSystemsSystem});
+            this.dataGridViewSuggestedSystems.Location = new System.Drawing.Point(329, 319);
             this.dataGridViewSuggestedSystems.Name = "dataGridViewSuggestedSystems";
             this.dataGridViewSuggestedSystems.ReadOnly = true;
             this.dataGridViewSuggestedSystems.RowHeadersVisible = false;
-            this.dataGridViewSuggestedSystems.Size = new System.Drawing.Size(268, 154);
+            this.dataGridViewSuggestedSystems.Size = new System.Drawing.Size(238, 130);
             this.dataGridViewSuggestedSystems.TabIndex = 14;
             this.dataGridViewSuggestedSystems.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewSuggestedSystems_CellContentDoubleClick);
             // 
-            // dataGridViewTextBoxColumn1
+            // dataGridViewTextBoxColumnSuggestedSystemsSystem
             // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn1.HeaderText = "Suggested Systems";
-            this.dataGridViewTextBoxColumn1.MinimumWidth = 100;
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumnSuggestedSystemsSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumnSuggestedSystemsSystem.HeaderText = "System";
+            this.dataGridViewTextBoxColumnSuggestedSystemsSystem.MinimumWidth = 100;
+            this.dataGridViewTextBoxColumnSuggestedSystemsSystem.Name = "dataGridViewTextBoxColumnSuggestedSystemsSystem";
+            this.dataGridViewTextBoxColumnSuggestedSystemsSystem.ReadOnly = true;
             // 
             // panelImplementation
             // 
@@ -317,10 +334,41 @@
             this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmCsharp, "Algorithm from ed-systems rewritten to C# (fast, experimental)");
             this.radioButtonAlgorithmCsharp.UseVisualStyleBackColor = true;
             // 
+            // labelSuggestedSystems
+            // 
+            this.labelSuggestedSystems.AutoSize = true;
+            this.labelSuggestedSystems.Location = new System.Drawing.Point(382, 303);
+            this.labelSuggestedSystems.Name = "labelSuggestedSystems";
+            this.labelSuggestedSystems.Size = new System.Drawing.Size(146, 13);
+            this.labelSuggestedSystems.TabIndex = 17;
+            this.labelSuggestedSystems.Text = "Suggested reference systems";
+            // 
+            // labelClosestSystems
+            // 
+            this.labelClosestSystems.AutoSize = true;
+            this.labelClosestSystems.Location = new System.Drawing.Point(3, 303);
+            this.labelClosestSystems.Name = "labelClosestSystems";
+            this.labelClosestSystems.Size = new System.Drawing.Size(187, 13);
+            this.labelClosestSystems.TabIndex = 18;
+            this.labelClosestSystems.Text = "Closest systems to last known location";
+            // 
+            // labelLastKnownSystem
+            // 
+            this.labelLastKnownSystem.AutoSize = true;
+            this.labelLastKnownSystem.Location = new System.Drawing.Point(187, 303);
+            this.labelLastKnownSystem.MaximumSize = new System.Drawing.Size(190, 0);
+            this.labelLastKnownSystem.Name = "labelLastKnownSystem";
+            this.labelLastKnownSystem.Size = new System.Drawing.Size(53, 13);
+            this.labelLastKnownSystem.TabIndex = 19;
+            this.labelLastKnownSystem.Text = "Unknown";
+            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.labelLastKnownSystem);
+            this.Controls.Add(this.labelClosestSystems);
+            this.Controls.Add(this.labelSuggestedSystems);
             this.Controls.Add(this.panelImplementation);
             this.Controls.Add(this.dataGridViewSuggestedSystems);
             this.Controls.Add(this.dataGridViewClosestSystems);
@@ -337,7 +385,7 @@
             this.Controls.Add(this.textBoxSystemName);
             this.Controls.Add(this.dataGridViewDistances);
             this.Name = "TrilaterationControl";
-            this.Size = new System.Drawing.Size(570, 472);
+            this.Size = new System.Drawing.Size(570, 453);
             this.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).EndInit();
@@ -365,8 +413,6 @@
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.DataGridView dataGridViewClosestSystems;
         private System.Windows.Forms.DataGridView dataGridViewSuggestedSystems;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSuggestedSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
@@ -376,5 +422,11 @@
         private System.Windows.Forms.RadioButton radioButtonAlgorithmCsharp;
         private System.Windows.Forms.Label labelAlgorithm;
         private System.Windows.Forms.ToolTip toolTipAlgorithm;
+        private System.Windows.Forms.Label labelSuggestedSystems;
+        private System.Windows.Forms.Label labelClosestSystems;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnSuggestedSystemsSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnClosestSystemsSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnClosestSystemsDistance;
+        private System.Windows.Forms.Label labelLastKnownSystem;
     }
 }
