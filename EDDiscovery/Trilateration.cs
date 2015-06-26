@@ -12,6 +12,12 @@ namespace EDDiscovery
     /// </summary>
     public class Trilateration
     {
+        public enum Algorithm
+        {
+            RedWizzard_Emulated,
+            RedWizzard_Native
+        }
+
         public class Coordinate
         {
             public double X { get { return x; } }
@@ -311,7 +317,7 @@ namespace EDDiscovery
         private List<Coordinate> next;
 
 
-        public Result runTril() 
+        private Result RunCSharp() 
         {
 
 		    this.regions = getRegions();
@@ -414,17 +420,30 @@ namespace EDDiscovery
             }
 
 
-            if (bestCount >= 5 && (bestCount - nextBest) >= 2)
+                //var correctEntriesCount = 0;
+                //var correctedEntries = new Dictionary<Entry, double>();
+
+                //foreach (var entry in entries)
+                //{
+                //    var correctedDistance = entry.Coordinate % coordinate;
+                //    if (correctedDistance == entry.Distance)
+                //    {
+                //        correctEntriesCount++;
+                //    }
+                //    correctedEntries.Add(entry, correctedDistance);
+                //}
+
+                if (bestCount >= 5 && (bestCount - nextBest) >= 2)
             {
-                Result res = new Result(ResultState.Exact, best[0]);
+                Result res = new Result(ResultState.Exact, best[0], CalculateCSharpResultEntries(entries, best[0]));
                 return res;
             }
             else if ((bestCount - nextBest) >= 1)
             {
-                return new Result(ResultState.NotExact, best[0]);
+                return new Result(ResultState.NotExact, best[0], CalculateCSharpResultEntries(entries, best[0]));
             }
             else if (best != null && best.Count > 1)
-                return new Result(ResultState.MultipleSolutions, best[0]); // Trilatation.best.Count  shows how many solutions
+                return new Result(ResultState.MultipleSolutions, best[0], CalculateCSharpResultEntries(entries, best[0])); // Trilatation.best.Count  shows how many solutions
             else
                 return new Result(ResultState.NeedMoreDistances);
 
@@ -433,6 +452,18 @@ namespace EDDiscovery
         }
         return new Result(ResultState.NeedMoreDistances);
 	}
+
+        private Dictionary<Entry, double> CalculateCSharpResultEntries(List<Entry> entries, Coordinate coordinate)
+        {
+            var correctedEntries = new Dictionary<Entry, double>();
+
+            foreach (var entry in entries)
+            {
+                correctedEntries.Add(entry, entry.Coordinate % coordinate);
+            }
+
+            return correctedEntries;
+        }
 
 
 //  / p1 and p2 are objects that have x, y, and z properties
@@ -655,9 +686,23 @@ namespace EDDiscovery
         /// Executes trilateration based on given distances.
         /// </summary>
         /// <returns>Result information, including coordinate and corrected Entry distances if found.</returns>
-        public Result Run()
+        public Result Run(Algorithm algorithm)
         {
-            var engine = PrepareEngine();
+            switch (algorithm)
+            {
+                case Algorithm.RedWizzard_Native:
+                    return RunCSharp();
+                case Algorithm.RedWizzard_Emulated:
+                    return RunJavascript();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+
+        private Result RunJavascript()
+        { 
+            var engine = PrepareJavascriptEngine();
 
             engine.Run("var trilat = new Trilateration();");
 
@@ -678,8 +723,6 @@ namespace EDDiscovery
 
             engine.Run("var hasBestCandidate = trilat.best && trilat.best.length === 1;");
             var hasBestCandidate = (bool) engine.GetParameter("hasBestCandidate");
-
-            // TODO result validation (https://github.com/SteveHodge/ed-systems/blob/master/entry.html#L703)
 
             if (hasBestCandidate)
             {
@@ -722,7 +765,7 @@ namespace EDDiscovery
             }
         }
 
-        private JavascriptContext PrepareEngine()
+        private JavascriptContext PrepareJavascriptEngine()
         {
             JavascriptContext context = new JavascriptContext();
 

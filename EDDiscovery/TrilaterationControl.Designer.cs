@@ -313,23 +313,24 @@
             // radioButtonAlgorithmJs
             // 
             this.radioButtonAlgorithmJs.AutoSize = true;
-            this.radioButtonAlgorithmJs.Checked = true;
             this.radioButtonAlgorithmJs.Location = new System.Drawing.Point(3, 27);
             this.radioButtonAlgorithmJs.Name = "radioButtonAlgorithmJs";
             this.radioButtonAlgorithmJs.Size = new System.Drawing.Size(37, 17);
             this.radioButtonAlgorithmJs.TabIndex = 1;
-            this.radioButtonAlgorithmJs.TabStop = true;
             this.radioButtonAlgorithmJs.Text = "JS";
             this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmJs, "Original algoritthm from ed-systems, written in Javascript (slower)");
             this.radioButtonAlgorithmJs.UseVisualStyleBackColor = true;
+            this.radioButtonAlgorithmJs.CheckedChanged += new System.EventHandler(this.radioButtonAlgorithm_CheckedChanged);
             // 
             // radioButtonAlgorithmCsharp
             // 
             this.radioButtonAlgorithmCsharp.AutoSize = true;
+            this.radioButtonAlgorithmCsharp.Checked = true;
             this.radioButtonAlgorithmCsharp.Location = new System.Drawing.Point(3, 44);
             this.radioButtonAlgorithmCsharp.Name = "radioButtonAlgorithmCsharp";
             this.radioButtonAlgorithmCsharp.Size = new System.Drawing.Size(39, 17);
             this.radioButtonAlgorithmCsharp.TabIndex = 0;
+            this.radioButtonAlgorithmCsharp.TabStop = true;
             this.radioButtonAlgorithmCsharp.Text = "C#";
             this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmCsharp, "Algorithm from ed-systems rewritten to C# (fast, experimental)");
             this.radioButtonAlgorithmCsharp.UseVisualStyleBackColor = true;
