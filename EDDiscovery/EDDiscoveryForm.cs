@@ -23,6 +23,8 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
+    public delegate void DistancesLoaded();
+
     public partial class EDDiscoveryForm : Form
     {
         static public  AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
@@ -30,6 +32,9 @@ namespace EDDiscovery
 
         const string fileTgcSystems = "tgcsystems.json";
         const string fileTgcDistances ="tgcdistances.json";
+
+        public event DistancesLoaded OnDistancesLoaded;
+
         public EDDiscoveryForm()
         {
             InitializeComponent();
@@ -137,13 +142,10 @@ namespace EDDiscovery
                 redWizzardThread.Join();
                 edscThread.Join();
 
-                //Application.DoEvents();
-                //GetRedWizzardFiles();
-                //Application.DoEvents();
-                //GetEDSCSystems();
+
+                OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
 
 
-                //Application.DoEvents();
                 GetEDSCDistancesAsync();
                 //Application.DoEvents();
                 GetEDDBAsync();
@@ -394,6 +396,7 @@ namespace EDDiscovery
                 DistanceClass.Store(dists);
                 db.PutSettingString("EDSCLastDist", lstdist);
                 db.GetAllDistances();
+                OnDistancesLoaded();
             }
             catch (Exception ex)
             {
@@ -402,6 +405,16 @@ namespace EDDiscovery
             }
 
         }
+
+
+        internal void DistancesLoaded()
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                travelHistoryControl1.RefreshHistory();
+            });
+        }
+
 
         private void  GetEDDBUpdate()
         {
