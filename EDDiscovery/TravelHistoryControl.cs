@@ -672,6 +672,15 @@ namespace EDDiscovery
 
                     var result = visitedSystems.OrderByDescending(a => a.time).ToList<SystemPosition>();
 
+                    if (TrilaterationControl.Visible)
+                    {
+                        CloseTrilateration();
+                        MessageBox.Show("You have arrived to another system while trilaterating."
+                                        + " As a pre-caution to prevent any mistakes with submitting wrong systems or distances"
+                                        + ", your trilateration was aborted.");
+                    }
+                    buttonTrilaterate.Enabled = false; // when we arrive to new system, currently opened SystemInformation will _always_ be for non-current system
+
                     SystemPosition item = result[0];
                     SystemPosition item2;
 
@@ -775,7 +784,7 @@ namespace EDDiscovery
 
         private void buttonCloseTrilateration_Click(object sender, EventArgs e)
         {
-            TrilaterationControl.Visible = false;
+            CloseTrilateration();
         }
 
         private void TrilaterationControl_VisibleChanged(object sender, EventArgs e)
@@ -788,6 +797,11 @@ namespace EDDiscovery
                 dataGridView1.Visible = true;
                 labelHeader.Text = "Travel history";
             }
+        }
+
+        private void CloseTrilateration()
+        {
+            TrilaterationControl.Visible = false;
         }
 
         public string GetCommanderName()
