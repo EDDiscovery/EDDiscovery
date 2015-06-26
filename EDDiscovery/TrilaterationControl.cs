@@ -156,7 +156,8 @@ namespace EDDiscovery
                 UnfreezeTrilaterationUI();
                 dataGridViewDistances.Focus();
 
-                PopulateDataGridViewSuggestedSystems();
+                PopulateSuggestedSystems();
+                PopulateClosestSystems();
             }
 
             if (Visible == false)
@@ -171,6 +172,7 @@ namespace EDDiscovery
                 textBoxCoordinateX.Text = "?";
                 textBoxCoordinateY.Text = "?";
                 textBoxCoordinateZ.Text = "?";
+                labelLastKnownSystem.Text = "Unknown";
 
                 ClearDataGridViewDistancesRows();
                 ClearDataGridViewClosestSystemsRows();
@@ -376,19 +378,60 @@ namespace EDDiscovery
             dataGridViewSuggestedSystems.Rows.Clear();
         }
 
-        private void PopulateDataGridViewSuggestedSystems()
+        private void PopulateSuggestedSystems()
         {
             // TODO for now, just add few systems at different locations
-            // later, we'll implement something more clever, possibly
-            // based on distance and direction
-            var suggestedSystems = new List<string>() { "Sol", "Pars", "Maia", "Polaris", "HIP 1069" };
+            // eventually we might implement something more clever here
+
+            var suggestedSystems = new List<string>
+            {
+                "Sol", "Sadr", "Maia", "Polaris", "EZ Orionis",
+                "Kappa-2 Coronae Austrinae", "Eta Carinae", "HR 969", "UX Sculptoris"
+            };
             foreach (var system in SystemData.SystemList)
             {
-                if (suggestedSystems.Contains(system.name))
+                if (!suggestedSystems.Contains(system.name))
                 {
-                    var index = dataGridViewSuggestedSystems.Rows.Add(system.name);
-                    dataGridViewSuggestedSystems[0, index].Tag = system;
+                    continue;
                 }
+
+                var index = dataGridViewSuggestedSystems.Rows.Add(system.name);
+                dataGridViewSuggestedSystems[0, index].Tag = system;
+            }
+        }
+
+        private void PopulateClosestSystems()
+        {
+            // TODO: in future, we want this to be "predicted" by the direction and distances
+            
+            var lastKnown = (from systems
+                             in ((TravelHistoryControl)Parent).visitedSystems
+                             where systems.curSystem != null && systems.curSystem.HasCoordinate
+                             orderby systems.time descending
+                             select systems.curSystem).FirstOrDefault();
+
+            if (lastKnown == null)
+            {
+                return;
+            }
+
+            labelLastKnownSystem.Text = lastKnown.name;
+
+            var closest = (from systems
+                           in SystemData.SystemList
+                           where systems != lastKnown && systems.HasCoordinate
+                           select new
+                           {
+                               System = systems,
+                               Distance = Math.Sqrt(Math.Pow(lastKnown.x - systems.x, 2) + Math.Pow(lastKnown.y - systems.y, 2) + Math.Pow(lastKnown.z - systems.z, 2))
+                           })
+                          .OrderBy(c => c.Distance)
+                          .Take(30);
+
+            foreach (var item in closest)
+            {
+                var index = dataGridViewClosestSystems.Rows.Add(item.System.name, Math.Round(item.Distance, 2).ToString("0.00") + " Ly");
+                dataGridViewClosestSystems[0, index].Tag = item.System;
             }
         }
 
