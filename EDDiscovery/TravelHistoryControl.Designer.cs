@@ -80,9 +80,9 @@
             this.buttonSync = new System.Windows.Forms.Button();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
             this.buttonCloseTrilateration = new System.Windows.Forms.Button();
-            this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
             this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
             this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
+            this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -594,18 +594,6 @@
             this.buttonCloseTrilateration.Visible = false;
             this.buttonCloseTrilateration.Click += new System.EventHandler(this.buttonCloseTrilateration_Click);
             // 
-            // TrilaterationControl
-            // 
-            this.TrilaterationControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TrilaterationControl.Location = new System.Drawing.Point(21, 105);
-            this.TrilaterationControl.Name = "TrilaterationControl";
-            this.TrilaterationControl.Size = new System.Drawing.Size(570, 472);
-            this.TrilaterationControl.TabIndex = 20;
-            this.TrilaterationControl.Visible = false;
-            this.TrilaterationControl.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
-            // 
             // labelDistanceToNextSystem
             // 
             this.labelDistanceToNextSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -624,6 +612,18 @@
             this.textBoxDistanceToNextSystem.Size = new System.Drawing.Size(48, 20);
             this.textBoxDistanceToNextSystem.TabIndex = 21;
             this.textBoxDistanceToNextSystem.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDistanceToNextSystem_Validating);
+            // 
+            // TrilaterationControl
+            // 
+            this.TrilaterationControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TrilaterationControl.Location = new System.Drawing.Point(21, 105);
+            this.TrilaterationControl.Name = "TrilaterationControl";
+            this.TrilaterationControl.Size = new System.Drawing.Size(570, 472);
+            this.TrilaterationControl.TabIndex = 20;
+            this.TrilaterationControl.Visible = false;
+            this.TrilaterationControl.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
             // 
             // TravelHistoryControl
             // 
