@@ -539,7 +539,7 @@ namespace EDDiscovery
             Console.WriteLine(response);
 
             string info;
-            var responseOk = edsc.ShowDistanceResponce(response, out info);
+            var responseOk = edsc.ShowDistanceResponse(response, out info);
             var trilaterationOk = info.IndexOf("Trilateration succesful") != -1; // FIXME this is ugly
             Console.WriteLine(info);
 
