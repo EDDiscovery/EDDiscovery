@@ -86,7 +86,7 @@ namespace EDDiscovery
 
                 if (system == null || (enteredSystems.Contains(system)))
                 {
-                    e.Cancel = true;
+                    //e.Cancel = true;
                     return;
                 }
             }
@@ -111,6 +111,7 @@ namespace EDDiscovery
             {
                 var cell = dataGridViewDistances[e.ColumnIndex, e.RowIndex];
                 var value = cell.Value;
+                cell.Style.BackColor = Color.White;
                 if (value == null)
                 {
                     return;
@@ -121,6 +122,7 @@ namespace EDDiscovery
                 if (system == null)
                 {
                     cell.Value = null;
+                    //cell.Style.BackColor = Color.Salmon;
                     return;
                 }
 
@@ -136,7 +138,7 @@ namespace EDDiscovery
             dataGridViewDistances[3, e.RowIndex].Value = null;
 
             // trigger trilateration calculation
-            RunTrilateration();;
+            RunTrilateration();
         }
 
         private void TrilaterationControl_VisibleChanged(object sender, EventArgs e)
