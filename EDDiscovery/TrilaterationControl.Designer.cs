@@ -80,7 +80,6 @@
             this.ColumnCalculated,
             this.ColumnStatus});
             this.dataGridViewDistances.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewDistances.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
             this.dataGridViewDistances.Size = new System.Drawing.Size(574, 190);
