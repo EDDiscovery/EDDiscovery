@@ -298,44 +298,12 @@ Onion_Head,
             if (!Directory.Exists(EDDirectory)) // For safety.
                 return true;
 
-            string filename = Path.Combine(EDDirectory, "AppConfig.xml");
-
-            using (Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            try
             {
-                using (StreamReader sr = new StreamReader(fs))
-                {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        line = line.Trim().Replace(" ", "");
-                        if (line.Contains("VerboseLogging=\"1\""))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
 
 
+                string filename = Path.Combine(EDDirectory, "AppConfig.xml");
 
-            // Check ED local filename too
-            filename = Path.Combine(EDDirectory, "AppConfigLocal.xml");
-
-            if (!File.Exists(filename))
-            {
-                try
-                {
-                    File.Copy("AppConfigLocal.xml", filename);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Trace.WriteLine("CheckStationLogging exception: " + ex.Message);
-                }
-            }
-
-
-            if (File.Exists(filename))
-            {
                 using (Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (StreamReader sr = new StreamReader(fs))
@@ -351,15 +319,64 @@ Onion_Head,
                         }
                     }
                 }
+
+
+
+                // Check ED local filename too
+                filename = Path.Combine(EDDirectory, "AppConfigLocal.xml");
+
+                if (!File.Exists(filename))
+                {
+                    try
+                    {
+                        using (StreamWriter writer = new StreamWriter(filename))
+                        {
+                            writer.WriteLine("<AppConfig>");
+                            writer.WriteLine(" <Network");
+                            writer.WriteLine("  VerboseLogging=\"1\">");
+                            writer.WriteLine(" </Network>");
+                            writer.WriteLine("</AppConfig>");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.WriteLine("CheckStationLogging exception: " + ex.Message);
+                    }
+                }
+
+
+                if (File.Exists(filename))
+                {
+                    using (Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using (StreamReader sr = new StreamReader(fs))
+                        {
+                            string line;
+                            while ((line = sr.ReadLine()) != null)
+                            {
+                                line = line.Trim().Replace(" ", "");
+                                if (line.Contains("VerboseLogging=\"1\""))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                return false;
             }
-
-
-
-
-
-            return false;
-
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                return false;
+            }
         }
+
+
+
 
         static private string ProcessExecutablePath(Process process)
         {

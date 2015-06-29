@@ -418,65 +418,77 @@ namespace EDDiscovery
 
         private void  GetEDDBUpdate()
         {
-           EDDBClass eddb = new EDDBClass();
-            string timestr;
-            DateTime time;
-
-            Thread.Sleep(1000);
-
-            SQLiteDBClass db = new SQLiteDBClass();
-            timestr = db.GetSettingString("EDDBSystemsTime", "0");
-            time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
-            bool updatedb = false;
-
-            if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
+            try
             {
-                LogText("Get systems from EDDB. ");
-                  
-                if (eddb.GetSystems())
+                EDDBClass eddb = new EDDBClass();
+                string timestr;
+                DateTime time;
+
+                Thread.Sleep(1000);
+
+                SQLiteDBClass db = new SQLiteDBClass();
+                timestr = db.GetSettingString("EDDBSystemsTime", "0");
+                time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
+                bool updatedb = false;
+
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
                 {
-                   LogText("OK." + Environment.NewLine);
-                      
-                    db.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
-                    updatedb = true;
+                    LogText("Get systems from EDDB. ");
+
+                    if (eddb.GetSystems())
+                    {
+                        LogText("OK." + Environment.NewLine);
+
+                        db.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
+                        updatedb = true;
+                    }
+                    else
+                        LogText("Failed." + Environment.NewLine, Color.Red);
+
+
+                    eddb.GetCommodities();
                 }
-                else
-                    LogText("Failed." + Environment.NewLine, Color.Red);
 
 
-                eddb.GetCommodities();
-            }
+                timestr = db.GetSettingString("EDDBStationsLiteTime", "0");
+                time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
 
-
-            timestr = db.GetSettingString("EDDBStationsLiteTime", "0");
-            time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
-
-            if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
-            {
-
-                LogText("Get stations from EDDB. ");
-                if (eddb.GetStationsLite())
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
                 {
-                    LogText("OK." + Environment.NewLine);
-                    db.PutSettingString("EDDBStationsLiteTime", DateTime.UtcNow.Ticks.ToString());
-                    updatedb = true;
+
+                    LogText("Get stations from EDDB. ");
+                    if (eddb.GetStationsLite())
+                    {
+                        LogText("OK." + Environment.NewLine);
+                        db.PutSettingString("EDDBStationsLiteTime", DateTime.UtcNow.Ticks.ToString());
+                        updatedb = true;
+                    }
+                    else
+                        LogText("Failed." + Environment.NewLine, Color.Red);
+
                 }
-                else
-                    LogText("Failed." + Environment.NewLine, Color.Red);
+
+
+                if (updatedb)
+                {
+                    List<SystemClass> eddbsystems = eddb.ReadSystems();
+                    List<StationClass> eddbstations = eddb.ReadStations();
+
+                    LogText("Add new EDDB data to database." + Environment.NewLine);
+                    eddb.Add2DB(eddbsystems, eddbstations);
+                }
+
+                return;
 
             }
-
-
-            if (updatedb)
+            catch (Exception ex)
             {
-                List<SystemClass> eddbsystems = eddb.ReadSystems();
-                List<StationClass> eddbstations = eddb.ReadStations();
-
-                LogText("Add new EDDB data to database." + Environment.NewLine);
-                eddb.Add2DB(eddbsystems, eddbstations);
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText("GetEDSCSystems exception:" + ex.Message + Environment.NewLine);
+                });
             }
-
-            return ;
+           
         }
 
 

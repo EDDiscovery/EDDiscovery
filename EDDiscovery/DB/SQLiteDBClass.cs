@@ -134,6 +134,7 @@ namespace EDDiscovery.DB
             catch (Exception ex)
             {
                 MessageBox.Show("UpgradeDB error: " + ex.Message);
+                MessageBox.Show(ex.StackTrace);
                 return false;
             }
 

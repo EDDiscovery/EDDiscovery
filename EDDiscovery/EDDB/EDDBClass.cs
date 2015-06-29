@@ -57,15 +57,15 @@ namespace EDDiscovery2.EDDB
                     request.Headers[HttpRequestHeader.IfNoneMatch] = etag;
                 }
             }
-            
+
             try
             {
-                var response = (HttpWebResponse) request.GetResponse();
+                var response = (HttpWebResponse)request.GetResponse();
 
                 File.WriteAllText(tmpEtagFilename, response.Headers[HttpResponseHeader.ETag]);
                 var destFileStream = File.Open(tmpFilename, FileMode.Create, FileAccess.Write);
                 response.GetResponseStream().CopyTo(destFileStream);
-                
+
                 destFileStream.Close();
                 response.Close();
 
@@ -73,7 +73,7 @@ namespace EDDiscovery2.EDDB
                     File.Delete(filename);
                 if (File.Exists(etagFilename))
                     File.Delete(etagFilename);
-                
+
                 File.Move(tmpFilename, filename);
                 File.Move(tmpEtagFilename, etagFilename);
 
@@ -81,13 +81,19 @@ namespace EDDiscovery2.EDDB
             }
             catch (WebException ex)
             {
-                var code = ((HttpWebResponse) ex.Response).StatusCode;
+                var code = ((HttpWebResponse)ex.Response).StatusCode;
                 if (code == HttpStatusCode.NotModified)
                 {
                     System.Diagnostics.Trace.WriteLine("EDDB: " + filename + " up to date (etag).");
                     return true;
                 }
                 System.Diagnostics.Trace.WriteLine("Exception:" + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 return false;
             }

@@ -1,7 +1,5 @@
-<AppConfig>
+<AppConfig> 
   <Network
-   VerboseLogging="1"
->
+   VerboseLogging="1">
   </Network>
-
 </AppConfig>
