@@ -288,6 +288,8 @@ namespace EDDiscovery
                         TravelHistoryControl.LogText("Adding data from tgcsystems.json " + Environment.NewLine);
                     });
                     SystemClass.Store(systems);
+                    EDDBClass eddb = new EDDBClass();
+                    DBUpdateEDDB(eddb);
                 }
 
                 string retstr = edsc.EDSCGetNewSystems(db);
@@ -296,8 +298,11 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText(retstr);
                 });
 
+
+
                 db.GetAllSystemNotes();
                 db.GetAllSystems();
+
 
 
                 SystemNames.Clear();
@@ -471,11 +476,7 @@ namespace EDDiscovery
 
                 if (updatedb)
                 {
-                    List<SystemClass> eddbsystems = eddb.ReadSystems();
-                    List<StationClass> eddbstations = eddb.ReadStations();
-
-                    LogText("Add new EDDB data to database." + Environment.NewLine);
-                    eddb.Add2DB(eddbsystems, eddbstations);
+                    DBUpdateEDDB(eddb);
                 }
 
                 return;
@@ -489,6 +490,15 @@ namespace EDDiscovery
                 });
             }
            
+        }
+
+        private void DBUpdateEDDB(EDDBClass eddb)
+        {
+            List<SystemClass> eddbsystems = eddb.ReadSystems();
+            List<StationClass> eddbstations = eddb.ReadStations();
+
+            LogText("Add new EDDB data to database." + Environment.NewLine);
+            eddb.Add2DB(eddbsystems, eddbstations);
         }
 
 
