@@ -1,5 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery2._3DMap;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,10 @@ namespace EDDiscovery2
             public List<SystemPosition> visitedSystems;
             private Dictionary<string, SystemClass> VisitedStars;
 
+            private List<Data3DSetClass> datasets;
+
+
+
 
             public FormMap()
             {
@@ -50,6 +55,7 @@ namespace EDDiscovery2
                 GL.ClearColor(Color.Black); // Yey! .NET Colors can be used directly!
 
                 SetupViewport();
+                
             }
 
             /// <summary>
@@ -96,6 +102,147 @@ namespace EDDiscovery2
 
             }
 
+
+            private void GenerateDataSets()
+            {
+                Data3DSetClass dataset;
+                InitGenerateDataSet();
+
+                datasets = new List<Data3DSetClass>();
+
+                dataset = new Data3DSetClass("stars", PrimitiveType.Points, Color.White, 1.0f);
+                foreach (SystemClass si in StarList)
+                {
+                    if (si.HasCoordinate)
+                    {
+                        dataset.AddPoint(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z);
+                    }
+                }
+                datasets.Add(dataset);
+
+
+                dataset = new Data3DSetClass("visitedstars", PrimitiveType.Points, Color.Red, 2.0f);
+
+                if (visitedSystems != null)
+                {
+                    SystemClass star;
+                    foreach (SystemClass sp in VisitedStars.Values)
+                    {
+                        star = sp;
+                        if (star != null)
+                        {
+                            dataset.AddPoint(star.x - CenterSystem.x, star.y - CenterSystem.y, CenterSystem.z - star.z);
+                        }
+                    }
+                }
+                datasets.Add(dataset);
+
+
+                dataset = new Data3DSetClass("Center", PrimitiveType.Points, Color.Yellow, 5.0f);
+
+                //GL.Enable(EnableCap.ProgramPointSize);
+                dataset.AddPoint(0, 0, 0);
+                datasets.Add(dataset);
+            }
+
+
+            private void GenerateDataSetsAllegiance()
+            {
+
+                Dictionary<int, Data3DSetClass> datadict = new Dictionary<int, Data3DSetClass>();
+
+                InitGenerateDataSet();
+
+                datasets = new List<Data3DSetClass>();
+
+                datadict[(int)EDAllegiance.Alliance] = new Data3DSetClass(EDAllegiance.Alliance.ToString(), PrimitiveType.Points, Color.Green, 1.0f);
+                datadict[(int)EDAllegiance.Anarchy] = new Data3DSetClass(EDAllegiance.Anarchy.ToString(), PrimitiveType.Points, Color.Purple, 1.0f);
+                datadict[(int)EDAllegiance.Empire] = new Data3DSetClass(EDAllegiance.Empire.ToString(), PrimitiveType.Points, Color.Blue, 1.0f);
+                datadict[(int)EDAllegiance.Federation] = new Data3DSetClass(EDAllegiance.Federation.ToString(), PrimitiveType.Points, Color.Red, 1.0f);
+                datadict[(int)EDAllegiance.Independent] = new Data3DSetClass(EDAllegiance.Independent.ToString(), PrimitiveType.Points, Color.Yellow, 1.0f);
+                datadict[(int)EDAllegiance.None] = new Data3DSetClass(EDAllegiance.None.ToString(), PrimitiveType.Points, Color.LightGray, 1.0f);
+                datadict[(int)EDAllegiance.Unknown] = new Data3DSetClass(EDAllegiance.Unknown.ToString(), PrimitiveType.Points, Color.DarkGray , 1.0f);
+
+                foreach (SystemClass si in StarList)
+                {
+                    if (si.HasCoordinate)
+                    {
+                        datadict[(int)si.allegiance].AddPoint(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z);
+                    }
+                }
+
+                foreach (var ds in datadict.Values)
+                    datasets.Add(ds);
+
+                datadict[(int)EDAllegiance.None].Visible = false;
+                datadict[(int)EDAllegiance.Unknown].Visible = false;
+
+            }
+
+
+            private void GenerateDataSetsGovernment()
+            {
+
+                Dictionary<int, Data3DSetClass> datadict = new Dictionary<int, Data3DSetClass>();
+
+                InitGenerateDataSet();
+
+                datasets = new List<Data3DSetClass>();
+
+                datadict[(int)EDGovernment.Anarchy] = new Data3DSetClass(EDGovernment.Anarchy.ToString(), PrimitiveType.Points, Color.Yellow, 1.0f);
+                datadict[(int)EDGovernment.Colony] = new Data3DSetClass(EDGovernment.Colony.ToString(), PrimitiveType.Points, Color.YellowGreen, 1.0f);
+                datadict[(int)EDGovernment.Democracy] = new Data3DSetClass(EDGovernment.Democracy.ToString(), PrimitiveType.Points, Color.Green, 1.0f);
+                datadict[(int)EDGovernment.Imperial] = new Data3DSetClass(EDGovernment.Imperial.ToString(), PrimitiveType.Points, Color.DarkGreen, 1.0f);
+                datadict[(int)EDGovernment.Corporate] = new Data3DSetClass(EDGovernment.Corporate.ToString(), PrimitiveType.Points, Color.LawnGreen, 1.0f);
+                datadict[(int)EDGovernment.Communism] = new Data3DSetClass(EDGovernment.Communism.ToString(), PrimitiveType.Points, Color.DarkOliveGreen, 1.0f);
+                datadict[(int)EDGovernment.Feudal] = new Data3DSetClass(EDGovernment.Feudal.ToString(), PrimitiveType.Points, Color.LightBlue, 1.0f);
+                datadict[(int)EDGovernment.Dictatorship] = new Data3DSetClass(EDGovernment.Dictatorship.ToString(), PrimitiveType.Points, Color.Blue, 1.0f);
+                datadict[(int)EDGovernment.Theocracy] = new Data3DSetClass(EDGovernment.Theocracy.ToString(), PrimitiveType.Points, Color.DarkBlue, 1.0f);
+                datadict[(int)EDGovernment.Cooperative] = new Data3DSetClass(EDGovernment.Cooperative.ToString(), PrimitiveType.Points, Color.Purple, 1.0f);
+                datadict[(int)EDGovernment.Patronage] = new Data3DSetClass(EDGovernment.Patronage.ToString(), PrimitiveType.Points, Color.LightCyan, 1.0f);
+                datadict[(int)EDGovernment.Confederacy] = new Data3DSetClass(EDGovernment.Confederacy.ToString(), PrimitiveType.Points, Color.Red, 1.0f);
+                datadict[(int)EDGovernment.Prison_Colony] = new Data3DSetClass(EDGovernment.Prison_Colony.ToString(), PrimitiveType.Points, Color.Orange, 1.0f);
+                datadict[(int)EDGovernment.None] = new Data3DSetClass(EDGovernment.None.ToString(), PrimitiveType.Points, Color.Gray, 1.0f);
+                datadict[(int)EDGovernment.Unknown] = new Data3DSetClass(EDGovernment.Unknown.ToString(), PrimitiveType.Points, Color.DarkGray, 1.0f);
+
+                foreach (SystemClass si in StarList)
+                {
+                    if (si.HasCoordinate)
+                    {
+                        datadict[(int)si.primary_economy].AddPoint(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z);
+                    }
+                }
+
+                foreach (var ds in datadict.Values)
+                    datasets.Add(ds);
+
+                datadict[(int)EDGovernment.None].Visible = false;
+                datadict[(int)EDGovernment.Unknown].Visible = false;
+
+            }
+
+
+
+            private void InitGenerateDataSet()
+            {
+
+                if (StarList == null)
+                    StarList = SQLiteDBClass.globalSystems;
+
+
+                if (VisitedStars == null)
+                    InitData();
+            }
+
+            private void DrawStars()
+            {
+                foreach (var dataset in datasets)
+                {
+                    dataset.DrawPoints();
+                }
+            }
+
+            /*
             private void DrawStars()
             {
                 if (StarList == null)
@@ -149,7 +296,7 @@ namespace EDDiscovery2
                 GL.End();
             }
 
-
+            */
 
             /// <summary>
             /// Calculate Translation of  (X, Y, Z) - according to mouse input
@@ -309,6 +456,9 @@ namespace EDDiscovery2
             {
                 textBox_From.AutoCompleteCustomSource = EDDiscoveryForm.SystemNames;
                 ShowCenterSystem();
+                GenerateDataSets();
+                //GenerateDataSetsAllegiance();
+                //GenerateDataSetsGovernment();
             }
 
 
