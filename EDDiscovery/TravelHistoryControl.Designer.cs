@@ -79,12 +79,13 @@
             this.textBoxCmdrName = new System.Windows.Forms.TextBox();
             this.buttonSync = new System.Windows.Forms.Button();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonCloseTrilateration = new System.Windows.Forms.Button();
             this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
             this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
+            this.panelRight = new System.Windows.Forms.Panel();
             this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
+            this.panelRight.SuspendLayout();
             this.SuspendLayout();
             // 
             // richTextBox_History
@@ -117,6 +118,7 @@
             this.labelHeader.Size = new System.Drawing.Size(115, 20);
             this.labelHeader.TabIndex = 7;
             this.labelHeader.Text = "Travel history";
+            this.labelHeader.Click += new System.EventHandler(this.labelHeader_Click);
             // 
             // dataGridView1
             // 
@@ -199,7 +201,8 @@
             // 
             // listView1
             // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ColumnName,
@@ -208,9 +211,9 @@
             listViewGroup1.Name = "Name";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
             listViewGroup1});
-            this.listView1.Location = new System.Drawing.Point(599, 360);
+            this.listView1.Location = new System.Drawing.Point(11, 364);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(267, 218);
+            this.listView1.Size = new System.Drawing.Size(278, 213);
             this.listView1.TabIndex = 11;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -227,9 +230,8 @@
             // 
             // label3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(598, 344);
+            this.label3.Location = new System.Drawing.Point(10, 348);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(206, 13);
             this.label3.TabIndex = 12;
@@ -237,8 +239,7 @@
             // 
             // buttonMap
             // 
-            this.buttonMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonMap.Location = new System.Drawing.Point(787, 76);
+            this.buttonMap.Location = new System.Drawing.Point(199, 80);
             this.buttonMap.Name = "buttonMap";
             this.buttonMap.Size = new System.Drawing.Size(83, 23);
             this.buttonMap.TabIndex = 14;
@@ -256,7 +257,6 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.buttonTrilaterate);
             this.panel1.Controls.Add(this.buttonRoss);
             this.panel1.Controls.Add(this.buttonEDDB);
@@ -285,7 +285,7 @@
             this.panel1.Controls.Add(this.textBoxX);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.textBoxSystem);
-            this.panel1.Location = new System.Drawing.Point(595, 106);
+            this.panel1.Location = new System.Drawing.Point(7, 110);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(293, 235);
             this.panel1.TabIndex = 16;
@@ -553,10 +553,9 @@
             // 
             // label6
             // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(597, 3);
+            this.label6.Location = new System.Drawing.Point(9, 7);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(96, 20);
             this.label6.TabIndex = 17;
@@ -564,9 +563,8 @@
             // 
             // textBoxCmdrName
             // 
-            this.textBoxCmdrName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxCmdrName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCmdrName.Location = new System.Drawing.Point(702, 2);
+            this.textBoxCmdrName.Location = new System.Drawing.Point(114, 6);
             this.textBoxCmdrName.Name = "textBoxCmdrName";
             this.textBoxCmdrName.Size = new System.Drawing.Size(167, 26);
             this.textBoxCmdrName.TabIndex = 18;
@@ -574,8 +572,7 @@
             // 
             // buttonSync
             // 
-            this.buttonSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSync.Location = new System.Drawing.Point(702, 34);
+            this.buttonSync.Location = new System.Drawing.Point(114, 38);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(164, 23);
             this.buttonSync.TabIndex = 19;
@@ -583,22 +580,10 @@
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
-            // buttonCloseTrilateration
-            // 
-            this.buttonCloseTrilateration.Location = new System.Drawing.Point(513, 116);
-            this.buttonCloseTrilateration.Name = "buttonCloseTrilateration";
-            this.buttonCloseTrilateration.Size = new System.Drawing.Size(75, 23);
-            this.buttonCloseTrilateration.TabIndex = 21;
-            this.buttonCloseTrilateration.Text = "Close";
-            this.buttonCloseTrilateration.UseVisualStyleBackColor = true;
-            this.buttonCloseTrilateration.Visible = false;
-            this.buttonCloseTrilateration.Click += new System.EventHandler(this.buttonCloseTrilateration_Click);
-            // 
             // labelDistanceToNextSystem
             // 
-            this.labelDistanceToNextSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDistanceToNextSystem.AutoSize = true;
-            this.labelDistanceToNextSystem.Location = new System.Drawing.Point(592, 60);
+            this.labelDistanceToNextSystem.Location = new System.Drawing.Point(4, 64);
             this.labelDistanceToNextSystem.Name = "labelDistanceToNextSystem";
             this.labelDistanceToNextSystem.Size = new System.Drawing.Size(122, 13);
             this.labelDistanceToNextSystem.TabIndex = 20;
@@ -606,21 +591,37 @@
             // 
             // textBoxDistanceToNextSystem
             // 
-            this.textBoxDistanceToNextSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxDistanceToNextSystem.Location = new System.Drawing.Point(666, 76);
+            this.textBoxDistanceToNextSystem.Location = new System.Drawing.Point(78, 80);
             this.textBoxDistanceToNextSystem.Name = "textBoxDistanceToNextSystem";
             this.textBoxDistanceToNextSystem.Size = new System.Drawing.Size(48, 20);
             this.textBoxDistanceToNextSystem.TabIndex = 21;
             this.textBoxDistanceToNextSystem.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDistanceToNextSystem_Validating);
+            // 
+            // panelRight
+            // 
+            this.panelRight.Controls.Add(this.label6);
+            this.panelRight.Controls.Add(this.listView1);
+            this.panelRight.Controls.Add(this.textBoxDistanceToNextSystem);
+            this.panelRight.Controls.Add(this.label3);
+            this.panelRight.Controls.Add(this.labelDistanceToNextSystem);
+            this.panelRight.Controls.Add(this.buttonMap);
+            this.panelRight.Controls.Add(this.buttonSync);
+            this.panelRight.Controls.Add(this.panel1);
+            this.panelRight.Controls.Add(this.textBoxCmdrName);
+            this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panelRight.Location = new System.Drawing.Point(594, 0);
+            this.panelRight.Name = "panelRight";
+            this.panelRight.Size = new System.Drawing.Size(297, 586);
+            this.panelRight.TabIndex = 22;
             // 
             // TrilaterationControl
             // 
             this.TrilaterationControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TrilaterationControl.Location = new System.Drawing.Point(21, 105);
+            this.TrilaterationControl.Location = new System.Drawing.Point(21, 76);
             this.TrilaterationControl.Name = "TrilaterationControl";
-            this.TrilaterationControl.Size = new System.Drawing.Size(570, 472);
+            this.TrilaterationControl.Size = new System.Drawing.Size(571, 501);
             this.TrilaterationControl.TabIndex = 20;
             this.TrilaterationControl.Visible = false;
             this.TrilaterationControl.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
@@ -629,22 +630,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.buttonCloseTrilateration);
-            this.Controls.Add(this.textBoxDistanceToNextSystem);
-            this.Controls.Add(this.labelDistanceToNextSystem);
-            this.Controls.Add(this.buttonSync);
-            this.Controls.Add(this.textBoxCmdrName);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.buttonMap);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.TrilaterationControl);
+            this.Controls.Add(this.panelRight);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBoxHistoryWindow);
             this.Controls.Add(this.labelHeader);
             this.Controls.Add(this.richTextBox_History);
             this.Controls.Add(this.button_RefreshHistory);
-            this.Controls.Add(this.TrilaterationControl);
             this.Controls.Add(this.dataGridView1);
             this.Name = "TravelHistoryControl";
             this.Size = new System.Drawing.Size(891, 586);
@@ -652,6 +644,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panelRight.ResumeLayout(false);
+            this.panelRight.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -708,8 +702,8 @@
         private System.Windows.Forms.Button buttonRoss;
         private System.Windows.Forms.Button buttonTrilaterate;
         private TrilaterationControl TrilaterationControl;
-        private System.Windows.Forms.Button buttonCloseTrilateration;
         private System.Windows.Forms.Label labelDistanceToNextSystem;
         private System.Windows.Forms.TextBox textBoxDistanceToNextSystem;
+        private System.Windows.Forms.Panel panelRight;
     }
 }

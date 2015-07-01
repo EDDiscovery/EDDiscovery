@@ -775,9 +775,10 @@ namespace EDDiscovery
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
             dataGridView1.Visible = false;
+            //panelRight.Visible = false;
             TrilaterationControl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
             TrilaterationControl.Visible = true;
-            buttonCloseTrilateration.Visible = true;
+            TrilaterationControl.BringToFront();
             buttonTrilaterate.Enabled = false;
             labelHeader.Text = "Trilateration";
         }
@@ -792,16 +793,17 @@ namespace EDDiscovery
             if (TrilaterationControl.Visible == false)
             {
                 TrilaterationControl.TargetSystem = null;
-                buttonCloseTrilateration.Visible = false;
                 buttonTrilaterate.Enabled = true;
                 dataGridView1.Visible = true;
-                labelHeader.Text = "Travel history";
+                //labelHeader.Text = "Travel history";
             }
         }
 
         private void CloseTrilateration()
         {
             TrilaterationControl.Visible = false;
+            panelRight.Visible = true;
+
         }
 
         public string GetCommanderName()
@@ -857,6 +859,11 @@ namespace EDDiscovery
             }
 
             return valueDouble;
+        }
+
+        private void labelHeader_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
