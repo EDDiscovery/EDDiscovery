@@ -104,6 +104,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="3DMap\Data3DSetClass.cs" />
     <Compile Include="DB\StationClass.cs" />
     <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
