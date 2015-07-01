@@ -99,7 +99,7 @@ namespace EDDiscovery2
             this.Controls.Add(this.textBox_From);
             this.Controls.Add(this.glControl1);
             this.Name = "FormMap";
-            this.Text = "Form1";
+            this.Text = "3D Star Map";
             this.Load += new System.EventHandler(this.FormMap_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

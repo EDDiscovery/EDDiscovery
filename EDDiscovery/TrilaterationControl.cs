@@ -599,5 +599,10 @@ namespace EDDiscovery
             // when algorithm is changed, we want to re-run trilateration
             RunTrilateration();
         }
+
+        private void buttonCloseTrilateration_Click(object sender, EventArgs e)
+        {
+            Visible = false;
+        }
     }
 }
