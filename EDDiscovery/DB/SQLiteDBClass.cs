@@ -22,7 +22,6 @@ namespace EDDiscovery.DB
         public static List<SystemClass> globalSystems = new List<SystemClass>();
         public static Dictionary<string, SystemClass> dictSystems = new Dictionary<string, SystemClass>(); 
         
-        public static List<DistanceClass> globalDistances = new List<DistanceClass>();
         public static Dictionary<string, DistanceClass> dictDistances = new Dictionary<string, DistanceClass>(); 
 
         public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
@@ -448,8 +447,7 @@ namespace EDDiscovery.DB
                         {
                             return false;
                         }
-
-                        globalDistances.Clear();
+                        
                         dictDistances.Clear();
 
                         foreach (DataRow dr in ds.Tables[0].Rows)
@@ -913,8 +911,6 @@ namespace EDDiscovery.DB
 
         public static void AddDistanceToCache(DistanceClass distance)
         {
-
-            globalDistances.Add(distance);
             dictDistances[GetDistanceCacheKey(distance.NameA, distance.NameB)] = distance;
         }
 

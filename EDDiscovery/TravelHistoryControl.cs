@@ -613,7 +613,7 @@ namespace EDDiscovery
             }
 
 
-            var dists = from p in SQLiteDBClass.globalDistances where p.Status == DistancsEnum.EDDiscovery  orderby p.CreateTime  select p;
+            var dists = from p in SQLiteDBClass.dictDistances where p.Value.Status == DistancsEnum.EDDiscovery  orderby p.Value.CreateTime  select p.Value;
 
             EDSCClass edsc = new EDSCClass();
 
