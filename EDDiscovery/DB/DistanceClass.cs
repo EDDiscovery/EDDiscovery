@@ -324,15 +324,11 @@ namespace EDDiscovery.DB
             if (s1 == null || s2 == null)
                 return -1;
 
-            string name1, name2;
-            
-            name1 = s1.SearchName;
-            name2 = s2.SearchName;
+            string key = SQLiteDBClass.GetDistanceCacheKey(s1.SearchName, s2.SearchName);
 
-            string key = name1 + ":" + name2;
-
-            if (SQLiteDBClass.dictDistances.ContainsKey(key))
-                return SQLiteDBClass.dictDistances[key].Dist;
+            DistanceClass distance;
+            if (SQLiteDBClass.dictDistances.TryGetValue(key, out distance))
+                return distance.Dist;
             else
                 return -1;
 
