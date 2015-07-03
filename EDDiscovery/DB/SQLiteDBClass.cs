@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -912,9 +913,17 @@ namespace EDDiscovery.DB
 
         public static void AddDistanceToCache(DistanceClass distance)
         {
+
             globalDistances.Add(distance);
-            dictDistances[distance.NameA.ToLower() + ":" + distance.NameB.ToLower()] = distance;
-            dictDistances[distance.NameB.ToLower() + ":" + distance.NameA.ToLower()] = distance;
+            dictDistances[GetDistanceCacheKey(distance.NameA, distance.NameB)] = distance;
+        }
+
+        public static string GetDistanceCacheKey(string systemA, string systemB)
+        {
+            var systemALower = systemA.ToLower();
+            var systemBLower = systemB.ToLower();
+            var cmp = string.Compare(systemALower, systemBLower, false, CultureInfo.InvariantCulture);
+            return cmp < 0 ? systemALower + ":" + systemBLower : systemBLower + ":" + systemALower;
         }
     }
 }
