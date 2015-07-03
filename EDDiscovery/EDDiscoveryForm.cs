@@ -723,8 +723,8 @@ namespace EDDiscovery
                 {
                     //var Distances = from SQLiteDBClass.globalDistances
 
-                    var distances1 = from p in SQLiteDBClass.globalDistances where p.NameA.ToLower() == System.SearchName select p;
-                    var distances2 = from p in SQLiteDBClass.globalDistances where p.NameB.ToLower() == System.SearchName select p;
+                    var distances1 = from p in SQLiteDBClass.dictDistances where p.Value.NameA.ToLower() == System.SearchName select p.Value;
+                    var distances2 = from p in SQLiteDBClass.dictDistances where p.Value.NameB.ToLower() == System.SearchName select p.Value;
 
                     int nr = distances1.Count();
                     //nr = distances2.Count();
