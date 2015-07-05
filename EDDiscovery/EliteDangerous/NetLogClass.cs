@@ -267,42 +267,60 @@ namespace EDDiscovery
 
         private void NetLogMain()
         {
-            m_Watcher = new System.IO.FileSystemWatcher();
+            try
+            {
+                m_Watcher = new System.IO.FileSystemWatcher();
 
-            m_Watcher.Path =GetNetLogPath() + "\\";
-            m_Watcher.Filter = "netLog*.log";
-            m_Watcher.IncludeSubdirectories = true;
-            m_Watcher.NotifyFilter = NotifyFilters.FileName; // | NotifyFilters.Size; 
+                if (Directory.Exists(GetNetLogPath()))
+                {
+                    m_Watcher.Path = GetNetLogPath() + "\\";
+                    m_Watcher.Filter = "netLog*.log";
+                    m_Watcher.IncludeSubdirectories = true;
+                    m_Watcher.NotifyFilter = NotifyFilters.FileName; // | NotifyFilters.Size; 
 
-            m_Watcher.Changed += new FileSystemEventHandler(OnChanged);
-            m_Watcher.Created += new FileSystemEventHandler(OnChanged);
-            m_Watcher.Deleted += new FileSystemEventHandler(OnChanged);
-            m_Watcher.EnableRaisingEvents = true;
+                    m_Watcher.Changed += new FileSystemEventHandler(OnChanged);
+                    m_Watcher.Created += new FileSystemEventHandler(OnChanged);
+                    m_Watcher.Deleted += new FileSystemEventHandler(OnChanged);
+                    m_Watcher.EnableRaisingEvents = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Net log watcher exception : " + ex.Message, "EDDiscovery Error");
+                System.Diagnostics.Trace.WriteLine("NetlogMAin exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-
+            }
             while (!Exit)
             {
-                Thread.Sleep(2000);
-
-                EliteDangerous.CheckED();
-
-                if (NoEvents == false)
+                try
                 {
-                    if (lastnfi != null)
-                    {
-                        FileInfo fi = new FileInfo(lastnfi.FileName);
+                    Thread.Sleep(2000);
 
-                        if (fi.Length != lastnfi.fileSize)
-                            ParseFile(fi, visitedSystems);
-                        else
+                    EliteDangerous.CheckED();
+
+                    if (NoEvents == false)
+                    {
+                        if (lastnfi != null)
                         {
-                            //System.Diagnostics.Trace.WriteLine("No change");
+                            FileInfo fi = new FileInfo(lastnfi.FileName);
+
+                            if (fi.Length != lastnfi.fileSize)
+                                ParseFile(fi, visitedSystems);
+                            else
+                            {
+                                //System.Diagnostics.Trace.WriteLine("No change");
+                            }
                         }
                     }
                 }
-            }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine("NetlogMAin exception : " + ex.Message);
+                    System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                }
 
-
+        }
         }
 
 
