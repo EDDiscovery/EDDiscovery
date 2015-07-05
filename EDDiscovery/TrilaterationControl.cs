@@ -339,9 +339,9 @@ namespace EDDiscovery
                 } else
                 {
                     hasInvalidDistances = true;
-                    calculatedDistanceCell.Style.ForeColor = Color.Red;
-                    statusCell.Value = "Wrong distance";
-                    statusCell.Style.ForeColor = Color.Red;
+                    calculatedDistanceCell.Style.ForeColor = Color.Salmon;
+                    statusCell.Value = "Wrong distance?";
+                    statusCell.Style.ForeColor = Color.Salmon;
                 }
             }
 

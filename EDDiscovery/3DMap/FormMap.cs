@@ -456,9 +456,9 @@ namespace EDDiscovery2
             {
                 textBox_From.AutoCompleteCustomSource = EDDiscoveryForm.SystemNames;
                 ShowCenterSystem();
-                GenerateDataSets();
+                //GenerateDataSets();
                 //GenerateDataSetsAllegiance();
-                //GenerateDataSetsGovernment();
+                GenerateDataSetsGovernment();
             }
 
 
