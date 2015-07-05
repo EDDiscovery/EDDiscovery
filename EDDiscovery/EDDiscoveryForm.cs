@@ -30,15 +30,17 @@ namespace EDDiscovery
         static public  AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
         static public string CommanderName;
 
-        const string fileTgcSystems = "tgcsystems.json";
-        const string fileTgcDistances ="tgcdistances.json";
+        string fileTgcSystems ;
+        string fileTgcDistances;
 
         public event DistancesLoaded OnDistancesLoaded;
 
         public EDDiscoveryForm()
         {
             InitializeComponent();
-
+           
+            fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
+            fileTgcDistances = Path.Combine(Tools.GetAppDataDirectory(), "tgcdistances.json");
         }
 
 
@@ -353,7 +355,7 @@ namespace EDDiscovery
                 lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                 List<DistanceClass> dists = new List<DistanceClass>();
 
-                json = LoadJsonArray("tgcdistances.json");
+                json = LoadJsonArray(fileTgcDistances);
                 dists = DistanceClass.ParseEDSC(json, ref rwdistfiletime);
 
                 if (!rwdisttime.Equals(rwdistfiletime))  // New distance file from Redwizzard

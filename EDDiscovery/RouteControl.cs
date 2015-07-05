@@ -115,7 +115,7 @@ namespace EDDiscovery
                     Console.WriteLine(A.ToString());
                 }
 
-                JArray ja = Path2JSON(AS);
+               // JArray ja = Path2JSON(AS);
             }
             else Console.WriteLine("No result !");
 

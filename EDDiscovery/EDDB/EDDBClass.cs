@@ -16,26 +16,42 @@ namespace EDDiscovery2.EDDB
 {
     public class EDDBClass
     {
-        private string stationFileName = "eddbstationslite.json";
-        private string systemFileName = "eddbsystems.json";
-        private string commoditiesFileName = "commodities.json";
+        private string stationFileName;
+        private string systemFileName;
+        private string commoditiesFileName;
+
+        private string stationTempFileName;
+        private string systemTempFileName;
+        private string commoditiesTempFileName;
+
+        public EDDBClass()
+        {
+            stationFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstationslite.json");
+            systemFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems.json");
+            commoditiesFileName = Path.Combine(Tools.GetAppDataDirectory(), "commodities.json");
+
+            stationTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstationslite_temp.json");
+            systemTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems_temp.json");
+            commoditiesTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "commodities_temp.json");
+        
+        }
 
         public bool GetSystems()
         {
-            if (File.Exists("eddbstationslite_temp.json")) File.Delete("eddbstationslite_temp.json"); // migration - remove obsolete file
+            if (File.Exists(stationTempFileName)) File.Delete(stationTempFileName); // migration - remove obsolete file
             return DownloadFile("http://robert.astronet.se/Elite/eddb/systems.json", systemFileName);
         }
 
         public bool GetCommodities()
         {
-            if (File.Exists("eddbsystems_temp.json")) File.Delete("eddbsystems_temp.json"); // migration - remove obsolete file
+            if (File.Exists(systemTempFileName)) File.Delete(systemTempFileName); // migration - remove obsolete file
             return DownloadFile("http://robert.astronet.se/Elite/eddb/commodities.json", commoditiesFileName);
         }
 
 
         public bool GetStationsLite()
         {
-            if (File.Exists("commodities_temp.json")) File.Delete("commodities_temp.json"); // migration - remove obsolete file
+            if (File.Exists(commoditiesTempFileName)) File.Delete(commoditiesTempFileName); // migration - remove obsolete file
             return DownloadFile("http://robert.astronet.se/Elite/eddb/stations_lite.json", stationFileName);
         }
 

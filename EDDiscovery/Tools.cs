@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -102,5 +103,28 @@ namespace EDDiscovery
                 }
             }
         }
+
+
+        static internal string GetAppDataDirectory()
+        {
+            try
+            {
+                string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\EDDiscovery\\";
+
+
+                if (!Directory.Exists(datapath))
+                    Directory.CreateDirectory(datapath);
+
+
+                return datapath;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message, "GetAppDataDirectory Exception", System.Windows.Forms.MessageBoxButtons.OK);
+                return null;
+            }
+        }
+
+
     }
 }
