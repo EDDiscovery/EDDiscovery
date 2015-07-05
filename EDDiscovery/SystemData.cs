@@ -29,50 +29,7 @@ namespace EDDiscovery
             //ReadData();V:\RobertW\EDDiscovery\EDDiscovery\systems.json
         }
 
-        //public bool ReadData()
-        //{
-        //    using (StreamReader reader = File.OpenText(@"systems.json"))
-        //    {
-        //        string str = reader.ReadToEnd();
-        //        systems = (JArray)JArray.Parse(str);
-
-        //        listSystems = new List<SystemClass>();
-
-        //        foreach (JObject jo in systems)
-        //        {
-        //            listSystems.Add(new SystemClass(jo, SystemInfoSource.RW));
-        //        }
-
-        //    }
-
-        //    return true;
-        //}
-
-
-
-        //public bool ParseEDSCObsolete(string json)
-        //{
-        //    JObject edsc = null;
-        //    if (json!=null)
-        //        edsc = (JObject)JObject.Parse(json);
-
-        //    listSystems = new List<SystemClass>();
-
-        //    if (edsc == null)
-        //        return false;
-
-        //    JObject edscdata = (JObject)edsc["d"];
-        //    JArray systems = (JArray)edscdata["systems"];
-
-        //    foreach (JObject jo in systems)
-        //    {
-        //        SystemClass system = new SystemClass(jo, SystemInfoSource.EDSC);
-                
-        //  //      if (system.HasCoordinate)
-        //  //          listSystems.Add(system);
-        //    }
-        //    return true;
-        //}
+    
 
         static public List<SystemClass> SystemList
         {
