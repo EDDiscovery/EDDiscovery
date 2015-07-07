@@ -865,6 +865,50 @@ namespace EDDiscovery
         {
 
         }
+
+        private void TrilaterationControl_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
+        {
+            string searchstr = textBoxFilter.Text.Trim();
+            dataGridView1.SuspendLayout();
+
+            DataGridViewRow[] theRows = new DataGridViewRow[dataGridView1.Rows.Count];
+            dataGridView1.Rows.CopyTo(theRows, 0);
+            dataGridView1.Rows.Clear();
+
+            for (int loop = 0; loop < theRows.Length; loop++)
+            {
+                bool found = false;
+
+                if (searchstr.Length <1)
+                    found = true;
+                else
+                {
+                    foreach (DataGridViewCell cell in theRows[loop].Cells)
+                    {
+                        if (cell.Value!=null)
+                            if (cell.Value.ToString().Contains(searchstr))
+                            {
+                                found = true;
+                                break;
+                            }
+                    }
+                }
+                theRows[loop].Visible = found;
+            }
+            dataGridView1.Rows.AddRange(theRows);
+            dataGridView1.ResumeLayout();
+            
+        }
+
+        private void textBoxFilter_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
 
