@@ -83,6 +83,8 @@
             this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
             this.panelRight = new System.Windows.Forms.Panel();
             this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
+            this.textBoxFilter = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -101,7 +103,7 @@
             // button_RefreshHistory
             // 
             this.button_RefreshHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_RefreshHistory.Location = new System.Drawing.Point(508, 77);
+            this.button_RefreshHistory.Location = new System.Drawing.Point(505, 78);
             this.button_RefreshHistory.Name = "button_RefreshHistory";
             this.button_RefreshHistory.Size = new System.Drawing.Size(83, 23);
             this.button_RefreshHistory.TabIndex = 5;
@@ -112,10 +114,10 @@
             // labelHeader
             // 
             this.labelHeader.AutoSize = true;
-            this.labelHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelHeader.Location = new System.Drawing.Point(17, 76);
             this.labelHeader.Name = "labelHeader";
-            this.labelHeader.Size = new System.Drawing.Size(115, 20);
+            this.labelHeader.Size = new System.Drawing.Size(110, 18);
             this.labelHeader.TabIndex = 7;
             this.labelHeader.Text = "Travel history";
             this.labelHeader.Click += new System.EventHandler(this.labelHeader_Click);
@@ -183,9 +185,9 @@
             "2 Weeks",
             "Month",
             "All"});
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(313, 78);
+            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(247, 77);
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 21);
             this.comboBoxHistoryWindow.TabIndex = 9;
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
@@ -193,7 +195,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(206, 81);
+            this.label2.Location = new System.Drawing.Point(140, 80);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(101, 13);
             this.label2.TabIndex = 10;
@@ -624,13 +626,33 @@
             this.TrilaterationControl.Size = new System.Drawing.Size(571, 501);
             this.TrilaterationControl.TabIndex = 20;
             this.TrilaterationControl.Visible = false;
+            this.TrilaterationControl.Load += new System.EventHandler(this.TrilaterationControl_Load);
             this.TrilaterationControl.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
+            // 
+            // textBoxFilter
+            // 
+            this.textBoxFilter.Location = new System.Drawing.Point(399, 78);
+            this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.Size = new System.Drawing.Size(100, 20);
+            this.textBoxFilter.TabIndex = 23;
+            this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
+            this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(352, 80);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 13);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "Search";
             // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.TrilaterationControl);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBoxFilter);
             this.Controls.Add(this.panelRight);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBoxHistoryWindow);
@@ -638,6 +660,7 @@
             this.Controls.Add(this.richTextBox_History);
             this.Controls.Add(this.button_RefreshHistory);
             this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.TrilaterationControl);
             this.Name = "TravelHistoryControl";
             this.Size = new System.Drawing.Size(891, 586);
             this.Load += new System.EventHandler(this.TravelHistoryControl_Load);
@@ -705,5 +728,7 @@
         private System.Windows.Forms.Label labelDistanceToNextSystem;
         private System.Windows.Forms.TextBox textBoxDistanceToNextSystem;
         private System.Windows.Forms.Panel panelRight;
+        private System.Windows.Forms.TextBox textBoxFilter;
+        private System.Windows.Forms.Label label1;
     }
 }
