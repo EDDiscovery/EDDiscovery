@@ -891,7 +891,7 @@ namespace EDDiscovery
                     foreach (DataGridViewCell cell in theRows[loop].Cells)
                     {
                         if (cell.Value!=null)
-                            if (cell.Value.ToString().Contains(searchstr))
+                            if (cell.Value.ToString().IndexOf(searchstr, 0, StringComparison.CurrentCultureIgnoreCase) >=0)
                             {
                                 found = true;
                                 break;
