@@ -44,6 +44,7 @@ namespace EDDiscovery
 
             TriggerEDSCRefresh();
             RefreshHistory();
+            
 
             EliteDangerous.CheckED();
         }
@@ -194,6 +195,8 @@ namespace EDDiscovery
             System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
             sw1.Stop();
 
+            if (textBoxFilter.TextLength>0)
+                FilterGridView();
         }
 
         private void AddHistoryRow(DateTime oldestData, SystemPosition item, SystemPosition item2)
@@ -873,6 +876,11 @@ namespace EDDiscovery
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
         {
+            FilterGridView();
+        }
+
+        private void FilterGridView()
+        {
             string searchstr = textBoxFilter.Text.Trim();
             dataGridView1.SuspendLayout();
 
@@ -884,14 +892,14 @@ namespace EDDiscovery
             {
                 bool found = false;
 
-                if (searchstr.Length <1)
+                if (searchstr.Length < 1)
                     found = true;
                 else
                 {
                     foreach (DataGridViewCell cell in theRows[loop].Cells)
                     {
-                        if (cell.Value!=null)
-                            if (cell.Value.ToString().IndexOf(searchstr, 0, StringComparison.CurrentCultureIgnoreCase) >=0)
+                        if (cell.Value != null)
+                            if (cell.Value.ToString().IndexOf(searchstr, 0, StringComparison.CurrentCultureIgnoreCase) >= 0)
                             {
                                 found = true;
                                 break;
@@ -902,7 +910,6 @@ namespace EDDiscovery
             }
             dataGridView1.Rows.AddRange(theRows);
             dataGridView1.ResumeLayout();
-            
         }
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
