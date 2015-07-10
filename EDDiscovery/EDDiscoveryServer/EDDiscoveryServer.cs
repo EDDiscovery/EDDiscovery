@@ -74,12 +74,11 @@ namespace EDDiscovery
             }
         }
 
-
-        private string Get(string query, string action)
+        private string GetUrl(string url, string query)
         {
             try
             {
-                WebRequest request = WebRequest.Create("http://eddiscovery.astronet.se/v1/index.php/" + action);
+                WebRequest request = WebRequest.Create(url);
                 // Set the Method property of the request to POST.
                 request.Method = "GET";
                 string postData = query;
@@ -126,6 +125,18 @@ namespace EDDiscovery
 
         }
 
+
+
+        private string Get(string query, string action)
+        {
+            return GetUrl("http://eddiscovery.astronet.se/v1/index.php/" + action, query);
+        }
+
+
+        public string GetLastestInstaller()
+        {
+            return GetUrl("http://eddiscovery.astronet.se/release/latest.php", "");
+        }
 
 
         public string AddSystem(SystemClass system)

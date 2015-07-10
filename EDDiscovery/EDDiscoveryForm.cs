@@ -404,6 +404,11 @@ namespace EDDiscovery
                 db.PutSettingString("EDSCLastDist", lstdist);
                 db.GetAllDistances();
                 OnDistancesLoaded();
+
+                // Check for a new installer    
+                if (File.Exists("Installer.txt")) // Only check for isntallshield installation
+                    CheckForNewInstaller();
+
             }
             catch (Exception ex)
             {
@@ -411,6 +416,34 @@ namespace EDDiscovery
                 
             }
 
+        }
+
+        private void CheckForNewInstaller()
+        {
+            {
+                EDDiscoveryServer eds = new EDDiscoveryServer();
+
+                string inst = eds.GetLastestInstaller();
+                if (inst != null)
+                {
+                    JObject jo = (JObject)JObject.Parse(inst);
+
+                    string newVersion = jo["Version"].Value<string>();
+                    string newInstaller = jo["Filename"].Value<string>();
+
+                    var currentVersion = Application.ProductVersion;
+
+                    Version v1, v2;
+                    v1 = new Version(newVersion);
+                    v2 = new Version(currentVersion);
+
+                    if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
+                    {
+                        LogText("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine, Color.Salmon);
+                    }
+
+                }
+            }
         }
 
 
