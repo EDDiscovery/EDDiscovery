@@ -80,7 +80,7 @@ namespace EDDiscovery
 
             return (SystemClass)obj.First();
 
-            return SQLiteDBClass.dictSystems[lname];
+            //return SQLiteDBClass.dictSystems[lname];
         }
 
 
