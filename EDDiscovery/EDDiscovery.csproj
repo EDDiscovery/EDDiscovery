@@ -163,11 +163,14 @@
     <Compile Include="TravelHistoryControl.Designer.cs">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Trilateration.cs" />
-    <Compile Include="TrilaterationControl.cs">
+    <Compile Include="Trilateration\ReferencesSector.cs" />
+    <Compile Include="Trilateration\ReferenceSystem.cs" />
+    <Compile Include="Trilateration\SuggestedReferences.cs" />
+    <Compile Include="Trilateration\Trilateration.cs" />
+    <Compile Include="Trilateration\TrilaterationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TrilaterationControl.Designer.cs">
+    <Compile Include="Trilateration\TrilaterationControl.Designer.cs">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </Compile>
     <Content Include="AppConfigLocal.xml">
@@ -210,7 +213,7 @@
     <EmbeddedResource Include="TravelHistoryControl.resx">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrilaterationControl.resx">
+    <EmbeddedResource Include="Trilateration\TrilaterationControl.resx">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
