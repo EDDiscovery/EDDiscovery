@@ -105,6 +105,11 @@ namespace EDDiscovery2
 
             private void GenerateDataSets()
             {
+                GenerateDataSetStandard();
+            }
+
+            private void GenerateDataSetStandard()
+            {
                 Data3DSetClass dataset;
                 InitGenerateDataSet();
 
@@ -479,6 +484,7 @@ namespace EDDiscovery2
                     ShowCenterSystem();
                 }
 
+                GenerateDataSets();
                 glControl1.Invalidate();
             }
 
