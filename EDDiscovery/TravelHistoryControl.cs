@@ -516,7 +516,7 @@ namespace EDDiscovery
             FormMap map2;
             if (TrilaterationControl.Visible && TrilaterationControl.TargetSystem!=null)
             {
-                map2 = new FormMap(TrilaterationControl.TargetSystem);
+                map2 = new FormMap(TrilaterationControl.TargetSystem) {ReferenceSystems = TrilaterationControl.CurrentReferenceSystems.ToList()};
             }
             else
             {
