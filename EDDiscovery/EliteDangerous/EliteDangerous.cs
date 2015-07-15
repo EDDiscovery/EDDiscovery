@@ -189,6 +189,7 @@ Wuthielo_Ku_Froth,
 Antiquities,
 Painite,
 Onion_Head,
+Trinkets_Of_Hidden_Fortune,
     }
 
 
