@@ -416,7 +416,7 @@ namespace EDDiscovery2
 
                     MouseStartRotate.X = e.X;
                     MouseStartRotate.Y = e.Y;
-                    System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
+                    //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
                     xang+= (float)(dx /5.0);
@@ -433,7 +433,7 @@ namespace EDDiscovery2
 
                     MouseStartTranslate.X = e.X;
                     MouseStartTranslate.Y = e.Y;
-                    System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
+                    //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
                     x += dx * zoom;
