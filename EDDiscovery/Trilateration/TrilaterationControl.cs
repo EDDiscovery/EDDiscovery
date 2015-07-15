@@ -144,7 +144,7 @@ namespace EDDiscovery
 
         private void TrilaterationControl_VisibleChanged(object sender, EventArgs e)
         {
-            if (Visible == true && TargetSystem != null)
+            if (Visible && TargetSystem != null)
             {
                 textBoxSystemName.Text = TargetSystem.name;
                 labelStatus.Text = "Enter Distances";
@@ -157,7 +157,7 @@ namespace EDDiscovery
                 PopulateClosestSystems();
             }
 
-            if (Visible == false)
+            if (!Visible)
             {
                 if (trilaterationThread != null)
                 {
@@ -289,6 +289,12 @@ namespace EDDiscovery
                     textBoxCoordinateX.Text = trilaterationResult.Coordinate.X.ToString();
                     textBoxCoordinateY.Text = trilaterationResult.Coordinate.Y.ToString();
                     textBoxCoordinateZ.Text = trilaterationResult.Coordinate.Z.ToString();
+                    if (TargetSystem != null)
+                    {
+                        TargetSystem.x = trilaterationResult.Coordinate.X;
+                        TargetSystem.y = trilaterationResult.Coordinate.Y;
+                        TargetSystem.z = trilaterationResult.Coordinate.Z;
+                    }
                 });
             }
             else
