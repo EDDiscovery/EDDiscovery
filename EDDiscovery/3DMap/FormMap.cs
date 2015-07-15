@@ -1,11 +1,13 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery2._3DMap;
+using EDDiscovery2.Trilateration;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -147,6 +149,28 @@ namespace EDDiscovery2
 
                 //GL.Enable(EnableCap.ProgramPointSize);
                 dataset.AddPoint(0, 0, 0);
+                datasets.Add(dataset);
+
+
+                dataset = new Data3DSetClass("Reference", PrimitiveType.Points, Color.Green, 5.0f);
+
+
+                // For test only
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                SuggestedReferences refereces = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
+
+                ReferenceSystem rsys;
+
+                for (int ii = 0; ii < 16; ii++)
+                {
+                    rsys = refereces.GetCandidate();
+                    refereces.AddReferenceStar(rsys.System);
+                    System.Diagnostics.Trace.WriteLine(rsys.System.name + " Dist: " + rsys.Distance.ToString("0.00") + " x:" + rsys.System.x.ToString() + " y:" + rsys.System.y.ToString() + " z:" + rsys.System.z.ToString());
+                    dataset.AddPoint(rsys.System.x - CenterSystem.x, rsys.System.y - CenterSystem.y, CenterSystem.z - rsys.System.z);
+                }
+                sw.Stop();
+                System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
                 datasets.Add(dataset);
             }
 

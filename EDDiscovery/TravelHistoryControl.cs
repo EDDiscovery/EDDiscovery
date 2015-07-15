@@ -293,8 +293,23 @@ namespace EDDiscovery
                 textBoxY.Text = syspos.curSystem.y.ToString("#.#####");
                 textBoxZ.Text = syspos.curSystem.z.ToString("#.#####");
 
+                //// For test only
+                //Stopwatch sw = new Stopwatch();
+                //sw.Start();
+                //SuggestedReferences refereces = new SuggestedReferences(syspos.curSystem.x, syspos.curSystem.y, syspos.curSystem.z);
 
-                SuggestedReferences refereces = new SuggestedReferences(syspos.curSystem.x, syspos.curSystem.y, syspos.curSystem.z);
+                //ReferenceSystem rsys;
+
+                //for (int ii = 0; ii < 16; ii++)
+                //{
+                //    rsys = refereces.GetCandidate();
+                //    refereces.AddReferenceStar(rsys.System);
+                //    System.Diagnostics.Trace.WriteLine(rsys.System.name + " Dist: " + rsys.Distance.ToString("0.00") + " x:" + rsys.System.x.ToString() + " y:" + rsys.System.y.ToString() + " z:" + rsys.System.z.ToString() );
+                //}
+                //sw.Stop();
+                //System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
+
+
             }
             else
             {
