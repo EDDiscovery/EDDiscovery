@@ -34,17 +34,22 @@ namespace EDDiscovery2
 
             public List<SystemClass> StarList;
             public List<SystemPosition> visitedSystems;
+            public List<SystemClass> ReferenceSystems;
             private Dictionary<string, SystemClass> VisitedStars;
 
-            private List<Data3DSetClass> datasets;
-
-
+            private List<IData3DSet> datasets;
 
 
             public FormMap()
             {
                 InitializeComponent();
             }
+
+            public FormMap(SystemClass centerSystem) : this()
+            {
+                CenterSystem = centerSystem;
+            }
+
 
             /// <summary>
             /// Loads Control
@@ -86,15 +91,13 @@ namespace EDDiscovery2
 
             public void InitData()
             {
-                SystemClass star;
-
                 VisitedStars = new Dictionary<string, SystemClass>();
 
                 if (visitedSystems != null)
                 {
                     foreach (SystemPosition sp in visitedSystems)
                     {
-                        star = SystemData.GetSystem(sp.Name);
+                        SystemClass star = SystemData.GetSystem(sp.Name);
                         if (star != null && star.HasCoordinate)
                         {
                             VisitedStars[star.SearchName] = star;
@@ -112,23 +115,23 @@ namespace EDDiscovery2
 
             private void GenerateDataSetStandard()
             {
-                Data3DSetClass dataset;
                 InitGenerateDataSet();
 
-                datasets = new List<Data3DSetClass>();
+                datasets = new List<IData3DSet>();
 
-                dataset = new Data3DSetClass("stars", PrimitiveType.Points, Color.White, 1.0f);
+                var dataset = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
+
                 foreach (SystemClass si in StarList)
                 {
                     if (si.HasCoordinate)
                     {
-                        dataset.AddPoint(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z);
+                        dataset.Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
                     }
                 }
                 datasets.Add(dataset);
 
 
-                dataset = new Data3DSetClass("visitedstars", PrimitiveType.Points, Color.Red, 2.0f);
+                dataset = new Data3DSetClass<PointData>("visitedstars", Color.Red, 2.0f);
 
                 if (visitedSystems != null)
                 {
@@ -138,65 +141,77 @@ namespace EDDiscovery2
                         star = sp;
                         if (star != null)
                         {
-                            dataset.AddPoint(star.x - CenterSystem.x, star.y - CenterSystem.y, CenterSystem.z - star.z);
+                            dataset.Add(new PointData(star.x - CenterSystem.x, star.y - CenterSystem.y, CenterSystem.z - star.z));
                         }
                     }
                 }
                 datasets.Add(dataset);
 
 
-                dataset = new Data3DSetClass("Center", PrimitiveType.Points, Color.Yellow, 5.0f);
+                dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
 
                 //GL.Enable(EnableCap.ProgramPointSize);
-                dataset.AddPoint(0, 0, 0);
+                dataset.Add(new PointData(0, 0, 0));
                 datasets.Add(dataset);
 
 
-                dataset = new Data3DSetClass("Reference", PrimitiveType.Points, Color.Green, 5.0f);
-
-
                 // For test only
+
+                if (ReferenceSystems != null && ReferenceSystems.Any())
+                {
+                    var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
+                    foreach (var refSystem in ReferenceSystems)
+                    {
+                        referenceLines.Add(new LineData(0, 0, 0, refSystem.x - CenterSystem.x, refSystem.y - CenterSystem.y, CenterSystem.z - refSystem.z));
+                    }
+
+                    datasets.Add(referenceLines);
+                }
+
+                var lineSet = new Data3DSetClass<LineData>("SuggestedReference", Color.DarkOrange, 5.0f);
+
+
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                SuggestedReferences refereces = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
+                SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
 
                 ReferenceSystem rsys;
 
                 for (int ii = 0; ii < 16; ii++)
                 {
-                    rsys = refereces.GetCandidate();
-                    refereces.AddReferenceStar(rsys.System);
-                    System.Diagnostics.Trace.WriteLine(rsys.System.name + " Dist: " + rsys.Distance.ToString("0.00") + " x:" + rsys.System.x.ToString() + " y:" + rsys.System.y.ToString() + " z:" + rsys.System.z.ToString());
-                    dataset.AddPoint(rsys.System.x - CenterSystem.x, rsys.System.y - CenterSystem.y, CenterSystem.z - rsys.System.z);
+                    rsys = references.GetCandidate();
+                    references.AddReferenceStar(rsys.System);
+                    System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", rsys.System.name, rsys.Distance.ToString("0.00"), rsys.System.x, rsys.System.y, rsys.System.z));
+                    lineSet.Add(new LineData(0,0,0,rsys.System.x - CenterSystem.x, rsys.System.y - CenterSystem.y, CenterSystem.z - rsys.System.z));
                 }
                 sw.Stop();
                 System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-                datasets.Add(dataset);
+                datasets.Add(lineSet);
             }
 
 
             private void GenerateDataSetsAllegiance()
             {
 
-                Dictionary<int, Data3DSetClass> datadict = new Dictionary<int, Data3DSetClass>();
+                var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
 
                 InitGenerateDataSet();
 
-                datasets = new List<Data3DSetClass>();
+                datasets = new List<IData3DSet>();
 
-                datadict[(int)EDAllegiance.Alliance] = new Data3DSetClass(EDAllegiance.Alliance.ToString(), PrimitiveType.Points, Color.Green, 1.0f);
-                datadict[(int)EDAllegiance.Anarchy] = new Data3DSetClass(EDAllegiance.Anarchy.ToString(), PrimitiveType.Points, Color.Purple, 1.0f);
-                datadict[(int)EDAllegiance.Empire] = new Data3DSetClass(EDAllegiance.Empire.ToString(), PrimitiveType.Points, Color.Blue, 1.0f);
-                datadict[(int)EDAllegiance.Federation] = new Data3DSetClass(EDAllegiance.Federation.ToString(), PrimitiveType.Points, Color.Red, 1.0f);
-                datadict[(int)EDAllegiance.Independent] = new Data3DSetClass(EDAllegiance.Independent.ToString(), PrimitiveType.Points, Color.Yellow, 1.0f);
-                datadict[(int)EDAllegiance.None] = new Data3DSetClass(EDAllegiance.None.ToString(), PrimitiveType.Points, Color.LightGray, 1.0f);
-                datadict[(int)EDAllegiance.Unknown] = new Data3DSetClass(EDAllegiance.Unknown.ToString(), PrimitiveType.Points, Color.DarkGray , 1.0f);
+                datadict[(int)EDAllegiance.Alliance] = new Data3DSetClass<PointData>(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
+                datadict[(int)EDAllegiance.Anarchy] = new Data3DSetClass<PointData>(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
+                datadict[(int)EDAllegiance.Empire] = new Data3DSetClass<PointData>(EDAllegiance.Empire.ToString(), Color.Blue, 1.0f);
+                datadict[(int)EDAllegiance.Federation] = new Data3DSetClass<PointData>(EDAllegiance.Federation.ToString(), Color.Red, 1.0f);
+                datadict[(int)EDAllegiance.Independent] = new Data3DSetClass<PointData>(EDAllegiance.Independent.ToString(), Color.Yellow, 1.0f);
+                datadict[(int)EDAllegiance.None] = new Data3DSetClass<PointData>(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
+                datadict[(int)EDAllegiance.Unknown] = new Data3DSetClass<PointData>(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
 
                 foreach (SystemClass si in StarList)
                 {
                     if (si.HasCoordinate)
                     {
-                        datadict[(int)si.allegiance].AddPoint(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z);
+                        datadict[(int)si.allegiance].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
                     }
                 }
 
@@ -212,33 +227,33 @@ namespace EDDiscovery2
             private void GenerateDataSetsGovernment()
             {
 
-                Dictionary<int, Data3DSetClass> datadict = new Dictionary<int, Data3DSetClass>();
+                var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
 
                 InitGenerateDataSet();
 
-                datasets = new List<Data3DSetClass>();
+                datasets = new List<IData3DSet>();
 
-                datadict[(int)EDGovernment.Anarchy] = new Data3DSetClass(EDGovernment.Anarchy.ToString(), PrimitiveType.Points, Color.Yellow, 1.0f);
-                datadict[(int)EDGovernment.Colony] = new Data3DSetClass(EDGovernment.Colony.ToString(), PrimitiveType.Points, Color.YellowGreen, 1.0f);
-                datadict[(int)EDGovernment.Democracy] = new Data3DSetClass(EDGovernment.Democracy.ToString(), PrimitiveType.Points, Color.Green, 1.0f);
-                datadict[(int)EDGovernment.Imperial] = new Data3DSetClass(EDGovernment.Imperial.ToString(), PrimitiveType.Points, Color.DarkGreen, 1.0f);
-                datadict[(int)EDGovernment.Corporate] = new Data3DSetClass(EDGovernment.Corporate.ToString(), PrimitiveType.Points, Color.LawnGreen, 1.0f);
-                datadict[(int)EDGovernment.Communism] = new Data3DSetClass(EDGovernment.Communism.ToString(), PrimitiveType.Points, Color.DarkOliveGreen, 1.0f);
-                datadict[(int)EDGovernment.Feudal] = new Data3DSetClass(EDGovernment.Feudal.ToString(), PrimitiveType.Points, Color.LightBlue, 1.0f);
-                datadict[(int)EDGovernment.Dictatorship] = new Data3DSetClass(EDGovernment.Dictatorship.ToString(), PrimitiveType.Points, Color.Blue, 1.0f);
-                datadict[(int)EDGovernment.Theocracy] = new Data3DSetClass(EDGovernment.Theocracy.ToString(), PrimitiveType.Points, Color.DarkBlue, 1.0f);
-                datadict[(int)EDGovernment.Cooperative] = new Data3DSetClass(EDGovernment.Cooperative.ToString(), PrimitiveType.Points, Color.Purple, 1.0f);
-                datadict[(int)EDGovernment.Patronage] = new Data3DSetClass(EDGovernment.Patronage.ToString(), PrimitiveType.Points, Color.LightCyan, 1.0f);
-                datadict[(int)EDGovernment.Confederacy] = new Data3DSetClass(EDGovernment.Confederacy.ToString(), PrimitiveType.Points, Color.Red, 1.0f);
-                datadict[(int)EDGovernment.Prison_Colony] = new Data3DSetClass(EDGovernment.Prison_Colony.ToString(), PrimitiveType.Points, Color.Orange, 1.0f);
-                datadict[(int)EDGovernment.None] = new Data3DSetClass(EDGovernment.None.ToString(), PrimitiveType.Points, Color.Gray, 1.0f);
-                datadict[(int)EDGovernment.Unknown] = new Data3DSetClass(EDGovernment.Unknown.ToString(), PrimitiveType.Points, Color.DarkGray, 1.0f);
+                datadict[(int)EDGovernment.Anarchy] = new Data3DSetClass<PointData>(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
+                datadict[(int)EDGovernment.Colony] = new Data3DSetClass<PointData>(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
+                datadict[(int)EDGovernment.Democracy] = new Data3DSetClass<PointData>(EDGovernment.Democracy.ToString(), Color.Green, 1.0f);
+                datadict[(int)EDGovernment.Imperial] = new Data3DSetClass<PointData>(EDGovernment.Imperial.ToString(), Color.DarkGreen, 1.0f);
+                datadict[(int)EDGovernment.Corporate] = new Data3DSetClass<PointData>(EDGovernment.Corporate.ToString(), Color.LawnGreen, 1.0f);
+                datadict[(int)EDGovernment.Communism] = new Data3DSetClass<PointData>(EDGovernment.Communism.ToString(), Color.DarkOliveGreen, 1.0f);
+                datadict[(int)EDGovernment.Feudal] = new Data3DSetClass<PointData>(EDGovernment.Feudal.ToString(), Color.LightBlue, 1.0f);
+                datadict[(int)EDGovernment.Dictatorship] = new Data3DSetClass<PointData>(EDGovernment.Dictatorship.ToString(), Color.Blue, 1.0f);
+                datadict[(int)EDGovernment.Theocracy] = new Data3DSetClass<PointData>(EDGovernment.Theocracy.ToString(), Color.DarkBlue, 1.0f);
+                datadict[(int)EDGovernment.Cooperative] = new Data3DSetClass<PointData>(EDGovernment.Cooperative.ToString(), Color.Purple, 1.0f);
+                datadict[(int)EDGovernment.Patronage] = new Data3DSetClass<PointData>(EDGovernment.Patronage.ToString(), Color.LightCyan, 1.0f);
+                datadict[(int)EDGovernment.Confederacy] = new Data3DSetClass<PointData>(EDGovernment.Confederacy.ToString(), Color.Red, 1.0f);
+                datadict[(int)EDGovernment.Prison_Colony] = new Data3DSetClass<PointData>(EDGovernment.Prison_Colony.ToString(), Color.Orange, 1.0f);
+                datadict[(int)EDGovernment.None] = new Data3DSetClass<PointData>(EDGovernment.None.ToString(), Color.Gray, 1.0f);
+                datadict[(int)EDGovernment.Unknown] = new Data3DSetClass<PointData>(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
 
                 foreach (SystemClass si in StarList)
                 {
                     if (si.HasCoordinate)
                     {
-                        datadict[(int)si.primary_economy].AddPoint(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z);
+                        datadict[(int)si.primary_economy].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
                     }
                 }
 
@@ -267,7 +282,7 @@ namespace EDDiscovery2
             {
                 foreach (var dataset in datasets)
                 {
-                    dataset.DrawPoints();
+                    dataset.DrawAll();
                 }
             }
 
@@ -494,19 +509,11 @@ namespace EDDiscovery2
             
             private void buttonCenter_Click(object sender, EventArgs e)
             {
-                if (CenterSystem == null)
-                    CenterSystem = SystemData.GetSystem("sol");
                 SystemClass sys = SystemData.GetSystem(textBox_From.Text);
+                if (sys == null) return;
 
-                if (sys != null)
-                {
-                    CenterSystem = sys;
-                    ShowCenterSystem();
-                }
-                else
-                {
-                    ShowCenterSystem();
-                }
+                CenterSystem = sys;
+                ShowCenterSystem();
 
                 GenerateDataSets();
                 glControl1.Invalidate();
@@ -515,20 +522,11 @@ namespace EDDiscovery2
             private void ShowCenterSystem()
             {
                 if (CenterSystem == null)
-                    CenterSystem = SystemData.GetSystem("sol");
-
-                if (CenterSystem == null)
                 {
-                    CenterSystem = new SystemClass();
-                    CenterSystem.name = "Sol";
-                    CenterSystem.SearchName = "sol";
-                    CenterSystem.x = 0;
-                    CenterSystem.y = 0;
-                    CenterSystem.z = 0;
-
+                    CenterSystem = SystemData.GetSystem("sol") ?? new SystemClass {name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0};                    
                 }
 
-                label1.Text = CenterSystem.name + " x:" + CenterSystem.x.ToString("0.00") + " y:" + CenterSystem.y.ToString("0.00") + " z:" + CenterSystem.z.ToString("0.00");
+                label1.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
             }
         }
     }
