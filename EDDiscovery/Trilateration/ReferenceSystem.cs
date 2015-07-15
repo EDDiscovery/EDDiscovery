@@ -13,7 +13,10 @@ namespace EDDiscovery2.Trilateration
         public double Azimuth, Altitude;
         private SystemClass refSys;
 
-        
+        public SystemClass System
+        {
+            get { return refSys; }
+        }
 
         public ReferenceSystem(SystemClass refsys, SystemClass EstimatedPosition)
         {
