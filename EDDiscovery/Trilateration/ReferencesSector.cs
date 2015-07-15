@@ -11,6 +11,35 @@ namespace EDDiscovery2.Trilateration
         double AzimuthStart;
         double AltitudeStart;
 
+        public List<ReferenceSystem> usedReferences;
+        public List<ReferenceSystem> candidateReferences;
+
+
+        public double Width
+        {
+            get
+            {
+                return WidthAngle * Math.PI / 180;
+            }
+        }
+
+        public ReferencesSector(double azimuth, double altitude, int width)
+        {
+            AzimuthStart = azimuth * Math.PI / 180;
+            AltitudeStart = altitude * Math.PI / 180;
+            WidthAngle = width;
+
+            usedReferences = new List<ReferenceSystem>();
+            candidateReferences = new List<ReferenceSystem>();
+
+        }
+
+
+        public void AddCandidate(ReferenceSystem refSys)
+        {
+            candidateReferences.Add(refSys);
+        }
+
         public string Name
         {
             get
