@@ -15,6 +15,7 @@ using EDDiscovery2;
 using EDDiscovery2.DB;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using EDDiscovery2.Trilateration;
 
 
 namespace EDDiscovery
@@ -291,6 +292,9 @@ namespace EDDiscovery
                 textBoxX.Text = syspos.curSystem.x.ToString("#.#####");
                 textBoxY.Text = syspos.curSystem.y.ToString("#.#####");
                 textBoxZ.Text = syspos.curSystem.z.ToString("#.#####");
+
+
+                SuggestedReferences refereces = new SuggestedReferences(syspos.curSystem.x, syspos.curSystem.y, syspos.curSystem.z);
             }
             else
             {

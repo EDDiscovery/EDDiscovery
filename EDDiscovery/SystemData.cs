@@ -21,8 +21,7 @@ namespace EDDiscovery
 
     public class SystemData
     {
-        static JArray systems;
-        //static List<SystemClass> listSystems = new List<SystemClass>();
+       
 
         public SystemData()
         {
@@ -39,16 +38,7 @@ namespace EDDiscovery
             }
         }
 
-        public int Count
-        {
-            get
-            {
-                if (systems != null)
-                    return systems.Count;
-
-                return 0;
-            }
-        }
+      
 
         static public SystemClass GetSystem(string name)
         {

@@ -83,7 +83,7 @@ namespace EDDiscovery
                 request.Method = "GET";
                 string postData = query;
 
-                byte[] byteArray;
+                
                 // Set the ContentType property of the WebRequest.
                 request.ContentType = "application/json; charset=utf-8";
                 // Set the ContentLength property of the WebRequest.

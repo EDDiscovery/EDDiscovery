@@ -7,7 +7,7 @@ using System.Text;
 
 namespace EDDiscovery2.Trilateration
 {
-    public class ReferenceSystem : SystemClass
+    public class ReferenceSystem
     {
         public double Distance;
         public double Azimuth, Altitude;
@@ -15,11 +15,12 @@ namespace EDDiscovery2.Trilateration
 
         
 
-        public ReferenceSystem(SystemClass refSys, SystemClass EstimatedPosition)
+        public ReferenceSystem(SystemClass refsys, SystemClass EstimatedPosition)
         {
+            this.refSys = refsys;
             Azimuth = Math.Atan2(refSys.y - EstimatedPosition.y, refSys.x - EstimatedPosition.x);
             Distance = SystemData.Distance(refSys, EstimatedPosition);
-            Altitude= Math.Acos(refSys.z-EstimatedPosition.z/Distance);
+            Altitude= Math.Acos((refSys.z-EstimatedPosition.z)/Distance);
         }
 
     }

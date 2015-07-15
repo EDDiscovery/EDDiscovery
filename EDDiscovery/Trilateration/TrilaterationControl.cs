@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery.DB;
 using ThreadState = System.Threading.ThreadState;
+using EDDiscovery2.Trilateration;
 
 namespace EDDiscovery
 {
@@ -393,6 +394,14 @@ namespace EDDiscovery
         {
             // TODO for now, just add few systems at different locations
             // eventually we might implement something more clever here
+            var lastKnown = GetLastKnownSystem();
+             if (lastKnown!=null)
+             {
+
+                 SuggestedReferences refereces = new SuggestedReferences(lastKnown.x, lastKnown.y, lastKnown.z);
+
+             }
+
 
             var suggestedSystems = new List<string>
             {
@@ -414,12 +423,8 @@ namespace EDDiscovery
         private void PopulateClosestSystems()
         {
             // TODO: in future, we want this to be "predicted" by the direction and distances
-            
-            var lastKnown = (from systems
-                             in ((TravelHistoryControl)Parent).visitedSystems
-                             where systems.curSystem != null && systems.curSystem.HasCoordinate
-                             orderby systems.time descending
-                             select systems.curSystem).FirstOrDefault();
+
+            var lastKnown = GetLastKnownSystem();
 
             if (lastKnown == null)
             {
@@ -444,6 +449,16 @@ namespace EDDiscovery
                 var index = dataGridViewClosestSystems.Rows.Add(item.System.name, Math.Round(item.Distance, 2).ToString("0.00") + " Ly");
                 dataGridViewClosestSystems[0, index].Tag = item.System;
             }
+        }
+
+        private SystemClass GetLastKnownSystem()
+        {
+            var lastKnown = (from systems
+                             in ((TravelHistoryControl)Parent).visitedSystems
+                             where systems.curSystem != null && systems.curSystem.HasCoordinate
+                             orderby systems.time descending
+                             select systems.curSystem).FirstOrDefault();
+            return lastKnown;
         }
 
         private void dataGridViewClosestSystems_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)

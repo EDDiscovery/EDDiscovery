@@ -376,7 +376,7 @@ namespace EDDiscovery.DB
 
         public static double DistanceDB(SystemClass s1, SystemClass s2)
         {
-            double distly = -1;
+         
             List<DistanceClass> dists = new List<DistanceClass>();
             try
             {
