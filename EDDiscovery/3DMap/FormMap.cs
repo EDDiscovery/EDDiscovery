@@ -123,29 +123,20 @@ namespace EDDiscovery2
 
                 foreach (SystemClass si in StarList)
                 {
-                    if (si.HasCoordinate)
-                    {
-                        dataset.Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
-                    }
+                    AddSystem(si, dataset);
                 }
                 datasets.Add(dataset);
 
 
-                dataset = new Data3DSetClass<PointData>("visitedstars", Color.Red, 2.0f);
-
-                if (visitedSystems != null)
+                if (visitedSystems != null && visitedSystems.Any())
                 {
-                    SystemClass star;
+                    dataset = new Data3DSetClass<PointData>("visitedstars", Color.Red, 2.0f);
                     foreach (SystemClass sp in VisitedStars.Values)
                     {
-                        star = sp;
-                        if (star != null)
-                        {
-                            dataset.Add(new PointData(star.x - CenterSystem.x, star.y - CenterSystem.y, CenterSystem.z - star.z));
-                        }
+                        AddSystem(sp, dataset);
                     }
+                    datasets.Add(dataset);
                 }
-                datasets.Add(dataset);
 
 
                 dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
@@ -154,6 +145,11 @@ namespace EDDiscovery2
                 dataset.Add(new PointData(0, 0, 0));
                 datasets.Add(dataset);
 
+                dataset = new Data3DSetClass<PointData>("Interest", Color.Purple, 10.0f);
+                AddSystem("sol", dataset);
+                AddSystem("sagittarius a*", dataset);
+                AddSystem("polaris", dataset);
+                datasets.Add(dataset);
 
                 // For test only
 
@@ -175,18 +171,31 @@ namespace EDDiscovery2
                 sw.Start();
                 SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
 
-                ReferenceSystem rsys;
-
                 for (int ii = 0; ii < 16; ii++)
                 {
-                    rsys = references.GetCandidate();
-                    references.AddReferenceStar(rsys.System);
-                    System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", rsys.System.name, rsys.Distance.ToString("0.00"), rsys.System.x, rsys.System.y, rsys.System.z));
-                    lineSet.Add(new LineData(0,0,0,rsys.System.x - CenterSystem.x, rsys.System.y - CenterSystem.y, CenterSystem.z - rsys.System.z));
+                    var rsys = references.GetCandidate();
+                    if (rsys == null) break;
+                    var system = rsys.System;
+                    references.AddReferenceStar(system);
+                    System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
+                    lineSet.Add(new LineData(0,0,0,system.x - CenterSystem.x, system.y - CenterSystem.y, CenterSystem.z - system.z));
                 }
                 sw.Stop();
                 System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
                 datasets.Add(lineSet);
+            }
+
+            private void AddSystem(string systemName, Data3DSetClass<PointData> dataset)
+            {
+                AddSystem(SystemData.GetSystem(systemName), dataset);
+            }
+
+            private void AddSystem(SystemClass system, Data3DSetClass<PointData> dataset)
+            {
+                if (system != null && system.HasCoordinate)
+                {
+                    dataset.Add(new PointData(system.x - CenterSystem.x, system.y - CenterSystem.y, CenterSystem.z - system.z));
+                }
             }
 
 

@@ -303,7 +303,24 @@ namespace EDDiscovery
                         TargetSystem.y = trilaterationResult.Coordinate.Y;
                         TargetSystem.z = trilaterationResult.Coordinate.Z;
                     }
+
+
                 });
+
+
+                var references = new SuggestedReferences(trilaterationResult.Coordinate.X, trilaterationResult.Coordinate.Y, trilaterationResult.Coordinate.Z);
+                var suggestedSystems = new List<SystemClass>();
+                for (int ii = 0; ii < 7; ii++)
+                {
+                    var rsys = references.GetCandidate();
+                    if (rsys == null) break;
+                    var system = rsys.System;
+                    references.AddReferenceStar(system);
+                    System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
+                    suggestedSystems.Add(system);
+                }
+
+                Invoke((MethodInvoker) (() => PopulateSuggestedSystems(suggestedSystems)));
             }
             else
             {
@@ -408,31 +425,49 @@ namespace EDDiscovery
         {
             // TODO for now, just add few systems at different locations
             // eventually we might implement something more clever here
-            var lastKnown = GetLastKnownSystem();
-             if (lastKnown!=null)
-             {
-
-                 SuggestedReferences refereces = new SuggestedReferences(lastKnown.x, lastKnown.y, lastKnown.z);
-
-             }
-
+            //var lastKnown = GetLastKnownSystem();
+            // if (lastKnown!=null)
+            // {
+            //     SuggestedReferences refereces = new SuggestedReferences(lastKnown.x, lastKnown.y, lastKnown.z);
+            // }
 
             var suggestedSystems = new List<string>
             {
                 "Sol", "Sadr", "Maia", "Polaris", "EZ Orionis",
                 "Kappa-2 Coronae Austrinae", "Eta Carinae", "HR 969", "UX Sculptoris"
             };
+            PopulateSuggestedSystems(suggestedSystems);
+        }
+
+        private void PopulateSuggestedSystems(ICollection<string> suggestedSystems)
+        {
+            dataGridViewSuggestedSystems.Rows.Clear();
             foreach (var system in SystemData.SystemList)
             {
                 if (!suggestedSystems.Contains(system.name))
                 {
                     continue;
                 }
-
-                var index = dataGridViewSuggestedSystems.Rows.Add(system.name);
-                dataGridViewSuggestedSystems[0, index].Tag = system;
+                AddSuggestedSystem(system);
             }
         }
+
+        private void AddSuggestedSystem(SystemClass system)
+        {
+            var index = dataGridViewSuggestedSystems.Rows.Add(system.name);
+            dataGridViewSuggestedSystems[0, index].Tag = system;
+        }
+
+
+        private void PopulateSuggestedSystems(IEnumerable<SystemClass> suggestedSystems)
+        {
+            dataGridViewSuggestedSystems.Rows.Clear();
+            foreach (var system in suggestedSystems)
+            {
+                AddSuggestedSystem(system);
+            }
+        }
+
 
         private void PopulateClosestSystems()
         {
