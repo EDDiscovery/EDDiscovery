@@ -90,19 +90,32 @@ namespace EDDiscovery2.Trilateration
             for (int i = 0; i < sections; i++)
                 for (int j = 0; j < sections / 2; j++)
                 {
-                    if (sectors[i, j].ReferencesCount == 0 && sectors[i, j].CandidatesCount > 1)  // An unused sector with candidates left?
+                    if (sectors[i, j].ReferencesCount == 0 && sectors[i, j].CandidatesCount > 0)  // An unused sector with candidates left?
                     {
+                        double dist;
+                        double mindist = 10;
+
                         for (int ii = 0; ii < sections; ii++)
                             for (int jj = 0; jj < sections / 2; jj++)
                             {
-                                var dist = CalculateAngularDistance(sectors[i, j].AzimuthCenterRad, sectors[i, j].LatitudeCenterRad, sectors[ii, jj].AzimuthCenterRad, sectors[ii, jj].LatitudeCenterRad);
-                                if (dist > maxdistance)  // New candidate
+                                if (sectors[ii, jj].CandidatesCount > 0)
                                 {
-                                    maxdistance = dist;
-                                    sectorcandidate = sectors[i, j];
-                                }
+                                    dist = CalculateAngularDistance(sectors[i, j].AzimuthCenterRad, sectors[i, j].LatitudeCenterRad, sectors[ii, jj].AzimuthCenterRad, sectors[ii, jj].LatitudeCenterRad);
 
+                                    if (dist > 0.001)
+                                    {
+                                        if (dist < mindist)
+                                            mindist = dist;
+                                    }
+                                }
                             }
+
+
+                        if (mindist > maxdistance)  // New candidate
+                        {
+                            maxdistance = mindist;
+                            sectorcandidate = sectors[i, j];
+                        }
 
                     }
                 }
