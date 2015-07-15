@@ -7,60 +7,109 @@ using System.Drawing;
 
 namespace EDDiscovery2._3DMap
 {
-    public class Data3DSetClass
+    public interface IDrawingPrimative
     {
-        public class VertexData
-        {
-            public double x, y, z;
+        PrimitiveType Type { get; }
+        float Size { get; set; }
+        Color Color { get; set; }
+        void Draw();
+    }
 
-            public VertexData(double x, double y, double z)
-            {
-                this.x = x;
-                this.y = y;
-                this.z = z;
-            }
+    public class PointData : IDrawingPrimative
+    {
+        public double x, y, z;
+
+        public PointData(double x, double y, double z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
 
-        public string name;
-        public PrimitiveType primtype;
-        public Color color;
-        public float pointSize;
-        public List<VertexData> points;
+        public PrimitiveType Type { get { return PrimitiveType.Points; } }
+        public Color Color { get; set; }
+        public float Size { get; set; }
+
+        public void Draw()
+        {
+            GL.PointSize(Size);
+
+            GL.Begin(Type);
+            GL.Color3(Color);
+            GL.Vertex3(x, y, z);
+            GL.End();
+        }
+    }
+
+    public class LineData : IDrawingPrimative
+    {
+        public double x1, y1, z1;
+        public double x2, y2, z2;
+
+        public LineData(double x1, double y1, double z1, double x2, double y2, double z2)
+        {
+            this.x1 = x1;
+            this.y1 = y1;
+            this.z1 = z1;
+            this.x2 = x2;
+            this.y2 = y2;
+            this.z2 = z2;
+        }
+
+        public PrimitiveType Type { get { return PrimitiveType.Lines; } }
+        public Color Color { get; set; }
+        public float Size { get; set; }
+
+        public void Draw()
+        {
+            GL.PointSize(Size);
+
+            GL.Begin(Type);
+            GL.Color3(Color);
+            GL.Vertex3(x1, y1, z1);
+            GL.Vertex3(x2, y2, z2);
+            GL.End();
+        }
+    }
+    public class Data3DSetClass<T> : IData3DSet where T : IDrawingPrimative
+    {
+        public string Name;
+        private readonly Color color;
+        private readonly float pointSize;
+        private readonly List<T> primatives;
 
         public bool Visible;
 
-        public Data3DSetClass(string Name, PrimitiveType type, Color color, float pointsize)
+        public Data3DSetClass(string name, Color color, float pointsize)
         {
-            name = Name;
-            primtype = type;
+            Name = name;
             this.color = color;
             pointSize = pointsize;
-            points = new List<VertexData>();
+            primatives = new List<T>();
             Visible = true;
         }
 
 
-        public void AddPoint(double x, double y, double z)
+        public void Add(T primative)
         {
-            VertexData vertex = new VertexData(x, y, z);
-            points.Add(vertex);
+            primative.Color = color;
+            primative.Size = pointSize;
+            primatives.Add(primative);
         }
 
-        public void DrawPoints()
+        public void DrawAll()
         {
-            if (Visible)
+            if (!Visible) return;
+
+            foreach (var primative in primatives)
             {
-                GL.PointSize(pointSize);
-
-                GL.Begin(primtype);
-                GL.Color3(color);
-
-                foreach (VertexData vertex in points)
-                {
-                    GL.Vertex3(vertex.x, vertex.y, vertex.z);
-                }
-                GL.End();
+                primative.Draw();
             }
         }
+    }
+
+    public interface IData3DSet
+    {
+        void DrawAll();
     }
 }

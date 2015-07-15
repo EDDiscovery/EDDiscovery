@@ -513,7 +513,16 @@ namespace EDDiscovery
             //string json = edsc.SubmitDistances("Finwen", "19 Geminorum", "HIP 30687", (float)19.26);
 
 
-            FormMap map2 = new FormMap();
+            FormMap map2;
+            if (TrilaterationControl.Visible && TrilaterationControl.TargetSystem!=null)
+            {
+                map2 = new FormMap(TrilaterationControl.TargetSystem) {ReferenceSystems = TrilaterationControl.CurrentReferenceSystems.ToList()};
+            }
+            else
+            {
+                map2 = new FormMap();
+            }
+
             map2.visitedSystems = visitedSystems;
             map2.Show();
 
