@@ -81,34 +81,21 @@ namespace EDDiscovery2.Trilateration
 
         public ReferenceSystem GetCandidate()
         {
-            if (NrOfRefenreceSystems == 0)
-            {
-                SystemClass sys = SystemData.GetSystem("Sol");
 
-                if (EstimatedPosition.x == 0 && EstimatedPosition.y==0 && EstimatedPosition.z == 0)
-                    sys = SystemData.GetSystem("Sirius");
 
-                if (sys == null)
-                    return null;   // Should not happend
-
-                ReferenceSystem refSys = new ReferenceSystem(sys, EstimatedPosition);
-
-                return refSys;
-            }
-
-            double maxdistance=0, dist;
-            ReferencesSector sectorcandidate=null;
+            double maxdistance = 0;
+            ReferencesSector sectorcandidate = null;
 
             // Get Sector with maximum distance for all others...
             for (int i = 0; i < sections; i++)
                 for (int j = 0; j < sections / 2; j++)
                 {
                     if (sectors[i, j].ReferencesCount == 0 && sectors[i, j].CandidatesCount > 1)  // An unused sector with candidates left?
-                    { 
+                    {
                         for (int ii = 0; ii < sections; ii++)
                             for (int jj = 0; jj < sections / 2; jj++)
                             {
-                                dist = CalculateAngularDistance(sectors[i, j].AzimuthCenterRad, sectors[i, j].LatitudeCenterRad, sectors[ii, jj].AzimuthCenterRad, sectors[ii, jj].LatitudeCenterRad);
+                                var dist = CalculateAngularDistance(sectors[i, j].AzimuthCenterRad, sectors[i, j].LatitudeCenterRad, sectors[ii, jj].AzimuthCenterRad, sectors[ii, jj].LatitudeCenterRad);
                                 if (dist > maxdistance)  // New candidate
                                 {
                                     maxdistance = dist;
@@ -120,11 +107,25 @@ namespace EDDiscovery2.Trilateration
                     }
                 }
 
-
-
             if (sectorcandidate == null)
-                return null;
+            {
+                if (NrOfRefenreceSystems == 0)
+                {
+                    SystemClass sys = SystemData.GetSystem("Sol");
 
+                    if (EstimatedPosition.x == 0 && EstimatedPosition.y == 0 && EstimatedPosition.z == 0)
+                        sys = SystemData.GetSystem("Sirius");
+
+                    if (sys == null)
+                        return null;   // Should not happend
+
+                    ReferenceSystem refSys = new ReferenceSystem(sys, EstimatedPosition);
+
+                    return refSys;
+                }
+
+                return null;
+            }
 
             return sectorcandidate.candidateReferences[0];  // Todo change to a better later...
         }

@@ -22,7 +22,7 @@ namespace EDDiscovery.DB
     }
 
 
-
+    [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
     public class SystemClass
     {
         public int id;
