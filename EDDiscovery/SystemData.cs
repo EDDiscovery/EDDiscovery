@@ -45,7 +45,7 @@ namespace EDDiscovery
             if (name==null)
                 return null;
 
-            string lname = name.ToLower();
+            string lname = name.Trim().ToLower();
 
 
             if (SQLiteDBClass.dictSystems.ContainsKey(lname))
