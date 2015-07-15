@@ -94,7 +94,7 @@ namespace EDDiscovery
 
             if (e.ColumnIndex == 1)
             {
-                var value = e.FormattedValue.ToString();
+                var value = e.FormattedValue.ToString().Trim();
 
                 if (value == "")
                 {
@@ -111,14 +111,13 @@ namespace EDDiscovery
             if (e.ColumnIndex == 0)
             {
                 var cell = dataGridViewDistances[e.ColumnIndex, e.RowIndex];
-                var value = cell.Value;
+                var value = cell.Value as string;
                 cell.Style.BackColor = Color.White;
                 if (value == null)
                 {
                     return;
                 }
-                var stringValue = value.ToString();
-                var system = SystemData.GetSystem(stringValue);
+                var system = SystemData.GetSystem(value);
 
                 if (system == null)
                 {
@@ -127,7 +126,7 @@ namespace EDDiscovery
                     return;
                 }
 
-                if (stringValue != system.name)
+                if (value != system.name)
                 {
                     cell.Value = system.name;
                 }
@@ -308,17 +307,9 @@ namespace EDDiscovery
                 });
 
 
-                var references = new SuggestedReferences(trilaterationResult.Coordinate.X, trilaterationResult.Coordinate.Y, trilaterationResult.Coordinate.Z);
-                var suggestedSystems = new List<SystemClass>();
-                for (int ii = 0; ii < 7; ii++)
-                {
-                    var rsys = references.GetCandidate();
-                    if (rsys == null) break;
-                    var system = rsys.System;
-                    references.AddReferenceStar(system);
-                    System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
-                    suggestedSystems.Add(system);
-                }
+                var suggestedSystems = GetListOfSuggestedSystems(trilaterationResult.Coordinate.X, 
+                                                                 trilaterationResult.Coordinate.Y,
+                                                                 trilaterationResult.Coordinate.Z, 10);
 
                 Invoke((MethodInvoker) (() => PopulateSuggestedSystems(suggestedSystems)));
             }
@@ -383,6 +374,23 @@ namespace EDDiscovery
             });
         }
 
+        private static IEnumerable<SystemClass> GetListOfSuggestedSystems(double x, double y, double z, int count)
+        {
+            var references = new SuggestedReferences(x, y, z);
+            var suggestedSystems = new List<SystemClass>();
+            for (int ii = 0; ii < count; ii++)
+            {
+                var rsys = references.GetCandidate();
+                if (rsys == null) break;
+                var system = rsys.System;
+                references.AddReferenceStar(system);
+                System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name,
+                    rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
+                suggestedSystems.Add(system);
+            }
+            return suggestedSystems;
+        }
+
         private void ClearDataGridViewDistancesRows()
         {
             // keep systems, clear distances
@@ -423,20 +431,22 @@ namespace EDDiscovery
 
         private void PopulateSuggestedSystems()
         {
-            // TODO for now, just add few systems at different locations
-            // eventually we might implement something more clever here
-            //var lastKnown = GetLastKnownSystem();
-            // if (lastKnown!=null)
-            // {
-            //     SuggestedReferences refereces = new SuggestedReferences(lastKnown.x, lastKnown.y, lastKnown.z);
-            // }
+            var lastKnown = GetLastKnownSystem();
+            if (lastKnown != null)
+            {
+                var suggestedSystems = GetListOfSuggestedSystems(lastKnown.x,
+                                                                 lastKnown.y,
+                                                                 lastKnown.z, 10);
+                PopulateSuggestedSystems(suggestedSystems);
+                return;
+            }
 
-            var suggestedSystems = new List<string>
+            var suggestedSystemNames = new List<string>
             {
                 "Sol", "Sadr", "Maia", "Polaris", "EZ Orionis",
                 "Kappa-2 Coronae Austrinae", "Eta Carinae", "HR 969", "UX Sculptoris"
             };
-            PopulateSuggestedSystems(suggestedSystems);
+            PopulateSuggestedSystems(suggestedSystemNames);
         }
 
         private void PopulateSuggestedSystems(ICollection<string> suggestedSystems)
@@ -457,7 +467,6 @@ namespace EDDiscovery
             var index = dataGridViewSuggestedSystems.Rows.Add(system.name);
             dataGridViewSuggestedSystems[0, index].Tag = system;
         }
-
 
         private void PopulateSuggestedSystems(IEnumerable<SystemClass> suggestedSystems)
         {
