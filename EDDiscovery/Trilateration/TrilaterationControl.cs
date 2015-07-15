@@ -192,6 +192,14 @@ namespace EDDiscovery
             trilaterationThread.Start();
         }
 
+
+        public IEnumerable<SystemClass> CurrentReferenceSystems
+        {
+            get
+            {
+                return (dataGridViewDistances.Rows.OfType<DataGridViewRow>().Select(row => row.Cells[0].Tag)).OfType<SystemClass>();
+            }
+        }
         private void RunTrilaterationWorker()
         { 
             var systemsEntries = new Dictionary<SystemClass, Trilateration.Entry>();

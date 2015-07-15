@@ -34,11 +34,10 @@ namespace EDDiscovery2
 
             public List<SystemClass> StarList;
             public List<SystemPosition> visitedSystems;
+            public List<SystemClass> ReferenceSystems;
             private Dictionary<string, SystemClass> VisitedStars;
 
             private List<IData3DSet> datasets;
-
-
 
 
             public FormMap()
@@ -92,15 +91,13 @@ namespace EDDiscovery2
 
             public void InitData()
             {
-                SystemClass star;
-
                 VisitedStars = new Dictionary<string, SystemClass>();
 
                 if (visitedSystems != null)
                 {
                     foreach (SystemPosition sp in visitedSystems)
                     {
-                        star = SystemData.GetSystem(sp.Name);
+                        SystemClass star = SystemData.GetSystem(sp.Name);
                         if (star != null && star.HasCoordinate)
                         {
                             VisitedStars[star.SearchName] = star;
@@ -118,12 +115,12 @@ namespace EDDiscovery2
 
             private void GenerateDataSetStandard()
             {
-                Data3DSetClass<PointData> dataset;
                 InitGenerateDataSet();
 
                 datasets = new List<IData3DSet>();
 
-                dataset = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
+                var dataset = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
+
                 foreach (SystemClass si in StarList)
                 {
                     if (si.HasCoordinate)
@@ -158,10 +155,22 @@ namespace EDDiscovery2
                 datasets.Add(dataset);
 
 
-                var lineSet = new Data3DSetClass<LineData>("Reference", Color.Green, 5.0f);
-
-
                 // For test only
+
+                if (ReferenceSystems != null && ReferenceSystems.Any())
+                {
+                    var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
+                    foreach (var refSystem in ReferenceSystems)
+                    {
+                        referenceLines.Add(new LineData(0, 0, 0, refSystem.x - CenterSystem.x, refSystem.y - CenterSystem.y, CenterSystem.z - refSystem.z));
+                    }
+
+                    datasets.Add(referenceLines);
+                }
+
+                var lineSet = new Data3DSetClass<LineData>("SuggestedReference", Color.DarkOrange, 5.0f);
+
+
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
