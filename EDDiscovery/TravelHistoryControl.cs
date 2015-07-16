@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -516,7 +517,9 @@ namespace EDDiscovery
             FormMap map2;
             if (TrilaterationControl.Visible && TrilaterationControl.TargetSystem!=null)
             {
-                map2 = new FormMap(TrilaterationControl.TargetSystem) {ReferenceSystems = TrilaterationControl.CurrentReferenceSystems.ToList()};
+                var centerSystem = TrilaterationControl.TargetSystem;
+                if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = TrilaterationControl.LastKnownSystem;
+                map2 = new FormMap(centerSystem) { ReferenceSystems = TrilaterationControl.CurrentReferenceSystems.ToList() };
             }
             else
             {
