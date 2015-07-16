@@ -47,7 +47,7 @@ namespace EDDiscovery2
 
             public FormMap(SystemClass centerSystem) : this()
             {
-                CenterSystem = centerSystem;
+                if (centerSystem !=null && centerSystem.HasCoordinate) CenterSystem = centerSystem;
             }
 
 

@@ -199,6 +199,7 @@ namespace EDDiscovery
                 return (dataGridViewDistances.Rows.OfType<DataGridViewRow>().Select(row => row.Cells[0].Tag)).OfType<SystemClass>();
             }
         }
+
         private void RunTrilaterationWorker()
         { 
             var systemsEntries = new Dictionary<SystemClass, Trilateration.Entry>();
@@ -431,7 +432,7 @@ namespace EDDiscovery
 
         private void PopulateSuggestedSystems()
         {
-            var lastKnown = GetLastKnownSystem();
+            var lastKnown = LastKnownSystem;
             if (lastKnown != null)
             {
                 var suggestedSystems = GetListOfSuggestedSystems(lastKnown.x,
@@ -482,7 +483,7 @@ namespace EDDiscovery
         {
             // TODO: in future, we want this to be "predicted" by the direction and distances
 
-            var lastKnown = GetLastKnownSystem();
+            var lastKnown = LastKnownSystem;
 
             if (lastKnown == null)
             {
@@ -509,14 +510,17 @@ namespace EDDiscovery
             }
         }
 
-        private SystemClass GetLastKnownSystem()
+        public SystemClass LastKnownSystem
         {
-            var lastKnown = (from systems
-                             in ((TravelHistoryControl)Parent).visitedSystems
-                             where systems.curSystem != null && systems.curSystem.HasCoordinate
-                             orderby systems.time descending
-                             select systems.curSystem).FirstOrDefault();
-            return lastKnown;
+            get
+            {
+                var lastKnown = (from systems
+                    in ((TravelHistoryControl) Parent).visitedSystems
+                    where systems.curSystem != null && systems.curSystem.HasCoordinate
+                    orderby systems.time descending
+                    select systems.curSystem).FirstOrDefault();
+                return lastKnown;
+            }
         }
 
         private void dataGridViewClosestSystems_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
