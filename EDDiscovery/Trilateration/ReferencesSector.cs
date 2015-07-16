@@ -11,8 +11,10 @@ namespace EDDiscovery2.Trilateration
         public double AzimuthStartRad;
         public double LatitudeStartRad;
 
-        public List<ReferenceSystem> usedReferences;
-        public List<ReferenceSystem> candidateReferences;
+        private List<ReferenceSystem> usedReferences;
+        private List<ReferenceSystem> candidateReferences;
+        private List<ReferenceSystem> optcandidateReferences;
+
 
         public double Azimuth
         {
@@ -72,13 +74,26 @@ namespace EDDiscovery2.Trilateration
 
             usedReferences = new List<ReferenceSystem>();
             candidateReferences = new List<ReferenceSystem>();
+            optcandidateReferences = new List<ReferenceSystem>();
 
         }
 
+        public ReferenceSystem GetBestCandidate()
+        {
+            var candidate = from p in optcandidateReferences  orderby p.Weight ascending select p;
+
+            return candidate.First<ReferenceSystem>();
+        }
 
         public void AddCandidate(ReferenceSystem refSys)
         {
             candidateReferences.Add(refSys);
+
+            
+            if (optcandidateReferences.Count < 5)
+                optcandidateReferences.Add(refSys);
+            else if (optcandidateReferences.Count < 50 && refSys.Distance < 1000 && refSys.Distance > 100)
+                optcandidateReferences.Add(refSys);
         }
 
         public void AddReference(ReferenceSystem refSys)
