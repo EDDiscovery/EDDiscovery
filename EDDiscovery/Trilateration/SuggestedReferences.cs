@@ -36,7 +36,7 @@ namespace EDDiscovery2.Trilateration
             {
                 for (int j = 0; j < sections/2; j++)
                 {
-                    System.Diagnostics.Trace.WriteLine(i.ToString() + ":" + j.ToString()+ "  " + sectors[i, j].Name + "  " + sectors[i, j].candidateReferences.Count.ToString());
+                    System.Diagnostics.Trace.WriteLine(i.ToString() + ":" + j.ToString() + "  " + sectors[i, j].Name + "  " + sectors[i, j].CandidatesCount.ToString());
                 }
             }
         }
@@ -140,7 +140,7 @@ namespace EDDiscovery2.Trilateration
                 return null;
             }
 
-            return sectorcandidate.candidateReferences[0];  // Todo change to a better later...
+            return sectorcandidate.GetBestCandidate(); 
         }
 
         public void AddReferenceStar(SystemClass sys)

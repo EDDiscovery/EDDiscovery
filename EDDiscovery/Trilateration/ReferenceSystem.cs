@@ -18,6 +18,15 @@ namespace EDDiscovery2.Trilateration
             get { return refSys; }
         }
 
+
+        public double Weight
+        {
+            get
+            {
+                return refSys.name.Length + Distance / 100;
+            }
+        }
+
         public ReferenceSystem(SystemClass refsys, SystemClass EstimatedPosition)
         {
             this.refSys = refsys;
