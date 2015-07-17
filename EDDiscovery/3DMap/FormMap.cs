@@ -177,6 +177,7 @@ namespace EDDiscovery2
                     if (rsys == null) break;
                     var system = rsys.System;
                     references.AddReferenceStar(system);
+                    if (ReferenceSystems != null && ReferenceSystems.Any(s =>s.name==system.name)) continue;
                     System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
                     lineSet.Add(new LineData(0,0,0,system.x - CenterSystem.x, system.y - CenterSystem.y, CenterSystem.z - system.z));
                 }
