@@ -515,7 +515,7 @@ namespace EDDiscovery
 
 
             FormMap map2;
-            if (TrilaterationControl.Visible && TrilaterationControl.TargetSystem!=null)
+            if (TrilaterationControl.Visible)
             {
                 var centerSystem = TrilaterationControl.TargetSystem;
                 if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = TrilaterationControl.LastKnownSystem;
