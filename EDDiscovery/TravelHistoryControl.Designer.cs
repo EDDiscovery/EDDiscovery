@@ -82,30 +82,35 @@
             this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
             this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
             this.panelRight = new System.Windows.Forms.Panel();
-            this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
             this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.panelBottom = new System.Windows.Forms.Panel();
+            this.panelMain = new System.Windows.Forms.Panel();
+            this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panelRight.SuspendLayout();
+            this.panelBottom.SuspendLayout();
+            this.panelMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // richTextBox_History
             // 
-            this.richTextBox_History.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.richTextBox_History.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox_History.Location = new System.Drawing.Point(21, 3);
+            this.richTextBox_History.Location = new System.Drawing.Point(3, 3);
             this.richTextBox_History.Name = "richTextBox_History";
-            this.richTextBox_History.Size = new System.Drawing.Size(570, 70);
+            this.richTextBox_History.Size = new System.Drawing.Size(588, 91);
             this.richTextBox_History.TabIndex = 6;
             this.richTextBox_History.Text = "";
             // 
             // button_RefreshHistory
             // 
             this.button_RefreshHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_RefreshHistory.Location = new System.Drawing.Point(505, 78);
+            this.button_RefreshHistory.Location = new System.Drawing.Point(517, 7);
             this.button_RefreshHistory.Name = "button_RefreshHistory";
-            this.button_RefreshHistory.Size = new System.Drawing.Size(83, 23);
+            this.button_RefreshHistory.Size = new System.Drawing.Size(69, 23);
             this.button_RefreshHistory.TabIndex = 5;
             this.button_RefreshHistory.Text = "Refresh";
             this.button_RefreshHistory.UseVisualStyleBackColor = true;
@@ -115,7 +120,7 @@
             // 
             this.labelHeader.AutoSize = true;
             this.labelHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelHeader.Location = new System.Drawing.Point(17, 76);
+            this.labelHeader.Location = new System.Drawing.Point(3, 7);
             this.labelHeader.Name = "labelHeader";
             this.labelHeader.Size = new System.Drawing.Size(110, 18);
             this.labelHeader.TabIndex = 7;
@@ -135,9 +140,9 @@
             this.ColumnSystem,
             this.ColumnDistance,
             this.ColumnNote});
-            this.dataGridView1.Location = new System.Drawing.Point(21, 106);
+            this.dataGridView1.Location = new System.Drawing.Point(3, 34);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(570, 471);
+            this.dataGridView1.Size = new System.Drawing.Size(589, 444);
             this.dataGridView1.TabIndex = 8;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
@@ -185,7 +190,7 @@
             "2 Weeks",
             "Month",
             "All"});
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(247, 77);
+            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(259, 8);
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 21);
             this.comboBoxHistoryWindow.TabIndex = 9;
@@ -195,7 +200,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(140, 80);
+            this.label2.Location = new System.Drawing.Point(152, 11);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(101, 13);
             this.label2.TabIndex = 10;
@@ -616,23 +621,10 @@
             this.panelRight.Size = new System.Drawing.Size(297, 586);
             this.panelRight.TabIndex = 22;
             // 
-            // TrilaterationControl
-            // 
-            this.TrilaterationControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TrilaterationControl.Location = new System.Drawing.Point(21, 76);
-            this.TrilaterationControl.Name = "TrilaterationControl";
-            this.TrilaterationControl.Size = new System.Drawing.Size(571, 501);
-            this.TrilaterationControl.TabIndex = 20;
-            this.TrilaterationControl.Visible = false;
-            this.TrilaterationControl.Load += new System.EventHandler(this.TrilaterationControl_Load);
-            this.TrilaterationControl.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
-            // 
             // textBoxFilter
             // 
             this.textBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxFilter.Location = new System.Drawing.Point(399, 78);
+            this.textBoxFilter.Location = new System.Drawing.Point(411, 9);
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(100, 20);
             this.textBoxFilter.TabIndex = 23;
@@ -643,26 +635,57 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(352, 80);
+            this.label1.Location = new System.Drawing.Point(364, 11);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 13);
             this.label1.TabIndex = 24;
             this.label1.Text = "Search";
             // 
+            // panelBottom
+            // 
+            this.panelBottom.Controls.Add(this.richTextBox_History);
+            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelBottom.Location = new System.Drawing.Point(0, 484);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(594, 102);
+            this.panelBottom.TabIndex = 25;
+            // 
+            // panelMain
+            // 
+            this.panelMain.Controls.Add(this.labelHeader);
+            this.panelMain.Controls.Add(this.label1);
+            this.panelMain.Controls.Add(this.TrilaterationControl);
+            this.panelMain.Controls.Add(this.textBoxFilter);
+            this.panelMain.Controls.Add(this.dataGridView1);
+            this.panelMain.Controls.Add(this.button_RefreshHistory);
+            this.panelMain.Controls.Add(this.label2);
+            this.panelMain.Controls.Add(this.comboBoxHistoryWindow);
+            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMain.Location = new System.Drawing.Point(0, 0);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(594, 484);
+            this.panelMain.TabIndex = 26;
+            // 
+            // TrilaterationControl
+            // 
+            this.TrilaterationControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TrilaterationControl.Location = new System.Drawing.Point(20, 80);
+            this.TrilaterationControl.Name = "TrilaterationControl";
+            this.TrilaterationControl.Size = new System.Drawing.Size(479, 347);
+            this.TrilaterationControl.TabIndex = 20;
+            this.TrilaterationControl.Visible = false;
+            this.TrilaterationControl.Load += new System.EventHandler(this.TrilaterationControl_Load);
+            this.TrilaterationControl.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBoxFilter);
+            this.Controls.Add(this.panelMain);
+            this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelRight);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.comboBoxHistoryWindow);
-            this.Controls.Add(this.labelHeader);
-            this.Controls.Add(this.richTextBox_History);
-            this.Controls.Add(this.button_RefreshHistory);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.TrilaterationControl);
             this.Name = "TravelHistoryControl";
             this.Size = new System.Drawing.Size(891, 586);
             this.Load += new System.EventHandler(this.TravelHistoryControl_Load);
@@ -671,8 +694,10 @@
             this.panel1.PerformLayout();
             this.panelRight.ResumeLayout(false);
             this.panelRight.PerformLayout();
+            this.panelBottom.ResumeLayout(false);
+            this.panelMain.ResumeLayout(false);
+            this.panelMain.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -732,5 +757,7 @@
         private System.Windows.Forms.Panel panelRight;
         private System.Windows.Forms.TextBox textBoxFilter;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panelBottom;
+        private System.Windows.Forms.Panel panelMain;
     }
 }

@@ -197,13 +197,6 @@ namespace EDDiscovery2.EDDB
 
             db.Connect2DB();
 
-            //int lastupdated =  db.QueryValueInt("SELECT Max(eddb_updated_at ) FROM Systems", -1);
-
-            //var result = from a in eddbsystems where a.eddb_updated_at > lastupdated  orderby a.eddb_updated_at  select a;
-
-            //if (result.Count() == 0)
-            //    return true ;
-
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
