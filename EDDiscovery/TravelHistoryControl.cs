@@ -514,20 +514,20 @@ namespace EDDiscovery
             //string json = edsc.SubmitDistances("Finwen", "19 Geminorum", "HIP 30687", (float)19.26);
 
 
-            FormMap map2;
-            if (TrilaterationControl.Visible)
-            {
-                var centerSystem = TrilaterationControl.TargetSystem;
-                if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = TrilaterationControl.LastKnownSystem;
-                map2 = new FormMap(centerSystem) { ReferenceSystems = TrilaterationControl.CurrentReferenceSystems.ToList() };
-            }
-            else
-            {
-                map2 = new FormMap();
-            }
+            //FormMap map2;
+            //if (TrilaterationControl.Visible)
+            //{
+            //    var centerSystem = TrilaterationControl.TargetSystem;
+            //    if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = TrilaterationControl.LastKnownSystem;
+            //    map2 = new FormMap(centerSystem) { ReferenceSystems = TrilaterationControl.CurrentReferenceSystems.ToList() };
+            //}
+            //else
+            //{
+            //    map2 = new FormMap();
+            //}
 
-            map2.visitedSystems = visitedSystems;
-            map2.Show();
+            //map2.visitedSystems = visitedSystems;
+            //map2.Show();
 
         }
 
@@ -706,13 +706,13 @@ namespace EDDiscovery
 
                     var result = visitedSystems.OrderByDescending(a => a.time).ToList<SystemPosition>();
 
-                    if (TrilaterationControl.Visible)
-                    {
-                        CloseTrilateration();
-                        MessageBox.Show("You have arrived to another system while trilaterating."
-                                        + " As a pre-caution to prevent any mistakes with submitting wrong systems or distances"
-                                        + ", your trilateration was aborted.");
-                    }
+                    //if (TrilaterationControl.Visible)
+                    //{
+                    //    CloseTrilateration();
+                    //    MessageBox.Show("You have arrived to another system while trilaterating."
+                    //                    + " As a pre-caution to prevent any mistakes with submitting wrong systems or distances"
+                    //                    + ", your trilateration was aborted.");
+                    //}
                     buttonTrilaterate.Enabled = false; // when we arrive to new system, currently opened SystemInformation will _always_ be for non-current system
 
                     SystemPosition item = result[0];
@@ -808,37 +808,17 @@ namespace EDDiscovery
         
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
-            dataGridView1.Visible = false;
+            //dataGridView1.Visible = false;
             //panelRight.Visible = false;
-            TrilaterationControl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
-            TrilaterationControl.Visible = true;
-            TrilaterationControl.BringToFront();
-            buttonTrilaterate.Enabled = false;
-            labelHeader.Text = "Trilateration";
-        }
+            TrilaterationControl tctrl = EDDiscoveryForm.TrilControl;
 
-        private void buttonCloseTrilateration_Click(object sender, EventArgs e)
-        {
-            CloseTrilateration();
+            tctrl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
+           
+            //tctrl.Parent.Visible = true;
+            //buttonTrilaterate.Enabled = false;
+//            labelHeader.Text = "Trilateration";
         }
-
-        private void TrilaterationControl_VisibleChanged(object sender, EventArgs e)
-        {
-            if (TrilaterationControl.Visible == false)
-            {
-                TrilaterationControl.TargetSystem = null;
-                buttonTrilaterate.Enabled = true;
-                dataGridView1.Visible = true;
-                //labelHeader.Text = "Travel history";
-            }
-        }
-
-        private void CloseTrilateration()
-        {
-            TrilaterationControl.Visible = false;
-            panelRight.Visible = true;
-
-        }
+    
 
         public string GetCommanderName()
         {

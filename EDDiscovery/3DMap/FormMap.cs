@@ -29,7 +29,6 @@ namespace EDDiscovery2
 
             private Point MouseStartRotate;
             private Point MouseStartTranslate;
-            private bool bMouseDown = false;
             private SystemClass CenterSystem;
 
             public List<SystemClass> StarList;
@@ -499,11 +498,6 @@ namespace EDDiscovery2
                     MouseStartTranslate.Y = e.Y;
                 }
             
-            }
-
-            private void glControl1_MouseUp(object sender, MouseEventArgs e)
-            {
-                bMouseDown = false;
             }
 
             private void FormMap_Load(object sender, EventArgs e)

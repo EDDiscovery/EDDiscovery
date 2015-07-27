@@ -414,7 +414,7 @@ namespace EDDiscovery.DB
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -510,7 +510,7 @@ namespace EDDiscovery.DB
                     }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -541,7 +541,7 @@ namespace EDDiscovery.DB
                     }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return defaultvalue;
             }
@@ -722,7 +722,7 @@ namespace EDDiscovery.DB
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -754,7 +754,7 @@ namespace EDDiscovery.DB
                     }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return defaultvalue;
             }
@@ -837,7 +837,7 @@ namespace EDDiscovery.DB
                     }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return defaultvalue;
             }

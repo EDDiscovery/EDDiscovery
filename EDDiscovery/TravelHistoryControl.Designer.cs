@@ -86,7 +86,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
-            this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -654,7 +653,6 @@
             // 
             this.panelMain.Controls.Add(this.labelHeader);
             this.panelMain.Controls.Add(this.label1);
-            this.panelMain.Controls.Add(this.TrilaterationControl);
             this.panelMain.Controls.Add(this.textBoxFilter);
             this.panelMain.Controls.Add(this.dataGridView1);
             this.panelMain.Controls.Add(this.button_RefreshHistory);
@@ -665,19 +663,6 @@
             this.panelMain.Name = "panelMain";
             this.panelMain.Size = new System.Drawing.Size(594, 484);
             this.panelMain.TabIndex = 26;
-            // 
-            // TrilaterationControl
-            // 
-            this.TrilaterationControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TrilaterationControl.Location = new System.Drawing.Point(20, 80);
-            this.TrilaterationControl.Name = "TrilaterationControl";
-            this.TrilaterationControl.Size = new System.Drawing.Size(479, 347);
-            this.TrilaterationControl.TabIndex = 20;
-            this.TrilaterationControl.Visible = false;
-            this.TrilaterationControl.Load += new System.EventHandler(this.TrilaterationControl_Load);
-            this.TrilaterationControl.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
             // 
             // TravelHistoryControl
             // 
@@ -751,7 +736,6 @@
         private System.Windows.Forms.ToolTip toolTipEddb;
         private System.Windows.Forms.Button buttonRoss;
         private System.Windows.Forms.Button buttonTrilaterate;
-        private TrilaterationControl TrilaterationControl;
         private System.Windows.Forms.Label labelDistanceToNextSystem;
         private System.Windows.Forms.TextBox textBoxDistanceToNextSystem;
         private System.Windows.Forms.Panel panelRight;
