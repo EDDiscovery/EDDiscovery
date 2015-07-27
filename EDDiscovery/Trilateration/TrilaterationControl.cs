@@ -515,7 +515,7 @@ namespace EDDiscovery
             get
             {
                 var lastKnown = (from systems
-                    in ((TravelHistoryControl) Parent.Parent).visitedSystems
+                    in EDDiscoveryForm.TravelControl.visitedSystems
                     where systems.curSystem != null && systems.curSystem.HasCoordinate
                     orderby systems.time descending
                     select systems.curSystem).FirstOrDefault();
@@ -583,7 +583,7 @@ namespace EDDiscovery
 
         private void SubmitToEDSC()
         {
-            var travelHistoryControl = (TravelHistoryControl)Parent;
+            var travelHistoryControl = EDDiscoveryForm.TravelControl;
             string commanderName = travelHistoryControl.GetCommanderName();
 
             if (string.IsNullOrEmpty(commanderName))
@@ -642,7 +642,7 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker) delegate
                 {
-                    Visible = false;
+                    //Visible = false;
                     travelHistoryControl.TriggerEDSCRefresh(); // TODO we might eventually avoid this by further parsing EDSC response
                     travelHistoryControl.RefreshHistory();
                 });
@@ -679,6 +679,11 @@ namespace EDDiscovery
         }
 
         private void buttonCloseTrilateration_Click(object sender, EventArgs e)
+        {
+            Visible = false;
+        }
+
+        private void toolStripButton1_Close(object sender, EventArgs e)
         {
             Visible = false;
         }

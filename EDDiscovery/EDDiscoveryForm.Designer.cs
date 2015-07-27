@@ -31,8 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
+            this.tabPageTriletaration = new System.Windows.Forms.TabPage();
+            this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -55,7 +57,8 @@
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.tabPageTravelHistory.SuspendLayout();
+            this.tabPageTriletaration.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -68,7 +71,8 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPageTravelHistory);
+            this.tabControl1.Controls.Add(this.tabPageTriletaration);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(0, 27);
@@ -77,16 +81,16 @@
             this.tabControl1.Size = new System.Drawing.Size(905, 593);
             this.tabControl1.TabIndex = 15;
             // 
-            // tabPage1
+            // tabPageTravelHistory
             // 
-            this.tabPage1.Controls.Add(this.travelHistoryControl1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(897, 567);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Travel history";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPageTravelHistory.Controls.Add(this.travelHistoryControl1);
+            this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTravelHistory.Name = "tabPageTravelHistory";
+            this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTravelHistory.Size = new System.Drawing.Size(897, 567);
+            this.tabPageTravelHistory.TabIndex = 0;
+            this.tabPageTravelHistory.Text = "Travel history";
+            this.tabPageTravelHistory.UseVisualStyleBackColor = true;
             // 
             // travelHistoryControl1
             // 
@@ -96,6 +100,25 @@
             this.travelHistoryControl1.Size = new System.Drawing.Size(891, 561);
             this.travelHistoryControl1.TabIndex = 0;
             this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
+            // 
+            // tabPageTriletaration
+            // 
+            this.tabPageTriletaration.Controls.Add(this.TrilaterationControl);
+            this.tabPageTriletaration.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTriletaration.Name = "tabPageTriletaration";
+            this.tabPageTriletaration.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTriletaration.Size = new System.Drawing.Size(897, 567);
+            this.tabPageTriletaration.TabIndex = 3;
+            this.tabPageTriletaration.Text = "Trilateration";
+            this.tabPageTriletaration.UseVisualStyleBackColor = true;
+            // 
+            // TrilaterationControl
+            // 
+            this.TrilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TrilaterationControl.Location = new System.Drawing.Point(3, 3);
+            this.TrilaterationControl.Name = "TrilaterationControl";
+            this.TrilaterationControl.Size = new System.Drawing.Size(891, 561);
+            this.TrilaterationControl.TabIndex = 21;
             // 
             // tabPage2
             // 
@@ -318,7 +341,8 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
+            this.tabPageTravelHistory.ResumeLayout(false);
+            this.tabPageTriletaration.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -336,7 +360,7 @@
 
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPageTravelHistory;
         private System.Windows.Forms.TabPage tabPage2;
         private TravelHistoryControl travelHistoryControl1;
         private System.Windows.Forms.TabPage tabPage3;
@@ -359,6 +383,8 @@
         private System.Windows.Forms.ToolStripMenuItem statisticsToolStripMenuItem;
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Label labelPanelText;
+        private System.Windows.Forms.TabPage tabPageTriletaration;
+        private TrilaterationControl TrilaterationControl;
     }
 }
 

@@ -29,6 +29,8 @@ namespace EDDiscovery
     {
         static public  AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
         static public string CommanderName;
+        private static TrilaterationControl sTrilControl;
+        private static TravelHistoryControl  sTravelControl;
 
         string fileTgcSystems ;
         string fileTgcDistances;
@@ -44,13 +46,23 @@ namespace EDDiscovery
         }
 
 
-  
+        static public TrilaterationControl TrilControl
+        {
+            get { return sTrilControl; }
+        }
+
+        static public TravelHistoryControl TravelControl
+        {
+            get { return sTravelControl; }
+        }
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
             try
             {
-
+                sTrilControl = TrilaterationControl;
+                sTravelControl = travelHistoryControl1;
                 // Click once   System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVe‌​rsion
                 var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
                 var version = assemblyFullName.Split(',')[1].Split('=')[1];
@@ -65,6 +77,8 @@ namespace EDDiscovery
 
                 SystemData sdata = new SystemData();
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+
+
 
                 string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Developments\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
@@ -539,20 +553,32 @@ namespace EDDiscovery
 
         private void LogText(string text)
         {
-            Invoke((MethodInvoker)delegate
-                       {
-                           TravelHistoryControl.LogText(text);
+            try
+            {
+                Invoke((MethodInvoker)delegate
+                           {
+                               TravelHistoryControl.LogText(text);
 
-                       });
+                           });
+            }
+            catch
+            {
+            }
         }
 
         private void LogText(string text, Color col)
         {
-            Invoke((MethodInvoker)delegate
+            try
             {
-                TravelHistoryControl.LogText(text, col);
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText(text, col);
 
-            });
+                });
+            }
+            catch
+            {
+            }
         }
 
         private string LoadJsonArray(string filename)
@@ -633,7 +659,7 @@ namespace EDDiscovery
 
             EDDiscovery2.Properties.Settings.Default.Save();
 
-            tabControl1.SelectedTab = tabPage1;
+            tabControl1.SelectedTab = tabPageTravelHistory;
             travelHistoryControl1.RefreshHistory();
         }
 
