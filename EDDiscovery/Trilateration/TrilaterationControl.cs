@@ -515,7 +515,7 @@ namespace EDDiscovery
             get
             {
                 var lastKnown = (from systems
-                    in ((TravelHistoryControl) Parent).visitedSystems
+                    in ((TravelHistoryControl) Parent.Parent).visitedSystems
                     where systems.curSystem != null && systems.curSystem.HasCoordinate
                     orderby systems.time descending
                     select systems.curSystem).FirstOrDefault();
@@ -669,6 +669,7 @@ namespace EDDiscovery
             dataGridViewDistances.Enabled = true;
             dataGridViewClosestSystems.Enabled = true;
             dataGridViewSuggestedSystems.Enabled = true;
+            Dock = DockStyle.Fill;
         }
 
         private void radioButtonAlgorithm_CheckedChanged(object sender, EventArgs e)
