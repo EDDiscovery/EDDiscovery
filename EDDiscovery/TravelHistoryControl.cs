@@ -813,7 +813,7 @@ namespace EDDiscovery
             TrilaterationControl tctrl = EDDiscoveryForm.TrilControl;
 
             tctrl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
-           
+            EDDiscoveryForm.ShowTrilaterationTab();
             //tctrl.Parent.Visible = true;
             //buttonTrilaterate.Enabled = false;
 //            labelHeader.Text = "Trilateration";

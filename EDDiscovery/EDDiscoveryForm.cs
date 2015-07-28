@@ -31,6 +31,7 @@ namespace EDDiscovery
         static public string CommanderName;
         private static TrilaterationControl sTrilControl;
         private static TravelHistoryControl  sTravelControl;
+        private static EDDiscoveryForm sEDDiscoveryForm;
 
         string fileTgcSystems ;
         string fileTgcDistances;
@@ -57,12 +58,22 @@ namespace EDDiscovery
         }
 
 
+        static internal void ShowTrilaterationTab()
+        {
+            sEDDiscoveryForm.tabControl1.SelectedIndex = 1;
+        }
+        static internal void ShowHistoryTab()
+        {
+            sEDDiscoveryForm.tabControl1.SelectedIndex = 0;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             try
             {
                 sTrilControl = TrilaterationControl;
                 sTravelControl = travelHistoryControl1;
+                sEDDiscoveryForm = this;
                 // Click once   System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVe‌​rsion
                 var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
                 var version = assemblyFullName.Split(',')[1].Split('=')[1];
