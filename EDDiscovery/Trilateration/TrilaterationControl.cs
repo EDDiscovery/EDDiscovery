@@ -393,7 +393,7 @@ namespace EDDiscovery
             return suggestedSystems;
         }
 
-        private void ClearDataGridViewDistancesRows()
+        public void ClearDataGridViewDistancesRows()
         {
             // keep systems, clear distances
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
@@ -685,7 +685,7 @@ namespace EDDiscovery
 
         private void toolStripButton1_Close(object sender, EventArgs e)
         {
-            Visible = false;
+            //Visible = false;
             EDDiscoveryForm.ShowHistoryTab();
         }
 
