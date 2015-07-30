@@ -362,7 +362,7 @@ namespace EDDiscovery
                     statusCell.Style.ForeColor = Color.Green;
                 } else
                 {
-                    hasInvalidDistances = true;
+                        hasInvalidDistances = true;
                     calculatedDistanceCell.Style.ForeColor = Color.Salmon;
                     statusCell.Value = "Wrong distance?";
                     statusCell.Style.ForeColor = Color.Salmon;
@@ -470,8 +470,9 @@ namespace EDDiscovery
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
                 var systemCell = dataGridViewDistances[0, i];
-                if (systemCell.Value.Equals(system.name))  // Dont add list thats already in distances. 
-                    return; 
+                if (systemCell.Value!=null)
+                    if (systemCell.Value.Equals(system.name))  // Dont add list thats already in distances. 
+                        return; 
             }
 
                 var index = dataGridViewSuggestedSystems.Rows.Add(system.name);
