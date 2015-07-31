@@ -17,7 +17,7 @@ using EDDiscovery2.DB;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using EDDiscovery2.Trilateration;
-
+using EDDiscovery2.EDSM;
 
 namespace EDDiscovery
 {
@@ -649,7 +649,9 @@ namespace EDDiscovery
 
             var dists = from p in SQLiteDBClass.dictDistances where p.Value.Status == DistancsEnum.EDDiscovery  orderby p.Value.CreateTime  select p.Value;
 
-            EDSCClass edsc = new EDSCClass();
+            //EDSCClass edsc = new EDSCClass();
+            EDSMClass edsc = new EDSMClass();
+
 
             foreach (var dist in dists)
             {
