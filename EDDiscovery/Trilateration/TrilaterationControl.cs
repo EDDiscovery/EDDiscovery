@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using EDDiscovery.DB;
 using ThreadState = System.Threading.ThreadState;
 using EDDiscovery2.Trilateration;
+using EDDiscovery2.EDSM;
 
 namespace EDDiscovery
 {
@@ -605,7 +606,7 @@ namespace EDDiscovery
                 distances.Add(system.name, entry.Distance);
             }
 
-            var edsc = new EDSCClass();
+            var edsc = new EDSMClass();
             
             //if (!EDSCClass.UseTest)
             //{
@@ -622,8 +623,9 @@ namespace EDDiscovery
             Console.WriteLine(response);
 
             string info;
-            var responseOk = edsc.ShowDistanceResponse(response, out info);
-            var trilaterationOk = info.IndexOf("Trilateration succesful") != -1; // FIXME this is ugly
+            bool trilaterationOk;
+            var responseOk = edsc.ShowDistanceResponse(response, out info, out trilaterationOk);
+            //var trilaterationOk = info.IndexOf("Trilateration succesful") != -1; // FIXME this is ugly
             Console.WriteLine(info);
 
             Invoke((MethodInvoker) delegate

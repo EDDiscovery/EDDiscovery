@@ -118,6 +118,40 @@ namespace EDDiscovery.DB
                 UpdateDate = jo["updatedate"].Value<DateTime>();
                 status = SystemStatusEnum.EDSC;
             }
+            else if (source == SystemInfoSource.EDSM)
+            {
+                JObject coords = (JObject)jo["coords"];
+
+                name = jo["name"].Value<string>();
+                SearchName = name.ToLower();
+
+                //cr = jo["cr"].Value<int>();
+                x = double.NaN;
+                y = double.NaN;
+                z = double.NaN;
+
+
+                if (coords !=null &&  (coords["x"].Type == JTokenType.Float || coords["x"].Type == JTokenType.Integer))
+                {
+                    x = coords["x"].Value<double>();
+                    y = coords["y"].Value<double>();
+                    z = coords["z"].Value<double>();
+                }
+                JArray submitted = (JArray)jo["submitted"];
+
+                if (submitted.Count>0)
+                {
+                    if (submitted[0]["cmdrname"]!=null)
+                        CommanderCreate = submitted[0]["cmdrname"].Value<string>();
+                    CreateDate = submitted[0]["date"].Value<DateTime>();
+
+                    if (submitted[submitted.Count - 1]["cmdrname"] != null)
+                        CommanderUpdate = submitted[submitted.Count-1]["cmdrname"].Value<string>();
+                    UpdateDate = submitted[submitted.Count-1]["date"].Value<DateTime>();
+
+                }
+                status = SystemStatusEnum.EDSC;
+            }
             else if (source == SystemInfoSource.EDDB)
             {
                 
@@ -201,10 +235,18 @@ namespace EDDiscovery.DB
                     x = (double)dr["x"];
                     y = (double)dr["y"];
                     z = (double)dr["z"];
-                    CommanderCreate = (string)dr["commandercreate"];
-                    CreateDate = (DateTime)dr["createdate"];
-                    CommanderUpdate = (string)dr["commanderupdate"];
-                    UpdateDate = (DateTime)dr["updatedate"];
+                    CommanderCreate = dr["commandercreate"].ToString();
+                    if (CommanderCreate.Length > 0)
+                        CreateDate = (DateTime)dr["createdate"];
+                    else
+                        CreateDate = new DateTime(1980, 1, 1);
+
+                    CommanderUpdate = (string)dr["commanderupdate"].ToString();
+                    if (CommanderUpdate.Length > 0)
+                        UpdateDate = (DateTime)dr["updatedate"];
+                    else
+                        UpdateDate = new DateTime(1980, 1, 1);
+                    
 
                 }
 
@@ -328,6 +370,44 @@ namespace EDDiscovery.DB
         }
 
 
+        public static List<SystemClass> ParseEDSM(string json, string date)
+        {
+            JArray edsc = null;
+            if (json != null)
+                edsc = (JArray)JArray.Parse(json);
+
+            List<SystemClass> listSystems = new List<SystemClass>();
+
+            if (edsc == null)
+                return listSystems;
+
+
+            DateTime maxdate = new DateTime(1980,1,1);
+
+//            date = edscdata["date"].Value<string>();
+
+
+
+
+            foreach (JObject jo in edsc)
+            {
+                string name = jo["name"].Value<string>();
+
+                SystemClass system = new SystemClass(jo, SystemInfoSource.EDSM);
+
+                if (system.UpdateDate.Subtract(maxdate).TotalSeconds>0)
+                    maxdate = system.UpdateDate;
+
+
+
+                if (system.HasCoordinate)
+                    listSystems.Add(system);
+            }
+
+            date = maxdate.ToString("yyyy-MM-dd HH:mm:ss");
+            return listSystems;
+        }
+
 
         public static bool Store(List<SystemClass> systems)
         {
@@ -351,7 +431,7 @@ namespace EDDiscovery.DB
 
                         if (sys != null)
                         {
-                            system.Update(cn, sys.id, transaction);
+                            system.UpdateEDSM(cn, sys.id, transaction);
                         }
                         else
                             system.Store(cn, transaction);
@@ -385,7 +465,7 @@ namespace EDDiscovery.DB
         {
             using (SQLiteCommand cmd = new SQLiteCommand())
             {
-                if (id_eddb != null)
+                if (id_eddb != 0)
                 {
                     cmd.Connection = cn;
                     cmd.Transaction = transaction;
@@ -487,6 +567,31 @@ namespace EDDiscovery.DB
                 cmd.Parameters.AddWithValue("@eddb_updated_at", eddb_updated_at);
                 cmd.Parameters.AddWithValue("@state", state);
                 cmd.Parameters.AddWithValue("@needs_permit", needs_permit);
+
+                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                return true;
+            }
+        }
+
+        public bool UpdateEDSM(SQLiteConnection cn, int id, SQLiteTransaction transaction)
+        {
+            using (SQLiteCommand cmd = new SQLiteCommand("Update", cn, transaction))
+            {
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandTimeout = 30;
+                cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status   where ID=@id";
+
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@x", x);
+                cmd.Parameters.AddWithValue("@y", y);
+                cmd.Parameters.AddWithValue("@z", z);
+                cmd.Parameters.AddWithValue("@cr", cr);
+                cmd.Parameters.AddWithValue("@CommanderCreate", CommanderCreate);
+                cmd.Parameters.AddWithValue("@Createdate", CreateDate);
+                cmd.Parameters.AddWithValue("@CommanderUpdate", CommanderCreate);
+                cmd.Parameters.AddWithValue("@updatedate", CreateDate);
+                cmd.Parameters.AddWithValue("@Status", (int)status);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
                 return true;
