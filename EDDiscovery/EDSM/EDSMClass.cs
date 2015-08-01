@@ -1,17 +1,20 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDDiscovery.DB;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery2.EDSM
 {
     class EDSMClass
     {
-        private string EDSCJSONRequest(string json, string action)
+        private string RequestPost(string json, string action)
         {
             try
             {
@@ -27,6 +30,7 @@ namespace EDDiscovery2.EDSM
                 byte[] byteArray = Encoding.UTF8.GetBytes(postData);
                 // Set the ContentType property of the WebRequest.
                 request.ContentType = "application/json; charset=utf-8";
+                //request.Headers.Add("Accept-Encoding", "gzip,deflate");
                 // Set the ContentLength property of the WebRequest.
                 request.ContentLength = byteArray.Length;
                 // Get the request stream.
@@ -62,9 +66,57 @@ namespace EDDiscovery2.EDSM
                 //MessageBox.Show("Exception in EDSCRequest: " + ex.Message);
                 return null;
             }
+        }
+
+
+        private string RequestGet(string action)
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://the-temple.de/public/" + action);
+                // Set the Method property of the request to POST.
+                request.Method = "GET";
+
+
+                // Set the ContentType property of the WebRequest.
+                request.ContentType = "application/json; charset=utf-8";
+                request.Headers.Add("Accept-Encoding", "gzip,deflate");
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+
+
+                // Get the response.
+                //request.Timeout = 740 * 1000;
+                HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+                // Display the status.
+                //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+                // Get the stream containing content returned by the server.
+                Stream dataStream = response.GetResponseStream();
+                // Open the stream using a StreamReader for easy access.
+                StreamReader reader = new StreamReader(dataStream);
+                // Read the content.
+                string responseFromServer = reader.ReadToEnd();
+                // Display the content.
+                // Clean up the streams.
+                reader.Close();
+                dataStream.Close();
+                response.Close();
+
+                return responseFromServer;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+
+                //MessageBox.Show("Exception in EDSCRequest: " + ex.Message);
+                return null;
+            }
 
         }
 
+
+    
 
         public string SubmitDistances(string cmdr, string from, string to, double dist)
         {
@@ -93,14 +145,15 @@ namespace EDDiscovery2.EDSM
 
             query += "] } ";
 
-            return EDSCJSONRequest(query, "edscpostdists.php");
+            return RequestPost(query, "edscpostdists.php");
         }
 
 
-        public bool ShowDistanceResponse(string json, out string respstr)
+        public bool ShowDistanceResponse(string json, out string respstr, out Boolean trilOK)
         {
             bool retval = true;
             JObject edsc = null;
+            trilOK = false;
 
             respstr = "";
 
@@ -138,6 +191,9 @@ namespace EDDiscovery2.EDSM
                     if (statusnum == 101)
                         retval = false;
 
+                    if (statusnum == 102 || statusnum == 104)
+                        trilOK = true;
+
                     respstr += "System " + statusnum.ToString() + " : " + basesystem["msg"].Value<string>() + Environment.NewLine;
                 }
 
@@ -149,6 +205,54 @@ namespace EDDiscovery2.EDSM
                 return false;
             }
         }
+
+        
+
+     public string RequestSystems(string date)
+        {
+            string query;
+
+            //string datestr = date.ToString("yyyy-MM-dd hh:mm:ss");
+
+            query = "?startdatetime=" + WebUtility.HtmlEncode(date);
+            return RequestGet("systems.php" + query + "&coords=1&submitted=1");
+        }
+
+        public string RequestDistances(string date)
+        {
+            string query;
+            query = "?startdatetime=" + WebUtility.HtmlEncode(date);
+
+            return RequestGet("distances.php" + query + "coords=1 & submitted=1");
+        }
+
+
+
+        internal string GetNewSystems(SQLiteDBClass db)
+        {
+            string json;
+            string date = "2010-01-01 00:00:00";
+            string lstsyst = db.GetSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
+
+            string retstr = "";
+
+
+            Application.DoEvents();
+
+            json = RequestSystems(lstsyst);
+
+            db.GetAllSystems();
+
+            List<SystemClass> listNewSystems = SystemClass.ParseEDSM(json, date);
+
+            retstr = listNewSystems.Count.ToString() + " new systems from EDSM." + Environment.NewLine;
+            Application.DoEvents();
+            SystemClass.Store(listNewSystems);
+            db.PutSettingString("EDSMLastSystems", date);
+
+            return retstr;
+        }
+
 
     }
 }

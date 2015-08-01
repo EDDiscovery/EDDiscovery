@@ -13,7 +13,7 @@ namespace EDDiscovery
         RW = 1,
         EDSC = 2,
         EDDB = 4,
-        Inhumierer = 5
+        EDSM = 5
 
     }
 

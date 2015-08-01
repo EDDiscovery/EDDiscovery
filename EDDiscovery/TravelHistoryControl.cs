@@ -54,8 +54,8 @@ namespace EDDiscovery
         public void TriggerEDSCRefresh()
         {
             SQLiteDBClass db = new SQLiteDBClass();
-
-            edsc.EDSCGetNewSystems(db);
+            EDSMClass edsm = new EDSMClass();
+            edsm.GetNewSystems(db);
             db.GetAllSystems();
         }
      
@@ -649,8 +649,7 @@ namespace EDDiscovery
 
             var dists = from p in SQLiteDBClass.dictDistances where p.Value.Status == DistancsEnum.EDDiscovery  orderby p.Value.CreateTime  select p.Value;
 
-            //EDSCClass edsc = new EDSCClass();
-            EDSMClass edsc = new EDSMClass();
+            EDSMClass edsm = new EDSMClass();
 
 
             foreach (var dist in dists)
@@ -660,7 +659,7 @@ namespace EDDiscovery
                 if (dist.Dist > 0)
                 {
                     LogText("Add distance: " + dist.NameA + " => " + dist.NameB + " :" + dist.Dist.ToString("0.00") + "ly" + Environment.NewLine);
-                    json = edsc.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
+                    json = edsm.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
                 }
                 else
                 {
@@ -671,7 +670,8 @@ namespace EDDiscovery
                 if (json != null)
                 {
                     string str="";
-                    if (edsc.ShowDistanceResponse(json, out str))
+                    bool trilok;
+                    if (edsm.ShowDistanceResponse(json, out str, out trilok))
                     {
                         LogText(str);
                         dist.Status = DistancsEnum.EDDiscoverySubmitted;
