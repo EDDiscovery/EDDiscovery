@@ -370,7 +370,7 @@ namespace EDDiscovery.DB
         }
 
 
-        public static List<SystemClass> ParseEDSM(string json, string date)
+        public static List<SystemClass> ParseEDSM(string json, ref string date)
         {
             JArray edsc = null;
             if (json != null)
