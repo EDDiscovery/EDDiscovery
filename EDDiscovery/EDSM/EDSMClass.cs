@@ -74,7 +74,7 @@ namespace EDDiscovery2.EDSM
         public string SubmitDistances(string cmdr, string from, Dictionary<string, double> distances)
         {
             CultureInfo culture = new CultureInfo("en-US");
-            string query = "{ver:2," + " commander:\"" + cmdr + "\", p0: { name: \"" + from + "\" },   refs: [";
+            string query = "{\"ver\":2," + " \"commander\":\"" + cmdr + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
 
             var counter = 0;
             foreach (var item in distances)
@@ -87,19 +87,19 @@ namespace EDDiscovery2.EDSM
                 var to = item.Key;
                 var distance = item.Value.ToString("0.00", culture);
 
-                query += " { name: \"" + to + "\",  dist: " + distance + " } ";
+                query += " { \"name\": \"" + to + "\",  \"dist\": " + distance + " } ";
             }
 
 
             query += "] } ";
 
-            return EDSCJSONRequest(query, "submitdistances.php");
+            return EDSCJSONRequest(query, "edscpostdists.php");
         }
 
 
         public bool ShowDistanceResponse(string json, out string respstr)
         {
-            bool retval = false;
+            bool retval = true;
             JObject edsc = null;
 
             respstr = "";
@@ -114,56 +114,33 @@ namespace EDDiscovery2.EDSM
                 if (edsc == null)
                     return false;
 
-                JObject edscdata = (JObject)edsc["d"];
-                JObject status = (JObject)edscdata["status"];
+                JObject basesystem = (JObject)edsc["basesystem"];
+                JArray distances = (JArray)edsc["distances"];
 
-                JArray input = (JArray)status["input"];
-                if (input != null)
-                    foreach (var st in input)
+
+                if (distances != null)
+                    foreach (var st in distances)
                     {
-                        JObject inpstatus = (JObject)st["status"];
-                        int statusnum = inpstatus["statusnum"].Value<int>();
+                        int statusnum = st["msgnum"].Value<int>();
 
-                        if (statusnum == 0)
-                            retval = true;
+                        if (statusnum == 201)
+                            retval = false;
 
-                        respstr += "Status " + statusnum.ToString() + " : " + inpstatus["msg"].Value<string>() + Environment.NewLine;
+                        respstr += "Status " + statusnum.ToString() + " : " + st["msg"].Value<string>() + Environment.NewLine;
 
                     }
 
+                if (basesystem != null)
+                {
 
-                JArray system = (JArray)status["system"];
-                if (system != null)
-                    foreach (var st in system)
-                    {
-                        JObject inpstatus = (JObject)st["status"];
-                        int statusnum = inpstatus["statusnum"].Value<int>();
+                    int statusnum = basesystem["msgnum"].Value<int>();
 
+                    if (statusnum == 101)
+                        retval = false;
 
-                        respstr += "System " + statusnum.ToString() + " : " + inpstatus["msg"].Value<string>() + Environment.NewLine;
+                    respstr += "System " + statusnum.ToString() + " : " + basesystem["msg"].Value<string>() + Environment.NewLine;
+                }
 
-                    }
-
-                JArray dist = (JArray)status["dist"];
-                if (dist != null)
-                    foreach (var st in dist)
-                    {
-                        JObject inpstatus = (JObject)st["status"];
-                        int statusnum = inpstatus["statusnum"].Value<int>();
-
-                        respstr += "Dist " + statusnum.ToString() + " : " + inpstatus["msg"].Value<string>() + Environment.NewLine;
-
-                    }
-                JArray trilat = (JArray)status["trilat"];
-                if (trilat != null)
-                    foreach (var st in trilat)
-                    {
-                        JObject inpstatus = (JObject)st["status"];
-                        int statusnum = inpstatus["statusnum"].Value<int>();
-
-                        respstr += "Trilat " + statusnum.ToString() + " : " + inpstatus["msg"].Value<string>() + " : " + st["system"].Value<string>() + Environment.NewLine;
-
-                    }
                 return retval;
             }
             catch (Exception ex)
