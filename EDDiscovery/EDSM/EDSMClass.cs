@@ -243,7 +243,7 @@ namespace EDDiscovery2.EDSM
 
             db.GetAllSystems();
 
-            List<SystemClass> listNewSystems = SystemClass.ParseEDSM(json, date);
+            List<SystemClass> listNewSystems = SystemClass.ParseEDSM(json, ref date);
 
             retstr = listNewSystems.Count.ToString() + " new systems from EDSM." + Environment.NewLine;
             Application.DoEvents();
