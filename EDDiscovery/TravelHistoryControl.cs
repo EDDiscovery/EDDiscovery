@@ -664,6 +664,7 @@ namespace EDDiscovery
                 }
                 else
                 {
+
                     dist.Delete();
                     return;
                 }
