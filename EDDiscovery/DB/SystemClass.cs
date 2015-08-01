@@ -382,7 +382,7 @@ namespace EDDiscovery.DB
                 return listSystems;
 
 
-            DateTime maxdate = new DateTime(1980,1,1);
+            DateTime maxdate = DateTime.Parse(date);
 
 //            date = edscdata["date"].Value<string>();
 
