@@ -606,8 +606,8 @@ namespace EDDiscovery
                 distances.Add(system.name, entry.Distance);
             }
 
-            var edsc = new EDSMClass();
-            
+            var edsc = new EDSCClass();
+            var edsm = new EDSMClass();
             //if (!EDSCClass.UseTest)
             //{
             //    Invoke((MethodInvoker) delegate
@@ -617,24 +617,29 @@ namespace EDDiscovery
             //    });
             //    EDSCClass.UseTest = true;
             //}
-     
-            var response = edsc.SubmitDistances(commanderName, TargetSystem.name, distances);
-            
-            Console.WriteLine(response);
 
-            string info;
-            bool trilaterationOk;
-            var responseOk = edsc.ShowDistanceResponse(response, out info, out trilaterationOk);
-            //var trilaterationOk = info.IndexOf("Trilateration succesful") != -1; // FIXME this is ugly
-            Console.WriteLine(info);
+            var responseC = edsc.SubmitDistances(commanderName, TargetSystem.name, distances);
+            var responseM = edsm.SubmitDistances(commanderName, TargetSystem.name, distances);
+
+            Console.WriteLine(responseC);
+            Console.WriteLine(responseM);
+
+            string infoC, infoM;
+            bool trilaterationOkC;
+            bool trilaterationOkM;
+            var responseOkC = edsc.ShowDistanceResponse(responseC, out infoC);
+            var responseOkM = edsm.ShowDistanceResponse(responseM, out infoM, out trilaterationOkM);
+
+            trilaterationOkC = infoC.IndexOf("Trilateration succesful") != -1; // FIXME this is ugly
+            Console.WriteLine(infoC);
 
             Invoke((MethodInvoker) delegate
             {
-                if (responseOk && trilaterationOk)
+                if (responseOkC && trilaterationOkC)
                 {
                     LogText("EDSC submission succeeded, trilateration successful." + Environment.NewLine, Color.Green);
                 }
-                else if (responseOk)
+                else if (responseOkC)
                 {
                     LogText("EDSC submission succeeded, but trilateration failed. Try adding more distances." + Environment.NewLine, Color.Orange);
                 }
@@ -642,9 +647,23 @@ namespace EDDiscovery
                 {
                     LogText("EDSC submission failed." + Environment.NewLine, Color.Red);
                 }
+
+                if (responseOkM && trilaterationOkM)
+                {
+                    LogText("EDSM submission succeeded, trilateration successful." + Environment.NewLine, Color.Green);
+                }
+                else if (responseOkM)
+                {
+                    LogText("EDSM submission succeeded, but trilateration failed. Try adding more distances." + Environment.NewLine, Color.Orange);
+                }
+                else
+                {
+                    LogText("EDSM submission failed." + Environment.NewLine, Color.Red);
+                }
+
             });
 
-            if (responseOk && trilaterationOk)
+            if (responseOkC && trilaterationOkC)
             {
                 Invoke((MethodInvoker) delegate
                 {
