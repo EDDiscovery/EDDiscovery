@@ -751,5 +751,12 @@ namespace EDDiscovery
             AddSystemToDataGridViewDistances(system);
             dataGridViewSuggestedSystems.Rows.RemoveAt(e.RowIndex);
         }
+
+        private void toolStripButtonNew_Click(object sender, EventArgs e)
+        {
+
+            TargetSystem = ((SystemPosition)EDDiscoveryForm.TravelControl.dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
+            ClearDataGridViewDistancesRows();
+        }
     }
 }

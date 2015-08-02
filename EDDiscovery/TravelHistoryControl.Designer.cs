@@ -690,7 +690,6 @@
 
         private System.Windows.Forms.Button button_RefreshHistory;
         private System.Windows.Forms.Label labelHeader;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ComboBox comboBoxHistoryWindow;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListView listView1;
@@ -743,5 +742,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.Panel panelMain;
+        public System.Windows.Forms.DataGridView dataGridView1;
     }
 }
