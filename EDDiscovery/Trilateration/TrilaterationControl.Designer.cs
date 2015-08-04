@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrilaterationControl));
             this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -39,7 +39,6 @@
             this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textBoxSystemName = new System.Windows.Forms.TextBox();
             this.labelTargetSystem = new System.Windows.Forms.Label();
-            this.buttonSubmitToEDSC = new System.Windows.Forms.Button();
             this.labelCoordinates = new System.Windows.Forms.Label();
             this.textBoxCoordinateX = new System.Windows.Forms.TextBox();
             this.labelCoordinateX = new System.Windows.Forms.Label();
@@ -66,7 +65,7 @@
             this.labelClosestSystems = new System.Windows.Forms.Label();
             this.LabelTrilateration = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSubmitDistances = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
@@ -143,18 +142,6 @@
             this.labelTargetSystem.Size = new System.Drawing.Size(44, 13);
             this.labelTargetSystem.TabIndex = 2;
             this.labelTargetSystem.Text = "System:";
-            // 
-            // buttonSubmitToEDSC
-            // 
-            this.buttonSubmitToEDSC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSubmitToEDSC.Enabled = false;
-            this.buttonSubmitToEDSC.Location = new System.Drawing.Point(708, 58);
-            this.buttonSubmitToEDSC.Name = "buttonSubmitToEDSC";
-            this.buttonSubmitToEDSC.Size = new System.Drawing.Size(109, 23);
-            this.buttonSubmitToEDSC.TabIndex = 4;
-            this.buttonSubmitToEDSC.Text = "Submit Distances";
-            this.buttonSubmitToEDSC.UseVisualStyleBackColor = true;
-            this.buttonSubmitToEDSC.Click += new System.EventHandler(this.buttonSubmit_Click);
             // 
             // labelCoordinates
             // 
@@ -330,14 +317,14 @@
             this.dataGridViewSuggestedSystems.AllowUserToResizeRows = false;
             this.dataGridViewSuggestedSystems.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewSuggestedSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewSuggestedSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewSuggestedSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewSuggestedSystems.ColumnHeadersVisible = false;
             this.dataGridViewSuggestedSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -387,14 +374,14 @@
             this.dataGridViewClosestSystems.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewClosestSystems.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewClosestSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewClosestSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumnClosestSystemsSystem,
@@ -447,7 +434,7 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonClose,
+            this.toolStripButtonSubmitDistances,
             this.toolStripButtonNew,
             this.toolStripButtonMap});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -456,16 +443,16 @@
             this.toolStrip1.TabIndex = 23;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButtonClose
+            // toolStripButtonSubmitDistances
             // 
-            this.toolStripButtonClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButtonClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonClose.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonClose.Image")));
-            this.toolStripButtonClose.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonClose.Name = "toolStripButtonClose";
-            this.toolStripButtonClose.Size = new System.Drawing.Size(40, 22);
-            this.toolStripButtonClose.Text = "Close";
-            this.toolStripButtonClose.Click += new System.EventHandler(this.toolStripButton1_Close);
+            this.toolStripButtonSubmitDistances.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripButtonSubmitDistances.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonSubmitDistances.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSubmitDistances.Image")));
+            this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSubmitDistances.Name = "toolStripButtonSubmitDistances";
+            this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(102, 22);
+            this.toolStripButtonSubmitDistances.Text = "Submit Distances";
+            this.toolStripButtonSubmitDistances.Click += new System.EventHandler(this.toolStripButtonSubmitDistances_Click);
             // 
             // toolStripButtonNew
             // 
@@ -505,7 +492,6 @@
             this.Controls.Add(this.labelCoordinateX);
             this.Controls.Add(this.textBoxCoordinateX);
             this.Controls.Add(this.labelCoordinates);
-            this.Controls.Add(this.buttonSubmitToEDSC);
             this.Controls.Add(this.labelTargetSystem);
             this.Controls.Add(this.textBoxSystemName);
             this.Name = "TrilaterationControl";
@@ -531,7 +517,6 @@
         #endregion
         private System.Windows.Forms.TextBox textBoxSystemName;
         private System.Windows.Forms.Label labelTargetSystem;
-        private System.Windows.Forms.Button buttonSubmitToEDSC;
         private System.Windows.Forms.Label labelCoordinates;
         private System.Windows.Forms.TextBox textBoxCoordinateX;
         private System.Windows.Forms.Label labelCoordinateX;
@@ -553,7 +538,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label LabelTrilateration;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonClose;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSubmitDistances;
         private System.Windows.Forms.Label labelSuggestedSystems;
         private System.Windows.Forms.DataGridView dataGridViewSuggestedSystems;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnSuggestedSystemsSystem;
