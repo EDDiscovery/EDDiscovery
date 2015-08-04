@@ -124,7 +124,7 @@
             this.labelHeader.Size = new System.Drawing.Size(110, 18);
             this.labelHeader.TabIndex = 7;
             this.labelHeader.Text = "Travel history";
-            this.labelHeader.Click += new System.EventHandler(this.labelHeader_Click);
+
             // 
             // dataGridView1
             // 
@@ -188,6 +188,7 @@
             "Week",
             "2 Weeks",
             "Month",
+            "Last 20",
             "All"});
             this.comboBoxHistoryWindow.Location = new System.Drawing.Point(259, 8);
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
