@@ -8,27 +8,47 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery.DB;
+using EDDiscovery2;
 using ThreadState = System.Threading.ThreadState;
 using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
-using EDDiscovery2;
 
 namespace EDDiscovery
 {
     public partial class TrilaterationControl : UserControl
     {
         private readonly EDDiscoveryForm _discoveryForm;
-        public SystemClass TargetSystem;
+        private SystemClass TargetSystem;
         private Thread trilaterationThread;
         private Trilateration.Result lastTrilatelationResult;
         private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
         private Thread EDSCSubmissionThread;
 
-
         public TrilaterationControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
             InitializeComponent();
+        }
+
+        public void Set(SystemClass system)
+        {
+            if (TargetSystem == null || !TargetSystem.Equals(system))
+            {
+                TargetSystem = system;
+                ClearDataGridViewDistancesRows();
+            }
+
+            if (TargetSystem == null) return;
+
+            textBoxSystemName.Text = TargetSystem.name;
+            labelStatus.Text = "Enter Distances";
+            labelStatus.BackColor = Color.LightBlue;
+
+            UnfreezeTrilaterationUI();
+            dataGridViewDistances.Focus();
+
+            PopulateSuggestedSystems();
+            PopulateClosestSystems();
         }
 
         private List<SystemClass> GetEnteredSystems()
@@ -144,44 +164,6 @@ namespace EDDiscovery
 
             // trigger trilateration calculation
             RunTrilateration();
-        }
-
-        private void TrilaterationControl_VisibleChanged(object sender, EventArgs e)
-        {
-            if (Visible && TargetSystem != null)
-            {
-                textBoxSystemName.Text = TargetSystem.name;
-                labelStatus.Text = "Enter Distances";
-                labelStatus.BackColor = Color.LightBlue;
-
-                UnfreezeTrilaterationUI();
-                dataGridViewDistances.Focus();
-
-                PopulateSuggestedSystems();
-                PopulateClosestSystems();
-            }
-
-            if (!Visible)
-            {
-                if (trilaterationThread != null)
-                {
-                    trilaterationThread.Abort();
-                    trilaterationThread = null;
-                }
-
-                textBoxSystemName.Text = null;
-                textBoxCoordinateX.Text = "?";
-                textBoxCoordinateY.Text = "?";
-                textBoxCoordinateZ.Text = "?";
-                labelLastKnownSystem.Text = "Unknown";
-
-                ClearDataGridViewDistancesRows();
-                ClearDataGridViewClosestSystemsRows();
-                ClearDataGridViewSuggestedSystemsRows();
-
-                lastTrilatelationResult = null;
-                lastTrilatelationEntries = null;
-            }
         }
 
         private void RunTrilateration()
@@ -308,7 +290,7 @@ namespace EDDiscovery
                         TargetSystem.y = trilaterationResult.Coordinate.Y;
                         TargetSystem.z = trilaterationResult.Coordinate.Z;
                     }
-
+                    toolStripButtonMap.Enabled = (TargetSystem != null);
 
                 });
 
@@ -538,6 +520,19 @@ namespace EDDiscovery
             }
         }
 
+
+        public SystemClass CurrentSystem
+        {
+            get
+            {
+                var currentKnown = (from systems
+                    in _discoveryForm.visitedSystems
+                                 orderby systems.time descending
+                                 select systems.curSystem).FirstOrDefault();
+                return currentKnown;
+            }
+        }
+
         private void dataGridViewClosestSystems_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             var system = (SystemClass) dataGridViewClosestSystems[0, e.RowIndex].Tag;
@@ -758,10 +753,7 @@ namespace EDDiscovery
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            TargetSystem = ((SystemPosition)_discoveryForm.TravelControl.dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
-            ClearDataGridViewDistancesRows();
-            PopulateSuggestedSystems();
-            PopulateClosestSystems();
+			Set(CurrentSystem);
         }
 
         private void toolStripButtonMap_Click(object sender, EventArgs e)

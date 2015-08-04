@@ -814,16 +814,10 @@ namespace EDDiscovery
         
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
-            //dataGridView1.Visible = false;
-            //panelRight.Visible = false;
             TrilaterationControl tctrl = _discoveryForm.TrilaterationControl;
 
-            tctrl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
-            tctrl.ClearDataGridViewDistancesRows();
             _discoveryForm.ShowTrilaterationTab();
-            //tctrl.Parent.Visible = true;
-            //buttonTrilaterate.Enabled = false;
-//            labelHeader.Text = "Trilateration";
+            tctrl.Set(((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem);
         }
     
 		public SystemClass CurrentSystem

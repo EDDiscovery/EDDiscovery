@@ -510,7 +510,6 @@
             this.Controls.Add(this.textBoxSystemName);
             this.Name = "TrilaterationControl";
             this.Size = new System.Drawing.Size(826, 587);
-            this.VisibleChanged += new System.EventHandler(this.TrilaterationControl_VisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).EndInit();
             this.panelImplementation.ResumeLayout(false);
             this.panelImplementation.PerformLayout();
