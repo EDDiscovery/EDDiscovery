@@ -35,6 +35,13 @@ namespace EDDiscovery
 
 
         private static RichTextBox static_richTextBox;
+
+        public TravelHistoryControl()  // For UI editor
+        {
+            InitializeComponent();
+        }
+
+
         public TravelHistoryControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
@@ -814,7 +821,7 @@ namespace EDDiscovery
         
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
-            TrilaterationControl tctrl = _discoveryForm.TrilaterationControl;
+            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
 
             _discoveryForm.ShowTrilaterationTab();
             tctrl.Set(((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem);
