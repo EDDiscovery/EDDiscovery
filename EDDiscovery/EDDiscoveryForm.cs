@@ -423,8 +423,7 @@ namespace EDDiscovery
                 OnDistancesLoaded();
 
                 // Check for a new installer    
-                if (File.Exists("Installer.txt")) // Only check for isntallshield installation
-                    CheckForNewInstaller();
+                CheckForNewInstaller();
 
             }
             catch (Exception ex)
