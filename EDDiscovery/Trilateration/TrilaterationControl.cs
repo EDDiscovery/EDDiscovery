@@ -361,11 +361,11 @@ namespace EDDiscovery
                 }
             }
 
-            // Always enable submiot so we can submit a partial result. 
-            Invoke((MethodInvoker) delegate
-            {
-                buttonSubmitToEDSC.Enabled = true;  //trilaterationResult.State == Trilateration.ResultState.Exact && !hasInvalidDistances;
-            });
+            //// Always enable submiot so we can submit a partial result. 
+            //Invoke((MethodInvoker) delegate
+            //{
+            //    //buttonSubmitToEDSC.Enabled = true;  //trilaterationResult.State == Trilateration.ResultState.Exact && !hasInvalidDistances;
+            //});
         }
 
         private static IEnumerable<SystemClass> GetListOfSuggestedSystems(double x, double y, double z, int count)
@@ -559,7 +559,7 @@ namespace EDDiscovery
             dataGridViewDistances[0, index].Tag = system;
         }
 
-        private void buttonSubmit_Click(object sender, EventArgs e)
+        private void toolStripButtonSubmitDistances_Click(object sender, EventArgs e)
         {
             LogText("Submitting system to EDSC, please wait..." + Environment.NewLine);
             FreezeTrilaterationUI();
@@ -686,7 +686,7 @@ namespace EDDiscovery
 
         private void FreezeTrilaterationUI()
         {
-            buttonSubmitToEDSC.Enabled = false;
+            
             dataGridViewDistances.Enabled = false;
             dataGridViewClosestSystems.Enabled = false;
             dataGridViewSuggestedSystems.Enabled = false;
@@ -694,7 +694,7 @@ namespace EDDiscovery
 
         private void UnfreezeTrilaterationUI()
         {
-            buttonSubmitToEDSC.Enabled = lastTrilatelationResult != null && lastTrilatelationResult.State == Trilateration.ResultState.Exact;
+            //buttonSubmitToEDSC.Enabled = lastTrilatelationResult != null && lastTrilatelationResult.State == Trilateration.ResultState.Exact;
             dataGridViewDistances.Enabled = true;
             dataGridViewClosestSystems.Enabled = true;
             dataGridViewSuggestedSystems.Enabled = true;
@@ -705,14 +705,6 @@ namespace EDDiscovery
         {
             // when algorithm is changed, we want to re-run trilateration
             RunTrilateration();
-        }
-
-
-
-        private void toolStripButton1_Close(object sender, EventArgs e)
-        {
-            //Visible = false;
-            _discoveryForm.ShowHistoryTab();
         }
 
 
