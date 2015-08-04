@@ -486,9 +486,13 @@ namespace EDDiscovery
         {
             //if (!this.DesignMode)
             //    RefreshHistory();
-            var db = new SQLiteDBClass();
-            comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
 
+
+            if (!this.DesignMode)
+            {
+                var db = new SQLiteDBClass();
+                comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
+            }
             // this improves dataGridView's scrolling performance
             typeof(DataGridView).InvokeMember(
                 "DoubleBuffered",
