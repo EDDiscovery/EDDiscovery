@@ -17,22 +17,21 @@ namespace EDDiscovery
 {
     public partial class TrilaterationControl : UserControl
     {
-        private readonly EDDiscoveryForm _discoveryForm;
+        private EDDiscoveryForm _discoveryForm;
         private SystemClass TargetSystem;
         private Thread trilaterationThread;
         private Trilateration.Result lastTrilatelationResult;
         private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
         private Thread EDSCSubmissionThread;
 
-        public TrilaterationControl()  // For UI editor
+        public TrilaterationControl()
         {
             InitializeComponent();
         }
 
-        public TrilaterationControl(EDDiscoveryForm discoveryForm)
+        public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            InitializeComponent();
         }
 
 

@@ -42,6 +42,10 @@ namespace EDDiscovery
            
             fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
             fileTgcDistances = Path.Combine(Tools.GetAppDataDirectory(), "tgcdistances.json");
+
+            trilaterationControl.InitControl(this);
+            travelHistoryControl1.InitControl(this);
+ 
         }
 
         public TravelHistoryControl TravelControl
