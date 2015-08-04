@@ -23,7 +23,12 @@ namespace EDDiscovery2.Trilateration
         {
             get
             {
-                return refSys.name.Length + Distance / 100;
+                int modifier = 0;
+                if (refSys.name.EndsWith("0"))  // Elite has a bug with selecting systems ending with 0.  Prefere others first.
+                    modifier += 50;
+
+                return refSys.name.Length*2 + Math.Sqrt(Distance) / 3.5 + modifier;
+                //return refSys.name.Length + Distance/100 + modifier;
             }
         }
 
