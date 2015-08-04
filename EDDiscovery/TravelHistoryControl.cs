@@ -23,7 +23,7 @@ namespace EDDiscovery
 {
     public partial class TravelHistoryControl : UserControl
     {
-        private readonly EDDiscoveryForm _discoveryForm;
+        private EDDiscoveryForm _discoveryForm;
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
         internal List<SystemPosition> visitedSystems;
@@ -33,22 +33,21 @@ namespace EDDiscovery
         private SystemPosition currentSysPos = null;
         private EDSCClass edsc;
 
-
         private static RichTextBox static_richTextBox;
 
-        public TravelHistoryControl()  // For UI editor
+        public TravelHistoryControl()
         {
-            InitializeComponent();
-        }
-
-
-        public TravelHistoryControl(EDDiscoveryForm discoveryForm)
-        {
-            _discoveryForm = discoveryForm;
             InitializeComponent();
             static_richTextBox = richTextBox_History;
-            edsc = new EDSCClass();
+
         }
+
+        public void InitControl(EDDiscoveryForm discoveryForm)
+        {
+            _discoveryForm = discoveryForm;
+            edsc = new EDSCClass();  // Init here to avoid UI editor errors.
+        }
+
 
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {

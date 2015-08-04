@@ -32,9 +32,9 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl(this);
+            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.trilaterationControl = new EDDiscovery.TrilaterationControl(this);
+            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
