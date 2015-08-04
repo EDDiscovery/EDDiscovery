@@ -92,7 +92,7 @@ namespace EDDiscovery2.Trilateration
             
             if (optcandidateReferences.Count < 5)
                 optcandidateReferences.Add(refSys);
-            else if (optcandidateReferences.Count < 50 && refSys.Distance < 1000 && refSys.Distance > 100)
+            else if (optcandidateReferences.Count < 100 && refSys.Distance < 1000 && refSys.Distance > 100)
                 optcandidateReferences.Add(refSys);
         }
 
