@@ -24,11 +24,17 @@ namespace EDDiscovery
         private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
         private Thread EDSCSubmissionThread;
 
+        public TrilaterationControl()  // For UI editor
+        {
+            InitializeComponent();
+        }
+
         public TrilaterationControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
             InitializeComponent();
         }
+
 
         public void Set(SystemClass system)
         {

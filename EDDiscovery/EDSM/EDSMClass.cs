@@ -254,5 +254,49 @@ namespace EDDiscovery2.EDSM
         }
 
 
+        public List<DistanceClass> GetDistances(string systemname)
+        {
+            List<DistanceClass> listDistances = new List<DistanceClass>();
+            try
+            {
+                string json;
+
+
+                string query;
+                query = "?sysname=" + WebUtility.HtmlEncode(systemname) + "&coords=1&distances=1&submitted=1";
+
+                json = RequestGet("sysinfo.php" + query);
+
+                //http://the-temple.de/public/sysinfo.php?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
+
+                if (json.Length > 1)
+                {
+                    JObject ditancesresp = (JObject)JObject.Parse(json);
+
+                    JArray distances = (JArray)ditancesresp["distances"];
+
+                    if (distances != null)
+                    {
+                        foreach (JObject jo in distances)
+                        {
+                            DistanceClass dc = new DistanceClass();
+
+                            dc.NameA = systemname;
+                            dc.NameB = jo["name"].Value<string>();
+                            dc.Dist = jo["dist"].Value<float>();
+//                            dc.CommanderCreate = jo[]
+
+                            listDistances.Add(dc);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return listDistances;
+        }
+
+
     }
 }

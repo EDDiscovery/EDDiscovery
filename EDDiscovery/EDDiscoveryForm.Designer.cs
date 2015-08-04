@@ -34,7 +34,7 @@
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl(this);
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.TrilaterationControl = new EDDiscovery.TrilaterationControl(this);
+            this.trilaterationControl = new EDDiscovery.TrilaterationControl(this);
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -103,7 +103,7 @@
             // 
             // tabPageTriletaration
             // 
-            this.tabPageTriletaration.Controls.Add(this.TrilaterationControl);
+            this.tabPageTriletaration.Controls.Add(this.trilaterationControl);
             this.tabPageTriletaration.Location = new System.Drawing.Point(4, 22);
             this.tabPageTriletaration.Name = "tabPageTriletaration";
             this.tabPageTriletaration.Padding = new System.Windows.Forms.Padding(3);
@@ -114,11 +114,11 @@
             // 
             // TrilaterationControl
             // 
-            this.TrilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TrilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.TrilaterationControl.Name = "TrilaterationControl";
-            this.TrilaterationControl.Size = new System.Drawing.Size(891, 561);
-            this.TrilaterationControl.TabIndex = 21;
+            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
+            this.trilaterationControl.Name = "TrilaterationControl";
+            this.trilaterationControl.Size = new System.Drawing.Size(891, 561);
+            this.trilaterationControl.TabIndex = 21;
             // 
             // tabPage2
             // 
@@ -384,7 +384,7 @@
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Label labelPanelText;
         private System.Windows.Forms.TabPage tabPageTriletaration;
-        public TrilaterationControl TrilaterationControl;
+        public TrilaterationControl trilaterationControl;
     }
 }
 
