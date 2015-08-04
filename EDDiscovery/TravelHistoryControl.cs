@@ -23,7 +23,9 @@ namespace EDDiscovery
 {
     public partial class TravelHistoryControl : UserControl
     {
+        private readonly EDDiscoveryForm _discoveryForm;
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
+
         internal List<SystemPosition> visitedSystems;
 
         public NetLogClass netlog = new NetLogClass();
@@ -33,8 +35,9 @@ namespace EDDiscovery
 
 
         private static RichTextBox static_richTextBox;
-        public TravelHistoryControl()
+        public TravelHistoryControl(EDDiscoveryForm discoveryForm)
         {
+            _discoveryForm = discoveryForm;
             InitializeComponent();
             static_richTextBox = richTextBox_History;
             edsc = new EDSCClass();
@@ -110,7 +113,8 @@ namespace EDDiscovery
             sw1.Start();
 
 
-            TimeSpan maxDataAge;
+            TimeSpan maxDataAge = TimeSpan.Zero;
+            int atMost = 0;
 
             switch (comboBoxHistoryWindow.SelectedIndex)
             {
@@ -136,6 +140,9 @@ namespace EDDiscovery
                     maxDataAge = new TimeSpan(30, 0, 0, 0); // 30 days (month)
                     break;
                 case 7:
+                    atMost = 20; // Last 20
+                    break;
+                case 8:
                     maxDataAge = new TimeSpan(100000, 24, 0, 0); // all
                     break;
                 default:
@@ -143,7 +150,6 @@ namespace EDDiscovery
                     break;
             }
 
-            DateTime oldestData = DateTime.Now.Subtract(maxDataAge);
 
             if (visitedSystems==null || visitedSystems.Count == 0)
                 visitedSystems = netlog.ParseFiles(richTextBox_History);
@@ -154,8 +160,16 @@ namespace EDDiscovery
 
             //var result = visitedSystems.OrderByDescending(a => a.time).ToList<SystemPosition>();
 
-            var resultsystems = from systems in visitedSystems where systems.time > oldestData orderby systems.time descending select systems;
-            var result = resultsystems.ToList<SystemPosition>();
+            List<SystemPosition> result;
+            if (atMost > 0)
+            {
+                result = visitedSystems.OrderByDescending(s => s.time).Take(atMost).ToList();
+            }
+            else
+            {
+                var oldestData = DateTime.Now.Subtract(maxDataAge);
+                result = (from systems in visitedSystems where systems.time > oldestData orderby systems.time descending select systems).ToList();
+            }
 
             //DataTable dt = new DataTable();
             //dataGridView1.Columns.Clear();
@@ -182,7 +196,7 @@ namespace EDDiscovery
                 else
                     item2 = null;
 
-                AddHistoryRow(oldestData, item, item2);
+                AddHistoryRow(false, item, item2);
             }
 
             System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
@@ -201,7 +215,7 @@ namespace EDDiscovery
                 FilterGridView();
         }
 
-        private void AddHistoryRow(DateTime oldestData, SystemPosition item, SystemPosition item2)
+        private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
         {
             SystemClass sys1 = null, sys2;
             double dist;
@@ -250,12 +264,10 @@ namespace EDDiscovery
 
             //richTextBox_History.AppendText(item.time + " " + item.Name + Environment.NewLine);
 
-            if (item.time.Subtract(oldestData).TotalDays > 0)
-            {
-                object[] rowobj = new object[] { item.time, item.Name, diststr, item.curSystem.Note };
+                object[] rowobj = { item.time, item.Name, diststr, item.curSystem.Note };
                 int rownr;
 
-                if (oldestData.Year == 1990)
+                if (insert)
                 {
                     dataGridView1.Rows.Insert(0, rowobj);
                     rownr = 0;
@@ -273,7 +285,6 @@ namespace EDDiscovery
                 if (!sys1.HasCoordinate)  // Mark all systems without coordinates
                     cell.Style.ForeColor = Color.Blue;
             }
-        }
 
 
 
@@ -469,12 +480,14 @@ namespace EDDiscovery
         {
             //if (!this.DesignMode)
             //    RefreshHistory();
-            comboBoxHistoryWindow.SelectedIndex = 4;
+            var db = new SQLiteDBClass();
+            comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
 
             // this improves dataGridView's scrolling performance
             typeof(DataGridView).InvokeMember(
                 "DoubleBuffered",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.SetProperty,
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.SetProperty,
                 null,
                 dataGridView1,
                 new object[] { true }
@@ -485,6 +498,9 @@ namespace EDDiscovery
         {
             if (visitedSystems != null)
                 RefreshHistory();
+
+            var db = new SQLiteDBClass();
+            db.PutSettingInt("EDUIHistory", comboBoxHistoryWindow.SelectedIndex);
         }
 
 
@@ -509,27 +525,12 @@ namespace EDDiscovery
 
         private void button2_Click(object sender, EventArgs e)
         {
-            EDSCClass edsc = new EDSCClass();
-
+            //EDSCClass edsc = new EDSCClass();
             //string json = edsc.SubmitDistances("Finwen", "19 Geminorum", "HIP 30687", (float)19.26);
 
-
-            FormMap map2;
-            map2 = new FormMap();
+            var map2 = new FormMap(_discoveryForm.SystemNames);
             map2.visitedSystems = visitedSystems;
             map2.Show();
-
-            //if (TrilaterationControl.Visible)
-            //{
-            //    var centerSystem = TrilaterationControl.TargetSystem;
-            //    if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = TrilaterationControl.LastKnownSystem;
-            //    map2 = new FormMap(centerSystem) { ReferenceSystems = TrilaterationControl.CurrentReferenceSystems.ToList() };
-            //}
-            //else
-            //{
-
-            //}
-
 
         }
 
@@ -575,7 +576,7 @@ namespace EDDiscovery
 
         private void textBoxCmdrName_Leave(object sender, EventArgs e)
         {
-            if (!EDDiscoveryForm.CommanderName.Equals(textBoxCmdrName.Text))
+            if (!_discoveryForm.CommanderName.Equals(textBoxCmdrName.Text))
             {
                 SQLiteDBClass db = new SQLiteDBClass();
 
@@ -718,8 +719,8 @@ namespace EDDiscovery
                     //                    + " As a pre-caution to prevent any mistakes with submitting wrong systems or distances"
                     //                    + ", your trilateration was aborted.");
                     //}
-                    buttonTrilaterate.Enabled = false; // when we arrive to new system, currently opened SystemInformation will _always_ be for non-current system
 
+                    
                     SystemPosition item = result[0];
                     SystemPosition item2;
 
@@ -762,7 +763,7 @@ namespace EDDiscovery
                     textBoxDistanceToNextSystem.Clear();
                     textBoxDistanceToNextSystem.Enabled = true;
 
-                    AddHistoryRow(new DateTime(1990, 1, 1), item, item2);
+                    AddHistoryRow(true, item, item2);
                     lastRowIndex += 1;
                     StoreSystemNote();
                 });
@@ -815,16 +816,25 @@ namespace EDDiscovery
         {
             //dataGridView1.Visible = false;
             //panelRight.Visible = false;
-            TrilaterationControl tctrl = EDDiscoveryForm.TrilControl;
+            TrilaterationControl tctrl = _discoveryForm.TrilaterationControl;
 
             tctrl.TargetSystem = ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
             tctrl.ClearDataGridViewDistancesRows();
-            EDDiscoveryForm.ShowTrilaterationTab();
+            _discoveryForm.ShowTrilaterationTab();
             //tctrl.Parent.Visible = true;
             //buttonTrilaterate.Enabled = false;
 //            labelHeader.Text = "Trilateration";
         }
     
+		public SystemClass CurrentSystem
+        {
+            get
+            {
+                if (dataGridView1 == null || dataGridView1.CurrentRow == null) return null;
+                return ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
+            }
+        }
+
 
         public string GetCommanderName()
         {
@@ -879,16 +889,6 @@ namespace EDDiscovery
             }
 
             return valueDouble;
-        }
-
-        private void labelHeader_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TrilaterationControl_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)

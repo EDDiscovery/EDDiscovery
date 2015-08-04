@@ -28,14 +28,11 @@ namespace EDDiscovery
 
     public partial class EDDiscoveryForm : Form
     {
-        static public  AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
-        static public string CommanderName;
-        private static TrilaterationControl sTrilControl;
-        private static TravelHistoryControl  sTravelControl;
-        private static EDDiscoveryForm sEDDiscoveryForm;
+        public readonly AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
+        public string CommanderName;
 
-        string fileTgcSystems ;
-        string fileTgcDistances;
+        readonly string fileTgcSystems ;
+        readonly string fileTgcDistances;
 
         public event DistancesLoaded OnDistancesLoaded;
 
@@ -47,68 +44,50 @@ namespace EDDiscovery
             fileTgcDistances = Path.Combine(Tools.GetAppDataDirectory(), "tgcdistances.json");
         }
 
-
-        static public TrilaterationControl TrilControl
+        public TravelHistoryControl TravelControl
         {
-            get { return sTrilControl; }
-        }
-
-        static public TravelHistoryControl TravelControl
-        {
-            get { return sTravelControl; }
+            get { return travelHistoryControl1; }
         }
 
 
-        static internal void ShowTrilaterationTab()
+        internal void ShowTrilaterationTab()
         {
-            sEDDiscoveryForm.tabControl1.SelectedIndex = 1;
+            tabControl1.SelectedIndex = 1;
         }
-        static internal void ShowHistoryTab()
+
+        internal void ShowHistoryTab()
         {
-            sEDDiscoveryForm.tabControl1.SelectedIndex = 0;
+            tabControl1.SelectedIndex = 0;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             try
             {
-                sTrilControl = TrilaterationControl;
-                sTravelControl = travelHistoryControl1;
-                sEDDiscoveryForm = this;
                 // Click once   System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVe‌​rsion
                 var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
                 var version = assemblyFullName.Split(',')[1].Split('=')[1];
-                Text = "EDDiscovery v" + version;
+                Text = string.Format("EDDiscovery v{0}", version);
                 EliteDangerous.CheckED();
 
                 labelPanelText.Text = "Loading. Please wait!";
                 panelInfo.Visible = true;
                 panelInfo.BackColor = Color.Gold;
 
-
-
                 SystemData sdata = new SystemData();
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
 
-
-
-                string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Developments\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
+                string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
 
                 EDDiscovery2.Properties.Settings.Default.Upgrade();
-
-
-
 
                 if (EDDiscovery2.Properties.Settings.Default.Netlogdir.Equals(""))
                     EDDiscovery2.Properties.Settings.Default.Netlogdir = datapath;
 
-
                 if (EDDiscovery2.Properties.Settings.Default.NetlogDirAutoMode)
                 {
                     textBoxNetLogDir.Text = datapath;
-
                     radioButton_Auto.Checked = true;
-
                 }
                 else
                 {
@@ -156,10 +135,8 @@ namespace EDDiscovery
             {
                 travelHistoryControl1.Enabled = false;
 
-                var redWizzardThread = new Thread(GetRedWizzardFiles);
-                redWizzardThread.Name = "Downloading Red Wizzard Files";
-                var edscThread = new Thread(GetEDSCSystems);
-                edscThread.Name = "Downloading EDSC Systems";
+                var redWizzardThread = new Thread(GetRedWizzardFiles) {Name = "Downloading Red Wizzard Files"};
+                var edscThread = new Thread(GetEDSCSystems) {Name = "Downloading EDSC Systems"};
 
                 redWizzardThread.Start();
                 edscThread.Start();
@@ -362,6 +339,12 @@ namespace EDDiscovery
         }
 
         private Thread ThreadEDDB;
+
+        public List<SystemPosition> visitedSystems
+        {
+            get { return travelHistoryControl1.visitedSystems; }
+        }
+
         private void GetEDDBAsync()
         {
             ThreadEDDB = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDDBUpdate));
@@ -670,13 +653,17 @@ namespace EDDiscovery
 
         private void button_Save_Click(object sender, EventArgs e)
         {
-            EDDiscovery2.Properties.Settings.Default.Netlogdir = textBoxNetLogDir.Text;
-            EDDiscovery2.Properties.Settings.Default.NetlogDirAutoMode = radioButton_Auto.Checked;
-
-            EDDiscovery2.Properties.Settings.Default.Save();
+            SaveSettings();
 
             tabControl1.SelectedTab = tabPageTravelHistory;
             travelHistoryControl1.RefreshHistory();
+        }
+
+        private void SaveSettings()
+        {
+            EDDiscovery2.Properties.Settings.Default.Netlogdir = textBoxNetLogDir.Text;
+            EDDiscovery2.Properties.Settings.Default.NetlogDirAutoMode = radioButton_Auto.Checked;
+            EDDiscovery2.Properties.Settings.Default.Save();
         }
 
         private void routeControl1_Load(object sender, EventArgs e)
@@ -687,6 +674,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             travelHistoryControl1.netlog.StopMonitor();
+            SaveSettings();
         }
 
         private void travelHistoryControl1_Load(object sender, EventArgs e)
@@ -847,6 +835,7 @@ namespace EDDiscovery
                 }
             }
         }
+
 
 
 

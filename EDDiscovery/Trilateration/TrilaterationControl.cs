@@ -11,22 +11,26 @@ using EDDiscovery.DB;
 using ThreadState = System.Threading.ThreadState;
 using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
+using EDDiscovery2;
 
 namespace EDDiscovery
 {
     public partial class TrilaterationControl : UserControl
     {
+        private readonly EDDiscoveryForm _discoveryForm;
         public SystemClass TargetSystem;
         private Thread trilaterationThread;
         private Trilateration.Result lastTrilatelationResult;
         private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
         private Thread EDSCSubmissionThread;
 
-        public TrilaterationControl()
+
+        public TrilaterationControl(EDDiscoveryForm discoveryForm)
         {
+            _discoveryForm = discoveryForm;
             InitializeComponent();
         }
-        
+
         private List<SystemClass> GetEnteredSystems()
         {
             var systems = new List<SystemClass>();
@@ -526,7 +530,7 @@ namespace EDDiscovery
             get
             {
                 var lastKnown = (from systems
-                    in EDDiscoveryForm.TravelControl.visitedSystems
+                    in _discoveryForm.visitedSystems
                     where systems.curSystem != null && systems.curSystem.HasCoordinate
                     orderby systems.time descending
                     select systems.curSystem).FirstOrDefault();
@@ -588,7 +592,7 @@ namespace EDDiscovery
 
         private void SubmitToEDSC()
         {
-            var travelHistoryControl = EDDiscoveryForm.TravelControl;
+            var travelHistoryControl = _discoveryForm.TravelControl;
             string commanderName = travelHistoryControl.GetCommanderName();
 
             if (string.IsNullOrEmpty(commanderName))
@@ -708,7 +712,7 @@ namespace EDDiscovery
         private void toolStripButton1_Close(object sender, EventArgs e)
         {
             //Visible = false;
-            EDDiscoveryForm.ShowHistoryTab();
+            _discoveryForm.ShowHistoryTab();
         }
 
 
@@ -754,9 +758,22 @@ namespace EDDiscovery
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-
-            TargetSystem = ((SystemPosition)EDDiscoveryForm.TravelControl.dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
+            TargetSystem = ((SystemPosition)_discoveryForm.TravelControl.dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
             ClearDataGridViewDistancesRows();
+            PopulateSuggestedSystems();
+            PopulateClosestSystems();
+        }
+
+        private void toolStripButtonMap_Click(object sender, EventArgs e)
+        {
+            var centerSystem = TargetSystem;
+            if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = LastKnownSystem;
+            var map2 = new FormMap(centerSystem, _discoveryForm.SystemNames)
+            {
+                ReferenceSystems = CurrentReferenceSystems.ToList(),
+                visitedSystems = _discoveryForm.visitedSystems
+            };
+            map2.Show();
         }
     }
 }

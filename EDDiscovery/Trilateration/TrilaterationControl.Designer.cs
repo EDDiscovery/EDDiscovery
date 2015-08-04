@@ -68,6 +68,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.panelImplementation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -447,7 +448,8 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonClose,
-            this.toolStripButtonNew});
+            this.toolStripButtonNew,
+            this.toolStripButtonMap});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(826, 25);
@@ -473,8 +475,19 @@
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(60, 22);
             this.toolStripButtonNew.Text = "Start new";
-            this.toolStripButtonNew.ToolTipText = "Start new Trilateration on current system";
+            this.toolStripButtonNew.ToolTipText = "Calculate coordinates for current system";
             this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
+            // 
+            // toolStripButtonMap
+            // 
+            this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonMap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMap.Image")));
+            this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonMap.Name = "toolStripButtonMap";
+            this.toolStripButtonMap.Size = new System.Drawing.Size(51, 22);
+            this.toolStripButtonMap.Text = "3d map";
+            this.toolStripButtonMap.ToolTipText = "Show 3d map";
+            this.toolStripButtonMap.Click += new System.EventHandler(this.toolStripButtonMap_Click);
             // 
             // TrilaterationControl
             // 
@@ -553,5 +566,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         protected System.Windows.Forms.DataGridView dataGridViewDistances;
+        private System.Windows.Forms.ToolStripButton toolStripButtonMap;
     }
 }

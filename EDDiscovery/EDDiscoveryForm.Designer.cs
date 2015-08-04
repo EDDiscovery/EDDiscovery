@@ -32,9 +32,9 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
+            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl(this);
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.TrilaterationControl = new EDDiscovery.TrilaterationControl();
+            this.TrilaterationControl = new EDDiscovery.TrilaterationControl(this);
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -384,7 +384,7 @@
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Label labelPanelText;
         private System.Windows.Forms.TabPage tabPageTriletaration;
-        private TrilaterationControl TrilaterationControl;
+        public TrilaterationControl TrilaterationControl;
     }
 }
 
