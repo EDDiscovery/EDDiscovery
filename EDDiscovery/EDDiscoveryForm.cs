@@ -687,6 +687,10 @@ namespace EDDiscovery
 
         private void button1_Click(object sender, EventArgs e)
         {
+            FormSagCarinaMission frm = new FormSagCarinaMission(this);
+
+            frm.Show();
+
 //            EDDiscoveryServer srv = new EDDiscoveryServer() ;
 //            List<SystemClass> systems;
 //            string date = "";
@@ -715,7 +719,7 @@ namespace EDDiscovery
             //eddb.Add2DB(eddbsystems, eddbstations);
 
 
-            TestTrileteration();
+            //TestTrileteration();
 
 
         }

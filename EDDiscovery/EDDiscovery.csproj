@@ -104,6 +104,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="2DMap\FGEImage.cs" />
+    <Compile Include="2DMap\FormSagCarinaMission.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2DMap\FormSagCarinaMission.Designer.cs">
+      <DependentUpon>FormSagCarinaMission.cs</DependentUpon>
+    </Compile>
     <Compile Include="3DMap\Data3DSetClass.cs" />
     <Compile Include="DB\StationClass.cs" />
     <Compile Include="EDDB\EDDBClass.cs" />
@@ -182,6 +189,9 @@
     <Content Include="trilateration.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="2DMap\FormSagCarinaMission.resx">
+      <DependentUpon>FormSagCarinaMission.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EDDiscoveryForm.resx">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </EmbeddedResource>
