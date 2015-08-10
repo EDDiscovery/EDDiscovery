@@ -59,10 +59,10 @@ namespace EDDiscovery2
         {
             //currentImage = (Bitmap)Image.FromFile(fgeimg.Name, true);
 
-            pictureBox1.ImageLocation = fgeimg.Name;1
-
+            panel1.BackgroundImage = new Bitmap(fgeimg.Name);
+            currentFGEImage = fgeimg;
             DrawTravelHistory();
-
+            
         }
 
 
@@ -80,11 +80,29 @@ namespace EDDiscovery2
                     DrawLine(listHistory[ii - 1].curSystem, listHistory[ii].curSystem);
                 }
             }
+
+            Point test1  = currentFGEImage.TransformCoordinate(currentFGEImage.BottomLeft);
+            Point test2 = currentFGEImage.TransformCoordinate(currentFGEImage.TopRight);
         }
 
         private void DrawLine(SystemClass sys1, SystemClass sys2)
         {
+            Graphics gfx = panel1.CreateGraphics();
 
+            gfx.DrawLine(Pens.Red, Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.x, (int)sys1.z))), Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys2.x, (int)sys2.z))));
+        }
+
+        private Point Transform2Screen(Point point)
+        {
+            Point np = new Point(point.X / 4, point.Y / 4);
+
+            return np;
+        }
+
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            DrawTravelHistory();
         }
     }
 }
