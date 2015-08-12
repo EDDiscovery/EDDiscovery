@@ -535,8 +535,7 @@ namespace EDDiscovery
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //EDSCClass edsc = new EDSCClass();
-            //string json = edsc.SubmitDistances("Finwen", "19 Geminorum", "HIP 30687", (float)19.26);
+
 
             var map2 = new FormMap(_discoveryForm.SystemNames);
             map2.visitedSystems = visitedSystems;
@@ -664,15 +663,15 @@ namespace EDDiscovery
 
             EDSMClass edsm = new EDSMClass();
 
-
             foreach (var dist in dists)
             {
-                string json;
+                string json, json2;
 
                 if (dist.Dist > 0)
                 {
                     LogText("Add distance: " + dist.NameA + " => " + dist.NameB + " :" + dist.Dist.ToString("0.00") + "ly" + Environment.NewLine);
                     json = edsm.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
+                    json2 = edsc.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
                 }
                 else
                 {
