@@ -12,10 +12,13 @@ namespace EDDiscovery2
         public Point TopLeft, TopRight, BottomLeft, BottomRight;
         public Point pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight;
         public List<Point> Yaxispoints;
+        private List<Double> polynoms; 
+
 
         public FGEImage(string filename)
         {
             Name = filename;
+            Yaxispoints = new List<Point>();
         }
 
         public Point TransformCoordinate(Point coordinate)
@@ -23,6 +26,8 @@ namespace EDDiscovery2
             int diffx1, diffx2, diffy1, diffy2;
             int diffpx1, diffpx2, diffpy1, diffpy2;
 
+            if (polynoms == null)
+                polynoms = FindPolynomialLeastSquaresFit(Yaxispoints, 3);
             
             //Transform trans;
 
@@ -58,7 +63,7 @@ namespace EDDiscovery2
 
 
         // Find the least squares linear fit.
-        public static List<double> FindPolynomialLeastSquaresFit(List<Point> points, int degree)
+        public  List<double> FindPolynomialLeastSquaresFit(List<Point> points, int degree)
         {
             // Allocate space for (degree + 1) equations with 
             // (degree + 2) terms each (including the constant term).

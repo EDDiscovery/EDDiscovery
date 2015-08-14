@@ -48,6 +48,16 @@ namespace EDDiscovery2
                     fgeimg.BottomRight = new Point(3000, 0);
                     fgeimg.pxBottomRight = new Point(2871, 2616);
 
+
+                    fgeimg.Yaxispoints.Add(new Point(0, 2634));
+                    fgeimg.Yaxispoints.Add(new Point(1000, 2158));
+                    fgeimg.Yaxispoints.Add(new Point(2000, 1710));
+                    fgeimg.Yaxispoints.Add(new Point(3000, 1288));
+                    fgeimg.Yaxispoints.Add(new Point(4000, 887));
+                    fgeimg.Yaxispoints.Add(new Point(5000, 503));
+                    fgeimg.Yaxispoints.Add(new Point(6000, 0));
+
+
                     fgeimages.Add(fgeimg);
 
                     ShowImage(fgeimg);
@@ -68,7 +78,7 @@ namespace EDDiscovery2
 
         private void DrawTravelHistory()
         {
-            DateTime start = new DateTime(2015, 8, 1);
+            DateTime start = new DateTime(2014, 8, 1);
 
             var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.time > start && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.time  select systems;
             List<SystemPosition> listHistory = history.ToList<SystemPosition>();
