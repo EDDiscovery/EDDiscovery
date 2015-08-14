@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -21,14 +22,56 @@ namespace EDDiscovery2
             Yaxispoints = new List<Point>();
         }
 
+        public string ToJson()
+        {
+            JObject jo = new JObject(
+                new JProperty("Name", Name));
+
+
+            jo.Add(AddPoint("TopLeft", TopLeft));
+            jo.Add(AddPoint("TopRight", TopRight));
+            jo.Add(AddPoint("BottomLeft", BottomLeft));
+            jo.Add(AddPoint("BottomRight", BottomRight));
+
+            jo.Add(AddPoint("pxTopLeft", pxTopLeft));
+            jo.Add(AddPoint("pxTopRight", pxTopRight));
+            jo.Add(AddPoint("pxBottomLeft", pxBottomLeft));
+            jo.Add(AddPoint("pxBottomRight", pxBottomRight));
+
+            jo.Add(new JProperty("YAxaispoints",
+                new JArray(
+                    from p in Yaxispoints
+                    select new JObject(
+                        new JProperty("x", p.X),
+                        new JProperty("y", p.Y)
+                    ))));
+
+
+            return jo.ToString();
+        }
+
+        private JProperty AddPoint(string name, Point obj)
+        {
+            JObject jo = new JObject();
+            jo.Add(new JProperty("x", obj.X));
+            jo.Add(new JProperty("y", obj.Y));
+
+            JProperty jp = new JProperty(name, jo);
+            return jp;
+        }
+
         public Point TransformCoordinate(Point coordinate)
         {
             int diffx1, diffx2, diffy1, diffy2;
             int diffpx1, diffpx2, diffpy1, diffpy2;
 
+            string json = ToJson();
             if (polynoms == null)
-                polynoms = FindPolynomialLeastSquaresFit(Yaxispoints, 3);
-            
+            {
+                if (Yaxispoints!= null && Yaxispoints.Count>0)
+                    polynoms = FindPolynomialLeastSquaresFit(Yaxispoints, 3);
+
+            }
             //Transform trans;
 
             diffx1 = TopRight.X - TopLeft.X;
@@ -56,11 +99,32 @@ namespace EDDiscovery2
             dx = dx2 + newPoint.Y / (double)diffy1 * (dx1 - dx2);
             dy = dy2 + newPoint.X / (double)diffx1 * (dy1- dy2);
 
-            return new Point((int)(newPoint.X*dx + pxBottomLeft.X + newPoint.Y / (double)diffy1 * (pxTopLeft.X - pxBottomLeft.X)), 
-                             (int)(newPoint.Y*dy + pxBottomLeft.Y + newPoint.X / (double)diffx1 * (pxTopRight.Y - pxTopLeft.Y)));
+
+            int x, y;
+
+            x = (int)(newPoint.X * dx + pxBottomLeft.X + newPoint.Y / (double)diffy1 * (pxTopLeft.X - pxBottomLeft.X));
+            if (polynoms != null)
+                y = (int)(CalcYPixel(newPoint.Y) + newPoint.X / (double)diffx1 * (pxTopRight.Y - pxTopLeft.Y));
+            else
+                y = (int)(newPoint.Y * dy + pxBottomLeft.Y + newPoint.X / (double)diffx1 * (pxTopRight.Y - pxTopLeft.Y));
+
+
+            return new Point(x, y);
 
         }
 
+
+        private double CalcYPixel(double ypos)
+        {
+            double pos = 0;
+
+            for (int ii=0; ii< polynoms.Count; ii++) 
+            {
+                pos +=  Math.Pow(ypos, ii) * polynoms[ii];
+            }
+
+            return pos;
+        }
 
         // Find the least squares linear fit.
         public  List<double> FindPolynomialLeastSquaresFit(List<Point> points, int degree)

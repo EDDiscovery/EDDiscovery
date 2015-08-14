@@ -30,11 +30,11 @@ namespace EDDiscovery2
 
         private void FormSagCarinaMission_Load(object sender, EventArgs e)
         {
-            if (Directory.Exists("FGE"))
+            if (Directory.Exists("Maps"))
             {
-                if (File.Exists("FGE\\SC-00.jpg"))
+                if (File.Exists("Maps\\SC-00.jpg"))
                 {
-                    FGEImage fgeimg = new FGEImage("FGE\\SC-00.jpg");
+                    FGEImage fgeimg = new FGEImage("Maps\\SC-00.jpg");
 
                     fgeimg.TopLeft = new Point(-3000, 6000);
                     fgeimg.pxTopLeft = new Point(329, 144);
@@ -55,7 +55,7 @@ namespace EDDiscovery2
                     fgeimg.Yaxispoints.Add(new Point(3000, 1288));
                     fgeimg.Yaxispoints.Add(new Point(4000, 887));
                     fgeimg.Yaxispoints.Add(new Point(5000, 503));
-                    fgeimg.Yaxispoints.Add(new Point(6000, 0));
+                    fgeimg.Yaxispoints.Add(new Point(6000, 144));
 
 
                     fgeimages.Add(fgeimg);
