@@ -578,13 +578,13 @@ namespace EDDiscovery
                 return;
             }
 
-            // edge case - should not happen, usually, but, just in case...
-            if (lastTrilatelationResult.State != Trilateration.ResultState.Exact)
-            {
-                LogText("EDSC submission aborted, local trilateration failed." + Environment.NewLine, Color.Red);
-                UnfreezeTrilaterationUI();
-                return;
-            }
+            //// edge case - should not happen, usually, but, just in case...
+            //if (lastTrilatelationResult.State != Trilateration.ResultState.Exact)
+            //{
+            //    LogText("EDSC submission aborted, local trilateration failed." + Environment.NewLine, Color.Red);
+            //    UnfreezeTrilaterationUI();
+            //    return;
+            //}
 
             EDSCSubmissionThread = new Thread(SubmitToEDSC) {Name = "EDSC Submission"};
             EDSCSubmissionThread.Start();
