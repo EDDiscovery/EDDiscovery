@@ -28,58 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSagCarinaMission));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.lower4thQuadrantToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sC00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sC01ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripDropDownButton1});
+            this.toolStripComboBox1,
+            this.toolStripComboBox2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1157, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripDropDownButton1
-            // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lower4thQuadrantToolStripMenuItem,
-            this.sC00ToolStripMenuItem,
-            this.sC01ToolStripMenuItem});
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 22);
-            this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
-            // 
-            // lower4thQuadrantToolStripMenuItem
-            // 
-            this.lower4thQuadrantToolStripMenuItem.Checked = true;
-            this.lower4thQuadrantToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.lower4thQuadrantToolStripMenuItem.Name = "lower4thQuadrantToolStripMenuItem";
-            this.lower4thQuadrantToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.lower4thQuadrantToolStripMenuItem.Text = "Lower 4th quadrant";
-            // 
-            // sC00ToolStripMenuItem
-            // 
-            this.sC00ToolStripMenuItem.Name = "sC00ToolStripMenuItem";
-            this.sC00ToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.sC00ToolStripMenuItem.Text = "SC-00";
-            // 
-            // sC01ToolStripMenuItem
-            // 
-            this.sC01ToolStripMenuItem.Name = "sC01ToolStripMenuItem";
-            this.sC01ToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.sC01ToolStripMenuItem.Text = "SC-01";
             // 
             // panel1
             // 
@@ -92,6 +57,26 @@
             this.panel1.Size = new System.Drawing.Size(1157, 615);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // toolStripComboBox1
+            // 
+            this.toolStripComboBox1.Name = "toolStripComboBox1";
+            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
+            // 
+            // toolStripComboBox2
+            // 
+            this.toolStripComboBox2.DropDownWidth = 140;
+            this.toolStripComboBox2.Items.AddRange(new object[] {
+            "FGE Expedition start",
+            "Last Week",
+            "Last Month",
+            "Last Year",
+            "All"});
+            this.toolStripComboBox2.Name = "toolStripComboBox2";
+            this.toolStripComboBox2.Size = new System.Drawing.Size(140, 25);
+            this.toolStripComboBox2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
+            this.toolStripComboBox2.Click += new System.EventHandler(this.toolStripComboBox2_Click);
             // 
             // FormSagCarinaMission
             // 
@@ -112,10 +97,8 @@
 
         #endregion
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
-        private System.Windows.Forms.ToolStripMenuItem lower4thQuadrantToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sC00ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sC01ToolStripMenuItem;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBox2;
     }
 }

@@ -17,18 +17,37 @@ namespace EDDiscovery2
         public List<FGEImage> fgeimages = new List<FGEImage>();
         private FGEImage currentFGEImage;
         public readonly EDDiscoveryForm _eddiscoveryForm;
-//        private Bitmap currentImage;
+        //        private Bitmap currentImage;
 
+        private DateTime maxage;
 
         public FormSagCarinaMission(EDDiscoveryForm frm)
         {
             _eddiscoveryForm = frm;
+            
             InitializeComponent();
         }
 
 
 
         private void FormSagCarinaMission_Load(object sender, EventArgs e)
+        {
+            maxage = new DateTime(2010, 1, 1);
+            AddImages();
+            WindowState = FormWindowState.Maximized;
+
+            toolStripComboBox1.Items.Clear();
+
+            foreach (FGEImage img in fgeimages)
+            {
+                toolStripComboBox1.Items.Add(img.Name);
+            }
+            toolStripComboBox1.SelectedIndex = 0;
+            toolStripComboBox2.SelectedIndex = 0;
+
+        }
+
+        private void AddImages()
         {
             if (Directory.Exists("Maps"))
             {
@@ -59,25 +78,100 @@ namespace EDDiscovery2
 
                     fgeimages.Add(fgeimg);
 
+                    //ShowImage(fgeimg);
+                }
+
+                if (File.Exists("Maps\\SC-02.jpg"))
+                {
+                    FGEImage fgeimg = new FGEImage("Maps\\SC-02.jpg");
+
+                    fgeimg.TopLeft = new Point(-1000, 9000);
+                    fgeimg.pxTopLeft = new Point(281, 169);
+
+                    fgeimg.TopRight = new Point(5000, 9000);
+                    fgeimg.pxTopRight = new Point(2688, 150);
+
+                    fgeimg.BottomLeft = new Point(-1000, 3000);
+                    fgeimg.pxBottomLeft = new Point(152, 2648);
+
+                    fgeimg.BottomRight = new Point(5000, 3000);
+                    fgeimg.pxBottomRight = new Point(2817, 2620);
+
+
+                    fgeimg.Yaxispoints.Add(new Point(3000, 2643));
+                    fgeimg.Yaxispoints.Add(new Point(4000, 2199));
+                    fgeimg.Yaxispoints.Add(new Point(5000, 1767));
+                    fgeimg.Yaxispoints.Add(new Point(6000, 1341));
+                    fgeimg.Yaxispoints.Add(new Point(7000, 936));
+                    fgeimg.Yaxispoints.Add(new Point(8000, 545));
+                    fgeimg.Yaxispoints.Add(new Point(9000, 167));
+
+                    fgeimages.Add(fgeimg);
+
+                    //ShowImage(fgeimg);
+                }
+
+                if (File.Exists("Maps\\SC-L4.jpg"))
+                {
+                    FGEImage fgeimg = new FGEImage("Maps\\SC-L4.jpg");
+
+                    fgeimg.TopLeft = new Point(0, 30000);
+                    fgeimg.pxTopLeft = new Point(344, 106);
+
+                    fgeimg.TopRight = new Point(30000, 30000);
+                    fgeimg.pxTopRight = new Point(2511, 119);
+
+                    fgeimg.BottomLeft = new Point(0, -5000);
+                    fgeimg.pxBottomLeft = new Point(136, 2839);
+
+                    fgeimg.BottomRight = new Point(30000, -5000);
+                    fgeimg.pxBottomRight = new Point(2881, 2855);
+
+
+                    fgeimg.Yaxispoints.Add(new Point(-5000, 2839));
+                    fgeimg.Yaxispoints.Add(new Point(0000, 2392));
+                    fgeimg.Yaxispoints.Add(new Point(5000, 1926));
+                    fgeimg.Yaxispoints.Add(new Point(10000, 1523));
+                    fgeimg.Yaxispoints.Add(new Point(15000, 1117));
+                    fgeimg.Yaxispoints.Add(new Point(20000, 771));
+                    fgeimg.Yaxispoints.Add(new Point(25000, 406));
+                    fgeimg.Yaxispoints.Add(new Point(30000, 106));
+
+                    fgeimages.Add(fgeimg);
+
                     ShowImage(fgeimg);
                 }
-            }       
+
+            }
         }
 
         private void ShowImage(FGEImage fgeimg)
         {
             //currentImage = (Bitmap)Image.FromFile(fgeimg.Name, true);
-
-            panel1.BackgroundImage = new Bitmap(fgeimg.Name);
-            currentFGEImage = fgeimg;
-            DrawTravelHistory();
-            
+            if (fgeimg != null)
+            {
+                panel1.BackgroundImage = new Bitmap(fgeimg.Name);
+                currentFGEImage = fgeimg;
+                DrawTravelHistory();
+            }
         }
 
 
         private void DrawTravelHistory()
         {
-            DateTime start = new DateTime(2014, 8, 1);
+            DateTime start = maxage;
+
+            
+
+            foreach (var sys in _eddiscoveryForm.TravelControl.visitedSystems)
+            {
+                if (sys.curSystem == null)
+                {
+                    sys.curSystem = SystemData.GetSystem(sys.Name);
+
+                }
+            }
+
 
             var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.time > start && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.time  select systems;
             List<SystemPosition> listHistory = history.ToList<SystemPosition>();
@@ -125,6 +219,49 @@ namespace EDDiscovery2
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             //DrawTravelHistory();
+        }
+
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ShowSelectedImage();
+        }
+
+        private void ShowSelectedImage()
+        {
+            string str = toolStripComboBox1.SelectedItem.ToString();
+
+            FGEImage img = fgeimages.FirstOrDefault(i => i.Name == str);
+            ShowImage(img);
+        }
+
+        private void toolStripComboBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int nr = toolStripComboBox2.SelectedIndex;
+            /*
+            FGE Expedition start
+            Last Week
+            Last Month
+            Last Year
+            All
+            */
+            if (nr == 0)
+                maxage = new DateTime(2015, 8, 1);
+            else if (nr == 1)
+                maxage = DateTime.Now.AddDays(-7);
+            else if (nr == 2)
+                maxage = DateTime.Now.AddMonths(-1);
+            else if (nr == 3)
+                maxage = DateTime.Now.AddYears(-1);
+            else
+                maxage = new DateTime(2010, 8, 1); 
+
+            
+            ShowSelectedImage();
         }
     }
 }

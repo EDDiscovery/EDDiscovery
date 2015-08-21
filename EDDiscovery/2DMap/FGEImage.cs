@@ -104,7 +104,7 @@ namespace EDDiscovery2
 
             x = (int)(newPoint.X * dx + pxBottomLeft.X + newPoint.Y / (double)diffy1 * (pxTopLeft.X - pxBottomLeft.X));
             if (polynoms != null)
-                y = (int)(CalcYPixel(newPoint.Y) + newPoint.X / (double)diffx1 * (pxTopRight.Y - pxTopLeft.Y));
+                y = (int)(CalcYPixel(coordinate.Y) + newPoint.X / (double)diffx1 * (pxTopRight.Y - pxTopLeft.Y));
             else
                 y = (int)(newPoint.Y * dy + pxBottomLeft.Y + newPoint.X / (double)diffx1 * (pxTopRight.Y - pxTopLeft.Y));
 
