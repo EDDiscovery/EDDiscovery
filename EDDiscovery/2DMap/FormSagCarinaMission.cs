@@ -32,9 +32,9 @@ namespace EDDiscovery2
         {
             if (Directory.Exists("Maps"))
             {
-                if (File.Exists("Maps\\SC-00.jpg"))
+                if (File.Exists("Maps\\SC-01.jpg"))
                 {
-                    FGEImage fgeimg = new FGEImage("Maps\\SC-00.jpg");
+                    FGEImage fgeimg = new FGEImage("Maps\\SC-01.jpg");
 
                     fgeimg.TopLeft = new Point(-3000, 6000);
                     fgeimg.pxTopLeft = new Point(329, 144);
@@ -56,7 +56,6 @@ namespace EDDiscovery2
                     fgeimg.Yaxispoints.Add(new Point(4000, 887));
                     fgeimg.Yaxispoints.Add(new Point(5000, 503));
                     fgeimg.Yaxispoints.Add(new Point(6000, 144));
-
 
                     fgeimages.Add(fgeimg);
 
