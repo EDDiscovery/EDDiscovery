@@ -56,6 +56,7 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
+            this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -112,11 +113,11 @@
             this.tabPageTriletaration.Text = "Trilateration";
             this.tabPageTriletaration.UseVisualStyleBackColor = true;
             // 
-            // TrilaterationControl
+            // trilaterationControl
             // 
             this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.trilaterationControl.Name = "TrilaterationControl";
+            this.trilaterationControl.Name = "trilaterationControl";
             this.trilaterationControl.Size = new System.Drawing.Size(891, 561);
             this.trilaterationControl.TabIndex = 21;
             // 
@@ -247,6 +248,7 @@
             this.addNewStarToolStripMenuItem,
             this.openEliteDangerousDirectoryToolStripMenuItem,
             this.showLogfilesToolStripMenuItem,
+            this.show2DMapsToolStripMenuItem,
             this.statisticsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
@@ -324,6 +326,13 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
+            // show2DMapsToolStripMenuItem
+            // 
+            this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
+            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.show2DMapsToolStripMenuItem.Text = "Show 2D maps";
+            this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -385,6 +394,7 @@
         private System.Windows.Forms.Label labelPanelText;
         private System.Windows.Forms.TabPage tabPageTriletaration;
         public TrilaterationControl trilaterationControl;
+        private System.Windows.Forms.ToolStripMenuItem show2DMapsToolStripMenuItem;
     }
 }
 

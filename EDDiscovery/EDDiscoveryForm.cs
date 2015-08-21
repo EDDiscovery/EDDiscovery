@@ -843,6 +843,13 @@ namespace EDDiscovery
             }
         }
 
+        private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormSagCarinaMission frm = new FormSagCarinaMission(this);
+
+            frm.Show();
+        }
+
 
 
 
