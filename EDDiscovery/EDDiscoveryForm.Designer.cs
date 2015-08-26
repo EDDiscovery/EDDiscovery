@@ -35,6 +35,7 @@
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
             this.trilaterationControl = new EDDiscovery.TrilaterationControl();
+            this.tabPageScreenshots = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -50,13 +51,14 @@
             this.addNewStarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openEliteDangerousDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -74,6 +76,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageTravelHistory);
             this.tabControl1.Controls.Add(this.tabPageTriletaration);
+            this.tabControl1.Controls.Add(this.tabPageScreenshots);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(0, 27);
@@ -120,6 +123,14 @@
             this.trilaterationControl.Name = "trilaterationControl";
             this.trilaterationControl.Size = new System.Drawing.Size(891, 561);
             this.trilaterationControl.TabIndex = 21;
+
+            this.tabPageScreenshots.Controls.Add(this.imageHandler1);
+            this.tabPageScreenshots.Location = new System.Drawing.Point(4, 22);
+            this.tabPageScreenshots.Name = "tabPageScreenshots";
+            this.tabPageScreenshots.Size = new System.Drawing.Size(897, 567);
+            this.tabPageScreenshots.TabIndex = 4;
+            this.tabPageScreenshots.Text = "Screenshots";
+            this.tabPageScreenshots.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -275,6 +286,13 @@
             this.showLogfilesToolStripMenuItem.Text = "Show logfiles";
             this.showLogfilesToolStripMenuItem.Click += new System.EventHandler(this.showLogfilesToolStripMenuItem_Click);
             // 
+            // show2DMapsToolStripMenuItem
+            // 
+            this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
+            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.show2DMapsToolStripMenuItem.Text = "Show 2D maps";
+            this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
+            // 
             // statisticsToolStripMenuItem
             // 
             this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
@@ -326,12 +344,13 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
-            // show2DMapsToolStripMenuItem
+            // imageHandler1
             // 
-            this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
-            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.show2DMapsToolStripMenuItem.Text = "Show 2D maps";
-            this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
+            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
+            this.imageHandler1.Name = "imageHandler1";
+            this.imageHandler1.Size = new System.Drawing.Size(897, 567);
+            this.imageHandler1.TabIndex = 0;
             // 
             // EDDiscoveryForm
             // 
@@ -353,6 +372,7 @@
             this.tabPageTravelHistory.ResumeLayout(false);
             this.tabPageTriletaration.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.tabPageScreenshots.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -395,6 +415,8 @@
         private System.Windows.Forms.TabPage tabPageTriletaration;
         public TrilaterationControl trilaterationControl;
         private System.Windows.Forms.ToolStripMenuItem show2DMapsToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPageScreenshots;
+        private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
     }
 }
 
