@@ -147,6 +147,12 @@
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EliteDangerous\NetLogClass.cs" />
+    <Compile Include="ImageHandler\ImageHandler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ImageHandler\ImageHandler.Designer.cs">
+      <DependentUpon>ImageHandler.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteControl.cs">
@@ -206,6 +212,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="3DMap\FormMap.resx">
       <DependentUpon>FormMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImageHandler\ImageHandler.resx">
+      <DependentUpon>ImageHandler.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

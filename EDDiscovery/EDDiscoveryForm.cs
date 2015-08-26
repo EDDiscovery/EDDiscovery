@@ -45,7 +45,7 @@ namespace EDDiscovery
 
             trilaterationControl.InitControl(this);
             travelHistoryControl1.InitControl(this);
- 
+            imageHandler1.InitControl(this);
         }
 
         public TravelHistoryControl TravelControl

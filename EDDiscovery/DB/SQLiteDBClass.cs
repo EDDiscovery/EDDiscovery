@@ -810,6 +810,97 @@ namespace EDDiscovery.DB
         }
 
 
+        public bool GetSettingBool(string key, bool defaultvalue)
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = "SELECT ValueInt from Register WHERE ID = @ID";
+                        cmd.Parameters.AddWithValue("@ID", key);
+                        object ob = SqlScalar(cn, cmd);
+
+                        if (ob == null)
+                            return defaultvalue;
+
+                        int val = Convert.ToInt32(ob);
+
+                        if (val == 0)
+                            return false;
+                        else
+                            return true;
+                       
+                    }
+                }
+            }
+            catch
+            {
+                return defaultvalue;
+            }
+        }
+
+
+        public bool PutSettingBool(string key, bool boolvalue)
+        {
+            try
+            {
+                int intvalue = 0;
+
+                if (boolvalue == true)
+                    intvalue = 1;
+
+                if (keyExists(key))
+                {
+                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        {
+                            cmd.Connection = cn;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandTimeout = 30;
+                            cmd.CommandText = "Update Register set ValueInt = @ValueInt Where ID=@ID";
+                            cmd.Parameters.AddWithValue("@ID", key);
+
+                            
+                            cmd.Parameters.AddWithValue("@ValueInt", intvalue);
+
+                            SqlNonQueryText(cn, cmd);
+
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        {
+                            cmd.Connection = cn;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandTimeout = 30;
+                            cmd.CommandText = "Insert into Register (ID, ValueInt) values (@ID, @valint)";
+                            cmd.Parameters.AddWithValue("@ID", key);
+                            cmd.Parameters.AddWithValue("@valint", intvalue);
+
+                            SqlNonQueryText(cn, cmd);
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
         public string GetSettingString(string key, string defaultvalue)
         {
             try
