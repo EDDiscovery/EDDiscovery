@@ -52,11 +52,13 @@
             this.checkBoxAutoConvert.UseVisualStyleBackColor = true;
             this.checkBoxAutoConvert.CheckedChanged += new System.EventHandler(this.checkBoxAutoConvert_CheckedChanged);
             // 
-            // textBoxSchreenshots
+            // textBoxScreenshotsDir
             // 
             this.textBoxScreenshotsDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
+            this.textBoxScreenshotsDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxScreenshotsDir.Location = new System.Drawing.Point(131, 26);
-            this.textBoxScreenshotsDir.Name = "textBoxSchreenshots";
+            this.textBoxScreenshotsDir.Name = "textBoxScreenshotsDir";
             this.textBoxScreenshotsDir.ReadOnly = true;
             this.textBoxScreenshotsDir.Size = new System.Drawing.Size(281, 20);
             this.textBoxScreenshotsDir.TabIndex = 1;
@@ -72,6 +74,7 @@
             // 
             // buttonChnageEDScreenshot
             // 
+            this.buttonChnageEDScreenshot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonChnageEDScreenshot.Location = new System.Drawing.Point(418, 26);
             this.buttonChnageEDScreenshot.Name = "buttonChnageEDScreenshot";
             this.buttonChnageEDScreenshot.Size = new System.Drawing.Size(57, 23);
@@ -82,6 +85,7 @@
             // 
             // buttonImageStore
             // 
+            this.buttonImageStore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonImageStore.Location = new System.Drawing.Point(418, 52);
             this.buttonImageStore.Name = "buttonImageStore";
             this.buttonImageStore.Size = new System.Drawing.Size(57, 23);
@@ -102,6 +106,8 @@
             // textBoxOutputDir
             // 
             this.textBoxOutputDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
+            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputDir.Location = new System.Drawing.Point(131, 52);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
             this.textBoxOutputDir.ReadOnly = true;
@@ -110,6 +116,7 @@
             // 
             // comboBoxFormat
             // 
+            this.comboBoxFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxFormat.FormattingEnabled = true;
             this.comboBoxFormat.Items.AddRange(new object[] {
             "Png",
@@ -124,6 +131,7 @@
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(508, 7);
             this.label3.Name = "label3";
