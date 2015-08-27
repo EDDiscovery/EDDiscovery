@@ -111,6 +111,36 @@ namespace EDDiscovery2
                     //ShowImage(fgeimg);
                 }
 
+                if (File.Exists("Maps\\SC-03.jpg"))
+                {
+                    FGEImage fgeimg = new FGEImage("Maps\\SC-03.jpg");
+
+                    fgeimg.TopLeft = new Point(3000, 8000);
+                    fgeimg.pxTopLeft = new Point(319, 187);
+
+                    fgeimg.TopRight = new Point(9000, 8000);
+                    fgeimg.pxTopRight = new Point(2646, 166);
+
+                    fgeimg.BottomLeft = new Point(3000, 2000);
+                    fgeimg.pxBottomLeft = new Point(184, 2631);
+
+                    fgeimg.BottomRight = new Point(9000, 2000);
+                    fgeimg.pxBottomRight = new Point(2777, 2609);
+
+
+                    fgeimg.Yaxispoints.Add(new Point(2000, 2631));
+                    fgeimg.Yaxispoints.Add(new Point(3000, 2186));
+                    fgeimg.Yaxispoints.Add(new Point(4000, 1757));
+                    fgeimg.Yaxispoints.Add(new Point(5000, 1343));
+                    fgeimg.Yaxispoints.Add(new Point(6000, 944));
+                    fgeimg.Yaxispoints.Add(new Point(7000, 557));
+                    fgeimg.Yaxispoints.Add(new Point(8000, 187));
+
+                    fgeimages.Add(fgeimg);
+
+                    //ShowImage(fgeimg);
+                }
+
                 if (File.Exists("Maps\\SC-L4.jpg"))
                 {
                     FGEImage fgeimg = new FGEImage("Maps\\SC-L4.jpg");

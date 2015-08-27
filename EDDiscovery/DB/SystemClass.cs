@@ -373,7 +373,7 @@ namespace EDDiscovery.DB
         public static List<SystemClass> ParseEDSM(string json, ref string date)
         {
             JArray edsc = null;
-            if (json != null && json.Length < 5)
+            if (json != null && json.Length > 5)
                 edsc = (JArray)JArray.Parse(json);
 
             List<SystemClass> listSystems = new List<SystemClass>();
