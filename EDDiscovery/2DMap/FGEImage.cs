@@ -1,9 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDDiscovery2.EDDB;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery2
 {
@@ -20,6 +23,27 @@ namespace EDDiscovery2
         {
             Name = filename;
             Yaxispoints = new List<Point>();
+        }
+
+
+        public bool DownloadImages()
+        {
+            try
+            {
+                if (!Directory.Exists("Maps"))
+                    Directory.CreateDirectory("Maps");
+
+                EDDBClass eddb = new EDDBClass();
+
+                //eddb.DownloadFile()
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception in DownloadImages:" + ex.Message);
+                return false;
+            }
+
+            return true;
         }
 
         public string ToJson()
