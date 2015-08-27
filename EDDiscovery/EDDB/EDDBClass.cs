@@ -55,11 +55,18 @@ namespace EDDiscovery2.EDDB
             return DownloadFile("http://robert.astronet.se/Elite/eddb/stations_lite.json", stationFileName);
         }
 
-        public bool DownloadFile(string url, string filename)
+        private bool DownloadFile(string url, string filename)
+        {
+            bool newfile = false;
+            return DownloadFile(url, filename, out newfile);
+        }
+
+        public bool DownloadFile(string url, string filename, out bool newfile)
         {
             var etagFilename = filename + ".etag";
             var tmpFilename = filename + ".tmp";
             var tmpEtagFilename = etagFilename + ".tmp";
+            newfile = false;
             
             var request = (HttpWebRequest) HttpWebRequest.Create(url);
             request.UserAgent = "EDDiscovery v" + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
@@ -93,6 +100,7 @@ namespace EDDiscovery2.EDDB
                 File.Move(tmpFilename, filename);
                 File.Move(tmpEtagFilename, etagFilename);
 
+                newfile = true;
                 return true;
             }
             catch (WebException ex)

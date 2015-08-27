@@ -169,7 +169,13 @@ namespace EDDiscovery2.ImageHandler
         {
             get
             {
-                switch (comboBoxFormat.SelectedIndex)
+                int nr=0;
+                Invoke((MethodInvoker)delegate
+                {
+                    nr = comboBoxFormat.SelectedIndex;
+                });
+
+                switch (nr)
                 {
                     case 0:
                         return ".png";
