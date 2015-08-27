@@ -73,6 +73,7 @@ namespace EDDiscovery
                 var version = assemblyFullName.Split(',')[1].Split('=')[1];
                 Text = string.Format("EDDiscovery v{0}", version);
                 EliteDangerous.CheckED();
+                SQLiteDBClass db = new SQLiteDBClass();
 
                 labelPanelText.Text = "Loading. Please wait!";
                 panelInfo.Visible = true;
@@ -81,22 +82,20 @@ namespace EDDiscovery
                 SystemData sdata = new SystemData();
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
 
+                // Default directory
                 string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
 
-                EDDiscovery2.Properties.Settings.Default.Upgrade();
-
-                if (EDDiscovery2.Properties.Settings.Default.Netlogdir.Equals(""))
-                    EDDiscovery2.Properties.Settings.Default.Netlogdir = datapath;
-
-                if (EDDiscovery2.Properties.Settings.Default.NetlogDirAutoMode)
+                bool auto = db.GetSettingBool("NetlogDirAutoMode", true);
+                if (auto)
                 {
+                    datapath = db.GetSettingString("Netlogdir", datapath);
                     textBoxNetLogDir.Text = datapath;
                     radioButton_Auto.Checked = true;
                 }
                 else
                 {
                     radioButton_Manual.Checked = true;
-                    textBoxNetLogDir.Text = EDDiscovery2.Properties.Settings.Default.Netlogdir;
+                    textBoxNetLogDir.Text = datapath = db.GetSettingString("Netlogdir", datapath); ;
                 }
 
 
@@ -664,9 +663,10 @@ namespace EDDiscovery
 
         private void SaveSettings()
         {
-            EDDiscovery2.Properties.Settings.Default.Netlogdir = textBoxNetLogDir.Text;
-            EDDiscovery2.Properties.Settings.Default.NetlogDirAutoMode = radioButton_Auto.Checked;
-            EDDiscovery2.Properties.Settings.Default.Save();
+            SQLiteDBClass db = new SQLiteDBClass();
+
+            db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
+            db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
         }
 
         private void routeControl1_Load(object sender, EventArgs e)
