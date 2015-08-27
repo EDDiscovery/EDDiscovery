@@ -46,13 +46,31 @@ namespace EDDiscovery2.ImageHandler
 
         private void buttonChnageEDScreenshot_Click(object sender, EventArgs e)
         {
-            db.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
-            StartWatcher();
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+
+            dlg.Description = "Select ED screenshot folder";
+            dlg.SelectedPath = textBoxScreenshotsDir.Text;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                textBoxScreenshotsDir.Text = dlg.SelectedPath;
+                db.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+                StartWatcher();
+            }
         }
 
         private void buttonImageStore_Click(object sender, EventArgs e)
         {
-            db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+
+            dlg.Description = "Select converted screenshot folder";
+            dlg.SelectedPath = textBoxOutputDir.Text;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                textBoxOutputDir.Text = dlg.SelectedPath;
+                db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+            }
         }
 
         private void checkBoxAutoConvert_CheckedChanged(object sender, EventArgs e)

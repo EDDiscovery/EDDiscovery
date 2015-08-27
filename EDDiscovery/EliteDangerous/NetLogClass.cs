@@ -1,3 +1,4 @@
+using EDDiscovery.DB;
 using EDDiscovery2;
 using System;
 using System.Collections.Generic;
@@ -30,18 +31,25 @@ namespace EDDiscovery
         bool NoEvents = false;
         public event NetLogEventHandler OnNewPosition;
 
-        
+        SQLiteDBClass db=null;
+
 
         public string GetNetLogPath()
         {
             try
             {
+                if (db == null)
+                    db = new SQLiteDBClass();
+
+                string netlogdirstored = db.GetSettingString("Netlogdir", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Developments\\Products");
                 string datapath = null;
-                if (EDDiscovery2.Properties.Settings.Default.NetlogDirAutoMode)
+                if (db.GetSettingBool("NetlogDirAutoMode", true))
                 {
                     if (EliteDangerous.EDDirectory != null && EliteDangerous.EDDirectory.Length > 0)
                     {
                         datapath = Path.Combine(EliteDangerous.EDDirectory, "Logs");
+                        if (!netlogdirstored.Equals(datapath))
+                            db.PutSettingString("Netlogdir", datapath);
                         return datapath;
                     }
 
@@ -80,8 +88,8 @@ namespace EDDiscovery
 
                     if (newfi != null)
                     {
-                        EDDiscovery2.Properties.Settings.Default.Netlogdir = newfi.DirectoryName;
-                        EDDiscovery2.Properties.Settings.Default.NetlogDirAutoMode = false;
+                        db.PutSettingString("Netlogdir" , newfi.DirectoryName);
+                        db.PutSettingBool("NetlogDirAutoMode" , false);
                         datapath = newfi.DirectoryName;
                     }
 
@@ -90,7 +98,7 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    datapath = EDDiscovery2.Properties.Settings.Default.Netlogdir;
+                    datapath = db.GetSettingString("Netlogdir", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Developments\\Products");
                 }
 
                 return datapath;
