@@ -26,25 +26,6 @@ namespace EDDiscovery2
         }
 
 
-        public bool DownloadImages()
-        {
-            try
-            {
-                if (!Directory.Exists("Maps"))
-                    Directory.CreateDirectory("Maps");
-
-                EDDBClass eddb = new EDDBClass();
-
-                //eddb.DownloadFile()
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Exception in DownloadImages:" + ex.Message);
-                return false;
-            }
-
-            return true;
-        }
 
         public string ToJson()
         {

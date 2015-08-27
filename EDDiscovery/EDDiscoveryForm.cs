@@ -140,11 +140,12 @@ namespace EDDiscovery
 
                 var redWizzardThread = new Thread(GetRedWizzardFiles) {Name = "Downloading Red Wizzard Files"};
                 var edscThread = new Thread(GetEDSCSystems) {Name = "Downloading EDSC Systems"};
-
+                var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files" };
                 redWizzardThread.Start();
                 edscThread.Start();
+                downloadmapsThread.Start();
 
-                while (redWizzardThread.IsAlive || edscThread.IsAlive)
+                while (redWizzardThread.IsAlive || edscThread.IsAlive || downloadmapsThread.IsAlive)
                 {
                     Thread.Sleep(50);
                     Application.DoEvents();
@@ -152,7 +153,7 @@ namespace EDDiscovery
 
                 redWizzardThread.Join();
                 edscThread.Join();
-
+                downloadmapsThread.Join();
 
                 OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
 
@@ -198,6 +199,45 @@ namespace EDDiscovery
             }
         }
 
+
+        public void DownloadMaps()
+        {
+            try
+            {
+                if (!Directory.Exists("Maps"))
+                    Directory.CreateDirectory("Maps");
+
+
+                LogText("Checking for new EDDiscovery maps" + Environment.NewLine);
+
+                if (DownloadMapFile("SC-01.jpg"))  // If server down only try one.
+                {
+                    DownloadMapFile("SC-02.jpg");
+                    DownloadMapFile("SC-03.jpg");
+                    DownloadMapFile("SC-L4.jpg");
+                }
+            }
+            catch (Exception ex)
+            {
+                LogText("Exception in DownloadImages:" + ex.Message + Environment.NewLine);
+            }
+
+        }
+
+        private bool DownloadMapFile(string file)
+        {
+            EDDBClass eddb = new EDDBClass();
+            bool newfile = false;
+            if (eddb.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, "Maps\\" + file, out newfile))
+            {
+                if (newfile)
+                    LogText("Downloaded map: " + file + Environment.NewLine);
+                return true;
+
+            }
+            else
+                return false;
+        }
 
         private void GetRedWizzardFiles()
         {
