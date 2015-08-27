@@ -55,7 +55,7 @@ namespace EDDiscovery2.EDDB
             return DownloadFile("http://robert.astronet.se/Elite/eddb/stations_lite.json", stationFileName);
         }
 
-        private bool DownloadFile(string url, string filename)
+        public bool DownloadFile(string url, string filename)
         {
             var etagFilename = filename + ".etag";
             var tmpFilename = filename + ".tmp";
