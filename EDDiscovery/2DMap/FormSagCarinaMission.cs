@@ -180,7 +180,8 @@ namespace EDDiscovery2
             //currentImage = (Bitmap)Image.FromFile(fgeimg.Name, true);
             if (fgeimg != null)
             {
-                panel1.BackgroundImage = new Bitmap(fgeimg.Name);
+                //panel1.BackgroundImage = new Bitmap(fgeimg.Name);
+                imageViewer1.Image = new Bitmap(fgeimg.Name);
                 currentFGEImage = fgeimg;
                 DrawTravelHistory();
             }
@@ -205,7 +206,7 @@ namespace EDDiscovery2
 
             var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.time > start && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.time  select systems;
             List<SystemPosition> listHistory = history.ToList<SystemPosition>();
-            Graphics gfx = Graphics.FromImage(panel1.BackgroundImage);
+            Graphics gfx = Graphics.FromImage(imageViewer1.Image);
             Pen pen = new Pen(Color.Red, 2);
 
             if (listHistory.Count > 1)

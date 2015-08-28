@@ -40,5 +40,8 @@ namespace EDDiscovery2.Trilateration
             Altitude= Math.Acos((refSys.z-EstimatedPosition.z)/Distance);
         }
 
+
+
+
     }
 }

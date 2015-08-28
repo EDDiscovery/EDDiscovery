@@ -111,6 +111,12 @@
     <Compile Include="2DMap\FormSagCarinaMission.Designer.cs">
       <DependentUpon>FormSagCarinaMission.cs</DependentUpon>
     </Compile>
+    <Compile Include="2DMap\ImageViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="2DMap\ImageViewer.Designer.cs">
+      <DependentUpon>ImageViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="3DMap\Data3DSetClass.cs" />
     <Compile Include="DB\StationClass.cs" />
     <Compile Include="EDDB\EDDBClass.cs" />
@@ -197,6 +203,9 @@
     </Content>
     <EmbeddedResource Include="2DMap\FormSagCarinaMission.resx">
       <DependentUpon>FormSagCarinaMission.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2DMap\ImageViewer.resx">
+      <DependentUpon>ImageViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EDDiscoveryForm.resx">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
