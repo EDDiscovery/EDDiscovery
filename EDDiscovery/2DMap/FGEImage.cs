@@ -12,7 +12,8 @@ namespace EDDiscovery2
 {
     public class FGEImage
     {
-        public string Name;
+        public string FilePath;
+        
         public Point TopLeft, TopRight, BottomLeft, BottomRight;
         public Point pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight;
         public List<Point> Yaxispoints;
@@ -21,16 +22,22 @@ namespace EDDiscovery2
 
         public FGEImage(string filename)
         {
-            Name = filename;
+            FilePath = filename;
             Yaxispoints = new List<Point>();
         }
 
-
+        public string FileName
+        {
+            get
+            {
+                return Path.GetFileNameWithoutExtension(FilePath);
+            }
+        }
 
         public string ToJson()
         {
             JObject jo = new JObject(
-                new JProperty("Name", Name));
+                new JProperty("Name", FilePath));
 
 
             jo.Add(AddPoint("TopLeft", TopLeft));

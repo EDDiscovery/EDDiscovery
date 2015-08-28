@@ -20,6 +20,7 @@ namespace EDDiscovery2
         //        private Bitmap currentImage;
 
         private DateTime maxage;
+        public bool Test = false;
 
         public FormSagCarinaMission(EDDiscoveryForm frm)
         {
@@ -40,7 +41,7 @@ namespace EDDiscovery2
 
             foreach (FGEImage img in fgeimages)
             {
-                toolStripComboBox1.Items.Add(img.Name);
+                toolStripComboBox1.Items.Add(img.FileName);
             }
             toolStripComboBox1.SelectedIndex = 0;
             toolStripComboBox2.SelectedIndex = 0;
@@ -49,11 +50,11 @@ namespace EDDiscovery2
 
         private void AddImages()
         {
-            if (Directory.Exists("Maps"))
+            if (Directory.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps")))
             {
-                if (File.Exists("Maps\\SC-01.jpg"))
+                if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-01.jpg")))
                 {
-                    FGEImage fgeimg = new FGEImage("Maps\\SC-01.jpg");
+                    FGEImage fgeimg = new FGEImage(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-01.jpg"));
 
                     fgeimg.TopLeft = new Point(-3000, 6000);
                     fgeimg.pxTopLeft = new Point(329, 144);
@@ -81,9 +82,9 @@ namespace EDDiscovery2
                     //ShowImage(fgeimg);
                 }
 
-                if (File.Exists("Maps\\SC-02.jpg"))
+                if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-02.jpg")))
                 {
-                    FGEImage fgeimg = new FGEImage("Maps\\SC-02.jpg");
+                    FGEImage fgeimg = new FGEImage(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-02.jpg"));
 
                     fgeimg.TopLeft = new Point(-1000, 9000);
                     fgeimg.pxTopLeft = new Point(281, 169);
@@ -111,9 +112,9 @@ namespace EDDiscovery2
                     //ShowImage(fgeimg);
                 }
 
-                if (File.Exists("Maps\\SC-03.jpg"))
+                if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-03.jpg")))
                 {
-                    FGEImage fgeimg = new FGEImage("Maps\\SC-03.jpg");
+                    FGEImage fgeimg = new FGEImage(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-03.jpg"));
 
                     fgeimg.TopLeft = new Point(3000, 8000);
                     fgeimg.pxTopLeft = new Point(319, 187);
@@ -141,9 +142,9 @@ namespace EDDiscovery2
                     //ShowImage(fgeimg);
                 }
 
-                if (File.Exists("Maps\\SC-L4.jpg"))
+                if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-L4.jpg")))
                 {
-                    FGEImage fgeimg = new FGEImage("Maps\\SC-L4.jpg");
+                    FGEImage fgeimg = new FGEImage(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-L4.jpg"));
 
                     fgeimg.TopLeft = new Point(0, 30000);
                     fgeimg.pxTopLeft = new Point(344, 106);
@@ -180,7 +181,7 @@ namespace EDDiscovery2
             //currentImage = (Bitmap)Image.FromFile(fgeimg.Name, true);
             if (fgeimg != null)
             {
-                //panel1.BackgroundImage = new Bitmap(fgeimg.Name);
+                panel1.BackgroundImage = new Bitmap(fgeimg.FilePath);
                 imageViewer1.Image = new Bitmap(fgeimg.Name);
                 currentFGEImage = fgeimg;
                 DrawTravelHistory();
@@ -220,6 +221,7 @@ namespace EDDiscovery2
             Point test1  = currentFGEImage.TransformCoordinate(currentFGEImage.BottomLeft);
             Point test2 = currentFGEImage.TransformCoordinate(currentFGEImage.TopRight);
 
+            if (Test)
             TestGrid(gfx);
         }
 
@@ -261,7 +263,7 @@ namespace EDDiscovery2
         {
             string str = toolStripComboBox1.SelectedItem.ToString();
 
-            FGEImage img = fgeimages.FirstOrDefault(i => i.Name == str);
+            FGEImage img = fgeimages.FirstOrDefault(i => i.FileName == str);
             ShowImage(img);
         }
 
@@ -294,5 +296,7 @@ namespace EDDiscovery2
             
             ShowSelectedImage();
         }
+
+
     }
 }

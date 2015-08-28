@@ -204,8 +204,8 @@ namespace EDDiscovery
         {
             try
             {
-                if (!Directory.Exists("Maps"))
-                    Directory.CreateDirectory("Maps");
+                if (!Directory.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps")))
+                    Directory.CreateDirectory(Path.Combine(Tools.GetAppDataDirectory(), "Maps"));
 
 
                 LogText("Checking for new EDDiscovery maps" + Environment.NewLine);
@@ -228,7 +228,7 @@ namespace EDDiscovery
         {
             EDDBClass eddb = new EDDBClass();
             bool newfile = false;
-            if (eddb.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, "Maps\\" + file, out newfile))
+            if (eddb.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps\\" + file), out newfile))
             {
                 if (newfile)
                     LogText("Downloaded map: " + file + Environment.NewLine);
