@@ -181,8 +181,9 @@ namespace EDDiscovery2
             //currentImage = (Bitmap)Image.FromFile(fgeimg.Name, true);
             if (fgeimg != null)
             {
-                panel1.BackgroundImage = new Bitmap(fgeimg.FilePath);
-                imageViewer1.Image = new Bitmap(fgeimg.Name);
+                //panel1.BackgroundImage = new Bitmap(fgeimg.FilePath);
+                imageViewer1.Image = new Bitmap(fgeimg.FilePath);
+                imageViewer1.ZoomToFit();
                 currentFGEImage = fgeimg;
                 DrawTravelHistory();
             }
@@ -297,6 +298,19 @@ namespace EDDiscovery2
             ShowSelectedImage();
         }
 
+        private void toolStripButtonZoomIn_Click(object sender, EventArgs e)
+        {
+            imageViewer1.ZoomIn();
+        }
 
+        private void toolStripButtonZoomOut_Click(object sender, EventArgs e)
+        {
+            imageViewer1.ZoomOut();
+        }
+
+        private void toolStripButtonZoomtoFit_Click(object sender, EventArgs e)
+        {
+            imageViewer1.ZoomToFit();
+        }
     }
 }
