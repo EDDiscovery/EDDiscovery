@@ -307,6 +307,17 @@ namespace EDDiscovery2._2DMap
             }
         }
 
+        public void ZoomIn()
+        {
+            this.Zoom += ZoomIncrement;
+        }
+
+        public void ZoomOut()
+        {
+            this.Zoom -= ZoomIncrement;
+        }
+
+
         protected override void OnPaddingChanged(System.EventArgs e)
         {
             base.OnPaddingChanged(e);
