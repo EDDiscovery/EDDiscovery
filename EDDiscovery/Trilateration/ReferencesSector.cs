@@ -16,6 +16,10 @@ namespace EDDiscovery2.Trilateration
         private List<ReferenceSystem> optcandidateReferences;
 
 
+        private double minWeight;
+
+
+
         public double Azimuth
         {
             get { return AzimuthStartRad * 180 / Math.PI; }
@@ -75,7 +79,7 @@ namespace EDDiscovery2.Trilateration
             usedReferences = new List<ReferenceSystem>();
             candidateReferences = new List<ReferenceSystem>();
             optcandidateReferences = new List<ReferenceSystem>();
-
+            minWeight = double.MaxValue;
         }
 
         public ReferenceSystem GetBestCandidate()
@@ -88,12 +92,18 @@ namespace EDDiscovery2.Trilateration
         public void AddCandidate(ReferenceSystem refSys)
         {
             candidateReferences.Add(refSys);
+            double weight = refSys.Weight;
 
-            
-            if (optcandidateReferences.Count < 5)
+            if (weight < minWeight)
+            {
+                minWeight = weight;
+                optcandidateReferences.Add(refSys);
+            }
+            else if (optcandidateReferences.Count < 10)
                 optcandidateReferences.Add(refSys);
             else if (optcandidateReferences.Count < 100 && refSys.Distance < 1000 && refSys.Distance > 100)
                 optcandidateReferences.Add(refSys);
+           
         }
 
         public void AddReference(ReferenceSystem refSys)
