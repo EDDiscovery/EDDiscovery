@@ -32,6 +32,7 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
+            FreezeTrilaterationUI();
         }
 
 

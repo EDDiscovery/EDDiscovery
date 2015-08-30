@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace EDDiscovery2.Trilateration
 {
@@ -25,6 +26,9 @@ namespace EDDiscovery2.Trilateration
             {
                 int modifier = 0;
                 if (refSys.name.EndsWith("0"))  // Elite has a bug with selecting systems ending with 0.  Prefere others first.
+                    modifier += 50;
+
+                if (Regex.IsMatch(refSys.name, "\\s[A-Z][A-Z].[A-Z]\\s"))
                     modifier += 50;
 
                 return refSys.name.Length*2 + Math.Sqrt(Distance) / 3.5 + modifier;

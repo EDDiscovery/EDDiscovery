@@ -228,6 +228,7 @@
             this.panelImplementation.Name = "panelImplementation";
             this.panelImplementation.Size = new System.Drawing.Size(49, 63);
             this.panelImplementation.TabIndex = 16;
+            this.panelImplementation.Visible = false;
             // 
             // labelAlgorithm
             // 
