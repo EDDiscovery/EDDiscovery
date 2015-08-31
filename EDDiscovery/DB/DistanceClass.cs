@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -85,6 +86,41 @@ namespace EDDiscovery.DB
             return listDistances;
         }
 
+        public static List<DistanceClass> ParseEDSM(string json, ref string date)
+        {
+            List<DistanceClass> listDistances;
+
+            JArray edsm = null;
+            if (json != null)
+                edsm = (JArray)JArray.Parse(json);
+
+            listDistances = new List<DistanceClass>();
+            DateTime maxdate = DateTime.Parse(date, new CultureInfo("sv-SE"));
+
+            if (edsm == null)
+                return listDistances;
+
+            if (edsm != null)
+            {
+                foreach (JObject jo in edsm)
+                {
+                    DistanceClass dist = ParseEDSM(jo, date);
+
+                    if (dist.NameA != null && dist.NameB != null)
+                    {
+                        listDistances.Add(dist);
+                        if (dist.CreateTime.Subtract(maxdate).TotalSeconds > 0)
+                            maxdate = dist.CreateTime;
+                    }
+                }
+            }
+
+            // date = edscdata["date"].Value<string>();
+            date = maxdate.ToString("yyyy-MM-dd HH:mm:ss");
+
+            return listDistances;
+        }
+
 
         public static List<DistanceClass> Parse(JObject jo, string date)
         {
@@ -142,6 +178,58 @@ namespace EDDiscovery.DB
                     dists.Add(dist);
             }
             return dists;
+        }
+
+        /*
+{
+  "date": "2015-08-31 07:30:58",
+  "submitted_by": [
+    {
+      "cmdr": "Mixolydian",
+      "date": "2015-04-12 17:11:39"
+    }
+  ],
+  "sys1": {
+    "name": "Col 359 Sector ZJ-Z d86",
+    "date": "2015-05-12 15:29:33"
+  },
+  "sys2": {
+    "name": "KOI 1925",
+    "date": "2015-08-31 07:31:01"
+  },
+  "distance": 34.86
+}
+
+        */
+
+
+
+        public static DistanceClass ParseEDSM(JObject jo, string date)
+        {
+            DistanceClass dist = new DistanceClass();
+
+
+            JObject sys1, sys2;
+
+            sys1 = (JObject)jo["sys1"];
+            sys2 = (JObject)jo["sys2"];
+            JArray submitted_by = (JArray)jo["submitted_by"];
+
+
+            dist.NameA = sys1["name"].Value<string>(); 
+            dist.NameB = sys2["name"].Value<string>();
+            dist.Dist = jo["distance"].Value<float>();
+            if (submitted_by.Count > 0)
+            {
+                dist.CommanderCreate = submitted_by[0]["cmdr"].Value<string>();
+            }
+            else
+                dist.CommanderCreate = "";
+
+            dist.CreateTime = jo["date"].Value<DateTime>();
+            dist.Status = DistancsEnum.EDSC;
+
+            return dist;
         }
 
 

@@ -401,7 +401,8 @@ namespace EDDiscovery
             try
             {
                 SQLiteDBClass db = new SQLiteDBClass();
-                EDSCClass edsc = new EDSCClass();
+                //EDSCClass edsc = new EDSCClass();
+                EDSMClass edsm = new EDSMClass();
                 string lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                 string json;
 
@@ -441,13 +442,13 @@ namespace EDDiscovery
 
                 }
 
-                LogText("Checking for new distances from EDSC. ");
+                LogText("Checking for new distances from EDSM. ");
                
                 Application.DoEvents();
-                json = edsc.RequestDistances(lstdist);
+                json = edsm.RequestDistances(lstdist);
 
                 dists = new List<DistanceClass>();
-                dists = DistanceClass.ParseEDSC(json, ref lstdist);
+                dists = DistanceClass.ParseEDSM(json, ref lstdist);
 
                 if (json == null)
                     LogText("No response from server." + Environment.NewLine);

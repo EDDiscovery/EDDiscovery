@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -382,7 +383,7 @@ namespace EDDiscovery.DB
                 return listSystems;
 
 
-            DateTime maxdate = DateTime.Parse(date);
+            DateTime maxdate = DateTime.Parse(date,  new CultureInfo("sv-SE"));
 
 //            date = edscdata["date"].Value<string>();
 
