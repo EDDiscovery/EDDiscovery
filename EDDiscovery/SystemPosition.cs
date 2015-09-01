@@ -18,7 +18,7 @@ namespace EDDiscovery
         public SystemClass prevSystem;
         public string strDistance;
 
-        static public SystemPosition Parse(DateTime starttime, string line)
+        static public SystemPosition Parse(DateTime lasttime, string line)
         {
             SystemPosition sp = new SystemPosition();
 
@@ -36,9 +36,9 @@ namespace EDDiscovery
                 int min = int.Parse(line.Substring(4, 2));
                 int sec = int.Parse(line.Substring(7, 2));
 
-                sp.time = new DateTime(starttime.Year, starttime.Month, starttime.Day, hour, min, sec);
+                sp.time = new DateTime(lasttime.Year, lasttime.Month, lasttime.Day, hour, min, sec);
 
-                if (sp.time < starttime)
+                if (sp.time.Subtract(lasttime).TotalHours < -12)
                     sp.time = sp.time.AddDays(1);
 
                 str = line.Substring(18, line.IndexOf(" Body:")-19);
