@@ -211,6 +211,7 @@ namespace EDDiscovery
                         if (ps.Name.Equals("Destination"))
                             continue;
 
+                        filetime = ps.time;
 
                         if (visitedSystems.Count > 0)
                             if (visitedSystems[visitedSystems.Count - 1].Name.Equals(ps.Name))
