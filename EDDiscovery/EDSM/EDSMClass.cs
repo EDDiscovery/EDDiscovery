@@ -232,16 +232,27 @@ namespace EDDiscovery2.EDSM
         {
             string json;
             string date = "2010-01-01 00:00:00";
-            string lstsyst = db.GetSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
+            string lstsyst;
 
             string retstr = "";
 
 
             Application.DoEvents();
 
+            db.GetAllSystems();
+
+            //if (lstsys)
+
+
+            var system = SQLiteDBClass.globalSystems.Max(x => x.UpdateDate);
+            lstsyst = system.ToString("yyyy-MM-dd HH:mm:ss");
+            lstsyst = db.GetSettingString("EDSMLastSystems", lstsyst);
+
+            if (lstsyst.Equals("2010-01-01 00:00:00"))
+                lstsyst = system.ToString("yyyy-MM-dd HH:mm:ss");
+
             json = RequestSystems(lstsyst);
 
-            db.GetAllSystems();
 
             List<SystemClass> listNewSystems = SystemClass.ParseEDSM(json, ref date);
 

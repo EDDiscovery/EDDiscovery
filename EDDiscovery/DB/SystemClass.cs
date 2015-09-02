@@ -151,6 +151,12 @@ namespace EDDiscovery.DB
                     UpdateDate = submitted[submitted.Count-1]["date"].Value<DateTime>();
 
                 }
+
+                UpdateDate = jo["date"].Value<DateTime>();
+                if (CreateDate.Year <= 1)
+                    CreateDate = UpdateDate;
+
+
                 status = SystemStatusEnum.EDSC;
             }
             else if (source == SystemInfoSource.EDDB)

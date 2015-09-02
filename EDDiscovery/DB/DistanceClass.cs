@@ -221,7 +221,7 @@ namespace EDDiscovery.DB
             dist.Dist = jo["distance"].Value<float>();
             if (submitted_by.Count > 0)
             {
-                dist.CommanderCreate = submitted_by[0]["cmdr"].Value<string>();
+                dist.CommanderCreate = submitted_by[0]["cmdrname"].Value<string>();
             }
             else
                 dist.CommanderCreate = "";
