@@ -27,13 +27,27 @@ namespace EDDiscovery2.ImageHandler
         {
             _discoveryForm = discoveryForm;
             db = new SQLiteDBClass();
-            
+
             string ScreenshotsDirdefault = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous";
             string OutputDirdefault = ScreenshotsDirdefault + "\\Converted";
 
-            comboBoxFormat.SelectedIndex =  db.GetSettingInt("ImageHandlerFormatNr", 0);
+            try
+            {
+                comboBoxFormat.SelectedIndex = db.GetSettingInt("ImageHandlerFormatNr", 0);
+            }
+            catch { }
+
+            try
+            {
+                comboBoxFileNameFormat.SelectedIndex = db.GetSettingInt("comboBoxFileNameFormat", 0);
+            }
+            catch {}
+
+            textBoxFileNameExample.Text = CreateFileName("Sol", "Screenshot_0000.bmp");
 
             checkBoxAutoConvert.Checked = db.GetSettingBool("ImageHandlerAutoconvert", false);
+            checkBoxRemove.Checked = db.GetSettingBool("checkBoxRemove", false);
+
             textBoxOutputDir.Text = db.GetSettingString("ImageHandlerOutputDir", OutputDirdefault);
             textBoxScreenshotsDir.Text = db.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
             StartWatcher();
@@ -108,6 +122,7 @@ namespace EDDiscovery2.ImageHandler
             try
             {
                 string output_folder = textBoxOutputDir.Text;
+                string cur_sysname = "";
 
                 string new_name = null;
                 new_name = "unknown";
@@ -116,7 +131,7 @@ namespace EDDiscovery2.ImageHandler
 
                 if (cursys!=null)
                 {
-                    new_name = cursys.name;
+                    cur_sysname = cursys.name;
                 }
 
 
@@ -130,7 +145,7 @@ namespace EDDiscovery2.ImageHandler
                     System.Threading.Thread.Sleep(1000);
                     this.pictureBox1.ImageLocation = e.FullPath;
                     this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                    new_name = new_name + " (" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ")";
+                    new_name = CreateFileName(cur_sysname, e.FullPath);
 
                     //just in case we manage to take more than 1 pic in a second, add x's until the name is unique (the fix above may make this pointless)
                     while (File.Exists(output_folder + "\\" + new_name + pic_ext))
@@ -157,12 +172,37 @@ namespace EDDiscovery2.ImageHandler
                     {
                         ED_PIC.Save(output_folder + "\\" + new_name + pic_ext, System.Drawing.Imaging.ImageFormat.Png);
                     }
+                    if (checkBoxRemove.Checked) // Remove original picture
+                    {
+                        File.Delete(e.FullPath);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Exception in imageConvert:" + ex.Message); 
             }
+        }
+
+        private string CreateFileName(string cur_sysname, string orignalfile)
+        {
+            switch (comboBoxFileNameFormat.SelectedIndex)
+            {
+                case 0:
+                    return cur_sysname + " (" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ")";
+
+                case 1:
+                    {
+                        string time = DateTime.Now.ToString().Replace(":", "-");
+                        return cur_sysname + " (" + time + ")";
+                    }
+
+                default:
+                    return Path.GetFileNameWithoutExtension(orignalfile);
+
+            }
+
+            
         }
 
         private string pic_ext
@@ -198,6 +238,18 @@ namespace EDDiscovery2.ImageHandler
         private void ImageHandler_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBoxRemove_CheckedChanged(object sender, EventArgs e)
+        {
+            db.PutSettingBool("checkBoxRemove", checkBoxRemove.Checked);
+        }
+
+        private void comboBoxFileNameFormat_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            db.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
+
+            textBoxFileNameExample.Text = CreateFileName("Sol", "Screenshot_0000.bmp");
         }
     }
 }

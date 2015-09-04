@@ -38,13 +38,17 @@
             this.comboBoxFormat = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.checkBoxRemove = new System.Windows.Forms.CheckBox();
+            this.comboBoxFileNameFormat = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBoxFileNameExample = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // checkBoxAutoConvert
             // 
             this.checkBoxAutoConvert.AutoSize = true;
-            this.checkBoxAutoConvert.Location = new System.Drawing.Point(3, 3);
+            this.checkBoxAutoConvert.Location = new System.Drawing.Point(6, 3);
             this.checkBoxAutoConvert.Name = "checkBoxAutoConvert";
             this.checkBoxAutoConvert.Size = new System.Drawing.Size(165, 17);
             this.checkBoxAutoConvert.TabIndex = 0;
@@ -141,16 +145,64 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(6, 94);
+            this.pictureBox1.Location = new System.Drawing.Point(15, 154);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(406, 280);
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             // 
+            // checkBoxRemove
+            // 
+            this.checkBoxRemove.AutoSize = true;
+            this.checkBoxRemove.Location = new System.Drawing.Point(6, 78);
+            this.checkBoxRemove.Name = "checkBoxRemove";
+            this.checkBoxRemove.Size = new System.Drawing.Size(212, 17);
+            this.checkBoxRemove.TabIndex = 10;
+            this.checkBoxRemove.Text = "Remove original image after conversion";
+            this.checkBoxRemove.UseVisualStyleBackColor = true;
+            this.checkBoxRemove.CheckedChanged += new System.EventHandler(this.checkBoxRemove_CheckedChanged);
+            // 
+            // comboBoxFileNameFormat
+            // 
+            this.comboBoxFileNameFormat.FormattingEnabled = true;
+            this.comboBoxFileNameFormat.Items.AddRange(new object[] {
+            "Sysname (short time)",
+            "Sysname (Windows dateformat)",
+            "Keep original"});
+            this.comboBoxFileNameFormat.Location = new System.Drawing.Point(131, 101);
+            this.comboBoxFileNameFormat.Name = "comboBoxFileNameFormat";
+            this.comboBoxFileNameFormat.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFileNameFormat.TabIndex = 11;
+            this.comboBoxFileNameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileNameFormat_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 104);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(81, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Filename format";
+            // 
+            // textBoxFileNameExample
+            // 
+            this.textBoxFileNameExample.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
+            this.textBoxFileNameExample.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxFileNameExample.Location = new System.Drawing.Point(258, 101);
+            this.textBoxFileNameExample.Name = "textBoxFileNameExample";
+            this.textBoxFileNameExample.ReadOnly = true;
+            this.textBoxFileNameExample.Size = new System.Drawing.Size(154, 20);
+            this.textBoxFileNameExample.TabIndex = 13;
+            // 
             // ImageHandler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.textBoxFileNameExample);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.comboBoxFileNameFormat);
+            this.Controls.Add(this.checkBoxRemove);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.comboBoxFormat);
@@ -182,5 +234,9 @@
         private System.Windows.Forms.ComboBox comboBoxFormat;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.CheckBox checkBoxRemove;
+        private System.Windows.Forms.ComboBox comboBoxFileNameFormat;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBoxFileNameExample;
     }
 }
