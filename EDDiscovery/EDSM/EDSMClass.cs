@@ -18,7 +18,7 @@ namespace EDDiscovery2.EDSM
         {
             try
             {
-                WebRequest request = WebRequest.Create("http://the-temple.de/public/" + action);
+                WebRequest request = WebRequest.Create("http://www.edsm.net/api-v1/" + action);
                 // Set the Method property of the request to POST.
                 request.Method = "POST";
                 // Create POST data and convert it to a byte array.
@@ -73,7 +73,7 @@ namespace EDDiscovery2.EDSM
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://the-temple.de/public/" + action);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.edsm.net/api-v1/" + action);
                 // Set the Method property of the request to POST.
                 request.Method = "GET";
 
@@ -145,7 +145,7 @@ namespace EDDiscovery2.EDSM
 
             query += "] } ";
 
-            return RequestPost(query, "edscpostdists.php");
+            return RequestPost(query, "submit-distances");
         }
 
 
@@ -215,7 +215,7 @@ namespace EDDiscovery2.EDSM
             //string datestr = date.ToString("yyyy-MM-dd hh:mm:ss");
 
             query = "?startdatetime=" + WebUtility.HtmlEncode(date);
-            return RequestGet("systems.php" + query + "&coords=1&submitted=1");
+            return RequestGet("systems" + query + "&coords=1&submitted=1");
         }
 
         public string RequestDistances(string date)
@@ -223,7 +223,7 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "?startdatetime=" + WebUtility.HtmlEncode(date);
 
-            return RequestGet("distances.php" + query + "coords=1 & submitted=1");
+            return RequestGet("distances" + query + "coords=1 & submitted=1");
         }
 
 
@@ -276,9 +276,9 @@ namespace EDDiscovery2.EDSM
                 string query;
                 query = "?sysname=" + WebUtility.HtmlEncode(systemname) + "&coords=1&distances=1&submitted=1";
 
-                json = RequestGet("sysinfo.php" + query);
+                json = RequestGet("system" + query);
 
-                //http://the-temple.de/public/sysinfo.php?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
+                //http://www.edsm.net/api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
 
                 if (json.Length > 1)
                 {
