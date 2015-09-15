@@ -186,7 +186,17 @@ namespace EDDiscovery2.ImageHandler
 
         private string CreateFileName(string cur_sysname, string orignalfile)
         {
-            switch (comboBoxFileNameFormat.SelectedIndex)
+            int nr=0;
+
+            if (Created)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    nr = comboBoxFileNameFormat.SelectedIndex;
+                });
+            }
+
+            switch (nr)
             {
                 case 0:
                     return cur_sysname + " (" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ")";
