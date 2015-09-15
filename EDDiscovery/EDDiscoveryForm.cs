@@ -139,7 +139,7 @@ namespace EDDiscovery
                 travelHistoryControl1.Enabled = false;
 
                 var redWizzardThread = new Thread(GetRedWizzardFiles) {Name = "Downloading Red Wizzard Files"};
-                var edscThread = new Thread(GetEDSCSystems) {Name = "Downloading EDSC Systems"};
+                var edscThread = new Thread(GetEDSMSystems) {Name = "Downloading EDSM Systems"};
                 var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files" };
                 redWizzardThread.Start();
                 edscThread.Start();
@@ -307,7 +307,7 @@ namespace EDDiscovery
         }
 
 
-        private void GetEDSCSystems()
+        private void GetEDSMSystems()
         {
             try
             {
@@ -367,7 +367,8 @@ namespace EDDiscovery
             catch (Exception ex)
             {
                 Invoke((MethodInvoker) delegate {
-                    TravelHistoryControl.LogText("GetEDSCSystems exception:" + ex.Message + Environment.NewLine);
+                    TravelHistoryControl.LogText("GetEDSCMSystems exception:" + ex.Message + Environment.NewLine);
+                    TravelHistoryControl.LogText(ex.StackTrace + Environment.NewLine);
                 });
             }
 
@@ -376,7 +377,7 @@ namespace EDDiscovery
         private Thread ThreadEDSCDistances;
         private void GetEDSCDistancesAsync()
         {
-            ThreadEDSCDistances = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDSCDistances));
+            ThreadEDSCDistances = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDSMDistances));
             ThreadEDSCDistances.Name = "Get Distances";
             ThreadEDSCDistances.Start();
         }
@@ -396,7 +397,7 @@ namespace EDDiscovery
         }
 
    
-        private void GetEDSCDistances()
+        private void GetEDSMDistances()
         {
             try
             {
@@ -468,8 +469,8 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                LogText("GetEDSCDistances exception:" + ex.Message + Environment.NewLine);
-                
+                LogText("GetEDSMDistances exception:" + ex.Message + Environment.NewLine);
+                LogText(ex.StackTrace + Environment.NewLine);
             }
 
         }

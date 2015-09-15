@@ -668,13 +668,15 @@ namespace EDDiscovery
 
             });
 
-            if (responseOkC && trilaterationOkC)
+            if (responseOkM && trilaterationOkM)
             {
                 Invoke((MethodInvoker) delegate
                 {
                     //Visible = false;
+                    UnfreezeTrilaterationUI();
                     travelHistoryControl.TriggerEDSCRefresh(); // TODO we might eventually avoid this by further parsing EDSC response
                     travelHistoryControl.RefreshHistory();
+
                 });
             }
             else
