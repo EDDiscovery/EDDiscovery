@@ -49,24 +49,24 @@ namespace EDDiscovery.DB
 
         }
 
-        public static List<DistanceClass> ParseEDSC(string json, ref string date)
+        public static List<DistanceClass> ParseRW(string json, ref string date)
         {
             List<DistanceClass> listDistances;
 
-            JObject edsc = null;
+            JObject rw = null;
             if (json != null)
-                edsc = (JObject)JObject.Parse(json);
+                rw = (JObject)JObject.Parse(json);
 
             listDistances = new List<DistanceClass>();
 
-            if (edsc == null)
+            if (rw == null)
                 return listDistances;
 
-            JObject edscdata = (JObject)edsc["d"];
-            if (edscdata == null) // If from file.
-                edscdata = edsc;  
+            JObject rwdata = (JObject)rw["d"];
+            if (rwdata == null) // If from file.
+                rwdata = rw;  
 
-            JArray systems = (JArray)edscdata["distances"];
+            JArray systems = (JArray)rwdata["distances"];
 
             if (systems != null)
             {
@@ -81,7 +81,7 @@ namespace EDDiscovery.DB
                 }
             }
 
-            date = edscdata["date"].Value<string>();
+            date = rwdata["date"].Value<string>();
 
             return listDistances;
         }

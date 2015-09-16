@@ -31,7 +31,7 @@ namespace EDDiscovery
         public NetLogClass netlog = new NetLogClass();
         List<SystemDist> sysDist = null;
         private SystemPosition currentSysPos = null;
-        private EDSCClass edsc;
+//        private EDSCClass edsc;
 
         private static RichTextBox static_richTextBox;
 
@@ -45,7 +45,6 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            edsc = new EDSCClass();  // Init here to avoid UI editor errors.
         }
 
 
@@ -671,7 +670,7 @@ namespace EDDiscovery
                 {
                     LogText("Add distance: " + dist.NameA + " => " + dist.NameB + " :" + dist.Dist.ToString("0.00") + "ly" + Environment.NewLine);
                     json = edsm.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
-                    json2 = edsc.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
+                    //json2 = edsc.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
                 }
                 else
                 {

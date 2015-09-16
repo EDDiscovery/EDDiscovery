@@ -190,33 +190,5 @@ namespace EDDiscovery
             }
         }
 
-
-
-        internal string  EDSCGetNewSystems(SQLiteDBClass db)
-        {
-            string json;
-            string date = "2010-01-01 00:00:00";
-            string lstsyst = db.GetSettingString("EDSCLastSystems", "2010-01-01 00:00:00");
-
-            string retstr="";
-      
-
-            Application.DoEvents();
-
-            json = RequestSystems(lstsyst);
-
-            db.GetAllSystems();
-
-            List<SystemClass> listNewSystems = SystemClass.ParseEDSC(json, ref date);
-
-            retstr = listNewSystems.Count.ToString() + " new systems from EDSC." + Environment.NewLine;
-            Application.DoEvents();
-            SystemClass.Store(listNewSystems);
-            db.PutSettingString("EDSCLastSystems", date);
-
-            return retstr;
-        }
-
-
     }
 }
