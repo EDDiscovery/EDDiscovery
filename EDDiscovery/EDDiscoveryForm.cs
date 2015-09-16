@@ -139,26 +139,26 @@ namespace EDDiscovery
                 travelHistoryControl1.Enabled = false;
 
                 var redWizzardThread = new Thread(GetRedWizzardFiles) {Name = "Downloading Red Wizzard Files"};
-                var edscThread = new Thread(GetEDSMSystems) {Name = "Downloading EDSM Systems"};
+                var edsmThread = new Thread(GetEDSMSystems) {Name = "Downloading EDSM Systems"};
                 var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files" };
                 redWizzardThread.Start();
-                edscThread.Start();
+                edsmThread.Start();
                 downloadmapsThread.Start();
 
-                while (redWizzardThread.IsAlive || edscThread.IsAlive || downloadmapsThread.IsAlive)
+                while (redWizzardThread.IsAlive || edsmThread.IsAlive || downloadmapsThread.IsAlive)
                 {
                     Thread.Sleep(50);
                     Application.DoEvents();
                 }
 
                 redWizzardThread.Join();
-                edscThread.Join();
+                edsmThread.Join();
                 downloadmapsThread.Join();
 
                 OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
 
 
-                GetEDSCDistancesAsync();
+                GetEDSMDistancesAsync();
                 //Application.DoEvents();
                 GetEDDBAsync();
 
@@ -367,19 +367,19 @@ namespace EDDiscovery
             catch (Exception ex)
             {
                 Invoke((MethodInvoker) delegate {
-                    TravelHistoryControl.LogText("GetEDSCMSystems exception:" + ex.Message + Environment.NewLine);
+                    TravelHistoryControl.LogText("GetEDSMSystems exception:" + ex.Message + Environment.NewLine);
                     TravelHistoryControl.LogText(ex.StackTrace + Environment.NewLine);
                 });
             }
 
         }
 
-        private Thread ThreadEDSCDistances;
-        private void GetEDSCDistancesAsync()
+        private Thread ThreadEDSMDistances;
+        private void GetEDSMDistancesAsync()
         {
-            ThreadEDSCDistances = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDSMDistances));
-            ThreadEDSCDistances.Name = "Get Distances";
-            ThreadEDSCDistances.Start();
+            ThreadEDSMDistances = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDSMDistances));
+            ThreadEDSMDistances.Name = "Get Distances";
+            ThreadEDSMDistances.Start();
         }
 
         private Thread ThreadEDDB;
@@ -402,7 +402,6 @@ namespace EDDiscovery
             try
             {
                 SQLiteDBClass db = new SQLiteDBClass();
-                //EDSCClass edsc = new EDSCClass();
                 EDSMClass edsm = new EDSMClass();
                 string lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                 string json;
@@ -732,36 +731,6 @@ namespace EDDiscovery
             FormSagCarinaMission frm = new FormSagCarinaMission(this);
 
             frm.Show();
-
-//            EDDiscoveryServer srv = new EDDiscoveryServer() ;
-//            List<SystemClass> systems;
-//            string date = "";
-//            string json;
-//            json = srv.RequestSystems("2011-01-01");
-
-////            srv.PostSystem();
-
-
-            //            json = LoadJsonArray(fileTgcSystems);
-     
-
-//            systems = SystemClass.ParseEDSC(json, ref date);
-
-//            foreach (SystemClass system in systems)
-//            {
-//                srv.AddSystem(system);
-//            }
-
-
-            //EDDBClass eddb = new EDDBClass();
-
-            //List<SystemClass> eddbsystems = eddb.ReadSystems();
-            //List<StationClass> eddbstations = eddb.ReadStations();
-
-            //eddb.Add2DB(eddbsystems, eddbstations);
-
-
-            //TestTrileteration();
 
 
         }

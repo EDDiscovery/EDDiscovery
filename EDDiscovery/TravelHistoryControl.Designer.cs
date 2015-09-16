@@ -583,7 +583,7 @@
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(164, 23);
             this.buttonSync.TabIndex = 19;
-            this.buttonSync.Text = "Send Distances to EDSC";
+            this.buttonSync.Text = "Send Distances to EDSM";
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 

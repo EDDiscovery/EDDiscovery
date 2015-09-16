@@ -22,7 +22,7 @@ namespace EDDiscovery
         private Thread trilaterationThread;
         private Trilateration.Result lastTrilatelationResult;
         private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
-        private Thread EDSCSubmissionThread;
+        private Thread EDSMSubmissionThread;
 
         public TrilaterationControl()
         {
@@ -362,11 +362,6 @@ namespace EDDiscovery
                 }
             }
 
-            //// Always enable submiot so we can submit a partial result. 
-            //Invoke((MethodInvoker) delegate
-            //{
-            //    //buttonSubmitToEDSC.Enabled = true;  //trilaterationResult.State == Trilateration.ResultState.Exact && !hasInvalidDistances;
-            //});
         }
 
         private static IEnumerable<SystemClass> GetListOfSuggestedSystems(double x, double y, double z, int count)
@@ -562,7 +557,7 @@ namespace EDDiscovery
 
         private void toolStripButtonSubmitDistances_Click(object sender, EventArgs e)
         {
-            LogText("Submitting system to EDSC, please wait..." + Environment.NewLine);
+            LogText("Submitting system to EDSM, please wait..." + Environment.NewLine);
             FreezeTrilaterationUI();
 
             if (trilaterationThread != null)
@@ -574,24 +569,18 @@ namespace EDDiscovery
             // edge case - make sure distances were trilaterated
             if (lastTrilatelationResult == null)
             {
-                LogText("EDSC submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
+                LogText("EDSM submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
                 UnfreezeTrilaterationUI();
                 return;
             }
 
-            //// edge case - should not happen, usually, but, just in case...
-            //if (lastTrilatelationResult.State != Trilateration.ResultState.Exact)
-            //{
-            //    LogText("EDSC submission aborted, local trilateration failed." + Environment.NewLine, Color.Red);
-            //    UnfreezeTrilaterationUI();
-            //    return;
-            //}
 
-            EDSCSubmissionThread = new Thread(SubmitToEDSC) {Name = "EDSC Submission"};
-            EDSCSubmissionThread.Start();
+
+            EDSMSubmissionThread = new Thread(SubmitToEDSM) {Name = "EDSM Submission"};
+            EDSMSubmissionThread.Start();
         }
 
-        private void SubmitToEDSC()
+        private void SubmitToEDSM()
         {
             var travelHistoryControl = _discoveryForm.TravelControl;
             string commanderName = travelHistoryControl.GetCommanderName();
@@ -612,15 +601,7 @@ namespace EDDiscovery
             }
 
             var edsm = new EDSMClass();
-            //if (!EDSCClass.UseTest)
-            //{
-            //    Invoke((MethodInvoker) delegate
-            //    {
-            //        // TODO temporarily mess with EDSC in test mode only
-            //        LogText("Forcibly switching to EDSC UseTest mode." + Environment.NewLine, Color.OrangeRed);
-            //    });
-            //    EDSCClass.UseTest = true;
-            //}
+        
 
             var responseM = edsm.SubmitDistances(commanderName, TargetSystem.name, distances);
 
@@ -655,7 +636,7 @@ namespace EDDiscovery
                 {
                     //Visible = false;
                     UnfreezeTrilaterationUI();
-                    travelHistoryControl.TriggerEDSCRefresh(); // TODO we might eventually avoid this by further parsing EDSC response
+                    travelHistoryControl.TriggerEDSMRefresh(); // TODO we might eventually avoid this by further parsing EDSC response
                     travelHistoryControl.RefreshHistory();
 
                 });
@@ -678,8 +659,7 @@ namespace EDDiscovery
 
         private void UnfreezeTrilaterationUI()
         {
-            //buttonSubmitToEDSC.Enabled = lastTrilatelationResult != null && lastTrilatelationResult.State == Trilateration.ResultState.Exact;
-            dataGridViewDistances.Enabled = true;
+  
             dataGridViewClosestSystems.Enabled = true;
             dataGridViewSuggestedSystems.Enabled = true;
             Dock = DockStyle.Fill;
