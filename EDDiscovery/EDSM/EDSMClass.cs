@@ -63,7 +63,6 @@ namespace EDDiscovery2.EDSM
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                //MessageBox.Show("Exception in EDSCRequest: " + ex.Message);
                 return null;
             }
         }
@@ -109,7 +108,7 @@ namespace EDDiscovery2.EDSM
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                //MessageBox.Show("Exception in EDSCRequest: " + ex.Message);
+
                 return null;
             }
 
@@ -152,7 +151,7 @@ namespace EDDiscovery2.EDSM
         public bool ShowDistanceResponse(string json, out string respstr, out Boolean trilOK)
         {
             bool retval = true;
-            JObject edsc = null;
+            JObject edsm = null;
             trilOK = false;
 
             respstr = "";
@@ -162,13 +161,13 @@ namespace EDDiscovery2.EDSM
                 if (json == null)
                     return false;
 
-                edsc = (JObject)JObject.Parse(json);
+                edsm = (JObject)JObject.Parse(json);
 
-                if (edsc == null)
+                if (edsm == null)
                     return false;
 
-                JObject basesystem = (JObject)edsc["basesystem"];
-                JArray distances = (JArray)edsc["distances"];
+                JObject basesystem = (JObject)edsm["basesystem"];
+                JArray distances = (JArray)edsm["distances"];
 
 
                 if (distances != null)
