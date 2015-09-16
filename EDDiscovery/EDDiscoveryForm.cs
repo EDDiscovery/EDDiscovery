@@ -414,7 +414,7 @@ namespace EDDiscovery
                 List<DistanceClass> dists = new List<DistanceClass>();
 
                 json = LoadJsonArray(fileTgcDistances);
-                dists = DistanceClass.ParseEDSC(json, ref rwdistfiletime);
+                dists = DistanceClass.ParseRW(json, ref rwdistfiletime);
 
                 if (!rwdisttime.Equals(rwdistfiletime))  // New distance file from Redwizzard
                 {
