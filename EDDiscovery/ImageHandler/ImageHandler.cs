@@ -143,8 +143,11 @@ namespace EDDiscovery2.ImageHandler
 
                     //sometimes the picture doesn't load into the picture box so waiting 1 sec in case this due to the file not being closed quick enough in ED 
                     System.Threading.Thread.Sleep(1000);
-                    this.pictureBox1.ImageLocation = e.FullPath;
-                    this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                    if (!checkBoxRemove.Checked)
+                    {
+                        this.pictureBox1.ImageLocation = e.FullPath;
+                        this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                    }
                     new_name = CreateFileName(cur_sysname, e.FullPath);
 
                     //just in case we manage to take more than 1 pic in a second, add x's until the name is unique (the fix above may make this pointless)
@@ -260,6 +263,16 @@ namespace EDDiscovery2.ImageHandler
             db.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
 
             textBoxFileNameExample.Text = CreateFileName("Sol", "Screenshot_0000.bmp");
+        }
+
+        private void textBoxScreenshotsDir_Leave(object sender, EventArgs e)
+        {
+            db.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+        }
+
+        private void textBoxOutputDir_Leave(object sender, EventArgs e)
+        {
+            db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
         }
     }
 }
