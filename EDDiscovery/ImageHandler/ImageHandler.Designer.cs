@@ -63,9 +63,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxScreenshotsDir.Location = new System.Drawing.Point(131, 26);
             this.textBoxScreenshotsDir.Name = "textBoxScreenshotsDir";
-            this.textBoxScreenshotsDir.ReadOnly = true;
             this.textBoxScreenshotsDir.Size = new System.Drawing.Size(281, 20);
             this.textBoxScreenshotsDir.TabIndex = 1;
+            this.textBoxScreenshotsDir.Leave += new System.EventHandler(this.textBoxScreenshotsDir_Leave);
             // 
             // label1
             // 
@@ -114,9 +114,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputDir.Location = new System.Drawing.Point(131, 52);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
-            this.textBoxOutputDir.ReadOnly = true;
             this.textBoxOutputDir.Size = new System.Drawing.Size(281, 20);
             this.textBoxOutputDir.TabIndex = 4;
+            this.textBoxOutputDir.Leave += new System.EventHandler(this.textBoxOutputDir_Leave);
             // 
             // comboBoxFormat
             // 
