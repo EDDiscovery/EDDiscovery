@@ -659,7 +659,7 @@ namespace EDDiscovery
 
         private void UnfreezeTrilaterationUI()
         {
-  
+            dataGridViewDistances.Enabled = true;
             dataGridViewClosestSystems.Enabled = true;
             dataGridViewSuggestedSystems.Enabled = true;
             Dock = DockStyle.Fill;

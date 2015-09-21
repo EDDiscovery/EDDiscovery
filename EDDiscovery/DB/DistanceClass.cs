@@ -324,6 +324,9 @@ namespace EDDiscovery.DB
 
         private bool Store(SQLiteConnection cn)
         {
+            if (CommanderCreate == null)
+                CommanderCreate = "";
+
             using (SQLiteCommand cmd = new SQLiteCommand())
             {
                 cmd.Connection = cn;
