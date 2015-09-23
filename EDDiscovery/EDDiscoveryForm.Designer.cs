@@ -36,6 +36,7 @@
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
             this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
+            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -58,10 +59,12 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
+            this.textBoxEDSMApiKey = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
+            this.tabPageScreenshots.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -123,7 +126,9 @@
             this.trilaterationControl.Name = "trilaterationControl";
             this.trilaterationControl.Size = new System.Drawing.Size(891, 561);
             this.trilaterationControl.TabIndex = 21;
-
+            // 
+            // tabPageScreenshots
+            // 
             this.tabPageScreenshots.Controls.Add(this.imageHandler1);
             this.tabPageScreenshots.Location = new System.Drawing.Point(4, 22);
             this.tabPageScreenshots.Name = "tabPageScreenshots";
@@ -131,6 +136,14 @@
             this.tabPageScreenshots.TabIndex = 4;
             this.tabPageScreenshots.Text = "Screenshots";
             this.tabPageScreenshots.UseVisualStyleBackColor = true;
+            // 
+            // imageHandler1
+            // 
+            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
+            this.imageHandler1.Name = "imageHandler1";
+            this.imageHandler1.Size = new System.Drawing.Size(897, 567);
+            this.imageHandler1.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -154,6 +167,8 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label1);
+            this.tabPage3.Controls.Add(this.textBoxEDSMApiKey);
             this.tabPage3.Controls.Add(this.button_Save);
             this.tabPage3.Controls.Add(this.groupBox1);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
@@ -167,7 +182,7 @@
             // button_Save
             // 
             this.button_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Save.Location = new System.Drawing.Point(732, 351);
+            this.button_Save.Location = new System.Drawing.Point(819, 178);
             this.button_Save.Name = "button_Save";
             this.button_Save.Size = new System.Drawing.Size(75, 23);
             this.button_Save.TabIndex = 4;
@@ -344,13 +359,23 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
-            // imageHandler1
+            // textBox1
             // 
-            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
-            this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(897, 567);
-            this.imageHandler1.TabIndex = 0;
+            this.textBoxEDSMApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxEDSMApiKey.Location = new System.Drawing.Point(128, 110);
+            this.textBoxEDSMApiKey.Name = "textBox1";
+            this.textBoxEDSMApiKey.Size = new System.Drawing.Size(365, 20);
+            this.textBoxEDSMApiKey.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 113);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "EDSM Api key";
             // 
             // EDDiscoveryForm
             // 
@@ -371,9 +396,10 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);
             this.tabPageTriletaration.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
             this.tabPageScreenshots.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -417,6 +443,8 @@
         private System.Windows.Forms.ToolStripMenuItem show2DMapsToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageScreenshots;
         private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBoxEDSMApiKey;
     }
 }
 

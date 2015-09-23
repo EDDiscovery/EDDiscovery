@@ -16,7 +16,7 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1053:{A3FF5DB3-339C-41DF-8C35-DA5186834311} 1033:{8D338D39-667C-48DD-920D-10BBC97A88B3} " Type="16"/>
+    <ROW Property="ProductCode" Value="1053:{A3FF5DB3-339C-41DF-8C35-DA5186834311} 1033:{EBAD4DB7-7F63-45C2-B486-0356C80D4CC6} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
     <ROW Property="ProductVersion" Value="2.4.12" Type="32"/>
@@ -65,7 +65,7 @@
     <ROW File="trilateration.js" Component_="fround.js" FileName="TRILAT~1.JS|trilateration.js" Attributes="0" SourcePath="..\EDDiscovery\trilateration.js" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="AnyCPU_Debug" BuildName="AnyCPU_Debug" BuildOrder="1" BuildType="0" PackageFolder="AnyCPU_DebugSetupFiles" PackageFileName="EDDiscovery" Languages="sv;en" LangOpt="1" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" UseLargeSchema="true" ExeName="EDDiscovery"/>
+    <ROW BuildKey="AnyCPU_Debug" BuildName="AnyCPU_Debug" BuildOrder="1" BuildType="0" PackageFolder="AnyCPU_DebugSetupFiles" PackageFileName="EDDiscovery" Languages="sv;en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" LangsDialog="true" UseLargeSchema="true" ExeName="EDDiscovery"/>
     <ATTRIBUTE name="CurrentBuild" value="AnyCPU_Debug"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">

@@ -99,6 +99,9 @@ namespace EDDiscovery
                 }
 
 
+                textBoxEDSMApiKey.Text = db.GetSettingString("EDSMApiKey", "");
+
+
                 if (EliteDangerous.EDRunning)
                 {
                     TravelHistoryControl.LogText("EliteDangerous " + EliteDangerous.EDVersion + " is running." + Environment.NewLine);
@@ -708,6 +711,7 @@ namespace EDDiscovery
 
             db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
             db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
+            db.PutSettingString("EDSMApiKey", textBoxEDSMApiKey.Text);
         }
 
         private void routeControl1_Load(object sender, EventArgs e)
