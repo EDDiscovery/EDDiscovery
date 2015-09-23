@@ -14,6 +14,9 @@ namespace EDDiscovery2.EDSM
 {
     class EDSMClass
     {
+        private string commanderName;
+        private string apiKey;
+
         private string RequestPost(string json, string action)
         {
             try
@@ -70,9 +73,15 @@ namespace EDDiscovery2.EDSM
 
         private string RequestGet(string action)
         {
+            return RequestGet("api-v1", action);
+        }
+
+
+        private string RequestGet(string api, string action)
+        {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.edsm.net/api-v1/" + action);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.edsm.net/" + api + "/" + action);
                 // Set the Method property of the request to POST.
                 request.Method = "GET";
 
@@ -307,6 +316,37 @@ namespace EDDiscovery2.EDSM
             return listDistances;
         }
 
+        public List<EDSMComment> GetComments(DateTime starttime)
+        {
+            List<EDSMComment> comments = new List<EDSMComment>();
+
+            string query = "get-comments?startdatetime=" + starttime.ToString("yyyy-MM-dd HH:mm:ss");
+            string json = RequestGet("api-logs-v1", query);
+
+            return comments;
+        }
+
+
+        public EDSMComment GetComment(string systemName)
+        {
+            EDSMComment comment = null;
+
+            string query;
+            query = "get-comment?systemName=" + WebUtility.HtmlEncode(systemName);
+
+            string json =  RequestGet("api-logs-v1", query);
+
+            return comment;
+        }
+
+        public string SetComment(EDSMComment comment)
+        {
+            string query;
+            query = "set-comment?systemName=" + WebUtility.HtmlEncode(comment.systemName) + "&commanderName=" + WebUtility.HtmlEncode(commanderName) + "&apiKey=" + apiKey + "&=comment" + WebUtility.HtmlEncode(comment.comment);
+            string json = RequestGet("api-logs-v1", query);
+
+            return json;
+        }
 
     }
 }
