@@ -156,7 +156,10 @@ namespace EDDiscovery2.ImageHandler
                         new_name = new_name + "x";
                     }
 
-                    Bitmap ED_PIC = new Bitmap(e.FullPath);
+                    Bitmap Screenshot_PIC = new Bitmap(e.FullPath);
+                    Bitmap ED_PIC = (Bitmap)Screenshot_PIC.Clone();
+
+                  
 
                     if (pic_ext.Equals(".jpg"))
                     {
