@@ -225,11 +225,14 @@ namespace EDDiscovery2.EDSM
      public string RequestSystems(string date)
         {
             string query;
-
+            string  json2;
             //string datestr = date.ToString("yyyy-MM-dd hh:mm:ss");
 
             query = "?startdatetime=" + WebUtility.HtmlEncode(date);
-            return RequestGet("systems" + query + "&coords=1&submitted=1");
+            //json1= RequestGet("systems" + query + "&coords=1&submitted=1");
+            json2=  RequestGet("systems" + query + "&coords=1&submitted=1&known=1");
+
+            return json2;
         }
 
         public string RequestDistances(string date)
@@ -326,8 +329,8 @@ namespace EDDiscovery2.EDSM
         {
             SQLiteDBClass db = new SQLiteDBClass();
 
-            //string query = "get-comments?startdatetime=\"" + WebUtility.HtmlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss")) + "\"&apiKey=" + apiKey ;
-            string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
+            string query = "get-comments?startdatetime=" + WebUtility.HtmlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss")) + "&apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
+            //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
             string json = RequestGet("api-logs-v1", query);
 
             return json;
