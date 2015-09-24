@@ -1,4 +1,5 @@
 ﻿using EDDiscovery.DB;
+using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,13 @@ namespace EDDiscovery2.EDSM
 {
     class EDSMClass
     {
-        private string commanderName;
-        private string apiKey;
+        public string commanderName;
+        public string apiKey;
+
+        public EDSMClass()
+        {
+        }
+
 
         private string RequestPost(string json, string action)
         {
@@ -316,33 +322,31 @@ namespace EDDiscovery2.EDSM
             return listDistances;
         }
 
-        public List<EDSMComment> GetComments(DateTime starttime)
+        public string GetComments(DateTime starttime)
         {
-            List<EDSMComment> comments = new List<EDSMComment>();
+            SQLiteDBClass db = new SQLiteDBClass();
 
-            string query = "get-comments?startdatetime=" + starttime.ToString("yyyy-MM-dd HH:mm:ss");
+            //string query = "get-comments?startdatetime=\"" + WebUtility.HtmlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss")) + "\"&apiKey=" + apiKey ;
+            string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
             string json = RequestGet("api-logs-v1", query);
 
-            return comments;
+            return json;
         }
 
 
-        public EDSMComment GetComment(string systemName)
+        public string GetComment(string systemName)
         {
-            EDSMComment comment = null;
-
             string query;
             query = "get-comment?systemName=" + WebUtility.HtmlEncode(systemName);
 
             string json =  RequestGet("api-logs-v1", query);
-
-            return comment;
+            return json;
         }
 
-        public string SetComment(EDSMComment comment)
+        public string SetComment(SystemNoteClass sn)
         {
             string query;
-            query = "set-comment?systemName=" + WebUtility.HtmlEncode(comment.systemName) + "&commanderName=" + WebUtility.HtmlEncode(commanderName) + "&apiKey=" + apiKey + "&=comment" + WebUtility.HtmlEncode(comment.comment);
+            query = "set-comment?systemName=" + WebUtility.HtmlEncode(sn.Name) + "&commanderName=" + WebUtility.HtmlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + WebUtility.HtmlEncode(sn.Note);
             string json = RequestGet("api-logs-v1", query);
 
             return json;

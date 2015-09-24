@@ -9,8 +9,11 @@ namespace EDDiscovery2.DB
     {
         public int id;
         public string Name;
-        public DateTime time;
+        public DateTime Time;
         public string Commander;
+        public string FileName;
+        public string Path;
+
 
     }
 }

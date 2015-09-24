@@ -605,7 +605,12 @@ namespace EDDiscovery
 
             try
             {
+                EDSMClass edsm = new EDSMClass();
+                SQLiteDBClass db = new SQLiteDBClass();
 
+
+                edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
+                edsm.commanderName = db.GetSettingString("CommanderName", "");
 
                 //SystemPosition sp = (SystemPosition)dataGridView1.Rows[lastRowIndex].Cells[1].Tag;
                 txt = richTextBoxNote.Text;
@@ -633,9 +638,12 @@ namespace EDDiscovery
                         sn.Add();
                     }
 
-
+                    
                     currentSysPos.curSystem.Note = txt;
                     dataGridView1.Rows[lastRowIndex].Cells[3].Value = txt;
+
+                    if (edsm.commanderName.Length>1 && edsm.apiKey.Length>1)
+                        edsm.SetComment(sn);
                 }
 
             }

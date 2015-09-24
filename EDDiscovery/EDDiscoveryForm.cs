@@ -732,9 +732,17 @@ namespace EDDiscovery
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FormSagCarinaMission frm = new FormSagCarinaMission(this);
+            //FormSagCarinaMission frm = new FormSagCarinaMission(this);
+            //            frm.Show();
 
-            frm.Show();
+
+            SQLiteDBClass db = new SQLiteDBClass();
+            EDSMClass edsm = new EDSMClass();
+
+            edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
+            edsm.commanderName = db.GetSettingString("CommanderName", "");
+
+            string comments =  edsm.GetComments(new DateTime(1990, 1, 1));
 
 
         }
