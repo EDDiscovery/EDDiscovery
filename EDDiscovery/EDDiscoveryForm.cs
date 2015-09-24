@@ -742,7 +742,7 @@ namespace EDDiscovery
             edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
             edsm.commanderName = db.GetSettingString("CommanderName", "");
 
-            string comments =  edsm.GetComments(new DateTime(1990, 1, 1));
+            string comments =  edsm.GetComments(new DateTime(2015, 1, 1));
 
 
         }
