@@ -355,5 +355,15 @@ namespace EDDiscovery2.EDSM
             return json;
         }
 
+        public string SetLog(string systemName, DateTime dateVisited)
+        {
+            string query;
+            query = "set-log?systemName=" + WebUtility.HtmlEncode(systemName) + "&commanderName=" + WebUtility.HtmlEncode(commanderName) + "&apiKey=" + apiKey + "&dateVisited=" + WebUtility.HtmlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+            string json = RequestGet("api-logs-v1", query);
+
+            return json;
+        }
+
+
     }
 }

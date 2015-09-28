@@ -614,6 +614,8 @@ namespace EDDiscovery
 
                 //SystemPosition sp = (SystemPosition)dataGridView1.Rows[lastRowIndex].Cells[1].Tag;
                 txt = richTextBoxNote.Text;
+                if (currentSysPos.curSystem.Note == null)
+                    currentSysPos.curSystem.Note = "";
 
                 if (currentSysPos != null && !txt.Equals(currentSysPos.curSystem.Note))
                 {

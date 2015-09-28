@@ -217,6 +217,8 @@ namespace EDDiscovery
                 {
                     DownloadMapFile("SC-02.jpg");
                     DownloadMapFile("SC-03.jpg");
+                    DownloadMapFile("SC-04.jpg");
+
                     DownloadMapFile("SC-L4.jpg");
                 }
             }
@@ -742,8 +744,13 @@ namespace EDDiscovery
             edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
             edsm.commanderName = db.GetSettingString("CommanderName", "");
 
-            string comments =  edsm.GetComments(new DateTime(2015, 1, 1));
+            //string comments =  edsm.GetComments(new DateTime(2015, 1, 1));
 
+
+            foreach (var system in travelHistoryControl1.visitedSystems)
+            {
+                edsm.SetLog(system.Name, system.time);
+            }
 
         }
 
