@@ -1,4 +1,5 @@
-﻿using EDDiscovery.DB;
+﻿using EDDiscovery;
+using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
@@ -362,6 +363,41 @@ namespace EDDiscovery2.EDSM
             string json = RequestGet("api-logs-v1", query);
 
             return json;
+        }
+
+        public int GetLogs(DateTime starttime, out List<SystemPosition> log)
+        {
+            log = new List<SystemPosition>();
+
+            string query = "get-logs?startdatetime=" + WebUtility.HtmlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss")) + "&apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
+            //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
+            string json = RequestGet("api-logs-v1", query);
+
+            if (json == null)
+                return 0;
+
+            JObject msg = (JObject)JObject.Parse(json);
+            int msgnr = msg["msgnum"].Value<int>();
+
+            JArray logs = (JArray)msg["logs"];
+
+            if (logs != null)
+            {
+                foreach (JObject jo in logs)
+                {
+                    SystemPosition pos = new SystemPosition();
+
+                    pos.Name = jo["system"].Value<string>();
+                    string str = jo["date"].Value<string>();
+
+                    pos.time = DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", null).ToUniversalTime();
+
+                    log.Add(pos);
+              
+                }
+            }
+
+            return msgnr;
         }
 
 
