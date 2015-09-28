@@ -745,6 +745,8 @@ namespace EDDiscovery
             edsm.commanderName = db.GetSettingString("CommanderName", "");
 
             //string comments =  edsm.GetComments(new DateTime(2015, 1, 1));
+            List<SystemPosition> log;
+            int ret = edsm.GetLogs(new DateTime(2011, 1, 1), out log);
 
 
             foreach (var system in travelHistoryControl1.visitedSystems)
