@@ -123,7 +123,6 @@
     <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
-    <Compile Include="EDSM\EDSMComment.cs" />
     <Compile Include="EliteDangerous\AppConfig.cs" />
     <Compile Include="EliteDangerous\EliteDangerous.cs" />
     <Compile Include="EliteDangerous\GameSettings.cs" />

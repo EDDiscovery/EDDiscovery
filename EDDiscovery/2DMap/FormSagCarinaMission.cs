@@ -142,6 +142,38 @@ namespace EDDiscovery2
                     //ShowImage(fgeimg);
                 }
 
+                if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-04.jpg")))
+                {
+                    FGEImage fgeimg = new FGEImage(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-04.jpg"));
+
+                    fgeimg.TopLeft = new Point(8000, 8000);
+                    fgeimg.pxTopLeft = new Point(253, 129);
+
+                    fgeimg.TopRight = new Point(14000, 8000);
+                    fgeimg.pxTopRight = new Point(2661, 112);
+
+                    fgeimg.BottomLeft = new Point(8000, 2000);
+                    fgeimg.pxBottomLeft = new Point(105, 2701);
+
+                    fgeimg.BottomRight = new Point(14000, 2000);
+                    fgeimg.pxBottomRight = new Point(2788, 2696);
+
+
+                    fgeimg.Yaxispoints.Add(new Point(2000, 2701));
+                    fgeimg.Yaxispoints.Add(new Point(3000, 2234));
+                    fgeimg.Yaxispoints.Add(new Point(4000, 1781));
+                    fgeimg.Yaxispoints.Add(new Point(5000, 1345));
+                    fgeimg.Yaxispoints.Add(new Point(6000, 927));
+                    fgeimg.Yaxispoints.Add(new Point(7000, 520));
+                    fgeimg.Yaxispoints.Add(new Point(8000, 129));
+
+                    fgeimages.Add(fgeimg);
+
+                    //ShowImage(fgeimg);
+                }
+
+
+
                 if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-L4.jpg")))
                 {
                     FGEImage fgeimg = new FGEImage(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-L4.jpg"));
