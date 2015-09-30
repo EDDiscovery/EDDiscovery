@@ -255,8 +255,18 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker) delegate
                 {
+                    SystemClass s1, s2, s3;
+
+                    s1 = new SystemClass("Sol");
+                    s2 = new SystemClass("Saggitarius A*");
+                    s3 = new SystemClass();
+
+                    s3.x = trilaterationResult.Coordinate.X;
+                    s3.y = trilaterationResult.Coordinate.Y;
+                    s3.z = trilaterationResult.Coordinate.Z;
+
                     LogText("Trilateration successful (" + spentTimeString + "), exact coordinates found." + Environment.NewLine);
-                    //LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
+                    LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + " Sol: " + SystemData.Distance(s1, s3).ToString("0.0") +  " Sag A* " + SystemData.Distance(s2, s3).ToString("0.0") + Environment.NewLine);
                     labelStatus.Text = "Success, coordinates found!";
                     labelStatus.BackColor = Color.LawnGreen;
                 });
