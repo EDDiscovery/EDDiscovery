@@ -257,8 +257,8 @@ namespace EDDiscovery
                 {
                     SystemClass s1, s2, s3;
 
-                    s1 = new SystemClass("Sol");
-                    s2 = new SystemClass("Saggitarius A*");
+                    s1 = SystemData.GetSystem("Sol");
+                    s2 = SystemData.GetSystem("Sagittarius A*");
                     s3 = new SystemClass();
 
                     s3.x = trilaterationResult.Coordinate.X;
