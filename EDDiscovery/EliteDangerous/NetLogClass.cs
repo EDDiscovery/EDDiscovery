@@ -18,7 +18,7 @@ namespace EDDiscovery
         public string FileName;
         public DateTime lastchanged;
         public long filePos, fileSize;
-
+        public bool CQC;
     }
 
     public class NetLogClass
@@ -187,6 +187,7 @@ namespace EDDiscovery
             string FirstLine = sr.ReadLine();
             string line, str;
             NetLogFileInfo nfi = null;
+            bool CQC = false;
 
             str = "20" + FirstLine.Substring(0, 8) + " " + FirstLine.Substring(9, 5);
 
@@ -197,11 +198,25 @@ namespace EDDiscovery
                 nfi = netlogfiles[fi.FullName];
                 sr.BaseStream.Position = nfi.filePos;
                 sr.DiscardBufferedData();
+                CQC = nfi.CQC;
             }
 
             while ((line = sr.ReadLine()) != null)
             {
-                if (line.Contains(" System:"))
+                if (line.Contains("[PG] [Notification] Left a playlist lobby"))
+                    CQC = false;
+
+                if (line.Contains("[PG] Destroying playlist lobby."))
+                    CQC = false;
+
+                if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
+                    CQC = true;
+                if (line.Contains("[PG] Created playlist lobby"))
+                    CQC = true;
+                if (line.Contains("[PG] Found matchmaking lobby object"))
+                    CQC = true;
+
+                if (line.Contains(" System:") && CQC == false)
                 {
                     SystemPosition ps = SystemPosition.Parse(filetime, line);
                     if (ps != null)
@@ -240,6 +255,7 @@ namespace EDDiscovery
             nfi.lastchanged = File.GetLastWriteTimeUtc(nfi.FileName);
             nfi.filePos = sr.BaseStream.Position;
             nfi.fileSize = fi.Length;
+            nfi.CQC = CQC;
 
             netlogfiles[nfi.FileName] = nfi;
             lastnfi = nfi;
