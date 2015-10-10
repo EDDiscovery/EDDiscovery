@@ -683,9 +683,14 @@ namespace EDDiscovery
                 }
                 else
                 {
-
-                    dist.Delete();
-                    return;
+                    if (dist.Dist < 0)  // Can removedistance by adding negative value
+                        dist.Delete();
+                    else
+                    {
+                        dist.Status = DistancsEnum.EDDiscoverySubmitted;
+                        dist.Update();
+                    }
+                    json = null;
                 }
                 if (json != null)
                 {
