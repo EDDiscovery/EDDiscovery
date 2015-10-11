@@ -127,6 +127,9 @@ namespace EDDiscovery.DB
                 if (dbver < 6)
                     UpgradeDB6();
 
+                if (dbver < 7)
+                    UpgradeDB7();
+
 
 
                 return true;
@@ -332,10 +335,50 @@ namespace EDDiscovery.DB
             {
                 System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB4 error: " + ex.Message);
+                MessageBox.Show("UpgradeDB6 error: " + ex.Message);
             }
 
             PutSettingInt("DBVer", 6);
+
+            return true;
+        }
+
+
+        private bool UpgradeDB7()
+        {
+            
+            string query1 = "DROP TABLE VisitedSystems";
+            string query2 = "CREATE TABLE VisitedSystems(id INTEGER PRIMARY KEY  NOT NULL, Name TEXT NOT NULL, Time DATETIME NOT NULL, Unit Integer, Commander Integer, Source Integer)";
+            string query3 = "CREATE TABLE TravelLogUnit(id INTEGER PRIMARY KEY  NOT NULL, type INTEGER NOT NULL, name TEXT NOT NULL, size INTEGER)";
+
+
+            string dbfile = GetSQLiteDBFile();
+
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery6.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+
+            try
+            {
+                ExecuteQuery(query1);
+                ExecuteQuery(query2);
+                ExecuteQuery(query3);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB7 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 7);
 
             return true;
         }

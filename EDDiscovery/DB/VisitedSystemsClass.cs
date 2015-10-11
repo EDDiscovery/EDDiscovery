@@ -1,5 +1,8 @@
-﻿using System;
+﻿using EDDiscovery.DB;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 
@@ -10,10 +13,89 @@ namespace EDDiscovery2.DB
         public int id;
         public string Name;
         public DateTime Time;
-        public string Commander;
-        public string FileName;
-        public string Path;
+        public int Commander;
+        public int Source;
+        public string Unit;
 
+
+        public VisitedSystemsClass(DataRow dr)
+        {
+            id = (int)(long)dr["id"];
+            Name = (string)dr["Name"];
+            Time = (DateTime)dr["Time"];
+            Commander = (int)(long)dr["Commander"];
+            Source = (int)(long)dr["Source"];
+            Unit = (string)dr["Unit"];
+        }
+
+
+        public bool Add()
+        {
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            {
+                return Add(cn);
+            }
+        }
+
+        private bool Add(SQLiteConnection cn)
+        {
+            using (SQLiteCommand cmd = new SQLiteCommand())
+            {
+                cmd.Connection = cn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandTimeout = 30;
+                cmd.CommandText = "Insert into VisitedSystems (Name, Time, Unit, Commander, Source) values (@name, @time, @unit, @commander, @source)";
+                cmd.Parameters.AddWithValue("@name", Name);
+                cmd.Parameters.AddWithValue("@time", Time);
+                cmd.Parameters.AddWithValue("@unit", Unit);
+                cmd.Parameters.AddWithValue("@commander", Commander);
+                cmd.Parameters.AddWithValue("@source", Source);
+
+                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+
+                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                {
+                    cmd2.Connection = cn;
+                    cmd2.CommandType = CommandType.Text;
+                    cmd2.CommandTimeout = 30;
+                    cmd2.CommandText = "Select Max(id) as id from VisitedSystems";
+
+                    id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                }
+                return true;
+            }
+        }
+
+        public bool Update()
+        {
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            {
+                return Update(cn);
+            }
+        }
+
+        private bool Update(SQLiteConnection cn)
+        {
+            using (SQLiteCommand cmd = new SQLiteCommand())
+            {
+                cmd.Connection = cn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandTimeout = 30;
+                cmd.CommandText = "Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@NoCommanderte, Source=@Source  where ID=@id";
+                cmd.Parameters.AddWithValue("@ID", id);
+                cmd.Parameters.AddWithValue("@Name", Name);
+                cmd.Parameters.AddWithValue("@Time", Time);
+                cmd.Parameters.AddWithValue("@unit", Unit);
+                cmd.Parameters.AddWithValue("@commander", Commander);
+                cmd.Parameters.AddWithValue("@source", Source);
+
+                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+
+                return true;
+            }
+        }
 
     }
+
 }
+
