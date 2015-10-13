@@ -19,13 +19,20 @@ namespace EDDiscovery2
         public readonly EDDiscoveryForm _eddiscoveryForm;
         //        private Bitmap currentImage;
 
-        private DateTime maxage;
+        private DateTime startDate, endDate;
         public bool Test = false;
+
+        private DateTimePicker pickerStart, pickerStop;
+        ToolStripControlHost host1, host2;
+
 
         public FormSagCarinaMission(EDDiscoveryForm frm)
         {
             _eddiscoveryForm = frm;
-            
+
+
+
+
             InitializeComponent();
         }
 
@@ -33,7 +40,20 @@ namespace EDDiscovery2
 
         private void FormSagCarinaMission_Load(object sender, EventArgs e)
         {
-            maxage = new DateTime(2010, 1, 1);
+            pickerStart = new DateTimePicker();
+            pickerStop = new DateTimePicker();
+            host1 = new ToolStripControlHost(pickerStart);
+            toolStrip1.Items.Add(host1);
+            host2 = new ToolStripControlHost(pickerStop);
+            toolStrip1.Items.Add(host2);
+            pickerStart.Value = DateTime.Today.AddMonths(-1);
+
+
+            this.pickerStart.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged);
+            this.pickerStop.ValueChanged += new System.EventHandler(this.dateTimePickerStop_ValueChanged);
+
+
+            startDate = new DateTime(2010, 1, 1);
             AddImages();
             WindowState = FormWindowState.Maximized;
 
@@ -44,7 +64,7 @@ namespace EDDiscovery2
                 toolStripComboBox1.Items.Add(img.FileName);
             }
             toolStripComboBox1.SelectedIndex = 0;
-            toolStripComboBox2.SelectedIndex = 0;
+            toolStripComboBoxTime.SelectedIndex = 0;
 
         }
 
@@ -224,7 +244,7 @@ namespace EDDiscovery2
 
         private void DrawTravelHistory()
         {
-            DateTime start = maxage;
+            DateTime start = startDate;
 
             
 
@@ -238,7 +258,7 @@ namespace EDDiscovery2
             }
 
 
-            var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.time > start && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.time  select systems;
+            var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.time > start && systems.time<endDate  && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.time  select systems;
             List<SystemPosition> listHistory = history.ToList<SystemPosition>();
             Graphics gfx = Graphics.FromImage(imageViewer1.Image);
             Pen pen = new Pen(Color.Red, 2);
@@ -305,9 +325,9 @@ namespace EDDiscovery2
 
         }
 
-        private void toolStripComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void toolStripComboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int nr = toolStripComboBox2.SelectedIndex;
+            int nr = toolStripComboBoxTime.SelectedIndex;
             /*
             FGE Expedition start
             Last Week
@@ -315,18 +335,40 @@ namespace EDDiscovery2
             Last Year
             All
             */
-            if (nr == 0)
-                maxage = new DateTime(2015, 8, 1);
-            else if (nr == 1)
-                maxage = DateTime.Now.AddDays(-7);
-            else if (nr == 2)
-                maxage = DateTime.Now.AddMonths(-1);
-            else if (nr == 3)
-                maxage = DateTime.Now.AddYears(-1);
-            else
-                maxage = new DateTime(2010, 8, 1); 
 
-            
+            endDate = DateTime.Today.AddDays(1);
+            if (nr == 0)
+                startDate = new DateTime(2015, 8, 1);
+            else if (nr == 1)
+                startDate = DateTime.Now.AddDays(-7);
+            else if (nr == 2)
+                startDate = DateTime.Now.AddMonths(-1);
+            else if (nr == 3)
+                startDate = DateTime.Now.AddYears(-1);
+            else if (nr == 4)
+                startDate = new DateTime(2010, 8, 1);
+            else if (nr == 5)  // Custom
+                startDate = new DateTime(2010, 8, 1);
+
+
+            if (nr == 5)
+            {
+                host1.Visible = true;
+                host2.Visible = true;
+                endDate = pickerStop.Value;
+                startDate = pickerStart.Value;
+            }
+            else
+            {
+                host1.Visible = false;
+                host2.Visible = false;
+                endDate = DateTime.Today.AddDays(1);
+            }
+
+
+
+
+
             ShowSelectedImage();
         }
 
@@ -334,6 +376,24 @@ namespace EDDiscovery2
         {
             imageViewer1.ZoomIn();
         }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void dateTimePickerStart_ValueChanged(object sender, EventArgs e)
+        {
+            startDate = pickerStart.Value;
+            ShowSelectedImage();
+        }
+
+        private void dateTimePickerStop_ValueChanged(object sender, EventArgs e)
+        {
+            endDate = pickerStop.Value;
+            ShowSelectedImage();
+        }
+
 
         private void toolStripButtonZoomOut_Click(object sender, EventArgs e)
         {
@@ -343,6 +403,11 @@ namespace EDDiscovery2
         private void toolStripButtonZoomtoFit_Click(object sender, EventArgs e)
         {
             imageViewer1.ZoomToFit();
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

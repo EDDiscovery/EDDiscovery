@@ -658,6 +658,31 @@ namespace EDDiscovery.DB
 
         }
 
+        static public DataSet QueryText(SQLiteConnection cn, SQLiteCommand cmd)
+        {
+
+            //LogLine("SqlQueryText: " + cmd.CommandText);
+
+            try
+            {
+                DataSet ds = new DataSet();
+                SQLiteDataAdapter da = default(SQLiteDataAdapter);
+                cmd.CommandType = CommandType.Text;
+                cmd.Connection = cn;
+                da = new SQLiteDataAdapter(cmd);
+                cn.Open();
+                da.Fill(ds);
+                cn.Close();
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("SqlQuery Exception: " + ex.Message);
+                throw;
+            }
+
+        }
+
 
         public int SqlNonQuery(SQLiteConnection cn, SQLiteCommand cmd)
         {

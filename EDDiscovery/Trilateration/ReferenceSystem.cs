@@ -29,7 +29,15 @@ namespace EDDiscovery2.Trilateration
                     modifier += 50;
 
                 if (Regex.IsMatch(refSys.name, "\\s[A-Z][A-Z].[A-Z]\\s"))
-                    modifier += 50;
+                    modifier += 20;
+
+
+                if (Distance > 20000)
+                    modifier += 10;
+
+                if (Distance > 30000)
+                    modifier += 20;
+
 
                 return refSys.name.Length*2 + Math.Sqrt(Distance) / 3.5 + modifier;
                 //return refSys.name.Length + Distance/100 + modifier;

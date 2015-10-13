@@ -31,12 +31,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSagCarinaMission));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.imageViewer1 = new EDDiscovery2._2DMap.ImageViewer();
+            this.toolStripComboBoxTime = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonZoomIn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomtoFit = new System.Windows.Forms.ToolStripButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.imageViewer1 = new EDDiscovery2._2DMap.ImageViewer();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -46,7 +46,7 @@
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox1,
-            this.toolStripComboBox2,
+            this.toolStripComboBoxTime,
             this.toolStripButtonZoomIn,
             this.toolStripButtonZoomOut,
             this.toolStripButtonZoomtoFit});
@@ -55,6 +55,7 @@
             this.toolStrip1.Size = new System.Drawing.Size(1157, 29);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
             // 
             // toolStripComboBox1
             // 
@@ -62,42 +63,20 @@
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 29);
             this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
             // 
-            // toolStripComboBox2
+            // toolStripComboBoxTime
             // 
-            this.toolStripComboBox2.DropDownWidth = 140;
-            this.toolStripComboBox2.Items.AddRange(new object[] {
+            this.toolStripComboBoxTime.DropDownWidth = 140;
+            this.toolStripComboBoxTime.Items.AddRange(new object[] {
             "FGE Expedition start",
             "Last Week",
             "Last Month",
             "Last Year",
-            "All"});
-            this.toolStripComboBox2.Name = "toolStripComboBox2";
-            this.toolStripComboBox2.Size = new System.Drawing.Size(140, 29);
-            this.toolStripComboBox2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
-            this.toolStripComboBox2.Click += new System.EventHandler(this.toolStripComboBox2_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel1.Controls.Add(this.imageViewer1);
-            this.panel1.Location = new System.Drawing.Point(0, 28);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1157, 615);
-            this.panel1.TabIndex = 2;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
-            // imageViewer1
-            // 
-            this.imageViewer1.AutoScroll = true;
-            this.imageViewer1.AutoSize = false;
-            this.imageViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageViewer1.Location = new System.Drawing.Point(0, 0);
-            this.imageViewer1.Name = "imageViewer1";
-            this.imageViewer1.Size = new System.Drawing.Size(1157, 615);
-            this.imageViewer1.TabIndex = 0;
+            "All",
+            "Custom"});
+            this.toolStripComboBoxTime.Name = "toolStripComboBoxTime";
+            this.toolStripComboBoxTime.Size = new System.Drawing.Size(140, 29);
+            this.toolStripComboBoxTime.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxTime_SelectedIndexChanged);
+            this.toolStripComboBoxTime.Click += new System.EventHandler(this.toolStripComboBox2_Click);
             // 
             // toolStripButtonZoomIn
             // 
@@ -132,6 +111,29 @@
             this.toolStripButtonZoomtoFit.ToolTipText = "Zoom to best fit";
             this.toolStripButtonZoomtoFit.Click += new System.EventHandler(this.toolStripButtonZoomtoFit_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel1.Controls.Add(this.imageViewer1);
+            this.panel1.Location = new System.Drawing.Point(0, 28);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1157, 615);
+            this.panel1.TabIndex = 2;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // imageViewer1
+            // 
+            this.imageViewer1.AutoScroll = true;
+            this.imageViewer1.AutoSize = false;
+            this.imageViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageViewer1.Location = new System.Drawing.Point(0, 0);
+            this.imageViewer1.Name = "imageViewer1";
+            this.imageViewer1.Size = new System.Drawing.Size(1157, 615);
+            this.imageViewer1.TabIndex = 0;
+            // 
             // FormSagCarinaMission
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,7 +156,7 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
-        private System.Windows.Forms.ToolStripComboBox toolStripComboBox2;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxTime;
         private _2DMap.ImageViewer imageViewer1;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomIn;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomOut;
