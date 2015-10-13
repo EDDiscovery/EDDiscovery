@@ -313,7 +313,7 @@ namespace EDDiscovery
 
                 var suggestedSystems = GetListOfSuggestedSystems(trilaterationResult.Coordinate.X, 
                                                                  trilaterationResult.Coordinate.Y,
-                                                                 trilaterationResult.Coordinate.Z, 10);
+                                                                 trilaterationResult.Coordinate.Z, 16);
 
                 Invoke((MethodInvoker) (() => PopulateSuggestedSystems(suggestedSystems)));
             }
@@ -436,7 +436,7 @@ namespace EDDiscovery
             {
                 var suggestedSystems = GetListOfSuggestedSystems(lastKnown.x,
                                                                  lastKnown.y,
-                                                                 lastKnown.z, 10);
+                                                                 lastKnown.z, 16);
                 PopulateSuggestedSystems(suggestedSystems);
                 return;
             }
