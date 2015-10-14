@@ -1,5 +1,6 @@
 using EDDiscovery.DB;
 using EDDiscovery2;
+using EDDiscovery2.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -19,6 +20,7 @@ namespace EDDiscovery
         public DateTime lastchanged;
         public long filePos, fileSize;
         public bool CQC;
+
     }
 
     public class NetLogClass
@@ -32,7 +34,7 @@ namespace EDDiscovery
         public event NetLogEventHandler OnNewPosition;
 
         SQLiteDBClass db=null;
-
+        public List<TravelLogUnit> tlUnits;
 
         public string GetNetLogPath()
         {
@@ -135,13 +137,78 @@ namespace EDDiscovery
                 return null;
             }
 
+            // Get TravelLogUnits;
+
+            tlUnits =  TravelLogUnit.GetAll();
+
+            List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll();
+
+            // Add systems in local DB.
+            if (vsSystemsList != null)
+                foreach (VisitedSystemsClass vs in vsSystemsList)
+                    visitedSystems.Add(new SystemPosition(vs));
+
             FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.Name).ToArray();
 
             NoEvents = true;
 
             foreach (FileInfo fi in allFiles)
             {
-                ParseFile(fi, visitedSystems);
+                TravelLogUnit lu = null;
+                bool parsefile = true;
+
+                // Check if we alreade have parse the file and stored in DB.
+                if (tlUnits!=null)
+                    lu= (from c in tlUnits where c.Name == fi.Name select c).FirstOrDefault<TravelLogUnit>();
+
+                if (lu != null)
+                {
+                    if (lu.Size == fi.Length)  // File is already in DB:
+                        parsefile = false;
+                }
+                else
+                {
+                    lu = new TravelLogUnit();
+                    lu.Name = fi.Name;
+                    lu.Path = Path.GetDirectoryName(fi.FullName);
+                    lu.Size = 0;  // Add real size after data is in DB //;(int)fi.Length;
+                    lu.type = 1;
+                    lu.Add();
+                }
+
+
+                if (parsefile)
+                {
+                    int nr = 0;
+                    List<SystemPosition> tempVisitedSystems = new List<SystemPosition>();
+                    ParseFile(fi, tempVisitedSystems);
+
+
+                    foreach (SystemPosition ps in tempVisitedSystems)
+                    {
+                        SystemPosition ps2;
+                        ps2 = (from c in visitedSystems where c.Name == ps.Name && c.time == ps.time select c).FirstOrDefault<SystemPosition>();
+                        if (ps2 == null)
+                        {
+                            VisitedSystemsClass dbsys = new VisitedSystemsClass();
+
+                            dbsys.Name = ps.Name;
+                            dbsys.Time = ps.time;
+                            dbsys.Source = lu.id;
+                            dbsys.EDSM_sync = false;
+                            dbsys.Unit = fi.Name;
+
+                            dbsys.Add();
+                            nr++;
+                        }
+                        visitedSystems.Add(ps);
+                    
+                    }
+
+                    lu.Size = (int)fi.Length;
+                    lu.Update();
+                    AppendText(richTextBox_History, fi.Name + " " + nr.ToString() + " added to local database." + Environment.NewLine, Color.Black);
+                }
             }
             NoEvents = false;
 
@@ -272,6 +339,10 @@ namespace EDDiscovery
             box.SelectionColor = color;
             box.AppendText(text);
             box.SelectionColor = box.ForeColor;
+            box.ScrollToCaret();
+            box.Invalidate();
+            Application.DoEvents();
+
         }
 
         public bool StartMonitor()

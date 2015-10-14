@@ -8,7 +8,7 @@ using System.Text;
 
 namespace EDDiscovery2.DB
 {
-    class VisitedSystemsClass
+    public class VisitedSystemsClass
     {
         public int id;
         public string Name;
@@ -16,7 +16,11 @@ namespace EDDiscovery2.DB
         public int Commander;
         public int Source;
         public string Unit;
+        public bool EDSM_sync;
 
+        public VisitedSystemsClass()
+        {
+        }
 
         public VisitedSystemsClass(DataRow dr)
         {
@@ -26,6 +30,7 @@ namespace EDDiscovery2.DB
             Commander = (int)(long)dr["Commander"];
             Source = (int)(long)dr["Source"];
             Unit = (string)dr["Unit"];
+            EDSM_sync = (bool)dr["edsm_sync"];
         }
 
 
@@ -44,12 +49,13 @@ namespace EDDiscovery2.DB
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into VisitedSystems (Name, Time, Unit, Commander, Source) values (@name, @time, @unit, @commander, @source)";
+                cmd.CommandText = "Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync) values (@name, @time, @unit, @commander, @source, @edsm_sync)";
                 cmd.Parameters.AddWithValue("@name", Name);
                 cmd.Parameters.AddWithValue("@time", Time);
                 cmd.Parameters.AddWithValue("@unit", Unit);
                 cmd.Parameters.AddWithValue("@commander", Commander);
                 cmd.Parameters.AddWithValue("@source", Source);
+                cmd.Parameters.AddWithValue("@edsm_sync", EDSM_sync);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
@@ -81,19 +87,61 @@ namespace EDDiscovery2.DB
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@NoCommanderte, Source=@Source  where ID=@id";
+                cmd.CommandText = "Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@NoCommanderte, Source=@Source, edsm_sync=@edsm_sync  where ID=@id";
                 cmd.Parameters.AddWithValue("@ID", id);
                 cmd.Parameters.AddWithValue("@Name", Name);
                 cmd.Parameters.AddWithValue("@Time", Time);
                 cmd.Parameters.AddWithValue("@unit", Unit);
                 cmd.Parameters.AddWithValue("@commander", Commander);
                 cmd.Parameters.AddWithValue("@source", Source);
+                cmd.Parameters.AddWithValue("@edsm_sync", EDSM_sync);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
                 return true;
             }
         }
+
+
+
+        static public List<VisitedSystemsClass> GetAll()
+        {
+            List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
+
+
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    DataSet ds = null;
+                    cmd.Connection = cn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandTimeout = 30;
+                    cmd.CommandText = "select * from VisitedSystems";
+
+                    ds = SQLiteDBClass.QueryText(cn, cmd);
+                    if (ds.Tables.Count == 0)
+                    {
+                        return null;
+                    }
+                    //
+                    if (ds.Tables[0].Rows.Count == 0)
+                    {
+                        return list;
+                    }
+
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        VisitedSystemsClass sys = new VisitedSystemsClass(dr);
+
+                        list.Add(sys);
+                    }
+
+                    return list;
+                }
+            }
+        }
+
 
     }
 
