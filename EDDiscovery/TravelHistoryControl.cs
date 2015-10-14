@@ -156,9 +156,8 @@ namespace EDDiscovery
             }
 
 
-            if (visitedSystems==null || visitedSystems.Count == 0)
-                visitedSystems = netlog.ParseFiles(richTextBox_History);
-
+            if (visitedSystems == null || visitedSystems.Count == 0)
+                GetVisitedSystems();
 
             if (visitedSystems == null)
                 return;
@@ -218,6 +217,11 @@ namespace EDDiscovery
 
             if (textBoxFilter.TextLength>0)
                 FilterGridView();
+        }
+
+        private void GetVisitedSystems()
+        {
+            visitedSystems = netlog.ParseFiles(richTextBox_History);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
