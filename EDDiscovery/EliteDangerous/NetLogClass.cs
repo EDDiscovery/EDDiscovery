@@ -146,7 +146,12 @@ namespace EDDiscovery
             // Add systems in local DB.
             if (vsSystemsList != null)
                 foreach (VisitedSystemsClass vs in vsSystemsList)
-                    visitedSystems.Add(new SystemPosition(vs));
+                {
+                    if (visitedSystems.Count==0)
+                        visitedSystems.Add(new SystemPosition(vs));
+                    else if (!visitedSystems.Last<SystemPosition>().Name.Equals(vs.Name))  // Avoid duplicate if times exist in same system from different files.
+                        visitedSystems.Add(new SystemPosition(vs));
+                }
 
             FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.Name).ToArray();
 
