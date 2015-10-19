@@ -389,8 +389,13 @@ namespace EDDiscovery2.EDSM
                 {
                     SystemPosition pos = new SystemPosition();
 
+
                     pos.Name = jo["system"].Value<string>();
                     string str = jo["date"].Value<string>();
+
+                    if (pos.Name.Equals("BD 23 204"))
+                        System.Diagnostics.Trace.WriteLine("Test");
+
 
                     pos.time = DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", null, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
