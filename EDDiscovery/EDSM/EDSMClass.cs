@@ -10,6 +10,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 using System.Windows.Forms;
 
 namespace EDDiscovery2.EDSM
@@ -18,6 +19,7 @@ namespace EDDiscovery2.EDSM
     {
         public string commanderName;
         public string apiKey;
+
 
         public EDSMClass()
         {
@@ -229,7 +231,7 @@ namespace EDDiscovery2.EDSM
             string  json2;
             //string datestr = date.ToString("yyyy-MM-dd hh:mm:ss");
 
-            query = "?startdatetime=" + WebUtility.HtmlEncode(date);
+            query = "?startdatetime=" + HttpUtility.UrlEncode(date);
             //json1= RequestGet("systems" + query + "&coords=1&submitted=1");
             json2=  RequestGet("systems" + query + "&coords=1&submitted=1&known=1");
 
@@ -239,7 +241,7 @@ namespace EDDiscovery2.EDSM
         public string RequestDistances(string date)
         {
             string query;
-            query = "?startdatetime=" + WebUtility.HtmlEncode(date);
+            query = "?startdatetime=" + HttpUtility.UrlEncode(date);
 
             return RequestGet("distances" + query + "coords=1 & submitted=1");
         }
@@ -292,7 +294,7 @@ namespace EDDiscovery2.EDSM
 
 
                 string query;
-                query = "?sysname=" + WebUtility.HtmlEncode(systemname) + "&coords=1&distances=1&submitted=1";
+                query = "?sysname=" + HttpUtility.UrlEncode(systemname) + "&coords=1&distances=1&submitted=1";
 
                 json = RequestGet("system" + query);
 
@@ -330,8 +332,8 @@ namespace EDDiscovery2.EDSM
         {
             SQLiteDBClass db = new SQLiteDBClass();
 
-            string query = "get-comments?startdatetime=" + WebUtility.HtmlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss")) + "&apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
-            //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
+            string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss")) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
+            //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             string json = RequestGet("api-logs-v1", query);
 
             return json;
@@ -341,7 +343,7 @@ namespace EDDiscovery2.EDSM
         public string GetComment(string systemName)
         {
             string query;
-            query = "get-comment?systemName=" + WebUtility.HtmlEncode(systemName);
+            query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName);
 
             string json =  RequestGet("api-logs-v1", query);
             return json;
@@ -350,7 +352,7 @@ namespace EDDiscovery2.EDSM
         public string SetComment(SystemNoteClass sn)
         {
             string query;
-            query = "set-comment?systemName=" + WebUtility.HtmlEncode(sn.Name) + "&commanderName=" + WebUtility.HtmlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + WebUtility.HtmlEncode(sn.Note);
+            query = "set-comment?systemName=" + HttpUtility.UrlEncode(sn.Name) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(sn.Note);
             string json = RequestGet("api-logs-v1", query);
 
             return json;
@@ -359,7 +361,7 @@ namespace EDDiscovery2.EDSM
         public string SetLog(string systemName, DateTime dateVisited)
         {
             string query;
-            query = "set-log?systemName=" + WebUtility.HtmlEncode(systemName) + "&commanderName=" + WebUtility.HtmlEncode(commanderName) + "&apiKey=" + apiKey + "&dateVisited=" + WebUtility.HtmlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+            query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"));
             string json = RequestGet("api-logs-v1", query);
 
             return json;
@@ -369,8 +371,8 @@ namespace EDDiscovery2.EDSM
         {
             log = new List<SystemPosition>();
 
-            string query = "get-logs?startdatetime=" + WebUtility.HtmlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss")) + "&apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
-            //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + WebUtility.HtmlEncode(commanderName);
+            string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss")) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
+            //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             string json = RequestGet("api-logs-v1", query);
 
             if (json == null)
@@ -390,7 +392,7 @@ namespace EDDiscovery2.EDSM
                     pos.Name = jo["system"].Value<string>();
                     string str = jo["date"].Value<string>();
 
-                    pos.time = DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", null).ToUniversalTime();
+                    pos.time = DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", null, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
                     log.Add(pos);
               
