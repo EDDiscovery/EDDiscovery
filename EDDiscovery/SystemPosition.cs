@@ -18,7 +18,7 @@ namespace EDDiscovery
         public SystemClass curSystem;
         public SystemClass prevSystem;
         public string strDistance;
-
+        public VisitedSystemsClass vs;
 
         public SystemPosition()
         {
@@ -28,6 +28,7 @@ namespace EDDiscovery
         {
             Name = vs.Name;
             time = vs.Time;
+            this.vs = vs;
         }
 
         static public SystemPosition Parse(DateTime lasttime, string line)

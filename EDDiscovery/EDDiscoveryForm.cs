@@ -748,10 +748,49 @@ namespace EDDiscovery
             List<SystemPosition> log;
             int ret = edsm.GetLogs(new DateTime(2011, 1, 1), out log);
 
+            if (log == null)
+                log = new List<SystemPosition>();
 
+            // Send Unsynced system to EDSM.
             foreach (var system in travelHistoryControl1.visitedSystems)
             {
-                edsm.SetLog(system.Name, system.time);
+                string json=null;
+
+                if (system.vs != null && system.vs.EDSM_sync == false)
+                {
+                    // check if it exist in EDSM
+                    SystemPosition ps2 = (from c in log where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
+                    if (ps2 != null)
+                    {
+                        system.vs.EDSM_sync = true;
+                        system.vs.Update();
+
+                    }
+                    else
+                        json = edsm.SetLog(system.Name, system.time);
+
+                    if (json != null)
+                    {
+                        JObject msg = (JObject)JObject.Parse(json);
+
+                        int msgnum = msg["msgnum"].Value<int>();
+
+                        if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
+                        {
+                            if (msgnum == 100)
+                                System.Diagnostics.Trace.WriteLine("New");
+
+                            system.vs.EDSM_sync = true;
+                            system.vs.Update();
+                        }
+                        else
+                        {
+                            System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name  );
+                        }
+
+
+                    }
+                }
             }
 
         }
