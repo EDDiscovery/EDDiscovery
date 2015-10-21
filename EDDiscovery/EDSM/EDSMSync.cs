@@ -38,6 +38,7 @@ namespace EDDiscovery2.EDSM
 
         private void SyncThread()
         {
+            Sync();
         }
 
 
@@ -60,6 +61,9 @@ namespace EDDiscovery2.EDSM
             foreach (var system in mainForm.visitedSystems)
             {
                 string json = null;
+
+                if (Exit)
+                    return;
 
                 if (system.vs != null && system.vs.EDSM_sync == false)
                 {
