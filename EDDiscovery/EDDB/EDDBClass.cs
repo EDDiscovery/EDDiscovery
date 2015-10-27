@@ -26,7 +26,7 @@ namespace EDDiscovery2.EDDB
 
         public EDDBClass()
         {
-            stationFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstationslite.json");
+            stationFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstations.json");
             systemFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems.json");
             commoditiesFileName = Path.Combine(Tools.GetAppDataDirectory(), "commodities.json");
 
@@ -39,20 +39,20 @@ namespace EDDiscovery2.EDDB
         public bool GetSystems()
         {
             if (File.Exists(stationTempFileName)) File.Delete(stationTempFileName); // migration - remove obsolete file
-            return DownloadFile("http://robert.astronet.se/Elite/eddb/systems.json", systemFileName);
+            return DownloadFile("http://robert.astronet.se/Elite/eddb/v4/systems.json", systemFileName);
         }
 
         public bool GetCommodities()
         {
             if (File.Exists(systemTempFileName)) File.Delete(systemTempFileName); // migration - remove obsolete file
-            return DownloadFile("http://robert.astronet.se/Elite/eddb/commodities.json", commoditiesFileName);
+            return DownloadFile("http://robert.astronet.se/Elite/eddb/v4/commodities.json", commoditiesFileName);
         }
 
 
         public bool GetStationsLite()
         {
             if (File.Exists(commoditiesTempFileName)) File.Delete(commoditiesTempFileName); // migration - remove obsolete file
-            return DownloadFile("http://robert.astronet.se/Elite/eddb/stations_lite.json", stationFileName);
+            return DownloadFile("http://robert.astronet.se/Elite/eddb/v4/stations.json", stationFileName);
         }
 
         private bool DownloadFile(string url, string filename)

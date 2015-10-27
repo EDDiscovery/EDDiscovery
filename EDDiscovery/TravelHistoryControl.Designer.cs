@@ -86,6 +86,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBoxSolDist = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -124,7 +126,6 @@
             this.labelHeader.Size = new System.Drawing.Size(110, 18);
             this.labelHeader.TabIndex = 7;
             this.labelHeader.Text = "Travel history";
-
             // 
             // dataGridView1
             // 
@@ -264,6 +265,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label14);
+            this.panel1.Controls.Add(this.textBoxSolDist);
             this.panel1.Controls.Add(this.buttonTrilaterate);
             this.panel1.Controls.Add(this.buttonRoss);
             this.panel1.Controls.Add(this.buttonEDDB);
@@ -364,7 +367,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(17, 81);
+            this.label13.Location = new System.Drawing.Point(149, 100);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(27, 13);
             this.label13.TabIndex = 36;
@@ -373,10 +376,10 @@
             // 
             // textBoxGovernment
             // 
-            this.textBoxGovernment.Location = new System.Drawing.Point(50, 78);
+            this.textBoxGovernment.Location = new System.Drawing.Point(182, 97);
             this.textBoxGovernment.Name = "textBoxGovernment";
             this.textBoxGovernment.ReadOnly = true;
-            this.textBoxGovernment.Size = new System.Drawing.Size(67, 20);
+            this.textBoxGovernment.Size = new System.Drawing.Size(71, 20);
             this.textBoxGovernment.TabIndex = 35;
             // 
             // textBoxAllegiance
@@ -428,7 +431,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 98);
+            this.label8.Location = new System.Drawing.Point(3, 107);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(30, 13);
             this.label8.TabIndex = 28;
@@ -437,9 +440,9 @@
             // richTextBoxNote
             // 
             this.richTextBoxNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBoxNote.Location = new System.Drawing.Point(29, 114);
+            this.richTextBoxNote.Location = new System.Drawing.Point(29, 123);
             this.richTextBoxNote.Name = "richTextBoxNote";
-            this.richTextBoxNote.Size = new System.Drawing.Size(238, 56);
+            this.richTextBoxNote.Size = new System.Drawing.Size(238, 47);
             this.richTextBoxNote.TabIndex = 27;
             this.richTextBoxNote.Text = "";
             this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
@@ -665,6 +668,24 @@
             this.panelMain.Size = new System.Drawing.Size(594, 484);
             this.panelMain.TabIndex = 26;
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(26, 84);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(22, 13);
+            this.label14.TabIndex = 43;
+            this.label14.Text = "Sol";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textBox1
+            // 
+            this.textBoxSolDist.Location = new System.Drawing.Point(50, 81);
+            this.textBoxSolDist.Name = "textBox1";
+            this.textBoxSolDist.ReadOnly = true;
+            this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
+            this.textBoxSolDist.TabIndex = 42;
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -744,5 +765,7 @@
         private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.Panel panelMain;
         public System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox textBoxSolDist;
     }
 }
