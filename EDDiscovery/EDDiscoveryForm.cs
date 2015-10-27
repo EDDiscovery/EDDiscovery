@@ -32,7 +32,7 @@ namespace EDDiscovery
         public string CommanderName;
 
         readonly string fileTgcSystems ;
-        readonly string fileTgcDistances;
+
 
         public event DistancesLoaded OnDistancesLoaded;
         public EDSMSync edsmsync;
@@ -43,7 +43,7 @@ namespace EDDiscovery
             InitializeComponent();
            
             fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
-            fileTgcDistances = Path.Combine(Tools.GetAppDataDirectory(), "tgcdistances.json");
+//            fileTgcDistances = Path.Combine(Tools.GetAppDataDirectory(), "tgcdistances.json");
 
             edsmsync = new EDSMSync(this);
 
@@ -257,7 +257,7 @@ namespace EDDiscovery
                 LogText("Checking for new EDDiscovery data" + Environment.NewLine);
 
                 GetNewRedWizzardFile(fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
-                GetNewRedWizzardFile(fileTgcDistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
+                //GetNewRedWizzardFile(fileTgcDistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
             }
             catch (Exception ex)
             {
@@ -416,40 +416,9 @@ namespace EDDiscovery
                 string json;
 
                 // Get distances
-                string rwdisttime = db.GetSettingString("RWLastDist", "2000-01-01 00:00:00"); // Latest time from RW file.
-                string rwdistfiletime = "";
                 lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                 List<DistanceClass> dists = new List<DistanceClass>();
 
-                json = LoadJsonArray(fileTgcDistances);
-                dists = DistanceClass.ParseRW(json, ref rwdistfiletime);
-
-                if (!rwdisttime.Equals(rwdistfiletime))  // New distance file from Redwizzard
-                {
-                    DistanceClass.Delete(DistancsEnum.EDSC); // Remove all EDSC distances.
-                    lstdist = "2010-01-01 00:00:00";
-                    db.PutSettingString("RWLastDist", rwdistfiletime);
-                }
-
-                if (lstdist.Equals("2010-01-01 00:00:00"))
-                {
-                    LogText("Adding data from tgcdistances.json " + Environment.NewLine);
-                   
-
-                    lstdist = rwdistfiletime;
-
-                    if (json == null)
-                        LogText("Couldn't read file." + Environment.NewLine);
-                        
-                    else
-                    {
-                        LogText("Found " + dists.Count.ToString() + " new distances." + Environment.NewLine);
-                        
-                        DistanceClass.Store(dists);
-                        db.PutSettingString("EDSCLastDist", lstdist);
-                    }
-
-                }
 
                 LogText("Checking for new distances from EDSM. ");
                
