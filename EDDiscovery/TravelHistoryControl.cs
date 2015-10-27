@@ -314,6 +314,8 @@ namespace EDDiscovery
                 textBoxY.Text = syspos.curSystem.y.ToString("#.#####");
                 textBoxZ.Text = syspos.curSystem.z.ToString("#.#####");
 
+                textBoxSolDist.Text = Math.Sqrt(syspos.curSystem.x * syspos.curSystem.x + syspos.curSystem.y * syspos.curSystem.y + syspos.curSystem.z * syspos.curSystem.z).ToString("0.00");
+
                 //// For test only
                 //Stopwatch sw = new Stopwatch();
                 //sw.Start();
@@ -337,6 +339,7 @@ namespace EDDiscovery
                 textBoxX.Text = "?";
                 textBoxY.Text = "?";
                 textBoxZ.Text = "?";
+                textBoxSolDist.Text = "";
 
             }
 
