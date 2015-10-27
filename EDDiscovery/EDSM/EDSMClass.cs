@@ -264,13 +264,23 @@ namespace EDDiscovery2.EDSM
             //if (lstsys)
 
 
-            var system = SQLiteDBClass.globalSystems.Max(x => x.UpdateDate);
-            lstsyst = system.ToString("yyyy-MM-dd HH:mm:ss");
-            lstsyst = db.GetSettingString("EDSMLastSystems", lstsyst);
+            DateTime NewSystemTime;
 
-            if (lstsyst.Equals("2010-01-01 00:00:00"))
-                lstsyst = system.ToString("yyyy-MM-dd HH:mm:ss");
+            if (SQLiteDBClass.globalSystems == null || SQLiteDBClass.globalSystems.Count ==0)
+            {
+                lstsyst = "2010-01-01 00:00:00";
+            }
+            else
+            {
+                NewSystemTime = SQLiteDBClass.globalSystems.Max(x => x.UpdateDate);
+                lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss");
+                lstsyst = db.GetSettingString("EDSMLastSystems", lstsyst);
 
+                if (lstsyst.Equals("2010-01-01 00:00:00"))
+                    lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+
+            }
             json = RequestSystems(lstsyst);
 
 
