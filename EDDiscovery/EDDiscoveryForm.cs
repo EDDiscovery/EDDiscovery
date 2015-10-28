@@ -735,9 +735,7 @@ namespace EDDiscovery
             //FormSagCarinaMission frm = new FormSagCarinaMission(this);
             //            frm.Show();
 
-            EDSMSync sync = new EDSMSync(this);
 
-            sync.StartSync();
           
         }
 
