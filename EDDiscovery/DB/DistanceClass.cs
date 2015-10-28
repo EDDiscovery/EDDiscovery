@@ -219,7 +219,7 @@ namespace EDDiscovery.DB
             dist.NameA = sys1["name"].Value<string>(); 
             dist.NameB = sys2["name"].Value<string>();
             dist.Dist = jo["distance"].Value<float>();
-            if (submitted_by.Count > 0)
+            if (submitted_by !=null && submitted_by.Count > 0)
             {
                 dist.CommanderCreate = submitted_by[0]["cmdrname"].Value<string>();
             }

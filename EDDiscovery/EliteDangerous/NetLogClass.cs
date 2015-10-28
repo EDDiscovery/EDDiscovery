@@ -143,6 +143,7 @@ namespace EDDiscovery
 
             List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll();
 
+            visitedSystems.Clear();
             // Add systems in local DB.
             if (vsSystemsList != null)
                 foreach (VisitedSystemsClass vs in vsSystemsList)
@@ -161,6 +162,9 @@ namespace EDDiscovery
             {
                 TravelLogUnit lu = null;
                 bool parsefile = true;
+
+                if (fi.Name.Equals("netLog.1510280152.01.log"))
+                    parsefile = true;
 
                 // Check if we alreade have parse the file and stored in DB.
                 if (tlUnits!=null)
@@ -205,8 +209,9 @@ namespace EDDiscovery
 
                             dbsys.Add();
                             nr++;
+                            visitedSystems.Add(ps);
                         }
-                        visitedSystems.Add(ps);
+                        
                     
                     }
 
