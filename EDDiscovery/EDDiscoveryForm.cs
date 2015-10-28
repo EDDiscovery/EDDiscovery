@@ -32,7 +32,7 @@ namespace EDDiscovery
         public string CommanderName;
 
         readonly string fileTgcSystems ;
-
+        readonly string fileEDSMDistances;
 
         public event DistancesLoaded OnDistancesLoaded;
         public EDSMSync edsmsync;
@@ -43,7 +43,7 @@ namespace EDDiscovery
             InitializeComponent();
            
             fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
-//            fileTgcDistances = Path.Combine(Tools.GetAppDataDirectory(), "tgcdistances.json");
+            fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
             edsmsync = new EDSMSync(this);
 
@@ -412,6 +412,7 @@ namespace EDDiscovery
             {
                 SQLiteDBClass db = new SQLiteDBClass();
                 EDSMClass edsm = new EDSMClass();
+                EDDBClass eddb = new EDDBClass();
                 string lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                 string json;
 
@@ -419,9 +420,29 @@ namespace EDDiscovery
                 lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                 List<DistanceClass> dists = new List<DistanceClass>();
 
+                if (lstdist.Equals("2010-01-01 00:00:00"))
+                {
+                    LogText("Downloading mirrored EDSM distance data. (Might take some time)" + Environment.NewLine);
+                    eddb.GetEDSMDistances();
+                    json = LoadJsonArray(fileEDSMDistances);
+                    if (json!= null)
+                    {
+                        LogText("Adding mirrored EDSM distance data." + Environment.NewLine);
+
+                        dists = new List<DistanceClass>();
+                        dists = DistanceClass.ParseEDSM(json, ref lstdist);
+                        LogText("Found " + dists.Count.ToString() + " distances." + Environment.NewLine);
+
+                        Application.DoEvents();
+                        DistanceClass.Store(dists);
+                        db.PutSettingString("EDSCLastDist", lstdist);
+                    }
+                }
+
 
                 LogText("Checking for new distances from EDSM. ");
-               
+
+
                 Application.DoEvents();
                 json = edsm.RequestDistances(lstdist);
 
@@ -504,6 +525,9 @@ namespace EDDiscovery
                 timestr = db.GetSettingString("EDDBSystemsTime", "0");
                 time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
                 bool updatedb = false;
+
+
+
 
                 if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
                 {
