@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="12.3.1" version="12.4" Modules="professional" RootPath="." Language="sv" Id="{E17E2BD0-5288-4C73-8857-5EBE36CF59E8}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="12.3.1" version="12.4.2" Modules="professional" RootPath="." Language="sv" Id="{E17E2BD0-5288-4C73-8857-5EBE36CF59E8}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
     <ROW Name="HiddenItems" Value="MsiJavaComponent;MsiDriverPackagesComponent;UserAccountsComponent;ScheduledTasksComponent;SqlConnectionComponent;AutorunComponent;FirewallExceptionComponent;GameUxComponent;MsiDirectEditorComponent;SharePointSlnComponent;SilverlightSlnComponent;MultipleInstancesComponent;SccmComponent;ActSyncAppComponent"/>
   </COMPONENT>
@@ -16,10 +16,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1053:{7B495A6F-E101-433E-894E-680148367469} 1033:{5183A52C-6C74-4A23-A75B-F436A6395C26} " Type="16"/>
+    <ROW Property="ProductCode" Value="1053:{BC7707F2-E0E5-466B-A7CB-4F1BCE385555} 1033:{BA06CB91-FF40-42EE-9A09-687FC58207C0} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="2.4.16" Type="32"/>
+    <ROW Property="ProductVersion" Value="2.5.0" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -36,6 +36,7 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AI_ExePath" ComponentId="{109A35C7-F83F-4943-A79E-CFE792394CE4}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
     <ROW Component="EDDiscovery2.exe" ComponentId="{43A55B51-FE82-46A8-B10C-F2779D466379}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery2.exe"/>
+    <ROW Component="InstallLanguage" ComponentId="{E9F59FD4-B1B3-479F-858E-68E75683B873}" Directory_="APPDIR" Attributes="4" KeyPath="InstallLanguage" Options="1"/>
     <ROW Component="Newtonsoft.Json.dll" ComponentId="{11EF4895-473E-435D-A749-C1CCC6462BF8}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
     <ROW Component="Noesis.Javascript.dll" ComponentId="{B9CF6015-9AD7-490B-895B-4E521922B150}" Directory_="APPDIR" Attributes="0" KeyPath="Noesis.Javascript.dll"/>
     <ROW Component="OpenTK.GLControl.dll" ComponentId="{027B3AD2-A990-44DE-A920-B19144770C02}" Directory_="APPDIR" Attributes="0" KeyPath="OpenTK.GLControl.dll"/>
@@ -48,7 +49,7 @@
     <ROW Component="fround.js" ComponentId="{B5869344-88FF-40C8-9124-682DF7CBD7F5}" Directory_="APPDIR" Attributes="0" KeyPath="fround.js" Type="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath EDDiscovery2.exe Newtonsoft.Json.dll Noesis.Javascript.dll OpenTK.GLControl.dll OpenTK.dll ProductInformation SHORTCUTDIR SQLite.Interop.dll System.Data.SQLite.Linq.dll System.Data.SQLite.dll fround.js"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath EDDiscovery2.exe InstallLanguage Newtonsoft.Json.dll Noesis.Javascript.dll OpenTK.GLControl.dll OpenTK.dll ProductInformation SHORTCUTDIR SQLite.Interop.dll System.Data.SQLite.Linq.dll System.Data.SQLite.dll fround.js"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
@@ -196,6 +197,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
     <ROW Registry="AI_ExePath" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Value="[AI_SETUPEXEPATH]" Component_="AI_ExePath"/>
+    <ROW Registry="InstallLanguage" Root="-1" Key="Software\Caphyon\Advanced Installer\[ProductCode]" Name="InstallLanguage" Value="[ProductLanguage]" Component_="InstallLanguage"/>
     <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
   </COMPONENT>
