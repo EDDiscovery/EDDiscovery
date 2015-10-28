@@ -4,6 +4,7 @@ using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -67,12 +68,18 @@ namespace EDDiscovery2.EDSM
                     log = new List<SystemPosition>();
 
                 // Send Unsynced system to EDSM.
-                foreach (var system in mainForm.visitedSystems)
+
+                List<SystemPosition> systems = (from s in mainForm.visitedSystems where s.vs.EDSM_sync == false select s).ToList<SystemPosition>();
+                mainForm.LogLine("EDSM: Sending" +  systems.Count.ToString() + " flightlog entries", Color.Black);
+                foreach (var system in systems)
                 {
                     string json = null;
 
                     if (Exit)
+                    {
+                        running = false;
                         return;
+                    }
 
                     if (system.vs != null && system.vs.EDSM_sync == false)
                     {
@@ -144,11 +151,12 @@ namespace EDDiscovery2.EDSM
                         System.Diagnostics.Trace.WriteLine("New from EDSM");
                     }
                 }
-
+                mainForm.LogLine("EDSM sync Done", Color.Black);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
+                mainForm.LogLine("EDSM sync Exception " + ex.Message, Color.Red);
             }
 
         }

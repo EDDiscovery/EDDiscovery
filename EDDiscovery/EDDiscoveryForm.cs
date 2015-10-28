@@ -610,13 +610,29 @@ namespace EDDiscovery
             }
         }
 
-        private void LogText(string text, Color col)
+        public void LogText(string text, Color col)
         {
             try
             {
                 Invoke((MethodInvoker)delegate
                 {
                     TravelHistoryControl.LogText(text, col);
+
+                });
+            }
+            catch
+            {
+            }
+        }
+
+
+        public void LogLine(string text, Color col)
+        {
+            try
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText(text + Environment.NewLine, col);
 
                 });
             }
