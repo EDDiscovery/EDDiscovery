@@ -48,6 +48,8 @@
             this.buttonMap = new System.Windows.Forms.Button();
             this.textBoxSystem = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBoxSolDist = new System.Windows.Forms.TextBox();
             this.buttonTrilaterate = new System.Windows.Forms.Button();
             this.buttonRoss = new System.Windows.Forms.Button();
             this.buttonEDDB = new System.Windows.Forms.Button();
@@ -86,8 +88,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBoxSolDist = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -299,6 +299,24 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(293, 235);
             this.panel1.TabIndex = 16;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(26, 84);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(22, 13);
+            this.label14.TabIndex = 43;
+            this.label14.Text = "Sol";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textBoxSolDist
+            // 
+            this.textBoxSolDist.Location = new System.Drawing.Point(50, 81);
+            this.textBoxSolDist.Name = "textBoxSolDist";
+            this.textBoxSolDist.ReadOnly = true;
+            this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
+            this.textBoxSolDist.TabIndex = 42;
             // 
             // buttonTrilaterate
             // 
@@ -586,7 +604,7 @@
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(164, 23);
             this.buttonSync.TabIndex = 19;
-            this.buttonSync.Text = "Send Distances to EDSM";
+            this.buttonSync.Text = "Sync with EDSM";
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
@@ -667,24 +685,6 @@
             this.panelMain.Name = "panelMain";
             this.panelMain.Size = new System.Drawing.Size(594, 484);
             this.panelMain.TabIndex = 26;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(26, 84);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(22, 13);
-            this.label14.TabIndex = 43;
-            this.label14.Text = "Sol";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // textBox1
-            // 
-            this.textBoxSolDist.Location = new System.Drawing.Point(50, 81);
-            this.textBoxSolDist.Name = "textBox1";
-            this.textBoxSolDist.ReadOnly = true;
-            this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
-            this.textBoxSolDist.TabIndex = 42;
             // 
             // TravelHistoryControl
             // 
