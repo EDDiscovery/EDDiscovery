@@ -24,7 +24,7 @@ namespace EDDiscovery
     public partial class TravelHistoryControl : UserControl
     {
         private EDDiscoveryForm _discoveryForm;
-        EDSMSync sync;
+        public EDSMSync sync;
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
         internal List<SystemPosition> visitedSystems;
@@ -722,6 +722,15 @@ namespace EDDiscovery
             sync.StartSync();
 
 
+        }
+
+        internal void RefreshEDSMEvent(object source)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                visitedSystems.Clear();
+                RefreshHistory();
+            });
         }
 
 

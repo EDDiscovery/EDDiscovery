@@ -11,13 +11,16 @@ using System.Threading;
 
 namespace EDDiscovery2.EDSM
 {
+    public delegate void EDSMNewSystemEventHandler(object source);
+
+
     public class EDSMSync
     {
         Thread ThreadEDSMSync;
         bool running = false;
         bool Exit = false;
         private EDDiscoveryForm mainForm;
-
+        public event EDSMNewSystemEventHandler OnNewEDSMTravelLog;
 
         public EDSMSync(EDDiscoveryForm frm)
         {
@@ -121,6 +124,7 @@ namespace EDDiscovery2.EDSM
                 TravelLogUnit tlu = null;
 
                 // Check for new systems from EDSM
+                bool newsystem = false;
                 foreach (var system in log)
                 {
                     SystemPosition ps2 = (from c in mainForm.visitedSystems where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
@@ -149,9 +153,14 @@ namespace EDDiscovery2.EDSM
 
                         vs.Add();  // Add to DB;
                         System.Diagnostics.Trace.WriteLine("New from EDSM");
+                        newsystem = true;
+                        
                     }
                 }
                 mainForm.LogLine("EDSM sync Done", Color.Black);
+
+                if (newsystem)
+                    OnNewEDSMTravelLog(this);
             }
             catch (Exception ex)
             {
