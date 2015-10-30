@@ -397,10 +397,22 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
             }
+
+            List<TravelLogUnit> travelogUnits;
+            // Get TravelLogUnits;
+            travelogUnits = null;
+            TravelLogUnit  tlUnit=null;
+
+            int ii =0;
+
+
             while (!Exit)
             {
                 try
                 {
+
+
+                    ii++;
                     Thread.Sleep(2000);
 
                     EliteDangerous.CheckED();
@@ -411,11 +423,52 @@ namespace EDDiscovery
                         {
                             FileInfo fi = new FileInfo(lastnfi.FileName);
 
-                            if (fi.Length != lastnfi.fileSize)
-                                ParseFile(fi, visitedSystems);
-                            else
+                            if (fi.Length != lastnfi.fileSize || ii % 5 == 0)
                             {
-                                //System.Diagnostics.Trace.WriteLine("No change");
+                                if (tlUnit == null || !tlUnit.Name.Equals(Path.GetFileName(lastnfi.FileName)))  // Create / find new travellog unit
+                                {
+                                    travelogUnits = TravelLogUnit.GetAll();
+                                    // Check if we alreade have parse the file and stored in DB.
+                                    if (tlUnit == null)
+                                        tlUnit = (from c in travelogUnits where c.Name == fi.Name select c).FirstOrDefault<TravelLogUnit>();
+
+                                    if (tlUnit == null)
+                                    {
+                                        tlUnit = new TravelLogUnit();
+                                        tlUnit.Name = fi.Name;
+                                        tlUnit.Path = Path.GetDirectoryName(fi.FullName);
+                                        tlUnit.Size = 0;  // Add real size after data is in DB //;(int)fi.Length;
+                                        tlUnit.type = 1;
+                                        tlUnit.Add();
+                                        travelogUnits.Add(tlUnit);
+                                    }
+                                }
+
+
+                                int nrsystems = visitedSystems.Count;
+                                ParseFile(fi, visitedSystems);
+                                if (nrsystems < visitedSystems.Count) // Om vi har fler system
+                                {
+                                    System.Diagnostics.Trace.WriteLine("New systems");
+                                    for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
+                                    {
+                                        VisitedSystemsClass dbsys = new VisitedSystemsClass();
+
+                                        dbsys.Name = visitedSystems[nr].Name;
+                                        dbsys.Time = visitedSystems[nr].time;
+                                        dbsys.Source = tlUnit.id;
+                                        dbsys.EDSM_sync = false;
+                                        dbsys.Unit = fi.Name;
+
+                                        dbsys.Add();
+                                        visitedSystems[nr].vs = dbsys;
+                                        nr++;
+                                    }
+                                }
+                                else
+                                {
+                                    //System.Diagnostics.Trace.WriteLine("No change");
+                                }
                             }
                         }
                     }
