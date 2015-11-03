@@ -139,7 +139,7 @@ namespace EDDiscovery2
                 foreach (IGrouping<int, SystemPosition> colour in colours)
                 {
                     dataset = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                    foreach (SystemPosition sp in visitedSystems)
+                    foreach (SystemPosition sp in colour)
                     {
                         SystemClass star = SystemData.GetSystem(sp.Name);
                         if (star != null && star.HasCoordinate)
