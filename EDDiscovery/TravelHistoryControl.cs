@@ -297,7 +297,7 @@ namespace EDDiscovery
                     cell.Style.ForeColor = Color.Blue;
 
                 cell = dataGridView1.Rows[rownr].Cells[4];
-                cell.Style.ForeColor = Color.FromArgb(item.vs.MapColour);
+                cell.Style.ForeColor = Color.FromArgb(item.vs == null ? Color.Red.ToArgb() : item.vs.MapColour);
             }
 
 
@@ -977,7 +977,25 @@ namespace EDDiscovery
 
         private void starMapColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+                                                           .Select(cell => cell.OwningRow)
+                                                           .Distinct();
+            Color colour = selectedRows.First().Cells[4].Style.ForeColor;
+            mapColorDialog.Color = colour;
+            if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                string sysName = "";
+                foreach(DataGridViewRow r in selectedRows)
+                {
+                    r.Cells[4].Style.ForeColor = mapColorDialog.Color;
+                    sysName = r.Cells[1].Value.ToString();
+                    SystemPosition sp = visitedSystems.First(s => s.Name.ToUpperInvariant() == sysName.ToUpperInvariant());
+                    sp.vs.MapColour = mapColorDialog.Color.ToArgb();
+                    sp.vs.Update();
+                }
+                this.Cursor = Cursors.Default;
+            }
         }
 
     }
