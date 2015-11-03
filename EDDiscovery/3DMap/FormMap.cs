@@ -153,20 +153,16 @@ namespace EDDiscovery2
             //AddSystem("polaris", dataset);
             datasets.Add(dataset);
 
-            if (ShowTril)
+
+            if (ReferenceSystems != null && ReferenceSystems.Any())
             {
-                // For test only
-
-                if (ReferenceSystems != null && ReferenceSystems.Any())
+                var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
+                foreach (var refSystem in ReferenceSystems)
                 {
-                    var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
-                    foreach (var refSystem in ReferenceSystems)
-                    {
-                        referenceLines.Add(new LineData(0, 0, 0, refSystem.x - CenterSystem.x, refSystem.y - CenterSystem.y, CenterSystem.z - refSystem.z));
-                    }
-
-                    datasets.Add(referenceLines);
+                    referenceLines.Add(new LineData(0, 0, 0, refSystem.x - CenterSystem.x, refSystem.y - CenterSystem.y, CenterSystem.z - refSystem.z));
                 }
+
+                datasets.Add(referenceLines);
 
                 var lineSet = new Data3DSetClass<LineData>("SuggestedReference", Color.DarkOrange, 5.0f);
 
@@ -189,6 +185,7 @@ namespace EDDiscovery2
                 System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
                 datasets.Add(lineSet);
             }
+
         }
 
         private void AddSystem(string systemName, Data3DSetClass<PointData> dataset)
