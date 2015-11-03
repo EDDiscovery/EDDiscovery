@@ -275,7 +275,7 @@ namespace EDDiscovery
 
             //richTextBox_History.AppendText(item.time + " " + item.Name + Environment.NewLine);
 
-                object[] rowobj = { item.time, item.Name, diststr, item.curSystem.Note };
+                object[] rowobj = { item.time, item.Name, diststr, item.curSystem.Note, "█" };
                 int rownr;
 
                 if (insert)
@@ -295,6 +295,9 @@ namespace EDDiscovery
 
                 if (!sys1.HasCoordinate)  // Mark all systems without coordinates
                     cell.Style.ForeColor = Color.Blue;
+
+                cell = dataGridView1.Rows[rownr].Cells[4];
+                cell.Style.ForeColor = Color.FromArgb(item.vs.MapColour);
             }
 
 
@@ -971,6 +974,12 @@ namespace EDDiscovery
         {
 
         }
+
+        private void starMapColourToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
     }
 
 
