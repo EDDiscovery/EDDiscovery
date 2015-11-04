@@ -791,5 +791,23 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
         }
+
+        private void toolStripButtonRemoveAll_Click(object sender, EventArgs e)
+        {
+            dataGridViewDistances.Rows.Clear();
+            PopulateSuggestedSystems();
+        }
+
+        private void toolStripButtonRemoveUnused_Click(object sender, EventArgs e)
+        {
+            for (int i = dataGridViewDistances.Rows.Count - 1; i >= 0; i--)
+            {
+                var cell = dataGridViewDistances[1, i];
+                if (cell.Value == null)
+                {
+                    dataGridViewDistances.Rows.RemoveAt(i);
+                }
+            }
+        }
     }
 }
