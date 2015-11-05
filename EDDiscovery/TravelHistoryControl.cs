@@ -24,6 +24,7 @@ namespace EDDiscovery
     public partial class TravelHistoryControl : UserControl
     {
         private EDDiscoveryForm _discoveryForm;
+        private int defaultColour;
         public EDSMSync sync;
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
@@ -40,7 +41,8 @@ namespace EDDiscovery
         {
             InitializeComponent();
             static_richTextBox = richTextBox_History;
-
+            var db = new SQLiteDBClass();
+            defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -223,13 +225,14 @@ namespace EDDiscovery
 
         private void GetVisitedSystems()
         {
-            visitedSystems = netlog.ParseFiles(richTextBox_History);
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultColour);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
         {
             SystemClass sys1 = null, sys2;
             double dist;
+            
 
             sys1 = SystemData.GetSystem(item.Name);
             if (sys1 == null)
@@ -252,7 +255,11 @@ namespace EDDiscovery
 
             item.curSystem = sys1;
             item.prevSystem = sys2;
-
+            if (!insert)
+            {
+                SystemPosition known = visitedSystems.First(x => x.Name == item.Name);
+                if (known != null) item.vs = known.vs;
+            }
 
             string diststr = "";
             dist = 0;
@@ -297,7 +304,7 @@ namespace EDDiscovery
                     cell.Style.ForeColor = Color.Blue;
 
                 cell = dataGridView1.Rows[rownr].Cells[4];
-                cell.Style.ForeColor = Color.FromArgb(item.vs == null ? Color.Red.ToArgb() : item.vs.MapColour);
+                cell.Style.ForeColor = Color.FromArgb(item.vs == null ? defaultColour : item.vs.MapColour);
             }
 
 
@@ -995,6 +1002,17 @@ namespace EDDiscovery
                     sp.vs.Update();
                 }
                 this.Cursor = Cursors.Default;
+            }
+        }
+
+        public void setDefaultMapColour()
+        {
+            mapColorDialog.Color = Color.FromArgb(defaultColour);
+            if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                defaultColour = mapColorDialog.Color.ToArgb();
+                var db = new SQLiteDBClass();
+                db.PutSettingInt("DefaultMap", defaultColour);
             }
         }
 

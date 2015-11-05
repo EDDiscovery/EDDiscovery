@@ -40,6 +40,8 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxEDSMApiKey = new System.Windows.Forms.TextBox();
             this.button_Save = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button_Browse = new System.Windows.Forms.Button();
@@ -59,8 +61,7 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.textBoxEDSMApiKey = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.setDefaultMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -179,6 +180,24 @@
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 113);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "EDSM Api key";
+            // 
+            // textBoxEDSMApiKey
+            // 
+            this.textBoxEDSMApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxEDSMApiKey.Location = new System.Drawing.Point(128, 110);
+            this.textBoxEDSMApiKey.Name = "textBoxEDSMApiKey";
+            this.textBoxEDSMApiKey.Size = new System.Drawing.Size(365, 20);
+            this.textBoxEDSMApiKey.TabIndex = 5;
+            // 
             // button_Save
             // 
             this.button_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -275,7 +294,8 @@
             this.openEliteDangerousDirectoryToolStripMenuItem,
             this.showLogfilesToolStripMenuItem,
             this.show2DMapsToolStripMenuItem,
-            this.statisticsToolStripMenuItem});
+            this.statisticsToolStripMenuItem,
+            this.setDefaultMapColourToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -359,23 +379,12 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
-            // textBox1
+            // setDefaultMapColourToolStripMenuItem
             // 
-            this.textBoxEDSMApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxEDSMApiKey.Location = new System.Drawing.Point(128, 110);
-            this.textBoxEDSMApiKey.Name = "textBox1";
-            this.textBoxEDSMApiKey.Size = new System.Drawing.Size(365, 20);
-            this.textBoxEDSMApiKey.TabIndex = 5;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 113);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "EDSM Api key";
+            this.setDefaultMapColourToolStripMenuItem.Name = "setDefaultMapColourToolStripMenuItem";
+            this.setDefaultMapColourToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.setDefaultMapColourToolStripMenuItem.Text = "Set Default Map Colour";
+            this.setDefaultMapColourToolStripMenuItem.Click += new System.EventHandler(this.setDefaultMapColourToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -445,6 +454,7 @@
         private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxEDSMApiKey;
+        private System.Windows.Forms.ToolStripMenuItem setDefaultMapColourToolStripMenuItem;
     }
 }
 
