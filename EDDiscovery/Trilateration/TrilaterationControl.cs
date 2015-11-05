@@ -731,12 +731,83 @@ namespace EDDiscovery
         {
             var centerSystem = TargetSystem;
             if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = LastKnownSystem;
-            var map2 = new FormMap(centerSystem, _discoveryForm.SystemNames)
+            FormMap map2 = new FormMap(centerSystem, _discoveryForm.SystemNames)
             {
                 ReferenceSystems = CurrentReferenceSystems.ToList(),
                 visitedSystems = _discoveryForm.visitedSystems
             };
             map2.Show();
+        }
+
+        private void dataGridViewDistances_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string text = null;
+            try
+            {
+                if (e.ColumnIndex == 0 && e.RowIndex < dataGridViewDistances.Rows.Count)
+                {
+                    Object ob = dataGridViewDistances[e.ColumnIndex, e.RowIndex].Value;
+                    if (ob != null)
+                        text = ob.ToString();
+
+                    System.Diagnostics.Trace.WriteLine("Click:" + e.RowIndex.ToString() + ":" + e.ColumnIndex.ToString());
+
+                    if (text != null)
+                    {
+                        System.Windows.Forms.Clipboard.SetText(text);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception dataGridViewDistances_CellClick: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+        }
+
+        private void dataGridViewDistances_CellLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            string text = null;
+            try
+            {
+                if (e.ColumnIndex == 0 && e.RowIndex < dataGridViewDistances.Rows.Count)
+                {
+                    Object ob= dataGridViewDistances[e.ColumnIndex, e.RowIndex].Value;
+                    if (ob != null)
+                        text = ob.ToString();
+
+                    System.Diagnostics.Trace.WriteLine("Click:" + e.RowIndex.ToString() + ":" + e.ColumnIndex.ToString());
+
+                    if (text != null)
+                    {
+                        System.Windows.Forms.Clipboard.SetText(text);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception dataGridViewDistances_CellLeave: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+        }
+
+        private void toolStripButtonRemoveAll_Click(object sender, EventArgs e)
+        {
+            dataGridViewDistances.Rows.Clear();
+            PopulateSuggestedSystems();
+        }
+
+        private void toolStripButtonRemoveUnused_Click(object sender, EventArgs e)
+        {
+            for (int i = dataGridViewDistances.Rows.Count - 1; i >= 0; i--)
+            {
+                var cell = dataGridViewDistances[1, i];
+                if (cell.Value == null)
+                {
+                    dataGridViewDistances.Rows.RemoveAt(i);
+                }
+            }
         }
     }
 }

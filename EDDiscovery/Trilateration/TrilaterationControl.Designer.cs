@@ -68,6 +68,9 @@
             this.toolStripButtonSubmitDistances = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRemoveAll = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonRemoveUnused = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.panelImplementation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -94,7 +97,9 @@
             this.dataGridViewDistances.Name = "dataGridViewDistances";
             this.dataGridViewDistances.Size = new System.Drawing.Size(554, 335);
             this.dataGridViewDistances.TabIndex = 0;
+            this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
+            this.dataGridViewDistances.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellLeave);
             this.dataGridViewDistances.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewDistances_CellValidating);
             this.dataGridViewDistances.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridViewDistances_EditingControlShowing);
             // 
@@ -437,6 +442,9 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSubmitDistances,
             this.toolStripButtonNew,
+            this.toolStripSeparator1,
+            this.toolStripButtonRemoveUnused,
+            this.toolStripButtonRemoveAll,
             this.toolStripButtonMap});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -447,35 +455,60 @@
             // toolStripButtonSubmitDistances
             // 
             this.toolStripButtonSubmitDistances.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButtonSubmitDistances.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButtonSubmitDistances.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSubmitDistances.Image")));
             this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSubmitDistances.Name = "toolStripButtonSubmitDistances";
-            this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(102, 22);
+            this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(118, 22);
             this.toolStripButtonSubmitDistances.Text = "Submit Distances";
             this.toolStripButtonSubmitDistances.Click += new System.EventHandler(this.toolStripButtonSubmitDistances_Click);
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButtonNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNew.Image")));
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
-            this.toolStripButtonNew.Size = new System.Drawing.Size(60, 22);
+            this.toolStripButtonNew.Size = new System.Drawing.Size(76, 22);
             this.toolStripButtonNew.Text = "Start new";
             this.toolStripButtonNew.ToolTipText = "Calculate coordinates for current system";
             this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
             // 
             // toolStripButtonMap
             // 
-            this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonMap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMap.Image")));
             this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonMap.Name = "toolStripButtonMap";
-            this.toolStripButtonMap.Size = new System.Drawing.Size(51, 22);
+            this.toolStripButtonMap.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonMap.Text = "3d map";
             this.toolStripButtonMap.ToolTipText = "Show 3d map";
             this.toolStripButtonMap.Click += new System.EventHandler(this.toolStripButtonMap_Click);
+            // 
+            // toolStripButtonRemoveAll
+            // 
+            this.toolStripButtonRemoveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveAll.Image")));
+            this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
+            this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRemoveAll.Text = "toolStripButton1";
+            this.toolStripButtonRemoveAll.ToolTipText = "Remove all";
+            this.toolStripButtonRemoveAll.Click += new System.EventHandler(this.toolStripButtonRemoveAll_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButtonRemoveUnused
+            // 
+            this.toolStripButtonRemoveUnused.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRemoveUnused.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveUnused.Image")));
+            this.toolStripButtonRemoveUnused.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemoveUnused.Name = "toolStripButtonRemoveUnused";
+            this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRemoveUnused.Text = "toolStripButtonRemoveUnused";
+            this.toolStripButtonRemoveUnused.ToolTipText = "Remove unused";
+            this.toolStripButtonRemoveUnused.Click += new System.EventHandler(this.toolStripButtonRemoveUnused_Click);
             // 
             // TrilaterationControl
             // 
@@ -552,5 +585,8 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         protected System.Windows.Forms.DataGridView dataGridViewDistances;
         private System.Windows.Forms.ToolStripButton toolStripButtonMap;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRemoveAll;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRemoveUnused;
     }
 }
