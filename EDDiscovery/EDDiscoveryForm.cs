@@ -882,10 +882,10 @@ namespace EDDiscovery
             frm.Show();
         }
 
-
-
-
-
+        private void setDefaultMapColourToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            travelHistoryControl1.setDefaultMapColour();
+        }
 
         //Pleiades Sector WU-O B16-0
         //Pleiades Sector WU-O b6-0

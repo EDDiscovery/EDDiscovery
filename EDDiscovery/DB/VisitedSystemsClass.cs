@@ -51,7 +51,7 @@ namespace EDDiscovery2.DB
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour)";
+                cmd.CommandText = "Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour)";
                 cmd.Parameters.AddWithValue("@name", Name);
                 cmd.Parameters.AddWithValue("@time", Time);
                 cmd.Parameters.AddWithValue("@unit", Unit);
