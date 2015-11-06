@@ -802,10 +802,13 @@ namespace EDDiscovery
         {
             for (int i = dataGridViewDistances.Rows.Count - 1; i >= 0; i--)
             {
-                var cell = dataGridViewDistances[1, i];
-                if (cell.Value == null)
+                if (!dataGridViewDistances.Rows[i].IsNewRow)
                 {
-                    dataGridViewDistances.Rows.RemoveAt(i);
+                    var cell = dataGridViewDistances[1, i];
+                    if (cell.Value == null)
+                    {
+                        dataGridViewDistances.Rows.RemoveAt(i);
+                    }
                 }
             }
         }
