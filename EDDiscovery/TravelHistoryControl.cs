@@ -998,8 +998,11 @@ namespace EDDiscovery
                     r.Cells[4].Style.ForeColor = mapColorDialog.Color;
                     sysName = r.Cells[1].Value.ToString();
                     SystemPosition sp = visitedSystems.First(s => s.Name.ToUpperInvariant() == sysName.ToUpperInvariant());
-                    sp.vs.MapColour = mapColorDialog.Color.ToArgb();
-                    sp.vs.Update();
+                    if (sp.vs != null)
+                    {
+                        sp.vs.MapColour = mapColorDialog.Color.ToArgb();
+                        sp.vs.Update();
+                    }
                 }
                 this.Cursor = Cursors.Default;
             }

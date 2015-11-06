@@ -132,8 +132,11 @@ namespace EDDiscovery2
 
             if (visitedSystems != null && visitedSystems.Any())
             {
+                // For some reason I am unable to fathom this errors during the session after DBUpgrade8
+                // colours just resolves to an object reference not set error, but after a restart it works fine
+                // Not going to waste any more time, a one time restart is hardly the worst workaround in the world...
                 IEnumerable<IGrouping<int, SystemPosition>> colours =
-                    from sysPos in visitedSystems
+                    from SystemPosition sysPos in visitedSystems
                     group sysPos by sysPos.vs.MapColour;
 
                 foreach (IGrouping<int, SystemPosition> colour in colours)
