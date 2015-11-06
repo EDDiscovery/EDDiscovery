@@ -387,8 +387,8 @@ namespace EDDiscovery.DB
 
         private bool UpgradeDB8()
         {
-            //Default is 0xFFFF0000 in decimal - i.e. Color.Red
-            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Map_colour INTEGER DEFAULT (4294901760)";
+            //Default is Color.Red.ToARGB()
+            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Map_colour INTEGER DEFAULT (-65536)";
             string dbfile = GetSQLiteDBFile();
             
             try
