@@ -207,8 +207,11 @@ namespace EDDiscovery
                             dbsys.EDSM_sync = false;
                             dbsys.Unit = fi.Name;
 
-                            dbsys.Add();
-                            nr++;
+                            if (!lu.Beta)  // dont store  history in DB for beta (YET)
+                            {
+                                dbsys.Add();
+                                nr++;
+                            }
                             visitedSystems.Add(ps);
                         }
                         
@@ -460,9 +463,14 @@ namespace EDDiscovery
                                         dbsys.EDSM_sync = false;
                                         dbsys.Unit = fi.Name;
 
-                                        dbsys.Add();
+
+
+                                        if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
+                                        {
+                                            dbsys.Add();
+                                            nr++;
+                                        }
                                         visitedSystems[nr].vs = dbsys;
-                                        nr++;
                                     }
                                 }
                                 else
