@@ -32,15 +32,18 @@ namespace EDDiscovery2.DB
 
         }
 
-        public bool isBeta()
+        public bool Beta
         {
-            if (Path==null)
-                return false;
+            get
+            {
+                if (Path == null)
+                    return false;
 
-            if (Path.Contains("PUBLIC_TEST_SERVER"))
-                return true;
-            else
-                return false;
+                if (Path.Contains("PUBLIC_TEST_SERVER"))
+                    return true;
+                else
+                    return false;
+            }
         }
 
 
