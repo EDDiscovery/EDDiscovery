@@ -768,7 +768,8 @@ namespace EDDiscovery
             //FormSagCarinaMission frm = new FormSagCarinaMission(this);
             //            frm.Show();
 
-
+            SystemViewForm frm = new SystemViewForm();
+            frm.Show();
           
         }
 

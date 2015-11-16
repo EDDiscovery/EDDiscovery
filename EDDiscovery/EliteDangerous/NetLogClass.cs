@@ -208,8 +208,11 @@ namespace EDDiscovery
                             dbsys.Unit = fi.Name;
                             dbsys.MapColour = defaultMapColour;
 
-                            dbsys.Add();
-                            nr++;
+                            if (!lu.Beta)  // dont store  history in DB for beta (YET)
+                            {
+                                dbsys.Add();
+                                nr++;
+                            }
                             visitedSystems.Add(ps);
                         }
                         
@@ -463,8 +466,16 @@ namespace EDDiscovery
                                         dbsys.Unit = fi.Name;
                                         dbsys.MapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
                                         dbsys.Add();
+                                        dbsys.Unit = fi.Name;
+
+
+
+                                        if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
+                                        {
+                                            dbsys.Add();
+                                            nr++;
+                                        }
                                         visitedSystems[nr].vs = dbsys;
-                                        nr++;
                                     }
                                 }
                                 else
