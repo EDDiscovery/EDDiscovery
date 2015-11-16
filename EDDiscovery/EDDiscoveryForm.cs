@@ -79,6 +79,18 @@ namespace EDDiscovery
                 EliteDangerous.CheckED();
                 SQLiteDBClass db = new SQLiteDBClass();
 
+                var top = db.GetSettingInt("FormTop", -1);
+                if (top > 0)
+                {
+                    var left = db.GetSettingInt("FormLeft", -1);
+                    var height = db.GetSettingInt("FormHeight", -1);
+                    var width = db.GetSettingInt("FormWidth", -1);
+                    this.Top = top;
+                    this.Left = left;
+                    this.Height = height;
+                    this.Width = width;
+                }
+
                 labelPanelText.Text = "Loading. Please wait!";
                 panelInfo.Visible = true;
                 panelInfo.BackColor = Color.Gold;
@@ -728,6 +740,10 @@ namespace EDDiscovery
             db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
             db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
             db.PutSettingString("EDSMApiKey", textBoxEDSMApiKey.Text);
+            db.PutSettingInt("FormWidth", this.Width);
+            db.PutSettingInt("FormHeight", this.Height);
+            db.PutSettingInt("FormTop", this.Top);
+            db.PutSettingInt("FormLeft", this.Left);
         }
 
         private void routeControl1_Load(object sender, EventArgs e)
