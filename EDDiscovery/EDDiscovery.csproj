@@ -178,6 +178,12 @@
     </Compile>
     <Compile Include="SystemData.cs" />
     <Compile Include="SystemPosition.cs" />
+    <Compile Include="SystemViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SystemViewForm.Designer.cs">
+      <DependentUpon>SystemViewForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools.cs" />
     <Compile Include="TravelHistoryControl.cs">
       <SubType>UserControl</SubType>
@@ -240,6 +246,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StatsForm.resx">
       <DependentUpon>StatsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SystemViewForm.resx">
+      <DependentUpon>SystemViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TravelHistoryControl.resx">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
