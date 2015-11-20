@@ -102,7 +102,7 @@ namespace EDDiscovery2
                         AppConfig = locAppConfig;
                     }
                 }
-                catch (Exception ex)
+                catch 
                 {
 
                     if (AppConfig == null)
@@ -122,7 +122,7 @@ namespace EDDiscovery2
             {
                 LoadAppConfig();
             }
-            catch (Exception ex)
+            catch 
             {
                 //cErr.processError(ex, "Error in AppData_Changed()");
             }
