@@ -114,7 +114,7 @@ namespace EDDiscovery
 
 
 
-        public List<SystemPosition> ParseFiles(RichTextBox richTextBox_History)
+        public List<SystemPosition> ParseFiles(RichTextBox richTextBox_History, int defaultMapColour)
         {
             string datapath;
             datapath = GetNetLogPath();
@@ -206,6 +206,7 @@ namespace EDDiscovery
                             dbsys.Source = lu.id;
                             dbsys.EDSM_sync = false;
                             dbsys.Unit = fi.Name;
+                            dbsys.MapColour = defaultMapColour;
 
                             if (!lu.Beta)  // dont store  history in DB for beta (YET)
                             {
@@ -405,6 +406,7 @@ namespace EDDiscovery
             // Get TravelLogUnits;
             travelogUnits = null;
             TravelLogUnit  tlUnit=null;
+            SQLiteDBClass db = new SQLiteDBClass();
 
             int ii =0;
 
@@ -461,6 +463,9 @@ namespace EDDiscovery
                                         dbsys.Time = visitedSystems[nr].time;
                                         dbsys.Source = tlUnit.id;
                                         dbsys.EDSM_sync = false;
+                                        dbsys.Unit = fi.Name;
+                                        dbsys.MapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+                                        dbsys.Add();
                                         dbsys.Unit = fi.Name;
 
 

@@ -125,6 +125,7 @@ namespace EDDiscovery2.EDSM
 
                 // Check for new systems from EDSM
                 bool newsystem = false;
+                int defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
                 foreach (var system in log)
                 {
                     SystemPosition ps2 = (from c in mainForm.visitedSystems where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
@@ -149,7 +150,9 @@ namespace EDDiscovery2.EDSM
 
                         vs.Name = system.Name;
                         vs.Time = system.time;
+                        vs.MapColour = defaultColour;
                         vs.EDSM_sync = true;
+                        
 
                         vs.Add();  // Add to DB;
                         System.Diagnostics.Trace.WriteLine("New from EDSM");

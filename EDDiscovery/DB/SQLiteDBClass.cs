@@ -130,7 +130,8 @@ namespace EDDiscovery.DB
                 if (dbver < 7)
                     UpgradeDB7();
 
-
+                if (dbver < 8)
+                    UpgradeDB8();
 
                 return true;
             }
@@ -384,7 +385,38 @@ namespace EDDiscovery.DB
         }
 
 
+        private bool UpgradeDB8()
+        {
+            //Default is Color.Red.ToARGB()
+            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Map_colour INTEGER DEFAULT (-65536)";
+            string dbfile = GetSQLiteDBFile();
+            
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery7.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
 
+
+            try
+            {
+                ExecuteQuery(query1);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB7 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 8);
+
+            return true;
+        }
 
 
         private void ExecuteQuery(string query)
