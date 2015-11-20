@@ -327,7 +327,7 @@ namespace EDDiscovery
                 });
             }
 
-            var hasInvalidDistances = false;
+            //var hasInvalidDistances = false;
 
             // update dataGrid with calculated distances and status
             var entriesDistances = trilaterationResult.EntriesDistances;
@@ -365,7 +365,7 @@ namespace EDDiscovery
                     statusCell.Style.ForeColor = Color.Green;
                 } else
                 {
-                        hasInvalidDistances = true;
+                        //hasInvalidDistances = true;
                     calculatedDistanceCell.Style.ForeColor = Color.Salmon;
                     statusCell.Value = "Wrong distance?";
                     statusCell.Style.ForeColor = Color.Salmon;

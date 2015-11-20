@@ -683,7 +683,7 @@ namespace EDDiscovery
 
             foreach (var dist in dists)
             {
-                string json, json2;
+                string json;
 
                 if (dist.Dist > 0)
                 {
