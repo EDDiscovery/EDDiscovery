@@ -452,7 +452,7 @@ namespace EDDiscovery
                                 ParseFile(fi, visitedSystems);
                                 if (nrsystems < visitedSystems.Count) // Om vi har fler system
                                 {
-                                    System.Diagnostics.Trace.WriteLine("New systems");
+                                    System.Diagnostics.Trace.WriteLine("New systems " + nrsystems.ToString() + ":" + visitedSystems.Count.ToString());
                                     for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
                                     {
                                         VisitedSystemsClass dbsys = new VisitedSystemsClass();
@@ -468,7 +468,7 @@ namespace EDDiscovery
                                         if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
                                         {
                                             dbsys.Add();
-                                            nr++;
+                                        
                                         }
                                         visitedSystems[nr].vs = dbsys;
                                     }
