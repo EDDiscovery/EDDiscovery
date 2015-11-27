@@ -41,14 +41,15 @@ namespace EDDiscovery
         {
             InitializeComponent();
             static_richTextBox = richTextBox_History;
-            var db = new SQLiteDBClass();
-            defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
             sync = new EDSMSync(_discoveryForm);
+            var db = new SQLiteDBClass();
+            defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
         }
 
 
