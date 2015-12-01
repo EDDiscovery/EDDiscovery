@@ -18,7 +18,9 @@ namespace EDDiscovery2
 {
     public partial class FormMap : Form
     {
-            private readonly AutoCompleteStringCollection _systemNames;
+        private const int ZoomMax = 15;
+        private const double ZoomMin = 0.005;
+        private readonly AutoCompleteStringCollection _systemNames;
         bool loaded = false;
 
         float x = 0;
@@ -492,8 +494,8 @@ namespace EDDiscovery2
 
         private void OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Delta > 0 && zoom < 10) zoom *= 1.1f;
-            if (e.Delta < 0 && zoom > 0.01) zoom /= 1.1f;
+            if (e.Delta > 0 && zoom < ZoomMax) zoom *= 1.1f;
+            if (e.Delta < 0 && zoom > ZoomMin) zoom /= 1.1f;
 
             SetupCursorXYZ();
 
