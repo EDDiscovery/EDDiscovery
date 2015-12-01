@@ -28,7 +28,7 @@ namespace EDDiscovery2
         float z = 0;
         float zoom = 1;
         float xang = 0;
-        float yang = 0;
+        float yang = 90;
 
         private Point MouseStartRotate;
         private Point MouseStartTranslate;
