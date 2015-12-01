@@ -16,8 +16,26 @@ using System.Windows.Forms;
 
 namespace EDDiscovery2
 {
+
+
     public partial class FormMap : Form
     {
+        private class MyRenderer : ToolStripProfessionalRenderer
+        {
+            protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
+            {
+                var btn = e.Item as ToolStripButton;
+                if (btn != null && btn.CheckOnClick && btn.Checked)
+                {
+                    Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
+                    e.Graphics.FillRectangle(Brushes.Orange, bounds);
+                }
+                else base.OnRenderButtonBackground(e);
+            }
+        }
+
+
+
         private const int ZoomMax = 15;
         private const double ZoomMin = 0.005;
         private readonly AutoCompleteStringCollection _systemNames;
@@ -47,6 +65,7 @@ namespace EDDiscovery2
         {
                 _systemNames = SystemNames;
             InitializeComponent();
+            toolStrip1.Renderer = new MyRenderer();
         }
 
             public FormMap(SystemClass centerSystem, AutoCompleteStringCollection SystemNames) : this(SystemNames)
@@ -563,6 +582,11 @@ namespace EDDiscovery2
 
             if (ps2!=null)
                 SetCentersystem(ps2.curSystem);
+        }
+
+        private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
+        {
+            //toolStripButtonDrawLines.Checked = !toolStripButtonDrawLines.Checked;
         }
     }
 }

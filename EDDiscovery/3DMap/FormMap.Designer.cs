@@ -42,6 +42,7 @@ namespace EDDiscovery2
             this.label1 = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonDrawLines = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,7 +99,8 @@ namespace EDDiscovery2
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.toolStripButtonDrawLines});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(916, 25);
@@ -114,6 +116,18 @@ namespace EDDiscovery2
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "Last known position";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripButtonDrawLines
+            // 
+            this.toolStripButtonDrawLines.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDrawLines.BackgroundImage")));
+            this.toolStripButtonDrawLines.CheckOnClick = true;
+            this.toolStripButtonDrawLines.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonDrawLines.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDrawLines.Image")));
+            this.toolStripButtonDrawLines.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDrawLines.Name = "toolStripButtonDrawLines";
+            this.toolStripButtonDrawLines.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonDrawLines.Text = "Draw lines";
+            this.toolStripButtonDrawLines.Click += new System.EventHandler(this.toolStripButtonDrawLines_Click);
             // 
             // FormMap
             // 
@@ -144,5 +158,6 @@ namespace EDDiscovery2
             private Label label1;
         private ToolStrip toolStrip1;
         private ToolStripButton toolStripButton1;
+        private ToolStripButton toolStripButtonDrawLines;
     }
     }
