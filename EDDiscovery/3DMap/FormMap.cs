@@ -533,6 +533,11 @@ namespace EDDiscovery2
         private void buttonCenter_Click(object sender, EventArgs e)
         {
             SystemClass sys = SystemData.GetSystem(textBox_From.Text);
+            SetCentersystem(sys);
+        }
+
+        private void SetCentersystem(SystemClass sys)
+        {
             if (sys == null) return;
 
             CenterSystem = sys;
@@ -550,6 +555,14 @@ namespace EDDiscovery2
             }
 
             label1.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            SystemPosition ps2 = (from c in visitedSystems where c.curSystem!=null && c.curSystem.HasCoordinate==true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
+
+            if (ps2!=null)
+                SetCentersystem(ps2.curSystem);
         }
     }
 }

@@ -35,10 +35,14 @@ namespace EDDiscovery2
             /// </summary>
             private void InitializeComponent()
             {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMap));
             this.glControl1 = new OpenTK.GLControl();
             this.textBox_From = new System.Windows.Forms.TextBox();
             this.buttonCenter = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // glControl1
@@ -61,9 +65,10 @@ namespace EDDiscovery2
             // 
             // textBox_From
             // 
+            this.textBox_From.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_From.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_From.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_From.Location = new System.Drawing.Point(12, 7);
+            this.textBox_From.Location = new System.Drawing.Point(550, 7);
             this.textBox_From.Name = "textBox_From";
             this.textBox_From.Size = new System.Drawing.Size(125, 20);
             this.textBox_From.TabIndex = 16;
@@ -71,7 +76,8 @@ namespace EDDiscovery2
             // 
             // buttonCenter
             // 
-            this.buttonCenter.Location = new System.Drawing.Point(143, 4);
+            this.buttonCenter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCenter.Location = new System.Drawing.Point(681, 4);
             this.buttonCenter.Name = "buttonCenter";
             this.buttonCenter.Size = new System.Drawing.Size(75, 23);
             this.buttonCenter.TabIndex = 17;
@@ -81,12 +87,33 @@ namespace EDDiscovery2
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(224, 7);
+            this.label1.Location = new System.Drawing.Point(762, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 18;
             this.label1.Text = "label1";
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(916, 25);
+            this.toolStrip1.TabIndex = 19;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "Last known position";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // FormMap
             // 
@@ -97,9 +124,12 @@ namespace EDDiscovery2
             this.Controls.Add(this.buttonCenter);
             this.Controls.Add(this.textBox_From);
             this.Controls.Add(this.glControl1);
+            this.Controls.Add(this.toolStrip1);
             this.Name = "FormMap";
             this.Text = "3D Star Map";
             this.Load += new System.EventHandler(this.FormMap_Load);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -112,5 +142,7 @@ namespace EDDiscovery2
             internal TextBox textBox_From;
             private Button buttonCenter;
             private Label label1;
-        }
+        private ToolStrip toolStrip1;
+        private ToolStripButton toolStripButton1;
+    }
     }
