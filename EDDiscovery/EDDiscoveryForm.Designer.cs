@@ -56,12 +56,13 @@
             this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setDefaultMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.setDefaultMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -168,6 +169,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label2);
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Controls.Add(this.textBoxEDSMApiKey);
             this.tabPage3.Controls.Add(this.button_Save);
@@ -335,6 +337,13 @@
             this.statisticsToolStripMenuItem.Text = "Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
             // 
+            // setDefaultMapColourToolStripMenuItem
+            // 
+            this.setDefaultMapColourToolStripMenuItem.Name = "setDefaultMapColourToolStripMenuItem";
+            this.setDefaultMapColourToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.setDefaultMapColourToolStripMenuItem.Text = "Set Default Map Colour";
+            this.setDefaultMapColourToolStripMenuItem.Click += new System.EventHandler(this.setDefaultMapColourToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -379,12 +388,14 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
-            // setDefaultMapColourToolStripMenuItem
+            // label2
             // 
-            this.setDefaultMapColourToolStripMenuItem.Name = "setDefaultMapColourToolStripMenuItem";
-            this.setDefaultMapColourToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.setDefaultMapColourToolStripMenuItem.Text = "Set Default Map Colour";
-            this.setDefaultMapColourToolStripMenuItem.Click += new System.EventHandler(this.setDefaultMapColourToolStripMenuItem_Click);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(125, 133);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(297, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Get APi ket from http://www.edsm.net in  \"My acount\" menu.";
             // 
             // EDDiscoveryForm
             // 
@@ -455,6 +466,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxEDSMApiKey;
         private System.Windows.Forms.ToolStripMenuItem setDefaultMapColourToolStripMenuItem;
+        private System.Windows.Forms.Label label2;
     }
 }
 
