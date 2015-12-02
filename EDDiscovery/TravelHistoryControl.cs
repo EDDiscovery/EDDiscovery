@@ -683,9 +683,12 @@ namespace EDDiscovery
         {
             if (textBoxCmdrName.Text.Equals(""))
             {
-                MessageBox.Show("Please enter commander name before sending distances!");
+                MessageBox.Show("Please enter commander name before sending distances/ travel history to EDSM!");
                 return;
             }
+            var db = new SQLiteDBClass();
+
+
 
 
             var dists = from p in SQLiteDBClass.dictDistances where p.Value.Status == DistancsEnum.EDDiscovery  orderby p.Value.CreateTime  select p.Value;
@@ -729,7 +732,12 @@ namespace EDDiscovery
                 }
             }
 
-           
+            if (db.GetSettingString("EDSMApiKey", "").Equals(""))
+            {
+                MessageBox.Show("Please enter EDSM api key (In settings) before sending travel history to EDSM!");
+                return;
+
+            }
             sync.StartSync();
 
 
