@@ -17,8 +17,10 @@ namespace EDDiscovery
 
         public SystemClass curSystem;
         public SystemClass prevSystem;
+        public SystemClass lastKnownSystem;
         public string strDistance;
         public VisitedSystemsClass vs;
+        
 
         public SystemPosition()
         {

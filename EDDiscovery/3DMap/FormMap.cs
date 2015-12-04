@@ -20,6 +20,7 @@ namespace EDDiscovery2
 
     public partial class FormMap : Form
     {
+
         private class MyRenderer : ToolStripProfessionalRenderer
         {
             protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
@@ -153,6 +154,17 @@ namespace EDDiscovery2
 
             if (visitedSystems != null && visitedSystems.Any())
             {
+                SystemClass lastknownps = null;
+                foreach (SystemPosition ps in visitedSystems)
+                {
+                    if (ps.curSystem!=null && ps.curSystem.HasCoordinate)
+                    {
+                        ps.lastKnownSystem = lastknownps;
+                        lastknownps = ps.curSystem;
+                    }
+                }
+
+
                 // For some reason I am unable to fathom this errors during the session after DBUpgrade8
                 // colours just resolves to an object reference not set error, but after a restart it works fine
                 // Not going to waste any more time, a one time restart is hardly the worst workaround in the world...
@@ -162,16 +174,35 @@ namespace EDDiscovery2
 
                 foreach (IGrouping<int, SystemPosition> colour in colours)
                 {
-                    dataset = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                    foreach (SystemPosition sp in colour)
+                    if (toolStripButtonDrawLines.Checked)
                     {
-                        SystemClass star = SystemData.GetSystem(sp.Name);
-                        if (star != null && star.HasCoordinate)
+                        Data3DSetClass<LineData>  datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                        foreach (SystemPosition sp in colour)
                         {
-                            AddSystem(star, dataset);
+                            if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem!=null && sp.lastKnownSystem.HasCoordinate)
+                            {
+                                datasetl.Add(new LineData(sp.curSystem.x - CenterSystem.x, sp.curSystem.y - CenterSystem.y, CenterSystem.z - sp.curSystem.z,
+                                    sp.lastKnownSystem.x - CenterSystem.x, sp.lastKnownSystem.y - CenterSystem.y,  CenterSystem.z - sp.lastKnownSystem.z));
+
+                            }
                         }
+                        datasets.Add(datasetl);
                     }
-                    datasets.Add(dataset);
+                    else
+                    {
+                        dataset = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                        foreach (SystemPosition sp in colour)
+                        {
+                            SystemClass star = SystemData.GetSystem(sp.Name);
+                            if (star != null && star.HasCoordinate)
+                            {
+                                
+                                AddSystem(star, dataset);
+                            }
+                        }
+                        datasets.Add(dataset);
+                    }
+
                 }
             }
 
@@ -587,6 +618,7 @@ namespace EDDiscovery2
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
         {
             //toolStripButtonDrawLines.Checked = !toolStripButtonDrawLines.Checked;
+            SetCentersystem(CenterSystem);
         }
     }
 }
