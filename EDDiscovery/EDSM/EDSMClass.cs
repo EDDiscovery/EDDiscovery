@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Windows.Forms;
@@ -20,9 +21,17 @@ namespace EDDiscovery2.EDSM
         public string commanderName;
         public string apiKey;
 
+        private readonly string fromSoftwareVersion;
+        private readonly string fromSoftware;
+
+
 
         public EDSMClass()
         {
+            fromSoftware = "EDDiscovery";
+
+            var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
+            fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
         }
 
 
@@ -143,7 +152,7 @@ namespace EDDiscovery2.EDSM
         public string SubmitDistances(string cmdr, string from, Dictionary<string, double> distances)
         {
             CultureInfo culture = new CultureInfo("en-US");
-            string query = "{\"ver\":2," + " \"commander\":\"" + cmdr + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
+            string query = "{\"ver\":2," + " \"commander\":\"" + cmdr + "\", \"fromSoftware\":\"" + fromSoftware + " \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
 
             var counter = 0;
             foreach (var item in distances)
