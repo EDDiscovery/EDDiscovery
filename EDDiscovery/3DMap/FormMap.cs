@@ -101,6 +101,8 @@ namespace EDDiscovery2
             int w = glControl1.Width;
             int h = glControl1.Height;
 
+            if (w == 0 || h == 0) return;
+
             float orthoW = w * (zoom + 1);
             float orthoH = h * (zoom + 1);
 
