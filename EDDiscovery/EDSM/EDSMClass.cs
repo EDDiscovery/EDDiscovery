@@ -152,7 +152,7 @@ namespace EDDiscovery2.EDSM
         public string SubmitDistances(string cmdr, string from, Dictionary<string, double> distances)
         {
             CultureInfo culture = new CultureInfo("en-US");
-            string query = "{\"ver\":2," + " \"commander\":\"" + cmdr + "\", \"fromSoftware\":\"" + fromSoftware + " \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
+            string query = "{\"ver\":2," + " \"commander\":\"" + cmdr + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
 
             var counter = 0;
             foreach (var item in distances)
