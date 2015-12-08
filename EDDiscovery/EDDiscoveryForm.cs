@@ -237,6 +237,13 @@ namespace EDDiscovery
                     DownloadMapFile("SC-04.jpg");
 
                     DownloadMapFile("SC-L4.jpg");
+
+
+                    for (int ii = -10; ii <= 60; ii += 10)
+                    {
+                        DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".png");
+                        DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".json");
+                    }
                 }
             }
             catch (Exception ex)
