@@ -323,7 +323,7 @@ namespace EDDiscovery2
             Point test1  = currentFGEImage.TransformCoordinate(currentFGEImage.BottomLeft);
             Point test2 = currentFGEImage.TransformCoordinate(currentFGEImage.TopRight);
 
-            //if (Test)
+            if (Test)
             TestGrid(gfx);
         }
 
