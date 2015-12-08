@@ -1,5 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -68,8 +69,56 @@ namespace EDDiscovery2
 
         }
 
+
+        private void LoadImages(string datapath)
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(datapath);
+            FileInfo[] allFiles = null;
+
+            try
+            {
+                allFiles = dirInfo.GetFiles("*.json");
+            }
+            catch
+            {
+            }
+
+            if (allFiles != null)
+            {
+                foreach (FileInfo fi in allFiles)
+                {
+                    JObject pfile = null;
+                    string json = EDDiscoveryForm.LoadJsonFile(fi.FullName);
+
+
+                    if (json != null)
+                    {
+                        pfile = (JObject)JObject.Parse(json);
+
+                        FGEImage fgeimg = new FGEImage(fi.FullName.Replace(".json", ".png"));
+
+                        fgeimg.TopLeft = new Point(pfile["x1"].Value<int>(), pfile["y1"].Value<int>());
+                        fgeimg.pxTopLeft = new Point(pfile["px1"].Value<int>(), pfile["py1"].Value<int>());
+
+                        fgeimg.TopRight = new Point(pfile["x2"].Value<int>(), pfile["y1"].Value<int>());
+                        fgeimg.pxTopRight = new Point(pfile["px2"].Value<int>(), pfile["py1"].Value<int>());
+
+                        fgeimg.BottomLeft = new Point(pfile["x1"].Value<int>(), pfile["y2"].Value<int>());
+                        fgeimg.pxBottomLeft = new Point(pfile["px1"].Value<int>(), pfile["py2"].Value<int>());
+
+                        fgeimg.BottomRight = new Point(pfile["x2"].Value<int>(), pfile["y2"].Value<int>());
+                        fgeimg.pxBottomRight = new Point(pfile["px2"].Value<int>(), pfile["py2"].Value<int>());
+                        fgeimages.Add(fgeimg);
+                    }
+                }
+            }
+        }
+
+
+
         private void AddImages()
         {
+            LoadImages(Path.Combine(Tools.GetAppDataDirectory(), "Maps"));
             if (Directory.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps")))
             {
                 if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-01.jpg")))
@@ -99,7 +148,7 @@ namespace EDDiscovery2
 
                     fgeimages.Add(fgeimg);
 
-                    //ShowImage(fgeimg);
+                    ShowImage(fgeimg);
                 }
 
                 if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-02.jpg")))
@@ -274,7 +323,7 @@ namespace EDDiscovery2
             Point test1  = currentFGEImage.TransformCoordinate(currentFGEImage.BottomLeft);
             Point test2 = currentFGEImage.TransformCoordinate(currentFGEImage.TopRight);
 
-            if (Test)
+            //if (Test)
             TestGrid(gfx);
         }
 

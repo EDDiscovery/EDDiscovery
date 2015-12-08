@@ -348,7 +348,7 @@ namespace EDDiscovery
                 });
 
 
-                json = LoadJsonArray(fileTgcSystems);
+                json = LoadJsonFile(fileTgcSystems);
                 List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
 
 
@@ -437,7 +437,7 @@ namespace EDDiscovery
                 {
                     LogText("Downloading mirrored EDSM distance data. (Might take some time)" + Environment.NewLine);
                     eddb.GetEDSMDistances();
-                    json = LoadJsonArray(fileEDSMDistances);
+                    json = LoadJsonFile(fileEDSMDistances);
                     if (json!= null)
                     {
                         LogText("Adding mirrored EDSM distance data." + Environment.NewLine);
@@ -654,7 +654,7 @@ namespace EDDiscovery
             }
         }
 
-        private string LoadJsonArray(string filename)
+        static public string LoadJsonFile(string filename)
         {
             string json = null;
             try
