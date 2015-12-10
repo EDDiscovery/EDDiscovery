@@ -102,6 +102,8 @@ namespace EDDiscovery2.EDSM
                             JObject msg = (JObject)JObject.Parse(json);
 
                             int msgnum = msg["msgnum"].Value<int>();
+                            string msgstr = msg["msg"].Value<string>();
+
 
                             if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
                             {
@@ -113,7 +115,9 @@ namespace EDDiscovery2.EDSM
                             }
                             else
                             {
+                                mainForm.LogLine("EDSM sync ERROR:" + msgnum.ToString() +":" + msgstr, Color.Red);
                                 System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name);
+                                break;
                             }
 
 
