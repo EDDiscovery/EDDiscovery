@@ -62,14 +62,25 @@ namespace EDDiscovery2
 
         public bool ShowTril;
 
-            public FormMap(AutoCompleteStringCollection SystemNames)
+        public FormMap(AutoCompleteStringCollection SystemNames)
         {
-                _systemNames = SystemNames;
+            _systemNames = SystemNames;
             InitializeComponent();
+            if (CenterSystem == null)
+            {
+                var db = new SQLiteDBClass();
+                string defaultCenter = db.GetSettingString("DefaultMapCenter", null);
+                if (!String.IsNullOrWhiteSpace( defaultCenter))
+                {
+                    SystemClass sys = SystemData.GetSystem(defaultCenter);
+                    CenterSystem = sys;
+                    textBox_From.Text = sys.name;
+                }
+            }
             toolStrip1.Renderer = new MyRenderer();
         }
 
-            public FormMap(SystemClass centerSystem, AutoCompleteStringCollection SystemNames) : this(SystemNames)
+        public FormMap(SystemClass centerSystem, AutoCompleteStringCollection SystemNames) : this(SystemNames)
         {
             if (centerSystem != null && centerSystem.HasCoordinate) CenterSystem = centerSystem;
         }
@@ -621,6 +632,17 @@ namespace EDDiscovery2
         {
             //toolStripButtonDrawLines.Checked = !toolStripButtonDrawLines.Checked;
             SetCentersystem(CenterSystem);
+        }
+
+        private void buttonSetDefault_Click(object sender, EventArgs e)
+        {
+            SystemClass sys = SystemData.GetSystem(textBox_From.Text);
+            if (sys != null && sys.HasCoordinate)
+            {
+                var db = new SQLiteDBClass();
+                db.PutSettingString("DefaultMapCenter", sys.name);
+                if (CenterSystem.name != sys.name) SetCentersystem(sys);
+            }
         }
     }
 }

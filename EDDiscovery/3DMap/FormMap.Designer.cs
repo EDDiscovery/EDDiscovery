@@ -43,6 +43,7 @@ namespace EDDiscovery2
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDrawLines = new System.Windows.Forms.ToolStripButton();
+            this.buttonSetDefault = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,7 +70,7 @@ namespace EDDiscovery2
             this.textBox_From.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_From.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_From.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_From.Location = new System.Drawing.Point(550, 7);
+            this.textBox_From.Location = new System.Drawing.Point(363, 7);
             this.textBox_From.Name = "textBox_From";
             this.textBox_From.Size = new System.Drawing.Size(125, 20);
             this.textBox_From.TabIndex = 16;
@@ -78,7 +79,7 @@ namespace EDDiscovery2
             // buttonCenter
             // 
             this.buttonCenter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCenter.Location = new System.Drawing.Point(681, 4);
+            this.buttonCenter.Location = new System.Drawing.Point(494, 5);
             this.buttonCenter.Name = "buttonCenter";
             this.buttonCenter.Size = new System.Drawing.Size(75, 23);
             this.buttonCenter.TabIndex = 17;
@@ -90,7 +91,7 @@ namespace EDDiscovery2
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(762, 7);
+            this.label1.Location = new System.Drawing.Point(656, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 18;
@@ -129,11 +130,24 @@ namespace EDDiscovery2
             this.toolStripButtonDrawLines.Text = "Draw lines";
             this.toolStripButtonDrawLines.Click += new System.EventHandler(this.toolStripButtonDrawLines_Click);
             // 
+            // buttonSetDefault
+            // 
+            this.buttonSetDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSetDefault.Location = new System.Drawing.Point(575, 5);
+            this.buttonSetDefault.Name = "buttonSetDefault";
+            this.buttonSetDefault.Size = new System.Drawing.Size(75, 23);
+            this.buttonSetDefault.TabIndex = 20;
+            this.buttonSetDefault.Text = "Set Default";
+            this.buttonSetDefault.UseCompatibleTextRendering = true;
+            this.buttonSetDefault.UseVisualStyleBackColor = true;
+            this.buttonSetDefault.Click += new System.EventHandler(this.buttonSetDefault_Click);
+            // 
             // FormMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(916, 545);
+            this.Controls.Add(this.buttonSetDefault);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonCenter);
             this.Controls.Add(this.textBox_From);
@@ -159,5 +173,6 @@ namespace EDDiscovery2
         private ToolStrip toolStrip1;
         private ToolStripButton toolStripButton1;
         private ToolStripButton toolStripButtonDrawLines;
+        private Button buttonSetDefault;
     }
     }
