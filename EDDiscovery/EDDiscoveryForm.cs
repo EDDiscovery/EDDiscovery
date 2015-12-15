@@ -37,11 +37,14 @@ namespace EDDiscovery
         public event DistancesLoaded OnDistancesLoaded;
         public EDSMSync edsmsync;
 
+        public EDDConfig eddConfig;
 
         public EDDiscoveryForm()
         {
             InitializeComponent();
-           
+
+            eddConfig = new EDDConfig();
+
             fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
             fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
@@ -78,6 +81,7 @@ namespace EDDiscovery
                 Text = string.Format("EDDiscovery v{0}", version);
                 EliteDangerous.CheckED();
                 SQLiteDBClass db = new SQLiteDBClass();
+                eddConfig.Update();
 
                 var top = db.GetSettingInt("FormTop", -1);
                 if (top > 0)
@@ -116,7 +120,7 @@ namespace EDDiscovery
 
 
                 textBoxEDSMApiKey.Text = db.GetSettingString("EDSMApiKey", "");
-
+                checkBox_Distances.Checked = eddConfig.UseDistances;
 
                 if (EliteDangerous.EDRunning)
                 {
@@ -176,8 +180,8 @@ namespace EDDiscovery
 
                 OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
 
+                 GetEDSMDistancesAsync();
 
-                GetEDSMDistancesAsync();
                 //Application.DoEvents();
                 GetEDDBAsync();
 
@@ -208,6 +212,10 @@ namespace EDDiscovery
                 {
                     panelInfo.Visible = false;
                 }
+
+
+                // Check for a new installer    
+                CheckForNewInstaller();
 
             }
             catch (Exception ex)
@@ -431,58 +439,59 @@ namespace EDDiscovery
             try
             {
                 SQLiteDBClass db = new SQLiteDBClass();
-                EDSMClass edsm = new EDSMClass();
-                EDDBClass eddb = new EDDBClass();
-                string lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
-                string json;
 
-                // Get distances
-                lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
-                List<DistanceClass> dists = new List<DistanceClass>();
-
-                if (lstdist.Equals("2010-01-01 00:00:00"))
+                if (eddConfig.UseDistances)
                 {
-                    LogText("Downloading mirrored EDSM distance data. (Might take some time)" + Environment.NewLine);
-                    eddb.GetEDSMDistances();
-                    json = LoadJsonFile(fileEDSMDistances);
-                    if (json!= null)
+                    EDSMClass edsm = new EDSMClass();
+                    EDDBClass eddb = new EDDBClass();
+                    string lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                    string json;
+
+                    // Get distances
+                    lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                    List<DistanceClass> dists = new List<DistanceClass>();
+
+                    if (lstdist.Equals("2010-01-01 00:00:00"))
                     {
-                        LogText("Adding mirrored EDSM distance data." + Environment.NewLine);
+                        LogText("Downloading mirrored EDSM distance data. (Might take some time)" + Environment.NewLine);
+                        eddb.GetEDSMDistances();
+                        json = LoadJsonFile(fileEDSMDistances);
+                        if (json != null)
+                        {
+                            LogText("Adding mirrored EDSM distance data." + Environment.NewLine);
 
-                        dists = new List<DistanceClass>();
-                        dists = DistanceClass.ParseEDSM(json, ref lstdist);
-                        LogText("Found " + dists.Count.ToString() + " distances." + Environment.NewLine);
+                            dists = new List<DistanceClass>();
+                            dists = DistanceClass.ParseEDSM(json, ref lstdist);
+                            LogText("Found " + dists.Count.ToString() + " distances." + Environment.NewLine);
 
-                        Application.DoEvents();
-                        DistanceClass.Store(dists);
-                        db.PutSettingString("EDSCLastDist", lstdist);
+                            Application.DoEvents();
+                            DistanceClass.Store(dists);
+                            db.PutSettingString("EDSCLastDist", lstdist);
+                        }
                     }
+
+
+                    LogText("Checking for new distances from EDSM. ");
+
+
+                    Application.DoEvents();
+                    json = edsm.RequestDistances(lstdist);
+
+                    dists = new List<DistanceClass>();
+                    dists = DistanceClass.ParseEDSM(json, ref lstdist);
+
+                    if (json == null)
+                        LogText("No response from server." + Environment.NewLine);
+
+                    else
+                        LogText("Found " + dists.Count.ToString() + " new distances." + Environment.NewLine);
+
+                    Application.DoEvents();
+                    DistanceClass.Store(dists);
+                    db.PutSettingString("EDSCLastDist", lstdist);
                 }
-
-
-                LogText("Checking for new distances from EDSM. ");
-
-
-                Application.DoEvents();
-                json = edsm.RequestDistances(lstdist);
-
-                dists = new List<DistanceClass>();
-                dists = DistanceClass.ParseEDSM(json, ref lstdist);
-
-                if (json == null)
-                    LogText("No response from server." + Environment.NewLine);
-                   
-                else
-                    LogText("Found " + dists.Count.ToString() + " new distances." + Environment.NewLine);
-                    
-                Application.DoEvents();
-                DistanceClass.Store(dists);
-                db.PutSettingString("EDSCLastDist", lstdist);
-                db.GetAllDistances();
+                db.GetAllDistances(eddConfig.UseDistances);  // Load user added distances
                 OnDistancesLoaded();
-
-                // Check for a new installer    
-                CheckForNewInstaller();
 
             }
             catch (Exception ex)
@@ -751,6 +760,8 @@ namespace EDDiscovery
             db.PutSettingInt("FormHeight", this.Height);
             db.PutSettingInt("FormTop", this.Top);
             db.PutSettingInt("FormLeft", this.Left);
+            eddConfig.UseDistances = checkBox_Distances.Checked;
+
         }
 
         private void routeControl1_Load(object sender, EventArgs e)

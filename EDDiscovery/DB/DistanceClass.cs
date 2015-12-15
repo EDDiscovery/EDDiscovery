@@ -17,7 +17,7 @@ namespace EDDiscovery.DB
         RedWizzard =2,
         EDDiscovery = 3,
         EDDiscoverySubmitted = 4,
-        LessThen = 5,
+
     }
 
     public class DistanceClass

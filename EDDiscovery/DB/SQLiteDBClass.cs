@@ -498,7 +498,7 @@ namespace EDDiscovery.DB
 
 
 
-        public bool GetAllDistances()
+        public bool GetAllDistances(bool loadAlldata)
         {
             try
             {
@@ -510,7 +510,11 @@ namespace EDDiscovery.DB
                         cmd.Connection = cn;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from Distances";
+                        if (!loadAlldata)
+                            cmd.CommandText = "select * from Distances WHERE status='3' or status = '4'";//         EDDiscovery = 3, EDDiscoverySubmitted = 4
+
+                        else
+                            cmd.CommandText = "select * from Distances";
 
                         ds = SqlQueryText(cn, cmd);
                         if (ds.Tables.Count == 0)

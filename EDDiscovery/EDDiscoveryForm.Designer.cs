@@ -63,6 +63,7 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
+            this.checkBox_Distances = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -169,6 +170,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.checkBox_Distances);
             this.tabPage3.Controls.Add(this.label2);
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Controls.Add(this.textBoxEDSMApiKey);
@@ -185,7 +187,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(125, 133);
+            this.label2.Location = new System.Drawing.Point(125, 93);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(304, 13);
             this.label2.TabIndex = 7;
@@ -194,7 +196,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 113);
+            this.label1.Location = new System.Drawing.Point(30, 113);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 13);
             this.label1.TabIndex = 6;
@@ -397,6 +399,16 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
+            // checkBox_Distances
+            // 
+            this.checkBox_Distances.AutoSize = true;
+            this.checkBox_Distances.Location = new System.Drawing.Point(128, 136);
+            this.checkBox_Distances.Name = "checkBox_Distances";
+            this.checkBox_Distances.Size = new System.Drawing.Size(153, 17);
+            this.checkBox_Distances.TabIndex = 8;
+            this.checkBox_Distances.Text = "Get Distances from EDSM ";
+            this.checkBox_Distances.UseVisualStyleBackColor = true;
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -467,6 +479,7 @@
         private System.Windows.Forms.TextBox textBoxEDSMApiKey;
         private System.Windows.Forms.ToolStripMenuItem setDefaultMapColourToolStripMenuItem;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox checkBox_Distances;
     }
 }
 
