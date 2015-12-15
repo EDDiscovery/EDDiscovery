@@ -40,6 +40,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxEDSMApiKey = new System.Windows.Forms.TextBox();
             this.button_Save = new System.Windows.Forms.Button();
@@ -62,7 +63,6 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -181,6 +181,15 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(125, 133);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(304, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Get Api key from http://www.edsm.net in  \"My account\" menu.";
             // 
             // label1
             // 
@@ -387,15 +396,6 @@
             this.labelPanelText.TabIndex = 0;
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(125, 133);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(297, 13);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Get APi ket from http://www.edsm.net in  \"My acount\" menu.";
             // 
             // EDDiscoveryForm
             // 
