@@ -207,13 +207,19 @@ Trinkets_Of_Hidden_Fortune,
 
         static public bool CheckED()
         {
-            Process[] processes = Process.GetProcessesByName("EliteDangerous32");
+            Process[] processes32 = Process.GetProcessesByName("EliteDangerous32");
+            Process[] processes64 = Process.GetProcessesByName("EliteDangerous64");
+
+            Process[] processes = processes32;
+
+            if (processes == null || processes32.Length == 0)
+                processes = processes64;
 
             if (processes == null)
             {
                 EDRunning = false;
             }
-            else if (processes.Length == 0)
+            else if (processes.Length == 0 )
             {
                 EDRunning = false;
 
