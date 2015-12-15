@@ -237,7 +237,7 @@ namespace EDDiscovery
                     DownloadMapFile("SC-04.jpg");
 
                     DownloadMapFile("SC-L4.jpg");
-
+                    DownloadMapFile("SC-U4.jpg");
 
                     for (int ii = -10; ii <= 60; ii += 10)
                     {

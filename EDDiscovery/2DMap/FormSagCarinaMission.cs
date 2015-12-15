@@ -273,6 +273,35 @@ namespace EDDiscovery2
 
                     ShowImage(fgeimg);
                 }
+                if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-U4.jpg")))
+                {
+                    FGEImage fgeimg = new FGEImage(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-U4.jpg"));
+
+                    fgeimg.TopLeft = new Point(0, 60000);
+                    fgeimg.pxTopLeft = new Point(273, 445);
+
+                    fgeimg.TopRight = new Point(30000, 60000);
+                    fgeimg.pxTopRight = new Point(2496, 439);
+
+                    fgeimg.BottomLeft = new Point(0, 30000);
+                    fgeimg.pxBottomLeft = new Point(100, 2868);
+
+                    fgeimg.BottomRight = new Point(30000, 30000);
+                    fgeimg.pxBottomRight = new Point(2840, 2862);
+
+
+                    fgeimg.Yaxispoints.Add(new Point(30000, 2868));
+                    fgeimg.Yaxispoints.Add(new Point(35000, 2385));
+                    fgeimg.Yaxispoints.Add(new Point(40000, 1944));
+                    fgeimg.Yaxispoints.Add(new Point(45000, 1524));
+                    fgeimg.Yaxispoints.Add(new Point(50000, 1143));
+                    fgeimg.Yaxispoints.Add(new Point(55000, 773));
+                    fgeimg.Yaxispoints.Add(new Point(60000, 445));
+
+                    fgeimages.Add(fgeimg);
+
+                    ShowImage(fgeimg);
+                }
 
             }
         }
