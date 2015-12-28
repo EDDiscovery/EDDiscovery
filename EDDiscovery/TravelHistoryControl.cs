@@ -664,6 +664,9 @@ namespace EDDiscovery
                     currentSysPos.curSystem.Note = txt;
                     dataGridView1.Rows[lastRowIndex].Cells[3].Value = txt;
 
+                    if (edsm.commanderName == null || edsm.apiKey == null)
+                        return;
+
                     if (edsm.commanderName.Length>1 && edsm.apiKey.Length>1)
                         edsm.SetComment(sn);
                 }
