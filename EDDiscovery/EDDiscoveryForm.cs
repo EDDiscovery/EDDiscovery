@@ -201,7 +201,7 @@ namespace EDDiscovery
                  GetEDSMDistancesAsync();
 
                 //Application.DoEvents();
-                GetEDDBAsync();
+                GetEDDBAsync(false);
 
 
                 if (SystemData.SystemList.Count == 0)
@@ -444,10 +444,13 @@ namespace EDDiscovery
             get { return travelHistoryControl1.visitedSystems; }
         }
 
-        private void GetEDDBAsync()
+
+        private bool eddbforceupdate;
+        private void GetEDDBAsync(bool force)
         {
             ThreadEDDB = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDDBUpdate));
             ThreadEDDB.Name = "Get EDDB Update";
+            eddbforceupdate = force;
             ThreadEDDB.Start();
         }
 
@@ -614,7 +617,7 @@ namespace EDDiscovery
                 }
 
 
-                if (updatedb)
+                if (updatedb || eddbforceupdate)
                 {
                     DBUpdateEDDB(eddb);
                 }
@@ -639,6 +642,10 @@ namespace EDDiscovery
 
             LogText("Add new EDDB data to database." + Environment.NewLine);
             eddb.Add2DB(eddbsystems, eddbstations);
+
+            eddbsystems.Clear();
+            eddbstations.Clear();
+           
         }
 
 
@@ -939,6 +946,11 @@ namespace EDDiscovery
         private void setDefaultMapColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
             travelHistoryControl1.setDefaultMapColour();
+        }
+
+        private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GetEDDBAsync(true);
         }
 
         //Pleiades Sector WU-O B16-0

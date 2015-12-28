@@ -40,6 +40,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
             this.checkBox_Distances = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,7 +65,8 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
+            this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -186,6 +188,16 @@
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // checkBoxEDSMLog
+            // 
+            this.checkBoxEDSMLog.AutoSize = true;
+            this.checkBoxEDSMLog.Location = new System.Drawing.Point(128, 159);
+            this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
+            this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
+            this.checkBoxEDSMLog.TabIndex = 9;
+            this.checkBoxEDSMLog.Text = "Log EDSM requests";
+            this.checkBoxEDSMLog.UseVisualStyleBackColor = true;
+            // 
             // checkBox_Distances
             // 
             this.checkBox_Distances.AutoSize = true;
@@ -305,6 +317,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsToolStripMenuItem,
+            this.adminToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -411,15 +424,20 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
-            // checkBoxEDSMLog
+            // adminToolStripMenuItem
             // 
-            this.checkBoxEDSMLog.AutoSize = true;
-            this.checkBoxEDSMLog.Location = new System.Drawing.Point(128, 159);
-            this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
-            this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
-            this.checkBoxEDSMLog.TabIndex = 9;
-            this.checkBoxEDSMLog.Text = "Log EDSM requests";
-            this.checkBoxEDSMLog.UseVisualStyleBackColor = true;
+            this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.forceEDDBUpdateToolStripMenuItem});
+            this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
+            this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.adminToolStripMenuItem.Text = "Admin";
+            // 
+            // forceEDDBUpdateToolStripMenuItem
+            // 
+            this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
+            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.forceEDDBUpdateToolStripMenuItem.Text = "Force EDDB update";
+            this.forceEDDBUpdateToolStripMenuItem.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -493,6 +511,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox checkBox_Distances;
         private System.Windows.Forms.CheckBox checkBoxEDSMLog;
+        private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem forceEDDBUpdateToolStripMenuItem;
     }
 }
 

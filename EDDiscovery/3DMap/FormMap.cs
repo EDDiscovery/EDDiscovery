@@ -172,7 +172,7 @@ namespace EDDiscovery2
 
             if (toolStripButtonStations.Checked)
             {
-                var datasetS = new Data3DSetClass<PointData>("stations", Color.LightBlue, 1.0f);
+                var datasetS = new Data3DSetClass<PointData>("stations", Color.RoyalBlue, 1.0f);
 
                 foreach (SystemClass si in StarList)
                 {
