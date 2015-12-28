@@ -645,7 +645,7 @@ namespace EDDiscovery
 
             eddbsystems.Clear();
             eddbstations.Clear();
-           
+            LogText("EDDB update done." + Environment.NewLine);
         }
 
 
