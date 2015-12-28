@@ -62,6 +62,10 @@ namespace EDDiscovery2.EDSM
                 dataStream.Close();
                 // Get the response.
                 //request.Timeout = 740 * 1000;
+
+                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                    WriteEDSMLog("POST " + request.RequestUri, postData);
+
                 WebResponse response = request.GetResponse();
                 // Display the status.
                 //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
@@ -77,12 +81,21 @@ namespace EDDiscovery2.EDSM
                 dataStream.Close();
                 response.Close();
 
+                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                {
+                    WriteEDSMLog(responseFromServer, "");
+                }
+
                 return responseFromServer;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                {
+                    WriteEDSMLog("Exception" + ex.Message, "");
+                }
 
                 return null;
             }
@@ -103,12 +116,13 @@ namespace EDDiscovery2.EDSM
                 // Set the Method property of the request to POST.
                 request.Method = "GET";
 
-
                 // Set the ContentType property of the WebRequest.
                 request.ContentType = "application/json; charset=utf-8";
                 request.Headers.Add("Accept-Encoding", "gzip,deflate");
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
+                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                    WriteEDSMLog("GET " + request.RequestUri, "");
 
 
                 // Get the response.
@@ -128,6 +142,11 @@ namespace EDDiscovery2.EDSM
                 dataStream.Close();
                 response.Close();
 
+                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                {
+                    WriteEDSMLog(responseFromServer, "");
+                }
+
                 return responseFromServer;
             }
             catch (Exception ex)
@@ -135,14 +154,34 @@ namespace EDDiscovery2.EDSM
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
+                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                {
+                    WriteEDSMLog("Exception" + ex.Message, "");
+                }
+
 
                 return null;
             }
 
         }
 
+        private void WriteEDSMLog(string str1, string str2)
+        {
+            try
+            {
+                string filename = Path.Combine(Tools.GetAppDataDirectory(), "Log", "edsm"+EDDiscoveryForm.eddConfig.LogIndex+".log");
 
-    
+                using (StreamWriter w = File.AppendText(filename))
+                {
+                    w.WriteLine(DateTime.Now.ToLongTimeString() + "; " + str1 + "; "+str2);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+        }
 
         public string SubmitDistances(string cmdr, string from, string to, double dist)
         {
@@ -425,6 +464,9 @@ namespace EDDiscovery2.EDSM
 
             return msgnr;
         }
+
+
+        
 
 
     }

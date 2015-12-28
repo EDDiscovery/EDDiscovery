@@ -37,7 +37,7 @@ namespace EDDiscovery
         public event DistancesLoaded OnDistancesLoaded;
         public EDSMSync edsmsync;
 
-        public EDDConfig eddConfig;
+        static public EDDConfig eddConfig;
 
         public EDDiscoveryForm()
         {
@@ -47,6 +47,24 @@ namespace EDDiscovery
 
             fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
             fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
+
+
+            try
+            {
+                string logpath = Path.Combine(Tools.GetAppDataDirectory(), "Log");
+                if (!Directory.Exists(logpath))
+                {
+                    Directory.CreateDirectory(logpath);
+                }
+
+            }
+            catch (Exception)
+            {
+
+                
+            }
+
+
 
             edsmsync = new EDSMSync(this);
 
@@ -761,6 +779,7 @@ namespace EDDiscovery
             db.PutSettingInt("FormTop", this.Top);
             db.PutSettingInt("FormLeft", this.Left);
             eddConfig.UseDistances = checkBox_Distances.Checked;
+            eddConfig.EDSMLog = checkBoxEDSMLog.Checked;
 
         }
 

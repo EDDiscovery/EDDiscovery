@@ -40,6 +40,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.checkBox_Distances = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxEDSMApiKey = new System.Windows.Forms.TextBox();
@@ -63,7 +64,7 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.checkBox_Distances = new System.Windows.Forms.CheckBox();
+            this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -170,6 +171,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.checkBoxEDSMLog);
             this.tabPage3.Controls.Add(this.checkBox_Distances);
             this.tabPage3.Controls.Add(this.label2);
             this.tabPage3.Controls.Add(this.label1);
@@ -183,6 +185,16 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_Distances
+            // 
+            this.checkBox_Distances.AutoSize = true;
+            this.checkBox_Distances.Location = new System.Drawing.Point(128, 136);
+            this.checkBox_Distances.Name = "checkBox_Distances";
+            this.checkBox_Distances.Size = new System.Drawing.Size(153, 17);
+            this.checkBox_Distances.TabIndex = 8;
+            this.checkBox_Distances.Text = "Get Distances from EDSM ";
+            this.checkBox_Distances.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -310,7 +322,7 @@
             this.statisticsToolStripMenuItem,
             this.setDefaultMapColourToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // addNewStarToolStripMenuItem
@@ -399,15 +411,15 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
-            // checkBox_Distances
+            // checkBoxEDSMLog
             // 
-            this.checkBox_Distances.AutoSize = true;
-            this.checkBox_Distances.Location = new System.Drawing.Point(128, 136);
-            this.checkBox_Distances.Name = "checkBox_Distances";
-            this.checkBox_Distances.Size = new System.Drawing.Size(153, 17);
-            this.checkBox_Distances.TabIndex = 8;
-            this.checkBox_Distances.Text = "Get Distances from EDSM ";
-            this.checkBox_Distances.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMLog.AutoSize = true;
+            this.checkBoxEDSMLog.Location = new System.Drawing.Point(128, 159);
+            this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
+            this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
+            this.checkBoxEDSMLog.TabIndex = 9;
+            this.checkBoxEDSMLog.Text = "Log EDSM requests";
+            this.checkBoxEDSMLog.UseVisualStyleBackColor = true;
             // 
             // EDDiscoveryForm
             // 
@@ -480,6 +492,7 @@
         private System.Windows.Forms.ToolStripMenuItem setDefaultMapColourToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox checkBox_Distances;
+        private System.Windows.Forms.CheckBox checkBoxEDSMLog;
     }
 }
 
