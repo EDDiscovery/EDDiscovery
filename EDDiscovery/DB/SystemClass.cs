@@ -263,6 +263,10 @@ namespace EDDiscovery.DB
                 o = dr["id_eddb"];
                 id_eddb = o == DBNull.Value ? 0 : (int)((long)o);
 
+                o = dr["population"];
+                population = o == DBNull.Value ? 0 : (int)((long)o);
+
+
                 o = dr["faction"];
                 faction = o == DBNull.Value ? null : (string)o;
 
@@ -478,7 +482,7 @@ namespace EDDiscovery.DB
                     cmd.Transaction = transaction;
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
-                    cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, faction, government_id, allegiance_id, primary_economy_id,  security, eddb_updated_at, state, needs_permit) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit)";
+                    cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id,  security, eddb_updated_at, state, needs_permit) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit)";
                     cmd.Parameters.AddWithValue("@name", name);
                     cmd.Parameters.AddWithValue("@x", x);
                     cmd.Parameters.AddWithValue("@y", y);
@@ -492,6 +496,7 @@ namespace EDDiscovery.DB
 
                     
                     cmd.Parameters.AddWithValue("@id_eddb", id_eddb);
+                    cmd.Parameters.AddWithValue("@population", population);
                     cmd.Parameters.AddWithValue("@faction", faction);
                     cmd.Parameters.AddWithValue("@government_id", government);
                     cmd.Parameters.AddWithValue("@allegiance_id", allegiance);
@@ -547,7 +552,7 @@ namespace EDDiscovery.DB
             {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit  where ID=@id";
+                cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit  where ID=@id";
 
                 cmd.Parameters.AddWithValue("@id", id); 
                 cmd.Parameters.AddWithValue("@name", name);
@@ -566,6 +571,7 @@ namespace EDDiscovery.DB
 
 
                 cmd.Parameters.AddWithValue("@id_eddb", id_eddb);
+                cmd.Parameters.AddWithValue("@population", population);
                 cmd.Parameters.AddWithValue("@faction", faction);
                 cmd.Parameters.AddWithValue("@government_id", government);
                 cmd.Parameters.AddWithValue("@allegiance_id", allegiance);

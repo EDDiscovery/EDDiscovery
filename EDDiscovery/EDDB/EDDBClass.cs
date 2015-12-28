@@ -237,7 +237,7 @@ namespace EDDiscovery2.EDDB
 
                             if (sysdb != null)  // Update system
                             {
-                                if (sysdb.eddb_updated_at != sys.eddb_updated_at)
+                                if (sysdb.eddb_updated_at != sys.eddb_updated_at ||sysdb.population!=sys.population)
                                 {
                                     sysdb.id_eddb = sys.id_eddb;
                                     sysdb.faction = sys.faction;
