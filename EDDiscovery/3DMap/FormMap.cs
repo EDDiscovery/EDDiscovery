@@ -77,7 +77,7 @@ namespace EDDiscovery2
                     textBox_From.Text = sys.name;
                 }
             }
-            toolStrip1.Renderer = new MyRenderer();
+            toolStripShowAllStars.Renderer = new MyRenderer();
         }
 
         public FormMap(SystemClass centerSystem, AutoCompleteStringCollection SystemNames) : this(SystemNames)
@@ -156,14 +156,31 @@ namespace EDDiscovery2
 
             datasets = new List<IData3DSet>();
 
-            var dataset = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
-
-            foreach (SystemClass si in StarList)
+            if (toolStripButtonShowAllStars.Checked)
             {
-                AddSystem(si, dataset);
-            }
-            datasets.Add(dataset);
+                bool addstations = !toolStripButtonStations.Checked;
+                var datasetS = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
 
+                foreach (SystemClass si in StarList)
+                {
+                    if (addstations  || si.population==0)
+                        AddSystem(si, datasetS);
+                }
+                datasets.Add(datasetS);
+            }
+
+
+            if (toolStripButtonStations.Checked)
+            {
+                var datasetS = new Data3DSetClass<PointData>("stations", Color.LightBlue, 1.0f);
+
+                foreach (SystemClass si in StarList)
+                {
+                   if (si.population>0)
+                        AddSystem(si, datasetS);
+                }
+                datasets.Add(datasetS);
+            }
 
             if (visitedSystems != null && visitedSystems.Any())
             {
@@ -203,24 +220,24 @@ namespace EDDiscovery2
                     }
                     else
                     {
-                        dataset = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                        var datasetvs = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
                         foreach (SystemPosition sp in colour)
                         {
                             SystemClass star = SystemData.GetSystem(sp.Name);
                             if (star != null && star.HasCoordinate)
                             {
                                 
-                                AddSystem(star, dataset);
+                                AddSystem(star, datasetvs);
                             }
                         }
-                        datasets.Add(dataset);
+                        datasets.Add(datasetvs);
                     }
 
                 }
             }
 
 
-            dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
+            var dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
 
             //GL.Enable(EnableCap.ProgramPointSize);
             dataset.Add(new PointData(0, 0, 0));
@@ -643,6 +660,16 @@ namespace EDDiscovery2
                 db.PutSettingString("DefaultMapCenter", sys.name);
                 if (CenterSystem.name != sys.name) SetCentersystem(sys);
             }
+        }
+
+        private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
+        {
+            SetCentersystem(CenterSystem);
+        }
+
+        private void toolStripButtonStations_Click(object sender, EventArgs e)
+        {
+            SetCentersystem(CenterSystem);
         }
     }
 }

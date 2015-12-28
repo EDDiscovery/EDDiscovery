@@ -40,11 +40,13 @@ namespace EDDiscovery2
             this.textBox_From = new System.Windows.Forms.TextBox();
             this.buttonCenter = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripShowAllStars = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonLastKnownPosition = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDrawLines = new System.Windows.Forms.ToolStripButton();
             this.buttonSetDefault = new System.Windows.Forms.Button();
-            this.toolStrip1.SuspendLayout();
+            this.toolStripButtonShowAllStars = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
+            this.toolStripShowAllStars.SuspendLayout();
             this.SuspendLayout();
             // 
             // glControl1
@@ -97,26 +99,28 @@ namespace EDDiscovery2
             this.label1.TabIndex = 18;
             this.label1.Text = "label1";
             // 
-            // toolStrip1
+            // toolStripShowAllStars
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButtonDrawLines});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(916, 25);
-            this.toolStrip1.TabIndex = 19;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStripShowAllStars.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonLastKnownPosition,
+            this.toolStripButtonDrawLines,
+            this.toolStripButtonShowAllStars,
+            this.toolStripButtonStations});
+            this.toolStripShowAllStars.Location = new System.Drawing.Point(0, 0);
+            this.toolStripShowAllStars.Name = "toolStripShowAllStars";
+            this.toolStripShowAllStars.Size = new System.Drawing.Size(916, 31);
+            this.toolStripShowAllStars.TabIndex = 19;
+            this.toolStripShowAllStars.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // toolStripButtonLastKnownPosition
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "Last known position";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripButtonLastKnownPosition.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonLastKnownPosition.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLastKnownPosition.Image")));
+            this.toolStripButtonLastKnownPosition.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonLastKnownPosition.Name = "toolStripButtonLastKnownPosition";
+            this.toolStripButtonLastKnownPosition.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonLastKnownPosition.Text = "Last known position";
+            this.toolStripButtonLastKnownPosition.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripButtonDrawLines
             // 
@@ -126,7 +130,7 @@ namespace EDDiscovery2
             this.toolStripButtonDrawLines.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDrawLines.Image")));
             this.toolStripButtonDrawLines.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDrawLines.Name = "toolStripButtonDrawLines";
-            this.toolStripButtonDrawLines.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonDrawLines.Size = new System.Drawing.Size(23, 28);
             this.toolStripButtonDrawLines.Text = "Draw lines";
             this.toolStripButtonDrawLines.Click += new System.EventHandler(this.toolStripButtonDrawLines_Click);
             // 
@@ -142,6 +146,33 @@ namespace EDDiscovery2
             this.buttonSetDefault.UseVisualStyleBackColor = true;
             this.buttonSetDefault.Click += new System.EventHandler(this.buttonSetDefault_Click);
             // 
+            // toolStripButtonShowAllStars
+            // 
+            this.toolStripButtonShowAllStars.Checked = true;
+            this.toolStripButtonShowAllStars.CheckOnClick = true;
+            this.toolStripButtonShowAllStars.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripButtonShowAllStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonShowAllStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonShowAllStars.Image")));
+            this.toolStripButtonShowAllStars.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonShowAllStars.Name = "toolStripButtonShowAllStars";
+            this.toolStripButtonShowAllStars.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonShowAllStars.Text = "Show all stars";
+            this.toolStripButtonShowAllStars.Click += new System.EventHandler(this.toolStripButtonShowAllStars_Click);
+            // 
+            // toolStripButtonStations
+            // 
+            this.toolStripButtonStations.Checked = true;
+            this.toolStripButtonStations.CheckOnClick = true;
+            this.toolStripButtonStations.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripButtonStations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonStations.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonStations.Image")));
+            this.toolStripButtonStations.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripButtonStations.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonStations.Name = "toolStripButtonStations";
+            this.toolStripButtonStations.Size = new System.Drawing.Size(28, 28);
+            this.toolStripButtonStations.Text = "Stations";
+            this.toolStripButtonStations.Click += new System.EventHandler(this.toolStripButtonStations_Click);
+            // 
             // FormMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -152,12 +183,12 @@ namespace EDDiscovery2
             this.Controls.Add(this.buttonCenter);
             this.Controls.Add(this.textBox_From);
             this.Controls.Add(this.glControl1);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStripShowAllStars);
             this.Name = "FormMap";
             this.Text = "3D Star Map";
             this.Load += new System.EventHandler(this.FormMap_Load);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStripShowAllStars.ResumeLayout(false);
+            this.toolStripShowAllStars.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,9 +201,11 @@ namespace EDDiscovery2
             internal TextBox textBox_From;
             private Button buttonCenter;
             private Label label1;
-        private ToolStrip toolStrip1;
-        private ToolStripButton toolStripButton1;
+        private ToolStrip toolStripShowAllStars;
+        private ToolStripButton toolStripButtonLastKnownPosition;
         private ToolStripButton toolStripButtonDrawLines;
         private Button buttonSetDefault;
+        private ToolStripButton toolStripButtonShowAllStars;
+        private ToolStripButton toolStripButtonStations;
     }
     }
