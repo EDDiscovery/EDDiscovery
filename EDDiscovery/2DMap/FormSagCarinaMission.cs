@@ -93,9 +93,13 @@ namespace EDDiscovery2
 
                     if (json != null)
                     {
+                        FGEImage fgeimg;
                         pfile = (JObject)JObject.Parse(json);
 
-                        FGEImage fgeimg = new FGEImage(fi.FullName.Replace(".json", ".png"));
+                        if (File.Exists(fi.FullName.Replace(".json", ".png")))
+                            fgeimg = new FGEImage(fi.FullName.Replace(".json", ".png"));
+                        else
+                            fgeimg = new FGEImage(fi.FullName.Replace(".json", ".jpg"));
 
                         fgeimg.TopLeft = new Point(pfile["x1"].Value<int>(), pfile["y1"].Value<int>());
                         fgeimg.pxTopLeft = new Point(pfile["px1"].Value<int>(), pfile["py1"].Value<int>());
