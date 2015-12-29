@@ -550,22 +550,13 @@ namespace EDDiscovery
 
         }
 
-    
-
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonMap_Click(object sender, EventArgs e)
         {
-
-
-            var map2 = new FormMap(_discoveryForm.SystemNames);
-            map2.visitedSystems = visitedSystems;
-            map2.Show();
-
+            var map = new FormMap(_discoveryForm.SystemNames);
+            map.visitedSystems = visitedSystems;
+            map.Show();
         }
 
-        private void textBox7_TextChanged(object sender, EventArgs e)
-        {
-
-        }
         private int lastRowIndex;
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {

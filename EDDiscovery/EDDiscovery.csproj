@@ -127,6 +127,7 @@
       <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="3DMap\Data3DSetClass.cs" />
+    <Compile Include="3DMap\Map3DManager.cs" />
     <Compile Include="DB\StationClass.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\VisitedSystemsClass.cs" />

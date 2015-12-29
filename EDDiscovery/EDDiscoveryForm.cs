@@ -3,12 +3,9 @@ using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDDB;
 using EDDiscovery2.EDSM;
-using EMK.Cartography;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,10 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EDDiscovery
@@ -28,25 +22,25 @@ namespace EDDiscovery
 
     public partial class EDDiscoveryForm : Form
     {
-        public readonly AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
-        public string CommanderName;
+        readonly string _fileTgcSystems;
+        readonly string _fileEDSMDistances;
+        private EDSMSync _edsmSync;
 
-        readonly string fileTgcSystems ;
-        readonly string fileEDSMDistances;
+        public readonly AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
+        public string CommanderName { get; private set; }
+        static public EDDConfig EDDConfig { get; private set; }
 
         public event DistancesLoaded OnDistancesLoaded;
-        public EDSMSync edsmsync;
 
-        static public EDDConfig eddConfig;
 
         public EDDiscoveryForm()
         {
             InitializeComponent();
 
-            eddConfig = new EDDConfig();
+            EDDConfig = new EDDConfig();
 
-            fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
-            fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
+            _fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
+            _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
 
             try
@@ -66,7 +60,7 @@ namespace EDDiscovery
 
 
 
-            edsmsync = new EDSMSync(this);
+            _edsmSync = new EDSMSync(this);
 
             trilaterationControl.InitControl(this);
             travelHistoryControl1.InitControl(this);
@@ -93,25 +87,11 @@ namespace EDDiscovery
         {
             try
             {
-                // Click once   System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVe‌​rsion
-                var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
-                var version = assemblyFullName.Split(',')[1].Split('=')[1];
-                Text = string.Format("EDDiscovery v{0}", version);
+                UpdateTitle();
                 EliteDangerous.CheckED();
-                SQLiteDBClass db = new SQLiteDBClass();
-                eddConfig.Update();
+                EDDConfig.Update();
 
-                var top = db.GetSettingInt("FormTop", -1);
-                if (top > 0)
-                {
-                    var left = db.GetSettingInt("FormLeft", -1);
-                    var height = db.GetSettingInt("FormHeight", -1);
-                    var width = db.GetSettingInt("FormWidth", -1);
-                    this.Top = top;
-                    this.Left = left;
-                    this.Height = height;
-                    this.Width = width;
-                }
+                RepositionForm();
 
                 labelPanelText.Text = "Loading. Please wait!";
                 panelInfo.Visible = true;
@@ -123,6 +103,7 @@ namespace EDDiscovery
                 // Default directory
                 string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
 
+                SQLiteDBClass db = new SQLiteDBClass();
                 bool auto = db.GetSettingBool("NetlogDirAutoMode", true);
                 if (auto)
                 {
@@ -138,10 +119,10 @@ namespace EDDiscovery
 
 
                 textBoxEDSMApiKey.Text = db.GetSettingString("EDSMApiKey", "");
-                checkBox_Distances.Checked = eddConfig.UseDistances;
-                checkBoxEDSMLog.Checked = eddConfig.EDSMLog;
+                checkBox_Distances.Checked = EDDConfig.UseDistances;
+                checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
 
-                checkboxSkipSlowUpdates.Checked = eddConfig.CanSkipSlowUpdates;
+                checkboxSkipSlowUpdates.Checked = EDDConfig.CanSkipSlowUpdates;
 #if DEBUG
                 checkboxSkipSlowUpdates.Visible = true;
 #endif
@@ -303,7 +284,7 @@ namespace EDDiscovery
         private bool CanSkipSlowUpdates()
         {
 #if DEBUG
-            return eddConfig.CanSkipSlowUpdates;
+            return EDDConfig.CanSkipSlowUpdates;
 #else
             return false;
 #endif
@@ -317,7 +298,7 @@ namespace EDDiscovery
             {
                 LogText("Checking for new EDDiscovery data" + Environment.NewLine);
 
-                GetNewRedWizzardFile(fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
+                GetNewRedWizzardFile(_fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
                 //GetNewRedWizzardFile(fileTgcDistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
             }
             catch (Exception ex)
@@ -396,7 +377,7 @@ namespace EDDiscovery
                 });
 
 
-                json = LoadJsonFile(fileTgcSystems);
+                json = LoadJsonFile(_fileTgcSystems);
                 List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
 
 
@@ -483,7 +464,7 @@ namespace EDDiscovery
             {
                 SQLiteDBClass db = new SQLiteDBClass();
 
-                if (eddConfig.UseDistances)
+                if (EDDConfig.UseDistances)
                 {
                     EDSMClass edsm = new EDSMClass();
                     EDDBClass eddb = new EDDBClass();
@@ -498,7 +479,7 @@ namespace EDDiscovery
                     {
                         LogText("Downloading mirrored EDSM distance data. (Might take some time)" + Environment.NewLine);
                         eddb.GetEDSMDistances();
-                        json = LoadJsonFile(fileEDSMDistances);
+                        json = LoadJsonFile(_fileEDSMDistances);
                         if (json != null)
                         {
                             LogText("Adding mirrored EDSM distance data." + Environment.NewLine);
@@ -533,7 +514,7 @@ namespace EDDiscovery
                     DistanceClass.Store(dists);
                     db.PutSettingString("EDSCLastDist", lstdist);
                 }
-                db.GetAllDistances(eddConfig.UseDistances);  // Load user added distances
+                db.GetAllDistances(EDDConfig.UseDistances);  // Load user added distances
                 OnDistancesLoaded();
 
             }
@@ -819,9 +800,9 @@ namespace EDDiscovery
             db.PutSettingInt("FormHeight", this.Height);
             db.PutSettingInt("FormTop", this.Top);
             db.PutSettingInt("FormLeft", this.Left);
-            eddConfig.UseDistances = checkBox_Distances.Checked;
-            eddConfig.EDSMLog = checkBoxEDSMLog.Checked;
-            eddConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
+            EDDConfig.UseDistances = checkBox_Distances.Checked;
+            EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
+            EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
         }
 
         private void routeControl1_Load(object sender, EventArgs e)
@@ -832,7 +813,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             travelHistoryControl1.netlog.StopMonitor();
-            edsmsync.StopSync();
+            _edsmSync.StopSync();
             SaveSettings();
         }
 
@@ -989,6 +970,29 @@ namespace EDDiscovery
 
         //Pleiades Sector WU-O B16-0
         //Pleiades Sector WU-O b6-0
+
+        private void UpdateTitle()
+        {
+            var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
+            var version = assemblyFullName.Split(',')[1].Split('=')[1];
+            Text = string.Format("EDDiscovery v{0}", version);
+        }
+
+        private void RepositionForm()
+        {
+            SQLiteDBClass db = new SQLiteDBClass();
+            var top = db.GetSettingInt("FormTop", -1);
+            if (top > 0)
+            {
+                var left = db.GetSettingInt("FormLeft", -1);
+                var height = db.GetSettingInt("FormHeight", -1);
+                var width = db.GetSettingInt("FormWidth", -1);
+                this.Top = top;
+                this.Left = left;
+                this.Height = height;
+                this.Width = width;
+            }
+        }
 
     }
 }
