@@ -40,6 +40,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.checkboxSkipSlowUpdates = new System.Windows.Forms.CheckBox();
             this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
             this.checkBox_Distances = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -60,13 +61,13 @@
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setDefaultMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -173,6 +174,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.checkboxSkipSlowUpdates);
             this.tabPage3.Controls.Add(this.checkBoxEDSMLog);
             this.tabPage3.Controls.Add(this.checkBox_Distances);
             this.tabPage3.Controls.Add(this.label2);
@@ -187,6 +189,18 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // checkboxSkipSlowUpdates
+            // 
+            this.checkboxSkipSlowUpdates.AutoSize = true;
+            this.checkboxSkipSlowUpdates.BackColor = System.Drawing.Color.Gold;
+            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(653, 96);
+            this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
+            this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
+            this.checkboxSkipSlowUpdates.TabIndex = 11;
+            this.checkboxSkipSlowUpdates.Text = "DEBUG ONLY: Skip slow updates on startup";
+            this.checkboxSkipSlowUpdates.UseVisualStyleBackColor = false;
+            this.checkboxSkipSlowUpdates.Visible = false;
             // 
             // checkBoxEDSMLog
             // 
@@ -335,7 +349,7 @@
             this.statisticsToolStripMenuItem,
             this.setDefaultMapColourToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // addNewStarToolStripMenuItem
@@ -379,6 +393,21 @@
             this.setDefaultMapColourToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.setDefaultMapColourToolStripMenuItem.Text = "Set Default Map Colour";
             this.setDefaultMapColourToolStripMenuItem.Click += new System.EventHandler(this.setDefaultMapColourToolStripMenuItem_Click);
+            // 
+            // adminToolStripMenuItem
+            // 
+            this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.forceEDDBUpdateToolStripMenuItem});
+            this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
+            this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.adminToolStripMenuItem.Text = "Admin";
+            // 
+            // forceEDDBUpdateToolStripMenuItem
+            // 
+            this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
+            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.forceEDDBUpdateToolStripMenuItem.Text = "Force EDDB update";
+            this.forceEDDBUpdateToolStripMenuItem.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -424,21 +453,6 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
-            // adminToolStripMenuItem
-            // 
-            this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.forceEDDBUpdateToolStripMenuItem});
-            this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
-            this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.adminToolStripMenuItem.Text = "Admin";
-            // 
-            // forceEDDBUpdateToolStripMenuItem
-            // 
-            this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
-            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.forceEDDBUpdateToolStripMenuItem.Text = "Force EDDB update";
-            this.forceEDDBUpdateToolStripMenuItem.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
-            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -451,9 +465,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "EDDiscoveryForm";
-            this.Text = "Form1";
+            this.Text = "EDDiscovery";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EDDiscoveryForm_FormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.tabControl1.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);
@@ -513,6 +527,7 @@
         private System.Windows.Forms.CheckBox checkBoxEDSMLog;
         private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem forceEDDBUpdateToolStripMenuItem;
+        private System.Windows.Forms.CheckBox checkboxSkipSlowUpdates;
     }
 }
 
