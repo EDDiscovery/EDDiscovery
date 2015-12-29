@@ -63,7 +63,7 @@ namespace EDDiscovery2.EDSM
                 // Get the response.
                 //request.Timeout = 740 * 1000;
 
-                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                if (EDDiscoveryForm.EDDConfig.EDSMLog)
                     WriteEDSMLog("POST " + request.RequestUri, postData);
 
                 WebResponse response = request.GetResponse();
@@ -81,7 +81,7 @@ namespace EDDiscovery2.EDSM
                 dataStream.Close();
                 response.Close();
 
-                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
                     WriteEDSMLog(responseFromServer, "");
                 }
@@ -92,7 +92,7 @@ namespace EDDiscovery2.EDSM
             {
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
                     WriteEDSMLog("Exception" + ex.Message, "");
                 }
@@ -121,7 +121,7 @@ namespace EDDiscovery2.EDSM
                 request.Headers.Add("Accept-Encoding", "gzip,deflate");
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                if (EDDiscoveryForm.EDDConfig.EDSMLog)
                     WriteEDSMLog("GET " + request.RequestUri, "");
 
 
@@ -142,7 +142,7 @@ namespace EDDiscovery2.EDSM
                 dataStream.Close();
                 response.Close();
 
-                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
                     WriteEDSMLog(responseFromServer, "");
                 }
@@ -154,7 +154,7 @@ namespace EDDiscovery2.EDSM
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                if (EDDiscoveryForm.eddConfig.EDSMLog)
+                if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
                     WriteEDSMLog("Exception" + ex.Message, "");
                 }
@@ -169,7 +169,7 @@ namespace EDDiscovery2.EDSM
         {
             try
             {
-                string filename = Path.Combine(Tools.GetAppDataDirectory(), "Log", "edsm"+EDDiscoveryForm.eddConfig.LogIndex+".log");
+                string filename = Path.Combine(Tools.GetAppDataDirectory(), "Log", "edsm"+EDDiscoveryForm.EDDConfig.LogIndex+".log");
 
                 using (StreamWriter w = File.AppendText(filename))
                 {
