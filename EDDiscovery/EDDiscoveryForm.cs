@@ -89,7 +89,7 @@ namespace EDDiscovery
             tabControl1.SelectedIndex = 0;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
             try
             {
@@ -139,6 +139,12 @@ namespace EDDiscovery
 
                 textBoxEDSMApiKey.Text = db.GetSettingString("EDSMApiKey", "");
                 checkBox_Distances.Checked = eddConfig.UseDistances;
+                checkBoxEDSMLog.Checked = eddConfig.EDSMLog;
+
+                checkboxSkipSlowUpdates.Checked = eddConfig.CanSkipSlowUpdates;
+#if DEBUG
+                checkboxSkipSlowUpdates.Visible = true;
+#endif
 
                 if (EliteDangerous.EDRunning)
                 {
@@ -166,11 +172,10 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Form1_Load exception: " + ex.Message);
+                System.Windows.Forms.MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message);
                 System.Windows.Forms.MessageBox.Show("Trace: " + ex.StackTrace);
             }
         }
-
 
 
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
@@ -235,10 +240,11 @@ namespace EDDiscovery
                 // Check for a new installer    
                 CheckForNewInstaller();
 
+                LogLine($"{Environment.NewLine}{Environment.NewLine}Loading completed!{Environment.NewLine}");
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Form1_Load exception: " + ex.Message);
+                System.Windows.Forms.MessageBox.Show("EDDiscovery_Load exception: " + ex.Message);
                 System.Windows.Forms.MessageBox.Show("Trace: " + ex.StackTrace);
                 travelHistoryControl1.Enabled = true;
 
@@ -292,6 +298,15 @@ namespace EDDiscovery
             }
             else
                 return false;
+        }
+
+        private bool CanSkipSlowUpdates()
+        {
+#if DEBUG
+            return eddConfig.CanSkipSlowUpdates;
+#else
+            return false;
+#endif
         }
 
         private void GetRedWizzardFiles()
@@ -399,12 +414,19 @@ namespace EDDiscovery
                     DBUpdateEDDB(eddb);
                 }
 
-                string retstr = edsm.GetNewSystems(db);
-                Invoke((MethodInvoker)delegate
+                if (CanSkipSlowUpdates())
                 {
-                    TravelHistoryControl.LogText(retstr);
-                });
-
+                    LogLine("Skipping loading updates (DEBUG option).");
+                    LogLine("  Need to turn this back on again? Look in the Settings tab.");
+                }
+                else
+                {
+                    string retstr = edsm.GetNewSystems(db);
+                    Invoke((MethodInvoker)delegate
+                    {
+                        TravelHistoryControl.LogText(retstr);
+                    });
+                }
 
 
                 db.GetAllSystemNotes();
@@ -654,10 +676,9 @@ namespace EDDiscovery
             try
             {
                 Invoke((MethodInvoker)delegate
-                           {
-                               TravelHistoryControl.LogText(text);
-
-                           });
+                {
+                    TravelHistoryControl.LogText(text);
+                });
             }
             catch
             {
@@ -679,6 +700,19 @@ namespace EDDiscovery
             }
         }
 
+        public void LogLine(string text)
+        {
+            try
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText(text + Environment.NewLine);
+                });
+            }
+            catch
+            {
+            }
+        }
 
         public void LogLine(string text, Color col)
         {
@@ -787,7 +821,7 @@ namespace EDDiscovery
             db.PutSettingInt("FormLeft", this.Left);
             eddConfig.UseDistances = checkBox_Distances.Checked;
             eddConfig.EDSMLog = checkBoxEDSMLog.Checked;
-
+            eddConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
         }
 
         private void routeControl1_Load(object sender, EventArgs e)
