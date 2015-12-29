@@ -11,8 +11,9 @@ namespace EDDiscovery2
         private bool _useDistances;
         private bool _EDSMLog;
         readonly public string LogIndex;
+        private bool _canSkipSlowUpdates = false;
 
-        SQLiteDBClass db = new SQLiteDBClass();
+        SQLiteDBClass _db = new SQLiteDBClass();
 
         public EDDConfig()
         {
@@ -29,8 +30,7 @@ namespace EDDiscovery2
             set
             {
                 _useDistances = value;
-                db.PutSettingBool("EDSMDistances", value);
-
+                _db.PutSettingBool("EDSMDistances", value);
             }
         }
 
@@ -44,16 +44,28 @@ namespace EDDiscovery2
             set
             {
                 _EDSMLog = value;
-                db.PutSettingBool("EDSMLog", value);
+                _db.PutSettingBool("EDSMLog", value);
+            }
+        }
+
+        public bool CanSkipSlowUpdates
+        {
+            get
+            {
+                return _canSkipSlowUpdates;
+            }
+            set
+            {
+                _canSkipSlowUpdates = value;
+                _db.PutSettingBool("CanSkipSlowUpdates", value);
             }
         }
 
         public void Update()
         {
-            _useDistances = db.GetSettingBool("EDSMDistances", false);
-            _EDSMLog = db.GetSettingBool("EDSMLog", false);
+            _useDistances = _db.GetSettingBool("EDSMDistances", false);
+            _EDSMLog = _db.GetSettingBool("EDSMLog", false);
+            _canSkipSlowUpdates = _db.GetSettingBool("CanSkipSlowUpdates", false);
         }
-
-        
     }
 }
