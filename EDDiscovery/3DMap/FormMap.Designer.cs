@@ -43,10 +43,16 @@ namespace EDDiscovery2
             this.toolStripShowAllStars = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonLastKnownPosition = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDrawLines = new System.Windows.Forms.ToolStripButton();
-            this.buttonSetDefault = new System.Windows.Forms.Button();
             this.toolStripButtonShowAllStars = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonGrid = new System.Windows.Forms.ToolStripButton();
+            this.buttonSetDefault = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelSystem = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelCoordinates = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelZoom = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripShowAllStars.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // glControl1
@@ -55,9 +61,9 @@ namespace EDDiscovery2
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.glControl1.BackColor = System.Drawing.Color.Black;
-            this.glControl1.Location = new System.Drawing.Point(12, 33);
+            this.glControl1.Location = new System.Drawing.Point(0, 33);
             this.glControl1.Name = "glControl1";
-            this.glControl1.Size = new System.Drawing.Size(892, 500);
+            this.glControl1.Size = new System.Drawing.Size(918, 496);
             this.glControl1.TabIndex = 0;
             this.glControl1.VSync = false;
             this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
@@ -72,7 +78,7 @@ namespace EDDiscovery2
             this.textBox_From.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_From.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_From.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_From.Location = new System.Drawing.Point(363, 7);
+            this.textBox_From.Location = new System.Drawing.Point(365, 7);
             this.textBox_From.Name = "textBox_From";
             this.textBox_From.Size = new System.Drawing.Size(125, 20);
             this.textBox_From.TabIndex = 16;
@@ -81,7 +87,7 @@ namespace EDDiscovery2
             // buttonCenter
             // 
             this.buttonCenter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCenter.Location = new System.Drawing.Point(494, 5);
+            this.buttonCenter.Location = new System.Drawing.Point(496, 5);
             this.buttonCenter.Name = "buttonCenter";
             this.buttonCenter.Size = new System.Drawing.Size(75, 23);
             this.buttonCenter.TabIndex = 17;
@@ -93,7 +99,7 @@ namespace EDDiscovery2
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(656, 10);
+            this.label1.Location = new System.Drawing.Point(658, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 18;
@@ -105,10 +111,11 @@ namespace EDDiscovery2
             this.toolStripButtonLastKnownPosition,
             this.toolStripButtonDrawLines,
             this.toolStripButtonShowAllStars,
-            this.toolStripButtonStations});
+            this.toolStripButtonStations,
+            this.toolStripButtonGrid});
             this.toolStripShowAllStars.Location = new System.Drawing.Point(0, 0);
             this.toolStripShowAllStars.Name = "toolStripShowAllStars";
-            this.toolStripShowAllStars.Size = new System.Drawing.Size(916, 31);
+            this.toolStripShowAllStars.Size = new System.Drawing.Size(918, 31);
             this.toolStripShowAllStars.TabIndex = 19;
             this.toolStripShowAllStars.Text = "toolStrip1";
             // 
@@ -133,18 +140,6 @@ namespace EDDiscovery2
             this.toolStripButtonDrawLines.Size = new System.Drawing.Size(23, 28);
             this.toolStripButtonDrawLines.Text = "Draw lines";
             this.toolStripButtonDrawLines.Click += new System.EventHandler(this.toolStripButtonDrawLines_Click);
-            // 
-            // buttonSetDefault
-            // 
-            this.buttonSetDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSetDefault.Location = new System.Drawing.Point(575, 5);
-            this.buttonSetDefault.Name = "buttonSetDefault";
-            this.buttonSetDefault.Size = new System.Drawing.Size(75, 23);
-            this.buttonSetDefault.TabIndex = 20;
-            this.buttonSetDefault.Text = "Set Default";
-            this.buttonSetDefault.UseCompatibleTextRendering = true;
-            this.buttonSetDefault.UseVisualStyleBackColor = true;
-            this.buttonSetDefault.Click += new System.EventHandler(this.buttonSetDefault_Click);
             // 
             // toolStripButtonShowAllStars
             // 
@@ -173,11 +168,66 @@ namespace EDDiscovery2
             this.toolStripButtonStations.Text = "Stations";
             this.toolStripButtonStations.Click += new System.EventHandler(this.toolStripButtonStations_Click);
             // 
+            // toolStripButtonGrid
+            // 
+            this.toolStripButtonGrid.CheckOnClick = true;
+            this.toolStripButtonGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonGrid.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGrid.Image")));
+            this.toolStripButtonGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonGrid.Name = "toolStripButtonGrid";
+            this.toolStripButtonGrid.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonGrid.Text = "Grid";
+            this.toolStripButtonGrid.ToolTipText = "Show Grid";
+            this.toolStripButtonGrid.Click += new System.EventHandler(this.toolStripButtonGrud_Click);
+            // 
+            // buttonSetDefault
+            // 
+            this.buttonSetDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSetDefault.Location = new System.Drawing.Point(577, 5);
+            this.buttonSetDefault.Name = "buttonSetDefault";
+            this.buttonSetDefault.Size = new System.Drawing.Size(75, 23);
+            this.buttonSetDefault.TabIndex = 20;
+            this.buttonSetDefault.Text = "Set Default";
+            this.buttonSetDefault.UseCompatibleTextRendering = true;
+            this.buttonSetDefault.UseVisualStyleBackColor = true;
+            this.buttonSetDefault.Click += new System.EventHandler(this.buttonSetDefault_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelSystem,
+            this.toolStripStatusLabelCoordinates,
+            this.toolStripStatusLabelZoom});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 532);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(918, 22);
+            this.statusStrip1.TabIndex = 21;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelSystem
+            // 
+            this.toolStripStatusLabelSystem.Name = "toolStripStatusLabelSystem";
+            this.toolStripStatusLabelSystem.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabelSystem.Text = "toolStripStatusLabel1";
+            // 
+            // toolStripStatusLabelCoordinates
+            // 
+            this.toolStripStatusLabelCoordinates.Name = "toolStripStatusLabelCoordinates";
+            this.toolStripStatusLabelCoordinates.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabelCoordinates.Text = "toolStripStatusLabel2";
+            // 
+            // toolStripStatusLabelZoom
+            // 
+            this.toolStripStatusLabelZoom.Name = "toolStripStatusLabelZoom";
+            this.toolStripStatusLabelZoom.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabelZoom.Text = "toolStripStatusLabel1";
+            // 
             // FormMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(916, 545);
+            this.ClientSize = new System.Drawing.Size(918, 554);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.buttonSetDefault);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonCenter);
@@ -189,6 +239,8 @@ namespace EDDiscovery2
             this.Load += new System.EventHandler(this.FormMap_Load);
             this.toolStripShowAllStars.ResumeLayout(false);
             this.toolStripShowAllStars.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -207,5 +259,10 @@ namespace EDDiscovery2
         private Button buttonSetDefault;
         private ToolStripButton toolStripButtonShowAllStars;
         private ToolStripButton toolStripButtonStations;
+        private ToolStripButton toolStripButtonGrid;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel toolStripStatusLabelSystem;
+        private ToolStripStatusLabel toolStripStatusLabelCoordinates;
+        private ToolStripStatusLabel toolStripStatusLabelZoom;
     }
     }
