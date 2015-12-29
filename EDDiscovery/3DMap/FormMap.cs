@@ -37,8 +37,9 @@ namespace EDDiscovery2
 
 
 
-        private const int ZoomMax = 15;
+        private const int ZoomMax = 100;
         private const double ZoomMin = 0.005;
+        private const double ZoomFact = 1.2589254117941672104239541063958;
         private readonly AutoCompleteStringCollection _systemNames;
         bool loaded = false;
 
@@ -155,6 +156,27 @@ namespace EDDiscovery2
             InitGenerateDataSet();
 
             datasets = new List<IData3DSet>();
+
+
+            if (toolStripButtonGrid.Checked)
+            {
+                bool addstations = !toolStripButtonStations.Checked;
+                var datasetGrid = new Data3DSetClass<LineData>("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#ff7100"), 1.0f);
+
+                for (int xx = -40000; xx <= 40000; xx += 1000)
+                    {
+                        datasetGrid.Add(new LineData(xx - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.x  - - 20000,
+                            xx - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - 70000));
+                    }
+                    for (int zz = -20000; zz <= 70000; zz += 1000)
+                                        datasetGrid.Add(new LineData(-40000 - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - zz,
+                         40000 - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - zz));
+
+
+
+                    datasets.Add(datasetGrid);
+            }
+
 
             if (toolStripButtonShowAllStars.Checked)
             {
@@ -574,9 +596,11 @@ namespace EDDiscovery2
 
         private void OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Delta > 0 && zoom < ZoomMax) zoom *= 1.1f;
-            if (e.Delta < 0 && zoom > ZoomMin) zoom /= 1.1f;
+            if (e.Delta > 0 && zoom < ZoomMax) zoom *= (float)ZoomFact;
+            if (e.Delta < 0 && zoom > ZoomMin) zoom /= (float)ZoomFact;
 
+            //System.Diagnostics.Trace.WriteLine("Zoom:" + zoom + " : W:" + (2000/ zoom).ToString("0"));
+            UpdateStatus();
             SetupCursorXYZ();
 
             SetupViewport();
@@ -633,8 +657,15 @@ namespace EDDiscovery2
             {
                 CenterSystem = SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             }
+            UpdateStatus();
+            //label1.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
+        }
 
-            label1.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
+        private void UpdateStatus()
+        {
+            toolStripStatusLabelSystem.Text = CenterSystem.name;
+            toolStripStatusLabelCoordinates.Text = string.Format("x:{0} y:{1} z:{2}", CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
+            toolStripStatusLabelZoom.Text = "Width:" + (2000 / zoom).ToString("0");
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -668,6 +699,11 @@ namespace EDDiscovery2
         }
 
         private void toolStripButtonStations_Click(object sender, EventArgs e)
+        {
+            SetCentersystem(CenterSystem);
+        }
+
+        private void toolStripButtonGrud_Click(object sender, EventArgs e)
         {
             SetCentersystem(CenterSystem);
         }
