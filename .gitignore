@@ -2,3 +2,4 @@ EDDiscovery/bin/
 EDDiscovery/obj/
 packages/
 .vs
+*.csproj.user
