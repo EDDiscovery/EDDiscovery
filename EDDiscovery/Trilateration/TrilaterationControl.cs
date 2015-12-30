@@ -523,7 +523,7 @@ namespace EDDiscovery
             get
             {
                 var lastKnown = (from systems
-                    in _discoveryForm.visitedSystems
+                    in _discoveryForm.VisitedSystems
                     where systems.curSystem != null && systems.curSystem.HasCoordinate
                     orderby systems.time descending
                     select systems.curSystem).FirstOrDefault();
@@ -537,7 +537,7 @@ namespace EDDiscovery
             get
             {
                 var currentKnown = (from systems
-                    in _discoveryForm.visitedSystems
+                    in _discoveryForm.VisitedSystems
                                  orderby systems.time descending
                                  select systems.curSystem).FirstOrDefault();
                 return currentKnown;
@@ -731,12 +731,12 @@ namespace EDDiscovery
         {
             var centerSystem = TargetSystem;
             if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = LastKnownSystem;
-            FormMap map2 = new FormMap(centerSystem, _discoveryForm.SystemNames)
-            {
-                ReferenceSystems = CurrentReferenceSystems.ToList(),
-                visitedSystems = _discoveryForm.visitedSystems
-            };
-            map2.Show();
+            var map = _discoveryForm.Map;
+
+            map.Instance.Reset();
+            map.Instance.CenterSystem = centerSystem;
+            map.Instance.ReferenceSystems = CurrentReferenceSystems.ToList();
+            map.Show();
         }
 
         private void dataGridViewDistances_CellClick(object sender, DataGridViewCellEventArgs e)
