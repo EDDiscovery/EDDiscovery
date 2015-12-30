@@ -27,12 +27,12 @@ namespace EDDiscovery
         private EDSMSync _edsmSync;
         private SQLiteDBClass _db = new SQLiteDBClass();
 
-        public readonly AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
+        public AutoCompleteStringCollection SystemNames { get; private set; }
         public string CommanderName { get; private set; }
         static public EDDConfig EDDConfig { get; private set; }
+        public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
         public event DistancesLoaded OnDistancesLoaded;
-
 
         public EDDiscoveryForm()
         {
@@ -41,8 +41,7 @@ namespace EDDiscovery
             EDDConfig = new EDDConfig();
 
             _fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
-            _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
-
+            _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");        
 
             string logpath="";
             try
@@ -64,6 +63,9 @@ namespace EDDiscovery
             trilaterationControl.InitControl(this);
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
+
+            SystemNames = new AutoCompleteStringCollection();
+            Map = new EDDiscovery2._3DMap.MapManager();
         }
 
         public TravelHistoryControl TravelControl
@@ -381,7 +383,7 @@ namespace EDDiscovery
 
         private Thread ThreadEDDB;
 
-        public List<SystemPosition> visitedSystems
+        public List<SystemPosition> VisitedSystems
         {
             get { return travelHistoryControl1.visitedSystems; }
         }
@@ -452,8 +454,8 @@ namespace EDDiscovery
                     _db.PutSettingString("EDSCLastDist", lstdist);
                 }
                 _db.GetAllDistances(EDDConfig.UseDistances);  // Load user added distances
+                initMap();
                 OnDistancesLoaded();
-
             }
             catch (Exception ex)
             {
@@ -987,6 +989,13 @@ namespace EDDiscovery
                 labelPanelText.Text = "Elite Dangerous is not logging system names!";
                 panelInfo.BackColor = Color.Salmon;
             }
+        }
+
+        private void initMap()
+        {
+            Map.SystemNames = SystemNames;
+            Map.VisitedSystems = VisitedSystems;
+            Map.Prepare();
         }
     }
 }

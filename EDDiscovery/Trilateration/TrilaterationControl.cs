@@ -523,7 +523,7 @@ namespace EDDiscovery
             get
             {
                 var lastKnown = (from systems
-                    in _discoveryForm.visitedSystems
+                    in _discoveryForm.VisitedSystems
                     where systems.curSystem != null && systems.curSystem.HasCoordinate
                     orderby systems.time descending
                     select systems.curSystem).FirstOrDefault();
@@ -537,7 +537,7 @@ namespace EDDiscovery
             get
             {
                 var currentKnown = (from systems
-                    in _discoveryForm.visitedSystems
+                    in _discoveryForm.VisitedSystems
                                  orderby systems.time descending
                                  select systems.curSystem).FirstOrDefault();
                 return currentKnown;
@@ -734,7 +734,7 @@ namespace EDDiscovery
             FormMap map2 = new FormMap(centerSystem, _discoveryForm.SystemNames)
             {
                 ReferenceSystems = CurrentReferenceSystems.ToList(),
-                visitedSystems = _discoveryForm.visitedSystems
+                visitedSystems = _discoveryForm.VisitedSystems
             };
             map2.Show();
         }

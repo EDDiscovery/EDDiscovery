@@ -72,7 +72,7 @@ namespace EDDiscovery2.EDSM
 
                 // Send Unsynced system to EDSM.
 
-                List<SystemPosition> systems = (from s in mainForm.visitedSystems where s.vs !=null && s.vs.EDSM_sync == false select s).ToList<SystemPosition>();
+                List<SystemPosition> systems = (from s in mainForm.VisitedSystems where s.vs !=null && s.vs.EDSM_sync == false select s).ToList<SystemPosition>();
                 mainForm.LogLine("EDSM: Sending" +  systems.Count.ToString() + " flightlog entries", Color.Black);
                 foreach (var system in systems)
                 {
@@ -132,7 +132,7 @@ namespace EDDiscovery2.EDSM
                 int defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
                 foreach (var system in log)
                 {
-                    SystemPosition ps2 = (from c in mainForm.visitedSystems where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
+                    SystemPosition ps2 = (from c in mainForm.VisitedSystems where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
                     if (ps2 == null)  // Add to local DB...
                     {
                         if (tlu == null) // If we dontt have a travellogunit yet then create it. 
