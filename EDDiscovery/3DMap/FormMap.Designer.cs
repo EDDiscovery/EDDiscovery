@@ -37,9 +37,9 @@ namespace EDDiscovery2
             {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMap));
             this.glControl1 = new OpenTK.GLControl();
-            this.textBox_From = new System.Windows.Forms.TextBox();
+            this.textboxFrom = new System.Windows.Forms.TextBox();
             this.buttonCenter = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelSystemCoords = new System.Windows.Forms.Label();
             this.toolStripShowAllStars = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonLastKnownPosition = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDrawLines = new System.Windows.Forms.ToolStripButton();
@@ -73,16 +73,16 @@ namespace EDDiscovery2
             this.glControl1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.OnMouseWheel);
             this.glControl1.Resize += new System.EventHandler(this.glControl1_Resize);
             // 
-            // textBox_From
+            // textboxFrom
             // 
-            this.textBox_From.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_From.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_From.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_From.Location = new System.Drawing.Point(365, 7);
-            this.textBox_From.Name = "textBox_From";
-            this.textBox_From.Size = new System.Drawing.Size(125, 20);
-            this.textBox_From.TabIndex = 16;
-            this.textBox_From.Text = "Sol";
+            this.textboxFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxFrom.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textboxFrom.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textboxFrom.Location = new System.Drawing.Point(365, 7);
+            this.textboxFrom.Name = "textboxFrom";
+            this.textboxFrom.Size = new System.Drawing.Size(125, 20);
+            this.textboxFrom.TabIndex = 16;
+            this.textboxFrom.Text = "Sol";
             // 
             // buttonCenter
             // 
@@ -95,15 +95,15 @@ namespace EDDiscovery2
             this.buttonCenter.UseVisualStyleBackColor = true;
             this.buttonCenter.Click += new System.EventHandler(this.buttonCenter_Click);
             // 
-            // label1
+            // labelSystemCoords
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(658, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 18;
-            this.label1.Text = "label1";
+            this.labelSystemCoords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelSystemCoords.AutoSize = true;
+            this.labelSystemCoords.Location = new System.Drawing.Point(658, 10);
+            this.labelSystemCoords.Name = "labelSystemCoords";
+            this.labelSystemCoords.Size = new System.Drawing.Size(57, 13);
+            this.labelSystemCoords.TabIndex = 18;
+            this.labelSystemCoords.Text = "Sol x=0.00";
             // 
             // toolStripShowAllStars
             // 
@@ -229,13 +229,14 @@ namespace EDDiscovery2
             this.ClientSize = new System.Drawing.Size(918, 554);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.buttonSetDefault);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelSystemCoords);
             this.Controls.Add(this.buttonCenter);
-            this.Controls.Add(this.textBox_From);
+            this.Controls.Add(this.textboxFrom);
             this.Controls.Add(this.glControl1);
             this.Controls.Add(this.toolStripShowAllStars);
             this.Name = "FormMap";
             this.Text = "3D Star Map";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMap_FormClosing);
             this.Load += new System.EventHandler(this.FormMap_Load);
             this.toolStripShowAllStars.ResumeLayout(false);
             this.toolStripShowAllStars.PerformLayout();
@@ -250,9 +251,9 @@ namespace EDDiscovery2
             #endregion
 
             private OpenTK.GLControl glControl1;
-            internal TextBox textBox_From;
+            internal TextBox textboxFrom;
             private Button buttonCenter;
-            private Label label1;
+            private Label labelSystemCoords;
         private ToolStrip toolStripShowAllStars;
         private ToolStripButton toolStripButtonLastKnownPosition;
         private ToolStripButton toolStripButtonDrawLines;
