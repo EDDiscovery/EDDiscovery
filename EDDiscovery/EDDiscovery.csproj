@@ -150,6 +150,7 @@
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
+    <Compile Include="Prospecting\Material.cs" />
     <Compile Include="EMK\Arc.cs" />
     <Compile Include="EMK\AStar.cs" />
     <Compile Include="EMK\Graph.cs" />
