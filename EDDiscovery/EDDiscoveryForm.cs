@@ -208,6 +208,12 @@ namespace EDDiscovery
 
         }
 
+        public void updateMapData()
+        {
+            Map.Instance.SystemNames = SystemNames;
+            Map.Instance.VisitedSystems = VisitedSystems;
+        }
+
         private bool DownloadMapFile(string file)
         {
             EDDBClass eddb = new EDDBClass();
@@ -454,7 +460,7 @@ namespace EDDiscovery
                     _db.PutSettingString("EDSCLastDist", lstdist);
                 }
                 _db.GetAllDistances(EDDConfig.UseDistances);  // Load user added distances
-                initMap();
+                updateMapData();
                 OnDistancesLoaded();
             }
             catch (Exception ex)
@@ -991,11 +997,5 @@ namespace EDDiscovery
             }
         }
 
-        private void initMap()
-        {
-            Map.SystemNames = SystemNames;
-            Map.VisitedSystems = VisitedSystems;
-            Map.Prepare();
-        }
     }
 }

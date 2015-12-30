@@ -552,7 +552,11 @@ namespace EDDiscovery
 
         private void buttonMap_Click(object sender, EventArgs e)
         {
-            _discoveryForm.Map.Show();
+            var map = _discoveryForm.Map;
+            _discoveryForm.updateMapData();
+            map.Instance.Reset();
+            map.Instance.CenterSystemName = textBoxSystem.Text.Trim();
+            map.Show();
         }
 
         private int lastRowIndex;

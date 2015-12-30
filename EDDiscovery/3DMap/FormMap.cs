@@ -40,22 +40,21 @@ namespace EDDiscovery2
         private const int ZoomMax = 100;
         private const double ZoomMin = 0.005;
         private const double ZoomFact = 1.2589254117941672104239541063958;
-        private readonly AutoCompleteStringCollection _systemNames;
-        bool loaded = false;
+        private AutoCompleteStringCollection _systemNames;
+        private SystemClass _centerSystem;
+        private bool loaded = false;
 
-        float x = 0;
-        float y = 0;
-        float z = 0;
-        float zoom = 1;
-        float xang = 0;
-        float yang = 90;
+        private float x = 0;
+        private float y = 0;
+        private float z = 0;
+        private float zoom = 1;
+        private float xang = 0;
+        private float yang = 90;
 
         private Point MouseStartRotate;
         private Point MouseStartTranslate;
-        private SystemClass CenterSystem;
 
         public List<SystemClass> StarList;
-        public List<SystemPosition> visitedSystems;
         public List<SystemClass> ReferenceSystems;
         private Dictionary<string, SystemClass> VisitedStars;
 
@@ -63,29 +62,79 @@ namespace EDDiscovery2
 
         public bool ShowTril;
 
-        public FormMap(AutoCompleteStringCollection SystemNames)
+        public List<SystemPosition> VisitedSystems { get; set; }
+
+        public SystemClass CenterSystem {
+            get
+            {
+                return _centerSystem;
+            }
+            set
+            {
+                if (value != null && value.HasCoordinate)
+                {
+                    _centerSystem = value;
+                }
+                else
+                {
+                    _centerSystem = null;
+                }
+            }
+        }
+
+        public String CenterSystemName
         {
-            _systemNames = SystemNames;
+            get
+            {
+                if (CenterSystem != null)
+                {
+                    return CenterSystem.name;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            set
+            {
+                if (!String.IsNullOrWhiteSpace(value))
+                {
+                    CenterSystem = SystemData.GetSystem(value.Trim());
+                }
+            }
+        }
+
+        public AutoCompleteStringCollection SystemNames {
+            get
+            {
+                return _systemNames;
+            }
+            set
+            {
+                _systemNames = value;
+            }
+        }
+
+        public FormMap()
+        {
             InitializeComponent();
+        }
+
+        public void Prepare()
+        {
             if (CenterSystem == null)
             {
                 var db = new SQLiteDBClass();
                 string defaultCenter = db.GetSettingString("DefaultMapCenter", null);
-                if (!String.IsNullOrWhiteSpace( defaultCenter))
-                {
-                    SystemClass sys = SystemData.GetSystem(defaultCenter);
-                    CenterSystem = sys;
-                    textBox_From.Text = sys.name;
-                }
+                OrientateMapAroundSystem(defaultCenter);
+            }
+            else
+            {
+                OrientateMapAroundSystem(CenterSystem);
+
             }
             toolStripShowAllStars.Renderer = new MyRenderer();
         }
-
-        public FormMap(SystemClass centerSystem, AutoCompleteStringCollection SystemNames) : this(SystemNames)
-        {
-            if (centerSystem != null && centerSystem.HasCoordinate) CenterSystem = centerSystem;
-        }
-
 
         /// <summary>
         /// Loads Control
@@ -131,9 +180,9 @@ namespace EDDiscovery2
         {
             VisitedStars = new Dictionary<string, SystemClass>();
 
-            if (visitedSystems != null)
+            if (VisitedSystems != null)
             {
-                foreach (SystemPosition sp in visitedSystems)
+                foreach (SystemPosition sp in VisitedSystems)
                 {
                     SystemClass star = SystemData.GetSystem(sp.Name);
                     if (star != null && star.HasCoordinate)
@@ -204,10 +253,10 @@ namespace EDDiscovery2
                 datasets.Add(datasetS);
             }
 
-            if (visitedSystems != null && visitedSystems.Any())
+            if (VisitedSystems != null && VisitedSystems.Any())
             {
                 SystemClass lastknownps = null;
-                foreach (SystemPosition ps in visitedSystems)
+                foreach (SystemPosition ps in VisitedSystems)
                 {
                     if (ps.curSystem!=null && ps.curSystem.HasCoordinate)
                     {
@@ -221,7 +270,7 @@ namespace EDDiscovery2
                 // colours just resolves to an object reference not set error, but after a restart it works fine
                 // Not going to waste any more time, a one time restart is hardly the worst workaround in the world...
                 IEnumerable<IGrouping<int, SystemPosition>> colours =
-                    from SystemPosition sysPos in visitedSystems
+                    from SystemPosition sysPos in VisitedSystems
                     group sysPos by sysPos.vs.MapColour;
 
                 foreach (IGrouping<int, SystemPosition> colour in colours)
@@ -416,6 +465,12 @@ namespace EDDiscovery2
             }
         }
 
+        public void Reset()
+        {
+            CenterSystem = null;
+            ReferenceSystems = null;        
+        }
+
         /*
         private void DrawStars()
         {
@@ -447,7 +502,7 @@ namespace EDDiscovery2
             GL.Color3(Color.Red);
 
 
-            if (visitedSystems != null)
+            if (VisitedSystems != null)
             {
                 SystemClass star;
 
@@ -625,7 +680,7 @@ namespace EDDiscovery2
 
         private void FormMap_Load(object sender, EventArgs e)
         {
-            textBox_From.AutoCompleteCustomSource = _systemNames;
+            textboxFrom.AutoCompleteCustomSource = _systemNames;
             ShowCenterSystem();
             GenerateDataSets();
             //GenerateDataSetsAllegiance();
@@ -636,11 +691,11 @@ namespace EDDiscovery2
 
         private void buttonCenter_Click(object sender, EventArgs e)
         {
-            SystemClass sys = SystemData.GetSystem(textBox_From.Text);
-            SetCentersystem(sys);
+            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
+            SetCenterSystem(sys);
         }
 
-        private void SetCentersystem(SystemClass sys)
+        private void SetCenterSystem(SystemClass sys)
         {
             if (sys == null) return;
 
@@ -658,7 +713,7 @@ namespace EDDiscovery2
                 CenterSystem = SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             }
             UpdateStatus();
-            label1.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
+            labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
         }
 
         private void UpdateStatus()
@@ -670,42 +725,64 @@ namespace EDDiscovery2
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            SystemPosition ps2 = (from c in visitedSystems where c.curSystem!=null && c.curSystem.HasCoordinate==true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
+            SystemPosition ps2 = (from c in VisitedSystems where c.curSystem!=null && c.curSystem.HasCoordinate==true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
 
             if (ps2!=null)
-                SetCentersystem(ps2.curSystem);
+                SetCenterSystem(ps2.curSystem);
         }
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
         {
             //toolStripButtonDrawLines.Checked = !toolStripButtonDrawLines.Checked;
-            SetCentersystem(CenterSystem);
+            SetCenterSystem(CenterSystem);
         }
 
         private void buttonSetDefault_Click(object sender, EventArgs e)
         {
-            SystemClass sys = SystemData.GetSystem(textBox_From.Text);
+            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
             if (sys != null && sys.HasCoordinate)
             {
                 var db = new SQLiteDBClass();
                 db.PutSettingString("DefaultMapCenter", sys.name);
-                if (CenterSystem.name != sys.name) SetCentersystem(sys);
+                if (CenterSystem.name != sys.name) SetCenterSystem(sys);
             }
         }
 
         private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
         {
-            SetCentersystem(CenterSystem);
+            SetCenterSystem(CenterSystem);
         }
 
         private void toolStripButtonStations_Click(object sender, EventArgs e)
         {
-            SetCentersystem(CenterSystem);
+            SetCenterSystem(CenterSystem);
         }
 
         private void toolStripButtonGrud_Click(object sender, EventArgs e)
         {
-            SetCentersystem(CenterSystem);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
+        private void OrientateMapAroundSystem(String systemName)
+        {
+            if (!String.IsNullOrWhiteSpace(systemName))
+            {
+                SystemClass system = SystemData.GetSystem(systemName.Trim());
+                OrientateMapAroundSystem(system);
+            }
+        }
+
+        private void OrientateMapAroundSystem(SystemClass system)
+        {
+            CenterSystem = system;
+            textboxFrom.Text = system.name;
+            SetCenterSystem(system);
         }
     }
 }

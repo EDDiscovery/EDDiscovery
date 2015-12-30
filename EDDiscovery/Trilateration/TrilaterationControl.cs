@@ -731,12 +731,12 @@ namespace EDDiscovery
         {
             var centerSystem = TargetSystem;
             if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = LastKnownSystem;
-            FormMap map2 = new FormMap(centerSystem, _discoveryForm.SystemNames)
-            {
-                ReferenceSystems = CurrentReferenceSystems.ToList(),
-                visitedSystems = _discoveryForm.VisitedSystems
-            };
-            map2.Show();
+            var map = _discoveryForm.Map;
+
+            map.Instance.Reset();
+            map.Instance.CenterSystem = centerSystem;
+            map.Instance.ReferenceSystems = CurrentReferenceSystems.ToList();
+            map.Show();
         }
 
         private void dataGridViewDistances_CellClick(object sender, DataGridViewCellEventArgs e)
