@@ -552,9 +552,7 @@ namespace EDDiscovery
 
         private void buttonMap_Click(object sender, EventArgs e)
         {
-            var map = new FormMap(_discoveryForm.SystemNames);
-            map.visitedSystems = visitedSystems;
-            map.Show();
+            _discoveryForm.Map.Show();
         }
 
         private int lastRowIndex;
