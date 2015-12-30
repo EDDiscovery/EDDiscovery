@@ -29,13 +29,18 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("ListViewGroup", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.richTextBox_History = new System.Windows.Forms.RichTextBox();
             this.button_RefreshHistory = new System.Windows.Forms.Button();
             this.labelHeader = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBoxHistoryWindow = new System.Windows.Forms.ComboBox();
@@ -88,11 +93,6 @@
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
             this.mapColorDialog = new System.Windows.Forms.ColorDialog();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.historyContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -156,6 +156,44 @@
             this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
             this.dataGridView1.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
             this.dataGridView1.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.Width = 140;
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.ReadOnly = true;
+            this.ColumnSystem.Width = 200;
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.Name = "ColumnDistance";
+            this.ColumnDistance.ReadOnly = true;
+            this.ColumnDistance.Width = 70;
+            // 
+            // ColumnNote
+            // 
+            this.ColumnNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnNote.HeaderText = "Note";
+            this.ColumnNote.Name = "ColumnNote";
+            this.ColumnNote.ReadOnly = true;
+            // 
+            // mapColour
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
+            this.mapColour.HeaderText = "Map";
+            this.mapColour.Name = "mapColour";
+            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
+            this.mapColour.Width = 30;
             // 
             // historyContextMenu
             // 
@@ -247,7 +285,7 @@
             this.buttonMap.TabIndex = 14;
             this.buttonMap.Text = "3D star map";
             this.buttonMap.UseVisualStyleBackColor = true;
-            this.buttonMap.Click += new System.EventHandler(this.button2_Click);
+            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
             // 
             // textBoxSystem
             // 
@@ -471,7 +509,6 @@
             this.textBoxDistText.Size = new System.Drawing.Size(263, 28);
             this.textBoxDistText.TabIndex = 26;
             this.textBoxDistText.Text = "Important!!  Use galaxy map to get distance with 2 decimals. Ex 17.44     ";
-            this.textBoxDistText.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
             // 
             // buttonUpdate
             // 
@@ -683,44 +720,6 @@
             // mapColorDialog
             // 
             this.mapColorDialog.SolidColorOnly = true;
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 140;
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.Name = "ColumnSystem";
-            this.ColumnSystem.ReadOnly = true;
-            this.ColumnSystem.Width = 200;
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.Name = "ColumnDistance";
-            this.ColumnDistance.ReadOnly = true;
-            this.ColumnDistance.Width = 70;
-            // 
-            // ColumnNote
-            // 
-            this.ColumnNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnNote.HeaderText = "Note";
-            this.ColumnNote.Name = "ColumnNote";
-            this.ColumnNote.ReadOnly = true;
-            // 
-            // mapColour
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
-            this.mapColour.HeaderText = "Map";
-            this.mapColour.Name = "mapColour";
-            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
-            this.mapColour.Width = 30;
             // 
             // TravelHistoryControl
             // 

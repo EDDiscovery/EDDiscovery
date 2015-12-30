@@ -127,6 +127,7 @@
       <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="3DMap\Data3DSetClass.cs" />
+    <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="DB\StationClass.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\VisitedSystemsClass.cs" />
@@ -213,6 +214,7 @@
     </Compile>
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -279,7 +281,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

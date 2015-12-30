@@ -3,12 +3,9 @@ using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDDB;
 using EDDiscovery2.EDSM;
-using EMK.Cartography;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,10 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EDDiscovery
@@ -28,49 +22,50 @@ namespace EDDiscovery
 
     public partial class EDDiscoveryForm : Form
     {
-        public readonly AutoCompleteStringCollection SystemNames = new AutoCompleteStringCollection();
-        public string CommanderName;
+        readonly string _fileTgcSystems;
+        readonly string _fileEDSMDistances;
+        private EDSMSync _edsmSync;
+        private SQLiteDBClass _db = new SQLiteDBClass();
 
-        readonly string fileTgcSystems ;
-        readonly string fileEDSMDistances;
+        public AutoCompleteStringCollection SystemNames { get; private set; }
+        public string CommanderName { get; private set; }
+        static public EDDConfig EDDConfig { get; private set; }
+        public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
         public event DistancesLoaded OnDistancesLoaded;
-        public EDSMSync edsmsync;
-
-        static public EDDConfig eddConfig;
 
         public EDDiscoveryForm()
         {
             InitializeComponent();
 
-            eddConfig = new EDDConfig();
+            EDDConfig = new EDDConfig();
 
-            fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
-            fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
+            _fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
+            _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");        
 
-
+            string logpath="";
             try
             {
-                string logpath = Path.Combine(Tools.GetAppDataDirectory(), "Log");
+                logpath = Path.Combine(Tools.GetAppDataDirectory(), "Log");
                 if (!Directory.Exists(logpath))
                 {
                     Directory.CreateDirectory(logpath);
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                
+                Trace.WriteLine($"Unable to create the folder '{logpath}'");
+                Trace.WriteLine($"Exception: {ex.Message}");
             }
-
-
-
-            edsmsync = new EDSMSync(this);
+            _edsmSync = new EDSMSync(this);
 
             trilaterationControl.InitControl(this);
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
+
+            SystemNames = new AutoCompleteStringCollection();
+            Map = new EDDiscovery2._3DMap.MapManager();
         }
 
         public TravelHistoryControl TravelControl
@@ -93,82 +88,18 @@ namespace EDDiscovery
         {
             try
             {
-                // Click once   System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVe‌​rsion
-                var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
-                var version = assemblyFullName.Split(',')[1].Split('=')[1];
-                Text = string.Format("EDDiscovery v{0}", version);
                 EliteDangerous.CheckED();
-                SQLiteDBClass db = new SQLiteDBClass();
-                eddConfig.Update();
-
-                var top = db.GetSettingInt("FormTop", -1);
-                if (top > 0)
-                {
-                    var left = db.GetSettingInt("FormLeft", -1);
-                    var height = db.GetSettingInt("FormHeight", -1);
-                    var width = db.GetSettingInt("FormWidth", -1);
-                    this.Top = top;
-                    this.Left = left;
-                    this.Height = height;
-                    this.Width = width;
-                }
-
-                labelPanelText.Text = "Loading. Please wait!";
-                panelInfo.Visible = true;
-                panelInfo.BackColor = Color.Gold;
-
-                SystemData sdata = new SystemData();
-                routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-
-                // Default directory
-                string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
-
-                bool auto = db.GetSettingBool("NetlogDirAutoMode", true);
-                if (auto)
-                {
-                    datapath = db.GetSettingString("Netlogdir", datapath);
-                    textBoxNetLogDir.Text = datapath;
-                    radioButton_Auto.Checked = true;
-                }
-                else
-                {
-                    radioButton_Manual.Checked = true;
-                    textBoxNetLogDir.Text = datapath = db.GetSettingString("Netlogdir", datapath); ;
-                }
-
-
-                textBoxEDSMApiKey.Text = db.GetSettingString("EDSMApiKey", "");
-                checkBox_Distances.Checked = eddConfig.UseDistances;
-                checkBoxEDSMLog.Checked = eddConfig.EDSMLog;
-
-                checkboxSkipSlowUpdates.Checked = eddConfig.CanSkipSlowUpdates;
-#if DEBUG
-                checkboxSkipSlowUpdates.Visible = true;
-#endif
-
-                if (EliteDangerous.EDRunning)
-                {
-                    TravelHistoryControl.LogText("EliteDangerous " + EliteDangerous.EDVersion + " is running." + Environment.NewLine);
-                }
-                else
-                    TravelHistoryControl.LogText("EliteDangerous is not running ." + Environment.NewLine);
-
-                if (!EliteDangerous.CheckStationLogging())
-                {
-                    TravelHistoryControl.LogText("Elite Dangerous is not logging system names!!! ", Color.Red);
-                    TravelHistoryControl.LogText("Add ");
-                    TravelHistoryControl.LogText("VerboseLogging=\"1\" ", Color.Blue);
-                    TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remeber to restart Elite!" + Environment.NewLine);
-
-                    labelPanelText.Text = "Elite Dangerous is not logging system names!";
-                    panelInfo.BackColor = Color.Salmon;
-                }
-
+                EDDConfig.Update();
+                RepositionForm();
+                InitFormControls();
+                InitSettingsTab();
+                CheckIfEliteDangerousIsRunning();
+                CheckIfVerboseLoggingIsTurnedOn();
 
                 if (File.Exists("test.txt"))
+                {
                     button1.Visible = true;
-
-
+                }
             }
             catch (Exception ex)
             {
@@ -207,14 +138,6 @@ namespace EDDiscovery
 
                 //Application.DoEvents();
                 GetEDDBAsync(false);
-
-
-                if (SystemData.SystemList.Count == 0)
-                {
-                    //sdata.ReadData();
-                }
-
-
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                 routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
@@ -285,6 +208,12 @@ namespace EDDiscovery
 
         }
 
+        public void updateMapData()
+        {
+            Map.Instance.SystemNames = SystemNames;
+            Map.Instance.VisitedSystems = VisitedSystems;
+        }
+
         private bool DownloadMapFile(string file)
         {
             EDDBClass eddb = new EDDBClass();
@@ -303,7 +232,7 @@ namespace EDDiscovery
         private bool CanSkipSlowUpdates()
         {
 #if DEBUG
-            return eddConfig.CanSkipSlowUpdates;
+            return EDDConfig.CanSkipSlowUpdates;
 #else
             return false;
 #endif
@@ -317,7 +246,7 @@ namespace EDDiscovery
             {
                 LogText("Checking for new EDDiscovery data" + Environment.NewLine);
 
-                GetNewRedWizzardFile(fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
+                GetNewRedWizzardFile(_fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
                 //GetNewRedWizzardFile(fileTgcDistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
             }
             catch (Exception ex)
@@ -381,22 +310,21 @@ namespace EDDiscovery
         {
             try
             {
-                SQLiteDBClass db = new SQLiteDBClass();
                 EDSMClass edsm = new EDSMClass();
 
 
                 string json;
 
-                string rwsystime = db.GetSettingString("RWLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+                string rwsystime = _db.GetSettingString("RWLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
                 string rwsysfiletime = "";
 
-                CommanderName = db.GetSettingString("CommanderName", "");
+                CommanderName = _db.GetSettingString("CommanderName", "");
                 Invoke((MethodInvoker) delegate {
                     travelHistoryControl1.textBoxCmdrName.Text = CommanderName;
                 });
 
 
-                json = LoadJsonFile(fileTgcSystems);
+                json = LoadJsonFile(_fileTgcSystems);
                 List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
 
 
@@ -404,8 +332,8 @@ namespace EDDiscovery
                 {
                     SystemClass.Delete(SystemStatusEnum.EDSC); // Remove all EDSC systems.
                     
-                    db.PutSettingString("RWLastSystems", rwsysfiletime);
-                    db.PutSettingString("EDSMLastSystems", rwsysfiletime);
+                    _db.PutSettingString("RWLastSystems", rwsysfiletime);
+                    _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
                     Invoke((MethodInvoker) delegate {
                         TravelHistoryControl.LogText("Adding data from tgcsystems.json " + Environment.NewLine);
                     });
@@ -421,7 +349,7 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    string retstr = edsm.GetNewSystems(db);
+                    string retstr = edsm.GetNewSystems(_db);
                     Invoke((MethodInvoker)delegate
                     {
                         TravelHistoryControl.LogText(retstr);
@@ -429,8 +357,8 @@ namespace EDDiscovery
                 }
 
 
-                db.GetAllSystemNotes();
-                db.GetAllSystems();
+                _db.GetAllSystemNotes();
+                _db.GetAllSystems();
 
 
 
@@ -461,7 +389,7 @@ namespace EDDiscovery
 
         private Thread ThreadEDDB;
 
-        public List<SystemPosition> visitedSystems
+        public List<SystemPosition> VisitedSystems
         {
             get { return travelHistoryControl1.visitedSystems; }
         }
@@ -481,24 +409,22 @@ namespace EDDiscovery
         {
             try
             {
-                SQLiteDBClass db = new SQLiteDBClass();
-
-                if (eddConfig.UseDistances)
+                if (EDDConfig.UseDistances)
                 {
                     EDSMClass edsm = new EDSMClass();
                     EDDBClass eddb = new EDDBClass();
-                    string lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                    string lstdist = _db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                     string json;
 
                     // Get distances
-                    lstdist = db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                    lstdist = _db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                     List<DistanceClass> dists = new List<DistanceClass>();
 
                     if (lstdist.Equals("2010-01-01 00:00:00"))
                     {
                         LogText("Downloading mirrored EDSM distance data. (Might take some time)" + Environment.NewLine);
                         eddb.GetEDSMDistances();
-                        json = LoadJsonFile(fileEDSMDistances);
+                        json = LoadJsonFile(_fileEDSMDistances);
                         if (json != null)
                         {
                             LogText("Adding mirrored EDSM distance data." + Environment.NewLine);
@@ -509,7 +435,7 @@ namespace EDDiscovery
 
                             Application.DoEvents();
                             DistanceClass.Store(dists);
-                            db.PutSettingString("EDSCLastDist", lstdist);
+                            _db.PutSettingString("EDSCLastDist", lstdist);
                         }
                     }
 
@@ -531,11 +457,11 @@ namespace EDDiscovery
 
                     Application.DoEvents();
                     DistanceClass.Store(dists);
-                    db.PutSettingString("EDSCLastDist", lstdist);
+                    _db.PutSettingString("EDSCLastDist", lstdist);
                 }
-                db.GetAllDistances(eddConfig.UseDistances);  // Load user added distances
+                _db.GetAllDistances(EDDConfig.UseDistances);  // Load user added distances
+                updateMapData();
                 OnDistancesLoaded();
-
             }
             catch (Exception ex)
             {
@@ -593,8 +519,7 @@ namespace EDDiscovery
 
                 Thread.Sleep(1000);
 
-                SQLiteDBClass db = new SQLiteDBClass();
-                timestr = db.GetSettingString("EDDBSystemsTime", "0");
+                timestr = _db.GetSettingString("EDDBSystemsTime", "0");
                 time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
                 bool updatedb = false;
 
@@ -609,7 +534,7 @@ namespace EDDiscovery
                     {
                         LogText("OK." + Environment.NewLine);
 
-                        db.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
+                        _db.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
                         updatedb = true;
                     }
                     else
@@ -620,7 +545,7 @@ namespace EDDiscovery
                 }
 
 
-                timestr = db.GetSettingString("EDDBStationsLiteTime", "0");
+                timestr = _db.GetSettingString("EDDBStationsLiteTime", "0");
                 time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
 
                 if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
@@ -630,7 +555,7 @@ namespace EDDiscovery
                     if (eddb.GetStationsLite())
                     {
                         LogText("OK." + Environment.NewLine);
-                        db.PutSettingString("EDDBStationsLiteTime", DateTime.UtcNow.Ticks.ToString());
+                        _db.PutSettingString("EDDBStationsLiteTime", DateTime.UtcNow.Ticks.ToString());
                         updatedb = true;
                     }
                     else
@@ -810,18 +735,16 @@ namespace EDDiscovery
 
         private void SaveSettings()
         {
-            SQLiteDBClass db = new SQLiteDBClass();
-
-            db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
-            db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
-            db.PutSettingString("EDSMApiKey", textBoxEDSMApiKey.Text);
-            db.PutSettingInt("FormWidth", this.Width);
-            db.PutSettingInt("FormHeight", this.Height);
-            db.PutSettingInt("FormTop", this.Top);
-            db.PutSettingInt("FormLeft", this.Left);
-            eddConfig.UseDistances = checkBox_Distances.Checked;
-            eddConfig.EDSMLog = checkBoxEDSMLog.Checked;
-            eddConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
+            _db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
+            _db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
+            _db.PutSettingString("EDSMApiKey", textBoxEDSMApiKey.Text);
+            _db.PutSettingInt("FormWidth", this.Width);
+            _db.PutSettingInt("FormHeight", this.Height);
+            _db.PutSettingInt("FormTop", this.Top);
+            _db.PutSettingInt("FormLeft", this.Left);
+            EDDConfig.UseDistances = checkBox_Distances.Checked;
+            EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
+            EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
         }
 
         private void routeControl1_Load(object sender, EventArgs e)
@@ -832,7 +755,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             travelHistoryControl1.netlog.StopMonitor();
-            edsmsync.StopSync();
+            _edsmSync.StopSync();
             SaveSettings();
         }
 
@@ -989,6 +912,90 @@ namespace EDDiscovery
 
         //Pleiades Sector WU-O B16-0
         //Pleiades Sector WU-O b6-0
+
+        private void InitFormControls()
+        {
+            UpdateTitle();
+
+            labelPanelText.Text = "Loading. Please wait!";
+            panelInfo.Visible = true;
+            panelInfo.BackColor = Color.Gold;
+
+            routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+        }
+
+        private void UpdateTitle()
+        {
+            var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
+            var version = assemblyFullName.Split(',')[1].Split('=')[1];
+            Text = string.Format("EDDiscovery v{0}", version);
+        }
+
+        private void RepositionForm()
+        {
+            var top = _db.GetSettingInt("FormTop", -1);
+            if (top > 0)
+            {
+                var left = _db.GetSettingInt("FormLeft", -1);
+                var height = _db.GetSettingInt("FormHeight", -1);
+                var width = _db.GetSettingInt("FormWidth", -1);
+                this.Top = top;
+                this.Left = left;
+                this.Height = height;
+                this.Width = width;
+            }
+        }
+
+        private void InitSettingsTab()
+        {
+            // Default directory
+            bool auto = _db.GetSettingBool("NetlogDirAutoMode", true);
+            if (auto)
+            {
+                radioButton_Auto.Checked = auto;
+            }
+            else
+            {
+                radioButton_Manual.Checked = true;
+            }
+            string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
+            textBoxNetLogDir.Text = _db.GetSettingString("Netlogdir", datapath);
+
+            textBoxEDSMApiKey.Text = _db.GetSettingString("EDSMApiKey", "");
+            checkBox_Distances.Checked = EDDConfig.UseDistances;
+            checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
+
+            checkboxSkipSlowUpdates.Checked = EDDConfig.CanSkipSlowUpdates;
+#if DEBUG
+            checkboxSkipSlowUpdates.Visible = true;
+#endif
+        }
+
+        private void CheckIfEliteDangerousIsRunning()
+        {
+            if (EliteDangerous.EDRunning)
+            {
+                TravelHistoryControl.LogText("EliteDangerous " + EliteDangerous.EDVersion + " is running." + Environment.NewLine);
+            }
+            else
+            {
+                TravelHistoryControl.LogText("EliteDangerous is not running ." + Environment.NewLine);
+            }
+        }
+
+        private void CheckIfVerboseLoggingIsTurnedOn()
+        {
+            if (!EliteDangerous.CheckStationLogging())
+            {
+                TravelHistoryControl.LogText("Elite Dangerous is not logging system names!!! ", Color.Red);
+                TravelHistoryControl.LogText("Add ");
+                TravelHistoryControl.LogText("VerboseLogging=\"1\" ", Color.Blue);
+                TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remeber to restart Elite!" + Environment.NewLine);
+
+                labelPanelText.Text = "Elite Dangerous is not logging system names!";
+                panelInfo.BackColor = Color.Salmon;
+            }
+        }
 
     }
 }
