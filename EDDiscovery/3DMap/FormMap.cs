@@ -42,7 +42,6 @@ namespace EDDiscovery2
 
         private float _x = 0.0f;
         private float _y = 0.0f;
-        private float _z = 0.0f;
         private float _zoom = 1.0f;
         private float _xAng = 0.0f;
         private float _yAng = 90.0f;
@@ -132,6 +131,9 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
+            _x = 0.0f;
+            _y = 0.0f;
+
             _xAng = 0.0f;
             _yAng = 90.0f;
 

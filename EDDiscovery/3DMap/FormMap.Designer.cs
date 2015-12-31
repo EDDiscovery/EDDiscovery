@@ -235,6 +235,7 @@ namespace EDDiscovery2
             this.Controls.Add(this.textboxFrom);
             this.Controls.Add(this.glControl1);
             this.Controls.Add(this.toolStripShowAllStars);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMap";
             this.Text = "3D Star Map";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMap_FormClosing);
