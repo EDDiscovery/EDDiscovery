@@ -42,8 +42,8 @@ namespace EDDiscovery2
         private SystemClass _centerSystem;
         private bool _loaded = false;
 
-        private float _screenX = 0.0f;
-        private float _screenY = 0.0f;
+        private float _systemOffsetX = 0.0f;
+        private float _systemOffsetY = 0.0f;
         private float _zoom = 1.0f;
         private float _xAng = 0.0f;
         private float _yAng = 90.0f;
@@ -135,8 +135,8 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
-            _screenX = 0.0f;
-            _screenY = 0.0f;
+            _systemOffsetX = 0.0f;
+            _systemOffsetY = 0.0f;
 
             _xAng = 0.0f;
             _yAng = 90.0f;
@@ -197,25 +197,47 @@ namespace EDDiscovery2
 
             _datasets = new List<IData3DSet>();
 
+            BuildGridLines();
+            AddStandardSystemsToDataset();
+            AddStationsToDataset();
+            AddVisitedSystemsToDataset();
+            AddCenterPointToDataset();
+            AddPOIsToDataset();
+            AddTrilaterationInfoToDataset();
+        }
 
+        private void BuildGridLines()
+        {
             if (toolStripButtonGrid.Checked)
             {
                 bool addstations = !toolStripButtonStations.Checked;
                 var datasetGrid = new Data3DSetClass<LineData>("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
 
-                for (int xx = -40000; xx <= 40000; xx += 1000)
-                    {
-                        datasetGrid.Add(new LineData(xx - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.x  - - 20000,
-                            xx - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - 70000));
-                    }
-                    for (int zz = -20000; zz <= 70000; zz += 1000)
-                                        datasetGrid.Add(new LineData(-40000 - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - zz,
-                         40000 - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - zz));
+                for (int x = -50000; x <= 50000; x += 1000)
+                {
+                    datasetGrid.Add(new LineData(x - CenterSystem.x,
+                        0 - CenterSystem.y,
+                        CenterSystem.x - -20000,
+                        x - CenterSystem.x,
+                        0 - CenterSystem.y,
+                        CenterSystem.z - 70000));
+                }
+                for (int z = -20000; z <= 70000; z += 1000)
+                {
+                    datasetGrid.Add(new LineData(-40000 - CenterSystem.x,
+                        0 - CenterSystem.y,
+                        CenterSystem.z - z,
+                        40000 - CenterSystem.x,
+                        0 - CenterSystem.y,
+                        CenterSystem.z - z));
+                }
 
-                    _datasets.Add(datasetGrid);
+                _datasets.Add(datasetGrid);
             }
+        }
 
-
+        private void AddStandardSystemsToDataset()
+        {
             if (toolStripButtonShowAllStars.Checked)
             {
                 bool addstations = !toolStripButtonStations.Checked;
@@ -223,31 +245,36 @@ namespace EDDiscovery2
 
                 foreach (SystemClass si in _starList)
                 {
-                    if (addstations  || si.population==0)
+                    if (addstations || si.population == 0)
                         AddSystem(si, datasetS);
                 }
                 _datasets.Add(datasetS);
             }
+        }
 
-
+        private void AddStationsToDataset()
+        {
             if (toolStripButtonStations.Checked)
             {
                 var datasetS = new Data3DSetClass<PointData>("stations", Color.RoyalBlue, 1.0f);
 
                 foreach (SystemClass si in _starList)
                 {
-                   if (si.population>0)
+                    if (si.population > 0)
                         AddSystem(si, datasetS);
                 }
                 _datasets.Add(datasetS);
             }
+        }
 
+        private void AddVisitedSystemsToDataset()
+        {
             if (VisitedSystems != null && VisitedSystems.Any())
             {
                 SystemClass lastknownps = null;
                 foreach (SystemPosition ps in VisitedSystems)
                 {
-                    if (ps.curSystem!=null && ps.curSystem.HasCoordinate)
+                    if (ps.curSystem != null && ps.curSystem.HasCoordinate)
                     {
                         ps.lastKnownSystem = lastknownps;
                         lastknownps = ps.curSystem;
@@ -266,13 +293,13 @@ namespace EDDiscovery2
                 {
                     if (toolStripButtonDrawLines.Checked)
                     {
-                        Data3DSetClass<LineData>  datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                        Data3DSetClass<LineData> datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
                         foreach (SystemPosition sp in colour)
                         {
-                            if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem!=null && sp.lastKnownSystem.HasCoordinate)
+                            if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
                             {
                                 datasetl.Add(new LineData(sp.curSystem.x - CenterSystem.x, sp.curSystem.y - CenterSystem.y, CenterSystem.z - sp.curSystem.z,
-                                    sp.lastKnownSystem.x - CenterSystem.x, sp.lastKnownSystem.y - CenterSystem.y,  CenterSystem.z - sp.lastKnownSystem.z));
+                                    sp.lastKnownSystem.x - CenterSystem.x, sp.lastKnownSystem.y - CenterSystem.y, CenterSystem.z - sp.lastKnownSystem.z));
 
                             }
                         }
@@ -286,7 +313,7 @@ namespace EDDiscovery2
                             SystemClass star = SystemData.GetSystem(sp.Name);
                             if (star != null && star.HasCoordinate)
                             {
-                                
+
                                 AddSystem(star, datasetvs);
                             }
                         }
@@ -295,21 +322,28 @@ namespace EDDiscovery2
 
                 }
             }
+        }
 
-
+        private void AddCenterPointToDataset()
+        {
             var dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
 
             //GL.Enable(EnableCap.ProgramPointSize);
             dataset.Add(new PointData(0, 0, 0));
             _datasets.Add(dataset);
+        }
 
-            dataset = new Data3DSetClass<PointData>("Interest", Color.Purple, 10.0f);
+        private void AddPOIsToDataset()
+        {
+            var dataset = new Data3DSetClass<PointData>("Interest", Color.Purple, 10.0f);
             AddSystem("sol", dataset);
             AddSystem("sagittarius a*", dataset);
             //AddSystem("polaris", dataset);
             _datasets.Add(dataset);
+        }
 
-
+        private void AddTrilaterationInfoToDataset()
+        {
             if (ReferenceSystems != null && ReferenceSystems.Any())
             {
                 var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
@@ -341,7 +375,6 @@ namespace EDDiscovery2
                 System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
                 _datasets.Add(lineSet);
             }
-
         }
 
         private void AddSystem(string systemName, Data3DSetClass<PointData> dataset)
@@ -657,7 +690,7 @@ namespace EDDiscovery2
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            GL.Translate(_screenX, _screenY, 0); // position triangle according to our x variable
+            GL.Translate(_systemOffsetX, _systemOffsetY, 0); // position triangle according to our x variable
             GL.Rotate(_xAng, 0, 1, 0);
             GL.Rotate(_yAng, 1, 0, 0);
             GL.Scale(_zoom, _zoom, _zoom);
@@ -748,8 +781,8 @@ namespace EDDiscovery2
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _screenX += dx * _zoom;
-                _screenY += -dy * _zoom;
+                _systemOffsetX += dx * _zoom;
+                _systemOffsetY += -dy * _zoom;
 
                 SetupCursorXYZ();
 
