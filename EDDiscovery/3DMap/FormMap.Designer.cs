@@ -47,12 +47,10 @@ namespace EDDiscovery2
             this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGrid = new System.Windows.Forms.ToolStripButton();
             this.buttonSetDefault = new System.Windows.Forms.Button();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabelSystem = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabelCoordinates = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabelZoom = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripShowAllStars.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // glControl1
@@ -193,42 +191,28 @@ namespace EDDiscovery2
             this.buttonSetDefault.UseVisualStyleBackColor = true;
             this.buttonSetDefault.Click += new System.EventHandler(this.buttonSetDefault_Click);
             // 
-            // statusStrip1
+            // statusStrip
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelSystem,
-            this.toolStripStatusLabelCoordinates,
-            this.toolStripStatusLabelZoom});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 532);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(918, 22);
-            this.statusStrip1.TabIndex = 21;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 532);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(918, 22);
+            this.statusStrip.TabIndex = 21;
+            this.statusStrip.Text = "statusStrip1";
             // 
-            // toolStripStatusLabelSystem
+            // statusLabel
             // 
-            this.toolStripStatusLabelSystem.Name = "toolStripStatusLabelSystem";
-            this.toolStripStatusLabelSystem.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabelSystem.Text = "toolStripStatusLabel1";
-            // 
-            // toolStripStatusLabelCoordinates
-            // 
-            this.toolStripStatusLabelCoordinates.Name = "toolStripStatusLabelCoordinates";
-            this.toolStripStatusLabelCoordinates.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabelCoordinates.Text = "toolStripStatusLabel2";
-            // 
-            // toolStripStatusLabelZoom
-            // 
-            this.toolStripStatusLabelZoom.Name = "toolStripStatusLabelZoom";
-            this.toolStripStatusLabelZoom.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabelZoom.Text = "toolStripStatusLabel1";
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(35, 17);
+            this.statusLabel.Text = "x=0.0";
             // 
             // FormMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(918, 554);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.buttonSetDefault);
             this.Controls.Add(this.labelSystemCoords);
             this.Controls.Add(this.buttonCenter);
@@ -242,8 +226,8 @@ namespace EDDiscovery2
             this.Load += new System.EventHandler(this.FormMap_Load);
             this.toolStripShowAllStars.ResumeLayout(false);
             this.toolStripShowAllStars.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,9 +247,7 @@ namespace EDDiscovery2
         private ToolStripButton toolStripButtonShowAllStars;
         private ToolStripButton toolStripButtonStations;
         private ToolStripButton toolStripButtonGrid;
-        private StatusStrip statusStrip1;
-        private ToolStripStatusLabel toolStripStatusLabelSystem;
-        private ToolStripStatusLabel toolStripStatusLabelCoordinates;
-        private ToolStripStatusLabel toolStripStatusLabelZoom;
+        private StatusStrip statusStrip;
+        private ToolStripStatusLabel statusLabel;
     }
     }
