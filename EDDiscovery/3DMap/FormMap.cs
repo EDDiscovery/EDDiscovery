@@ -35,33 +35,30 @@ namespace EDDiscovery2
             }
         }
 
-
-
         private const int ZoomMax = 100;
         private const double ZoomMin = 0.005;
         private const double ZoomFact = 1.2589254117941672104239541063958;
+
         private AutoCompleteStringCollection _systemNames;
         private SystemClass _centerSystem;
-        private bool loaded = false;
+        private bool _loaded = false;
 
-        private float x = 0;
-        private float y = 0;
-        private float z = 0;
-        private float zoom = 1;
-        private float xang = 0;
-        private float yang = 90;
+        private float _x = 0;
+        private float _y = 0;
+        private float _z = 0;
+        private float _zoom = 1;
+        private float _xAng = 0;
+        private float _yAng = 90;
 
-        private Point MouseStartRotate;
-        private Point MouseStartTranslate;
+        private Point _mouseStartRotate;
+        private Point _mouseStartTranslate;
 
-        public List<SystemClass> StarList;
-        public List<SystemClass> ReferenceSystems;
-        private Dictionary<string, SystemClass> VisitedStars;
+        private List<SystemClass> _starList;
+        private Dictionary<string, SystemClass> _visitedStars;
 
-        private List<IData3DSet> datasets;
+        private List<IData3DSet> _datasets;
 
-        public bool ShowTril;
-
+        public List<SystemClass> ReferenceSystems { get; set; }
         public List<SystemPosition> VisitedSystems { get; set; }
 
         public SystemClass CenterSystem {
@@ -143,7 +140,7 @@ namespace EDDiscovery2
         /// <param name="e"></param>
         private void glControl1_Load(object sender, EventArgs e)
         {
-            loaded = true;
+            _loaded = true;
             GL.ClearColor(Color.Black); // Yey! .NET Colors can be used directly!
 
             SetupViewport();
@@ -164,8 +161,8 @@ namespace EDDiscovery2
 
             if (w == 0 || h == 0) return;
 
-            float orthoW = w * (zoom + 1);
-            float orthoH = h * (zoom + 1);
+            float orthoW = w * (_zoom + 1);
+            float orthoH = h * (_zoom + 1);
 
 
             int orthoheight = 1000 * h / w;
@@ -178,7 +175,7 @@ namespace EDDiscovery2
 
         public void InitData()
         {
-            VisitedStars = new Dictionary<string, SystemClass>();
+            _visitedStars = new Dictionary<string, SystemClass>();
 
             if (VisitedSystems != null)
             {
@@ -187,7 +184,7 @@ namespace EDDiscovery2
                     SystemClass star = SystemData.GetSystem(sp.Name);
                     if (star != null && star.HasCoordinate)
                     {
-                        VisitedStars[star.SearchName] = star;
+                        _visitedStars[star.SearchName] = star;
                     }
                 }
             }
@@ -204,7 +201,7 @@ namespace EDDiscovery2
         {
             InitGenerateDataSet();
 
-            datasets = new List<IData3DSet>();
+            _datasets = new List<IData3DSet>();
 
 
             if (toolStripButtonGrid.Checked)
@@ -223,7 +220,7 @@ namespace EDDiscovery2
 
 
 
-                    datasets.Add(datasetGrid);
+                    _datasets.Add(datasetGrid);
             }
 
 
@@ -232,12 +229,12 @@ namespace EDDiscovery2
                 bool addstations = !toolStripButtonStations.Checked;
                 var datasetS = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
 
-                foreach (SystemClass si in StarList)
+                foreach (SystemClass si in _starList)
                 {
                     if (addstations  || si.population==0)
                         AddSystem(si, datasetS);
                 }
-                datasets.Add(datasetS);
+                _datasets.Add(datasetS);
             }
 
 
@@ -245,12 +242,12 @@ namespace EDDiscovery2
             {
                 var datasetS = new Data3DSetClass<PointData>("stations", Color.RoyalBlue, 1.0f);
 
-                foreach (SystemClass si in StarList)
+                foreach (SystemClass si in _starList)
                 {
                    if (si.population>0)
                         AddSystem(si, datasetS);
                 }
-                datasets.Add(datasetS);
+                _datasets.Add(datasetS);
             }
 
             if (VisitedSystems != null && VisitedSystems.Any())
@@ -287,7 +284,7 @@ namespace EDDiscovery2
 
                             }
                         }
-                        datasets.Add(datasetl);
+                        _datasets.Add(datasetl);
                     }
                     else
                     {
@@ -301,7 +298,7 @@ namespace EDDiscovery2
                                 AddSystem(star, datasetvs);
                             }
                         }
-                        datasets.Add(datasetvs);
+                        _datasets.Add(datasetvs);
                     }
 
                 }
@@ -312,13 +309,13 @@ namespace EDDiscovery2
 
             //GL.Enable(EnableCap.ProgramPointSize);
             dataset.Add(new PointData(0, 0, 0));
-            datasets.Add(dataset);
+            _datasets.Add(dataset);
 
             dataset = new Data3DSetClass<PointData>("Interest", Color.Purple, 10.0f);
             AddSystem("sol", dataset);
             AddSystem("sagittarius a*", dataset);
             //AddSystem("polaris", dataset);
-            datasets.Add(dataset);
+            _datasets.Add(dataset);
 
 
             if (ReferenceSystems != null && ReferenceSystems.Any())
@@ -329,7 +326,7 @@ namespace EDDiscovery2
                     referenceLines.Add(new LineData(0, 0, 0, refSystem.x - CenterSystem.x, refSystem.y - CenterSystem.y, CenterSystem.z - refSystem.z));
                 }
 
-                datasets.Add(referenceLines);
+                _datasets.Add(referenceLines);
 
                 var lineSet = new Data3DSetClass<LineData>("SuggestedReference", Color.DarkOrange, 5.0f);
 
@@ -350,7 +347,7 @@ namespace EDDiscovery2
                 }
                 sw.Stop();
                 System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-                datasets.Add(lineSet);
+                _datasets.Add(lineSet);
             }
 
         }
@@ -376,7 +373,7 @@ namespace EDDiscovery2
 
             InitGenerateDataSet();
 
-            datasets = new List<IData3DSet>();
+            _datasets = new List<IData3DSet>();
 
             datadict[(int)EDAllegiance.Alliance] = new Data3DSetClass<PointData>(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
             datadict[(int)EDAllegiance.Anarchy] = new Data3DSetClass<PointData>(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
@@ -386,7 +383,7 @@ namespace EDDiscovery2
             datadict[(int)EDAllegiance.None] = new Data3DSetClass<PointData>(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
             datadict[(int)EDAllegiance.Unknown] = new Data3DSetClass<PointData>(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
 
-            foreach (SystemClass si in StarList)
+            foreach (SystemClass si in _starList)
             {
                 if (si.HasCoordinate)
                 {
@@ -395,7 +392,7 @@ namespace EDDiscovery2
             }
 
             foreach (var ds in datadict.Values)
-                datasets.Add(ds);
+                _datasets.Add(ds);
 
             datadict[(int)EDAllegiance.None].Visible = false;
             datadict[(int)EDAllegiance.Unknown].Visible = false;
@@ -410,7 +407,7 @@ namespace EDDiscovery2
 
             InitGenerateDataSet();
 
-            datasets = new List<IData3DSet>();
+            _datasets = new List<IData3DSet>();
 
             datadict[(int)EDGovernment.Anarchy] = new Data3DSetClass<PointData>(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
             datadict[(int)EDGovernment.Colony] = new Data3DSetClass<PointData>(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
@@ -428,7 +425,7 @@ namespace EDDiscovery2
             datadict[(int)EDGovernment.None] = new Data3DSetClass<PointData>(EDGovernment.None.ToString(), Color.Gray, 1.0f);
             datadict[(int)EDGovernment.Unknown] = new Data3DSetClass<PointData>(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
 
-            foreach (SystemClass si in StarList)
+            foreach (SystemClass si in _starList)
             {
                 if (si.HasCoordinate)
                 {
@@ -437,7 +434,7 @@ namespace EDDiscovery2
             }
 
             foreach (var ds in datadict.Values)
-                datasets.Add(ds);
+                _datasets.Add(ds);
 
             datadict[(int)EDGovernment.None].Visible = false;
             datadict[(int)EDGovernment.Unknown].Visible = false;
@@ -449,17 +446,17 @@ namespace EDDiscovery2
         private void InitGenerateDataSet()
         {
 
-            if (StarList == null)
-                StarList = SQLiteDBClass.globalSystems;
+            if (_starList == null)
+                _starList = SQLiteDBClass.globalSystems;
 
 
-            if (VisitedStars == null)
+            if (_visitedStars == null)
                 InitData();
         }
 
         private void DrawStars()
         {
-            foreach (var dataset in datasets)
+            foreach (var dataset in _datasets)
             {
                 dataset.DrawAll();
             }
@@ -546,7 +543,7 @@ namespace EDDiscovery2
         /// <param name="e"></param>
         private void glControl1_Resize(object sender, EventArgs e)
         {
-            if (!loaded)
+            if (!_loaded)
                 return;
 
             SetupViewport();
@@ -561,7 +558,7 @@ namespace EDDiscovery2
         /// <param name="e"></param>
         private void glControl1_Paint(object sender, PaintEventArgs e)
         {
-            if (!loaded) // Play nice
+            if (!_loaded) // Play nice
                 return;
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -571,10 +568,10 @@ namespace EDDiscovery2
 
 
             nr++;
-            GL.Translate(x, y, 0); // position triangle according to our x variable
-            GL.Rotate(xang, 0, 1, 0);
-            GL.Rotate(yang, 1, 0, 0);
-            GL.Scale(zoom, zoom, zoom);
+            GL.Translate(_x, _y, 0); // position triangle according to our x variable
+            GL.Rotate(_xAng, 0, 1, 0);
+            GL.Rotate(_yAng, 1, 0, 0);
+            GL.Scale(_zoom, _zoom, _zoom);
             //                GL.Enable(EnableCap.PointSmooth);
             //                GL.Enable(EnableCap.Blend);
 
@@ -611,16 +608,16 @@ namespace EDDiscovery2
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                int dx = e.X - MouseStartRotate.X;
-                int dy = e.Y - MouseStartRotate.Y;
+                int dx = e.X - _mouseStartRotate.X;
+                int dy = e.Y - _mouseStartRotate.Y;
 
-                MouseStartRotate.X = e.X;
-                MouseStartRotate.Y = e.Y;
+                _mouseStartRotate.X = e.X;
+                _mouseStartRotate.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                xang += (float)(dx / 5.0);
-                yang += (float)(-dy / 5.0);
+                _xAng += (float)(dx / 5.0);
+                _yAng += (float)(-dy / 5.0);
 
                 SetupCursorXYZ();
 
@@ -628,16 +625,16 @@ namespace EDDiscovery2
             }
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                int dx = e.X - MouseStartTranslate.X;
-                int dy = e.Y - MouseStartTranslate.Y;
+                int dx = e.X - _mouseStartTranslate.X;
+                int dy = e.Y - _mouseStartTranslate.Y;
 
-                MouseStartTranslate.X = e.X;
-                MouseStartTranslate.Y = e.Y;
+                _mouseStartTranslate.X = e.X;
+                _mouseStartTranslate.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                x += dx * zoom;
-                y += -dy * zoom;
+                _x += dx * _zoom;
+                _y += -dy * _zoom;
 
                 SetupCursorXYZ();
 
@@ -651,8 +648,8 @@ namespace EDDiscovery2
 
         private void OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Delta > 0 && zoom < ZoomMax) zoom *= (float)ZoomFact;
-            if (e.Delta < 0 && zoom > ZoomMin) zoom /= (float)ZoomFact;
+            if (e.Delta > 0 && _zoom < ZoomMax) _zoom *= (float)ZoomFact;
+            if (e.Delta < 0 && _zoom > ZoomMin) _zoom /= (float)ZoomFact;
 
             //System.Diagnostics.Trace.WriteLine("Zoom:" + zoom + " : W:" + (2000/ zoom).ToString("0"));
             UpdateStatus();
@@ -666,14 +663,14 @@ namespace EDDiscovery2
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                MouseStartRotate.X = e.X;
-                MouseStartRotate.Y = e.Y;
+                _mouseStartRotate.X = e.X;
+                _mouseStartRotate.Y = e.Y;
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                MouseStartTranslate.X = e.X;
-                MouseStartTranslate.Y = e.Y;
+                _mouseStartTranslate.X = e.X;
+                _mouseStartTranslate.Y = e.Y;
             }
 
         }
@@ -720,7 +717,7 @@ namespace EDDiscovery2
         {
             toolStripStatusLabelSystem.Text = CenterSystem.name;
             toolStripStatusLabelCoordinates.Text = string.Format("x:{0} y:{1} z:{2}", CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
-            toolStripStatusLabelZoom.Text = "Width:" + (2000 / zoom).ToString("0");
+            toolStripStatusLabelZoom.Text = "Width:" + (2000 / _zoom).ToString("0");
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
