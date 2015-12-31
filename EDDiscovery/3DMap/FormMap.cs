@@ -195,201 +195,21 @@ namespace EDDiscovery2
         {
             InitStarLists();
 
-            _datasets = DatasetBuilder.Build();
-
-            BuildGridLines();
-            AddStandardSystemsToDataset();
-            AddStationsToDataset();
-            AddVisitedSystemsToDataset();
-            AddCenterPointToDataset();
-            AddPOIsToDataset();
-            AddTrilaterationInfoToDataset();
-        }
-
-        private void BuildGridLines()
-        {
-            if (toolStripButtonGrid.Checked)
+            var builder = new DatasetBuilder()
             {
-                bool addstations = !toolStripButtonStations.Checked;
-                var datasetGrid = new Data3DSetClass<LineData>("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
+                Origin = CenterSystem,
+                StarList = _starList,
+                VisitedSystems = VisitedSystems,
+                ReferenceSystems = ReferenceSystems,
 
-                for (int x = -50000; x <= 50000; x += 1000)
-                {
-                    datasetGrid.Add(new LineData(x - CenterSystem.x,
-                        0 - CenterSystem.y,
-                        CenterSystem.x - -20000,
-                        x - CenterSystem.x,
-                        0 - CenterSystem.y,
-                        CenterSystem.z - 70000));
-                }
-                for (int z = -20000; z <= 70000; z += 1000)
-                {
-                    datasetGrid.Add(new LineData(-40000 - CenterSystem.x,
-                        0 - CenterSystem.y,
-                        CenterSystem.z - z,
-                        40000 - CenterSystem.x,
-                        0 - CenterSystem.y,
-                        CenterSystem.z - z));
-                }
+                GridLines = toolStripButtonGrid.Checked,
+                DrawLines = toolStripButtonDrawLines.Checked,
+                AllSystems = toolStripButtonShowAllStars.Checked,
+                Stations = toolStripButtonStations.Checked
+            };
 
-                _datasets.Add(datasetGrid);
-            }
+            _datasets = builder.Build();
         }
-
-        private void AddStandardSystemsToDataset()
-        {
-            if (toolStripButtonShowAllStars.Checked)
-            {
-                bool addstations = !toolStripButtonStations.Checked;
-                var datasetS = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
-
-                foreach (SystemClass si in _starList)
-                {
-                    if (addstations || si.population == 0)
-                        AddSystem(si, datasetS);
-                }
-                _datasets.Add(datasetS);
-            }
-        }
-
-        private void AddStationsToDataset()
-        {
-            if (toolStripButtonStations.Checked)
-            {
-                var datasetS = new Data3DSetClass<PointData>("stations", Color.RoyalBlue, 1.0f);
-
-                foreach (SystemClass si in _starList)
-                {
-                    if (si.population > 0)
-                        AddSystem(si, datasetS);
-                }
-                _datasets.Add(datasetS);
-            }
-        }
-
-        private void AddVisitedSystemsToDataset()
-        {
-            if (VisitedSystems != null && VisitedSystems.Any())
-            {
-                SystemClass lastknownps = null;
-                foreach (SystemPosition ps in VisitedSystems)
-                {
-                    if (ps.curSystem != null && ps.curSystem.HasCoordinate)
-                    {
-                        ps.lastKnownSystem = lastknownps;
-                        lastknownps = ps.curSystem;
-                    }
-                }
-
-
-                // For some reason I am unable to fathom this errors during the session after DBUpgrade8
-                // colours just resolves to an object reference not set error, but after a restart it works fine
-                // Not going to waste any more time, a one time restart is hardly the worst workaround in the world...
-                IEnumerable<IGrouping<int, SystemPosition>> colours =
-                    from SystemPosition sysPos in VisitedSystems
-                    group sysPos by sysPos.vs.MapColour;
-
-                foreach (IGrouping<int, SystemPosition> colour in colours)
-                {
-                    if (toolStripButtonDrawLines.Checked)
-                    {
-                        Data3DSetClass<LineData> datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                        foreach (SystemPosition sp in colour)
-                        {
-                            if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
-                            {
-                                datasetl.Add(new LineData(sp.curSystem.x - CenterSystem.x, sp.curSystem.y - CenterSystem.y, CenterSystem.z - sp.curSystem.z,
-                                    sp.lastKnownSystem.x - CenterSystem.x, sp.lastKnownSystem.y - CenterSystem.y, CenterSystem.z - sp.lastKnownSystem.z));
-
-                            }
-                        }
-                        _datasets.Add(datasetl);
-                    }
-                    else
-                    {
-                        var datasetvs = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                        foreach (SystemPosition sp in colour)
-                        {
-                            SystemClass star = SystemData.GetSystem(sp.Name);
-                            if (star != null && star.HasCoordinate)
-                            {
-
-                                AddSystem(star, datasetvs);
-                            }
-                        }
-                        _datasets.Add(datasetvs);
-                    }
-
-                }
-            }
-        }
-
-        private void AddCenterPointToDataset()
-        {
-            var dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
-
-            //GL.Enable(EnableCap.ProgramPointSize);
-            dataset.Add(new PointData(0, 0, 0));
-            _datasets.Add(dataset);
-        }
-
-        private void AddPOIsToDataset()
-        {
-            var dataset = new Data3DSetClass<PointData>("Interest", Color.Purple, 10.0f);
-            AddSystem("sol", dataset);
-            AddSystem("sagittarius a*", dataset);
-            //AddSystem("polaris", dataset);
-            _datasets.Add(dataset);
-        }
-
-        private void AddTrilaterationInfoToDataset()
-        {
-            if (ReferenceSystems != null && ReferenceSystems.Any())
-            {
-                var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
-                foreach (var refSystem in ReferenceSystems)
-                {
-                    referenceLines.Add(new LineData(0, 0, 0, refSystem.x - CenterSystem.x, refSystem.y - CenterSystem.y, CenterSystem.z - refSystem.z));
-                }
-
-                _datasets.Add(referenceLines);
-
-                var lineSet = new Data3DSetClass<LineData>("SuggestedReference", Color.DarkOrange, 5.0f);
-
-
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
-
-                for (int ii = 0; ii < 16; ii++)
-                {
-                    var rsys = references.GetCandidate();
-                    if (rsys == null) break;
-                    var system = rsys.System;
-                    references.AddReferenceStar(system);
-                    if (ReferenceSystems != null && ReferenceSystems.Any(s => s.name == system.name)) continue;
-                    System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
-                    lineSet.Add(new LineData(0, 0, 0, system.x - CenterSystem.x, system.y - CenterSystem.y, CenterSystem.z - system.z));
-                }
-                sw.Stop();
-                System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-                _datasets.Add(lineSet);
-            }
-        }
-
-        private void AddSystem(string systemName, Data3DSetClass<PointData> dataset)
-        {
-            AddSystem(SystemData.GetSystem(systemName), dataset);
-        }
-
-        private void AddSystem(SystemClass system, Data3DSetClass<PointData> dataset)
-        {
-            if (system != null && system.HasCoordinate)
-            {
-                dataset.Add(new PointData(system.x - CenterSystem.x, system.y - CenterSystem.y, CenterSystem.z - system.z));
-            }
-        }
-
 
         private void GenerateDataSetsAllegiance()
         {
