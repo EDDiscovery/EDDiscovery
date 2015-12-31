@@ -5,13 +5,10 @@ using EDDiscovery2.Trilateration;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EDDiscovery2
@@ -128,23 +125,8 @@ namespace EDDiscovery2
             else
             {
                 OrientateMapAroundSystem(CenterSystem);
-
             }
             toolStripShowAllStars.Renderer = new MyRenderer();
-        }
-
-        /// <summary>
-        /// Loads Control
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void glControl1_Load(object sender, EventArgs e)
-        {
-            _loaded = true;
-            GL.ClearColor(Color.Black); // Yey! .NET Colors can be used directly!
-
-            SetupViewport();
-
         }
 
         /// <summary>
@@ -152,7 +134,6 @@ namespace EDDiscovery2
         /// </summary>
         private void SetupViewport()
         {
-
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
@@ -163,7 +144,6 @@ namespace EDDiscovery2
 
             float orthoW = w * (_zoom + 1);
             float orthoH = h * (_zoom + 1);
-
 
             int orthoheight = 1000 * h / w;
 
@@ -187,8 +167,7 @@ namespace EDDiscovery2
                         _visitedStars[star.SearchName] = star;
                     }
                 }
-            }
-
+            }        
         }
 
 
@@ -217,8 +196,6 @@ namespace EDDiscovery2
                     for (int zz = -20000; zz <= 70000; zz += 1000)
                                         datasetGrid.Add(new LineData(-40000 - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - zz,
                          40000 - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - zz));
-
-
 
                     _datasets.Add(datasetGrid);
             }
@@ -441,8 +418,6 @@ namespace EDDiscovery2
 
         }
 
-
-
         private void InitGenerateDataSet()
         {
 
@@ -535,21 +510,124 @@ namespace EDDiscovery2
             //                System.Diagnostics.Trace.WriteLine("X:" + x + " Y:" + y + " Z:" + zoom);
         }
 
+        private void SetCenterSystem(SystemClass sys)
+        {
+            if (sys == null) return;
+
+            CenterSystem = sys;
+            ShowCenterSystem();
+
+            GenerateDataSets();
+            glControl1.Invalidate();
+        }
+
+        private void ShowCenterSystem()
+        {
+            if (CenterSystem == null)
+            {
+                CenterSystem = SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+            }
+            UpdateStatus();
+            labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
+        }
+
+        private void UpdateStatus()
+        {
+            toolStripStatusLabelSystem.Text = CenterSystem.name;
+            toolStripStatusLabelCoordinates.Text = string.Format("x:{0} y:{1} z:{2}", CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
+            toolStripStatusLabelZoom.Text = "Width:" + (2000 / _zoom).ToString("0");
+        }    
+        
+        private void OrientateMapAroundSystem(String systemName)
+        {
+            if (!String.IsNullOrWhiteSpace(systemName))
+            {
+                SystemClass system = SystemData.GetSystem(systemName.Trim());
+                OrientateMapAroundSystem(system);
+            }
+        }
+
+        private void OrientateMapAroundSystem(SystemClass system)
+        {
+            CenterSystem = system;
+            textboxFrom.Text = system.name;
+            SetCenterSystem(system);
+        }
+
+        private void FormMap_Load(object sender, EventArgs e)
+        {
+            textboxFrom.AutoCompleteCustomSource = _systemNames;
+            ShowCenterSystem();
+            GenerateDataSets();
+            //GenerateDataSetsAllegiance();
+            //GenerateDataSetsGovernment();
+        }
+
+        private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
+        private void buttonCenter_Click(object sender, EventArgs e)
+        {
+            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
+            SetCenterSystem(sys);
+        }
+
+        private void buttonSetDefault_Click(object sender, EventArgs e)
+        {
+            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
+            if (sys != null && sys.HasCoordinate)
+            {
+                var db = new SQLiteDBClass();
+                db.PutSettingString("DefaultMapCenter", sys.name);
+                if (CenterSystem.name != sys.name) SetCenterSystem(sys);
+            }
+        }
+
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            SystemPosition ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
+
+            if (ps2 != null)
+                SetCenterSystem(ps2.curSystem);
+        }
+
+        private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
+        {
+            //toolStripButtonDrawLines.Checked = !toolStripButtonDrawLines.Checked;
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
+        {
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonStations_Click(object sender, EventArgs e)
+        {
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonGrud_Click(object sender, EventArgs e)
+        {
+            SetCenterSystem(CenterSystem);
+        }
 
         /// <summary>
-        /// We need to setup each time our viewport and Ortho.
+        /// Loads Control
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void glControl1_Resize(object sender, EventArgs e)
+        private void glControl1_Load(object sender, EventArgs e)
         {
-            if (!_loaded)
-                return;
+            _loaded = true;
+            GL.ClearColor(Color.Black); // Yey! .NET Colors can be used directly!
 
             SetupViewport();
         }
-
-        int nr = 0;
 
         /// <summary>
         /// Paint The control.
@@ -566,8 +644,6 @@ namespace EDDiscovery2
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-
-            nr++;
             GL.Translate(_x, _y, 0); // position triangle according to our x variable
             GL.Rotate(_xAng, 0, 1, 0);
             GL.Rotate(_yAng, 1, 0, 0);
@@ -580,7 +656,6 @@ namespace EDDiscovery2
             GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
 
             //GL.Color3(Color.Yellow);
             //GL.Begin(BeginMode.Triangles);
@@ -595,7 +670,34 @@ namespace EDDiscovery2
 
         }
 
+        /// <summary>
+        /// We need to setup each time our viewport and Ortho.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void glControl1_Resize(object sender, EventArgs e)
+        {
+            if (!_loaded)
+                return;
 
+            SetupViewport();
+        }
+
+        private void glControl1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                _mouseStartRotate.X = e.X;
+                _mouseStartRotate.Y = e.Y;
+            }
+
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                _mouseStartTranslate.X = e.X;
+                _mouseStartTranslate.Y = e.Y;
+            }
+
+        }
 
         /// <summary>
         /// The triangle will always move with the cursor. 
@@ -640,13 +742,9 @@ namespace EDDiscovery2
 
                 glControl1.Invalidate();
             }
-
-
-
         }
 
-
-        private void OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void glControl1_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Delta > 0 && _zoom < ZoomMax) _zoom *= (float)ZoomFact;
             if (e.Delta < 0 && _zoom > ZoomMin) _zoom /= (float)ZoomFact;
@@ -659,127 +757,9 @@ namespace EDDiscovery2
             glControl1.Invalidate();
         }
 
-        private void glControl1_MouseDown(object sender, MouseEventArgs e)
+        private void glControl1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                _mouseStartRotate.X = e.X;
-                _mouseStartRotate.Y = e.Y;
-            }
 
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                _mouseStartTranslate.X = e.X;
-                _mouseStartTranslate.Y = e.Y;
-            }
-
-        }
-
-        private void FormMap_Load(object sender, EventArgs e)
-        {
-            textboxFrom.AutoCompleteCustomSource = _systemNames;
-            ShowCenterSystem();
-            GenerateDataSets();
-            //GenerateDataSetsAllegiance();
-            //GenerateDataSetsGovernment();
-        }
-
-
-
-        private void buttonCenter_Click(object sender, EventArgs e)
-        {
-            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
-            SetCenterSystem(sys);
-        }
-
-        private void SetCenterSystem(SystemClass sys)
-        {
-            if (sys == null) return;
-
-            CenterSystem = sys;
-            ShowCenterSystem();
-
-            GenerateDataSets();
-            glControl1.Invalidate();
-        }
-
-        private void ShowCenterSystem()
-        {
-            if (CenterSystem == null)
-            {
-                CenterSystem = SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
-            }
-            UpdateStatus();
-            labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
-        }
-
-        private void UpdateStatus()
-        {
-            toolStripStatusLabelSystem.Text = CenterSystem.name;
-            toolStripStatusLabelCoordinates.Text = string.Format("x:{0} y:{1} z:{2}", CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
-            toolStripStatusLabelZoom.Text = "Width:" + (2000 / _zoom).ToString("0");
-        }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            SystemPosition ps2 = (from c in VisitedSystems where c.curSystem!=null && c.curSystem.HasCoordinate==true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
-
-            if (ps2!=null)
-                SetCenterSystem(ps2.curSystem);
-        }
-
-        private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
-        {
-            //toolStripButtonDrawLines.Checked = !toolStripButtonDrawLines.Checked;
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void buttonSetDefault_Click(object sender, EventArgs e)
-        {
-            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
-            if (sys != null && sys.HasCoordinate)
-            {
-                var db = new SQLiteDBClass();
-                db.PutSettingString("DefaultMapCenter", sys.name);
-                if (CenterSystem.name != sys.name) SetCenterSystem(sys);
-            }
-        }
-
-        private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
-        {
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void toolStripButtonStations_Click(object sender, EventArgs e)
-        {
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void toolStripButtonGrud_Click(object sender, EventArgs e)
-        {
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            this.Hide();
-        }
-
-        private void OrientateMapAroundSystem(String systemName)
-        {
-            if (!String.IsNullOrWhiteSpace(systemName))
-            {
-                SystemClass system = SystemData.GetSystem(systemName.Trim());
-                OrientateMapAroundSystem(system);
-            }
-        }
-
-        private void OrientateMapAroundSystem(SystemClass system)
-        {
-            CenterSystem = system;
-            textboxFrom.Text = system.name;
-            SetCenterSystem(system);
         }
     }
 }
