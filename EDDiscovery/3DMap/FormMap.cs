@@ -193,9 +193,9 @@ namespace EDDiscovery2
 
         private void GenerateDataSetStandard()
         {
-            InitGenerateDataSet();
+            InitStarLists();
 
-            _datasets = new List<IData3DSet>();
+            _datasets = DatasetBuilder.Build();
 
             BuildGridLines();
             AddStandardSystemsToDataset();
@@ -396,7 +396,7 @@ namespace EDDiscovery2
 
             var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
 
-            InitGenerateDataSet();
+            InitStarLists();
 
             _datasets = new List<IData3DSet>();
 
@@ -430,7 +430,7 @@ namespace EDDiscovery2
 
             var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
 
-            InitGenerateDataSet();
+            InitStarLists();
 
             _datasets = new List<IData3DSet>();
 
@@ -466,7 +466,7 @@ namespace EDDiscovery2
 
         }
 
-        private void InitGenerateDataSet()
+        private void InitStarLists()
         {
 
             if (_starList == null)
