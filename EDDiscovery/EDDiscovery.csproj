@@ -151,6 +151,18 @@
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
+    <Compile Include="Prospecting\AddMaterialNodeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Prospecting\AddMaterialNodeControl.Designer.cs">
+      <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Prospecting\FormAddMaterialNode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prospecting\FormAddMaterialNode.Designer.cs">
+      <DependentUpon>FormAddMaterialNode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Prospecting\Material.cs" />
     <Compile Include="EMK\Arc.cs" />
     <Compile Include="EMK\AStar.cs" />
@@ -253,6 +265,12 @@
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Prospecting\AddMaterialNodeControl.resx">
+      <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Prospecting\FormAddMaterialNode.resx">
+      <DependentUpon>FormAddMaterialNode.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -270,6 +288,7 @@
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Material.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
