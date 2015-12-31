@@ -2,6 +2,8 @@
 using EDDiscovery.DB;
 using EDDiscovery2._3DMap;
 using EDDiscovery2.Trilateration;
+using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -40,11 +42,13 @@ namespace EDDiscovery2
         private SystemClass _centerSystem;
         private bool _loaded = false;
 
-        private float _x = 0.0f;
-        private float _y = 0.0f;
+        private float _screenX = 0.0f;
+        private float _screenY = 0.0f;
         private float _zoom = 1.0f;
         private float _xAng = 0.0f;
         private float _yAng = 90.0f;
+
+        private Vector3 _cursorPosition;
 
         private Point _mouseStartRotate;
         private Point _mouseStartTranslate;
@@ -131,8 +135,8 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
-            _x = 0.0f;
-            _y = 0.0f;
+            _screenX = 0.0f;
+            _screenY = 0.0f;
 
             _xAng = 0.0f;
             _yAng = 90.0f;
@@ -197,7 +201,7 @@ namespace EDDiscovery2
             if (toolStripButtonGrid.Checked)
             {
                 bool addstations = !toolStripButtonStations.Checked;
-                var datasetGrid = new Data3DSetClass<LineData>("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#ff7100"), 1.0f);
+                var datasetGrid = new Data3DSetClass<LineData>("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
 
                 for (int xx = -40000; xx <= 40000; xx += 1000)
                     {
@@ -538,15 +542,12 @@ namespace EDDiscovery2
             {
                 CenterSystem = SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             }
-            UpdateStatus();
             labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
         }
 
         private void UpdateStatus()
         {
-            toolStripStatusLabelSystem.Text = CenterSystem.name;
-            toolStripStatusLabelCoordinates.Text = string.Format("x:{0} y:{1} z:{2}", CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
-            toolStripStatusLabelZoom.Text = "Width:" + (2000 / _zoom).ToString("0");
+            statusLabel.Text = $"Coordinates: x={_cursorPosition.X} y={_cursorPosition.Y} z={_cursorPosition.Z}";
         }    
         
         private void OrientateMapAroundSystem(String systemName)
@@ -635,7 +636,8 @@ namespace EDDiscovery2
         private void glControl1_Load(object sender, EventArgs e)
         {
             _loaded = true;
-            GL.ClearColor(Color.Black); // Yey! .NET Colors can be used directly!
+
+            GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10")); 
 
             SetupViewport();
         }
@@ -655,7 +657,7 @@ namespace EDDiscovery2
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            GL.Translate(_x, _y, 0); // position triangle according to our x variable
+            GL.Translate(_screenX, _screenY, 0); // position triangle according to our x variable
             GL.Rotate(_xAng, 0, 1, 0);
             GL.Rotate(_yAng, 1, 0, 0);
             GL.Scale(_zoom, _zoom, _zoom);
@@ -678,7 +680,7 @@ namespace EDDiscovery2
             DrawStars();
 
             glControl1.SwapBuffers();
-
+            UpdateStatus();
         }
 
         /// <summary>
@@ -746,8 +748,8 @@ namespace EDDiscovery2
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _x += dx * _zoom;
-                _y += -dy * _zoom;
+                _screenX += dx * _zoom;
+                _screenY += -dy * _zoom;
 
                 SetupCursorXYZ();
 
@@ -761,16 +763,14 @@ namespace EDDiscovery2
             if (e.Delta < 0 && _zoom > ZoomMin) _zoom /= (float)ZoomFact;
 
             //System.Diagnostics.Trace.WriteLine("Zoom:" + zoom + " : W:" + (2000/ zoom).ToString("0"));
-            UpdateStatus();
             SetupCursorXYZ();
 
             SetupViewport();
             glControl1.Invalidate();
         }
 
-        private void glControl1_KeyPress(object sender, KeyPressEventArgs e)
+        private void glControl1_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
-
         }
     }
 }
