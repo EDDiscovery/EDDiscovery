@@ -40,12 +40,12 @@ namespace EDDiscovery2
         private SystemClass _centerSystem;
         private bool _loaded = false;
 
-        private float _x = 0;
-        private float _y = 0;
-        private float _z = 0;
-        private float _zoom = 1;
-        private float _xAng = 0;
-        private float _yAng = 90;
+        private float _x = 0.0f;
+        private float _y = 0.0f;
+        private float _z = 0.0f;
+        private float _zoom = 1.0f;
+        private float _xAng = 0.0f;
+        private float _yAng = 90.0f;
 
         private Point _mouseStartRotate;
         private Point _mouseStartTranslate;
@@ -126,7 +126,16 @@ namespace EDDiscovery2
             {
                 OrientateMapAroundSystem(CenterSystem);
             }
+            ResetCamera();
             toolStripShowAllStars.Renderer = new MyRenderer();
+        }
+
+        private void ResetCamera()
+        {
+            _xAng = 0.0f;
+            _yAng = 90.0f;
+
+            _zoom = 1.0f;
         }
 
         /// <summary>
@@ -142,12 +151,12 @@ namespace EDDiscovery2
 
             if (w == 0 || h == 0) return;
 
-            float orthoW = w * (_zoom + 1);
-            float orthoH = h * (_zoom + 1);
+            float orthoW = w * (_zoom + 1.0f);
+            float orthoH = h * (_zoom + 1.0f);
 
-            int orthoheight = 1000 * h / w;
+            float orthoheight = 1000.0f * h / w;
 
-            GL.Ortho(-1000.0, 1000.0, -orthoheight, orthoheight, -5000.0, 5000.0);
+            GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
             //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
@@ -718,8 +727,8 @@ namespace EDDiscovery2
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _xAng += (float)(dx / 5.0);
-                _yAng += (float)(-dy / 5.0);
+                _xAng += (float)(dx / 5.0f);
+                _yAng += (float)(-dy / 5.0f);
 
                 SetupCursorXYZ();
 
