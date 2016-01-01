@@ -1,6 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2.DB.Offline;
+using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

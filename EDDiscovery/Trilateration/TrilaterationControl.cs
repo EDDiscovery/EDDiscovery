@@ -12,7 +12,7 @@ using EDDiscovery2;
 using ThreadState = System.Threading.ThreadState;
 using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
-using EDDiscovery2.DB.Offline;
+using EDDiscovery2.DB;
 
 namespace EDDiscovery
 {

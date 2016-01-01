@@ -1,6 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2.DB.Offline;
+using EDDiscovery2.DB;
 
 using System;
 using System.Collections.Generic;
@@ -158,6 +158,8 @@ namespace EDDiscovery2._3DMap
             }
         }
 
+        // Planned change: Centered system will be marked but won't be "center" of the galaxy
+        // dataset anymore. The origin will stay at Sol.
         public void AddCenterPointToDataset()
         {
             var dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
