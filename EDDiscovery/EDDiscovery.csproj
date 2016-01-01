@@ -154,19 +154,19 @@
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
-    <Compile Include="Prospecting\AddMaterialNodeControl.cs">
+    <Compile Include="PlanetSystems\AddMaterialNodeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Prospecting\AddMaterialNodeControl.Designer.cs">
+    <Compile Include="PlanetSystems\AddMaterialNodeControl.Designer.cs">
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Prospecting\FormProspecting.cs">
+    <Compile Include="PlanetSystems\FormProspecting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Prospecting\FormProspecting.Designer.cs">
+    <Compile Include="PlanetSystems\FormProspecting.Designer.cs">
       <DependentUpon>FormProspecting.cs</DependentUpon>
     </Compile>
-    <Compile Include="Prospecting\Material.cs" />
+    <Compile Include="PlanetSystems\Material.cs" />
     <Compile Include="EMK\Arc.cs" />
     <Compile Include="EMK\AStar.cs" />
     <Compile Include="EMK\Graph.cs" />
@@ -268,10 +268,10 @@
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Prospecting\AddMaterialNodeControl.resx">
+    <EmbeddedResource Include="PlanetSystems\AddMaterialNodeControl.resx">
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Prospecting\FormProspecting.resx">
+    <EmbeddedResource Include="PlanetSystems\FormProspecting.resx">
       <DependentUpon>FormProspecting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RouteControl.resx">
