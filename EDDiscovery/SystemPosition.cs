@@ -1,5 +1,6 @@
 ﻿using EDDiscovery.DB;
 using EDDiscovery2.DB;
+using EDDiscovery2.DB.Offline;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,9 @@ namespace EDDiscovery
         public int Nr;
         public int BodyNr;
 
-        public SystemClass curSystem;
-        public SystemClass prevSystem;
-        public SystemClass lastKnownSystem;
+        public ISystem curSystem;
+        public ISystem prevSystem;
+        public ISystem lastKnownSystem;
         public string strDistance;
         public VisitedSystemsClass vs;
         

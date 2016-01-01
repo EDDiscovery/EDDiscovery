@@ -1,5 +1,5 @@
-EDDiscovery/bin/
-EDDiscovery/obj/
-packages/
+bin
+obj
+packages
 .vs
 *.csproj.user

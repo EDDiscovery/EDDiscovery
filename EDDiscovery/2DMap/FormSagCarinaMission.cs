@@ -1,5 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery2.DB.Offline;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -360,7 +361,7 @@ namespace EDDiscovery2
             TestGrid(gfx);
         }
 
-        private void DrawLine(Graphics gfx, Pen pen, SystemClass sys1, SystemClass sys2)
+        private void DrawLine(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
         {
             gfx.DrawLine(pen, Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.x, (int)sys1.z))), Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys2.x, (int)sys2.z))));
         }

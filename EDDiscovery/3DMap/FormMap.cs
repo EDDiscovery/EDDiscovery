@@ -1,17 +1,17 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery2.DB.Offline;
 using EDDiscovery2._3DMap;
 using EDDiscovery2.Trilateration;
+using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EDDiscovery2
@@ -35,36 +35,34 @@ namespace EDDiscovery2
             }
         }
 
-
-
         private const int ZoomMax = 100;
         private const double ZoomMin = 0.005;
         private const double ZoomFact = 1.2589254117941672104239541063958;
+
         private AutoCompleteStringCollection _systemNames;
-        private SystemClass _centerSystem;
-        private bool loaded = false;
+        private ISystem _centerSystem;
+        private bool _loaded = false;
 
-        private float x = 0;
-        private float y = 0;
-        private float z = 0;
-        private float zoom = 1;
-        private float xang = 0;
-        private float yang = 90;
+        private float _systemOffsetX = 0.0f;
+        private float _systemOffsetY = 0.0f;
+        private float _zoom = 1.0f;
+        private float _xAng = 0.0f;
+        private float _yAng = 90.0f;
 
-        private Point MouseStartRotate;
-        private Point MouseStartTranslate;
+        private Vector3 _cursorPosition;
 
-        public List<SystemClass> StarList;
-        public List<SystemClass> ReferenceSystems;
-        private Dictionary<string, SystemClass> VisitedStars;
+        private Point _mouseStartRotate;
+        private Point _mouseStartTranslate;
 
-        private List<IData3DSet> datasets;
+        private List<SystemClass> _starList;
+        private Dictionary<string, SystemClass> _visitedStars;
 
-        public bool ShowTril;
+        private List<IData3DSet> _datasets;
 
+        public List<SystemClass> ReferenceSystems { get; set; }
         public List<SystemPosition> VisitedSystems { get; set; }
 
-        public SystemClass CenterSystem {
+        public ISystem CenterSystem {
             get
             {
                 return _centerSystem;
@@ -131,23 +129,20 @@ namespace EDDiscovery2
             else
             {
                 OrientateMapAroundSystem(CenterSystem);
-
             }
+            ResetCamera();
             toolStripShowAllStars.Renderer = new MyRenderer();
         }
 
-        /// <summary>
-        /// Loads Control
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void glControl1_Load(object sender, EventArgs e)
+        private void ResetCamera()
         {
-            loaded = true;
-            GL.ClearColor(Color.Black); // Yey! .NET Colors can be used directly!
+            _systemOffsetX = 0.0f;
+            _systemOffsetY = 0.0f;
 
-            SetupViewport();
+            _xAng = 0.0f;
+            _yAng = 90.0f;
 
+            _zoom = 1.0f;
         }
 
         /// <summary>
@@ -155,7 +150,6 @@ namespace EDDiscovery2
         /// </summary>
         private void SetupViewport()
         {
-
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
@@ -164,13 +158,12 @@ namespace EDDiscovery2
 
             if (w == 0 || h == 0) return;
 
-            float orthoW = w * (zoom + 1);
-            float orthoH = h * (zoom + 1);
+            float orthoW = w * (_zoom + 1.0f);
+            float orthoH = h * (_zoom + 1.0f);
 
+            float orthoheight = 1000.0f * h / w;
 
-            int orthoheight = 1000 * h / w;
-
-            GL.Ortho(-1000.0, 1000.0, -orthoheight, orthoheight, -5000.0, 5000.0);
+            GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
             //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
@@ -178,7 +171,7 @@ namespace EDDiscovery2
 
         public void InitData()
         {
-            VisitedStars = new Dictionary<string, SystemClass>();
+            _visitedStars = new Dictionary<string, SystemClass>();
 
             if (VisitedSystems != null)
             {
@@ -187,11 +180,10 @@ namespace EDDiscovery2
                     SystemClass star = SystemData.GetSystem(sp.Name);
                     if (star != null && star.HasCoordinate)
                     {
-                        VisitedStars[star.SearchName] = star;
+                        _visitedStars[star.SearchName] = star;
                     }
                 }
-            }
-
+            }        
         }
 
 
@@ -202,181 +194,44 @@ namespace EDDiscovery2
 
         private void GenerateDataSetStandard()
         {
-            InitGenerateDataSet();
+            InitStarLists();
 
-            datasets = new List<IData3DSet>();
-
-
-            if (toolStripButtonGrid.Checked)
+            var builder = new DatasetBuilder()
             {
-                bool addstations = !toolStripButtonStations.Checked;
-                var datasetGrid = new Data3DSetClass<LineData>("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#ff7100"), 1.0f);
+                // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
+                // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
+                Origin = CenterSystem,
 
-                for (int xx = -40000; xx <= 40000; xx += 1000)
-                    {
-                        datasetGrid.Add(new LineData(xx - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.x  - - 20000,
-                            xx - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - 70000));
-                    }
-                    for (int zz = -20000; zz <= 70000; zz += 1000)
-                                        datasetGrid.Add(new LineData(-40000 - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - zz,
-                         40000 - CenterSystem.x, 0 - CenterSystem.y, CenterSystem.z - zz));
+                VisitedSystems = VisitedSystems,
 
-
-
-                    datasets.Add(datasetGrid);
+                GridLines = toolStripButtonGrid.Checked,
+                DrawLines = toolStripButtonDrawLines.Checked,
+                AllSystems = toolStripButtonShowAllStars.Checked,
+                Stations = toolStripButtonStations.Checked
+            };
+            if (_starList != null)
+            {
+                builder.StarList = _starList.ConvertAll(system => (ISystem)system);
+            }
+            if (ReferenceSystems != null)
+            {
+                builder.ReferenceSystems = ReferenceSystems.ConvertAll(system => (ISystem)system);
             }
 
-
-            if (toolStripButtonShowAllStars.Checked)
-            {
-                bool addstations = !toolStripButtonStations.Checked;
-                var datasetS = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
-
-                foreach (SystemClass si in StarList)
-                {
-                    if (addstations  || si.population==0)
-                        AddSystem(si, datasetS);
-                }
-                datasets.Add(datasetS);
-            }
-
-
-            if (toolStripButtonStations.Checked)
-            {
-                var datasetS = new Data3DSetClass<PointData>("stations", Color.RoyalBlue, 1.0f);
-
-                foreach (SystemClass si in StarList)
-                {
-                   if (si.population>0)
-                        AddSystem(si, datasetS);
-                }
-                datasets.Add(datasetS);
-            }
-
-            if (VisitedSystems != null && VisitedSystems.Any())
-            {
-                SystemClass lastknownps = null;
-                foreach (SystemPosition ps in VisitedSystems)
-                {
-                    if (ps.curSystem!=null && ps.curSystem.HasCoordinate)
-                    {
-                        ps.lastKnownSystem = lastknownps;
-                        lastknownps = ps.curSystem;
-                    }
-                }
-
-
-                // For some reason I am unable to fathom this errors during the session after DBUpgrade8
-                // colours just resolves to an object reference not set error, but after a restart it works fine
-                // Not going to waste any more time, a one time restart is hardly the worst workaround in the world...
-                IEnumerable<IGrouping<int, SystemPosition>> colours =
-                    from SystemPosition sysPos in VisitedSystems
-                    group sysPos by sysPos.vs.MapColour;
-
-                foreach (IGrouping<int, SystemPosition> colour in colours)
-                {
-                    if (toolStripButtonDrawLines.Checked)
-                    {
-                        Data3DSetClass<LineData>  datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                        foreach (SystemPosition sp in colour)
-                        {
-                            if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem!=null && sp.lastKnownSystem.HasCoordinate)
-                            {
-                                datasetl.Add(new LineData(sp.curSystem.x - CenterSystem.x, sp.curSystem.y - CenterSystem.y, CenterSystem.z - sp.curSystem.z,
-                                    sp.lastKnownSystem.x - CenterSystem.x, sp.lastKnownSystem.y - CenterSystem.y,  CenterSystem.z - sp.lastKnownSystem.z));
-
-                            }
-                        }
-                        datasets.Add(datasetl);
-                    }
-                    else
-                    {
-                        var datasetvs = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                        foreach (SystemPosition sp in colour)
-                        {
-                            SystemClass star = SystemData.GetSystem(sp.Name);
-                            if (star != null && star.HasCoordinate)
-                            {
-                                
-                                AddSystem(star, datasetvs);
-                            }
-                        }
-                        datasets.Add(datasetvs);
-                    }
-
-                }
-            }
-
-
-            var dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
-
-            //GL.Enable(EnableCap.ProgramPointSize);
-            dataset.Add(new PointData(0, 0, 0));
-            datasets.Add(dataset);
-
-            dataset = new Data3DSetClass<PointData>("Interest", Color.Purple, 10.0f);
-            AddSystem("sol", dataset);
-            AddSystem("sagittarius a*", dataset);
-            //AddSystem("polaris", dataset);
-            datasets.Add(dataset);
-
-
-            if (ReferenceSystems != null && ReferenceSystems.Any())
-            {
-                var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
-                foreach (var refSystem in ReferenceSystems)
-                {
-                    referenceLines.Add(new LineData(0, 0, 0, refSystem.x - CenterSystem.x, refSystem.y - CenterSystem.y, CenterSystem.z - refSystem.z));
-                }
-
-                datasets.Add(referenceLines);
-
-                var lineSet = new Data3DSetClass<LineData>("SuggestedReference", Color.DarkOrange, 5.0f);
-
-
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
-
-                for (int ii = 0; ii < 16; ii++)
-                {
-                    var rsys = references.GetCandidate();
-                    if (rsys == null) break;
-                    var system = rsys.System;
-                    references.AddReferenceStar(system);
-                    if (ReferenceSystems != null && ReferenceSystems.Any(s => s.name == system.name)) continue;
-                    System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
-                    lineSet.Add(new LineData(0, 0, 0, system.x - CenterSystem.x, system.y - CenterSystem.y, CenterSystem.z - system.z));
-                }
-                sw.Stop();
-                System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-                datasets.Add(lineSet);
-            }
-
-        }
-
-        private void AddSystem(string systemName, Data3DSetClass<PointData> dataset)
-        {
-            AddSystem(SystemData.GetSystem(systemName), dataset);
-        }
-
-        private void AddSystem(SystemClass system, Data3DSetClass<PointData> dataset)
-        {
-            if (system != null && system.HasCoordinate)
-            {
-                dataset.Add(new PointData(system.x - CenterSystem.x, system.y - CenterSystem.y, CenterSystem.z - system.z));
-            }
+            _datasets = builder.Build();
         }
 
 
+        //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
+        // it out of FormMap's hair
         private void GenerateDataSetsAllegiance()
         {
 
             var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
 
-            InitGenerateDataSet();
+            InitStarLists();
 
-            datasets = new List<IData3DSet>();
+            _datasets = new List<IData3DSet>();
 
             datadict[(int)EDAllegiance.Alliance] = new Data3DSetClass<PointData>(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
             datadict[(int)EDAllegiance.Anarchy] = new Data3DSetClass<PointData>(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
@@ -386,7 +241,7 @@ namespace EDDiscovery2
             datadict[(int)EDAllegiance.None] = new Data3DSetClass<PointData>(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
             datadict[(int)EDAllegiance.Unknown] = new Data3DSetClass<PointData>(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
 
-            foreach (SystemClass si in StarList)
+            foreach (SystemClass si in _starList)
             {
                 if (si.HasCoordinate)
                 {
@@ -395,7 +250,7 @@ namespace EDDiscovery2
             }
 
             foreach (var ds in datadict.Values)
-                datasets.Add(ds);
+                _datasets.Add(ds);
 
             datadict[(int)EDAllegiance.None].Visible = false;
             datadict[(int)EDAllegiance.Unknown].Visible = false;
@@ -403,14 +258,16 @@ namespace EDDiscovery2
         }
 
 
+        //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
+        // it out of FormMap's hair
         private void GenerateDataSetsGovernment()
         {
 
             var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
 
-            InitGenerateDataSet();
+            InitStarLists();
 
-            datasets = new List<IData3DSet>();
+            _datasets = new List<IData3DSet>();
 
             datadict[(int)EDGovernment.Anarchy] = new Data3DSetClass<PointData>(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
             datadict[(int)EDGovernment.Colony] = new Data3DSetClass<PointData>(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
@@ -428,7 +285,7 @@ namespace EDDiscovery2
             datadict[(int)EDGovernment.None] = new Data3DSetClass<PointData>(EDGovernment.None.ToString(), Color.Gray, 1.0f);
             datadict[(int)EDGovernment.Unknown] = new Data3DSetClass<PointData>(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
 
-            foreach (SystemClass si in StarList)
+            foreach (SystemClass si in _starList)
             {
                 if (si.HasCoordinate)
                 {
@@ -437,29 +294,27 @@ namespace EDDiscovery2
             }
 
             foreach (var ds in datadict.Values)
-                datasets.Add(ds);
+                _datasets.Add(ds);
 
             datadict[(int)EDGovernment.None].Visible = false;
             datadict[(int)EDGovernment.Unknown].Visible = false;
 
         }
 
-
-
-        private void InitGenerateDataSet()
+        private void InitStarLists()
         {
 
-            if (StarList == null)
-                StarList = SQLiteDBClass.globalSystems;
+            if (_starList == null)
+                _starList = SQLiteDBClass.globalSystems;
 
 
-            if (VisitedStars == null)
+            if (_visitedStars == null)
                 InitData();
         }
 
         private void DrawStars()
         {
-            foreach (var dataset in datasets)
+            foreach (var dataset in _datasets)
             {
                 dataset.DrawAll();
             }
@@ -538,164 +393,7 @@ namespace EDDiscovery2
             //                System.Diagnostics.Trace.WriteLine("X:" + x + " Y:" + y + " Z:" + zoom);
         }
 
-
-        /// <summary>
-        /// We need to setup each time our viewport and Ortho.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void glControl1_Resize(object sender, EventArgs e)
-        {
-            if (!loaded)
-                return;
-
-            SetupViewport();
-        }
-
-        int nr = 0;
-
-        /// <summary>
-        /// Paint The control.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void glControl1_Paint(object sender, PaintEventArgs e)
-        {
-            if (!loaded) // Play nice
-                return;
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-
-
-            nr++;
-            GL.Translate(x, y, 0); // position triangle according to our x variable
-            GL.Rotate(xang, 0, 1, 0);
-            GL.Rotate(yang, 1, 0, 0);
-            GL.Scale(zoom, zoom, zoom);
-            //                GL.Enable(EnableCap.PointSmooth);
-            //                GL.Enable(EnableCap.Blend);
-
-
-            GL.Enable(EnableCap.PointSmooth);
-            GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
-
-            //GL.Color3(Color.Yellow);
-            //GL.Begin(BeginMode.Triangles);
-            //GL.Vertex2(10, 20);
-            //GL.Vertex2(100, 20);
-            //GL.Vertex2(100, 50);
-            //GL.End();
-
-            DrawStars();
-
-            glControl1.SwapBuffers();
-
-        }
-
-
-
-        /// <summary>
-        /// The triangle will always move with the cursor. 
-        /// But is is not a problem to make it only if mousebutton pressed. 
-        /// And do some simple ath with old Translation and new translation.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void glControl1_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                int dx = e.X - MouseStartRotate.X;
-                int dy = e.Y - MouseStartRotate.Y;
-
-                MouseStartRotate.X = e.X;
-                MouseStartRotate.Y = e.Y;
-                //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
-
-
-                xang += (float)(dx / 5.0);
-                yang += (float)(-dy / 5.0);
-
-                SetupCursorXYZ();
-
-                glControl1.Invalidate();
-            }
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                int dx = e.X - MouseStartTranslate.X;
-                int dy = e.Y - MouseStartTranslate.Y;
-
-                MouseStartTranslate.X = e.X;
-                MouseStartTranslate.Y = e.Y;
-                //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
-
-
-                x += dx * zoom;
-                y += -dy * zoom;
-
-                SetupCursorXYZ();
-
-                glControl1.Invalidate();
-            }
-
-
-
-        }
-
-
-        private void OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (e.Delta > 0 && zoom < ZoomMax) zoom *= (float)ZoomFact;
-            if (e.Delta < 0 && zoom > ZoomMin) zoom /= (float)ZoomFact;
-
-            //System.Diagnostics.Trace.WriteLine("Zoom:" + zoom + " : W:" + (2000/ zoom).ToString("0"));
-            UpdateStatus();
-            SetupCursorXYZ();
-
-            SetupViewport();
-            glControl1.Invalidate();
-        }
-
-        private void glControl1_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                MouseStartRotate.X = e.X;
-                MouseStartRotate.Y = e.Y;
-            }
-
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                MouseStartTranslate.X = e.X;
-                MouseStartTranslate.Y = e.Y;
-            }
-
-        }
-
-        private void FormMap_Load(object sender, EventArgs e)
-        {
-            textboxFrom.AutoCompleteCustomSource = _systemNames;
-            ShowCenterSystem();
-            GenerateDataSets();
-            //GenerateDataSetsAllegiance();
-            //GenerateDataSetsGovernment();
-        }
-
-
-
-        private void buttonCenter_Click(object sender, EventArgs e)
-        {
-            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
-            SetCenterSystem(sys);
-        }
-
-        private void SetCenterSystem(SystemClass sys)
+        private void SetCenterSystem(ISystem sys)
         {
             if (sys == null) return;
 
@@ -712,29 +410,49 @@ namespace EDDiscovery2
             {
                 CenterSystem = SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             }
-            UpdateStatus();
             labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
         }
 
         private void UpdateStatus()
         {
-            toolStripStatusLabelSystem.Text = CenterSystem.name;
-            toolStripStatusLabelCoordinates.Text = string.Format("x:{0} y:{1} z:{2}", CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
-            toolStripStatusLabelZoom.Text = "Width:" + (2000 / zoom).ToString("0");
+            statusLabel.Text = $"Coordinates: x={_cursorPosition.X} y={_cursorPosition.Y} z={_cursorPosition.Z}";
+        }    
+        
+        private void OrientateMapAroundSystem(String systemName)
+        {
+            if (!String.IsNullOrWhiteSpace(systemName))
+            {
+                ISystem system = SystemData.GetSystem(systemName.Trim());
+                OrientateMapAroundSystem(system);
+            }
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void OrientateMapAroundSystem(ISystem system)
         {
-            SystemPosition ps2 = (from c in VisitedSystems where c.curSystem!=null && c.curSystem.HasCoordinate==true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
-
-            if (ps2!=null)
-                SetCenterSystem(ps2.curSystem);
+            CenterSystem = system;
+            textboxFrom.Text = system.name;
+            SetCenterSystem(system);
         }
 
-        private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
+        private void FormMap_Load(object sender, EventArgs e)
         {
-            //toolStripButtonDrawLines.Checked = !toolStripButtonDrawLines.Checked;
-            SetCenterSystem(CenterSystem);
+            textboxFrom.AutoCompleteCustomSource = _systemNames;
+            ShowCenterSystem();
+            GenerateDataSets();
+            //GenerateDataSetsAllegiance();
+            //GenerateDataSetsGovernment();
+        }
+
+        private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
+        private void buttonCenter_Click(object sender, EventArgs e)
+        {
+            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
+            SetCenterSystem(sys);
         }
 
         private void buttonSetDefault_Click(object sender, EventArgs e)
@@ -746,6 +464,21 @@ namespace EDDiscovery2
                 db.PutSettingString("DefaultMapCenter", sys.name);
                 if (CenterSystem.name != sys.name) SetCenterSystem(sys);
             }
+        }
+
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            SystemPosition ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
+
+            if (ps2 != null)
+                SetCenterSystem(ps2.curSystem);
+        }
+
+        private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
+        {
+            //toolStripButtonDrawLines.Checked = !toolStripButtonDrawLines.Checked;
+            SetCenterSystem(CenterSystem);
         }
 
         private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
@@ -763,26 +496,149 @@ namespace EDDiscovery2
             SetCenterSystem(CenterSystem);
         }
 
-        private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
+        /// <summary>
+        /// Loads Control
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void glControl1_Load(object sender, EventArgs e)
         {
-            e.Cancel = true;
-            this.Hide();
+            _loaded = true;
+
+            GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10")); 
+
+            SetupViewport();
         }
 
-        private void OrientateMapAroundSystem(String systemName)
+        /// <summary>
+        /// Paint The control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void glControl1_Paint(object sender, PaintEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(systemName))
+            if (!_loaded) // Play nice
+                return;
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
+
+            GL.Translate(_systemOffsetX, _systemOffsetY, 0); // position triangle according to our x variable
+            GL.Rotate(_xAng, 0, 1, 0);
+            GL.Rotate(_yAng, 1, 0, 0);
+            GL.Scale(_zoom, _zoom, _zoom);
+            //                GL.Enable(EnableCap.PointSmooth);
+            //                GL.Enable(EnableCap.Blend);
+
+
+            GL.Enable(EnableCap.PointSmooth);
+            GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+            //GL.Color3(Color.Yellow);
+            //GL.Begin(BeginMode.Triangles);
+            //GL.Vertex2(10, 20);
+            //GL.Vertex2(100, 20);
+            //GL.Vertex2(100, 50);
+            //GL.End();
+
+            DrawStars();
+
+            glControl1.SwapBuffers();
+            UpdateStatus();
+        }
+
+        /// <summary>
+        /// We need to setup each time our viewport and Ortho.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void glControl1_Resize(object sender, EventArgs e)
+        {
+            if (!_loaded)
+                return;
+
+            SetupViewport();
+        }
+
+        private void glControl1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                SystemClass system = SystemData.GetSystem(systemName.Trim());
-                OrientateMapAroundSystem(system);
+                _mouseStartRotate.X = e.X;
+                _mouseStartRotate.Y = e.Y;
+            }
+
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                _mouseStartTranslate.X = e.X;
+                _mouseStartTranslate.Y = e.Y;
+            }
+
+        }
+
+        /// <summary>
+        /// The triangle will always move with the cursor. 
+        /// But is is not a problem to make it only if mousebutton pressed. 
+        /// And do some simple ath with old Translation and new translation.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void glControl1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                int dx = e.X - _mouseStartRotate.X;
+                int dy = e.Y - _mouseStartRotate.Y;
+
+                _mouseStartRotate.X = e.X;
+                _mouseStartRotate.Y = e.Y;
+                //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
+
+
+                _xAng += (float)(dx / 5.0f);
+                _yAng += (float)(-dy / 5.0f);
+
+                SetupCursorXYZ();
+
+                glControl1.Invalidate();
+            }
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                int dx = e.X - _mouseStartTranslate.X;
+                int dy = e.Y - _mouseStartTranslate.Y;
+
+                _mouseStartTranslate.X = e.X;
+                _mouseStartTranslate.Y = e.Y;
+                //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
+
+
+                _systemOffsetX += dx * _zoom;
+                _systemOffsetY += -dy * _zoom;
+
+                SetupCursorXYZ();
+
+                glControl1.Invalidate();
             }
         }
 
-        private void OrientateMapAroundSystem(SystemClass system)
+        private void glControl1_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            CenterSystem = system;
-            textboxFrom.Text = system.name;
-            SetCenterSystem(system);
+            if (e.Delta > 0 && _zoom < ZoomMax) _zoom *= (float)ZoomFact;
+            if (e.Delta < 0 && _zoom > ZoomMin) _zoom /= (float)ZoomFact;
+
+            //System.Diagnostics.Trace.WriteLine("Zoom:" + zoom + " : W:" + (2000/ zoom).ToString("0"));
+            SetupCursorXYZ();
+
+            SetupViewport();
+            glControl1.Invalidate();
+        }
+
+        private void glControl1_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
         }
     }
 }
