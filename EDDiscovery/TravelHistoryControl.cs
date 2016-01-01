@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
+using EDDiscovery2.DB.Offline;
 
 namespace EDDiscovery
 {
@@ -491,7 +492,7 @@ namespace EDDiscovery
         }
 
 
-        public SystemClass GetCurrentSystem()
+        public ISystem GetCurrentSystem()
         {
             if (visitedSystems.Count == 0)
             {
@@ -879,7 +880,7 @@ namespace EDDiscovery
             tctrl.Set(((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem);
         }
     
-		public SystemClass CurrentSystem
+		public ISystem CurrentSystem
         {
             get
             {

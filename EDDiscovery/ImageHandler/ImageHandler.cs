@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using EDDiscovery.DB;
 using EDDiscovery;
+using EDDiscovery2.DB.Offline;
 
 namespace EDDiscovery2.ImageHandler
 {
@@ -127,7 +128,7 @@ namespace EDDiscovery2.ImageHandler
                 string new_name = null;
                 new_name = "unknown";
 
-                SystemClass cursys = _discoveryForm.TravelControl.GetCurrentSystem();
+                ISystem cursys = _discoveryForm.TravelControl.GetCurrentSystem();
 
                 if (cursys!=null)
                 {
