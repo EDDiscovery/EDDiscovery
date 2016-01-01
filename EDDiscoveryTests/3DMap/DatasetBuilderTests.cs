@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using EDDiscovery.DB;
 using EDDiscovery2.DB.Offline;
+using System.Drawing;
+using OpenTK;
 
 namespace EDDiscovery2._3DMap.Tests
 {
@@ -13,11 +15,9 @@ namespace EDDiscovery2._3DMap.Tests
     public class DatasetBuilderTests
     {
         private DatasetBuilder _subject;
-        private List<ISystemClass> _starList;
-
-        private void SpawnStars()
+        private List<ISystemClass> SpawnStars()
         {
-            _starList = new List<ISystemClass>()
+            return new List<ISystemClass>()
             {
                 new OfflineSystemClass() { id=1000, name="Sol", x=0.0, y=0.0, z=0.0, population=16999999880 },
                 new OfflineSystemClass() { id=1100, name="Sagittarius A*", x=25.21875, y=-20.90625, z=25899.96875 },
@@ -31,19 +31,58 @@ namespace EDDiscovery2._3DMap.Tests
             };
         }
 
+        private OfflineSystemClass SpawnOrigin()
+        {
+            return new OfflineSystemClass()
+            {
+                x = 1000.0,
+                y = 1000.0,
+                z = 1000.0,
+                name = "centerWorld"
+            };
+        }
+
         [TestInitialize]
         public void Initialize()
-        {
-            SpawnStars();
+        {            
             _subject = new DatasetBuilder
             {
                 Origin = new OfflineSystemClass(),
-                StarList = _starList
+                StarList = SpawnStars()
             };
         }
 
         [TestMethod()]
-        public void When_building_all_systems_specifically()
+        public void When_building_a_grid()
+        {
+            _subject.GridLines = true;
+            _subject.MinGridPos = new Vector2(2000.0f, 12000.0f);
+            _subject.MaxGridPos = new Vector2(4000.0f, 14000.0f);
+            var datasets = _subject.Build();
+
+            Data3DSetClass<LineData> dataset = (Data3DSetClass<LineData>) datasets[0];
+            Assert.AreEqual(2000.0, dataset.Primatives[0].x1);
+            Assert.AreEqual(-12000.0, dataset.Primatives[0].z1);
+        }
+
+        public void When_building_a_grid_with_an_origin()
+        {
+            _subject.GridLines = true;
+            _subject.MinGridPos = new Vector2(2000.0f, 12000.0f);
+            _subject.MaxGridPos = new Vector2(4000.0f, 14000.0f);
+            _subject.Origin = SpawnOrigin();
+            var datasets = _subject.Build();
+
+            Data3DSetClass<LineData> dataset = (Data3DSetClass<LineData>)datasets[0];
+
+            // Note: Looks like the grid is drawn directly over the origin
+            Assert.AreEqual(2000.0, dataset.Primatives[0].x1);
+            Assert.AreEqual(-12000.0, dataset.Primatives[0].z1);
+        }
+
+
+        [TestMethod()]
+        public void When_building_all_systems()
         {
             _subject.AllSystems = true;
             var datasets = _subject.Build();
@@ -61,15 +100,12 @@ namespace EDDiscovery2._3DMap.Tests
         }
 
         [TestMethod()]
-        public void When_building_all_systems_with_legoworld_as_the_origin()
+        public void When_building_all_systems_with_an_origin()
         {
             // Probably won't need this test for long. 
             // Just want to be sure of how the offsets are configured for a "centered" system
             _subject.AllSystems = true;
-            _subject.Origin = new OfflineSystemClass()
-            {
-                x = 1000, y = 1000, z = 1000, name = "centerWorld"
-            };
+            _subject.Origin = SpawnOrigin();
             var datasets = _subject.Build();
 
             Data3DSetClass<PointData> dataset = (Data3DSetClass<PointData>)datasets[0];
@@ -77,7 +113,7 @@ namespace EDDiscovery2._3DMap.Tests
             var legoWorld = dataset.Primatives[LegoWorldIndex];
 
             // Confirm we pulled the correct fixture
-            Assert.AreEqual("Legoworld", _starList[LegoWorldIndex].name);
+            Assert.AreEqual("Legoworld", _subject.StarList[LegoWorldIndex].name);
 
             // And the real tests...
             Assert.AreEqual(-900, legoWorld.x); // -1000
