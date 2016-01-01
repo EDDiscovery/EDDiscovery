@@ -12,13 +12,14 @@ using EDDiscovery2;
 using ThreadState = System.Threading.ThreadState;
 using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
+using EDDiscovery2.DB.Offline;
 
 namespace EDDiscovery
 {
     public partial class TrilaterationControl : UserControl
     {
         private EDDiscoveryForm _discoveryForm;
-        private SystemClass TargetSystem;
+        private ISystem TargetSystem;
         private Thread trilaterationThread;
         private Trilateration.Result lastTrilatelationResult;
         private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
@@ -36,7 +37,7 @@ namespace EDDiscovery
         }
 
 
-        public void Set(SystemClass system)
+        public void Set(ISystem system)
         {
             if (TargetSystem == null || !TargetSystem.Equals(system))
             {
@@ -518,7 +519,7 @@ namespace EDDiscovery
             }
         }
 
-        public SystemClass LastKnownSystem
+        public ISystem LastKnownSystem
         {
             get
             {
@@ -532,7 +533,7 @@ namespace EDDiscovery
         }
 
 
-        public SystemClass CurrentSystem
+        public ISystem CurrentSystem
         {
             get
             {
