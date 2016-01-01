@@ -170,10 +170,10 @@ namespace EDDiscovery2
             get
             {
                 List<Material> mlist = new List<Material>();
-                foreach (Material mat in Enum.GetValues(typeof(Material)))
+                foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
                 {
-                    if (mat.material != MaterialEnum.Unknown)
-                        mlist.Add(mat);
+                    if (mat != MaterialEnum.Unknown)
+                        mlist.Add(new Material(mat));
                 }
                 return mlist;
             }

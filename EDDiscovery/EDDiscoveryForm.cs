@@ -163,7 +163,7 @@ namespace EDDiscovery
                 // Check for a new installer    
                 CheckForNewInstaller();
 
-                LogLine($"{Environment.NewLine}{Environment.NewLine}Loading completed!{Environment.NewLine}");
+                LogLine($"{Environment.NewLine}Loading completed!");
             }
             catch (Exception ex)
             {
@@ -997,5 +997,11 @@ namespace EDDiscovery
             }
         }
 
+        private void prospectingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormProspecting frm = new FormProspecting();
+
+            frm.Show();
+        }
     }
 }
