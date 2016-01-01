@@ -73,10 +73,10 @@ namespace EDDiscovery2._3DMap
     }
     public class Data3DSetClass<T> : IData3DSet where T : IDrawingPrimative
     {
-        public string Name;
+        public string Name { get; set; }
+        public List<T> Primatives { get; private set; }
         private readonly Color color;
         private readonly float pointSize;
-        private readonly List<T> primatives;
 
         public bool Visible;
 
@@ -85,7 +85,7 @@ namespace EDDiscovery2._3DMap
             Name = name;
             this.color = color;
             pointSize = pointsize;
-            primatives = new List<T>();
+            Primatives = new List<T>();
             Visible = true;
         }
 
@@ -94,14 +94,14 @@ namespace EDDiscovery2._3DMap
         {
             primative.Color = color;
             primative.Size = pointSize;
-            primatives.Add(primative);
+            Primatives.Add(primative);
         }
 
         public void DrawAll()
         {
             if (!Visible) return;
 
-            foreach (var primative in primatives)
+            foreach (var primative in Primatives)
             {
                 primative.Draw();
             }
@@ -110,6 +110,7 @@ namespace EDDiscovery2._3DMap
 
     public interface IData3DSet
     {
+        string Name { get; set; }
         void DrawAll();
     }
 }
