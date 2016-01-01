@@ -61,7 +61,7 @@ namespace EDDiscovery2
             this.glControl1.BackColor = System.Drawing.Color.Black;
             this.glControl1.Location = new System.Drawing.Point(0, 33);
             this.glControl1.Name = "glControl1";
-            this.glControl1.Size = new System.Drawing.Size(918, 496);
+            this.glControl1.Size = new System.Drawing.Size(918, 521);
             this.glControl1.TabIndex = 0;
             this.glControl1.VSync = false;
             this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
@@ -200,6 +200,7 @@ namespace EDDiscovery2
             this.statusStrip.Size = new System.Drawing.Size(918, 22);
             this.statusStrip.TabIndex = 21;
             this.statusStrip.Text = "statusStrip1";
+            this.statusStrip.Visible = false;
             // 
             // statusLabel
             // 
