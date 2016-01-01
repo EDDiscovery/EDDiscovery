@@ -9,6 +9,7 @@ using System.Text;
 using System.Drawing;
 using System.Diagnostics;
 using EDDiscovery2.Trilateration;
+using OpenTK;
 
 namespace EDDiscovery2._3DMap
 {
@@ -25,7 +26,10 @@ namespace EDDiscovery2._3DMap
         public bool DrawLines { get; set; } = false;
         public bool AllSystems { get; set; } = false;
         public bool Stations { get; set; } = false;
- 
+
+        public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
+        public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 70000.0f);
+
         public DatasetBuilder()
         {            
         }
@@ -46,29 +50,27 @@ namespace EDDiscovery2._3DMap
 
         public void AddGridLines()
         {
-            Point minPos = new Point(-50000, -20000);
-            Point maxPos = new Point(50000, 70000);
             int unitSize = 1000;
             if (GridLines)
             {
                 bool addstations = !Stations;
                 var datasetGrid = new Data3DSetClass<LineData>("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
 
-                for (int x = minPos.X; x <= maxPos.X; x += unitSize)
+                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
                 {
                     datasetGrid.Add(new LineData(x - Origin.x,
                         0 - Origin.y,
-                        Origin.x - minPos.Y,
+                        Origin.x - MinGridPos.Y,
                         x - Origin.x,
                         0 - Origin.y,
-                        Origin.z - maxPos.Y));
+                        Origin.z - MaxGridPos.Y));
                 }
-                for (int z = minPos.Y; z <= maxPos.Y; z += unitSize)
+                for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += unitSize)
                 {
-                    datasetGrid.Add(new LineData(minPos.X - Origin.x,
+                    datasetGrid.Add(new LineData(MinGridPos.X - Origin.x,
                         0 - Origin.y,
                         Origin.z - z,
-                        maxPos.Y - Origin.x,
+                        MaxGridPos.Y - Origin.x,
                         0 - Origin.y,
                         Origin.z - z));
                 }
