@@ -17,9 +17,9 @@ namespace EDDiscovery2._3DMap
     {
         private List<IData3DSet> _datasets;
 
-        public ISystemClass Origin { get; set; } = new SystemClass();
-        public List<ISystemClass> StarList { get; set; } = new List<ISystemClass>();
-        public List<ISystemClass> ReferenceSystems { get; set; } = new List<ISystemClass>();
+        public ISystem Origin { get; set; } = new SystemClass();
+        public List<ISystem> StarList { get; set; } = new List<ISystem>();
+        public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
         public List<SystemPosition> VisitedSystems { get; set; }
 
         public bool GridLines { get; set; } = false;
@@ -86,7 +86,7 @@ namespace EDDiscovery2._3DMap
                 bool addstations = !Stations;
                 var datasetS = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
 
-                foreach (ISystemClass si in StarList)
+                foreach (ISystem si in StarList)
                 {
                     if (addstations || si.population == 0)
                         AddSystem(si, datasetS);
@@ -101,7 +101,7 @@ namespace EDDiscovery2._3DMap
             {
                 var datasetS = new Data3DSetClass<PointData>("stations", Color.RoyalBlue, 1.0f);
 
-                foreach (SystemClass si in StarList)
+                foreach (ISystem si in StarList)
                 {
                     if (si.population > 0)
                         AddSystem(si, datasetS);
@@ -224,7 +224,7 @@ namespace EDDiscovery2._3DMap
             AddSystem(SystemData.GetSystem(systemName), dataset);
         }
 
-        private void AddSystem(ISystemClass system, Data3DSetClass<PointData> dataset)
+        private void AddSystem(ISystem system, Data3DSetClass<PointData> dataset)
         {
             if (system != null && system.HasCoordinate)
             {

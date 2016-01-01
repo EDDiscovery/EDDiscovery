@@ -8,7 +8,7 @@ namespace EDDiscovery2.DB.Offline
 {
     // For when you need a minimal version and don't want to mess up the database. 
     // Useful for creation of test doubles
-    public class OfflineSystemClass : ISystemClass
+    public class OfflineSystemClass : ISystem
     {
         public int id { get; set; }
         public string name { get; set; }

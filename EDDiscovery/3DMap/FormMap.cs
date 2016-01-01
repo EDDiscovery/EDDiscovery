@@ -211,11 +211,11 @@ namespace EDDiscovery2
             };
             if (_starList != null)
             {
-                builder.StarList = _starList.ConvertAll(system => (ISystemClass)system);
+                builder.StarList = _starList.ConvertAll(system => (ISystem)system);
             }
             if (ReferenceSystems != null)
             {
-                builder.ReferenceSystems = ReferenceSystems.ConvertAll(system => (ISystemClass)system);
+                builder.ReferenceSystems = ReferenceSystems.ConvertAll(system => (ISystem)system);
             }
 
             _datasets = builder.Build();

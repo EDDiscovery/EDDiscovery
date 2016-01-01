@@ -15,9 +15,9 @@ namespace EDDiscovery2._3DMap.Tests
     public class DatasetBuilderTests
     {
         private DatasetBuilder _subject;
-        private List<ISystemClass> SpawnStars()
+        private List<ISystem> SpawnStars()
         {
-            return new List<ISystemClass>()
+            return new List<ISystem>()
             {
                 new OfflineSystemClass() { id=1000, name="Sol", x=0.0, y=0.0, z=0.0, population=16999999880 },
                 new OfflineSystemClass() { id=1100, name="Sagittarius A*", x=25.21875, y=-20.90625, z=25899.96875 },
@@ -119,6 +119,24 @@ namespace EDDiscovery2._3DMap.Tests
             Assert.AreEqual(-900, legoWorld.x); // -1000
             Assert.AreEqual(-950, legoWorld.y); // -1000
             Assert.AreEqual(800, legoWorld.z);  // -1000 then inverted 
+        }
+
+        [TestMethod()]
+        public void When_building_stations()
+        {
+            _subject.Stations = true;
+            var datasets = _subject.Build();
+
+            Data3DSetClass<PointData> dataset = (Data3DSetClass<PointData>)datasets[0];
+
+            Assert.AreEqual("stations", dataset.Name);
+
+            var sagA = dataset.Primatives[1];
+
+            Assert.AreEqual(25.21875, sagA.x);
+            Assert.AreEqual(-20.90625, sagA.y);
+            Assert.AreEqual(-25899.96875, sagA.z);
+            Assert.AreEqual(4, dataset.Primatives.Count);
         }
 
         [TestMethod()]
