@@ -1,5 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery2.DB.Offline;
 using EDDiscovery2._3DMap;
 using EDDiscovery2.Trilateration;
 using OpenTK;
@@ -197,8 +198,11 @@ namespace EDDiscovery2
 
             var builder = new DatasetBuilder()
             {
+                // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
+                // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
                 Origin = CenterSystem,
-                StarList = _starList,
+
+                StarList = _starList.ConvertAll( star => (ISystemClass) star),
                 VisitedSystems = VisitedSystems,
                 ReferenceSystems = ReferenceSystems,
 
@@ -211,6 +215,9 @@ namespace EDDiscovery2
             _datasets = builder.Build();
         }
 
+
+        //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
+        // it out of FormMap's hair
         private void GenerateDataSetsAllegiance()
         {
 
@@ -245,6 +252,8 @@ namespace EDDiscovery2
         }
 
 
+        //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
+        // it out of FormMap's hair
         private void GenerateDataSetsGovernment()
         {
 

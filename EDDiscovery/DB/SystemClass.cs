@@ -1,4 +1,5 @@
 ﻿using EDDiscovery2;
+using EDDiscovery2.DB.Offline;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,34 +23,9 @@ namespace EDDiscovery.DB
 
     }
 
-
     [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
-    public class SystemClass
+    public class SystemClass : OfflineSystemClass
     {
-        public int id;
-        public string name;
-        public string SearchName;
-        public double x, y, z;
-        public int cr;
-        public string CommanderCreate;
-        public DateTime CreateDate;
-        public string CommanderUpdate;
-        public DateTime UpdateDate;
-        public SystemStatusEnum status;
-        public string Note;
-
-
-        public int id_eddb;
-        public string faction;
-        public long population;
-        public EDGovernment government;
-        public EDAllegiance allegiance;
-        public EDState state;
-        public EDSecurity security;
-        public EDEconomy primary_economy;
-        public int needs_permit;
-        public int eddb_updated_at;
-
         public SystemClass()
         {
         }
@@ -327,18 +303,6 @@ namespace EDDiscovery.DB
             }
             return true;
         }
-
-
-
-        public bool HasCoordinate
-        {
-            get
-            {
-                return (!double.IsNaN(x));
-            }
-        }
-
-
 
         public static List<SystemClass> ParseEDSC(string json, ref string date)
         {

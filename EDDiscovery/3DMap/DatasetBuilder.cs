@@ -1,5 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery2.DB.Offline;
 
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace EDDiscovery2._3DMap
         private List<IData3DSet> _datasets;
 
         public SystemClass Origin { get; set; } = new SystemClass();
-        public List<SystemClass> StarList { get; set; } = new List<SystemClass>();
+        public List<ISystemClass> StarList { get; set; } = new List<ISystemClass>();
         public List<SystemClass> ReferenceSystems { get; set; } = new List<SystemClass>();
         public List<SystemPosition> VisitedSystems { get; set; }
 
@@ -36,6 +37,9 @@ namespace EDDiscovery2._3DMap
             AddStandardSystems();
             AddStations();
             AddVisitedSystems();
+            AddCenterPointToDataset();
+            AddPOIsToDataset();
+            AddTrilaterationInfoToDataset();
 
             return _datasets;
         }
@@ -75,12 +79,12 @@ namespace EDDiscovery2._3DMap
 
         public void AddStandardSystems()
         {
-            if (AllSystems)
+            if (AllSystems && StarList != null)
             {
                 bool addstations = !Stations;
                 var datasetS = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
 
-                foreach (SystemClass si in StarList)
+                foreach (ISystemClass si in StarList)
                 {
                     if (addstations || si.population == 0)
                         AddSystem(si, datasetS);
@@ -218,7 +222,7 @@ namespace EDDiscovery2._3DMap
             AddSystem(SystemData.GetSystem(systemName), dataset);
         }
 
-        private void AddSystem(SystemClass system, Data3DSetClass<PointData> dataset)
+        private void AddSystem(ISystemClass system, Data3DSetClass<PointData> dataset)
         {
             if (system != null && system.HasCoordinate)
             {
