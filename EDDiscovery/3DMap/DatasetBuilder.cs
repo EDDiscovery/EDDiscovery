@@ -16,9 +16,9 @@ namespace EDDiscovery2._3DMap
     {
         private List<IData3DSet> _datasets;
 
-        public SystemClass Origin { get; set; } = new SystemClass();
+        public ISystemClass Origin { get; set; } = new SystemClass();
         public List<ISystemClass> StarList { get; set; } = new List<ISystemClass>();
-        public List<SystemClass> ReferenceSystems { get; set; } = new List<SystemClass>();
+        public List<ISystemClass> ReferenceSystems { get; set; } = new List<ISystemClass>();
         public List<SystemPosition> VisitedSystems { get; set; }
 
         public bool GridLines { get; set; } = false;

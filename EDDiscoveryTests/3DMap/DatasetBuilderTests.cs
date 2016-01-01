@@ -26,8 +26,8 @@ namespace EDDiscovery2._3DMap.Tests
                 new OfflineSystemClass() { id=1400, name="Void's Brink", x=39307.25, y=-92.4375, z=19338.375 },
                 new OfflineSystemClass() { id=1500, name="HIP 72043", x=-22.0, y=118.5, z=58.78125, population=2166322767 },
                 new OfflineSystemClass() { id=1600, name="Achenar", x=67.5, y=-119.46875, z=24.84375, population=12999999523 },
-                new OfflineSystemClass() { id=1600, name="Alioth", x=-33.65625, y=72.46875, z=-20.65625, population=10000000000 }
-
+                new OfflineSystemClass() { id=1600, name="Alioth", x=-33.65625, y=72.46875, z=-20.65625, population=10000000000 },
+                new OfflineSystemClass() { id=1700, name="Legoworld", x=100.0, y=50.0, z=200.0, population=1000 },
             };
         }
 
@@ -37,6 +37,7 @@ namespace EDDiscovery2._3DMap.Tests
             SpawnStars();
             _subject = new DatasetBuilder
             {
+                Origin = new OfflineSystemClass(),
                 StarList = _starList
             };
         }
@@ -45,17 +46,43 @@ namespace EDDiscovery2._3DMap.Tests
         public void When_building_all_systems_specifically()
         {
             _subject.AllSystems = true;
-            var datasets = _subject.Build();        
-            Data3DSetClass<PointData> starData = (Data3DSetClass <PointData>) datasets[0];
+            var datasets = _subject.Build();
+                    
+            Data3DSetClass<PointData> dataset = (Data3DSetClass <PointData>) datasets[0];
 
-            Assert.AreEqual("stars", starData.Name);
-            Assert.AreEqual(8, starData.Primatives.Count);
+            Assert.AreEqual("stars", dataset.Name);
 
-            var sagA = starData.Primatives[1];
+            var sagA = dataset.Primatives[1];
 
             Assert.AreEqual(25.21875, sagA.x);
             Assert.AreEqual(-20.90625, sagA.y);
             Assert.AreEqual(-25899.96875, sagA.z);
+            Assert.IsTrue(dataset.Primatives.Count >= 9);
+        }
+
+        [TestMethod()]
+        public void When_building_all_systems_with_legoworld_as_the_origin()
+        {
+            // Probably won't need this test for long. 
+            // Just want to be sure of how the offsets are configured for a "centered" system
+            _subject.AllSystems = true;
+            _subject.Origin = new OfflineSystemClass()
+            {
+                x = 1000, y = 1000, z = 1000, name = "centerWorld"
+            };
+            var datasets = _subject.Build();
+
+            Data3DSetClass<PointData> dataset = (Data3DSetClass<PointData>)datasets[0];
+            const int LegoWorldIndex = 8;
+            var legoWorld = dataset.Primatives[LegoWorldIndex];
+
+            // Confirm we pulled the correct fixture
+            Assert.AreEqual("Legoworld", _starList[LegoWorldIndex].name);
+
+            // And the real tests...
+            Assert.AreEqual(-900, legoWorld.x); // -1000
+            Assert.AreEqual(-950, legoWorld.y); // -1000
+            Assert.AreEqual(800, legoWorld.z);  // -1000 then inverted 
         }
 
         [TestMethod()]
