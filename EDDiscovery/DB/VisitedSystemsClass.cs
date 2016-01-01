@@ -8,17 +8,8 @@ using System.Text;
 
 namespace EDDiscovery2.DB
 {
-    public class VisitedSystemsClass
+    public class VisitedSystemsClass : InMemory.VisitedSystemsClass
     {
-        public int id;
-        public string Name;
-        public DateTime Time;
-        public int Commander;
-        public int Source;
-        public string Unit;
-        public bool EDSM_sync;
-        public int MapColour;
-
         public VisitedSystemsClass()
         {
         }

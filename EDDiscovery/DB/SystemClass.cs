@@ -1,5 +1,5 @@
 ﻿using EDDiscovery2;
-using EDDiscovery2.DB.Offline;
+using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace EDDiscovery.DB
     }
 
     [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
-    public class SystemClass : OfflineSystemClass
+    public class SystemClass : EDDiscovery2.DB.InMemory.SystemClass
     {
         public SystemClass()
         {

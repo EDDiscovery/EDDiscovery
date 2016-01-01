@@ -18,7 +18,6 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
-using EDDiscovery2.DB.Offline;
 
 namespace EDDiscovery
 {

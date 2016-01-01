@@ -1,6 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2.DB.Offline;
+using EDDiscovery2.DB;
 using EDDiscovery2._3DMap;
 using EDDiscovery2.Trilateration;
 using OpenTK;
