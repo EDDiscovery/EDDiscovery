@@ -202,15 +202,21 @@ namespace EDDiscovery2
                 // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
                 Origin = CenterSystem,
 
-                StarList = _starList.ConvertAll( star => (ISystemClass) star),
                 VisitedSystems = VisitedSystems,
-                ReferenceSystems = ReferenceSystems,
 
                 GridLines = toolStripButtonGrid.Checked,
                 DrawLines = toolStripButtonDrawLines.Checked,
                 AllSystems = toolStripButtonShowAllStars.Checked,
                 Stations = toolStripButtonStations.Checked
             };
+            if (_starList != null)
+            {
+                builder.StarList = _starList.ConvertAll(system => (ISystemClass)system);
+            }
+            if (ReferenceSystems != null)
+            {
+                builder.ReferenceSystems = ReferenceSystems.ConvertAll(system => (ISystemClass)system);
+            }
 
             _datasets = builder.Build();
         }
