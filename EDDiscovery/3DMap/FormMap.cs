@@ -40,7 +40,7 @@ namespace EDDiscovery2
         private const double ZoomFact = 1.2589254117941672104239541063958;
 
         private AutoCompleteStringCollection _systemNames;
-        private SystemClass _centerSystem;
+        private ISystem _centerSystem;
         private bool _loaded = false;
 
         private float _systemOffsetX = 0.0f;
@@ -62,7 +62,7 @@ namespace EDDiscovery2
         public List<SystemClass> ReferenceSystems { get; set; }
         public List<SystemPosition> VisitedSystems { get; set; }
 
-        public SystemClass CenterSystem {
+        public ISystem CenterSystem {
             get
             {
                 return _centerSystem;
@@ -393,7 +393,7 @@ namespace EDDiscovery2
             //                System.Diagnostics.Trace.WriteLine("X:" + x + " Y:" + y + " Z:" + zoom);
         }
 
-        private void SetCenterSystem(SystemClass sys)
+        private void SetCenterSystem(ISystem sys)
         {
             if (sys == null) return;
 
@@ -422,12 +422,12 @@ namespace EDDiscovery2
         {
             if (!String.IsNullOrWhiteSpace(systemName))
             {
-                SystemClass system = SystemData.GetSystem(systemName.Trim());
+                ISystem system = SystemData.GetSystem(systemName.Trim());
                 OrientateMapAroundSystem(system);
             }
         }
 
-        private void OrientateMapAroundSystem(SystemClass system)
+        private void OrientateMapAroundSystem(ISystem system)
         {
             CenterSystem = system;
             textboxFrom.Text = system.name;

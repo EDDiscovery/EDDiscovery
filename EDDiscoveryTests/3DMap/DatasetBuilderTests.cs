@@ -28,6 +28,7 @@ namespace EDDiscovery2._3DMap.Tests
                 new OfflineSystemClass() { id=1600, name="Achenar", x=67.5, y=-119.46875, z=24.84375, population=12999999523 },
                 new OfflineSystemClass() { id=1600, name="Alioth", x=-33.65625, y=72.46875, z=-20.65625, population=10000000000 },
                 new OfflineSystemClass() { id=1700, name="Legoworld", x=100.0, y=50.0, z=200.0, population=1000 },
+                new OfflineSystemClass() { id=1800, name="Reverse Legoworld", x=-100.0, y=-50.0, z=-200.0, population=1001 },
             };
         }
 
@@ -44,7 +45,7 @@ namespace EDDiscovery2._3DMap.Tests
 
         [TestInitialize]
         public void Initialize()
-        {            
+        {
             _subject = new DatasetBuilder
             {
                 Origin = new OfflineSystemClass(),
@@ -60,11 +61,13 @@ namespace EDDiscovery2._3DMap.Tests
             _subject.MaxGridPos = new Vector2(4000.0f, 14000.0f);
             var datasets = _subject.Build();
 
-            Data3DSetClass<LineData> dataset = (Data3DSetClass<LineData>) datasets[0];
+            Data3DSetClass<LineData> dataset = (Data3DSetClass<LineData>)datasets[0];
             Assert.AreEqual(2000.0, dataset.Primatives[0].x1);
             Assert.AreEqual(-12000.0, dataset.Primatives[0].z1);
         }
 
+        // Probably won't need this test for long. 
+        // Just want to be sure of how the offsets are configured for a "centered" system
         public void When_building_a_grid_with_an_origin()
         {
             _subject.GridLines = true;
@@ -86,8 +89,8 @@ namespace EDDiscovery2._3DMap.Tests
         {
             _subject.AllSystems = true;
             var datasets = _subject.Build();
-                    
-            Data3DSetClass<PointData> dataset = (Data3DSetClass <PointData>) datasets[0];
+
+            Data3DSetClass<PointData> dataset = (Data3DSetClass<PointData>)datasets[0];
 
             Assert.AreEqual("stars", dataset.Name);
 
@@ -96,14 +99,31 @@ namespace EDDiscovery2._3DMap.Tests
             Assert.AreEqual(25.21875, sagA.x);
             Assert.AreEqual(-20.90625, sagA.y);
             Assert.AreEqual(-25899.96875, sagA.z);
-            Assert.IsTrue(dataset.Primatives.Count >= 9);
+            Assert.IsTrue(dataset.Primatives.Count >= 10);
         }
 
+        // Probably won't need this test for long. 
+        // Just want to be sure of how the offsets are configured for a "centered" system
         [TestMethod()]
         public void When_building_all_systems_with_an_origin()
+        { 
+            _subject.AllSystems = true;
+            _subject.Origin = SpawnOrigin();
+            var datasets = _subject.Build();
+
+            Data3DSetClass<PointData> dataset = (Data3DSetClass<PointData>)datasets[0];
+            var sagA = dataset.Primatives[1];
+
+            Assert.AreEqual(-974.78125, sagA.x); // -1000
+            Assert.AreEqual(-1020.90625, sagA.y); // -1000
+            Assert.AreEqual(-24899.96875, sagA.z); // -1000 then inverted
+        }
+
+        // Probably won't need this test for long. 
+        // Just want to be sure of how the offsets are configured for a "centered" system
+        [TestMethod()]
+        public void When_building_all_systems_with_an_origin_on_legoland()
         {
-            // Probably won't need this test for long. 
-            // Just want to be sure of how the offsets are configured for a "centered" system
             _subject.AllSystems = true;
             _subject.Origin = SpawnOrigin();
             var datasets = _subject.Build();
@@ -121,6 +141,28 @@ namespace EDDiscovery2._3DMap.Tests
             Assert.AreEqual(800, legoWorld.z);  // -1000 then inverted 
         }
 
+        // Probably won't need this test for long. 
+        // Just want to be sure of how the offsets are configured for a "centered" system
+        [TestMethod()]
+        public void When_building_all_systems_with_an_origin_on_reverse_legoland()
+        {
+            _subject.AllSystems = true;
+            _subject.Origin = SpawnOrigin();
+            var datasets = _subject.Build();
+
+            Data3DSetClass<PointData> dataset = (Data3DSetClass<PointData>)datasets[0];
+            const int LegoWorldIndex = 9;
+            var legoWorld = dataset.Primatives[LegoWorldIndex];
+
+            // Confirm we pulled the correct fixture
+            Assert.AreEqual("Reverse Legoworld", _subject.StarList[LegoWorldIndex].name);
+
+            // And the real tests...
+            Assert.AreEqual(-1100, legoWorld.x); // -1000
+            Assert.AreEqual(-1050, legoWorld.y); // -1000
+            Assert.AreEqual(1200, legoWorld.z);  // -1000 then inverted 
+        }
+
         [TestMethod()]
         public void When_building_stations()
         {
@@ -131,13 +173,40 @@ namespace EDDiscovery2._3DMap.Tests
 
             Assert.AreEqual("stations", dataset.Name);
 
-            var sagA = dataset.Primatives[1];
+            var iger = dataset.Primatives[1];
 
-            Assert.AreEqual(25.21875, sagA.x);
-            Assert.AreEqual(-20.90625, sagA.y);
-            Assert.AreEqual(-25899.96875, sagA.z);
-            Assert.AreEqual(4, dataset.Primatives.Count);
+            Assert.AreEqual(-22.0, iger.x);
+            Assert.AreEqual(118.5, iger.y);
+            Assert.AreEqual(-58.78125, iger.z); // Inverted
+            Assert.AreEqual(6, dataset.Primatives.Count);
         }
+
+        [TestMethod()]
+        public void When_building_stations_with_an_origin()
+        {
+            _subject.Stations = true;
+            _subject.Origin = SpawnOrigin();
+            var datasets = _subject.Build();
+
+            Data3DSetClass<PointData> dataset = (Data3DSetClass<PointData>)datasets[0];
+
+            Assert.AreEqual("stations", dataset.Name);
+
+            var iger = dataset.Primatives[1];
+
+            Assert.AreEqual(-1022.0, iger.x);   // -1000
+            Assert.AreEqual(-881.5, iger.y);    // -1000
+            Assert.AreEqual(941.21875, iger.z); // inverted then -1000
+            Assert.AreEqual(6, dataset.Primatives.Count);
+        }
+
+        //[TestMethod()]
+        //public void When_building_visited_systems()
+        //{
+        //    _subject.VisitedSystems = SpawnVisitedSystems();
+        //    var datasets = _subject.Build();
+        //}
+
 
         [TestMethod()]
         public void When_building_with_no_stars()

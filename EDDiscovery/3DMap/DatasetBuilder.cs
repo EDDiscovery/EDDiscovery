@@ -40,7 +40,7 @@ namespace EDDiscovery2._3DMap
             AddGridLines();
             AddStandardSystems();
             AddStations();
-            AddVisitedSystems();
+            AddVisitedSystemsInformation();
             AddCenterPointToDataset();
             AddPOIsToDataset();
             AddTrilaterationInfoToDataset();
@@ -110,19 +110,11 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public void AddVisitedSystems()
+        public void AddVisitedSystemsInformation()
         {
             if (VisitedSystems != null && VisitedSystems.Any())
             {
-                SystemClass lastknownps = null;
-                foreach (SystemPosition ps in VisitedSystems)
-                {
-                    if (ps.curSystem != null && ps.curSystem.HasCoordinate)
-                    {
-                        ps.lastKnownSystem = lastknownps;
-                        lastknownps = ps.curSystem;
-                    }
-                }
+                ISystem lastknownps = LastKnownSystemPosition();
 
                 // For some reason I am unable to fathom this errors during the session after DBUpgrade8
                 // colours just resolves to an object reference not set error, but after a restart it works fine
@@ -135,7 +127,7 @@ namespace EDDiscovery2._3DMap
                 {
                     if (DrawLines)
                     {
-                        Data3DSetClass<LineData> datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                        var datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
                         foreach (SystemPosition sp in colour)
                         {
                             if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
@@ -152,7 +144,7 @@ namespace EDDiscovery2._3DMap
                         var datasetvs = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
                         foreach (SystemPosition sp in colour)
                         {
-                            SystemClass star = SystemData.GetSystem(sp.Name);
+                            ISystem star = SystemData.GetSystem(sp.Name);
                             if (star != null && star.HasCoordinate)
                             {
 
@@ -166,7 +158,7 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        private void AddCenterPointToDataset()
+        public void AddCenterPointToDataset()
         {
             var dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
 
@@ -175,7 +167,7 @@ namespace EDDiscovery2._3DMap
             _datasets.Add(dataset);
         }
 
-        private void AddPOIsToDataset()
+        public void AddPOIsToDataset()
         {
             var dataset = new Data3DSetClass<PointData>("Interest", Color.Purple, 10.0f);
             AddSystem("sol", dataset);
@@ -184,7 +176,7 @@ namespace EDDiscovery2._3DMap
             _datasets.Add(dataset);
         }
 
-        private void AddTrilaterationInfoToDataset()
+        public void AddTrilaterationInfoToDataset()
         {
             if (ReferenceSystems != null && ReferenceSystems.Any())
             {
@@ -230,6 +222,20 @@ namespace EDDiscovery2._3DMap
             {
                 dataset.Add(new PointData(system.x - Origin.x, system.y - Origin.y, Origin.z - system.z));
             }
+        }
+
+        private ISystem LastKnownSystemPosition()
+        {
+            ISystem lastknownps = null;
+            foreach (SystemPosition ps in VisitedSystems)
+            {
+                if (ps.curSystem != null && ps.curSystem.HasCoordinate)
+                {
+                    ps.lastKnownSystem = lastknownps;
+                    lastknownps = ps.curSystem;
+                }
+            }
+            return lastknownps;
         }
 
     }
