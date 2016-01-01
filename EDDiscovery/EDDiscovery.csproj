@@ -160,11 +160,11 @@
     <Compile Include="Prospecting\AddMaterialNodeControl.Designer.cs">
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Prospecting\FormAddMaterialNode.cs">
+    <Compile Include="Prospecting\FormProspecting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Prospecting\FormAddMaterialNode.Designer.cs">
-      <DependentUpon>FormAddMaterialNode.cs</DependentUpon>
+    <Compile Include="Prospecting\FormProspecting.Designer.cs">
+      <DependentUpon>FormProspecting.cs</DependentUpon>
     </Compile>
     <Compile Include="Prospecting\Material.cs" />
     <Compile Include="EMK\Arc.cs" />
@@ -271,8 +271,8 @@
     <EmbeddedResource Include="Prospecting\AddMaterialNodeControl.resx">
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Prospecting\FormAddMaterialNode.resx">
-      <DependentUpon>FormAddMaterialNode.cs</DependentUpon>
+    <EmbeddedResource Include="Prospecting\FormProspecting.resx">
+      <DependentUpon>FormProspecting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
