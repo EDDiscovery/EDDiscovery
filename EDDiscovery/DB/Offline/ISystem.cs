@@ -6,7 +6,7 @@ using System.Text;
 namespace EDDiscovery2.DB.Offline
 {
     // Definition of the core interface so we can swap out an "offline" version during testing
-    public interface ISystemClass
+    public interface ISystem
     {
         int id { get; set; }
         string name { get; set; }
