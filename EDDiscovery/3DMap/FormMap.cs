@@ -47,7 +47,7 @@ namespace EDDiscovery2
         private float _systemOffsetY = 0.0f;
         private float _zoom = 1.0f;
         private float _xAng = 0.0f;
-        private float _yAng = 90.0f;
+        private float _yAng = 0.0f;
 
         private Vector3 _cursorPosition;
 
@@ -140,7 +140,7 @@ namespace EDDiscovery2
             _systemOffsetY = 0.0f;
 
             _xAng = 0.0f;
-            _yAng = 90.0f;
+            _yAng = -90.0f;
 
             _zoom = 1.0f;
         }
@@ -200,7 +200,7 @@ namespace EDDiscovery2
             {
                 // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
                 // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
-                Origin = CenterSystem,
+                CenterSystem = CenterSystem,
 
                 VisitedSystems = VisitedSystems,
 
