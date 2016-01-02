@@ -78,7 +78,7 @@ namespace EDDiscovery2._3DMap.Tests
         {
             _subject = new DatasetBuilder
             {
-                Origin = new DB.InMemory.SystemClass(),
+                CenterSystem = new DB.InMemory.SystemClass(),
                 StarList = SpawnStars()
             };
         }
@@ -103,7 +103,7 @@ namespace EDDiscovery2._3DMap.Tests
             _subject.GridLines = true;
             _subject.MinGridPos = new Vector2(2000.0f, 12000.0f);
             _subject.MaxGridPos = new Vector2(4000.0f, 14000.0f);
-            _subject.Origin = SpawnOrigin();
+            _subject.CenterSystem = SpawnOrigin();
             var datasets = _subject.Build();
 
             var dataset = (Data3DSetClass<LineData>)datasets[0];
@@ -128,69 +128,8 @@ namespace EDDiscovery2._3DMap.Tests
 
             Assert.AreEqual(25.21875, sagA.x);
             Assert.AreEqual(-20.90625, sagA.y);
-            Assert.AreEqual(-25899.96875, sagA.z);
+            Assert.AreEqual(25899.96875, sagA.z);
             Assert.IsTrue(dataset.Primatives.Count >= 10);
-        }
-
-        // Probably won't need this test for long. 
-        // Just want to be sure of how the offsets are configured for a "centered" system
-        [TestMethod()]
-        public void When_building_all_systems_with_an_origin()
-        { 
-            _subject.AllSystems = true;
-            _subject.Origin = SpawnOrigin();
-            var datasets = _subject.Build();
-
-            var dataset = (Data3DSetClass<PointData>)datasets[0];
-            var sagA = dataset.Primatives[1];
-
-            Assert.AreEqual(-974.78125, sagA.x); // -1000
-            Assert.AreEqual(-1020.90625, sagA.y); // -1000
-            Assert.AreEqual(-24899.96875, sagA.z); // -1000 then inverted
-        }
-
-        // Probably won't need this test for long. 
-        // Just want to be sure of how the offsets are configured for a "centered" system
-        [TestMethod()]
-        public void When_building_all_systems_with_an_origin_on_legoland()
-        {
-            _subject.AllSystems = true;
-            _subject.Origin = SpawnOrigin();
-            var datasets = _subject.Build();
-
-            var dataset = (Data3DSetClass<PointData>)datasets[0];
-            const int LegoWorldIndex = 8;
-            var legoWorld = dataset.Primatives[LegoWorldIndex];
-
-            // Confirm we pulled the correct fixture
-            Assert.AreEqual("Legoworld", _subject.StarList[LegoWorldIndex].name);
-
-            // And the real tests...
-            Assert.AreEqual(-900, legoWorld.x); // -1000
-            Assert.AreEqual(-950, legoWorld.y); // -1000
-            Assert.AreEqual(800, legoWorld.z);  // -1000 then inverted 
-        }
-
-        // Probably won't need this test for long. 
-        // Just want to be sure of how the offsets are configured for a "centered" system
-        [TestMethod()]
-        public void When_building_all_systems_with_an_origin_on_reverse_legoland()
-        {
-            _subject.AllSystems = true;
-            _subject.Origin = SpawnOrigin();
-            var datasets = _subject.Build();
-
-            var dataset = (Data3DSetClass<PointData>)datasets[0];
-            const int LegoWorldIndex = 9;
-            var legoWorld = dataset.Primatives[LegoWorldIndex];
-
-            // Confirm we pulled the correct fixture
-            Assert.AreEqual("Reverse Legoworld", _subject.StarList[LegoWorldIndex].name);
-
-            // And the real tests...
-            Assert.AreEqual(-1100, legoWorld.x); // -1000
-            Assert.AreEqual(-1050, legoWorld.y); // -1000
-            Assert.AreEqual(1200, legoWorld.z);  // -1000 then inverted 
         }
 
         [TestMethod()]
@@ -207,28 +146,10 @@ namespace EDDiscovery2._3DMap.Tests
 
             Assert.AreEqual(-22.0, iger.x);
             Assert.AreEqual(118.5, iger.y);
-            Assert.AreEqual(-58.78125, iger.z); // Inverted
+            Assert.AreEqual(58.78125, iger.z);
             Assert.AreEqual(6, dataset.Primatives.Count);
         }
 
-        [TestMethod()]
-        public void When_building_stations_with_an_origin()
-        {
-            _subject.Stations = true;
-            _subject.Origin = SpawnOrigin();
-            var datasets = _subject.Build();
-
-            var dataset = (Data3DSetClass<PointData>)datasets[0];
-
-            Assert.AreEqual("stations", dataset.Name);
-
-            var iger = dataset.Primatives[1];
-
-            Assert.AreEqual(-1022.0, iger.x);   // -1000
-            Assert.AreEqual(-881.5, iger.y);    // -1000
-            Assert.AreEqual(941.21875, iger.z); // inverted then -1000
-            Assert.AreEqual(6, dataset.Primatives.Count);
-        }
 
         // This one's a pain. Will manually test for now.
 
