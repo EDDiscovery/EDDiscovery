@@ -194,11 +194,16 @@ namespace EDDiscovery
                     DownloadMapFile("SC-L4.jpg");
                     DownloadMapFile("SC-U4.jpg");
 
-                    for (int ii = -10; ii <= 60; ii += 10)
-                    {
-                        DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".png");
-                        DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".json");
-                    }
+                    DownloadMapFile("Galaxy_L.jpg");
+                    DownloadMapFile("Galaxy_L.json");
+                    DownloadMapFile("Galaxy_L_Grid.jpg");
+                    DownloadMapFile("Galaxy_L_Grid.json");
+
+                    //for (int ii = -10; ii <= 60; ii += 10)
+                    //{
+                    //    DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".png");
+                    //    DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".json");
+                    //}
                 }
             }
             catch (Exception ex)
