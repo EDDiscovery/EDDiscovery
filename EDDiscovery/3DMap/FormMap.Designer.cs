@@ -36,7 +36,7 @@ namespace EDDiscovery2
             private void InitializeComponent()
             {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMap));
-            this.glControl1 = new OpenTK.GLControl();
+            this.glControl = new OpenTK.GLControl();
             this.textboxFrom = new System.Windows.Forms.TextBox();
             this.buttonCenter = new System.Windows.Forms.Button();
             this.labelSystemCoords = new System.Windows.Forms.Label();
@@ -53,24 +53,23 @@ namespace EDDiscovery2
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // glControl1
+            // glControl
             // 
-            this.glControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.glControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.glControl1.BackColor = System.Drawing.Color.Black;
-            this.glControl1.Location = new System.Drawing.Point(0, 33);
-            this.glControl1.Name = "glControl1";
-            this.glControl1.Size = new System.Drawing.Size(918, 521);
-            this.glControl1.TabIndex = 0;
-            this.glControl1.VSync = false;
-            this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
-            this.glControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl1_Paint);
-            this.glControl1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.glControl1_KeyPress);
-            this.glControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl1_MouseDown);
-            this.glControl1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl1_MouseMove);
-            this.glControl1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.glControl1_OnMouseWheel);
-            this.glControl1.Resize += new System.EventHandler(this.glControl1_Resize);
+            this.glControl.BackColor = System.Drawing.Color.Black;
+            this.glControl.Location = new System.Drawing.Point(0, 44);
+            this.glControl.Name = "glControl";
+            this.glControl.Size = new System.Drawing.Size(918, 485);
+            this.glControl.TabIndex = 0;
+            this.glControl.VSync = false;
+            this.glControl.Load += new System.EventHandler(this.glControl_Load);
+            this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
+            this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
+            this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
+            this.glControl.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.glControl_OnMouseWheel);
+            this.glControl.Resize += new System.EventHandler(this.glControl_Resize);
             // 
             // textboxFrom
             // 
@@ -200,7 +199,6 @@ namespace EDDiscovery2
             this.statusStrip.Size = new System.Drawing.Size(918, 22);
             this.statusStrip.TabIndex = 21;
             this.statusStrip.Text = "statusStrip1";
-            this.statusStrip.Visible = false;
             // 
             // statusLabel
             // 
@@ -218,11 +216,12 @@ namespace EDDiscovery2
             this.Controls.Add(this.labelSystemCoords);
             this.Controls.Add(this.buttonCenter);
             this.Controls.Add(this.textboxFrom);
-            this.Controls.Add(this.glControl1);
+            this.Controls.Add(this.glControl);
             this.Controls.Add(this.toolStripShowAllStars);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMap";
             this.Text = "3D Star Map";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMap_FormClosing);
             this.Load += new System.EventHandler(this.FormMap_Load);
             this.toolStripShowAllStars.ResumeLayout(false);
@@ -237,7 +236,7 @@ namespace EDDiscovery2
 
             #endregion
 
-            private OpenTK.GLControl glControl1;
+            private OpenTK.GLControl glControl;
             internal TextBox textboxFrom;
             private Button buttonCenter;
             private Label labelSystemCoords;

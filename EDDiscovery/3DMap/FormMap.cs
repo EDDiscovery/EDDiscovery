@@ -1,8 +1,7 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2.DB.Offline;
+using EDDiscovery2.DB;
 using EDDiscovery2._3DMap;
-using EDDiscovery2.Trilateration;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -13,6 +12,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using OpenTK.Input;
 
 namespace EDDiscovery2
 {
@@ -43,13 +43,17 @@ namespace EDDiscovery2
         private ISystem _centerSystem;
         private bool _loaded = false;
 
-        private float _systemOffsetX = 0.0f;
-        private float _systemOffsetY = 0.0f;
         private float _zoom = 1.0f;
-        private float _xAng = 0.0f;
-        private float _yAng = 90.0f;
 
-        private Vector3 _cursorPosition;
+        private Vector3 _cameraPos = Vector3.Zero;
+        private Vector3 _cameraDir = Vector3.Zero;
+
+        private Vector3 _cameraActionMovement = Vector3.Zero;
+        private Vector3 _cameraActionRotation = Vector3.Zero;
+
+        private KeyboardActions _kbdActions = new KeyboardActions();
+        private int _oldTickCount = Environment.TickCount;
+        private int _ticks = 0;
 
         private Point _mouseStartRotate;
         private Point _mouseStartTranslate;
@@ -136,11 +140,8 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
-            _systemOffsetX = 0.0f;
-            _systemOffsetY = 0.0f;
-
-            _xAng = 0.0f;
-            _yAng = 90.0f;
+            _cameraPos = new Vector3((float) CenterSystem.x, (float)CenterSystem.x, (float)CenterSystem.z);
+            _cameraDir = Vector3.Zero;
 
             _zoom = 1.0f;
         }
@@ -153,8 +154,8 @@ namespace EDDiscovery2
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
-            int w = glControl1.Width;
-            int h = glControl1.Height;
+            int w = glControl.Width;
+            int h = glControl.Height;
 
             if (w == 0 || h == 0) return;
 
@@ -164,6 +165,7 @@ namespace EDDiscovery2
             float orthoheight = 1000.0f * h / w;
 
             GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
+            //GL.Ortho(-100000.0, 100000.0, -100000.0, 100000.0, -100000.0, 100000.0); // Bottom-left corner pixel has coordinate (0, 0)
             //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
@@ -183,7 +185,7 @@ namespace EDDiscovery2
                         _visitedStars[star.SearchName] = star;
                     }
                 }
-            }        
+            }
         }
 
 
@@ -200,7 +202,7 @@ namespace EDDiscovery2
             {
                 // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
                 // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
-                Origin = CenterSystem,
+                CenterSystem = CenterSystem,
 
                 VisitedSystems = VisitedSystems,
 
@@ -323,7 +325,7 @@ namespace EDDiscovery2
         public void Reset()
         {
             CenterSystem = null;
-            ReferenceSystems = null;        
+            ReferenceSystems = null;
         }
 
         /*
@@ -387,8 +389,8 @@ namespace EDDiscovery2
         /// </summary>
         private void SetupCursorXYZ()
         {
-            //                x =   (PointToClient(Cursor.Position).X - glControl1.Width/2 ) * (zoom + 1);
-            //                y = (-PointToClient(Cursor.Position).Y + glControl1.Height/2) * (zoom + 1);
+            //                x =   (PointToClient(Cursor.Position).X - glControl.Width/2 ) * (zoom + 1);
+            //                y = (-PointToClient(Cursor.Position).Y + glControl.Height/2) * (zoom + 1);
 
             //                System.Diagnostics.Trace.WriteLine("X:" + x + " Y:" + y + " Z:" + zoom);
         }
@@ -401,7 +403,7 @@ namespace EDDiscovery2
             ShowCenterSystem();
 
             GenerateDataSets();
-            glControl1.Invalidate();
+            glControl.Invalidate();
         }
 
         private void ShowCenterSystem()
@@ -415,9 +417,14 @@ namespace EDDiscovery2
 
         private void UpdateStatus()
         {
-            statusLabel.Text = $"Coordinates: x={_cursorPosition.X} y={_cursorPosition.Y} z={_cursorPosition.Z}";
-        }    
-        
+            statusLabel.Text = "Use W, A, S and D keys with mouse to move the map!      ";
+            statusLabel.Text += $"Coordinates: x={_cameraPos.X} y={_cameraPos.Y} z={_cameraPos.Z}";
+            statusLabel.Text += $", Zoom: {_zoom}";
+#if DEBUG
+            statusLabel.Text += $", Direction: x={_cameraDir.X} y={_cameraDir.Y} z={_cameraDir.Z}";
+#endif        
+        }
+
         private void OrientateMapAroundSystem(String systemName)
         {
             if (!String.IsNullOrWhiteSpace(systemName))
@@ -433,12 +440,171 @@ namespace EDDiscovery2
             textboxFrom.Text = system.name;
             SetCenterSystem(system);
         }
+        private void CalculateTimeDelta()
+        {
+            var tickCount = Environment.TickCount;
+            _ticks = tickCount - _oldTickCount;
+            _oldTickCount = tickCount;
+        }
+
+        private void HandleInputs()
+        {
+            ReceiveKeybaordActions();
+            HandleTurningAdjustments();
+            HandleMovementAdjustments();
+        }
+
+        private void ReceiveKeybaordActions()
+        {
+            _kbdActions.Reset();
+
+            var state = OpenTK.Input.Keyboard.GetState();
+
+            _kbdActions.Left = (state[Key.Left] || state[Key.A]);
+            _kbdActions.Right = (state[Key.Right] || state[Key.D]);
+            _kbdActions.Up = (state[Key.Up] || state[Key.W]);
+            _kbdActions.Down = (state[Key.Down] || state[Key.S]);
+
+            _kbdActions.ZoomIn = state[Key.Minus];
+            _kbdActions.ZoomOut = state[Key.Plus];
+
+            // Yes, much of this is overkill. but useful while development is happening
+            // I'll probably hide away the less useful options later from the Release build
+            _kbdActions.Forwards = state[Key.R];
+            _kbdActions.Backwards = state[Key.F];
+ 
+            _kbdActions.Pitch = state[Key.Keypad8];
+            _kbdActions.Dive = state[Key.Keypad5];
+            _kbdActions.RollLeft = state[Key.Keypad4];
+            _kbdActions.RollRight = state[Key.Keypad6];
+            _kbdActions.YawLeft = state[Key.Keypad7];
+            _kbdActions.YawRight = state[Key.Keypad9];
+        }
+
+        private void HandleTurningAdjustments()
+        {
+            _cameraActionRotation = Vector3.Zero;
+
+            var angle = (float)  _ticks * 0.1f;
+            if (_kbdActions.Dive)
+            {
+                _cameraActionRotation.X = -angle;
+            }
+            if (_kbdActions.Pitch)
+            {
+                _cameraActionRotation.X = angle;
+            }
+            if (_kbdActions.RollLeft)
+            {
+                _cameraActionRotation.Y = -angle;
+            }
+            if (_kbdActions.RollRight)
+            {
+                _cameraActionRotation.Y = angle;
+            }
+            if (_kbdActions.YawLeft)
+            {
+                _cameraActionRotation.Z = -angle;
+            }
+            if (_kbdActions.YawRight)
+            {
+                _cameraActionRotation.Z = angle;
+            }
+
+        }
+
+        private void HandleMovementAdjustments()
+        {
+            _cameraActionMovement = Vector3.Zero;
+            var distance = _ticks * (1.0f / _zoom);
+            if (_kbdActions.Left)
+            {
+                _cameraActionMovement.X = -distance;
+            }
+            if (_kbdActions.Right)
+            {
+                _cameraActionMovement.X = distance;
+            }
+            if (_kbdActions.Forwards)
+            {
+                _cameraActionMovement.Y = -distance;
+            }
+            if (_kbdActions.Backwards)
+            {
+                _cameraActionMovement.Y = distance;
+            }
+            if (_kbdActions.Up)
+            {
+                _cameraActionMovement.Z = distance;
+            }
+            if (_kbdActions.Down)
+            {
+                _cameraActionMovement.Z = -distance;
+            }
+        }
+
+        private void Render()
+        {
+            if (!_loaded) // Play nice
+                return;
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
+            GL.Scale(_zoom, _zoom, _zoom);
+            GL.Rotate(-90.0, 1, 0, 0);
+
+            GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);
+            GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
+            GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
+            GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
+            //GL.Scale(_zoom, _zoom, _zoom);
+
+
+            //GL.Rotate(_xAng, 0, 1, 0);
+            //GL.Rotate(_yAng, 1, 0, 0);
+            //GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
+
+            //var lookat = Matrix4.LookAt(_cursorX, _cursorY, _cursorZ, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+            //var lookat = Matrix4.LookAt(new Vector3(0.01f, 10.0f, 0.01f), 
+            //                            Vector3.Zero, 
+            //                            Vector3.UnitY);
+            //GL.MatrixMode(MatrixMode.Modelview);
+            //GL.LoadMatrix(ref lookat);
+
+            //GL.Translate(-_cursorX, 0.0f, -_cursorZ);
+            //GL.Rotate(_xAng, 0, 1, 0);
+            //GL.Rotate(_yAng, 1, 0, 0);
+            //GL.Scale(_zoom, _zoom, _zoom);
+            //GL.Scale(_zoom, _zoom, _zoom);
+            //                GL.Enable(EnableCap.PointSmooth);
+            //                GL.Enable(EnableCap.Blend);
+
+            RenderGalaxy();
+
+            glControl.SwapBuffers();
+            UpdateStatus();
+        }
+
+        private void RenderGalaxy()
+        {
+            GL.Enable(EnableCap.PointSmooth);
+            GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+            GL.PushMatrix();
+            DrawStars();
+            GL.PopMatrix();
+        }
 
         private void FormMap_Load(object sender, EventArgs e)
         {
             textboxFrom.AutoCompleteCustomSource = _systemNames;
             ShowCenterSystem();
             GenerateDataSets();
+
             //GenerateDataSetsAllegiance();
             //GenerateDataSetsGovernment();
         }
@@ -501,62 +667,63 @@ namespace EDDiscovery2
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void glControl1_Load(object sender, EventArgs e)
+        private void glControl_Load(object sender, EventArgs e)
         {
-            _loaded = true;
 
-            GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10")); 
+            GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
 
             SetupViewport();
+
+            _loaded = true;
+
+            Application.Idle += Application_Idle;
+
         }
 
-        /// <summary>
-        /// Paint The control.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void glControl1_Paint(object sender, PaintEventArgs e)
+
+        private void Application_Idle(object sender, EventArgs e)
         {
-            if (!_loaded) // Play nice
-                return;
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-
-            GL.Translate(_systemOffsetX, _systemOffsetY, 0); // position triangle according to our x variable
-            GL.Rotate(_xAng, 0, 1, 0);
-            GL.Rotate(_yAng, 1, 0, 0);
-            GL.Scale(_zoom, _zoom, _zoom);
-            //                GL.Enable(EnableCap.PointSmooth);
-            //                GL.Enable(EnableCap.Blend);
-
-
-            GL.Enable(EnableCap.PointSmooth);
-            GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
-            //GL.Color3(Color.Yellow);
-            //GL.Begin(BeginMode.Triangles);
-            //GL.Vertex2(10, 20);
-            //GL.Vertex2(100, 20);
-            //GL.Vertex2(100, 50);
-            //GL.End();
-
-            DrawStars();
-
-            glControl1.SwapBuffers();
-            UpdateStatus();
+            glControl.Invalidate();
         }
 
-        /// <summary>
-        /// We need to setup each time our viewport and Ortho.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void glControl1_Resize(object sender, EventArgs e)
+        private void glControl_Paint(object sender, PaintEventArgs e)
+        {
+            CalculateTimeDelta();
+            HandleInputs();
+            UpdateCamera();
+            Render();
+        }
+
+        private void UpdateCamera()
+        {
+            GL.PushMatrix();
+            var camera = Matrix4.Identity;
+            _cameraDir.X = BoundedAngle(_cameraDir.X + _cameraActionRotation.X);
+            _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
+            _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);
+            var rotY = Matrix4.CreateRotationY( DegreesToRadians(_cameraDir.Y) );
+            var rotX = Matrix4.CreateRotationX( DegreesToRadians(_cameraDir.X) );
+            var rotZ = Matrix4.CreateRotationZ( DegreesToRadians(_cameraDir.Y) );
+            var translation = Matrix4.CreateTranslation(_cameraActionMovement);
+            camera *= translation;
+            camera *= rotY;
+            camera *= rotX;
+            camera *= rotZ;
+            _cameraPos += camera.ExtractTranslation();
+            GL.PopMatrix();
+        }
+
+        private float BoundedAngle(float angle)
+        {
+            return ((angle + 360 + 180) % 360) - 180;
+        }
+
+        private float DegreesToRadians(float angle)
+        {
+            return (float) (Math.PI * angle / 180.0);
+        }
+
+        private void glControl_Resize(object sender, EventArgs e)
         {
             if (!_loaded)
                 return;
@@ -564,7 +731,7 @@ namespace EDDiscovery2
             SetupViewport();
         }
 
-        private void glControl1_MouseDown(object sender, MouseEventArgs e)
+        private void glControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
@@ -587,8 +754,11 @@ namespace EDDiscovery2
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void glControl1_MouseMove(object sender, MouseEventArgs e)
+        private void glControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            // TODO: Use OpenTK Input control, implement rotation where the camera locks onto the mouse, like with EDs map.
+            // This may be a good starting point to figuring it out:
+            // http://www.opentk.com/node/3738
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 int dx = e.X - _mouseStartRotate.X;
@@ -599,13 +769,14 @@ namespace EDDiscovery2
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _xAng += (float)(dx / 5.0f);
-                _yAng += (float)(-dy / 5.0f);
+                _cameraDir.Y += (float)(dx / 4.0f);
+                _cameraDir.X += (float)(-dy / 4.0f);
 
                 SetupCursorXYZ();
 
-                glControl1.Invalidate();
+                glControl.Invalidate();
             }
+            // TODO: Turn this into Up and Down along Y Axis, like real ED map 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 int dx = e.X - _mouseStartTranslate.X;
@@ -616,16 +787,16 @@ namespace EDDiscovery2
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _systemOffsetX += dx * _zoom;
-                _systemOffsetY += -dy * _zoom;
+                _cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
+                _cameraPos.Y += dy * (1.0f /_zoom) * 2.0f;
 
                 SetupCursorXYZ();
 
-                glControl1.Invalidate();
+                glControl.Invalidate();
             }
         }
 
-        private void glControl1_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Delta > 0 && _zoom < ZoomMax) _zoom *= (float)ZoomFact;
             if (e.Delta < 0 && _zoom > ZoomMin) _zoom /= (float)ZoomFact;
@@ -634,11 +805,7 @@ namespace EDDiscovery2
             SetupCursorXYZ();
 
             SetupViewport();
-            glControl1.Invalidate();
-        }
-
-        private void glControl1_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
+            glControl.Invalidate();
         }
     }
 }

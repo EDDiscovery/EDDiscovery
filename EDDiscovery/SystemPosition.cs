@@ -1,6 +1,5 @@
 ﻿using EDDiscovery.DB;
 using EDDiscovery2.DB;
-using EDDiscovery2.DB.Offline;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +19,14 @@ namespace EDDiscovery
         public ISystem prevSystem;
         public ISystem lastKnownSystem;
         public string strDistance;
-        public VisitedSystemsClass vs;
+        public IVisitedSystems vs;
         
 
         public SystemPosition()
         {
         }
 
-        public SystemPosition(VisitedSystemsClass vs)
+        public SystemPosition(IVisitedSystems vs)
         {
             Name = vs.Name;
             time = vs.Time;

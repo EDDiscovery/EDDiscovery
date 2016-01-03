@@ -1,6 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
-using EDDiscovery2.DB.Offline;
+using EDDiscovery2.DB;
 
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace EDDiscovery2._3DMap
     {
         private List<IData3DSet> _datasets;
 
-        public ISystem Origin { get; set; } = new SystemClass();
+        public ISystem CenterSystem { get; set; } = new SystemClass();
         public List<ISystem> StarList { get; set; } = new List<ISystem>();
         public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
         public List<SystemPosition> VisitedSystems { get; set; }
@@ -28,7 +28,7 @@ namespace EDDiscovery2._3DMap
         public bool Stations { get; set; } = false;
 
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
-        public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 70000.0f);
+        public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
 
         public DatasetBuilder()
         {            
@@ -58,21 +58,11 @@ namespace EDDiscovery2._3DMap
 
                 for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
                 {
-                    datasetGrid.Add(new LineData(x - Origin.x,
-                        0 - Origin.y,
-                        Origin.x - MinGridPos.Y,
-                        x - Origin.x,
-                        0 - Origin.y,
-                        Origin.z - MaxGridPos.Y));
+                    datasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x,0,MaxGridPos.Y));
                 }
                 for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += unitSize)
                 {
-                    datasetGrid.Add(new LineData(MinGridPos.X - Origin.x,
-                        0 - Origin.y,
-                        Origin.z - z,
-                        MaxGridPos.Y - Origin.x,
-                        0 - Origin.y,
-                        Origin.z - z));
+                    datasetGrid.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
                 }
 
                 _datasets.Add(datasetGrid);
@@ -132,8 +122,8 @@ namespace EDDiscovery2._3DMap
                         {
                             if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
                             {
-                                datasetl.Add(new LineData(sp.curSystem.x - Origin.x, sp.curSystem.y - Origin.y, Origin.z - sp.curSystem.z,
-                                    sp.lastKnownSystem.x - Origin.x, sp.lastKnownSystem.y - Origin.y, Origin.z - sp.lastKnownSystem.z));
+                                datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
+                                    sp.lastKnownSystem.x , sp.lastKnownSystem.y, sp.lastKnownSystem.z));
 
                             }
                         }
@@ -158,12 +148,14 @@ namespace EDDiscovery2._3DMap
             }
         }
 
+        // Planned change: Centered system will be marked but won't be "center" of the galaxy
+        // dataset anymore. The origin will stay at Sol.
         public void AddCenterPointToDataset()
         {
             var dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
 
             //GL.Enable(EnableCap.ProgramPointSize);
-            dataset.Add(new PointData(0, 0, 0));
+            dataset.Add(new PointData(CenterSystem.x, CenterSystem.y, CenterSystem.z));
             _datasets.Add(dataset);
         }
 
@@ -183,7 +175,7 @@ namespace EDDiscovery2._3DMap
                 var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
                 foreach (var refSystem in ReferenceSystems)
                 {
-                    referenceLines.Add(new LineData(0, 0, 0, refSystem.x - Origin.x, refSystem.y - Origin.y, Origin.z - refSystem.z));
+                    referenceLines.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, refSystem.x, refSystem.y, refSystem.z));
                 }
 
                 _datasets.Add(referenceLines);
@@ -193,7 +185,7 @@ namespace EDDiscovery2._3DMap
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                SuggestedReferences references = new SuggestedReferences(Origin.x, Origin.y, Origin.z);
+                SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
 
                 for (int ii = 0; ii < 16; ii++)
                 {
@@ -203,7 +195,7 @@ namespace EDDiscovery2._3DMap
                     references.AddReferenceStar(system);
                     if (ReferenceSystems != null && ReferenceSystems.Any(s => s.name == system.name)) continue;
                     System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
-                    lineSet.Add(new LineData(0, 0, 0, system.x - Origin.x, system.y - Origin.y, Origin.z - system.z));
+                    lineSet.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, system.x, system.y, system.z));
                 }
                 sw.Stop();
                 System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
@@ -220,7 +212,7 @@ namespace EDDiscovery2._3DMap
         {
             if (system != null && system.HasCoordinate)
             {
-                dataset.Add(new PointData(system.x - Origin.x, system.y - Origin.y, Origin.z - system.z));
+                dataset.Add(new PointData(system.x, system.y, system.z));
             }
         }
 

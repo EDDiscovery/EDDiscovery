@@ -1,14 +1,10 @@
-﻿using EDDiscovery2.DB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 
-namespace EDDiscovery2.DB.Offline
+namespace EDDiscovery2.DB.InMemory
 {
     // For when you need a minimal version and don't want to mess up the database. 
     // Useful for creation of test doubles
-    public class OfflineSystemClass : ISystem
+    public class SystemClass : ISystem
     {
         public int id { get; set; }
         public string name { get; set; }
