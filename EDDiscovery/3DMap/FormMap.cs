@@ -79,7 +79,8 @@ namespace EDDiscovery2
                 }
                 else
                 {
-                    _centerSystem = null;
+                    // We need to use 0,0,0 if we don't have a center system
+                    _centerSystem = SystemData.GetSystem("sol");
                 }
             }
         }
