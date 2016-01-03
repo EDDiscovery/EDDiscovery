@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EDDiscovery2.DB.Offline
+namespace EDDiscovery2.DB
 {
     // Definition of the core interface so we can swap out an "offline" version during testing
     public interface ISystem
