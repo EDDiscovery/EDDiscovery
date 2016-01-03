@@ -28,7 +28,7 @@ namespace EDDiscovery2._3DMap
         public bool Stations { get; set; } = false;
 
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
-        public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 70000.0f);
+        public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
 
         public DatasetBuilder()
         {            
@@ -58,11 +58,11 @@ namespace EDDiscovery2._3DMap
 
                 for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
                 {
-                    datasetGrid.Add(new LineData(x, 0, -MinGridPos.Y, x,0,-MaxGridPos.Y));
+                    datasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x,0,MaxGridPos.Y));
                 }
                 for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += unitSize)
                 {
-                    datasetGrid.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.Y, 0, z));
+                    datasetGrid.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
                 }
 
                 _datasets.Add(datasetGrid);
@@ -175,7 +175,7 @@ namespace EDDiscovery2._3DMap
                 var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
                 foreach (var refSystem in ReferenceSystems)
                 {
-                    referenceLines.Add(new LineData(0, 0, 0, refSystem.x, refSystem.y, refSystem.z));
+                    referenceLines.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, refSystem.x, refSystem.y, refSystem.z));
                 }
 
                 _datasets.Add(referenceLines);
@@ -185,7 +185,7 @@ namespace EDDiscovery2._3DMap
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                SuggestedReferences references = new SuggestedReferences(0.0, 0.0, 0.0);
+                SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
 
                 for (int ii = 0; ii < 16; ii++)
                 {
@@ -195,7 +195,7 @@ namespace EDDiscovery2._3DMap
                     references.AddReferenceStar(system);
                     if (ReferenceSystems != null && ReferenceSystems.Any(s => s.name == system.name)) continue;
                     System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
-                    lineSet.Add(new LineData(0, 0, 0, system.x, system.y, system.z));
+                    lineSet.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, system.x, system.y, system.z));
                 }
                 sw.Stop();
                 System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));

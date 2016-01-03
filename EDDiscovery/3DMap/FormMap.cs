@@ -2,7 +2,6 @@
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using EDDiscovery2._3DMap;
-using EDDiscovery2.Trilateration;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -45,8 +44,6 @@ namespace EDDiscovery2
         private bool _loaded = false;
 
         private float _zoom = 1.0f;
-        private float _xAng = 0.0f;
-        private float _yAng = 0.0f;
 
         private Vector3 _cameraPos = Vector3.Zero;
         private Vector3 _cameraDir = Vector3.Zero;
@@ -143,11 +140,8 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
-            _cameraPos = Vector3.Zero;
+            _cameraPos = new Vector3((float) CenterSystem.x, (float)CenterSystem.x, (float)CenterSystem.z);
             _cameraDir = Vector3.Zero;
-
-            _xAng = 0.0f;
-            _yAng = 0.0f;
 
             _zoom = 1.0f;
         }
@@ -423,7 +417,9 @@ namespace EDDiscovery2
 
         private void UpdateStatus()
         {
-            statusLabel.Text = $"Coordinates: x={_cameraPos.X} y={_cameraPos.Y} z={_cameraPos.Z}";
+            statusLabel.Text = "Use W, A, S and D keys with mouse to move the map!      ";
+            statusLabel.Text += $"Coordinates: x={_cameraPos.X} y={_cameraPos.Y} z={_cameraPos.Z}";
+            statusLabel.Text += $", Zoom: {_zoom}";
 #if DEBUG
             statusLabel.Text += $", Direction: x={_cameraDir.X} y={_cameraDir.Y} z={_cameraDir.Z}";
 #endif        
@@ -520,7 +516,7 @@ namespace EDDiscovery2
         private void HandleMovementAdjustments()
         {
             _cameraActionMovement = Vector3.Zero;
-            var distance = _ticks;
+            var distance = _ticks * (1.0f / _zoom);
             if (_kbdActions.Left)
             {
                 _cameraActionMovement.X = -distance;
@@ -688,12 +684,6 @@ namespace EDDiscovery2
         private void Application_Idle(object sender, EventArgs e)
         {
             glControl.Invalidate();
-            //while (glControl.IsIdle)
-            //{
-            //    glControl.MakeCurrent();
-            //    Render();
-            //    glControl.SwapBuffers();
-            //}
         }
 
         private void glControl_Paint(object sender, PaintEventArgs e)
@@ -766,6 +756,9 @@ namespace EDDiscovery2
         /// <param name="e"></param>
         private void glControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            // TODO: Use OpenTK Input control, implement rotation where the camera locks onto the mouse, like with EDs map.
+            // This may be a good starting point to figuring it out:
+            // http://www.opentk.com/node/3738
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 int dx = e.X - _mouseStartRotate.X;
@@ -776,13 +769,14 @@ namespace EDDiscovery2
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _xAng += (float)(dx / 5.0f);
-                _yAng += (float)(-dy / 5.0f);
+                _cameraDir.Y += (float)(dx / 4.0f);
+                _cameraDir.X += (float)(-dy / 4.0f);
 
                 SetupCursorXYZ();
 
                 glControl.Invalidate();
             }
+            // TODO: Turn this into Up and Down along Y Axis, like real ED map 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 int dx = e.X - _mouseStartTranslate.X;
@@ -793,8 +787,8 @@ namespace EDDiscovery2
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _cameraPos.X += dx * _zoom;
-                _cameraPos.Y += -dy * _zoom;
+                _cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
+                _cameraPos.Y += dy * (1.0f /_zoom) * 2.0f;
 
                 SetupCursorXYZ();
 

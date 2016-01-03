@@ -93,26 +93,8 @@ namespace EDDiscovery2._3DMap.Tests
 
             var dataset = (Data3DSetClass<LineData>)datasets[0];
             Assert.AreEqual(2000.0, dataset.Primatives[0].x1);
-            Assert.AreEqual(-12000.0, dataset.Primatives[0].z1);
+            Assert.AreEqual(12000.0, dataset.Primatives[0].z1);
         }
-
-        // Probably won't need this test for long. 
-        // Just want to be sure of how the offsets are configured for a "centered" system
-        public void When_building_a_grid_with_an_origin()
-        {
-            _subject.GridLines = true;
-            _subject.MinGridPos = new Vector2(2000.0f, 12000.0f);
-            _subject.MaxGridPos = new Vector2(4000.0f, 14000.0f);
-            _subject.CenterSystem = SpawnOrigin();
-            var datasets = _subject.Build();
-
-            var dataset = (Data3DSetClass<LineData>)datasets[0];
-
-            // Note: Looks like the grid is drawn directly over the origin
-            Assert.AreEqual(2000.0, dataset.Primatives[0].x1);
-            Assert.AreEqual(-12000.0, dataset.Primatives[0].z1);
-        }
-
 
         [TestMethod()]
         public void When_building_all_systems()
