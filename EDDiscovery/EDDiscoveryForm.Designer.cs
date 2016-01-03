@@ -59,6 +59,7 @@
             this.openEliteDangerousDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.prospectingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setDefaultMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +69,6 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.prospectingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -382,6 +382,14 @@
             this.show2DMapsToolStripMenuItem.Text = "Show 2D maps";
             this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
             // 
+            // prospectingToolStripMenuItem
+            // 
+            this.prospectingToolStripMenuItem.Name = "prospectingToolStripMenuItem";
+            this.prospectingToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.prospectingToolStripMenuItem.Text = "Prospecting";
+            this.prospectingToolStripMenuItem.Visible = false;
+            this.prospectingToolStripMenuItem.Click += new System.EventHandler(this.prospectingToolStripMenuItem_Click);
+            // 
             // statisticsToolStripMenuItem
             // 
             this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
@@ -454,13 +462,6 @@
             this.labelPanelText.TabIndex = 0;
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // prospectingToolStripMenuItem
-            // 
-            this.prospectingToolStripMenuItem.Name = "prospectingToolStripMenuItem";
-            this.prospectingToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.prospectingToolStripMenuItem.Text = "Prospecting";
-            this.prospectingToolStripMenuItem.Click += new System.EventHandler(this.prospectingToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 

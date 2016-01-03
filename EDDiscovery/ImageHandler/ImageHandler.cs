@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using EDDiscovery.DB;
 using EDDiscovery;
-using EDDiscovery2.DB.Offline;
+using EDDiscovery2.DB;
 
 namespace EDDiscovery2.ImageHandler
 {
