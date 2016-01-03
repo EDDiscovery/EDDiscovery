@@ -25,8 +25,9 @@ namespace EDDiscovery2.Trilateration
             get
             {
                 int modifier = 0;
-                if (refSys.name.EndsWith("0"))  // Elite has a bug with selecting systems ending with 0.  Prefere others first.
-                    modifier += 50;
+                //search bug seems to be fixed now, don't avoid these any more.
+                //if (refSys.name.EndsWith("0"))  // Elite has a bug with selecting systems ending with 0.  Prefere others first.
+                //    modifier += 50;
 
                 if (Regex.IsMatch(refSys.name, "\\s[A-Z][A-Z].[A-Z]\\s"))
                     modifier += 20;

@@ -344,12 +344,16 @@ namespace EDDiscovery2
             var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.time > start && systems.time<endDate  && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.time  select systems;
             List<SystemPosition> listHistory = history.ToList<SystemPosition>();
             Graphics gfx = Graphics.FromImage(imageViewer1.Image);
-            Pen pen = new Pen(Color.Red, 2);
-
+            
             if (listHistory.Count > 1)
             {
+                Pen pen = new Pen(Color.FromArgb(listHistory[1].vs.MapColour), 2);
                 for (int ii = 1; ii < listHistory.Count; ii++)
                 {
+                    if (listHistory[ii].vs.MapColour != listHistory[ii-1].vs.MapColour)
+                    {
+                        pen = new Pen(Color.FromArgb(listHistory[ii].vs.MapColour), 2);
+                    }
                     DrawLine(gfx, pen, listHistory[ii - 1].curSystem, listHistory[ii].curSystem);
                 }
             }
