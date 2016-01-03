@@ -129,6 +129,7 @@
     <Compile Include="3DMap\Data3DSetClass.cs" />
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
+    <Compile Include="3DMap\KeyboardActions.cs" />
     <Compile Include="DB\InMemory\VisitedSystemsClass.cs" />
     <Compile Include="DB\ISystem.cs" />
     <Compile Include="DB\InMemory\SystemClass.cs" />
