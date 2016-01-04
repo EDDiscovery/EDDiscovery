@@ -465,15 +465,11 @@ namespace EDDiscovery
                                         dbsys.EDSM_sync = false;
                                         dbsys.Unit = fi.Name;
                                         dbsys.MapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
-                                        dbsys.Add();
                                         dbsys.Unit = fi.Name;
-
-
-
+                                        
                                         if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
                                         {
                                             dbsys.Add();
-                                        
                                         }
                                         visitedSystems[nr].vs = dbsys;
                                     }
