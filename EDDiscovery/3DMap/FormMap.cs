@@ -474,13 +474,13 @@ namespace EDDiscovery2
             // I'll probably hide away the less useful options later from the Release build
             _kbdActions.Forwards = state[Key.R];
             _kbdActions.Backwards = state[Key.F];
- 
+
+            _kbdActions.YawLeft = state[Key.Keypad4];
+            _kbdActions.YawRight = state[Key.Keypad6];
             _kbdActions.Pitch = state[Key.Keypad8];
-            _kbdActions.Dive = state[Key.Keypad5];
-            _kbdActions.RollLeft = state[Key.Keypad4];
-            _kbdActions.RollRight = state[Key.Keypad6];
-            _kbdActions.YawLeft = state[Key.Keypad7];
-            _kbdActions.YawRight = state[Key.Keypad9];
+            _kbdActions.Dive = (state[Key.Keypad5] || state[Key.Keypad2]);
+            _kbdActions.RollLeft = state[Key.Keypad7];
+            _kbdActions.RollRight = state[Key.Keypad9];
         }
 
         private void HandleTurningAdjustments()
@@ -488,6 +488,14 @@ namespace EDDiscovery2
             _cameraActionRotation = Vector3.Zero;
 
             var angle = (float)  _ticks * 0.1f;
+            if (_kbdActions.YawLeft)
+            {
+                _cameraActionRotation.Z = -angle;
+            }
+            if (_kbdActions.YawRight)
+            {
+                _cameraActionRotation.Z = angle;
+            }
             if (_kbdActions.Dive)
             {
                 _cameraActionRotation.X = -angle;
@@ -503,14 +511,6 @@ namespace EDDiscovery2
             if (_kbdActions.RollRight)
             {
                 _cameraActionRotation.Y = angle;
-            }
-            if (_kbdActions.YawLeft)
-            {
-                _cameraActionRotation.Z = -angle;
-            }
-            if (_kbdActions.YawRight)
-            {
-                _cameraActionRotation.Z = angle;
             }
 
         }
@@ -693,21 +693,19 @@ namespace EDDiscovery2
 
         private void UpdateCamera()
         {
-            GL.PushMatrix();
             var camera = Matrix4.Identity;
+            _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);
             _cameraDir.X = BoundedAngle(_cameraDir.X + _cameraActionRotation.X);
             _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
-            _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);
-            var rotY = Matrix4.CreateRotationY( DegreesToRadians(_cameraDir.Y) );
+            var rotZ = Matrix4.CreateRotationZ(DegreesToRadians(_cameraDir.Z));
             var rotX = Matrix4.CreateRotationX( DegreesToRadians(_cameraDir.X) );
-            var rotZ = Matrix4.CreateRotationZ( DegreesToRadians(_cameraDir.Y) );
+            var rotY = Matrix4.CreateRotationY(DegreesToRadians(_cameraDir.Y));
             var translation = Matrix4.CreateTranslation(_cameraActionMovement);
             camera *= translation;
-            camera *= rotY;
-            camera *= rotX;
             camera *= rotZ;
+            camera *= rotX;
+            camera *= rotY;
             _cameraPos += camera.ExtractTranslation();
-            GL.PopMatrix();
         }
 
         private float BoundedAngle(float angle)

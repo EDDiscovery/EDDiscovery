@@ -80,6 +80,7 @@ namespace EDDiscovery2
             this.textboxFrom.Name = "textboxFrom";
             this.textboxFrom.Size = new System.Drawing.Size(125, 20);
             this.textboxFrom.TabIndex = 16;
+            this.textboxFrom.TabStop = false;
             this.textboxFrom.Text = "Sol";
             // 
             // buttonCenter
@@ -89,6 +90,7 @@ namespace EDDiscovery2
             this.buttonCenter.Name = "buttonCenter";
             this.buttonCenter.Size = new System.Drawing.Size(75, 23);
             this.buttonCenter.TabIndex = 17;
+            this.buttonCenter.TabStop = false;
             this.buttonCenter.Text = "Center";
             this.buttonCenter.UseVisualStyleBackColor = true;
             this.buttonCenter.Click += new System.EventHandler(this.buttonCenter_Click);
@@ -185,6 +187,7 @@ namespace EDDiscovery2
             this.buttonSetDefault.Name = "buttonSetDefault";
             this.buttonSetDefault.Size = new System.Drawing.Size(75, 23);
             this.buttonSetDefault.TabIndex = 20;
+            this.buttonSetDefault.TabStop = false;
             this.buttonSetDefault.Text = "Set Default";
             this.buttonSetDefault.UseCompatibleTextRendering = true;
             this.buttonSetDefault.UseVisualStyleBackColor = true;
