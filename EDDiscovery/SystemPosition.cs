@@ -33,6 +33,15 @@ namespace EDDiscovery
             this.vs = vs;
         }
 
+        public void Update()
+        {
+            if (this.vs is VisitedSystemsClass)
+            {
+                VisitedSystemsClass vsc = (VisitedSystemsClass)vs;
+                vsc.Update();
+            }
+        }
+
         static public SystemPosition Parse(DateTime lasttime, string line)
         {
             SystemPosition sp = new SystemPosition();
