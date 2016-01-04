@@ -35,8 +35,8 @@ namespace EDDiscovery2
             }
         }
 
-        private const int ZoomMax = 100;
-        private const double ZoomMin = 0.005;
+        private const double ZoomMax = 50;
+        private const double ZoomMin = 0.01;
         private const double ZoomFact = 1.2589254117941672104239541063958;
 
         private AutoCompleteStringCollection _systemNames;
@@ -453,6 +453,7 @@ namespace EDDiscovery2
             ReceiveKeybaordActions();
             HandleTurningAdjustments();
             HandleMovementAdjustments();
+            HandleZoomAdjustment();
         }
 
         private void ReceiveKeybaordActions()
@@ -466,8 +467,8 @@ namespace EDDiscovery2
             _kbdActions.Up = (state[Key.Up] || state[Key.W]);
             _kbdActions.Down = (state[Key.Down] || state[Key.S]);
 
-            _kbdActions.ZoomIn = state[Key.Minus];
-            _kbdActions.ZoomOut = state[Key.Plus];
+            _kbdActions.ZoomIn = (state[Key.Plus] || state[Key.Z]);
+            _kbdActions.ZoomOut = (state[Key.Minus] || state[Key.X]);
 
             // Yes, much of this is overkill. but useful while development is happening
             // I'll probably hide away the less useful options later from the Release build
@@ -544,6 +545,21 @@ namespace EDDiscovery2
             }
         }
 
+        private void HandleZoomAdjustment()
+        {
+            var adjustment = 1.0f + ((float)_ticks * 0.01f);
+            if (_kbdActions.ZoomIn)
+            {
+                _zoom *= (float)adjustment;
+                if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
+            }
+            if (_kbdActions.ZoomOut)
+            {
+                _zoom /= (float)adjustment;
+                if (_zoom < ZoomMin) _zoom = (float) ZoomMin;
+            }
+        }
+
         private void Render()
         {
             if (!_loaded) // Play nice
@@ -553,34 +569,13 @@ namespace EDDiscovery2
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-            GL.Scale(_zoom, _zoom, _zoom);
             GL.Rotate(-90.0, 1, 0, 0);
 
+            GL.Scale(_zoom, _zoom, _zoom);
             GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);
             GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
             GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
             GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
-            //GL.Scale(_zoom, _zoom, _zoom);
-
-
-            //GL.Rotate(_xAng, 0, 1, 0);
-            //GL.Rotate(_yAng, 1, 0, 0);
-            //GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
-
-            //var lookat = Matrix4.LookAt(_cursorX, _cursorY, _cursorZ, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-            //var lookat = Matrix4.LookAt(new Vector3(0.01f, 10.0f, 0.01f), 
-            //                            Vector3.Zero, 
-            //                            Vector3.UnitY);
-            //GL.MatrixMode(MatrixMode.Modelview);
-            //GL.LoadMatrix(ref lookat);
-
-            //GL.Translate(-_cursorX, 0.0f, -_cursorZ);
-            //GL.Rotate(_xAng, 0, 1, 0);
-            //GL.Rotate(_yAng, 1, 0, 0);
-            //GL.Scale(_zoom, _zoom, _zoom);
-            //GL.Scale(_zoom, _zoom, _zoom);
-            //                GL.Enable(EnableCap.PointSmooth);
-            //                GL.Enable(EnableCap.Blend);
 
             RenderGalaxy();
 
@@ -606,6 +601,7 @@ namespace EDDiscovery2
             ShowCenterSystem();
             GenerateDataSets();
 
+            //TODO: Move this functionality into DatasetBuilder
             //GenerateDataSetsAllegiance();
             //GenerateDataSetsGovernment();
         }
@@ -791,18 +787,23 @@ namespace EDDiscovery2
                 _cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
                 _cameraPos.Y += dy * (1.0f /_zoom) * 2.0f;
 
-                SetupCursorXYZ();
-
                 glControl.Invalidate();
             }
         }
 
         private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Delta > 0 && _zoom < ZoomMax) _zoom *= (float)ZoomFact;
-            if (e.Delta < 0 && _zoom > ZoomMin) _zoom /= (float)ZoomFact;
+            if (e.Delta > 0)
+            {
+                _zoom *= (float)ZoomFact;
+                if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
+            }
+            if (e.Delta < 0)
+            {
+                _zoom /= (float)ZoomFact;
+                if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
+            }
 
-            //System.Diagnostics.Trace.WriteLine("Zoom:" + zoom + " : W:" + (2000/ zoom).ToString("0"));
             SetupCursorXYZ();
 
             SetupViewport();
