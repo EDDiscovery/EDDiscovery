@@ -91,7 +91,7 @@ namespace EDDiscovery2.EDSM
                         if (ps2 != null)
                         {
                             system.vs.EDSM_sync = true;
-                            system.vs.Update();
+                            system.Update();
 
                         }
                         else
@@ -111,7 +111,7 @@ namespace EDDiscovery2.EDSM
                                     System.Diagnostics.Trace.WriteLine("New");
 
                                 system.vs.EDSM_sync = true;
-                                system.vs.Update();
+                                system.Update();
                             }
                             else
                             {

@@ -1006,7 +1006,7 @@ namespace EDDiscovery
                     if (sp.vs != null)
                     {
                         sp.vs.MapColour = mapColorDialog.Color.ToArgb();
-                        sp.vs.Update();
+                        sp.Update();
                     }
                 }
                 this.Cursor = Cursors.Default;
