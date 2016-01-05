@@ -980,7 +980,7 @@ namespace EDDiscovery
         {
             if (EliteDangerous.EDRunning)
             {
-                TravelHistoryControl.LogText("EliteDangerous " + EliteDangerous.EDVersion + " is running." + Environment.NewLine);
+                TravelHistoryControl.LogText("EliteDangerous is running." + Environment.NewLine);
             }
             else
             {

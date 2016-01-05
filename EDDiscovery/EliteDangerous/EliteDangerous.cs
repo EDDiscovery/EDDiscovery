@@ -200,7 +200,7 @@ Trinkets_Of_Hidden_Fortune,
         static public string EDFileName;
         static public string EDLaunchFileName;
         static public string EDDirectory;
-        static public string EDVersion;
+        //static public string EDVersion;
         static public bool EDRunning = false;
         static public bool EDLaunchRunning = false;
         static public bool Beta = false;
@@ -233,15 +233,15 @@ Trinkets_Of_Hidden_Fortune,
                 string processFilename = null;
                 try
                 {
-                    processFilename = processes[0].MainModule.FileName;
+                    int id = processes[0].Id;
+                    processFilename = GetMainModuleFilepath(id);
+                    EDFileName = processFilename;
+                    //processFilename = processes[0].MainModule.FileName;
                 }
                 catch (Win32Exception)
                 {
                 }
 
-                if (processFilename != null && (EDFileName==null || !EDFileName.Equals(processes[0].MainModule.FileName)))
-                {
-                    EDFileName = processes[0].MainModule.FileName;
                     EDDirectory = Path.GetDirectoryName(EDFileName);
 
                     SQLiteDBClass db = new SQLiteDBClass();
@@ -257,15 +257,7 @@ Trinkets_Of_Hidden_Fortune,
                         db.PutSettingString("EDDirectory", EDDirectory);
                     }
                     
-                }
-
-                try
-                {
-                    EDVersion = processes[0].MainModule.FileVersionInfo.ProductVersion;
-                }
-                catch (Win32Exception)
-                {
-                }
+        
 
                 EDRunning = true;
 
@@ -292,6 +284,24 @@ Trinkets_Of_Hidden_Fortune,
             return EDRunning;
         }
 
+        private static  string GetMainModuleFilepath(int processId)
+        {
+            string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
+            using (var searcher = new ManagementObjectSearcher(wmiQueryString))
+            {
+                using (var results = searcher.Get())
+                {
+                    foreach (ManagementObject mo in results)
+                    {
+                        if (mo != null)
+                        {
+                            return (string)mo["ExecutablePath"];
+                        }
+                    }
+                }
+            }
+            return null;
+        }
 
         static public bool CheckStationLogging()
         {
