@@ -32,7 +32,7 @@ namespace EDDiscovery
 
         private void button_Route_Click_1(object sender, EventArgs e)
         {
-
+            button_Route.Enabled = false;
             richTextBox1.Clear();
 
             ThreadRoute = new System.Threading.Thread(new System.Threading.ThreadStart(RouteMain));
@@ -49,9 +49,9 @@ namespace EDDiscovery
         {
             float maxrange = float.Parse(textBox_Range.Text);
 
-            button_Route.Enabled = false;
+            //button_Route.Enabled = false;
             Route(textBox_From.Text, textBox_To.Text, maxrange, 0);
-            button_Route.Enabled = true;
+            //button_Route.Enabled = true;
         }
 
         private void Route(string s1, string s2, float maxrange, int mode)
@@ -122,6 +122,7 @@ namespace EDDiscovery
 
             AppendText("Total distance: " + totdist.ToString("0.00") + Environment.NewLine);
             AppendText("Jumps: " + jumps + Environment.NewLine);
+            this.Invoke(new Action(() => button_Route.Enabled = true));
         }
 
 
