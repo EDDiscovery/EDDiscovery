@@ -307,7 +307,7 @@ namespace EDDiscovery2
         private void InitStarLists()
         {
 
-            if (_starList == null)
+            if (_starList == null || _starList.Count == 0)
                 _starList = SQLiteDBClass.globalSystems;
 
 
