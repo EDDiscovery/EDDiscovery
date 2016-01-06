@@ -569,9 +569,9 @@ namespace EDDiscovery2
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-            GL.Rotate(-90.0, 1, 0, 0);
+            GL.Rotate(90.0, 1, 0, 0);
 
-            GL.Scale(_zoom, _zoom, _zoom);
+            GL.Scale(_zoom, _zoom, -_zoom);
             GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);
             GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
             GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
