@@ -133,6 +133,9 @@ namespace EDDiscovery.DB
                 if (dbver < 8)
                     UpgradeDB8();
 
+                if (dbver < 9)
+                    UpgradeDB9();
+
                 return true;
             }
             catch (Exception ex)
@@ -410,13 +413,48 @@ namespace EDDiscovery.DB
             {
                 System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB7 error: " + ex.Message);
+                MessageBox.Show("UpgradeDB8 error: " + ex.Message);
             }
 
             PutSettingInt("DBVer", 8);
 
             return true;
         }
+
+
+        private bool UpgradeDB9()
+        {
+            //Default is Color.Red.ToARGB()
+            string query1 = "CREATE TABLE Objects (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , SystemName TEXT NOT NULL , ObjectName TEXT NOT NULL , ObjectType INTEGER NOT NULL , ArrivalPoint Float, Gravity FLOAT, Atmosphere Integer, Vulcanism Integer, Terrain INTEGER, Carbon BOOL, Iron BOOL, Nickel BOOL, Phosphorus BOOL, Sulphur BOOL, Arsenic BOOL, Chromium BOOL, Germanium BOOL, Manganese BOOL, Selenium BOOL NOT NULL , Vanadium BOOL, Zinc BOOL, Zirconium BOOL, Cadmium BOOL, Mercury BOOL, Molybdenum BOOL, Niobium BOOL, Tin BOOL, Tungsten BOOL, Antimony BOOL, Polonium BOOL, Ruthenium BOOL, Technetium BOOL, Tellurium BOOL, Yttrium BOOL, Commander  Text, UpdateTime DATETIME, Status INTEGER )";
+            string dbfile = GetSQLiteDBFile();
+
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery8.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+
+            try
+            {
+                ExecuteQuery(query1);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB9 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 9);
+
+            return true;
+        }
+
 
 
         private void ExecuteQuery(string query)
