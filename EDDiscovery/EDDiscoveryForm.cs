@@ -16,8 +16,6 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
-// ROB
-
 namespace EDDiscovery
 {
     public delegate void DistancesLoaded();
