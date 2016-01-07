@@ -5,9 +5,9 @@ using System.Text;
 
 namespace EDDiscovery2.PlanetSystems
 {
-    public enum PlanetTypesEnum
+    public enum ObjectTypesEnum
     {
-        Unknown = 0,
+        UnknownObject = 0,
         EarthLikeWorld,
         WaterWorld,
         MetalRich,
@@ -24,11 +24,35 @@ namespace EDDiscovery2.PlanetSystems
         Class_IV_GasGiant,
         Class_V_GasGiant,
         WaterGiant,
+        Belt,
+
+
+        Unknown_Star = 100,
+        Star_O,
+        Star_B,
+        Star_A,
+        Star_F,
+        Star_G,
+        Star_K,
+        Star_L,
+        Star_T,
+        Star_Y,
+        Star_Proto,
+        Star_W,
+        Star_C,
+        Star_S,
+        Star_TTauri,
+        Star_WhiteDwarf,
+        Star_AeBe,
+        BlackHole,
+        NeutronStar,
+
+
     }
         
     public class Planets
     {
-        public PlanetTypesEnum type;
+        public ObjectTypesEnum type;
 
 
         public string Description
@@ -37,40 +61,42 @@ namespace EDDiscovery2.PlanetSystems
             {
                 switch (type)
                 {
-                    case PlanetTypesEnum.Unknown:
+                    case ObjectTypesEnum.UnknownObject:
                         return "?";
-                    case PlanetTypesEnum.EarthLikeWorld: // FD
+                    case ObjectTypesEnum.EarthLikeWorld: // FD
                         return "Earth-like world";
-                    case PlanetTypesEnum.WaterWorld:  //FD
+                    case ObjectTypesEnum.WaterWorld:  //FD
                         return "Water world";
-                    case PlanetTypesEnum.MetalRich: // FD
+                    case ObjectTypesEnum.MetalRich: // FD
                         return "Metal-rich body";
-                    case PlanetTypesEnum.HighMetalContent:
+                    case ObjectTypesEnum.HighMetalContent:
                         return "High metal content";  // FD
-                    case PlanetTypesEnum.Icy:   // FD
+                    case ObjectTypesEnum.Icy:   // FD
                         return "Icy body ";
-                    case PlanetTypesEnum.Rocky:  // FD
+                    case ObjectTypesEnum.Rocky:  // FD
                         return "Rocky body";
-                    case PlanetTypesEnum.RockyIce:  // FD
+                    case ObjectTypesEnum.RockyIce:  // FD
                         return "Rocky ice world";
-                    case PlanetTypesEnum.GasGiant_WaterBasedLife:
+                    case ObjectTypesEnum.GasGiant_WaterBasedLife:
                         return "Gas Giant with water-based life";  // FD
-                    case PlanetTypesEnum.GasGiant_AmmoniaBasedLife:
+                    case ObjectTypesEnum.GasGiant_AmmoniaBasedLife:
                         return "Gas Giant with ammonia-based life"; // FD
-                    case PlanetTypesEnum.GasGiant_HeliumRich:
+                    case ObjectTypesEnum.GasGiant_HeliumRich:
                         return "Gas Giant, Helium Rich";
-                    case PlanetTypesEnum.Class_I_GasGiant:  //FD
+                    case ObjectTypesEnum.Class_I_GasGiant:  //FD
                         return "Class I Gas Giant";
-                    case PlanetTypesEnum.Class_II_GasGiant:  //FD
+                    case ObjectTypesEnum.Class_II_GasGiant:  //FD
                         return "Class II Gas Giant";
-                    case PlanetTypesEnum.Class_III_GasGiant: //FD
+                    case ObjectTypesEnum.Class_III_GasGiant: //FD
                         return "Class III Gas Giant";
-                    case PlanetTypesEnum.Class_IV_GasGiant:
+                    case ObjectTypesEnum.Class_IV_GasGiant:
                         return "Class IV Gas Giant";
-                    case PlanetTypesEnum.Class_V_GasGiant:
+                    case ObjectTypesEnum.Class_V_GasGiant:
                         return "Class V Gas Giant";
-                    case PlanetTypesEnum.WaterGiant:
+                    case ObjectTypesEnum.WaterGiant:
                         return "Water Giant";
+                    case ObjectTypesEnum.Belt:
+                        return "Belt";
                     default:
                         return "";
                 }
@@ -84,39 +110,39 @@ namespace EDDiscovery2.PlanetSystems
             {
                 switch (type)
                 {
-                    case PlanetTypesEnum.Unknown:
+                    case ObjectTypesEnum.UnknownObject:
                         return "?";
-                    case PlanetTypesEnum.EarthLikeWorld:
+                    case ObjectTypesEnum.EarthLikeWorld:
                         return "ELW";
-                    case PlanetTypesEnum.WaterWorld:
+                    case ObjectTypesEnum.WaterWorld:
                         return "WW";
-                    case PlanetTypesEnum.MetalRich:
+                    case ObjectTypesEnum.MetalRich:
                         return "Metal-rich" ;
-                    case PlanetTypesEnum.HighMetalContent:
+                    case ObjectTypesEnum.HighMetalContent:
                         return "High Metal";
-                    case PlanetTypesEnum.Icy:
+                    case ObjectTypesEnum.Icy:
                         return "Icy";
-                    case PlanetTypesEnum.Rocky:
+                    case ObjectTypesEnum.Rocky:
                         return "Rocky";
-                    case PlanetTypesEnum.RockyIce:
+                    case ObjectTypesEnum.RockyIce:
                         return "Rocky Ice";
-                    case PlanetTypesEnum.GasGiant_WaterBasedLife:
+                    case ObjectTypesEnum.GasGiant_WaterBasedLife:
                         return "Gas Giant water life";
-                    case PlanetTypesEnum.GasGiant_AmmoniaBasedLife:
+                    case ObjectTypesEnum.GasGiant_AmmoniaBasedLife:
                         return "Gas Giant ammonia life";
-                    case PlanetTypesEnum.GasGiant_HeliumRich:
+                    case ObjectTypesEnum.GasGiant_HeliumRich:
                         return "Gas Giant Helium Rich";
-                    case PlanetTypesEnum.Class_I_GasGiant:
+                    case ObjectTypesEnum.Class_I_GasGiant:
                         return "Class I Gas Giant";
-                    case PlanetTypesEnum.Class_II_GasGiant:
+                    case ObjectTypesEnum.Class_II_GasGiant:
                         return "Class II Gas Giant";
-                    case PlanetTypesEnum.Class_III_GasGiant:
+                    case ObjectTypesEnum.Class_III_GasGiant:
                         return "Class III Gas Giant";
-                    case PlanetTypesEnum.Class_IV_GasGiant:
+                    case ObjectTypesEnum.Class_IV_GasGiant:
                         return "Class IV Gas Giant";
-                    case PlanetTypesEnum.Class_V_GasGiant:
+                    case ObjectTypesEnum.Class_V_GasGiant:
                         return "Class V Gas Giant";
-                    case PlanetTypesEnum.WaterGiant:
+                    case ObjectTypesEnum.WaterGiant:
                         return "Water Giant";
                     default:
                         return "";
