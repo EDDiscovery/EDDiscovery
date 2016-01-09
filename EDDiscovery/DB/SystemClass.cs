@@ -379,7 +379,7 @@ namespace EDDiscovery.DB
                     listSystems.Add(system);
             }
 
-            date = maxdate.ToString("yyyy-MM-dd HH:mm:ss");
+            date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
             return listSystems;
         }
 
