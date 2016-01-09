@@ -625,8 +625,14 @@ namespace EDDiscovery
                 edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
                 edsm.commanderName = db.GetSettingString("CommanderName", "");
 
+
+                if (currentSysPos == null || currentSysPos.curSystem == null)
+                    return;
+
                 //SystemPosition sp = (SystemPosition)dataGridView1.Rows[lastRowIndex].Cells[1].Tag;
                 txt = richTextBoxNote.Text;
+
+                
                 if (currentSysPos.curSystem.Note == null)
                     currentSysPos.curSystem.Note = "";
 
