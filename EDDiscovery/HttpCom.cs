@@ -10,11 +10,13 @@ namespace EDDiscovery2
 {
     public class HttpCom
     {
+        protected string ServerAdress;
+
         protected string RequestPost(string json, string action)
         {
             try
             {
-                WebRequest request = WebRequest.Create("http://www.edsm.net/api-v1/" + action);
+                WebRequest request = WebRequest.Create(ServerAdress + action);
                 // Set the Method property of the request to POST.
                 request.Method = "POST";
                 // Create POST data and convert it to a byte array.
@@ -79,15 +81,9 @@ namespace EDDiscovery2
 
         protected string RequestGet(string action)
         {
-            return RequestGet("api-v1", action);
-        }
-
-
-        protected string RequestGet(string api, string action)
-        {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.edsm.net/" + api + "/" + action);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ServerAdress + action);
                 // Set the Method property of the request to POST.
                 request.Method = "GET";
 

@@ -29,6 +29,7 @@ namespace EDDiscovery2.EDSM
         public EDSMClass()
         {
             fromSoftware = "EDDiscovery";
+            ServerAdress = "http://www.edsm.net/";
 
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
@@ -64,7 +65,7 @@ namespace EDDiscovery2.EDSM
 
             query += "] } ";
 
-            return RequestPost(query, "submit-distances");
+            return RequestPost(query, "api-v1/submit-distances");
         }
 
 
@@ -135,7 +136,7 @@ namespace EDDiscovery2.EDSM
 
             query = "?startdatetime=" + HttpUtility.UrlEncode(date);
             //json1= RequestGet("systems" + query + "&coords=1&submitted=1");
-            json2=  RequestGet("systems" + query + "&coords=1&submitted=1&known=1");
+            json2=  RequestGet("api-v1/systems" + query + "&coords=1&submitted=1&known=1");
 
             return json2;
         }
@@ -145,7 +146,7 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "?startdatetime=" + HttpUtility.UrlEncode(date);
 
-            return RequestGet("distances" + query + "coords=1 & submitted=1");
+            return RequestGet("api-v1/distances" + query + "coords=1 & submitted=1");
         }
 
 
@@ -208,7 +209,7 @@ namespace EDDiscovery2.EDSM
                 string query;
                 query = "?sysname=" + HttpUtility.UrlEncode(systemname) + "&coords=1&distances=1&submitted=1";
 
-                json = RequestGet("system" + query);
+                json = RequestGet("api-v1/system" + query);
 
                 //http://www.edsm.net/api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
 
@@ -246,7 +247,7 @@ namespace EDDiscovery2.EDSM
 
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            string json = RequestGet("api-logs-v1", query);
+            string json = RequestGet("api-logs-v1/" + query);
 
             return json;
         }
@@ -257,7 +258,7 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName);
 
-            string json =  RequestGet("api-logs-v1", query);
+            string json =  RequestGet("api-logs-v1/" + query);
             return json;
         }
 
@@ -265,7 +266,7 @@ namespace EDDiscovery2.EDSM
         {
             string query;
             query = "set-comment?systemName=" + HttpUtility.UrlEncode(sn.Name) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(sn.Note);
-            string json = RequestGet("api-logs-v1", query);
+            string json = RequestGet("api-logs-v1/"+ query);
 
             return json;
         }
@@ -274,7 +275,7 @@ namespace EDDiscovery2.EDSM
         {
             string query;
             query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-            string json = RequestGet("api-logs-v1", query);
+            string json = RequestGet("api-logs-v1/" + query);
 
             return json;
         }
@@ -285,7 +286,7 @@ namespace EDDiscovery2.EDSM
 
             string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            string json = RequestGet("api-logs-v1", query);
+            string json = RequestGet("api-logs-v1/"+ query);
 
             if (json == null)
                 return 0;
