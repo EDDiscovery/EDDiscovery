@@ -158,12 +158,14 @@
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
+    <Compile Include="HttpCom.cs" />
     <Compile Include="PlanetSystems\AddMaterialNodeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PlanetSystems\AddMaterialNodeControl.Designer.cs">
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlanetSystems\edmaterializer.cs" />
     <Compile Include="PlanetSystems\FormProspecting.cs">
       <SubType>Form</SubType>
     </Compile>

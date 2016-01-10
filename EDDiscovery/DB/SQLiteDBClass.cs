@@ -462,9 +462,9 @@ namespace EDDiscovery.DB
         private bool UpgradeDB10()
         {
             //Default is Color.Red.ToARGB()
-            string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscuvery BOOL";
+            string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
             string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
-            string query3 = "ALTER TABLE Objects ADD COLUMN Terraforming BOOL";
+            string query3 = "ALTER TABLE Objects ADD COLUMN terraformable BOOL";
             string query4 = "ALTER TABLE VisitedSystems ADD COLUMN Status BOOL";
             string dbfile = GetSQLiteDBFile();
 
