@@ -1,4 +1,5 @@
 ﻿using EDDiscovery;
+using EDDiscovery2.EDDB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -31,9 +32,9 @@ namespace EDDiscovery2.DB
 		public int has_outfitting;
         public int has_shipyard;
 
-        public List<EDCommodities>  import_commodities;
-        public List<EDCommodities> export_commodities;
-        public List<EDCommodities> prohibited_commodities;
+        public List<Commodity>  import_commodities;
+        public List<Commodity> export_commodities;
+        public List<Commodity> prohibited_commodities;
 
         public List<EDEconomy> economies;
         public int eddb_updated_at;

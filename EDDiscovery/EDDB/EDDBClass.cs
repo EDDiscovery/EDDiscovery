@@ -25,6 +25,9 @@ namespace EDDiscovery2.EDDB
         private string systemTempFileName;
         private string commoditiesTempFileName;
 
+        public static Dictionary<int, Commodity> commodities;
+
+
         public EDDBClass()
         {
             stationFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstations.json");
@@ -35,7 +38,9 @@ namespace EDDiscovery2.EDDB
             stationTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstationslite_temp.json");
             systemTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems_temp.json");
             commoditiesTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "commodities_temp.json");
-        
+
+            if (commodities == null)
+                ReadCommodities();
         }
 
         public bool GetSystems()
@@ -185,6 +190,43 @@ namespace EDDiscovery2.EDDB
 
             return eddbsystems;
         }
+
+        public void  ReadCommodities()
+        {
+            Dictionary<int, Commodity> eddbcommodities = new Dictionary<int, Commodity>();
+            string json;
+
+            try
+            {
+                json = ReadJson(commoditiesFileName);
+
+                if (json == null)
+                    return;
+
+                JArray jcommodities = (JArray)JArray.Parse(json);
+
+                if (jcommodities != null)
+                {
+                    foreach (JObject jo in jcommodities)
+                    {
+                        Commodity com = new Commodity(jo);
+
+                        if (com != null)
+                            eddbcommodities[com.id] = com;
+                    }
+                }
+
+                commodities = eddbcommodities;
+
+            }
+            catch (Exception ex)
+            {
+
+                System.Diagnostics.Trace.WriteLine("ReadCommodities error: {0}" + ex.Message);
+            }
+        }
+
+
 
         public List<StationClass> ReadStations()
         {

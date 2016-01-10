@@ -547,6 +547,7 @@ namespace EDDiscovery
 
 
                     eddb.GetCommodities();
+                    eddb.ReadCommodities();
                 }
 
 
@@ -568,6 +569,7 @@ namespace EDDiscovery
 
                 }
 
+                
 
                 if (updatedb || eddbforceupdate)
                 {

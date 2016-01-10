@@ -137,6 +137,7 @@
     <Compile Include="DB\StationClass.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\VisitedSystemsClass.cs" />
+    <Compile Include="EDDB\Commodity.cs" />
     <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
