@@ -553,9 +553,20 @@ namespace EDDiscovery
         private void buttonMap_Click(object sender, EventArgs e)
         {
             var map = _discoveryForm.Map;
+            var selectedLine = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+                                                           .Select(cell => cell.OwningRow)
+                                                           .OrderBy(row => row.Index)
+                                                           .First().Index;
+            SystemPosition selectedSys;
+            do
+            {
+                selectedSys = (SystemPosition)dataGridView1.Rows[selectedLine].Cells[1].Tag;
+                selectedLine += 1;
+            } while (!selectedSys.curSystem.HasCoordinate && selectedLine <= dataGridView1.Rows.Count);
             _discoveryForm.updateMapData();
             map.Instance.Reset();
-            map.Instance.CenterSystemName = textBoxSystem.Text.Trim();
+                        
+            map.Instance.HistorySelection = selectedSys.curSystem.HasCoordinate ? selectedSys.Name : textBoxSystem.Text.Trim();
             map.Show();
         }
 

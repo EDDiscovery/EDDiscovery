@@ -747,6 +747,9 @@ namespace EDDiscovery
             _db.PutSettingInt("FormHeight", this.Height);
             _db.PutSettingInt("FormTop", this.Top);
             _db.PutSettingInt("FormLeft", this.Left);
+            _db.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
+            _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
+            _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
             EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
@@ -969,11 +972,25 @@ namespace EDDiscovery
             textBoxEDSMApiKey.Text = _db.GetSettingString("EDSMApiKey", "");
             checkBox_Distances.Checked = EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
-
+            
             checkboxSkipSlowUpdates.Checked = EDDConfig.CanSkipSlowUpdates;
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
+            textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
+            textBoxHomeSystem.Text = _db.GetSettingString("DefaultMapCenter", "Sol");
+
+            textBoxDefaultZoom.Text = _db.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
+
+            bool selectionCentre = _db.GetSettingBool("CentreMapOnSelection", true);
+            if (selectionCentre)
+            {
+                radioButtonHistorySelection.Checked = true;
+            }
+            else
+            {
+                radioButtonCentreHome.Checked = true;
+            }
         }
 
         private void CheckIfEliteDangerousIsRunning()
@@ -1007,6 +1024,20 @@ namespace EDDiscovery
             FormProspecting frm = new FormProspecting();
 
             frm.Show();
+        }
+
+        private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var value = textBoxDefaultZoom.Text.Trim();
+            double parseout;
+            if (Double.TryParse(value, out parseout))
+            {
+                e.Cancel = (parseout < 0.01 || parseout > 50.0);
+            }
+            else
+            {
+                e.Cancel = true;
+            }
         }
     }
 }
