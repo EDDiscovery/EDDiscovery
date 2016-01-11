@@ -8,7 +8,7 @@ using System.Management;
 using System.IO;
 using EDDiscovery.DB;
 using Newtonsoft.Json.Linq;
-
+using EDDiscovery2.EDDB;
 
 namespace EDDiscovery2
 {
@@ -97,101 +97,6 @@ namespace EDDiscovery2
         None = 10,
 
     }
-
-    public enum EDCommodities
-    {
-        Unknown = 0,
-Advanced_Catalysers,
-Agri__Medicines,
-Algae,
-Aluminium,
-Animal_Meat,
-Animal_Monitors,
-Aquaponic_Systems,
-Atmospheric_Processors,
-Auto__Fabricators,
-Basic_Medicines,
-Battle_Weapons,
-Bauxite,
-Beer,
-Bertrandite,
-Beryllium,
-Bioreducing_Lichen,
-Biowaste,
-Chemical_Waste,
-Clothing,
-Cobalt,
-Coffee,
-Coltan,
-Combat_Stabilisers,
-Computer_Components,
-Consumer_Technology,
-Copper,
-Crop_Harvesters,
-Domestic_Appliances,
-Explosives,
-Fish,
-Food_Cartridges,
-Fruit_and_Vegetables,
-Gallite,
-Gallium,
-Gold,
-Grain,
-H___E____Suits,
-Hydrogen_Fuel,
-Imperial_Slaves,
-Indite,
-Indium,
-Land_Enrichment_Systems,
-Leather,
-Lepidolite,
-Liquor,
-Lithium,
-Marine_Equipment,
-Microbial_Furnaces,
-Mineral_Extractors,
-Mineral_Oil,
-Narcotics,
-Natural_Fabrics,
-Non__lethal_Weapons,
-Palladium,
-Performance_Enhancers,
-Personal_Weapons,
-Pesticides,
-Platinum,
-Polymers,
-Power_Generators,
-Progenitor_Cells,
-Reactive_Armour,
-Resonating_Separators,
-Robotics,
-Rutile,
-Scrap,
-Semiconductors,
-Silver,
-Slaves,
-Superconductors,
-Synthetic_Fabrics,
-Synthetic_Meat,
-Tantalum,
-Tea,
-Terrain_Enrichment_Systems,
-Titanium,
-Tobacco,
-Toxic_Waste,
-Uraninite,
-Uranium,
-Water_Purifiers,
-Wine,
-Lucan_Onion_Head,
-Limpet,
-Wuthielo_Ku_Froth,
-Antiquities,
-Painite,
-Onion_Head,
-Trinkets_Of_Hidden_Fortune,
-    }
-
 
 
 
@@ -583,22 +488,17 @@ Trinkets_Of_Hidden_Fortune,
 
 
 
-        static public EDCommodities String2Commodity(string str)
+        static public Commodity String2Commodity(string str)
         {
-            foreach (var govid in Enum.GetValues(typeof(EDCommodities)))
-            {
-                if (str.Equals(govid.ToString().Replace("___", ".").Replace("__", "-").Replace("_", " ")))
-                    return (EDCommodities)govid;
-                //System.Console.WriteLine(govid.ToString());
-            }
 
-            System.Diagnostics.Trace.WriteLine("Unknown commodity: " + str);
-            return EDCommodities.Unknown;
+            var v = EDDBClass.commodities.FirstOrDefault(m => m.Value.name == str).Value;
+
+            return v;
         }
 
-        static public List<EDCommodities> EDCommodities2ID(JArray ja)
+        static public List<Commodity> EDCommodities2ID(JArray ja)
         {
-            List<EDCommodities> commodity = new List<EDCommodities>();
+            List<Commodity> commodity = new List<Commodity>();
 
             if (ja == null)
                 return null;
@@ -606,6 +506,7 @@ Trinkets_Of_Hidden_Fortune,
             for (int ii = 0; ii < ja.Count; ii++)
             {
                 string ecstr = ja[ii].Value<string>();
+
                 commodity.Add(String2Commodity(ecstr));
 
             }

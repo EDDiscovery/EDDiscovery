@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery2.EDSM
 {
-    class EDSMClass
+    class EDSMClass : HttpCom
     {
         public string commanderName;
         public string apiKey;
@@ -29,159 +29,14 @@ namespace EDDiscovery2.EDSM
         public EDSMClass()
         {
             fromSoftware = "EDDiscovery";
+            ServerAdress = "http://www.edsm.net/";
 
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
         }
 
 
-        private string RequestPost(string json, string action)
-        {
-            try
-            {
-                WebRequest request = WebRequest.Create("http://www.edsm.net/api-v1/" + action);
-                // Set the Method property of the request to POST.
-                request.Method = "POST";
-                // Create POST data and convert it to a byte array.
-                //WRITE JSON DATA TO VARIABLE D
-                //string postData = "D={\"requests\":[{\"C\":\"Gpf_Auth_Service\", \"M\":\"authenticate\", \"fields\":[[\"name\",\"value\"],[\"Id\",\"\"],[\"username\",\"user@example.com\"],[\"password\",\"ab9ce908\"],[\"rememberMe\",\"Y\"],[\"language\",\"en-US\"],[\"roleType\",\"M\"]]}],\"C\":\"Gpf_Rpc_Server\", \"M\":\"run\"}";
-                string postData = "{ \"data\": " + json + " }";
 
-
-                byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-                // Set the ContentType property of the WebRequest.
-                request.ContentType = "application/json; charset=utf-8";
-                //request.Headers.Add("Accept-Encoding", "gzip,deflate");
-                // Set the ContentLength property of the WebRequest.
-                request.ContentLength = byteArray.Length;
-                // Get the request stream.
-                Stream dataStream = request.GetRequestStream();
-                // Write the data to the request stream.
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                // Close the Stream object.
-                dataStream.Close();
-                // Get the response.
-                //request.Timeout = 740 * 1000;
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                    WriteEDSMLog("POST " + request.RequestUri, postData);
-
-                WebResponse response = request.GetResponse();
-                // Display the status.
-                //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-                string responseFromServer = reader.ReadToEnd();
-                // Display the content.
-                // Clean up the streams.
-                reader.Close();
-                dataStream.Close();
-                response.Close();
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                {
-                    WriteEDSMLog(responseFromServer, "");
-                }
-
-                return responseFromServer;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                {
-                    WriteEDSMLog("Exception" + ex.Message, "");
-                }
-
-                return null;
-            }
-        }
-
-
-        private string RequestGet(string action)
-        {
-            return RequestGet("api-v1", action);
-        }
-
-
-        private string RequestGet(string api, string action)
-        {
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.edsm.net/" + api + "/" + action);
-                // Set the Method property of the request to POST.
-                request.Method = "GET";
-
-                // Set the ContentType property of the WebRequest.
-                request.ContentType = "application/json; charset=utf-8";
-                request.Headers.Add("Accept-Encoding", "gzip,deflate");
-                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                    WriteEDSMLog("GET " + request.RequestUri, "");
-
-
-                // Get the response.
-                //request.Timeout = 740 * 1000;
-                HttpWebResponse response = (HttpWebResponse) request.GetResponse();
-                // Display the status.
-                //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                Stream dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-                string responseFromServer = reader.ReadToEnd();
-                // Display the content.
-                // Clean up the streams.
-                reader.Close();
-                dataStream.Close();
-                response.Close();
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                {
-                    WriteEDSMLog(responseFromServer, "");
-                }
-
-                return responseFromServer;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                {
-                    WriteEDSMLog("Exception" + ex.Message, "");
-                }
-
-
-                return null;
-            }
-
-        }
-
-        private void WriteEDSMLog(string str1, string str2)
-        {
-            try
-            {
-                string filename = Path.Combine(Tools.GetAppDataDirectory(), "Log", "edsm"+EDDiscoveryForm.EDDConfig.LogIndex+".log");
-
-                using (StreamWriter w = File.AppendText(filename))
-                {
-                    w.WriteLine(DateTime.Now.ToLongTimeString() + "; " + str1 + "; "+str2);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-            }
-        }
 
         public string SubmitDistances(string cmdr, string from, string to, double dist)
         {
@@ -210,7 +65,7 @@ namespace EDDiscovery2.EDSM
 
             query += "] } ";
 
-            return RequestPost(query, "submit-distances");
+            return RequestPost(query, "api-v1/submit-distances");
         }
 
 
@@ -281,7 +136,7 @@ namespace EDDiscovery2.EDSM
 
             query = "?startdatetime=" + HttpUtility.UrlEncode(date);
             //json1= RequestGet("systems" + query + "&coords=1&submitted=1");
-            json2=  RequestGet("systems" + query + "&coords=1&submitted=1&known=1");
+            json2=  RequestGet("api-v1/systems" + query + "&coords=1&submitted=1&known=1");
 
             return json2;
         }
@@ -291,7 +146,7 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "?startdatetime=" + HttpUtility.UrlEncode(date);
 
-            return RequestGet("distances" + query + "coords=1 & submitted=1");
+            return RequestGet("api-v1/distances" + query + "coords=1 & submitted=1");
         }
 
 
@@ -354,7 +209,7 @@ namespace EDDiscovery2.EDSM
                 string query;
                 query = "?sysname=" + HttpUtility.UrlEncode(systemname) + "&coords=1&distances=1&submitted=1";
 
-                json = RequestGet("system" + query);
+                json = RequestGet("api-v1/system" + query);
 
                 //http://www.edsm.net/api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
 
@@ -392,7 +247,7 @@ namespace EDDiscovery2.EDSM
 
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            string json = RequestGet("api-logs-v1", query);
+            string json = RequestGet("api-logs-v1/" + query);
 
             return json;
         }
@@ -403,7 +258,7 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName);
 
-            string json =  RequestGet("api-logs-v1", query);
+            string json =  RequestGet("api-logs-v1/" + query);
             return json;
         }
 
@@ -411,7 +266,7 @@ namespace EDDiscovery2.EDSM
         {
             string query;
             query = "set-comment?systemName=" + HttpUtility.UrlEncode(sn.Name) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(sn.Note);
-            string json = RequestGet("api-logs-v1", query);
+            string json = RequestGet("api-logs-v1/"+ query);
 
             return json;
         }
@@ -420,7 +275,7 @@ namespace EDDiscovery2.EDSM
         {
             string query;
             query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-            string json = RequestGet("api-logs-v1", query);
+            string json = RequestGet("api-logs-v1/" + query);
 
             return json;
         }
@@ -431,7 +286,7 @@ namespace EDDiscovery2.EDSM
 
             string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            string json = RequestGet("api-logs-v1", query);
+            string json = RequestGet("api-logs-v1/"+ query);
 
             if (json == null)
                 return 0;
