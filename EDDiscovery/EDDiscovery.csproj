@@ -352,9 +352,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
->>>>>>> blessed/master
-    <PostBuildEvent>
-copy ..\..\SQLite.Interop.dll  .
+  <PostBuildEvent>
+	copy ..\..\SQLite.Interop.dll  .
     if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
     xcopy /s /y "$(SolutionDir)packages\Noesis.Javascript.0.7.1.0\NativeBinaries\net40\x86\*.*" "$(TargetDir)x86"
     if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"

@@ -84,7 +84,7 @@ namespace EDDiscovery2
                 else
                 {
                     // We need to use 0,0,0 if we don't have a center system
-                    _centerSystem = SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+                    _centerSystem = SystemData.GetSystem(_homeSystem) ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
                 }
             }
         }
