@@ -137,6 +137,7 @@
     <Compile Include="DB\StationClass.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\VisitedSystemsClass.cs" />
+    <Compile Include="EDDB\Commodity.cs" />
     <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
@@ -157,12 +158,14 @@
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
+    <Compile Include="HttpCom.cs" />
     <Compile Include="PlanetSystems\AddMaterialNodeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PlanetSystems\AddMaterialNodeControl.Designer.cs">
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlanetSystems\edmaterializer.cs" />
     <Compile Include="PlanetSystems\FormProspecting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -244,7 +247,7 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\Home-icon.png" />
+	<None Include="Resources\Home-icon.png" />
     <None Include="Resources\Travelicon.png" />
     <Content Include="trilateration.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -349,6 +352,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
+>>>>>>> blessed/master
     <PostBuildEvent>
 copy ..\..\SQLite.Interop.dll  .
     if not exist "$(TargetDir)x86" md "$(TargetDir)x86"

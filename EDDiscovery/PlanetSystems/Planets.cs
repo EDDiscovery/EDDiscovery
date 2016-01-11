@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,20 +47,67 @@ namespace EDDiscovery2.PlanetSystems
         Star_AeBe,
         BlackHole,
         NeutronStar,
-
-
     }
-        
-    public class Planets
-    {
-        public ObjectTypesEnum type;
 
+    public enum VulcanismEnum
+    {
+        Unknown = 0,
+        NoVolcanism,
+        SilicateMagma,
+        SilicateVapourGeysers,
+        IronMagma,
+        WaterGeysers,
+    }
+
+    public enum AtmosphereEnum
+    {
+        Unknown = 0,
+        NoAtmosphere,
+        CarbonDioxide,
+        SuitableForWaterBasedLife,
+        SulphurDioxide,
+        AmmoniaRich,
+        Nitrogen,
+        MethaneRich,
+        SilicateVapour,
+        Water,
+        WaterRich,
+        Helium,
+        CarbonDioxideRich,
+    }
+
+    public class EDObject
+    {
+        public int id;
+        public string system;
+        public string objectName;
+        public ObjectTypesEnum objectType;
+        public bool terraformable;
+        public float gravity;
+        public float arrivalPoint;
+        public float radius;
+        public AtmosphereEnum atmosphere;
+        public VulcanismEnum vulcanism;
+        public int terrain_difficulty;
+        public string notes;
+        public Dictionary<MaterialEnum, bool> materials;
+        public DateTime updated_at;
+        public DateTime created_at;
+
+
+
+        static private List<Material> mlist = Material.GetMaterialList;
+
+        public EDObject()
+        {
+            materials = new Dictionary<MaterialEnum, bool>();
+        }
 
         public string Description
         {
             get
             {
-                switch (type)
+                switch (objectType)
                 {
                     case ObjectTypesEnum.UnknownObject:
                         return "?";
@@ -108,7 +156,7 @@ namespace EDDiscovery2.PlanetSystems
         {
             get
             {
-                switch (type)
+                switch (objectType)
                 {
                     case ObjectTypesEnum.UnknownObject:
                         return "?";
@@ -152,6 +200,74 @@ namespace EDDiscovery2.PlanetSystems
 
 
 
+        public bool ParseJson(JObject jo)
+        {
 
+            id = jo["id"].Value<int>();
+            system = jo["system"].Value<string>();
+            objectName = jo["world"].Value<string>();
+
+            objectType = String2ObjectType(jo["world_type"].Value<string>());
+            terraformable = GetBool(jo["terraformable"]);
+            gravity = jo["gravity"].Value<float>();
+            terrain_difficulty  =  jo["terrain_difficulty"].Value<int>();
+
+            radius = GetFloat(jo["radius"]);
+            arrivalPoint = GetFloat(jo["arrival_point"]);
+            atmosphere = (AtmosphereEnum)  GetInt(jo["atmosphere_type"]);
+            vulcanism = (VulcanismEnum)  GetInt(jo["vulcanism_type"]);
+
+            foreach (var mat in mlist)
+            {
+                materials[mat.material] = GetBool(jo[mat.Name.ToLower()]);
+            }
+                return true;
+        }
+
+        private bool GetBool(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return false;
+            return jToken.Value<bool>();
+        }
+
+        private float GetFloat(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return 0f;
+            return jToken.Value<float>();
+        }
+
+
+        private int GetInt(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return 0;
+            return jToken.Value<int>();
+        }
+
+        public bool IsNullOrEmptyT(JToken token)
+        {
+            return (token == null) ||
+                   (token.Type == JTokenType.Array && !token.HasValues) ||
+                   (token.Type == JTokenType.Object && !token.HasValues) ||
+                   (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
+                   (token.Type == JTokenType.Null);
+        }
+
+        private ObjectTypesEnum String2ObjectType(string v)
+        {
+            EDObject ed = new EDObject();
+
+            foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
+            {
+                ed.objectType = mat;
+                if (v.ToLower().Equals(ed.Description.ToLower()))
+                    return mat;
+
+            }
+
+            return ObjectTypesEnum.UnknownObject;
+        }
     }
 }

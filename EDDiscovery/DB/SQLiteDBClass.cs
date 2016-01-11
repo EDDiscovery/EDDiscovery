@@ -457,6 +457,46 @@ namespace EDDiscovery.DB
 
 
 
+
+
+        private bool UpgradeDB10()
+        {
+            //Default is Color.Red.ToARGB()
+            string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
+            string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
+            string query3 = "ALTER TABLE Objects ADD COLUMN terraformable BOOL";
+            string query4 = "ALTER TABLE VisitedSystems ADD COLUMN Status BOOL";
+            string dbfile = GetSQLiteDBFile();
+
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery9.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+
+            try
+            {
+                ExecuteQuery(query1);
+                ExecuteQuery(query2);
+                ExecuteQuery(query3);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB9 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 9);
+
+            return true;
+        }
+
         private void ExecuteQuery(string query)
         {
             if (Connect2DB())
@@ -951,7 +991,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public double GetSettingDouble(string key, double defaultvalue)
+		public double GetSettingDouble(string key, double defaultvalue)
         {
             try
             {
@@ -1234,3 +1274,4 @@ namespace EDDiscovery.DB
         }
     }
 }
+>>>>>>> blessed/master

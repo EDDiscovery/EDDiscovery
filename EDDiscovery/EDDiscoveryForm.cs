@@ -3,6 +3,7 @@ using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDDB;
 using EDDiscovery2.EDSM;
+using EDDiscovery2.PlanetSystems;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -547,6 +548,7 @@ namespace EDDiscovery
 
 
                     eddb.GetCommodities();
+                    eddb.ReadCommodities();
                 }
 
 
@@ -568,6 +570,7 @@ namespace EDDiscovery
 
                 }
 
+                
 
                 if (updatedb || eddbforceupdate)
                 {
@@ -777,9 +780,13 @@ namespace EDDiscovery
             //FormSagCarinaMission frm = new FormSagCarinaMission(this);
             //            frm.Show();
 
-            SystemViewForm frm = new SystemViewForm();
-            frm.Show();
-          
+            //SystemViewForm frm = new SystemViewForm();
+            //frm.Show();
+
+            EdMaterializer mat = new EdMaterializer();
+
+            mat.GetAll();
+
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
