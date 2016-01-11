@@ -212,24 +212,62 @@ namespace EDDiscovery2.PlanetSystems
             gravity = jo["gravity"].Value<float>();
             terrain_difficulty  =  jo["terrain_difficulty"].Value<int>();
 
+            radius = GetFloat(jo["radius"]);
+            arrivalPoint = GetFloat(jo["arrival_point"]);
+            atmosphere = (AtmosphereEnum)  GetInt(jo["atmosphere_type"]);
+            vulcanism = (VulcanismEnum)  GetInt(jo["vulcanism_type"]);
 
             foreach (var mat in mlist)
             {
-                materials[mat.material] = GetBool(jo["mat.Name"]);
+                materials[mat.material] = GetBool(jo[mat.Name.ToLower()]);
             }
                 return true;
         }
 
         private bool GetBool(JToken jToken)
         {
-            if (jToken == null)
+            if (IsNullOrEmptyT(jToken))
                 return false;
             return jToken.Value<bool>();
         }
 
+        private float GetFloat(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return 0f;
+            return jToken.Value<float>();
+        }
+
+
+        private int GetInt(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return 0;
+            return jToken.Value<int>();
+        }
+
+        public bool IsNullOrEmptyT(JToken token)
+        {
+            return (token == null) ||
+                   (token.Type == JTokenType.Array && !token.HasValues) ||
+                   (token.Type == JTokenType.Object && !token.HasValues) ||
+                   (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
+                   (token.Type == JTokenType.Null);
+        }
+
         private ObjectTypesEnum String2ObjectType(string v)
         {
-            throw new NotImplementedException();
+            EDObject ed = new EDObject();
+
+            foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
+            {
+                ed.objectType = mat;
+                if (v.ToLower().Equals(ed.Description.ToLower()))
+                    return mat;
+
+            }
+
+            return ObjectTypesEnum.UnknownObject;
         }
     }
 }
