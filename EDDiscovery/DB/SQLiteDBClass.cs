@@ -951,6 +951,84 @@ namespace EDDiscovery.DB
             }
         }
 
+        public double GetSettingDouble(string key, double defaultvalue)
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = "SELECT ValueDouble from Register WHERE ID = @ID";
+                        cmd.Parameters.AddWithValue("@ID", key);
+                        object ob = SqlScalar(cn, cmd);
+
+                        if (ob == null)
+                            return defaultvalue;
+
+                        double val = Convert.ToDouble(ob);
+
+                        return val;
+                    }
+                }
+            }
+            catch
+            {
+                return defaultvalue;
+            }
+        }
+
+
+        public bool PutSettingDouble(string key, double doublevalue)
+        {
+            try
+            {
+                if (keyExists(key))
+                {
+                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        {
+                            cmd.Connection = cn;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandTimeout = 30;
+                            cmd.CommandText = "Update Register set ValueDouble = @ValueDouble Where ID=@ID";
+                            cmd.Parameters.AddWithValue("@ID", key);
+                            cmd.Parameters.AddWithValue("@ValueDouble", doublevalue);
+
+                            SqlNonQueryText(cn, cmd);
+
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        {
+                            cmd.Connection = cn;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandTimeout = 30;
+                            cmd.CommandText = "Insert into Register (ID, ValueDouble) values (@ID, @valdbl)";
+                            cmd.Parameters.AddWithValue("@ID", key);
+                            cmd.Parameters.AddWithValue("@valdbl", doublevalue);
+
+                            SqlNonQueryText(cn, cmd);
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         public bool GetSettingBool(string key, bool defaultvalue)
         {
