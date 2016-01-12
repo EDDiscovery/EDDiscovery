@@ -618,7 +618,9 @@ namespace EDDiscovery2
         private void buttonCenter_Click(object sender, EventArgs e)
         {
             SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
-            SetCenterSystem(sys);
+            OrientateMapAroundSystem(sys);
+
+            ResetCamera();
         }
         
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -801,14 +803,18 @@ namespace EDDiscovery2
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            SystemClass sys = SystemData.GetSystem(_homeSystem);
-            SetCenterSystem(sys);
+            ISystem sys = SystemData.GetSystem(_homeSystem);
+            OrientateMapAroundSystem(sys);
+
+            ResetCamera();
         }
 
         private void buttonHistory_Click(object sender, EventArgs e)
         {
-            SystemClass sys = SystemData.GetSystem(HistorySelection);
-            SetCenterSystem(sys);
+            ISystem sys = SystemData.GetSystem(HistorySelection);
+            OrientateMapAroundSystem(sys);
+
+            ResetCamera();
         }
     }
 }
