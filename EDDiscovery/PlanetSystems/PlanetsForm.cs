@@ -33,7 +33,7 @@ namespace EDDiscovery2.PlanetSystems
 
         private void PlanetsForm_Load(object sender, EventArgs e)
         {
-
+            SetCurrentSystem();
         }
 
         private void button1_Click(object sender, EventArgs e)
