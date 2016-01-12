@@ -782,7 +782,7 @@ namespace EDDiscovery
 
             EdMaterializer mat = new EdMaterializer();
 
-            mat.GetAll();
+            mat.GetAll(null);
 
         }
 
@@ -1011,8 +1011,9 @@ namespace EDDiscovery
 
         private void prospectingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormProspecting frm = new FormProspecting();
+            PlanetsForm frm = new PlanetsForm();
 
+            frm.InitForm(this);
             frm.Show();
         }
     }

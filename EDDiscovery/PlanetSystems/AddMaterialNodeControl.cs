@@ -6,17 +6,40 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EDDiscovery2.PlanetSystems;
 
 namespace EDDiscovery2
 {
     public partial class AddMaterialNodeControl : UserControl
     {
+        string currentSystem;
+        EdMaterializer edmat;
+        public string CurrentSystem
+        {
+            get
+            {
+                return currentSystem;
+            }
+            set
+            {
+                dataGridViewPlanet.Rows.Clear();
+                currentSystem = value;
+                GetData();
+            }
+        }
+
         public AddMaterialNodeControl()
         {
             InitializeComponent();
+            edmat = new EdMaterializer();
             PopulateColumn();
         }
 
+
+        private void GetData()
+        {
+           List<EDObject> objs = edmat.GetAll(currentSystem);
+        }
 
         private void PopulateColumn()
         {
@@ -58,6 +81,16 @@ namespace EDDiscovery2
         private void toolStripButtonAddPlanet_Click(object sender, EventArgs e)
         {
             dataGridViewPlanet.Rows.Add();
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        public void Save()
+        {
+            
         }
     }
 }
