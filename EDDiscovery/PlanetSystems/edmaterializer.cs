@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 
 namespace EDDiscovery2.PlanetSystems
 {
@@ -16,10 +17,15 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        public List<EDObject>GetAll()
+        public List<EDObject>GetAll(string system)
         {
             List<EDObject> listObjects = new List<EDObject>();
-            string json = RequestGet("api/v1/world_surveys");
+            string query = "api/v1/world_surveys";
+
+            if (!String.IsNullOrEmpty(system))
+                query = query + "/?q[system]="+HttpUtility.UrlEncode(system);
+
+            string json = RequestGet(query);
 
 
             JArray jArray = null;
