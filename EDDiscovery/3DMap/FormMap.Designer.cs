@@ -35,21 +35,23 @@ namespace EDDiscovery2
             /// </summary>
             private void InitializeComponent()
             {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMap));
             this.glControl = new OpenTK.GLControl();
             this.textboxFrom = new System.Windows.Forms.TextBox();
             this.buttonCenter = new System.Windows.Forms.Button();
             this.labelSystemCoords = new System.Windows.Forms.Label();
             this.toolStripShowAllStars = new System.Windows.Forms.ToolStrip();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.buttonHistory = new System.Windows.Forms.Button();
-            this.buttonHome = new System.Windows.Forms.Button();
             this.toolStripButtonLastKnownPosition = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDrawLines = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonShowAllStars = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGrid = new System.Windows.Forms.ToolStripButton();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.buttonHistory = new System.Windows.Forms.Button();
+            this.buttonHome = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -120,42 +122,6 @@ namespace EDDiscovery2
             this.toolStripShowAllStars.TabIndex = 19;
             this.toolStripShowAllStars.Text = "toolStrip1";
             // 
-            // statusStrip
-            // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 532);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(918, 22);
-            this.statusStrip.TabIndex = 21;
-            this.statusStrip.Text = "statusStrip1";
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(35, 17);
-            this.statusLabel.Text = "x=0.0";
-            // 
-            // buttonHistory
-            // 
-            this.buttonHistory.Image = global::EDDiscovery2.Properties.Resources.Travelicon;
-            this.buttonHistory.Location = new System.Drawing.Point(605, 5);
-            this.buttonHistory.Name = "buttonHistory";
-            this.buttonHistory.Size = new System.Drawing.Size(22, 23);
-            this.buttonHistory.TabIndex = 23;
-            this.buttonHistory.UseVisualStyleBackColor = true;
-            this.buttonHistory.Click += new System.EventHandler(this.buttonHistory_Click);
-            // 
-            // buttonHome
-            // 
-            this.buttonHome.Image = global::EDDiscovery2.Properties.Resources.Homeicon;
-            this.buttonHome.Location = new System.Drawing.Point(577, 5);
-            this.buttonHome.Name = "buttonHome";
-            this.buttonHome.Size = new System.Drawing.Size(22, 23);
-            this.buttonHome.TabIndex = 22;
-            this.buttonHome.UseVisualStyleBackColor = true;
-            this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
-            // 
             // toolStripButtonLastKnownPosition
             // 
             this.toolStripButtonLastKnownPosition.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -217,6 +183,46 @@ namespace EDDiscovery2
             this.toolStripButtonGrid.ToolTipText = "Show Grid";
             this.toolStripButtonGrid.Click += new System.EventHandler(this.toolStripButtonGrud_Click);
             // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 532);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(918, 22);
+            this.statusStrip.TabIndex = 21;
+            this.statusStrip.Text = "statusStrip1";
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(35, 17);
+            this.statusLabel.Text = "x=0.0";
+            // 
+            // buttonHistory
+            // 
+            this.buttonHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonHistory.Image = global::EDDiscovery2.Properties.Resources.Travelicon;
+            this.buttonHistory.Location = new System.Drawing.Point(605, 5);
+            this.buttonHistory.Name = "buttonHistory";
+            this.buttonHistory.Size = new System.Drawing.Size(22, 23);
+            this.buttonHistory.TabIndex = 23;
+            this.toolTip1.SetToolTip(this.buttonHistory, "Centre map on selected system from Travel History");
+            this.buttonHistory.UseVisualStyleBackColor = true;
+            this.buttonHistory.Click += new System.EventHandler(this.buttonHistory_Click);
+            // 
+            // buttonHome
+            // 
+            this.buttonHome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonHome.Image = global::EDDiscovery2.Properties.Resources.Homeicon;
+            this.buttonHome.Location = new System.Drawing.Point(577, 5);
+            this.buttonHome.Name = "buttonHome";
+            this.buttonHome.Size = new System.Drawing.Size(22, 23);
+            this.buttonHome.TabIndex = 22;
+            this.toolTip1.SetToolTip(this.buttonHome, "Centre map on Home System");
+            this.buttonHome.UseVisualStyleBackColor = true;
+            this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
+            // 
             // FormMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -262,5 +268,6 @@ namespace EDDiscovery2
         private ToolStripStatusLabel statusLabel;
         private Button buttonHome;
         private Button buttonHistory;
+        private ToolTip toolTip1;
     }
     }
