@@ -81,6 +81,7 @@ namespace EDDiscovery2.PlanetSystems
         public int id;
         public string system;
         public string objectName;
+        public string commander;
         public ObjectTypesEnum objectType;
         public bool terraformable;
         public float gravity;
@@ -101,6 +102,14 @@ namespace EDDiscovery2.PlanetSystems
         public EDObject()
         {
             materials = new Dictionary<MaterialEnum, bool>();
+
+            // Create an empty dictionary
+            foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
+            {
+                if (mat != MaterialEnum.Unknown)
+                    materials[mat] = false;
+
+            }
         }
 
         public string Description
