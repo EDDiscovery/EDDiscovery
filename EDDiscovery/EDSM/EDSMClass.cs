@@ -65,7 +65,7 @@ namespace EDDiscovery2.EDSM
 
             query += "] } ";
 
-            return RequestPost(query, "api-v1/submit-distances");
+            return RequestPost("{ \"data\": " + query + " }", "api-v1/submit-distances");
         }
 
 
