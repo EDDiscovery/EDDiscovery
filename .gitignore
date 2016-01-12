@@ -3,3 +3,7 @@ obj
 packages
 .vs
 *.csproj.user
+/logs
+/Installer/EDDiscovery-cache
+/Installer/AnyCPU_DebugSetupFiles
+/Installer/EDDiscovery

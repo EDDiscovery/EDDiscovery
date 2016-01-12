@@ -33,6 +33,7 @@
             this.dataGridViewPlanet = new System.Windows.Forms.DataGridView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAddPlanet = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.materialBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPlanetType = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -61,11 +62,13 @@
             this.dataGridViewPlanet.Name = "dataGridViewPlanet";
             this.dataGridViewPlanet.Size = new System.Drawing.Size(517, 318);
             this.dataGridViewPlanet.TabIndex = 0;
+            this.dataGridViewPlanet.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewPlanet_CellContentClick);
             // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonAddPlanet});
+            this.toolStripButtonAddPlanet,
+            this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(520, 25);
@@ -82,29 +85,45 @@
             this.toolStripButtonAddPlanet.Text = "Add Planet";
             this.toolStripButtonAddPlanet.Click += new System.EventHandler(this.toolStripButtonAddPlanet_Click);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(35, 22);
+            this.toolStripButton1.Text = "Save";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
             // materialBindingSource
             // 
             this.materialBindingSource.DataSource = typeof(EDDiscovery2.Material);
             // 
             // ColumnName
             // 
+            this.ColumnName.FillWeight = 50.63292F;
             this.ColumnName.HeaderText = "Name";
             this.ColumnName.Name = "ColumnName";
+            this.ColumnName.Width = 90;
             // 
             // ColumnPlanetType
             // 
+            this.ColumnPlanetType.FillWeight = 50.61286F;
             this.ColumnPlanetType.HeaderText = "Type";
             this.ColumnPlanetType.Name = "ColumnPlanetType";
-            this.ColumnPlanetType.Width = 60;
+            this.ColumnPlanetType.Width = 90;
             // 
             // ColumnGravity
             // 
+            this.ColumnGravity.FillWeight = 130.5182F;
             this.ColumnGravity.HeaderText = "Gravity";
             this.ColumnGravity.Name = "ColumnGravity";
             this.ColumnGravity.Width = 40;
             // 
             // ColumnTerrain
             // 
+            this.ColumnTerrain.FillWeight = 168.236F;
             this.ColumnTerrain.HeaderText = "Terrain";
             this.ColumnTerrain.Items.AddRange(new object[] {
             "Unknown",
@@ -115,7 +134,7 @@
             "V hard",
             ""});
             this.ColumnTerrain.Name = "ColumnTerrain";
-            this.ColumnTerrain.Width = 40;
+            this.ColumnTerrain.Width = 50;
             // 
             // AddMaterialNodeControl
             // 
@@ -140,6 +159,7 @@
         private System.Windows.Forms.BindingSource materialBindingSource;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButtonAddPlanet;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnName;
         private System.Windows.Forms.DataGridViewComboBoxColumn ColumnPlanetType;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnGravity;
