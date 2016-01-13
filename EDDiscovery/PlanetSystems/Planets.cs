@@ -49,32 +49,87 @@ namespace EDDiscovery2.PlanetSystems
         NeutronStar,
     }
 
+  
+
+
     public enum VulcanismEnum
     {
         Unknown = 0,
-        NoVolcanism,
-        SilicateMagma,
-        SilicateVapourGeysers,
-        IronMagma,
-        WaterGeysers,
+        NO_VOLCANISM,
+        IRON_MAGMA,
+        SILICATE_MAGMA,
+        WATER_MAGMA,
+        SILICATE_VAPOUR_GEYSERS,
+        CARBON_DIOXIDE_GEYSERS,
+        WATER_GEYSERS,
+        METHANE_MAGMA,
+        NITROGEN_MAGMA,
+        AMMONIA_MAGMA,
     }
 
-    public enum AtmosphereEnum
-    {
-        Unknown = 0,
-        NoAtmosphere,
-        CarbonDioxide,
-        SuitableForWaterBasedLife,
-        SulphurDioxide,
-        AmmoniaRich,
-        Nitrogen,
-        MethaneRich,
-        SilicateVapour,
-        Water,
-        WaterRich,
-        Helium,
-        CarbonDioxideRich,
-    }
+public enum AtmosphereEnum
+{
+    Unknown = 0,
+    NO_ATMOSPHERE,
+    SUITABLE_FOR_WATER_BASED_LIFE,
+    NITROGEN,
+    CARBON_DIOXIDE,
+    SULPHUR_DIOXIDE,
+    ARGON,
+    NEON,
+    NEON_RICH,
+    ARGON_RICH,
+    NITROGEN_RICH,
+    WATER_RICH,
+    CARBON_DIOXIDE_RICH,
+    METHANE_RICH,
+    SILICATE_VAPOUR,
+    METHANE,
+    HELIUM,
+    AMMONIA,
+    AMMONIA_AND_OXYGEN,
+    WATER,
+}
+
+/*
+  <AtmosphereComponents>
+    NITROGEN,
+    OXYGEN,
+    WATER,
+    NEON,
+    CARBON DIOXIDE,
+    AMMONIA,
+    METHANE,
+    SULPHUR_DIOXIDE,
+    HYDROGEN,
+    HELIUM,
+    ARGON,
+    IRON,
+    SILICATES,
+  </AtmosphereComponents>
+  <SolidComponents>
+    METAL,
+    ROCK,
+    ICE,
+  </SolidComponents>
+  <RingTypes>
+    METALLIC,
+    METAL RICH,
+    ROCKY,
+    ICY,
+  </RingTypes>
+  <MiningReserves>
+    Pristine reserves,
+    Major reserves,
+    Common reserves,
+    Low reserves,
+    Depleted reserves,
+  </MiningReserves>
+  <Terraforming>
+    This body is a candidate for terraforming.,
+    This world has been terraformed.,
+  </Terraforming>
+  */
 
     public class EDObject
     {
