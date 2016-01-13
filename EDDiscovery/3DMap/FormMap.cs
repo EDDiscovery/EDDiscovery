@@ -130,7 +130,7 @@ namespace EDDiscovery2
         public void Prepare()
         {
             var db = new SQLiteDBClass();
-            _homeSystem = db.GetSettingString("DefaultMapCenter", null);
+            _homeSystem = db.GetSettingString("DefaultMapCenter", "Sol");
             _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0);
             bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
 
@@ -803,7 +803,7 @@ namespace EDDiscovery2
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemData.GetSystem(_homeSystem);
+            ISystem sys = SystemData.GetSystem(_homeSystem) ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             OrientateMapAroundSystem(sys);
 
             ResetCamera();
@@ -811,7 +811,7 @@ namespace EDDiscovery2
 
         private void buttonHistory_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemData.GetSystem(HistorySelection);
+            ISystem sys = SystemData.GetSystem(HistorySelection) ?? SystemData.GetSystem(_homeSystem) ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             OrientateMapAroundSystem(sys);
 
             ResetCamera();
