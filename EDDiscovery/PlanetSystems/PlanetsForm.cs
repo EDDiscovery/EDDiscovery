@@ -50,6 +50,10 @@ namespace EDDiscovery2.PlanetSystems
         private void button1_Click(object sender, EventArgs e)
         {
             SetCurrentSystem();
+
+            ObjectsType objt = new ObjectsType();
+
+            objt.ParseJson();
         }
 
         private void SetCurrentSystem()
