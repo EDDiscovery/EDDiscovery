@@ -53,7 +53,12 @@ namespace EDDiscovery2.PlanetSystems
 
             textBoxSystemName.Text = currentSystem.name;
 
-            addMaterialNodeControl1.CurrentSystem = currentSystem.name;
+            //addMaterialNodeControl1.CurrentSystem = currentSystem.name;
+        }
+
+        private void addMaterialNodeControl1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 
