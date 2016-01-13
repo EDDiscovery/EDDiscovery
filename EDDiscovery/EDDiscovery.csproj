@@ -194,6 +194,7 @@
     <Compile Include="ImageHandler\ImageHandler.Designer.cs">
       <DependentUpon>ImageHandler.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlanetSystems\ObjectsType.cs" />
     <Compile Include="PlanetSystems\Planets.cs" />
     <Compile Include="PlanetSystems\PlanetsForm.cs">
       <SubType>Form</SubType>
@@ -247,7 +248,7 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-	<None Include="Resources\Home-icon.png" />
+    <None Include="Resources\Home-icon.png" />
     <None Include="Resources\Travelicon.png" />
     <Content Include="trilateration.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -352,7 +353,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-  <PostBuildEvent>
+    <PostBuildEvent>
 	copy ..\..\SQLite.Interop.dll  .
     if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
     xcopy /s /y "$(SolutionDir)packages\Noesis.Javascript.0.7.1.0\NativeBinaries\net40\x86\*.*" "$(TargetDir)x86"

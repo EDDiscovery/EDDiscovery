@@ -54,13 +54,13 @@ namespace EDDiscovery2
                 dataGridViewPlanet.Rows.Clear();
 
                 dictComboShortNames.Clear();
-                foreach (EDObject obj in EDObject.listObjectTypes)
-                {
-                    int nr = ColumnPlanetType.Items.Add(obj.ShortName);
-                    dictComboShortNames[nr] = obj.ShortName;
+                //foreach (EDObject obj in EDObject.listObjectTypes)
+                //{
+                //    int nr = ColumnPlanetType.Items.Add(obj.ShortName);
+                //    dictComboShortNames[nr] = obj.ShortName;
 
-                    //ColumnPlanetType.Items[nr]
-                }
+                //    //ColumnPlanetType.Items[nr]
+                //}
 
                 foreach (Material mat in mlist)
                 {

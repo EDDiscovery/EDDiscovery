@@ -200,6 +200,14 @@ namespace EDDiscovery
                     DownloadMapFile("Galaxy_L_Grid.jpg");
                     DownloadMapFile("Galaxy_L_Grid.json");
 
+                    DownloadMapFile("DW1.jpg");
+                    DownloadMapFile("DW1.json");
+                    DownloadMapFile("DW2.jpg");
+                    DownloadMapFile("DW2.json");
+                    DownloadMapFile("DW3.jpg");
+                    DownloadMapFile("DW3.json");
+
+
                     //for (int ii = -10; ii <= 60; ii += 10)
                     //{
                     //    DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".png");
