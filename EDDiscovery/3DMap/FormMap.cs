@@ -803,7 +803,7 @@ namespace EDDiscovery2
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemData.GetSystem(_homeSystem) ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+            ISystem sys = SystemData.GetSystem(_homeSystem) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             OrientateMapAroundSystem(sys);
 
             ResetCamera();
@@ -811,7 +811,7 @@ namespace EDDiscovery2
 
         private void buttonHistory_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemData.GetSystem(HistorySelection) ?? SystemData.GetSystem(_homeSystem) ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+            ISystem sys = SystemData.GetSystem(HistorySelection) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             OrientateMapAroundSystem(sys);
 
             ResetCamera();
