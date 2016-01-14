@@ -801,7 +801,7 @@ namespace EDDiscovery
             obj.commander = "Test";
             obj.system = "Fine Ring Sector JH-V C2-4";
             obj.objectName = "A 3";
-            obj.objectType = ObjectTypesEnum.HighMetalContent;
+            obj.ObjectType = ObjectTypesEnum.HighMetalContent;
             obj.arrivalPoint = 0;
             obj.gravity = 0.13f;
 

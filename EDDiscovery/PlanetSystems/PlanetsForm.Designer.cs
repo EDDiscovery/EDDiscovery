@@ -69,6 +69,7 @@
             this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -315,6 +316,7 @@
             // 
             // checkedListBox1
             // 
+            this.checkedListBox1.CheckOnClick = true;
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
             "Carbon",
@@ -465,11 +467,23 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Name";
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.Red;
+            this.label14.Location = new System.Drawing.Point(394, 3);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(495, 25);
+            this.label14.TabIndex = 8;
+            this.label14.Text = "Testing only!!  Storing function will come soon(TM)";
+            // 
             // PlanetsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(963, 411);
+            this.Controls.Add(this.label14);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button1);
@@ -531,5 +545,6 @@
         private System.Windows.Forms.CheckedListBox checkedListBox2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.Label label14;
     }
 }

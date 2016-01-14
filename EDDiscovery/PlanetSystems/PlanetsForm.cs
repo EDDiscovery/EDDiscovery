@@ -44,6 +44,15 @@ namespace EDDiscovery2.PlanetSystems
                 dictComboDesc[nr] = obj.Description;
             }
 
+
+            foreach (VulcanismEnum vulc in Enum.GetValues(typeof(VulcanismEnum)))
+            {
+                comboBoxAtmosphere.Items.Add(vulc.ToString().Replace("_", " "));
+            }
+            foreach (AtmosphereEnum vulc in Enum.GetValues(typeof(AtmosphereEnum)))
+            {
+                comboBoxVulcanism.Items.Add(vulc.ToString().Replace("_", " "));
+            }
             SetCurrentSystem();
         }
 
@@ -133,6 +142,16 @@ namespace EDDiscovery2.PlanetSystems
             textBoxGravity.Text = obj.gravity.ToString("0.00");
             textBoxRadius.Text = obj.radius.ToString("0");
             textBoxArrivalPoint.Text = obj.arrivalPoint.ToString("0");
+
+            try
+            {
+                comboBoxAtmosphere.SelectedIndex = (int)obj.atmosphere;
+                comboBoxVulcanism.SelectedIndex = (int)obj.vulcanism;
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void comboBoxType_SelectedIndexChanged(object sender, EventArgs e)

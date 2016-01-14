@@ -15,17 +15,17 @@ namespace EDDiscovery2.PlanetSystems
         public bool Planet;
         public bool Star;
 
-        public ObjectsType(ObjectTypesEnum type, string Name, string Short, string Description)
+        public ObjectsType(ObjectTypesEnum type, string Name, string ShortDescription, string Description)
         {
             this.type = type;
             this.Name = Name;
-            this.Short = Short;
+            this.Short = ShortDescription;
             this.Description = Description;
 //            this.Planet = Planet;
 //            this.Star = Star;
         }
             
-        public ObjectsType[] GetArray()
+        static public List<ObjectsType> GetAllTypes()
         {
             ObjectsType[] objs = new ObjectsType[]
             {
@@ -85,7 +85,7 @@ namespace EDDiscovery2.PlanetSystems
                 new ObjectsType(ObjectTypesEnum.BlackHole, "ClassBH","Black Hole", "Black holes are typically the stellar remnants of super massive stars of twenty solar masses or more, that have reached the end of their lives. Nuclear fusion has ceased, and the star collapsed to the most extreme point possible - where gravity was so extreme light can no longer escape. If matter should fall on to such a body, an extreme burst of gamma radiation will be emitted, but otherwise the body is only visible by the gravitational distortion in the vicinity. In many cases black holes can be seen emitting brightly in X-rays because of matter falling on to their surface from a companion body."),
                 new ObjectsType(ObjectTypesEnum.SuperBlackHole, "ClassSB", "Supermassive Black Hole", "Super massive black holes tend to form when an initial black hole begins to swallow ever more mass, including other black holes. With time they acquire a vast mass and become a key component of the galaxy, with much of the other galactic mass rotating around them, and can be several million solar masses.")
                 };
-            return objs;
+            return objs.ToList<ObjectsType>();
         }
 
 }
