@@ -42,6 +42,7 @@
             this.comboBoxFileNameFormat = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxFileNameExample = new System.Windows.Forms.TextBox();
+            this.checkBoxPreview = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -195,10 +196,21 @@
             this.textBoxFileNameExample.Size = new System.Drawing.Size(154, 20);
             this.textBoxFileNameExample.TabIndex = 13;
             // 
+            // checkBoxPreview
+            // 
+            this.checkBoxPreview.AutoSize = true;
+            this.checkBoxPreview.Location = new System.Drawing.Point(15, 131);
+            this.checkBoxPreview.Name = "checkBoxPreview";
+            this.checkBoxPreview.Size = new System.Drawing.Size(64, 17);
+            this.checkBoxPreview.TabIndex = 14;
+            this.checkBoxPreview.Text = "Preview";
+            this.checkBoxPreview.UseVisualStyleBackColor = true;
+            // 
             // ImageHandler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxPreview);
             this.Controls.Add(this.textBoxFileNameExample);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.comboBoxFileNameFormat);
@@ -238,5 +250,6 @@
         private System.Windows.Forms.ComboBox comboBoxFileNameFormat;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBoxFileNameExample;
+        private System.Windows.Forms.CheckBox checkBoxPreview;
     }
 }
