@@ -11,6 +11,7 @@ namespace EDDiscovery2.PlanetSystems
         UnknownObject = 0,
         EarthLikeWorld,
         WaterWorld,
+        AmmoniaWorld,
         MetalRich,
         HighMetalContent,
         Icy,
@@ -35,18 +36,44 @@ namespace EDDiscovery2.PlanetSystems
         Star_F,
         Star_G,
         Star_K,
+        Star_M, 
         Star_L,
         Star_T,
         Star_Y,
-        Star_Proto,
+
         Star_W,
+        Star_WN,
+        Star_WNC,
+        Star_WC,
+        Star_WO,
         Star_C,
         Star_S,
         Star_TTauri,
-        Star_WhiteDwarf,
         Star_AeBe,
+
+        Star_GA,
+        Star_GF,
+        Star_GK,
+        Star_GM,
+        Star_SGM,
+        Star_GS, 
+        Star_MS,
+
+        Star_CN,
+
+        Star_DA,
+        Star_DB,
+        Star_DAB, 
+        Star_DC,
+        Star_DCV,
+        Star_N,
+
+
         BlackHole,
+        SuperBlackHole,
         NeutronStar,
+
+
     }
 
   
@@ -234,8 +261,8 @@ public enum AtmosphereEnum
                         return "T";
         case ObjectTypesEnum.Star_Y:
                         return "Y";
-        case ObjectTypesEnum.Star_Proto:
-                        return "Proto";
+    //    case ObjectTypesEnum.Star_Proto:
+    //                    return "Proto";
         case ObjectTypesEnum.Star_W:
                         return "W";
         case ObjectTypesEnum.Star_C:
@@ -244,8 +271,8 @@ public enum AtmosphereEnum
                         return "S";
         case ObjectTypesEnum.Star_TTauri:
                         return "T Tauri";
-        case ObjectTypesEnum.Star_WhiteDwarf:
-                        return "DA";
+    //    case ObjectTypesEnum.Star_WhiteDwarf:
+    //                    return "DA";
         case ObjectTypesEnum.Star_AeBe:
                         return "AeBe";
         case ObjectTypesEnum.BlackHole:
@@ -320,8 +347,8 @@ public enum AtmosphereEnum
                         return "T";
                     case ObjectTypesEnum.Star_Y:
                         return "Y";
-                    case ObjectTypesEnum.Star_Proto:
-                        return "Proto";
+         //           case ObjectTypesEnum.Star_Proto:
+         //               return "Proto";
                     case ObjectTypesEnum.Star_W:
                         return "W";
                     case ObjectTypesEnum.Star_C:
@@ -330,8 +357,8 @@ public enum AtmosphereEnum
                         return "S";
                     case ObjectTypesEnum.Star_TTauri:
                         return "T Tauri";
-                    case ObjectTypesEnum.Star_WhiteDwarf:
-                        return "DA";
+           //         case ObjectTypesEnum.Star_WhiteDwarf:
+           //             return "DA";
                     case ObjectTypesEnum.Star_AeBe:
                         return "AeBe";
                     case ObjectTypesEnum.BlackHole:

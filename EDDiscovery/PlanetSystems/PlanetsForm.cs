@@ -51,9 +51,9 @@ namespace EDDiscovery2.PlanetSystems
         {
             SetCurrentSystem();
 
-            ObjectsType objt = new ObjectsType();
+      //      ObjectsType objt = new ObjectsType();
 
-            objt.ParseJson();
+//            objt.ParseJson();
         }
 
         private void SetCurrentSystem()
