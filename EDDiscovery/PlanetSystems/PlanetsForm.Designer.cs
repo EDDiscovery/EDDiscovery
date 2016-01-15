@@ -242,6 +242,7 @@
             // 
             // checkedListBox4
             // 
+            this.checkedListBox4.CheckOnClick = true;
             this.checkedListBox4.FormattingEnabled = true;
             this.checkedListBox4.Items.AddRange(new object[] {
             "Antimony",
@@ -266,6 +267,7 @@
             // 
             // checkedListBox3
             // 
+            this.checkedListBox3.CheckOnClick = true;
             this.checkedListBox3.FormattingEnabled = true;
             this.checkedListBox3.Items.AddRange(new object[] {
             "Cadmium",
@@ -290,6 +292,7 @@
             // 
             // checkedListBox2
             // 
+            this.checkedListBox2.CheckOnClick = true;
             this.checkedListBox2.FormattingEnabled = true;
             this.checkedListBox2.Items.AddRange(new object[] {
             "Arsenic",
