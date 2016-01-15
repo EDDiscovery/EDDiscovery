@@ -47,11 +47,11 @@ namespace EDDiscovery2.PlanetSystems
 
             foreach (VulcanismEnum vulc in Enum.GetValues(typeof(VulcanismEnum)))
             {
-                comboBoxAtmosphere.Items.Add(vulc.ToString().Replace("_", " "));
+                comboBoxVulcanism.Items.Add(vulc.ToString().Replace("_", " "));
             }
             foreach (AtmosphereEnum vulc in Enum.GetValues(typeof(AtmosphereEnum)))
             {
-                comboBoxVulcanism.Items.Add(vulc.ToString().Replace("_", " "));
+                comboBoxAtmosphere.Items.Add(vulc.ToString().Replace("_", " "));
             }
             SetCurrentSystem();
         }
