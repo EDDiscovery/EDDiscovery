@@ -117,6 +117,7 @@ namespace EDDiscovery.DB
 
             // date = edscdata["date"].Value<string>();
             date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            edsm = null;
 
             return listDistances;
         }
