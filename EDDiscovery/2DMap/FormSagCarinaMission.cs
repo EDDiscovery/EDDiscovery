@@ -416,6 +416,7 @@ namespace EDDiscovery2
         {
             int nr = toolStripComboBoxTime.SelectedIndex;
             /*
+            Distant Worlds Expedition
             FGE Expedition start
             Last Week
             Last Month
@@ -425,20 +426,22 @@ namespace EDDiscovery2
 
             endDate = DateTime.Today.AddDays(1);
             if (nr == 0)
-                startDate = new DateTime(2015, 8, 1);
+                startDate = new DateTime(2016, 1, 14);
             else if (nr == 1)
-                startDate = DateTime.Now.AddDays(-7);
+                startDate = new DateTime(2015, 8, 1);
             else if (nr == 2)
-                startDate = DateTime.Now.AddMonths(-1);
+                startDate = DateTime.Now.AddDays(-7);
             else if (nr == 3)
-                startDate = DateTime.Now.AddYears(-1);
+                startDate = DateTime.Now.AddMonths(-1);
             else if (nr == 4)
+                startDate = DateTime.Now.AddYears(-1);
+            else if (nr == 5)
                 startDate = new DateTime(2010, 8, 1);
-            else if (nr == 5)  // Custom
+            else if (nr == 6)  // Custom
                 startDate = new DateTime(2010, 8, 1);
 
 
-            if (nr == 5)
+            if (nr == 6)
             {
                 host1.Visible = true;
                 host2.Visible = true;

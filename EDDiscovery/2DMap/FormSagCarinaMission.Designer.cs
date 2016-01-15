@@ -67,6 +67,7 @@
             // 
             this.toolStripComboBoxTime.DropDownWidth = 140;
             this.toolStripComboBoxTime.Items.AddRange(new object[] {
+            "Distant Worlds Expedition",
             "FGE Expedition start",
             "Last Week",
             "Last Month",
