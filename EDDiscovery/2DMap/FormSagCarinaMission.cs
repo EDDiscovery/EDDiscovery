@@ -491,13 +491,13 @@ namespace EDDiscovery2
                 switch (saveFileDialog1.FilterIndex)
                 {
                     case 1:
-                        imageViewer1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                        imageViewer1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
                         break;
                     case 2:
-                        imageViewer1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        imageViewer1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
                         break;
                     case 3:
-                        imageViewer1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        imageViewer1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
                         break;
                 }
             }

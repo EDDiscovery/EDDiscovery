@@ -32,12 +32,12 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripComboBoxTime = new System.Windows.Forms.ToolStripComboBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.imageViewer1 = new EDDiscovery2._2DMap.ImageViewer();
-            this.buttonSave = new System.Windows.Forms.Button();
             this.toolStripButtonZoomIn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomtoFit = new System.Windows.Forms.ToolStripButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.imageViewer1 = new EDDiscovery2._2DMap.ImageViewer();
+            this.buttonSave = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -81,6 +81,39 @@
             this.toolStripComboBoxTime.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxTime_SelectedIndexChanged);
             this.toolStripComboBoxTime.Click += new System.EventHandler(this.toolStripComboBox2_Click);
             // 
+            // toolStripButtonZoomIn
+            // 
+            this.toolStripButtonZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonZoomIn.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonZoomIn.Image")));
+            this.toolStripButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonZoomIn.Name = "toolStripButtonZoomIn";
+            this.toolStripButtonZoomIn.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonZoomIn.Text = "toolStripButton1";
+            this.toolStripButtonZoomIn.ToolTipText = "Zoom in";
+            this.toolStripButtonZoomIn.Click += new System.EventHandler(this.toolStripButtonZoomIn_Click);
+            // 
+            // toolStripButtonZoomOut
+            // 
+            this.toolStripButtonZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonZoomOut.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonZoomOut.Image")));
+            this.toolStripButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonZoomOut.Name = "toolStripButtonZoomOut";
+            this.toolStripButtonZoomOut.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonZoomOut.Text = "toolStripButtonZoomOut";
+            this.toolStripButtonZoomOut.ToolTipText = "Zoom out";
+            this.toolStripButtonZoomOut.Click += new System.EventHandler(this.toolStripButtonZoomOut_Click);
+            // 
+            // toolStripButtonZoomtoFit
+            // 
+            this.toolStripButtonZoomtoFit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonZoomtoFit.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonZoomtoFit.Image")));
+            this.toolStripButtonZoomtoFit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonZoomtoFit.Name = "toolStripButtonZoomtoFit";
+            this.toolStripButtonZoomtoFit.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonZoomtoFit.Text = "toolStripButtonZoomtoFit";
+            this.toolStripButtonZoomtoFit.ToolTipText = "Zoom to best fit";
+            this.toolStripButtonZoomtoFit.Click += new System.EventHandler(this.toolStripButtonZoomtoFit_Click);
+            // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -115,42 +148,9 @@
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
-            // toolStripButtonZoomIn
-            // 
-            this.toolStripButtonZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomIn.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonZoomIn.Image")));
-            this.toolStripButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonZoomIn.Name = "toolStripButtonZoomIn";
-            this.toolStripButtonZoomIn.Size = new System.Drawing.Size(26, 26);
-            this.toolStripButtonZoomIn.Text = "toolStripButton1";
-            this.toolStripButtonZoomIn.ToolTipText = "Zoom in";
-            this.toolStripButtonZoomIn.Click += new System.EventHandler(this.toolStripButtonZoomIn_Click);
-            // 
-            // toolStripButtonZoomOut
-            // 
-            this.toolStripButtonZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomOut.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonZoomOut.Image")));
-            this.toolStripButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonZoomOut.Name = "toolStripButtonZoomOut";
-            this.toolStripButtonZoomOut.Size = new System.Drawing.Size(26, 26);
-            this.toolStripButtonZoomOut.Text = "toolStripButtonZoomOut";
-            this.toolStripButtonZoomOut.ToolTipText = "Zoom out";
-            this.toolStripButtonZoomOut.Click += new System.EventHandler(this.toolStripButtonZoomOut_Click);
-            // 
-            // toolStripButtonZoomtoFit
-            // 
-            this.toolStripButtonZoomtoFit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomtoFit.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonZoomtoFit.Image")));
-            this.toolStripButtonZoomtoFit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonZoomtoFit.Name = "toolStripButtonZoomtoFit";
-            this.toolStripButtonZoomtoFit.Size = new System.Drawing.Size(26, 26);
-            this.toolStripButtonZoomtoFit.Text = "toolStripButtonZoomtoFit";
-            this.toolStripButtonZoomtoFit.ToolTipText = "Zoom to best fit";
-            this.toolStripButtonZoomtoFit.Click += new System.EventHandler(this.toolStripButtonZoomtoFit_Click);
-            // 
             // saveFileDialog1
             // 
-            this.saveFileDialog1.Filter = "Bitmap Image|*.bmp|JPEG Image|*.jpg|PNG Image|*.png";
+            this.saveFileDialog1.Filter = "PNG Image|*.png|Bitmap Image|*.bmp|JPEG Image|*.jpg";
             // 
             // FormSagCarinaMission
             // 
