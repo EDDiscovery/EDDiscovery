@@ -13,7 +13,7 @@ namespace EDDiscovery2.PlanetSystems
 
         public EdMaterializer()
         {
-#if Debug
+#if DEBUG
             // Dev server. Mess with data as much as you like here
             ServerAdress = "https://ed-materializer.herokuapp.com/";
 #else
