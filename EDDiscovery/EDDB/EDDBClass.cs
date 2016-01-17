@@ -300,6 +300,7 @@ namespace EDDiscovery2.EDDB
                             else
                             {
                                 System.Diagnostics.Trace.WriteLine("New system " + sys.name);
+                                sys.Store(cn, tra);
                             }
                         }
                         System.Diagnostics.Trace.WriteLine("Add2DB  " + nr.ToString() + " eddb systems: " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
