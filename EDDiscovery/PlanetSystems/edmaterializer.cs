@@ -13,7 +13,13 @@ namespace EDDiscovery2.PlanetSystems
 
         public EdMaterializer()
         {
+#if Debug
+            // Dev server. Mess with data as much as you like here
             ServerAdress = "https://ed-materializer.herokuapp.com/";
+#else
+            // Production
+            ServerAdress = "http://ed-materializer-env.elasticbeanstalk.com/";
+#endif
         }
 
 
