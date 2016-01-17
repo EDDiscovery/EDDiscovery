@@ -288,6 +288,7 @@
     </Content>
     <None Include="Resources\Home-icon.png" />
     <None Include="Resources\Travelicon.png" />
+    <None Include="Resources\save.png" />
     <Content Include="trilateration.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
