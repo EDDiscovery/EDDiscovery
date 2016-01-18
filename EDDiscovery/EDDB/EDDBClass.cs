@@ -182,12 +182,14 @@ namespace EDDiscovery2.EDDB
                 foreach (JObject jo in systems)
                 {
                     SystemClass sys = new SystemClass(jo, EDDiscovery.SystemInfoSource.EDDB);
-
+                    
                     if (sys != null)
                         eddbsystems.Add(sys);
+
                 }
             }
-
+            systems = null;
+            json = null;
             return eddbsystems;
         }
 
@@ -296,6 +298,8 @@ namespace EDDiscovery2.EDDB
                                     sysdb.Update(cn, sysdb.id, tra);
                                     nr++;
                                 }
+
+                                sysdb = null;
                             }
                             else
                             {
