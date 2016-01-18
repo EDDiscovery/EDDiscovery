@@ -28,8 +28,8 @@
     <InstallUrl>http://robert.astronet.se/Elite/EDDiscovery2/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.6.6.0</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>2.6.8.1</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -285,6 +285,11 @@
     </Content>
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
+    <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
+    <Content Include="x86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\Home-icon.png" />
     <None Include="Resources\Travelicon.png" />
