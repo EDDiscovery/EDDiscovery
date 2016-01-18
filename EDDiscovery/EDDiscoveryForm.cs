@@ -391,6 +391,8 @@ namespace EDDiscovery
                 });
             }
 
+            GC.Collect();
+
         }
 
         private Thread ThreadEDSMDistances;
@@ -476,6 +478,7 @@ namespace EDDiscovery
                 _db.GetAllDistances(EDDConfig.UseDistances);  // Load user added distances
                 updateMapData();
                 OnDistancesLoaded();
+                GC.Collect();
             }
             catch (Exception ex)
             {
@@ -606,8 +609,11 @@ namespace EDDiscovery
             LogText("Add new EDDB data to database." + Environment.NewLine);
             eddb.Add2DB(eddbsystems, eddbstations);
 
+            
             eddbsystems.Clear();
             eddbstations.Clear();
+            eddbsystems = null;
+            GC.Collect();
             LogText("EDDB update done." + Environment.NewLine);
         }
 
