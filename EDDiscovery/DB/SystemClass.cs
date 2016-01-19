@@ -116,7 +116,7 @@ namespace EDDiscovery.DB
                 }
                 JArray submitted = (JArray)jo["submitted"];
 
-                if (submitted.Count>0)
+                if (submitted != null && submitted.Count>0)
                 {
                     if (submitted[0]["cmdrname"]!=null)
                         CommanderCreate = submitted[0]["cmdrname"].Value<string>();
