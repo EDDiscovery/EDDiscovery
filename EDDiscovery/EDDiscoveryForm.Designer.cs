@@ -77,6 +77,7 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
+            this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -498,7 +499,8 @@
             // adminToolStripMenuItem
             // 
             this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.forceEDDBUpdateToolStripMenuItem});
+            this.forceEDDBUpdateToolStripMenuItem,
+            this.syncEDSMSystemsToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "Admin";
@@ -506,7 +508,7 @@
             // forceEDDBUpdateToolStripMenuItem
             // 
             this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
-            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.forceEDDBUpdateToolStripMenuItem.Text = "Force EDDB update";
             this.forceEDDBUpdateToolStripMenuItem.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
             // 
@@ -553,6 +555,13 @@
             this.labelPanelText.TabIndex = 0;
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // syncEDSMSystemsToolStripMenuItem
+            // 
+            this.syncEDSMSystemsToolStripMenuItem.Name = "syncEDSMSystemsToolStripMenuItem";
+            this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.syncEDSMSystemsToolStripMenuItem.Text = "Sync EDSM Systems";
+            this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -640,6 +649,7 @@
         private System.Windows.Forms.RadioButton radioButtonHistorySelection;
         private System.Windows.Forms.RadioButton radioButtonCentreHome;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ToolStripMenuItem syncEDSMSystemsToolStripMenuItem;
     }
 }
 

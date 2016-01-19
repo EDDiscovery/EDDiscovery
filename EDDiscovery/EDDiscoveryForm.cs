@@ -1089,5 +1089,62 @@ namespace EDDiscovery
                 e.Cancel = true;
             }
         }
+
+        private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            syncEDSMSystems();
+        }
+
+        private void syncEDSMSystems()
+        {
+            var EDSMThread = new Thread(GetAllEDSMSystems) { Name = "Downloading EDSM system" };
+            EDSMThread.Start();
+        }
+
+        private void GetAllEDSMSystems()
+        {
+            try
+            {
+                EDDBClass eddb = new EDDBClass();
+                EDSMClass edsm = new EDSMClass();
+
+                string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
+                bool newfile = false;
+                string  rwsysfiletime = "2014-01-01 00:00:00";
+                LogText("Get systems from EDSM." + Environment.NewLine);
+
+                eddb.DownloadFile("http://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
+
+                if (newfile)
+                {
+                    LogText("Adding EDSM systems." + Environment.NewLine);
+
+                    string json = LoadJsonFile(edsmsystems);
+                    List<SystemClass> systems = SystemClass.ParseEDSM(json, ref rwsysfiletime);
+
+                    _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
+                    
+                }
+                else
+                    LogText("No new file." + Environment.NewLine);
+
+                string retstr = edsm.GetNewSystems(_db);
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText(retstr);
+                });
+
+
+            }
+            catch (Exception ex)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText("GetAllEDSMSystems exception:" + ex.Message + Environment.NewLine);
+                });
+            }
+
+        }
+
     }
 }
