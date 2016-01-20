@@ -402,8 +402,7 @@ namespace EDDiscovery.DB
                     foreach (SystemClass system in systems)
                     {
 
-                        var sys = SQLiteDBClass.globalSystems.FirstOrDefault(sy => sy.SearchName == system.SearchName);
-
+                        SystemClass sys = SystemData.GetSystem(system.name);
                         if (sys != null)
                         {
                             system.UpdateEDSM(cn, sys.id, transaction);

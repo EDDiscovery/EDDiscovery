@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -23,7 +24,7 @@ namespace EDDiscovery
 
     public partial class EDDiscoveryForm : Form
     {
-        readonly string _fileTgcSystems;
+        //readonly string _fileTgcSystems;
         readonly string _fileEDSMDistances;
         private EDSMSync _edsmSync;
         private SQLiteDBClass _db = new SQLiteDBClass();
@@ -41,7 +42,7 @@ namespace EDDiscovery
 
             EDDConfig = new EDDConfig();
 
-            _fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
+            //_fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
             _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");        
 
             string logpath="";
@@ -116,20 +117,17 @@ namespace EDDiscovery
             {
                 travelHistoryControl1.Enabled = false;
 
-                var redWizzardThread = new Thread(GetRedWizzardFiles) {Name = "Downloading Red Wizzard Files"};
                 var edsmThread = new Thread(GetEDSMSystems) {Name = "Downloading EDSM Systems"};
                 var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files" };
-                redWizzardThread.Start();
                 edsmThread.Start();
                 downloadmapsThread.Start();
 
-                while (redWizzardThread.IsAlive || edsmThread.IsAlive || downloadmapsThread.IsAlive)
+                while (edsmThread.IsAlive || downloadmapsThread.IsAlive)
                 {
                     Thread.Sleep(50);
                     Application.DoEvents();
                 }
 
-                redWizzardThread.Join();
                 edsmThread.Join();
                 downloadmapsThread.Join();
 
@@ -251,7 +249,7 @@ namespace EDDiscovery
             return false;
 #endif
         }
-
+        /*
         private void GetRedWizzardFiles()
         {
             WebClient web = new WebClient();
@@ -260,7 +258,7 @@ namespace EDDiscovery
             {
                 LogText("Checking for new EDDiscovery data" + Environment.NewLine);
 
-                GetNewRedWizzardFile(_fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
+                //GetNewRedWizzardFile(_fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
                 //GetNewRedWizzardFile(fileTgcDistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
             }
             catch (Exception ex)
@@ -318,7 +316,7 @@ namespace EDDiscovery
                 }
             }
         }
-
+        */
 
         private void GetEDSMSystems()
         {
@@ -329,8 +327,7 @@ namespace EDDiscovery
 
                 string json;
 
-                string rwsystime = _db.GetSettingString("RWLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-                string rwsysfiletime = "";
+                string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
                 CommanderName = _db.GetSettingString("CommanderName", "");
                 Invoke((MethodInvoker) delegate {
@@ -338,38 +335,30 @@ namespace EDDiscovery
                 });
 
 
-                json = LoadJsonFile(_fileTgcSystems);
-                List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
+                //                List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
+                DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
 
-
-                if (!rwsystime.Equals(rwsysfiletime))  // New distance file from Redwizzard
+                if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
                 {
-                    SystemClass.Delete(SystemStatusEnum.EDSC); // Remove all EDSC systems.
-                    
-                    _db.PutSettingString("RWLastSystems", rwsysfiletime);
-                    _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                    Invoke((MethodInvoker) delegate {
-                        TravelHistoryControl.LogText("Adding data from tgcsystems.json " + Environment.NewLine);
-                    });
-                    SystemClass.Store(systems);
-                    EDDBClass eddb = new EDDBClass();
-                    DBUpdateEDDB(eddb);
-                }
-
-                if (CanSkipSlowUpdates())
-                {
-                    LogLine("Skipping loading updates (DEBUG option).");
-                    LogLine("  Need to turn this back on again? Look in the Settings tab.");
+                    SyncAllEDSMSystems();
                 }
                 else
                 {
-                    string retstr = edsm.GetNewSystems(_db);
-                    Invoke((MethodInvoker)delegate
+                    if (CanSkipSlowUpdates())
                     {
-                        TravelHistoryControl.LogText(retstr);
-                    });
-                }
+                        LogLine("Skipping loading updates (DEBUG option).");
+                        LogLine("  Need to turn this back on again? Look in the Settings tab.");
+                    }
+                    else
+                    {
+                        string retstr = edsm.GetNewSystems(_db);
+                        Invoke((MethodInvoker)delegate
+                        {
+                            TravelHistoryControl.LogText(retstr);
+                        });
+                    }
 
+                }
 
                 _db.GetAllSystemNotes();
                 _db.GetAllSystems();
@@ -1092,16 +1081,16 @@ namespace EDDiscovery
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            syncEDSMSystems();
+            AsyncSyncEDSMSystems();
         }
 
-        private void syncEDSMSystems()
+        private void AsyncSyncEDSMSystems()
         {
-            var EDSMThread = new Thread(GetAllEDSMSystems) { Name = "Downloading EDSM system" };
+            var EDSMThread = new Thread(SyncAllEDSMSystems) { Name = "Downloading EDSM system" };
             EDSMThread.Start();
         }
 
-        private void GetAllEDSMSystems()
+        private void SyncAllEDSMSystems()
         {
             try
             {
@@ -1118,12 +1107,31 @@ namespace EDDiscovery
                 if (newfile)
                 {
                     LogText("Adding EDSM systems." + Environment.NewLine);
-
+                    _db.GetAllSystems();
                     string json = LoadJsonFile(edsmsystems);
                     List<SystemClass> systems = SystemClass.ParseEDSM(json, ref rwsysfiletime);
 
+                   
+                    List<SystemClass> systems2Store = new List<SystemClass>();
+
+                    foreach (SystemClass system in systems)
+                    {
+                        // Check if sys exists first
+                        SystemClass sys = SystemData.GetSystem(system.name);
+                        if (sys == null)
+                            systems2Store.Add(system);
+                        else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y!=system.y  || sys.z != system.z)  // Case or position changed
+                            systems2Store.Add(system);
+                    }
+                    SystemClass.Store(systems2Store);
+                    systems.Clear();
+                    systems = null;
+                    systems2Store.Clear();
+                    systems2Store = null;
+                    json = null;
+
                     _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                    
+                    _db.GetAllSystems();
                 }
                 else
                     LogText("No new file." + Environment.NewLine);
@@ -1134,7 +1142,7 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText(retstr);
                 });
 
-
+                GC.Collect();
             }
             catch (Exception ex)
             {
