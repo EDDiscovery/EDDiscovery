@@ -406,6 +406,7 @@ namespace EDDiscovery.DB
 
                         if (sys != null)
                         {
+                            if (!sys.name.Equals(system.name)  || sys.x != system.x || sys.y != system.y || sys.z != system.z)
                             system.UpdateEDSM(cn, sys.id, transaction);
                         }
                         else

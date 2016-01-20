@@ -1122,6 +1122,7 @@ namespace EDDiscovery
                     string json = LoadJsonFile(edsmsystems);
                     List<SystemClass> systems = SystemClass.ParseEDSM(json, ref rwsysfiletime);
 
+                    SystemClass.Store(systems);
                     _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
                     
                 }
