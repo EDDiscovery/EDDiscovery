@@ -177,6 +177,9 @@ public enum AtmosphereEnum
         static public List<EDObject> listObjectTypes = EDObject.GetEDObjList;
         static private List<ObjectsType> objectsTypes = ObjectsType.GetAllTypes();
 
+        static private Dictionary<string, ObjectTypesEnum>  objectAliases = ObjectsType.GetAllTypesAlias();
+
+
         public EDObject()
         {
             materials = new Dictionary<MaterialEnum, bool>();
@@ -336,13 +339,13 @@ public enum AtmosphereEnum
 
             ObjectType = String2ObjectType(jo["world_type"].Value<string>());
             terraformable = GetBool(jo["terraformable"]);
-            gravity = jo["gravity"].Value<float>();
-            terrain_difficulty  =  jo["terrain_difficulty"].Value<int>();
+            gravity = GetFloat(jo["gravity"]);
+            terrain_difficulty  = GetInt(jo["terrain_difficulty"]);
 
             radius = GetFloat(jo["radius"]);
             arrivalPoint = GetFloat(jo["arrival_point"]);
             atmosphere = (AtmosphereEnum)  GetInt(jo["atmosphere_type"]);
-            vulcanism = (VulcanismEnum)  GetInt(jo["vulcanism_type"]);
+            vulcanism = (VulcanismEnum)VulcanismStr2Enum(jo["vulcanism_type"].Value<string>());
 
             foreach (var mat in mlist)
             {
@@ -386,13 +389,10 @@ public enum AtmosphereEnum
         {
             EDObject ed = new EDObject();
 
-            foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
-            {
-                ed.ObjectType = mat;
-                if (v.ToLower().Equals(ed.Description.ToLower()))
-                    return mat;
 
-            }
+            if (objectAliases.ContainsKey(v.ToLower()))
+                return objectAliases[v.ToLower()];
+         
 
             return ObjectTypesEnum.UnknownObject;
         }
@@ -411,5 +411,48 @@ public enum AtmosphereEnum
 
             return ObjectTypesEnum.UnknownObject;
         }
+
+        public AtmosphereEnum AthmosphereStr2Enum(string v)
+        {
+            foreach (AtmosphereEnum mat in Enum.GetValues(typeof(AtmosphereEnum)))
+            {
+                string str = mat.ToString().Replace("_", "").ToLower();
+
+                if (v.Replace("_", "").Replace(" ", "").ToLower().Equals(str))
+                    return mat;
+
+            }
+
+            return AtmosphereEnum.Unknown;
+        }
+
+        public VulcanismEnum VulcanismStr2Enum(string v)
+        {
+            if (v == null)
+                return VulcanismEnum.Unknown;
+
+            foreach (VulcanismEnum mat in Enum.GetValues(typeof(VulcanismEnum)))
+            {
+                string str = mat.ToString().Replace("_", "").ToLower();
+
+                if (v.Replace("_", "").Replace(" ", "").ToLower().Equals(str))
+                    return mat;
+
+            }
+
+            return VulcanismEnum.Unknown;
+        }
+
+        public MaterialEnum MaterialFromString(string v)
+        {
+            foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
+            {
+                if (v.ToLower().Equals(mat.ToString().ToLower()))
+                    return mat;
+            }
+
+            return MaterialEnum.Unknown;
+        }
+
     }
 }

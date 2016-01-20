@@ -53,7 +53,7 @@ namespace EDDiscovery2.PlanetSystems
             {
                 comboBoxAtmosphere.Items.Add(vulc.ToString().Replace("_", " "));
             }
-            SetCurrentSystem();
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -67,7 +67,9 @@ namespace EDDiscovery2.PlanetSystems
 
         private void SetCurrentSystem()
         {
-            SetSystem(edForm.TravelControl.CurrentSystem);
+            //SetSystem(edForm.TravelControl.CurrentSystem);
+            ISystem sys = SystemData.GetSystem("SHINRARTA DEZHRA");
+            SetSystem(sys);
         }
 
         private void SetSystem(ISystem currentSystem)
@@ -80,7 +82,7 @@ namespace EDDiscovery2.PlanetSystems
             edObjects.Clear();
 
             edObjects = edmat.GetAll(textBoxSystemName.Text);
-
+            UpDateListView();
             //addMaterialNodeControl1.CurrentSystem = currentSystem.name;
         }
 
@@ -137,7 +139,7 @@ namespace EDDiscovery2.PlanetSystems
 
             var nr = (from str in dictComboDesc where str.Value == obj.Description select str.Key).FirstOrDefault<int>();
             comboBoxType.SelectedIndex = nr;
-           
+
 
             textBoxGravity.Text = obj.gravity.ToString("0.00");
             textBoxRadius.Text = obj.radius.ToString("0");
@@ -151,6 +153,21 @@ namespace EDDiscovery2.PlanetSystems
             catch (Exception)
             {
 
+            }
+            SetMaterials(obj, checkedListBox1);
+            SetMaterials(obj, checkedListBox2);
+            SetMaterials(obj, checkedListBox3);
+            SetMaterials(obj, checkedListBox4);
+
+        }
+
+        private void SetMaterials(EDObject obj, CheckedListBox box)
+        {
+            for (int i = 0; i < box.Items.Count; i++)
+            {
+                string item = (string)box.Items[i];
+                MaterialEnum mat = obj.MaterialFromString(item);
+                box.SetItemChecked(i, obj.materials[mat]);
             }
         }
 
@@ -167,6 +184,11 @@ namespace EDDiscovery2.PlanetSystems
         private void textBoxGravity_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void PlanetsForm_Shown(object sender, EventArgs e)
+        {
+            SetCurrentSystem();
         }
     }
 
