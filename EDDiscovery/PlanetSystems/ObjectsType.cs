@@ -21,10 +21,31 @@ namespace EDDiscovery2.PlanetSystems
             this.Name = Name;
             this.Short = ShortDescription;
             this.Description = Description;
-//            this.Planet = Planet;
-//            this.Star = Star;
+            //            this.Planet = Planet;
+            //            this.Star = Star;
         }
-            
+
+        static public Dictionary<string, ObjectTypesEnum> GetAllTypesAlias()
+        {
+            Dictionary<string, ObjectTypesEnum> aliases = new Dictionary<string, ObjectTypesEnum>();
+
+            List<ObjectsType> allobject = GetAllTypes();
+
+            foreach (var obj in allobject)
+            {
+                aliases[obj.type.ToString().ToLower()] = obj.type;
+                aliases[obj.Name.ToLower()] = obj.type;
+                aliases[obj.Short.ToLower()] = obj.type;
+            }
+
+
+            // Extra aliases
+
+            aliases["icy world"] = ObjectTypesEnum.Icy;
+            aliases["high metal content"] = ObjectTypesEnum.HighMetalContent;
+            return aliases;
+        }
+
         static public List<ObjectsType> GetAllTypes()
         {
             ObjectsType[] objs = new ObjectsType[]

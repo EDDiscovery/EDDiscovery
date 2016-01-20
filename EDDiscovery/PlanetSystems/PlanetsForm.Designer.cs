@@ -228,7 +228,7 @@
             this.panel2.Controls.Add(this.textBoxName);
             this.panel2.Location = new System.Drawing.Point(15, 272);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(923, 139);
+            this.panel2.Size = new System.Drawing.Size(923, 144);
             this.panel2.TabIndex = 7;
             // 
             // label13
@@ -242,6 +242,7 @@
             // 
             // checkedListBox4
             // 
+            this.checkedListBox4.BackColor = System.Drawing.Color.Salmon;
             this.checkedListBox4.CheckOnClick = true;
             this.checkedListBox4.FormattingEnabled = true;
             this.checkedListBox4.Items.AddRange(new object[] {
@@ -267,6 +268,7 @@
             // 
             // checkedListBox3
             // 
+            this.checkedListBox3.BackColor = System.Drawing.Color.LightGoldenrodYellow;
             this.checkedListBox3.CheckOnClick = true;
             this.checkedListBox3.FormattingEnabled = true;
             this.checkedListBox3.Items.AddRange(new object[] {
@@ -292,6 +294,7 @@
             // 
             // checkedListBox2
             // 
+            this.checkedListBox2.BackColor = System.Drawing.Color.LightGreen;
             this.checkedListBox2.CheckOnClick = true;
             this.checkedListBox2.FormattingEnabled = true;
             this.checkedListBox2.Items.AddRange(new object[] {
@@ -319,6 +322,7 @@
             // 
             // checkedListBox1
             // 
+            this.checkedListBox1.BackColor = System.Drawing.Color.LightBlue;
             this.checkedListBox1.CheckOnClick = true;
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
@@ -485,7 +489,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(963, 411);
+            this.ClientSize = new System.Drawing.Size(963, 419);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -493,8 +497,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxSystemName);
             this.Name = "PlanetsForm";
+            this.Opacity = 0.5D;
             this.Text = "PlanetsForm";
             this.Load += new System.EventHandler(this.PlanetsForm_Load);
+            this.Shown += new System.EventHandler(this.PlanetsForm_Shown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
