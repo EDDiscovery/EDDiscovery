@@ -543,8 +543,8 @@ namespace EDDiscovery.DB
                             return false;
                         }
 
-                        globalSystems.Clear();
-                        dictSystems.Clear();
+                        //globalSystems.Clear();
+                        //dictSystems.Clear();
 
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
@@ -554,8 +554,6 @@ namespace EDDiscovery.DB
                             {
                                 sys.Note = globalSystemNotes[sys.SearchName].Note;
                             }
-
-
                             
                             dictSystems[sys.SearchName] = sys;
                         }
