@@ -497,7 +497,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxSystemName);
             this.Name = "PlanetsForm";
-            this.Opacity = 0.5D;
             this.Text = "PlanetsForm";
             this.Load += new System.EventHandler(this.PlanetsForm_Load);
             this.Shown += new System.EventHandler(this.PlanetsForm_Shown);
