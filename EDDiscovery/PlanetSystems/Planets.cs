@@ -344,7 +344,7 @@ public enum AtmosphereEnum
 
             radius = GetFloat(jo["radius"]);
             arrivalPoint = GetFloat(jo["arrival_point"]);
-            atmosphere = (AtmosphereEnum)  GetInt(jo["atmosphere_type"]);
+            atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(jo["atmosphere_type"].Value<string>());
             vulcanism = (VulcanismEnum)VulcanismStr2Enum(jo["vulcanism_type"].Value<string>());
 
             foreach (var mat in mlist)
@@ -412,7 +412,7 @@ public enum AtmosphereEnum
             return ObjectTypesEnum.UnknownObject;
         }
 
-        public AtmosphereEnum AthmosphereStr2Enum(string v)
+        public AtmosphereEnum AtmosphereStr2Enum(string v)
         {
             foreach (AtmosphereEnum mat in Enum.GetValues(typeof(AtmosphereEnum)))
             {
