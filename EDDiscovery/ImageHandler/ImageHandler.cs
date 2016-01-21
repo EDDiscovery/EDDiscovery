@@ -51,7 +51,6 @@ namespace EDDiscovery2.ImageHandler
 
             textBoxOutputDir.Text = db.GetSettingString("ImageHandlerOutputDir", OutputDirdefault);
             textBoxScreenshotsDir.Text = db.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
-            StartWatcher();
         }
 
         private void comboBoxFormat_SelectedIndexChanged(object sender, EventArgs e)
@@ -142,7 +141,7 @@ namespace EDDiscovery2.ImageHandler
                     if (!Directory.Exists(textBoxOutputDir.Text))
                         Directory.CreateDirectory(textBoxOutputDir.Text);
 
-                    //sometimes the picture doesn't load into the picture box so waiting 1 sec in case this due to the file not being closed quick enough in ED 
+                    //sometimes the picture doesn't load into the picture box so waiting 1 sec in case this due to the file not being closed quick enough in ED
                     System.Threading.Thread.Sleep(1000);
                     if (!checkBoxRemove.Checked && checkBoxPreview.Checked)
                     {
@@ -160,7 +159,7 @@ namespace EDDiscovery2.ImageHandler
                     Bitmap Screenshot_PIC = new Bitmap(e.FullPath);
                     Bitmap ED_PIC = (Bitmap)Screenshot_PIC.Clone();
 
-                  
+
 
                     if (pic_ext.Equals(".jpg"))
                     {
@@ -179,15 +178,21 @@ namespace EDDiscovery2.ImageHandler
                     {
                         ED_PIC.Save(output_folder + "\\" + new_name + pic_ext, System.Drawing.Imaging.ImageFormat.Png);
                     }
+
+                    ED_PIC.Dispose();
+                    Screenshot_PIC.Dispose();
+
                     if (checkBoxRemove.Checked) // Remove original picture
                     {
                         File.Delete(e.FullPath);
                     }
+
+                    Invoke((MethodInvoker)delegate { TravelHistoryControl.LogText("Converted " + e.Name + " to " + new_name + pic_ext + Environment.NewLine ); });
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Exception in imageConvert:" + ex.Message); 
+                MessageBox.Show("Exception in imageConvert:" + ex.Message);
             }
         }
 
@@ -219,7 +224,7 @@ namespace EDDiscovery2.ImageHandler
 
             }
 
-            
+
         }
 
         private string pic_ext
