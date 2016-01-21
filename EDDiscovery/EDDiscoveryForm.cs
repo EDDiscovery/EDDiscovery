@@ -143,6 +143,8 @@ namespace EDDiscovery
 
                 Text += "         Systems:  " + SystemData.SystemList.Count;
 
+                imageHandler1.StartWatcher();
+
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(routeControl1.NewPosition);
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
