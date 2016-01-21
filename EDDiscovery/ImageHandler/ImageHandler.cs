@@ -144,7 +144,7 @@ namespace EDDiscovery2.ImageHandler
 
                     //sometimes the picture doesn't load into the picture box so waiting 1 sec in case this due to the file not being closed quick enough in ED 
                     System.Threading.Thread.Sleep(1000);
-                    if (!checkBoxRemove.Checked)
+                    if (!checkBoxRemove.Checked && checkBoxPreview.Checked)
                     {
                         this.pictureBox1.ImageLocation = e.FullPath;
                         this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;

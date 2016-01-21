@@ -116,7 +116,7 @@ namespace EDDiscovery.DB
                 }
                 JArray submitted = (JArray)jo["submitted"];
 
-                if (submitted.Count>0)
+                if (submitted != null && submitted.Count>0)
                 {
                     if (submitted[0]["cmdrname"]!=null)
                         CommanderCreate = submitted[0]["cmdrname"].Value<string>();
@@ -379,7 +379,7 @@ namespace EDDiscovery.DB
                     listSystems.Add(system);
             }
 
-            date = maxdate.ToString("yyyy-MM-dd HH:mm:ss");
+            date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
             return listSystems;
         }
 
@@ -402,8 +402,7 @@ namespace EDDiscovery.DB
                     foreach (SystemClass system in systems)
                     {
 
-                        var sys = SQLiteDBClass.globalSystems.FirstOrDefault(sy => sy.SearchName == system.SearchName);
-
+                        SystemClass sys = SystemData.GetSystem(system.name);
                         if (sys != null)
                         {
                             system.UpdateEDSM(cn, sys.id, transaction);

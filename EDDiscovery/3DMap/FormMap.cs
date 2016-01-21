@@ -63,9 +63,13 @@ namespace EDDiscovery2
 
         private List<IData3DSet> _datasets;
 
+        private string _homeSystem;
+        private float _defaultZoom;
         public List<SystemClass> ReferenceSystems { get; set; }
         public List<SystemPosition> VisitedSystems { get; set; }
 
+        public string HistorySelection { get; set; }
+        
         public ISystem CenterSystem {
             get
             {
@@ -80,7 +84,7 @@ namespace EDDiscovery2
                 else
                 {
                     // We need to use 0,0,0 if we don't have a center system
-                    _centerSystem = SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+                    _centerSystem = SystemData.GetSystem(_homeSystem) ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
                 }
             }
         }
@@ -125,16 +129,15 @@ namespace EDDiscovery2
 
         public void Prepare()
         {
-            if (CenterSystem == null)
-            {
-                var db = new SQLiteDBClass();
-                string defaultCenter = db.GetSettingString("DefaultMapCenter", null);
-                OrientateMapAroundSystem(defaultCenter);
-            }
-            else
-            {
-                OrientateMapAroundSystem(CenterSystem);
-            }
+            var db = new SQLiteDBClass();
+            _homeSystem = db.GetSettingString("DefaultMapCenter", "Sol");
+            _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0);
+            bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
+
+            CenterSystemName = selectionCentre ? HistorySelection : _homeSystem;
+
+            OrientateMapAroundSystem(CenterSystem);
+
             ResetCamera();
             toolStripShowAllStars.Renderer = new MyRenderer();
         }
@@ -144,7 +147,7 @@ namespace EDDiscovery2
             _cameraPos = new Vector3((float) CenterSystem.x, (float)CenterSystem.x, (float)CenterSystem.z);
             _cameraDir = Vector3.Zero;
 
-            _zoom = 1.0f;
+            _zoom = _defaultZoom;
         }
 
         /// <summary>
@@ -615,21 +618,11 @@ namespace EDDiscovery2
         private void buttonCenter_Click(object sender, EventArgs e)
         {
             SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
-            SetCenterSystem(sys);
+            OrientateMapAroundSystem(sys);
+
+            ResetCamera();
         }
-
-        private void buttonSetDefault_Click(object sender, EventArgs e)
-        {
-            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
-            if (sys != null && sys.HasCoordinate)
-            {
-                var db = new SQLiteDBClass();
-                db.PutSettingString("DefaultMapCenter", sys.name);
-                if (CenterSystem.name != sys.name) SetCenterSystem(sys);
-            }
-        }
-
-
+        
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             SystemPosition ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
@@ -806,6 +799,22 @@ namespace EDDiscovery2
 
             SetupViewport();
             glControl.Invalidate();
+        }
+
+        private void buttonHome_Click(object sender, EventArgs e)
+        {
+            ISystem sys = SystemData.GetSystem(_homeSystem) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+            OrientateMapAroundSystem(sys);
+
+            ResetCamera();
+        }
+
+        private void buttonHistory_Click(object sender, EventArgs e)
+        {
+            ISystem sys = SystemData.GetSystem(HistorySelection) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+            OrientateMapAroundSystem(sys);
+
+            ResetCamera();
         }
     }
 }

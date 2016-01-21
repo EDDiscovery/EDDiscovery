@@ -1,5 +1,4 @@
-﻿using Noesis.Javascript;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -699,95 +698,10 @@ namespace EDDiscovery
         /// <returns>Result information, including coordinate and corrected Entry distances if found.</returns>
         public Result Run(Algorithm algorithm)
         {
-            switch (algorithm)
-            {
-                case Algorithm.RedWizzard_Native:
                     return RunCSharp();
-                case Algorithm.RedWizzard_Emulated:
-                    return RunJavascript();
-                default:
-                    throw new NotImplementedException();
-            }
         }
 
 
-        private Result RunJavascript()
-        {
-            var engine = PrepareJavascriptEngine();
-
-            engine.Run("var trilat = new Trilateration();");
-
-            foreach (var entry in entries)
-            {
-                var coord = entry.Coordinate;
-                var entryDict = new Dictionary<string, double>() {
-                    {  "x",  coord.X },
-                    {  "y",  coord.Y },
-                    {  "z",  coord.Z },
-                    {  "distance",  entry.Distance }
-                };
-                engine.SetParameter("distance", entryDict);
-                engine.Run("trilat.addDistance(distance);");
-            }
-
-            engine.Run("trilat.addDistance({ x: 0, y: 0, z: 0, distance: 0 });");
-
-            engine.Run("var hasBestCandidate = trilat.best && trilat.best.length === 1;");
-            var hasBestCandidate = (bool)engine.GetParameter("hasBestCandidate");
-
-            if (hasBestCandidate)
-            {
-                engine.Run("EDDlog('x = ' + trilat.best[0].x + ', y = ' + trilat.best[0].y  + ', z = ' + trilat.best[0].z);");
-
-                engine.Run("var bestResult = trilat.best[0];");
-                var result = (Dictionary<string, object>)engine.GetParameter("bestResult"); // contains either int or double
-                var coordinate = new Coordinate(
-                    result["x"] is int ? (int)result["x"] * 1.0 : (double)result["x"],
-                    result["y"] is int ? (int)result["y"] * 1.0 : (double)result["y"],
-                    result["z"] is int ? (int)result["z"] * 1.0 : (double)result["z"]
-                );
-                var correctEntriesCount = 0;
-                var correctedEntries = new Dictionary<Entry, double>();
-
-                foreach (var entry in entries)
-                {
-                    var correctedDistance = entry.Coordinate % coordinate;
-                    if (correctedDistance == entry.Distance)
-                    {
-                        correctEntriesCount++;
-                    }
-                    correctedEntries.Add(entry, correctedDistance);
-                }
-
-                engine.Run("EDDlog('trilat.bestCount: ' + trilat.bestCount);");
-                engine.Run("EDDlog('trilat.nextBest: ' + trilat.nextBest);");
-                engine.Run("var isPreciseEnough = (trilat.bestCount - trilat.nextBest) >= 2;");
-                var isPreciseEnough = (bool)engine.GetParameter("isPreciseEnough");
-                if (isPreciseEnough && correctEntriesCount >= 5)
-                {
-                    return new Result(ResultState.Exact, coordinate, correctedEntries);
-                }
-                else
-                {
-                    return new Result(ResultState.NotExact, coordinate, correctedEntries);
-                }
-            }
-            else
-            {
-                return new Result(ResultState.NeedMoreDistances);
-            }
-        }
-
-        private JavascriptContext PrepareJavascriptEngine()
-        {
-            JavascriptContext context = new JavascriptContext();
-
-            context.Run(File.ReadAllText("fround.js"));
-            context.Run(File.ReadAllText("trilateration.js"));
-            context.SetParameter("EDDlog", new Action<object>(delegate(object o) { logger(o.ToString()); }));
-
-            return context;
-        }
 
         public class CalculationErrorException : Exception { }
 

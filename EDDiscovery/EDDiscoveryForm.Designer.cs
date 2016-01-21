@@ -40,6 +40,14 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.textBoxDefaultZoom = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.radioButtonHistorySelection = new System.Windows.Forms.RadioButton();
+            this.radioButtonCentreHome = new System.Windows.Forms.RadioButton();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBoxHomeSystem = new System.Windows.Forms.TextBox();
             this.checkboxSkipSlowUpdates = new System.Windows.Forms.CheckBox();
             this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
             this.checkBox_Distances = new System.Windows.Forms.CheckBox();
@@ -69,12 +77,14 @@
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
+            this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
             this.tabPageScreenshots.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
@@ -175,6 +185,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.groupBox2);
             this.tabPage3.Controls.Add(this.checkboxSkipSlowUpdates);
             this.tabPage3.Controls.Add(this.checkBoxEDSMLog);
             this.tabPage3.Controls.Add(this.checkBox_Distances);
@@ -190,6 +201,88 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.textBoxDefaultZoom);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.radioButtonHistorySelection);
+            this.groupBox2.Controls.Add(this.radioButtonCentreHome);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.textBoxHomeSystem);
+            this.groupBox2.Location = new System.Drawing.Point(8, 207);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(883, 84);
+            this.groupBox2.TabIndex = 12;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "3D Map Settings";
+            // 
+            // textBoxDefaultZoom
+            // 
+            this.textBoxDefaultZoom.Location = new System.Drawing.Point(427, 19);
+            this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
+            this.textBoxDefaultZoom.Size = new System.Drawing.Size(107, 20);
+            this.textBoxDefaultZoom.TabIndex = 6;
+            this.textBoxDefaultZoom.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDefaultZoom_Validating);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(350, 22);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(71, 13);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "Default Zoom";
+            // 
+            // radioButtonHistorySelection
+            // 
+            this.radioButtonHistorySelection.AutoSize = true;
+            this.radioButtonHistorySelection.Location = new System.Drawing.Point(216, 45);
+            this.radioButtonHistorySelection.Name = "radioButtonHistorySelection";
+            this.radioButtonHistorySelection.Size = new System.Drawing.Size(137, 17);
+            this.radioButtonHistorySelection.TabIndex = 4;
+            this.radioButtonHistorySelection.TabStop = true;
+            this.radioButtonHistorySelection.Text = "Travel History Selection";
+            this.radioButtonHistorySelection.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonCentreHome
+            // 
+            this.radioButtonCentreHome.AutoSize = true;
+            this.radioButtonCentreHome.Location = new System.Drawing.Point(118, 45);
+            this.radioButtonCentreHome.Name = "radioButtonCentreHome";
+            this.radioButtonCentreHome.Size = new System.Drawing.Size(90, 17);
+            this.radioButtonCentreHome.TabIndex = 3;
+            this.radioButtonCentreHome.TabStop = true;
+            this.radioButtonCentreHome.Text = "Home System";
+            this.radioButtonCentreHome.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(22, 49);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(90, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Open Centred On";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(22, 22);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(72, 13);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "Home System";
+            // 
+            // textBoxHomeSystem
+            // 
+            this.textBoxHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxHomeSystem.Location = new System.Drawing.Point(120, 19);
+            this.textBoxHomeSystem.Name = "textBoxHomeSystem";
+            this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
+            this.textBoxHomeSystem.TabIndex = 0;
             // 
             // checkboxSkipSlowUpdates
             // 
@@ -252,8 +345,8 @@
             // 
             // button_Save
             // 
-            this.button_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Save.Location = new System.Drawing.Point(819, 178);
+            this.button_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_Save.Location = new System.Drawing.Point(817, 297);
             this.button_Save.Name = "button_Save";
             this.button_Save.Size = new System.Drawing.Size(75, 23);
             this.button_Save.TabIndex = 4;
@@ -351,7 +444,7 @@
             this.statisticsToolStripMenuItem,
             this.setDefaultMapColourToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // addNewStarToolStripMenuItem
@@ -406,7 +499,8 @@
             // adminToolStripMenuItem
             // 
             this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.forceEDDBUpdateToolStripMenuItem});
+            this.forceEDDBUpdateToolStripMenuItem,
+            this.syncEDSMSystemsToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "Admin";
@@ -414,7 +508,7 @@
             // forceEDDBUpdateToolStripMenuItem
             // 
             this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
-            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.forceEDDBUpdateToolStripMenuItem.Text = "Force EDDB update";
             this.forceEDDBUpdateToolStripMenuItem.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
             // 
@@ -462,6 +556,13 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
+            // syncEDSMSystemsToolStripMenuItem
+            // 
+            this.syncEDSMSystemsToolStripMenuItem.Name = "syncEDSMSystemsToolStripMenuItem";
+            this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.syncEDSMSystemsToolStripMenuItem.Text = "Sync EDSM Systems";
+            this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -485,6 +586,8 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -538,6 +641,15 @@
         private System.Windows.Forms.ToolStripMenuItem forceEDDBUpdateToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkboxSkipSlowUpdates;
         private System.Windows.Forms.ToolStripMenuItem prospectingToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBoxHomeSystem;
+        private System.Windows.Forms.TextBox textBoxDefaultZoom;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.RadioButton radioButtonHistorySelection;
+        private System.Windows.Forms.RadioButton radioButtonCentreHome;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ToolStripMenuItem syncEDSMSystemsToolStripMenuItem;
     }
 }
 

@@ -3,12 +3,14 @@ using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDDB;
 using EDDiscovery2.EDSM;
+using EDDiscovery2.PlanetSystems;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,7 +24,7 @@ namespace EDDiscovery
 
     public partial class EDDiscoveryForm : Form
     {
-        readonly string _fileTgcSystems;
+        //readonly string _fileTgcSystems;
         readonly string _fileEDSMDistances;
         private EDSMSync _edsmSync;
         private SQLiteDBClass _db = new SQLiteDBClass();
@@ -40,7 +42,7 @@ namespace EDDiscovery
 
             EDDConfig = new EDDConfig();
 
-            _fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
+            //_fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
             _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");        
 
             string logpath="";
@@ -115,20 +117,17 @@ namespace EDDiscovery
             {
                 travelHistoryControl1.Enabled = false;
 
-                var redWizzardThread = new Thread(GetRedWizzardFiles) {Name = "Downloading Red Wizzard Files"};
                 var edsmThread = new Thread(GetEDSMSystems) {Name = "Downloading EDSM Systems"};
                 var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files" };
-                redWizzardThread.Start();
                 edsmThread.Start();
                 downloadmapsThread.Start();
 
-                while (redWizzardThread.IsAlive || edsmThread.IsAlive || downloadmapsThread.IsAlive)
+                while (edsmThread.IsAlive || downloadmapsThread.IsAlive)
                 {
                     Thread.Sleep(50);
                     Application.DoEvents();
                 }
 
-                redWizzardThread.Join();
                 edsmThread.Join();
                 downloadmapsThread.Join();
 
@@ -199,6 +198,14 @@ namespace EDDiscovery
                     DownloadMapFile("Galaxy_L_Grid.jpg");
                     DownloadMapFile("Galaxy_L_Grid.json");
 
+                    DownloadMapFile("DW1.jpg");
+                    DownloadMapFile("DW1.json");
+                    DownloadMapFile("DW2.jpg");
+                    DownloadMapFile("DW2.json");
+                    DownloadMapFile("DW3.jpg");
+                    DownloadMapFile("DW3.json");
+
+
                     //for (int ii = -10; ii <= 60; ii += 10)
                     //{
                     //    DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".png");
@@ -242,7 +249,7 @@ namespace EDDiscovery
             return false;
 #endif
         }
-
+        /*
         private void GetRedWizzardFiles()
         {
             WebClient web = new WebClient();
@@ -251,7 +258,7 @@ namespace EDDiscovery
             {
                 LogText("Checking for new EDDiscovery data" + Environment.NewLine);
 
-                GetNewRedWizzardFile(_fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
+                //GetNewRedWizzardFile(_fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
                 //GetNewRedWizzardFile(fileTgcDistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
             }
             catch (Exception ex)
@@ -309,7 +316,7 @@ namespace EDDiscovery
                 }
             }
         }
-
+        */
 
         private void GetEDSMSystems()
         {
@@ -320,8 +327,7 @@ namespace EDDiscovery
 
                 string json;
 
-                string rwsystime = _db.GetSettingString("RWLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-                string rwsysfiletime = "";
+                string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
                 CommanderName = _db.GetSettingString("CommanderName", "");
                 Invoke((MethodInvoker) delegate {
@@ -329,38 +335,30 @@ namespace EDDiscovery
                 });
 
 
-                json = LoadJsonFile(_fileTgcSystems);
-                List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
+                //                List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
+                DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
 
-
-                if (!rwsystime.Equals(rwsysfiletime))  // New distance file from Redwizzard
+                if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
                 {
-                    SystemClass.Delete(SystemStatusEnum.EDSC); // Remove all EDSC systems.
-                    
-                    _db.PutSettingString("RWLastSystems", rwsysfiletime);
-                    _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                    Invoke((MethodInvoker) delegate {
-                        TravelHistoryControl.LogText("Adding data from tgcsystems.json " + Environment.NewLine);
-                    });
-                    SystemClass.Store(systems);
-                    EDDBClass eddb = new EDDBClass();
-                    DBUpdateEDDB(eddb);
-                }
-
-                if (CanSkipSlowUpdates())
-                {
-                    LogLine("Skipping loading updates (DEBUG option).");
-                    LogLine("  Need to turn this back on again? Look in the Settings tab.");
+                    SyncAllEDSMSystems();
                 }
                 else
                 {
-                    string retstr = edsm.GetNewSystems(_db);
-                    Invoke((MethodInvoker)delegate
+                    if (CanSkipSlowUpdates())
                     {
-                        TravelHistoryControl.LogText(retstr);
-                    });
-                }
+                        LogLine("Skipping loading updates (DEBUG option).");
+                        LogLine("  Need to turn this back on again? Look in the Settings tab.");
+                    }
+                    else
+                    {
+                        string retstr = edsm.GetNewSystems(_db);
+                        Invoke((MethodInvoker)delegate
+                        {
+                            TravelHistoryControl.LogText(retstr);
+                        });
+                    }
 
+                }
 
                 _db.GetAllSystemNotes();
                 _db.GetAllSystems();
@@ -381,6 +379,8 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText(ex.StackTrace + Environment.NewLine);
                 });
             }
+
+            GC.Collect();
 
         }
 
@@ -467,6 +467,7 @@ namespace EDDiscovery
                 _db.GetAllDistances(EDDConfig.UseDistances);  // Load user added distances
                 updateMapData();
                 OnDistancesLoaded();
+                GC.Collect();
             }
             catch (Exception ex)
             {
@@ -547,6 +548,7 @@ namespace EDDiscovery
 
 
                     eddb.GetCommodities();
+                    eddb.ReadCommodities();
                 }
 
 
@@ -568,6 +570,7 @@ namespace EDDiscovery
 
                 }
 
+                
 
                 if (updatedb || eddbforceupdate)
                 {
@@ -595,8 +598,11 @@ namespace EDDiscovery
             LogText("Add new EDDB data to database." + Environment.NewLine);
             eddb.Add2DB(eddbsystems, eddbstations);
 
+            
             eddbsystems.Clear();
             eddbstations.Clear();
+            eddbsystems = null;
+            GC.Collect();
             LogText("EDDB update done." + Environment.NewLine);
         }
 
@@ -747,6 +753,9 @@ namespace EDDiscovery
             _db.PutSettingInt("FormHeight", this.Height);
             _db.PutSettingInt("FormTop", this.Top);
             _db.PutSettingInt("FormLeft", this.Left);
+            _db.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
+            _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
+            _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
             EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
@@ -774,9 +783,41 @@ namespace EDDiscovery
             //FormSagCarinaMission frm = new FormSagCarinaMission(this);
             //            frm.Show();
 
-            SystemViewForm frm = new SystemViewForm();
-            frm.Show();
-          
+            //SystemViewForm frm = new SystemViewForm();
+            //frm.Show();
+
+            EdMaterializer mat = new EdMaterializer();
+
+            mat.GetAll(null);
+
+
+            EDObject obj = new EDObject();
+
+            obj.commander = "Test";
+            obj.system = "Fine Ring Sector JH-V C2-4";
+            obj.objectName = "A 3";
+            obj.ObjectType = ObjectTypesEnum.HighMetalContent;
+            obj.arrivalPoint = 0;
+            obj.gravity = 0.13f;
+
+            obj.materials[MaterialEnum.Carbon] = true;
+            obj.materials[MaterialEnum.Iron] = true;
+            obj.materials[MaterialEnum.Nickel] = true;
+            obj.materials[MaterialEnum.Phosphorus] = true;
+            obj.materials[MaterialEnum.Sulphur] = true;
+            obj.materials[MaterialEnum.Germanium] = true;
+            obj.materials[MaterialEnum.Selenium] = true;
+            obj.materials[MaterialEnum.Vanadium] = true;
+            obj.materials[MaterialEnum.Cadmium] = true;
+            obj.materials[MaterialEnum.Molybdenum] = true;
+            obj.materials[MaterialEnum.Tin] = true;
+            obj.materials[MaterialEnum.Polonium] = true;
+
+            mat.DeleteID(5);
+            mat.DeleteID(6);
+            mat.DeleteID(7);
+
+            mat.Store(obj);
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -969,11 +1010,25 @@ namespace EDDiscovery
             textBoxEDSMApiKey.Text = _db.GetSettingString("EDSMApiKey", "");
             checkBox_Distances.Checked = EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
-
+            
             checkboxSkipSlowUpdates.Checked = EDDConfig.CanSkipSlowUpdates;
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
+            textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
+            textBoxHomeSystem.Text = _db.GetSettingString("DefaultMapCenter", "Sol");
+
+            textBoxDefaultZoom.Text = _db.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
+
+            bool selectionCentre = _db.GetSettingBool("CentreMapOnSelection", true);
+            if (selectionCentre)
+            {
+                radioButtonHistorySelection.Checked = true;
+            }
+            else
+            {
+                radioButtonCentreHome.Checked = true;
+            }
         }
 
         private void CheckIfEliteDangerousIsRunning()
@@ -1004,9 +1059,100 @@ namespace EDDiscovery
 
         private void prospectingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormProspecting frm = new FormProspecting();
+            PlanetsForm frm = new PlanetsForm();
 
+            frm.InitForm(this);
             frm.Show();
         }
+
+        private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var value = textBoxDefaultZoom.Text.Trim();
+            double parseout;
+            if (Double.TryParse(value, out parseout))
+            {
+                e.Cancel = (parseout < 0.01 || parseout > 50.0);
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AsyncSyncEDSMSystems();
+        }
+
+        private void AsyncSyncEDSMSystems()
+        {
+            var EDSMThread = new Thread(SyncAllEDSMSystems) { Name = "Downloading EDSM system" };
+            EDSMThread.Start();
+        }
+
+        private void SyncAllEDSMSystems()
+        {
+            try
+            {
+                EDDBClass eddb = new EDDBClass();
+                EDSMClass edsm = new EDSMClass();
+
+                string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
+                bool newfile = false;
+                string  rwsysfiletime = "2014-01-01 00:00:00";
+                LogText("Get systems from EDSM." + Environment.NewLine);
+
+                eddb.DownloadFile("http://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
+
+                if (newfile)
+                {
+                    LogText("Adding EDSM systems." + Environment.NewLine);
+                    _db.GetAllSystems();
+                    string json = LoadJsonFile(edsmsystems);
+                    List<SystemClass> systems = SystemClass.ParseEDSM(json, ref rwsysfiletime);
+
+                   
+                    List<SystemClass> systems2Store = new List<SystemClass>();
+
+                    foreach (SystemClass system in systems)
+                    {
+                        // Check if sys exists first
+                        SystemClass sys = SystemData.GetSystem(system.name);
+                        if (sys == null)
+                            systems2Store.Add(system);
+                        else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y!=system.y  || sys.z != system.z)  // Case or position changed
+                            systems2Store.Add(system);
+                    }
+                    SystemClass.Store(systems2Store);
+                    systems.Clear();
+                    systems = null;
+                    systems2Store.Clear();
+                    systems2Store = null;
+                    json = null;
+
+                    _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
+                    _db.GetAllSystems();
+                }
+                else
+                    LogText("No new file." + Environment.NewLine);
+
+                string retstr = edsm.GetNewSystems(_db);
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText(retstr);
+                });
+
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText("GetAllEDSMSystems exception:" + ex.Message + Environment.NewLine);
+                });
+            }
+
+        }
+
     }
 }
