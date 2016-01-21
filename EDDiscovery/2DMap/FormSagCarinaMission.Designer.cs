@@ -37,6 +37,8 @@
             this.toolStripButtonZoomtoFit = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.imageViewer1 = new EDDiscovery2._2DMap.ImageViewer();
+            this.buttonSave = new System.Windows.Forms.Button();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -67,6 +69,7 @@
             // 
             this.toolStripComboBoxTime.DropDownWidth = 140;
             this.toolStripComboBoxTime.Items.AddRange(new object[] {
+            "Distant Worlds Expedition",
             "FGE Expedition start",
             "Last Week",
             "Last Month",
@@ -134,11 +137,27 @@
             this.imageViewer1.Size = new System.Drawing.Size(1157, 615);
             this.imageViewer1.TabIndex = 0;
             // 
+            // buttonSave
+            // 
+            this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSave.Image = global::EDDiscovery2.Properties.Resources.save;
+            this.buttonSave.Location = new System.Drawing.Point(1127, 0);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(30, 28);
+            this.buttonSave.TabIndex = 3;
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.Filter = "PNG Image|*.png|Bitmap Image|*.bmp|JPEG Image|*.jpg";
+            // 
             // FormSagCarinaMission
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1157, 638);
+            this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
             this.Name = "FormSagCarinaMission";
@@ -161,5 +180,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomIn;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomOut;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomtoFit;
+        private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }

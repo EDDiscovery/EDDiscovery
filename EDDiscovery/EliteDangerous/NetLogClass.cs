@@ -301,10 +301,12 @@ namespace EDDiscovery
                 {
                     SystemPosition ps = SystemPosition.Parse(filetime, line);
                     if (ps != null)
-                    {
+                    {   // Remove some training systems
                         if (ps.Name.Equals("Training"))
                             continue;
                         if (ps.Name.Equals("Destination"))
+                            continue;
+                        if (ps.Name.Equals("Altiris"))
                             continue;
 
                         filetime = ps.time;

@@ -25,6 +25,9 @@ namespace EDDiscovery2.EDDB
         private string systemTempFileName;
         private string commoditiesTempFileName;
 
+        public static Dictionary<int, Commodity> commodities;
+
+
         public EDDBClass()
         {
             stationFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstations.json");
@@ -35,7 +38,9 @@ namespace EDDiscovery2.EDDB
             stationTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstationslite_temp.json");
             systemTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems_temp.json");
             commoditiesTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "commodities_temp.json");
-        
+
+            if (commodities == null)
+                ReadCommodities();
         }
 
         public bool GetSystems()
@@ -177,14 +182,53 @@ namespace EDDiscovery2.EDDB
                 foreach (JObject jo in systems)
                 {
                     SystemClass sys = new SystemClass(jo, EDDiscovery.SystemInfoSource.EDDB);
-
+                    
                     if (sys != null)
                         eddbsystems.Add(sys);
+
                 }
             }
-
+            systems = null;
+            json = null;
             return eddbsystems;
         }
+
+        public void  ReadCommodities()
+        {
+            Dictionary<int, Commodity> eddbcommodities = new Dictionary<int, Commodity>();
+            string json;
+
+            try
+            {
+                json = ReadJson(commoditiesFileName);
+
+                if (json == null)
+                    return;
+
+                JArray jcommodities = (JArray)JArray.Parse(json);
+
+                if (jcommodities != null)
+                {
+                    foreach (JObject jo in jcommodities)
+                    {
+                        Commodity com = new Commodity(jo);
+
+                        if (com != null)
+                            eddbcommodities[com.id] = com;
+                    }
+                }
+
+                commodities = eddbcommodities;
+
+            }
+            catch (Exception ex)
+            {
+
+                System.Diagnostics.Trace.WriteLine("ReadCommodities error: {0}" + ex.Message);
+            }
+        }
+
+
 
         public List<StationClass> ReadStations()
         {
@@ -254,10 +298,13 @@ namespace EDDiscovery2.EDDB
                                     sysdb.Update(cn, sysdb.id, tra);
                                     nr++;
                                 }
+
+                                sysdb = null;
                             }
                             else
                             {
                                 System.Diagnostics.Trace.WriteLine("New system " + sys.name);
+                                sys.Store(cn, tra);
                             }
                         }
                         System.Diagnostics.Trace.WriteLine("Add2DB  " + nr.ToString() + " eddb systems: " + sw.Elapsed.TotalSeconds.ToString("0.000s"));

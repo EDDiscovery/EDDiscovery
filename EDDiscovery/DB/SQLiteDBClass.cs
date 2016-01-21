@@ -133,6 +133,9 @@ namespace EDDiscovery.DB
                 if (dbver < 8)
                     UpgradeDB8();
 
+                if (dbver < 9)
+                    UpgradeDB9();
+
                 return true;
             }
             catch (Exception ex)
@@ -410,7 +413,7 @@ namespace EDDiscovery.DB
             {
                 System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB7 error: " + ex.Message);
+                MessageBox.Show("UpgradeDB8 error: " + ex.Message);
             }
 
             PutSettingInt("DBVer", 8);
@@ -418,6 +421,81 @@ namespace EDDiscovery.DB
             return true;
         }
 
+
+        private bool UpgradeDB9()
+        {
+            //Default is Color.Red.ToARGB()
+            string query1 = "CREATE TABLE Objects (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , SystemName TEXT NOT NULL , ObjectName TEXT NOT NULL , ObjectType INTEGER NOT NULL , ArrivalPoint Float, Gravity FLOAT, Atmosphere Integer, Vulcanism Integer, Terrain INTEGER, Carbon BOOL, Iron BOOL, Nickel BOOL, Phosphorus BOOL, Sulphur BOOL, Arsenic BOOL, Chromium BOOL, Germanium BOOL, Manganese BOOL, Selenium BOOL NOT NULL , Vanadium BOOL, Zinc BOOL, Zirconium BOOL, Cadmium BOOL, Mercury BOOL, Molybdenum BOOL, Niobium BOOL, Tin BOOL, Tungsten BOOL, Antimony BOOL, Polonium BOOL, Ruthenium BOOL, Technetium BOOL, Tellurium BOOL, Yttrium BOOL, Commander  Text, UpdateTime DATETIME, Status INTEGER )";
+            string dbfile = GetSQLiteDBFile();
+
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery8.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+
+            try
+            {
+                ExecuteQuery(query1);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB9 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 9);
+
+            return true;
+        }
+
+
+
+
+
+        private bool UpgradeDB10()
+        {
+            //Default is Color.Red.ToARGB()
+            string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
+            string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
+            string query3 = "ALTER TABLE Objects ADD COLUMN terraformable BOOL";
+            string query4 = "ALTER TABLE VisitedSystems ADD COLUMN Status BOOL";
+            string dbfile = GetSQLiteDBFile();
+
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery9.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+
+            try
+            {
+                ExecuteQuery(query1);
+                ExecuteQuery(query2);
+                ExecuteQuery(query3);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB9 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 9);
+
+            return true;
+        }
 
         private void ExecuteQuery(string query)
         {
@@ -465,8 +543,8 @@ namespace EDDiscovery.DB
                             return false;
                         }
 
-                        globalSystems.Clear();
-                        dictSystems.Clear();
+                        //globalSystems.Clear();
+                        //dictSystems.Clear();
 
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
@@ -476,8 +554,6 @@ namespace EDDiscovery.DB
                             {
                                 sys.Note = globalSystemNotes[sys.SearchName].Note;
                             }
-
-
                             
                             dictSystems[sys.SearchName] = sys;
                         }
@@ -913,6 +989,84 @@ namespace EDDiscovery.DB
             }
         }
 
+		public double GetSettingDouble(string key, double defaultvalue)
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = "SELECT ValueDouble from Register WHERE ID = @ID";
+                        cmd.Parameters.AddWithValue("@ID", key);
+                        object ob = SqlScalar(cn, cmd);
+
+                        if (ob == null)
+                            return defaultvalue;
+
+                        double val = Convert.ToDouble(ob);
+
+                        return val;
+                    }
+                }
+            }
+            catch
+            {
+                return defaultvalue;
+            }
+        }
+
+
+        public bool PutSettingDouble(string key, double doublevalue)
+        {
+            try
+            {
+                if (keyExists(key))
+                {
+                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        {
+                            cmd.Connection = cn;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandTimeout = 30;
+                            cmd.CommandText = "Update Register set ValueDouble = @ValueDouble Where ID=@ID";
+                            cmd.Parameters.AddWithValue("@ID", key);
+                            cmd.Parameters.AddWithValue("@ValueDouble", doublevalue);
+
+                            SqlNonQueryText(cn, cmd);
+
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        {
+                            cmd.Connection = cn;
+                            cmd.CommandType = CommandType.Text;
+                            cmd.CommandTimeout = 30;
+                            cmd.CommandText = "Insert into Register (ID, ValueDouble) values (@ID, @valdbl)";
+                            cmd.Parameters.AddWithValue("@ID", key);
+                            cmd.Parameters.AddWithValue("@valdbl", doublevalue);
+
+                            SqlNonQueryText(cn, cmd);
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         public bool GetSettingBool(string key, bool defaultvalue)
         {
