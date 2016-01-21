@@ -189,9 +189,25 @@ namespace EDDiscovery2.EDSM
 
             List<SystemClass> listNewSystems = SystemClass.ParseEDSM(json, ref date);
 
-            retstr = listNewSystems.Count.ToString() + " new systems from EDSM." + Environment.NewLine;
+
+
+            List<SystemClass> systems2Store = new List<SystemClass>();
+
+            foreach (SystemClass system in listNewSystems)
+            {
+                // Check if sys exists first
+                SystemClass sys = SystemData.GetSystem(system.name);
+                if (sys == null)
+                    systems2Store.Add(system);
+                else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y != system.y || sys.z != system.z)  // Case or position changed
+                    systems2Store.Add(system);
+            }
+            SystemClass.Store(systems2Store);
+
+            retstr = systems2Store.Count.ToString() + " new systems from EDSM." + Environment.NewLine;
             Application.DoEvents();
-            SystemClass.Store(listNewSystems);
+
+
             db.PutSettingString("EDSMLastSystems", date);
 
             return retstr;
