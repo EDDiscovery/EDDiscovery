@@ -34,12 +34,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnData = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ColumnVeryCommon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderCommon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderRare = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderVeryRare = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1 = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
@@ -112,13 +106,6 @@
             // 
             // listView1
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnName,
-            this.columnData,
-            this.ColumnVeryCommon,
-            this.columnHeaderCommon,
-            this.columnHeaderRare,
-            this.columnHeaderVeryRare});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(0, 25);
@@ -129,34 +116,6 @@
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            // 
-            // columnName
-            // 
-            this.columnName.Text = "Name";
-            this.columnName.Width = 90;
-            // 
-            // columnData
-            // 
-            this.columnData.Text = "Data";
-            this.columnData.Width = 200;
-            // 
-            // ColumnVeryCommon
-            // 
-            this.ColumnVeryCommon.Text = "Very common";
-            this.ColumnVeryCommon.Width = 100;
-            // 
-            // columnHeaderCommon
-            // 
-            this.columnHeaderCommon.Text = "Common";
-            this.columnHeaderCommon.Width = 100;
-            // 
-            // columnHeaderRare
-            // 
-            this.columnHeaderRare.Text = "Rare";
-            // 
-            // columnHeaderVeryRare
-            // 
-            this.columnHeaderVeryRare.Text = "Very rare";
             // 
             // panel1
             // 
@@ -518,12 +477,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader columnName;
-        private System.Windows.Forms.ColumnHeader columnData;
-        private System.Windows.Forms.ColumnHeader ColumnVeryCommon;
-        private System.Windows.Forms.ColumnHeader columnHeaderCommon;
-        private System.Windows.Forms.ColumnHeader columnHeaderRare;
-        private System.Windows.Forms.ColumnHeader columnHeaderVeryRare;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButtonAdd;
