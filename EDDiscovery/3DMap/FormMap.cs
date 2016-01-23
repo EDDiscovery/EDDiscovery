@@ -571,19 +571,34 @@ namespace EDDiscovery2
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-            GL.Rotate(90.0, 1, 0, 0);
+            TransformWorldOrientatation();
 
-            GL.Scale(_zoom, _zoom, -_zoom);
-            GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);
-            GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
-            GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
-            GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
-
+            TransformCamera();
+            FlipYAxisOnWorld();
             RenderGalaxy();
 
             glControl.SwapBuffers();
             UpdateStatus();
+        }
+
+
+        private void TransformWorldOrientatation()
+        {
+            GL.LoadIdentity();
+            GL.Rotate(-90.0, 1, 0, 0);
+        }
+        private void TransformCamera()
+        {
+            GL.Scale(_zoom, _zoom, _zoom);
+            GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);
+            GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
+            GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
+            GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
+        }
+
+        private void FlipYAxisOnWorld()
+        {
+            GL.Scale(1.0, -1.0, 1.0);
         }
 
         private void RenderGalaxy()
