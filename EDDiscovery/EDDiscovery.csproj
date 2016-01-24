@@ -196,7 +196,8 @@
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
-    <Compile Include="HttpCom.cs" />
+    <Compile Include="HTTP\EDMaterializerCom.cs" />
+    <Compile Include="HTTP\HttpCom.cs" />
     <Compile Include="PlanetSystems\AddMaterialNodeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

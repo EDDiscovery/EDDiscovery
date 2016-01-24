@@ -1,28 +1,43 @@
 ﻿using EDDiscovery;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace EDDiscovery2
+namespace EDDiscovery2.HTTP
 {
+    public struct ResponseData
+    {
+        public ResponseData(HttpStatusCode statusCode, string content)
+        {
+            StatusCode = statusCode;
+            Content = content;
+        }
+
+        public HttpStatusCode StatusCode; // Sometimes you need the status code if you're in a
+                                   // converstation with the server
+        public string Content;
+    }
+
     public class HttpCom
     {
-        protected string ServerAdress;
+        protected string _serverAddress;
 
-        protected string RequestPost(string json, string action)
+        protected ResponseData RequestPost(string json, string action, bool authenticate=true)
         {
             try
             {
-                WebRequest request = WebRequest.Create(ServerAdress + action);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
                 // Set the Method property of the request to POST.
                 request.Method = "POST";
+                if (authenticate)
+                {
+                    AddAuthHeaders(request);
+                }
                 // Create POST data and convert it to a byte array.
                 //WRITE JSON DATA TO VARIABLE D
                 //string postData = "D={\"requests\":[{\"C\":\"Gpf_Auth_Service\", \"M\":\"authenticate\", \"fields\":[[\"name\",\"value\"],[\"Id\",\"\"],[\"username\",\"user@example.com\"],[\"password\",\"ab9ce908\"],[\"rememberMe\",\"Y\"],[\"language\",\"en-US\"],[\"roleType\",\"M\"]]}],\"C\":\"Gpf_Rpc_Server\", \"M\":\"run\"}";
-                string postData =  json;
+                string postData = json;
 
 
                 byte[] byteArray = Encoding.UTF8.GetBytes(postData);
@@ -43,7 +58,7 @@ namespace EDDiscovery2
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                     WriteEDSMLog("POST " + request.RequestUri, postData);
 
-                WebResponse response = request.GetResponse();
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 // Display the status.
                 //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
                 // Get the stream containing content returned by the server.
@@ -51,7 +66,8 @@ namespace EDDiscovery2
                 // Open the stream using a StreamReader for easy access.
                 StreamReader reader = new StreamReader(dataStream);
                 // Read the content.
-                string responseFromServer = reader.ReadToEnd();
+                var data = new ResponseData(response.StatusCode, reader.ReadToEnd());
+
                 // Display the content.
                 // Clean up the streams.
                 reader.Close();
@@ -60,10 +76,11 @@ namespace EDDiscovery2
 
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
-                    WriteEDSMLog(responseFromServer, "");
+                    //TODO: Log Status Code too
+                    WriteEDSMLog(data.Content, "");
                 }
 
-                return responseFromServer;
+                return data;
             }
             catch (Exception ex)
             {
@@ -74,17 +91,15 @@ namespace EDDiscovery2
                     WriteEDSMLog("Exception" + ex.Message, "");
                 }
 
-                return null;
+                return new ResponseData(HttpStatusCode.BadRequest, null);
             }
         }
 
-
-
-        protected string RequestPatch(string json, string action)
+        protected ResponseData RequestPatch(string json, string action)
         {
             try
             {
-                WebRequest request = WebRequest.Create(ServerAdress + action);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
                 request.Method = "PATCH";
                 string postData = json;
 
@@ -107,7 +122,7 @@ namespace EDDiscovery2
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                     WriteEDSMLog("PATCH " + request.RequestUri, postData);
 
-                WebResponse response = request.GetResponse();
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 // Display the status.
                 //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
                 // Get the stream containing content returned by the server.
@@ -115,7 +130,7 @@ namespace EDDiscovery2
                 // Open the stream using a StreamReader for easy access.
                 StreamReader reader = new StreamReader(dataStream);
                 // Read the content.
-                string responseFromServer = reader.ReadToEnd();
+                var data = new ResponseData(response.StatusCode, reader.ReadToEnd());
                 // Display the content.
                 // Clean up the streams.
                 reader.Close();
@@ -124,10 +139,10 @@ namespace EDDiscovery2
 
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
-                    WriteEDSMLog(responseFromServer, "");
+                    WriteEDSMLog(data.Content, "");
                 }
 
-                return responseFromServer;
+                return data;
             }
             catch (Exception ex)
             {
@@ -138,17 +153,17 @@ namespace EDDiscovery2
                     WriteEDSMLog("Exception" + ex.Message, "");
                 }
 
-                return null;
+                return new ResponseData(HttpStatusCode.BadRequest, null);
             }
         }
 
 
 
-        protected string RequestGet(string action)
+        protected ResponseData RequestGet(string action)
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ServerAdress + action);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
                 // Set the Method property of the request to POST.
                 request.Method = "GET";
 
@@ -171,7 +186,8 @@ namespace EDDiscovery2
                 // Open the stream using a StreamReader for easy access.
                 StreamReader reader = new StreamReader(dataStream);
                 // Read the content.
-                string responseFromServer = reader.ReadToEnd();
+                var data = new ResponseData(response.StatusCode, reader.ReadToEnd());
+                var statusCode = response.StatusCode;
                 // Display the content.
                 // Clean up the streams.
                 reader.Close();
@@ -180,10 +196,10 @@ namespace EDDiscovery2
 
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
-                    WriteEDSMLog(responseFromServer, "");
+                    WriteEDSMLog(data.Content, "");
                 }
 
-                return responseFromServer;
+                return data;
             }
             catch (Exception ex)
             {
@@ -196,17 +212,17 @@ namespace EDDiscovery2
                 }
 
 
-                return null;
+                return new ResponseData(HttpStatusCode.BadRequest, null);
             }
 
         }
 
 
-        protected string RequestDelete(string action)
+        protected ResponseData RequestDelete(string action)
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ServerAdress + action);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
                 request.Method = "DELETE";
 
                 // Set the ContentType property of the WebRequest.
@@ -228,7 +244,7 @@ namespace EDDiscovery2
                 // Open the stream using a StreamReader for easy access.
                 StreamReader reader = new StreamReader(dataStream);
                 // Read the content.
-                string responseFromServer = reader.ReadToEnd();
+                var data = new ResponseData(response.StatusCode, reader.ReadToEnd());
                 // Display the content.
                 // Clean up the streams.
                 reader.Close();
@@ -237,10 +253,10 @@ namespace EDDiscovery2
 
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
-                    WriteEDSMLog(responseFromServer, "");
+                    WriteEDSMLog(data.Content, "");
                 }
 
-                return responseFromServer;
+                return data;
             }
             catch (Exception ex)
             {
@@ -253,11 +269,15 @@ namespace EDDiscovery2
                 }
 
 
-                return null;
+                return new ResponseData(HttpStatusCode.BadRequest, null);
             }
 
         }
 
+        protected void AddAuthHeaders(WebRequest request)
+        {
+            // Override me
+        }
 
         private void WriteEDSMLog(string str1, string str2)
         {

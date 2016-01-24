@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDDiscovery2.HTTP;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Web;
 
 namespace EDDiscovery2.PlanetSystems
 {
-    public class EdMaterializer : HttpCom
+    public class EdMaterializer : EDMaterizliaerCom
     {
 
 
@@ -15,10 +16,10 @@ namespace EDDiscovery2.PlanetSystems
         {
 #if DEBUG
             // Dev server. Mess with data as much as you like here
-            ServerAdress = "https://ed-materializer.herokuapp.com/";
+            _serverAddress = "https://ed-materializer.herokuapp.com/";
 #else
             // Production
-            ServerAdress = "http://ed-materializer-env.elasticbeanstalk.com/";
+            _serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
 #endif
         }
 
@@ -31,8 +32,8 @@ namespace EDDiscovery2.PlanetSystems
             if (!String.IsNullOrEmpty(system))
                 query = query + "/?q[system]="+HttpUtility.UrlEncode(system);
 
-            string json = RequestGet(query);
-
+            var response = RequestGet(query);
+            var json = response.Content;
 
             JArray jArray = null;
             JObject jObject = null;
@@ -112,18 +113,19 @@ namespace EDDiscovery2.PlanetSystems
 
             JObject joPost = new JObject(new JProperty("world_survey", jo));
 
-            string json;
-
             if (edobj.id == 0)
             {
-                json = RequestPost(joPost.ToString(), "api/v1/world_surveys");
+                var response = RequestPost(joPost.ToString(), "api/v1/world_surveys");
+                var json = response.Content;
 
                 JObject jo2 = (JObject)JObject.Parse(json);
                 JObject obj = (JObject)jo2["world_survey"];
                 edobj.id = obj["id"].Value<int>();
             }
             else
-                json = RequestPatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
+            {
+                var response = RequestPatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
+            }
             return true;
 
 
@@ -131,8 +133,8 @@ namespace EDDiscovery2.PlanetSystems
 
         public bool DeleteID(int id)
         {
-            string json = RequestDelete("api/v1/world_surveys/"+id.ToString());
-
+            var response = RequestDelete("api/v1/world_surveys/"+id.ToString());
+            
             return true;
         }
 
