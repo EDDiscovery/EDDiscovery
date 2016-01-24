@@ -12,9 +12,9 @@ namespace EDDiscovery2.HTTP
     public class EDMaterizliaerCom : HttpCom
     {
         private NameValueCollection _authTokens = null;
-        private readonly string _authPath = "/api/v1/auth";
+        private readonly string _authPath = "api/v1/auth";
 
-        protected new void AddAuthHeaders(WebRequest request)
+        protected override void AddAuthHeaders(WebRequest request)
         {
             if (_authTokens == null)
             {
@@ -55,11 +55,11 @@ namespace EDDiscovery2.HTTP
             var appSettings = ConfigurationManager.AppSettings;
             var username = appSettings["EDMaterializerUsername"];
             var password = appSettings["EDMaterializerPassword"];
-            var json = $"email={username}&password{password}";
+            var json = $"{{\"email\": \"{username}\", \"password\": \"{password}\"}}";
             var response = RequestPost(json, $"{_authPath}/sign_in",false);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                return HttpUtility.ParseQueryString(response.Content);
+                return HttpUtility.ParseQueryString(response.Body);
             }
             else
             {

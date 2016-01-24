@@ -294,6 +294,9 @@
     <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="AppSettingsSecrets.config.example">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="AppSettingsSecrets.config">
       <SubType>Designer</SubType>
     </None>
