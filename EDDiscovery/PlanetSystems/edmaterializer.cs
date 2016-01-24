@@ -1,13 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDDiscovery2.HTTP;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 
 namespace EDDiscovery2.PlanetSystems
 {
-    public class EdMaterializer : HttpCom
+    public class EdMaterializer : EDMaterizliaerCom
     {
 
 
@@ -15,10 +17,10 @@ namespace EDDiscovery2.PlanetSystems
         {
 #if DEBUG
             // Dev server. Mess with data as much as you like here
-            ServerAdress = "https://ed-materializer.herokuapp.com/";
+            _serverAddress = "https://ed-materializer.herokuapp.com/";
 #else
             // Production
-            ServerAdress = "http://ed-materializer-env.elasticbeanstalk.com/";
+            _serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
 #endif
         }
 
@@ -31,8 +33,8 @@ namespace EDDiscovery2.PlanetSystems
             if (!String.IsNullOrEmpty(system))
                 query = query + "/?q[system]="+HttpUtility.UrlEncode(system);
 
-            string json = RequestGet(query);
-
+            var response = RequestGet(query);
+            var json = response.Body;
 
             JArray jArray = null;
             JObject jObject = null;
@@ -112,18 +114,39 @@ namespace EDDiscovery2.PlanetSystems
 
             JObject joPost = new JObject(new JProperty("world_survey", jo));
 
-            string json;
-
             if (edobj.id == 0)
             {
-                json = RequestPost(joPost.ToString(), "api/v1/world_surveys");
+                var response = RequestSecurePost(joPost.ToString(), "api/v1/world_surveys");
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    JObject jo2 = (JObject)JObject.Parse(response.Body);
+                    JObject obj = (JObject)jo2["world_survey"];
+                    edobj.id = obj["id"].Value<int>();
+                }
+                else if ((int)response.StatusCode == 422)
+                {
+                    // Surprise, record is already there for some reason!
+                    // I may create an api method on the server that negates the need to check for 
+                    // this at some point
+                    // - Greg
 
-                JObject jo2 = (JObject)JObject.Parse(json);
-                JObject obj = (JObject)jo2["world_survey"];
-                edobj.id = obj["id"].Value<int>();
+                    var queryParam = $"q[system]={jo.system}&q[world]={jo.world}&q[commander]={jo.commander}";
+                    response = RequestGet($"api/v1/world_surveys?{queryParam}");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        JObject jo2 = (JObject)JObject.Parse(response.Body);
+                        JObject obj = (JObject)jo2["world_surveys"][0];
+                        edobj.id = obj["id"].Value<int>();
+
+                        response = RequestSecurePatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
+                    }
+
+                }
             }
             else
-                json = RequestPatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
+            {
+                var response = RequestSecurePatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
+            }
             return true;
 
 
@@ -131,8 +154,8 @@ namespace EDDiscovery2.PlanetSystems
 
         public bool DeleteID(int id)
         {
-            string json = RequestDelete("api/v1/world_surveys/"+id.ToString());
-
+            var response = RequestDelete("api/v1/world_surveys/"+id.ToString());
+            
             return true;
         }
 
