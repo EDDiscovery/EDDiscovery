@@ -185,11 +185,6 @@ namespace EDDiscovery2.PlanetSystems
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-            var edo = new EDObject();
-            edo.system = "MarlonTest";
-            edo.objectName = "A 1";
-            edo.commander = "Marlon Blake";
-            edmat.Store(edo);
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)

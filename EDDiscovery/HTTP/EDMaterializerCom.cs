@@ -7,6 +7,7 @@ using System.Configuration;
 
 namespace EDDiscovery2.HTTP
 {
+    using System;
     using System.Web;
 
     public class EDMaterizliaerCom : HttpCom
@@ -14,69 +15,26 @@ namespace EDDiscovery2.HTTP
         private NameValueCollection _authTokens = null;
         private readonly string _authPath = "api/v1/auth";
 
-        //{
-        //    if (_authTokens == null)
-        //    {
-        //        _authTokens = TokensFromSignIn();
-        //    }
+        protected ResponseData RequestSecureGet(string action)
+        {
+            return ManagedRequest(null, action, RequestGetWrapper);
+        }
 
-        //    if (_authTokens == null)
-        //    {
-        //        // TODO: Could potentially cut this step by checking the expiry date
-        //        // token. Though watch out for scenario where tokens are expired by other
-        //        // events, like a logout. It can be handled by validating the return value
-        //        // of the actual main request, but of course that's extra effort. :)
-        //        _authTokens = ValidatedTokens();
-        //    }
-
-        //    if (_authTokens != null)
-        //    {
-        //        request.Headers.Add(_authTokens);
-        //    }
-        //}
-        //protected void AddAuthHeaders(WebRequest request)
-
-        //private NameValueCollection ValidatedTokens()
-        //{
-        //    var queryParams = $"uid={_authTokens["uid"]}&access-token={_authTokens["access_token"]}&client=email";
-        //    var response = RequestGet($"{_authPath}/validate_token/?{queryParams}");
-        //    if (response.StatusCode == HttpStatusCode.OK)
-        //    {
-        //        return _authTokens;
-        //    }
-        //    else
-        //    { 
-        //        return null;
-        //    }
-        //}
         protected ResponseData RequestSecurePost(string json, string action)
         {
-            ResponseData response = new ResponseData(HttpStatusCode.BadRequest);
-            // Attempt #1 with existing tokens
-            if (_authTokens != null)
-            {
-                response = RequestPost(json, action, _authTokens);
-                if (response.StatusCode == HttpStatusCode.Unauthorized ||
-                    response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    _authTokens = null;
-                }
-                else
-                {
-                    return response;
-                }
-            }
-            // Attempt #2 by logging in and obtaining fresh tokens
-            if (_authTokens == null)
-            {
-                response = SignIn();
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    response = RequestPost(json, action, _authTokens);
-                }
-            }
-            return response;
+            return ManagedRequest(json, action, RequestPost);
         }
+
+        protected ResponseData RequestSecurePatch(string json, string action)
+        {
+            return ManagedRequest(json, action, RequestPatch);
+        }
+
+        protected ResponseData RequestSecureDelete(string action)
+        {
+            return ManagedRequest(null, action, RequestDeleteWrapper);
+        }
+
 
         private ResponseData SignIn()
         {
@@ -97,6 +55,48 @@ namespace EDDiscovery2.HTTP
             }
             return response;
         }
+
+        private ResponseData ManagedRequest(string json, 
+                                            string action, 
+                                            Func<string, string, NameValueCollection, ResponseData> requestMethod)
+        {
+            ResponseData response = new ResponseData(HttpStatusCode.BadRequest);
+            // Attempt #1 with existing tokens
+            if (_authTokens != null)
+            {
+                response = requestMethod(json, action, _authTokens);
+                if (response.StatusCode == HttpStatusCode.Unauthorized ||
+                    response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    _authTokens = null;
+                }
+                else
+                {
+                    return response;
+                }
+            }
+            // Attempt #2 by logging in and obtaining fresh tokens
+            if (_authTokens == null)
+            {
+                response = SignIn();
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    response = requestMethod(json, action, _authTokens);
+                }
+            }
+            return response;
+        }
+
+        private ResponseData RequestGetWrapper(string json, string action, NameValueCollection headers)
+        {
+            return RequestGet(action, headers);
+        }
+
+        private ResponseData RequestDeleteWrapper(string json, string action, NameValueCollection headers)
+        {
+            return RequestDelete(action, headers);
+        }
+
 
         private string AuthKeyToJson()
         {
