@@ -465,6 +465,9 @@ public enum AtmosphereEnum
 
         public MaterialEnum MaterialFromString(string v)
         {
+            if (v == null)
+                return MaterialEnum.Unknown;
+
             foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
             {
                 if (v.ToLower().Equals(mat.ToString().ToLower()))

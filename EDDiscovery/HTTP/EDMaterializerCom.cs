@@ -1,19 +1,20 @@
 ﻿using EDDiscovery;
-using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
+using System.Web.Script.Serialization;
+using System.Configuration;
 
 namespace EDDiscovery2.HTTP
 {
+    using System.Web;
+
     public class EDMaterizliaerCom : HttpCom
     {
         private NameValueCollection _authTokens = null;
+        private readonly string _authPath = "/api/v1/auth";
 
-        protected void AddAuthHeaders(WebRequest request)
+        protected new void AddAuthHeaders(WebRequest request)
         {
             if (_authTokens == null)
             {
@@ -32,19 +33,46 @@ namespace EDDiscovery2.HTTP
             if (_authTokens != null)
             {
                 request.Headers.Add(_authTokens);
-            }        
+            }
         }
 
         private NameValueCollection ValidatedTokens()
         {
-            //RequestGet($"{authPath}/validate_token/$uid=");
-            // http://ed-materializer.heroku.com/api/v1/auth/validate_token/?uid=jenny@example.com&access-token=TOKEN_HERE&client=CLIENT_HERE
-            throw new NotImplementedException();
+            var queryParams = $"uid={_authTokens["uid"]}&access-token={_authTokens["access_token"]}&client=email";
+            var response = RequestGet($"{_authPath}/validate_token/?{queryParams}");
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return _authTokens;
+            }
+            else
+            { 
+                return null;
+            }
         }
 
         private NameValueCollection TokensFromSignIn()
         {
-            throw new NotImplementedException();
+            var appSettings = ConfigurationManager.AppSettings;
+            var username = appSettings["EDMaterializerUsername"];
+            var password = appSettings["EDMaterializerPassword"];
+            var json = $"email={username}&password{password}";
+            var response = RequestPost(json, $"{_authPath}/sign_in",false);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return HttpUtility.ParseQueryString(response.Content);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private string AuthKeyToJson()
+        {
+            var json = new JavaScriptSerializer().Serialize(
+                _authTokens.AllKeys.ToDictionary(k => k, k => _authTokens[k])
+            );
+            return json;
         }
 
     }
