@@ -185,7 +185,6 @@ namespace EDDiscovery2.PlanetSystems
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
