@@ -103,54 +103,78 @@ namespace EDDiscovery2.HTTP
             }
         }
 
-        protected ResponseData RequestPatch(string json, string action)
+        protected ResponseData RequestPatch(string json, string action, NameValueCollection headers = null)
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
-                request.Method = "PATCH";
-                string postData = json;
-
-
-                byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-                // Set the ContentType property of the WebRequest.
-                request.ContentType = "application/json; charset=utf-8";
-                //request.Headers.Add("Accept-Encoding", "gzip,deflate");
-                // Set the ContentLength property of the WebRequest.
-                request.ContentLength = byteArray.Length;
-                // Get the request stream.
-                Stream dataStream = request.GetRequestStream();
-                // Write the data to the request stream.
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                // Close the Stream object.
-                dataStream.Close();
-                // Get the response.
-                //request.Timeout = 740 * 1000;
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                    WriteEDSMLog("PATCH " + request.RequestUri, postData);
-
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                // Display the status.
-                //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-                var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
-                // Display the content.
-                // Clean up the streams.
-                reader.Close();
-                dataStream.Close();
-                response.Close();
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                try
                 {
-                    WriteEDSMLog(data.Body, "");
-                }
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
+                    request.Method = "PATCH";
+                    if (headers != null)
+                    {
+                        request.Headers.Add(headers);
+                    }
+                    string postData = json;
 
-                return data;
+
+                    byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+                    // Set the ContentType property of the WebRequest.
+                    request.ContentType = "application/json; charset=utf-8";
+                    //request.Headers.Add("Accept-Encoding", "gzip,deflate");
+                    // Set the ContentLength property of the WebRequest.
+                    request.ContentLength = byteArray.Length;
+                    // Get the request stream.
+                    Stream dataStream = request.GetRequestStream();
+                    // Write the data to the request stream.
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    // Close the Stream object.
+                    dataStream.Close();
+                    // Get the response.
+                    //request.Timeout = 740 * 1000;
+
+                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        WriteEDSMLog("PATCH " + request.RequestUri, postData);
+
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    // Display the status.
+                    //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+                    // Get the stream containing content returned by the server.
+                    dataStream = response.GetResponseStream();
+                    // Open the stream using a StreamReader for easy access.
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.
+                    var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
+                    // Display the content.
+                    // Clean up the streams.
+                    reader.Close();
+                    dataStream.Close();
+                    response.Close();
+
+                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    {
+                        WriteEDSMLog(data.Body, "");
+                    }
+
+                    return data;
+                }
+                catch (WebException ex)
+                {
+                    using (WebResponse response = ex.Response)
+                    {
+                        HttpWebResponse httpResponse = (HttpWebResponse)response;
+                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                        System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
+                        System.Diagnostics.Trace.WriteLine($"HTTP Error code: {httpResponse.StatusCode}");
+                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        {
+                            WriteEDSMLog("WebException" + ex.Message, "");
+                            WriteEDSMLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                        }
+                        return new ResponseData(httpResponse.StatusCode);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -167,47 +191,71 @@ namespace EDDiscovery2.HTTP
 
 
 
-        protected ResponseData RequestGet(string action)
+        protected ResponseData RequestGet(string action, NameValueCollection headers = null)
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
-                // Set the Method property of the request to POST.
-                request.Method = "GET";
-
-                // Set the ContentType property of the WebRequest.
-                request.ContentType = "application/json; charset=utf-8";
-                request.Headers.Add("Accept-Encoding", "gzip,deflate");
-                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                    WriteEDSMLog("GET " + request.RequestUri, "");
-
-
-                // Get the response.
-                //request.Timeout = 740 * 1000;
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                // Display the status.
-                //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                Stream dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-                var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
-                var statusCode = response.StatusCode;
-                // Display the content.
-                // Clean up the streams.
-                reader.Close();
-                dataStream.Close();
-                response.Close();
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                try
                 {
-                    WriteEDSMLog(data.Body, "");
-                }
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
+                    // Set the Method property of the request to POST.
+                    request.Method = "GET";
 
-                return data;
+                    // Set the ContentType property of the WebRequest.
+                    request.ContentType = "application/json; charset=utf-8";
+                    request.Headers.Add("Accept-Encoding", "gzip,deflate");
+                    if (headers != null)
+                    {
+                        request.Headers.Add(headers);
+                    }
+                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        WriteEDSMLog("GET " + request.RequestUri, "");
+
+
+                    // Get the response.
+                    //request.Timeout = 740 * 1000;
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    // Display the status.
+                    //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+                    // Get the stream containing content returned by the server.
+                    Stream dataStream = response.GetResponseStream();
+                    // Open the stream using a StreamReader for easy access.
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.
+                    var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
+                    var statusCode = response.StatusCode;
+                    // Display the content.
+                    // Clean up the streams.
+                    reader.Close();
+                    dataStream.Close();
+                    response.Close();
+
+                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    {
+                        WriteEDSMLog(data.Body, "");
+                    }
+
+                    return data;
+                }
+                catch (WebException ex)
+                {
+                    using (WebResponse response = ex.Response)
+                    {
+                        HttpWebResponse httpResponse = (HttpWebResponse)response;
+                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                        System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
+                        System.Diagnostics.Trace.WriteLine($"HTTP Error code: {httpResponse.StatusCode}");
+                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        {
+                            WriteEDSMLog("WebException" + ex.Message, "");
+                            WriteEDSMLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                        }
+                        return new ResponseData(httpResponse.StatusCode);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -226,45 +274,69 @@ namespace EDDiscovery2.HTTP
         }
 
 
-        protected ResponseData RequestDelete(string action)
+        protected ResponseData RequestDelete(string action, NameValueCollection headers = null)
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
-                request.Method = "DELETE";
-
-                // Set the ContentType property of the WebRequest.
-                request.ContentType = "application/json; charset=utf-8";
-                request.Headers.Add("Accept-Encoding", "gzip,deflate");
-                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                    WriteEDSMLog("DELETE " + request.RequestUri, "");
-
-
-                // Get the response.
-                //request.Timeout = 740 * 1000;
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                // Display the status.
-                //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                Stream dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-                var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
-                // Display the content.
-                // Clean up the streams.
-                reader.Close();
-                dataStream.Close();
-                response.Close();
-
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                try
                 {
-                    WriteEDSMLog(data.Body, "");
-                }
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
+                    request.Method = "DELETE";
 
-                return data;
+                    // Set the ContentType property of the WebRequest.
+                    request.ContentType = "application/json; charset=utf-8";
+                    request.Headers.Add("Accept-Encoding", "gzip,deflate");
+                    if (headers != null)
+                    {
+                        request.Headers.Add(headers);
+                    }
+                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        WriteEDSMLog("DELETE " + request.RequestUri, "");
+
+
+                    // Get the response.
+                    //request.Timeout = 740 * 1000;
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    // Display the status.
+                    //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+                    // Get the stream containing content returned by the server.
+                    Stream dataStream = response.GetResponseStream();
+                    // Open the stream using a StreamReader for easy access.
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.
+                    var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
+                    // Display the content.
+                    // Clean up the streams.
+                    reader.Close();
+                    dataStream.Close();
+                    response.Close();
+
+                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                    {
+                        WriteEDSMLog(data.Body, "");
+                    }
+
+                    return data;
+                }
+                catch (WebException ex)
+                {
+                    using (WebResponse response = ex.Response)
+                    {
+                        HttpWebResponse httpResponse = (HttpWebResponse)response;
+                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                        System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
+                        System.Diagnostics.Trace.WriteLine($"HTTP Error code: {httpResponse.StatusCode}");
+                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+                        {
+                            WriteEDSMLog("WebException" + ex.Message, "");
+                            WriteEDSMLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                        }
+                        return new ResponseData(httpResponse.StatusCode);
+                    }
+                }
             }
             catch (Exception ex)
             {

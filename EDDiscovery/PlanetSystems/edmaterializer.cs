@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 
@@ -113,25 +114,38 @@ namespace EDDiscovery2.PlanetSystems
 
             JObject joPost = new JObject(new JProperty("world_survey", jo));
 
-            // Suggestion: Instead of checking local data, just try a POST first. if the response 
-            //             is a 422 then try again with a PATCH. This'll work even if the local data 
-            //             is out of sync with the server.
-            //
-            //             Note: There is no enum for 422, so you'd have to check it as:
-            //             response.StatusCode == (HttpStatusCode)422;
-            //             - Greg
             if (edobj.id == 0)
             {
                 var response = RequestSecurePost(joPost.ToString(), "api/v1/world_surveys");
-                var json = response.Body;
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    JObject jo2 = (JObject)JObject.Parse(response.Body);
+                    JObject obj = (JObject)jo2["world_survey"];
+                    edobj.id = obj["id"].Value<int>();
+                }
+                else if ((int)response.StatusCode == 422)
+                {
+                    // Surprise, record is already there for some reason!
+                    // I may create an api method on the server that negates the need to check for 
+                    // this at some point
+                    // - Greg
 
-                JObject jo2 = (JObject)JObject.Parse(json);
-                JObject obj = (JObject)jo2["world_survey"];
-                edobj.id = obj["id"].Value<int>();
+                    var queryParam = $"q[system]={jo.system}&q[world]={jo.world}&q[commander]={jo.commander}";
+                    response = RequestGet($"api/v1/world_surveys?{queryParam}");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        JObject jo2 = (JObject)JObject.Parse(response.Body);
+                        JObject obj = (JObject)jo2["world_surveys"][0];
+                        edobj.id = obj["id"].Value<int>();
+
+                        response = RequestSecurePatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
+                    }
+
+                }
             }
             else
             {
-                var response = RequestPatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
+                var response = RequestSecurePatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
             }
             return true;
 
