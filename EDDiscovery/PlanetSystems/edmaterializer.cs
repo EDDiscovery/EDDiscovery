@@ -33,7 +33,7 @@ namespace EDDiscovery2.PlanetSystems
                 query = query + "/?q[system]="+HttpUtility.UrlEncode(system);
 
             var response = RequestGet(query);
-            var json = response.Content;
+            var json = response.Body;
 
             JArray jArray = null;
             JObject jObject = null;
@@ -116,7 +116,7 @@ namespace EDDiscovery2.PlanetSystems
             if (edobj.id == 0)
             {
                 var response = RequestPost(joPost.ToString(), "api/v1/world_surveys");
-                var json = response.Content;
+                var json = response.Body;
 
                 JObject jo2 = (JObject)JObject.Parse(json);
                 JObject obj = (JObject)jo2["world_survey"];

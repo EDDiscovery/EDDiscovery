@@ -67,8 +67,8 @@ namespace EDDiscovery2.EDSM
             query += "] } ";
 
             var response = RequestPost("{ \"data\": " + query + " }", "api-v1/submit-distances");
-            var data = response.Content;
-            return response.Content;
+            var data = response.Body;
+            return response.Body;
         }
 
 
@@ -140,8 +140,8 @@ namespace EDDiscovery2.EDSM
             query = "?startdatetime=" + HttpUtility.UrlEncode(date);
             //json1= RequestGet("systems" + query + "&coords=1&submitted=1");
             var response = RequestGet("api-v1/systems" + query + "&coords=1&submitted=1&known=1");
-            var data = response.Content;
-            return response.Content;
+            var data = response.Body;
+            return response.Body;
         }
 
         public string RequestDistances(string date)
@@ -150,8 +150,8 @@ namespace EDDiscovery2.EDSM
             query = "?startdatetime=" + HttpUtility.UrlEncode(date);
 
             var response = RequestGet("api-v1/distances" + query + "coords=1 & submitted=1");
-            var data = response.Content;
-            return response.Content;
+            var data = response.Body;
+            return response.Body;
         }
 
 
@@ -228,7 +228,7 @@ namespace EDDiscovery2.EDSM
                 query = "?sysname=" + HttpUtility.UrlEncode(systemname) + "&coords=1&distances=1&submitted=1";
 
                 var response = RequestGet("api-v1/system" + query);
-                var json = response.Content;
+                var json = response.Body;
 
                 //http://www.edsm.net/api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
 
@@ -267,7 +267,7 @@ namespace EDDiscovery2.EDSM
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query);
-            return response.Content;
+            return response.Body;
         }
 
 
@@ -277,7 +277,7 @@ namespace EDDiscovery2.EDSM
             query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName);
 
             var response = RequestGet("api-logs-v1/" + query);
-            return response.Content;
+            return response.Body;
         }
 
         public string SetComment(SystemNoteClass sn)
@@ -285,7 +285,7 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "set-comment?systemName=" + HttpUtility.UrlEncode(sn.Name) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(sn.Note);
             var response = RequestGet("api-logs-v1/" + query);
-            return response.Content;
+            return response.Body;
         }
 
         public string SetLog(string systemName, DateTime dateVisited)
@@ -293,7 +293,7 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
             var response = RequestGet("api-logs-v1/" + query);
-            return response.Content;
+            return response.Body;
         }
 
         public int GetLogs(DateTime starttime, out List<SystemPosition> log)
@@ -303,7 +303,7 @@ namespace EDDiscovery2.EDSM
             string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query);
-            var json = response.Content;
+            var json = response.Body;
 
             if (json == null)
                 return 0;
