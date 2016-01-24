@@ -200,6 +200,7 @@
     <Compile Include="DB\SystemNoteClass.cs" />
     <Compile Include="HTTP\EDMaterializerCom.cs" />
     <Compile Include="HTTP\HttpCom.cs" />
+    <Compile Include="HTTP\ResponseData.cs" />
     <Compile Include="PlanetSystems\AddMaterialNodeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

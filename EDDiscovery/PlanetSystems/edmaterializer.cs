@@ -113,9 +113,16 @@ namespace EDDiscovery2.PlanetSystems
 
             JObject joPost = new JObject(new JProperty("world_survey", jo));
 
+            // Suggestion: Instead of checking local data, just try a POST first. if the response 
+            //             is a 422 then try again with a PATCH. This'll work even if the local data 
+            //             is out of sync with the server.
+            //
+            //             Note: There is no enum for 422, so you'd have to check it as:
+            //             response.StatusCode == (HttpStatusCode)422;
+            //             - Greg
             if (edobj.id == 0)
             {
-                var response = RequestPost(joPost.ToString(), "api/v1/world_surveys");
+                var response = RequestSecurePost(joPost.ToString(), "api/v1/world_surveys");
                 var json = response.Body;
 
                 JObject jo2 = (JObject)JObject.Parse(json);
