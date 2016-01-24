@@ -12,8 +12,27 @@ namespace EDDiscovery2.PlanetSystems
         public string Name;
         public string Short;
         public string Description;
-        public bool Planet;
-        public bool Star;
+        public bool Planet
+        {
+            get
+            {
+                if (type < ObjectTypesEnum.Unknown_Star)
+                    return true;
+                else
+                    return false;
+            }
+        }
+        public bool Star
+        {
+            get
+            {
+                if (type >= ObjectTypesEnum.Unknown_Star)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
 
         public ObjectsType(ObjectTypesEnum type, string Name, string ShortDescription, string Description)
         {
