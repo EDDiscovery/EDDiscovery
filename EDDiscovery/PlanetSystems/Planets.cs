@@ -231,6 +231,23 @@ public enum AtmosphereEnum
             }
         }
 
+        public bool IsPlanet
+        {
+            get
+            {
+                return type.Planet;
+            }
+        }
+
+        public bool IsStar
+        {
+            get
+            {
+                return type.Star;
+            }
+        }
+
+
 
         public string ShortName
         {

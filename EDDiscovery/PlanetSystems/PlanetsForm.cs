@@ -93,8 +93,11 @@ namespace EDDiscovery2.PlanetSystems
             dictComboDesc.Clear();
             foreach (EDObject obj in EDObject.listObjectTypes)
             {
-                int nr = comboBoxType.Items.Add(obj.Description);
-                dictComboDesc[nr] = obj.Description;
+                if (obj.IsPlanet)
+                {
+                    int nr = comboBoxType.Items.Add(obj.Description);
+                    dictComboDesc[nr] = obj.Description;
+                }
             }
 
 
@@ -202,6 +205,16 @@ namespace EDDiscovery2.PlanetSystems
             EDObject obj = edObjects[v];
 
             textBoxName.Text = obj.objectName;
+            if (obj.IsPlanet)
+            {
+                panelPlanets.Visible = true;
+                panelStar.Visible = false;
+            }
+            else
+            {
+                panelPlanets.Visible = false;
+                panelStar.Visible = true;
+            }
 
 
             var nr = (from str in dictComboDesc where str.Value == obj.Description select str.Key).FirstOrDefault<int>();
@@ -256,6 +269,31 @@ namespace EDDiscovery2.PlanetSystems
         private void PlanetsForm_Shown(object sender, EventArgs e)
         {
             SetCurrentSystem();
+        }
+
+        private void label21_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label20_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelStar_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 
