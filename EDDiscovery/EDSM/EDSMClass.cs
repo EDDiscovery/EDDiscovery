@@ -1,6 +1,7 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
+using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace EDDiscovery2.EDSM
         public EDSMClass()
         {
             fromSoftware = "EDDiscovery";
-            ServerAdress = "http://www.edsm.net/";
+            _serverAddress = "http://www.edsm.net/";
 
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
@@ -65,7 +66,9 @@ namespace EDDiscovery2.EDSM
 
             query += "] } ";
 
-            return RequestPost("{ \"data\": " + query + " }", "api-v1/submit-distances");
+            var response = RequestPost("{ \"data\": " + query + " }", "api-v1/submit-distances");
+            var data = response.Content;
+            return response.Content;
         }
 
 
@@ -136,9 +139,9 @@ namespace EDDiscovery2.EDSM
 
             query = "?startdatetime=" + HttpUtility.UrlEncode(date);
             //json1= RequestGet("systems" + query + "&coords=1&submitted=1");
-            json2=  RequestGet("api-v1/systems" + query + "&coords=1&submitted=1&known=1");
-
-            return json2;
+            var response = RequestGet("api-v1/systems" + query + "&coords=1&submitted=1&known=1");
+            var data = response.Content;
+            return response.Content;
         }
 
         public string RequestDistances(string date)
@@ -146,7 +149,9 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "?startdatetime=" + HttpUtility.UrlEncode(date);
 
-            return RequestGet("api-v1/distances" + query + "coords=1 & submitted=1");
+            var response = RequestGet("api-v1/distances" + query + "coords=1 & submitted=1");
+            var data = response.Content;
+            return response.Content;
         }
 
 
@@ -219,13 +224,11 @@ namespace EDDiscovery2.EDSM
             List<DistanceClass> listDistances = new List<DistanceClass>();
             try
             {
-                string json;
-
-
                 string query;
                 query = "?sysname=" + HttpUtility.UrlEncode(systemname) + "&coords=1&distances=1&submitted=1";
 
-                json = RequestGet("api-v1/system" + query);
+                var response = RequestGet("api-v1/system" + query);
+                var json = response.Content;
 
                 //http://www.edsm.net/api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
 
@@ -263,9 +266,8 @@ namespace EDDiscovery2.EDSM
 
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            string json = RequestGet("api-logs-v1/" + query);
-
-            return json;
+            var response = RequestGet("api-logs-v1/" + query);
+            return response.Content;
         }
 
 
@@ -274,26 +276,24 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName);
 
-            string json =  RequestGet("api-logs-v1/" + query);
-            return json;
+            var response = RequestGet("api-logs-v1/" + query);
+            return response.Content;
         }
 
         public string SetComment(SystemNoteClass sn)
         {
             string query;
             query = "set-comment?systemName=" + HttpUtility.UrlEncode(sn.Name) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(sn.Note);
-            string json = RequestGet("api-logs-v1/"+ query);
-
-            return json;
+            var response = RequestGet("api-logs-v1/" + query);
+            return response.Content;
         }
 
         public string SetLog(string systemName, DateTime dateVisited)
         {
             string query;
             query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-            string json = RequestGet("api-logs-v1/" + query);
-
-            return json;
+            var response = RequestGet("api-logs-v1/" + query);
+            return response.Content;
         }
 
         public int GetLogs(DateTime starttime, out List<SystemPosition> log)
@@ -302,7 +302,8 @@ namespace EDDiscovery2.EDSM
 
             string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            string json = RequestGet("api-logs-v1/"+ query);
+            var response = RequestGet("api-logs-v1/" + query);
+            var json = response.Content;
 
             if (json == null)
                 return 0;
