@@ -7,33 +7,11 @@ using System.Text;
 
 namespace EDDiscovery2.HTTP
 {
-    public struct ResponseData
-    {
-        public ResponseData(HttpStatusCode statusCode)
-        {
-            StatusCode = statusCode;
-            Body = null;
-            Headers = null;
-        }
-
-        public ResponseData(HttpStatusCode statusCode, string content, NameValueCollection headers)
-        {
-            StatusCode = statusCode;
-            Body = content;
-            Headers = headers;
-        }
-
-        public HttpStatusCode StatusCode; // Sometimes you need the status code if you're in a
-                                   // converstation with the server
-        public string Body;
-        public NameValueCollection Headers;
-    }
-
     public class HttpCom
     {
         protected string _serverAddress;
 
-        protected ResponseData RequestPost(string json, string action, bool authenticate=true)
+        protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null)
         {
             try
             {
@@ -42,9 +20,9 @@ namespace EDDiscovery2.HTTP
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
                     // Set the Method property of the request to POST.
                     request.Method = "POST";
-                    if (authenticate)
+                    if (headers != null)
                     {
-                        AddAuthHeaders(request);
+                        request.Headers.Add(headers);
                     }
                     // Create POST data and convert it to a byte array.
                     //WRITE JSON DATA TO VARIABLE D
@@ -302,11 +280,6 @@ namespace EDDiscovery2.HTTP
                 return new ResponseData(HttpStatusCode.BadRequest);
             }
 
-        }
-
-        protected virtual void AddAuthHeaders(WebRequest request)
-        {
-            // Override me
         }
 
         private void WriteEDSMLog(string str1, string str2)
