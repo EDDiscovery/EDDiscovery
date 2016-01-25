@@ -39,8 +39,6 @@
             this.textBox_Range = new System.Windows.Forms.TextBox();
             this.textBoxCurrent = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // richTextBox1
@@ -48,6 +46,7 @@
             this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.Location = new System.Drawing.Point(3, 55);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(627, 358);
@@ -62,6 +61,7 @@
             this.textBox_From.Name = "textBox_From";
             this.textBox_From.Size = new System.Drawing.Size(125, 20);
             this.textBox_From.TabIndex = 15;
+            this.textBox_From.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
             // 
             // label3
             // 
@@ -118,6 +118,7 @@
             this.textBox_To.Name = "textBox_To";
             this.textBox_To.Size = new System.Drawing.Size(125, 20);
             this.textBox_To.TabIndex = 16;
+            this.textBox_To.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
             // 
             // textBox_Range
             // 
@@ -126,7 +127,6 @@
             this.textBox_Range.Size = new System.Drawing.Size(57, 20);
             this.textBox_Range.TabIndex = 17;
             this.textBox_Range.Text = "15";
-            this.textBox_Range.TextChanged += new System.EventHandler(this.textBox_Range_TextChanged);
             this.textBox_Range.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_Range_KeyPress);
             // 
             // textBoxCurrent
@@ -138,7 +138,6 @@
             this.textBoxCurrent.ReadOnly = true;
             this.textBoxCurrent.Size = new System.Drawing.Size(125, 20);
             this.textBoxCurrent.TabIndex = 22;
-            this.textBoxCurrent.TextChanged += new System.EventHandler(this.textBoxCurrent_TextChanged);
             this.textBoxCurrent.DoubleClick += new System.EventHandler(this.textBoxCurrent_DoubleClick);
             // 
             // label5
@@ -150,31 +149,10 @@
             this.label5.TabIndex = 23;
             this.label5.Text = "Current";
             // 
-            // textBox2
-            // 
-            this.textBox2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox2.Location = new System.Drawing.Point(251, 30);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(125, 20);
-            this.textBox2.TabIndex = 24;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(216, 33);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(29, 13);
-            this.label6.TabIndex = 25;
-            this.label6.Text = "Next";
-            // 
             // RouteControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.textBoxCurrent);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.richTextBox1);
@@ -204,10 +182,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
         internal System.Windows.Forms.TextBox textBox_To;
-        private System.Windows.Forms.TextBox textBox_Range;
         internal System.Windows.Forms.TextBox textBoxCurrent;
         private System.Windows.Forms.Label label5;
-        internal System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label6;
+        internal System.Windows.Forms.TextBox textBox_Range;
     }
 }
