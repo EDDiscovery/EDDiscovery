@@ -50,7 +50,7 @@ namespace EDDiscovery2.HTTP
                 var tokens = new NameValueCollection();
                 tokens["access-token"] = headers["access-token"];
                 tokens["client"] = headers["client"];
-                tokens["provider"] = headers["email"];
+                tokens["uid"] = headers["uid"]; ;
                 _authTokens = tokens;
             }
             return response;
