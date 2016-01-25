@@ -16,29 +16,33 @@ using System.Collections.Generic;
 
 namespace EMK.Cartography
 {
-	/// <summary>
-	/// Graph structure. It is defined with :
-	/// It is defined with both a list of nodes and a list of arcs.
-	/// </summary>
-	[Serializable]
-	public class Graph
-	{
-		List<Node> LN;
-		List<Arc> LA;
+    /// <summary>
+    /// Graph structure. It is defined with :
+    /// It is defined with both a list of nodes and a list of arcs.
+    /// </summary>
+    [Serializable]
+    public class Graph
+    {
+        List<Node> LN;
+        List<Arc> LA;
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public Graph()
-		{
-			LN = new List<Node>();
-			LA = new List<Arc>();
-		}
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Graph()
+        {
+            LN = new List<Node>();
+            LA = new List<Arc>();
+        }
 
-		/// <summary>
-		/// Gets the List interface of the nodes in the graph.
-		/// </summary>
-		public List<Node> Nodes { get { return LN; } }
+        public int Count { get { return LN.Count; } }
+        public Node GetN(int i) { return LN[i]; }
+        public List<Node> GetNodes { get { return LN; } }
+
+        /// <summary>
+        /// Gets the List interface of the nodes in the graph.
+        /// </summary>
+        public List<Node> Nodes { get { return LN; } }
 
 		/// <summary>
 		/// Gets the List interface of the arcs in the graph.
