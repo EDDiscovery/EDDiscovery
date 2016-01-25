@@ -16,10 +16,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1053:{E533BB0C-B66D-434E-B903-98E8F72925A0} 1033:{37C452A6-9C79-457B-B24A-9B6FBE84563F} " Type="16"/>
+    <ROW Property="ProductCode" Value="1053:{7281315B-5A19-44FC-B51D-CDB1CB191AB7} 1033:{8680F80A-B552-49DD-94F2-9FCA71C8BB52} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="2.6.9" Type="32"/>
+    <ROW Property="ProductVersion" Value="2.6.11" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -65,7 +65,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="EDDiscovery2.exe" Component_="EDDiscovery2.exe" FileName="EDDISC~1.EXE|EDDiscovery2.exe" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery2.exe" SelfReg="false" NextFile="System.Data.SQLite.dll" DigSign="true"/>
-    <ROW File="EDDiscovery2.exe_1" Component_="EDDiscovery2.exe_1" FileName="EDDISC~1.EXE|EDDiscovery2.exe" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery2.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="EDDiscovery2.exe_1" Component_="EDDiscovery2.exe_1" FileName="EDDISC~1|EDDiscovery" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery2.exe" SelfReg="false" DigSign="true"/>
     <ROW File="Installer.txt" Component_="fround.js" FileName="INSTAL~1.TXT|Installer.txt" Attributes="0" SourcePath="Installer.txt" SelfReg="false" NextFile="trilateration.js"/>
     <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll" SelfReg="false" NextFile="Noesis.Javascript.dll"/>
     <ROW File="Noesis.Javascript.dll" Component_="Noesis.Javascript.dll" FileName="NOESIS~1.DLL|Noesis.Javascript.dll" Attributes="0" SourcePath="..\packages\Noesis.Javascript.0.7.1.0\lib\net40\x86\Noesis.Javascript.dll" SelfReg="false" NextFile="OpenTK.GLControl.dll"/>
