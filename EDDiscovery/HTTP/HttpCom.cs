@@ -46,7 +46,7 @@ namespace EDDiscovery2.HTTP
                     //request.Timeout = 740 * 1000;
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                        WriteEDSMLog("POST " + request.RequestUri, postData);
+                        WriteLog("POST " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                     // Display the status.
@@ -67,7 +67,7 @@ namespace EDDiscovery2.HTTP
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
                     {
                         //TODO: Log Status Code too
-                        WriteEDSMLog(data.Body, "");
+                        WriteLog(data.Body, "");
                     }
 
                     return data;
@@ -83,8 +83,8 @@ namespace EDDiscovery2.HTTP
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         if (EDDiscoveryForm.EDDConfig.EDSMLog)
                         {
-                            WriteEDSMLog("WebException" + ex.Message, "");
-                            WriteEDSMLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                            WriteLog("WebException" + ex.Message, "");
+                            WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
                         }
                         return new ResponseData(httpResponse.StatusCode);
                     }
@@ -96,7 +96,7 @@ namespace EDDiscovery2.HTTP
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
-                    WriteEDSMLog("Exception" + ex.Message, "");
+                    WriteLog("Exception" + ex.Message, "");
                 }
 
                 return new ResponseData(HttpStatusCode.BadRequest);
@@ -134,7 +134,7 @@ namespace EDDiscovery2.HTTP
                     //request.Timeout = 740 * 1000;
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                        WriteEDSMLog("PATCH " + request.RequestUri, postData);
+                        WriteLog("PATCH " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                     // Display the status.
@@ -153,7 +153,7 @@ namespace EDDiscovery2.HTTP
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
                     {
-                        WriteEDSMLog(data.Body, "");
+                        WriteLog(data.Body, "");
                     }
 
                     return data;
@@ -169,8 +169,8 @@ namespace EDDiscovery2.HTTP
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         if (EDDiscoveryForm.EDDConfig.EDSMLog)
                         {
-                            WriteEDSMLog("WebException" + ex.Message, "");
-                            WriteEDSMLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                            WriteLog("WebException" + ex.Message, "");
+                            WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
                         }
                         return new ResponseData(httpResponse.StatusCode);
                     }
@@ -182,7 +182,7 @@ namespace EDDiscovery2.HTTP
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
-                    WriteEDSMLog("Exception" + ex.Message, "");
+                    WriteLog("Exception" + ex.Message, "");
                 }
 
                 return new ResponseData(HttpStatusCode.BadRequest);
@@ -211,7 +211,7 @@ namespace EDDiscovery2.HTTP
                     request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                        WriteEDSMLog("GET " + request.RequestUri, "");
+                        WriteLog("GET " + request.RequestUri, "");
 
 
                     // Get the response.
@@ -234,7 +234,7 @@ namespace EDDiscovery2.HTTP
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
                     {
-                        WriteEDSMLog(data.Body, "");
+                        WriteLog(data.Body, "");
                     }
 
                     return data;
@@ -250,8 +250,8 @@ namespace EDDiscovery2.HTTP
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         if (EDDiscoveryForm.EDDConfig.EDSMLog)
                         {
-                            WriteEDSMLog("WebException" + ex.Message, "");
-                            WriteEDSMLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                            WriteLog("WebException" + ex.Message, "");
+                            WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
                         }
                         return new ResponseData(httpResponse.StatusCode);
                     }
@@ -264,7 +264,7 @@ namespace EDDiscovery2.HTTP
 
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
-                    WriteEDSMLog("Exception" + ex.Message, "");
+                    WriteLog("Exception" + ex.Message, "");
                 }
 
 
@@ -293,7 +293,7 @@ namespace EDDiscovery2.HTTP
                     request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                        WriteEDSMLog("DELETE " + request.RequestUri, "");
+                        WriteLog("DELETE " + request.RequestUri, "");
 
 
                     // Get the response.
@@ -315,7 +315,7 @@ namespace EDDiscovery2.HTTP
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
                     {
-                        WriteEDSMLog(data.Body, "");
+                        WriteLog(data.Body, "");
                     }
 
                     return data;
@@ -331,8 +331,8 @@ namespace EDDiscovery2.HTTP
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         if (EDDiscoveryForm.EDDConfig.EDSMLog)
                         {
-                            WriteEDSMLog("WebException" + ex.Message, "");
-                            WriteEDSMLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                            WriteLog("WebException" + ex.Message, "");
+                            WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
                         }
                         return new ResponseData(httpResponse.StatusCode);
                     }
@@ -345,7 +345,7 @@ namespace EDDiscovery2.HTTP
 
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
                 {
-                    WriteEDSMLog("Exception" + ex.Message, "");
+                    WriteLog("Exception" + ex.Message, "");
                 }
 
 
@@ -354,15 +354,23 @@ namespace EDDiscovery2.HTTP
 
         }
 
-        private void WriteEDSMLog(string str1, string str2)
+
+        private static Object LOCK = new Object();
+        static public  void WriteLog(string str1, string str2)
         {
+            if (EDDiscoveryForm.EDDConfig.EDSMLog == false)
+                return;
+
             try
             {
-                string filename = Path.Combine(Tools.GetAppDataDirectory(), "Log", "edsm" + EDDiscoveryForm.EDDConfig.LogIndex + ".log");
-
-                using (StreamWriter w = File.AppendText(filename))
+                lock(LOCK)
                 {
-                    w.WriteLine(DateTime.Now.ToLongTimeString() + "; " + str1 + "; " + str2);
+                    string filename = Path.Combine(Tools.GetAppDataDirectory(), "Log", "EDD_" + EDDiscoveryForm.EDDConfig.LogIndex + ".log");
+
+                    using (StreamWriter w = File.AppendText(filename))
+                    {
+                        w.WriteLine(DateTime.Now.ToLongTimeString() + "; " + str1 + "; " + str2);
+                    }
                 }
             }
             catch (Exception ex)

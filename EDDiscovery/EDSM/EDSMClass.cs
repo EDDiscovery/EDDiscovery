@@ -136,6 +136,10 @@ namespace EDDiscovery2.EDSM
             string query;
             string  json2;
             //string datestr = date.ToString("yyyy-MM-dd hh:mm:ss");
+            DateTime dtDate = DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+
+            if (dtDate.Subtract(new DateTime(2015, 5, 10)).TotalDays < 0)
+                date = "2015-05-10 00:00:00";
 
             query = "?startdatetime=" + HttpUtility.UrlEncode(date);
             //json1= RequestGet("systems" + query + "&coords=1&submitted=1");

@@ -1,6 +1,7 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
+using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -85,7 +86,8 @@ namespace EDDiscovery2.EDDB
             var tmpFilename = filename + ".tmp";
             var tmpEtagFilename = etagFilename + ".tmp";
             newfile = false;
-            
+
+            HttpCom.WriteLog("DownloadFile", url);
             var request = (HttpWebRequest) HttpWebRequest.Create(url);
             request.UserAgent = "EDDiscovery v" + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
@@ -102,6 +104,7 @@ namespace EDDiscovery2.EDDB
             try
             {
                 var response = (HttpWebResponse)request.GetResponse();
+                HttpCom.WriteLog("Response", response.StatusCode.ToString());
 
                 File.WriteAllText(tmpEtagFilename, response.Headers[HttpResponseHeader.ETag]);
                 var destFileStream = File.Open(tmpFilename, FileMode.Create, FileAccess.Write);
@@ -127,16 +130,19 @@ namespace EDDiscovery2.EDDB
                 if (code == HttpStatusCode.NotModified)
                 {
                     System.Diagnostics.Trace.WriteLine("EDDB: " + filename + " up to date (etag).");
+                    HttpCom.WriteLog(filename, "up to date (etag).");
                     return true;
                 }
-                System.Diagnostics.Trace.WriteLine("Exception:" + ex.Message);
+                System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                HttpCom.WriteLog("Exception", ex.Message);
                 return false;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                HttpCom.WriteLog("DownloadFile Exception", ex.Message);
                 return false;
             }
         }
