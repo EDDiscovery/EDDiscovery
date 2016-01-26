@@ -144,7 +144,8 @@ namespace EDDiscovery
                 Text += "         Systems:  " + SystemData.SystemList.Count;
 
                 imageHandler1.StartWatcher();
-
+                routeControl1.UpdateRouteButtonState(); // now we have systems, we can update this..
+                
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(routeControl1.NewPosition);
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
@@ -758,6 +759,9 @@ namespace EDDiscovery
             _db.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
             _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
             _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
+            _db.PutSettingString("RouteFrom", routeControl1.textBox_From.Text);
+            _db.PutSettingString("RouteTo", routeControl1.textBox_To.Text);
+            _db.PutSettingString("RouteRange", routeControl1.textBox_Range.Text);
             EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
@@ -970,6 +974,7 @@ namespace EDDiscovery
             panelInfo.BackColor = Color.Gold;
 
             routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+            routeControl1.SetFromTo(_db.GetSettingString("RouteFrom", ""), _db.GetSettingString("RouteTo", ""), _db.GetSettingString("RouteRange", "15"));
         }
 
         private void UpdateTitle()
