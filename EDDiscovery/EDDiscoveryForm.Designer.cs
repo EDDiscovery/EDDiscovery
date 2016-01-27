@@ -73,6 +73,8 @@
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.keepOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,8 +82,7 @@
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.keepOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fastTravelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -524,6 +525,22 @@
             this.syncEDSMSystemsToolStripMenuItem.Text = "Sync EDSM Systems";
             this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.keepOnTopToolStripMenuItem,
+            this.fastTravelToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // keepOnTopToolStripMenuItem
+            // 
+            this.keepOnTopToolStripMenuItem.Name = "keepOnTopToolStripMenuItem";
+            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.keepOnTopToolStripMenuItem.Text = "Keep on Top";
+            this.keepOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepOnTopToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -584,20 +601,12 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
-            // optionsToolStripMenuItem
+            // fastTravelToolStripMenuItem
             // 
-            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.keepOnTopToolStripMenuItem});
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.optionsToolStripMenuItem.Text = "Options";
-            // 
-            // keepOnTopToolStripMenuItem
-            // 
-            this.keepOnTopToolStripMenuItem.Name = "keepOnTopToolStripMenuItem";
-            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.keepOnTopToolStripMenuItem.Text = "Keep on Top";
-            this.keepOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepOnTopToolStripMenuItem_Click);
+            this.fastTravelToolStripMenuItem.CheckOnClick = true;
+            this.fastTravelToolStripMenuItem.Name = "fastTravelToolStripMenuItem";
+            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fastTravelToolStripMenuItem.Text = "Fast Travel";
             // 
             // EDDiscoveryForm
             // 
@@ -612,6 +621,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "EDDiscoveryForm";
             this.Text = "EDDiscovery";
+            this.Activated += new System.EventHandler(this.EDDiscoveryForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EDDiscoveryForm_FormClosing);
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
@@ -690,6 +700,7 @@
         private System.Windows.Forms.ToolStripMenuItem reportIssueIdeasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem keepOnTopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fastTravelToolStripMenuItem;
     }
 }
 
