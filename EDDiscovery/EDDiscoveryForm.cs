@@ -1161,5 +1161,14 @@ namespace EDDiscovery
 
         }
 
+        private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/EDDiscovery/EDDiscovery");
+        }
+
+        private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
+        }
     }
 }
