@@ -123,17 +123,16 @@ namespace EDDiscovery2.PlanetSystems
 
         private void SetCurrentSystem()
         {
-            //SetSystem(edForm.TravelControl.CurrentSystem);
-            ISystem sys = SystemData.GetSystem("SHINRARTA DEZHRA");
-            SetSystem(sys);
+            if (edForm.TravelControl.CurrentSystem!=null)
+                SetSystem(edForm.TravelControl.CurrentSystem.name);
         }
 
-        private void SetSystem(ISystem currentSystem)
+        private void SetSystem(string systemname)
         {
-            if (currentSystem == null)
+            if (systemname == null)
                 return;
 
-            textBoxSystemName.Text = currentSystem.name;
+            textBoxSystemName.Text = systemname;
 
             edObjects.Clear();
 
@@ -180,7 +179,8 @@ namespace EDDiscovery2.PlanetSystems
 
                 lvi.Tag = obj;
             }
-            listView1.Items[0].Selected = true;
+            if (edObjects.Count>0)
+                listView1.Items[0].Selected = true;
         }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
@@ -300,6 +300,11 @@ namespace EDDiscovery2.PlanetSystems
         private void panelStar_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            SetSystem(textBoxSystemName.Text);
         }
     }
 
