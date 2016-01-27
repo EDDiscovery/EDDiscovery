@@ -132,7 +132,8 @@
             this.textBoxName.Location = new System.Drawing.Point(72, 13);
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(103, 20);
-            this.textBoxName.TabIndex = 4;
+            this.textBoxName.TabIndex = 0;
+            this.textBoxName.TextChanged += new System.EventHandler(this.textBoxName_TextChanged);
             // 
             // listView1
             // 
@@ -347,7 +348,7 @@
             this.comboBoxTerrainDifficulty.Location = new System.Drawing.Point(90, 92);
             this.comboBoxTerrainDifficulty.Name = "comboBoxTerrainDifficulty";
             this.comboBoxTerrainDifficulty.Size = new System.Drawing.Size(85, 21);
-            this.comboBoxTerrainDifficulty.TabIndex = 20;
+            this.comboBoxTerrainDifficulty.TabIndex = 8;
             // 
             // label9
             // 
@@ -364,7 +365,7 @@
             this.checkBox1.Location = new System.Drawing.Point(400, 41);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(91, 17);
-            this.checkBox1.TabIndex = 18;
+            this.checkBox1.TabIndex = 5;
             this.checkBox1.Text = "Terraformable";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
@@ -382,7 +383,7 @@
             this.textBoxRadius.Location = new System.Drawing.Point(242, 66);
             this.textBoxRadius.Name = "textBoxRadius";
             this.textBoxRadius.Size = new System.Drawing.Size(103, 20);
-            this.textBoxRadius.TabIndex = 16;
+            this.textBoxRadius.TabIndex = 7;
             // 
             // label7
             // 
@@ -398,7 +399,7 @@
             this.textBoxArrivalPoint.Location = new System.Drawing.Point(72, 66);
             this.textBoxArrivalPoint.Name = "textBoxArrivalPoint";
             this.textBoxArrivalPoint.Size = new System.Drawing.Size(103, 20);
-            this.textBoxArrivalPoint.TabIndex = 14;
+            this.textBoxArrivalPoint.TabIndex = 6;
             // 
             // comboBoxVulcanism
             // 
@@ -406,7 +407,7 @@
             this.comboBoxVulcanism.Location = new System.Drawing.Point(242, 39);
             this.comboBoxVulcanism.Name = "comboBoxVulcanism";
             this.comboBoxVulcanism.Size = new System.Drawing.Size(107, 21);
-            this.comboBoxVulcanism.TabIndex = 13;
+            this.comboBoxVulcanism.TabIndex = 4;
             this.comboBoxVulcanism.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label6
@@ -424,7 +425,7 @@
             this.comboBoxAtmosphere.Location = new System.Drawing.Point(72, 39);
             this.comboBoxAtmosphere.Name = "comboBoxAtmosphere";
             this.comboBoxAtmosphere.Size = new System.Drawing.Size(103, 21);
-            this.comboBoxAtmosphere.TabIndex = 11;
+            this.comboBoxAtmosphere.TabIndex = 3;
             // 
             // label5
             // 
@@ -449,7 +450,7 @@
             this.textBoxGravity.Location = new System.Drawing.Point(422, 12);
             this.textBoxGravity.Name = "textBoxGravity";
             this.textBoxGravity.Size = new System.Drawing.Size(58, 20);
-            this.textBoxGravity.TabIndex = 8;
+            this.textBoxGravity.TabIndex = 2;
             this.textBoxGravity.TextChanged += new System.EventHandler(this.textBoxGravity_TextChanged);
             // 
             // comboBoxType
@@ -458,7 +459,7 @@
             this.comboBoxType.Location = new System.Drawing.Point(242, 12);
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(107, 21);
-            this.comboBoxType.TabIndex = 7;
+            this.comboBoxType.TabIndex = 1;
             this.comboBoxType.SelectedIndexChanged += new System.EventHandler(this.comboBoxType_SelectedIndexChanged);
             // 
             // label3

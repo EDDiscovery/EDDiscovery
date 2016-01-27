@@ -80,8 +80,8 @@ namespace EDDiscovery2.PlanetSystems
             if (edobj.arrivalPoint>0)
                 jo.arrival_point = edobj.arrivalPoint;
 
-            jo.atmosphere_type = edobj.atmosphere;
-            jo.vulcanism_type = edobj.vulcanism;
+            jo.atmosphere_type = edobj.atmosphere.ToString();
+            jo.vulcanism_type = edobj.vulcanism.ToString();
 
             if (edobj.radius>0)
                 jo.radius = edobj.radius;

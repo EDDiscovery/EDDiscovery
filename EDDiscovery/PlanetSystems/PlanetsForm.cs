@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery2.DB;
+using System.Globalization;
 
 namespace EDDiscovery2.PlanetSystems
 {
@@ -19,6 +20,7 @@ namespace EDDiscovery2.PlanetSystems
         private Dictionary<int, string> dictComboDesc = new Dictionary<int, string>();
 
         private int CurrentItem = 0;
+        private EDObject currentObj;
 
         private System.Windows.Forms.ColumnHeader columnName;
         private System.Windows.Forms.ColumnHeader columnType;
@@ -144,7 +146,10 @@ namespace EDDiscovery2.PlanetSystems
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
-            edObjects.Add(new EDObject());
+            EDObject obj = new EDObject();
+            obj.system = textBoxSystemName.Text;
+            obj.commander = edForm.CommanderName;
+            edObjects.Add(obj);
             CurrentItem = edObjects.Count - 1;
             UpDateListView();
 
@@ -183,8 +188,37 @@ namespace EDDiscovery2.PlanetSystems
                 listView1.Items[0].Selected = true;
         }
 
+        private void UpdateListViewLine()
+        {
+            ListViewItem lvi;
+
+            if (listView1.SelectedItems.Count > 0)
+            {
+                lvi = listView1.SelectedItems[0];
+
+                lvi.SubItems[0].Text = currentObj.objectName;
+                lvi.SubItems[1].Text = currentObj.Description;
+                lvi.SubItems[2].Text = currentObj.gravity.ToString("0.00");
+                lvi.SubItems[3].Text = currentObj.arrivalPoint.ToString("0");
+
+
+                for (int ii = 0; ii < mlist.Count; ii++)
+                {
+                    if (currentObj.materials[mlist[ii].material])
+                        lvi.SubItems[3+ii].Text = "X";
+                    else
+                        lvi.SubItems[3 + ii].Text = " ";
+                }
+
+
+            }
+        }
+
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
+            UpdateEDObject(currentObj);
+
+            edmat.Store(currentObj);
             //Just Greg testing stuff. Go ahead and delete this comment if it's
             //in your way...
             //var edo = new EDObject();
@@ -193,6 +227,7 @@ namespace EDDiscovery2.PlanetSystems
             //edo.commander = "Marlon Blake";
             //edmat.Store(edo);
         }
+
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -208,10 +243,10 @@ namespace EDDiscovery2.PlanetSystems
             if (v < 0)
                 return;
 
-            EDObject obj = edObjects[v];
+            currentObj = edObjects[v];
 
-            textBoxName.Text = obj.objectName;
-            if (obj.IsPlanet)
+            textBoxName.Text = currentObj.objectName;
+            if (currentObj.IsPlanet)
             {
                 panelPlanets.Visible = true;
                 panelStar.Visible = false;
@@ -223,27 +258,27 @@ namespace EDDiscovery2.PlanetSystems
             }
 
 
-            var nr = (from str in dictComboDesc where str.Value == obj.Description select str.Key).FirstOrDefault<int>();
+            var nr = (from str in dictComboDesc where str.Value == currentObj.Description select str.Key).FirstOrDefault<int>();
             comboBoxType.SelectedIndex = nr;
 
 
-            textBoxGravity.Text = obj.gravity.ToString("0.00");
-            textBoxRadius.Text = obj.radius.ToString("0");
-            textBoxArrivalPoint.Text = obj.arrivalPoint.ToString("0");
+            textBoxGravity.Text = currentObj.gravity.ToString("0.00");
+            textBoxRadius.Text = currentObj.radius.ToString("0");
+            textBoxArrivalPoint.Text = currentObj.arrivalPoint.ToString("0");
 
             try
             {
-                comboBoxAtmosphere.SelectedIndex = (int)obj.atmosphere;
-                comboBoxVulcanism.SelectedIndex = (int)obj.vulcanism;
+                comboBoxAtmosphere.SelectedIndex = (int)currentObj.atmosphere;
+                comboBoxVulcanism.SelectedIndex = (int)currentObj.vulcanism;
             }
             catch (Exception)
             {
 
             }
-            SetMaterials(obj, checkedListBox1);
-            SetMaterials(obj, checkedListBox2);
-            SetMaterials(obj, checkedListBox3);
-            SetMaterials(obj, checkedListBox4);
+            SetMaterials(currentObj, checkedListBox1);
+            SetMaterials(currentObj, checkedListBox2);
+            SetMaterials(currentObj, checkedListBox3);
+            SetMaterials(currentObj, checkedListBox4);
 
         }
 
@@ -306,6 +341,51 @@ namespace EDDiscovery2.PlanetSystems
         {
             SetSystem(textBoxSystemName.Text);
         }
+
+        private void textBoxName_TextChanged(object sender, EventArgs e)
+        {
+         
+            
+        }
+
+
+        private void UpdateEDObject(EDObject obj)
+        {
+            
+            obj.objectName = textBoxName.Text;
+            obj.ObjectType = obj.String2ObjectType(comboBoxType.Text);
+
+            var culture = new CultureInfo("en-US");
+            currentObj.gravity = float.Parse(textBoxGravity.Text.Replace(",", "."), culture);
+            currentObj.radius = float.Parse(textBoxRadius.Text.Replace(",", "."), culture);
+            currentObj.arrivalPoint = float.Parse(textBoxArrivalPoint.Text.Replace(",", "."), culture);
+
+            currentObj.atmosphere = obj.AtmosphereStr2Enum(comboBoxAtmosphere.Text);
+            currentObj.vulcanism = obj.VulcanismStr2Enum(comboBoxVulcanism.Text);
+
+ 
+            GetMaterials(ref currentObj, checkedListBox1);
+            GetMaterials(ref currentObj, checkedListBox2);
+            GetMaterials(ref currentObj, checkedListBox3);
+            GetMaterials(ref currentObj, checkedListBox4);
+
+
+            UpdateListViewLine();
+        }
+
+
+        private void GetMaterials(ref EDObject obj, CheckedListBox box)
+        {
+            for (int i = 0; i < box.Items.Count; i++)
+            {
+                string item = (string)box.Items[i];
+                MaterialEnum mat = obj.MaterialFromString(item);
+                obj.materials[mat] =  box.GetItemChecked(i);
+            }
+        }
+
+
+
     }
 
 }

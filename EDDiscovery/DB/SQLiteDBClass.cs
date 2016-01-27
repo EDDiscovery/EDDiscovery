@@ -464,7 +464,7 @@ namespace EDDiscovery.DB
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
             string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
-            string query3 = "ALTER TABLE Objects ADD COLUMN terraformable BOOL";
+            string query3 = "ALTER TABLE Objects ADD COLUMN terraform Integer";
             string query4 = "ALTER TABLE VisitedSystems ADD COLUMN Status BOOL";
             string dbfile = GetSQLiteDBFile();
 
@@ -484,6 +484,7 @@ namespace EDDiscovery.DB
                 ExecuteQuery(query1);
                 ExecuteQuery(query2);
                 ExecuteQuery(query3);
+                ExecuteQuery(query4);
             }
             catch (Exception ex)
             {

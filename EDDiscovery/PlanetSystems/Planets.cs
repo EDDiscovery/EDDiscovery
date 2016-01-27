@@ -161,7 +161,7 @@ public enum AtmosphereEnum
         public string commander;
         private ObjectTypesEnum objectType;
         private ObjectsType type;
-        public bool terraformable;
+        public string terraformable;
         public float gravity;
         public float arrivalPoint;
         public float radius;
@@ -184,6 +184,8 @@ public enum AtmosphereEnum
         {
             materials = new Dictionary<MaterialEnum, bool>();
 
+            if (objectsTypes != null)
+                type = objectsTypes[0];
             // Create an empty dictionary
             foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
             {
@@ -353,9 +355,10 @@ public enum AtmosphereEnum
             id = jo["id"].Value<int>();
             system = jo["system"].Value<string>();
             objectName = jo["world"].Value<string>();
+            commander = jo["commander"].Value<string>();
 
             ObjectType = String2ObjectType(jo["world_type"].Value<string>());
-            terraformable = GetBool(jo["terraformable"]);
+            terraformable = jo["terraformable"].Value<string>();
             gravity = GetFloat(jo["gravity"]);
             terrain_difficulty  = GetInt(jo["terrain_difficulty"]);
 
