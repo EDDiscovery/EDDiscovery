@@ -134,7 +134,6 @@ namespace EDDiscovery2.EDSM
      public string RequestSystems(string date)
         {
             string query;
-            string  json2;
             //string datestr = date.ToString("yyyy-MM-dd hh:mm:ss");
             DateTime dtDate = DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 

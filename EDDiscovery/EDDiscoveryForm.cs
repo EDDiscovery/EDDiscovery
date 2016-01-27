@@ -326,10 +326,6 @@ namespace EDDiscovery
             try
             {
                 EDSMClass edsm = new EDSMClass();
-
-
-                string json;
-
                 string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
                 CommanderName = _db.GetSettingString("CommanderName", "");
@@ -367,13 +363,14 @@ namespace EDDiscovery
                 _db.GetAllSystems();
 
 
-
-                SystemNames.Clear();
-                foreach (SystemClass system in SystemData.SystemList)
+                Invoke((MethodInvoker)delegate
                 {
-                    SystemNames.Add(system.name);
-                }
-
+                    SystemNames.Clear();
+                    foreach (SystemClass system in SystemData.SystemList)
+                    {
+                        SystemNames.Add(system.name);
+                    }
+                });
             }
             catch (Exception ex)
             {
