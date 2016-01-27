@@ -62,7 +62,7 @@ namespace EDDiscovery
 
                 sp.time = new DateTime(lasttime.Year, lasttime.Month, lasttime.Day, hour, min, sec);
 
-                if (sp.time.Subtract(lasttime).TotalHours < -12)
+                if (sp.time.Subtract(lasttime).TotalHours < -4)
                     sp.time = sp.time.AddDays(1);
 
                 str = line.Substring(18, line.IndexOf(" Body:")-19);

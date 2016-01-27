@@ -246,7 +246,6 @@ namespace EDDiscovery2
 
                 // Check ED local filename too
                 filename = Path.Combine(EDDirectory, "AppConfigLocal.xml");
-
                 if (!File.Exists(filename))
                 {
                     try
