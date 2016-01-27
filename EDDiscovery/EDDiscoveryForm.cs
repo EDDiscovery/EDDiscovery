@@ -1170,5 +1170,12 @@ namespace EDDiscovery
         {
             Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
         }
+
+        private void keepOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            mi.Checked = !mi.Checked;
+            this.TopMost = mi.Checked;
+        }
     }
 }
