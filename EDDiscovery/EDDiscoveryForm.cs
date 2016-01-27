@@ -1177,5 +1177,13 @@ namespace EDDiscovery
             mi.Checked = !mi.Checked;
             this.TopMost = mi.Checked;
         }
+
+        private void EDDiscoveryForm_Activated(object sender, EventArgs e)
+        {
+            if(fastTravelToolStripMenuItem.Checked) {
+                TextBox txtDistanceToNextSystem = this.Controls.Find("textBoxDistanceToNextSystem", true).FirstOrDefault() as TextBox;
+                txtDistanceToNextSystem.Focus();
+            }
+        }
     }
 }
