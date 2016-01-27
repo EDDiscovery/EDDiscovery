@@ -231,6 +231,23 @@ public enum AtmosphereEnum
             }
         }
 
+        public bool IsPlanet
+        {
+            get
+            {
+                return type.Planet;
+            }
+        }
+
+        public bool IsStar
+        {
+            get
+            {
+                return type.Star;
+            }
+        }
+
+
 
         public string ShortName
         {
@@ -414,6 +431,9 @@ public enum AtmosphereEnum
 
         public AtmosphereEnum AtmosphereStr2Enum(string v)
         {
+            if (v == null)
+                return AtmosphereEnum.Unknown;
+
             foreach (AtmosphereEnum mat in Enum.GetValues(typeof(AtmosphereEnum)))
             {
                 string str = mat.ToString().Replace("_", "").ToLower();
@@ -445,6 +465,9 @@ public enum AtmosphereEnum
 
         public MaterialEnum MaterialFromString(string v)
         {
+            if (v == null)
+                return MaterialEnum.Unknown;
+
             foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
             {
                 if (v.ToLower().Equals(mat.ToString().ToLower()))

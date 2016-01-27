@@ -17,7 +17,7 @@ namespace EDDiscovery2
 
         public EDDConfig()
         {
-            LogIndex = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            LogIndex = DateTime.Now.ToString("yyyyMMdd");
         }
 
         public bool UseDistances

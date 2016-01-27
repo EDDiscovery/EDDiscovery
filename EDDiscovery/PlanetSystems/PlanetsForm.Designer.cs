@@ -34,17 +34,36 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnData = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ColumnVeryCommon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderCommon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderRare = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderVeryRare = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1 = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonAddPlanet = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.toolStripButtonAddStar = new System.Windows.Forms.ToolStripButton();
+            this.panelPlanets = new System.Windows.Forms.Panel();
+            this.panelStar = new System.Windows.Forms.Panel();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ColumnRowType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label17 = new System.Windows.Forms.Label();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.checkedListBox4 = new System.Windows.Forms.CheckedListBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -70,9 +89,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
+            this.panelBottom = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.panelPlanets.SuspendLayout();
+            this.panelStar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.panelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxSystemName
@@ -112,13 +135,6 @@
             // 
             // listView1
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnName,
-            this.columnData,
-            this.ColumnVeryCommon,
-            this.columnHeaderCommon,
-            this.columnHeaderRare,
-            this.columnHeaderVeryRare});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(0, 25);
@@ -129,34 +145,6 @@
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            // 
-            // columnName
-            // 
-            this.columnName.Text = "Name";
-            this.columnName.Width = 90;
-            // 
-            // columnData
-            // 
-            this.columnData.Text = "Data";
-            this.columnData.Width = 200;
-            // 
-            // ColumnVeryCommon
-            // 
-            this.ColumnVeryCommon.Text = "Very common";
-            this.ColumnVeryCommon.Width = 100;
-            // 
-            // columnHeaderCommon
-            // 
-            this.columnHeaderCommon.Text = "Common";
-            this.columnHeaderCommon.Width = 100;
-            // 
-            // columnHeaderRare
-            // 
-            this.columnHeaderRare.Text = "Rare";
-            // 
-            // columnHeaderVeryRare
-            // 
-            this.columnHeaderVeryRare.Text = "Very rare";
             // 
             // panel1
             // 
@@ -170,23 +158,24 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonAdd,
-            this.toolStripButtonSave});
+            this.toolStripButtonAddPlanet,
+            this.toolStripButtonSave,
+            this.toolStripButtonAddStar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(923, 25);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButtonAdd
+            // toolStripButtonAddPlanet
             // 
-            this.toolStripButtonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAdd.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAdd.Image")));
-            this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonAdd.Name = "toolStripButtonAdd";
-            this.toolStripButtonAdd.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonAdd.Text = "Add";
-            this.toolStripButtonAdd.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
+            this.toolStripButtonAddPlanet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAddPlanet.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddPlanet.Image")));
+            this.toolStripButtonAddPlanet.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAddPlanet.Name = "toolStripButtonAddPlanet";
+            this.toolStripButtonAddPlanet.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonAddPlanet.Text = "Add planet";
+            this.toolStripButtonAddPlanet.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
             // 
             // toolStripButtonSave
             // 
@@ -199,37 +188,263 @@
             this.toolStripButtonSave.Text = "Save";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
-            // panel2
+            // toolStripButtonAddStar
             // 
-            this.panel2.Controls.Add(this.label13);
-            this.panel2.Controls.Add(this.checkedListBox4);
-            this.panel2.Controls.Add(this.label12);
-            this.panel2.Controls.Add(this.checkedListBox3);
-            this.panel2.Controls.Add(this.label11);
-            this.panel2.Controls.Add(this.checkedListBox2);
-            this.panel2.Controls.Add(this.label10);
-            this.panel2.Controls.Add(this.checkedListBox1);
-            this.panel2.Controls.Add(this.comboBoxTerrainDifficulty);
-            this.panel2.Controls.Add(this.label9);
-            this.panel2.Controls.Add(this.checkBox1);
-            this.panel2.Controls.Add(this.label8);
-            this.panel2.Controls.Add(this.textBoxRadius);
-            this.panel2.Controls.Add(this.label7);
-            this.panel2.Controls.Add(this.textBoxArrivalPoint);
-            this.panel2.Controls.Add(this.comboBoxVulcanism);
-            this.panel2.Controls.Add(this.label6);
-            this.panel2.Controls.Add(this.comboBoxAtmosphere);
-            this.panel2.Controls.Add(this.label5);
-            this.panel2.Controls.Add(this.label4);
-            this.panel2.Controls.Add(this.textBoxGravity);
-            this.panel2.Controls.Add(this.comboBoxType);
-            this.panel2.Controls.Add(this.label3);
-            this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.textBoxName);
-            this.panel2.Location = new System.Drawing.Point(15, 272);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(923, 144);
-            this.panel2.TabIndex = 7;
+            this.toolStripButtonAddStar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAddStar.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddStar.Image")));
+            this.toolStripButtonAddStar.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAddStar.Name = "toolStripButtonAddStar";
+            this.toolStripButtonAddStar.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonAddStar.Text = "Add Star";
+            // 
+            // panelPlanets
+            // 
+            this.panelPlanets.Controls.Add(this.label13);
+            this.panelPlanets.Controls.Add(this.checkedListBox4);
+            this.panelPlanets.Controls.Add(this.label12);
+            this.panelPlanets.Controls.Add(this.checkedListBox3);
+            this.panelPlanets.Controls.Add(this.label11);
+            this.panelPlanets.Controls.Add(this.checkedListBox2);
+            this.panelPlanets.Controls.Add(this.label10);
+            this.panelPlanets.Controls.Add(this.checkedListBox1);
+            this.panelPlanets.Controls.Add(this.comboBoxTerrainDifficulty);
+            this.panelPlanets.Controls.Add(this.label9);
+            this.panelPlanets.Controls.Add(this.checkBox1);
+            this.panelPlanets.Controls.Add(this.label8);
+            this.panelPlanets.Controls.Add(this.textBoxRadius);
+            this.panelPlanets.Controls.Add(this.label7);
+            this.panelPlanets.Controls.Add(this.textBoxArrivalPoint);
+            this.panelPlanets.Controls.Add(this.comboBoxVulcanism);
+            this.panelPlanets.Controls.Add(this.label6);
+            this.panelPlanets.Controls.Add(this.comboBoxAtmosphere);
+            this.panelPlanets.Controls.Add(this.label5);
+            this.panelPlanets.Controls.Add(this.label4);
+            this.panelPlanets.Controls.Add(this.textBoxGravity);
+            this.panelPlanets.Controls.Add(this.comboBoxType);
+            this.panelPlanets.Controls.Add(this.label3);
+            this.panelPlanets.Controls.Add(this.label2);
+            this.panelPlanets.Controls.Add(this.textBoxName);
+            this.panelPlanets.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPlanets.Location = new System.Drawing.Point(0, 0);
+            this.panelPlanets.Name = "panelPlanets";
+            this.panelPlanets.Size = new System.Drawing.Size(926, 157);
+            this.panelPlanets.TabIndex = 7;
+            // 
+            // panelStar
+            // 
+            this.panelStar.Controls.Add(this.dataGridView1);
+            this.panelStar.Controls.Add(this.label17);
+            this.panelStar.Controls.Add(this.textBox7);
+            this.panelStar.Controls.Add(this.label18);
+            this.panelStar.Controls.Add(this.textBox8);
+            this.panelStar.Controls.Add(this.label19);
+            this.panelStar.Controls.Add(this.textBox9);
+            this.panelStar.Controls.Add(this.label16);
+            this.panelStar.Controls.Add(this.textBox6);
+            this.panelStar.Controls.Add(this.textBox5);
+            this.panelStar.Controls.Add(this.label15);
+            this.panelStar.Controls.Add(this.textBox3);
+            this.panelStar.Controls.Add(this.label20);
+            this.panelStar.Controls.Add(this.textBox1);
+            this.panelStar.Controls.Add(this.label21);
+            this.panelStar.Controls.Add(this.textBox2);
+            this.panelStar.Controls.Add(this.comboBox4);
+            this.panelStar.Controls.Add(this.label25);
+            this.panelStar.Controls.Add(this.label26);
+            this.panelStar.Controls.Add(this.textBox4);
+            this.panelStar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelStar.Location = new System.Drawing.Point(0, 0);
+            this.panelStar.Name = "panelStar";
+            this.panelStar.Size = new System.Drawing.Size(926, 157);
+            this.panelStar.TabIndex = 9;
+            this.panelStar.Paint += new System.Windows.Forms.PaintEventHandler(this.panelStar_Paint);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.ColumnHeadersVisible = false;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnRowType,
+            this.Column2,
+            this.ColumnUnit});
+            this.dataGridView1.Location = new System.Drawing.Point(199, 3);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.Size = new System.Drawing.Size(368, 141);
+            this.dataGridView1.TabIndex = 32;
+            // 
+            // ColumnRowType
+            // 
+            this.ColumnRowType.HeaderText = "Column1";
+            this.ColumnRowType.Name = "ColumnRowType";
+            this.ColumnRowType.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Column2";
+            this.Column2.Name = "Column2";
+            // 
+            // ColumnUnit
+            // 
+            this.ColumnUnit.HeaderText = "Column3";
+            this.ColumnUnit.Name = "ColumnUnit";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(752, 127);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(70, 13);
+            this.label17.TabIndex = 31;
+            this.label17.Text = "Surface temp";
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(828, 122);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(107, 20);
+            this.textBox7.TabIndex = 30;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(572, 125);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(32, 13);
+            this.label18.TabIndex = 29;
+            this.label18.Text = "Orbit ";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(635, 122);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(107, 20);
+            this.textBox8.TabIndex = 28;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(733, 46);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(61, 13);
+            this.label19.TabIndex = 27;
+            this.label19.Text = "Orbit period";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(802, 43);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(103, 20);
+            this.textBox9.TabIndex = 26;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(753, 100);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(70, 13);
+            this.label16.TabIndex = 25;
+            this.label16.Text = "Surface temp";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(829, 95);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(107, 20);
+            this.textBox6.TabIndex = 24;
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(135, 69);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(58, 20);
+            this.textBox5.TabIndex = 23;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(28, 72);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(32, 13);
+            this.label15.TabIndex = 22;
+            this.label15.Text = "Class";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(71, 69);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.ReadOnly = true;
+            this.textBox3.Size = new System.Drawing.Size(58, 20);
+            this.textBox3.TabIndex = 21;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(573, 98);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(62, 13);
+            this.label20.TabIndex = 17;
+            this.label20.Text = "Solar radius";
+            this.label20.Click += new System.EventHandler(this.label20_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(636, 95);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(107, 20);
+            this.textBox1.TabIndex = 16;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(734, 19);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(69, 13);
+            this.label21.TabIndex = 15;
+            this.label21.Text = "Solar masses";
+            this.label21.Click += new System.EventHandler(this.label21_Click);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(803, 16);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(103, 20);
+            this.textBox2.TabIndex = 14;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Location = new System.Drawing.Point(72, 39);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(107, 21);
+            this.comboBox4.TabIndex = 7;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(28, 43);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(31, 13);
+            this.label25.TabIndex = 6;
+            this.label25.Text = "Type";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(28, 19);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(35, 13);
+            this.label26.TabIndex = 5;
+            this.label26.Text = "Name";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(72, 13);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(103, 20);
+            this.textBox4.TabIndex = 4;
             // 
             // label13
             // 
@@ -485,13 +700,25 @@
             this.label14.TabIndex = 8;
             this.label14.Text = "Testing only!!  Storing function will come soon(TM)";
             // 
+            // panelBottom
+            // 
+            this.panelBottom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelBottom.Controls.Add(this.panelPlanets);
+            this.panelBottom.Controls.Add(this.panelStar);
+            this.panelBottom.Location = new System.Drawing.Point(12, 272);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(926, 157);
+            this.panelBottom.TabIndex = 10;
+            // 
             // PlanetsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(963, 419);
+            this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.label14);
-            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
@@ -504,8 +731,12 @@
             this.panel1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.panelPlanets.ResumeLayout(false);
+            this.panelPlanets.PerformLayout();
+            this.panelStar.ResumeLayout(false);
+            this.panelStar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.panelBottom.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -518,17 +749,11 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader columnName;
-        private System.Windows.Forms.ColumnHeader columnData;
-        private System.Windows.Forms.ColumnHeader ColumnVeryCommon;
-        private System.Windows.Forms.ColumnHeader columnHeaderCommon;
-        private System.Windows.Forms.ColumnHeader columnHeaderRare;
-        private System.Windows.Forms.ColumnHeader columnHeaderVeryRare;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonAdd;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAddPlanet;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelPlanets;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBoxType;
         private System.Windows.Forms.Label label3;
@@ -554,5 +779,31 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAddStar;
+        private System.Windows.Forms.Panel panelStar;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnRowType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnUnit;
+        private System.Windows.Forms.Panel panelBottom;
     }
 }

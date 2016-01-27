@@ -19,6 +19,15 @@ namespace EDDiscovery2.PlanetSystems
         private Dictionary<int, string> dictComboDesc = new Dictionary<int, string>();
 
         private int CurrentItem = 0;
+
+        private System.Windows.Forms.ColumnHeader columnName;
+        private System.Windows.Forms.ColumnHeader columnType;
+        private System.Windows.Forms.ColumnHeader columnGravity;
+        private System.Windows.Forms.ColumnHeader columnArrivalPoint;
+        private System.Windows.Forms.ColumnHeader[] ColumnMats;
+
+        private List<Material> mlist;
+
         public PlanetsForm()
         {
             InitializeComponent();
@@ -37,11 +46,58 @@ namespace EDDiscovery2.PlanetSystems
 
         private void PlanetsForm_Load(object sender, EventArgs e)
         {
+            this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnGravity = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnArrivalPoint = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnName,
+            this.columnType, columnGravity, columnArrivalPoint });
+            // 
+            // columnName
+            // 
+            this.columnName.Text = "Name";
+            this.columnName.Width = 80;
+            // 
+            // columnData
+            // 
+            this.columnType.Text = "Data";
+            this.columnType.Width = 150;
+
+            columnGravity.Text = "G";
+            columnGravity.Width = 40;
+
+            columnArrivalPoint.Text = "Dist";
+            columnArrivalPoint.Width = 40;
+
+
+            mlist = Material.GetMaterialList;
+
+            ColumnMats = new ColumnHeader[mlist.Count];
+            for (int ii = 0; ii < mlist.Count; ii++)
+            {
+                ColumnHeader col = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+                ColumnMats[ii] = col;
+                col.Name = mlist[ii].Name;
+                col.Text = mlist[ii].ShortName;
+                col.Tag = mlist[ii];
+                col.Width = 25;
+                listView1.Columns.Add(col);
+            }
+
+
+
+
+
             dictComboDesc.Clear();
             foreach (EDObject obj in EDObject.listObjectTypes)
             {
-                int nr = comboBoxType.Items.Add(obj.Description);
-                dictComboDesc[nr] = obj.Description;
+                if (obj.IsPlanet)
+                {
+                    int nr = comboBoxType.Items.Add(obj.Description);
+                    dictComboDesc[nr] = obj.Description;
+                }
             }
 
 
@@ -104,10 +160,24 @@ namespace EDDiscovery2.PlanetSystems
                 ListViewItem lvi;
                 lvi = listView1.Items.Add(obj.objectName);
                 lvi.SubItems.Add(obj.Description);
-                lvi.SubItems.Add("P S");
-                lvi.SubItems.Add("Cd");
-                lvi.SubItems.Add("W");
-                lvi.SubItems.Add("Po");
+
+                lvi.SubItems.Add(obj.gravity.ToString("0.00"));
+                lvi.SubItems.Add(obj.arrivalPoint.ToString("0"));
+
+                lvi.UseItemStyleForSubItems = false;
+
+
+                for (int ii = 0; ii < mlist.Count; ii++)
+                {
+                    ListViewItem.ListViewSubItem lvsi;
+                    if (obj.materials[mlist[ii].material])
+                        lvsi = lvi.SubItems.Add("X");
+                    else
+                        lvsi =  lvi.SubItems.Add(" ");
+
+                    lvsi.BackColor = mlist[ii].RareityColor;
+                }
+
                 lvi.Tag = obj;
             }
             listView1.Items[0].Selected = true;
@@ -115,7 +185,13 @@ namespace EDDiscovery2.PlanetSystems
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-
+            //Just Greg testing stuff. Go ahead and delete this comment if it's
+            //in your way...
+            //var edo = new EDObject();
+            //edo.system = "MarlonTest";
+            //edo.objectName = "A 1";
+            //edo.commander = "Marlon Blake";
+            //edmat.Store(edo);
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -135,6 +211,16 @@ namespace EDDiscovery2.PlanetSystems
             EDObject obj = edObjects[v];
 
             textBoxName.Text = obj.objectName;
+            if (obj.IsPlanet)
+            {
+                panelPlanets.Visible = true;
+                panelStar.Visible = false;
+            }
+            else
+            {
+                panelPlanets.Visible = false;
+                panelStar.Visible = true;
+            }
 
 
             var nr = (from str in dictComboDesc where str.Value == obj.Description select str.Key).FirstOrDefault<int>();
@@ -189,6 +275,31 @@ namespace EDDiscovery2.PlanetSystems
         private void PlanetsForm_Shown(object sender, EventArgs e)
         {
             SetCurrentSystem();
+        }
+
+        private void label21_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label20_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelStar_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 
