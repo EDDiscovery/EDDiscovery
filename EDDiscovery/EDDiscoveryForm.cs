@@ -1181,8 +1181,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
         {
             if(fastTravelToolStripMenuItem.Checked) {
-                TextBox txtDistanceToNextSystem = this.Controls.Find("textBoxDistanceToNextSystem", true).FirstOrDefault() as TextBox;
-                txtDistanceToNextSystem.Focus();
+                travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
             }
         }
     }
