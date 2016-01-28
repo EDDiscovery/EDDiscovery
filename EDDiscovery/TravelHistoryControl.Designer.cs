@@ -790,7 +790,6 @@
         private System.Windows.Forms.Button buttonRoss;
         private System.Windows.Forms.Button buttonTrilaterate;
         private System.Windows.Forms.Label labelDistanceToNextSystem;
-        private System.Windows.Forms.TextBox textBoxDistanceToNextSystem;
         private System.Windows.Forms.Panel panelRight;
         private System.Windows.Forms.TextBox textBoxFilter;
         private System.Windows.Forms.Label label1;
@@ -807,5 +806,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
+        internal System.Windows.Forms.TextBox textBoxDistanceToNextSystem;
     }
 }
