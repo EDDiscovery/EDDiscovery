@@ -1180,7 +1180,8 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
         {
-            if(fastTravelToolStripMenuItem.Checked) {
+            /* TODO: Only focus the field if we're on the correct tab! */
+            if(fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory) {
                 travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
             }
         }
