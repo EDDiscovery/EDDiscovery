@@ -65,14 +65,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panelStar = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.ColumnRowType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label17 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -91,11 +83,12 @@
             this.label14 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.buttonLoad = new System.Windows.Forms.Button();
+            this.label22 = new System.Windows.Forms.Label();
+            this.textBox10 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panelPlanets.SuspendLayout();
             this.panelStar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -144,7 +137,7 @@
             this.listView1.Location = new System.Drawing.Point(0, 25);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(923, 203);
+            this.listView1.Size = new System.Drawing.Size(920, 216);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -159,7 +152,7 @@
             this.panel1.Controls.Add(this.toolStrip1);
             this.panel1.Location = new System.Drawing.Point(15, 38);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(923, 228);
+            this.panel1.Size = new System.Drawing.Size(920, 241);
             this.panel1.TabIndex = 6;
             // 
             // toolStrip1
@@ -170,7 +163,7 @@
             this.toolStripButtonAddStar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(923, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(920, 25);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -234,7 +227,7 @@
             this.panelPlanets.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPlanets.Location = new System.Drawing.Point(0, 0);
             this.panelPlanets.Name = "panelPlanets";
-            this.panelPlanets.Size = new System.Drawing.Size(926, 157);
+            this.panelPlanets.Size = new System.Drawing.Size(923, 149);
             this.panelPlanets.TabIndex = 7;
             // 
             // label13
@@ -482,11 +475,8 @@
             // 
             // panelStar
             // 
-            this.panelStar.Controls.Add(this.dataGridView1);
-            this.panelStar.Controls.Add(this.label17);
-            this.panelStar.Controls.Add(this.textBox7);
-            this.panelStar.Controls.Add(this.label18);
-            this.panelStar.Controls.Add(this.textBox8);
+            this.panelStar.Controls.Add(this.label22);
+            this.panelStar.Controls.Add(this.textBox10);
             this.panelStar.Controls.Add(this.label19);
             this.panelStar.Controls.Add(this.textBox9);
             this.panelStar.Controls.Add(this.label16);
@@ -505,92 +495,30 @@
             this.panelStar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelStar.Location = new System.Drawing.Point(0, 0);
             this.panelStar.Name = "panelStar";
-            this.panelStar.Size = new System.Drawing.Size(926, 157);
+            this.panelStar.Size = new System.Drawing.Size(923, 149);
             this.panelStar.TabIndex = 9;
             this.panelStar.Paint += new System.Windows.Forms.PaintEventHandler(this.panelStar_Paint);
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.ColumnHeadersVisible = false;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnRowType,
-            this.Column2,
-            this.ColumnUnit});
-            this.dataGridView1.Location = new System.Drawing.Point(199, 3);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(368, 141);
-            this.dataGridView1.TabIndex = 32;
-            // 
-            // ColumnRowType
-            // 
-            this.ColumnRowType.HeaderText = "Column1";
-            this.ColumnRowType.Name = "ColumnRowType";
-            this.ColumnRowType.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
-            // 
-            // ColumnUnit
-            // 
-            this.ColumnUnit.HeaderText = "Column3";
-            this.ColumnUnit.Name = "ColumnUnit";
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(752, 127);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(70, 13);
-            this.label17.TabIndex = 31;
-            this.label17.Text = "Surface temp";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(828, 122);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(107, 20);
-            this.textBox7.TabIndex = 30;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(572, 125);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(32, 13);
-            this.label18.TabIndex = 29;
-            this.label18.Text = "Orbit ";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(635, 122);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(107, 20);
-            this.textBox8.TabIndex = 28;
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(733, 46);
+            this.label19.Location = new System.Drawing.Point(472, 44);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(61, 13);
+            this.label19.Size = new System.Drawing.Size(47, 13);
             this.label19.TabIndex = 27;
-            this.label19.Text = "Orbit period";
+            this.label19.Text = "Star age";
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(802, 43);
+            this.textBox9.Location = new System.Drawing.Point(534, 41);
             this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(103, 20);
+            this.textBox9.Size = new System.Drawing.Size(107, 20);
             this.textBox9.TabIndex = 26;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(753, 100);
+            this.label16.Location = new System.Drawing.Point(237, 45);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(70, 13);
             this.label16.TabIndex = 25;
@@ -598,9 +526,9 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(829, 95);
+            this.textBox6.Location = new System.Drawing.Point(313, 41);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(107, 20);
+            this.textBox6.Size = new System.Drawing.Size(103, 20);
             this.textBox6.TabIndex = 24;
             // 
             // textBox5
@@ -630,7 +558,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(573, 98);
+            this.label20.Location = new System.Drawing.Point(471, 15);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(62, 13);
             this.label20.TabIndex = 17;
@@ -639,7 +567,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(636, 95);
+            this.textBox1.Location = new System.Drawing.Point(534, 12);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(107, 20);
             this.textBox1.TabIndex = 16;
@@ -648,7 +576,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(734, 19);
+            this.label21.Location = new System.Drawing.Point(238, 13);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(69, 13);
             this.label21.TabIndex = 15;
@@ -657,7 +585,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(803, 16);
+            this.textBox2.Location = new System.Drawing.Point(313, 13);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(103, 20);
             this.textBox2.TabIndex = 14;
@@ -666,9 +594,9 @@
             // comboBox4
             // 
             this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(72, 39);
+            this.comboBox4.Location = new System.Drawing.Point(72, 40);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(107, 21);
+            this.comboBox4.Size = new System.Drawing.Size(121, 21);
             this.comboBox4.TabIndex = 7;
             // 
             // label25
@@ -693,7 +621,7 @@
             // 
             this.textBox4.Location = new System.Drawing.Point(72, 13);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(103, 20);
+            this.textBox4.Size = new System.Drawing.Size(121, 20);
             this.textBox4.TabIndex = 4;
             // 
             // label14
@@ -711,11 +639,11 @@
             // 
             this.panelBottom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelBottom.Controls.Add(this.panelPlanets);
             this.panelBottom.Controls.Add(this.panelStar);
-            this.panelBottom.Location = new System.Drawing.Point(12, 272);
+            this.panelBottom.Controls.Add(this.panelPlanets);
+            this.panelBottom.Location = new System.Drawing.Point(12, 285);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(926, 157);
+            this.panelBottom.Size = new System.Drawing.Size(923, 149);
             this.panelBottom.TabIndex = 10;
             // 
             // buttonLoad
@@ -728,11 +656,27 @@
             this.buttonLoad.UseVisualStyleBackColor = true;
             this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(251, 72);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(61, 13);
+            this.label22.TabIndex = 33;
+            this.label22.Text = "Orbit period";
+            // 
+            // textBox10
+            // 
+            this.textBox10.Location = new System.Drawing.Point(313, 69);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.Size = new System.Drawing.Size(103, 20);
+            this.textBox10.TabIndex = 32;
+            // 
             // PlanetsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(963, 419);
+            this.ClientSize = new System.Drawing.Size(960, 432);
             this.Controls.Add(this.buttonLoad);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.label14);
@@ -752,7 +696,6 @@
             this.panelPlanets.PerformLayout();
             this.panelStar.ResumeLayout(false);
             this.panelStar.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panelBottom.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -809,19 +752,13 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnRowType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnUnit;
         private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox textBox10;
     }
 }

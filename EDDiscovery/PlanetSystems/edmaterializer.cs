@@ -17,7 +17,8 @@ namespace EDDiscovery2.PlanetSystems
         {
 #if DEBUG
             // Dev server. Mess with data as much as you like here
-            _serverAddress = "https://ed-materializer.herokuapp.com/";
+            //_serverAddress = "https://ed-materializer.herokuapp.com/";
+            _serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
 #else
             // Production
             _serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
