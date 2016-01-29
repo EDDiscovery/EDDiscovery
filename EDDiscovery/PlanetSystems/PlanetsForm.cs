@@ -15,12 +15,12 @@ namespace EDDiscovery2.PlanetSystems
     public partial class PlanetsForm : Form
     {
         public EDDiscovery.EDDiscoveryForm edForm;
-        private List<EDObject> edObjects = new List<EDObject>();
+        private List<EDPlanet> edObjects = new List<EDPlanet>();
         private EdMaterializer edmat = new EdMaterializer();
         private Dictionary<int, string> dictComboDesc = new Dictionary<int, string>();
 
         private int CurrentItem = 0;
-        private EDObject currentObj;
+        private EDPlanet currentObj;
 
         private System.Windows.Forms.ColumnHeader columnName;
         private System.Windows.Forms.ColumnHeader columnType;
@@ -93,7 +93,7 @@ namespace EDDiscovery2.PlanetSystems
 
 
             dictComboDesc.Clear();
-            foreach (EDObject obj in EDObject.listObjectTypes)
+            foreach (EDPlanet obj in EDPlanet.listObjectTypes)
             {
                 if (obj.IsPlanet)
                 {
@@ -138,7 +138,7 @@ namespace EDDiscovery2.PlanetSystems
 
             edObjects.Clear();
 
-            edObjects = edmat.GetAll(textBoxSystemName.Text);
+            edObjects = edmat.GetAllPlanets(textBoxSystemName.Text);
             UpDateListView();
             //addMaterialNodeControl1.CurrentSystem = currentSystem.name;
         }
@@ -146,7 +146,7 @@ namespace EDDiscovery2.PlanetSystems
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
-            EDObject obj = new EDObject();
+            EDPlanet obj = new EDPlanet();
             obj.system = textBoxSystemName.Text;
             obj.commander = edForm.CommanderName;
             edObjects.Add(obj);
@@ -218,7 +218,7 @@ namespace EDDiscovery2.PlanetSystems
         {
             UpdateEDObject(currentObj);
 
-            edmat.Store(currentObj);
+            edmat.StorePlanet(currentObj);
             //Just Greg testing stuff. Go ahead and delete this comment if it's
             //in your way...
             //var edo = new EDObject();
@@ -282,7 +282,7 @@ namespace EDDiscovery2.PlanetSystems
 
         }
 
-        private void SetMaterials(EDObject obj, CheckedListBox box)
+        private void SetMaterials(EDPlanet obj, CheckedListBox box)
         {
             for (int i = 0; i < box.Items.Count; i++)
             {
@@ -349,7 +349,7 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        private void UpdateEDObject(EDObject obj)
+        private void UpdateEDObject(EDPlanet obj)
         {
             
             obj.objectName = textBoxName.Text;
@@ -374,7 +374,7 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        private void GetMaterials(ref EDObject obj, CheckedListBox box)
+        private void GetMaterials(ref EDPlanet obj, CheckedListBox box)
         {
             for (int i = 0; i < box.Items.Count; i++)
             {

@@ -791,10 +791,10 @@ namespace EDDiscovery
 
             EdMaterializer mat = new EdMaterializer();
 
-            mat.GetAll(null);
+            mat.GetAllPlanets(null);
 
 
-            EDObject obj = new EDObject();
+            EDPlanet obj = new EDPlanet();
 
             obj.commander = "Test";
             obj.system = "Fine Ring Sector JH-V C2-4";
@@ -820,7 +820,7 @@ namespace EDDiscovery
             mat.DeleteID(6);
             mat.DeleteID(7);
 
-            mat.Store(obj);
+            mat.StorePlanet(obj);
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
