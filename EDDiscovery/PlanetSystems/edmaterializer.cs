@@ -17,8 +17,8 @@ namespace EDDiscovery2.PlanetSystems
         {
 #if DEBUG
             // Dev server. Mess with data as much as you like here
-            //_serverAddress = "https://ed-materializer.herokuapp.com/";
-            _serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
+            _serverAddress = "https://ed-materializer.herokuapp.com/";
+            //_serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
 #else
             // Production
             _serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
@@ -26,9 +26,9 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        public List<EDObject>GetAll(string system)
+        public List<EDPlanet>GetAllPlanets(string system)
         {
-            List<EDObject> listObjects = new List<EDObject>();
+            List<EDPlanet> listObjects = new List<EDPlanet>();
             string query = "api/v1/world_surveys";
 
             if (!String.IsNullOrEmpty(system))
@@ -51,7 +51,7 @@ namespace EDDiscovery2.PlanetSystems
 
             foreach (JObject jo in jArray)
             {
-                EDObject obj = new EDObject();
+                EDPlanet obj = new EDPlanet();
 
                 if (obj.ParseJson(jo))
                     listObjects.Add(obj);
@@ -61,11 +61,46 @@ namespace EDDiscovery2.PlanetSystems
             return listObjects;
         }
 
-        public bool Store(EDObject edobj)
+
+        public List<EDPlanet> GetAllStars(string system)
+        {
+            List<EDPlanet> listObjects = new List<EDPlanet>();
+            string query = "api/v1/star_surveys";
+
+            if (!String.IsNullOrEmpty(system))
+                query = query + "/?q[system]=" + HttpUtility.UrlEncode(system);
+
+            var response = RequestGet(query);
+            var json = response.Body;
+
+            JArray jArray = null;
+            JObject jObject = null;
+            if (json != null && json.Length > 5)
+                jObject = (JObject)JObject.Parse(json);
+
+            if (jObject == null)
+                return listObjects;
+
+
+            jArray = (JArray)jObject["world_surveys"];
+
+
+            foreach (JObject jo in jArray)
+            {
+                EDPlanet obj = new EDPlanet();
+
+                if (obj.ParseJson(jo))
+                    listObjects.Add(obj);
+            }
+
+
+            return listObjects;
+        }
+
+
+        public bool StorePlanet(EDPlanet edobj)
         {
             
-
-
             dynamic jo = new JObject();
 
             jo.system = edobj.system;
@@ -160,7 +195,7 @@ namespace EDDiscovery2.PlanetSystems
             return true;
         }
 
-        public bool Delete(EDObject obj)
+        public bool Delete(EDPlanet obj)
         {
             if (obj.id > 0)
                 return DeleteID(obj.id);
