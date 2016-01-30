@@ -14,8 +14,7 @@ namespace EDDiscovery2.PlanetSystems
 
         public EDStar()
         {
-            if (objectsTypes != null)
-                type = objectsTypes[0];
+            ObjectType = ObjectTypesEnum.Unknown_Star;
         }
 
 
@@ -24,14 +23,20 @@ namespace EDDiscovery2.PlanetSystems
 
             id = jo["id"].Value<int>();
             system = jo["system"].Value<string>();
-            objectName = jo["world"].Value<string>();
+            objectName = jo["star"].Value<string>();
             commander = jo["commander"].Value<string>();
 
-            ObjectType = String2ObjectType(jo["world_type"].Value<string>());
-
-
-            radius = GetFloat(jo["radius"]);
+            ObjectType = String2ObjectType(jo["star_type"].Value<string>());
+            radius = GetFloat(jo["solar_radius"]);
+            mass = GetFloat(jo["solar_mass"]);
+            surfaceTemp = GetInt(jo["surface_temp"]);
+            star_age = GetFloat(jo["star_age"]);
+            orbitPeriod = GetFloat(jo["orbit_period"]);
             arrivalPoint = GetFloat(jo["arrival_point"]);
+            notes = GetString(jo["note"]);
+            subclass = GetString(jo["subclass"]);
+            luminosity = GetString(jo["luminosity"]); 
+
 
             return true;
         }

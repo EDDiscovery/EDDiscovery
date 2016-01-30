@@ -816,9 +816,9 @@ namespace EDDiscovery
             obj.materials[MaterialEnum.Tin] = true;
             obj.materials[MaterialEnum.Polonium] = true;
 
-            mat.DeleteID(5);
-            mat.DeleteID(6);
-            mat.DeleteID(7);
+            mat.DeletePlanetID(5);
+            mat.DeletePlanetID(6);
+            mat.DeletePlanetID(7);
 
             mat.StorePlanet(obj);
         }
