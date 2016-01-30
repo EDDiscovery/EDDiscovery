@@ -212,7 +212,7 @@ namespace EDDiscovery2.PlanetSystems
             jo.subclass = edobj.subclass;
             jo.solar_mass = edobj.mass;
             jo.solar_radius = edobj.radius;
-            jo.star_Age = edobj.star_age;
+            jo.star_age = edobj.star_age;
             jo.orbit_period = edobj.orbitPeriod;
             jo.arrival_point = edobj.arrivalPoint;
             jo.luminosity = edobj.luminosity;
