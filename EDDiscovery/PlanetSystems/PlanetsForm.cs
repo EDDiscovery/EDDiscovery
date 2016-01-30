@@ -358,6 +358,7 @@ namespace EDDiscovery2.PlanetSystems
                 textBoxS_ArrivalPoint.Text = star.arrivalPoint.ToString("0");
                 textBoxStarNote.Text = star.notes;
                 textBoxStarLuminosity.Text = star.luminosity;
+                textBoxStarTemp.Text = star.surfaceTemp.ToString("0");
             }
         }
 
