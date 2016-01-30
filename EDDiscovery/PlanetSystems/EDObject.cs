@@ -165,8 +165,8 @@ public enum AtmosphereEnum
         public float arrivalPoint;
         public float radius;
         public float mass;
-        public int Surface_Temp;
-        public float Orbit_period;
+        public int surfaceTemp;
+        public float orbitPeriod;
 
         public string notes;
 
@@ -245,8 +245,6 @@ public enum AtmosphereEnum
         }
 
 
-
-
         protected bool GetBool(JToken jToken)
         {
             if (IsNullOrEmptyT(jToken))
@@ -268,6 +266,15 @@ public enum AtmosphereEnum
                 return 0;
             return jToken.Value<int>();
         }
+
+
+        protected string GetString(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return null;
+            return jToken.Value<string>();
+        }
+
 
         protected bool IsNullOrEmptyT(JToken token)
         {

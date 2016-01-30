@@ -16,16 +16,19 @@ namespace EDDiscovery2.PlanetSystems
         public int terrain_difficulty;
         public Dictionary<MaterialEnum, bool> materials;
         public string Reserve;
-        public float Surface_preasure;
+        public float surfacePressure;
+        public float rotationPeriod;
 
-
-
+        public float semiMajorAxis;
+        public float rockPct;
+        public float metalPct;
+        public float icePct;
 
         static private List<Material> mlist = Material.GetMaterialList;
         static public List<EDPlanet> listObjectTypes = EDPlanet.GetEDObjList;
         
 
-
+        static private Dictionary<string, ObjectTypesEnum> objectAliases = ObjectsType.GetAllTypesAlias();
 
 
         public EDPlanet()
@@ -154,14 +157,26 @@ namespace EDDiscovery2.PlanetSystems
             commander = jo["commander"].Value<string>();
 
             ObjectType = String2ObjectType(jo["world_type"].Value<string>());
-            terraformable = jo["terraformable"].Value<string>();
+            terraformable = GetString(jo["terraformable"]);
             gravity = GetFloat(jo["gravity"]);
             terrain_difficulty = GetInt(jo["terrain_difficulty"]);
+            notes = GetString(jo["notes"]);
+
 
             radius = GetFloat(jo["radius"]);
             arrivalPoint = GetFloat(jo["arrival_point"]);
             atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(jo["atmosphere_type"].Value<string>());
             vulcanism = (VulcanismEnum)VulcanismStr2Enum(jo["vulcanism_type"].Value<string>());
+            Reserve = GetString(jo["reserve"]);
+            mass = GetFloat(jo["mass"]);
+            surfaceTemp = GetInt(jo["surface_temp"]);
+            surfacePressure = GetFloat(jo["surface_pressure"]);
+            orbitPeriod = GetFloat(jo["orbit_period"]);
+            rotationPeriod = GetFloat(jo["rotation_period"]);
+            semiMajorAxis = GetFloat(jo["semi_major_axis"]);
+            rockPct = GetFloat(jo["rock_pct"]);
+            metalPct = GetFloat(jo["metal_pct"]);
+            icePct = GetFloat(jo["ice_pct"]);
 
             foreach (var mat in mlist)
             {
@@ -169,7 +184,6 @@ namespace EDDiscovery2.PlanetSystems
             }
             return true;
         }
-
 
 
 

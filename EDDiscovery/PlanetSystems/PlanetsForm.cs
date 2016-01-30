@@ -15,12 +15,13 @@ namespace EDDiscovery2.PlanetSystems
     public partial class PlanetsForm : Form
     {
         public EDDiscovery.EDDiscoveryForm edForm;
-        private List<EDPlanet> edObjects = new List<EDPlanet>();
+        private List<EDObject> edObjects = new List<EDObject>();
         private EdMaterializer edmat = new EdMaterializer();
-        private Dictionary<int, string> dictComboDesc = new Dictionary<int, string>();
+        private Dictionary<int, string> dictComboPlanetDesc = new Dictionary<int, string>();
+        private Dictionary<int, string> dictComboStarDesc = new Dictionary<int, string>();
 
         private int CurrentItem = 0;
-        private EDPlanet currentObj;
+        private EDObject currentObj;
 
         private System.Windows.Forms.ColumnHeader columnName;
         private System.Windows.Forms.ColumnHeader columnType;
@@ -92,13 +93,19 @@ namespace EDDiscovery2.PlanetSystems
 
 
 
-            dictComboDesc.Clear();
+            dictComboPlanetDesc.Clear();
+            dictComboStarDesc.Clear();
             foreach (EDPlanet obj in EDPlanet.listObjectTypes)
             {
                 if (obj.IsPlanet)
                 {
                     int nr = comboBoxType.Items.Add(obj.Description);
-                    dictComboDesc[nr] = obj.Description;
+                    dictComboPlanetDesc[nr] = obj.Description;
+                }
+                if (obj.IsStar)
+                {
+                    int nr = comboBoxStarType.Items.Add(obj.Description);
+                    dictComboStarDesc[nr] = obj.Description;
                 }
             }
 
@@ -131,6 +138,8 @@ namespace EDDiscovery2.PlanetSystems
 
         private void SetSystem(string systemname)
         {
+            List<EDPlanet> planets;
+            List<EDStar> stars;
             if (systemname == null)
                 return;
 
@@ -138,7 +147,11 @@ namespace EDDiscovery2.PlanetSystems
 
             edObjects.Clear();
 
-            edObjects = edmat.GetAllPlanets(textBoxSystemName.Text);
+            planets = edmat.GetAllPlanets(textBoxSystemName.Text);
+            stars = edmat.GetAllStars(textBoxSystemName.Text);
+
+            edObjects.AddRange(planets);
+            edObjects.AddRange(stars);
             UpDateListView();
             //addMaterialNodeControl1.CurrentSystem = currentSystem.name;
         }
@@ -159,30 +172,56 @@ namespace EDDiscovery2.PlanetSystems
         {
             listView1.Items.Clear();
 
-            foreach (var obj in edObjects)
+            foreach (var ob in edObjects)
             {
-                ListViewItem lvi;
-                lvi = listView1.Items.Add(obj.objectName);
-                lvi.SubItems.Add(obj.Description);
-
-                lvi.SubItems.Add(obj.gravity.ToString("0.00"));
-                lvi.SubItems.Add(obj.arrivalPoint.ToString("0"));
-
-                lvi.UseItemStyleForSubItems = false;
-
-
-                for (int ii = 0; ii < mlist.Count; ii++)
+                if (ob is EDPlanet)
                 {
-                    ListViewItem.ListViewSubItem lvsi;
-                    if (obj.materials[mlist[ii].material])
-                        lvsi = lvi.SubItems.Add("X");
-                    else
-                        lvsi =  lvi.SubItems.Add(" ");
+                    EDPlanet planet = (EDPlanet)ob;
+                    ListViewItem lvi;
+                    lvi = listView1.Items.Add(planet.objectName);
+                    lvi.SubItems.Add(planet.Description);
 
-                    lvsi.BackColor = mlist[ii].RareityColor;
+                    lvi.SubItems.Add(planet.gravity.ToString("0.00"));
+                    lvi.SubItems.Add(planet.arrivalPoint.ToString("0"));
+
+                    lvi.UseItemStyleForSubItems = false;
+
+
+                    for (int ii = 0; ii < mlist.Count; ii++)
+                    {
+                        ListViewItem.ListViewSubItem lvsi;
+                        if (planet.materials[mlist[ii].material])
+                            lvsi = lvi.SubItems.Add("X");
+                        else
+                            lvsi = lvi.SubItems.Add(" ");
+
+                        lvsi.BackColor = mlist[ii].RareityColor;
+                    }
+
+                    lvi.Tag = planet;
                 }
+                if (ob is EDStar)
+                {
+                    EDStar planet = (EDStar)ob;
+                    ListViewItem lvi;
+                    lvi = listView1.Items.Add(planet.objectName);
+                    lvi.SubItems.Add(planet.Description);
 
-                lvi.Tag = obj;
+                    lvi.SubItems.Add("");  // Gravity
+                    lvi.SubItems.Add(planet.arrivalPoint.ToString("0"));
+
+                    lvi.UseItemStyleForSubItems = false;
+
+                    
+                    for (int ii = 0; ii < mlist.Count; ii++)
+                    {
+                        ListViewItem.ListViewSubItem lvsi;
+                         lvsi = lvi.SubItems.Add("");
+                        lvsi.BackColor = Color.Gray;
+                    }
+                    
+                    lvi.Tag = planet;
+                }
             }
             if (edObjects.Count>0)
                 listView1.Items[0].Selected = true;
@@ -196,29 +235,48 @@ namespace EDDiscovery2.PlanetSystems
             {
                 lvi = listView1.SelectedItems[0];
 
-                lvi.SubItems[0].Text = currentObj.objectName;
-                lvi.SubItems[1].Text = currentObj.Description;
-                lvi.SubItems[2].Text = currentObj.gravity.ToString("0.00");
-                lvi.SubItems[3].Text = currentObj.arrivalPoint.ToString("0");
-
-
-                for (int ii = 0; ii < mlist.Count; ii++)
+                if (currentObj is EDPlanet)
                 {
-                    if (currentObj.materials[mlist[ii].material])
-                        lvi.SubItems[3+ii].Text = "X";
-                    else
-                        lvi.SubItems[3 + ii].Text = " ";
+                    EDPlanet planet = (EDPlanet)currentObj;
+                    lvi.SubItems[0].Text = planet.objectName;
+                    lvi.SubItems[1].Text = planet.Description;
+                    lvi.SubItems[2].Text = planet.gravity.ToString("0.00");
+                    lvi.SubItems[3].Text = planet.arrivalPoint.ToString("0");
+
+
+                    for (int ii = 0; ii < mlist.Count; ii++)
+                    {
+                        if (planet.materials[mlist[ii].material])
+                            lvi.SubItems[3 + ii].Text = "X";
+                        else
+                            lvi.SubItems[3 + ii].Text = " ";
+                    }
                 }
+                if (currentObj is EDStar)
+                {
+                    EDStar star = (EDStar)currentObj;
+                    lvi.SubItems[0].Text = star.objectName;
+                    lvi.SubItems[1].Text = star.Description;
+                    lvi.SubItems[2].Text = "";
+                    lvi.SubItems[3].Text = star.arrivalPoint.ToString("0");
 
 
+                    for (int ii = 0; ii < mlist.Count; ii++)
+                    {
+                        lvi.SubItems[3 + ii].Text = "";
+                    }
+                }
             }
         }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
             UpdateEDObject(currentObj);
+            if (currentObj is EDPlanet)
+                edmat.StorePlanet((EDPlanet)currentObj);
+            if (currentObj is EDStar)
+                edmat.StoreStar((EDStar)currentObj);
 
-            edmat.StorePlanet(currentObj);
             //Just Greg testing stuff. Go ahead and delete this comment if it's
             //in your way...
             //var edo = new EDObject();
@@ -244,8 +302,6 @@ namespace EDDiscovery2.PlanetSystems
                 return;
 
             currentObj = edObjects[v];
-
-            textBoxName.Text = currentObj.objectName;
             if (currentObj.IsPlanet)
             {
                 panelPlanets.Visible = true;
@@ -258,28 +314,51 @@ namespace EDDiscovery2.PlanetSystems
             }
 
 
-            var nr = (from str in dictComboDesc where str.Value == currentObj.Description select str.Key).FirstOrDefault<int>();
-            comboBoxType.SelectedIndex = nr;
-
-
-            textBoxGravity.Text = currentObj.gravity.ToString("0.00");
-            textBoxRadius.Text = currentObj.radius.ToString("0");
-            textBoxArrivalPoint.Text = currentObj.arrivalPoint.ToString("0");
-
-            try
+            if (currentObj is EDPlanet)
             {
-                comboBoxAtmosphere.SelectedIndex = (int)currentObj.atmosphere;
-                comboBoxVulcanism.SelectedIndex = (int)currentObj.vulcanism;
+                EDPlanet planet = (EDPlanet)currentObj;
+
+                textBoxName.Text = currentObj.objectName;
+
+
+                var nr = (from str in dictComboPlanetDesc where str.Value == planet.Description select str.Key).FirstOrDefault<int>();
+                comboBoxType.SelectedIndex = nr;
+
+                textBoxGravity.Text = planet.gravity.ToString("0.00");
+                textBoxRadius.Text = planet.radius.ToString("0");
+                textBoxArrivalPoint.Text = planet.arrivalPoint.ToString("0");
+
+                try
+                {
+                    comboBoxAtmosphere.SelectedIndex = (int)planet.atmosphere;
+                    comboBoxVulcanism.SelectedIndex = (int)planet.vulcanism;
+                }
+                catch (Exception)
+                {
+
+                }
+                SetMaterials(planet, checkedListBox1);
+                SetMaterials(planet, checkedListBox2);
+                SetMaterials(planet, checkedListBox3);
+                SetMaterials(planet, checkedListBox4);
             }
-            catch (Exception)
+            if (currentObj is EDStar)
             {
+                EDStar star = (EDStar)currentObj;
+
+                textBoxStarName.Text = star.objectName;
+
+                var nr = (from str in dictComboStarDesc where str.Value == star.Description select str.Key).FirstOrDefault<int>();
+                comboBoxStarType.SelectedIndex = nr;
+                textBoxStarSubClass.Text = star.subclass;
+                textBoxStarMass.Text = star.mass.ToString();
+                textBoxS_Radius.Text = star.radius.ToString();
+                textBox_StarAge.Text = star.star_age.ToString("0");
+                textBoxStarOrbitPeriod.Text = star.orbitPeriod.ToString();
+                textBoxS_ArrivalPoint.Text = star.arrivalPoint.ToString("0");
+                textBoxStarNote.Text = star.notes;
 
             }
-            SetMaterials(currentObj, checkedListBox1);
-            SetMaterials(currentObj, checkedListBox2);
-            SetMaterials(currentObj, checkedListBox3);
-            SetMaterials(currentObj, checkedListBox4);
-
         }
 
         private void SetMaterials(EDPlanet obj, CheckedListBox box)
@@ -349,25 +428,46 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        private void UpdateEDObject(EDPlanet obj)
+        private void UpdateEDObject(EDObject obj)
         {
-            
-            obj.objectName = textBoxName.Text;
-            obj.ObjectType = obj.String2ObjectType(comboBoxType.Text);
+            if (obj is EDPlanet)
+            {
+                EDPlanet planet = (EDPlanet)obj;
+                planet.objectName = textBoxName.Text;
+                planet.ObjectType = obj.String2ObjectType(comboBoxType.Text);
 
-            var culture = new CultureInfo("en-US");
-            currentObj.gravity = float.Parse(textBoxGravity.Text.Replace(",", "."), culture);
-            currentObj.radius = float.Parse(textBoxRadius.Text.Replace(",", "."), culture);
-            currentObj.arrivalPoint = float.Parse(textBoxArrivalPoint.Text.Replace(",", "."), culture);
+                var culture = new CultureInfo("en-US");
+                planet.gravity = float.Parse(textBoxGravity.Text.Replace(",", "."), culture);
+                planet.radius = float.Parse(textBoxRadius.Text.Replace(",", "."), culture);
+                planet.arrivalPoint = float.Parse(textBoxArrivalPoint.Text.Replace(",", "."), culture);
 
-            currentObj.atmosphere = obj.AtmosphereStr2Enum(comboBoxAtmosphere.Text);
-            currentObj.vulcanism = obj.VulcanismStr2Enum(comboBoxVulcanism.Text);
+                planet.atmosphere = planet.AtmosphereStr2Enum(comboBoxAtmosphere.Text);
+                planet.vulcanism = planet.VulcanismStr2Enum(comboBoxVulcanism.Text);
 
- 
-            GetMaterials(ref currentObj, checkedListBox1);
-            GetMaterials(ref currentObj, checkedListBox2);
-            GetMaterials(ref currentObj, checkedListBox3);
-            GetMaterials(ref currentObj, checkedListBox4);
+                GetMaterials(ref planet, checkedListBox1);
+                GetMaterials(ref planet, checkedListBox2);
+                GetMaterials(ref planet, checkedListBox3);
+                GetMaterials(ref planet, checkedListBox4);
+            }
+
+            if (obj is EDStar)
+            {
+                EDStar star = (EDStar)obj;
+                star.objectName = textBoxStarName.Text;
+                star.ObjectType = obj.String2ObjectType(comboBoxStarType.Text);
+                star.subclass = textBoxStarSubClass.Text;
+
+                var culture = new CultureInfo("en-US");
+                star.mass = float.Parse(textBoxStarMass.Text.Replace(",", "."), culture); 
+                star.radius = float.Parse(textBoxS_Radius.Text.Replace(",", "."), culture);
+                star.arrivalPoint = float.Parse(textBoxS_ArrivalPoint.Text.Replace(",", "."), culture);
+
+                star.star_age = float.Parse(textBox_StarAge.Text.Replace(",", "."), culture);
+                star.surfaceTemp = int.Parse(textBoxStarTemp.Text, culture);
+                star.orbitPeriod = float.Parse(textBoxStarOrbitPeriod.Text.Replace(",", "."), culture);
+                star.notes = textBoxStarNote.Text;
+            }
+
 
 
             UpdateListViewLine();
@@ -384,8 +484,15 @@ namespace EDDiscovery2.PlanetSystems
             }
         }
 
-
-
+        private void toolStripButtonAddStar_Click(object sender, EventArgs e)
+        {
+            EDStar obj = new EDStar();
+            obj.system = textBoxSystemName.Text;
+            obj.commander = edForm.CommanderName;
+            edObjects.Add(obj);
+            CurrentItem = edObjects.Count - 1;
+            UpDateListView();
+        }
     }
 
 }
