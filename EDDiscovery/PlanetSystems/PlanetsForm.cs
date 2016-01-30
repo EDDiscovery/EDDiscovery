@@ -357,7 +357,7 @@ namespace EDDiscovery2.PlanetSystems
                 textBoxStarOrbitPeriod.Text = star.orbitPeriod.ToString();
                 textBoxS_ArrivalPoint.Text = star.arrivalPoint.ToString("0");
                 textBoxStarNote.Text = star.notes;
-
+                textBoxStarLuminosity.Text = star.luminosity;
             }
         }
 
@@ -465,6 +465,7 @@ namespace EDDiscovery2.PlanetSystems
                 star.star_age = float.Parse(textBox_StarAge.Text.Replace(",", "."), culture);
                 star.surfaceTemp = int.Parse(textBoxStarTemp.Text, culture);
                 star.orbitPeriod = float.Parse(textBoxStarOrbitPeriod.Text.Replace(",", "."), culture);
+                star.luminosity = textBoxStarLuminosity.Text;
                 star.notes = textBoxStarNote.Text;
             }
 

@@ -202,6 +202,7 @@
             this.toolStripButtonAddStar.Name = "toolStripButtonAddStar";
             this.toolStripButtonAddStar.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonAddStar.Text = "Add Star";
+            this.toolStripButtonAddStar.Click += new System.EventHandler(this.toolStripButtonAddStar_Click);
             // 
             // panelPlanets
             // 

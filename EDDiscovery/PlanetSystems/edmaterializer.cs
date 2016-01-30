@@ -207,14 +207,17 @@ namespace EDDiscovery2.PlanetSystems
 
             jo.system = edobj.system;
             jo.commander = edobj.commander;
-            jo.world = edobj.objectName;
-            jo.world_type = edobj.Description;
-            jo.notes = edobj.notes;
-            jo.arrival_point = edobj.arrivalPoint;
-            jo.radius = edobj.radius;
-            jo.mass = edobj.mass;
-            jo.surface_temp = edobj.surfaceTemp;
+            jo.star = edobj.objectName;
+            jo.star_type = edobj.Description;
+            jo.subclass = edobj.subclass;
+            jo.solar_mass = edobj.mass;
+            jo.solar_radius = edobj.radius;
+            jo.star_Age = edobj.star_age;
             jo.orbit_period = edobj.orbitPeriod;
+            jo.arrival_point = edobj.arrivalPoint;
+            jo.luminosity = edobj.luminosity;
+            jo.note = edobj.notes;
+            jo.surface_temp = edobj.surfaceTemp;
 
             JObject joPost = new JObject(new JProperty("star_survey", jo));
 
