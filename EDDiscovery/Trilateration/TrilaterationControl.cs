@@ -24,6 +24,7 @@ namespace EDDiscovery
         private Trilateration.Result lastTrilatelationResult;
         private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
         private Thread EDSMSubmissionThread;
+        private EDSMClass edsm;
 
         public TrilaterationControl()
         {
@@ -34,9 +35,12 @@ namespace EDDiscovery
         {
             _discoveryForm = discoveryForm;
             FreezeTrilaterationUI();
+            edsm = new EDSMClass();
+            var db = new SQLiteDBClass();
+            edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
+            edsm.commanderName = db.GetSettingString("CommanderName", "");
         }
-
-
+        
         public void Set(ISystem system)
         {
             if (TargetSystem == null || !TargetSystem.Equals(system))
@@ -81,16 +85,16 @@ namespace EDDiscovery
                 textbox.AutoCompleteMode = AutoCompleteMode.None;
                 return;
             }
-            
+
             textbox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             textbox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             var items = new AutoCompleteStringCollection();
-
+            
             var enteredSystems = GetEnteredSystems();
             items.AddRange((
                 from s
                 in SystemData.SystemList
-                where s.HasCoordinate && (s.name == textbox.Text || !enteredSystems.Contains(s))
+                where s.HasCoordinate && (s.name == textbox.Text || enteredSystems.Where(lu => lu.name == s.name).Count() == 0)
                 orderby s.name ascending
                 select s.name
             ).ToArray());
@@ -119,7 +123,6 @@ namespace EDDiscovery
 
                 if (system == null || (enteredSystems.Contains(system)))
                 {
-                    //e.Cancel = true;
                     return;
                 }
             }
@@ -153,9 +156,16 @@ namespace EDDiscovery
 
                 if (system == null)
                 {
-                    cell.Value = null;
-                    //cell.Style.BackColor = Color.Salmon;
-                    return;
+                    if (!edsm.IsKnownSystem(value))
+                    {
+                        LogText("Only systems with coordinates or already known to EDSM can be added");
+                        cell.Value = null;
+                        return;
+                    }
+                    else
+                    {
+                        system = new SystemClass(value);
+                    }                    
                 }
 
                 if (value != system.name)
@@ -163,13 +173,19 @@ namespace EDDiscovery
                     cell.Value = system.name;
                 }
                 cell.Tag = system;
+                if (system.HasCoordinate)
+                {
+                    // reset any calculated distances
+                    dataGridViewDistances[2, e.RowIndex].Value = null;
+                    dataGridViewDistances[3, e.RowIndex].Value = null;
+                }
+                else
+                {
+                    dataGridViewDistances[3, e.RowIndex].Value = "Position unknown";
+                    dataGridViewDistances[3, e.RowIndex].Style.ForeColor = Color.Salmon;
+                }
             }
-
-            // reset any calculated distances
-            dataGridViewDistances[2, e.RowIndex].Value = null;
-            dataGridViewDistances[3, e.RowIndex].Value = null;
-
-            // trigger trilateration calculation
+// trigger trilateration calculation
             RunTrilateration();
         }
 
@@ -209,12 +225,15 @@ namespace EDDiscovery
                 }
 
                 var system = (SystemClass)systemCell.Tag;
-                var culture = new CultureInfo("en-US");
-                var distance = double.Parse(distanceCell.Value.ToString().Replace(",", "."), culture);
+                if (system != null && system.HasCoordinate)
+                {
+                    var culture = new CultureInfo("en-US");
+                    var distance = double.Parse(distanceCell.Value.ToString().Replace(",", "."), culture);
 
-                var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
+                    var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
 
-                systemsEntries.Add(system, entry);
+                    systemsEntries.Add(system, entry);
+                }
             }
 
             if (systemsEntries.Count < 3)
@@ -339,15 +358,17 @@ namespace EDDiscovery
                 var calculatedDistanceCell = dataGridViewDistances[2, i];
                 var statusCell = dataGridViewDistances[3, i];
 
-                calculatedDistanceCell.Value = null;
-                statusCell.Value = null;
+                var system = (SystemClass)systemCell.Tag;
 
+                if (system.HasCoordinate)
+                {
+                    calculatedDistanceCell.Value = null;
+                    statusCell.Value = null;
+                }
                 if (entriesDistances == null || systemCell.Value == null || systemCell.Tag == null)
                 {
                     continue;
                 }
-
-                var system = (SystemClass) systemCell.Tag;
 
                 if (!systemsEntries.ContainsKey(system)) // calculated without this system, so skip the row
                 {
@@ -397,13 +418,16 @@ namespace EDDiscovery
             // keep systems, clear distances
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
+                var systemCell = dataGridViewDistances[0, i];
                 var distanceCell = dataGridViewDistances[1, i];
                 var calculatedDistanceCell = dataGridViewDistances[2, i];
                 var statusCell = dataGridViewDistances[3, i];
 
+                var system = (SystemClass)systemCell.Tag;
+
                 distanceCell.Value = null;
                 calculatedDistanceCell.Value = null;
-                statusCell.Value = null;
+                if (system.HasCoordinate) statusCell.Value = null;
             }
         }
 
@@ -412,11 +436,14 @@ namespace EDDiscovery
             // keep systems and distances, clear calculated distances and statuses
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
+                var systemCell = dataGridViewDistances[0, i];
                 var calculatedDistanceCell = dataGridViewDistances[2, i];
                 var statusCell = dataGridViewDistances[3, i];
 
+                var system = (SystemClass)systemCell.Tag;
+
                 calculatedDistanceCell.Value = null;
-                statusCell.Value = null;
+                if (system.HasCoordinate) statusCell.Value = null;
             }
         }
 
@@ -594,27 +621,38 @@ namespace EDDiscovery
         private void SubmitToEDSM()
         {
             var travelHistoryControl = _discoveryForm.TravelControl;
-            string commanderName = travelHistoryControl.GetCommanderName();
+            if (string.IsNullOrEmpty(edsm.commanderName))
+            {   
+                string commanderName = travelHistoryControl.GetCommanderName();
 
-            if (string.IsNullOrEmpty(commanderName))
-            {
-                MessageBox.Show("Please enter commander name before submitting the system!");
-                UnfreezeTrilaterationUI();
-                return;
+                if (string.IsNullOrEmpty(commanderName))
+                {
+                    MessageBox.Show("Please enter commander name before submitting the system!");
+                    UnfreezeTrilaterationUI();
+                    return;
+                }
+                edsm.commanderName = commanderName;
             }
-
             var distances = new Dictionary<string, double>();
-            foreach (var item in lastTrilatelationEntries)
+            var culture = new CultureInfo("en-US");
+            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
-                var system = item.Key;
-                var entry = item.Value;
-                distances.Add(system.name, entry.Distance);
+                var systemCell = dataGridViewDistances[0, i];
+                var distanceCell = dataGridViewDistances[1, i];
+                if (systemCell.Value != null && distanceCell.Value != null)
+                {
+                    var system = systemCell.Value.ToString();
+                    var distance = double.Parse(distanceCell.Value.ToString().Replace(",", "."), culture);
+                    // can over-ride drop down now if it's a real system so you could add duplicates if you wanted (even once I've figured out issue #81 which makes it easy if not likely...)
+                    if (!distances.Keys.Contains(system))
+                    {
+                        distances.Add(system, distance);
+                    }
+                }
+                
             }
-
-            var edsm = new EDSMClass();
-        
-
-            var responseM = edsm.SubmitDistances(commanderName, TargetSystem.name, distances);
+            
+            var responseM = edsm.SubmitDistances(edsm.commanderName, TargetSystem.name, distances);
 
             Console.WriteLine(responseM);
 
@@ -649,7 +687,7 @@ namespace EDDiscovery
                     UnfreezeTrilaterationUI();
                     travelHistoryControl.TriggerEDSMRefresh(); // TODO we might eventually avoid this by further parsing EDSC response
                     travelHistoryControl.RefreshHistory();
-
+                    checkForUnknownSystemsNowKnown();
                 });
             }
             else
@@ -700,9 +738,6 @@ namespace EDDiscovery
                 richTextBox_History.SelectionColor = color;
                 richTextBox_History.AppendText(text);
                 richTextBox_History.SelectionColor = richTextBox_History.ForeColor;
-
-
-
 
                 richTextBox_History.SelectionStart = richTextBox_History.Text.Length;
                 richTextBox_History.SelectionLength = 0;
@@ -809,6 +844,26 @@ namespace EDDiscovery
                     if (cell.Value == null)
                     {
                         dataGridViewDistances.Rows.RemoveAt(i);
+                    }
+                }
+            }
+        }
+
+        private void checkForUnknownSystemsNowKnown()
+        {
+            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            {
+                var systemCell = dataGridViewDistances[0, i];
+                var oldSystem = (SystemClass)systemCell.Tag;
+                if (!oldSystem.HasCoordinate)
+                {
+                    var value = systemCell.Value as string;
+                    var newSystem = SystemData.GetSystem(value);
+                    if (newSystem != null && newSystem.HasCoordinate)
+                    {
+                        systemCell.Tag = newSystem;
+                        dataGridViewDistances[3, i].Style.ForeColor = Color.Green;
+                        dataGridViewDistances[3, i].Value = "Position found";
                     }
                 }
             }
