@@ -152,14 +152,23 @@ namespace EDDiscovery
                 {
                     return;
                 }
+
+                var enteredSystems = GetEnteredSystems();
+                if (enteredSystems.Where(es => es.name == value).Count() > 0)
+                {
+                    LogText("Duplicate system entry is not allowed" + Environment.NewLine, Color.Red);
+                    dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
+                    return;
+                }
+
                 var system = SystemData.GetSystem(value);
 
                 if (system == null)
                 {
                     if (!edsm.IsKnownSystem(value))
                     {
-                        LogText("Only systems with coordinates or already known to EDSM can be added");
-                        cell.Value = null;
+                        LogText("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine, Color.Red);
+                        dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
                         return;
                     }
                     else
