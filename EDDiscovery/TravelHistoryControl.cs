@@ -198,7 +198,7 @@ namespace EDDiscovery
                 AddHistoryRow(false, item, item2);
             }
 
-<<<<<<< HEAD
+
             if (result.Count != visitedSystems.Count)
             {
                 // we didn't put all the systems in the history grid
@@ -220,29 +220,7 @@ namespace EDDiscovery
                         }
                     }
                 }
-=======
-            if (result.Count != visitedSystems.Count)
-            {
-                // we didn't put all the systems in the history grid
-                // make sure that the LastKnown system is properly loaded if it's not visible so trilateration can find it...
-                var lastKnown = (from systems
-                                 in visitedSystems
-                                 where systems.curSystem != null && systems.curSystem.HasCoordinate
-                                 orderby systems.time descending
-                                 select systems.curSystem).FirstOrDefault();
-                if (lastKnown == null)
-                {
-                    for (int ii = visitedSystems.Count - 1; ii > 0; ii--)
-                    {
-                        SystemClass sys = SystemData.GetSystem(visitedSystems[ii].Name);
-                        if (visitedSystems[ii].curSystem == null && sys != null)
-                        {
-                            visitedSystems[ii].curSystem = sys;
-                            if (sys.HasCoordinate) break;
-                        }
-                    }
-                }
->>>>>>> a3650cf12bce5b8864e7ad015697a4b2ac5f1d38
+
             }
 
             System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
