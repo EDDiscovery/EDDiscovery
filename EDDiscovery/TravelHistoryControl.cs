@@ -36,6 +36,8 @@ namespace EDDiscovery
 
 
         private static RichTextBox static_richTextBox;
+        private int activecommander = 0;
+
 
         public TravelHistoryControl()
         {
@@ -162,7 +164,7 @@ namespace EDDiscovery
 
 
             if (visitedSystems == null || visitedSystems.Count == 0)
-                GetVisitedSystems();
+                GetVisitedSystems(activecommander);
 
             if (visitedSystems == null)
                 return;
@@ -224,9 +226,9 @@ namespace EDDiscovery
                 FilterGridView();
         }
 
-        private void GetVisitedSystems()
+        private void GetVisitedSystems(int commander)
         {
-            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultColour);
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultColour, commander);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)

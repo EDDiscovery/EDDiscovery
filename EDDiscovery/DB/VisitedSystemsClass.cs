@@ -99,7 +99,7 @@ namespace EDDiscovery2.DB
 
 
 
-        static public List<VisitedSystemsClass> GetAll()
+        static public List<VisitedSystemsClass> GetAll(int commander)
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
@@ -112,7 +112,8 @@ namespace EDDiscovery2.DB
                     cmd.Connection = cn;
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
-                    cmd.CommandText = "select * from VisitedSystems Order by Time";
+                    cmd.CommandText = "select * from VisitedSystems Order by Time where commander=@commander";
+                    cmd.Parameters.AddWithValue("@commander", commander);
 
                     ds = SQLiteDBClass.QueryText(cn, cmd);
                     if (ds.Tables.Count == 0)
