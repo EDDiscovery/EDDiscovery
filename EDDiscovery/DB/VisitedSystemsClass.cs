@@ -112,7 +112,7 @@ namespace EDDiscovery2.DB
                     cmd.Connection = cn;
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
-                    cmd.CommandText = "select * from VisitedSystems Order by Time where commander=@commander";
+                    cmd.CommandText = "select * from VisitedSystems where commander=@commander Order by Time ";
                     cmd.Parameters.AddWithValue("@commander", commander);
 
                     ds = SQLiteDBClass.QueryText(cn, cmd);

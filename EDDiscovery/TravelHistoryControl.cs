@@ -168,9 +168,7 @@ namespace EDDiscovery
 
             if (visitedSystems == null)
                 return;
-
-            //var result = visitedSystems.OrderByDescending(a => a.time).ToList<SystemPosition>();
-
+            
             List<SystemPosition> result;
             if (atMost > 0)
             {
@@ -182,20 +180,10 @@ namespace EDDiscovery
                 result = (from systems in visitedSystems where systems.time > oldestData orderby systems.time descending select systems).ToList();
             }
 
-            //DataTable dt = new DataTable();
-            //dataGridView1.Columns.Clear();
-            //dt.Columns.Add("Time");
-            //dt.Columns.Add("System");
-            //dt.Columns.Add("Distance");
-
-
             dataGridView1.Rows.Clear();
 
-            //dataGridView1.DataSource = dt;
-
             System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-
-
+            
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
       
@@ -210,10 +198,31 @@ namespace EDDiscovery
                 AddHistoryRow(false, item, item2);
             }
 
+            if (result.Count != visitedSystems.Count)
+            {
+                // we didn't put all the systems in the history grid
+                // make sure that the LastKnown system is properly loaded if it's not visible so trilateration can find it...
+                var lastKnown = (from systems
+                                 in visitedSystems
+                                 where systems.curSystem != null && systems.curSystem.HasCoordinate
+                                 orderby systems.time descending
+                                 select systems.curSystem).FirstOrDefault();
+                if (lastKnown == null)
+                {
+                    for (int ii = visitedSystems.Count - 1; ii > 0; ii--)
+                    {
+                        SystemClass sys = SystemData.GetSystem(visitedSystems[ii].Name);
+                        if (visitedSystems[ii].curSystem == null && sys != null)
+                        {
+                            visitedSystems[ii].curSystem = sys;
+                            if (sys.HasCoordinate) break;
+                        }
+                    }
+                }
+            }
+
             System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-
-            //setRowNumber(dataGridView1);
-
+            
             if (dataGridView1.Rows.Count > 0)
             {
                 lastRowIndex = 0;
