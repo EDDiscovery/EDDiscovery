@@ -13,7 +13,7 @@ namespace EDDiscovery2.HTTP
     public class EDMaterizliaerCom : HttpCom
     {
         private NameValueCollection _authTokens = null;
-        private readonly string _authPath = "api/v1/auth";
+        private readonly string _authPath = "auth";
 
         protected ResponseData RequestSecureGet(string action)
         {
