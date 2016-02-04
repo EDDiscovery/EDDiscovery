@@ -531,8 +531,8 @@ namespace EDDiscovery
 
 
 
-
-                if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
+                // Get EDDB data once every week.
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)
                 {
                     LogText("Get systems from EDDB. ");
 
@@ -555,7 +555,7 @@ namespace EDDiscovery
                 timestr = _db.GetSettingString("EDDBStationsLiteTime", "0");
                 time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
 
-                if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)
                 {
 
                     LogText("Get stations from EDDB. ");
