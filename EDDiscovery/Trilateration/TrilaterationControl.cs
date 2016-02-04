@@ -789,6 +789,9 @@ namespace EDDiscovery
             string text = null;
             try
             {
+                if (e.RowIndex == -1)
+                    return;
+
                 if (e.ColumnIndex == 0 && e.RowIndex < dataGridViewDistances.Rows.Count)
                 {
                     Object ob = dataGridViewDistances[e.ColumnIndex, e.RowIndex].Value;
