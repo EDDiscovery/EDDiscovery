@@ -154,10 +154,19 @@ namespace EDDiscovery
                 }
 
                 var enteredSystems = GetEnteredSystems();
+
+                if (value.Equals(enteredSystems[e.RowIndex].name)) // If we change a row to same value as before dont do anything from doubleclick or pastinf same new for example
+                {
+                    return;
+                }
+
                 if (enteredSystems.Where(es => es.name == value).Count() > 0)
                 {
                     LogText("Duplicate system entry is not allowed" + Environment.NewLine, Color.Red);
-                    dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
+                    this.BeginInvoke(new MethodInvoker(() =>
+                    {
+                        dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
+                    }));
                     return;
                 }
 
