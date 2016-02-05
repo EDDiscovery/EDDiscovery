@@ -155,11 +155,13 @@ namespace EDDiscovery
 
                 var enteredSystems = GetEnteredSystems();
 
-                if (value.Equals(enteredSystems[e.RowIndex].name)) // If we change a row to same value as before dont do anything from doubleclick or pastinf same new for example
+                if (enteredSystems.Count > e.RowIndex)  //don't do the below if we're entering something that's not in enteredSystems yet (we need to set cell.tag lower down the first time through here)
                 {
-                    return;
+                    if (value.Equals(enteredSystems[e.RowIndex].name)) // If we change a row to same value as before dont do anything from doubleclick or pastinf same new for example
+                    {
+                        return;
+                    }
                 }
-
                 if (enteredSystems.Where(es => es.name == value).Count() > 0)
                 {
                     LogText("Duplicate system entry is not allowed" + Environment.NewLine, Color.Red);
