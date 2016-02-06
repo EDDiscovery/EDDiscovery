@@ -26,21 +26,24 @@ namespace EDDiscovery.DB
 
         public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
 
-
+        private static Object lockDBInit = new Object();
+        private static bool dbUpgraded = false;
         public SQLiteDBClass()
         {
-            dbfile = GetSQLiteDBFile();
-
-            ConnectionString = "Data Source=" + dbfile + ";Pooling=true;";
-
-            if (!File.Exists(dbfile))
+            lock (lockDBInit)
             {
-                CreateDB(dbfile);
+                dbfile = GetSQLiteDBFile();
+
+                ConnectionString = "Data Source=" + dbfile + ";Pooling=true;";
+
+                if (!File.Exists(dbfile))
+                {
+                    CreateDB(dbfile);
+                }
+                else
+                    UpgradeDB();
+
             }
-            else
-                UpgradeDB();
-
-
         }
 
 
@@ -106,9 +109,13 @@ namespace EDDiscovery.DB
 
         public bool UpgradeDB()
         {
+            if (dbUpgraded)
+                return true;
+
             int dbver;
             try
             {
+
                 dbver = GetSettingInt("DBVer", 1);
 
                 if (dbver < 2)
@@ -136,6 +143,8 @@ namespace EDDiscovery.DB
                 if (dbver < 9)
                     UpgradeDB9();
 
+
+                dbUpgraded = true;
                 return true;
             }
             catch (Exception ex)
