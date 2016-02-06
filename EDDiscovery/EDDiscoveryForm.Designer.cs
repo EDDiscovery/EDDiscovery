@@ -556,7 +556,7 @@
             // 
             this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
             this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.gitHubToolStripMenuItem.Text = "Gitbub";
+            this.gitHubToolStripMenuItem.Text = "Github";
             this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.gitHubToolStripMenuItem_Click);
             // 
             // eDDiscoveryHomepageToolStripMenuItem
