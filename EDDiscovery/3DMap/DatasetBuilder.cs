@@ -110,40 +110,43 @@ namespace EDDiscovery2._3DMap
                 // colours just resolves to an object reference not set error, but after a restart it works fine
                 // Not going to waste any more time, a one time restart is hardly the worst workaround in the world...
                 IEnumerable<IGrouping<int, SystemPosition>> colours =
-                    from SystemPosition sysPos in VisitedSystems
+                    from SystemPosition sysPos in VisitedSystems where sysPos.vs!=null
                     group sysPos by sysPos.vs.MapColour;
 
-                foreach (IGrouping<int, SystemPosition> colour in colours)
+                if (colours!=null)
                 {
-                    if (DrawLines)
+                    foreach (IGrouping<int, SystemPosition> colour in colours)
                     {
-                        var datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                        foreach (SystemPosition sp in colour)
+                        if (DrawLines)
                         {
-                            if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
+                            var datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                            foreach (SystemPosition sp in colour)
                             {
-                                datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
-                                    sp.lastKnownSystem.x , sp.lastKnownSystem.y, sp.lastKnownSystem.z));
+                                if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
+                                {
+                                    datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
+                                        sp.lastKnownSystem.x, sp.lastKnownSystem.y, sp.lastKnownSystem.z));
 
+                                }
                             }
+                            _datasets.Add(datasetl);
                         }
-                        _datasets.Add(datasetl);
-                    }
-                    else
-                    {
-                        var datasetvs = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                        foreach (SystemPosition sp in colour)
+                        else
                         {
-                            ISystem star = SystemData.GetSystem(sp.Name);
-                            if (star != null && star.HasCoordinate)
+                            var datasetvs = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                            foreach (SystemPosition sp in colour)
                             {
+                                ISystem star = SystemData.GetSystem(sp.Name);
+                                if (star != null && star.HasCoordinate)
+                                {
 
-                                AddSystem(star, datasetvs);
+                                    AddSystem(star, datasetvs);
+                                }
                             }
+                            _datasets.Add(datasetvs);
                         }
-                        _datasets.Add(datasetvs);
-                    }
 
+                    }
                 }
             }
         }
