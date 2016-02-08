@@ -61,8 +61,8 @@ namespace EDDiscovery2.EDSM
                 SQLiteDBClass db = new SQLiteDBClass();
                 EDSMClass edsm = new EDSMClass();
 
-                edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
-                edsm.commanderName = db.GetSettingString("CommanderName", "");
+                edsm.apiKey =  EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+                edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
 
                 //string comments =  edsm.GetComments(new DateTime(2015, 1, 1));
                 List<SystemPosition> log;
