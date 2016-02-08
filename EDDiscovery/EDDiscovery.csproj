@@ -184,6 +184,7 @@
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EliteDangerous\AppConfig.cs" />
+    <Compile Include="EliteDangerous\EDCommander.cs" />
     <Compile Include="EliteDangerous\EliteDangerous.cs" />
     <Compile Include="EliteDangerous\GameSettings.cs" />
     <Compile Include="3DMap\FormMap.cs">

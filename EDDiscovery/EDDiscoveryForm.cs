@@ -328,7 +328,7 @@ namespace EDDiscovery
                 EDSMClass edsm = new EDSMClass();
                 string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
-                CommanderName = _db.GetSettingString("CommanderName", "");
+                CommanderName = EDDConfig.CurrentCommander.Name;
                 Invoke((MethodInvoker) delegate {
                     travelHistoryControl1.textBoxCmdrName.Text = CommanderName;
                 });
@@ -748,7 +748,8 @@ namespace EDDiscovery
         {
             _db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
             _db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
-            _db.PutSettingString("EDSMApiKey", textBoxEDSMApiKey.Text);
+            EDDiscovery.EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey = textBoxEDSMApiKey.Text;
+
             _db.PutSettingInt("FormWidth", this.Width);
             _db.PutSettingInt("FormHeight", this.Height);
             _db.PutSettingInt("FormTop", this.Top);
@@ -762,6 +763,10 @@ namespace EDDiscovery
             EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
+
+            List<EDCommander> edcommanders = (List<EDCommander>)dataGridView1.DataSource;
+            EDDConfig.StoreCommanders(edcommanders);
+
         }
 
         private void routeControl1_Load(object sender, EventArgs e)
@@ -1011,7 +1016,7 @@ namespace EDDiscovery
             string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
             textBoxNetLogDir.Text = _db.GetSettingString("Netlogdir", datapath);
 
-            textBoxEDSMApiKey.Text = _db.GetSettingString("EDSMApiKey", "");
+            textBoxEDSMApiKey.Text = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
             checkBox_Distances.Checked = EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
             
@@ -1033,6 +1038,19 @@ namespace EDDiscovery
             {
                 radioButtonCentreHome.Checked = true;
             }
+
+
+            List<EDCommander> cmdList = new List<EDCommander>();
+
+            cmdList.Add(new EDCommander(1, "Finwen", "3456356745678"));
+            cmdList.Add(new EDCommander(2, "Finwena", "2456356745678"));
+            cmdList.Add(new EDCommander(3, "Lpgano22", "156356745678"));
+            cmdList.Add(new EDCommander(4, "Finwen4", "4456356745678"));
+            cmdList.Add(new EDCommander(5, "Finwen5", "5456356745678"));
+
+
+            dataGridView1.DataSource = cmdList;
+
         }
 
         private void CheckIfEliteDangerousIsRunning()

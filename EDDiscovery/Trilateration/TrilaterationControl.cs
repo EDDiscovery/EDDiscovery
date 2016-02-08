@@ -37,8 +37,8 @@ namespace EDDiscovery
             FreezeTrilaterationUI();
             edsm = new EDSMClass();
             var db = new SQLiteDBClass();
-            edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
-            edsm.commanderName = db.GetSettingString("CommanderName", "");
+            edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
         }
         
         public void Set(ISystem system)
@@ -640,6 +640,9 @@ namespace EDDiscovery
 
         private void SubmitToEDSM()
         {
+            edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+
             var travelHistoryControl = _discoveryForm.TravelControl;
             if (string.IsNullOrEmpty(edsm.commanderName))
             {   

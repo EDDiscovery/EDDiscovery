@@ -43,6 +43,8 @@
             this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBoxHistoryWindow = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -198,16 +200,31 @@
             // historyContextMenu
             // 
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.starMapColourToolStripMenuItem});
+            this.starMapColourToolStripMenuItem,
+            this.hideSystemToolStripMenuItem,
+            this.moveToAnotherCommanderToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(170, 26);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 70);
             // 
             // starMapColourToolStripMenuItem
             // 
             this.starMapColourToolStripMenuItem.Name = "starMapColourToolStripMenuItem";
-            this.starMapColourToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.starMapColourToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.starMapColourToolStripMenuItem.Text = "Star Map Colour...";
             this.starMapColourToolStripMenuItem.Click += new System.EventHandler(this.starMapColourToolStripMenuItem_Click);
+            // 
+            // hideSystemToolStripMenuItem
+            // 
+            this.hideSystemToolStripMenuItem.Name = "hideSystemToolStripMenuItem";
+            this.hideSystemToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.hideSystemToolStripMenuItem.Text = "Hide system";
+            this.hideSystemToolStripMenuItem.Click += new System.EventHandler(this.hideSystemToolStripMenuItem_Click);
+            // 
+            // moveToAnotherCommanderToolStripMenuItem
+            // 
+            this.moveToAnotherCommanderToolStripMenuItem.Name = "moveToAnotherCommanderToolStripMenuItem";
+            this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.moveToAnotherCommanderToolStripMenuItem.Text = "Move to another Commander";
             // 
             // comboBoxHistoryWindow
             // 
@@ -625,9 +642,9 @@
             this.textBoxCmdrName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCmdrName.Location = new System.Drawing.Point(114, 6);
             this.textBoxCmdrName.Name = "textBoxCmdrName";
+            this.textBoxCmdrName.ReadOnly = true;
             this.textBoxCmdrName.Size = new System.Drawing.Size(167, 26);
             this.textBoxCmdrName.TabIndex = 18;
-            this.textBoxCmdrName.Leave += new System.EventHandler(this.textBoxCmdrName_Leave);
             // 
             // buttonSync
             // 
@@ -807,5 +824,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
         internal System.Windows.Forms.TextBox textBoxDistanceToNextSystem;
+        private System.Windows.Forms.ToolStripMenuItem hideSystemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem moveToAnotherCommanderToolStripMenuItem;
     }
 }

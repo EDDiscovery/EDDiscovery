@@ -40,6 +40,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxDefaultZoom = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -75,6 +76,7 @@
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keepOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fastTravelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,13 +84,16 @@
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.fastTravelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
             this.tabPageScreenshots.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -190,6 +195,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.dataGridView1);
             this.tabPage3.Controls.Add(this.groupBox2);
             this.tabPage3.Controls.Add(this.checkboxSkipSlowUpdates);
             this.tabPage3.Controls.Add(this.checkBoxEDSMLog);
@@ -206,6 +212,21 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToOrderColumns = true;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnNr,
+            this.ColumnCommander,
+            this.ColumnEDSMAPIKey});
+            this.dataGridView1.Location = new System.Drawing.Point(515, 93);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(376, 108);
+            this.dataGridView1.TabIndex = 13;
             // 
             // groupBox2
             // 
@@ -293,7 +314,7 @@
             // 
             this.checkboxSkipSlowUpdates.AutoSize = true;
             this.checkboxSkipSlowUpdates.BackColor = System.Drawing.Color.Gold;
-            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(653, 96);
+            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(128, 182);
             this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
             this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
             this.checkboxSkipSlowUpdates.TabIndex = 11;
@@ -450,7 +471,7 @@
             this.statisticsToolStripMenuItem,
             this.setDefaultMapColourToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // addNewStarToolStripMenuItem
@@ -537,9 +558,16 @@
             // keepOnTopToolStripMenuItem
             // 
             this.keepOnTopToolStripMenuItem.Name = "keepOnTopToolStripMenuItem";
-            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.keepOnTopToolStripMenuItem.Text = "Keep on Top";
             this.keepOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepOnTopToolStripMenuItem_Click);
+            // 
+            // fastTravelToolStripMenuItem
+            // 
+            this.fastTravelToolStripMenuItem.CheckOnClick = true;
+            this.fastTravelToolStripMenuItem.Name = "fastTravelToolStripMenuItem";
+            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.fastTravelToolStripMenuItem.Text = "Fast Travel";
             // 
             // helpToolStripMenuItem
             // 
@@ -601,12 +629,27 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
-            // fastTravelToolStripMenuItem
+            // ColumnNr
             // 
-            this.fastTravelToolStripMenuItem.CheckOnClick = true;
-            this.fastTravelToolStripMenuItem.Name = "fastTravelToolStripMenuItem";
-            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.fastTravelToolStripMenuItem.Text = "Fast Travel";
+            this.ColumnNr.DataPropertyName = "Nr";
+            this.ColumnNr.HeaderText = "Nr";
+            this.ColumnNr.Name = "ColumnNr";
+            this.ColumnNr.ReadOnly = true;
+            this.ColumnNr.Width = 20;
+            // 
+            // ColumnCommander
+            // 
+            this.ColumnCommander.DataPropertyName = "Name";
+            this.ColumnCommander.HeaderText = "Commander";
+            this.ColumnCommander.Name = "ColumnCommander";
+            this.ColumnCommander.Width = 130;
+            // 
+            // ColumnEDSMAPIKey
+            // 
+            this.ColumnEDSMAPIKey.DataPropertyName = "APIKey";
+            this.ColumnEDSMAPIKey.HeaderText = "EDSM api key";
+            this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
+            this.ColumnEDSMAPIKey.Width = 200;
             // 
             // EDDiscoveryForm
             // 
@@ -632,6 +675,7 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -701,6 +745,10 @@
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem keepOnTopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fastTravelToolStripMenuItem;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
     }
 }
 
