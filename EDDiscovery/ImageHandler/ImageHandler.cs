@@ -143,11 +143,7 @@ namespace EDDiscovery2.ImageHandler
 
                     //sometimes the picture doesn't load into the picture box so waiting 1 sec in case this due to the file not being closed quick enough in ED
                     System.Threading.Thread.Sleep(1000);
-                    if (!checkBoxRemove.Checked && checkBoxPreview.Checked)
-                    {
-                        this.pictureBox1.ImageLocation = e.FullPath;
-                        this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                    }
+
                     new_name = CreateFileName(cur_sysname, e.FullPath);
 
                     //just in case we manage to take more than 1 pic in a second, add x's until the name is unique (the fix above may make this pointless)
@@ -156,31 +152,44 @@ namespace EDDiscovery2.ImageHandler
                         new_name = new_name + "x";
                     }
 
-                    Bitmap Screenshot_PIC = new Bitmap(e.FullPath);
-                    Bitmap ED_PIC = (Bitmap)Screenshot_PIC.Clone();
+                    var bmp = System.Drawing.Bitmap.FromFile(e.FullPath);
 
-
+                    string pngName = "";
 
                     if (pic_ext.Equals(".jpg"))
                     {
-                        ED_PIC.Save(output_folder + "\\" + new_name + pic_ext, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        pngName = output_folder + "\\" + new_name + pic_ext;
+                        bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Jpeg);
                     }
                     else if (pic_ext.Equals(".tiff"))
                     {
-                        ED_PIC.Save(output_folder + "\\" + new_name + pic_ext, System.Drawing.Imaging.ImageFormat.Tiff);
+                        pngName = output_folder + "\\" + new_name + pic_ext;
+                        bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Tiff);
                     }
                     else if (pic_ext.Equals(".bmp"))
                     {
+                        pngName = output_folder + "\\" + new_name + pic_ext;
                         if (!textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text))  // Dont save bmp format in screenshot dir....
-                            ED_PIC.Save(output_folder + "\\" + new_name + pic_ext, System.Drawing.Imaging.ImageFormat.Bmp);
+                            bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Bmp);
                     }
                     else
                     {
-                        ED_PIC.Save(output_folder + "\\" + new_name + pic_ext, System.Drawing.Imaging.ImageFormat.Png);
+                        pngName = output_folder + "\\" + new_name + pic_ext;
+                        bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Png);
                     }
 
-                    ED_PIC.Dispose();
-                    Screenshot_PIC.Dispose();
+                    bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Png);
+                    FileInfo fi = new FileInfo(e.FullPath);
+                    File.SetCreationTime(pngName, fi.CreationTime);
+
+                    bmp.Dispose();
+
+
+                    if (!checkBoxRemove.Checked && checkBoxPreview.Checked)
+                    {
+                        this.pictureBox1.ImageLocation = e.FullPath;
+                        this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                    }
 
                     if (checkBoxRemove.Checked) // Remove original picture
                     {

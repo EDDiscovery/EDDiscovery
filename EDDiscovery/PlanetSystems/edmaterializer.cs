@@ -18,6 +18,7 @@ namespace EDDiscovery2.PlanetSystems
 #if DEBUG
             // Dev server. Mess with data as much as you like here
             _serverAddress = "https://ed-materializer.herokuapp.com/";
+            //_serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
 #else
             // Production
             _serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
@@ -25,9 +26,9 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        public List<EDObject>GetAll(string system)
+        public List<EDPlanet>GetAllPlanets(string system)
         {
-            List<EDObject> listObjects = new List<EDObject>();
+            List<EDPlanet> listObjects = new List<EDPlanet>();
             string query = "api/v1/world_surveys";
 
             if (!String.IsNullOrEmpty(system))
@@ -50,7 +51,7 @@ namespace EDDiscovery2.PlanetSystems
 
             foreach (JObject jo in jArray)
             {
-                EDObject obj = new EDObject();
+                EDPlanet obj = new EDPlanet();
 
                 if (obj.ParseJson(jo))
                     listObjects.Add(obj);
@@ -60,11 +61,46 @@ namespace EDDiscovery2.PlanetSystems
             return listObjects;
         }
 
-        public bool Store(EDObject edobj)
+
+        public List<EDStar> GetAllStars(string system)
+        {
+            List<EDStar> listObjects = new List<EDStar>();
+            string query = "api/v1/star_surveys";
+
+            if (!String.IsNullOrEmpty(system))
+                query = query + "/?q[system]=" + HttpUtility.UrlEncode(system);
+
+            var response = RequestGet(query);
+            var json = response.Body;
+
+            JArray jArray = null;
+            JObject jObject = null;
+            if (json != null && json.Length > 5)
+                jObject = (JObject)JObject.Parse(json);
+
+            if (jObject == null)
+                return listObjects;
+
+
+            jArray = (JArray)jObject["star_surveys"];
+
+
+            foreach (JObject jo in jArray)
+            {
+                EDStar obj = new EDStar();
+
+                if (obj.ParseJson(jo))
+                    listObjects.Add(obj);
+            }
+
+
+            return listObjects;
+        }
+
+
+        public bool StorePlanet(EDPlanet edobj)
         {
             
-
-
             dynamic jo = new JObject();
 
             jo.system = edobj.system;
@@ -80,11 +116,25 @@ namespace EDDiscovery2.PlanetSystems
             if (edobj.arrivalPoint>0)
                 jo.arrival_point = edobj.arrivalPoint;
 
-            jo.atmosphere_type = edobj.atmosphere;
-            jo.vulcanism_type = edobj.vulcanism;
+            jo.atmosphere_type = edobj.atmosphere.ToString();
+            jo.vulcanism_type = edobj.vulcanism.ToString();
+
+
 
             if (edobj.radius>0)
                 jo.radius = edobj.radius;
+
+            jo.reserve = edobj.Reserve;
+            jo.mass = edobj.mass;
+            jo.surface_temp = edobj.surfaceTemp;
+            jo.surface_pressure = edobj.surfacePressure;
+            jo.orbit_period = edobj.orbitPeriod;
+            jo.rotation_period = edobj.rotationPeriod;
+            jo.semi_major_axis = edobj.semiMajorAxis;
+            jo.rock_pct = edobj.rockPct;
+            jo.metal_pct = edobj.metalPct;
+            jo.ice_pct = edobj.metalPct;
+
 
             jo.carbon = edobj.materials[MaterialEnum.Carbon];
             jo.iron = edobj.materials[MaterialEnum.Iron];
@@ -148,21 +198,80 @@ namespace EDDiscovery2.PlanetSystems
                 var response = RequestSecurePatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
             }
             return true;
+        }
+
+        public bool StoreStar(EDStar edobj)
+        {
+
+            dynamic jo = new JObject();
+
+            jo.system = edobj.system;
+            jo.commander = edobj.commander;
+            jo.star = edobj.objectName;
+            jo.star_type = edobj.Description;
+            jo.subclass = edobj.subclass;
+            jo.solar_mass = edobj.mass;
+            jo.solar_radius = edobj.radius;
+            jo.star_age = edobj.star_age;
+            jo.orbit_period = edobj.orbitPeriod;
+            jo.arrival_point = edobj.arrivalPoint;
+            jo.luminosity = edobj.luminosity;
+            jo.note = edobj.notes;
+            jo.surface_temp = edobj.surfaceTemp;
+
+            JObject joPost = new JObject(new JProperty("star_survey", jo));
+
+            if (edobj.id == 0)
+            {
+                var response = RequestSecurePost(joPost.ToString(), "api/v1/star_surveys");
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    JObject jo2 = (JObject)JObject.Parse(response.Body);
+                    JObject obj = (JObject)jo2["star_survey"];
+                    edobj.id = obj["id"].Value<int>();
+                }
+                else if ((int)response.StatusCode == 422)
+                {
+                    // Surprise, record is already there for some reason!
+                    // I may create an api method on the server that negates the need to check for 
+                    // this at some point
+                    // - Greg
+
+                    var queryParam = $"q[system]={jo.system}&q[star]={jo.star}&q[commander]={jo.commander}";
+                    response = RequestGet($"api/v1/star_surveys?{queryParam}");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        JObject jo2 = (JObject)JObject.Parse(response.Body);
+                        JObject obj = (JObject)jo2["star_surveys"][0];
+                        edobj.id = obj["id"].Value<int>();
+
+                        response = RequestSecurePatch(joPost.ToString(), "api/v1/star_surveys/" + edobj.id.ToString());
+                    }
+
+                }
+            }
+            else
+            {
+                var response = RequestSecurePatch(joPost.ToString(), "api/v1/star_surveys/" + edobj.id.ToString());
+            }
+            return true;
 
 
         }
 
-        public bool DeleteID(int id)
+
+
+        public bool DeletePlanetID(int id)
         {
             var response = RequestDelete("api/v1/world_surveys/"+id.ToString());
             
             return true;
         }
 
-        public bool Delete(EDObject obj)
+        public bool Delete(EDPlanet obj)
         {
             if (obj.id > 0)
-                return DeleteID(obj.id);
+                return DeletePlanetID(obj.id);
 
             return true;
         }

@@ -40,30 +40,6 @@
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddStar = new System.Windows.Forms.ToolStripButton();
             this.panelPlanets = new System.Windows.Forms.Panel();
-            this.panelStar = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.ColumnRowType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label17 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.checkedListBox4 = new System.Windows.Forms.CheckedListBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -88,13 +64,37 @@
             this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.panelStar = new System.Windows.Forms.Panel();
+            this.label17 = new System.Windows.Forms.Label();
+            this.textBoxS_ArrivalPoint = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.textBoxStarOrbitPeriod = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.textBox_StarAge = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBoxStarTemp = new System.Windows.Forms.TextBox();
+            this.textBoxStarSubClass = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.textBoxS_Radius = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBoxStarMass = new System.Windows.Forms.TextBox();
+            this.comboBoxStarType = new System.Windows.Forms.ComboBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.textBoxStarName = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.buttonLoad = new System.Windows.Forms.Button();
+            this.textBoxStarNote = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.textBoxStarLuminosity = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panelPlanets.SuspendLayout();
             this.panelStar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -118,7 +118,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(278, 9);
+            this.button1.Location = new System.Drawing.Point(345, 9);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 3;
@@ -131,16 +131,19 @@
             this.textBoxName.Location = new System.Drawing.Point(72, 13);
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(103, 20);
-            this.textBoxName.TabIndex = 4;
+            this.textBoxName.TabIndex = 0;
+            this.textBoxName.TextChanged += new System.EventHandler(this.textBoxName_TextChanged);
             // 
             // listView1
             // 
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(0, 25);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(923, 203);
+            this.listView1.Size = new System.Drawing.Size(920, 216);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -148,11 +151,14 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.listView1);
             this.panel1.Controls.Add(this.toolStrip1);
             this.panel1.Location = new System.Drawing.Point(15, 38);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(923, 228);
+            this.panel1.Size = new System.Drawing.Size(920, 241);
             this.panel1.TabIndex = 6;
             // 
             // toolStrip1
@@ -163,7 +169,7 @@
             this.toolStripButtonAddStar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(923, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(920, 25);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -196,6 +202,7 @@
             this.toolStripButtonAddStar.Name = "toolStripButtonAddStar";
             this.toolStripButtonAddStar.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonAddStar.Text = "Add Star";
+            this.toolStripButtonAddStar.Click += new System.EventHandler(this.toolStripButtonAddStar_Click);
             // 
             // panelPlanets
             // 
@@ -227,224 +234,8 @@
             this.panelPlanets.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPlanets.Location = new System.Drawing.Point(0, 0);
             this.panelPlanets.Name = "panelPlanets";
-            this.panelPlanets.Size = new System.Drawing.Size(926, 157);
+            this.panelPlanets.Size = new System.Drawing.Size(923, 149);
             this.panelPlanets.TabIndex = 7;
-            // 
-            // panelStar
-            // 
-            this.panelStar.Controls.Add(this.dataGridView1);
-            this.panelStar.Controls.Add(this.label17);
-            this.panelStar.Controls.Add(this.textBox7);
-            this.panelStar.Controls.Add(this.label18);
-            this.panelStar.Controls.Add(this.textBox8);
-            this.panelStar.Controls.Add(this.label19);
-            this.panelStar.Controls.Add(this.textBox9);
-            this.panelStar.Controls.Add(this.label16);
-            this.panelStar.Controls.Add(this.textBox6);
-            this.panelStar.Controls.Add(this.textBox5);
-            this.panelStar.Controls.Add(this.label15);
-            this.panelStar.Controls.Add(this.textBox3);
-            this.panelStar.Controls.Add(this.label20);
-            this.panelStar.Controls.Add(this.textBox1);
-            this.panelStar.Controls.Add(this.label21);
-            this.panelStar.Controls.Add(this.textBox2);
-            this.panelStar.Controls.Add(this.comboBox4);
-            this.panelStar.Controls.Add(this.label25);
-            this.panelStar.Controls.Add(this.label26);
-            this.panelStar.Controls.Add(this.textBox4);
-            this.panelStar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelStar.Location = new System.Drawing.Point(0, 0);
-            this.panelStar.Name = "panelStar";
-            this.panelStar.Size = new System.Drawing.Size(926, 157);
-            this.panelStar.TabIndex = 9;
-            this.panelStar.Paint += new System.Windows.Forms.PaintEventHandler(this.panelStar_Paint);
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.ColumnHeadersVisible = false;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnRowType,
-            this.Column2,
-            this.ColumnUnit});
-            this.dataGridView1.Location = new System.Drawing.Point(199, 3);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(368, 141);
-            this.dataGridView1.TabIndex = 32;
-            // 
-            // ColumnRowType
-            // 
-            this.ColumnRowType.HeaderText = "Column1";
-            this.ColumnRowType.Name = "ColumnRowType";
-            this.ColumnRowType.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
-            // 
-            // ColumnUnit
-            // 
-            this.ColumnUnit.HeaderText = "Column3";
-            this.ColumnUnit.Name = "ColumnUnit";
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(752, 127);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(70, 13);
-            this.label17.TabIndex = 31;
-            this.label17.Text = "Surface temp";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(828, 122);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(107, 20);
-            this.textBox7.TabIndex = 30;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(572, 125);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(32, 13);
-            this.label18.TabIndex = 29;
-            this.label18.Text = "Orbit ";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(635, 122);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(107, 20);
-            this.textBox8.TabIndex = 28;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(733, 46);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(61, 13);
-            this.label19.TabIndex = 27;
-            this.label19.Text = "Orbit period";
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(802, 43);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(103, 20);
-            this.textBox9.TabIndex = 26;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(753, 100);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(70, 13);
-            this.label16.TabIndex = 25;
-            this.label16.Text = "Surface temp";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(829, 95);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(107, 20);
-            this.textBox6.TabIndex = 24;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(135, 69);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(58, 20);
-            this.textBox5.TabIndex = 23;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(28, 72);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(32, 13);
-            this.label15.TabIndex = 22;
-            this.label15.Text = "Class";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(71, 69);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(58, 20);
-            this.textBox3.TabIndex = 21;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(573, 98);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(62, 13);
-            this.label20.TabIndex = 17;
-            this.label20.Text = "Solar radius";
-            this.label20.Click += new System.EventHandler(this.label20_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(636, 95);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(107, 20);
-            this.textBox1.TabIndex = 16;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(734, 19);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(69, 13);
-            this.label21.TabIndex = 15;
-            this.label21.Text = "Solar masses";
-            this.label21.Click += new System.EventHandler(this.label21_Click);
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(803, 16);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(103, 20);
-            this.textBox2.TabIndex = 14;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
-            // comboBox4
-            // 
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(72, 39);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(107, 21);
-            this.comboBox4.TabIndex = 7;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(28, 43);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(31, 13);
-            this.label25.TabIndex = 6;
-            this.label25.Text = "Type";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(28, 19);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(35, 13);
-            this.label26.TabIndex = 5;
-            this.label26.Text = "Name";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(72, 13);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(103, 20);
-            this.textBox4.TabIndex = 4;
             // 
             // label13
             // 
@@ -557,7 +348,7 @@
             this.comboBoxTerrainDifficulty.Location = new System.Drawing.Point(90, 92);
             this.comboBoxTerrainDifficulty.Name = "comboBoxTerrainDifficulty";
             this.comboBoxTerrainDifficulty.Size = new System.Drawing.Size(85, 21);
-            this.comboBoxTerrainDifficulty.TabIndex = 20;
+            this.comboBoxTerrainDifficulty.TabIndex = 8;
             // 
             // label9
             // 
@@ -574,7 +365,7 @@
             this.checkBox1.Location = new System.Drawing.Point(400, 41);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(91, 17);
-            this.checkBox1.TabIndex = 18;
+            this.checkBox1.TabIndex = 5;
             this.checkBox1.Text = "Terraformable";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
@@ -592,7 +383,7 @@
             this.textBoxRadius.Location = new System.Drawing.Point(242, 66);
             this.textBoxRadius.Name = "textBoxRadius";
             this.textBoxRadius.Size = new System.Drawing.Size(103, 20);
-            this.textBoxRadius.TabIndex = 16;
+            this.textBoxRadius.TabIndex = 7;
             // 
             // label7
             // 
@@ -608,7 +399,7 @@
             this.textBoxArrivalPoint.Location = new System.Drawing.Point(72, 66);
             this.textBoxArrivalPoint.Name = "textBoxArrivalPoint";
             this.textBoxArrivalPoint.Size = new System.Drawing.Size(103, 20);
-            this.textBoxArrivalPoint.TabIndex = 14;
+            this.textBoxArrivalPoint.TabIndex = 6;
             // 
             // comboBoxVulcanism
             // 
@@ -616,7 +407,7 @@
             this.comboBoxVulcanism.Location = new System.Drawing.Point(242, 39);
             this.comboBoxVulcanism.Name = "comboBoxVulcanism";
             this.comboBoxVulcanism.Size = new System.Drawing.Size(107, 21);
-            this.comboBoxVulcanism.TabIndex = 13;
+            this.comboBoxVulcanism.TabIndex = 4;
             this.comboBoxVulcanism.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label6
@@ -634,7 +425,7 @@
             this.comboBoxAtmosphere.Location = new System.Drawing.Point(72, 39);
             this.comboBoxAtmosphere.Name = "comboBoxAtmosphere";
             this.comboBoxAtmosphere.Size = new System.Drawing.Size(103, 21);
-            this.comboBoxAtmosphere.TabIndex = 11;
+            this.comboBoxAtmosphere.TabIndex = 3;
             // 
             // label5
             // 
@@ -659,7 +450,7 @@
             this.textBoxGravity.Location = new System.Drawing.Point(422, 12);
             this.textBoxGravity.Name = "textBoxGravity";
             this.textBoxGravity.Size = new System.Drawing.Size(58, 20);
-            this.textBoxGravity.TabIndex = 8;
+            this.textBoxGravity.TabIndex = 2;
             this.textBoxGravity.TextChanged += new System.EventHandler(this.textBoxGravity_TextChanged);
             // 
             // comboBoxType
@@ -668,7 +459,7 @@
             this.comboBoxType.Location = new System.Drawing.Point(242, 12);
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(107, 21);
-            this.comboBoxType.TabIndex = 7;
+            this.comboBoxType.TabIndex = 1;
             this.comboBoxType.SelectedIndexChanged += new System.EventHandler(this.comboBoxType_SelectedIndexChanged);
             // 
             // label3
@@ -689,12 +480,201 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Name";
             // 
+            // panelStar
+            // 
+            this.panelStar.Controls.Add(this.label23);
+            this.panelStar.Controls.Add(this.textBoxStarLuminosity);
+            this.panelStar.Controls.Add(this.label18);
+            this.panelStar.Controls.Add(this.textBoxStarNote);
+            this.panelStar.Controls.Add(this.label17);
+            this.panelStar.Controls.Add(this.textBoxS_ArrivalPoint);
+            this.panelStar.Controls.Add(this.label22);
+            this.panelStar.Controls.Add(this.textBoxStarOrbitPeriod);
+            this.panelStar.Controls.Add(this.label19);
+            this.panelStar.Controls.Add(this.textBox_StarAge);
+            this.panelStar.Controls.Add(this.label16);
+            this.panelStar.Controls.Add(this.textBoxStarTemp);
+            this.panelStar.Controls.Add(this.textBoxStarSubClass);
+            this.panelStar.Controls.Add(this.label15);
+            this.panelStar.Controls.Add(this.textBox3);
+            this.panelStar.Controls.Add(this.label20);
+            this.panelStar.Controls.Add(this.textBoxS_Radius);
+            this.panelStar.Controls.Add(this.label21);
+            this.panelStar.Controls.Add(this.textBoxStarMass);
+            this.panelStar.Controls.Add(this.comboBoxStarType);
+            this.panelStar.Controls.Add(this.label25);
+            this.panelStar.Controls.Add(this.label26);
+            this.panelStar.Controls.Add(this.textBoxStarName);
+            this.panelStar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelStar.Location = new System.Drawing.Point(0, 0);
+            this.panelStar.Name = "panelStar";
+            this.panelStar.Size = new System.Drawing.Size(923, 149);
+            this.panelStar.TabIndex = 9;
+            this.panelStar.Paint += new System.Windows.Forms.PaintEventHandler(this.panelStar_Paint);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(472, 72);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(62, 13);
+            this.label17.TabIndex = 35;
+            this.label17.Text = "Arrival point";
+            // 
+            // textBoxS_ArrivalPoint
+            // 
+            this.textBoxS_ArrivalPoint.Location = new System.Drawing.Point(534, 69);
+            this.textBoxS_ArrivalPoint.Name = "textBoxS_ArrivalPoint";
+            this.textBoxS_ArrivalPoint.Size = new System.Drawing.Size(107, 20);
+            this.textBoxS_ArrivalPoint.TabIndex = 34;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(251, 72);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(61, 13);
+            this.label22.TabIndex = 33;
+            this.label22.Text = "Orbit period";
+            // 
+            // textBoxStarOrbitPeriod
+            // 
+            this.textBoxStarOrbitPeriod.Location = new System.Drawing.Point(313, 69);
+            this.textBoxStarOrbitPeriod.Name = "textBoxStarOrbitPeriod";
+            this.textBoxStarOrbitPeriod.Size = new System.Drawing.Size(103, 20);
+            this.textBoxStarOrbitPeriod.TabIndex = 32;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(472, 44);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(47, 13);
+            this.label19.TabIndex = 27;
+            this.label19.Text = "Star age";
+            // 
+            // textBox_StarAge
+            // 
+            this.textBox_StarAge.Location = new System.Drawing.Point(534, 41);
+            this.textBox_StarAge.Name = "textBox_StarAge";
+            this.textBox_StarAge.Size = new System.Drawing.Size(107, 20);
+            this.textBox_StarAge.TabIndex = 26;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(237, 45);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(70, 13);
+            this.label16.TabIndex = 25;
+            this.label16.Text = "Surface temp";
+            // 
+            // textBoxStarTemp
+            // 
+            this.textBoxStarTemp.Location = new System.Drawing.Point(313, 41);
+            this.textBoxStarTemp.Name = "textBoxStarTemp";
+            this.textBoxStarTemp.Size = new System.Drawing.Size(103, 20);
+            this.textBoxStarTemp.TabIndex = 24;
+            // 
+            // textBoxStarSubClass
+            // 
+            this.textBoxStarSubClass.Location = new System.Drawing.Point(135, 69);
+            this.textBoxStarSubClass.Name = "textBoxStarSubClass";
+            this.textBoxStarSubClass.Size = new System.Drawing.Size(58, 20);
+            this.textBoxStarSubClass.TabIndex = 23;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(28, 72);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(32, 13);
+            this.label15.TabIndex = 22;
+            this.label15.Text = "Class";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(71, 69);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.ReadOnly = true;
+            this.textBox3.Size = new System.Drawing.Size(58, 20);
+            this.textBox3.TabIndex = 21;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(471, 15);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(62, 13);
+            this.label20.TabIndex = 17;
+            this.label20.Text = "Solar radius";
+            this.label20.Click += new System.EventHandler(this.label20_Click);
+            // 
+            // textBoxS_Radius
+            // 
+            this.textBoxS_Radius.Location = new System.Drawing.Point(534, 12);
+            this.textBoxS_Radius.Name = "textBoxS_Radius";
+            this.textBoxS_Radius.Size = new System.Drawing.Size(107, 20);
+            this.textBoxS_Radius.TabIndex = 16;
+            this.textBoxS_Radius.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(238, 13);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(69, 13);
+            this.label21.TabIndex = 15;
+            this.label21.Text = "Solar masses";
+            this.label21.Click += new System.EventHandler(this.label21_Click);
+            // 
+            // textBoxStarMass
+            // 
+            this.textBoxStarMass.Location = new System.Drawing.Point(313, 13);
+            this.textBoxStarMass.Name = "textBoxStarMass";
+            this.textBoxStarMass.Size = new System.Drawing.Size(103, 20);
+            this.textBoxStarMass.TabIndex = 14;
+            this.textBoxStarMass.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // comboBoxStarType
+            // 
+            this.comboBoxStarType.FormattingEnabled = true;
+            this.comboBoxStarType.Location = new System.Drawing.Point(72, 40);
+            this.comboBoxStarType.Name = "comboBoxStarType";
+            this.comboBoxStarType.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxStarType.TabIndex = 7;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(28, 43);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(31, 13);
+            this.label25.TabIndex = 6;
+            this.label25.Text = "Type";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(28, 15);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(35, 13);
+            this.label26.TabIndex = 5;
+            this.label26.Text = "Name";
+            // 
+            // textBoxStarName
+            // 
+            this.textBoxStarName.Location = new System.Drawing.Point(72, 13);
+            this.textBoxStarName.Name = "textBoxStarName";
+            this.textBoxStarName.Size = new System.Drawing.Size(121, 20);
+            this.textBoxStarName.TabIndex = 4;
+            // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.Red;
-            this.label14.Location = new System.Drawing.Point(394, 3);
+            this.label14.Location = new System.Drawing.Point(452, 3);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(495, 25);
             this.label14.TabIndex = 8;
@@ -702,21 +682,64 @@
             // 
             // panelBottom
             // 
-            this.panelBottom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.panelBottom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelBottom.Controls.Add(this.panelPlanets);
             this.panelBottom.Controls.Add(this.panelStar);
-            this.panelBottom.Location = new System.Drawing.Point(12, 272);
+            this.panelBottom.Controls.Add(this.panelPlanets);
+            this.panelBottom.Location = new System.Drawing.Point(12, 285);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(926, 157);
+            this.panelBottom.Size = new System.Drawing.Size(923, 149);
             this.panelBottom.TabIndex = 10;
+            // 
+            // buttonLoad
+            // 
+            this.buttonLoad.Location = new System.Drawing.Point(264, 10);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(75, 23);
+            this.buttonLoad.TabIndex = 11;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = true;
+            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
+            // 
+            // textBoxStarNote
+            // 
+            this.textBoxStarNote.Location = new System.Drawing.Point(316, 97);
+            this.textBoxStarNote.Multiline = true;
+            this.textBoxStarNote.Name = "textBoxStarNote";
+            this.textBoxStarNote.Size = new System.Drawing.Size(325, 43);
+            this.textBoxStarNote.TabIndex = 36;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(277, 108);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(30, 13);
+            this.label18.TabIndex = 37;
+            this.label18.Text = "Note";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(10, 104);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(56, 13);
+            this.label23.TabIndex = 39;
+            this.label23.Text = "Luminosity";
+            // 
+            // textBoxStarLuminosity
+            // 
+            this.textBoxStarLuminosity.Location = new System.Drawing.Point(72, 101);
+            this.textBoxStarLuminosity.Name = "textBoxStarLuminosity";
+            this.textBoxStarLuminosity.Size = new System.Drawing.Size(121, 20);
+            this.textBoxStarLuminosity.TabIndex = 38;
             // 
             // PlanetsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(963, 419);
+            this.ClientSize = new System.Drawing.Size(960, 432);
+            this.Controls.Add(this.buttonLoad);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.panel1);
@@ -735,7 +758,6 @@
             this.panelPlanets.PerformLayout();
             this.panelStar.ResumeLayout(false);
             this.panelStar.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panelBottom.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -781,29 +803,30 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ToolStripButton toolStripButtonAddStar;
         private System.Windows.Forms.Panel panelStar;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textBoxStarSubClass;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxS_Radius;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.TextBox textBoxStarMass;
+        private System.Windows.Forms.ComboBox comboBoxStarType;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox textBoxStarName;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.TextBox textBox_StarAge;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnRowType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnUnit;
+        private System.Windows.Forms.TextBox textBoxStarTemp;
         private System.Windows.Forms.Panel panelBottom;
+        private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox textBoxStarOrbitPeriod;
+        private System.Windows.Forms.TextBox textBoxS_ArrivalPoint;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox textBoxStarNote;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox textBoxStarLuminosity;
     }
 }

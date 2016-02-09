@@ -6,184 +6,37 @@ using System.Text;
 
 namespace EDDiscovery2.PlanetSystems
 {
-    public enum ObjectTypesEnum
+
+    public class EDPlanet : EDObject
     {
-        UnknownObject = 0,
-        EarthLikeWorld,
-        WaterWorld,
-        AmmoniaWorld,
-        MetalRich,
-        HighMetalContent,
-        Icy,
-        Rocky,
-        RockyIce,
-        GasGiant_WaterBasedLife,
-        GasGiant_AmmoniaBasedLife,
-        GasGiant_HeliumRich,
-        Class_I_GasGiant,
-        Class_II_GasGiant,
-        Class_III_GasGiant,
-        Class_IV_GasGiant,
-        Class_V_GasGiant,
-        WaterGiant,
-        Belt,
-
-
-        Unknown_Star = 100,
-        Star_O,
-        Star_B,
-        Star_A,
-        Star_F,
-        Star_G,
-        Star_K,
-        Star_M, 
-        Star_L,
-        Star_T,
-        Star_Y,
-
-        Star_W,
-        Star_WN,
-        Star_WNC,
-        Star_WC,
-        Star_WO,
-        Star_C,
-        Star_S,
-        Star_TTauri,
-        Star_AeBe,
-
-        Star_GA,
-        Star_GF,
-        Star_GK,
-        Star_GM,
-        Star_SGM,
-        Star_GS, 
-        Star_MS,
-
-        Star_CN,
-
-        Star_DA,
-        Star_DB,
-        Star_DAB, 
-        Star_DC,
-        Star_DCV,
-        Star_N,
-        BlackHole,
-        SuperBlackHole,
-    }
-
-  
-
-
-    public enum VulcanismEnum
-    {
-        Unknown = 0,
-        No_volcanism,
-        Iron_magma,
-        Silicate_magma,
-        Water_magma,
-        Silicate_vapour_geysers,
-        Carbon_dioxide_geysers,
-        Water_geysers,
-        Methane_magma,
-        Nitrogen_magma,
-        Ammonia_magma,
-    }
-
-public enum AtmosphereEnum
-{
-    Unknown = 0,
-        No_atmosphere,
-        Suitable_for_water_based_life,
-        Nitrogen,
-        Carbon_dioxide,
-        Sulphur_dioxide,
-        Argon,
-        Neon,
-        Neon_rich,
-        Argon_rich,
-        Nitrogen_rich,
-        Water_rich,
-        Carbon_dioxide_rich,
-        Methane_rich,
-        Silicate_vapour,
-        Methane,
-        Helium,
-        Ammonia,
-        Ammonia_and_oxygen,
-        Water,
-    }
-
-    /*
-      <AtmosphereComponents>
-        NITROGEN,
-        OXYGEN,
-        WATER,
-        NEON,
-        CARBON DIOXIDE,
-        AMMONIA,
-        METHANE,
-        SULPHUR_DIOXIDE,
-        HYDROGEN,
-        HELIUM,
-        ARGON,
-        IRON,
-        SILICATES,
-      </AtmosphereComponents>
-      <SolidComponents>
-        METAL,
-        ROCK,
-        ICE,
-      </SolidComponents>
-      <RingTypes>
-        METALLIC,
-        METAL RICH,
-        ROCKY,
-        ICY,
-      </RingTypes>
-      <MiningReserves>
-        Pristine reserves,
-        Major reserves,
-        Common reserves,
-        Low reserves,
-        Depleted reserves,
-      </MiningReserves>
-      <Terraforming>
-        This body is a candidate for terraforming.,
-        This world has been terraformed.,
-      </Terraforming>
-      */
-
-    public class EDObject
-    {
-        public int id;
-        public string system;
-        public string objectName;
-        public string commander;
-        private ObjectTypesEnum objectType;
-        private ObjectsType type;
-        public bool terraformable;
+        public string terraformable;
         public float gravity;
-        public float arrivalPoint;
-        public float radius;
         public AtmosphereEnum atmosphere;
         public VulcanismEnum vulcanism;
         public int terrain_difficulty;
-        public string notes;
         public Dictionary<MaterialEnum, bool> materials;
-        public DateTime updated_at;
-        public DateTime created_at;
+        public string Reserve;
+        public float surfacePressure;
+        public float rotationPeriod;
+
+        public float semiMajorAxis;
+        public float rockPct;
+        public float metalPct;
+        public float icePct;
 
         static private List<Material> mlist = Material.GetMaterialList;
-        static public List<EDObject> listObjectTypes = EDObject.GetEDObjList;
-        static private List<ObjectsType> objectsTypes = ObjectsType.GetAllTypes();
+        static public List<EDPlanet> listObjectTypes = EDPlanet.GetEDObjList;
+        
 
-        static private Dictionary<string, ObjectTypesEnum>  objectAliases = ObjectsType.GetAllTypesAlias();
+        static private Dictionary<string, ObjectTypesEnum> objectAliases = ObjectsType.GetAllTypesAlias();
 
 
-        public EDObject()
+        public EDPlanet()
         {
             materials = new Dictionary<MaterialEnum, bool>();
 
+            if (objectsTypes != null)
+                type = objectsTypes[0];
             // Create an empty dictionary
             foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
             {
@@ -194,59 +47,6 @@ public enum AtmosphereEnum
 
 
         }
-
-        public ObjectTypesEnum ObjectType
-        {
-            get
-            {
-                return objectType;
-            }
-
-            set
-            {
-                if (objectsTypes==null)
-                    objectsTypes = ObjectsType.GetAllTypes();
-
-                objectType = value;
-                type = objectsTypes.Where(obj => obj.type == value).FirstOrDefault<ObjectsType>();
-            }
-        }
-
-
-        public ObjectsType Type
-        {
-            get
-            {
-                return type;
-            }
-        }
-
-        public string Description
-        {
-            get
-            {
-                if (type == null)
-                    return "";
-                return Type.Short;
-            }
-        }
-
-        public bool IsPlanet
-        {
-            get
-            {
-                return type.Planet;
-            }
-        }
-
-        public bool IsStar
-        {
-            get
-            {
-                return type.Star;
-            }
-        }
-
 
 
         public string ShortName
@@ -262,7 +62,7 @@ public enum AtmosphereEnum
                     case ObjectTypesEnum.WaterWorld:
                         return "WW";
                     case ObjectTypesEnum.MetalRich:
-                        return "Metal-rich" ;
+                        return "Metal-rich";
                     case ObjectTypesEnum.HighMetalContent:
                         return "High Metal";
                     case ObjectTypesEnum.Icy:
@@ -309,8 +109,8 @@ public enum AtmosphereEnum
                         return "T";
                     case ObjectTypesEnum.Star_Y:
                         return "Y";
-         //           case ObjectTypesEnum.Star_Proto:
-         //               return "Proto";
+                    //           case ObjectTypesEnum.Star_Proto:
+                    //               return "Proto";
                     case ObjectTypesEnum.Star_W:
                         return "W";
                     case ObjectTypesEnum.Star_C:
@@ -319,8 +119,8 @@ public enum AtmosphereEnum
                         return "S";
                     case ObjectTypesEnum.Star_TTauri:
                         return "T Tauri";
-           //         case ObjectTypesEnum.Star_WhiteDwarf:
-           //             return "DA";
+                    //         case ObjectTypesEnum.Star_WhiteDwarf:
+                    //             return "DA";
                     case ObjectTypesEnum.Star_AeBe:
                         return "AeBe";
                     case ObjectTypesEnum.BlackHole:
@@ -332,13 +132,14 @@ public enum AtmosphereEnum
             }
         }
 
-        public static List<EDObject> GetEDObjList
-        { get
+        public static List<EDPlanet> GetEDObjList
+        {
+            get
             {
-                List<EDObject> list = new List<EDObject>();
+                List<EDPlanet> list = new List<EDPlanet>();
                 foreach (ObjectTypesEnum objtype in Enum.GetValues(typeof(ObjectTypesEnum)))
                 {
-                    EDObject obj = new EDObject();
+                    EDPlanet obj = new EDPlanet();
                     obj.ObjectType = objtype;
                     list.Add(obj);
                 }
@@ -353,70 +154,43 @@ public enum AtmosphereEnum
             id = jo["id"].Value<int>();
             system = jo["system"].Value<string>();
             objectName = jo["world"].Value<string>();
+            commander = jo["commander"].Value<string>();
 
             ObjectType = String2ObjectType(jo["world_type"].Value<string>());
-            terraformable = GetBool(jo["terraformable"]);
+            terraformable = GetString(jo["terraformable"]);
             gravity = GetFloat(jo["gravity"]);
-            terrain_difficulty  = GetInt(jo["terrain_difficulty"]);
+            terrain_difficulty = GetInt(jo["terrain_difficulty"]);
+            notes = GetString(jo["notes"]);
+
 
             radius = GetFloat(jo["radius"]);
             arrivalPoint = GetFloat(jo["arrival_point"]);
             atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(jo["atmosphere_type"].Value<string>());
             vulcanism = (VulcanismEnum)VulcanismStr2Enum(jo["vulcanism_type"].Value<string>());
+            Reserve = GetString(jo["reserve"]);
+            mass = GetFloat(jo["mass"]);
+            surfaceTemp = GetInt(jo["surface_temp"]);
+            surfacePressure = GetFloat(jo["surface_pressure"]);
+            orbitPeriod = GetFloat(jo["orbit_period"]);
+            rotationPeriod = GetFloat(jo["rotation_period"]);
+            semiMajorAxis = GetFloat(jo["semi_major_axis"]);
+            rockPct = GetFloat(jo["rock_pct"]);
+            metalPct = GetFloat(jo["metal_pct"]);
+            icePct = GetFloat(jo["ice_pct"]);
 
             foreach (var mat in mlist)
             {
                 materials[mat.material] = GetBool(jo[mat.Name.ToLower()]);
             }
-                return true;
-        }
-
-        private bool GetBool(JToken jToken)
-        {
-            if (IsNullOrEmptyT(jToken))
-                return false;
-            return jToken.Value<bool>();
-        }
-
-        private float GetFloat(JToken jToken)
-        {
-            if (IsNullOrEmptyT(jToken))
-                return 0f;
-            return jToken.Value<float>();
+            return true;
         }
 
 
-        private int GetInt(JToken jToken)
-        {
-            if (IsNullOrEmptyT(jToken))
-                return 0;
-            return jToken.Value<int>();
-        }
 
-        public bool IsNullOrEmptyT(JToken token)
-        {
-            return (token == null) ||
-                   (token.Type == JTokenType.Array && !token.HasValues) ||
-                   (token.Type == JTokenType.Object && !token.HasValues) ||
-                   (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
-                   (token.Type == JTokenType.Null);
-        }
-
-        public ObjectTypesEnum String2ObjectType(string v)
-        {
-            EDObject ed = new EDObject();
-
-
-            if (objectAliases.ContainsKey(v.ToLower()))
-                return objectAliases[v.ToLower()];
-         
-
-            return ObjectTypesEnum.UnknownObject;
-        }
 
         public ObjectTypesEnum ShortName2ObjectType(string v)
         {
-            EDObject ed = new EDObject();
+            EDPlanet ed = new EDPlanet();
 
             foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
             {
