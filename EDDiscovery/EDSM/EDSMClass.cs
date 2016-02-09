@@ -134,7 +134,6 @@ namespace EDDiscovery2.EDSM
      public string RequestSystems(string date)
         {
             string query;
-            string  json2;
             //string datestr = date.ToString("yyyy-MM-dd hh:mm:ss");
             DateTime dtDate = DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
@@ -312,7 +311,7 @@ namespace EDDiscovery2.EDSM
             if (json == null)
                 return 0;
 
-            JObject msg = (JObject)JObject.Parse(json);
+            JObject msg = JObject.Parse(json);
             int msgnr = msg["msgnum"].Value<int>();
 
             JArray logs = (JArray)msg["logs"];
@@ -337,9 +336,16 @@ namespace EDDiscovery2.EDSM
             return msgnr;
         }
 
+        public bool IsKnownSystem(string sysName)
+        {
+            string query = "system?sysname=" + HttpUtility.UrlEncode(sysName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            var response = RequestGet("api-v1/" + query);
+            var json = response.Body;
+            if (json == null)
+                return false;
 
-        
-
+            return (json.ToString() != "-1");
+        }
 
     }
 }

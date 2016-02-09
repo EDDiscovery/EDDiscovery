@@ -29,7 +29,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.6.12.0</ApplicationVersion>
+    <ApplicationVersion>2.6.18.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -208,6 +208,8 @@
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
     <Compile Include="PlanetSystems\edmaterializer.cs" />
+    <Compile Include="PlanetSystems\EDPlanet.cs" />
+    <Compile Include="PlanetSystems\EDStar.cs" />
     <Compile Include="PlanetSystems\FormProspecting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -237,7 +239,7 @@
       <DependentUpon>ImageHandler.cs</DependentUpon>
     </Compile>
     <Compile Include="PlanetSystems\ObjectsType.cs" />
-    <Compile Include="PlanetSystems\Planets.cs" />
+    <Compile Include="PlanetSystems\EDObject.cs" />
     <Compile Include="PlanetSystems\PlanetsForm.cs">
       <SubType>Form</SubType>
     </Compile>

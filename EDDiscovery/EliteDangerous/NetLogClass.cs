@@ -114,7 +114,7 @@ namespace EDDiscovery
 
 
 
-        public List<SystemPosition> ParseFiles(RichTextBox richTextBox_History, int defaultMapColour)
+        public List<SystemPosition> ParseFiles(RichTextBox richTextBox_History, int defaultMapColour, int commander)
         {
             string datapath;
             datapath = GetNetLogPath();
@@ -141,7 +141,7 @@ namespace EDDiscovery
 
             tlUnits =  TravelLogUnit.GetAll();
 
-            List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll();
+            List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(commander);
 
             visitedSystems.Clear();
             // Add systems in local DB.

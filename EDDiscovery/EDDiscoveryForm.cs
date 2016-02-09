@@ -326,10 +326,6 @@ namespace EDDiscovery
             try
             {
                 EDSMClass edsm = new EDSMClass();
-
-
-                string json;
-
                 string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
                 CommanderName = _db.GetSettingString("CommanderName", "");
@@ -367,13 +363,14 @@ namespace EDDiscovery
                 _db.GetAllSystems();
 
 
-
-                SystemNames.Clear();
-                foreach (SystemClass system in SystemData.SystemList)
+                Invoke((MethodInvoker)delegate
                 {
-                    SystemNames.Add(system.name);
-                }
-
+                    SystemNames.Clear();
+                    foreach (SystemClass system in SystemData.SystemList)
+                    {
+                        SystemNames.Add(system.name);
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -534,8 +531,8 @@ namespace EDDiscovery
 
 
 
-
-                if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
+                // Get EDDB data once every week.
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)
                 {
                     LogText("Get systems from EDDB. ");
 
@@ -558,7 +555,7 @@ namespace EDDiscovery
                 timestr = _db.GetSettingString("EDDBStationsLiteTime", "0");
                 time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
 
-                if (DateTime.UtcNow.Subtract(time).TotalDays > 0.5)
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)
                 {
 
                     LogText("Get stations from EDDB. ");
@@ -794,10 +791,10 @@ namespace EDDiscovery
 
             EdMaterializer mat = new EdMaterializer();
 
-            mat.GetAll(null);
+            mat.GetAllPlanets(null);
 
 
-            EDObject obj = new EDObject();
+            EDPlanet obj = new EDPlanet();
 
             obj.commander = "Test";
             obj.system = "Fine Ring Sector JH-V C2-4";
@@ -819,11 +816,11 @@ namespace EDDiscovery
             obj.materials[MaterialEnum.Tin] = true;
             obj.materials[MaterialEnum.Polonium] = true;
 
-            mat.DeleteID(5);
-            mat.DeleteID(6);
-            mat.DeleteID(7);
+            mat.DeletePlanetID(5);
+            mat.DeletePlanetID(6);
+            mat.DeletePlanetID(7);
 
-            mat.Store(obj);
+            mat.StorePlanet(obj);
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1169,6 +1166,21 @@ namespace EDDiscovery
         private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
+        }
+
+        private void keepOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            mi.Checked = !mi.Checked;
+            this.TopMost = mi.Checked;
+        }
+
+        private void EDDiscoveryForm_Activated(object sender, EventArgs e)
+        {
+            /* TODO: Only focus the field if we're on the correct tab! */
+            if(fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory) {
+                travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
+            }
         }
     }
 }
