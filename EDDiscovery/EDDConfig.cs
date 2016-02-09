@@ -12,7 +12,7 @@ namespace EDDiscovery2
         private bool _EDSMLog;
         readonly public string LogIndex;
         private bool _canSkipSlowUpdates = false;
-        public Dictionary<int, EDCommander> listcmdr;
+        public List<EDCommander> listCommanders;
         private int currentCmdrID=0;
 
         SQLiteDBClass _db = new SQLiteDBClass();
@@ -40,12 +40,16 @@ namespace EDDiscovery2
         {
             get
             {
+                if (currentCmdrID >= listCommanders.Count)
+                    currentCmdrID = listCommanders.Count - 1;
                 return currentCmdrID;
             }
 
             set
             {
                 currentCmdrID = value;
+                if (currentCmdrID >= listCommanders.Count)
+                    currentCmdrID = listCommanders.Count - 1;
             }
         }
 
@@ -53,10 +57,14 @@ namespace EDDiscovery2
         {
             get
             {
-                if (listcmdr == null)
+                if (listCommanders == null)
                     Update();
 
-                return listcmdr[CurrentCmdrID];
+                if (currentCmdrID >= listCommanders.Count)
+                    currentCmdrID = listCommanders.Count - 1;
+
+
+                return listCommanders[CurrentCmdrID];
             }
         }
 
@@ -109,10 +117,10 @@ namespace EDDiscovery2
 
         private void LoadCommanders()
         {
-            if (listcmdr == null)
-                listcmdr = new Dictionary<int, EDCommander>();
+            if (listCommanders == null)
+                listCommanders = new List<EDCommander>();
 
-            listcmdr.Clear();
+            listCommanders.Clear();
 
             // Migrate old settigns.
             string apikey =  _db.GetSettingString("EDSMApiKey", "");
@@ -121,25 +129,38 @@ namespace EDDiscovery2
            
            
 
-            EDCommander cmdr = new EDCommander(0, _db.GetSettingString("EDCommanderName0", commanderName),  _db.GetSettingString("EDCommanderApiKey0", apikey));
-            listcmdr[cmdr.Nr] = cmdr;
+            EDCommander cmdr = new EDCommander(1, _db.GetSettingString("EDCommanderName1", commanderName),  _db.GetSettingString("EDCommanderApiKey1", apikey));
+            listCommanders.Add(cmdr);
 
 
-            for (int ii = 1; ii < 5; ii++)
+            for (int ii = 2; ii < 100; ii++)
             {
                 cmdr = new EDCommander(ii, _db.GetSettingString("EDCommanderName"+ii.ToString(), ""), _db.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
-                listcmdr[cmdr.Nr] = cmdr;
+                if (!cmdr.Name.Equals(""))
+                    listCommanders.Add(cmdr);
             }
 
         }
 
-        public void StoreCommanders(List<EDCommander> listcmdr)
+        public void StoreCommanders(List<EDCommander> dictcmdr)
         {
-            foreach (EDCommander cmdr in listcmdr)
+            foreach (EDCommander cmdr in dictcmdr)
             {
                 _db.PutSettingString("EDCommanderName" + cmdr.Nr.ToString(), cmdr.Name);
                 _db.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);
+                _db.PutSettingString("EDCommanderNetLogPath" + cmdr.Nr.ToString(), cmdr.NetLogPath);
             }
+        }
+
+        internal EDCommander GetNewCommander()
+        {
+            int maxnr = 1;
+            foreach (EDCommander cmdr in listCommanders)
+            {
+                maxnr = Math.Max(cmdr.Nr, maxnr);
+            }
+
+            return new EDCommander(maxnr+1, "CMDR "+(maxnr + 1).ToString(), "");
         }
     }
 }

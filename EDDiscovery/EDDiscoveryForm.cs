@@ -748,7 +748,6 @@ namespace EDDiscovery
         {
             _db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
             _db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
-            EDDiscovery.EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey = textBoxEDSMApiKey.Text;
 
             _db.PutSettingInt("FormWidth", this.Width);
             _db.PutSettingInt("FormHeight", this.Height);
@@ -764,7 +763,7 @@ namespace EDDiscovery
             EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
 
-            List<EDCommander> edcommanders = (List<EDCommander>)dataGridView1.DataSource;
+            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
             EDDConfig.StoreCommanders(edcommanders);
 
         }
@@ -1016,7 +1015,6 @@ namespace EDDiscovery
             string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
             textBoxNetLogDir.Text = _db.GetSettingString("Netlogdir", datapath);
 
-            textBoxEDSMApiKey.Text = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
             checkBox_Distances.Checked = EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
             
@@ -1038,20 +1036,9 @@ namespace EDDiscovery
             {
                 radioButtonCentreHome.Checked = true;
             }
-
-
-            List<EDCommander> cmdList = new List<EDCommander>();
-
-            cmdList.Add(new EDCommander(1, "Finwen", "3456356745678"));
-            cmdList.Add(new EDCommander(2, "Finwena", "2456356745678"));
-            cmdList.Add(new EDCommander(3, "Lpgano22", "156356745678"));
-            cmdList.Add(new EDCommander(4, "Finwen4", "4456356745678"));
-            cmdList.Add(new EDCommander(5, "Finwen5", "5456356745678"));
-
-
-            dataGridView1.DataSource = cmdList;
-
+            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
         }
+
 
         private void CheckIfEliteDangerousIsRunning()
         {
@@ -1199,6 +1186,30 @@ namespace EDDiscovery
             if(fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory) {
                 travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
             }
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonAddCommander_Click(object sender, EventArgs e)
+        {
+            EDCommander cmdr = EDDConfig.GetNewCommander();
+
+            //List<EDCommander> dlist = (List < EDCommander > )dataGridViewCommanders.DataSource;
+            //dlist.Add(cmdr);
+            //dataGridViewCommanders.DataSource = dlist;
+            //dataGridViewCommanders.Invalidate();
+
+            //dataGridViewCommanders.Update();
+
+            EDDConfig.listCommanders.Add(cmdr);
+            dataGridViewCommanders.DataSource = null;
+            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
+            dataGridViewCommanders.Update();
+            //string[] row = new string[] { cmdr.Nr.ToString(), cmdr.Name, cmdr.APIKey, cmdr.NetLogPath };
+            //dataGridViewCommanders.Rows.Add(row);
         }
     }
 }

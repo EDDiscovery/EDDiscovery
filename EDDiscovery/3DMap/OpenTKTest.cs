@@ -14,12 +14,12 @@ namespace EDDiscovery2
     class OpenTKTest
     {
         public List<SystemClass> StarList;
-        public List<SystemPosition> visitedSystems;
+        public List<SystemPosition> visitedSystems=null;
         private Dictionary<string, SystemClass> VisitedStars;
 
         float x = 0;
         float y = 0;
-        float z = 0;
+        //float z = 0;
 
 
         public void InitData()
