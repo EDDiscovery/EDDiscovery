@@ -274,10 +274,10 @@ namespace EDDiscovery2
 
     }
 
-    public class Synthesis
-    {
-        public string name;
-        List<Material> materials;
+    //public class Synthesis
+    //{
+    //    public string name;
+    //    List<Material> materials;
 
-    }
+    //}
 }

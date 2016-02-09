@@ -32,15 +32,11 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
-            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxDefaultZoom = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -53,8 +49,6 @@
             this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
             this.checkBox_Distances = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxEDSMApiKey = new System.Windows.Forms.TextBox();
             this.button_Save = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button_Browse = new System.Windows.Forms.Button();
@@ -84,20 +78,30 @@
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnNetLogPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
+            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
+            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
+            this.routeControl1 = new EDDiscovery.RouteControl();
+            this.buttonAddCommander = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
             this.tabPageScreenshots.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -127,15 +131,6 @@
             this.tabPageTravelHistory.Text = "Travel history";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
             // 
-            // travelHistoryControl1
-            // 
-            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl1.Name = "travelHistoryControl1";
-            this.travelHistoryControl1.Size = new System.Drawing.Size(891, 561);
-            this.travelHistoryControl1.TabIndex = 0;
-            this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
-            // 
             // tabPageTriletaration
             // 
             this.tabPageTriletaration.Controls.Add(this.trilaterationControl);
@@ -147,14 +142,6 @@
             this.tabPageTriletaration.Text = "Trilateration";
             this.tabPageTriletaration.UseVisualStyleBackColor = true;
             // 
-            // trilaterationControl
-            // 
-            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(891, 561);
-            this.trilaterationControl.TabIndex = 21;
-            // 
             // tabPageScreenshots
             // 
             this.tabPageScreenshots.Controls.Add(this.imageHandler1);
@@ -164,14 +151,6 @@
             this.tabPageScreenshots.TabIndex = 4;
             this.tabPageScreenshots.Text = "Screenshots";
             this.tabPageScreenshots.UseVisualStyleBackColor = true;
-            // 
-            // imageHandler1
-            // 
-            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
-            this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(897, 567);
-            this.imageHandler1.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -184,27 +163,13 @@
             this.tabPage2.Text = "Route";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // routeControl1
-            // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(891, 561);
-            this.routeControl1.TabIndex = 0;
-            this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
-            // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.dataGridView1);
-            this.tabPage3.Controls.Add(this.groupBox2);
-            this.tabPage3.Controls.Add(this.checkboxSkipSlowUpdates);
-            this.tabPage3.Controls.Add(this.checkBoxEDSMLog);
-            this.tabPage3.Controls.Add(this.checkBox_Distances);
-            this.tabPage3.Controls.Add(this.label2);
-            this.tabPage3.Controls.Add(this.label1);
-            this.tabPage3.Controls.Add(this.textBoxEDSMApiKey);
+            this.tabPage3.Controls.Add(this.groupBox3);
             this.tabPage3.Controls.Add(this.button_Save);
             this.tabPage3.Controls.Add(this.groupBox1);
+            this.tabPage3.Controls.Add(this.groupBox2);
+            this.tabPage3.Controls.Add(this.groupBox4);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -212,24 +177,28 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabPage3.Click += new System.EventHandler(this.tabPage3_Click);
             // 
-            // dataGridView1
+            // dataGridViewCommanders
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewCommanders.AllowUserToAddRows = false;
+            this.dataGridViewCommanders.AllowUserToDeleteRows = false;
+            this.dataGridViewCommanders.AllowUserToOrderColumns = true;
+            this.dataGridViewCommanders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewCommanders.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnNr,
             this.ColumnCommander,
-            this.ColumnEDSMAPIKey});
-            this.dataGridView1.Location = new System.Drawing.Point(515, 93);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(376, 108);
-            this.dataGridView1.TabIndex = 13;
+            this.ColumnEDSMAPIKey,
+            this.ColumnNetLogPath});
+            this.dataGridViewCommanders.Location = new System.Drawing.Point(11, 45);
+            this.dataGridViewCommanders.Name = "dataGridViewCommanders";
+            this.dataGridViewCommanders.Size = new System.Drawing.Size(868, 128);
+            this.dataGridViewCommanders.TabIndex = 13;
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.textBoxDefaultZoom);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.radioButtonHistorySelection);
@@ -237,16 +206,16 @@
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.textBoxHomeSystem);
-            this.groupBox2.Location = new System.Drawing.Point(8, 207);
+            this.groupBox2.Location = new System.Drawing.Point(432, 272);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(883, 84);
+            this.groupBox2.Size = new System.Drawing.Size(459, 95);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "3D Map Settings";
             // 
             // textBoxDefaultZoom
             // 
-            this.textBoxDefaultZoom.Location = new System.Drawing.Point(427, 19);
+            this.textBoxDefaultZoom.Location = new System.Drawing.Point(118, 65);
             this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(107, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
@@ -255,7 +224,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(350, 22);
+            this.label5.Location = new System.Drawing.Point(41, 68);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(71, 13);
             this.label5.TabIndex = 5;
@@ -314,7 +283,7 @@
             // 
             this.checkboxSkipSlowUpdates.AutoSize = true;
             this.checkboxSkipSlowUpdates.BackColor = System.Drawing.Color.Gold;
-            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(128, 182);
+            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(17, 64);
             this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
             this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
             this.checkboxSkipSlowUpdates.TabIndex = 11;
@@ -325,7 +294,7 @@
             // checkBoxEDSMLog
             // 
             this.checkBoxEDSMLog.AutoSize = true;
-            this.checkBoxEDSMLog.Location = new System.Drawing.Point(128, 159);
+            this.checkBoxEDSMLog.Location = new System.Drawing.Point(17, 41);
             this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
             this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
             this.checkBoxEDSMLog.TabIndex = 9;
@@ -335,44 +304,27 @@
             // checkBox_Distances
             // 
             this.checkBox_Distances.AutoSize = true;
-            this.checkBox_Distances.Location = new System.Drawing.Point(128, 136);
+            this.checkBox_Distances.Location = new System.Drawing.Point(17, 18);
             this.checkBox_Distances.Name = "checkBox_Distances";
-            this.checkBox_Distances.Size = new System.Drawing.Size(153, 17);
+            this.checkBox_Distances.Size = new System.Drawing.Size(346, 17);
             this.checkBox_Distances.TabIndex = 8;
-            this.checkBox_Distances.Text = "Get Distances from EDSM ";
+            this.checkBox_Distances.Text = "Get Distances from EDSM (Uses more memory normally not needed)";
             this.checkBox_Distances.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(125, 93);
+            this.label2.Location = new System.Drawing.Point(575, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(304, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "Get Api key from http://www.edsm.net in  \"My account\" menu.";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 113);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "EDSM Api key";
-            // 
-            // textBoxEDSMApiKey
-            // 
-            this.textBoxEDSMApiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxEDSMApiKey.Location = new System.Drawing.Point(128, 110);
-            this.textBoxEDSMApiKey.Name = "textBoxEDSMApiKey";
-            this.textBoxEDSMApiKey.Size = new System.Drawing.Size(365, 20);
-            this.textBoxEDSMApiKey.TabIndex = 5;
-            // 
             // button_Save
             // 
             this.button_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Save.Location = new System.Drawing.Point(817, 297);
+            this.button_Save.Location = new System.Drawing.Point(816, 373);
             this.button_Save.Name = "button_Save";
             this.button_Save.Size = new System.Drawing.Size(75, 23);
             this.button_Save.TabIndex = 4;
@@ -392,7 +344,7 @@
             this.groupBox1.Size = new System.Drawing.Size(891, 87);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Elite Dangerous netlog location";
+            this.groupBox1.Text = "Elite Dangerous netlog location (If not ovverride by commander settings belove)";
             // 
             // button_Browse
             // 
@@ -629,6 +581,31 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.checkBox_Distances);
+            this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
+            this.groupBox3.Controls.Add(this.checkboxSkipSlowUpdates);
+            this.groupBox3.Location = new System.Drawing.Point(3, 272);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(426, 95);
+            this.groupBox3.TabIndex = 13;
+            this.groupBox3.TabStop = false;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.buttonAddCommander);
+            this.groupBox4.Controls.Add(this.label2);
+            this.groupBox4.Controls.Add(this.dataGridViewCommanders);
+            this.groupBox4.Location = new System.Drawing.Point(0, 93);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(892, 182);
+            this.groupBox4.TabIndex = 14;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Commanders";
+            // 
             // ColumnNr
             // 
             this.ColumnNr.DataPropertyName = "Nr";
@@ -650,6 +627,57 @@
             this.ColumnEDSMAPIKey.HeaderText = "EDSM api key";
             this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
             this.ColumnEDSMAPIKey.Width = 200;
+            // 
+            // ColumnNetLogPath
+            // 
+            this.ColumnNetLogPath.DataPropertyName = "NetLogPath";
+            this.ColumnNetLogPath.FillWeight = 300F;
+            this.ColumnNetLogPath.HeaderText = "NetLog path";
+            this.ColumnNetLogPath.Name = "ColumnNetLogPath";
+            // 
+            // travelHistoryControl1
+            // 
+            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl1.Name = "travelHistoryControl1";
+            this.travelHistoryControl1.Size = new System.Drawing.Size(891, 561);
+            this.travelHistoryControl1.TabIndex = 0;
+            this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
+            // 
+            // trilaterationControl
+            // 
+            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
+            this.trilaterationControl.Name = "trilaterationControl";
+            this.trilaterationControl.Size = new System.Drawing.Size(891, 561);
+            this.trilaterationControl.TabIndex = 21;
+            // 
+            // imageHandler1
+            // 
+            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
+            this.imageHandler1.Name = "imageHandler1";
+            this.imageHandler1.Size = new System.Drawing.Size(897, 567);
+            this.imageHandler1.TabIndex = 0;
+            // 
+            // routeControl1
+            // 
+            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.routeControl1.Location = new System.Drawing.Point(3, 3);
+            this.routeControl1.Name = "routeControl1";
+            this.routeControl1.Size = new System.Drawing.Size(891, 561);
+            this.routeControl1.TabIndex = 0;
+            this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
+            // 
+            // buttonAddCommander
+            // 
+            this.buttonAddCommander.Location = new System.Drawing.Point(11, 16);
+            this.buttonAddCommander.Name = "buttonAddCommander";
+            this.buttonAddCommander.Size = new System.Drawing.Size(104, 23);
+            this.buttonAddCommander.TabIndex = 14;
+            this.buttonAddCommander.Text = "Add commander";
+            this.buttonAddCommander.UseVisualStyleBackColor = true;
+            this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -674,8 +702,7 @@
             this.tabPageScreenshots.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -684,6 +711,10 @@
             this.menuStrip1.PerformLayout();
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -721,8 +752,6 @@
         private System.Windows.Forms.ToolStripMenuItem show2DMapsToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageScreenshots;
         private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBoxEDSMApiKey;
         private System.Windows.Forms.ToolStripMenuItem setDefaultMapColourToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox checkBox_Distances;
@@ -745,10 +774,14 @@
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem keepOnTopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fastTravelToolStripMenuItem;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridViewCommanders;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
+        private System.Windows.Forms.Button buttonAddCommander;
     }
 }
 
