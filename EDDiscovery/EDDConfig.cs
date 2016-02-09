@@ -150,6 +150,8 @@ namespace EDDiscovery2
                 _db.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);
                 _db.PutSettingString("EDCommanderNetLogPath" + cmdr.Nr.ToString(), cmdr.NetLogPath);
             }
+
+            LoadCommanders();
         }
 
         internal EDCommander GetNewCommander()

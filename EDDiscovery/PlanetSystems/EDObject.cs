@@ -209,7 +209,8 @@ public enum AtmosphereEnum
         public ObjectTypesEnum String2ObjectType(string v)
         {
             EDPlanet ed = new EDPlanet();
-
+            if (v == null)
+                return ObjectTypesEnum.UnknownObject;
 
             if (objectAliases.ContainsKey(v.ToLower()))
                 return objectAliases[v.ToLower()];
