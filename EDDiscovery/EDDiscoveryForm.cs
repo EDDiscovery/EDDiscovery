@@ -363,14 +363,12 @@ namespace EDDiscovery
                 _db.GetAllSystems();
 
 
-                Invoke((MethodInvoker)delegate
-                {
+  
                     SystemNames.Clear();
                     foreach (SystemClass system in SystemData.SystemList)
                     {
                         SystemNames.Add(system.name);
                     }
-                });
             }
             catch (Exception ex)
             {
@@ -765,6 +763,9 @@ namespace EDDiscovery
 
             List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
             EDDConfig.StoreCommanders(edcommanders);
+            dataGridViewCommanders.DataSource = null;
+            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
+            dataGridViewCommanders.Update();
 
         }
 
