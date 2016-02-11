@@ -1090,6 +1090,62 @@ namespace EDDiscovery
                 this.Cursor = Cursors.Default;
             }
         }
+
+        private void moveToAnotherCommanderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct();
+
+
+
+            List<SystemPosition> listsyspos = new List<SystemPosition>();
+
+            {
+                this.Cursor = Cursors.WaitCursor;
+                string sysName = "";
+                foreach (DataGridViewRow r in selectedRows)
+                {
+                    sysName = r.Cells[1].Value.ToString();
+                    SystemPosition sp = null;
+
+                    sp = (SystemPosition)r.Cells[1].Tag;
+                    if (sp != null && sp.vs != null)
+                    {
+                        listsyspos.Add(sp);
+
+                    }
+                }
+
+                MoveToCommander movefrm = new MoveToCommander();
+
+                movefrm.Init(listsyspos.Count>1);
+
+                DialogResult red = movefrm.ShowDialog();
+                if (red == DialogResult.OK)
+                {
+                    if (movefrm.checkBoxAllInNetlog.Checked == false)   // Movel all in list.
+                    {
+                        foreach (SystemPosition sp in listsyspos)
+                        {
+                            sp.vs.Commander = movefrm.selectedCommander.Nr;
+                            sp.Update();
+                        }
+                        this.Cursor = Cursors.Default;
+                    }
+                    else   // Move all systems from the same session
+                    {
+
+                    }
+
+                }
+
+
+
+
+                this.Cursor = Cursors.Default;
+            }
+        }
     }
 
 

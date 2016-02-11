@@ -202,6 +202,12 @@
     <Compile Include="HTTP\EDMaterializerCom.cs" />
     <Compile Include="HTTP\HttpCom.cs" />
     <Compile Include="HTTP\ResponseData.cs" />
+    <Compile Include="MoveToCommander.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MoveToCommander.Designer.cs">
+      <DependentUpon>MoveToCommander.cs</DependentUpon>
+    </Compile>
     <Compile Include="PlanetSystems\AddMaterialNodeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -324,6 +330,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ImageHandler\ImageHandler.resx">
       <DependentUpon>ImageHandler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MoveToCommander.resx">
+      <DependentUpon>MoveToCommander.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PlanetSystems\PlanetsForm.resx">
       <DependentUpon>PlanetsForm.cs</DependentUpon>
