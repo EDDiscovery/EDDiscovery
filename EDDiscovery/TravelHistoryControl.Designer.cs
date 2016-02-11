@@ -204,7 +204,7 @@
             this.hideSystemToolStripMenuItem,
             this.moveToAnotherCommanderToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 70);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 92);
             // 
             // starMapColourToolStripMenuItem
             // 
@@ -225,6 +225,7 @@
             this.moveToAnotherCommanderToolStripMenuItem.Name = "moveToAnotherCommanderToolStripMenuItem";
             this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.moveToAnotherCommanderToolStripMenuItem.Text = "Move to another Commander";
+            this.moveToAnotherCommanderToolStripMenuItem.Click += new System.EventHandler(this.moveToAnotherCommanderToolStripMenuItem_Click);
             // 
             // comboBoxHistoryWindow
             // 
