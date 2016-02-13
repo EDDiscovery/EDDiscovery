@@ -329,9 +329,9 @@ namespace EDDiscovery
                 string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
                 CommanderName = EDDConfig.CurrentCommander.Name;
-                Invoke((MethodInvoker) delegate {
-                    travelHistoryControl1.textBoxCmdrName.Text = CommanderName;
-                });
+                //Invoke((MethodInvoker) delegate {
+                //    travelHistoryControl1.textBoxCmdrName.Text = CommanderName;
+                //});
 
 
                 //                List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
