@@ -623,8 +623,20 @@ namespace EDDiscovery
                 //string SysName = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
                 lastRowIndex = e.RowIndex;
                 ShowSystemInformation((SystemPosition)(dataGridView1.Rows[e.RowIndex].Cells[1].Tag));
+
+                if (e.ColumnIndex == 3)       // note column
+                {
+                    richTextBoxNote.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
+                    richTextBoxNote.ScrollToCaret();
+                    richTextBoxNote.Focus();
+                }
+                else  if (e.ColumnIndex == 2 && textBoxDistance.Enabled == true )       // distance column and on..
+                {
+                    textBoxDistance.Select(textBoxDistance.Text.Length, 0);     // move caret to end (in case something is there) and focus
+                    textBoxDistance.Focus();
+                }
             }
- 
+
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
@@ -655,8 +667,12 @@ namespace EDDiscovery
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
-
             StoreSystemNote();
+        }
+
+        private void richTextBoxNote_TextChanged(object sender, EventArgs e)
+        {
+            dataGridView1.Rows[lastRowIndex].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
         }
 
         private void StoreSystemNote()

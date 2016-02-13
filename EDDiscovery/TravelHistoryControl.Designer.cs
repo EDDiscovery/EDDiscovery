@@ -513,6 +513,7 @@
             this.richTextBoxNote.Size = new System.Drawing.Size(238, 47);
             this.richTextBoxNote.TabIndex = 27;
             this.richTextBoxNote.Text = "";
+            this.richTextBoxNote.TextChanged += new System.EventHandler(this.richTextBoxNote_TextChanged);
             this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
             // 
             // textBoxDistText
