@@ -84,7 +84,6 @@
             this.textBoxX = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBoxCmdrName = new System.Windows.Forms.TextBox();
             this.buttonSync = new System.Windows.Forms.Button();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
             this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
@@ -95,6 +94,7 @@
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
             this.mapColorDialog = new System.Windows.Forms.ColorDialog();
+            this.comboBoxCommander = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.historyContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -204,7 +204,7 @@
             this.hideSystemToolStripMenuItem,
             this.moveToAnotherCommanderToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 92);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 70);
             // 
             // starMapColourToolStripMenuItem
             // 
@@ -638,15 +638,6 @@
             this.label6.TabIndex = 17;
             this.label6.Text = "Commander";
             // 
-            // textBoxCmdrName
-            // 
-            this.textBoxCmdrName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCmdrName.Location = new System.Drawing.Point(114, 6);
-            this.textBoxCmdrName.Name = "textBoxCmdrName";
-            this.textBoxCmdrName.ReadOnly = true;
-            this.textBoxCmdrName.Size = new System.Drawing.Size(167, 26);
-            this.textBoxCmdrName.TabIndex = 18;
-            // 
             // buttonSync
             // 
             this.buttonSync.Location = new System.Drawing.Point(114, 38);
@@ -676,6 +667,7 @@
             // 
             // panelRight
             // 
+            this.panelRight.Controls.Add(this.comboBoxCommander);
             this.panelRight.Controls.Add(this.label6);
             this.panelRight.Controls.Add(this.listView1);
             this.panelRight.Controls.Add(this.textBoxDistanceToNextSystem);
@@ -684,7 +676,6 @@
             this.panelRight.Controls.Add(this.buttonMap);
             this.panelRight.Controls.Add(this.buttonSync);
             this.panelRight.Controls.Add(this.panel1);
-            this.panelRight.Controls.Add(this.textBoxCmdrName);
             this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.panelRight.Location = new System.Drawing.Point(594, 0);
             this.panelRight.Name = "panelRight";
@@ -739,6 +730,16 @@
             // 
             this.mapColorDialog.SolidColorOnly = true;
             // 
+            // comboBoxCommander
+            // 
+            this.comboBoxCommander.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCommander.FormattingEnabled = true;
+            this.comboBoxCommander.Location = new System.Drawing.Point(114, 9);
+            this.comboBoxCommander.Name = "comboBoxCommander";
+            this.comboBoxCommander.Size = new System.Drawing.Size(162, 21);
+            this.comboBoxCommander.TabIndex = 22;
+            this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -789,7 +790,6 @@
         private System.Windows.Forms.Button buttonUpdate;
         private System.Windows.Forms.TextBox textBoxDistText;
         private System.Windows.Forms.Label label6;
-        internal System.Windows.Forms.TextBox textBoxCmdrName;
         private System.Windows.Forms.RichTextBox richTextBoxNote;
         private System.Windows.Forms.Button buttonSync;
         private System.Windows.Forms.Label label9;
@@ -827,5 +827,6 @@
         internal System.Windows.Forms.TextBox textBoxDistanceToNextSystem;
         private System.Windows.Forms.ToolStripMenuItem hideSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveToAnotherCommanderToolStripMenuItem;
+        private System.Windows.Forms.ComboBox comboBoxCommander;
     }
 }

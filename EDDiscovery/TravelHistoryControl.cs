@@ -37,7 +37,7 @@ namespace EDDiscovery
 
         private static RichTextBox static_richTextBox;
         private int activecommander = 0;
-
+        List<EDCommander> commanders = null;
 
         public TravelHistoryControl()
         {
@@ -524,6 +524,7 @@ namespace EDDiscovery
             {
                 var db = new SQLiteDBClass();
                 comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
+                LoadCommandersListBox();
             }
             // this improves dataGridView's scrolling performance
             typeof(DataGridView).InvokeMember(
@@ -535,6 +536,37 @@ namespace EDDiscovery
                 new object[] { true }
             );
         }
+
+        private bool cmdlistloaded;
+        private void LoadCommandersListBox()
+        {
+            commanders = new List<EDCommander>();
+
+            commanders.Add(new EDCommander(-1, "Hidden log", ""));
+            commanders.AddRange(EDDiscoveryForm.EDDConfig.listCommanders);
+
+            cmdlistloaded = false;
+            comboBoxCommander.DataSource = null;
+            comboBoxCommander.DataSource = commanders;
+            comboBoxCommander.ValueMember = "Nr";
+            comboBoxCommander.DisplayMember = "Name";
+            cmdlistloaded = true;
+            comboBoxCommander.SelectedIndex = 1;
+
+
+        }
+
+        private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            if (comboBoxCommander.SelectedIndex >= 0 && cmdlistloaded)
+            {
+                var itm = (EDCommander)comboBoxCommander.SelectedItem;
+                activecommander = itm.Nr;
+                RefreshHistory();
+            }
+        }
+
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1146,6 +1178,7 @@ namespace EDDiscovery
                 this.Cursor = Cursors.Default;
             }
         }
+
     }
 
 
