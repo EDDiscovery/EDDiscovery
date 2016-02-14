@@ -26,6 +26,10 @@ namespace EDDiscovery
         private Thread EDSMSubmissionThread;
         private EDSMClass edsm;
 
+        /** This global should be set if the next CurrentCellChanged() event should skip to the next editable cell.
+         * This should be the case whenver a keyboard event causes cells to change, but not on mouse-initiated events */
+        private bool skipReadOnlyCells = false;
+
         public TrilaterationControl()
         {
             InitializeComponent();
@@ -207,6 +211,8 @@ namespace EDDiscovery
             }
 // trigger trilateration calculation
             RunTrilateration();
+            /* And skip to the next editable cell */
+            skipReadOnlyCells = true;
         }
 
         private void RunTrilateration()
@@ -892,6 +898,76 @@ namespace EDDiscovery
                         dataGridViewDistances[3, i].Value = "Position found";
                     }
                 }
+            }
+        }
+
+        private void SelectNextEditableCell(DataGridView dataGridView)
+        {
+            DataGridViewCell cell = dataGridView.CurrentCell;
+            if(cell == null) return;
+            if (!skipReadOnlyCells) return;
+
+            int row = cell.RowIndex;
+            int col = cell.ColumnIndex;
+
+            if(row == dataGridView.RowCount && col == dataGridView.RowCount) return;
+
+            do {
+                col++;
+                if(col >= dataGridView.ColumnCount)
+                {
+                    col = 0;
+                    row++;
+                    if (row >= dataGridView.RowCount)
+                    {
+                        row = dataGridView.RowCount - 1;
+                        dataGridView.CurrentCell = dataGridView.Rows[row].Cells[col];
+                        return;
+                    }
+                }
+                cell = dataGridView.Rows[row].Cells[col];
+            } while( cell.ReadOnly );
+            dataGridView.CurrentCell = cell;
+            dataGridView.CurrentCell.Selected = true;
+
+            skipReadOnlyCells = false;
+        }
+
+        private void dataGridViewDistances_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                DataGridView self = sender as DataGridView;
+                /* On tab, skip over read-only cells */
+                if (self.Focused && e.KeyCode == Keys.Tab)
+                {
+                    skipReadOnlyCells = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception dataGridViewDistances_KeyDown: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+        }
+
+        /* This event is received when a new cell has been selected */
+        private void dataGridViewDistances_CurrentCellChanged(object sender, EventArgs e)
+        {
+            try {
+                DataGridView dgv = sender as DataGridView;
+                if (skipReadOnlyCells && dgv.CurrentCell.ReadOnly)
+                {
+					/* Have to run this delayed as otherwise we enter an even loop when changing cells */
+                    this.BeginInvoke(new MethodInvoker(() => {
+                        SelectNextEditableCell(sender as DataGridView);
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception dataGridViewDistances_CurrentCellChanged: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
         }
     }
