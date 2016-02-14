@@ -103,6 +103,7 @@
             this.dataGridViewDistances.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewDistances_CellValidating);
             this.dataGridViewDistances.CurrentCellChanged += new System.EventHandler(this.dataGridViewDistances_CurrentCellChanged);
             this.dataGridViewDistances.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridViewDistances_EditingControlShowing);
+            this.dataGridViewDistances.KeyDown += new System.KeyEventHandler(this.dataGridViewDistances_KeyDown);
             // 
             // ColumnSystem
             // 
