@@ -340,6 +340,7 @@ namespace EDDiscovery2
                 }
             }
 
+            int currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
             var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.time > start && systems.time<endDate  && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.time  select systems;
             List<SystemPosition> listHistory = history.ToList<SystemPosition>();
