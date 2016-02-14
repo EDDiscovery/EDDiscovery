@@ -271,8 +271,11 @@ namespace EDDiscovery
             item.prevSystem = sys2;
             if (!insert)
             {
-                SystemPosition known = visitedSystems.First(x => x.Name == item.Name);
-                if (known != null) item.vs = known.vs;
+                if (item.vs == null)
+                {
+                    SystemPosition known = visitedSystems.First(x => x.Name == item.Name);
+                    if (known != null) item.vs = known.vs;
+                }
             }
 
             string diststr = "";
@@ -1116,8 +1119,7 @@ namespace EDDiscovery
 
                     sp = (SystemPosition)r.Cells[1].Tag;
 
-                    if (sp==null)
-                        sp = visitedSystems.First(s => s.Name.ToUpperInvariant() == sysName.ToUpperInvariant());
+               
 
                     if (sp!= null && sp.vs != null)
                     {

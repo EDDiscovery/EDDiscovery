@@ -1212,5 +1212,19 @@ namespace EDDiscovery
             //string[] row = new string[] { cmdr.Nr.ToString(), cmdr.Name, cmdr.APIKey, cmdr.NetLogPath };
             //dataGridViewCommanders.Rows.Add(row);
         }
+
+        private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
+
+            foreach (VisitedSystemsClass vs in vsall)
+            {
+                if (vs.Commander != 0)
+                {
+                    vs.Commander = 0;
+                    vs.Update();
+                }
+            }
+        }
     }
 }

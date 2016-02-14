@@ -148,10 +148,17 @@ namespace EDDiscovery
             if (vsSystemsList != null)
                 foreach (VisitedSystemsClass vs in vsSystemsList)
                 {
-                    if (visitedSystems.Count==0)
+                    if (visitedSystems.Count == 0)
                         visitedSystems.Add(new SystemPosition(vs));
                     else if (!visitedSystems.Last<SystemPosition>().Name.Equals(vs.Name))  // Avoid duplicate if times exist in same system from different files.
                         visitedSystems.Add(new SystemPosition(vs));
+                    else
+                    {
+                        VisitedSystemsClass vs2 = (VisitedSystemsClass)visitedSystems.Last<SystemPosition>().vs;
+                        vs.Commander = -2; // Move to dupe user
+                        vs.Update();
+                    }
+
                 }
 
             FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.Name).ToArray();
