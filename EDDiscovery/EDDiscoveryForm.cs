@@ -757,6 +757,7 @@ namespace EDDiscovery
             _db.PutSettingString("RouteFrom", routeControl1.textBox_From.Text);
             _db.PutSettingString("RouteTo", routeControl1.textBox_To.Text);
             _db.PutSettingString("RouteRange", routeControl1.textBox_Range.Text);
+            _db.PutSettingBool("EDSMPushOnly", travelHistoryControl1.EDSMPushOnly);
             EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
