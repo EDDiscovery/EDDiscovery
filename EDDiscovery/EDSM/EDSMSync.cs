@@ -20,6 +20,7 @@ namespace EDDiscovery2.EDSM
         Thread ThreadEDSMSync;
         bool running = false;
         bool Exit = false;
+        bool _pushOnly = false;
         private EDDiscoveryForm mainForm;
         public event EDSMNewSystemEventHandler OnNewEDSMTravelLog;
 
@@ -28,11 +29,11 @@ namespace EDDiscovery2.EDSM
             mainForm = frm;
         }
 
-        public bool StartSync()
+        public bool StartSync(bool pushOnly)
         {
             if (running) // Only start once.
                 return false;
-
+            _pushOnly = pushOnly;
             ThreadEDSMSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
             ThreadEDSMSync.Name = "EDSM Sync";
             ThreadEDSMSync.Start();
@@ -49,12 +50,12 @@ namespace EDDiscovery2.EDSM
         private void SyncThread()
         {
             running = true;
-            Sync();
+            Sync(_pushOnly);
             running = false;
         }
 
 
-        public void Sync()
+        public void Sync(bool pushOnly)
         {
             try
             {
@@ -128,41 +129,44 @@ namespace EDDiscovery2.EDSM
 
                 TravelLogUnit tlu = null;
 
-                // Check for new systems from EDSM
                 bool newsystem = false;
-                int defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
-                foreach (var system in log)
+                if (!pushOnly)
                 {
-                    SystemPosition ps2 = (from c in mainForm.VisitedSystems where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
-                    if (ps2 == null)  // Add to local DB...
+                    // Check for new systems from EDSM
+                    int defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+                    foreach (var system in log)
                     {
-                        if (tlu == null) // If we dontt have a travellogunit yet then create it. 
+                        SystemPosition ps2 = (from c in mainForm.VisitedSystems where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
+                        if (ps2 == null)  // Add to local DB...
                         {
-                            tlu = new TravelLogUnit();
+                            if (tlu == null) // If we dontt have a travellogunit yet then create it. 
+                            {
+                                tlu = new TravelLogUnit();
 
-                            tlu.type = 2;  // EDSM
-                            tlu.Path = "http://www.edsm.net/api-logs-v1/get-logs";
-                            tlu.Name = "EDSM-" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                            tlu.Size = 0;
+                                tlu.type = 2;  // EDSM
+                                tlu.Path = "http://www.edsm.net/api-logs-v1/get-logs";
+                                tlu.Name = "EDSM-" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                tlu.Size = 0;
 
-                            tlu.Add();  // Add to Database
+                                tlu.Add();  // Add to Database
+                            }
+
+                            VisitedSystemsClass vs = new VisitedSystemsClass();
+
+                            vs.Source = tlu.id;
+                            vs.Unit = tlu.Name;
+
+                            vs.Name = system.Name;
+                            vs.Time = system.time;
+                            vs.MapColour = defaultColour;
+                            vs.EDSM_sync = true;
+
+
+                            vs.Add();  // Add to DB;
+                            System.Diagnostics.Trace.WriteLine("New from EDSM");
+                            newsystem = true;
+
                         }
-
-                        VisitedSystemsClass vs = new VisitedSystemsClass();
-
-                        vs.Source = tlu.id;
-                        vs.Unit = tlu.Name;
-
-                        vs.Name = system.Name;
-                        vs.Time = system.time;
-                        vs.MapColour = defaultColour;
-                        vs.EDSM_sync = true;
-                        
-
-                        vs.Add();  // Add to DB;
-                        System.Diagnostics.Trace.WriteLine("New from EDSM");
-                        newsystem = true;
-                        
                     }
                 }
                 mainForm.LogLine("EDSM sync Done", Color.Black);

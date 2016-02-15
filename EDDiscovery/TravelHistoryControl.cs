@@ -29,6 +29,7 @@ namespace EDDiscovery
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
         internal List<SystemPosition> visitedSystems;
+        internal bool EDSMPushOnly = false;
 
         public NetLogClass netlog = new NetLogClass();
         List<SystemDist> sysDist = null;
@@ -52,6 +53,9 @@ namespace EDDiscovery
             sync = new EDSMSync(_discoveryForm);
             var db = new SQLiteDBClass();
             defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+            EDSMPushOnly = db.GetSettingBool("EDSMPushOnly", false);
+            optPushOnly.Checked = EDSMPushOnly;
+            optFullSync.Checked = !EDSMPushOnly;
         }
 
 
@@ -755,10 +759,7 @@ namespace EDDiscovery
                 return;
             }
             var db = new SQLiteDBClass();
-
-
-
-
+            
             var dists = from p in SQLiteDBClass.dictDistances where p.Value.Status == DistancsEnum.EDDiscovery  orderby p.Value.CreateTime  select p.Value;
 
             EDSMClass edsm = new EDSMClass();
@@ -806,9 +807,8 @@ namespace EDDiscovery
                 return;
 
             }
-            sync.StartSync();
-
-
+            sync.StartSync(EDSMPushOnly);
+            
         }
 
         internal void RefreshEDSMEvent(object source)
@@ -1197,6 +1197,10 @@ namespace EDDiscovery
             }
         }
 
+        private void optFullSync_CheckedChanged(object sender, EventArgs e)
+        {
+            EDSMPushOnly = !optFullSync.Checked;
+        }
     }
 
 
