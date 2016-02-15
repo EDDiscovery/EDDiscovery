@@ -86,15 +86,17 @@
             this.label6 = new System.Windows.Forms.Label();
             this.buttonSync = new System.Windows.Forms.Button();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
+            this.optFullSync = new System.Windows.Forms.RadioButton();
+            this.optPushOnly = new System.Windows.Forms.RadioButton();
             this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
             this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
             this.panelRight = new System.Windows.Forms.Panel();
+            this.comboBoxCommander = new System.Windows.Forms.ComboBox();
             this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
             this.mapColorDialog = new System.Windows.Forms.ColorDialog();
-            this.comboBoxCommander = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.historyContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -643,11 +645,36 @@
             // 
             this.buttonSync.Location = new System.Drawing.Point(114, 38);
             this.buttonSync.Name = "buttonSync";
-            this.buttonSync.Size = new System.Drawing.Size(164, 23);
+            this.buttonSync.Size = new System.Drawing.Size(103, 23);
             this.buttonSync.TabIndex = 19;
             this.buttonSync.Text = "Sync with EDSM";
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
+            // 
+            // optFullSync
+            // 
+            this.optFullSync.AutoSize = true;
+            this.optFullSync.Location = new System.Drawing.Point(224, 38);
+            this.optFullSync.Name = "optFullSync";
+            this.optFullSync.Size = new System.Drawing.Size(68, 17);
+            this.optFullSync.TabIndex = 23;
+            this.optFullSync.TabStop = true;
+            this.optFullSync.Text = "Full Sync";
+            this.toolTipEddb.SetToolTip(this.optFullSync, "Update EDSM from travel history and download missing systems from EDSM");
+            this.optFullSync.UseVisualStyleBackColor = true;
+            this.optFullSync.CheckedChanged += new System.EventHandler(this.optFullSync_CheckedChanged);
+            // 
+            // optPushOnly
+            // 
+            this.optPushOnly.AutoSize = true;
+            this.optPushOnly.Location = new System.Drawing.Point(224, 57);
+            this.optPushOnly.Name = "optPushOnly";
+            this.optPushOnly.Size = new System.Drawing.Size(63, 17);
+            this.optPushOnly.TabIndex = 24;
+            this.optPushOnly.TabStop = true;
+            this.optPushOnly.Text = "Up Only";
+            this.toolTipEddb.SetToolTip(this.optPushOnly, "Upload to EDSM only, do not add unknown systems on EDSM to EDD2");
+            this.optPushOnly.UseVisualStyleBackColor = true;
             // 
             // labelDistanceToNextSystem
             // 
@@ -668,6 +695,8 @@
             // 
             // panelRight
             // 
+            this.panelRight.Controls.Add(this.optPushOnly);
+            this.panelRight.Controls.Add(this.optFullSync);
             this.panelRight.Controls.Add(this.comboBoxCommander);
             this.panelRight.Controls.Add(this.label6);
             this.panelRight.Controls.Add(this.listView1);
@@ -682,6 +711,16 @@
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(297, 586);
             this.panelRight.TabIndex = 22;
+            // 
+            // comboBoxCommander
+            // 
+            this.comboBoxCommander.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCommander.FormattingEnabled = true;
+            this.comboBoxCommander.Location = new System.Drawing.Point(114, 9);
+            this.comboBoxCommander.Name = "comboBoxCommander";
+            this.comboBoxCommander.Size = new System.Drawing.Size(162, 21);
+            this.comboBoxCommander.TabIndex = 22;
+            this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
             // 
             // textBoxFilter
             // 
@@ -730,16 +769,6 @@
             // mapColorDialog
             // 
             this.mapColorDialog.SolidColorOnly = true;
-            // 
-            // comboBoxCommander
-            // 
-            this.comboBoxCommander.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCommander.FormattingEnabled = true;
-            this.comboBoxCommander.Location = new System.Drawing.Point(114, 9);
-            this.comboBoxCommander.Name = "comboBoxCommander";
-            this.comboBoxCommander.Size = new System.Drawing.Size(162, 21);
-            this.comboBoxCommander.TabIndex = 22;
-            this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
             // 
             // TravelHistoryControl
             // 
@@ -829,5 +858,7 @@
         private System.Windows.Forms.ToolStripMenuItem hideSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveToAnotherCommanderToolStripMenuItem;
         private System.Windows.Forms.ComboBox comboBoxCommander;
+        private System.Windows.Forms.RadioButton optPushOnly;
+        private System.Windows.Forms.RadioButton optFullSync;
     }
 }
