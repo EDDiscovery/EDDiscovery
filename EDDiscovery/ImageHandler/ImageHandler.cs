@@ -51,6 +51,13 @@ namespace EDDiscovery2.ImageHandler
 
             textBoxOutputDir.Text = db.GetSettingString("ImageHandlerOutputDir", OutputDirdefault);
             textBoxScreenshotsDir.Text = db.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
+
+            checkBoxCropImage.Checked = db.GetSettingBool("ImageHandlerCropImage", false);
+            groupBoxCropSettings.Enabled = checkBoxCropImage.Checked;
+            numericUpDownTop.Value = db.GetSettingInt("ImageHandlerCropTop", 0);
+            numericUpDownLeft.Value = db.GetSettingInt("ImageHandlerCropLeft", 0);
+            numericUpDownWidth.Value = db.GetSettingInt("ImageHandlerCropWidth", 0);
+            numericUpDownHeight.Value = db.GetSettingInt("ImageHandlerCropHeight", 0);
         }
 
         private void comboBoxFormat_SelectedIndexChanged(object sender, EventArgs e)
@@ -125,9 +132,15 @@ namespace EDDiscovery2.ImageHandler
                 string cur_sysname = "";
 
                 string new_name = null;
-                new_name = "unknown";
+                ISystem cursys = null;
 
-                ISystem cursys = _discoveryForm.TravelControl.GetCurrentSystem();
+                if (!checkBoxAutoConvert.Checked)
+                {
+                    return;
+                }
+
+                new_name = "unknown";
+                cursys = _discoveryForm.TravelControl.GetCurrentSystem();
 
                 if (cursys!=null)
                 {
@@ -135,72 +148,109 @@ namespace EDDiscovery2.ImageHandler
                 }
 
 
-                if (checkBoxAutoConvert.Checked)
+                if (!Directory.Exists(textBoxOutputDir.Text))
+                    Directory.CreateDirectory(textBoxOutputDir.Text);
+
+                //sometimes the picture doesn't load into the picture box so waiting 1 sec in case this due to the file not being closed quick enough in ED
+                System.Threading.Thread.Sleep(1000);
+
+                new_name = CreateFileName(cur_sysname, e.FullPath);
+
+                //just in case we manage to take more than 1 pic in a second, add x's until the name is unique (the fix above may make this pointless)
+                while (File.Exists(output_folder + "\\" + new_name + pic_ext))
                 {
-
-                    if (!Directory.Exists(textBoxOutputDir.Text))
-                        Directory.CreateDirectory(textBoxOutputDir.Text);
-
-                    //sometimes the picture doesn't load into the picture box so waiting 1 sec in case this due to the file not being closed quick enough in ED
-                    System.Threading.Thread.Sleep(1000);
-
-                    new_name = CreateFileName(cur_sysname, e.FullPath);
-
-                    //just in case we manage to take more than 1 pic in a second, add x's until the name is unique (the fix above may make this pointless)
-                    while (File.Exists(output_folder + "\\" + new_name + pic_ext))
-                    {
-                        new_name = new_name + "x";
-                    }
-
-                    var bmp = System.Drawing.Bitmap.FromFile(e.FullPath);
-
-                    string pngName = "";
-
-                    if (pic_ext.Equals(".jpg"))
-                    {
-                        pngName = output_folder + "\\" + new_name + pic_ext;
-                        bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    }
-                    else if (pic_ext.Equals(".tiff"))
-                    {
-                        pngName = output_folder + "\\" + new_name + pic_ext;
-                        bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Tiff);
-                    }
-                    else if (pic_ext.Equals(".bmp"))
-                    {
-                        pngName = output_folder + "\\" + new_name + pic_ext;
-                        if (!textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text))  // Dont save bmp format in screenshot dir....
-                            bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Bmp);
-                    }
-                    else
-                    {
-                        pngName = output_folder + "\\" + new_name + pic_ext;
-                        bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Png);
-                    }
-
-                    bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Png);
-                    FileInfo fi = new FileInfo(e.FullPath);
-                    File.SetCreationTime(pngName, fi.CreationTime);
-
-                    bmp.Dispose();
-
-
-                    if (!checkBoxRemove.Checked && checkBoxPreview.Checked)
-                    {
-                        this.pictureBox1.ImageLocation = e.FullPath;
-                        this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                    }
-
-                    if (checkBoxRemove.Checked) // Remove original picture
-                    {
-                        File.Delete(e.FullPath);
-                    }
-
-                    Invoke((MethodInvoker)delegate { TravelHistoryControl.LogText("Converted " + e.Name + " to " + new_name + pic_ext + Environment.NewLine ); });
+                    new_name = new_name + "x";
                 }
+
+                //var bmp = System.Drawing.Bitmap.FromFile(e.FullPath);
+                var bmp = new System.Drawing.Bitmap(e.FullPath);
+
+                /* MKW - crop image */
+                if( checkBoxCropImage.Checked ) {
+                    Rectangle crop = new Rectangle();
+                    
+                    crop.X = int.Parse(numericUpDownLeft.Text); /* Left is read-only */
+                    crop.Y = int.Parse(numericUpDownTop.Text);  /* Top is read-only */
+                    crop.Width = int.Parse(numericUpDownWidth.Text);
+                    crop.Height = int.Parse(numericUpDownHeight.Text);
+
+                    /* check that crop settings are within the image, otherwise adjust. */
+                    if ((crop.Width <= 0) || (crop.Width > bmp.Width))
+                    {
+                        crop.X = 0;
+                        crop.Width = bmp.Width;
+                    }
+                    else if (crop.Left + crop.Width > bmp.Width)
+                    {
+                        crop.X = bmp.Width - crop.Width;
+                    }
+                    if ((crop.Height <= 0) || (crop.Height > bmp.Height))
+                    {
+                        crop.Y = 0;
+                        crop.Height = bmp.Height;
+                    }
+                    else if (crop.Top + crop.Height > bmp.Height)
+                    {
+                        crop.Y = bmp.Height - crop.Height;
+                    }
+
+                    /* Only crop if we need to */
+                    if ((crop.Width != bmp.Width) || (crop.Height != bmp.Height))
+                    {                        
+                        bmp = bmp.Clone(crop, System.Drawing.Imaging.PixelFormat.DontCare);
+                    }
+                }
+
+                string pngName = "";
+
+                if (pic_ext.Equals(".jpg"))
+                {
+                    pngName = output_folder + "\\" + new_name + pic_ext;
+                    bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+                else if (pic_ext.Equals(".tiff"))
+                {
+                    pngName = output_folder + "\\" + new_name + pic_ext;
+                    bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Tiff);
+                }
+                else if (pic_ext.Equals(".bmp"))
+                {
+                    pngName = output_folder + "\\" + new_name + pic_ext;
+                    if (!textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text))  // Dont save bmp format in screenshot dir....
+                        bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Bmp);
+                }
+                else
+                {
+                    pngName = output_folder + "\\" + new_name + pic_ext;
+                    bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Png);
+                }
+
+                bmp.Save(pngName, System.Drawing.Imaging.ImageFormat.Png);
+                FileInfo fi = new FileInfo(e.FullPath);
+                File.SetCreationTime(pngName, fi.CreationTime);
+
+                bmp.Dispose();
+
+
+                if (!checkBoxRemove.Checked && checkBoxPreview.Checked)
+                {
+                    this.pictureBox1.ImageLocation = e.FullPath;
+                    this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                }
+
+                if (checkBoxRemove.Checked) // Remove original picture
+                {
+                    File.Delete(e.FullPath);
+                }
+
+                Invoke((MethodInvoker)delegate { TravelHistoryControl.LogText("Converted " + e.Name + " to " + new_name + pic_ext + Environment.NewLine ); });
+                
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Trace.WriteLine("Exception watcher: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+
                 MessageBox.Show("Exception in imageConvert:" + ex.Message);
             }
         }
@@ -291,6 +341,73 @@ namespace EDDiscovery2.ImageHandler
         private void textBoxOutputDir_Leave(object sender, EventArgs e)
         {
             db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+        }
+
+        private void checkBoxCropImage_CheckedChanged(object sender, EventArgs e)
+        {
+            try {
+                CheckBox cb = sender as CheckBox;
+                groupBoxCropSettings.Enabled = cb.Checked;
+                db.PutSettingBool("ImageHandlerCropImage", cb.Checked);
+            } catch( Exception ex ) {
+                System.Diagnostics.Trace.WriteLine("Exception checkBoxCropImage_CheckedChanged: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+        }
+
+        private void numericUpDownTop_Leave(object sender, EventArgs e)
+        {
+            try {
+                NumericUpDown ud = sender as NumericUpDown;
+                db.PutSettingInt("ImageHandlerCropTop", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception numericUpDownTop_Leave: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+        }
+
+        private void numericUpDownLeft_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                NumericUpDown ud = sender as NumericUpDown;
+                db.PutSettingInt("ImageHandlerCropLeft", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception numericUpDownLeft_Leave: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+        }
+
+        private void numericUpDownWidth_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                NumericUpDown ud = sender as NumericUpDown;
+                db.PutSettingInt("ImageHandlerCropWidth", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception numericUpDownWidth_Leave: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+        }
+
+        private void numericUpDownHeight_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                NumericUpDown ud = sender as NumericUpDown;
+                db.PutSettingInt("ImageHandlerCropHeight", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception numericUpDownHeight_Leave: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
         }
     }
 }

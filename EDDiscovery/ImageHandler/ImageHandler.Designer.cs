@@ -43,7 +43,22 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxFileNameExample = new System.Windows.Forms.TextBox();
             this.checkBoxPreview = new System.Windows.Forms.CheckBox();
+            this.checkBoxCropImage = new System.Windows.Forms.CheckBox();
+            this.groupBoxCropSettings = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numericUpDownTop = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownLeft = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBoxCropSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTop)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // checkBoxAutoConvert
@@ -64,7 +79,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxScreenshotsDir.Location = new System.Drawing.Point(131, 26);
             this.textBoxScreenshotsDir.Name = "textBoxScreenshotsDir";
-            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(281, 20);
+            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(311, 20);
             this.textBoxScreenshotsDir.TabIndex = 1;
             this.textBoxScreenshotsDir.Leave += new System.EventHandler(this.textBoxScreenshotsDir_Leave);
             // 
@@ -80,10 +95,10 @@
             // buttonChnageEDScreenshot
             // 
             this.buttonChnageEDScreenshot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonChnageEDScreenshot.Location = new System.Drawing.Point(418, 26);
+            this.buttonChnageEDScreenshot.Location = new System.Drawing.Point(448, 26);
             this.buttonChnageEDScreenshot.Name = "buttonChnageEDScreenshot";
             this.buttonChnageEDScreenshot.Size = new System.Drawing.Size(57, 23);
-            this.buttonChnageEDScreenshot.TabIndex = 3;
+            this.buttonChnageEDScreenshot.TabIndex = 2;
             this.buttonChnageEDScreenshot.Text = "Browse";
             this.buttonChnageEDScreenshot.UseVisualStyleBackColor = true;
             this.buttonChnageEDScreenshot.Click += new System.EventHandler(this.buttonChnageEDScreenshot_Click);
@@ -91,10 +106,10 @@
             // buttonImageStore
             // 
             this.buttonImageStore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonImageStore.Location = new System.Drawing.Point(418, 52);
+            this.buttonImageStore.Location = new System.Drawing.Point(448, 52);
             this.buttonImageStore.Name = "buttonImageStore";
             this.buttonImageStore.Size = new System.Drawing.Size(57, 23);
-            this.buttonImageStore.TabIndex = 6;
+            this.buttonImageStore.TabIndex = 4;
             this.buttonImageStore.Text = "Browse";
             this.buttonImageStore.UseVisualStyleBackColor = true;
             this.buttonImageStore.Click += new System.EventHandler(this.buttonImageStore_Click);
@@ -115,30 +130,31 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxOutputDir.Location = new System.Drawing.Point(131, 52);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
-            this.textBoxOutputDir.Size = new System.Drawing.Size(281, 20);
-            this.textBoxOutputDir.TabIndex = 4;
+            this.textBoxOutputDir.Size = new System.Drawing.Size(311, 20);
+            this.textBoxOutputDir.TabIndex = 3;
             this.textBoxOutputDir.Leave += new System.EventHandler(this.textBoxOutputDir_Leave);
             // 
             // comboBoxFormat
             // 
             this.comboBoxFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxFormat.FormattingEnabled = true;
+            this.comboBoxFormat.ItemHeight = 13;
             this.comboBoxFormat.Items.AddRange(new object[] {
             "Png",
             "Jpg",
             "Bmp",
             "Tiff"});
-            this.comboBoxFormat.Location = new System.Drawing.Point(511, 25);
+            this.comboBoxFormat.Location = new System.Drawing.Point(588, 26);
             this.comboBoxFormat.Name = "comboBoxFormat";
             this.comboBoxFormat.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxFormat.TabIndex = 7;
+            this.comboBoxFormat.TabIndex = 5;
             this.comboBoxFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFormat_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(508, 7);
+            this.label3.Location = new System.Drawing.Point(585, 7);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 8;
@@ -146,9 +162,14 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(15, 154);
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Location = new System.Drawing.Point(188, 168);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(406, 280);
+            this.pictureBox1.Size = new System.Drawing.Size(521, 329);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             // 
@@ -158,7 +179,7 @@
             this.checkBoxRemove.Location = new System.Drawing.Point(6, 78);
             this.checkBoxRemove.Name = "checkBoxRemove";
             this.checkBoxRemove.Size = new System.Drawing.Size(212, 17);
-            this.checkBoxRemove.TabIndex = 10;
+            this.checkBoxRemove.TabIndex = 6;
             this.checkBoxRemove.Text = "Remove original image after conversion";
             this.checkBoxRemove.UseVisualStyleBackColor = true;
             this.checkBoxRemove.CheckedChanged += new System.EventHandler(this.checkBoxRemove_CheckedChanged);
@@ -173,7 +194,7 @@
             this.comboBoxFileNameFormat.Location = new System.Drawing.Point(131, 101);
             this.comboBoxFileNameFormat.Name = "comboBoxFileNameFormat";
             this.comboBoxFileNameFormat.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxFileNameFormat.TabIndex = 11;
+            this.comboBoxFileNameFormat.TabIndex = 7;
             this.comboBoxFileNameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileNameFormat_SelectedIndexChanged);
             // 
             // label4
@@ -193,23 +214,142 @@
             this.textBoxFileNameExample.Location = new System.Drawing.Point(258, 101);
             this.textBoxFileNameExample.Name = "textBoxFileNameExample";
             this.textBoxFileNameExample.ReadOnly = true;
-            this.textBoxFileNameExample.Size = new System.Drawing.Size(154, 20);
+            this.textBoxFileNameExample.Size = new System.Drawing.Size(184, 20);
             this.textBoxFileNameExample.TabIndex = 13;
+            this.textBoxFileNameExample.TabStop = false;
             // 
             // checkBoxPreview
             // 
             this.checkBoxPreview.AutoSize = true;
-            this.checkBoxPreview.Location = new System.Drawing.Point(15, 131);
+            this.checkBoxPreview.Location = new System.Drawing.Point(188, 145);
             this.checkBoxPreview.Name = "checkBoxPreview";
             this.checkBoxPreview.Size = new System.Drawing.Size(64, 17);
-            this.checkBoxPreview.TabIndex = 14;
+            this.checkBoxPreview.TabIndex = 10;
             this.checkBoxPreview.Text = "Preview";
             this.checkBoxPreview.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCropImage
+            // 
+            this.checkBoxCropImage.AutoSize = true;
+            this.checkBoxCropImage.Location = new System.Drawing.Point(6, 145);
+            this.checkBoxCropImage.Name = "checkBoxCropImage";
+            this.checkBoxCropImage.Size = new System.Drawing.Size(80, 17);
+            this.checkBoxCropImage.TabIndex = 8;
+            this.checkBoxCropImage.Text = "Crop Image";
+            this.checkBoxCropImage.UseVisualStyleBackColor = true;
+            this.checkBoxCropImage.CheckedChanged += new System.EventHandler(this.checkBoxCropImage_CheckedChanged);
+            // 
+            // groupBoxCropSettings
+            // 
+            this.groupBoxCropSettings.Controls.Add(this.numericUpDownHeight);
+            this.groupBoxCropSettings.Controls.Add(this.numericUpDownWidth);
+            this.groupBoxCropSettings.Controls.Add(this.numericUpDownLeft);
+            this.groupBoxCropSettings.Controls.Add(this.numericUpDownTop);
+            this.groupBoxCropSettings.Controls.Add(this.label8);
+            this.groupBoxCropSettings.Controls.Add(this.label7);
+            this.groupBoxCropSettings.Controls.Add(this.label6);
+            this.groupBoxCropSettings.Controls.Add(this.label5);
+            this.groupBoxCropSettings.Location = new System.Drawing.Point(5, 168);
+            this.groupBoxCropSettings.Name = "groupBoxCropSettings";
+            this.groupBoxCropSettings.Size = new System.Drawing.Size(166, 125);
+            this.groupBoxCropSettings.TabIndex = 9;
+            this.groupBoxCropSettings.TabStop = false;
+            this.groupBoxCropSettings.Text = "Crop Settings";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 100);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(38, 13);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Height";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 74);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(35, 13);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "Width";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 48);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(25, 13);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Left";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 22);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(26, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Top";
+            // 
+            // numericUpDownTop
+            // 
+            this.numericUpDownTop.Location = new System.Drawing.Point(77, 20);
+            this.numericUpDownTop.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownTop.Name = "numericUpDownTop";
+            this.numericUpDownTop.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownTop.TabIndex = 0;
+            this.numericUpDownTop.Leave += new System.EventHandler(this.numericUpDownTop_Leave);
+            // 
+            // numericUpDownLeft
+            // 
+            this.numericUpDownLeft.Location = new System.Drawing.Point(77, 46);
+            this.numericUpDownLeft.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownLeft.Name = "numericUpDownLeft";
+            this.numericUpDownLeft.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownLeft.TabIndex = 1;
+            this.numericUpDownLeft.Leave += new System.EventHandler(this.numericUpDownLeft_Leave);
+            // 
+            // numericUpDownWidth
+            // 
+            this.numericUpDownWidth.Location = new System.Drawing.Point(77, 72);
+            this.numericUpDownWidth.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownWidth.Name = "numericUpDownWidth";
+            this.numericUpDownWidth.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownWidth.TabIndex = 2;
+            this.numericUpDownWidth.Leave += new System.EventHandler(this.numericUpDownWidth_Leave);
+            // 
+            // numericUpDownHeight
+            // 
+            this.numericUpDownHeight.Location = new System.Drawing.Point(77, 98);
+            this.numericUpDownHeight.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownHeight.Name = "numericUpDownHeight";
+            this.numericUpDownHeight.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownHeight.TabIndex = 3;
+            this.numericUpDownHeight.Leave += new System.EventHandler(this.numericUpDownHeight_Leave);
             // 
             // ImageHandler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxCropImage);
+            this.Controls.Add(this.groupBoxCropSettings);
             this.Controls.Add(this.checkBoxPreview);
             this.Controls.Add(this.textBoxFileNameExample);
             this.Controls.Add(this.label4);
@@ -226,9 +366,15 @@
             this.Controls.Add(this.textBoxScreenshotsDir);
             this.Controls.Add(this.checkBoxAutoConvert);
             this.Name = "ImageHandler";
-            this.Size = new System.Drawing.Size(682, 451);
+            this.Size = new System.Drawing.Size(712, 500);
             this.Load += new System.EventHandler(this.ImageHandler_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBoxCropSettings.ResumeLayout(false);
+            this.groupBoxCropSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTop)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,5 +397,15 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBoxFileNameExample;
         private System.Windows.Forms.CheckBox checkBoxPreview;
+        protected System.Windows.Forms.CheckBox checkBoxCropImage;
+        private System.Windows.Forms.GroupBox groupBoxCropSettings;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.NumericUpDown numericUpDownHeight;
+        private System.Windows.Forms.NumericUpDown numericUpDownWidth;
+        private System.Windows.Forms.NumericUpDown numericUpDownLeft;
+        private System.Windows.Forms.NumericUpDown numericUpDownTop;
     }
 }
