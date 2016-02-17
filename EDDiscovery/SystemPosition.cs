@@ -60,7 +60,13 @@ namespace EDDiscovery
                 int min = int.Parse(line.Substring(4, 2));
                 int sec = int.Parse(line.Substring(7, 2));
 
-                sp.time = new DateTime(lasttime.Year, lasttime.Month, lasttime.Day, hour, min, sec);
+                if (hour >= lasttime.Hour)
+                { sp.time = new DateTime(lasttime.Year, lasttime.Month, lasttime.Day, hour, min, sec); }
+                else
+                {
+                    DateTime tomorrow = lasttime.AddDays(1);
+                    sp.time = new DateTime(tomorrow.Year, tomorrow.Month, tomorrow.Day, hour, min, sec);
+                }
 
                 if (sp.time.Subtract(lasttime).TotalHours < -4)
                     sp.time = sp.time.AddDays(1);
