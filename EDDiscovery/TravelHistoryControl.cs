@@ -570,6 +570,8 @@ namespace EDDiscovery
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 activecommander = itm.Nr;
+                if (visitedSystems != null)
+                    visitedSystems.Clear();
                 RefreshHistory();
             }
         }
