@@ -97,6 +97,7 @@
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
             this.mapColorDialog = new System.Windows.Forms.ColorDialog();
+            this.addToTrilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.historyContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -204,9 +205,10 @@
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.starMapColourToolStripMenuItem,
             this.hideSystemToolStripMenuItem,
-            this.moveToAnotherCommanderToolStripMenuItem});
+            this.moveToAnotherCommanderToolStripMenuItem,
+            this.addToTrilaterationToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 70);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 114);
             // 
             // starMapColourToolStripMenuItem
             // 
@@ -770,6 +772,13 @@
             // 
             this.mapColorDialog.SolidColorOnly = true;
             // 
+            // addToTrilaterationToolStripMenuItem
+            // 
+            this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
+            this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.addToTrilaterationToolStripMenuItem.Text = "Add to Trilateration";
+            this.addToTrilaterationToolStripMenuItem.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem_Click);
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -860,5 +869,6 @@
         private System.Windows.Forms.ComboBox comboBoxCommander;
         private System.Windows.Forms.RadioButton optPushOnly;
         private System.Windows.Forms.RadioButton optFullSync;
+        private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem;
     }
 }
