@@ -1201,6 +1201,28 @@ namespace EDDiscovery
         {
             EDSMPushOnly = !optFullSync.Checked;
         }
+
+        /* Add selected systems to trilateration grid */
+        private void addToTrilaterationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+
+            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[1].Value.ToString();
+
+                tctrl.AddSystemToDataGridViewDistances(sysName);
+            }
+
+            this.Cursor = Cursors.Default;
+        }
     }
 
 
@@ -1210,8 +1232,5 @@ namespace EDDiscovery
         public string name;
         public double dist;
     }
-
-
-
 
 }

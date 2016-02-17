@@ -145,6 +145,49 @@ namespace EDDiscovery
             }
         }
 
+        /* Tries to load the system data for the given name. If no system data is available, but the system is known,
+         * it creates a new System entity, otherwise logs it and returns null. */
+        private SystemClass getSystemForTrilateration(string systemName)
+        {
+            var system = SystemData.GetSystem(systemName);
+
+            if (system == null)
+            {
+                if (!edsm.IsKnownSystem(systemName))
+                {
+                    LogText("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine, Color.Red);                    
+                }
+                else
+                {
+                    system = new SystemClass(systemName);
+                }
+            }
+            return system;
+        }
+
+        /* Callback for when a new system has been added to the grid.
+         * Performs some additional setup such as clearing data and setting the status. */
+        private void newSystemAdded(DataGridViewCell cell, SystemClass system)
+        {
+            if (cell.Value != system.name)
+            {
+                cell.Value = system.name;
+            }
+            cell.Tag = system;
+            // reset any calculated distances
+            dataGridViewDistances[2, cell.RowIndex].Value = null;
+            // (re)set status
+            if (system.HasCoordinate)
+            {
+                dataGridViewDistances[3, cell.RowIndex].Value = null;
+            }
+            else
+            {
+                dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown";
+                dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = Color.Salmon;
+            }
+        }
+
         private void dataGridViewDistances_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -176,42 +219,23 @@ namespace EDDiscovery
                     return;
                 }
 
-                var system = SystemData.GetSystem(value);
-
+                var system = getSystemForTrilateration(value);
                 if (system == null)
                 {
-                    if (!edsm.IsKnownSystem(value))
+                    this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        LogText("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine, Color.Red);
                         dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
-                        return;
-                    }
-                    else
-                    {
-                        system = new SystemClass(value);
-                    }                    
+                    }));
+                    return;
                 }
-
-                if (value != system.name)
-                {
-                    cell.Value = system.name;
-                }
-                cell.Tag = system;
-                if (system.HasCoordinate)
-                {
-                    // reset any calculated distances
-                    dataGridViewDistances[2, e.RowIndex].Value = null;
-                    dataGridViewDistances[3, e.RowIndex].Value = null;
-                }
-                else
-                {
-                    dataGridViewDistances[3, e.RowIndex].Value = "Position unknown";
-                    dataGridViewDistances[3, e.RowIndex].Style.ForeColor = Color.Salmon;
-                }
+                newSystemAdded(cell, system);
             }
-// trigger trilateration calculation
-            RunTrilateration();
-            /* And skip to the next editable cell */
+            else if (e.ColumnIndex == 1)
+            {
+                // trigger trilateration calculation
+                RunTrilateration();
+            }
+            /* skip to the next editable cell */
             skipReadOnlyCells = true;
         }
 
@@ -604,7 +628,8 @@ namespace EDDiscovery
             AddSystemToDataGridViewDistances(system);
         }
 
-        private void AddSystemToDataGridViewDistances(SystemClass system)
+        /* Adds a system to the grid if it's not already in there */
+        public void AddSystemToDataGridViewDistances(SystemClass system)
         {
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
@@ -616,7 +641,16 @@ namespace EDDiscovery
             }
 
             var index = dataGridViewDistances.Rows.Add(system.name);
-            dataGridViewDistances[0, index].Tag = system;
+            newSystemAdded(dataGridViewDistances[0, index], system);
+        }
+
+        public void AddSystemToDataGridViewDistances(string systemName)
+        {
+            var system = getSystemForTrilateration(systemName);
+            if (system != null)
+            {
+                AddSystemToDataGridViewDistances(system);
+            }
         }
 
         private void toolStripButtonSubmitDistances_Click(object sender, EventArgs e)
