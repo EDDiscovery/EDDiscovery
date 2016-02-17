@@ -963,8 +963,16 @@ namespace EDDiscovery
             } while( cell.ReadOnly );
             dataGridView.CurrentCell = cell;
             dataGridView.CurrentCell.Selected = true;
-
             skipReadOnlyCells = false;
+
+            // Copy text to clipboard
+            DataGridViewTextBoxCell ob = (DataGridViewTextBoxCell)cell;
+            string text=null;
+            if (ob != null)
+                text = (STRING)ob.Value;
+            if (text != null)
+                System.Windows.Forms.Clipboard.SetText(text);
+
         }
 
         private void dataGridViewDistances_KeyDown(object sender, KeyEventArgs e)
