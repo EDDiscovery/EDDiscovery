@@ -969,7 +969,7 @@ namespace EDDiscovery
             DataGridViewTextBoxCell ob = (DataGridViewTextBoxCell)cell;
             string text=null;
             if (ob != null)
-                text = (STRING)ob.Value;
+                text = (string)ob.Value;
             if (text != null)
                 System.Windows.Forms.Clipboard.SetText(text);
 
