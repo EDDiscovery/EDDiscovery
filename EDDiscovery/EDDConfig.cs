@@ -129,7 +129,7 @@ namespace EDDiscovery2
            
            
 
-            EDCommander cmdr = new EDCommander(0, _db.GetSettingString("EDCommanderName0", commanderName),  _db.GetSettingString("EDCommanderApiKey1", apikey));
+            EDCommander cmdr = new EDCommander(0, _db.GetSettingString("EDCommanderName0", commanderName),  _db.GetSettingString("EDCommanderApiKey0", apikey));
             listCommanders.Add(cmdr);
 
 
