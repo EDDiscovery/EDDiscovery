@@ -145,6 +145,10 @@ namespace EDDiscovery2.ImageHandler
                     System.Threading.Thread.Sleep(1000);
 
                     new_name = CreateFileName(cur_sysname, e.FullPath);
+                    new_name = new_name.Replace("*", "_star");                  // fix SAG A
+                    new_name = new_name.Replace("/", "_slash");
+                    new_name = new_name.Replace("\\", "_slash");
+                    new_name = new_name.Replace(":", "_colon");
 
                     //just in case we manage to take more than 1 pic in a second, add x's until the name is unique (the fix above may make this pointless)
                     while (File.Exists(output_folder + "\\" + new_name + pic_ext))

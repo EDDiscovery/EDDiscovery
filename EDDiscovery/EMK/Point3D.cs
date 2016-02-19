@@ -71,28 +71,33 @@ namespace EMK.LightGeometry
 		/// </summary>
 		public double Z { set { _Coordinates[2] = value; } get { return _Coordinates[2]; } }
 
-		/// <summary>
-		/// Returns the distance between two points.
-		/// </summary>
-		/// <param name="P1">First point.</param>
-		/// <param name="P2">Second point.</param>
-		/// <returns>Distance value.</returns>
-		public static double DistanceBetween(Point3D P1, Point3D P2)
-		{
-            return Math.Sqrt((P1.X - P2.X) * (P1.X - P2.X) + (P1.Y - P2.Y) * (P1.Y - P2.Y) + (P1.Y - P2.Z) * (P1.Y - P2.Z));
-		}
+        /// <summary>
+        /// Returns the distance between two points.
+        /// </summary>
+        /// <param name="P1">First point.</param>
+        /// <param name="P2">Second point.</param>
+        /// <returns>Distance value.</returns>
+        public static double DistanceBetween(Point3D P1, Point3D P2)
+        {
+            return Math.Sqrt((P1.X - P2.X) * (P1.X - P2.X) + (P1.Y - P2.Y) * (P1.Y - P2.Y) + (P1.Z - P2.Z) * (P1.Z - P2.Z));
+        }
 
-		/// <summary>
-		/// Returns the projection of a point on the line defined with two other points.
-		/// When the projection is out of the segment, then the closest extremity is returned.
-		/// </summary>
-		/// <exception cref="ArgumentNullException">None of the arguments can be null.</exception>
-		/// <exception cref="ArgumentException">P1 and P2 must be different.</exception>
-		/// <param name="Pt">Point to project.</param>
-		/// <param name="P1">First point of the line.</param>
-		/// <param name="P2">Second point of the line.</param>
-		/// <returns>The projected point if it is on the segment / The closest extremity otherwise.</returns>
-		public static Point3D ProjectOnLine(Point3D Pt, Point3D P1, Point3D P2)
+        public static double DistanceBetweenX2(Point3D P1, Point3D P2)
+        {
+            return (P1.X - P2.X) * (P1.X - P2.X) + (P1.Y - P2.Y) * (P1.Y - P2.Y) + (P1.Z - P2.Z) * (P1.Z - P2.Z);
+        }
+
+        /// <summary>
+        /// Returns the projection of a point on the line defined with two other points.
+        /// When the projection is out of the segment, then the closest extremity is returned.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">None of the arguments can be null.</exception>
+        /// <exception cref="ArgumentException">P1 and P2 must be different.</exception>
+        /// <param name="Pt">Point to project.</param>
+        /// <param name="P1">First point of the line.</param>
+        /// <param name="P2">Second point of the line.</param>
+        /// <returns>The projected point if it is on the segment / The closest extremity otherwise.</returns>
+        public static Point3D ProjectOnLine(Point3D Pt, Point3D P1, Point3D P2)
 		{
 			if ( Pt==null || P1==null || P2==null ) throw new ArgumentNullException("None of the arguments can be null.");
 			if ( P1.Equals(P2) ) throw new ArgumentException("P1 and P2 must be different.");
