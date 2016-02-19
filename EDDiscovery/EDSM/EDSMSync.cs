@@ -74,7 +74,7 @@ namespace EDDiscovery2.EDSM
 
                 // Send Unsynced system to EDSM.
 
-                List<SystemPosition> systems = (from s in mainForm.VisitedSystems where s.vs !=null && s.vs.EDSM_sync == false select s).ToList<SystemPosition>();
+                List<SystemPosition> systems = (from s in mainForm.VisitedSystems where s.vs !=null && s.vs.EDSM_sync == false && s.vs.Commander== EDDiscoveryForm.EDDConfig.CurrentCommander.Nr select s).ToList<SystemPosition>();
                 mainForm.LogLine("EDSM: Sending " +  systems.Count.ToString() + " flightlog entries", Color.Black);
                 foreach (var system in systems)
                 {

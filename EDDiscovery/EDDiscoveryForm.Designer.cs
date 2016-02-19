@@ -58,10 +58,6 @@
             this.buttonAddCommander = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
-            this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNetLogPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,6 +71,7 @@
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keepOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fastTravelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,11 +82,15 @@
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.routeControl1 = new EDDiscovery.RouteControl();
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnNetLogPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -118,7 +119,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(905, 593);
+            this.tabControl1.Size = new System.Drawing.Size(924, 593);
             this.tabControl1.TabIndex = 15;
             // 
             // tabPageTravelHistory
@@ -127,7 +128,7 @@
             this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
             this.tabPageTravelHistory.Name = "tabPageTravelHistory";
             this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTravelHistory.Size = new System.Drawing.Size(897, 567);
+            this.tabPageTravelHistory.Size = new System.Drawing.Size(916, 567);
             this.tabPageTravelHistory.TabIndex = 0;
             this.tabPageTravelHistory.Text = "Travel history";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
@@ -174,7 +175,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(897, 567);
+            this.tabPage3.Size = new System.Drawing.Size(916, 567);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -226,7 +227,7 @@
             // button_Save
             // 
             this.button_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Save.Location = new System.Drawing.Point(816, 373);
+            this.button_Save.Location = new System.Drawing.Point(835, 373);
             this.button_Save.Name = "button_Save";
             this.button_Save.Size = new System.Drawing.Size(75, 23);
             this.button_Save.TabIndex = 4;
@@ -243,7 +244,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(891, 87);
+            this.groupBox1.Size = new System.Drawing.Size(910, 87);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Elite Dangerous netlog location (If not ovverride by commander settings belove)";
@@ -251,7 +252,7 @@
             // button_Browse
             // 
             this.button_Browse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Browse.Location = new System.Drawing.Point(814, 44);
+            this.button_Browse.Location = new System.Drawing.Point(833, 44);
             this.button_Browse.Name = "button_Browse";
             this.button_Browse.Size = new System.Drawing.Size(75, 23);
             this.button_Browse.TabIndex = 3;
@@ -265,7 +266,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxNetLogDir.Location = new System.Drawing.Point(125, 46);
             this.textBoxNetLogDir.Name = "textBoxNetLogDir";
-            this.textBoxNetLogDir.Size = new System.Drawing.Size(683, 20);
+            this.textBoxNetLogDir.Size = new System.Drawing.Size(702, 20);
             this.textBoxNetLogDir.TabIndex = 2;
             // 
             // radioButton_Manual
@@ -303,7 +304,7 @@
             this.groupBox2.Controls.Add(this.textBoxHomeSystem);
             this.groupBox2.Location = new System.Drawing.Point(432, 272);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(459, 95);
+            this.groupBox2.Size = new System.Drawing.Size(478, 95);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "3D Map Settings";
@@ -383,7 +384,7 @@
             this.groupBox4.Controls.Add(this.dataGridViewCommanders);
             this.groupBox4.Location = new System.Drawing.Point(0, 93);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(892, 182);
+            this.groupBox4.Size = new System.Drawing.Size(911, 182);
             this.groupBox4.TabIndex = 14;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Commanders";
@@ -402,7 +403,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(575, 16);
+            this.label2.Location = new System.Drawing.Point(594, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(304, 13);
             this.label2.TabIndex = 7;
@@ -424,38 +425,9 @@
             this.dataGridViewCommanders.Size = new System.Drawing.Size(868, 128);
             this.dataGridViewCommanders.TabIndex = 13;
             // 
-            // ColumnNr
-            // 
-            this.ColumnNr.DataPropertyName = "Nr";
-            this.ColumnNr.HeaderText = "Nr";
-            this.ColumnNr.Name = "ColumnNr";
-            this.ColumnNr.ReadOnly = true;
-            this.ColumnNr.Width = 20;
-            // 
-            // ColumnCommander
-            // 
-            this.ColumnCommander.DataPropertyName = "Name";
-            this.ColumnCommander.HeaderText = "Commander";
-            this.ColumnCommander.Name = "ColumnCommander";
-            this.ColumnCommander.Width = 130;
-            // 
-            // ColumnEDSMAPIKey
-            // 
-            this.ColumnEDSMAPIKey.DataPropertyName = "APIKey";
-            this.ColumnEDSMAPIKey.HeaderText = "EDSM api key";
-            this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
-            this.ColumnEDSMAPIKey.Width = 200;
-            // 
-            // ColumnNetLogPath
-            // 
-            this.ColumnNetLogPath.DataPropertyName = "NetLogPath";
-            this.ColumnNetLogPath.FillWeight = 300F;
-            this.ColumnNetLogPath.HeaderText = "NetLog path";
-            this.ColumnNetLogPath.Name = "ColumnNetLogPath";
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(823, 1);
+            this.button1.Location = new System.Drawing.Point(178, 0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -473,7 +445,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(908, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(927, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -564,6 +536,13 @@
             this.syncEDSMSystemsToolStripMenuItem.Text = "Sync EDSM Systems";
             this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
+            // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
+            // 
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "(DEBUG) Reset all history to first commander";
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click);
+            // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -630,8 +609,9 @@
             // 
             this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panelInfo.BackColor = System.Drawing.Color.Salmon;
+            this.panelInfo.Controls.Add(this.button1);
             this.panelInfo.Controls.Add(this.labelPanelText);
-            this.panelInfo.Location = new System.Drawing.Point(514, 1);
+            this.panelInfo.Location = new System.Drawing.Point(533, 1);
             this.panelInfo.Name = "panelInfo";
             this.panelInfo.Size = new System.Drawing.Size(394, 23);
             this.panelInfo.TabIndex = 17;
@@ -647,12 +627,23 @@
             this.labelPanelText.Text = "Loading. Please wait!";
             this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel1.Location = new System.Drawing.Point(825, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(101, 46);
+            this.panel1.TabIndex = 18;
+            // 
             // travelHistoryControl1
             // 
             this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
             this.travelHistoryControl1.Name = "travelHistoryControl1";
-            this.travelHistoryControl1.Size = new System.Drawing.Size(891, 561);
+            this.travelHistoryControl1.Size = new System.Drawing.Size(910, 561);
             this.travelHistoryControl1.TabIndex = 0;
             this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
             // 
@@ -681,19 +672,41 @@
             this.routeControl1.TabIndex = 0;
             this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
             // 
-            // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
+            // ColumnNr
             // 
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "(DEBUG) Reset all history to first commander";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click);
+            this.ColumnNr.DataPropertyName = "Nr";
+            this.ColumnNr.HeaderText = "Nr";
+            this.ColumnNr.Name = "ColumnNr";
+            this.ColumnNr.ReadOnly = true;
+            this.ColumnNr.Width = 20;
+            // 
+            // ColumnCommander
+            // 
+            this.ColumnCommander.DataPropertyName = "Name";
+            this.ColumnCommander.HeaderText = "Commander";
+            this.ColumnCommander.Name = "ColumnCommander";
+            this.ColumnCommander.Width = 130;
+            // 
+            // ColumnEDSMAPIKey
+            // 
+            this.ColumnEDSMAPIKey.DataPropertyName = "APIKey";
+            this.ColumnEDSMAPIKey.HeaderText = "EDSM api key";
+            this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
+            this.ColumnEDSMAPIKey.Width = 150;
+            // 
+            // ColumnNetLogPath
+            // 
+            this.ColumnNetLogPath.DataPropertyName = "NetLogPath";
+            this.ColumnNetLogPath.FillWeight = 300F;
+            this.ColumnNetLogPath.HeaderText = "NetLog path";
+            this.ColumnNetLogPath.Name = "ColumnNetLogPath";
             // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(908, 626);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(927, 626);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelInfo);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
@@ -786,12 +799,13 @@
         private System.Windows.Forms.DataGridView dataGridViewCommanders;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button buttonAddCommander;
+        private System.Windows.Forms.ToolStripMenuItem dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
-        private System.Windows.Forms.Button buttonAddCommander;
-        private System.Windows.Forms.ToolStripMenuItem dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem;
     }
 }
 
