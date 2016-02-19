@@ -306,6 +306,9 @@ namespace EDDiscovery
 
                 if (line.Contains(" System:") && CQC == false)
                 {
+                    if (line.Contains("ProvingGround"))
+                        continue;
+
                     SystemPosition ps = SystemPosition.Parse(filetime, line);
                     if (ps != null)
                     {   // Remove some training systems
@@ -315,7 +318,6 @@ namespace EDDiscovery
                             continue;
                         if (ps.Name.Equals("Altiris"))
                             continue;
-
                         filetime = ps.time;
 
                         if (visitedSystems.Count > 0)
@@ -325,7 +327,7 @@ namespace EDDiscovery
                         if (ps.time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma. 
                         {
 
-
+                            
                             visitedSystems.Add(ps);
                             count++;
 
