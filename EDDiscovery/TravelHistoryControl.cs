@@ -1225,6 +1225,16 @@ namespace EDDiscovery
 
             this.Cursor = Cursors.Default;
         }
+
+        private void textBoxPrevSystem_Enter(object sender, EventArgs e)
+        {
+            /* Automatically copy the contents to the clipboard whenever this control is activated */
+            TextBox tb = sender as TextBox;
+            if (tb != null && tb.Text != null)
+            {
+                System.Windows.Forms.Clipboard.SetText(tb.Text);
+            }
+        }
     }
 
 

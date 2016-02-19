@@ -114,7 +114,8 @@
             this.richTextBox_History.Location = new System.Drawing.Point(3, 3);
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.Size = new System.Drawing.Size(588, 91);
-            this.richTextBox_History.TabIndex = 6;
+            this.richTextBox_History.TabIndex = 0;
+            this.richTextBox_History.TabStop = false;
             this.richTextBox_History.Text = "";
             // 
             // button_RefreshHistory
@@ -123,7 +124,7 @@
             this.button_RefreshHistory.Location = new System.Drawing.Point(517, 7);
             this.button_RefreshHistory.Name = "button_RefreshHistory";
             this.button_RefreshHistory.Size = new System.Drawing.Size(69, 23);
-            this.button_RefreshHistory.TabIndex = 5;
+            this.button_RefreshHistory.TabIndex = 2;
             this.button_RefreshHistory.Text = "Refresh";
             this.button_RefreshHistory.UseVisualStyleBackColor = true;
             this.button_RefreshHistory.Click += new System.EventHandler(this.button_RefreshHistory_Click);
@@ -135,7 +136,7 @@
             this.labelHeader.Location = new System.Drawing.Point(3, 7);
             this.labelHeader.Name = "labelHeader";
             this.labelHeader.Size = new System.Drawing.Size(110, 18);
-            this.labelHeader.TabIndex = 7;
+            this.labelHeader.TabIndex = 0;
             this.labelHeader.Text = "Travel history";
             // 
             // dataGridView1
@@ -156,7 +157,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(3, 34);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(589, 444);
-            this.dataGridView1.TabIndex = 8;
+            this.dataGridView1.TabIndex = 3;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
             this.dataGridView1.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
@@ -248,7 +249,7 @@
             this.comboBoxHistoryWindow.Location = new System.Drawing.Point(259, 8);
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 21);
-            this.comboBoxHistoryWindow.TabIndex = 9;
+            this.comboBoxHistoryWindow.TabIndex = 0;
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // label2
@@ -258,7 +259,7 @@
             this.label2.Location = new System.Drawing.Point(152, 11);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(101, 13);
-            this.label2.TabIndex = 10;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Show history for last";
             // 
             // listView1
@@ -276,7 +277,8 @@
             this.listView1.Location = new System.Drawing.Point(11, 364);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(278, 213);
-            this.listView1.TabIndex = 11;
+            this.listView1.TabIndex = 7;
+            this.listView1.TabStop = false;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             // 
@@ -304,7 +306,7 @@
             this.buttonMap.Location = new System.Drawing.Point(199, 80);
             this.buttonMap.Name = "buttonMap";
             this.buttonMap.Size = new System.Drawing.Size(83, 23);
-            this.buttonMap.TabIndex = 14;
+            this.buttonMap.TabIndex = 4;
             this.buttonMap.Text = "3D star map";
             this.buttonMap.UseVisualStyleBackColor = true;
             this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
@@ -316,6 +318,7 @@
             this.textBoxSystem.ReadOnly = true;
             this.textBoxSystem.Size = new System.Drawing.Size(203, 20);
             this.textBoxSystem.TabIndex = 15;
+            this.textBoxSystem.TabStop = false;
             // 
             // panel1
             // 
@@ -352,7 +355,7 @@
             this.panel1.Location = new System.Drawing.Point(7, 110);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(293, 235);
-            this.panel1.TabIndex = 16;
+            this.panel1.TabIndex = 6;
             // 
             // label14
             // 
@@ -371,13 +374,14 @@
             this.textBoxSolDist.ReadOnly = true;
             this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
             this.textBoxSolDist.TabIndex = 42;
+            this.textBoxSolDist.TabStop = false;
             // 
             // buttonTrilaterate
             // 
             this.buttonTrilaterate.Location = new System.Drawing.Point(168, 186);
             this.buttonTrilaterate.Name = "buttonTrilaterate";
             this.buttonTrilaterate.Size = new System.Drawing.Size(99, 22);
-            this.buttonTrilaterate.TabIndex = 41;
+            this.buttonTrilaterate.TabIndex = 3;
             this.buttonTrilaterate.Text = "Trilaterate";
             this.buttonTrilaterate.UseVisualStyleBackColor = true;
             this.buttonTrilaterate.Click += new System.EventHandler(this.buttonTrilaterate_Click);
@@ -392,6 +396,7 @@
             this.buttonRoss.Name = "buttonRoss";
             this.buttonRoss.Size = new System.Drawing.Size(16, 20);
             this.buttonRoss.TabIndex = 40;
+            this.buttonRoss.TabStop = false;
             this.toolTipEddb.SetToolTip(this.buttonRoss, "Click to edit system in Ross");
             this.buttonRoss.UseVisualStyleBackColor = true;
             this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
@@ -406,6 +411,7 @@
             this.buttonEDDB.Name = "buttonEDDB";
             this.buttonEDDB.Size = new System.Drawing.Size(16, 20);
             this.buttonEDDB.TabIndex = 39;
+            this.buttonEDDB.TabStop = false;
             this.toolTipEddb.SetToolTip(this.buttonEDDB, "Click to show system in EDDB");
             this.buttonEDDB.UseVisualStyleBackColor = true;
             this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
@@ -417,6 +423,7 @@
             this.textBoxState.ReadOnly = true;
             this.textBoxState.Size = new System.Drawing.Size(71, 20);
             this.textBoxState.TabIndex = 37;
+            this.textBoxState.TabStop = false;
             // 
             // textBoxEconomy
             // 
@@ -425,6 +432,7 @@
             this.textBoxEconomy.ReadOnly = true;
             this.textBoxEconomy.Size = new System.Drawing.Size(71, 20);
             this.textBoxEconomy.TabIndex = 33;
+            this.textBoxEconomy.TabStop = false;
             // 
             // label12
             // 
@@ -453,6 +461,7 @@
             this.textBoxGovernment.ReadOnly = true;
             this.textBoxGovernment.Size = new System.Drawing.Size(71, 20);
             this.textBoxGovernment.TabIndex = 35;
+            this.textBoxGovernment.TabStop = false;
             // 
             // textBoxAllegiance
             // 
@@ -461,6 +470,7 @@
             this.textBoxAllegiance.ReadOnly = true;
             this.textBoxAllegiance.Size = new System.Drawing.Size(71, 20);
             this.textBoxAllegiance.TabIndex = 31;
+            this.textBoxAllegiance.TabStop = false;
             // 
             // label11
             // 
@@ -499,6 +509,7 @@
             this.textBoxVisits.ReadOnly = true;
             this.textBoxVisits.Size = new System.Drawing.Size(71, 20);
             this.textBoxVisits.TabIndex = 29;
+            this.textBoxVisits.TabStop = false;
             // 
             // label8
             // 
@@ -515,7 +526,7 @@
             this.richTextBoxNote.Location = new System.Drawing.Point(29, 123);
             this.richTextBoxNote.Name = "richTextBoxNote";
             this.richTextBoxNote.Size = new System.Drawing.Size(238, 47);
-            this.richTextBoxNote.TabIndex = 27;
+            this.richTextBoxNote.TabIndex = 0;
             this.richTextBoxNote.Text = "";
             this.richTextBoxNote.TextChanged += new System.EventHandler(this.richTextBoxNote_TextChanged);
             this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
@@ -531,6 +542,7 @@
             this.textBoxDistText.ReadOnly = true;
             this.textBoxDistText.Size = new System.Drawing.Size(263, 28);
             this.textBoxDistText.TabIndex = 26;
+            this.textBoxDistText.TabStop = false;
             this.textBoxDistText.Text = "Important!!  Use galaxy map to get distance with 2 decimals. Ex 17.44     ";
             // 
             // buttonUpdate
@@ -538,7 +550,7 @@
             this.buttonUpdate.Location = new System.Drawing.Point(6, 186);
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.Size = new System.Drawing.Size(69, 22);
-            this.buttonUpdate.TabIndex = 24;
+            this.buttonUpdate.TabIndex = 2;
             this.buttonUpdate.Text = "Update";
             this.buttonUpdate.UseVisualStyleBackColor = true;
             this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
@@ -549,7 +561,7 @@
             this.textBoxDistance.Location = new System.Drawing.Point(81, 188);
             this.textBoxDistance.Name = "textBoxDistance";
             this.textBoxDistance.Size = new System.Drawing.Size(70, 20);
-            this.textBoxDistance.TabIndex = 23;
+            this.textBoxDistance.TabIndex = 1;
             // 
             // label7
             // 
@@ -567,7 +579,9 @@
             this.textBoxPrevSystem.Name = "textBoxPrevSystem";
             this.textBoxPrevSystem.ReadOnly = true;
             this.textBoxPrevSystem.Size = new System.Drawing.Size(186, 13);
-            this.textBoxPrevSystem.TabIndex = 21;
+            this.textBoxPrevSystem.TabIndex = 1;
+            this.textBoxPrevSystem.TabStop = false;
+            this.textBoxPrevSystem.Enter += new System.EventHandler(this.textBoxPrevSystem_Enter);
             // 
             // label_Z
             // 
@@ -586,6 +600,7 @@
             this.textBoxZ.ReadOnly = true;
             this.textBoxZ.Size = new System.Drawing.Size(67, 20);
             this.textBoxZ.TabIndex = 19;
+            this.textBoxZ.TabStop = false;
             // 
             // labelDistEnter
             // 
@@ -615,6 +630,7 @@
             this.textBoxY.ReadOnly = true;
             this.textBoxY.Size = new System.Drawing.Size(67, 20);
             this.textBoxY.TabIndex = 17;
+            this.textBoxY.TabStop = false;
             // 
             // textBoxX
             // 
@@ -623,6 +639,7 @@
             this.textBoxX.ReadOnly = true;
             this.textBoxX.Size = new System.Drawing.Size(67, 20);
             this.textBoxX.TabIndex = 17;
+            this.textBoxX.TabStop = false;
             // 
             // label4
             // 
@@ -648,7 +665,7 @@
             this.buttonSync.Location = new System.Drawing.Point(114, 38);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(103, 23);
-            this.buttonSync.TabIndex = 19;
+            this.buttonSync.TabIndex = 1;
             this.buttonSync.Text = "Sync with EDSM";
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
@@ -659,7 +676,7 @@
             this.optFullSync.Location = new System.Drawing.Point(224, 38);
             this.optFullSync.Name = "optFullSync";
             this.optFullSync.Size = new System.Drawing.Size(68, 17);
-            this.optFullSync.TabIndex = 23;
+            this.optFullSync.TabIndex = 2;
             this.optFullSync.TabStop = true;
             this.optFullSync.Text = "Full Sync";
             this.toolTipEddb.SetToolTip(this.optFullSync, "Update EDSM from travel history and download missing systems from EDSM");
@@ -672,7 +689,7 @@
             this.optPushOnly.Location = new System.Drawing.Point(224, 57);
             this.optPushOnly.Name = "optPushOnly";
             this.optPushOnly.Size = new System.Drawing.Size(63, 17);
-            this.optPushOnly.TabIndex = 24;
+            this.optPushOnly.TabIndex = 3;
             this.optPushOnly.TabStop = true;
             this.optPushOnly.Text = "Up Only";
             this.toolTipEddb.SetToolTip(this.optPushOnly, "Upload to EDSM only, do not add unknown systems on EDSM to EDD2");
@@ -692,7 +709,7 @@
             this.textBoxDistanceToNextSystem.Location = new System.Drawing.Point(78, 80);
             this.textBoxDistanceToNextSystem.Name = "textBoxDistanceToNextSystem";
             this.textBoxDistanceToNextSystem.Size = new System.Drawing.Size(48, 20);
-            this.textBoxDistanceToNextSystem.TabIndex = 21;
+            this.textBoxDistanceToNextSystem.TabIndex = 5;
             this.textBoxDistanceToNextSystem.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDistanceToNextSystem_Validating);
             // 
             // panelRight
@@ -712,7 +729,7 @@
             this.panelRight.Location = new System.Drawing.Point(594, 0);
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(297, 586);
-            this.panelRight.TabIndex = 22;
+            this.panelRight.TabIndex = 1;
             // 
             // comboBoxCommander
             // 
@@ -721,7 +738,7 @@
             this.comboBoxCommander.Location = new System.Drawing.Point(114, 9);
             this.comboBoxCommander.Name = "comboBoxCommander";
             this.comboBoxCommander.Size = new System.Drawing.Size(162, 21);
-            this.comboBoxCommander.TabIndex = 22;
+            this.comboBoxCommander.TabIndex = 0;
             this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
             // 
             // textBoxFilter
@@ -730,7 +747,7 @@
             this.textBoxFilter.Location = new System.Drawing.Point(411, 9);
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(100, 20);
-            this.textBoxFilter.TabIndex = 23;
+            this.textBoxFilter.TabIndex = 1;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
             // 
@@ -751,7 +768,7 @@
             this.panelBottom.Location = new System.Drawing.Point(0, 484);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(594, 102);
-            this.panelBottom.TabIndex = 25;
+            this.panelBottom.TabIndex = 2;
             // 
             // panelMain
             // 
@@ -766,7 +783,7 @@
             this.panelMain.Location = new System.Drawing.Point(0, 0);
             this.panelMain.Name = "panelMain";
             this.panelMain.Size = new System.Drawing.Size(594, 484);
-            this.panelMain.TabIndex = 26;
+            this.panelMain.TabIndex = 0;
             // 
             // mapColorDialog
             // 
