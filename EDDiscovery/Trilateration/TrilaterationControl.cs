@@ -622,7 +622,7 @@ namespace EDDiscovery
             }
         }
 
-        private void dataGridViewClosestSystems_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void dataGridViewClosestSystems_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             var system = (SystemClass) dataGridViewClosestSystems[0, e.RowIndex].Tag;
             AddSystemToDataGridViewDistances(system);

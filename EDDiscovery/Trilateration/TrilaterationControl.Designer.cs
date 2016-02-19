@@ -401,7 +401,7 @@
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
             this.dataGridViewClosestSystems.Size = new System.Drawing.Size(264, 138);
             this.dataGridViewClosestSystems.TabIndex = 13;
-            this.dataGridViewClosestSystems.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseDoubleClick);
+            this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
             // dataGridViewTextBoxColumnClosestSystemsSystem
             // 
