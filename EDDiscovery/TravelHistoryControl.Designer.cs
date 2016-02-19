@@ -568,6 +568,7 @@
             this.textBoxPrevSystem.ReadOnly = true;
             this.textBoxPrevSystem.Size = new System.Drawing.Size(186, 13);
             this.textBoxPrevSystem.TabIndex = 21;
+            this.textBoxPrevSystem.Enter += new System.EventHandler(this.textBoxPrevSystem_Enter);
             // 
             // label_Z
             // 
