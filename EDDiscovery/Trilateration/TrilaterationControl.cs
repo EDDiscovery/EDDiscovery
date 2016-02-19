@@ -56,8 +56,20 @@ namespace EDDiscovery
             if (TargetSystem == null) return;
 
             textBoxSystemName.Text = TargetSystem.name;
-            labelStatus.Text = "Enter Distances";
-            labelStatus.BackColor = Color.LightBlue;
+            if (TargetSystem.HasCoordinate)
+            {
+                textBoxCoordinateX.Text = TargetSystem.x.ToString();
+                textBoxCoordinateY.Text = TargetSystem.y.ToString();
+                textBoxCoordinateZ.Text = TargetSystem.z.ToString();
+
+                labelStatus.Text = "Has Coordinates!";
+                labelStatus.BackColor = Color.LawnGreen;
+            }
+            else
+            {
+                labelStatus.Text = "Enter Distances";
+                labelStatus.BackColor = Color.LightBlue;
+            }
 
             UnfreezeTrilaterationUI();
             dataGridViewDistances.Focus();
@@ -664,15 +676,13 @@ namespace EDDiscovery
                 trilaterationThread = null;
             }
 
-            // edge case - make sure distances were trilaterated
-            if (lastTrilatelationResult == null)
+            // edge case - make sure distances were trilaterated OR the current system already has known coordinates
+            if (lastTrilatelationResult == null && !CurrentSystem.HasCoordinate)
             {
                 LogText("EDSM submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
                 UnfreezeTrilaterationUI();
                 return;
             }
-
-
 
             EDSMSubmissionThread = new Thread(SubmitToEDSM) {Name = "EDSM Submission"};
             EDSMSubmissionThread.Start();
