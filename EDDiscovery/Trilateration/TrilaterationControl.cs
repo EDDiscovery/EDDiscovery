@@ -26,6 +26,10 @@ namespace EDDiscovery
         private Thread EDSMSubmissionThread;
         private EDSMClass edsm;
 
+        /** This global should be set if the next CurrentCellChanged() event should skip to the next editable cell.
+         * This should be the case whenver a keyboard event causes cells to change, but not on mouse-initiated events */
+        private bool skipReadOnlyCells = false;
+
         public TrilaterationControl()
         {
             InitializeComponent();
@@ -37,8 +41,8 @@ namespace EDDiscovery
             FreezeTrilaterationUI();
             edsm = new EDSMClass();
             var db = new SQLiteDBClass();
-            edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
-            edsm.commanderName = db.GetSettingString("CommanderName", "");
+            edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
         }
         
         public void Set(ISystem system)
@@ -52,8 +56,20 @@ namespace EDDiscovery
             if (TargetSystem == null) return;
 
             textBoxSystemName.Text = TargetSystem.name;
-            labelStatus.Text = "Enter Distances";
-            labelStatus.BackColor = Color.LightBlue;
+            if (TargetSystem.HasCoordinate)
+            {
+                textBoxCoordinateX.Text = TargetSystem.x.ToString();
+                textBoxCoordinateY.Text = TargetSystem.y.ToString();
+                textBoxCoordinateZ.Text = TargetSystem.z.ToString();
+
+                labelStatus.Text = "Has Coordinates!";
+                labelStatus.BackColor = Color.LawnGreen;
+            }
+            else
+            {
+                labelStatus.Text = "Enter Distances";
+                labelStatus.BackColor = Color.LightBlue;
+            }
 
             UnfreezeTrilaterationUI();
             dataGridViewDistances.Focus();
@@ -141,6 +157,49 @@ namespace EDDiscovery
             }
         }
 
+        /* Tries to load the system data for the given name. If no system data is available, but the system is known,
+         * it creates a new System entity, otherwise logs it and returns null. */
+        private SystemClass getSystemForTrilateration(string systemName)
+        {
+            var system = SystemData.GetSystem(systemName);
+
+            if (system == null)
+            {
+                if (!edsm.IsKnownSystem(systemName))
+                {
+                    LogText("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine, Color.Red);                    
+                }
+                else
+                {
+                    system = new SystemClass(systemName);
+                }
+            }
+            return system;
+        }
+
+        /* Callback for when a new system has been added to the grid.
+         * Performs some additional setup such as clearing data and setting the status. */
+        private void newSystemAdded(DataGridViewCell cell, SystemClass system)
+        {
+            if (cell.Value != system.name)
+            {
+                cell.Value = system.name;
+            }
+            cell.Tag = system;
+            // reset any calculated distances
+            dataGridViewDistances[2, cell.RowIndex].Value = null;
+            // (re)set status
+            if (system.HasCoordinate)
+            {
+                dataGridViewDistances[3, cell.RowIndex].Value = null;
+            }
+            else
+            {
+                dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown";
+                dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = Color.Salmon;
+            }
+        }
+
         private void dataGridViewDistances_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -172,41 +231,24 @@ namespace EDDiscovery
                     return;
                 }
 
-                var system = SystemData.GetSystem(value);
-
+                var system = getSystemForTrilateration(value);
                 if (system == null)
                 {
-                    if (!edsm.IsKnownSystem(value))
+                    this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        LogText("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine, Color.Red);
                         dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
-                        return;
-                    }
-                    else
-                    {
-                        system = new SystemClass(value);
-                    }                    
+                    }));
+                    return;
                 }
-
-                if (value != system.name)
-                {
-                    cell.Value = system.name;
-                }
-                cell.Tag = system;
-                if (system.HasCoordinate)
-                {
-                    // reset any calculated distances
-                    dataGridViewDistances[2, e.RowIndex].Value = null;
-                    dataGridViewDistances[3, e.RowIndex].Value = null;
-                }
-                else
-                {
-                    dataGridViewDistances[3, e.RowIndex].Value = "Position unknown";
-                    dataGridViewDistances[3, e.RowIndex].Style.ForeColor = Color.Salmon;
-                }
+                newSystemAdded(cell, system);
             }
-// trigger trilateration calculation
-            RunTrilateration();
+            else if (e.ColumnIndex == 1)
+            {
+                // trigger trilateration calculation
+                RunTrilateration();
+            }
+            /* skip to the next editable cell */
+            skipReadOnlyCells = true;
         }
 
         private void RunTrilateration()
@@ -592,13 +634,14 @@ namespace EDDiscovery
             }
         }
 
-        private void dataGridViewClosestSystems_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void dataGridViewClosestSystems_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             var system = (SystemClass) dataGridViewClosestSystems[0, e.RowIndex].Tag;
             AddSystemToDataGridViewDistances(system);
         }
 
-        private void AddSystemToDataGridViewDistances(SystemClass system)
+        /* Adds a system to the grid if it's not already in there */
+        public void AddSystemToDataGridViewDistances(SystemClass system)
         {
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
@@ -610,7 +653,16 @@ namespace EDDiscovery
             }
 
             var index = dataGridViewDistances.Rows.Add(system.name);
-            dataGridViewDistances[0, index].Tag = system;
+            newSystemAdded(dataGridViewDistances[0, index], system);
+        }
+
+        public void AddSystemToDataGridViewDistances(string systemName)
+        {
+            var system = getSystemForTrilateration(systemName);
+            if (system != null)
+            {
+                AddSystemToDataGridViewDistances(system);
+            }
         }
 
         private void toolStripButtonSubmitDistances_Click(object sender, EventArgs e)
@@ -624,15 +676,13 @@ namespace EDDiscovery
                 trilaterationThread = null;
             }
 
-            // edge case - make sure distances were trilaterated
-            if (lastTrilatelationResult == null)
+            // edge case - make sure distances were trilaterated OR the current system already has known coordinates
+            if (lastTrilatelationResult == null && !CurrentSystem.HasCoordinate)
             {
                 LogText("EDSM submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
                 UnfreezeTrilaterationUI();
                 return;
             }
-
-
 
             EDSMSubmissionThread = new Thread(SubmitToEDSM) {Name = "EDSM Submission"};
             EDSMSubmissionThread.Start();
@@ -640,6 +690,9 @@ namespace EDDiscovery
 
         private void SubmitToEDSM()
         {
+            edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+            edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+
             var travelHistoryControl = _discoveryForm.TravelControl;
             if (string.IsNullOrEmpty(edsm.commanderName))
             {   
@@ -889,6 +942,84 @@ namespace EDDiscovery
                         dataGridViewDistances[3, i].Value = "Position found";
                     }
                 }
+            }
+        }
+
+        private void SelectNextEditableCell(DataGridView dataGridView)
+        {
+            DataGridViewCell cell = dataGridView.CurrentCell;
+            if(cell == null) return;
+            if (!skipReadOnlyCells) return;
+
+            int row = cell.RowIndex;
+            int col = cell.ColumnIndex;
+
+            if(row == dataGridView.RowCount && col == dataGridView.RowCount) return;
+
+            do {
+                col++;
+                if(col >= dataGridView.ColumnCount)
+                {
+                    col = 0;
+                    row++;
+                    if (row >= dataGridView.RowCount)
+                    {
+                        row = dataGridView.RowCount - 1;
+                        dataGridView.CurrentCell = dataGridView.Rows[row].Cells[col];
+                        return;
+                    }
+                }
+                cell = dataGridView.Rows[row].Cells[col];
+            } while( cell.ReadOnly );
+            dataGridView.CurrentCell = cell;
+            dataGridView.CurrentCell.Selected = true;
+            skipReadOnlyCells = false;
+
+            // Copy text to clipboard
+            DataGridViewTextBoxCell ob = (DataGridViewTextBoxCell)cell;
+            string text=null;
+            if (ob != null)
+                text = (string)ob.Value;
+            if (text != null)
+                System.Windows.Forms.Clipboard.SetText(text);
+
+        }
+
+        private void dataGridViewDistances_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                DataGridView self = sender as DataGridView;
+                /* On tab, skip over read-only cells */
+                if (self.Focused && e.KeyCode == Keys.Tab)
+                {
+                    skipReadOnlyCells = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception dataGridViewDistances_KeyDown: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+        }
+
+        /* This event is received when a new cell has been selected */
+        private void dataGridViewDistances_CurrentCellChanged(object sender, EventArgs e)
+        {
+            try {
+                DataGridView dgv = sender as DataGridView;
+                if (skipReadOnlyCells && dgv.CurrentCell.ReadOnly)
+                {
+					/* Have to run this delayed as otherwise we enter an even loop when changing cells */
+                    this.BeginInvoke(new MethodInvoker(() => {
+                        SelectNextEditableCell(sender as DataGridView);
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception dataGridViewDistances_CurrentCellChanged: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
         }
     }

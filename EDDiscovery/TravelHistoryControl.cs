@@ -29,6 +29,7 @@ namespace EDDiscovery
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
         internal List<SystemPosition> visitedSystems;
+        internal bool EDSMPushOnly = false;
 
         public NetLogClass netlog = new NetLogClass();
         List<SystemDist> sysDist = null;
@@ -37,7 +38,7 @@ namespace EDDiscovery
 
         private static RichTextBox static_richTextBox;
         private int activecommander = 0;
-
+        List<EDCommander> commanders = null;
 
         public TravelHistoryControl()
         {
@@ -52,6 +53,9 @@ namespace EDDiscovery
             sync = new EDSMSync(_discoveryForm);
             var db = new SQLiteDBClass();
             defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+            EDSMPushOnly = db.GetSettingBool("EDSMPushOnly", false);
+            optPushOnly.Checked = EDSMPushOnly;
+            optFullSync.Checked = !EDSMPushOnly;
         }
 
 
@@ -271,8 +275,11 @@ namespace EDDiscovery
             item.prevSystem = sys2;
             if (!insert)
             {
-                SystemPosition known = visitedSystems.First(x => x.Name == item.Name);
-                if (known != null) item.vs = known.vs;
+                if (item.vs == null)
+                {
+                    SystemPosition known = visitedSystems.First(x => x.Name == item.Name);
+                    if (known != null) item.vs = known.vs;
+                }
             }
 
             string diststr = "";
@@ -524,6 +531,7 @@ namespace EDDiscovery
             {
                 var db = new SQLiteDBClass();
                 comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
+                LoadCommandersListBox();
             }
             // this improves dataGridView's scrolling performance
             typeof(DataGridView).InvokeMember(
@@ -535,6 +543,39 @@ namespace EDDiscovery
                 new object[] { true }
             );
         }
+
+        private bool cmdlistloaded;
+        private void LoadCommandersListBox()
+        {
+            commanders = new List<EDCommander>();
+
+            commanders.Add(new EDCommander(-1, "Hidden log", ""));
+            commanders.AddRange(EDDiscoveryForm.EDDConfig.listCommanders);
+
+            cmdlistloaded = false;
+            comboBoxCommander.DataSource = null;
+            comboBoxCommander.DataSource = commanders;
+            comboBoxCommander.ValueMember = "Nr";
+            comboBoxCommander.DisplayMember = "Name";
+            cmdlistloaded = true;
+            comboBoxCommander.SelectedIndex = 1;
+
+
+        }
+
+        private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            if (comboBoxCommander.SelectedIndex >= 0 && cmdlistloaded)
+            {
+                var itm = (EDCommander)comboBoxCommander.SelectedItem;
+                activecommander = itm.Nr;
+                if (visitedSystems != null)
+                    visitedSystems.Clear();
+                RefreshHistory();
+            }
+        }
+
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -619,7 +660,7 @@ namespace EDDiscovery
 
                 distance.Dist = dist.Value;
                 distance.CreateTime = DateTime.UtcNow;
-                distance.CommanderCreate = textBoxCmdrName.Text.Trim();
+                distance.CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name.Trim();
                 distance.NameA = textBoxSystem.Text;
                 distance.NameB = textBoxPrevSystem.Text;
                 distance.Status = DistancsEnum.EDDiscovery;
@@ -631,16 +672,7 @@ namespace EDDiscovery
             }
         }
 
-        private void textBoxCmdrName_Leave(object sender, EventArgs e)
-        {
-            if (!_discoveryForm.CommanderName.Equals(textBoxCmdrName.Text))
-            {
-                SQLiteDBClass db = new SQLiteDBClass();
-
-                db.PutSettingString("CommanderName", textBoxCmdrName.Text);
-                //EDDiscoveryForm.CommanderName = textBoxCmdrName.Text;
-            }
-        }
+  
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
@@ -662,8 +694,8 @@ namespace EDDiscovery
                 SQLiteDBClass db = new SQLiteDBClass();
 
 
-                edsm.apiKey = db.GetSettingString("EDSMApiKey", "");
-                edsm.commanderName = db.GetSettingString("CommanderName", "");
+                edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+                edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
 
 
                 if (currentSysPos == null || currentSysPos.curSystem == null)
@@ -723,16 +755,13 @@ namespace EDDiscovery
 
         private void buttonSync_Click(object sender, EventArgs e)
         {
-            if (textBoxCmdrName.Text.Equals(""))
+            if (EDDiscoveryForm.EDDConfig.CurrentCommander.Name.Equals(""))
             {
                 MessageBox.Show("Please enter commander name before sending distances/ travel history to EDSM!");
                 return;
             }
             var db = new SQLiteDBClass();
-
-
-
-
+            
             var dists = from p in SQLiteDBClass.dictDistances where p.Value.Status == DistancsEnum.EDDiscovery  orderby p.Value.CreateTime  select p.Value;
 
             EDSMClass edsm = new EDSMClass();
@@ -744,7 +773,7 @@ namespace EDDiscovery
                 if (dist.Dist > 0)
                 {
                     LogText("Add distance: " + dist.NameA + " => " + dist.NameB + " :" + dist.Dist.ToString("0.00") + "ly" + Environment.NewLine);
-                    json = edsm.SubmitDistances(textBoxCmdrName.Text, dist.NameA, dist.NameB, dist.Dist);
+                    json = edsm.SubmitDistances(EDDiscoveryForm.EDDConfig.CurrentCommander.Name, dist.NameA, dist.NameB, dist.Dist);
                 }
                 else
                 {
@@ -774,15 +803,14 @@ namespace EDDiscovery
                 }
             }
 
-            if (db.GetSettingString("EDSMApiKey", "").Equals(""))
+            if (EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey.Equals(""))
             {
                 MessageBox.Show("Please enter EDSM api key (In settings) before sending travel history to EDSM!");
                 return;
 
             }
-            sync.StartSync();
-
-
+            sync.StartSync(EDSMPushOnly);
+            
         }
 
         internal void RefreshEDSMEvent(object source)
@@ -854,7 +882,7 @@ namespace EDDiscovery
                                 {
                                     Dist = presetDistance.Value,
                                     CreateTime = DateTime.UtcNow,
-                                    CommanderCreate = textBoxCmdrName.Text.Trim(),
+                                    CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name,
                                     NameA = item.Name,
                                     NameB = item2.Name,
                                     Status = DistancsEnum.EDDiscovery
@@ -937,7 +965,7 @@ namespace EDDiscovery
 
         public string GetCommanderName()
         {
-            var value = textBoxCmdrName.Text;
+            var value = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
             return !string.IsNullOrEmpty(value) ? value : null;
         }
 
@@ -1048,7 +1076,11 @@ namespace EDDiscovery
                 {
                     r.Cells[4].Style.ForeColor = mapColorDialog.Color;
                     sysName = r.Cells[1].Value.ToString();
-                    SystemPosition sp = visitedSystems.First(s => s.Name.ToUpperInvariant() == sysName.ToUpperInvariant());
+
+                    SystemPosition sp = null;
+                    sp = (SystemPosition)r.Cells[1].Tag;
+                    if (sp == null)
+                        sp = visitedSystems.First(s => s.Name.ToUpperInvariant() == sysName.ToUpperInvariant());
                     if (sp.vs != null)
                     {
                         sp.vs.MapColour = mapColorDialog.Color.ToArgb();
@@ -1070,6 +1102,139 @@ namespace EDDiscovery
             }
         }
 
+        private void hideSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+                                                                  .Select(cell => cell.OwningRow)
+                                                                  .Distinct();
+
+
+          
+            
+            {
+                this.Cursor = Cursors.WaitCursor;
+                string sysName = "";
+                foreach (DataGridViewRow r in selectedRows)
+                {
+                    sysName = r.Cells[1].Value.ToString();
+                    SystemPosition sp=null;
+
+                    sp = (SystemPosition)r.Cells[1].Tag;
+
+               
+
+                    if (sp!= null && sp.vs != null)
+                    {
+                        sp.vs.Commander = -1;
+                        sp.Update();
+                    }
+                }
+                // Remove rows
+                if (selectedRows.Count<DataGridViewRow>() == dataGridView1.Rows.Count)
+                {
+                    dataGridView1.Rows.Clear();
+                }
+
+                foreach (DataGridViewRow row in selectedRows.ToList<DataGridViewRow>())
+                {
+                    dataGridView1.Rows.Remove(row);
+                }
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void moveToAnotherCommanderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct();
+
+
+
+            List<SystemPosition> listsyspos = new List<SystemPosition>();
+
+            {
+                this.Cursor = Cursors.WaitCursor;
+                string sysName = "";
+                foreach (DataGridViewRow r in selectedRows)
+                {
+                    sysName = r.Cells[1].Value.ToString();
+                    SystemPosition sp = null;
+
+                    sp = (SystemPosition)r.Cells[1].Tag;
+                    if (sp != null && sp.vs != null)
+                    {
+                        listsyspos.Add(sp);
+
+                    }
+                }
+
+                MoveToCommander movefrm = new MoveToCommander();
+
+                movefrm.Init(listsyspos.Count>1);
+
+                DialogResult red = movefrm.ShowDialog();
+                if (red == DialogResult.OK)
+                {
+                    if (movefrm.checkBoxAllInNetlog.Checked == false)   // Movel all in list.
+                    {
+                        foreach (SystemPosition sp in listsyspos)
+                        {
+                            sp.vs.Commander = movefrm.selectedCommander.Nr;
+                            sp.Update();
+                        }
+                        this.Cursor = Cursors.Default;
+                    }
+                    else   // Move all systems from the same session
+                    {
+
+                    }
+
+                }
+
+
+
+
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void optFullSync_CheckedChanged(object sender, EventArgs e)
+        {
+            EDSMPushOnly = !optFullSync.Checked;
+        }
+
+        /* Add selected systems to trilateration grid */
+        private void addToTrilaterationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+
+            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[1].Value.ToString();
+
+                tctrl.AddSystemToDataGridViewDistances(sysName);
+            }
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void textBoxPrevSystem_Enter(object sender, EventArgs e)
+        {
+            /* Automatically copy the contents to the clipboard whenever this control is activated */
+            TextBox tb = sender as TextBox;
+            if (tb != null && tb.Text != null)
+            {
+                System.Windows.Forms.Clipboard.SetText(tb.Text);
+            }
+        }
     }
 
 
@@ -1079,8 +1244,5 @@ namespace EDDiscovery
         public string name;
         public double dist;
     }
-
-
-
 
 }
