@@ -160,8 +160,9 @@
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormSagCarinaMission";
-            this.Text = "FormSagCarinaMission";
+            this.Text = "2D Map";
             this.Load += new System.EventHandler(this.FormSagCarinaMission_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

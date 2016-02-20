@@ -99,6 +99,45 @@ namespace EDDiscovery2.DB
 
 
 
+        static public List<VisitedSystemsClass> GetAll()
+        {
+            List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
+
+
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    DataSet ds = null;
+                    cmd.Connection = cn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandTimeout = 30;
+                    cmd.CommandText = "select * from VisitedSystems Order by Time ";
+
+                    ds = SQLiteDBClass.QueryText(cn, cmd);
+                    if (ds.Tables.Count == 0)
+                    {
+                        return null;
+                    }
+                    //
+                    if (ds.Tables[0].Rows.Count == 0)
+                    {
+                        return list;
+                    }
+
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        VisitedSystemsClass sys = new VisitedSystemsClass(dr);
+
+                        list.Add(sys);
+                    }
+
+                    return list;
+                }
+            }
+        }
+
+
         static public List<VisitedSystemsClass> GetAll(int commander)
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();

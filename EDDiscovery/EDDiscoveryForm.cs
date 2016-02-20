@@ -328,10 +328,10 @@ namespace EDDiscovery
                 EDSMClass edsm = new EDSMClass();
                 string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
-                CommanderName = _db.GetSettingString("CommanderName", "");
-                Invoke((MethodInvoker) delegate {
-                    travelHistoryControl1.textBoxCmdrName.Text = CommanderName;
-                });
+                CommanderName = EDDConfig.CurrentCommander.Name;
+                //Invoke((MethodInvoker) delegate {
+                //    travelHistoryControl1.textBoxCmdrName.Text = CommanderName;
+                //});
 
 
                 //                List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
@@ -363,14 +363,12 @@ namespace EDDiscovery
                 _db.GetAllSystems();
 
 
-                Invoke((MethodInvoker)delegate
-                {
+  
                     SystemNames.Clear();
                     foreach (SystemClass system in SystemData.SystemList)
                     {
                         SystemNames.Add(system.name);
                     }
-                });
             }
             catch (Exception ex)
             {
@@ -748,7 +746,7 @@ namespace EDDiscovery
         {
             _db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
             _db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
-            _db.PutSettingString("EDSMApiKey", textBoxEDSMApiKey.Text);
+
             _db.PutSettingInt("FormWidth", this.Width);
             _db.PutSettingInt("FormHeight", this.Height);
             _db.PutSettingInt("FormTop", this.Top);
@@ -757,9 +755,17 @@ namespace EDDiscovery
             _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
             _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
             _db.PutSettingString("Route", routeControl1.GetStringSettings());
+            _db.PutSettingBool("EDSMPushOnly", travelHistoryControl1.EDSMPushOnly);
             EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
+
+            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            EDDConfig.StoreCommanders(edcommanders);
+            dataGridViewCommanders.DataSource = null;
+            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
+            dataGridViewCommanders.Update();
+
         }
 
         private void routeControl1_Load(object sender, EventArgs e)
@@ -1008,7 +1014,6 @@ namespace EDDiscovery
             string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
             textBoxNetLogDir.Text = _db.GetSettingString("Netlogdir", datapath);
 
-            textBoxEDSMApiKey.Text = _db.GetSettingString("EDSMApiKey", "");
             checkBox_Distances.Checked = EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
             
@@ -1030,7 +1035,9 @@ namespace EDDiscovery
             {
                 radioButtonCentreHome.Checked = true;
             }
+            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
         }
+
 
         private void CheckIfEliteDangerousIsRunning()
         {
@@ -1177,6 +1184,44 @@ namespace EDDiscovery
             /* TODO: Only focus the field if we're on the correct tab! */
             if(fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory) {
                 travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
+            }
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonAddCommander_Click(object sender, EventArgs e)
+        {
+            EDCommander cmdr = EDDConfig.GetNewCommander();
+
+            //List<EDCommander> dlist = (List < EDCommander > )dataGridViewCommanders.DataSource;
+            //dlist.Add(cmdr);
+            //dataGridViewCommanders.DataSource = dlist;
+            //dataGridViewCommanders.Invalidate();
+
+            //dataGridViewCommanders.Update();
+
+            EDDConfig.listCommanders.Add(cmdr);
+            dataGridViewCommanders.DataSource = null;
+            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
+            dataGridViewCommanders.Update();
+            //string[] row = new string[] { cmdr.Nr.ToString(), cmdr.Name, cmdr.APIKey, cmdr.NetLogPath };
+            //dataGridViewCommanders.Rows.Add(row);
+        }
+
+        private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
+
+            foreach (VisitedSystemsClass vs in vsall)
+            {
+                if (vs.Commander != 0)
+                {
+                    vs.Commander = 0;
+                    vs.Update();
+                }
             }
         }
     }
