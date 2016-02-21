@@ -66,7 +66,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public bool Update()
+        public new bool Update()
         {
             using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {

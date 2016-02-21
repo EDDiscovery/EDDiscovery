@@ -45,20 +45,21 @@
             this.checkBoxPreview = new System.Windows.Forms.CheckBox();
             this.checkBoxCropImage = new System.Windows.Forms.CheckBox();
             this.groupBoxCropSettings = new System.Windows.Forms.GroupBox();
+            this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownLeft = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownTop = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.numericUpDownTop = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownLeft = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxHires = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBoxCropSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTop)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTop)).BeginInit();
             this.SuspendLayout();
             // 
             // checkBoxAutoConvert
@@ -140,10 +141,10 @@
             this.comboBoxFormat.FormattingEnabled = true;
             this.comboBoxFormat.ItemHeight = 13;
             this.comboBoxFormat.Items.AddRange(new object[] {
-            "Png",
-            "Jpg",
-            "Bmp",
-            "Tiff"});
+            "png",
+            "jpg",
+            "bmp",
+            "tiff"});
             this.comboBoxFormat.Location = new System.Drawing.Point(588, 26);
             this.comboBoxFormat.Name = "comboBoxFormat";
             this.comboBoxFormat.Size = new System.Drawing.Size(121, 21);
@@ -188,12 +189,15 @@
             // 
             this.comboBoxFileNameFormat.FormattingEnabled = true;
             this.comboBoxFileNameFormat.Items.AddRange(new object[] {
-            "Sysname (short time)",
+            "Sysname (YYYYMMDD-HHMMSS)",
             "Sysname (Windows dateformat)",
+            "YYYY-MM-DD HH-MM-SS Sysname",
+            "DD-MM-YYYY HH-MM-SS Sysname",
+            "MM-DD-YYYY HH-MM-SS Sysname",
             "Keep original"});
             this.comboBoxFileNameFormat.Location = new System.Drawing.Point(131, 101);
             this.comboBoxFileNameFormat.Name = "comboBoxFileNameFormat";
-            this.comboBoxFileNameFormat.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFileNameFormat.Size = new System.Drawing.Size(218, 21);
             this.comboBoxFileNameFormat.TabIndex = 7;
             this.comboBoxFileNameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileNameFormat_SelectedIndexChanged);
             // 
@@ -211,7 +215,7 @@
             this.textBoxFileNameExample.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.textBoxFileNameExample.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxFileNameExample.Location = new System.Drawing.Point(258, 101);
+            this.textBoxFileNameExample.Location = new System.Drawing.Point(370, 101);
             this.textBoxFileNameExample.Name = "textBoxFileNameExample";
             this.textBoxFileNameExample.ReadOnly = true;
             this.textBoxFileNameExample.Size = new System.Drawing.Size(184, 20);
@@ -227,6 +231,7 @@
             this.checkBoxPreview.TabIndex = 10;
             this.checkBoxPreview.Text = "Preview";
             this.checkBoxPreview.UseVisualStyleBackColor = true;
+            this.checkBoxPreview.CheckedChanged += new System.EventHandler(this.checkBoxPreview_CheckedChanged);
             // 
             // checkBoxCropImage
             // 
@@ -255,6 +260,58 @@
             this.groupBoxCropSettings.TabIndex = 9;
             this.groupBoxCropSettings.TabStop = false;
             this.groupBoxCropSettings.Text = "Crop Settings";
+            // 
+            // numericUpDownHeight
+            // 
+            this.numericUpDownHeight.Location = new System.Drawing.Point(77, 98);
+            this.numericUpDownHeight.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownHeight.Name = "numericUpDownHeight";
+            this.numericUpDownHeight.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownHeight.TabIndex = 3;
+            this.numericUpDownHeight.Leave += new System.EventHandler(this.numericUpDownHeight_Leave);
+            // 
+            // numericUpDownWidth
+            // 
+            this.numericUpDownWidth.Location = new System.Drawing.Point(77, 72);
+            this.numericUpDownWidth.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownWidth.Name = "numericUpDownWidth";
+            this.numericUpDownWidth.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownWidth.TabIndex = 2;
+            this.numericUpDownWidth.Leave += new System.EventHandler(this.numericUpDownWidth_Leave);
+            // 
+            // numericUpDownLeft
+            // 
+            this.numericUpDownLeft.Location = new System.Drawing.Point(77, 46);
+            this.numericUpDownLeft.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownLeft.Name = "numericUpDownLeft";
+            this.numericUpDownLeft.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownLeft.TabIndex = 1;
+            this.numericUpDownLeft.Leave += new System.EventHandler(this.numericUpDownLeft_Leave);
+            // 
+            // numericUpDownTop
+            // 
+            this.numericUpDownTop.Location = new System.Drawing.Point(77, 20);
+            this.numericUpDownTop.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownTop.Name = "numericUpDownTop";
+            this.numericUpDownTop.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownTop.TabIndex = 0;
+            this.numericUpDownTop.Leave += new System.EventHandler(this.numericUpDownTop_Leave);
             // 
             // label8
             // 
@@ -292,62 +349,22 @@
             this.label5.TabIndex = 4;
             this.label5.Text = "Top";
             // 
-            // numericUpDownTop
+            // checkBoxHires
             // 
-            this.numericUpDownTop.Location = new System.Drawing.Point(77, 20);
-            this.numericUpDownTop.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDownTop.Name = "numericUpDownTop";
-            this.numericUpDownTop.Size = new System.Drawing.Size(83, 20);
-            this.numericUpDownTop.TabIndex = 0;
-            this.numericUpDownTop.Leave += new System.EventHandler(this.numericUpDownTop_Leave);
-            // 
-            // numericUpDownLeft
-            // 
-            this.numericUpDownLeft.Location = new System.Drawing.Point(77, 46);
-            this.numericUpDownLeft.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDownLeft.Name = "numericUpDownLeft";
-            this.numericUpDownLeft.Size = new System.Drawing.Size(83, 20);
-            this.numericUpDownLeft.TabIndex = 1;
-            this.numericUpDownLeft.Leave += new System.EventHandler(this.numericUpDownLeft_Leave);
-            // 
-            // numericUpDownWidth
-            // 
-            this.numericUpDownWidth.Location = new System.Drawing.Point(77, 72);
-            this.numericUpDownWidth.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDownWidth.Name = "numericUpDownWidth";
-            this.numericUpDownWidth.Size = new System.Drawing.Size(83, 20);
-            this.numericUpDownWidth.TabIndex = 2;
-            this.numericUpDownWidth.Leave += new System.EventHandler(this.numericUpDownWidth_Leave);
-            // 
-            // numericUpDownHeight
-            // 
-            this.numericUpDownHeight.Location = new System.Drawing.Point(77, 98);
-            this.numericUpDownHeight.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDownHeight.Name = "numericUpDownHeight";
-            this.numericUpDownHeight.Size = new System.Drawing.Size(83, 20);
-            this.numericUpDownHeight.TabIndex = 3;
-            this.numericUpDownHeight.Leave += new System.EventHandler(this.numericUpDownHeight_Leave);
+            this.checkBoxHires.AutoSize = true;
+            this.checkBoxHires.Location = new System.Drawing.Point(245, 78);
+            this.checkBoxHires.Name = "checkBoxHires";
+            this.checkBoxHires.Size = new System.Drawing.Size(152, 17);
+            this.checkBoxHires.TabIndex = 14;
+            this.checkBoxHires.Text = "Mark High Resolution Files";
+            this.checkBoxHires.UseVisualStyleBackColor = true;
+            this.checkBoxHires.CheckedChanged += new System.EventHandler(this.checkBox_hires_CheckedChanged);
             // 
             // ImageHandler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxHires);
             this.Controls.Add(this.checkBoxCropImage);
             this.Controls.Add(this.groupBoxCropSettings);
             this.Controls.Add(this.checkBoxPreview);
@@ -371,10 +388,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBoxCropSettings.ResumeLayout(false);
             this.groupBoxCropSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTop)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTop)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -407,5 +424,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDownWidth;
         private System.Windows.Forms.NumericUpDown numericUpDownLeft;
         private System.Windows.Forms.NumericUpDown numericUpDownTop;
+        private System.Windows.Forms.CheckBox checkBoxHires;
     }
 }
