@@ -181,7 +181,7 @@ namespace EDDiscovery
          * Performs some additional setup such as clearing data and setting the status. */
         private void newSystemAdded(DataGridViewCell cell, SystemClass system)
         {
-            if (cell.Value != system.name)
+            if (!cell.Value.Equals(system.name))            // if cell value is not the same as system name
             {
                 cell.Value = system.name;
             }
