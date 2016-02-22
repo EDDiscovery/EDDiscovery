@@ -1234,6 +1234,7 @@ namespace EDDiscovery
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AboutForm frm = new AboutForm();
+            frm.labelVersion.Text = Text;
             frm.ShowDialog();
         }
     }
