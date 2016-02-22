@@ -422,6 +422,11 @@ namespace EDDiscovery
 
                 var system = (SystemClass)systemCell.Tag;
 
+                if (system == null)
+                {
+                    continue;
+                }
+
                 if (system.HasCoordinate)
                 {
                     calculatedDistanceCell.Value = null;
@@ -505,7 +510,7 @@ namespace EDDiscovery
                 var system = (SystemClass)systemCell.Tag;
 
                 calculatedDistanceCell.Value = null;
-                if (system.HasCoordinate) statusCell.Value = null;
+                if (system != null && system.HasCoordinate) statusCell.Value = null;
             }
         }
 
