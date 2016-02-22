@@ -143,7 +143,6 @@
             this.textBox_Range.ReadOnly = true;
             this.textBox_Range.Size = new System.Drawing.Size(57, 20);
             this.textBox_Range.TabIndex = 2;
-            this.textBox_Range.Text = "15";
             this.textBox_Range.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_Range.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_Range_KeyPress);
             // 
@@ -251,11 +250,6 @@
             this.comboBoxRoutingMetric.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRoutingMetric.Enabled = false;
             this.comboBoxRoutingMetric.FormattingEnabled = true;
-            this.comboBoxRoutingMetric.Items.AddRange(new object[] {
-            "Nearest to Waypoint",
-            "Minimum Deviation from Path",
-            "Nearest to Waypoint+Deviation/2",
-            "AStar Method (Previous System)"});
             this.comboBoxRoutingMetric.Location = new System.Drawing.Point(322, 55);
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
             this.comboBoxRoutingMetric.Size = new System.Drawing.Size(234, 21);
