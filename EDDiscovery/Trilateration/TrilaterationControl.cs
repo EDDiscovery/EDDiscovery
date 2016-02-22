@@ -646,10 +646,12 @@ namespace EDDiscovery
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
                 var cell = dataGridViewDistances[0, i];
-                if (cell.Tag != null && (SystemClass)cell.Tag == system)
+                SystemClass s2 = cell.Tag as SystemClass;
+                if (s2 != null && s2.SearchName.Equals(system.SearchName))
                 {
                     return;
                 }
+                /* Should we fall-back on comparing cell.Value if call.Tag is null? */
             }
 
             var index = dataGridViewDistances.Rows.Add(system.name);
