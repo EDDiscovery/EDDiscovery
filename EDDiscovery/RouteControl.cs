@@ -77,7 +77,10 @@ namespace EDDiscovery
             {
                 DialogResult res = MessageBox.Show("This will result in a large number (" + possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
                 if (res != System.Windows.Forms.DialogResult.Yes)
+                {
+                    this.Invoke(new Action(() => button_Route.Enabled = true));
                     return;
+                }
             }
 
             if ( routemethod == 3 )     // AStar method
