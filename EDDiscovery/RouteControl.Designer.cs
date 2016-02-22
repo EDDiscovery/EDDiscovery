@@ -45,6 +45,11 @@
             this.textBox_ToX = new System.Windows.Forms.TextBox();
             this.textBox_ToY = new System.Windows.Forms.TextBox();
             this.textBox_ToZ = new System.Windows.Forms.TextBox();
+            this.comboBoxRoutingMetric = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox_Distance = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // richTextBox1
@@ -53,10 +58,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(3, 81);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 94);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(849, 332);
-            this.richTextBox1.TabIndex = 13;
+            this.richTextBox1.TabIndex = 11;
             this.richTextBox1.Text = "";
             // 
             // textBox_From
@@ -87,7 +92,7 @@
             this.button_Route.Location = new System.Drawing.Point(741, 0);
             this.button_Route.Name = "button_Route";
             this.button_Route.Size = new System.Drawing.Size(140, 27);
-            this.button_Route.TabIndex = 9;
+            this.button_Route.TabIndex = 10;
             this.button_Route.Text = "Find route";
             this.button_Route.UseVisualStyleBackColor = true;
             this.button_Route.Click += new System.EventHandler(this.button_Route_Click_1);
@@ -133,11 +138,11 @@
             // 
             // textBox_Range
             // 
-            this.textBox_Range.Location = new System.Drawing.Point(620, 6);
+            this.textBox_Range.Location = new System.Drawing.Point(620, 2);
             this.textBox_Range.Name = "textBox_Range";
             this.textBox_Range.ReadOnly = true;
             this.textBox_Range.Size = new System.Drawing.Size(57, 20);
-            this.textBox_Range.TabIndex = 8;
+            this.textBox_Range.TabIndex = 2;
             this.textBox_Range.Text = "15";
             this.textBox_Range.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_Range.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_Range_KeyPress);
@@ -150,7 +155,8 @@
             this.textBoxCurrent.Name = "textBoxCurrent";
             this.textBoxCurrent.ReadOnly = true;
             this.textBoxCurrent.Size = new System.Drawing.Size(125, 20);
-            this.textBoxCurrent.TabIndex = 10;
+            this.textBoxCurrent.TabIndex = 12;
+            this.textBoxCurrent.TabStop = false;
             this.textBoxCurrent.DoubleClick += new System.EventHandler(this.textBoxCurrent_DoubleClick);
             // 
             // label5
@@ -170,7 +176,7 @@
             this.textBox_FromX.Name = "textBox_FromX";
             this.textBox_FromX.ReadOnly = true;
             this.textBox_FromX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromX.TabIndex = 2;
+            this.textBox_FromX.TabIndex = 3;
             this.textBox_FromX.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_XYZ_From_Changed);
             this.textBox_FromX.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
@@ -183,7 +189,7 @@
             this.textBox_FromY.Name = "textBox_FromY";
             this.textBox_FromY.ReadOnly = true;
             this.textBox_FromY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromY.TabIndex = 3;
+            this.textBox_FromY.TabIndex = 4;
             this.textBox_FromY.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromY.TextChanged += new System.EventHandler(this.textBox_XYZ_From_Changed);
             this.textBox_FromY.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
@@ -196,7 +202,7 @@
             this.textBox_FromZ.Name = "textBox_FromZ";
             this.textBox_FromZ.ReadOnly = true;
             this.textBox_FromZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromZ.TabIndex = 4;
+            this.textBox_FromZ.TabIndex = 5;
             this.textBox_FromZ.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromZ.TextChanged += new System.EventHandler(this.textBox_XYZ_From_Changed);
             this.textBox_FromZ.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
@@ -209,7 +215,7 @@
             this.textBox_ToX.Name = "textBox_ToX";
             this.textBox_ToX.ReadOnly = true;
             this.textBox_ToX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToX.TabIndex = 5;
+            this.textBox_ToX.TabIndex = 6;
             this.textBox_ToX.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_ToX.TextChanged += new System.EventHandler(this.textBox_XYZ_To_Changed);
             this.textBox_ToX.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
@@ -222,7 +228,7 @@
             this.textBox_ToY.Name = "textBox_ToY";
             this.textBox_ToY.ReadOnly = true;
             this.textBox_ToY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToY.TabIndex = 6;
+            this.textBox_ToY.TabIndex = 7;
             this.textBox_ToY.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_ToY.TextChanged += new System.EventHandler(this.textBox_XYZ_To_Changed);
             this.textBox_ToY.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
@@ -235,18 +241,74 @@
             this.textBox_ToZ.Name = "textBox_ToZ";
             this.textBox_ToZ.ReadOnly = true;
             this.textBox_ToZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToZ.TabIndex = 7;
+            this.textBox_ToZ.TabIndex = 8;
             this.textBox_ToZ.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_ToZ.TextChanged += new System.EventHandler(this.textBox_XYZ_To_Changed);
             this.textBox_ToZ.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
+            // 
+            // comboBoxRoutingMetric
+            // 
+            this.comboBoxRoutingMetric.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxRoutingMetric.Enabled = false;
+            this.comboBoxRoutingMetric.FormattingEnabled = true;
+            this.comboBoxRoutingMetric.Items.AddRange(new object[] {
+            "Nearest to Waypoint",
+            "Minimum Deviation from Path",
+            "Nearest to Waypoint+Deviation/2",
+            "AStar Method (Previous System)"});
+            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(322, 55);
+            this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
+            this.comboBoxRoutingMetric.Size = new System.Drawing.Size(234, 21);
+            this.comboBoxRoutingMetric.TabIndex = 9;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(240, 58);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(76, 13);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "Routing Metric";
+            // 
+            // textBox_Distance
+            // 
+            this.textBox_Distance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_Distance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_Distance.Location = new System.Drawing.Point(620, 28);
+            this.textBox_Distance.Name = "textBox_Distance";
+            this.textBox_Distance.ReadOnly = true;
+            this.textBox_Distance.Size = new System.Drawing.Size(57, 20);
+            this.textBox_Distance.TabIndex = 8;
+            this.textBox_Distance.TabStop = false;
+            this.textBox_Distance.Click += new System.EventHandler(this.textBox_Clicked);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(565, 35);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(49, 13);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "Distance";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(683, 35);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(14, 13);
+            this.label9.TabIndex = 18;
+            this.label9.Text = "ly";
             // 
             // RouteControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.comboBoxRoutingMetric);
             this.Controls.Add(this.textBoxCurrent);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.textBox_Distance);
             this.Controls.Add(this.textBox_ToZ);
             this.Controls.Add(this.textBox_ToY);
             this.Controls.Add(this.textBox_ToX);
@@ -256,8 +318,11 @@
             this.Controls.Add(this.textBox_From);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button_Route);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label4);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox_To);
             this.Controls.Add(this.textBox_Range);
@@ -287,5 +352,10 @@
         internal System.Windows.Forms.TextBox textBox_ToX;
         internal System.Windows.Forms.TextBox textBox_ToY;
         internal System.Windows.Forms.TextBox textBox_ToZ;
+        private System.Windows.Forms.ComboBox comboBoxRoutingMetric;
+        private System.Windows.Forms.Label label6;
+        internal System.Windows.Forms.TextBox textBox_Distance;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label9;
     }
 }

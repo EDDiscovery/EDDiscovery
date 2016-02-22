@@ -144,7 +144,7 @@ namespace EDDiscovery
                 Text += "         Systems:  " + SystemData.SystemList.Count;
 
                 imageHandler1.StartWatcher();
-                routeControl1.EnableRouteTab(_db.GetSettingString("Route", "")); // now we have systems, we can update this..
+                routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(routeControl1.NewPosition);
@@ -754,7 +754,7 @@ namespace EDDiscovery
             _db.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
             _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
             _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
-            _db.PutSettingString("Route", routeControl1.GetStringSettings());
+            routeControl1.SaveSettings();
             _db.PutSettingBool("EDSMPushOnly", travelHistoryControl1.EDSMPushOnly);
             EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
