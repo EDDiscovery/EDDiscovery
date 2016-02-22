@@ -25,10 +25,27 @@ namespace EDDiscovery
         internal bool changesilence = false;
         private SQLiteDBClass db;
 
+        int metric_nearestwaypoint = 0;     // easiest way to synchronise metric text and index's. 
+        int metric_mindevfrompath = 1;
+        int metric_maximum100ly = 2;
+        int metric_maximum250ly = 3;
+        int metric_maximum500ly = 4;
+        int metric_waypointdev2 = 5;
+        int metric_astar = 6;
+
+        string[] metric_options = { "Nearest to Waypoint", "Minimum Deviation from Path",
+                                    "Nearest to Waypoint with dev<=100ly", "Nearest to Waypoint with dev<=250ly",
+                                    "Nearest to Waypoint with dev<=500ly", "Nearest to Waypoint + Deviation / 2",
+                                    "AStar Method (Previous System)" };
+
         public RouteControl()
         {
             InitializeComponent();
             button_Route.Enabled = false;
+
+            for( int i = 0; i < metric_options.Length; i++ )
+                comboBoxRoutingMetric.Items.Add(metric_options[i]);
+            
         }
 
         private Thread ThreadRoute;
@@ -86,7 +103,7 @@ namespace EDDiscovery
                 }
             }
 
-            if ( routemethod == 3 )     // AStar method
+            if ( routemethod == metric_astar )     // AStar method
             {
                 Route(fromsys, usingcoordsfrom, coordsfrom,            
                       tosys, usingcoordsto, coordsto,
@@ -112,12 +129,14 @@ namespace EDDiscovery
             AppendText("Searching route from " + fromsys + " to " + tosys + Environment.NewLine);
             AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
 
-            AppendText(Environment.NewLine + string.Format("{0,-30}    Depart          Co-Ords:{1,9:0.00},{2,8:0.00},{3,9:0.00}" + Environment.NewLine, fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
+            AppendText(Environment.NewLine + string.Format("{0,-30}    Depart          @ {1,9:0.00},{2,8:0.00},{3,9:0.00}" + Environment.NewLine, fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
 
             Point3D curpos = coordsfrom;
             int jump = 1;
             double actualdistance = 0;
-
+#if DEBUG
+            Console.WriteLine("-------------------------- BEGIN");
+#endif
             do
             {
                 double distancetogo = Point3D.DistanceBetween(coordsto, curpos);      // to go
@@ -152,7 +171,7 @@ namespace EDDiscovery
                     sysname = bestsystem.name;
                 }
 
-                AppendText(string.Format("{0,-30}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00} WP:{6,8:0.00}ly PDev:{7,8:0.00}ly" + Environment.NewLine,
+                AppendText(string.Format("{0,-30}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00} WPd:{6,8:0.00}ly Dev:{7,8:0.00}ly" + Environment.NewLine,
                             sysname, jump, Point3D.DistanceBetween(curpos, nextpos), nextpos.X, nextpos.Y, nextpos.Z, deltafromwaypoint, deviation));
 
                 actualdistance += Point3D.DistanceBetween(curpos, nextpos);
@@ -189,7 +208,7 @@ namespace EDDiscovery
                 if (distancefromwantedx2 <= maxfromwantedx2 &&         // if within the radius of wanted
                         distancefromcurposx2 <= maxfromcurposx2)          // and within the jump range of current
                 {
-                    if (routemethod == 0)
+                    if (routemethod == metric_nearestwaypoint)
                     {
                         if (distancefromwantedx2 < bestmindistance)
                         {
@@ -201,22 +220,28 @@ namespace EDDiscovery
                     { 
                         Point3D interceptpoint = curpos.InterceptPoint(wantedpos, syspos);      // work out where the perp. intercept point is..
                         double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
-                        double metric = 0;
+                        double metric = 1E39;
 
-                        if (routemethod == 1)                             // deviation only..
+                        if (routemethod == metric_mindevfrompath)                             
                             metric = deviation;
-                        else                                              // wanted plus a contribution from deviation
+                        else if (routemethod == metric_maximum100ly)
+                            metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
+                        else if (routemethod == metric_maximum250ly)
+                            metric = (deviation <= 250) ? distancefromwantedx2 : metric;
+                        else if (routemethod == metric_maximum500ly)
+                            metric = (deviation <= 500) ? distancefromwantedx2 : metric;
+                        else
                             metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
 
                         if (metric < bestmindistance)
                         {
                             nearestsystem = syscheck;
-                            bestmindistance = deviation;
-                            // Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0") + " *");
+                            bestmindistance = metric;
+                            //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0") + " *");
                         }
                         else
                         {
-                            // Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0"));
+                            //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0"));
                         }
                     }
                 }
@@ -505,11 +530,14 @@ namespace EDDiscovery
                                 "If you enter galactic co-ordinates, the nearest system will be shown in the upper box." + Environment.NewLine +
                                 "Select the jump distance and hit the route planning button to find a list of waypoints to traverse." + Environment.NewLine + Environment.NewLine +
 
-                                "Select the routing method to try different routes:" + Environment.NewLine +
-                                "* Minimum distance to waypoint (default)" + Environment.NewLine +
-                                "* Minimum deviation from a straight line path" + Environment.NewLine +
-                                "* Minimum distance to waypoint combined with half the path deviation" + Environment.NewLine +
-                                "* Use the AStar algorithm. Does not work for large jumps ranges (>40) or out of the bubble" + Environment.NewLine
+                                "Select the routing method to try different routes from a combination of:" + Environment.NewLine +
+                                "  Waypoint distance - how far the star is from the next target co-ordinate" + Environment.NewLine +
+                                "  Deviation from the straight line path - how far is the star taking you away" + Environment.NewLine +
+                                "  from a straight line journey to the destination" + Environment.NewLine +
+                                "  Options exist to limit the deviation allowed." + Environment.NewLine +
+                                "  A mix of Options exist to limit the deviation allowed and allow combinations of" + Environment.NewLine +
+                                "  waypoint distance and deviation. Experiment to find the best path" + Environment.NewLine + Environment.NewLine +
+                                "Alternately use the AStar algorithm, but this does not work for large jumps ranges (>40) or out of the bubble" + Environment.NewLine + Environment.NewLine
                 ;
 
         }
