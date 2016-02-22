@@ -28,7 +28,6 @@ namespace EDDiscovery
         public RouteControl()
         {
             InitializeComponent();
-            db = new SQLiteDBClass();
             button_Route.Enabled = false;
         }
 
@@ -36,6 +35,10 @@ namespace EDDiscovery
 
         private void button_Route_Click_1(object sender, EventArgs e)
         {
+            if (db ==null)
+                db = new SQLiteDBClass();
+
+
             button_Route.Enabled = false;           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
             richTextBox1.Clear();
 
@@ -455,6 +458,9 @@ namespace EDDiscovery
 
         public void SaveSettings()
         {
+            if (db == null)
+                db = new SQLiteDBClass();
+
             db.PutSettingString("RouteFrom", textBox_From.Text);
             db.PutSettingString("RouteTo", textBox_To.Text);
             db.PutSettingString("RouteRange", textBox_Range.Text);
@@ -471,6 +477,9 @@ namespace EDDiscovery
 
         public void EnableRouteTab()
         {
+            if (db == null)
+                db = new SQLiteDBClass();
+
             textBox_From.Text = db.GetSettingString("RouteFrom", "");
             textBox_To.Text = db.GetSettingString("RouteTo", "");
             textBox_Range.Text = db.GetSettingString("RouteRange", "30");

@@ -199,13 +199,19 @@
     <Compile Include="DB\SQLiteDBClass.cs" />
     <Compile Include="DB\SystemClass.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
+    <Compile Include="Forms\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HTTP\EDMaterializerCom.cs" />
     <Compile Include="HTTP\HttpCom.cs" />
     <Compile Include="HTTP\ResponseData.cs" />
-    <Compile Include="MoveToCommander.cs">
+    <Compile Include="Forms\MoveToCommander.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MoveToCommander.Designer.cs">
+    <Compile Include="Forms\MoveToCommander.Designer.cs">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </Compile>
     <Compile Include="PlanetSystems\AddMaterialNodeControl.cs">
@@ -261,18 +267,18 @@
     <Compile Include="RouteControl.Designer.cs">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="StatsForm.cs">
+    <Compile Include="Forms\StatsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StatsForm.Designer.cs">
+    <Compile Include="Forms\StatsForm.Designer.cs">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SystemData.cs" />
     <Compile Include="SystemPosition.cs" />
-    <Compile Include="SystemViewForm.cs">
+    <Compile Include="Forms\SystemViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SystemViewForm.Designer.cs">
+    <Compile Include="Forms\SystemViewForm.Designer.cs">
       <DependentUpon>SystemViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools.cs" />
@@ -329,10 +335,13 @@
     <EmbeddedResource Include="3DMap\FormMap.resx">
       <DependentUpon>FormMap.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ImageHandler\ImageHandler.resx">
       <DependentUpon>ImageHandler.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MoveToCommander.resx">
+    <EmbeddedResource Include="Forms\MoveToCommander.resx">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PlanetSystems\PlanetsForm.resx">
@@ -360,10 +369,10 @@
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StatsForm.resx">
+    <EmbeddedResource Include="Forms\StatsForm.resx">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SystemViewForm.resx">
+    <EmbeddedResource Include="Forms\SystemViewForm.resx">
       <DependentUpon>SystemViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TravelHistoryControl.resx">

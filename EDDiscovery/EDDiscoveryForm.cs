@@ -3,6 +3,7 @@ using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDDB;
 using EDDiscovery2.EDSM;
+using EDDiscovery2.Forms;
 using EDDiscovery2.PlanetSystems;
 using Newtonsoft.Json.Linq;
 using System;
@@ -1223,6 +1224,17 @@ namespace EDDiscovery
                     vs.Update();
                 }
             }
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutForm frm = new AboutForm();
+            frm.ShowDialog();
         }
     }
 }
