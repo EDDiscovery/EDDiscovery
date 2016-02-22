@@ -14,6 +14,7 @@ using System.Diagnostics;
 using EDDiscovery.DB;
 using System.Threading;
 using EMK.LightGeometry;
+using EDDiscovery2.DB;
 
 namespace EDDiscovery
 {
@@ -22,9 +23,12 @@ namespace EDDiscovery
         Graph G;
         internal TravelHistoryControl travelhistorycontrol1;
         internal bool changesilence = false;
+        private SQLiteDBClass db;
+
         public RouteControl()
         {
             InitializeComponent();
+            db = new SQLiteDBClass();
             button_Route.Enabled = false;
         }
 
@@ -32,7 +36,7 @@ namespace EDDiscovery
 
         private void button_Route_Click_1(object sender, EventArgs e)
         {
-            button_Route.Enabled = false;
+            button_Route.Enabled = false;           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
             richTextBox1.Clear();
 
             ThreadRoute = new System.Threading.Thread(new System.Threading.ThreadStart(RouteMain));
@@ -42,22 +46,52 @@ namespace EDDiscovery
 
         private void RouteMain()
         {
-            float maxrange = float.Parse(textBox_Range.Text);
-            bool usingcoordsfrom = textBox_From.ReadOnly == true;
-            bool usingcoordsto = textBox_To.ReadOnly == true;
-            Point3D coordsfrom, coordsto;
-            GetCoordsFrom(out coordsfrom);                      // will be valid for a system or a co-ords box
-            GetCoordsTo(out coordsto);
-            string fromsys = textBox_From.Text;
-            string tosys = textBox_To.Text;
+            float maxrange = 30;
+            bool usingcoordsfrom = false;
+            bool usingcoordsto=false;
+            Point3D coordsfrom = new Point3D(0, 0, 0);
+            Point3D coordsto = new Point3D(0, 0, 0);
+            string fromsys = "";
+            string tosys = "";
+            int routemethod = 0;
+
+            Invoke( (MethodInvoker)delegate {                       // we are in a thread, should pick info up using a delegate
+                maxrange = float.Parse(textBox_Range.Text);
+                usingcoordsfrom = textBox_From.ReadOnly == true;
+                usingcoordsto = textBox_To.ReadOnly == true;
+                GetCoordsFrom(out coordsfrom);                      // will be valid for a system or a co-ords box
+                GetCoordsTo(out coordsto);
+                fromsys = textBox_From.Text;
+                tosys = textBox_To.Text;
+                routemethod = comboBoxRoutingMetric.SelectedIndex;
+            });
+
             if (usingcoordsfrom)
                 fromsys = "START POINT";
             if (usingcoordsto)
                 tosys = "END POINT";
 
-            RouteIterative(fromsys, usingcoordsfrom, coordsfrom,            // use Route if you want to try the previous version..
-                  tosys, usingcoordsto, coordsto,
-                  maxrange);
+            double possiblejumps = Point3D.DistanceBetween(coordsfrom, coordsto) / maxrange;
+
+            if (possiblejumps > 100)
+            {
+                DialogResult res = MessageBox.Show("This will result in a large number (" + possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
+                if (res != System.Windows.Forms.DialogResult.Yes)
+                    return;
+            }
+
+            if ( routemethod == 3 )     // AStar method
+            {
+                Route(fromsys, usingcoordsfrom, coordsfrom,            
+                      tosys, usingcoordsto, coordsto,
+                      maxrange);
+            }
+            else
+            {
+                RouteIterative(fromsys, usingcoordsfrom, coordsfrom,            
+                      tosys, usingcoordsto, coordsto,
+                      maxrange, routemethod);
+            }
 
             this.Invoke(new Action(() => button_Route.Enabled = true));
         }
@@ -65,18 +99,9 @@ namespace EDDiscovery
 
         private void RouteIterative(string fromsys, bool usingcoordsfrom, Point3D coordsfrom,
                            string tosys, bool usingcoordsto, Point3D coordsto,
-                           float maxrange)
+                           float maxrange,int routemethod)
         {
             double traveldistance = Point3D.DistanceBetween(coordsfrom, coordsto);      // its based on a percentage of the traveldistance
-
-            double possiblejumps = traveldistance / maxrange;
-
-            if ( possiblejumps > 100)
-            {
-                DialogResult res = MessageBox.Show("This will result in a large number (" + possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
-                if (res != System.Windows.Forms.DialogResult.Yes)
-                    return;
-            }
 
             AppendText("Searching route from " + fromsys + " to " + tosys + Environment.NewLine);
             AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
@@ -108,19 +133,21 @@ namespace EDDiscovery
                 SystemClass bestsystem;
                 Point3D bestposition;
 
-                FindBestSystem(curpos, nextpos, maxrange, maxrange-0.5, out bestsystem, out bestposition);
+                FindBestSystem(curpos, nextpos, maxrange, maxrange-0.5, routemethod, out bestsystem, out bestposition);
                 string sysname = "WAYPOINT";
                 double deltafromwaypoint = 0;
+                double deviation = 0;
 
                 if (bestsystem != null)
                 {
                     deltafromwaypoint = Point3D.DistanceBetween(bestposition, nextpos);     // how much in error
+                    deviation = Point3D.DistanceBetween(curpos.InterceptPoint(nextpos, bestposition), bestposition);
                     nextpos = bestposition;
                     sysname = bestsystem.name;
                 }
 
-                AppendText(string.Format("{0,-30}{1,3} Dist:{2,8:0.00}ly Co-Ords:{3,9:0.00},{4,8:0.00},{5,9:0.00} Deviation:{6,8:0.00}ly" + Environment.NewLine,
-                            sysname, jump , Point3D.DistanceBetween(curpos, nextpos), nextpos.X, nextpos.Y, nextpos.Z,deltafromwaypoint));
+                AppendText(string.Format("{0,-30}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00} WP:{6,8:0.00}ly PDev:{7,8:0.00}ly" + Environment.NewLine,
+                            sysname, jump, Point3D.DistanceBetween(curpos, nextpos), nextpos.X, nextpos.Y, nextpos.Z, deltafromwaypoint, deviation));
 
                 actualdistance += Point3D.DistanceBetween(curpos, nextpos);
                 curpos = nextpos;
@@ -129,11 +156,12 @@ namespace EDDiscovery
             } while (true);
 
             actualdistance += Point3D.DistanceBetween(curpos, coordsto);
-            AppendText(string.Format("{0,-30}{1,3} Dist:{2,8:0.00}ly Co-Ords:{3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
-            AppendText(string.Format(Environment.NewLine + "Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance , actualdistance));
+            AppendText(string.Format("{0,-30}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
+            AppendText(string.Format(Environment.NewLine + "Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance, actualdistance));
         }
 
         private void FindBestSystem(Point3D curpos, Point3D wantedpos, double maxfromcurpos , double maxfromwanted, 
+                                    int routemethod,
                                     out SystemClass system, out Point3D position )
         {
             List<SystemClass> systems = SystemData.SystemList;
@@ -142,7 +170,8 @@ namespace EDDiscovery
             double maxfromwantedx2 = maxfromwanted * maxfromwanted;
 
             SystemClass nearestsystem = null;
-            double bestmindistancex2 = 1E39;
+
+            double bestmindistance = 1E39;
 
             for (int ii = 0; ii < systems.Count; ii++)
             {
@@ -151,28 +180,56 @@ namespace EDDiscovery
                 double distancefromwantedx2 = Point3D.DistanceBetweenX2(wantedpos, syspos); // range between the wanted point and this, ^2
                 double distancefromcurposx2 = Point3D.DistanceBetweenX2(curpos, syspos);    // range between the wanted point and this, ^2
 
-                if ( distancefromwantedx2 <= maxfromwantedx2 &&         // if within the radius of wanted
-                     distancefromcurposx2 <= maxfromcurposx2 )          // and within the jump range of current
+                if (distancefromwantedx2 <= maxfromwantedx2 &&         // if within the radius of wanted
+                        distancefromcurposx2 <= maxfromcurposx2)          // and within the jump range of current
                 {
-                    if ( distancefromwantedx2 < bestmindistancex2 )
+                    if (routemethod == 0)
                     {
-                        nearestsystem = syscheck;
-                        bestmindistancex2 = distancefromwantedx2;
+                        if (distancefromwantedx2 < bestmindistance)
+                        {
+                            nearestsystem = syscheck;
+                            bestmindistance = distancefromwantedx2;
+                        }
+                    }
+                    else
+                    { 
+                        Point3D interceptpoint = curpos.InterceptPoint(wantedpos, syspos);      // work out where the perp. intercept point is..
+                        double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
+                        double metric = 0;
+
+                        if (routemethod == 1)                             // deviation only..
+                            metric = deviation;
+                        else                                              // wanted plus a contribution from deviation
+                            metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
+
+                        if (metric < bestmindistance)
+                        {
+                            nearestsystem = syscheck;
+                            bestmindistance = deviation;
+                            // Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0") + " *");
+                        }
+                        else
+                        {
+                            // Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0"));
+                        }
                     }
                 }
             }
 
             system = nearestsystem;
             position = null;
-            if ( system != null )
+            if (system != null)
+            {
+#if DEBUG
+                Console.WriteLine("Best System " + nearestsystem.name);
+#endif
                 position = new Point3D(system.x, system.y, system.z);
+            }
         }
 
 
 
-
-
-
+        // AStar method, for large jumps with large max ranges, or over long distances, it gets bogged down.
 
         private void Route(string fromsys, bool usingcoordsfrom, Point3D coordsfrom,
                            string tosys, bool usingcoordsto, Point3D coordsto,
@@ -184,6 +241,13 @@ namespace EDDiscovery
             double traveldistance = Point3D.DistanceBetween(coordsfrom, coordsto);      // its based on a percentage of the traveldistance
             double wanderpercentage = 0.1;
             double wanderwindow = traveldistance * wanderpercentage;                    // this is the minimum window size
+
+            if (maxrange > 50)
+            {
+                DialogResult res1 = MessageBox.Show("Using a large range will result in a great number of possible paths and the computation may take a very long time" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
+                if (res1 != System.Windows.Forms.DialogResult.Yes)
+                    return;
+            }
 
             if (wanderwindow > 100)                                                     // limit, otherwise we just get too many
                 wanderwindow = 100;
@@ -240,7 +304,7 @@ namespace EDDiscovery
 
             if ( start == null || stop == null )
             {
-                AppendText("Code failed - blame Rob");
+                AppendText("Code failed - Please report failure on the ED Forums, Exploration, EDDiscovery thread");
                 return;
             }
 
@@ -252,10 +316,7 @@ namespace EDDiscovery
             res = AS.SearchPath(start, stop);
             sw.Stop();
 
-            AppendText("Searching route from " + fromsys + " to " + tosys + Environment.NewLine);
             AppendText("Find route Time: " + sw.Elapsed.TotalSeconds.ToString("0.000s") + Environment.NewLine);
-            AppendText("Total distance: " + traveldistance.ToString("0.00") + Environment.NewLine);
-            AppendText("Max jumprange:" + maxrange + Environment.NewLine);
 
             if (res)
             {
@@ -270,16 +331,16 @@ namespace EDDiscovery
                     double dist = Math.Sqrt((A.StartNode.X - A.EndNode.X) * (A.StartNode.X - A.EndNode.X) +
                                             (A.StartNode.Y - A.EndNode.Y) * (A.StartNode.Y - A.EndNode.Y) +
                                             (A.StartNode.Z - A.EndNode.Z) * (A.StartNode.Z - A.EndNode.Z));
-                    AppendText(string.Format("{0,-30}Dist:{1:0.00}ly Co-Ords:{2:0.00},{3:0.00},{4:0.00}" + Environment.NewLine, A.EndNode.System.name, dist, A.EndNode.System.x, A.EndNode.System.y, A.EndNode.System.z));
+                    jumps++;
+
+                    AppendText(string.Format("{0,-30}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, A.EndNode.System.name, jumps, dist, A.EndNode.System.x, A.EndNode.System.y, A.EndNode.System.z));
 
                     totdist += dist;
-                    jumps++;
 
                     Console.WriteLine(A.ToString());
                 }
 
-                AppendText(Environment.NewLine + "Total distance: " + totdist.ToString("0.00") + Environment.NewLine);
-                AppendText("Jumps: " + jumps + Environment.NewLine);
+                AppendText(string.Format(Environment.NewLine + "Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance.ToString("0.00"), totdist.ToString("0.00")));
             }
             else
                 AppendText(Environment.NewLine + "NO Solution found - jump distance is too small or not enough star data between systems" + Environment.NewLine);
@@ -361,7 +422,8 @@ namespace EDDiscovery
 
          private void textBoxCurrent_DoubleClick(object sender, EventArgs e)
         {
-            textBox_From.Text = textBoxCurrent.Text;
+            if ( textBoxCurrent.Text != "" )
+                textBox_From.Text = textBoxCurrent.Text;
         }
 
 
@@ -388,49 +450,56 @@ namespace EDDiscovery
             return s;
         }
 
-        public void SetFromSettings(string settings )
+        public void SaveSettings()
         {
+            db.PutSettingString("RouteFrom", textBox_From.Text);
+            db.PutSettingString("RouteTo", textBox_To.Text);
+            db.PutSettingString("RouteRange", textBox_Range.Text);
+            db.PutSettingString("RouteFromX", textBox_FromX.Text);
+            db.PutSettingString("RouteFromY", textBox_FromY.Text);
+            db.PutSettingString("RouteFromZ", textBox_FromZ.Text);
+            db.PutSettingString("RouteToX", textBox_ToX.Text);
+            db.PutSettingString("RouteToY", textBox_ToY.Text);
+            db.PutSettingString("RouteToZ", textBox_ToZ.Text);
+            db.PutSettingBool("RouteFromState", textBox_From.ReadOnly);
+            db.PutSettingBool("RouteToState", textBox_To.ReadOnly);
+            db.PutSettingInt("RouteMetric", comboBoxRoutingMetric.SelectedIndex);
         }
 
-        public string GetStringSettings()
+        public void EnableRouteTab()
         {
-            return  textBox_From.Text + "@!@" + textBox_To.Text + "@!@" + textBox_Range.Text + "@!@" +
-                    textBox_FromX.Text + "@!@" + textBox_FromY.Text + "@!@" + textBox_FromZ.Text + "@!@" +
-                    textBox_ToX.Text + "@!@" + textBox_ToY.Text + "@!@" + textBox_ToZ.Text + "@!@" +
-                    textBox_From.ReadOnly + "@!@" + textBox_To.ReadOnly;
-        }
-
-        public void EnableRouteTab( string settings )                        // this means system is ready to go..
-        {
-            string[] sep = { "@!@" };
-            string[] slist = settings.Split(sep, StringSplitOptions.None);
-            bool fromstate = false, tostate = false;
-
-            if (slist.Length == 11)
-            {
-                textBox_From.Text = slist[0];
-                textBox_To.Text = slist[1];
-                textBox_Range.Text = slist[2];
-                textBox_FromX.Text = slist[3];
-                textBox_FromY.Text = slist[4];
-                textBox_FromZ.Text = slist[5];
-                textBox_ToX.Text = slist[6];
-                textBox_ToY.Text = slist[7];
-                textBox_ToZ.Text = slist[8];
-                fromstate = slist[9] == "True";
-                tostate = slist[10] == "True";
-            }
+            textBox_From.Text = db.GetSettingString("RouteFrom", "");
+            textBox_To.Text = db.GetSettingString("RouteTo", "");
+            textBox_Range.Text = db.GetSettingString("RouteRange", "30");
+            textBox_FromX.Text = db.GetSettingString("RouteFromX", "");
+            textBox_FromY.Text = db.GetSettingString("RouteFromY", "");
+            textBox_FromZ.Text = db.GetSettingString("RouteFromZ", "");
+            textBox_ToX.Text = db.GetSettingString("RouteToX", "");
+            textBox_ToY.Text = db.GetSettingString("RouteToY", "");
+            textBox_ToZ.Text = db.GetSettingString("RouteToZ", "");
+            bool fromstate = db.GetSettingBool("RouteFromState", false);
+            bool tostate = db.GetSettingBool("RouteToState", false);
+            comboBoxRoutingMetric.SelectedIndex = db.GetSettingInt("RouteMetric", 0);
 
             SelectToMaster(tostate);
             UpdateTo(true);
             SelectFromMaster(fromstate);
             UpdateFrom(true);
             textBox_Range.ReadOnly = false;
+            comboBoxRoutingMetric.Enabled = true;
             richTextBox1.Text = "In either the From or To box areas, either enter a system name in the upper text Box," + Environment.NewLine +
                                 "or enter a set of galactic co-ordinates in the bottom three boxes (xyz)." + Environment.NewLine + Environment.NewLine +
                                 "If you enter a system, its co-ordinates will be shown in the lower three boxes." + Environment.NewLine +
                                 "If you enter galactic co-ordinates, the nearest system will be shown in the upper box." + Environment.NewLine +
-                                "Select the jump distance and hit the route planning button to find a list of waypoints to traverse.";
+                                "Select the jump distance and hit the route planning button to find a list of waypoints to traverse." + Environment.NewLine + Environment.NewLine +
+
+                                "Select the routing method to try different routes:" + Environment.NewLine +
+                                "* Minimum distance to waypoint (default)" + Environment.NewLine +
+                                "* Minimum deviation from a straight line path" + Environment.NewLine +
+                                "* Minimum distance to waypoint combined with half the path deviation" + Environment.NewLine +
+                                "* Use the AStar algorithm. Does not work for large jumps ranges (>40) or out of the bubble" + Environment.NewLine
+                ;
+
         }
 
         private void textBox_Clicked(object sender, EventArgs e)
@@ -538,15 +607,28 @@ namespace EDDiscovery
                 textBox_From.Text = res;
             }
 
+            UpdateDistance();
+
             changesilence = false;
             button_Route.Enabled = IsValid();
+        }
+
+        private void UpdateDistance()
+        {
+            Point3D from, to;
+            string dist = "";
+            if (GetCoordsFrom(out from) && GetCoordsTo(out to))
+            {
+                dist = Point3D.DistanceBetween(from, to).ToString("0.00");
+            }
+
+            textBox_Distance.Text = dist;
         }
 
         private void textBox_From_Enter(object sender, EventArgs e)
         {
             SelectFromMaster(false);                              // enable system box
             UpdateFrom(true);
-            ((System.Windows.Forms.TextBox)sender).Select(0, 1000); // clicking highlights everything
         }
 
         private void textBox_FromXYZ_Enter(object sender, EventArgs e)
@@ -618,6 +700,8 @@ namespace EDDiscovery
                 textBox_To.Text = res;
             }
 
+            UpdateDistance();
+
             changesilence = false;
             button_Route.Enabled = IsValid();
         }
@@ -626,7 +710,6 @@ namespace EDDiscovery
         {
             SelectToMaster(false);                              // enable system box
             UpdateTo(true);                                  // update xyz, and if valid, update name
-            ((System.Windows.Forms.TextBox)sender).Select(0, 1000); // clicking highlights everything
         }
 
         private void textBox_ToXYZ_Enter(object sender, EventArgs e)
@@ -709,8 +792,5 @@ namespace EDDiscovery
 
             return ja;
         }
-
-
-
     }
 }

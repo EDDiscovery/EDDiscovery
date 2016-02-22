@@ -87,6 +87,28 @@ namespace EMK.LightGeometry
             return (P1.X - P2.X) * (P1.X - P2.X) + (P1.Y - P2.Y) * (P1.Y - P2.Y) + (P1.Z - P2.Z) * (P1.Z - P2.Z);
         }
 
+        public double DOTP( Point3D other )
+        {
+            return this.X * other.X + this.Y * other.Y + this.Z * other.Z;
+        }
+                                                                
+        public double InterceptPercent( Point3D x2, Point3D x0) // % along the path THIS(x1)->X2 that a vector from X0 perpendicular meets it      
+        {
+            double dotp = (this.X - x0.X) * (x2.X - this.X) + (this.Y - x0.Y) * (x2.Y - this.Y) + (this.Z - x0.Z) * (x2.Z - this.Z);
+            double mag2 = ((x2.X - this.X) * (x2.X - this.X) + (x2.Y - this.Y) * (x2.Y - this.Y) + (x2.Z - this.Z) * (x2.Z - this.Z));
+            return -dotp/mag2;              // its -((x1-x0) dotp (x2-x1) / |x2-x1|^2)
+        }
+
+        public Point3D PointAlongPath( Point3D x1 , double i ) // i = 0 to 1.0, on the path. Negative before the path, >1 after the path
+        {
+            return new Point3D(this.X + (x1.X - this.X) * i, this.Y + (x1.Y - this.Y) * i, this.Z + (x1.Z - this.Z) * i);
+        }
+
+        public Point3D InterceptPoint( Point3D x2, Point3D x0 )     // from this(x1) to X2, given a point x0, where do the perpendiclar intercept?
+        {
+            return PointAlongPath(x2, InterceptPercent(x2, x0));
+        }
+
         /// <summary>
         /// Returns the projection of a point on the line defined with two other points.
         /// When the projection is out of the segment, then the closest extremity is returned.
