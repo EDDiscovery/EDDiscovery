@@ -161,7 +161,7 @@ namespace EDDiscovery2.PlanetSystems
         {
             EDPlanet obj = new EDPlanet();
             obj.system = textBoxSystemName.Text;
-            obj.commander = edForm.CommanderName;
+            obj.updater = edForm.CommanderName;
             edObjects.Add(obj);
             CurrentItem = edObjects.Count - 1;
             UpDateListView();
@@ -490,7 +490,7 @@ namespace EDDiscovery2.PlanetSystems
         {
             EDStar obj = new EDStar();
             obj.system = textBoxSystemName.Text;
-            obj.commander = edForm.CommanderName;
+            obj.updater = edForm.CommanderName;
             edObjects.Add(obj);
             CurrentItem = edObjects.Count - 1;
             UpDateListView();

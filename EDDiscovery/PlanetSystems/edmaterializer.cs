@@ -65,10 +65,10 @@ namespace EDDiscovery2.PlanetSystems
         public List<EDStar> GetAllStars(string system)
         {
             List<EDStar> listObjects = new List<EDStar>();
-            string query = "api/v1/star_surveys";
+            string query = "api/v2/stars";
 
             if (!String.IsNullOrEmpty(system))
-                query = query + "/?q[system]=" + HttpUtility.UrlEncode(system);
+                query = query + "?system=" + HttpUtility.UrlEncode(system);
 
             var response = RequestGet(query);
             var json = response.Body;
@@ -82,7 +82,7 @@ namespace EDDiscovery2.PlanetSystems
                 return listObjects;
 
 
-            jArray = (JArray)jObject["star_surveys"];
+            jArray = (JArray)jObject["stars"];
 
 
             foreach (JObject jo in jArray)
@@ -104,7 +104,7 @@ namespace EDDiscovery2.PlanetSystems
             dynamic jo = new JObject();
 
             jo.system = edobj.system;
-            jo.commander = edobj.commander;
+            jo.commander = edobj.updater;
             jo.world = edobj.objectName;
             jo.world_type = edobj.Description;
             jo.terraformable = edobj.terraformable;
@@ -206,28 +206,29 @@ namespace EDDiscovery2.PlanetSystems
             dynamic jo = new JObject();
 
             jo.system = edobj.system;
-            jo.commander = edobj.commander;
+            jo.updater = edobj.updater;
             jo.star = edobj.objectName;
-            jo.star_type = edobj.Description;
-            jo.subclass = edobj.subclass;
+            jo.spectral_class = edobj.Description;
+            jo.spectral_subclass = edobj.subclass;
             jo.solar_mass = edobj.mass;
             jo.solar_radius = edobj.radius;
+            jo.surface_temp = edobj.surfaceTemp;
             jo.star_age = edobj.star_age;
             jo.orbit_period = edobj.orbitPeriod;
             jo.arrival_point = edobj.arrivalPoint;
             jo.luminosity = edobj.luminosity;
-            jo.note = edobj.notes;
-            jo.surface_temp = edobj.surfaceTemp;
+            jo.notes = edobj.notes;
+            jo.image_url = edobj.image_url;
 
-            JObject joPost = new JObject(new JProperty("star_survey", jo));
+            JObject joPost = new JObject(new JProperty("stars", jo));
 
             if (edobj.id == 0)
             {
-                var response = RequestSecurePost(joPost.ToString(), "api/v1/star_surveys");
+                var response = RequestSecurePost(joPost.ToString(), "api/v2/stars");
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jo2 = (JObject)JObject.Parse(response.Body);
-                    JObject obj = (JObject)jo2["star_survey"];
+                    JObject obj = (JObject)jo2["stars"];
                     edobj.id = obj["id"].Value<int>();
                 }
                 else if ((int)response.StatusCode == 422)
@@ -237,22 +238,22 @@ namespace EDDiscovery2.PlanetSystems
                     // this at some point
                     // - Greg
 
-                    var queryParam = $"q[system]={jo.system}&q[star]={jo.star}&q[commander]={jo.commander}";
-                    response = RequestGet($"api/v1/star_surveys?{queryParam}");
+                    var queryParam = $"system={jo.system}&star={jo.star}&updater={jo.updater}";
+                    response = RequestGet($"api/v2/stars?{queryParam}");
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         JObject jo2 = (JObject)JObject.Parse(response.Body);
-                        JObject obj = (JObject)jo2["star_surveys"][0];
+                        JObject obj = (JObject)jo2["stars"][0];
                         edobj.id = obj["id"].Value<int>();
 
-                        response = RequestSecurePatch(joPost.ToString(), "api/v1/star_surveys/" + edobj.id.ToString());
+                        response = RequestSecurePatch(joPost.ToString(), "api/v2/stars/" + edobj.id.ToString());
                     }
 
                 }
             }
             else
             {
-                var response = RequestSecurePatch(joPost.ToString(), "api/v1/star_surveys/" + edobj.id.ToString());
+                var response = RequestSecurePatch(joPost.ToString(), "api/v2/stars/" + edobj.id.ToString());
             }
             return true;
 

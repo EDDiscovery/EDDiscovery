@@ -801,7 +801,7 @@ namespace EDDiscovery
 
             EDPlanet obj = new EDPlanet();
 
-            obj.commander = "Test";
+            obj.updater = "Test";
             obj.system = "Fine Ring Sector JH-V C2-4";
             obj.objectName = "A 3";
             obj.ObjectType = ObjectTypesEnum.HighMetalContent;
