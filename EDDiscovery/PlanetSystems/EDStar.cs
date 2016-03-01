@@ -24,22 +24,24 @@ namespace EDDiscovery2.PlanetSystems
             id = jo["id"].Value<int>();
             system = jo["system"].Value<string>();
             objectName = jo["star"].Value<string>();
-            commander = jo["commander"].Value<string>();
+            updater = jo["updater"].Value<string>();
 
-            ObjectType = String2ObjectType(jo["star_type"].Value<string>());
+            ObjectType = String2ObjectType(jo["spectral_class"].Value<string>());
             radius = GetFloat(jo["solar_radius"]);
             mass = GetFloat(jo["solar_mass"]);
             surfaceTemp = GetInt(jo["surface_temp"]);
             star_age = GetFloat(jo["star_age"]);
             orbitPeriod = GetFloat(jo["orbit_period"]);
             arrivalPoint = GetFloat(jo["arrival_point"]);
-            notes = GetString(jo["note"]);
-            subclass = GetString(jo["subclass"]);
-            luminosity = GetString(jo["luminosity"]); 
+            notes = GetString(jo["notes"]);
+            subclass = GetString(jo["spectral_subclass"]);
+            luminosity = GetString(jo["luminosity"]);
+            image_url = GetString(jo["image_url"]);
 
 
             return true;
         }
+
 
 
     }

@@ -89,44 +89,7 @@ namespace EDDiscovery2.PlanetSystems
                         return "Class V";
                     case ObjectTypesEnum.WaterGiant:
                         return "Water Giant";
-                    case ObjectTypesEnum.Unknown_Star:
-                        return "Star unknown";
-                    case ObjectTypesEnum.Star_O:
-                        return "O";
-                    case ObjectTypesEnum.Star_B:
-                        return "B";
-                    case ObjectTypesEnum.Star_A:
-                        return "A";
-                    case ObjectTypesEnum.Star_F:
-                        return "F";
-                    case ObjectTypesEnum.Star_G:
-                        return "G";
-                    case ObjectTypesEnum.Star_K:
-                        return "K";
-                    case ObjectTypesEnum.Star_L:
-                        return "L";
-                    case ObjectTypesEnum.Star_T:
-                        return "T";
-                    case ObjectTypesEnum.Star_Y:
-                        return "Y";
-                    //           case ObjectTypesEnum.Star_Proto:
-                    //               return "Proto";
-                    case ObjectTypesEnum.Star_W:
-                        return "W";
-                    case ObjectTypesEnum.Star_C:
-                        return "C";
-                    case ObjectTypesEnum.Star_S:
-                        return "S";
-                    case ObjectTypesEnum.Star_TTauri:
-                        return "T Tauri";
-                    //         case ObjectTypesEnum.Star_WhiteDwarf:
-                    //             return "DA";
-                    case ObjectTypesEnum.Star_AeBe:
-                        return "AeBe";
-                    case ObjectTypesEnum.BlackHole:
-                        return "Black hole";
-
-                    default:
+            default:
                         return ObjectType.ToString();
                 }
             }
@@ -154,7 +117,7 @@ namespace EDDiscovery2.PlanetSystems
             id = jo["id"].Value<int>();
             system = jo["system"].Value<string>();
             objectName = jo["world"].Value<string>();
-            commander = jo["commander"].Value<string>();
+            updater = jo["commander"].Value<string>();
 
             ObjectType = String2ObjectType(jo["world_type"].Value<string>());
             terraformable = GetString(jo["terraformable"]);
