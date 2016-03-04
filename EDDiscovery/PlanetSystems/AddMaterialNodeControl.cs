@@ -38,7 +38,7 @@ namespace EDDiscovery2
 
         private void GetData()
         {
-           List<EDWorld> objs = edmat.GetAllPlanets(currentSystem);
+           List<EDWorld> objs = edmat.GetAllWorlds(currentSystem);
         }
 
         private Dictionary<int, string> dictComboShortNames = new Dictionary<int, string>();

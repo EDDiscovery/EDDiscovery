@@ -117,34 +117,38 @@ namespace EDDiscovery2.PlanetSystems
             id = jo["id"].Value<int>();
             system = jo["system"].Value<string>();
             objectName = jo["world"].Value<string>();
-            updater = jo["commander"].Value<string>();
+            updater = jo["updater"].Value<string>();
 
             ObjectType = String2ObjectType(jo["world_type"].Value<string>());
-            terraformable = GetString(jo["terraformable"]);
-            gravity = GetFloat(jo["gravity"]);
-            terrain_difficulty = GetInt(jo["terrain_difficulty"]);
-            notes = GetString(jo["notes"]);
 
-
-            radius = GetFloat(jo["radius"]);
-            arrivalPoint = GetFloat(jo["arrival_point"]);
-            atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(jo["atmosphere_type"].Value<string>());
-            vulcanism = (VulcanismEnum)VulcanismStr2Enum(jo["vulcanism_type"].Value<string>());
-            Reserve = GetString(jo["reserve"]);
             mass = GetFloat(jo["mass"]);
+            radius = GetFloat(jo["radius"]);
+            gravity = GetFloat(jo["gravity"]);
             surfaceTemp = GetInt(jo["surface_temp"]);
             surfacePressure = GetFloat(jo["surface_pressure"]);
+
             orbitPeriod = GetFloat(jo["orbit_period"]);
             rotationPeriod = GetFloat(jo["rotation_period"]);
             semiMajorAxis = GetFloat(jo["semi_major_axis"]);
+
+            terrain_difficulty = GetInt(jo["terrain_difficulty"]);
+            vulcanism = (VulcanismEnum)VulcanismStr2Enum(jo["vulcanism_type"].Value<string>());
             rockPct = GetFloat(jo["rock_pct"]);
             metalPct = GetFloat(jo["metal_pct"]);
             icePct = GetFloat(jo["ice_pct"]);
+            Reserve = GetString(jo["reserve"]);
 
-            foreach (var mat in mlist)
-            {
-                materials[mat.material] = GetBool(jo[mat.Name.ToLower()]);
-            }
+            arrivalPoint = GetFloat(jo["arrival_point"]);
+            terraformable = GetString(jo["terraformable"]);
+            notes = GetString(jo["notes"]);
+            atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(jo["atmosphere_type"].Value<string>());
+            image_url = GetString(jo["image_url"]);
+
+
+            //foreach (var mat in mlist)
+            //{
+            //    materials[mat.material] = GetBool(jo[mat.Name.ToLower()]);
+            //}
             return true;
         }
 
