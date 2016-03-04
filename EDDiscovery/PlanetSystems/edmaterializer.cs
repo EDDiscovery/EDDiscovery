@@ -29,10 +29,10 @@ namespace EDDiscovery2.PlanetSystems
         public List<EDPlanet>GetAllPlanets(string system)
         {
             List<EDPlanet> listObjects = new List<EDPlanet>();
-            string query = "api/v1/world_surveys";
+            string query = "api/v2/world_surveys";
 
             if (!String.IsNullOrEmpty(system))
-                query = query + "/?q[system]="+HttpUtility.UrlEncode(system);
+                query = query + "/system="+HttpUtility.UrlEncode(system);
 
             var response = RequestGet(query);
             var json = response.Body;
@@ -166,11 +166,11 @@ namespace EDDiscovery2.PlanetSystems
 
             if (edobj.id == 0)
             {
-                var response = RequestSecurePost(joPost.ToString(), "api/v1/world_surveys");
+                var response = RequestSecurePost(joPost.ToString(), "api/v2/world_surveys");
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jo2 = (JObject)JObject.Parse(response.Body);
-                    JObject obj = (JObject)jo2["world_survey"];
+                    JObject obj = (JObject)jo2["world_surveys"];
                     edobj.id = obj["id"].Value<int>();
                 }
                 else if ((int)response.StatusCode == 422)
@@ -180,22 +180,22 @@ namespace EDDiscovery2.PlanetSystems
                     // this at some point
                     // - Greg
 
-                    var queryParam = $"q[system]={jo.system}&q[world]={jo.world}&q[commander]={jo.commander}";
-                    response = RequestGet($"api/v1/world_surveys?{queryParam}");
+                    var queryParam = $"system={jo.system}&world={jo.world}&commander={jo.commander}";
+                    response = RequestGet($"api/v2/world_surveys?{queryParam}");
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         JObject jo2 = (JObject)JObject.Parse(response.Body);
                         JObject obj = (JObject)jo2["world_surveys"][0];
                         edobj.id = obj["id"].Value<int>();
 
-                        response = RequestSecurePatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
+                        response = RequestSecurePatch(joPost.ToString(), "api/v2/world_surveys/" + edobj.id.ToString());
                     }
 
                 }
             }
             else
             {
-                var response = RequestSecurePatch(joPost.ToString(), "api/v1/world_surveys/" + edobj.id.ToString());
+                var response = RequestSecurePatch(joPost.ToString(), "api/v2/world_surveys/" + edobj.id.ToString());
             }
             return true;
         }
@@ -264,7 +264,7 @@ namespace EDDiscovery2.PlanetSystems
 
         public bool DeletePlanetID(int id)
         {
-            var response = RequestDelete("api/v1/world_surveys/"+id.ToString());
+            var response = RequestDelete("api/v2/world_surveys/"+id.ToString());
             
             return true;
         }
