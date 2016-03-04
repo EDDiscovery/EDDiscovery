@@ -95,7 +95,7 @@ namespace EDDiscovery2.PlanetSystems
 
             dictComboPlanetDesc.Clear();
             dictComboStarDesc.Clear();
-            foreach (EDPlanet obj in EDPlanet.listObjectTypes)
+            foreach (EDWorld obj in EDWorld.listObjectTypes)
             {
                 if (obj.IsPlanet)
                 {
@@ -138,7 +138,7 @@ namespace EDDiscovery2.PlanetSystems
 
         private void SetSystem(string systemname)
         {
-            List<EDPlanet> planets;
+            List<EDWorld> planets;
             List<EDStar> stars;
             if (systemname == null)
                 return;
@@ -159,7 +159,7 @@ namespace EDDiscovery2.PlanetSystems
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
-            EDPlanet obj = new EDPlanet();
+            EDWorld obj = new EDWorld();
             obj.system = textBoxSystemName.Text;
             obj.updater = edForm.CommanderName;
             edObjects.Add(obj);
@@ -174,9 +174,9 @@ namespace EDDiscovery2.PlanetSystems
 
             foreach (var ob in edObjects)
             {
-                if (ob is EDPlanet)
+                if (ob is EDWorld)
                 {
-                    EDPlanet planet = (EDPlanet)ob;
+                    EDWorld planet = (EDWorld)ob;
                     ListViewItem lvi;
                     lvi = listView1.Items.Add(planet.objectName);
                     lvi.SubItems.Add(planet.Description);
@@ -235,9 +235,9 @@ namespace EDDiscovery2.PlanetSystems
             {
                 lvi = listView1.SelectedItems[0];
 
-                if (currentObj is EDPlanet)
+                if (currentObj is EDWorld)
                 {
-                    EDPlanet planet = (EDPlanet)currentObj;
+                    EDWorld planet = (EDWorld)currentObj;
                     lvi.SubItems[0].Text = planet.objectName;
                     lvi.SubItems[1].Text = planet.Description;
                     lvi.SubItems[2].Text = planet.gravity.ToString("0.00");
@@ -272,8 +272,8 @@ namespace EDDiscovery2.PlanetSystems
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
             UpdateEDObject(currentObj);
-            if (currentObj is EDPlanet)
-                edmat.StorePlanet((EDPlanet)currentObj);
+            if (currentObj is EDWorld)
+                edmat.StorePlanet((EDWorld)currentObj);
             if (currentObj is EDStar)
                 edmat.StoreStar((EDStar)currentObj);
 
@@ -314,9 +314,9 @@ namespace EDDiscovery2.PlanetSystems
             }
 
 
-            if (currentObj is EDPlanet)
+            if (currentObj is EDWorld)
             {
-                EDPlanet planet = (EDPlanet)currentObj;
+                EDWorld planet = (EDWorld)currentObj;
 
                 textBoxName.Text = currentObj.objectName;
 
@@ -362,7 +362,7 @@ namespace EDDiscovery2.PlanetSystems
             }
         }
 
-        private void SetMaterials(EDPlanet obj, CheckedListBox box)
+        private void SetMaterials(EDWorld obj, CheckedListBox box)
         {
             for (int i = 0; i < box.Items.Count; i++)
             {
@@ -431,9 +431,9 @@ namespace EDDiscovery2.PlanetSystems
 
         private void UpdateEDObject(EDObject obj)
         {
-            if (obj is EDPlanet)
+            if (obj is EDWorld)
             {
-                EDPlanet planet = (EDPlanet)obj;
+                EDWorld planet = (EDWorld)obj;
                 planet.objectName = textBoxName.Text;
                 planet.ObjectType = obj.String2ObjectType(comboBoxType.Text);
 
@@ -476,7 +476,7 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        private void GetMaterials(ref EDPlanet obj, CheckedListBox box)
+        private void GetMaterials(ref EDWorld obj, CheckedListBox box)
         {
             for (int i = 0; i < box.Items.Count; i++)
             {

@@ -38,7 +38,7 @@ namespace EDDiscovery2
 
         private void GetData()
         {
-           List<EDPlanet> objs = edmat.GetAllPlanets(currentSystem);
+           List<EDWorld> objs = edmat.GetAllPlanets(currentSystem);
         }
 
         private Dictionary<int, string> dictComboShortNames = new Dictionary<int, string>();
@@ -96,7 +96,7 @@ namespace EDDiscovery2
             cmbCell = (DataGridViewComboBoxCell)newRow.Cells[3];
             cmbCell.Value = "Unknown"; 
 
-            var edobj = new EDPlanet();
+            var edobj = new EDWorld();
             edobj.system = currentSystem;
             dataGridViewPlanet.Rows[nr].Tag = edobj;
            
@@ -111,7 +111,7 @@ namespace EDDiscovery2
         {
             foreach (DataGridViewRow row in dataGridViewPlanet.Rows)
             {
-                EDPlanet edobj = (EDPlanet)row.Tag;
+                EDWorld edobj = (EDWorld)row.Tag;
 
 
                 edobj.objectName = row.Cells[0].Value.ToString();
