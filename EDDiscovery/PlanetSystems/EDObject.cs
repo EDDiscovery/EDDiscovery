@@ -207,7 +207,7 @@ public enum AtmosphereEnum
 
         public ObjectTypesEnum String2ObjectType(string v)
         {
-            EDPlanet ed = new EDPlanet();
+            EDWorld ed = new EDWorld();
             if (v == null)
                 return ObjectTypesEnum.UnknownObject;
 

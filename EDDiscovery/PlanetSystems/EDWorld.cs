@@ -7,7 +7,7 @@ using System.Text;
 namespace EDDiscovery2.PlanetSystems
 {
 
-    public class EDPlanet : EDObject
+    public class EDWorld : EDObject
     {
         public string terraformable;
         public float gravity;
@@ -25,13 +25,13 @@ namespace EDDiscovery2.PlanetSystems
         public float icePct;
 
         static private List<Material> mlist = Material.GetMaterialList;
-        static public List<EDPlanet> listObjectTypes = EDPlanet.GetEDObjList;
+        static public List<EDWorld> listObjectTypes = EDWorld.GetEDObjList;
         
 
         static private Dictionary<string, ObjectTypesEnum> objectAliases = ObjectsType.GetAllTypesAlias();
 
 
-        public EDPlanet()
+        public EDWorld()
         {
             materials = new Dictionary<MaterialEnum, bool>();
 
@@ -95,14 +95,14 @@ namespace EDDiscovery2.PlanetSystems
             }
         }
 
-        public static List<EDPlanet> GetEDObjList
+        public static List<EDWorld> GetEDObjList
         {
             get
             {
-                List<EDPlanet> list = new List<EDPlanet>();
+                List<EDWorld> list = new List<EDWorld>();
                 foreach (ObjectTypesEnum objtype in Enum.GetValues(typeof(ObjectTypesEnum)))
                 {
-                    EDPlanet obj = new EDPlanet();
+                    EDWorld obj = new EDWorld();
                     obj.ObjectType = objtype;
                     list.Add(obj);
                 }
@@ -153,7 +153,7 @@ namespace EDDiscovery2.PlanetSystems
 
         public ObjectTypesEnum ShortName2ObjectType(string v)
         {
-            EDPlanet ed = new EDPlanet();
+            EDWorld ed = new EDWorld();
 
             foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
             {

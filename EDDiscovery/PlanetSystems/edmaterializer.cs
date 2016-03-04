@@ -26,9 +26,9 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        public List<EDPlanet>GetAllPlanets(string system)
+        public List<EDWorld>GetAllPlanets(string system)
         {
-            List<EDPlanet> listObjects = new List<EDPlanet>();
+            List<EDWorld> listObjects = new List<EDWorld>();
             string query = "api/v2/world_surveys";
 
             if (!String.IsNullOrEmpty(system))
@@ -51,7 +51,7 @@ namespace EDDiscovery2.PlanetSystems
 
             foreach (JObject jo in jArray)
             {
-                EDPlanet obj = new EDPlanet();
+                EDWorld obj = new EDWorld();
 
                 if (obj.ParseJson(jo))
                     listObjects.Add(obj);
@@ -98,7 +98,7 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        public bool StorePlanet(EDPlanet edobj)
+        public bool StorePlanet(EDWorld edobj)
         {
             
             dynamic jo = new JObject();
@@ -269,7 +269,7 @@ namespace EDDiscovery2.PlanetSystems
             return true;
         }
 
-        public bool Delete(EDPlanet obj)
+        public bool Delete(EDWorld obj)
         {
             if (obj.id > 0)
                 return DeletePlanetID(obj.id);
