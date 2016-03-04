@@ -147,7 +147,7 @@ namespace EDDiscovery2.PlanetSystems
 
             edObjects.Clear();
 
-            planets = edmat.GetAllPlanets(textBoxSystemName.Text);
+            planets = edmat.GetAllWorlds(textBoxSystemName.Text);
             stars = edmat.GetAllStars(textBoxSystemName.Text);
 
             edObjects.AddRange(planets);
@@ -324,9 +324,25 @@ namespace EDDiscovery2.PlanetSystems
                 var nr = (from str in dictComboPlanetDesc where str.Value == planet.Description select str.Key).FirstOrDefault<int>();
                 comboBoxType.SelectedIndex = nr;
 
-                textBoxGravity.Text = planet.gravity.ToString("0.00");
+                textBoxMass.Text = planet.mass.ToString("0.0000");
                 textBoxRadius.Text = planet.radius.ToString("0");
+
+                if (planet.gravity == 0)
+                    planet.gravity = (float)CalcG(planet.mass, planet.radius);
+
+                textBoxGravity.Text = planet.gravity.ToString("0.00");
+                textBoxSurfaceTemp.Text = planet.surfaceTemp.ToString("0");
+                textBoxPreasure.Text = planet.surfacePressure.ToString("0.00");
+
                 textBoxArrivalPoint.Text = planet.arrivalPoint.ToString("0");
+                textBoxOrbitPeriod.Text = planet.orbitPeriod.ToString("0.0");
+                textBoxRotationPeriod.Text = planet.rotationPeriod.ToString("0.0");
+                textBoxSemiMajorAxis.Text = planet.semiMajorAxis.ToString("0.00");
+                textBoxArrivalPoint.Text = planet.arrivalPoint.ToString("0.0");
+                textBoxRock.Text = planet.rockPct.ToString("0.0");
+                textBoxMetal.Text = planet.metalPct.ToString("0.0");
+                textBoxIce.Text = planet.icePct.ToString("0.0");
+
 
                 try
                 {
@@ -337,10 +353,10 @@ namespace EDDiscovery2.PlanetSystems
                 {
 
                 }
-                SetMaterials(planet, checkedListBox1);
-                SetMaterials(planet, checkedListBox2);
-                SetMaterials(planet, checkedListBox3);
-                SetMaterials(planet, checkedListBox4);
+                //SetMaterials(planet, checkedListBox1);
+                //SetMaterials(planet, checkedListBox2);
+                //SetMaterials(planet, checkedListBox3);
+                //SetMaterials(planet, checkedListBox4);
             }
             if (currentObj is EDStar)
             {
@@ -445,10 +461,10 @@ namespace EDDiscovery2.PlanetSystems
                 planet.atmosphere = planet.AtmosphereStr2Enum(comboBoxAtmosphere.Text);
                 planet.vulcanism = planet.VulcanismStr2Enum(comboBoxVulcanism.Text);
 
-                GetMaterials(ref planet, checkedListBox1);
-                GetMaterials(ref planet, checkedListBox2);
-                GetMaterials(ref planet, checkedListBox3);
-                GetMaterials(ref planet, checkedListBox4);
+                //GetMaterials(ref planet, checkedListBox1);
+                //GetMaterials(ref planet, checkedListBox2);
+                //GetMaterials(ref planet, checkedListBox3);
+                //GetMaterials(ref planet, checkedListBox4);
             }
 
             if (obj is EDStar)
@@ -495,6 +511,19 @@ namespace EDDiscovery2.PlanetSystems
             CurrentItem = edObjects.Count - 1;
             UpDateListView();
         }
+
+        private void panelPlanets_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private double CalcG(double mass, double radius)
+        {
+            if (mass == 0 || radius == 0)
+                return 0;
+            return mass * 5.9722E+24 * 6.67E-11 / ((radius * 1000)* (radius * 1000)) / 9.80665;
+        }
+
     }
 
 }

@@ -796,10 +796,10 @@ namespace EDDiscovery
 
             EdMaterializer mat = new EdMaterializer();
 
-            mat.GetAllPlanets(null);
+            mat.GetAllWorlds(null);
 
 
-            EDPlanet obj = new EDPlanet();
+            EDWorld obj = new EDWorld();
 
             obj.updater = "Test";
             obj.system = "Fine Ring Sector JH-V C2-4";
