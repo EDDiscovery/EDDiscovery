@@ -252,7 +252,7 @@ namespace EDDiscovery2.PlanetSystems
             jo.notes = edobj.notes;
             jo.image_url = edobj.image_url;
 
-            JObject joPost = new JObject(new JProperty("stars", jo));
+            JObject joPost = new JObject(new JProperty("star", jo));
 
             if (edobj.id == 0)
             {
