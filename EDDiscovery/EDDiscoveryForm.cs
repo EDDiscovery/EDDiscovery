@@ -210,7 +210,7 @@ namespace EDDiscovery
                     DownloadMapFile("DW3.json");
                     DownloadMapFile("DW4.jpg");
                     DownloadMapFile("DW4.json");
-
+                    DeleteMapFile("DW4.png");
 
                     //for (int ii = -10; ii <= 60; ii += 10)
                     //{
@@ -246,6 +246,24 @@ namespace EDDiscovery
             else
                 return false;
         }
+
+        private void DeleteMapFile(string file)
+        {
+            string filename = Path.Combine(Tools.GetAppDataDirectory(), "Maps\\" + file);
+
+            try
+            {
+                if (File.Exists(filename))
+                    File.Delete(filename);
+            }
+            catch (Exception ex)
+            {
+                LogText("Exception in DeleteMapFile:" + ex.Message + Environment.NewLine);
+
+            }
+
+        }
+
 
         private bool CanSkipSlowUpdates()
         {
