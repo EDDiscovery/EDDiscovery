@@ -221,6 +221,7 @@
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
     <Compile Include="PlanetSystems\edmaterializer.cs" />
+    <Compile Include="PlanetSystems\EDMaterials.cs" />
     <Compile Include="PlanetSystems\EDWorld.cs" />
     <Compile Include="PlanetSystems\EDStar.cs" />
     <Compile Include="PlanetSystems\FormProspecting.cs">

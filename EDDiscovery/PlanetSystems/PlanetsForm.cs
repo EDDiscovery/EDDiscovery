@@ -187,17 +187,6 @@ namespace EDDiscovery2.PlanetSystems
                     lvi.UseItemStyleForSubItems = false;
 
 
-                    for (int ii = 0; ii < mlist.Count; ii++)
-                    {
-                        ListViewItem.ListViewSubItem lvsi;
-                        if (planet.materials[mlist[ii].material])
-                            lvsi = lvi.SubItems.Add("X");
-                        else
-                            lvsi = lvi.SubItems.Add(" ");
-
-                        lvsi.BackColor = mlist[ii].RareityColor;
-                    }
-
                     lvi.Tag = planet;
                 }
                 if (ob is EDStar)
@@ -242,15 +231,7 @@ namespace EDDiscovery2.PlanetSystems
                     lvi.SubItems[1].Text = planet.Description;
                     lvi.SubItems[2].Text = planet.gravity.ToString("0.00");
                     lvi.SubItems[3].Text = planet.arrivalPoint.ToString("0");
-
-
-                    for (int ii = 0; ii < mlist.Count; ii++)
-                    {
-                        if (planet.materials[mlist[ii].material])
-                            lvi.SubItems[3 + ii].Text = "X";
-                        else
-                            lvi.SubItems[3 + ii].Text = " ";
-                    }
+           
                 }
                 if (currentObj is EDStar)
                 {
@@ -260,11 +241,6 @@ namespace EDDiscovery2.PlanetSystems
                     lvi.SubItems[2].Text = "";
                     lvi.SubItems[3].Text = star.arrivalPoint.ToString("0");
 
-
-                    for (int ii = 0; ii < mlist.Count; ii++)
-                    {
-                        lvi.SubItems[3 + ii].Text = "";
-                    }
                 }
             }
         }
@@ -378,15 +354,7 @@ namespace EDDiscovery2.PlanetSystems
             }
         }
 
-        private void SetMaterials(EDWorld obj, CheckedListBox box)
-        {
-            for (int i = 0; i < box.Items.Count; i++)
-            {
-                string item = (string)box.Items[i];
-                MaterialEnum mat = obj.MaterialFromString(item);
-                box.SetItemChecked(i, obj.materials[mat]);
-            }
-        }
+
 
         private void comboBoxType_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -492,15 +460,7 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        private void GetMaterials(ref EDWorld obj, CheckedListBox box)
-        {
-            for (int i = 0; i < box.Items.Count; i++)
-            {
-                string item = (string)box.Items[i];
-                MaterialEnum mat = obj.MaterialFromString(item);
-                obj.materials[mat] =  box.GetItemChecked(i);
-            }
-        }
+
 
         private void toolStripButtonAddStar_Click(object sender, EventArgs e)
         {

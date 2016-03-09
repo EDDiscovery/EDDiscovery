@@ -14,7 +14,6 @@ namespace EDDiscovery2.PlanetSystems
         public AtmosphereEnum atmosphere;
         public VulcanismEnum vulcanism;
         public int terrain_difficulty;
-        public Dictionary<MaterialEnum, bool> materials;
         public string Reserve;
         public float surfacePressure;
         public float rotationPeriod;
@@ -24,7 +23,6 @@ namespace EDDiscovery2.PlanetSystems
         public float metalPct;
         public float icePct;
 
-        static private List<Material> mlist = Material.GetMaterialList;
         static public List<EDWorld> listObjectTypes = EDWorld.GetEDObjList;
         
 
@@ -33,17 +31,9 @@ namespace EDDiscovery2.PlanetSystems
 
         public EDWorld()
         {
-            materials = new Dictionary<MaterialEnum, bool>();
 
             if (objectsTypes != null)
                 type = objectsTypes[0];
-            // Create an empty dictionary
-            foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
-            {
-                if (mat != MaterialEnum.Unknown)
-                    materials[mat] = false;
-
-            }
 
 
         }

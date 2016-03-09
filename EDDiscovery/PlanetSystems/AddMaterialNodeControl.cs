@@ -130,7 +130,7 @@ namespace EDDiscovery2
                             if (chk.Value != null && (bool)chk.Value == true)
                                 val = true;
 
-                            edobj.materials[mat.material] = val; 
+                            //edobj.materials[mat.material] = val; 
                             
                         }
                     }
