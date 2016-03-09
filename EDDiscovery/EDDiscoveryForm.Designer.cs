@@ -91,6 +91,7 @@
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.eDDiscoveryChatDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -628,7 +629,8 @@
             this.gitHubToolStripMenuItem,
             this.eDDiscoveryHomepageToolStripMenuItem,
             this.frontierForumThreadToolStripMenuItem,
-            this.reportIssueIdeasToolStripMenuItem});
+            this.reportIssueIdeasToolStripMenuItem,
+            this.eDDiscoveryChatDiscordToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -637,35 +639,35 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // gitHubToolStripMenuItem
             // 
             this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
-            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.gitHubToolStripMenuItem.Text = "Github";
             this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.gitHubToolStripMenuItem_Click);
             // 
             // eDDiscoveryHomepageToolStripMenuItem
             // 
             this.eDDiscoveryHomepageToolStripMenuItem.Name = "eDDiscoveryHomepageToolStripMenuItem";
-            this.eDDiscoveryHomepageToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.eDDiscoveryHomepageToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.eDDiscoveryHomepageToolStripMenuItem.Text = "EDDiscovery homepage";
             this.eDDiscoveryHomepageToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryHomepageToolStripMenuItem_Click);
             // 
             // frontierForumThreadToolStripMenuItem
             // 
             this.frontierForumThreadToolStripMenuItem.Name = "frontierForumThreadToolStripMenuItem";
-            this.frontierForumThreadToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.frontierForumThreadToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.frontierForumThreadToolStripMenuItem.Text = "Frontier forum thread";
             this.frontierForumThreadToolStripMenuItem.Click += new System.EventHandler(this.frontierForumThreadToolStripMenuItem_Click);
             // 
             // reportIssueIdeasToolStripMenuItem
             // 
             this.reportIssueIdeasToolStripMenuItem.Name = "reportIssueIdeasToolStripMenuItem";
-            this.reportIssueIdeasToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.reportIssueIdeasToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.reportIssueIdeasToolStripMenuItem.Text = "Report issue / ideas";
             this.reportIssueIdeasToolStripMenuItem.Click += new System.EventHandler(this.reportIssueIdeasToolStripMenuItem_Click);
             // 
@@ -701,6 +703,13 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(101, 46);
             this.panel1.TabIndex = 18;
+            // 
+            // eDDiscoveryChatDiscordToolStripMenuItem
+            // 
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Name = "eDDiscoveryChatDiscordToolStripMenuItem";
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Text = "EDDiscovery chat (Discord)";
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryChatDiscordToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -807,6 +816,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem eDDiscoveryChatDiscordToolStripMenuItem;
     }
 }
 
