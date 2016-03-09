@@ -1257,5 +1257,10 @@ namespace EDDiscovery
             frm.labelVersion.Text = Text;
             frm.ShowDialog();
         }
+
+        private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://discord.gg/0qIqfCQbziTWzsQu");
+        }
     }
 }
