@@ -208,6 +208,8 @@ namespace EDDiscovery
                     DownloadMapFile("DW2.json");
                     DownloadMapFile("DW3.jpg");
                     DownloadMapFile("DW3.json");
+                    DownloadMapFile("DW4.jpg");
+                    DownloadMapFile("DW4.json");
 
 
                     //for (int ii = -10; ii <= 60; ii += 10)
@@ -794,38 +796,38 @@ namespace EDDiscovery
             //SystemViewForm frm = new SystemViewForm();
             //frm.Show();
 
-            EdMaterializer mat = new EdMaterializer();
+            //EdMaterializer mat = new EdMaterializer();
 
-            mat.GetAllWorlds(null);
+            //mat.GetAllWorlds(null);
 
 
-            EDWorld obj = new EDWorld();
+            //EDWorld obj = new EDWorld();
 
-            obj.updater = "Test";
-            obj.system = "Fine Ring Sector JH-V C2-4";
-            obj.objectName = "A 3";
-            obj.ObjectType = ObjectTypesEnum.HighMetalContent;
-            obj.arrivalPoint = 0;
-            obj.gravity = 0.13f;
+            //obj.updater = "Test";
+            //obj.system = "Fine Ring Sector JH-V C2-4";
+            //obj.objectName = "A 3";
+            //obj.ObjectType = ObjectTypesEnum.HighMetalContent;
+            //obj.arrivalPoint = 0;
+            //obj.gravity = 0.13f;
 
-            obj.materials[MaterialEnum.Carbon] = true;
-            obj.materials[MaterialEnum.Iron] = true;
-            obj.materials[MaterialEnum.Nickel] = true;
-            obj.materials[MaterialEnum.Phosphorus] = true;
-            obj.materials[MaterialEnum.Sulphur] = true;
-            obj.materials[MaterialEnum.Germanium] = true;
-            obj.materials[MaterialEnum.Selenium] = true;
-            obj.materials[MaterialEnum.Vanadium] = true;
-            obj.materials[MaterialEnum.Cadmium] = true;
-            obj.materials[MaterialEnum.Molybdenum] = true;
-            obj.materials[MaterialEnum.Tin] = true;
-            obj.materials[MaterialEnum.Polonium] = true;
+            //obj.materials[MaterialEnum.Carbon] = true;
+            //obj.materials[MaterialEnum.Iron] = true;
+            //obj.materials[MaterialEnum.Nickel] = true;
+            //obj.materials[MaterialEnum.Phosphorus] = true;
+            //obj.materials[MaterialEnum.Sulphur] = true;
+            //obj.materials[MaterialEnum.Germanium] = true;
+            //obj.materials[MaterialEnum.Selenium] = true;
+            //obj.materials[MaterialEnum.Vanadium] = true;
+            //obj.materials[MaterialEnum.Cadmium] = true;
+            //obj.materials[MaterialEnum.Molybdenum] = true;
+            //obj.materials[MaterialEnum.Tin] = true;
+            //obj.materials[MaterialEnum.Polonium] = true;
 
-            mat.DeletePlanetID(5);
-            mat.DeletePlanetID(6);
-            mat.DeletePlanetID(7);
+            //mat.DeletePlanetID(5);
+            //mat.DeletePlanetID(6);
+            //mat.DeletePlanetID(7);
 
-            mat.StorePlanet(obj);
+            //mat.StorePlanet(obj);
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
