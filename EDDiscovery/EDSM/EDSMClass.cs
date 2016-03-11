@@ -347,5 +347,30 @@ namespace EDDiscovery2.EDSM
             return (json.ToString() != "-1");
         }
 
+        public List<String> GetPushedSystems()
+        {
+            List<String> systems = new List<string>();
+            string query = "api-v1/systems?pushed=1";
+
+            var response = RequestGet(query);
+            var json = response.Body;
+            if (json == null)
+                return systems;
+
+            JArray msg = JArray.Parse(json);
+
+            if (msg != null)
+            {
+                foreach (JObject sysname in msg)
+                {
+                    systems.Add(sysname["name"].ToString());
+                }
+            }
+                    return systems;
+
+
+
+        }
+
     }
 }

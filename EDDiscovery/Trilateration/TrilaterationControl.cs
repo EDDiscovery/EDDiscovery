@@ -75,7 +75,10 @@ namespace EDDiscovery
             dataGridViewDistances.Focus();
 
             PopulateSuggestedSystems();
-            PopulateClosestSystems();
+            //PopulateClosestSystems();
+
+            ViewPushedSystems();
+
         }
 
         private List<SystemClass> GetEnteredSystems()
@@ -581,6 +584,24 @@ namespace EDDiscovery
             }
         }
 
+        private void ViewPushedSystems()
+        {
+            List<String> systems = edsm.GetPushedSystems();
+
+            dataGridViewClosestSystems.Rows.Clear();
+
+            foreach (String system in systems)
+            {
+                SystemClass star = SystemData.GetSystem(system);
+                if (star == null)
+                    star = new SystemClass(system);
+
+                var index = dataGridViewClosestSystems.Rows.Add(system);
+                dataGridViewClosestSystems[0, index].Tag = star;
+            }
+
+
+        } 
 
         private void PopulateClosestSystems()
         {
@@ -593,7 +614,7 @@ namespace EDDiscovery
                 return;
             }
 
-            labelLastKnownSystem.Text = lastKnown.name;
+            //labelLastKnownSystem.Text = lastKnown.name;
 
             var closest = (from systems
                            in SystemData.SystemList
@@ -840,6 +861,8 @@ namespace EDDiscovery
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
+
+
 			Set(CurrentSystem);
         }
 
