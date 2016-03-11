@@ -19,17 +19,23 @@ namespace EDDiscovery
         [STAThread]
         static void Main()
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             try
             {
                 using (new SingleGlobalInstance(1000))
                 {
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);
                     Application.Run(new EDDiscoveryForm());
                 }
             }
             catch (TimeoutException te)
             {
+                if (MessageBox.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Application.Run(new EDDiscoveryForm());
+                }
+
                 /* Could not lock the app-global mutex, which means another copy of the App is running.
                  * TODO: show a dialog and/or bring the current instance's window to the foreground.
                  */
