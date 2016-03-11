@@ -1,6 +1,32 @@
 Release log: 
 
-2016-02-17 Version 2.7.3 (testrelease)
+2016-03-11  Version 2.7.5
+
+* Changed EDSM sync option from Full/Push only to 2 checkboxes with ToEDSM/FromEDSM
+* Shows Wanted systems from EDSM instead of Closestsystems for last known positions in tril tab.
+* Support for DW4 map in 2DMaps
+* Check so we only start one EDDiscovery (mwerle).
+* Add Help -> About Box.
+* Allot of improvments in Routing (Robby)
+* Bug fix: with duplicate entries in Trilateration View (mwerle)
+* Bug fix:  add additional checks for NULL system (mwerle)
+
+* Lots of improvment in imageconversion from Robby 
+    Rewrite of the Image conversion to fix issues picking
+    Problem with deleting files which have been cropped.
+    Added more output file formats
+    Fixed it so it renames them _1, _2 if multiples exist
+    Can delete if you crop.
+    Have checked it for cropping, deleting, both, all formats, BMP warning
+
+* Trilateration UI improvements (mwerle)
+* Allow sending distances to systems if current system has known coordinates without trilaterating (mwerle).
+* Automatically copy "Last System" to clipboard when control is activated (mwerle)
+
+
+
+
+2016-02-17 Version 2.7.3 
 
 Robby: Can write note directly in the travelhistorylist now!
 Mwerle : Trilateration: Tab skip over readonly fields So pressing tab in distance field moves you to next system name.
@@ -135,4 +161,3 @@ Only some small changes in this update
 
 * Getting distances from EDSC in a thread -> EDDiscovery stars allot faster
 * Added a menu. With links to forum threads and quick ways to open Elite Dangerous directory and the log file directory.
-
