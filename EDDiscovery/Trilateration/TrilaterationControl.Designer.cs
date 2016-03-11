@@ -52,7 +52,6 @@
             this.radioButtonAlgorithmJs = new System.Windows.Forms.RadioButton();
             this.radioButtonAlgorithmCsharp = new System.Windows.Forms.RadioButton();
             this.toolTipAlgorithm = new System.Windows.Forms.ToolTip(this.components);
-            this.labelLastKnownSystem = new System.Windows.Forms.Label();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.labelSuggestedSystems = new System.Windows.Forms.Label();
             this.dataGridViewSuggestedSystems = new System.Windows.Forms.DataGridView();
@@ -67,10 +66,10 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSubmitDistances = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonRemoveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonRemoveUnused = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRemoveAll = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.panelImplementation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -272,16 +271,6 @@
             this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmCsharp, "Algorithm from ed-systems rewritten to C# (fast, experimental)");
             this.radioButtonAlgorithmCsharp.UseVisualStyleBackColor = true;
             // 
-            // labelLastKnownSystem
-            // 
-            this.labelLastKnownSystem.AutoSize = true;
-            this.labelLastKnownSystem.Location = new System.Drawing.Point(731, 5);
-            this.labelLastKnownSystem.MaximumSize = new System.Drawing.Size(190, 0);
-            this.labelLastKnownSystem.Name = "labelLastKnownSystem";
-            this.labelLastKnownSystem.Size = new System.Drawing.Size(53, 13);
-            this.labelLastKnownSystem.TabIndex = 19;
-            this.labelLastKnownSystem.Text = "Unknown";
-            // 
             // splitContainer1
             // 
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -301,7 +290,6 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.label1);
             this.splitContainer1.Panel2.Controls.Add(this.richTextBox_History);
-            this.splitContainer1.Panel2.Controls.Add(this.labelLastKnownSystem);
             this.splitContainer1.Panel2.Controls.Add(this.dataGridViewClosestSystems);
             this.splitContainer1.Panel2.Controls.Add(this.labelClosestSystems);
             this.splitContainer1.Size = new System.Drawing.Size(826, 498);
@@ -422,12 +410,13 @@
             // 
             // labelClosestSystems
             // 
+            this.labelClosestSystems.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelClosestSystems.AutoSize = true;
-            this.labelClosestSystems.Location = new System.Drawing.Point(548, 4);
+            this.labelClosestSystems.Location = new System.Drawing.Point(556, 4);
             this.labelClosestSystems.Name = "labelClosestSystems";
-            this.labelClosestSystems.Size = new System.Drawing.Size(187, 13);
+            this.labelClosestSystems.Size = new System.Drawing.Size(119, 13);
             this.labelClosestSystems.TabIndex = 18;
-            this.labelClosestSystems.Text = "Closest systems to last known location";
+            this.labelClosestSystems.Text = "Wanted EDSM systems";
             // 
             // LabelTrilateration
             // 
@@ -474,28 +463,6 @@
             this.toolStripButtonNew.ToolTipText = "Calculate coordinates for current system";
             this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
             // 
-            // toolStripButtonMap
-            // 
-            this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonMap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMap.Image")));
-            this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonMap.Name = "toolStripButtonMap";
-            this.toolStripButtonMap.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonMap.Text = "3d map";
-            this.toolStripButtonMap.ToolTipText = "Show 3d map";
-            this.toolStripButtonMap.Click += new System.EventHandler(this.toolStripButtonMap_Click);
-            // 
-            // toolStripButtonRemoveAll
-            // 
-            this.toolStripButtonRemoveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveAll.Image")));
-            this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
-            this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonRemoveAll.Text = "toolStripButton1";
-            this.toolStripButtonRemoveAll.ToolTipText = "Remove all";
-            this.toolStripButtonRemoveAll.Click += new System.EventHandler(this.toolStripButtonRemoveAll_Click);
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -511,6 +478,28 @@
             this.toolStripButtonRemoveUnused.Text = "toolStripButtonRemoveUnused";
             this.toolStripButtonRemoveUnused.ToolTipText = "Remove unused";
             this.toolStripButtonRemoveUnused.Click += new System.EventHandler(this.toolStripButtonRemoveUnused_Click);
+            // 
+            // toolStripButtonRemoveAll
+            // 
+            this.toolStripButtonRemoveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveAll.Image")));
+            this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
+            this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRemoveAll.Text = "toolStripButton1";
+            this.toolStripButtonRemoveAll.ToolTipText = "Remove all";
+            this.toolStripButtonRemoveAll.Click += new System.EventHandler(this.toolStripButtonRemoveAll_Click);
+            // 
+            // toolStripButtonMap
+            // 
+            this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonMap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMap.Image")));
+            this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonMap.Name = "toolStripButtonMap";
+            this.toolStripButtonMap.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonMap.Text = "3d map";
+            this.toolStripButtonMap.ToolTipText = "Show 3d map";
+            this.toolStripButtonMap.Click += new System.EventHandler(this.toolStripButtonMap_Click);
             // 
             // TrilaterationControl
             // 
@@ -570,7 +559,6 @@
         private System.Windows.Forms.RadioButton radioButtonAlgorithmCsharp;
         private System.Windows.Forms.Label labelAlgorithm;
         private System.Windows.Forms.ToolTip toolTipAlgorithm;
-        private System.Windows.Forms.Label labelLastKnownSystem;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label LabelTrilateration;
         private System.Windows.Forms.ToolStrip toolStrip1;
