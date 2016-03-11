@@ -29,7 +29,8 @@ namespace EDDiscovery
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
         internal List<SystemPosition> visitedSystems;
-        internal bool EDSMPushOnly = false;
+        internal bool EDSMSyncTo = true;
+        internal bool EDSMSyncFrom = true;
 
         public NetLogClass netlog = new NetLogClass();
         List<SystemDist> sysDist = null;
@@ -53,9 +54,10 @@ namespace EDDiscovery
             sync = new EDSMSync(_discoveryForm);
             var db = new SQLiteDBClass();
             defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
-            EDSMPushOnly = db.GetSettingBool("EDSMPushOnly", false);
-            optPushOnly.Checked = EDSMPushOnly;
-            optFullSync.Checked = !EDSMPushOnly;
+            EDSMSyncTo = db.GetSettingBool("EDSMSyncTo", true);
+            EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
+            checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
+            checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
         }
 
 
@@ -809,7 +811,7 @@ namespace EDDiscovery
                 return;
 
             }
-            sync.StartSync(EDSMPushOnly);
+            sync.StartSync(EDSMSyncTo, EDSMSyncFrom);
             
         }
 
@@ -1199,10 +1201,7 @@ namespace EDDiscovery
             }
         }
 
-        private void optFullSync_CheckedChanged(object sender, EventArgs e)
-        {
-            EDSMPushOnly = !optFullSync.Checked;
-        }
+
 
         /* Add selected systems to trilateration grid */
         private void addToTrilaterationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1234,6 +1233,16 @@ namespace EDDiscovery
             {
                 System.Windows.Forms.Clipboard.SetText(tb.Text);
             }
+        }
+
+        private void checkBoxEDSMSyncTo_CheckedChanged(object sender, EventArgs e)
+        {
+            EDSMSyncTo = checkBoxEDSMSyncTo.Checked;
+        }
+
+        private void checkBoxEDSMSyncFrom_CheckedChanged(object sender, EventArgs e)
+        {
+            EDSMSyncFrom = checkBoxEDSMSyncFrom.Checked;
         }
     }
 

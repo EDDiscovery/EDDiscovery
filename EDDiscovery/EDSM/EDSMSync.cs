@@ -20,7 +20,8 @@ namespace EDDiscovery2.EDSM
         Thread ThreadEDSMSync;
         bool running = false;
         bool Exit = false;
-        bool _pushOnly = false;
+        bool _syncTo = false;
+        bool _syncFrom = false;
         private EDDiscoveryForm mainForm;
         public event EDSMNewSystemEventHandler OnNewEDSMTravelLog;
 
@@ -29,11 +30,12 @@ namespace EDDiscovery2.EDSM
             mainForm = frm;
         }
 
-        public bool StartSync(bool pushOnly)
+        public bool StartSync(bool syncto, bool syncfrom)
         {
             if (running) // Only start once.
                 return false;
-            _pushOnly = pushOnly;
+            _syncTo = syncto;
+            _syncFrom = syncfrom;
             ThreadEDSMSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
             ThreadEDSMSync.Name = "EDSM Sync";
             ThreadEDSMSync.Start();
@@ -50,12 +52,12 @@ namespace EDDiscovery2.EDSM
         private void SyncThread()
         {
             running = true;
-            Sync(_pushOnly);
+            Sync();
             running = false;
         }
 
 
-        public void Sync(bool pushOnly)
+        public void Sync()
         {
             try
             {
@@ -72,57 +74,61 @@ namespace EDDiscovery2.EDSM
                 if (log == null)
                     log = new List<SystemPosition>();
 
-                // Send Unsynced system to EDSM.
 
-                List<SystemPosition> systems = (from s in mainForm.VisitedSystems where s.vs !=null && s.vs.EDSM_sync == false && s.vs.Commander== EDDiscoveryForm.EDDConfig.CurrentCommander.Nr select s).ToList<SystemPosition>();
-                mainForm.LogLine("EDSM: Sending " +  systems.Count.ToString() + " flightlog entries", Color.Black);
-                foreach (var system in systems)
+                if (_syncTo)
                 {
-                    string json = null;
+                    // Send Unsynced system to EDSM.
 
-                    if (Exit)
+                    List<SystemPosition> systems = (from s in mainForm.VisitedSystems where s.vs != null && s.vs.EDSM_sync == false && s.vs.Commander == EDDiscoveryForm.EDDConfig.CurrentCommander.Nr select s).ToList<SystemPosition>();
+                    mainForm.LogLine("EDSM: Sending " + systems.Count.ToString() + " flightlog entries", Color.Black);
+                    foreach (var system in systems)
                     {
-                        running = false;
-                        return;
-                    }
+                        string json = null;
 
-                    if (system.vs != null && system.vs.EDSM_sync == false)
-                    {
-                        // check if it exist in EDSM
-                        SystemPosition ps2 = (from c in log where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
-                        if (ps2 != null)
+                        if (Exit)
                         {
-                            system.vs.EDSM_sync = true;
-                            system.Update();
-
+                            running = false;
+                            return;
                         }
-                        else
-                            json = edsm.SetLog(system.Name, system.time);
 
-                        if (json != null)
+                        if (system.vs != null && system.vs.EDSM_sync == false)
                         {
-                            JObject msg = (JObject)JObject.Parse(json);
-
-                            int msgnum = msg["msgnum"].Value<int>();
-                            string msgstr = msg["msg"].Value<string>();
-
-
-                            if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
+                            // check if it exist in EDSM
+                            SystemPosition ps2 = (from c in log where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
+                            if (ps2 != null)
                             {
-                                if (msgnum == 100)
-                                    System.Diagnostics.Trace.WriteLine("New");
-
                                 system.vs.EDSM_sync = true;
                                 system.Update();
+
                             }
                             else
+                                json = edsm.SetLog(system.Name, system.time);
+
+                            if (json != null)
                             {
-                                mainForm.LogLine("EDSM sync ERROR:" + msgnum.ToString() +":" + msgstr, Color.Red);
-                                System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name);
-                                break;
+                                JObject msg = (JObject)JObject.Parse(json);
+
+                                int msgnum = msg["msgnum"].Value<int>();
+                                string msgstr = msg["msg"].Value<string>();
+
+
+                                if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
+                                {
+                                    if (msgnum == 100)
+                                        System.Diagnostics.Trace.WriteLine("New");
+
+                                    system.vs.EDSM_sync = true;
+                                    system.Update();
+                                }
+                                else
+                                {
+                                    mainForm.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr, Color.Red);
+                                    System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name);
+                                    break;
+                                }
+
+
                             }
-
-
                         }
                     }
                 }
@@ -130,7 +136,7 @@ namespace EDDiscovery2.EDSM
                 TravelLogUnit tlu = null;
 
                 bool newsystem = false;
-                if (!pushOnly)
+                if (_syncFrom)
                 {
                     // Check for new systems from EDSM
                     int defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());

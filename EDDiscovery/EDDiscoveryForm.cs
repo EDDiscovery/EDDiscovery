@@ -776,7 +776,9 @@ namespace EDDiscovery
             _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
             _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
             routeControl1.SaveSettings();
-            _db.PutSettingBool("EDSMPushOnly", travelHistoryControl1.EDSMPushOnly);
+
+            _db.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
+            _db.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
             EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;

@@ -704,13 +704,13 @@ namespace EDDiscovery
                 trilaterationThread = null;
             }
 
-            // edge case - make sure distances were trilaterated OR the current system already has known coordinates
-            if (lastTrilatelationResult == null && !CurrentSystem.HasCoordinate)
-            {
-                LogText("EDSM submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
-                UnfreezeTrilaterationUI();
-                return;
-            }
+            //// edge case - make sure distances were trilaterated OR the current system already has known coordinates
+            //if (lastTrilatelationResult == null && !CurrentSystem.HasCoordinate)
+            //{
+            //    LogText("EDSM submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
+            //    UnfreezeTrilaterationUI();
+            //    return;
+            //}
 
             EDSMSubmissionThread = new Thread(SubmitToEDSM) {Name = "EDSM Submission"};
             EDSMSubmissionThread.Start();

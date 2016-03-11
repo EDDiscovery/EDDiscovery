@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("ListViewGroup", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("ListViewGroup", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
             this.richTextBox_History = new System.Windows.Forms.RichTextBox();
             this.button_RefreshHistory = new System.Windows.Forms.Button();
@@ -45,6 +45,7 @@
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToTrilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBoxHistoryWindow = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -86,18 +87,17 @@
             this.label6 = new System.Windows.Forms.Label();
             this.buttonSync = new System.Windows.Forms.Button();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
-            this.optFullSync = new System.Windows.Forms.RadioButton();
-            this.optPushOnly = new System.Windows.Forms.RadioButton();
             this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
             this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
             this.panelRight = new System.Windows.Forms.Panel();
+            this.checkBoxEDSMSyncFrom = new System.Windows.Forms.CheckBox();
+            this.checkBoxEDSMSyncTo = new System.Windows.Forms.CheckBox();
             this.comboBoxCommander = new System.Windows.Forms.ComboBox();
             this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
             this.mapColorDialog = new System.Windows.Forms.ColorDialog();
-            this.addToTrilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.historyContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -193,8 +193,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle2;
             this.mapColour.HeaderText = "Map";
             this.mapColour.Name = "mapColour";
             this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -209,7 +209,7 @@
             this.moveToAnotherCommanderToolStripMenuItem,
             this.addToTrilaterationToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 114);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 92);
             // 
             // starMapColourToolStripMenuItem
             // 
@@ -231,6 +231,13 @@
             this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.moveToAnotherCommanderToolStripMenuItem.Text = "Move to another Commander";
             this.moveToAnotherCommanderToolStripMenuItem.Click += new System.EventHandler(this.moveToAnotherCommanderToolStripMenuItem_Click);
+            // 
+            // addToTrilaterationToolStripMenuItem
+            // 
+            this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
+            this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.addToTrilaterationToolStripMenuItem.Text = "Add to Trilateration";
+            this.addToTrilaterationToolStripMenuItem.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem_Click);
             // 
             // comboBoxHistoryWindow
             // 
@@ -270,10 +277,10 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ColumnName,
             this.columnDist});
-            listViewGroup1.Header = "ListViewGroup";
-            listViewGroup1.Name = "Name";
+            listViewGroup2.Header = "ListViewGroup";
+            listViewGroup2.Name = "Name";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1});
+            listViewGroup2});
             this.listView1.Location = new System.Drawing.Point(11, 364);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(278, 213);
@@ -664,36 +671,11 @@
             // 
             this.buttonSync.Location = new System.Drawing.Point(114, 38);
             this.buttonSync.Name = "buttonSync";
-            this.buttonSync.Size = new System.Drawing.Size(103, 23);
+            this.buttonSync.Size = new System.Drawing.Size(100, 23);
             this.buttonSync.TabIndex = 1;
             this.buttonSync.Text = "Sync with EDSM";
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
-            // 
-            // optFullSync
-            // 
-            this.optFullSync.AutoSize = true;
-            this.optFullSync.Location = new System.Drawing.Point(224, 38);
-            this.optFullSync.Name = "optFullSync";
-            this.optFullSync.Size = new System.Drawing.Size(68, 17);
-            this.optFullSync.TabIndex = 2;
-            this.optFullSync.TabStop = true;
-            this.optFullSync.Text = "Full Sync";
-            this.toolTipEddb.SetToolTip(this.optFullSync, "Update EDSM from travel history and download missing systems from EDSM");
-            this.optFullSync.UseVisualStyleBackColor = true;
-            this.optFullSync.CheckedChanged += new System.EventHandler(this.optFullSync_CheckedChanged);
-            // 
-            // optPushOnly
-            // 
-            this.optPushOnly.AutoSize = true;
-            this.optPushOnly.Location = new System.Drawing.Point(224, 57);
-            this.optPushOnly.Name = "optPushOnly";
-            this.optPushOnly.Size = new System.Drawing.Size(63, 17);
-            this.optPushOnly.TabIndex = 3;
-            this.optPushOnly.TabStop = true;
-            this.optPushOnly.Text = "Up Only";
-            this.toolTipEddb.SetToolTip(this.optPushOnly, "Upload to EDSM only, do not add unknown systems on EDSM to EDD2");
-            this.optPushOnly.UseVisualStyleBackColor = true;
             // 
             // labelDistanceToNextSystem
             // 
@@ -714,8 +696,8 @@
             // 
             // panelRight
             // 
-            this.panelRight.Controls.Add(this.optPushOnly);
-            this.panelRight.Controls.Add(this.optFullSync);
+            this.panelRight.Controls.Add(this.checkBoxEDSMSyncFrom);
+            this.panelRight.Controls.Add(this.checkBoxEDSMSyncTo);
             this.panelRight.Controls.Add(this.comboBoxCommander);
             this.panelRight.Controls.Add(this.label6);
             this.panelRight.Controls.Add(this.listView1);
@@ -730,6 +712,28 @@
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(297, 586);
             this.panelRight.TabIndex = 1;
+            // 
+            // checkBoxEDSMSyncFrom
+            // 
+            this.checkBoxEDSMSyncFrom.AutoSize = true;
+            this.checkBoxEDSMSyncFrom.Location = new System.Drawing.Point(217, 57);
+            this.checkBoxEDSMSyncFrom.Name = "checkBoxEDSMSyncFrom";
+            this.checkBoxEDSMSyncFrom.Size = new System.Drawing.Size(83, 17);
+            this.checkBoxEDSMSyncFrom.TabIndex = 22;
+            this.checkBoxEDSMSyncFrom.Text = "From EDSM";
+            this.checkBoxEDSMSyncFrom.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMSyncFrom.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncFrom_CheckedChanged);
+            // 
+            // checkBoxEDSMSyncTo
+            // 
+            this.checkBoxEDSMSyncTo.AutoSize = true;
+            this.checkBoxEDSMSyncTo.Location = new System.Drawing.Point(217, 36);
+            this.checkBoxEDSMSyncTo.Name = "checkBoxEDSMSyncTo";
+            this.checkBoxEDSMSyncTo.Size = new System.Drawing.Size(73, 17);
+            this.checkBoxEDSMSyncTo.TabIndex = 21;
+            this.checkBoxEDSMSyncTo.Text = "To EDSM";
+            this.checkBoxEDSMSyncTo.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMSyncTo.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncTo_CheckedChanged);
             // 
             // comboBoxCommander
             // 
@@ -788,13 +792,6 @@
             // mapColorDialog
             // 
             this.mapColorDialog.SolidColorOnly = true;
-            // 
-            // addToTrilaterationToolStripMenuItem
-            // 
-            this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
-            this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.addToTrilaterationToolStripMenuItem.Text = "Add to Trilateration";
-            this.addToTrilaterationToolStripMenuItem.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem_Click);
             // 
             // TravelHistoryControl
             // 
@@ -884,8 +881,8 @@
         private System.Windows.Forms.ToolStripMenuItem hideSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveToAnotherCommanderToolStripMenuItem;
         private System.Windows.Forms.ComboBox comboBoxCommander;
-        private System.Windows.Forms.RadioButton optPushOnly;
-        private System.Windows.Forms.RadioButton optFullSync;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem;
+        internal System.Windows.Forms.CheckBox checkBoxEDSMSyncFrom;
+        internal System.Windows.Forms.CheckBox checkBoxEDSMSyncTo;
     }
 }
