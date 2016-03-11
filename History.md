@@ -1,5 +1,17 @@
 Release log: 
 
+2016-02-17 Version 2.7.3 (testrelease)
+
+Robby: Can write note directly in the travelhistorylist now!
+Mwerle : Trilateration: Tab skip over readonly fields So pressing tab in distance field moves you to next system name.
+Iain: Option to only send travelhistory to EDSM.
+Iain: Bugfix with logfiles passing over midnight.
+Mwerle: Option to croop image on conversion. 
+Mwerle: Menu to copy selected systems from Travelhistory to trilateration.
+Finwen: Better switching between multicommandes.
+Finwen: Trilateration Tab to systemname copes name to clipboard (no need to do CTRL+C)
+
+
 2016-01-03 Version 2.6.2
 
 3DMap 
@@ -123,5 +135,4 @@ Only some small changes in this update
 
 * Getting distances from EDSC in a thread -> EDDiscovery stars allot faster
 * Added a menu. With links to forum threads and quick ways to open Elite Dangerous directory and the log file directory.
-
 
