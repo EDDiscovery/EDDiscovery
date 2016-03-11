@@ -23,7 +23,10 @@ Release log:
 * Allow sending distances to systems if current system has known coordinates without trilaterating (mwerle).
 * Automatically copy "Last System" to clipboard when control is activated (mwerle)
 
+2016-02-19 Version 2.7.4 
 
+* Removed systems from Proving ground
+* Multicommander bug fix:  Forst commander did read EDSM api key from commander 2....
 
 
 2016-02-17 Version 2.7.3 
