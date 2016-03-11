@@ -1,0 +1,127 @@
+Release log: 
+
+2016-01-03 Version 2.6.2
+
+3DMap 
+* 3DMap now open maximized
+* Created keyboard bindings (WASDG) to travel around in the galaxy.
+* Can transform the camera in all directions and rotations
+* Statusbar with information about position and more.
+* Grid
+
+2DMap
+* Support for the new map of the whole galaxy made by Finwen and Marlon Blake
+
+
+2016-12-28 Version 2.6.1
+
+3dMap
+*Show All known stars (on/off)
+*Show all known stations (On/off)
+EDDB:
+*Bug: did not update system with population information from EDDB.
+*Added in Admin menu a item to Force EDDB update.
+EDSM
+*Optional logging of EDSM communication
+
+
+2015-11-04 Version 2.5.2
+* Stores Travel log in local DB. 
+* Can sync Travellog with EDSM and sync log with several computers. 
+* Trilateration window enchanced. Copy systemname to clipboard on click. (No need to CTRL+C anymore.)
+3D map in trilateration window shows lines to reference stars. 
+Added icons to Remove unused references and to remove all. 
+
+
+2015-09-04 Version 2.4.8
+* Support for 2D maps made by Corbin Moran
+* Autoconvert ED screenshots to png or jpeg and renames them to Systemname with time. 
+* Better integration with EDSM
+* Trilateration is now better on suggesting good reference stars
+
+
+
+2015-08-04 Version 2.3.7
+
+* Moved trilateration to an own tab. 
+* Trilateration has a 3d star map button that show reference systems and suggested references- 
+* Star map works again
+* Travel history age selection will remember the selection to next usage. And we added last 20 systems as option. 
+* EDStarCoordinator homepage has been down allot last days so we now have support for EDSM also. 
+* Moved status login to bottom of window.
+* Can select installation directory
+
+
+2015-07-10 Version 2.3.5
+
+* The search box now moves when the window is resized
+* New alternate installer instead of the auto updating click once installer. Also checks if new installer is available. 
+* 3d map did show government instead of normal plotting...
+
+
+2015-07-10 Version 2.3.4
+
+* Search in travel history. Search works on all fields. So you can search for a system name or something in your notes. 
+* Downloaded json files from EDDB and EDSC is now stored in appdata instead of current directory. This is for the the future (next version) alternative installer that will a more regular installer instead of the current auto updating clickonce installer. Both installers will be available. 
+* EDDiscovery should not xrach if netlogmain has invalid path
+
+2015-06-26 Version 2.3.0 
+
+Together with Cmdr Majkl we have created allot of new things in this version. 
+
+* Trilateration routine to get coordinates for unknown stars. 
+* Eddiscovery also creates an AppConfigLocal.xml file to automatically to add verbose logging in ED. 
+* EDDiscovery starts faster with more work running in different threads. 
+* Easy way to add distance to next system. 
+* And a long list of other small bugfixes and small changes.
+
+
+
+
+
+
+2016-06-18 Version 2.2.0
+
+* Updates UI better during startuo.
+* Travel history list is allot faster.
+* EDDB integration. Get data about systems from http://EDDB.io Added 2 buttons to view a system in eddb or edit information i Ross.
+
+
+2015-06-14 Version 2.1.27
+
+* Allow regions with , as decimal separator to also use . as decimal separator
+* Test button removed.. 
+* Added more time span options (6 hrs, 12 hrs, 3 days, 2 weeks) - Thanks Majkl
+
+2015-06-12 Version 2.1.26
+
+* Much smaller installation package. Instead of bundling corrected TGC data from Redwizzard EDDiscovery now checks if a new version exists on my mirrored server and then download it on demand. 
+
+
+
+2015-06-10 Version 2.1.25
+* Shows how many visits you have done to a system. 
+* Added some statistics Tolls menu and Statistics open up a form with some statistics. Will add more later.
+
+
+
+2015-05-07 Version 2.1.22
+
+* Refresh in travel history now gets new systems from EDSC.
+* New corrected star database from Redwizzard.
+
+2015-05-05 Version 2.1.21
+
+* I had inverted Z axis in the 3d map. Should be correct now.
+* Now shows coordinates for a system with full precision. 
+
+
+
+2014-04-24 Version 2.1.18
+
+Only some small changes in this update
+
+* Getting distances from EDSC in a thread -> EDDiscovery stars allot faster
+* Added a menu. With links to forum threads and quick ways to open Elite Dangerous directory and the log file directory.
+
+
