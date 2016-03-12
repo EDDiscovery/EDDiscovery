@@ -77,7 +77,9 @@ namespace EDDiscovery
             PopulateSuggestedSystems();
             //PopulateClosestSystems();
 
-            ViewPushedSystems();
+
+            Thread ViewPushedSystemsThread = new Thread(ViewPushedSystems) { Name = "EDSM get pushed systems" };
+            ViewPushedSystemsThread.Start();
 
         }
 
@@ -584,11 +586,15 @@ namespace EDDiscovery
             }
         }
 
+        // Runs as a thread.
         private void ViewPushedSystems()
         {
             List<String> systems = edsm.GetPushedSystems();
 
-            dataGridViewClosestSystems.Rows.Clear();
+            this.BeginInvoke(new MethodInvoker(() =>
+            {
+                dataGridViewClosestSystems.Rows.Clear();
+            }));
 
             foreach (String system in systems)
             {
@@ -596,8 +602,11 @@ namespace EDDiscovery
                 if (star == null)
                     star = new SystemClass(system);
 
-                var index = dataGridViewClosestSystems.Rows.Add(system);
-                dataGridViewClosestSystems[0, index].Tag = star;
+                this.BeginInvoke(new MethodInvoker(() =>
+                {
+                    var index = dataGridViewClosestSystems.Rows.Add(system);
+                    dataGridViewClosestSystems[0, index].Tag = star;
+                }));
             }
 
 
