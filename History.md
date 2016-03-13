@@ -1,5 +1,10 @@
 Release log: 
 
+2016-03-13 Version 2.7.6
+* Solve a DirectoryInfo exception then path is not valid.
+* Get pushed systems from EDSM in a thread so UI do not need to wait for request..
+* Show a messagebox if another EDDiscovery is running
+
 2016-03-11  Version 2.7.5
 
 * Changed EDSM sync option from Full/Push only to 2 checkboxes with ToEDSM/FromEDSM
