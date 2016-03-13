@@ -117,6 +117,8 @@ namespace EDDiscovery
         public List<SystemPosition> ParseFiles(RichTextBox richTextBox_History, int defaultMapColour, int commander)
         {
             string datapath;
+            DirectoryInfo dirInfo;
+
             datapath = GetNetLogPath();
 
             if (datapath == null)
@@ -124,7 +126,7 @@ namespace EDDiscovery
                 AppendText(richTextBox_History, "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
                 return null;
             }
-            DirectoryInfo dirInfo = new DirectoryInfo(datapath);
+
 
             if (!Directory.Exists(datapath))   // if logfiles directory is not found
             {
@@ -134,6 +136,15 @@ namespace EDDiscovery
                     AppendText(richTextBox_History, "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
                     //MessageBox.Show("Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab", "EDDiscovery Error", MessageBoxButtons.OK);
                 }
+                return null;
+            }
+            try
+            {
+                dirInfo = new DirectoryInfo(datapath);
+            }
+            catch (Exception ex)
+            {
+                AppendText(richTextBox_History, "Could not create Directory info: " + ex.Message + Environment.NewLine, Color.Red);
                 return null;
             }
 
