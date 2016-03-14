@@ -194,7 +194,7 @@ namespace EDDiscovery2.PlanetSystems
             //jo.tellurium = edobj.materials[MaterialEnum.Tellurium];
             //jo.yttrium = edobj.materials[MaterialEnum.Yttrium];
 
-            JObject joPost = new JObject(new JProperty("world_survey", jo));
+            JObject joPost = new JObject(new JProperty("world", jo));
 
             if (edobj.id == 0)
             {
@@ -202,7 +202,7 @@ namespace EDDiscovery2.PlanetSystems
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jo2 = (JObject)JObject.Parse(response.Body);
-                    JObject obj = (JObject)jo2["worlds"];
+                    JObject obj = (JObject)jo2["world"];
                     edobj.id = obj["id"].Value<int>();
                 }
                 else if ((int)response.StatusCode == 422)
@@ -217,7 +217,7 @@ namespace EDDiscovery2.PlanetSystems
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         JObject jo2 = (JObject)JObject.Parse(response.Body);
-                        JObject obj = (JObject)jo2["worlds"][0];
+                        JObject obj = (JObject)jo2["world"][0];
                         edobj.id = obj["id"].Value<int>();
 
                         response = RequestSecurePatch(joPost.ToString(), "api/v2/worlds/" + edobj.id.ToString());
@@ -260,7 +260,7 @@ namespace EDDiscovery2.PlanetSystems
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jo2 = (JObject)JObject.Parse(response.Body);
-                    JObject obj = (JObject)jo2["stars"];
+                    JObject obj = (JObject)jo2["star"];
                     edobj.id = obj["id"].Value<int>();
                 }
                 else if ((int)response.StatusCode == 422)
