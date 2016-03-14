@@ -422,9 +422,12 @@ namespace EDDiscovery2.PlanetSystems
                 planet.ObjectType = obj.String2ObjectType(comboBoxType.Text);
 
                 var culture = new CultureInfo("en-US");
+                planet.mass = float.Parse(textBoxMass.Text.Replace(",", "."), culture);
                 planet.gravity = float.Parse(textBoxGravity.Text.Replace(",", "."), culture);
                 planet.radius = float.Parse(textBoxRadius.Text.Replace(",", "."), culture);
+                planet.surfaceTemp = Int16.Parse(textBoxSurfaceTemp.Text, culture);
                 planet.arrivalPoint = float.Parse(textBoxArrivalPoint.Text.Replace(",", "."), culture);
+                planet.surfacePressure = float.Parse(textBoxSurfaceTemp.Text.Replace(",", "."), culture);
 
                 planet.atmosphere = planet.AtmosphereStr2Enum(comboBoxAtmosphere.Text);
                 planet.vulcanism = planet.VulcanismStr2Enum(comboBoxVulcanism.Text);
