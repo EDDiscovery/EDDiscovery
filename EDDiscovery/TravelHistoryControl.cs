@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
+using EDDiscovery2.HTTP;
 
 namespace EDDiscovery
 {
@@ -98,13 +99,14 @@ namespace EDDiscovery
                 static_richTextBox.AppendText(text);
                 static_richTextBox.SelectionColor = static_richTextBox.ForeColor;
 
-
-
-
                 static_richTextBox.SelectionStart = static_richTextBox.Text.Length;
                 static_richTextBox.SelectionLength = 0;
                 static_richTextBox.ScrollToCaret();
                 static_richTextBox.Refresh();
+
+
+                HttpCom.WriteLog(text, "");
+
             }
             catch (Exception ex)
             {
@@ -763,8 +765,9 @@ namespace EDDiscovery
                 return;
             }
             var db = new SQLiteDBClass();
-            
-            var dists = from p in SQLiteDBClass.dictDistances where p.Value.Status == DistancsEnum.EDDiscovery  orderby p.Value.CreateTime  select p.Value;
+
+            var dists = db.GetDistancesByStatus((int)DistancsEnum.EDDiscovery);
+            //var dists = from p in SQLiteDBClass.dictDistances where p.Value.Status == DistancsEnum.EDDiscovery  orderby p.Value.CreateTime  select p.Value;
 
             EDSMClass edsm = new EDSMClass();
 
