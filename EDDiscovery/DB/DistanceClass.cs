@@ -418,9 +418,9 @@ namespace EDDiscovery.DB
 
             string key = SQLiteDBClass.GetDistanceCacheKey(s1.SearchName, s2.SearchName);
 
-            DistanceClass distance;
+            double distance;
             if (SQLiteDBClass.dictDistances.TryGetValue(key, out distance))
-                return distance.Dist;
+                return distance;
             else
                 return -1;
 

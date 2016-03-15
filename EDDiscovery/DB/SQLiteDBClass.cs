@@ -22,7 +22,7 @@ namespace EDDiscovery.DB
         public static List<SystemClass> globalSystems = new List<SystemClass>();
         public static Dictionary<string, SystemClass> dictSystems = new Dictionary<string, SystemClass>(); 
         
-        public static Dictionary<string, DistanceClass> dictDistances = new Dictionary<string, DistanceClass>(); 
+        public static Dictionary<string, double> dictDistances = new Dictionary<string, double>(); 
 
         public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
 
@@ -597,10 +597,9 @@ namespace EDDiscovery.DB
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
                         if (!loadAlldata)
-                            cmd.CommandText = "select * from Distances WHERE status='3' or status = '4'";//         EDDiscovery = 3, EDDiscoverySubmitted = 4
-
+                            cmd.CommandText = "select NameA,NameB, Dist from Distances WHERE status='3' or status = '4'";//         EDDiscovery = 3, EDDiscoverySubmitted = 4
                         else
-                            cmd.CommandText = "select * from Distances";
+                            cmd.CommandText = "select NameA,NameB, Dist from Distances";
 
                         ds = SqlQueryText(cn, cmd);
                         if (ds.Tables.Count == 0)
@@ -617,8 +616,14 @@ namespace EDDiscovery.DB
 
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
-                            DistanceClass distance = new DistanceClass(dr);
-                            AddDistanceToCache(distance);
+                            string NameA, NameB;
+                            double dist;
+
+                            NameA = (string)dr["NameA"];
+                            NameB = (string)dr["NameB"];
+                            dist = Convert.ToDouble(dr["Dist"]);
+
+                            dictDistances[GetDistanceCacheKey(NameA, NameB)] = dist;
                         }
 
                         return true;
@@ -634,6 +639,55 @@ namespace EDDiscovery.DB
                 return false;
             }
         }
+
+
+        public List<DistanceClass> GetDistancesByStatus(int status)
+        {
+            List<DistanceClass> ldist = new List<DistanceClass>();
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        DataSet ds = null;
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = "select * from Distances WHERE status='" + status.ToString() +  "'";
+
+                        ds = SqlQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0)
+                        {
+                            return ldist;
+                        }
+                        //
+                        if (ds.Tables[0].Rows.Count == 0)
+                        {
+                            return ldist;
+                        }
+
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            DistanceClass dist = new DistanceClass(dr);
+                            ldist.Add(dist);
+                        }
+
+                        return ldist;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+
+                return ldist;
+            }
+        }
+
 
 
 
@@ -1270,7 +1324,7 @@ namespace EDDiscovery.DB
 
         public static void AddDistanceToCache(DistanceClass distance)
         {
-            dictDistances[GetDistanceCacheKey(distance.NameA, distance.NameB)] = distance;
+            dictDistances[GetDistanceCacheKey(distance.NameA, distance.NameB)] = distance.Dist;
         }
 
         public static string GetDistanceCacheKey(string systemA, string systemB)
