@@ -254,6 +254,7 @@
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
             this.comboBoxRoutingMetric.Size = new System.Drawing.Size(234, 21);
             this.comboBoxRoutingMetric.TabIndex = 9;
+            this.comboBoxRoutingMetric.SelectedIndexChanged += new System.EventHandler(this.comboBoxRoutingMetric_SelectedIndexChanged);
             // 
             // label6
             // 
