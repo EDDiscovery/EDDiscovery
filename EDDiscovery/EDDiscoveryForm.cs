@@ -96,15 +96,14 @@ namespace EDDiscovery
             _textcolor = Color.Orange;
             _texthighlightcolor = Color.Red;
             _visitedsystemcolor = Color.White;
-
-            this.SizeGripStyle = SizeGripStyle.Show;
-
-//            this.ControlBox = false;                                        // disable the title bar
-            //this.Text = String.Empty;
             ApplyTheme();
         }
 
-
+        private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
+        {
+            panel_grip.Location = new Point(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height);
+            tabControl1.Size = new Size(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height - tabControl1.Location.Y);
+        }
 
         public void ApplyTheme()
         {
@@ -142,24 +141,6 @@ namespace EDDiscovery
             foreach (Control subC in myControl.Controls)
             {
                 UpdateColorControls(subC);
-            }
-        }
-
-//TBD - remove later..
-        private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            Console.WriteLine("Drawing tab " + e.Index);
-            using (Brush br = new SolidBrush(Color.Black))
-            {
-                e.Graphics.FillRectangle(br, e.Bounds);
-                SizeF sz = e.Graphics.MeasureString(tabControl1.TabPages[e.Index].Text, e.Font);
-                e.Graphics.DrawString(tabControl1.TabPages[e.Index].Text, e.Font, Brushes.Orange, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
-
-                Rectangle rect = e.Bounds;
-                rect.Offset(0, 1);
-                rect.Inflate(0, -1);
-                //e.Graphics.DrawRectangle(Pens.DarkGray, rect);
-                //e.DrawFocusRectangle();
             }
         }
 
@@ -234,8 +215,6 @@ namespace EDDiscovery
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                 routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
-
-// TBD                Text += "         Systems:  " + SystemData.SystemList.Count;
 
                 imageHandler1.StartWatcher();
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
@@ -1034,20 +1013,11 @@ namespace EDDiscovery
 
         private void InitFormControls()
         {
-            UpdateTitle();
-
             labelPanelText.Text = "Loading. Please wait!";
             panelInfo.Visible = true;
             panelInfo.BackColor = Color.Gold;
 
             routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-        }
-
-        private void UpdateTitle()
-        {
-            var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
-            var version = assemblyFullName.Split(',')[1].Split('=')[1];
-//TBD            Text = string.Format("EDDiscovery v{0}", version);
         }
 
         private void RepositionForm()
@@ -1291,16 +1261,19 @@ namespace EDDiscovery
             }
         }
 
-        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        
+        private void AboutBox()
         {
-
+            AboutForm frm = new AboutForm();
+            string atext = Assembly.GetExecutingAssembly().FullName;
+            atext = atext.Split(',')[1].Split('=')[1];
+            frm.labelVersion.Text = this.Text + " " + atext;
+            frm.ShowDialog();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AboutForm frm = new AboutForm();
-            frm.labelVersion.Text = Text;
-            frm.ShowDialog();
+            AboutBox();
         }
 
         private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1324,9 +1297,7 @@ namespace EDDiscovery
 
         private void panel1_Click(object sender, EventArgs e)
         {
-            AboutForm frm = new AboutForm();
-            frm.labelVersion.Text = Text;
-            frm.ShowDialog();
+            AboutBox();
         }
 
         private void panel_close_Click(object sender, EventArgs e)
@@ -1346,7 +1317,6 @@ namespace EDDiscovery
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCL_RESIZE, HT_RESIZE, 0);
             }
-
         }
     }
 }

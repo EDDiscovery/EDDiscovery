@@ -7687,10 +7687,10 @@
   </data>
   <data name="panel_grip.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAe
-        vAAAHrwB7kRN9wAAACx0RVh0Q3JlYXRpb24gVGltZQBUaHUgMTcgTWFyIDIwMTYgMTA6NTg6MDAgLTAw
-        MDARnWedAAAAB3RJTUUH4AMRDAgmZlsNmQAAACBJREFUKFNjwAVCQ0P/AykQxgR0kkThky8JBXgkGf4D
-        AAnSIt6WeWCOAAAAAElFTkSuQmCC
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAe
+        vAAAHrwB7kRN9wAAACx0RVh0Q3JlYXRpb24gVGltZQBUaHUgMTcgTWFyIDIwMTYgMTM6NTk6NDQgLTAw
+        MDAzkEqEAAAAB3RJTUUH4AMRDgEwQMnX7wAAADRJREFUOE9joBD8h9KkgQULFoA0jmoGAqg4fkBAM34D
+        RjUjAAFxCCBTM0R84DRDAQWaGRgACrB0BRyJQPAAAAAASUVORK5CYII=
 </value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

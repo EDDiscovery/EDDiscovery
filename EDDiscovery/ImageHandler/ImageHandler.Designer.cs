@@ -138,6 +138,7 @@
             // comboBoxFormat
             // 
             this.comboBoxFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFormat.FormattingEnabled = true;
             this.comboBoxFormat.ItemHeight = 13;
             this.comboBoxFormat.Items.AddRange(new object[] {
