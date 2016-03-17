@@ -45,7 +45,7 @@ $ git remote add upstream https://github.com/EDDiscovery/EDDiscovery.git
 $ git remote -v
 ```
 
-* Create a feature branch and checkout onto it:
+* Create a feature branch and checkout onto it using `git checkout -b`:
 ```
 $ git branch
 * master
@@ -57,9 +57,9 @@ $git branch
 * add-red-button
   master
 ```
-This step is important because now when you make a pull request the branch name will be used. If at any point you want to make a quicky pull request for a quick bug fix you check check master, pull down the latest from upstream, create a new branch and manage that pull request completely separately. No leakage between feature branches!
+This step is important because now when you make a pull request the branch name will be used. If at any point you want to make a quick pull request for a bug fix you will need to checkout master, pull down the latest from upstream, create a new branch and manage that pull request completely separately. No leakage between feature branches that way!
 
-Off you go! Build something beautiful!
+Off you go. Build something beautiful!
 
 ### Resyncing with EDDiscovery/EDDiscovery repo
 
@@ -92,12 +92,12 @@ $ git fetch upstream
 $ git rebase upstream/master
 ```
 
-This will update your local copy of "remote branches" from Finwen's upstream repo and then modify your local commit history to incoporate upstream commits. If you run into conflicts you will need to work through an "[interactive rebase](https://help.github.com/articles/resolving-merge-conflicts-after-a-git-rebase/)" to resolve them. Read up on it then work through them.
+This will update your local copy of "remote branches" from Finwen's upstream repo and then modify your local commit history to incorporate upstream commits. If you run into conflicts you will need to work through an "[interactive rebase](https://help.github.com/articles/resolving-merge-conflicts-after-a-git-rebase/)" to resolve them. Read up on it then work through them.
 
 When you're done you check your new history with these commands:
 ```
 git log
-git log -p
+git log -p     <-- shows commits as well as commits
 ```
 The latter version shows the diffs. you might want to search those diffs for "====" to make sure you didn't miss a conflict.
 
@@ -109,15 +109,17 @@ git rebase origin/master
 git push origin master
 ```
 
-And push the new version up. You will probably need a "force" push if you had to merge anything. Because the commit history has been modified:
+... which should push your changes up. You can check this by looking at sources from the github site. 
+
+You will probably need a "force" push if you had to merge anything. Because the commit history has been modified:
 
 ```
-git push -f origin master
+git push -f origin master            <-- -f makes it a force push master Skywalker.
 ```
 
 Force push is a dangerous tool, but you're only using it on your own fork, so it's safe enough.
 
-Finally you probably have a feature branch to sync up with the remote changes. This was probably why you had to sync up in the first place. Basically do the same thing you did for master but with your feature branch. Though need to push it up to your fork afterwards:
+Finally you probably have a local feature branch which needs to be updated with remote changes in the upstream repo; this was probably why you had to sync up in the first place. Basically do the same thing you did for the master branch but now with your feature branch:
 
 ```
 git fetch upstream
@@ -125,6 +127,12 @@ git branch my-newer-purple-button
 git checkout my-newer-purple-button-feature
 git branch backup-branch-restore-point-case-something-goes-wrong      <--- Optional trick ;)
 git rebase upstream/master
+```
+
+Now's probably a good time to update your remote forked repo on github:
+
+```
+git push origin my-newer-purple-button-feature
 ```
 
 Notice I threw in a step for creating a 2nd branch in cause you make a mess of the rebase and want to get back to where you left off.
@@ -155,25 +163,35 @@ git rebase origin/let-make-the-fonts-all-comic-sans     <-- Don't need to do thi
 git push origin let-make-the-fonts-all-comic-sans
 ```
 
-Finally go to the webbrowser, look at your Fork, and click on "Compare and Pull Request". Before firing off the pull request check the commit list. Make sure you don't have any leakage from other people or other feature branches! 
+Finally view the github web page for you repo fork and click on the green "Compare and Pull Request" button. Before submitting your pull request to make sure the commits listed are your change and only that. Make sure you don't have any leakage from other people or other feature branches! 
 
 ### Going nuclear: Resetting the master branch
 
-Ever get into a real mess and want to start again with your repo? Well you could delete your fork in gitthub, reclone and start again from scratch. But that's maybe a little too drastic. How about we try something else? Let's look at ways to get the master branch back to normal. then you can branch off that and get back to normal.
+Ever get into a real mess and want to start again with your repo? Well you could delete your fork in github, reclone and start again from scratch. But that's maybe a little too drastic. How about we try something else? Let's look at ways to get the master branch back to normal. then you can branch off that and get back to normal.
 
-#### Option 1: My master branch is at the wrong commit
+#### Option 1: My master branch is at the wrong commit.
 
 So somehow your master branch is pointing at the wrong thing. you can just move it to the correct place if you can find the right sha (commit code) or another branch that is in the right place. So you just need to find where that is.
 
 Here's 4 ways you can track down your errant commit point:
 
-1) The logs (the --all part makes it show ALL commits in the repo).
+1) Make it the same as the fork's master on github
+
+You just want your local master to be the same as your github fork's master? This should do it:
+
+```
+git fetch
+git reset --hard origin/master
+```
+
+
+2) The logs (the --all part makes it show ALL commits in the repo).
 
 ```
 git log --all --graph
 ```
 
-2) Using a gui graph view like gitk or Git for Windows:
+3) Using a gui graph view like gitk or Git for Windows:
 
 ```
 gitk --all
@@ -181,7 +199,7 @@ gitk --all
 
 Note: Your current HEAD node is a yellow dot. It'll also show there the remote branches are at.
 
-3) Look in the "reflog" this is a log of all commits ever. Even ones that are 'deleted':
+4) Look in the "reflog" this is a log of all commits ever. Even ones that are 'deleted':
 
 ```
 reflog
@@ -200,6 +218,12 @@ git log
 ```
 
 See? You're back in the game.
+
+If your have problems pushing your change up to your github fork afterwards you can force it to write to match your local version. It's a little drastic, but you can do this:
+
+`git -f push origin/master`
+
+Now check on github. The commit history should be the same.
 
 #### Option 2: Blow away my local master and recreate it
 
