@@ -1,20 +1,20 @@
 The best way to contribute to EDDiscovery is to create a fork the main project, make changes in your local fork and push them back up as Pull Requests using git.
 
-Figuring out Git can be a bit of a challenge to those more familiar with traditional server side SCMs like Subversion. It's probably easiest to try and forget everything you know and start again, following a good tutorial or screencast. One such example is this:
+Figuring out Git can be a bit of a challenge to those more familiar with traditional server side SCMs like Subversion. It's probably easiest to try and forget everything you know and start again abd work through a good tutorial or screencast. One such example:
 
 http://gitimmersion.com/
 
-A lot of the trickier things you will need to do are commonplace, so here is a cookbook on solving this little problems
+A lot of the trickier things you will need to do are commonplace, so here is a cookbook on solving this little problems.
 
 # Git Cookbook
-
-For all these examples I'm going to pretend to use a fictional gitthub account called **YOUR_GITHUB_NAME_HERE**. Subsitute that username for your own.
 
 I'm also go to give instructions using the command line tool [Git Bash](https://git-scm.com/downloads). There are other ways to use Git, but it'll be easy to explain it this way.
 
 I'm going to use https repo urls, but ssh works even better if you have the public key/private key thing set up right.
 
-Recipes:
+Most of these examples assume you have a remote to the main repo called "**upstream**" The initial recipe explains how to create the upstream remote.
+
+#### Recipes:
 
 * [Getting pull request capable for the first time](#getting-pull-request-capable-for-the-first-time)
 * [Resyncing with EDDiscovery/EDDiscovery repo](#resyncing-with-eddiscoveryeddiscovery-repo)
@@ -23,7 +23,7 @@ Recipes:
 
 ### Getting pull request capable for the first time
 
-* Create Finwen's EDDiscovery page. Make your own fork. To this from here: 
+* Go to Finwen's EDDiscovery page. Make your own fork. Do this from here: 
 
 https://github.com/EDDiscovery/EDDiscovery
 
