@@ -43,11 +43,7 @@ namespace EDDiscovery
         readonly string _fileEDSMDistances;
         private EDSMSync _edsmSync;
         private SQLiteDBClass _db = new SQLiteDBClass();
-        public Color _forecolor;
-        public Color _backcolor;
-        public Color _textcolor;
-        public Color _texthighlightcolor;
-        public Color _visitedsystemcolor;
+        public EDDTheme theme = new EDDTheme();
 
         public AutoCompleteStringCollection SystemNames { get; private set; }
         public string CommanderName { get; private set; }
@@ -91,12 +87,13 @@ namespace EDDiscovery
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager();
 
-            _forecolor = Color.IndianRed;
-            _backcolor = Color.Black;
-            _textcolor = Color.Orange;
-            _texthighlightcolor = Color.Red;
-            _visitedsystemcolor = Color.White;
-            ApplyTheme();
+
+            theme.SetThemeBlack();
+
+            menuStrip1.ForeColor = theme.ForeColor;
+            menuStrip1.BackColor = theme.BackColor;
+
+            theme.ApplyTheme(this);
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
@@ -105,44 +102,7 @@ namespace EDDiscovery
             tabControl1.Size = new Size(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height - tabControl1.Location.Y);
         }
 
-        public void ApplyTheme()
-        {
-            this.ForeColor = _forecolor;
-            this.BackColor = _backcolor;
 
-            menuStrip1.ForeColor = _forecolor;
-            menuStrip1.BackColor = _backcolor;
-
-            foreach (Control c in this.Controls)
-            {
-                UpdateColorControls(c);
-            }
-        }
-
-        public void UpdateColorControls(Control myControl)
-        {
-            try
-            {
-                myControl.BackColor = _backcolor;
-                myControl.ForeColor = _forecolor;
-            }
-            catch { }
-
-            if (myControl is DataGridView)
-            {
-                DataGridView MyDgv = (DataGridView)myControl;
-                MyDgv.ColumnHeadersDefaultCellStyle.BackColor = _backcolor;     // NOT WORKING
-                MyDgv.ColumnHeadersDefaultCellStyle.ForeColor = _forecolor;
-                MyDgv.BackgroundColor = _backcolor;
-                MyDgv.DefaultCellStyle.BackColor = _backcolor;
-                MyDgv.DefaultCellStyle.ForeColor = _forecolor;
-            }
-
-            foreach (Control subC in myControl.Controls)
-            {
-                UpdateColorControls(subC);
-            }
-        }
 
 
         public TravelHistoryControl TravelControl

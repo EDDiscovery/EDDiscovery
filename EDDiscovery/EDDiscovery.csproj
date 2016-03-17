@@ -181,6 +181,7 @@
     <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
+    <Compile Include="EDDTheme.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EliteDangerous\AppConfig.cs" />
