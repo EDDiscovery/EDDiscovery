@@ -175,7 +175,7 @@ So somehow your master branch is pointing at the wrong thing. you can just move 
 
 Here's 4 ways you can track down your errant commit point:
 
-1) Make it the same as the fork's master on github
+**1) Make it the same as the fork's master on github**
 
 You just want your local master to be the same as your github fork's master? This should do it:
 
@@ -185,13 +185,13 @@ $ git reset --hard origin/master
 ```
 
 
-2) The logs (the --all part makes it show ALL commits in the repo).
+**2) The logs** (the --all part makes it show ALL commits in the repo)
 
 ```
 $ git log --all --graph
 ```
 
-3) Using a gui graph view like gitk or Git for Windows:
+**3) Using a GUI graph view like gitk or Git for Windows**
 
 ```
 gitk --all
@@ -199,17 +199,17 @@ gitk --all
 
 Note: Your current HEAD node is a yellow dot. It'll also show there the remote branches are at.
 
-4) Look in the "reflog" this is a log of all commits ever. Even ones that are 'deleted':
+**4) Look in the "reflog" this is a log of all commits ever** (even ones that are 'deleted'):
 
 ```
 $ reflog
 ```
 
-Note the sha codes are shorter here. Just 7 chars. Doesn't matter.
+Note the SHA codes are shorter here. Just 7 chars. Doesn't matter.
 
-Found your sha code? Now you just need to change which commit your HEAD is at:
+Found your SHA? Now you just need to change which commit your HEAD is at:
 
-So if I found the latest sha is supposed to be "25437cf". Here's how I get my HEAD for master to this point.
+So if I found the latest SHA is supposed to be `25437cf`. Here's how I get my HEAD for master to this point.
 
 ```
 $ git checkout master
