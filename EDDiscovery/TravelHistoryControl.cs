@@ -952,10 +952,15 @@ namespace EDDiscovery
         
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
-            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+            ISystem currSys = GetCurrentSystem();
 
-            _discoveryForm.ShowTrilaterationTab();
-            tctrl.Set(((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem);
+            if (currSys != null)
+            {
+                TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+
+                _discoveryForm.ShowTrilaterationTab();
+                tctrl.Set(currSys);
+            }
         }
     
 		public ISystem CurrentSystem
