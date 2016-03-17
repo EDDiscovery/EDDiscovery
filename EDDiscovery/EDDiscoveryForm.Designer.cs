@@ -32,13 +32,9 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
-            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBox_Distances = new System.Windows.Forms.CheckBox();
@@ -95,6 +91,10 @@
             this.panel_close = new System.Windows.Forms.Panel();
             this.panel_minimize = new System.Windows.Forms.Panel();
             this.panel_grip = new System.Windows.Forms.Panel();
+            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
+            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
+            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
+            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
@@ -120,10 +120,10 @@
             this.tabControl1.Controls.Add(this.tabPageScreenshots);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Location = new System.Drawing.Point(0, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(943, 646);
+            this.tabControl1.Size = new System.Drawing.Size(969, 655);
             this.tabControl1.TabIndex = 15;
             this.tabControl1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
             // 
@@ -133,18 +133,10 @@
             this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
             this.tabPageTravelHistory.Name = "tabPageTravelHistory";
             this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTravelHistory.Size = new System.Drawing.Size(935, 620);
+            this.tabPageTravelHistory.Size = new System.Drawing.Size(961, 629);
             this.tabPageTravelHistory.TabIndex = 0;
             this.tabPageTravelHistory.Text = "Travel history";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
-            // 
-            // travelHistoryControl1
-            // 
-            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl1.Name = "travelHistoryControl1";
-            this.travelHistoryControl1.Size = new System.Drawing.Size(929, 595);
-            this.travelHistoryControl1.TabIndex = 0;
-            this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
             // 
             // tabPageTriletaration
             // 
@@ -152,36 +144,20 @@
             this.tabPageTriletaration.Location = new System.Drawing.Point(4, 22);
             this.tabPageTriletaration.Name = "tabPageTriletaration";
             this.tabPageTriletaration.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTriletaration.Size = new System.Drawing.Size(935, 620);
+            this.tabPageTriletaration.Size = new System.Drawing.Size(969, 637);
             this.tabPageTriletaration.TabIndex = 3;
             this.tabPageTriletaration.Text = "Trilateration";
             this.tabPageTriletaration.UseVisualStyleBackColor = true;
-            // 
-            // trilaterationControl
-            // 
-            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(929, 614);
-            this.trilaterationControl.TabIndex = 21;
             // 
             // tabPageScreenshots
             // 
             this.tabPageScreenshots.Controls.Add(this.imageHandler1);
             this.tabPageScreenshots.Location = new System.Drawing.Point(4, 22);
             this.tabPageScreenshots.Name = "tabPageScreenshots";
-            this.tabPageScreenshots.Size = new System.Drawing.Size(935, 620);
+            this.tabPageScreenshots.Size = new System.Drawing.Size(961, 613);
             this.tabPageScreenshots.TabIndex = 4;
             this.tabPageScreenshots.Text = "Screenshots";
             this.tabPageScreenshots.UseVisualStyleBackColor = true;
-            // 
-            // imageHandler1
-            // 
-            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
-            this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(935, 620);
-            this.imageHandler1.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -189,19 +165,10 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(935, 620);
+            this.tabPage2.Size = new System.Drawing.Size(961, 613);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Route";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // routeControl1
-            // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(929, 614);
-            this.routeControl1.TabIndex = 0;
-            this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
             // 
             // tabPage3
             // 
@@ -213,7 +180,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(935, 620);
+            this.tabPage3.Size = new System.Drawing.Size(961, 613);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -265,7 +232,7 @@
             // button_Save
             // 
             this.button_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Save.Location = new System.Drawing.Point(851, 373);
+            this.button_Save.Location = new System.Drawing.Point(877, 373);
             this.button_Save.Name = "button_Save";
             this.button_Save.Size = new System.Drawing.Size(75, 23);
             this.button_Save.TabIndex = 4;
@@ -282,7 +249,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(929, 87);
+            this.groupBox1.Size = new System.Drawing.Size(955, 87);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Elite Dangerous netlog location (If not ovverride by commander settings belove)";
@@ -290,7 +257,7 @@
             // button_Browse
             // 
             this.button_Browse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Browse.Location = new System.Drawing.Point(945, 44);
+            this.button_Browse.Location = new System.Drawing.Point(971, 44);
             this.button_Browse.Name = "button_Browse";
             this.button_Browse.Size = new System.Drawing.Size(75, 23);
             this.button_Browse.TabIndex = 3;
@@ -304,7 +271,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxNetLogDir.Location = new System.Drawing.Point(125, 46);
             this.textBoxNetLogDir.Name = "textBoxNetLogDir";
-            this.textBoxNetLogDir.Size = new System.Drawing.Size(814, 20);
+            this.textBoxNetLogDir.Size = new System.Drawing.Size(840, 20);
             this.textBoxNetLogDir.TabIndex = 2;
             // 
             // radioButton_Manual
@@ -342,7 +309,7 @@
             this.groupBox2.Controls.Add(this.textBoxHomeSystem);
             this.groupBox2.Location = new System.Drawing.Point(432, 272);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(494, 95);
+            this.groupBox2.Size = new System.Drawing.Size(520, 95);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "3D Map Settings";
@@ -422,7 +389,7 @@
             this.groupBox4.Controls.Add(this.dataGridViewCommanders);
             this.groupBox4.Location = new System.Drawing.Point(0, 93);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(927, 182);
+            this.groupBox4.Size = new System.Drawing.Size(953, 182);
             this.groupBox4.TabIndex = 14;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Commanders";
@@ -441,7 +408,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(706, 16);
+            this.label2.Location = new System.Drawing.Point(732, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(304, 13);
             this.label2.TabIndex = 7;
@@ -512,7 +479,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(943, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(969, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -687,7 +654,7 @@
             this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panelInfo.BackColor = System.Drawing.Color.Salmon;
             this.panelInfo.Controls.Add(this.labelPanelText);
-            this.panelInfo.Location = new System.Drawing.Point(385, 1);
+            this.panelInfo.Location = new System.Drawing.Point(411, 1);
             this.panelInfo.Name = "panelInfo";
             this.panelInfo.Size = new System.Drawing.Size(340, 23);
             this.panelInfo.TabIndex = 17;
@@ -709,7 +676,7 @@
             this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
             this.panel_eddiscovery.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_eddiscovery.BackgroundImage")));
             this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_eddiscovery.Location = new System.Drawing.Point(792, 1);
+            this.panel_eddiscovery.Location = new System.Drawing.Point(818, 1);
             this.panel_eddiscovery.Name = "panel_eddiscovery";
             this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
             this.panel_eddiscovery.TabIndex = 18;
@@ -721,7 +688,7 @@
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
             this.panel_close.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_close.BackgroundImage")));
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.Location = new System.Drawing.Point(911, 1);
+            this.panel_close.Location = new System.Drawing.Point(937, 1);
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(32, 24);
             this.panel_close.TabIndex = 19;
@@ -733,7 +700,7 @@
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
             this.panel_minimize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_minimize.BackgroundImage")));
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_minimize.Location = new System.Drawing.Point(893, 1);
+            this.panel_minimize.Location = new System.Drawing.Point(919, 1);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(22, 24);
             this.panel_minimize.TabIndex = 20;
@@ -741,30 +708,64 @@
             // 
             // panel_grip
             // 
-            this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panel_grip.BackColor = System.Drawing.SystemColors.Control;
             this.panel_grip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_grip.BackgroundImage")));
             this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_grip.Location = new System.Drawing.Point(767, 1);
+            this.panel_grip.Location = new System.Drawing.Point(780, 25);
             this.panel_grip.Name = "panel_grip";
             this.panel_grip.Size = new System.Drawing.Size(19, 19);
             this.panel_grip.TabIndex = 16;
             this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
             // 
+            // travelHistoryControl1
+            // 
+            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl1.Name = "travelHistoryControl1";
+            this.travelHistoryControl1.Size = new System.Drawing.Size(955, 623);
+            this.travelHistoryControl1.TabIndex = 0;
+            this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
+            // 
+            // trilaterationControl
+            // 
+            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
+            this.trilaterationControl.Name = "trilaterationControl";
+            this.trilaterationControl.Size = new System.Drawing.Size(963, 631);
+            this.trilaterationControl.TabIndex = 21;
+            // 
+            // imageHandler1
+            // 
+            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
+            this.imageHandler1.Name = "imageHandler1";
+            this.imageHandler1.Size = new System.Drawing.Size(961, 613);
+            this.imageHandler1.TabIndex = 0;
+            // 
+            // routeControl1
+            // 
+            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.routeControl1.Location = new System.Drawing.Point(3, 3);
+            this.routeControl1.Name = "routeControl1";
+            this.routeControl1.Size = new System.Drawing.Size(955, 607);
+            this.routeControl1.TabIndex = 0;
+            this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(943, 646);
+            this.ClientSize = new System.Drawing.Size(969, 694);
             this.Controls.Add(this.panel_eddiscovery);
             this.Controls.Add(this.panelInfo);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button_test);
             this.Controls.Add(this.panel_minimize);
             this.Controls.Add(this.panel_close);
             this.Controls.Add(this.panel_grip);
-            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "EDDiscoveryForm";
