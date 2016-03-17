@@ -14,6 +14,13 @@ I'm also go to give instructions using the command line tool [Git Bash](https://
 
 I'm going to use https repo urls, but ssh works even better if you have the public key/private key thing set up right.
 
+Recipes:
+
+* [Getting pull request capable for the first time](getting-pull-request-capable-for-the-first-time)
+* [Resyncing with EDDiscovery/EDDiscovery repo](resyncing-with-eddiscoveryeddiscovery-repo)
+* [Pull requests](pull-requests)
+* [Going nuclear: Resetting the master branch](going-nuclear-resetting-the-master-branch)
+
 ### Getting pull request capable for the first time
 
 * Create Finwen's EDDiscovery page. Make your own fork. To this from here: 
