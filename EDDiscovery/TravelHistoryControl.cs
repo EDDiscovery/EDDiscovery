@@ -24,7 +24,7 @@ namespace EDDiscovery
 {
     public partial class TravelHistoryControl : UserControl
     {
-        private EDDiscoveryForm _discoveryForm;
+        private static EDDiscoveryForm _discoveryForm;
         private int defaultColour;
         public EDSMSync sync;
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
@@ -80,14 +80,19 @@ namespace EDDiscovery
             edsm.GetNewSystems(db);
             db.GetAllSystems();
         }
-     
+
 
         static public void LogText(string text)
         {
-            LogText(text, Color.Black);
+            LogTextColor(text, _discoveryForm._textcolor);
         }
 
-        static public void LogText( string text, Color color)
+        static public void LogTextHighlight(string text)
+        {
+            LogTextColor(text, _discoveryForm._texthighlightcolor);
+        }
+
+        static public void LogTextColor( string text, Color color)
         {
             try
             {
@@ -325,8 +330,7 @@ namespace EDDiscovery
 
                 cell.Tag = item;
 
-                if (!sys1.HasCoordinate)  // Mark all systems without coordinates
-                    cell.Style.ForeColor = Color.Blue;
+                dataGridView1.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm._visitedsystemcolor : _discoveryForm._textcolor;
 
                 cell = dataGridView1.Rows[rownr].Cells[4];
                 cell.Style.ForeColor = Color.FromArgb(item.vs == null ? defaultColour : item.vs.MapColour);
@@ -752,8 +756,8 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                LogText("Exception : " + ex.Message, Color.Red);
-                LogText(ex.StackTrace, Color.Red);
+                LogTextHighlight("Exception : " + ex.Message);
+                LogTextHighlight(ex.StackTrace);
             }
         }
 
@@ -838,9 +842,9 @@ namespace EDDiscovery
                     LogText("Arrived to system: ");
                     SystemClass sys1 = SystemData.GetSystem(name);
                     if (sys1 == null || sys1.HasCoordinate == false)
-                        LogText(name , Color.Blue);
+                        LogTextHighlight(name);
                     else
-                        LogText(name );
+                        LogText(name);
 
 
                     int count = GetVisitsCount(name);

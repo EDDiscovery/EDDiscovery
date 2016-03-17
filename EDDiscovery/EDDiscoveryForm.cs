@@ -18,28 +18,49 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace EDDiscovery
 {
+
     public delegate void DistancesLoaded();
 
     public partial class EDDiscoveryForm : Form
     {
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+        public const int WM_NCL_RESIZE = 0x112;
+        public const int HT_RESIZE = 61448;
+                
+
+
+        [DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+
         //readonly string _fileTgcSystems;
         readonly string _fileEDSMDistances;
         private EDSMSync _edsmSync;
         private SQLiteDBClass _db = new SQLiteDBClass();
+        public Color _forecolor;
+        public Color _backcolor;
+        public Color _textcolor;
+        public Color _texthighlightcolor;
+        public Color _visitedsystemcolor;
 
         public AutoCompleteStringCollection SystemNames { get; private set; }
         public string CommanderName { get; private set; }
         static public EDDConfig EDDConfig { get; private set; }
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
+
         public event DistancesLoaded OnDistancesLoaded;
 
         public EDDiscoveryForm()
         {
             InitializeComponent();
+            panel_close.Enabled = false;                            // no closing until we are ready for it..
 
             EDDConfig = new EDDConfig();
 
@@ -69,7 +90,79 @@ namespace EDDiscovery
 
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager();
+
+            _forecolor = Color.IndianRed;
+            _backcolor = Color.Black;
+            _textcolor = Color.Orange;
+            _texthighlightcolor = Color.Red;
+            _visitedsystemcolor = Color.White;
+
+            this.SizeGripStyle = SizeGripStyle.Show;
+
+//            this.ControlBox = false;                                        // disable the title bar
+            //this.Text = String.Empty;
+            ApplyTheme();
         }
+
+
+
+        public void ApplyTheme()
+        {
+            this.ForeColor = _forecolor;
+            this.BackColor = _backcolor;
+
+            menuStrip1.ForeColor = _forecolor;
+            menuStrip1.BackColor = _backcolor;
+
+            foreach (Control c in this.Controls)
+            {
+                UpdateColorControls(c);
+            }
+        }
+
+        public void UpdateColorControls(Control myControl)
+        {
+            try
+            {
+                myControl.BackColor = _backcolor;
+                myControl.ForeColor = _forecolor;
+            }
+            catch { }
+
+            if (myControl is DataGridView)
+            {
+                DataGridView MyDgv = (DataGridView)myControl;
+                MyDgv.ColumnHeadersDefaultCellStyle.BackColor = _backcolor;     // NOT WORKING
+                MyDgv.ColumnHeadersDefaultCellStyle.ForeColor = _forecolor;
+                MyDgv.BackgroundColor = _backcolor;
+                MyDgv.DefaultCellStyle.BackColor = _backcolor;
+                MyDgv.DefaultCellStyle.ForeColor = _forecolor;
+            }
+
+            foreach (Control subC in myControl.Controls)
+            {
+                UpdateColorControls(subC);
+            }
+        }
+
+//TBD - remove later..
+        private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            Console.WriteLine("Drawing tab " + e.Index);
+            using (Brush br = new SolidBrush(Color.Black))
+            {
+                e.Graphics.FillRectangle(br, e.Bounds);
+                SizeF sz = e.Graphics.MeasureString(tabControl1.TabPages[e.Index].Text, e.Font);
+                e.Graphics.DrawString(tabControl1.TabPages[e.Index].Text, e.Font, Brushes.Orange, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
+
+                Rectangle rect = e.Bounds;
+                rect.Offset(0, 1);
+                rect.Inflate(0, -1);
+                //e.Graphics.DrawRectangle(Pens.DarkGray, rect);
+                //e.DrawFocusRectangle();
+            }
+        }
+
 
         public TravelHistoryControl TravelControl
         {
@@ -101,7 +194,7 @@ namespace EDDiscovery
 
                 if (File.Exists("test.txt"))
                 {
-                    button1.Visible = true;
+                    button_test.Visible = true;
                 }
             }
             catch (Exception ex)
@@ -142,7 +235,7 @@ namespace EDDiscovery
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                 routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
 
-                Text += "         Systems:  " + SystemData.SystemList.Count;
+// TBD                Text += "         Systems:  " + SystemData.SystemList.Count;
 
                 imageHandler1.StartWatcher();
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
@@ -167,6 +260,9 @@ namespace EDDiscovery
                 CheckForNewInstaller();
 
                 LogLine($"{Environment.NewLine}Loading completed!");
+
+                panel_close.Enabled = true;                            // now we can safely close
+
             }
             catch (Exception ex)
             {
@@ -520,7 +616,7 @@ namespace EDDiscovery
 
                     if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
                     {
-                        LogText("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine, Color.Salmon);
+                        LogTextHighlight("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine);
                     }
 
                 }
@@ -566,7 +662,7 @@ namespace EDDiscovery
                         updatedb = true;
                     }
                     else
-                        LogText("Failed." + Environment.NewLine, Color.Red);
+                        LogTextHighlight("Failed." + Environment.NewLine);
 
 
                     eddb.GetCommodities();
@@ -588,7 +684,7 @@ namespace EDDiscovery
                         updatedb = true;
                     }
                     else
-                        LogText("Failed." + Environment.NewLine, Color.Red);
+                        LogTextHighlight("Failed." + Environment.NewLine);
 
                 }
 
@@ -643,13 +739,13 @@ namespace EDDiscovery
             }
         }
 
-        public void LogText(string text, Color col)
+        public void LogTextHighlight(string text)
         {
             try
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    TravelHistoryControl.LogText(text, col);
+                    TravelHistoryControl.LogTextHighlight(text);
 
                 });
             }
@@ -672,13 +768,13 @@ namespace EDDiscovery
             }
         }
 
-        public void LogLine(string text, Color col)
+        public void LogLineHighlight(string text)
         {
             try
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    TravelHistoryControl.LogText(text + Environment.NewLine, col);
+                    TravelHistoryControl.LogTextHighlight(text + Environment.NewLine);
 
                 });
             }
@@ -811,7 +907,7 @@ namespace EDDiscovery
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button_test_Click(object sender, EventArgs e)
         {
             //FormSagCarinaMission frm = new FormSagCarinaMission(this);
             //            frm.Show();
@@ -951,7 +1047,7 @@ namespace EDDiscovery
         {
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             var version = assemblyFullName.Split(',')[1].Split('=')[1];
-            Text = string.Format("EDDiscovery v{0}", version);
+//TBD            Text = string.Format("EDDiscovery v{0}", version);
         }
 
         private void RepositionForm()
@@ -1025,9 +1121,9 @@ namespace EDDiscovery
         {
             if (!EliteDangerous.CheckStationLogging())
             {
-                TravelHistoryControl.LogText("Elite Dangerous is not logging system names!!! ", Color.Red);
+                TravelHistoryControl.LogTextHighlight("Elite Dangerous is not logging system names!!! ");
                 TravelHistoryControl.LogText("Add ");
-                TravelHistoryControl.LogText("VerboseLogging=\"1\" ", Color.Blue);
+                TravelHistoryControl.LogText("VerboseLogging=\"1\" ");
                 TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remember to restart Elite!" + Environment.NewLine);
 
                 labelPanelText.Text = "Elite Dangerous is not logging system names!";
@@ -1210,6 +1306,47 @@ namespace EDDiscovery
         private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://discord.gg/0qIqfCQbziTWzsQu");
+        }
+
+        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
+        {
+            EDDiscoveryForm_MouseDown(sender, e);
+        }
+
+        private void panel1_Click(object sender, EventArgs e)
+        {
+            AboutForm frm = new AboutForm();
+            frm.labelVersion.Text = Text;
+            frm.ShowDialog();
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panel_grip_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCL_RESIZE, HT_RESIZE, 0);
+            }
+
         }
     }
 }
