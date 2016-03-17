@@ -96,17 +96,17 @@ This will update your local copy of "remote branches" from Finwen's upstream rep
 
 When you're done you check your new history with these commands:
 ```
-git log
-git log -p     <-- shows commits as well as commits
+$ git log
+$ git log -p     <-- shows commits as well as commits
 ```
 The latter version shows the diffs. you might want to search those diffs for "====" to make sure you didn't miss a conflict.
 
 Now you can go ahead update your own repo
 
 ```
-git fetch origin
-git rebase origin/master
-git push origin master
+$ git fetch origin
+$ git rebase origin/master
+$ git push origin master
 ```
 
 ... which should push your changes up. You can check this by looking at sources from the github site. 
@@ -114,7 +114,7 @@ git push origin master
 You will probably need a "force" push if you had to merge anything. Because the commit history has been modified:
 
 ```
-git push -f origin master            <-- -f makes it a force push master Skywalker.
+$ git push -f origin master            <-- -f makes it a force push master Skywalker.
 ```
 
 Force push is a dangerous tool, but you're only using it on your own fork, so it's safe enough.
@@ -122,17 +122,17 @@ Force push is a dangerous tool, but you're only using it on your own fork, so it
 Finally you probably have a local feature branch which needs to be updated with remote changes in the upstream repo; this was probably why you had to sync up in the first place. Basically do the same thing you did for the master branch but now with your feature branch:
 
 ```
-git fetch upstream
-git branch my-newer-purple-button
-git checkout my-newer-purple-button-feature
-git branch backup-branch-restore-point-case-something-goes-wrong      <--- Optional trick ;)
-git rebase upstream/master
+$ git fetch upstream
+$ git branch my-newer-purple-button
+$ git checkout my-newer-purple-button-feature
+$ git branch backup-branch-restore-point-case-something-goes-wrong      <--- Optional trick ;)
+$ git rebase upstream/master
 ```
 
 Now's probably a good time to update your remote forked repo on github:
 
 ```
-git push origin my-newer-purple-button-feature
+$ git push origin my-newer-purple-button-feature
 ```
 
 Notice I threw in a step for creating a 2nd branch in cause you make a mess of the rebase and want to get back to where you left off.
@@ -158,9 +158,9 @@ Switched to a new branch 'let-make-the-fonts-all-comic-sans'
 Next, push up your local branch to your fork using your fork's remote.
 
 ```
-git fetch
-git rebase origin/let-make-the-fonts-all-comic-sans     <-- Don't need to do this if you this is your first push
-git push origin let-make-the-fonts-all-comic-sans
+$ git fetch
+$ git rebase origin/let-make-the-fonts-all-comic-sans     <-- Don't need to do this if you this is your first push
+$ git push origin let-make-the-fonts-all-comic-sans
 ```
 
 Finally view the github web page for you repo fork and click on the green "Compare and Pull Request" button. Before submitting your pull request to make sure the commits listed are your change and only that. Make sure you don't have any leakage from other people or other feature branches! 
@@ -180,15 +180,15 @@ Here's 4 ways you can track down your errant commit point:
 You just want your local master to be the same as your github fork's master? This should do it:
 
 ```
-git fetch
-git reset --hard origin/master
+$ git fetch
+$ git reset --hard origin/master
 ```
 
 
 2) The logs (the --all part makes it show ALL commits in the repo).
 
 ```
-git log --all --graph
+$ git log --all --graph
 ```
 
 3) Using a gui graph view like gitk or Git for Windows:
@@ -202,7 +202,7 @@ Note: Your current HEAD node is a yellow dot. It'll also show there the remote b
 4) Look in the "reflog" this is a log of all commits ever. Even ones that are 'deleted':
 
 ```
-reflog
+$ reflog
 ```
 
 Note the sha codes are shorter here. Just 7 chars. Doesn't matter.
@@ -212,16 +212,18 @@ Found your sha code? Now you just need to change which commit your HEAD is at:
 So if I found the latest sha is supposed to be "25437cf". Here's how I get my HEAD for master to this point.
 
 ```
-git checkout master
-git reset --hard 25437cf
-git log
+$ git checkout master
+$ git reset --hard 25437cf
+$ git log
 ```
 
 See? You're back in the game.
 
 If your have problems pushing your change up to your github fork afterwards you can force it to write to match your local version. It's a little drastic, but you can do this:
 
-`git -f push origin/master`
+```
+$ git -f push origin/master
+```
 
 Now check on github. The commit history should be the same.
 
@@ -230,8 +232,8 @@ Now check on github. The commit history should be the same.
 First get rid of it:
 
 ```
-git checkout another-branch
-git branch -D master
+$ git checkout another-branch
+$ git branch -D master
 ```
 
 Did you wave goodbye?
@@ -239,10 +241,10 @@ Did you wave goodbye?
 Next what do you want your master to be based off? upstream/master? origin/master? I'm guessing upstream/master so you're back to how the latest build of EDDiscovery is.
 
 ```
-git fetch upstream
-git checkout upstream/master       <-- Checkout a remote branch
-git checkout -b master
-git log
+$ git fetch upstream
+$ git checkout upstream/master       <-- Checkout a remote branch
+$ git checkout -b master
+$ git log
 ```
 
 Done!
