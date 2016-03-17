@@ -1,6 +1,6 @@
-The best way to contribute to EDDiscovery is to create a fork the main project, make changes in your local fork and push them back up as Pull Requests using git.
+The best way to contribute to EDDiscovery is to create a fork of the main project, make changes in your local fork and push them back up as Pull Requests using git.
 
-Figuring out Git can be a bit of a challenge to those more familiar with traditional server side SCMs like Subversion. It's probably easiest to try and forget everything you know and start again and work through a good tutorial or screencast. One such example:
+Figuring out Git can be a bit of a challenge to those more familiar with traditional server side SCMs like Subversion. It's probably easiest to try and forget everything you know, start again and work through a good tutorial or screencast. One such example is:
 
 http://gitimmersion.com/
 
@@ -8,7 +8,7 @@ A lot of the trickier things you will need to do are commonplace, so here is a c
 
 # Git Cookbook
 
-I'm also go to give instructions using the command line tool [Git Bash](https://git-scm.com/downloads). There are other ways to use Git, but it'll be easy to explain it this way.
+I'm also going to give instructions on using the command line tool [Git Bash](https://git-scm.com/downloads). There are other ways to use Git, but it'll be easier to explain it this way.
 
 I'm going to use https repo urls, but ssh works even better if you have the public key/private key thing set up right.
 
