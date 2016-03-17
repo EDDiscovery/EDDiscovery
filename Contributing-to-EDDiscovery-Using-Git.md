@@ -1,6 +1,6 @@
 The best way to contribute to EDDiscovery is to create a fork the main project, make changes in your local fork and push them back up as Pull Requests using git.
 
-Figuring out Git can be a bit of a challenge to those more familiar with traditional server side SCMs like Subversion. It's probably easiest to try and forget everything you know and start again abd work through a good tutorial or screencast. One such example:
+Figuring out Git can be a bit of a challenge to those more familiar with traditional server side SCMs like Subversion. It's probably easiest to try and forget everything you know and start again and work through a good tutorial or screencast. One such example:
 
 http://gitimmersion.com/
 
@@ -23,6 +23,8 @@ Most of these examples assume you have a remote to the main repo called "**upstr
 
 ### Getting pull request capable for the first time
 
+For all this recipe we're going to pretend to use a fictional github account called **YOUR_GITHUB_NAME_HERE**. Substitute that username for your own.
+
 * Go to Finwen's EDDiscovery page. Make your own fork. Do this from here: 
 
 https://github.com/EDDiscovery/EDDiscovery
@@ -31,7 +33,7 @@ https://github.com/EDDiscovery/EDDiscovery
 
 https://github.com/YOUR_GITHUB_NAME_HERE/EDDiscovery
 
-* Clone your forked repo from Git Bash. Create an upstream remote to Finwen's repo
+* Clone your forked repo from Git Bash. Create an upstream remote to the main remote repo
 
 ```
 $ clone https://github.com/YOUR_GITHUB_NAME_HERE/EDDiscovery.git
