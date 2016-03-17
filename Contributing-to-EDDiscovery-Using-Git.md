@@ -16,10 +16,10 @@ I'm going to use https repo urls, but ssh works even better if you have the publ
 
 Recipes:
 
-* [Getting pull request capable for the first time](getting-pull-request-capable-for-the-first-time)
-* [Resyncing with EDDiscovery/EDDiscovery repo](resyncing-with-eddiscoveryeddiscovery-repo)
-* [Pull requests](pull-requests)
-* [Going nuclear: Resetting the master branch](going-nuclear-resetting-the-master-branch)
+* [Getting pull request capable for the first time](#getting-pull-request-capable-for-the-first-time)
+* [Resyncing with EDDiscovery/EDDiscovery repo](#resyncing-with-eddiscoveryeddiscovery-repo)
+* [Pull requests](#pull-requests)
+* [Going nuclear: Resetting the master branch](#going-nuclear-resetting-the-master-branch)
 
 ### Getting pull request capable for the first time
 
