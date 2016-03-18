@@ -37,6 +37,14 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label_opacity = new System.Windows.Forms.Label();
+            this.trackBar_theme_opacity = new System.Windows.Forms.TrackBar();
+            this.checkBox_theme_windowframe = new System.Windows.Forms.CheckBox();
+            this.button_theme_visitedcolor = new System.Windows.Forms.Button();
+            this.button_theme_highlightcolor = new System.Windows.Forms.Button();
+            this.button_theme_textcolor = new System.Windows.Forms.Button();
+            this.button_theme_backcolor = new System.Windows.Forms.Button();
+            this.button_theme_forecolor = new System.Windows.Forms.Button();
             this.comboBoxTheme = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBox_Distances = new System.Windows.Forms.CheckBox();
@@ -71,7 +79,6 @@
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.prospectingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setDefaultMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,14 +99,7 @@
             this.panel_close = new System.Windows.Forms.Panel();
             this.panel_minimize = new System.Windows.Forms.Panel();
             this.panel_grip = new System.Windows.Forms.Panel();
-            this.button_theme_forecolor = new System.Windows.Forms.Button();
-            this.button_theme_backcolor = new System.Windows.Forms.Button();
-            this.button_theme_textcolor = new System.Windows.Forms.Button();
-            this.button_theme_highlightcolor = new System.Windows.Forms.Button();
-            this.button_theme_visitedcolor = new System.Windows.Forms.Button();
-            this.checkBox_theme_windowframe = new System.Windows.Forms.CheckBox();
-            this.trackBar_theme_opacity = new System.Windows.Forms.TrackBar();
-            this.label_opacity = new System.Windows.Forms.Label();
+            this.button_theme_mapblockcolor = new System.Windows.Forms.Button();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
@@ -111,6 +111,7 @@
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -118,7 +119,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -200,6 +200,7 @@
             this.groupBox5.Controls.Add(this.label_opacity);
             this.groupBox5.Controls.Add(this.trackBar_theme_opacity);
             this.groupBox5.Controls.Add(this.checkBox_theme_windowframe);
+            this.groupBox5.Controls.Add(this.button_theme_mapblockcolor);
             this.groupBox5.Controls.Add(this.button_theme_visitedcolor);
             this.groupBox5.Controls.Add(this.button_theme_highlightcolor);
             this.groupBox5.Controls.Add(this.button_theme_textcolor);
@@ -212,6 +213,88 @@
             this.groupBox5.TabIndex = 15;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Theme";
+            // 
+            // label_opacity
+            // 
+            this.label_opacity.AutoSize = true;
+            this.label_opacity.Location = new System.Drawing.Point(711, 8);
+            this.label_opacity.Name = "label_opacity";
+            this.label_opacity.Size = new System.Drawing.Size(43, 13);
+            this.label_opacity.TabIndex = 4;
+            this.label_opacity.Text = "Opacity";
+            // 
+            // trackBar_theme_opacity
+            // 
+            this.trackBar_theme_opacity.Location = new System.Drawing.Point(681, 24);
+            this.trackBar_theme_opacity.Maximum = 100;
+            this.trackBar_theme_opacity.Minimum = 30;
+            this.trackBar_theme_opacity.Name = "trackBar_theme_opacity";
+            this.trackBar_theme_opacity.Size = new System.Drawing.Size(104, 45);
+            this.trackBar_theme_opacity.TabIndex = 3;
+            this.trackBar_theme_opacity.Value = 30;
+            this.trackBar_theme_opacity.ValueChanged += new System.EventHandler(this.trackBar_theme_opacity_ValueChanged);
+            this.trackBar_theme_opacity.MouseCaptureChanged += new System.EventHandler(this.trackBar_theme_opacity_MouseCaptureChanged);
+            // 
+            // checkBox_theme_windowframe
+            // 
+            this.checkBox_theme_windowframe.AutoSize = true;
+            this.checkBox_theme_windowframe.Location = new System.Drawing.Point(791, 17);
+            this.checkBox_theme_windowframe.Name = "checkBox_theme_windowframe";
+            this.checkBox_theme_windowframe.Size = new System.Drawing.Size(97, 17);
+            this.checkBox_theme_windowframe.TabIndex = 2;
+            this.checkBox_theme_windowframe.Text = "Window Frame";
+            this.checkBox_theme_windowframe.UseVisualStyleBackColor = true;
+            this.checkBox_theme_windowframe.MouseClick += new System.Windows.Forms.MouseEventHandler(this.checkBox_theme_windowframe_MouseClick);
+            // 
+            // button_theme_visitedcolor
+            // 
+            this.button_theme_visitedcolor.Location = new System.Drawing.Point(558, 46);
+            this.button_theme_visitedcolor.Name = "button_theme_visitedcolor";
+            this.button_theme_visitedcolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_visitedcolor.TabIndex = 1;
+            this.button_theme_visitedcolor.Text = "Visited Colour";
+            this.button_theme_visitedcolor.UseVisualStyleBackColor = true;
+            this.button_theme_visitedcolor.Click += new System.EventHandler(this.button_theme_visited_Click);
+            // 
+            // button_theme_highlightcolor
+            // 
+            this.button_theme_highlightcolor.Location = new System.Drawing.Point(435, 46);
+            this.button_theme_highlightcolor.Name = "button_theme_highlightcolor";
+            this.button_theme_highlightcolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_highlightcolor.TabIndex = 1;
+            this.button_theme_highlightcolor.Text = "Highlight Colour";
+            this.button_theme_highlightcolor.UseVisualStyleBackColor = true;
+            this.button_theme_highlightcolor.Click += new System.EventHandler(this.button_theme_texthighlightcolor_Click);
+            // 
+            // button_theme_textcolor
+            // 
+            this.button_theme_textcolor.Location = new System.Drawing.Point(309, 46);
+            this.button_theme_textcolor.Name = "button_theme_textcolor";
+            this.button_theme_textcolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_textcolor.TabIndex = 1;
+            this.button_theme_textcolor.Text = "Text Colour";
+            this.button_theme_textcolor.UseVisualStyleBackColor = true;
+            this.button_theme_textcolor.Click += new System.EventHandler(this.button_theme_textcolor_Click);
+            // 
+            // button_theme_backcolor
+            // 
+            this.button_theme_backcolor.Location = new System.Drawing.Point(435, 17);
+            this.button_theme_backcolor.Name = "button_theme_backcolor";
+            this.button_theme_backcolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_backcolor.TabIndex = 1;
+            this.button_theme_backcolor.Text = "Back Colour";
+            this.button_theme_backcolor.UseVisualStyleBackColor = true;
+            this.button_theme_backcolor.Click += new System.EventHandler(this.button_theme_backcolor_Click);
+            // 
+            // button_theme_forecolor
+            // 
+            this.button_theme_forecolor.Location = new System.Drawing.Point(309, 17);
+            this.button_theme_forecolor.Name = "button_theme_forecolor";
+            this.button_theme_forecolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_forecolor.TabIndex = 1;
+            this.button_theme_forecolor.Text = "Menu Fore Colour";
+            this.button_theme_forecolor.UseVisualStyleBackColor = true;
+            this.button_theme_forecolor.Click += new System.EventHandler(this.button_theme_forecolor_Click);
             // 
             // comboBoxTheme
             // 
@@ -517,8 +600,7 @@
             this.showLogfilesToolStripMenuItem,
             this.show2DMapsToolStripMenuItem,
             this.prospectingToolStripMenuItem,
-            this.statisticsToolStripMenuItem,
-            this.setDefaultMapColourToolStripMenuItem});
+            this.statisticsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -557,13 +639,6 @@
             this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.statisticsToolStripMenuItem.Text = "Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
-            // 
-            // setDefaultMapColourToolStripMenuItem
-            // 
-            this.setDefaultMapColourToolStripMenuItem.Name = "setDefaultMapColourToolStripMenuItem";
-            this.setDefaultMapColourToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.setDefaultMapColourToolStripMenuItem.Text = "Set Default Map Colour";
-            this.setDefaultMapColourToolStripMenuItem.Click += new System.EventHandler(this.setDefaultMapColourToolStripMenuItem_Click);
             // 
             // adminToolStripMenuItem
             // 
@@ -743,87 +818,15 @@
             this.panel_grip.TabIndex = 16;
             this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
             // 
-            // button_theme_forecolor
+            // button_theme_mapblockcolor
             // 
-            this.button_theme_forecolor.Location = new System.Drawing.Point(309, 17);
-            this.button_theme_forecolor.Name = "button_theme_forecolor";
-            this.button_theme_forecolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_forecolor.TabIndex = 1;
-            this.button_theme_forecolor.Text = "Menu Fore Colour";
-            this.button_theme_forecolor.UseVisualStyleBackColor = true;
-            this.button_theme_forecolor.Click += new System.EventHandler(this.button_theme_forecolor_Click);
-            // 
-            // button_theme_backcolor
-            // 
-            this.button_theme_backcolor.Location = new System.Drawing.Point(435, 17);
-            this.button_theme_backcolor.Name = "button_theme_backcolor";
-            this.button_theme_backcolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_backcolor.TabIndex = 1;
-            this.button_theme_backcolor.Text = "Back Colour";
-            this.button_theme_backcolor.UseVisualStyleBackColor = true;
-            this.button_theme_backcolor.Click += new System.EventHandler(this.button_theme_backcolor_Click);
-            // 
-            // button_theme_textcolor
-            // 
-            this.button_theme_textcolor.Location = new System.Drawing.Point(309, 46);
-            this.button_theme_textcolor.Name = "button_theme_textcolor";
-            this.button_theme_textcolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_textcolor.TabIndex = 1;
-            this.button_theme_textcolor.Text = "Text Colour";
-            this.button_theme_textcolor.UseVisualStyleBackColor = true;
-            this.button_theme_textcolor.Click += new System.EventHandler(this.button_theme_textcolor_Click);
-            // 
-            // button_theme_highlightcolor
-            // 
-            this.button_theme_highlightcolor.Location = new System.Drawing.Point(435, 46);
-            this.button_theme_highlightcolor.Name = "button_theme_highlightcolor";
-            this.button_theme_highlightcolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_highlightcolor.TabIndex = 1;
-            this.button_theme_highlightcolor.Text = "Highlight Colour";
-            this.button_theme_highlightcolor.UseVisualStyleBackColor = true;
-            this.button_theme_highlightcolor.Click += new System.EventHandler(this.button_theme_texthighlightcolor_Click);
-            // 
-            // button_theme_visitedcolor
-            // 
-            this.button_theme_visitedcolor.Location = new System.Drawing.Point(558, 46);
-            this.button_theme_visitedcolor.Name = "button_theme_visitedcolor";
-            this.button_theme_visitedcolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_visitedcolor.TabIndex = 1;
-            this.button_theme_visitedcolor.Text = "Visited Colour";
-            this.button_theme_visitedcolor.UseVisualStyleBackColor = true;
-            this.button_theme_visitedcolor.Click += new System.EventHandler(this.button_theme_visited_Click);
-            // 
-            // checkBox_theme_windowframe
-            // 
-            this.checkBox_theme_windowframe.AutoSize = true;
-            this.checkBox_theme_windowframe.Location = new System.Drawing.Point(558, 17);
-            this.checkBox_theme_windowframe.Name = "checkBox_theme_windowframe";
-            this.checkBox_theme_windowframe.Size = new System.Drawing.Size(97, 17);
-            this.checkBox_theme_windowframe.TabIndex = 2;
-            this.checkBox_theme_windowframe.Text = "Window Frame";
-            this.checkBox_theme_windowframe.UseVisualStyleBackColor = true;
-            this.checkBox_theme_windowframe.MouseClick += new System.Windows.Forms.MouseEventHandler(this.checkBox_theme_windowframe_MouseClick);
-            // 
-            // trackBar_theme_opacity
-            // 
-            this.trackBar_theme_opacity.Location = new System.Drawing.Point(681, 24);
-            this.trackBar_theme_opacity.Maximum = 100;
-            this.trackBar_theme_opacity.Minimum = 30;
-            this.trackBar_theme_opacity.Name = "trackBar_theme_opacity";
-            this.trackBar_theme_opacity.Size = new System.Drawing.Size(104, 45);
-            this.trackBar_theme_opacity.TabIndex = 3;
-            this.trackBar_theme_opacity.Value = 30;
-            this.trackBar_theme_opacity.ValueChanged += new System.EventHandler(this.trackBar_theme_opacity_ValueChanged);
-            this.trackBar_theme_opacity.MouseCaptureChanged += new System.EventHandler(this.trackBar_theme_opacity_MouseCaptureChanged);
-            // 
-            // label_opacity
-            // 
-            this.label_opacity.AutoSize = true;
-            this.label_opacity.Location = new System.Drawing.Point(711, 8);
-            this.label_opacity.Name = "label_opacity";
-            this.label_opacity.Size = new System.Drawing.Size(43, 13);
-            this.label_opacity.TabIndex = 4;
-            this.label_opacity.Text = "Opacity";
+            this.button_theme_mapblockcolor.Location = new System.Drawing.Point(558, 17);
+            this.button_theme_mapblockcolor.Name = "button_theme_mapblockcolor";
+            this.button_theme_mapblockcolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_mapblockcolor.TabIndex = 1;
+            this.button_theme_mapblockcolor.Text = "Map Block";
+            this.button_theme_mapblockcolor.UseVisualStyleBackColor = true;
+            this.button_theme_mapblockcolor.Click += new System.EventHandler(this.button_theme_mapblockcolor_Click);
             // 
             // travelHistoryControl1
             // 
@@ -890,6 +893,7 @@
             this.tabPage3.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -903,7 +907,6 @@
             this.menuStrip1.PerformLayout();
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -939,7 +942,6 @@
         private System.Windows.Forms.ToolStripMenuItem show2DMapsToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageScreenshots;
         private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
-        private System.Windows.Forms.ToolStripMenuItem setDefaultMapColourToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox checkBox_Distances;
         private System.Windows.Forms.CheckBox checkBoxEDSMLog;
@@ -986,6 +988,7 @@
         private System.Windows.Forms.CheckBox checkBox_theme_windowframe;
         private System.Windows.Forms.TrackBar trackBar_theme_opacity;
         private System.Windows.Forms.Label label_opacity;
+        private System.Windows.Forms.Button button_theme_mapblockcolor;
     }
 }
 

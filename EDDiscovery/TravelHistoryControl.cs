@@ -25,7 +25,6 @@ namespace EDDiscovery
     public partial class TravelHistoryControl : UserControl
     {
         private static EDDiscoveryForm _discoveryForm;
-        private int defaultColour;
         public EDSMSync sync;
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
@@ -54,7 +53,6 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             sync = new EDSMSync(_discoveryForm);
             var db = new SQLiteDBClass();
-            defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
             EDSMSyncTo = db.GetSettingBool("EDSMSyncTo", true);
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
@@ -251,8 +249,8 @@ namespace EDDiscovery
         }
 
         private void GetVisitedSystems(int commander)
-        {
-            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultColour, commander);
+        {                                                       // for backwards compatibility, don't store RGB value.
+            visitedSystems = netlog.ParseFiles(richTextBox_History, _discoveryForm.theme.MapBlockColor.ToArgb() & 0xFFFFFF, commander);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
@@ -333,8 +331,8 @@ namespace EDDiscovery
                 dataGridView1.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.TextColor;
 
                 cell = dataGridView1.Rows[rownr].Cells[4];
-                cell.Style.ForeColor = Color.FromArgb(item.vs == null ? defaultColour : item.vs.MapColour);
-            }
+                cell.Style.ForeColor = (item.vs == null) ? _discoveryForm.theme.MapBlockColor : Color.FromArgb(item.vs.MapColour);
+        }
 
 
 
@@ -1097,17 +1095,6 @@ namespace EDDiscovery
                     }
                 }
                 this.Cursor = Cursors.Default;
-            }
-        }
-
-        public void setDefaultMapColour()
-        {
-            mapColorDialog.Color = Color.FromArgb(defaultColour);
-            if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                defaultColour = mapColorDialog.Color.ToArgb();
-                var db = new SQLiteDBClass();
-                db.PutSettingInt("DefaultMap", defaultColour);
             }
         }
 
