@@ -57,6 +57,7 @@ namespace EDDiscovery
         {
             InitializeComponent();
             panel_close.Enabled = false;                            // no closing until we are ready for it..
+            tabControl1.Enabled = false;
 
             EDDConfig = new EDDConfig();
 
@@ -87,23 +88,35 @@ namespace EDDiscovery
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager();
 
+            theme.RestoreSettings();                                    // theme, remember your saved settings
+            theme.FillComboBoxWithThemes(comboBoxTheme);                // set up combo box with default themes
+            comboBoxTheme.Items.Add("Custom");                          // and add an extra custom one which enables the individual controls
+            theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
+            ConfigureThemeCustomControls();                             // given the selected theme, enable/disable their custom controls
 
-            theme.SetThemeBlack();
+            ApplyTheme();
+        }
 
-            menuStrip1.ForeColor = theme.ForeColor;
-            menuStrip1.BackColor = theme.BackColor;
+        void ApplyTheme()
+        {
+            this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
+            panel_grip.Visible = !theme.WindowsFrame;
+            panel_close.Visible = !theme.WindowsFrame;
+            panel_minimize.Visible = !theme.WindowsFrame;
 
-            theme.ApplyTheme(this);
+            theme.ApplyColors(this);
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
         {
-            panel_grip.Location = new Point(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height);
-            tabControl1.Size = new Size(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height - tabControl1.Location.Y);
+            if (panel_grip.Visible)
+            {
+                panel_grip.Location = new Point(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height);
+                tabControl1.Size = new Size(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height - tabControl1.Location.Y);
+            }
+            else
+                tabControl1.Size = new Size(this.ClientSize.Width , this.ClientSize.Height - tabControl1.Location.Y);
         }
-
-
-
 
         public TravelHistoryControl TravelControl
         {
@@ -201,6 +214,7 @@ namespace EDDiscovery
                 LogLine($"{Environment.NewLine}Loading completed!");
 
                 panel_close.Enabled = true;                            // now we can safely close
+                tabControl1.Enabled = true;
 
             }
             catch (Exception ex)
@@ -1243,7 +1257,7 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (!theme.WindowsFrame && e.Button == MouseButtons.Left)           // only if theme is borderless
             {
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
@@ -1277,6 +1291,23 @@ namespace EDDiscovery
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCL_RESIZE, HT_RESIZE, 0);
             }
+        }
+
+        private void ConfigureThemeCustomControls()
+        {
+            // TBD - enable/disable controls on theme.IsCustomTheme()
+        }
+
+        private void comboBoxTheme_SelectedIndexChanged(object sender, EventArgs e) // theme selected..
+        {
+            if (!theme.SetThemeByName(comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString()))    // only Custom will fail..
+            {
+                theme.SetCustom();                              // go to custom theme..
+            }
+
+            ConfigureThemeCustomControls();
+            ApplyTheme();
+            travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
         }
     }
 }
