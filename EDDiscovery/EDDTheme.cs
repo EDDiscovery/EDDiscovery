@@ -12,9 +12,10 @@ namespace EDDiscovery2
     {
         public struct Settings
         {
-            public Settings( String n , Color f , Color b, Color t, Color th , Color vs, bool wf , double op )
+            public Settings( String n , Color f , Color b, Color t, Color th , Color vs, Color mb, bool wf , double op )
             {
-                name = n;  forecolor = f; backcolor = b; textcolor = t; texthighlightcolor = th; visitedsystemcolor = vs;
+                name = n;  forecolor = f; backcolor = b; textcolor = t; texthighlightcolor = th;
+                visitedsystemcolor = vs; mapblockcolor = mb;
                 windowsframe = wf; formopacity = op;
             }
 
@@ -24,6 +25,7 @@ namespace EDDiscovery2
             public Color textcolor;
             public Color texthighlightcolor;
             public Color visitedsystemcolor;
+            public Color mapblockcolor;
             public bool windowsframe;
             public double formopacity;
         };
@@ -37,16 +39,16 @@ namespace EDDiscovery2
             themelist = new Settings[7];
 
             themelist[0] = new Settings("Windows Default", SystemColors.MenuText, SystemColors.Menu,
-                                                               SystemColors.WindowText, Color.Red, Color.Blue, true, 100);
+                                                               SystemColors.WindowText, Color.Red, Color.Blue, Color.Red, true, 100);
 
-            themelist[1] = new Settings("Orange Delight", Color.Orange, Color.Black, Color.Orange, Color.Red, Color.White, false, 100);
-            themelist[2] = new Settings("Orange Delight Opaque", Color.Orange, Color.Black, Color.Orange, Color.Red, Color.White, false, 90);
-            themelist[3] = new Settings("Orange Delight Transparent", Color.Orange, Color.Black, Color.Orange, Color.Red, Color.White, false, 60);
+            themelist[1] = new Settings("Orange Delight", Color.Orange, Color.Black, Color.Orange, Color.Red, Color.White, Color.Red, false, 100);
+            themelist[2] = new Settings("Orange Delight Opaque", Color.Orange, Color.Black, Color.Orange, Color.Red, Color.White, Color.Red, false, 90);
+            themelist[3] = new Settings("Orange Delight Transparent", Color.Orange, Color.Black, Color.Orange, Color.Red, Color.White, Color.Red, false, 60);
 
-            themelist[4] = new Settings("Blue Wonder", Color.White, Color.DarkBlue, Color.White, Color.Red, Color.Cyan, false, 100);
-            themelist[5] = new Settings("Blue Wonder Opaque", Color.White, Color.DarkBlue, Color.White, Color.Red, Color.Cyan, false, 90);
+            themelist[4] = new Settings("Blue Wonder", Color.White, Color.DarkBlue, Color.White, Color.Red, Color.Cyan, Color.Red, false, 100);
+            themelist[5] = new Settings("Blue Wonder Opaque", Color.White, Color.DarkBlue, Color.White, Color.Red, Color.Cyan, Color.Red, false, 90);
 
-            themelist[6] = new Settings("Green Baize Opaque", Color.White, Color.FromArgb(255,48,121,17), Color.White, Color.Red, Color.Cyan, false, 90);
+            themelist[6] = new Settings("Green Baize Opaque", Color.White, Color.FromArgb(255,48,121,17), Color.White, Color.Red, Color.Cyan, Color.Red, false, 90);
 
             currentsettings = themelist[0];             //default old theme
         }
@@ -63,6 +65,7 @@ namespace EDDiscovery2
                 currentsettings.textcolor = Color.FromArgb(db.GetSettingInt("ThemeTextColor", SystemColors.WindowText.ToArgb()));
                 currentsettings.texthighlightcolor = Color.FromArgb(db.GetSettingInt("ThemeTextHighlightColor", Color.Red.ToArgb()));
                 currentsettings.visitedsystemcolor = Color.FromArgb(db.GetSettingInt("ThemeVisitedSystemColor", Color.Blue.ToArgb()));
+                currentsettings.mapblockcolor = Color.FromArgb(db.GetSettingInt("ThemeMapBlockColor", Color.Red.ToArgb()));
                 currentsettings.windowsframe = db.GetSettingBool("ThemeWindowsFrame", true);
                 currentsettings.formopacity = db.GetSettingDouble("ThemeFormOpacity", 100);
                 currentsettings.name = db.GetSettingString("ThemeName", "Custom");
@@ -79,6 +82,7 @@ namespace EDDiscovery2
             db.PutSettingInt("ThemeTextColor", currentsettings.textcolor.ToArgb());
             db.PutSettingInt("ThemeTextHighlightColor", currentsettings.texthighlightcolor.ToArgb());
             db.PutSettingInt("ThemeVisitedSystemColor", currentsettings.visitedsystemcolor.ToArgb());
+            db.PutSettingInt("ThemeMapBlockColor", currentsettings.mapblockcolor.ToArgb());
             db.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
             db.PutSettingDouble("ThemeFormOpacity", currentsettings.formopacity);
             db.PutSettingString("ThemeName", currentsettings.name);
@@ -165,7 +169,7 @@ namespace EDDiscovery2
             }
         }
 
-        public enum EditIndex { Fore,Back,Text,HL,Visited };
+        public enum EditIndex { Fore,Back,Text,HL,Visited,MapBlock };
 
         public bool EditColor(EditIndex ex)                      // name is used to index the color. cuts down code in settings
         {
@@ -180,6 +184,8 @@ namespace EDDiscovery2
                 MyDialog.Color = TextHighlightColor;
             else if (ex == EditIndex.Visited)
                 MyDialog.Color = VisitedSystemColor;
+            else if (ex == EditIndex.MapBlock)
+                MyDialog.Color = MapBlockColor;
             else
                 MyDialog.Color = BackColor;
 
@@ -193,6 +199,8 @@ namespace EDDiscovery2
                     TextHighlightColor = MyDialog.Color;
                 else if (ex == EditIndex.Visited)
                     VisitedSystemColor = MyDialog.Color;
+                else if (ex == EditIndex.MapBlock)
+                    MapBlockColor = MyDialog.Color;
                 else
                     BackColor = MyDialog.Color;
 
@@ -207,6 +215,7 @@ namespace EDDiscovery2
         public Color TextColor { get { return currentsettings.textcolor; } set { SetCustom(); currentsettings.textcolor = value; } }
         public Color TextHighlightColor { get { return currentsettings.texthighlightcolor; } set { SetCustom(); currentsettings.texthighlightcolor = value; } }
         public Color VisitedSystemColor { get { return currentsettings.visitedsystemcolor; } set { SetCustom(); currentsettings.visitedsystemcolor = value; } }
+        public Color MapBlockColor { get { return currentsettings.mapblockcolor; } set { SetCustom(); currentsettings.mapblockcolor = value; } }
         public bool WindowsFrame { get { return currentsettings.windowsframe; } set { SetCustom(); currentsettings.windowsframe = value; } }
         public double Opacity { get { return currentsettings.formopacity; } set { SetCustom(); currentsettings.formopacity = value; } }
         public string Name { get { return currentsettings.name; } }

@@ -120,6 +120,8 @@ namespace EDDiscovery
             button_theme_highlightcolor.ForeColor = theme.TextHighlightColor;
             button_theme_visitedcolor.Visible = theme.IsCustomTheme();
             button_theme_visitedcolor.ForeColor = theme.VisitedSystemColor;
+            button_theme_mapblockcolor.Visible = theme.IsCustomTheme();
+            button_theme_mapblockcolor.ForeColor = theme.MapBlockColor;
             checkBox_theme_windowframe.Visible = theme.IsCustomTheme();
             checkBox_theme_windowframe.Checked = theme.WindowsFrame;
             trackBar_theme_opacity.Visible = theme.IsCustomTheme();
@@ -918,11 +920,6 @@ namespace EDDiscovery
             frm.Show();
         }
 
-        private void setDefaultMapColourToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            travelHistoryControl1.setDefaultMapColour();
-        }
-
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GetEDDBAsync(true);
@@ -1278,6 +1275,12 @@ namespace EDDiscovery
             ApplyTheme(true);
         }
 
+        private void button_theme_mapblockcolor_Click(object sender, EventArgs e)
+        {
+            theme.EditColor(EDDTheme.EditIndex.MapBlock);
+            ApplyTheme(true);
+        }
+
         private void checkBox_theme_windowframe_MouseClick(object sender, MouseEventArgs e)
         {
             theme.WindowsFrame = checkBox_theme_windowframe.Checked;
@@ -1296,5 +1299,6 @@ namespace EDDiscovery
             theme.Opacity = (double)trackBar_theme_opacity.Value;
             ApplyTheme(true);
         }
+
     }
 }
