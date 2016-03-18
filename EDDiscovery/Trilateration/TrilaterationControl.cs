@@ -260,10 +260,13 @@ namespace EDDiscovery
             }
             else if (e.ColumnIndex == 1)
             {
-                double dist = double.Parse(dataGridViewDistances[1, e.RowIndex].Value.ToString());
-                dataGridViewDistances[1, e.RowIndex].Value = dist.ToString();
-                // trigger trilateration calculation
-                RunTrilateration();
+                if (dataGridViewDistances[1, e.RowIndex].Value != null && !string.IsNullOrEmpty(dataGridViewDistances[1, e.RowIndex].Value.ToString()))
+                {
+                    double dist = double.Parse(dataGridViewDistances[1, e.RowIndex].Value.ToString());
+                    dataGridViewDistances[1, e.RowIndex].Value = dist.ToString();
+                    // trigger trilateration calculation
+                    RunTrilateration();
+                }
             }
             /* skip to the next editable cell */
             skipReadOnlyCells = true;
