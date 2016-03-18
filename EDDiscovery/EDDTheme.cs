@@ -34,7 +34,7 @@ namespace EDDiscovery2
 
         public EDDTheme()
         {
-            themelist = new Settings[6];
+            themelist = new Settings[7];
 
             themelist[0] = new Settings("Windows Default", SystemColors.MenuText, SystemColors.Menu,
                                                                SystemColors.WindowText, Color.Red, Color.Blue, true, 100);
@@ -45,6 +45,8 @@ namespace EDDiscovery2
 
             themelist[4] = new Settings("Blue Wonder", Color.White, Color.DarkBlue, Color.White, Color.Red, Color.Cyan, false, 100);
             themelist[5] = new Settings("Blue Wonder Opaque", Color.White, Color.DarkBlue, Color.White, Color.Red, Color.Cyan, false, 90);
+
+            themelist[6] = new Settings("Green Baize Opaque", Color.White, Color.FromArgb(255,48,121,17), Color.White, Color.Red, Color.Cyan, false, 90);
 
             currentsettings = themelist[0];             //default old theme
         }
@@ -78,7 +80,7 @@ namespace EDDiscovery2
             db.PutSettingInt("ThemeTextHighlightColor", currentsettings.texthighlightcolor.ToArgb());
             db.PutSettingInt("ThemeVisitedSystemColor", currentsettings.visitedsystemcolor.ToArgb());
             db.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
-            db.PutSettingDouble("ThemeOpacity", currentsettings.formopacity);
+            db.PutSettingDouble("ThemeFormOpacity", currentsettings.formopacity);
             db.PutSettingString("ThemeName", currentsettings.name);
         }
 
@@ -133,14 +135,12 @@ namespace EDDiscovery2
 
         public void UpdateColorControls(Control myControl)
         {
-            try
+            if (myControl is RichTextBox)
             {
                 myControl.BackColor = currentsettings.backcolor;
-                myControl.ForeColor = currentsettings.forecolor;
+                myControl.ForeColor = currentsettings.textcolor;
             }
-            catch { }
-
-            if (myControl is DataGridView)
+            else if (myControl is DataGridView)
             {
                 DataGridView MyDgv = (DataGridView)myControl;
                 MyDgv.ColumnHeadersDefaultCellStyle.BackColor = currentsettings.backcolor;     // NOT WORKING
@@ -149,6 +149,15 @@ namespace EDDiscovery2
                 MyDgv.DefaultCellStyle.BackColor = currentsettings.backcolor;
                 MyDgv.DefaultCellStyle.ForeColor = currentsettings.forecolor;
             }
+            else
+            {
+                try
+                {
+                    myControl.BackColor = currentsettings.backcolor;
+                    myControl.ForeColor = currentsettings.forecolor;
+                }
+                catch { }
+            }
 
             foreach (Control subC in myControl.Controls)
             {
@@ -156,12 +165,50 @@ namespace EDDiscovery2
             }
         }
 
-        public Color ForeColor { get { return currentsettings.forecolor; } set { currentsettings.forecolor = value; } }
-        public Color BackColor { get { return currentsettings.backcolor; } set { currentsettings.backcolor = value; } }
-        public Color TextColor { get { return currentsettings.textcolor; } set { currentsettings.textcolor = value; } }
-        public Color TextHighlightColor { get { return currentsettings.texthighlightcolor; } set { currentsettings.texthighlightcolor = value; } }
-        public Color VisitedSystemColor { get { return currentsettings.visitedsystemcolor; } set { currentsettings.visitedsystemcolor = value; } }
-        public bool WindowsFrame { get { return currentsettings.windowsframe; } set { currentsettings.windowsframe = value; } }
-        public double Opacity { get { return currentsettings.formopacity; } set { currentsettings.formopacity = value; } }
+        public enum EditIndex { Fore,Back,Text,HL,Visited };
+
+        public bool EditColor(EditIndex ex)                      // name is used to index the color. cuts down code in settings
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            MyDialog.AllowFullOpen = true;
+
+            if (ex == EditIndex.Fore)
+                MyDialog.Color = ForeColor;
+            else if (ex == EditIndex.Text)
+                MyDialog.Color = TextColor;
+            else if (ex == EditIndex.HL)
+                MyDialog.Color = TextHighlightColor;
+            else if (ex == EditIndex.Visited)
+                MyDialog.Color = VisitedSystemColor;
+            else
+                MyDialog.Color = BackColor;
+
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (ex == EditIndex.Fore)
+                    ForeColor = MyDialog.Color;
+                else if (ex == EditIndex.Text)
+                    TextColor = MyDialog.Color;
+                else if (ex == EditIndex.HL)
+                    TextHighlightColor = MyDialog.Color;
+                else if (ex == EditIndex.Visited)
+                    VisitedSystemColor = MyDialog.Color;
+                else
+                    BackColor = MyDialog.Color;
+
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public Color ForeColor { get { return currentsettings.forecolor; } set { SetCustom(); currentsettings.forecolor = value; } }
+        public Color BackColor { get { return currentsettings.backcolor; } set { SetCustom(); currentsettings.backcolor = value; } }
+        public Color TextColor { get { return currentsettings.textcolor; } set { SetCustom(); currentsettings.textcolor = value; } }
+        public Color TextHighlightColor { get { return currentsettings.texthighlightcolor; } set { SetCustom(); currentsettings.texthighlightcolor = value; } }
+        public Color VisitedSystemColor { get { return currentsettings.visitedsystemcolor; } set { SetCustom(); currentsettings.visitedsystemcolor = value; } }
+        public bool WindowsFrame { get { return currentsettings.windowsframe; } set { SetCustom(); currentsettings.windowsframe = value; } }
+        public double Opacity { get { return currentsettings.formopacity; } set { SetCustom(); currentsettings.formopacity = value; } }
+        public string Name { get { return currentsettings.name; } }
     }
 }

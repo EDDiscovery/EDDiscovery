@@ -36,6 +36,8 @@
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.comboBoxTheme = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBox_Distances = new System.Windows.Forms.CheckBox();
             this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
@@ -90,8 +92,14 @@
             this.panel_close = new System.Windows.Forms.Panel();
             this.panel_minimize = new System.Windows.Forms.Panel();
             this.panel_grip = new System.Windows.Forms.Panel();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.comboBoxTheme = new System.Windows.Forms.ComboBox();
+            this.button_theme_forecolor = new System.Windows.Forms.Button();
+            this.button_theme_backcolor = new System.Windows.Forms.Button();
+            this.button_theme_textcolor = new System.Windows.Forms.Button();
+            this.button_theme_highlightcolor = new System.Windows.Forms.Button();
+            this.button_theme_visitedcolor = new System.Windows.Forms.Button();
+            this.checkBox_theme_windowframe = new System.Windows.Forms.CheckBox();
+            this.trackBar_theme_opacity = new System.Windows.Forms.TrackBar();
+            this.label_opacity = new System.Windows.Forms.Label();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
@@ -102,6 +110,7 @@
             this.tabPageScreenshots.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -109,7 +118,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
-            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -183,6 +192,36 @@
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
             this.tabPage3.Click += new System.EventHandler(this.tabPage3_Click);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox5.Controls.Add(this.label_opacity);
+            this.groupBox5.Controls.Add(this.trackBar_theme_opacity);
+            this.groupBox5.Controls.Add(this.checkBox_theme_windowframe);
+            this.groupBox5.Controls.Add(this.button_theme_visitedcolor);
+            this.groupBox5.Controls.Add(this.button_theme_highlightcolor);
+            this.groupBox5.Controls.Add(this.button_theme_textcolor);
+            this.groupBox5.Controls.Add(this.button_theme_backcolor);
+            this.groupBox5.Controls.Add(this.button_theme_forecolor);
+            this.groupBox5.Controls.Add(this.comboBoxTheme);
+            this.groupBox5.Location = new System.Drawing.Point(3, 387);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(974, 117);
+            this.groupBox5.TabIndex = 15;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Theme";
+            // 
+            // comboBoxTheme
+            // 
+            this.comboBoxTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTheme.FormattingEnabled = true;
+            this.comboBoxTheme.Location = new System.Drawing.Point(17, 19);
+            this.comboBoxTheme.Name = "comboBoxTheme";
+            this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
+            this.comboBoxTheme.TabIndex = 0;
+            this.comboBoxTheme.SelectedIndexChanged += new System.EventHandler(this.comboBoxTheme_SelectedIndexChanged);
             // 
             // groupBox3
             // 
@@ -704,27 +743,87 @@
             this.panel_grip.TabIndex = 16;
             this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
             // 
-            // groupBox5
+            // button_theme_forecolor
             // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.comboBoxTheme);
-            this.groupBox5.Location = new System.Drawing.Point(3, 387);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(974, 117);
-            this.groupBox5.TabIndex = 15;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Theme";
+            this.button_theme_forecolor.Location = new System.Drawing.Point(309, 17);
+            this.button_theme_forecolor.Name = "button_theme_forecolor";
+            this.button_theme_forecolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_forecolor.TabIndex = 1;
+            this.button_theme_forecolor.Text = "Menu Fore Colour";
+            this.button_theme_forecolor.UseVisualStyleBackColor = true;
+            this.button_theme_forecolor.Click += new System.EventHandler(this.button_theme_forecolor_Click);
             // 
-            // comboBoxTheme
+            // button_theme_backcolor
             // 
-            this.comboBoxTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTheme.FormattingEnabled = true;
-            this.comboBoxTheme.Location = new System.Drawing.Point(17, 19);
-            this.comboBoxTheme.Name = "comboBoxTheme";
-            this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
-            this.comboBoxTheme.TabIndex = 0;
-            this.comboBoxTheme.SelectedIndexChanged += new System.EventHandler(this.comboBoxTheme_SelectedIndexChanged);
+            this.button_theme_backcolor.Location = new System.Drawing.Point(435, 17);
+            this.button_theme_backcolor.Name = "button_theme_backcolor";
+            this.button_theme_backcolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_backcolor.TabIndex = 1;
+            this.button_theme_backcolor.Text = "Back Colour";
+            this.button_theme_backcolor.UseVisualStyleBackColor = true;
+            this.button_theme_backcolor.Click += new System.EventHandler(this.button_theme_backcolor_Click);
+            // 
+            // button_theme_textcolor
+            // 
+            this.button_theme_textcolor.Location = new System.Drawing.Point(309, 46);
+            this.button_theme_textcolor.Name = "button_theme_textcolor";
+            this.button_theme_textcolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_textcolor.TabIndex = 1;
+            this.button_theme_textcolor.Text = "Text Colour";
+            this.button_theme_textcolor.UseVisualStyleBackColor = true;
+            this.button_theme_textcolor.Click += new System.EventHandler(this.button_theme_textcolor_Click);
+            // 
+            // button_theme_highlightcolor
+            // 
+            this.button_theme_highlightcolor.Location = new System.Drawing.Point(435, 46);
+            this.button_theme_highlightcolor.Name = "button_theme_highlightcolor";
+            this.button_theme_highlightcolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_highlightcolor.TabIndex = 1;
+            this.button_theme_highlightcolor.Text = "Highlight Colour";
+            this.button_theme_highlightcolor.UseVisualStyleBackColor = true;
+            this.button_theme_highlightcolor.Click += new System.EventHandler(this.button_theme_texthighlightcolor_Click);
+            // 
+            // button_theme_visitedcolor
+            // 
+            this.button_theme_visitedcolor.Location = new System.Drawing.Point(558, 46);
+            this.button_theme_visitedcolor.Name = "button_theme_visitedcolor";
+            this.button_theme_visitedcolor.Size = new System.Drawing.Size(117, 23);
+            this.button_theme_visitedcolor.TabIndex = 1;
+            this.button_theme_visitedcolor.Text = "Visited Colour";
+            this.button_theme_visitedcolor.UseVisualStyleBackColor = true;
+            this.button_theme_visitedcolor.Click += new System.EventHandler(this.button_theme_visited_Click);
+            // 
+            // checkBox_theme_windowframe
+            // 
+            this.checkBox_theme_windowframe.AutoSize = true;
+            this.checkBox_theme_windowframe.Location = new System.Drawing.Point(558, 17);
+            this.checkBox_theme_windowframe.Name = "checkBox_theme_windowframe";
+            this.checkBox_theme_windowframe.Size = new System.Drawing.Size(97, 17);
+            this.checkBox_theme_windowframe.TabIndex = 2;
+            this.checkBox_theme_windowframe.Text = "Window Frame";
+            this.checkBox_theme_windowframe.UseVisualStyleBackColor = true;
+            this.checkBox_theme_windowframe.MouseClick += new System.Windows.Forms.MouseEventHandler(this.checkBox_theme_windowframe_MouseClick);
+            // 
+            // trackBar_theme_opacity
+            // 
+            this.trackBar_theme_opacity.Location = new System.Drawing.Point(681, 24);
+            this.trackBar_theme_opacity.Maximum = 100;
+            this.trackBar_theme_opacity.Minimum = 30;
+            this.trackBar_theme_opacity.Name = "trackBar_theme_opacity";
+            this.trackBar_theme_opacity.Size = new System.Drawing.Size(104, 45);
+            this.trackBar_theme_opacity.TabIndex = 3;
+            this.trackBar_theme_opacity.Value = 30;
+            this.trackBar_theme_opacity.ValueChanged += new System.EventHandler(this.trackBar_theme_opacity_ValueChanged);
+            this.trackBar_theme_opacity.MouseCaptureChanged += new System.EventHandler(this.trackBar_theme_opacity_MouseCaptureChanged);
+            // 
+            // label_opacity
+            // 
+            this.label_opacity.AutoSize = true;
+            this.label_opacity.Location = new System.Drawing.Point(711, 8);
+            this.label_opacity.Name = "label_opacity";
+            this.label_opacity.Size = new System.Drawing.Size(43, 13);
+            this.label_opacity.TabIndex = 4;
+            this.label_opacity.Text = "Opacity";
             // 
             // travelHistoryControl1
             // 
@@ -789,6 +888,8 @@
             this.tabPageScreenshots.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -802,7 +903,7 @@
             this.menuStrip1.PerformLayout();
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -877,6 +978,14 @@
         private System.Windows.Forms.Panel panel_grip;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.ComboBox comboBoxTheme;
+        private System.Windows.Forms.Button button_theme_forecolor;
+        private System.Windows.Forms.Button button_theme_backcolor;
+        private System.Windows.Forms.Button button_theme_textcolor;
+        private System.Windows.Forms.Button button_theme_highlightcolor;
+        private System.Windows.Forms.Button button_theme_visitedcolor;
+        private System.Windows.Forms.CheckBox checkBox_theme_windowframe;
+        private System.Windows.Forms.TrackBar trackBar_theme_opacity;
+        private System.Windows.Forms.Label label_opacity;
     }
 }
 
