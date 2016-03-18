@@ -125,10 +125,10 @@ namespace EDDiscovery2
                         if (chk.OwningColumn.Tag is Material)
                         {
                             Material mat = (Material)chk.OwningColumn.Tag;
-                            bool val = false;
+                            //bool val = false;
 
-                            if (chk.Value != null && (bool)chk.Value == true)
-                                val = true;
+                            //if (chk.Value != null && (bool)chk.Value == true)
+                            //    val = true;
 
                             //edobj.materials[mat.material] = val; 
                             

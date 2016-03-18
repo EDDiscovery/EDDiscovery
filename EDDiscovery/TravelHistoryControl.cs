@@ -330,7 +330,7 @@ namespace EDDiscovery
 
                 cell.Tag = item;
 
-                dataGridView1.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedsystemColor : _discoveryForm.theme.TextColor;
+                dataGridView1.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.TextColor;
 
                 cell = dataGridView1.Rows[rownr].Cells[4];
                 cell.Style.ForeColor = Color.FromArgb(item.vs == null ? defaultColour : item.vs.MapColour);
