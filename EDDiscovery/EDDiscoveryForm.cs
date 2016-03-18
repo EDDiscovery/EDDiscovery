@@ -322,74 +322,6 @@ namespace EDDiscovery
             return false;
 #endif
         }
-        /*
-        private void GetRedWizzardFiles()
-        {
-            WebClient web = new WebClient();
-
-            try
-            {
-                LogText("Checking for new EDDiscovery data" + Environment.NewLine);
-
-                //GetNewRedWizzardFile(_fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
-                //GetNewRedWizzardFile(fileTgcDistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
-            }
-            catch (Exception ex)
-            {
-                LogText("GetRedWizzardFiles exception:" + ex.Message + Environment.NewLine);
-                return;
-            }
-        }
-        
-        private void GetNewRedWizzardFile(string filename, string url)
-        {
-            string etagFilename = filename + ".etag";
-
-            var request = (HttpWebRequest) HttpWebRequest.Create(url);
-            request.UserAgent = "EDDiscovery v" + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            if (File.Exists(etagFilename))
-            {
-                var etag = File.ReadAllText(etagFilename);
-                if (etag != "")
-                {
-                   request.Headers[HttpRequestHeader.IfNoneMatch] = etag;
-                }
-            }
-
-            try {
-                var response = (HttpWebResponse) request.GetResponse();
-                
-                LogText("Downloading " + filename + "..." + Environment.NewLine);
-
-                File.WriteAllText(filename + ".etag.tmp", response.Headers[HttpResponseHeader.ETag]);
-                var destFileStream = File.Open(filename + ".tmp", FileMode.Create, FileAccess.Write);
-                response.GetResponseStream().CopyTo(destFileStream);
-                
-                destFileStream.Close();
-                response.Close();
-
-                if (File.Exists(filename))
-                    File.Delete(filename);
-                if (File.Exists(etagFilename))
-                    File.Delete(etagFilename);
-
-                File.Move(filename + ".tmp", filename);
-                File.Move(etagFilename + ".tmp", etagFilename);
-            } catch (WebException e)
-            {
-                var code = ((HttpWebResponse) e.Response).StatusCode;
-                if (code == HttpStatusCode.NotModified)
-                {
-                    LogText(filename + " is up to date." + Environment.NewLine);
-                } else
-                {
-                    throw e;
-                }
-            }
-        }
-        */
 
         private void GetEDSMSystems()
         {
@@ -807,14 +739,6 @@ namespace EDDiscovery
             }
         }
 
-        private void button_Save_Click(object sender, EventArgs e)
-        {
-            SaveSettings();
-
-            tabControl1.SelectedTab = tabPageTravelHistory;
-            travelHistoryControl1.RefreshHistory();
-        }
-
         private void SaveSettings()
         {
             _db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
@@ -828,6 +752,7 @@ namespace EDDiscovery
             _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
             _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
             routeControl1.SaveSettings();
+            theme.SaveSettings();
 
             _db.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
             _db.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
