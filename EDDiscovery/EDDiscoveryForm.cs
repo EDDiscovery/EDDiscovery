@@ -31,7 +31,7 @@ namespace EDDiscovery
         public const int HT_CAPTION = 0x2;
         public const int WM_NCL_RESIZE = 0x112;
         public const int HT_RESIZE = 61448;
-                
+
 
 
         [DllImportAttribute("user32.dll")]
@@ -62,9 +62,9 @@ namespace EDDiscovery
             EDDConfig = new EDDConfig();
 
             //_fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
-            _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");        
+            _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
-            string logpath="";
+            string logpath = "";
             try
             {
                 logpath = Path.Combine(Tools.GetAppDataDirectory(), "Log");
@@ -92,12 +92,11 @@ namespace EDDiscovery
             theme.FillComboBoxWithThemes(comboBoxTheme);                // set up combo box with default themes
             comboBoxTheme.Items.Add("Custom");                          // and add an extra custom one which enables the individual controls
             theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
-            ConfigureThemeCustomControls();                             // given the selected theme, enable/disable their custom controls
 
-            ApplyTheme();
+            ApplyTheme(false);
         }
 
-        void ApplyTheme()
+        void ApplyTheme(bool refreshhistory)
         {
             this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
             panel_grip.Visible = !theme.WindowsFrame;
@@ -105,6 +104,27 @@ namespace EDDiscovery
             panel_minimize.Visible = !theme.WindowsFrame;
 
             theme.ApplyColors(this);
+
+            if (refreshhistory)
+                travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
+
+            Console.WriteLine("Theme "  + theme.Name + " " + theme.IsCustomTheme().ToString());
+
+            button_theme_forecolor.Visible = theme.IsCustomTheme();
+            button_theme_forecolor.ForeColor = theme.ForeColor;
+            button_theme_backcolor.Visible = theme.IsCustomTheme();
+            button_theme_backcolor.ForeColor = Color.FromArgb(1-theme.BackColor.ToArgb());          // ensure its visible
+            button_theme_textcolor.Visible = theme.IsCustomTheme();
+            button_theme_textcolor.ForeColor = theme.TextColor;
+            button_theme_highlightcolor.Visible = theme.IsCustomTheme();
+            button_theme_highlightcolor.ForeColor = theme.TextHighlightColor;
+            button_theme_visitedcolor.Visible = theme.IsCustomTheme();
+            button_theme_visitedcolor.ForeColor = theme.VisitedSystemColor;
+            checkBox_theme_windowframe.Visible = theme.IsCustomTheme();
+            checkBox_theme_windowframe.Checked = theme.WindowsFrame;
+            trackBar_theme_opacity.Visible = theme.IsCustomTheme();
+            trackBar_theme_opacity.Value = (int)theme.Opacity;
+            label_opacity.Visible = theme.IsCustomTheme();
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
@@ -115,7 +135,7 @@ namespace EDDiscovery
                 tabControl1.Size = new Size(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height - tabControl1.Location.Y);
             }
             else
-                tabControl1.Size = new Size(this.ClientSize.Width , this.ClientSize.Height - tabControl1.Location.Y);
+                tabControl1.Size = new Size(this.ClientSize.Width, this.ClientSize.Height - tabControl1.Location.Y);
         }
 
         public TravelHistoryControl TravelControl
@@ -165,7 +185,7 @@ namespace EDDiscovery
             {
                 travelHistoryControl1.Enabled = false;
 
-                var edsmThread = new Thread(GetEDSMSystems) {Name = "Downloading EDSM Systems"};
+                var edsmThread = new Thread(GetEDSMSystems) { Name = "Downloading EDSM Systems" };
                 var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files" };
                 edsmThread.Start();
                 downloadmapsThread.Start();
@@ -181,7 +201,7 @@ namespace EDDiscovery
 
                 OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
 
-                 GetEDSMDistancesAsync();
+                GetEDSMDistancesAsync();
 
                 //Application.DoEvents();
                 GetEDDBAsync(false);
@@ -377,7 +397,8 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                Invoke((MethodInvoker) delegate {
+                Invoke((MethodInvoker)delegate
+                {
                     TravelHistoryControl.LogText("GetEDSMSystems exception:" + ex.Message + Environment.NewLine);
                     TravelHistoryControl.LogText(ex.StackTrace + Environment.NewLine);
                 });
@@ -412,7 +433,7 @@ namespace EDDiscovery
             ThreadEDDB.Start();
         }
 
-   
+
         private void GetEDSMDistances()
         {
             try
@@ -518,7 +539,7 @@ namespace EDDiscovery
         }
 
 
-        private void  GetEDDBUpdate()
+        private void GetEDDBUpdate()
         {
             try
             {
@@ -573,7 +594,7 @@ namespace EDDiscovery
 
                 }
 
-                
+
 
                 if (updatedb || eddbforceupdate)
                 {
@@ -590,7 +611,7 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText("GetEDSCSystems exception:" + ex.Message + Environment.NewLine);
                 });
             }
-           
+
         }
 
         private void DBUpdateEDDB(EDDBClass eddb)
@@ -601,7 +622,7 @@ namespace EDDiscovery
             LogText("Add new EDDB data to database." + Environment.NewLine);
             eddb.Add2DB(eddbsystems, eddbstations);
 
-            
+
             eddbsystems.Clear();
             eddbstations.Clear();
             eddbsystems = null;
@@ -688,7 +709,7 @@ namespace EDDiscovery
         }
 
 
-      
+
 
 
 
@@ -704,8 +725,8 @@ namespace EDDiscovery
                 if (!Directory.Exists(appdata))
                     Directory.CreateDirectory(appdata);
 
-                string filename = appdata + "\\"+jfile;
-                
+                string filename = appdata + "\\" + jfile;
+
                 if (!File.Exists(filename))
                     return null;
 
@@ -951,7 +972,7 @@ namespace EDDiscovery
 
             checkBox_Distances.Checked = EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
-            
+
             checkboxSkipSlowUpdates.Checked = EDDConfig.CanSkipSlowUpdates;
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
@@ -1042,7 +1063,7 @@ namespace EDDiscovery
 
                 string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
                 bool newfile = false;
-                string  rwsysfiletime = "2014-01-01 00:00:00";
+                string rwsysfiletime = "2014-01-01 00:00:00";
                 LogText("Get systems from EDSM." + Environment.NewLine);
 
                 eddb.DownloadFile("http://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
@@ -1054,7 +1075,7 @@ namespace EDDiscovery
                     string json = LoadJsonFile(edsmsystems);
                     List<SystemClass> systems = SystemClass.ParseEDSM(json, ref rwsysfiletime);
 
-                   
+
                     List<SystemClass> systems2Store = new List<SystemClass>();
 
                     foreach (SystemClass system in systems)
@@ -1063,7 +1084,7 @@ namespace EDDiscovery
                         SystemClass sys = SystemData.GetSystem(system.name);
                         if (sys == null)
                             systems2Store.Add(system);
-                        else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y!=system.y  || sys.z != system.z)  // Case or position changed
+                        else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y != system.y || sys.z != system.z)  // Case or position changed
                             systems2Store.Add(system);
                     }
                     SystemClass.Store(systems2Store);
@@ -1117,7 +1138,8 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
         {
             /* TODO: Only focus the field if we're on the correct tab! */
-            if(fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory) {
+            if (fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory)
+            {
                 travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
             }
         }
@@ -1160,7 +1182,7 @@ namespace EDDiscovery
             }
         }
 
-        
+
         private void AboutBox()
         {
             AboutForm frm = new AboutForm();
@@ -1218,21 +1240,61 @@ namespace EDDiscovery
             }
         }
 
-        private void ConfigureThemeCustomControls()
-        {
-            // TBD - enable/disable controls on theme.IsCustomTheme()
-        }
-
         private void comboBoxTheme_SelectedIndexChanged(object sender, EventArgs e) // theme selected..
         {
             if (!theme.SetThemeByName(comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString()))    // only Custom will fail..
-            {
                 theme.SetCustom();                              // go to custom theme..
-            }
 
-            ConfigureThemeCustomControls();
-            ApplyTheme();
-            travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
+            ApplyTheme(true);
+        }
+
+        private void button_theme_forecolor_Click(object sender, EventArgs e)
+        {
+            theme.EditColor(EDDTheme.EditIndex.Fore);
+            ApplyTheme(true);                               // no harm even if nothing changed..
+        }
+
+        private void button_theme_backcolor_Click(object sender, EventArgs e)
+        {
+            theme.EditColor(EDDTheme.EditIndex.Back);
+            ApplyTheme(true);
+        }
+
+        private void button_theme_textcolor_Click(object sender, EventArgs e)
+        {
+            theme.EditColor(EDDTheme.EditIndex.Text);
+            ApplyTheme(true);
+        }
+
+        private void button_theme_visited_Click(object sender, EventArgs e)
+        {
+            theme.EditColor(EDDTheme.EditIndex.Visited);
+            ApplyTheme(true);
+        }
+
+        private void button_theme_texthighlightcolor_Click(object sender, EventArgs e)
+        {
+            theme.EditColor(EDDTheme.EditIndex.HL);
+            ApplyTheme(true);
+        }
+
+        private void checkBox_theme_windowframe_MouseClick(object sender, MouseEventArgs e)
+        {
+            theme.WindowsFrame = checkBox_theme_windowframe.Checked;
+            ApplyTheme(true);
+
+        }
+
+        private void trackBar_theme_opacity_ValueChanged(object sender, EventArgs e)
+        {
+            theme.Opacity = (double)trackBar_theme_opacity.Value;
+            ApplyTheme(true);
+        }
+
+        private void trackBar_theme_opacity_MouseCaptureChanged(object sender, EventArgs e)
+        {
+            theme.Opacity = (double)trackBar_theme_opacity.Value;
+            ApplyTheme(true);
         }
     }
 }
