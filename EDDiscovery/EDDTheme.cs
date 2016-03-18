@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EDDiscovery.DB;
 
 namespace EDDiscovery2
 {
@@ -29,6 +30,7 @@ namespace EDDiscovery2
 
         private Settings currentsettings;           // if name = custom, then its not a standard theme..
         private Settings[] themelist;
+        private SQLiteDBClass db;
 
         public EDDTheme()
         {
@@ -44,17 +46,40 @@ namespace EDDiscovery2
             themelist[4] = new Settings("Blue Wonder", Color.White, Color.DarkBlue, Color.White, Color.Red, Color.Cyan, false, 100);
             themelist[5] = new Settings("Blue Wonder Opaque", Color.White, Color.DarkBlue, Color.White, Color.Red, Color.Cyan, false, 90);
 
-            currentsettings = themelist[2];
+            currentsettings = themelist[0];             //default old theme
         }
 
         public void RestoreSettings()
         {
-            // tbd
+            if (db == null)
+                db = new SQLiteDBClass();
+
+            if (db.keyExists( "ThemeForeColor"))                                         // if there.. get the others with a good default in case the db is screwed.
+            {
+                currentsettings.forecolor = Color.FromArgb(db.GetSettingInt("ThemeForeColor", SystemColors.MenuText.ToArgb()));
+                currentsettings.backcolor = Color.FromArgb(db.GetSettingInt("ThemeBackColor", SystemColors.Menu.ToArgb()));
+                currentsettings.textcolor = Color.FromArgb(db.GetSettingInt("ThemeTextColor", SystemColors.WindowText.ToArgb()));
+                currentsettings.texthighlightcolor = Color.FromArgb(db.GetSettingInt("ThemeTextHighlightColor", Color.Red.ToArgb()));
+                currentsettings.visitedsystemcolor = Color.FromArgb(db.GetSettingInt("ThemeVisitedSystemColor", Color.Blue.ToArgb()));
+                currentsettings.windowsframe = db.GetSettingBool("ThemeWindowsFrame", true);
+                currentsettings.formopacity = db.GetSettingDouble("ThemeFormOpacity", 100);
+                currentsettings.name = db.GetSettingString("ThemeName", "Custom");
+            }
         }
 
         public void SaveSettings()
         {
-            // tbd
+            if (db == null)
+                db = new SQLiteDBClass();
+
+            db.PutSettingInt("ThemeForeColor", currentsettings.forecolor.ToArgb());
+            db.PutSettingInt("ThemeBackColor", currentsettings.backcolor.ToArgb());
+            db.PutSettingInt("ThemeTextColor", currentsettings.textcolor.ToArgb());
+            db.PutSettingInt("ThemeTextHighlightColor", currentsettings.texthighlightcolor.ToArgb());
+            db.PutSettingInt("ThemeVisitedSystemColor", currentsettings.visitedsystemcolor.ToArgb());
+            db.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
+            db.PutSettingDouble("ThemeOpacity", currentsettings.formopacity);
+            db.PutSettingString("ThemeName", currentsettings.name);
         }
 
         public void FillComboBoxWithThemes(ComboBox comboBoxTheme)          // fill in a combo box with default themes

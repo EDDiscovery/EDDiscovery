@@ -935,7 +935,7 @@ namespace EDDiscovery.DB
         }
 
 // Check if a key exists
-        private bool keyExists(string sKey)
+        public bool keyExists(string sKey)
         {
 
             try
