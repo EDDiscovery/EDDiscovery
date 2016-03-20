@@ -48,6 +48,7 @@ namespace EDDiscovery
         public AutoCompleteStringCollection SystemNames { get; private set; }
         public string CommanderName { get; private set; }
         static public EDDConfig EDDConfig { get; private set; }
+
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
 
@@ -81,22 +82,21 @@ namespace EDDiscovery
             }
             _edsmSync = new EDSMSync(this);
 
+
+            theme.RestoreSettings();                                    // theme, remember your saved settings
+
             trilaterationControl.InitControl(this);
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
+            settings.InitControl(this);                                
 
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager();
 
-            theme.RestoreSettings();                                    // theme, remember your saved settings
-            theme.FillComboBoxWithThemes(comboBoxTheme);                // set up combo box with default themes
-            comboBoxTheme.Items.Add("Custom");                          // and add an extra custom one which enables the individual controls
-            theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
-
             ApplyTheme(false);
         }
 
-        void ApplyTheme(bool refreshhistory)
+        public void ApplyTheme(bool refreshhistory)
         {
             this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
             panel_grip.Visible = !theme.WindowsFrame;
@@ -110,23 +110,6 @@ namespace EDDiscovery
 
             Console.WriteLine("Theme "  + theme.Name + " " + theme.IsCustomTheme().ToString());
 
-            button_theme_forecolor.Visible = theme.IsCustomTheme();
-            button_theme_forecolor.ForeColor = theme.ForeColor;
-            button_theme_backcolor.Visible = theme.IsCustomTheme();
-            button_theme_backcolor.ForeColor = Color.FromArgb(1-theme.BackColor.ToArgb());          // ensure its visible
-            button_theme_textcolor.Visible = theme.IsCustomTheme();
-            button_theme_textcolor.ForeColor = theme.TextColor;
-            button_theme_highlightcolor.Visible = theme.IsCustomTheme();
-            button_theme_highlightcolor.ForeColor = theme.TextHighlightColor;
-            button_theme_visitedcolor.Visible = theme.IsCustomTheme();
-            button_theme_visitedcolor.ForeColor = theme.VisitedSystemColor;
-            button_theme_mapblockcolor.Visible = theme.IsCustomTheme();
-            button_theme_mapblockcolor.ForeColor = theme.MapBlockColor;
-            checkBox_theme_windowframe.Visible = theme.IsCustomTheme();
-            checkBox_theme_windowframe.Checked = theme.WindowsFrame;
-            trackBar_theme_opacity.Visible = theme.IsCustomTheme();
-            trackBar_theme_opacity.Value = (int)theme.Opacity;
-            label_opacity.Visible = theme.IsCustomTheme();
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
@@ -164,7 +147,8 @@ namespace EDDiscovery
                 EDDConfig.Update();
                 RepositionForm();
                 InitFormControls();
-                InitSettingsTab();
+                settings.InitSettingsTab();
+
                 CheckIfEliteDangerousIsRunning();
                 CheckIfVerboseLoggingIsTurnedOn();
 
@@ -624,7 +608,6 @@ namespace EDDiscovery
             LogText("Add new EDDB data to database." + Environment.NewLine);
             eddb.Add2DB(eddbsystems, eddbstations);
 
-
             eddbsystems.Clear();
             eddbstations.Clear();
             eddbsystems = null;
@@ -711,12 +694,6 @@ namespace EDDiscovery
         }
 
 
-
-
-
-
-
-
         private string LoadJSON(string jfile)
         {
             string json = null;
@@ -747,53 +724,19 @@ namespace EDDiscovery
         }
 
 
-
-
-        private void button_Browse_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-
-
-            DialogResult dlgResult = dirdlg.ShowDialog();
-
-            if (dlgResult == DialogResult.OK)
-            {
-                textBoxNetLogDir.Text = dirdlg.SelectedPath;
-            }
-        }
-
         private void SaveSettings()
         {
-            _db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
-            _db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
+            settings.SaveSettings();
 
             _db.PutSettingInt("FormWidth", this.Width);
             _db.PutSettingInt("FormHeight", this.Height);
             _db.PutSettingInt("FormTop", this.Top);
             _db.PutSettingInt("FormLeft", this.Left);
-            _db.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
-            _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
-            _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
             routeControl1.SaveSettings();
             theme.SaveSettings();
 
             _db.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
             _db.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
-            EDDConfig.UseDistances = checkBox_Distances.Checked;
-            EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
-            EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
-
-            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
-            EDDConfig.StoreCommanders(edcommanders);
-            dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
-            dataGridViewCommanders.Update();
-
-        }
-
-        private void routeControl1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -801,11 +744,6 @@ namespace EDDiscovery
             travelHistoryControl1.netlog.StopMonitor();
             _edsmSync.StopSync();
             SaveSettings();
-        }
-
-        private void travelHistoryControl1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void button_test_Click(object sender, EventArgs e)
@@ -906,13 +844,6 @@ namespace EDDiscovery
 
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormSagCarinaMission frm = new FormSagCarinaMission(this);
@@ -952,45 +883,7 @@ namespace EDDiscovery
             }
         }
 
-        private void InitSettingsTab()
-        {
-            // Default directory
-            bool auto = _db.GetSettingBool("NetlogDirAutoMode", true);
-            if (auto)
-            {
-                radioButton_Auto.Checked = auto;
-            }
-            else
-            {
-                radioButton_Manual.Checked = true;
-            }
-            string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
-            textBoxNetLogDir.Text = _db.GetSettingString("Netlogdir", datapath);
-
-            checkBox_Distances.Checked = EDDConfig.UseDistances;
-            checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
-
-            checkboxSkipSlowUpdates.Checked = EDDConfig.CanSkipSlowUpdates;
-#if DEBUG
-            checkboxSkipSlowUpdates.Visible = true;
-#endif
-            textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
-            textBoxHomeSystem.Text = _db.GetSettingString("DefaultMapCenter", "Sol");
-
-            textBoxDefaultZoom.Text = _db.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
-
-            bool selectionCentre = _db.GetSettingBool("CentreMapOnSelection", true);
-            if (selectionCentre)
-            {
-                radioButtonHistorySelection.Checked = true;
-            }
-            else
-            {
-                radioButtonCentreHome.Checked = true;
-            }
-            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
-        }
-
+        
 
         private void CheckIfEliteDangerousIsRunning()
         {
@@ -1026,20 +919,7 @@ namespace EDDiscovery
             frm.Show();
         }
 
-        private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            var value = textBoxDefaultZoom.Text.Trim();
-            double parseout;
-            if (Double.TryParse(value, out parseout))
-            {
-                e.Cancel = (parseout < 0.01 || parseout > 50.0);
-            }
-            else
-            {
-                e.Cancel = true;
-            }
-        }
-
+        
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AsyncSyncEDSMSystems();
@@ -1141,30 +1021,7 @@ namespace EDDiscovery
             }
         }
 
-        private void tabPage3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void buttonAddCommander_Click(object sender, EventArgs e)
-        {
-            EDCommander cmdr = EDDConfig.GetNewCommander();
-
-            //List<EDCommander> dlist = (List < EDCommander > )dataGridViewCommanders.DataSource;
-            //dlist.Add(cmdr);
-            //dataGridViewCommanders.DataSource = dlist;
-            //dataGridViewCommanders.Invalidate();
-
-            //dataGridViewCommanders.Update();
-
-            EDDConfig.listCommanders.Add(cmdr);
-            dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
-            dataGridViewCommanders.Update();
-            //string[] row = new string[] { cmdr.Nr.ToString(), cmdr.Name, cmdr.APIKey, cmdr.NetLogPath };
-            //dataGridViewCommanders.Rows.Add(row);
-        }
-
+        
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
@@ -1237,68 +1094,6 @@ namespace EDDiscovery
             }
         }
 
-        private void comboBoxTheme_SelectedIndexChanged(object sender, EventArgs e) // theme selected..
-        {
-            if (!theme.SetThemeByName(comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString()))    // only Custom will fail..
-                theme.SetCustom();                              // go to custom theme..
-
-            ApplyTheme(true);
-        }
-
-        private void button_theme_forecolor_Click(object sender, EventArgs e)
-        {
-            theme.EditColor(EDDTheme.EditIndex.Fore);
-            ApplyTheme(true);                               // no harm even if nothing changed..
-        }
-
-        private void button_theme_backcolor_Click(object sender, EventArgs e)
-        {
-            theme.EditColor(EDDTheme.EditIndex.Back);
-            ApplyTheme(true);
-        }
-
-        private void button_theme_textcolor_Click(object sender, EventArgs e)
-        {
-            theme.EditColor(EDDTheme.EditIndex.Text);
-            ApplyTheme(true);
-        }
-
-        private void button_theme_visited_Click(object sender, EventArgs e)
-        {
-            theme.EditColor(EDDTheme.EditIndex.Visited);
-            ApplyTheme(true);
-        }
-
-        private void button_theme_texthighlightcolor_Click(object sender, EventArgs e)
-        {
-            theme.EditColor(EDDTheme.EditIndex.HL);
-            ApplyTheme(true);
-        }
-
-        private void button_theme_mapblockcolor_Click(object sender, EventArgs e)
-        {
-            theme.EditColor(EDDTheme.EditIndex.MapBlock);
-            ApplyTheme(true);
-        }
-
-        private void checkBox_theme_windowframe_MouseClick(object sender, MouseEventArgs e)
-        {
-            theme.WindowsFrame = checkBox_theme_windowframe.Checked;
-            ApplyTheme(true);
-
-        }
-
-        private void trackBar_theme_opacity_ValueChanged(object sender, EventArgs e)
-        {
-            theme.Opacity = (double)trackBar_theme_opacity.Value;
-            ApplyTheme(true);
-        }
-
-        private void trackBar_theme_opacity_MouseCaptureChanged(object sender, EventArgs e)
-        {
-            theme.Opacity = (double)trackBar_theme_opacity.Value;
-            ApplyTheme(true);
-        }
 
     }
 }

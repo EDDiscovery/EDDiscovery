@@ -30,47 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.tabPageScreenshots = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label_opacity = new System.Windows.Forms.Label();
-            this.trackBar_theme_opacity = new System.Windows.Forms.TrackBar();
-            this.checkBox_theme_windowframe = new System.Windows.Forms.CheckBox();
-            this.button_theme_visitedcolor = new System.Windows.Forms.Button();
-            this.button_theme_highlightcolor = new System.Windows.Forms.Button();
-            this.button_theme_textcolor = new System.Windows.Forms.Button();
-            this.button_theme_backcolor = new System.Windows.Forms.Button();
-            this.button_theme_forecolor = new System.Windows.Forms.Button();
-            this.comboBoxTheme = new System.Windows.Forms.ComboBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBox_Distances = new System.Windows.Forms.CheckBox();
-            this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
-            this.checkboxSkipSlowUpdates = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button_Browse = new System.Windows.Forms.Button();
-            this.textBoxNetLogDir = new System.Windows.Forms.TextBox();
-            this.radioButton_Manual = new System.Windows.Forms.RadioButton();
-            this.radioButton_Auto = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textBoxDefaultZoom = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.radioButtonHistorySelection = new System.Windows.Forms.RadioButton();
-            this.radioButtonCentreHome = new System.Windows.Forms.RadioButton();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBoxHomeSystem = new System.Windows.Forms.TextBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.buttonAddCommander = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
-            this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNetLogPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button_test = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,477 +55,29 @@
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this.panel_close = new System.Windows.Forms.Panel();
-            this.panel_minimize = new System.Windows.Forms.Panel();
             this.panel_grip = new System.Windows.Forms.Panel();
-            this.button_theme_mapblockcolor = new System.Windows.Forms.Button();
-            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
-            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
-            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
+            this.panel_minimize = new System.Windows.Forms.Panel();
+            this.panel_close = new System.Windows.Forms.Panel();
+            this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.settings = new EDDiscovery2.Settings();
+            this.tabPageRoute = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
-            this.tabControl1.SuspendLayout();
-            this.tabPageTravelHistory.SuspendLayout();
-            this.tabPageTriletaration.SuspendLayout();
-            this.tabPageScreenshots.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).BeginInit();
-            this.groupBox3.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
+            this.tabPageScreenshots = new System.Windows.Forms.TabPage();
+            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
+            this.tabPageTriletaration = new System.Windows.Forms.TabPage();
+            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
+            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
+            this.tabPageSettings.SuspendLayout();
+            this.tabPageRoute.SuspendLayout();
+            this.tabPageScreenshots.SuspendLayout();
+            this.tabPageTriletaration.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPageTravelHistory.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabPageTravelHistory);
-            this.tabControl1.Controls.Add(this.tabPageTriletaration);
-            this.tabControl1.Controls.Add(this.tabPageScreenshots);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(0, 28);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(993, 697);
-            this.tabControl1.TabIndex = 15;
-            // 
-            // tabPageTravelHistory
-            // 
-            this.tabPageTravelHistory.Controls.Add(this.travelHistoryControl1);
-            this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
-            this.tabPageTravelHistory.Name = "tabPageTravelHistory";
-            this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTravelHistory.Size = new System.Drawing.Size(985, 671);
-            this.tabPageTravelHistory.TabIndex = 0;
-            this.tabPageTravelHistory.Text = "Travel history";
-            this.tabPageTravelHistory.UseVisualStyleBackColor = true;
-            // 
-            // tabPageTriletaration
-            // 
-            this.tabPageTriletaration.Controls.Add(this.trilaterationControl);
-            this.tabPageTriletaration.Location = new System.Drawing.Point(4, 22);
-            this.tabPageTriletaration.Name = "tabPageTriletaration";
-            this.tabPageTriletaration.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTriletaration.Size = new System.Drawing.Size(985, 671);
-            this.tabPageTriletaration.TabIndex = 3;
-            this.tabPageTriletaration.Text = "Trilateration";
-            this.tabPageTriletaration.UseVisualStyleBackColor = true;
-            // 
-            // tabPageScreenshots
-            // 
-            this.tabPageScreenshots.Controls.Add(this.imageHandler1);
-            this.tabPageScreenshots.Location = new System.Drawing.Point(4, 22);
-            this.tabPageScreenshots.Name = "tabPageScreenshots";
-            this.tabPageScreenshots.Size = new System.Drawing.Size(985, 671);
-            this.tabPageScreenshots.TabIndex = 4;
-            this.tabPageScreenshots.Text = "Screenshots";
-            this.tabPageScreenshots.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.routeControl1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(985, 671);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Route";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.groupBox5);
-            this.tabPage3.Controls.Add(this.groupBox3);
-            this.tabPage3.Controls.Add(this.groupBox1);
-            this.tabPage3.Controls.Add(this.groupBox2);
-            this.tabPage3.Controls.Add(this.groupBox4);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(985, 671);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Settings";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            this.tabPage3.Click += new System.EventHandler(this.tabPage3_Click);
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.label_opacity);
-            this.groupBox5.Controls.Add(this.trackBar_theme_opacity);
-            this.groupBox5.Controls.Add(this.checkBox_theme_windowframe);
-            this.groupBox5.Controls.Add(this.button_theme_mapblockcolor);
-            this.groupBox5.Controls.Add(this.button_theme_visitedcolor);
-            this.groupBox5.Controls.Add(this.button_theme_highlightcolor);
-            this.groupBox5.Controls.Add(this.button_theme_textcolor);
-            this.groupBox5.Controls.Add(this.button_theme_backcolor);
-            this.groupBox5.Controls.Add(this.button_theme_forecolor);
-            this.groupBox5.Controls.Add(this.comboBoxTheme);
-            this.groupBox5.Location = new System.Drawing.Point(3, 387);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(974, 117);
-            this.groupBox5.TabIndex = 15;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Theme";
-            // 
-            // label_opacity
-            // 
-            this.label_opacity.AutoSize = true;
-            this.label_opacity.Location = new System.Drawing.Point(711, 8);
-            this.label_opacity.Name = "label_opacity";
-            this.label_opacity.Size = new System.Drawing.Size(43, 13);
-            this.label_opacity.TabIndex = 4;
-            this.label_opacity.Text = "Opacity";
-            // 
-            // trackBar_theme_opacity
-            // 
-            this.trackBar_theme_opacity.Location = new System.Drawing.Point(681, 24);
-            this.trackBar_theme_opacity.Maximum = 100;
-            this.trackBar_theme_opacity.Minimum = 30;
-            this.trackBar_theme_opacity.Name = "trackBar_theme_opacity";
-            this.trackBar_theme_opacity.Size = new System.Drawing.Size(104, 45);
-            this.trackBar_theme_opacity.TabIndex = 3;
-            this.trackBar_theme_opacity.Value = 30;
-            this.trackBar_theme_opacity.ValueChanged += new System.EventHandler(this.trackBar_theme_opacity_ValueChanged);
-            this.trackBar_theme_opacity.MouseCaptureChanged += new System.EventHandler(this.trackBar_theme_opacity_MouseCaptureChanged);
-            // 
-            // checkBox_theme_windowframe
-            // 
-            this.checkBox_theme_windowframe.AutoSize = true;
-            this.checkBox_theme_windowframe.Location = new System.Drawing.Point(791, 17);
-            this.checkBox_theme_windowframe.Name = "checkBox_theme_windowframe";
-            this.checkBox_theme_windowframe.Size = new System.Drawing.Size(97, 17);
-            this.checkBox_theme_windowframe.TabIndex = 2;
-            this.checkBox_theme_windowframe.Text = "Window Frame";
-            this.checkBox_theme_windowframe.UseVisualStyleBackColor = true;
-            this.checkBox_theme_windowframe.MouseClick += new System.Windows.Forms.MouseEventHandler(this.checkBox_theme_windowframe_MouseClick);
-            // 
-            // button_theme_visitedcolor
-            // 
-            this.button_theme_visitedcolor.Location = new System.Drawing.Point(558, 46);
-            this.button_theme_visitedcolor.Name = "button_theme_visitedcolor";
-            this.button_theme_visitedcolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_visitedcolor.TabIndex = 1;
-            this.button_theme_visitedcolor.Text = "Visited Colour";
-            this.button_theme_visitedcolor.UseVisualStyleBackColor = true;
-            this.button_theme_visitedcolor.Click += new System.EventHandler(this.button_theme_visited_Click);
-            // 
-            // button_theme_highlightcolor
-            // 
-            this.button_theme_highlightcolor.Location = new System.Drawing.Point(435, 46);
-            this.button_theme_highlightcolor.Name = "button_theme_highlightcolor";
-            this.button_theme_highlightcolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_highlightcolor.TabIndex = 1;
-            this.button_theme_highlightcolor.Text = "Highlight Colour";
-            this.button_theme_highlightcolor.UseVisualStyleBackColor = true;
-            this.button_theme_highlightcolor.Click += new System.EventHandler(this.button_theme_texthighlightcolor_Click);
-            // 
-            // button_theme_textcolor
-            // 
-            this.button_theme_textcolor.Location = new System.Drawing.Point(309, 46);
-            this.button_theme_textcolor.Name = "button_theme_textcolor";
-            this.button_theme_textcolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_textcolor.TabIndex = 1;
-            this.button_theme_textcolor.Text = "Text Colour";
-            this.button_theme_textcolor.UseVisualStyleBackColor = true;
-            this.button_theme_textcolor.Click += new System.EventHandler(this.button_theme_textcolor_Click);
-            // 
-            // button_theme_backcolor
-            // 
-            this.button_theme_backcolor.Location = new System.Drawing.Point(435, 17);
-            this.button_theme_backcolor.Name = "button_theme_backcolor";
-            this.button_theme_backcolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_backcolor.TabIndex = 1;
-            this.button_theme_backcolor.Text = "Back Colour";
-            this.button_theme_backcolor.UseVisualStyleBackColor = true;
-            this.button_theme_backcolor.Click += new System.EventHandler(this.button_theme_backcolor_Click);
-            // 
-            // button_theme_forecolor
-            // 
-            this.button_theme_forecolor.Location = new System.Drawing.Point(309, 17);
-            this.button_theme_forecolor.Name = "button_theme_forecolor";
-            this.button_theme_forecolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_forecolor.TabIndex = 1;
-            this.button_theme_forecolor.Text = "Menu Fore Colour";
-            this.button_theme_forecolor.UseVisualStyleBackColor = true;
-            this.button_theme_forecolor.Click += new System.EventHandler(this.button_theme_forecolor_Click);
-            // 
-            // comboBoxTheme
-            // 
-            this.comboBoxTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTheme.FormattingEnabled = true;
-            this.comboBoxTheme.Location = new System.Drawing.Point(17, 19);
-            this.comboBoxTheme.Name = "comboBoxTheme";
-            this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
-            this.comboBoxTheme.TabIndex = 0;
-            this.comboBoxTheme.SelectedIndexChanged += new System.EventHandler(this.comboBoxTheme_SelectedIndexChanged);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.checkBox_Distances);
-            this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
-            this.groupBox3.Controls.Add(this.checkboxSkipSlowUpdates);
-            this.groupBox3.Location = new System.Drawing.Point(3, 281);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(426, 100);
-            this.groupBox3.TabIndex = 13;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Controls";
-            // 
-            // checkBox_Distances
-            // 
-            this.checkBox_Distances.AutoSize = true;
-            this.checkBox_Distances.Location = new System.Drawing.Point(17, 18);
-            this.checkBox_Distances.Name = "checkBox_Distances";
-            this.checkBox_Distances.Size = new System.Drawing.Size(346, 17);
-            this.checkBox_Distances.TabIndex = 8;
-            this.checkBox_Distances.Text = "Get Distances from EDSM (Uses more memory normally not needed)";
-            this.checkBox_Distances.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxEDSMLog
-            // 
-            this.checkBoxEDSMLog.AutoSize = true;
-            this.checkBoxEDSMLog.Location = new System.Drawing.Point(17, 41);
-            this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
-            this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
-            this.checkBoxEDSMLog.TabIndex = 9;
-            this.checkBoxEDSMLog.Text = "Log EDSM requests";
-            this.checkBoxEDSMLog.UseVisualStyleBackColor = true;
-            // 
-            // checkboxSkipSlowUpdates
-            // 
-            this.checkboxSkipSlowUpdates.AutoSize = true;
-            this.checkboxSkipSlowUpdates.BackColor = System.Drawing.Color.Gold;
-            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(17, 64);
-            this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
-            this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
-            this.checkboxSkipSlowUpdates.TabIndex = 11;
-            this.checkboxSkipSlowUpdates.Text = "DEBUG ONLY: Skip slow updates on startup";
-            this.checkboxSkipSlowUpdates.UseVisualStyleBackColor = false;
-            this.checkboxSkipSlowUpdates.Visible = false;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.button_Browse);
-            this.groupBox1.Controls.Add(this.textBoxNetLogDir);
-            this.groupBox1.Controls.Add(this.radioButton_Manual);
-            this.groupBox1.Controls.Add(this.radioButton_Auto);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(979, 87);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Elite Dangerous netlog location (If not ovverride by commander settings belove)";
-            // 
-            // button_Browse
-            // 
-            this.button_Browse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Browse.Location = new System.Drawing.Point(995, 44);
-            this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(75, 23);
-            this.button_Browse.TabIndex = 3;
-            this.button_Browse.Text = "Browse";
-            this.button_Browse.UseVisualStyleBackColor = true;
-            this.button_Browse.Click += new System.EventHandler(this.button_Browse_Click);
-            // 
-            // textBoxNetLogDir
-            // 
-            this.textBoxNetLogDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxNetLogDir.Location = new System.Drawing.Point(125, 46);
-            this.textBoxNetLogDir.Name = "textBoxNetLogDir";
-            this.textBoxNetLogDir.Size = new System.Drawing.Size(864, 20);
-            this.textBoxNetLogDir.TabIndex = 2;
-            // 
-            // radioButton_Manual
-            // 
-            this.radioButton_Manual.AutoSize = true;
-            this.radioButton_Manual.Location = new System.Drawing.Point(17, 49);
-            this.radioButton_Manual.Name = "radioButton_Manual";
-            this.radioButton_Manual.Size = new System.Drawing.Size(60, 17);
-            this.radioButton_Manual.TabIndex = 1;
-            this.radioButton_Manual.TabStop = true;
-            this.radioButton_Manual.Text = "Manual";
-            this.radioButton_Manual.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_Auto
-            // 
-            this.radioButton_Auto.AutoSize = true;
-            this.radioButton_Auto.Location = new System.Drawing.Point(17, 26);
-            this.radioButton_Auto.Name = "radioButton_Auto";
-            this.radioButton_Auto.Size = new System.Drawing.Size(47, 17);
-            this.radioButton_Auto.TabIndex = 0;
-            this.radioButton_Auto.TabStop = true;
-            this.radioButton_Auto.Text = "Auto";
-            this.radioButton_Auto.UseVisualStyleBackColor = true;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.textBoxDefaultZoom);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.radioButtonHistorySelection);
-            this.groupBox2.Controls.Add(this.radioButtonCentreHome);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.textBoxHomeSystem);
-            this.groupBox2.Location = new System.Drawing.Point(432, 281);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(544, 100);
-            this.groupBox2.TabIndex = 12;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "3D Map Settings";
-            // 
-            // textBoxDefaultZoom
-            // 
-            this.textBoxDefaultZoom.Location = new System.Drawing.Point(118, 65);
-            this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
-            this.textBoxDefaultZoom.Size = new System.Drawing.Size(107, 20);
-            this.textBoxDefaultZoom.TabIndex = 6;
-            this.textBoxDefaultZoom.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDefaultZoom_Validating);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(41, 68);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(71, 13);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "Default Zoom";
-            // 
-            // radioButtonHistorySelection
-            // 
-            this.radioButtonHistorySelection.AutoSize = true;
-            this.radioButtonHistorySelection.Location = new System.Drawing.Point(216, 45);
-            this.radioButtonHistorySelection.Name = "radioButtonHistorySelection";
-            this.radioButtonHistorySelection.Size = new System.Drawing.Size(137, 17);
-            this.radioButtonHistorySelection.TabIndex = 4;
-            this.radioButtonHistorySelection.TabStop = true;
-            this.radioButtonHistorySelection.Text = "Travel History Selection";
-            this.radioButtonHistorySelection.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonCentreHome
-            // 
-            this.radioButtonCentreHome.AutoSize = true;
-            this.radioButtonCentreHome.Location = new System.Drawing.Point(118, 45);
-            this.radioButtonCentreHome.Name = "radioButtonCentreHome";
-            this.radioButtonCentreHome.Size = new System.Drawing.Size(90, 17);
-            this.radioButtonCentreHome.TabIndex = 3;
-            this.radioButtonCentreHome.TabStop = true;
-            this.radioButtonCentreHome.Text = "Home System";
-            this.radioButtonCentreHome.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(22, 49);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(90, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Open Centred On";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 13);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "Home System";
-            // 
-            // textBoxHomeSystem
-            // 
-            this.textBoxHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBoxHomeSystem.Location = new System.Drawing.Point(120, 19);
-            this.textBoxHomeSystem.Name = "textBoxHomeSystem";
-            this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
-            this.textBoxHomeSystem.TabIndex = 0;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.buttonAddCommander);
-            this.groupBox4.Controls.Add(this.label2);
-            this.groupBox4.Controls.Add(this.dataGridViewCommanders);
-            this.groupBox4.Location = new System.Drawing.Point(0, 93);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(977, 182);
-            this.groupBox4.TabIndex = 14;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Commanders";
-            // 
-            // buttonAddCommander
-            // 
-            this.buttonAddCommander.Location = new System.Drawing.Point(11, 16);
-            this.buttonAddCommander.Name = "buttonAddCommander";
-            this.buttonAddCommander.Size = new System.Drawing.Size(104, 23);
-            this.buttonAddCommander.TabIndex = 14;
-            this.buttonAddCommander.Text = "Add commander";
-            this.buttonAddCommander.UseVisualStyleBackColor = true;
-            this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(125, 21);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(304, 13);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Get Api key from http://www.edsm.net in  \"My account\" menu.";
-            // 
-            // dataGridViewCommanders
-            // 
-            this.dataGridViewCommanders.AllowUserToAddRows = false;
-            this.dataGridViewCommanders.AllowUserToDeleteRows = false;
-            this.dataGridViewCommanders.AllowUserToOrderColumns = true;
-            this.dataGridViewCommanders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewCommanders.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnNr,
-            this.ColumnCommander,
-            this.ColumnEDSMAPIKey,
-            this.ColumnNetLogPath});
-            this.dataGridViewCommanders.Location = new System.Drawing.Point(11, 45);
-            this.dataGridViewCommanders.Name = "dataGridViewCommanders";
-            this.dataGridViewCommanders.Size = new System.Drawing.Size(868, 128);
-            this.dataGridViewCommanders.TabIndex = 13;
-            // 
-            // ColumnNr
-            // 
-            this.ColumnNr.DataPropertyName = "Nr";
-            this.ColumnNr.HeaderText = "Nr";
-            this.ColumnNr.Name = "ColumnNr";
-            this.ColumnNr.ReadOnly = true;
-            this.ColumnNr.Width = 20;
-            // 
-            // ColumnCommander
-            // 
-            this.ColumnCommander.DataPropertyName = "Name";
-            this.ColumnCommander.HeaderText = "Commander";
-            this.ColumnCommander.Name = "ColumnCommander";
-            this.ColumnCommander.Width = 130;
-            // 
-            // ColumnEDSMAPIKey
-            // 
-            this.ColumnEDSMAPIKey.DataPropertyName = "APIKey";
-            this.ColumnEDSMAPIKey.HeaderText = "EDSM api key";
-            this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
-            this.ColumnEDSMAPIKey.Width = 150;
-            // 
-            // ColumnNetLogPath
-            // 
-            this.ColumnNetLogPath.DataPropertyName = "NetLogPath";
-            this.ColumnNetLogPath.FillWeight = 300F;
-            this.ColumnNetLogPath.HeaderText = "NetLog path";
-            this.ColumnNetLogPath.Name = "ColumnNetLogPath";
             // 
             // button_test
             // 
@@ -768,7 +279,6 @@
             this.labelPanelText.Size = new System.Drawing.Size(158, 20);
             this.labelPanelText.TabIndex = 0;
             this.labelPanelText.Text = "Loading. Please wait!";
-            this.labelPanelText.Click += new System.EventHandler(this.label1_Click);
             // 
             // panel_eddiscovery
             // 
@@ -782,17 +292,17 @@
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.panel1_Click);
             // 
-            // panel_close
+            // panel_grip
             // 
-            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_close.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_close.BackgroundImage")));
-            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.Location = new System.Drawing.Point(961, 1);
-            this.panel_close.Name = "panel_close";
-            this.panel_close.Size = new System.Drawing.Size(32, 24);
-            this.panel_close.TabIndex = 19;
-            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
+            this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel_grip.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_grip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_grip.BackgroundImage")));
+            this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_grip.Location = new System.Drawing.Point(977, 727);
+            this.panel_grip.Name = "panel_grip";
+            this.panel_grip.Size = new System.Drawing.Size(16, 16);
+            this.panel_grip.TabIndex = 16;
+            this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
             // 
             // panel_minimize
             // 
@@ -806,44 +316,64 @@
             this.panel_minimize.TabIndex = 20;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
-            // panel_grip
+            // panel_close
             // 
-            this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel_grip.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_grip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_grip.BackgroundImage")));
-            this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_grip.Location = new System.Drawing.Point(977, 727);
-            this.panel_grip.Name = "panel_grip";
-            this.panel_grip.Size = new System.Drawing.Size(16, 16);
-            this.panel_grip.TabIndex = 16;
-            this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
+            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_close.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_close.BackgroundImage")));
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.Location = new System.Drawing.Point(961, 1);
+            this.panel_close.Name = "panel_close";
+            this.panel_close.Size = new System.Drawing.Size(32, 24);
+            this.panel_close.TabIndex = 19;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
-            // button_theme_mapblockcolor
+            // tabPageSettings
             // 
-            this.button_theme_mapblockcolor.Location = new System.Drawing.Point(558, 17);
-            this.button_theme_mapblockcolor.Name = "button_theme_mapblockcolor";
-            this.button_theme_mapblockcolor.Size = new System.Drawing.Size(117, 23);
-            this.button_theme_mapblockcolor.TabIndex = 1;
-            this.button_theme_mapblockcolor.Text = "Map Block";
-            this.button_theme_mapblockcolor.UseVisualStyleBackColor = true;
-            this.button_theme_mapblockcolor.Click += new System.EventHandler(this.button_theme_mapblockcolor_Click);
+            this.tabPageSettings.Controls.Add(this.settings);
+            this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSettings.Name = "tabPageSettings";
+            this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSettings.Size = new System.Drawing.Size(985, 671);
+            this.tabPageSettings.TabIndex = 5;
+            this.tabPageSettings.Text = "Settings";
+            this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
-            // travelHistoryControl1
+            // settings
             // 
-            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl1.Name = "travelHistoryControl1";
-            this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
-            this.travelHistoryControl1.TabIndex = 0;
-            this.travelHistoryControl1.Load += new System.EventHandler(this.travelHistoryControl1_Load);
+            this.settings.Location = new System.Drawing.Point(0, 0);
+            this.settings.Name = "settings";
+            this.settings.Size = new System.Drawing.Size(897, 657);
+            this.settings.TabIndex = 0;
             // 
-            // trilaterationControl
+            // tabPageRoute
             // 
-            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
-            this.trilaterationControl.TabIndex = 21;
+            this.tabPageRoute.Controls.Add(this.routeControl1);
+            this.tabPageRoute.Location = new System.Drawing.Point(4, 22);
+            this.tabPageRoute.Name = "tabPageRoute";
+            this.tabPageRoute.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageRoute.Size = new System.Drawing.Size(985, 671);
+            this.tabPageRoute.TabIndex = 1;
+            this.tabPageRoute.Text = "Route";
+            this.tabPageRoute.UseVisualStyleBackColor = true;
+            // 
+            // routeControl1
+            // 
+            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.routeControl1.Location = new System.Drawing.Point(3, 3);
+            this.routeControl1.Name = "routeControl1";
+            this.routeControl1.Size = new System.Drawing.Size(979, 665);
+            this.routeControl1.TabIndex = 0;
+            // 
+            // tabPageScreenshots
+            // 
+            this.tabPageScreenshots.Controls.Add(this.imageHandler1);
+            this.tabPageScreenshots.Location = new System.Drawing.Point(4, 22);
+            this.tabPageScreenshots.Name = "tabPageScreenshots";
+            this.tabPageScreenshots.Size = new System.Drawing.Size(985, 671);
+            this.tabPageScreenshots.TabIndex = 4;
+            this.tabPageScreenshots.Text = "Screenshots";
+            this.tabPageScreenshots.UseVisualStyleBackColor = true;
             // 
             // imageHandler1
             // 
@@ -853,14 +383,56 @@
             this.imageHandler1.Size = new System.Drawing.Size(985, 671);
             this.imageHandler1.TabIndex = 0;
             // 
-            // routeControl1
+            // tabPageTriletaration
             // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(979, 665);
-            this.routeControl1.TabIndex = 0;
-            this.routeControl1.Load += new System.EventHandler(this.routeControl1_Load);
+            this.tabPageTriletaration.Controls.Add(this.trilaterationControl);
+            this.tabPageTriletaration.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTriletaration.Name = "tabPageTriletaration";
+            this.tabPageTriletaration.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTriletaration.Size = new System.Drawing.Size(985, 671);
+            this.tabPageTriletaration.TabIndex = 3;
+            this.tabPageTriletaration.Text = "Trilateration";
+            this.tabPageTriletaration.UseVisualStyleBackColor = true;
+            // 
+            // trilaterationControl
+            // 
+            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
+            this.trilaterationControl.Name = "trilaterationControl";
+            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
+            this.trilaterationControl.TabIndex = 21;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPageTravelHistory);
+            this.tabControl1.Controls.Add(this.tabPageTriletaration);
+            this.tabControl1.Controls.Add(this.tabPageScreenshots);
+            this.tabControl1.Controls.Add(this.tabPageRoute);
+            this.tabControl1.Controls.Add(this.tabPageSettings);
+            this.tabControl1.Location = new System.Drawing.Point(0, 28);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(993, 697);
+            this.tabControl1.TabIndex = 15;
+            // 
+            // tabPageTravelHistory
+            // 
+            this.tabPageTravelHistory.Controls.Add(this.travelHistoryControl1);
+            this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTravelHistory.Name = "tabPageTravelHistory";
+            this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTravelHistory.Size = new System.Drawing.Size(985, 671);
+            this.tabPageTravelHistory.TabIndex = 0;
+            this.tabPageTravelHistory.Text = "Travel history";
+            this.tabPageTravelHistory.UseVisualStyleBackColor = true;
+            // 
+            // travelHistoryControl1
+            // 
+            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl1.Name = "travelHistoryControl1";
+            this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
+            this.travelHistoryControl1.TabIndex = 0;
             // 
             // EDDiscoveryForm
             // 
@@ -885,28 +457,16 @@
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.EDDiscoveryForm_Layout);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EDDiscoveryForm_MouseDown);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPageTravelHistory.ResumeLayout(false);
-            this.tabPageTriletaration.ResumeLayout(false);
-            this.tabPageScreenshots.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
+            this.tabPageSettings.ResumeLayout(false);
+            this.tabPageRoute.ResumeLayout(false);
+            this.tabPageScreenshots.ResumeLayout(false);
+            this.tabPageTriletaration.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPageTravelHistory.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -915,17 +475,6 @@
         #endregion
 
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPageTravelHistory;
-        private System.Windows.Forms.TabPage tabPage2;
-        private TravelHistoryControl travelHistoryControl1;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton radioButton_Manual;
-        private System.Windows.Forms.RadioButton radioButton_Auto;
-        private System.Windows.Forms.Button button_Browse;
-        private System.Windows.Forms.TextBox textBoxNetLogDir;
-        private RouteControl routeControl1;
         private System.Windows.Forms.Button button_test;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
@@ -937,58 +486,34 @@
         private System.Windows.Forms.ToolStripMenuItem statisticsToolStripMenuItem;
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Label labelPanelText;
-        private System.Windows.Forms.TabPage tabPageTriletaration;
-        public TrilaterationControl trilaterationControl;
         private System.Windows.Forms.ToolStripMenuItem show2DMapsToolStripMenuItem;
-        private System.Windows.Forms.TabPage tabPageScreenshots;
-        private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox checkBox_Distances;
-        private System.Windows.Forms.CheckBox checkBoxEDSMLog;
         private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem forceEDDBUpdateToolStripMenuItem;
-        private System.Windows.Forms.CheckBox checkboxSkipSlowUpdates;
         private System.Windows.Forms.ToolStripMenuItem prospectingToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBoxHomeSystem;
-        private System.Windows.Forms.TextBox textBoxDefaultZoom;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.RadioButton radioButtonHistorySelection;
-        private System.Windows.Forms.RadioButton radioButtonCentreHome;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ToolStripMenuItem syncEDSMSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gitHubToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportIssueIdeasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem keepOnTopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fastTravelToolStripMenuItem;
-        private System.Windows.Forms.DataGridView dataGridViewCommanders;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button buttonAddCommander;
         private System.Windows.Forms.ToolStripMenuItem dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem;
         private System.Windows.Forms.Panel panel_eddiscovery;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eDDiscoveryChatDiscordToolStripMenuItem;
         private System.Windows.Forms.Panel panel_close;
         private System.Windows.Forms.Panel panel_minimize;
         private System.Windows.Forms.Panel panel_grip;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.ComboBox comboBoxTheme;
-        private System.Windows.Forms.Button button_theme_forecolor;
-        private System.Windows.Forms.Button button_theme_backcolor;
-        private System.Windows.Forms.Button button_theme_textcolor;
-        private System.Windows.Forms.Button button_theme_highlightcolor;
-        private System.Windows.Forms.Button button_theme_visitedcolor;
-        private System.Windows.Forms.CheckBox checkBox_theme_windowframe;
-        private System.Windows.Forms.TrackBar trackBar_theme_opacity;
-        private System.Windows.Forms.Label label_opacity;
-        private System.Windows.Forms.Button button_theme_mapblockcolor;
+        private System.Windows.Forms.TabPage tabPageSettings;
+        private EDDiscovery2.Settings settings;
+        private System.Windows.Forms.TabPage tabPageRoute;
+        private RouteControl routeControl1;
+        private System.Windows.Forms.TabPage tabPageScreenshots;
+        private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
+        private System.Windows.Forms.TabPage tabPageTriletaration;
+        public TrilaterationControl trilaterationControl;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPageTravelHistory;
+        private TravelHistoryControl travelHistoryControl1;
     }
 }
 
