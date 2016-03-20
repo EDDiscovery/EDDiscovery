@@ -144,6 +144,16 @@ namespace EDDiscovery2
                 myControl.BackColor = currentsettings.backcolor;
                 myControl.ForeColor = currentsettings.textcolor;
             }
+            else if (myControl is Button)
+            {
+                myControl.BackColor = Color.Red;
+                myControl.ForeColor = currentsettings.forecolor;
+            }
+//            else if (myControl is ComboBox)
+            //{
+                //myControl.BackColor = Color.Red;
+                //myControl.ForeColor = Color.Green;
+            //}
             else if (myControl is DataGridView)
             {
                 DataGridView MyDgv = (DataGridView)myControl;
