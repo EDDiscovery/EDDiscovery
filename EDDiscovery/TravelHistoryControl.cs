@@ -82,12 +82,12 @@ namespace EDDiscovery
 
         static public void LogText(string text)
         {
-            LogTextColor(text, _discoveryForm.theme.TextColor);
+            LogTextColor(text, _discoveryForm.theme.TextBlock );
         }
 
         static public void LogTextHighlight(string text)
         {
-            LogTextColor(text, _discoveryForm.theme.TextHighlightColor);
+            LogTextColor(text, _discoveryForm.theme.TextBlockHighlightColor);
         }
 
         static public void LogTextColor( string text, Color color)
@@ -328,7 +328,7 @@ namespace EDDiscovery
 
                 cell.Tag = item;
 
-                dataGridView1.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.TextColor;
+                dataGridView1.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
                 cell = dataGridView1.Rows[rownr].Cells[4];
                 cell.Style.ForeColor = (item.vs == null) ? _discoveryForm.theme.MapBlockColor : Color.FromArgb(item.vs.MapColour);
