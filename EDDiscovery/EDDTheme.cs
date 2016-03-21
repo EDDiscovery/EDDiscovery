@@ -5,6 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.DB;
+using Newtonsoft.Json.Linq;
+using EDDiscovery;
+using System.IO;
+using System.Diagnostics;
 
 // TODO:
 // 1. ComboBoxes need owner draw
@@ -41,20 +45,20 @@ namespace EDDiscovery2
             public string fontname;         // Font.. (empty means don't override)
             public float fontsize;
 
-            public Settings( String n , Color f , 
-                                        Color bb, Color bf, 
-                                        Color gb, Color gbt, Color gbck, Color gt, 
+            public Settings(String n, Color f,
+                                        Color bb, Color bf,
+                                        Color gb, Color gbt, Color gbck, Color gt,
                                         Color tn, Color tv, Color tm,
                                         Color tbb, Color tbf, Color tbh,
                                         Color c,
                                         Color mb, Color mf,
                                         Color l,
-                                        bool wf , double op , string ft , float fs )            // ft = empty means don't set it
+                                        bool wf, double op, string ft, float fs)            // ft = empty means don't set it
             {
                 name = n;
                 colors = new Dictionary<CI, Color>();
                 colors.Add(CI.form, f);
-                colors.Add(CI.button_back,bb); colors.Add(CI.button_text,bf);
+                colors.Add(CI.button_back, bb); colors.Add(CI.button_text, bf);
                 colors.Add(CI.grid_border, gb); colors.Add(CI.grid_bordertext, gbt); colors.Add(CI.grid_background, gbck); colors.Add(CI.grid_text, gt);
                 colors.Add(CI.travelgrid_nonvisted, tn); colors.Add(CI.travelgrid_visited, tv); colors.Add(CI.travelgrid_mapblock, tm);
                 colors.Add(CI.textbox_back, tbb); colors.Add(CI.textbox_fore, tbf); colors.Add(CI.textbox_highlight, tbh);
@@ -65,7 +69,7 @@ namespace EDDiscovery2
                 windowsframe = wf; formopacity = op; fontname = ft; fontsize = fs;
             }
 
-            public Settings( Settings other)                // copy constructor, takes a real copy.
+            public Settings(Settings other)                // copy constructor, takes a real copy.
             {
                 name = other.name;
                 windowsframe = other.windowsframe; formopacity = other.formopacity; fontname = other.fontname; fontsize = other.fontsize;
@@ -74,9 +78,11 @@ namespace EDDiscovery2
                 {
                     colors.Add(ck, other.colors[ck]);
                 }
-            }
-        };
 
+
+            }
+        }
+        
         public string Name { get { return currentsettings.name; } }
 
         public Color TextBlock { get { return currentsettings.colors[Settings.CI.textbox_fore]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_fore] = value; } }
@@ -190,7 +196,58 @@ namespace EDDiscovery2
             {
                 db.PutSettingInt("ThemeColor" + ck.ToString(), currentsettings.colors[ck].ToArgb());
             }
+            //Save();
         }
+
+
+        public JObject Settings2Json()
+        {
+            JObject jo = new JObject();
+
+            foreach (Settings.CI ck in currentsettings.colors.Keys)
+            {
+                jo.Add(ck.ToString(), System.Drawing.ColorTranslator.ToHtml(currentsettings.colors[ck]));
+            }
+
+            jo.Add("windowsframe", currentsettings.windowsframe);
+            jo.Add("formopacity", currentsettings.formopacity);
+            jo.Add("fontname", currentsettings.fontname);
+            jo.Add("fontsize", currentsettings.fontsize);
+
+            return jo;
+        }
+
+        public bool Save()
+        {
+            string themepath = "";
+            JObject jo = Settings2Json();
+
+            try
+            {
+                themepath = Path.Combine(Tools.GetAppDataDirectory(), "Theme") + ".eddtheme";
+                if (!Directory.Exists(themepath))
+                {
+                    Directory.CreateDirectory(themepath);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Unable to create the folder '{themepath}'");
+                Trace.WriteLine($"Exception: {ex.Message}");
+
+                return false;
+            }
+
+            using (StreamWriter writer = new StreamWriter(Path.Combine(themepath, currentsettings.name)))
+            {
+                writer.Write(jo.ToString());
+            }
+
+            return true;
+        }
+        
+
 
         public void FillComboBoxWithThemes(ComboBox comboBoxTheme)          // fill in a combo box with default themes
         {
