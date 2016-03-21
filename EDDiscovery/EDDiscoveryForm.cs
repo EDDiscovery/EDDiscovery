@@ -733,7 +733,7 @@ namespace EDDiscovery
             _db.PutSettingInt("FormTop", this.Top);
             _db.PutSettingInt("FormLeft", this.Left);
             routeControl1.SaveSettings();
-            theme.SaveSettings();
+            theme.SaveSettings(null);
 
             _db.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
             _db.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
