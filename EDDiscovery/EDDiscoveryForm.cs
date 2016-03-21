@@ -32,8 +32,6 @@ namespace EDDiscovery
         public const int WM_NCL_RESIZE = 0x112;
         public const int HT_RESIZE = 61448;
 
-
-
         [DllImportAttribute("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImportAttribute("user32.dll")]
@@ -88,7 +86,7 @@ namespace EDDiscovery
             trilaterationControl.InitControl(this);
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
-            settings.InitControl(this);                                
+            settings.InitControl(this);
 
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager();
@@ -102,14 +100,14 @@ namespace EDDiscovery
             panel_grip.Visible = !theme.WindowsFrame;
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
+            label_version.Visible = !theme.WindowsFrame;
+            label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
             theme.ApplyColors(this);
 
             if (refreshhistory)
                 travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
-
-            Console.WriteLine("Theme "  + theme.Name + " " + theme.IsCustomTheme().ToString());
-
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
