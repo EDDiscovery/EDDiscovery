@@ -214,5 +214,10 @@ namespace EDDiscovery2
                 UpdatePatches();
             }
         }
+
+        private void buttonSaveTheme_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
