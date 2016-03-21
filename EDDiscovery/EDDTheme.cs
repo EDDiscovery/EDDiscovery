@@ -69,6 +69,75 @@ namespace EDDiscovery2
                 windowsframe = wf; formopacity = op; fontname = ft; fontsize = fs;
             }
 
+            public Settings(JObject jo, string settingsname)            // From json
+            {
+                name = settingsname.Replace(".eddtheme", "");
+                colors = new Dictionary<CI, Color>();
+
+                foreach (CI ck in Enum.GetValues(typeof(CI)))
+                {
+                    colors.Add(ck, JGetColor(jo, ck.ToString()));
+                }
+                windowsframe = GetBool(jo["windowsframe"]);
+                formopacity = GetFloat(jo["formopacity"]);
+                fontname = GetString(jo["fontname"]);
+                fontsize = GetFloat(jo["fontsize"]);
+            }
+
+            static private Color JGetColor(JObject jo, string name)
+            {
+                
+
+                string colstr = GetString(jo[name]);
+
+                if (colstr == null)
+                    return Color.White;
+
+                return System.Drawing.ColorTranslator.FromHtml(colstr);
+            }
+
+
+            static private bool GetBool(JToken jToken)
+            {
+                if (IsNullOrEmptyT(jToken))
+                    return false;
+                return jToken.Value<bool>();
+            }
+
+            static private float GetFloat(JToken jToken)
+            {
+                if (IsNullOrEmptyT(jToken))
+                    return 0f;
+                return jToken.Value<float>();
+            }
+
+
+            static private int GetInt(JToken jToken)
+            {
+                if (IsNullOrEmptyT(jToken))
+                    return 0;
+                return jToken.Value<int>();
+            }
+
+
+            static private string GetString(JToken jToken)
+            {
+                if (IsNullOrEmptyT(jToken))
+                    return null;
+                return jToken.Value<string>();
+            }
+
+
+            static private bool IsNullOrEmptyT(JToken token)
+            {
+                return (token == null) ||
+                       (token.Type == JTokenType.Array && !token.HasValues) ||
+                       (token.Type == JTokenType.Object && !token.HasValues) ||
+                       (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
+                       (token.Type == JTokenType.Null);
+            }
+
+
             public Settings(Settings other)                // copy constructor, takes a real copy.
             {
                 name = other.name;
@@ -95,14 +164,14 @@ namespace EDDiscovery2
         public double Opacity { get { return currentsettings.formopacity; } set { SetCustom(); currentsettings.formopacity = value; } }
 
         private Settings currentsettings;           // if name = custom, then its not a standard theme..
-        private Settings[] themelist;
+        private List<Settings> themelist;
         private SQLiteDBClass db;
 
         public EDDTheme()
         {
-            themelist = new Settings[5];
+            themelist = new List<Settings>();
 
-            themelist[0] = new Settings("Windows Default", SystemColors.Menu,
+            themelist.Add(new Settings("Windows Default", SystemColors.Menu,
                                                            SystemColors.Menu, SystemColors.MenuText,  // button
                                                            SystemColors.Menu, SystemColors.MenuText,  // grid border
                                                            SystemColors.Menu, SystemColors.MenuText,  // grid
@@ -111,11 +180,11 @@ namespace EDDiscovery2
                                                            SystemColors.MenuText, // checkbox
                                                            SystemColors.Menu, SystemColors.MenuText,  // menu
                                                            SystemColors.MenuText,  // label
-                                                           true, 100, "", 0);
+                                                           true, 100, "", 0));
 
             currentsettings = new Settings(themelist[0]);       // copy it, not reference it.
 
-            themelist[1] = new Settings("Crazy Scheme to show painting", Color.Black,
+            themelist.Add(new Settings("Crazy Scheme to show painting", Color.Black,
                                                Color.Gold, Color.Yellow,  // button
                                                Color.Purple, Color.Gray, Color.Beige, Color.Red, // grid 
                                                Color.White, Color.Blue, Color.Red, // travel
@@ -123,9 +192,9 @@ namespace EDDiscovery2
                                                Color.Aqua, // checkbox
                                                Color.Black, Color.Red,  // menu
                                                Color.Chocolate,  // label
-                                               true, 100, "", 0);
+                                               true, 100, "", 0));
 
-            themelist[2] = new Settings("Orange Delight", Color.Black,
+            themelist.Add(new Settings("Orange Delight", Color.Black,
                                                Color.Black, Color.Orange,  // button
                                                Color.Black, Color.Orange,  // grid border
                                                Color.Black, Color.Orange, // grid
@@ -134,9 +203,9 @@ namespace EDDiscovery2
                                                Color.Orange, // checkbox
                                                Color.Black, Color.Orange,  // menu
                                                Color.Orange,  // label
-                                               false, 95, "", 0);
+                                               false, 95, "", 0));
 
-            themelist[3] = new Settings("Blue Wonder", Color.DarkBlue,
+            themelist.Add(new Settings("Blue Wonder", Color.DarkBlue,
                                                Color.Blue, Color.White,  // button
                                                Color.DarkBlue, Color.White,  // grid border
                                                Color.DarkBlue, Color.White, // grid
@@ -145,9 +214,9 @@ namespace EDDiscovery2
                                                Color.White, // checkbox
                                                Color.DarkBlue, Color.White,  // menu
                                                Color.White,  // label
-                                               false, 95, "", 0);
+                                               false, 95, "", 0));
 
-            themelist[4] = new Settings("Green Baize", Color.FromArgb(255, 48, 121, 17),
+            themelist.Add(new Settings("Green Baize", Color.FromArgb(255, 48, 121, 17),
                                                Color.FromArgb(255, 48, 121, 17), Color.White,  // button
                                                Color.FromArgb(255, 48, 121, 17), Color.White,  // grid border
                                                Color.FromArgb(255, 48, 121, 17), Color.White, // grid
@@ -156,7 +225,9 @@ namespace EDDiscovery2
                                                Color.White, // checkbox
                                                Color.FromArgb(255, 48, 121, 17), Color.White,  // menu
                                                Color.White,  // label
-                                               false, 95, "", 0);
+                                               false, 95, "", 0));
+
+            LoadThemes();
         }
 
         public void RestoreSettings()
@@ -181,7 +252,7 @@ namespace EDDiscovery2
             }
         }
 
-        public void SaveSettings()
+        public void SaveSettings(string filename)
         {
             if (db == null)
                 db = new SQLiteDBClass();
@@ -196,10 +267,64 @@ namespace EDDiscovery2
             {
                 db.PutSettingInt("ThemeColor" + ck.ToString(), currentsettings.colors[ck].ToArgb());
             }
-            //Save();
+            SaveFile(filename);
         }
 
 
+        public void LoadThemes()
+        {
+            string themepath = "";
+
+            try
+            {
+                themepath = Path.Combine(Tools.GetAppDataDirectory(), "Theme");
+                if (!Directory.Exists(themepath))
+                {
+                    Directory.CreateDirectory(themepath);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Unable to create the folder '{themepath}'");
+                Trace.WriteLine($"Exception: {ex.Message}");
+
+                return;
+            }
+
+
+            // Search for theme files
+            DirectoryInfo dirInfo = new DirectoryInfo(themepath);
+            FileInfo[] allFiles = null;
+
+            try
+            {
+                allFiles = dirInfo.GetFiles("*.eddtheme");
+            }
+            catch
+            {
+            }
+
+            if (allFiles == null)
+            {
+                return;
+            }
+
+            FileInfo newfi = null;
+
+            foreach (FileInfo fi in allFiles)
+            {
+                try
+                {
+                    JObject jo = JObject.Parse(File.ReadAllText(fi.FullName));
+                    themelist.Add(new Settings(jo, fi.Name));
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine($"LoadThemes Exception : {ex.Message}");
+                }
+            }
+        }
         public JObject Settings2Json()
         {
             JObject jo = new JObject();
@@ -217,14 +342,14 @@ namespace EDDiscovery2
             return jo;
         }
 
-        public bool Save()
+        public bool SaveFile(string filename)
         {
             string themepath = "";
             JObject jo = Settings2Json();
 
             try
             {
-                themepath = Path.Combine(Tools.GetAppDataDirectory(), "Theme") + ".eddtheme";
+                themepath = Path.Combine(Tools.GetAppDataDirectory(), "Theme") ;
                 if (!Directory.Exists(themepath))
                 {
                     Directory.CreateDirectory(themepath);
@@ -239,7 +364,12 @@ namespace EDDiscovery2
                 return false;
             }
 
-            using (StreamWriter writer = new StreamWriter(Path.Combine(themepath, currentsettings.name)))
+            if (filename == null)
+            {
+                filename = Path.Combine(themepath, currentsettings.name) + ".eddtheme";
+            }   
+
+            using (StreamWriter writer = new StreamWriter(filename))
             {
                 writer.Write(jo.ToString());
             }
@@ -251,7 +381,7 @@ namespace EDDiscovery2
 
         public void FillComboBoxWithThemes(ComboBox comboBoxTheme)          // fill in a combo box with default themes
         {
-            for (int i = 0; i < themelist.Length; i++)
+            for (int i = 0; i < themelist.Count; i++)
                 comboBoxTheme.Items.Add(themelist[i].name);
         }
 
@@ -266,7 +396,7 @@ namespace EDDiscovery2
 
         public bool SetThemeByName( string name )                           // given a theme name, select it if possible
         {
-            for (int i = 0; i < themelist.Length; i++)
+            for (int i = 0; i < themelist.Count; i++)
             {
                 if ( themelist[i].name.Equals(name))
                 {
