@@ -15,42 +15,41 @@ namespace EDDiscovery2
     public partial class Settings : UserControl
     {
         private EDDiscoveryForm _discoveryForm;
-        private EDDTheme theme;
         private SQLiteDBClass _db; 
 
 
         public Settings()
         {
             InitializeComponent();
+
+            SetPanel(panel_theme1, "Form Back Colour", EDDTheme.Settings.CI.form);                  // using tag, and tool tips, hook up patches to enum
+            SetPanel(panel_theme2, "Text box Back Colour", EDDTheme.Settings.CI.textbox_back);
+            SetPanel(panel_theme3, "Text box Text Colour", EDDTheme.Settings.CI.textbox_fore);
+            SetPanel(panel_theme4, "Text box Highlight Colour", EDDTheme.Settings.CI.textbox_highlight);
+            SetPanel(panel_theme5, "Button Back Colour", EDDTheme.Settings.CI.button_back);
+            SetPanel(panel_theme6, "Button Text Colour", EDDTheme.Settings.CI.button_text);
+            SetPanel(panel_theme7, "Grid Border Back Colour", EDDTheme.Settings.CI.grid_border);
+            SetPanel(panel_theme8, "Grid Border Text Colour", EDDTheme.Settings.CI.grid_bordertext);
+            SetPanel(panel_theme9, "Grid Data Back Colour", EDDTheme.Settings.CI.grid_background);
+            SetPanel(panel_theme10, "Grid Data Text Colour", EDDTheme.Settings.CI.grid_text);
+            SetPanel(panel_theme11, "Menu Back Colour", EDDTheme.Settings.CI.menu_back);
+            SetPanel(panel_theme12, "Menu Fore Colour", EDDTheme.Settings.CI.menu_fore);
+            SetPanel(panel_theme13, "Travel Form Non Visited Colour", EDDTheme.Settings.CI.travelgrid_nonvisted);
+            SetPanel(panel_theme14, "Travel Form Visited Colour", EDDTheme.Settings.CI.travelgrid_visited);
+            SetPanel(panel_theme15, "Travel Form Map Block Colour", EDDTheme.Settings.CI.travelgrid_mapblock);
+            SetPanel(panel_theme16, "Check Box Text Colour", EDDTheme.Settings.CI.checkbox);
+            SetPanel(panel_theme17, "Label Text Colour", EDDTheme.Settings.CI.label);
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
             _db = new SQLiteDBClass();
-            theme = _discoveryForm.theme;                               // ref value to same one c# rules
 
-            theme.FillComboBoxWithThemes(comboBoxTheme);                // set up combo box with default themes
+            _discoveryForm.theme.FillComboBoxWithThemes(comboBoxTheme);                // set up combo box with default themes
             comboBoxTheme.Items.Add("Custom");                          // and add an extra custom one which enables the individual controls
-            theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
+            _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
 
-//            button_theme_forecolor.Visible = _discoveryForm.theme.IsCustomTheme();
-            //button_theme_forecolor.ForeColor = theme.ForeColor;
-            //button_theme_backcolor.Visible = theme.IsCustomTheme();
-            //button_theme_backcolor.ForeColor = Color.FromArgb(1 - theme.BackColor.ToArgb());          // ensure its visible
-            //b/utton_theme_textcolor.Visible = theme.IsCustomTheme();
-            //button_theme_textcolor.ForeColor = theme.TextColor;
-            //button_theme_highlightcolor.Visible = theme.IsCustomTheme();
-            //button_theme_highlightcolor.ForeColor = theme.TextHighlightColor;
-            //button_theme_visitedcolor.Visible = theme.IsCustomTheme();
-            //button_theme_visitedcolor.ForeColor = theme.VisitedSystemColor;
-            //button_theme_mapblockcolor.Visible = theme.IsCustomTheme();
-            //button_theme_mapblockcolor.ForeColor = theme.MapBlockColor;
-            checkBox_theme_windowframe.Visible = theme.IsCustomTheme();
-            checkBox_theme_windowframe.Checked = theme.WindowsFrame;
-            trackBar_theme_opacity.Visible = theme.IsCustomTheme();
-            trackBar_theme_opacity.Value = (int)theme.Opacity;
-            label_opacity.Visible = theme.IsCustomTheme();
         }
 
         public void InitSettingsTab()
@@ -91,6 +90,11 @@ namespace EDDiscovery2
             }
 
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
+
+            UpdatePatches();
+
+            trackBar_theme_opacity.Value = (int)_discoveryForm.theme.Opacity;
+            checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
         }
 
         public void SaveSettings()
@@ -111,6 +115,35 @@ namespace EDDiscovery2
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
             dataGridViewCommanders.Update();
         }
+
+        public void UpdatePatches()                                         // update patch colours..
+        {
+            _discoveryForm.theme.UpdatePatch(panel_theme1);
+            _discoveryForm.theme.UpdatePatch(panel_theme2);
+            _discoveryForm.theme.UpdatePatch(panel_theme3);
+            _discoveryForm.theme.UpdatePatch(panel_theme4);
+            _discoveryForm.theme.UpdatePatch(panel_theme5);
+            _discoveryForm.theme.UpdatePatch(panel_theme6);
+            _discoveryForm.theme.UpdatePatch(panel_theme7);
+            _discoveryForm.theme.UpdatePatch(panel_theme8);
+            _discoveryForm.theme.UpdatePatch(panel_theme9);
+            _discoveryForm.theme.UpdatePatch(panel_theme10);
+            _discoveryForm.theme.UpdatePatch(panel_theme11);
+            _discoveryForm.theme.UpdatePatch(panel_theme12);
+            _discoveryForm.theme.UpdatePatch(panel_theme13);
+            _discoveryForm.theme.UpdatePatch(panel_theme14);
+            _discoveryForm.theme.UpdatePatch(panel_theme15);
+            _discoveryForm.theme.UpdatePatch(panel_theme16);
+            _discoveryForm.theme.UpdatePatch(panel_theme17);
+        }
+
+
+        private void SetPanel(Panel pn, string name, EDDTheme.Settings.CI ex)
+        {
+            toolTip.SetToolTip(pn, name);        // assign tool tips and indicate which color to edit
+            pn.Tag = ex;
+        }
+
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -153,55 +186,33 @@ namespace EDDiscovery2
                 _discoveryForm.theme.SetCustom();                              // go to custom theme..
 
             _discoveryForm.ApplyTheme(true);
+            UpdatePatches();
         }
 
         private void trackBar_theme_opacity_MouseCaptureChanged(object sender, EventArgs e)
         {
             _discoveryForm.theme.Opacity = (double)trackBar_theme_opacity.Value;
             _discoveryForm.ApplyTheme(true);
-        }
-
-        private void button_theme_forecolor_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.theme.EditColor(EDDTheme.EditIndex.Fore);
-            _discoveryForm.ApplyTheme(true);                               // no harm even if nothing changed..
-        }
-
-        private void button_theme_backcolor_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.theme.EditColor(EDDTheme.EditIndex.Back);
-            _discoveryForm.ApplyTheme(true);
-        }
-
-        private void button_theme_textcolor_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.theme.EditColor(EDDTheme.EditIndex.Text);
-            _discoveryForm.ApplyTheme(true);
-        }
-
-        private void button_theme_visited_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.theme.EditColor(EDDTheme.EditIndex.Visited);
-            _discoveryForm.ApplyTheme(true);
-        }
-
-        private void button_theme_texthighlightcolor_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.theme.EditColor(EDDTheme.EditIndex.HL);
-            _discoveryForm.ApplyTheme(true);
-        }
-
-        private void button_theme_mapblockcolor_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.theme.EditColor(EDDTheme.EditIndex.MapBlock);
-            _discoveryForm.ApplyTheme(true);
+            _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
         }
 
         private void checkBox_theme_windowframe_MouseClick(object sender, MouseEventArgs e)
         {
             _discoveryForm.theme.WindowsFrame = checkBox_theme_windowframe.Checked;
             _discoveryForm.ApplyTheme(true);
+            _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
         }
 
+        private void panel_theme_Click(object sender, EventArgs e)  
+        {
+            EDDTheme.Settings.CI ci = (EDDTheme.Settings.CI)(((Control)sender).Tag);        // tag carries the colour we want to edit
+
+            if (_discoveryForm.theme.EditColor(ci))
+            {
+                _discoveryForm.ApplyTheme(true);
+                _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
+                UpdatePatches();
+            }
+        }
     }
 }

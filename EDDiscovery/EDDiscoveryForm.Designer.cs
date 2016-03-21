@@ -59,16 +59,17 @@
             this.panel_minimize = new System.Windows.Forms.Panel();
             this.panel_close = new System.Windows.Forms.Panel();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
-            this.settings = new EDDiscovery2.Settings();
             this.tabPageRoute = new System.Windows.Forms.TabPage();
-            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
-            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
+            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
+            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
+            this.routeControl1 = new EDDiscovery.RouteControl();
+            this.settings = new EDDiscovery2.Settings();
+            this.label_version = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
@@ -81,9 +82,9 @@
             // 
             // button_test
             // 
-            this.button_test.Location = new System.Drawing.Point(330, 1);
+            this.button_test.Location = new System.Drawing.Point(772, -1);
             this.button_test.Name = "button_test";
-            this.button_test.Size = new System.Drawing.Size(75, 23);
+            this.button_test.Size = new System.Drawing.Size(41, 23);
             this.button_test.TabIndex = 1;
             this.button_test.Text = "Test";
             this.button_test.UseVisualStyleBackColor = true;
@@ -92,6 +93,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsToolStripMenuItem,
             this.adminToolStripMenuItem,
@@ -99,7 +101,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(993, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(216, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -267,7 +269,7 @@
             this.panelInfo.Controls.Add(this.labelPanelText);
             this.panelInfo.Location = new System.Drawing.Point(435, 1);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(340, 23);
+            this.panelInfo.Size = new System.Drawing.Size(331, 23);
             this.panelInfo.TabIndex = 17;
             // 
             // labelPanelText
@@ -339,13 +341,6 @@
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
-            // settings
-            // 
-            this.settings.Location = new System.Drawing.Point(0, 0);
-            this.settings.Name = "settings";
-            this.settings.Size = new System.Drawing.Size(897, 657);
-            this.settings.TabIndex = 0;
-            // 
             // tabPageRoute
             // 
             this.tabPageRoute.Controls.Add(this.routeControl1);
@@ -357,14 +352,6 @@
             this.tabPageRoute.Text = "Route";
             this.tabPageRoute.UseVisualStyleBackColor = true;
             // 
-            // routeControl1
-            // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(979, 665);
-            this.routeControl1.TabIndex = 0;
-            // 
             // tabPageScreenshots
             // 
             this.tabPageScreenshots.Controls.Add(this.imageHandler1);
@@ -374,14 +361,6 @@
             this.tabPageScreenshots.TabIndex = 4;
             this.tabPageScreenshots.Text = "Screenshots";
             this.tabPageScreenshots.UseVisualStyleBackColor = true;
-            // 
-            // imageHandler1
-            // 
-            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
-            this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
-            this.imageHandler1.TabIndex = 0;
             // 
             // tabPageTriletaration
             // 
@@ -393,14 +372,6 @@
             this.tabPageTriletaration.TabIndex = 3;
             this.tabPageTriletaration.Text = "Trilateration";
             this.tabPageTriletaration.UseVisualStyleBackColor = true;
-            // 
-            // trilaterationControl
-            // 
-            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
-            this.trilaterationControl.TabIndex = 21;
             // 
             // tabControl1
             // 
@@ -434,11 +405,52 @@
             this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
             this.travelHistoryControl1.TabIndex = 0;
             // 
+            // trilaterationControl
+            // 
+            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
+            this.trilaterationControl.Name = "trilaterationControl";
+            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
+            this.trilaterationControl.TabIndex = 21;
+            // 
+            // imageHandler1
+            // 
+            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
+            this.imageHandler1.Name = "imageHandler1";
+            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
+            this.imageHandler1.TabIndex = 0;
+            // 
+            // routeControl1
+            // 
+            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.routeControl1.Location = new System.Drawing.Point(3, 3);
+            this.routeControl1.Name = "routeControl1";
+            this.routeControl1.Size = new System.Drawing.Size(979, 665);
+            this.routeControl1.TabIndex = 0;
+            // 
+            // settings
+            // 
+            this.settings.Location = new System.Drawing.Point(0, 0);
+            this.settings.Name = "settings";
+            this.settings.Size = new System.Drawing.Size(897, 657);
+            this.settings.TabIndex = 0;
+            // 
+            // label_version
+            // 
+            this.label_version.AutoSize = true;
+            this.label_version.Location = new System.Drawing.Point(244, 5);
+            this.label_version.Name = "label_version";
+            this.label_version.Size = new System.Drawing.Size(71, 13);
+            this.label_version.TabIndex = 21;
+            this.label_version.Text = "Version Label";
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(993, 744);
+            this.Controls.Add(this.label_version);
             this.Controls.Add(this.panel_eddiscovery);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panelInfo);
@@ -514,6 +526,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPageTravelHistory;
         private TravelHistoryControl travelHistoryControl1;
+        private System.Windows.Forms.Label label_version;
     }
 }
 
