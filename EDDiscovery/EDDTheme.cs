@@ -120,10 +120,10 @@ namespace EDDiscovery2
                                                true, 100, "", 0);
 
             themelist[2] = new Settings("Orange Delight", Color.Black,
-                                               Color.Black, Color.Orange,  // button
-                                               Color.Black, Color.Orange,  // grid border
+                                               Color.FromArgb(255, 198, 99, 0), Color.Black,  // button
+                                               Color.FromArgb(255, 198, 99, 0), Color.Black,  // grid border
                                                Color.Black, Color.Orange, // grid
-                                               Color.Orange, Color.Blue, Color.Red, // travel
+                                               Color.Orange, Color.White, Color.Red, // travel
                                                Color.Black, Color.Orange, Color.Red,  // text box
                                                Color.Orange, // checkbox
                                                Color.Black, Color.Orange,  // menu
@@ -262,11 +262,6 @@ namespace EDDiscovery2
             {
                 // Back/Fore only affects drop down list - need to owner draw..
             }
-            else if (myControl is ListView)
-            {
-                myControl.BackColor = currentsettings.colors[Settings.CI.grid_background];
-                myControl.ForeColor = currentsettings.colors[Settings.CI.grid_text];
-            }
             else if (myControl is Label || myControl is GroupBox )
             {
                 myControl.ForeColor = currentsettings.colors[Settings.CI.label];
@@ -278,11 +273,15 @@ namespace EDDiscovery2
             else if (myControl is DataGridView)
             {
                 DataGridView MyDgv = (DataGridView)myControl;
-                //MyDgv.ColumnHeadersDefaultCellStyle.BackColor = currentsettings.grid_border;   // NOT WORKING
-                //MyDgv.ColumnHeadersDefaultCellStyle.ForeColor = currentsettings.grid_bordertext;
+                MyDgv.EnableHeadersVisualStyles = false;            // without this, the colours for the grid are not applied.
+                MyDgv.RowHeadersDefaultCellStyle.BackColor = currentsettings.colors[Settings.CI.grid_border];
+                MyDgv.RowHeadersDefaultCellStyle.ForeColor = currentsettings.colors[Settings.CI.grid_bordertext];
+                MyDgv.ColumnHeadersDefaultCellStyle.BackColor = currentsettings.colors[Settings.CI.grid_border];
+                MyDgv.ColumnHeadersDefaultCellStyle.ForeColor = currentsettings.colors[Settings.CI.grid_bordertext];
                 MyDgv.BackgroundColor = currentsettings.colors[Settings.CI.form];
                 MyDgv.DefaultCellStyle.BackColor = currentsettings.colors[Settings.CI.grid_background];
                 MyDgv.DefaultCellStyle.ForeColor = currentsettings.colors[Settings.CI.grid_text];
+
             }
 
             foreach (Control subC in myControl.Controls)
