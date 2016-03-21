@@ -29,8 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("ListViewGroup", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
             this.richTextBox_History = new System.Windows.Forms.RichTextBox();
             this.button_RefreshHistory = new System.Windows.Forms.Button();
@@ -48,9 +47,6 @@
             this.addToTrilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBoxHistoryWindow = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.ColumnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnDist = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label3 = new System.Windows.Forms.Label();
             this.buttonMap = new System.Windows.Forms.Button();
             this.textBoxSystem = new System.Windows.Forms.TextBox();
@@ -90,6 +86,7 @@
             this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
             this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
             this.panelRight = new System.Windows.Forms.Panel();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.checkBoxEDSMSyncFrom = new System.Windows.Forms.CheckBox();
             this.checkBoxEDSMSyncTo = new System.Windows.Forms.CheckBox();
             this.comboBoxCommander = new System.Windows.Forms.ComboBox();
@@ -98,10 +95,13 @@
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
             this.mapColorDialog = new System.Windows.Forms.ColorDialog();
+            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.historyContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panelRight.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.panelBottom.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.SuspendLayout();
@@ -193,8 +193,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle4;
             this.mapColour.HeaderText = "Map";
             this.mapColour.Name = "mapColour";
             this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -268,36 +268,6 @@
             this.label2.Size = new System.Drawing.Size(101, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "Show history for last";
-            // 
-            // listView1
-            // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.ColumnName,
-            this.columnDist});
-            listViewGroup2.Header = "ListViewGroup";
-            listViewGroup2.Name = "Name";
-            this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup2});
-            this.listView1.Location = new System.Drawing.Point(11, 364);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(278, 213);
-            this.listView1.TabIndex = 7;
-            this.listView1.TabStop = false;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            // 
-            // ColumnName
-            // 
-            this.ColumnName.Text = "Name";
-            this.ColumnName.Width = 200;
-            // 
-            // columnDist
-            // 
-            this.columnDist.Text = "Dist";
-            this.columnDist.Width = 90;
             // 
             // label3
             // 
@@ -696,11 +666,11 @@
             // 
             // panelRight
             // 
+            this.panelRight.Controls.Add(this.dataGridView2);
             this.panelRight.Controls.Add(this.checkBoxEDSMSyncFrom);
             this.panelRight.Controls.Add(this.checkBoxEDSMSyncTo);
             this.panelRight.Controls.Add(this.comboBoxCommander);
             this.panelRight.Controls.Add(this.label6);
-            this.panelRight.Controls.Add(this.listView1);
             this.panelRight.Controls.Add(this.textBoxDistanceToNextSystem);
             this.panelRight.Controls.Add(this.label3);
             this.panelRight.Controls.Add(this.labelDistanceToNextSystem);
@@ -712,6 +682,27 @@
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(297, 586);
             this.panelRight.TabIndex = 1;
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.AllowUserToAddRows = false;
+            this.dataGridView2.AllowUserToDeleteRows = false;
+            this.dataGridView2.AllowUserToResizeColumns = false;
+            this.dataGridView2.AllowUserToResizeRows = false;
+            this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col1,
+            this.Distance});
+            this.dataGridView2.Location = new System.Drawing.Point(7, 379);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.RowHeadersVisible = false;
+            this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridView2.Size = new System.Drawing.Size(290, 207);
+            this.dataGridView2.TabIndex = 23;
+            this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
             // checkBoxEDSMSyncFrom
             // 
@@ -793,6 +784,18 @@
             // 
             this.mapColorDialog.SolidColorOnly = true;
             // 
+            // Col1
+            // 
+            this.Col1.HeaderText = "Name";
+            this.Col1.Name = "Col1";
+            this.Col1.Width = 200;
+            // 
+            // Distance
+            // 
+            this.Distance.HeaderText = "Distance";
+            this.Distance.Name = "Distance";
+            this.Distance.Width = 60;
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -809,6 +812,7 @@
             this.panel1.PerformLayout();
             this.panelRight.ResumeLayout(false);
             this.panelRight.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.panelBottom.ResumeLayout(false);
             this.panelMain.ResumeLayout(false);
             this.panelMain.PerformLayout();
@@ -822,9 +826,6 @@
         private System.Windows.Forms.Label labelHeader;
         private System.Windows.Forms.ComboBox comboBoxHistoryWindow;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader ColumnName;
-        private System.Windows.Forms.ColumnHeader columnDist;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button buttonMap;
         internal System.Windows.Forms.RichTextBox richTextBox_History;
@@ -884,5 +885,8 @@
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem;
         internal System.Windows.Forms.CheckBox checkBoxEDSMSyncFrom;
         internal System.Windows.Forms.CheckBox checkBoxEDSMSyncTo;
+        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
     }
 }

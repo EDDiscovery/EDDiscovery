@@ -467,7 +467,7 @@ namespace EDDiscovery
                 if (name !=null)
                     label3.Text = "Closest systems from " + name.ToString();
 
-                listView1.Items.Clear();
+                dataGridView2.Rows.Clear(); 
 
                 if (LastSystem == null)
                     return;
@@ -491,27 +491,18 @@ namespace EDDiscovery
                     }
                 }
 
-
                 var list = (from t in sysDist orderby t.dist select t).Take(50);
-
-
 
                 foreach (SystemDist sdist in list)
                 {
-                    ListViewItem item = new ListViewItem(sdist.name);
-                    item.SubItems.Add(sdist.dist.ToString("0.00"));
-                    listView1.Items.Add(item);
+                    object[] rowobj = { sdist.name, sdist.dist.ToString("0.00") };
+                    dataGridView2.Rows.Add(rowobj);
                 }
-
-
-
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-               
             }
 
         }
@@ -1237,6 +1228,11 @@ namespace EDDiscovery
         private void checkBoxEDSMSyncFrom_CheckedChanged(object sender, EventArgs e)
         {
             EDSMSyncFrom = checkBoxEDSMSyncFrom.Checked;
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 
