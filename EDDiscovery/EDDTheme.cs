@@ -152,7 +152,7 @@ namespace EDDiscovery2
             }
         }
         
-        public string Name { get { return currentsettings.name; } }
+        public string Name { get { return currentsettings.name; } set { currentsettings.name = value; } }
 
         public Color TextBlock { get { return currentsettings.colors[Settings.CI.textbox_fore]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_fore] = value; } }
         public Color TextBlockHighlightColor { get { return currentsettings.colors[Settings.CI.textbox_highlight]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_highlight] = value; } }
@@ -162,6 +162,7 @@ namespace EDDiscovery2
 
         public bool WindowsFrame { get { return currentsettings.windowsframe; } set { SetCustom(); currentsettings.windowsframe = value; } }
         public double Opacity { get { return currentsettings.formopacity; } set { SetCustom(); currentsettings.formopacity = value; } }
+        public string FontName { get { return currentsettings.fontname; } set { SetCustom(); currentsettings.fontname = value; } }
 
         private Settings currentsettings;           // if name = custom, then its not a standard theme..
         private List<Settings> themelist;
@@ -169,65 +170,9 @@ namespace EDDiscovery2
 
         public EDDTheme()
         {
-            themelist = new List<Settings>();
-
-            themelist.Add(new Settings("Windows Default", SystemColors.Menu,
-                                                           SystemColors.Menu, SystemColors.MenuText,  // button
-                                                           SystemColors.Menu, SystemColors.MenuText,  // grid border
-                                                           SystemColors.Menu, SystemColors.MenuText,  // grid
-                                                           SystemColors.MenuText, Color.Blue, Color.Red, // travel
-                                                           SystemColors.Menu, SystemColors.MenuText, Color.Red,  // text
-                                                           SystemColors.MenuText, // checkbox
-                                                           SystemColors.Menu, SystemColors.MenuText,  // menu
-                                                           SystemColors.MenuText,  // label
-                                                           true, 100, "", 0));
-
-            currentsettings = new Settings(themelist[0]);       // copy it, not reference it.
-
-            themelist.Add(new Settings("Crazy Scheme to show painting", Color.Black,
-                                               Color.Gold, Color.Yellow,  // button
-                                               Color.Purple, Color.Gray, Color.Beige, Color.Red, // grid 
-                                               Color.White, Color.Blue, Color.Red, // travel
-                                               Color.Green, Color.White, Color.Red,  // text box
-                                               Color.Aqua, // checkbox
-                                               Color.Black, Color.Red,  // menu
-                                               Color.Chocolate,  // label
-                                               true, 100, "", 0));
-
-            themelist.Add(new Settings("Orange Delight", Color.Black,
-                                               Color.Black, Color.Orange,  // button
-                                               Color.Black, Color.Orange,  // grid border
-                                               Color.Black, Color.Orange, // grid
-                                               Color.Orange, Color.White, Color.Red, // travel
-                                               Color.Black, Color.Orange, Color.Red,  // text box
-                                               Color.Orange, // checkbox
-                                               Color.Black, Color.Orange,  // menu
-                                               Color.Orange,  // label
-                                               false, 95, "", 0));
-
-            themelist.Add(new Settings("Blue Wonder", Color.DarkBlue,
-                                               Color.Blue, Color.White,  // button
-                                               Color.DarkBlue, Color.White,  // grid border
-                                               Color.DarkBlue, Color.White, // grid
-                                               Color.White, Color.DarkBlue, Color.Red, // travel
-                                               Color.DarkBlue, Color.White, Color.Red,  // text box
-                                               Color.White, // checkbox
-                                               Color.DarkBlue, Color.White,  // menu
-                                               Color.White,  // label
-                                               false, 95, "", 0));
-
-            themelist.Add(new Settings("Green Baize", Color.FromArgb(255, 48, 121, 17),
-                                               Color.FromArgb(255, 48, 121, 17), Color.White,  // button
-                                               Color.FromArgb(255, 48, 121, 17), Color.White,  // grid border
-                                               Color.FromArgb(255, 48, 121, 17), Color.White, // grid
-                                               Color.White, Color.FromArgb(255, 48, 121, 17), Color.Red, // travel
-                                               Color.FromArgb(255, 48, 121, 17), Color.White, Color.Red,  // text box
-                                               Color.White, // checkbox
-                                               Color.FromArgb(255, 48, 121, 17), Color.White,  // menu
-                                               Color.White,  // label
-                                               false, 95, "", 0));
-
+            themelist = new List<Settings>();               // new one every time
             LoadThemes();
+            currentsettings = new Settings(themelist[0]);       // copy it, not reference it.
         }
 
         public void RestoreSettings()
@@ -275,6 +220,62 @@ namespace EDDiscovery2
 
         public void LoadThemes()
         {
+            themelist.Clear();
+
+            themelist.Add(new Settings("Windows Default", SystemColors.Menu,
+                                                           SystemColors.Menu, SystemColors.MenuText,  // button
+                                                           SystemColors.Menu, SystemColors.MenuText,  // grid border
+                                                           SystemColors.Menu, SystemColors.MenuText,  // grid
+                                                           SystemColors.MenuText, Color.Blue, Color.Red, // travel
+                                                           SystemColors.Menu, SystemColors.MenuText, Color.Red,  // text
+                                                           SystemColors.MenuText, // checkbox
+                                                           SystemColors.Menu, SystemColors.MenuText,  // menu
+                                                           SystemColors.MenuText,  // label
+                                                           true, 100, "", 0));
+
+            themelist.Add(new Settings("Crazy Scheme to show painting", Color.Black,
+                                               Color.Gold, Color.Yellow,  // button
+                                               Color.Purple, Color.Gray, Color.Beige, Color.Red, // grid 
+                                               Color.White, Color.Blue, Color.Red, // travel
+                                               Color.Green, Color.White, Color.Red,  // text box
+                                               Color.Aqua, // checkbox
+                                               Color.Black, Color.Red,  // menu
+                                               Color.Chocolate,  // label
+                                               true, 100, "", 0));
+
+            themelist.Add(new Settings("Orange Delight", Color.Black,
+                                               Color.Black, Color.Orange,  // button
+                                               Color.Black, Color.Orange,  // grid border
+                                               Color.Black, Color.Orange, // grid
+                                               Color.Orange, Color.White, Color.Red, // travel
+                                               Color.Black, Color.Orange, Color.Red,  // text box
+                                               Color.Orange, // checkbox
+                                               Color.Black, Color.Orange,  // menu
+                                               Color.Orange,  // label
+                                               false, 95, "", 0));
+
+            themelist.Add(new Settings("Blue Wonder", Color.DarkBlue,
+                                               Color.Blue, Color.White,  // button
+                                               Color.DarkBlue, Color.White,  // grid border
+                                               Color.DarkBlue, Color.White, // grid
+                                               Color.White, Color.DarkBlue, Color.Red, // travel
+                                               Color.DarkBlue, Color.White, Color.Red,  // text box
+                                               Color.White, // checkbox
+                                               Color.DarkBlue, Color.White,  // menu
+                                               Color.White,  // label
+                                               false, 95, "", 0));
+
+            themelist.Add(new Settings("Green Baize", Color.FromArgb(255, 48, 121, 17),
+                                               Color.FromArgb(255, 48, 121, 17), Color.White,  // button
+                                               Color.FromArgb(255, 48, 121, 17), Color.White,  // grid border
+                                               Color.FromArgb(255, 48, 121, 17), Color.White, // grid
+                                               Color.White, Color.FromArgb(255, 48, 121, 17), Color.Red, // travel
+                                               Color.FromArgb(255, 48, 121, 17), Color.White, Color.Red,  // text box
+                                               Color.White, // checkbox
+                                               Color.FromArgb(255, 48, 121, 17), Color.White,  // menu
+                                               Color.White,  // label
+                                               false, 95, "", 0));
+
             string themepath = "";
 
             try
@@ -327,6 +328,7 @@ namespace EDDiscovery2
                 }
             }
         }
+
         public JObject Settings2Json()
         {
             JObject jo = new JObject();
@@ -383,17 +385,24 @@ namespace EDDiscovery2
 
         public void FillComboBoxWithThemes(ComboBox comboBoxTheme)          // fill in a combo box with default themes
         {
+            comboBoxTheme.Items.Clear();
             for (int i = 0; i < themelist.Count; i++)
                 comboBoxTheme.Items.Add(themelist[i].name);
+            comboBoxTheme.Items.Add("Custom");                          // and add an extra custom one which enables the individual controls
         }
 
-        public void SetComboBoxIndex(ComboBox comboBoxTheme)                // set the index of the combo box to the current theme
+        public bool SetComboBoxIndex(ComboBox comboBoxTheme)                // set the index of the combo box to the current theme
         {
             for (int i = 0; i < comboBoxTheme.Items.Count; i++)
             {
-                if ( comboBoxTheme.Items[i].Equals(currentsettings.name))
+                if (comboBoxTheme.Items[i].Equals(currentsettings.name))
+                {
                     comboBoxTheme.SelectedIndex = i;
+                    return true;
+                }
             }
+
+            return false;
         }
 
         public bool SetThemeByName( string name )                           // given a theme name, select it if possible
@@ -427,10 +436,13 @@ namespace EDDiscovery2
 
         public void UpdateColorControls(Control myControl)
         {
+            //Font fnt = new Font(currentsettings.fontname, currentsettings.fontsize);
+
             if (myControl is MenuStrip)
             {
                 myControl.BackColor = currentsettings.colors[Settings.CI.menu_back];
                 myControl.ForeColor = currentsettings.colors[Settings.CI.menu_fore];
+//                myControl.Font = fnt;
             }
             else if (myControl is RichTextBox || myControl is TextBox)
             {

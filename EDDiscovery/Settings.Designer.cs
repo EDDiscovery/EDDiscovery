@@ -55,6 +55,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxHomeSystem = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.textBox_Font = new System.Windows.Forms.TextBox();
+            this.buttonSaveTheme = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -88,7 +90,6 @@
             this.checkBox_theme_windowframe = new System.Windows.Forms.CheckBox();
             this.comboBoxTheme = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonSaveTheme = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
@@ -365,6 +366,7 @@
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox5.Controls.Add(this.textBox_Font);
             this.groupBox5.Controls.Add(this.buttonSaveTheme);
             this.groupBox5.Controls.Add(this.label15);
             this.groupBox5.Controls.Add(this.label8);
@@ -404,6 +406,26 @@
             this.groupBox5.TabIndex = 18;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Theme";
+            // 
+            // textBox_Font
+            // 
+            this.textBox_Font.Location = new System.Drawing.Point(125, 122);
+            this.textBox_Font.Name = "textBox_Font";
+            this.textBox_Font.ReadOnly = true;
+            this.textBox_Font.Size = new System.Drawing.Size(159, 20);
+            this.textBox_Font.TabIndex = 8;
+            this.textBox_Font.Text = "Font Elite Dangerous";
+            this.textBox_Font.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBoxFont_MouseClick);
+            // 
+            // buttonSaveTheme
+            // 
+            this.buttonSaveTheme.Location = new System.Drawing.Point(17, 46);
+            this.buttonSaveTheme.Name = "buttonSaveTheme";
+            this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
+            this.buttonSaveTheme.TabIndex = 7;
+            this.buttonSaveTheme.Text = "Save Theme";
+            this.buttonSaveTheme.UseVisualStyleBackColor = true;
+            this.buttonSaveTheme.Click += new System.EventHandler(this.buttonSaveTheme_Click);
             // 
             // label15
             // 
@@ -732,16 +754,6 @@
             this.comboBoxTheme.TabIndex = 0;
             this.comboBoxTheme.SelectedIndexChanged += new System.EventHandler(this.comboBoxTheme_SelectedIndexChanged);
             // 
-            // buttonSaveTheme
-            // 
-            this.buttonSaveTheme.Location = new System.Drawing.Point(17, 46);
-            this.buttonSaveTheme.Name = "buttonSaveTheme";
-            this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
-            this.buttonSaveTheme.TabIndex = 7;
-            this.buttonSaveTheme.Text = "Save Theme";
-            this.buttonSaveTheme.UseVisualStyleBackColor = true;
-            this.buttonSaveTheme.Click += new System.EventHandler(this.buttonSaveTheme_Click);
-            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -831,5 +843,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
         private System.Windows.Forms.Button buttonSaveTheme;
+        private System.Windows.Forms.TextBox textBox_Font;
     }
 }

@@ -48,7 +48,6 @@ namespace EDDiscovery2
             _db = new SQLiteDBClass();
 
             _discoveryForm.theme.FillComboBoxWithThemes(comboBoxTheme);                // set up combo box with default themes
-            comboBoxTheme.Items.Add("Custom");                          // and add an extra custom one which enables the individual controls
             _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
 
         }
@@ -226,9 +225,28 @@ namespace EDDiscovery2
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                _discoveryForm.theme.SaveSettings(dlg.FileName);
-            }
+                _discoveryForm.theme.SaveSettings(dlg.FileName);        // should create a new theme files
+                _discoveryForm.theme.LoadThemes();          // make sure up to data - we added a theme, reload them all
+                _discoveryForm.theme.Name = Path.GetFileNameWithoutExtension(dlg.FileName); // go to the name
 
+                _discoveryForm.theme.FillComboBoxWithThemes(comboBoxTheme);   // set up combo box with default themes
+
+                if (!_discoveryForm.theme.SetComboBoxIndex(comboBoxTheme))    // if can't select it, probably saved it somewhere else..
+                {
+                    _discoveryForm.theme.SetCustom();   // custom
+                }
+            }
+        }
+
+        private void textBoxFont_MouseClick(object sender, MouseEventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            fd.Font = new Font(_discoveryForm.theme.FontName, 8);
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+                _discoveryForm.theme.FontName = fd.Font.Name;
+                _discoveryForm.ApplyTheme(true);
+            }
         }
     }
 }
