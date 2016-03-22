@@ -49,7 +49,6 @@ namespace EDDiscovery2
 
             _discoveryForm.theme.FillComboBoxWithThemes(comboBoxTheme);                // set up combo box with default themes
             _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
-
         }
 
         public void InitSettingsTab()
@@ -135,6 +134,7 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme15);
             _discoveryForm.theme.UpdatePatch(panel_theme16);
             _discoveryForm.theme.UpdatePatch(panel_theme17);
+            textBox_Font.Text = _discoveryForm.theme.FontName;
         }
 
 
@@ -241,11 +241,21 @@ namespace EDDiscovery2
         private void textBoxFont_MouseClick(object sender, MouseEventArgs e)
         {
             FontDialog fd = new FontDialog();
-            fd.Font = new Font(_discoveryForm.theme.FontName, 8);
+            fd.Font = new Font(_discoveryForm.theme.FontName, _discoveryForm.theme.FontSize);
+            fd.MinSize = 4;
+            fd.MaxSize = 12;
+
             if (fd.ShowDialog() == DialogResult.OK)
             {
-                _discoveryForm.theme.FontName = fd.Font.Name;
-                _discoveryForm.ApplyTheme(true);
+                if (fd.Font.Style == FontStyle.Regular)
+                {
+                    _discoveryForm.theme.FontName = fd.Font.Name;
+                    _discoveryForm.theme.FontSize = fd.Font.Size;
+                    _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
+                    _discoveryForm.ApplyTheme(true);
+                }
+                else
+                    MessageBox.Show("Font does not have regular style");
             }
         }
     }
