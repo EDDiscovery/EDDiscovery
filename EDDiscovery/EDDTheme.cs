@@ -427,11 +427,15 @@ namespace EDDiscovery2
             Font fnt = new Font(currentsettings.fontname, currentsettings.fontsize);
 
             foreach (Control c in form.Controls)
-                UpdateColorControls(c,fnt);
+                UpdateColorControls(c, fnt, "TOP",0);
         }
 
-        public void UpdateColorControls(Control myControl, Font fnt)
+        public void UpdateColorControls(Control myControl, Font fnt, string parent,int level)
         {
+#if DEBUG
+            //string pad = "                             ".Substring(0, level);
+            //Console.WriteLine(pad + parent.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString());
+#endif
             if (myControl is MenuStrip)
             {
                 myControl.BackColor = currentsettings.colors[Settings.CI.menu_back];
@@ -444,7 +448,7 @@ namespace EDDiscovery2
                 myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
                 myControl.Font = fnt;
             }
-            else if (myControl is Panel  )
+            else if (myControl is Panel)
             {
                 if (!myControl.Name.Contains("theme"))                 // theme panels show settings color - don't overwrite
                     myControl.BackColor = currentsettings.colors[Settings.CI.form];
@@ -465,12 +469,18 @@ namespace EDDiscovery2
                 myControl.Font = fnt;
                 // Back/Fore only affects drop down list - need to owner draw..
             }
-            else if (myControl is Label || myControl is GroupBox )
+            else if (myControl is Label)
             {
                 myControl.ForeColor = currentsettings.colors[Settings.CI.label];
                 myControl.Font = fnt;
             }
-            else if (myControl is CheckBox || myControl is RadioButton )
+            else if (myControl is GroupBox)
+            {
+                GroupBox MyDgv = (GroupBox)myControl;
+                MyDgv.ForeColor = currentsettings.colors[Settings.CI.label];
+                myControl.Font = fnt;
+            }
+            else if (myControl is CheckBox || myControl is RadioButton)
             {
                 myControl.ForeColor = currentsettings.colors[Settings.CI.checkbox];
                 myControl.Font = fnt;
@@ -487,11 +497,16 @@ namespace EDDiscovery2
                 MyDgv.DefaultCellStyle.BackColor = currentsettings.colors[Settings.CI.grid_background];
                 MyDgv.DefaultCellStyle.ForeColor = currentsettings.colors[Settings.CI.grid_text];
                 myControl.Font = fnt;
+                if (myControl.Name.Contains("dataGridViewTravel") && fnt.Size > 9F)
+                {
+                    Font fnt2 = new Font(currentsettings.fontname, 9F);
+                    MyDgv.Columns[0].DefaultCellStyle.Font = fnt2;
+                }
             }
 
             foreach (Control subC in myControl.Controls)
             {
-                UpdateColorControls(subC,fnt);
+                UpdateColorControls(subC,fnt,myControl.Name,level+1);
             }
         }
 

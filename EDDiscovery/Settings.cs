@@ -91,6 +91,7 @@ namespace EDDiscovery2
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
 
             UpdatePatches();
+            UpdateFontInfo();
 
             trackBar_theme_opacity.Value = (int)_discoveryForm.theme.Opacity;
             checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
@@ -134,16 +135,18 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme15);
             _discoveryForm.theme.UpdatePatch(panel_theme16);
             _discoveryForm.theme.UpdatePatch(panel_theme17);
-            textBox_Font.Text = _discoveryForm.theme.FontName;
         }
 
+        public void UpdateFontInfo()
+        {
+            textBox_Font.Text = _discoveryForm.theme.FontName;
+        }
 
         private void SetPanel(Panel pn, string name, EDDTheme.Settings.CI ex)
         {
             toolTip.SetToolTip(pn, name);        // assign tool tips and indicate which color to edit
             pn.Tag = ex;
         }
-
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -187,6 +190,7 @@ namespace EDDiscovery2
 
             _discoveryForm.ApplyTheme(true);
             UpdatePatches();
+            UpdateFontInfo();
         }
 
         private void trackBar_theme_opacity_MouseCaptureChanged(object sender, EventArgs e)
@@ -252,6 +256,7 @@ namespace EDDiscovery2
                     _discoveryForm.theme.FontName = fd.Font.Name;
                     _discoveryForm.theme.FontSize = fd.Font.Size;
                     _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
+                    UpdateFontInfo();
                     _discoveryForm.ApplyTheme(true);
                 }
                 else

@@ -191,7 +191,7 @@ namespace EDDiscovery
                 result = (from systems in visitedSystems where systems.time > oldestData orderby systems.time descending select systems).ToList();
             }
 
-            dataGridView1.Rows.Clear();
+            dataGridViewTravel.Rows.Clear();
 
             System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
             
@@ -236,10 +236,10 @@ namespace EDDiscovery
 
             System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
             
-            if (dataGridView1.Rows.Count > 0)
+            if (dataGridViewTravel.Rows.Count > 0)
             {
                 lastRowIndex = 0;
-                ShowSystemInformation((SystemPosition)(dataGridView1.Rows[0].Cells[1].Tag));
+                ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[0].Cells[1].Tag));
             }
             System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
             sw1.Stop();
@@ -315,22 +315,22 @@ namespace EDDiscovery
 
                 if (insert)
                 {
-                    dataGridView1.Rows.Insert(0, rowobj);
+                    dataGridViewTravel.Rows.Insert(0, rowobj);
                     rownr = 0;
                 }
                 else
                 {
-                    dataGridView1.Rows.Add(rowobj);
-                    rownr = dataGridView1.Rows.Count - 1;
+                    dataGridViewTravel.Rows.Add(rowobj);
+                    rownr = dataGridViewTravel.Rows.Count - 1;
                 }
 
-                var cell = dataGridView1.Rows[rownr].Cells[1];
+                var cell = dataGridViewTravel.Rows[rownr].Cells[1];
 
                 cell.Tag = item;
 
-                dataGridView1.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
+                dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
-                cell = dataGridView1.Rows[rownr].Cells[4];
+                cell = dataGridViewTravel.Rows[rownr].Cells[4];
                 cell.Style.ForeColor = (item.vs == null) ? _discoveryForm.theme.MapBlockColor : Color.FromArgb(item.vs.MapColour);
         }
 
@@ -467,7 +467,7 @@ namespace EDDiscovery
                 if (name !=null)
                     label3.Text = "Closest systems from " + name.ToString();
 
-                dataGridView2.Rows.Clear(); 
+                dataGridViewNearest.Rows.Clear(); 
 
                 if (LastSystem == null)
                     return;
@@ -496,7 +496,7 @@ namespace EDDiscovery
                 foreach (SystemDist sdist in list)
                 {
                     object[] rowobj = { sdist.name, sdist.dist.ToString("0.00") };
-                    dataGridView2.Rows.Add(rowobj);
+                    dataGridViewNearest.Rows.Add(rowobj);
                 }
             }
             catch (Exception ex)
@@ -536,7 +536,7 @@ namespace EDDiscovery
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance |
                 System.Reflection.BindingFlags.SetProperty,
                 null,
-                dataGridView1,
+                dataGridViewTravel,
                 new object[] { true }
             );
         }
@@ -586,7 +586,7 @@ namespace EDDiscovery
 
         private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            DataGridViewSorter.DataGridSort(dataGridView1, e.ColumnIndex);
+            DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
         }
 
         private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -596,7 +596,7 @@ namespace EDDiscovery
                 //string  SysName = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
                 lastRowIndex = e.RowIndex;
 
-                ShowSystemInformation((SystemPosition)(dataGridView1.Rows[e.RowIndex].Cells[1].Tag));
+                ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[e.RowIndex].Cells[1].Tag));
             }
 
         }
@@ -604,16 +604,16 @@ namespace EDDiscovery
         private void buttonMap_Click(object sender, EventArgs e)
         {
             var map = _discoveryForm.Map;
-            var selectedLine = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            var selectedLine = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
                                                            .OrderBy(row => row.Index)
                                                            .First().Index;
             SystemPosition selectedSys;
             do
             {
-                selectedSys = (SystemPosition)dataGridView1.Rows[selectedLine].Cells[1].Tag;
+                selectedSys = (SystemPosition)dataGridViewTravel.Rows[selectedLine].Cells[1].Tag;
                 selectedLine += 1;
-            } while (!selectedSys.curSystem.HasCoordinate && selectedLine <= dataGridView1.Rows.Count);
+            } while (!selectedSys.curSystem.HasCoordinate && selectedLine <= dataGridViewTravel.Rows.Count);
             _discoveryForm.updateMapData();
             map.Instance.Reset();
                         
@@ -628,7 +628,7 @@ namespace EDDiscovery
             {
                 //string SysName = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
                 lastRowIndex = e.RowIndex;
-                ShowSystemInformation((SystemPosition)(dataGridView1.Rows[e.RowIndex].Cells[1].Tag));
+                ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[e.RowIndex].Cells[1].Tag));
 
                 if (e.ColumnIndex == 3)       // note column
                 {
@@ -665,7 +665,7 @@ namespace EDDiscovery
                 distance.Store();
                 SQLiteDBClass.AddDistanceToCache(distance);
 
-                dataGridView1.Rows[lastRowIndex].Cells[2].Value = textBoxDistance.Text.Trim();
+                dataGridViewTravel.Rows[lastRowIndex].Cells[2].Value = textBoxDistance.Text.Trim();
             }
         }
 
@@ -678,7 +678,7 @@ namespace EDDiscovery
 
         private void richTextBoxNote_TextChanged(object sender, EventArgs e)
         {
-            dataGridView1.Rows[lastRowIndex].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
+            dataGridViewTravel.Rows[lastRowIndex].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
         }
 
         private void StoreSystemNote()
@@ -730,7 +730,7 @@ namespace EDDiscovery
 
                     
                     currentSysPos.curSystem.Note = txt;
-                    dataGridView1.Rows[lastRowIndex].Cells[3].Value = txt;
+                    dataGridViewTravel.Rows[lastRowIndex].Cells[3].Value = txt;
 
                     if (edsm.commanderName == null || edsm.apiKey == null)
                         return;
@@ -948,15 +948,15 @@ namespace EDDiscovery
             TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
 
             _discoveryForm.ShowTrilaterationTab();
-            tctrl.Set(((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem);
+            tctrl.Set(((SystemPosition)dataGridViewTravel.CurrentRow.Cells[1].Tag).curSystem);
         }
     
 		public ISystem CurrentSystem
         {
             get
             {
-                if (dataGridView1 == null || dataGridView1.CurrentRow == null) return null;
-                return ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
+                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null) return null;
+                return ((SystemPosition)dataGridViewTravel.CurrentRow.Cells[1].Tag).curSystem;
             }
         }
 
@@ -1024,11 +1024,11 @@ namespace EDDiscovery
         private void FilterGridView()
         {
             string searchstr = textBoxFilter.Text.Trim();
-            dataGridView1.SuspendLayout();
+            dataGridViewTravel.SuspendLayout();
 
-            DataGridViewRow[] theRows = new DataGridViewRow[dataGridView1.Rows.Count];
-            dataGridView1.Rows.CopyTo(theRows, 0);
-            dataGridView1.Rows.Clear();
+            DataGridViewRow[] theRows = new DataGridViewRow[dataGridViewTravel.Rows.Count];
+            dataGridViewTravel.Rows.CopyTo(theRows, 0);
+            dataGridViewTravel.Rows.Clear();
 
             for (int loop = 0; loop < theRows.Length; loop++)
             {
@@ -1050,8 +1050,8 @@ namespace EDDiscovery
                 }
                 theRows[loop].Visible = found;
             }
-            dataGridView1.Rows.AddRange(theRows);
-            dataGridView1.ResumeLayout();
+            dataGridViewTravel.Rows.AddRange(theRows);
+            dataGridViewTravel.ResumeLayout();
         }
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
@@ -1061,7 +1061,7 @@ namespace EDDiscovery
 
         private void starMapColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
                                                            .Distinct();
             Color colour = selectedRows.First().Cells[4].Style.ForeColor;
@@ -1091,7 +1091,7 @@ namespace EDDiscovery
 
         private void hideSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                   .Select(cell => cell.OwningRow)
                                                                   .Distinct();
 
@@ -1117,14 +1117,14 @@ namespace EDDiscovery
                     }
                 }
                 // Remove rows
-                if (selectedRows.Count<DataGridViewRow>() == dataGridView1.Rows.Count)
+                if (selectedRows.Count<DataGridViewRow>() == dataGridViewTravel.Rows.Count)
                 {
-                    dataGridView1.Rows.Clear();
+                    dataGridViewTravel.Rows.Clear();
                 }
 
                 foreach (DataGridViewRow row in selectedRows.ToList<DataGridViewRow>())
                 {
-                    dataGridView1.Rows.Remove(row);
+                    dataGridViewTravel.Rows.Remove(row);
                 }
                 this.Cursor = Cursors.Default;
             }
@@ -1132,7 +1132,7 @@ namespace EDDiscovery
 
         private void moveToAnotherCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct();
 
@@ -1193,7 +1193,7 @@ namespace EDDiscovery
         {
             TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
 
-            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()
                                                                         .OrderBy(cell => cell.Index);
