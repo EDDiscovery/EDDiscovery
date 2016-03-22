@@ -308,7 +308,6 @@ namespace EDDiscovery2
                 return;
             }
 
-            FileInfo newfi = null;
 
             foreach (FileInfo fi in allFiles)
             {
@@ -424,6 +423,13 @@ namespace EDDiscovery2
         {
             form.Opacity = currentsettings.formopacity / 100;
             form.BackColor = currentsettings.colors[Settings.CI.form];
+
+            if (currentsettings.fontname.Equals("") || currentsettings.fontsize == 0)
+            {
+                currentsettings.fontname = "Microsoft Sans Serif";
+                currentsettings.fontsize = 8.25F;
+            }
+
             Font fnt = new Font(currentsettings.fontname, currentsettings.fontsize);
 
             foreach (Control c in form.Controls)
