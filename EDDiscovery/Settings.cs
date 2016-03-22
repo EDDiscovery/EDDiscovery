@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using EDDiscovery;
 using EDDiscovery2.DB;
 using EDDiscovery.DB;
+using System.IO;
 
 namespace EDDiscovery2
 {
@@ -217,6 +218,16 @@ namespace EDDiscovery2
 
         private void buttonSaveTheme_Click(object sender, EventArgs e)
         {
+            SaveFileDialog dlg = new SaveFileDialog();
+
+            dlg.InitialDirectory = Path.Combine(Tools.GetAppDataDirectory(), "Theme");
+            dlg.DefaultExt = "eddtheme";
+            dlg.AddExtension = true;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                _discoveryForm.theme.SaveSettings(dlg.FileName);
+            }
 
         }
     }
