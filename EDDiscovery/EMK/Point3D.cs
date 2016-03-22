@@ -96,10 +96,10 @@ namespace EMK.LightGeometry
         {
             double dotp = (this.X - x0.X) * (x2.X - this.X) + (this.Y - x0.Y) * (x2.Y - this.Y) + (this.Z - x0.Z) * (x2.Z - this.Z);
             double mag2 = ((x2.X - this.X) * (x2.X - this.X) + (x2.Y - this.Y) * (x2.Y - this.Y) + (x2.Z - this.Z) * (x2.Z - this.Z));
-            return -dotp/mag2;              // its -((x1-x0) dotp (x2-x1) / |x2-x1|^2)
+            return -dotp / mag2;              // its -((x1-x0) dotp (x2-x1) / |x2-x1|^2)
         }
 
-        public Point3D PointAlongPath( Point3D x1 , double i ) // i = 0 to 1.0, on the path. Negative before the path, >1 after the path
+        public Point3D PointAlongPath(Point3D x1, double i) // i = 0 to 1.0, on the path. Negative before the path, >1 after the path
         {
             return new Point3D(this.X + (x1.X - this.X) * i, this.Y + (x1.Y - this.Y) * i, this.Z + (x1.Z - this.Z) * i);
         }
@@ -108,6 +108,24 @@ namespace EMK.LightGeometry
         {
             return PointAlongPath(x2, InterceptPercent(x2, x0));
         }
+
+        public Point3D Subtract(Point3D other )
+        {
+            return new Point3D(this.X - other.X, this.Y - other.Y, this.Z - other.Z);
+        }
+
+        public static double InterceptPercent000(Point3D x2, Point3D x0) // % along the path 0,0,0->X2 that a vector from X0 perpendicular meets it      
+        {
+            double dotp = (-x0.X) * (x2.X) + (-x0.Y) * (x2.Y) + (-x0.Z) * (x2.Z);       // this is 0,0,0 in effect, so remove terms
+            double mag2 = ((x2.X) * (x2.X) + (x2.Y) * (x2.Y) + (x2.Z) * (x2.Z));
+            return -dotp / mag2;              // its -((x1-x0) dotp (x2-x1) / |x2-x1|^2)    where x0 =0,0,0
+        }
+
+        public static Point3D PointAlongVector(Point3D x1, double i) // i = 0 to 1.0, on the vector from 000
+        {
+            return new Point3D(x1.X * i, x1.Y * i, x1.Z * i);
+        }
+
 
         /// <summary>
         /// Returns the projection of a point on the line defined with two other points.
