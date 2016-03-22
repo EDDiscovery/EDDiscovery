@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDiscovery", "EDDiscovery\EDDiscovery.csproj", "{6EE10D92-E3E4-44D9-8E6B-851801B0B510}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6711422B-12A5-489A-ACAE-BDCFF8C88071}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDiscoveryTests", "EDDiscoveryTests\EDDiscoveryTests.csproj", "{C4452886-6A1B-4AFD-9E76-AB0E5D8AABA5}"
 EndProject
 Global

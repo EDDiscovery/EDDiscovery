@@ -80,7 +80,7 @@ namespace EDDiscovery2.EDSM
                     // Send Unsynced system to EDSM.
 
                     List<SystemPosition> systems = (from s in mainForm.VisitedSystems where s.vs != null && s.vs.EDSM_sync == false && s.vs.Commander == EDDiscoveryForm.EDDConfig.CurrentCommander.Nr select s).ToList<SystemPosition>();
-                    mainForm.LogLine("EDSM: Sending " + systems.Count.ToString() + " flightlog entries", Color.Black);
+                    mainForm.LogLine("EDSM: Sending " + systems.Count.ToString() + " flightlog entries");
                     foreach (var system in systems)
                     {
                         string json = null;
@@ -122,7 +122,7 @@ namespace EDDiscovery2.EDSM
                                 }
                                 else
                                 {
-                                    mainForm.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr, Color.Red);
+                                    mainForm.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr);
                                     System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name);
                                     break;
                                 }
@@ -175,7 +175,7 @@ namespace EDDiscovery2.EDSM
                         }
                     }
                 }
-                mainForm.LogLine("EDSM sync Done", Color.Black);
+                mainForm.LogLine("EDSM sync Done");
 
                 if (newsystem)
                     OnNewEDSMTravelLog(this);
@@ -183,7 +183,7 @@ namespace EDDiscovery2.EDSM
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
-                mainForm.LogLine("EDSM sync Exception " + ex.Message, Color.Red);
+                mainForm.LogLineHighlight("EDSM sync Exception " );
             }
 
         }

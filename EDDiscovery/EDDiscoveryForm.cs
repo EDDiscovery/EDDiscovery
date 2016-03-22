@@ -18,35 +18,52 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace EDDiscovery
 {
+
     public delegate void DistancesLoaded();
 
     public partial class EDDiscoveryForm : Form
     {
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+        public const int WM_NCL_RESIZE = 0x112;
+        public const int HT_RESIZE = 61448;
+
+        [DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+
         //readonly string _fileTgcSystems;
         readonly string _fileEDSMDistances;
         private EDSMSync _edsmSync;
         private SQLiteDBClass _db = new SQLiteDBClass();
+        public EDDTheme theme = new EDDTheme();
 
         public AutoCompleteStringCollection SystemNames { get; private set; }
         public string CommanderName { get; private set; }
         static public EDDConfig EDDConfig { get; private set; }
+
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
+
 
         public event DistancesLoaded OnDistancesLoaded;
 
         public EDDiscoveryForm()
         {
             InitializeComponent();
+            panel_close.Enabled = false;                            // no closing until we are ready for it..
+            tabControl1.Enabled = false;
 
             EDDConfig = new EDDConfig();
 
             //_fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
-            _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");        
+            _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
-            string logpath="";
+            string logpath = "";
             try
             {
                 logpath = Path.Combine(Tools.GetAppDataDirectory(), "Log");
@@ -63,12 +80,47 @@ namespace EDDiscovery
             }
             _edsmSync = new EDSMSync(this);
 
+
+            theme.RestoreSettings();                                    // theme, remember your saved settings
+
             trilaterationControl.InitControl(this);
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
+            settings.InitControl(this);
 
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager();
+
+            ApplyTheme(false);
+        }
+
+        public void ApplyTheme(bool refreshhistory)
+        {
+            this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
+            panel_grip.Visible = !theme.WindowsFrame;
+            panel_close.Visible = !theme.WindowsFrame;
+            panel_minimize.Visible = !theme.WindowsFrame;
+            label_version.Visible = !theme.WindowsFrame;
+            label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
+
+            theme.ApplyColors(this);
+
+            if (refreshhistory)
+                travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
+
+
+        }
+
+        private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
+        {
+            if (panel_grip.Visible)
+            {
+                panel_grip.Location = new Point(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height);
+                tabControl1.Size = new Size(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height - tabControl1.Location.Y);
+            }
+            else
+                tabControl1.Size = new Size(this.ClientSize.Width, this.ClientSize.Height - tabControl1.Location.Y);
         }
 
         public TravelHistoryControl TravelControl
@@ -95,13 +147,14 @@ namespace EDDiscovery
                 EDDConfig.Update();
                 RepositionForm();
                 InitFormControls();
-                InitSettingsTab();
+                settings.InitSettingsTab();
+
                 CheckIfEliteDangerousIsRunning();
                 CheckIfVerboseLoggingIsTurnedOn();
 
                 if (File.Exists("test.txt"))
                 {
-                    button1.Visible = true;
+                    button_test.Visible = true;
                 }
             }
             catch (Exception ex)
@@ -118,7 +171,7 @@ namespace EDDiscovery
             {
                 travelHistoryControl1.Enabled = false;
 
-                var edsmThread = new Thread(GetEDSMSystems) {Name = "Downloading EDSM Systems"};
+                var edsmThread = new Thread(GetEDSMSystems) { Name = "Downloading EDSM Systems" };
                 var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files" };
                 edsmThread.Start();
                 downloadmapsThread.Start();
@@ -134,15 +187,13 @@ namespace EDDiscovery
 
                 OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
 
-                 GetEDSMDistancesAsync();
+                GetEDSMDistancesAsync();
 
                 //Application.DoEvents();
                 GetEDDBAsync(false);
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                 routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
-
-                Text += "         Systems:  " + SystemData.SystemList.Count;
 
                 imageHandler1.StartWatcher();
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
@@ -167,6 +218,10 @@ namespace EDDiscovery
                 CheckForNewInstaller();
 
                 LogLine($"{Environment.NewLine}Loading completed!");
+
+                panel_close.Enabled = true;                            // now we can safely close
+                tabControl1.Enabled = true;
+
             }
             catch (Exception ex)
             {
@@ -273,74 +328,6 @@ namespace EDDiscovery
             return false;
 #endif
         }
-        /*
-        private void GetRedWizzardFiles()
-        {
-            WebClient web = new WebClient();
-
-            try
-            {
-                LogText("Checking for new EDDiscovery data" + Environment.NewLine);
-
-                //GetNewRedWizzardFile(_fileTgcSystems, "http://robert.astronet.se/Elite/ed-systems/tgcsystems.json");
-                //GetNewRedWizzardFile(fileTgcDistances, "http://robert.astronet.se/Elite/ed-systems/tgcdistances.json");
-            }
-            catch (Exception ex)
-            {
-                LogText("GetRedWizzardFiles exception:" + ex.Message + Environment.NewLine);
-                return;
-            }
-        }
-        
-        private void GetNewRedWizzardFile(string filename, string url)
-        {
-            string etagFilename = filename + ".etag";
-
-            var request = (HttpWebRequest) HttpWebRequest.Create(url);
-            request.UserAgent = "EDDiscovery v" + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            if (File.Exists(etagFilename))
-            {
-                var etag = File.ReadAllText(etagFilename);
-                if (etag != "")
-                {
-                   request.Headers[HttpRequestHeader.IfNoneMatch] = etag;
-                }
-            }
-
-            try {
-                var response = (HttpWebResponse) request.GetResponse();
-                
-                LogText("Downloading " + filename + "..." + Environment.NewLine);
-
-                File.WriteAllText(filename + ".etag.tmp", response.Headers[HttpResponseHeader.ETag]);
-                var destFileStream = File.Open(filename + ".tmp", FileMode.Create, FileAccess.Write);
-                response.GetResponseStream().CopyTo(destFileStream);
-                
-                destFileStream.Close();
-                response.Close();
-
-                if (File.Exists(filename))
-                    File.Delete(filename);
-                if (File.Exists(etagFilename))
-                    File.Delete(etagFilename);
-
-                File.Move(filename + ".tmp", filename);
-                File.Move(etagFilename + ".tmp", etagFilename);
-            } catch (WebException e)
-            {
-                var code = ((HttpWebResponse) e.Response).StatusCode;
-                if (code == HttpStatusCode.NotModified)
-                {
-                    LogText(filename + " is up to date." + Environment.NewLine);
-                } else
-                {
-                    throw e;
-                }
-            }
-        }
-        */
 
         private void GetEDSMSystems()
         {
@@ -396,7 +383,8 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                Invoke((MethodInvoker) delegate {
+                Invoke((MethodInvoker)delegate
+                {
                     TravelHistoryControl.LogText("GetEDSMSystems exception:" + ex.Message + Environment.NewLine);
                     TravelHistoryControl.LogText(ex.StackTrace + Environment.NewLine);
                 });
@@ -431,7 +419,7 @@ namespace EDDiscovery
             ThreadEDDB.Start();
         }
 
-   
+
         private void GetEDSMDistances()
         {
             try
@@ -520,7 +508,7 @@ namespace EDDiscovery
 
                     if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
                     {
-                        LogText("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine, Color.Salmon);
+                        LogTextHighlight("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine);
                     }
 
                 }
@@ -537,7 +525,7 @@ namespace EDDiscovery
         }
 
 
-        private void  GetEDDBUpdate()
+        private void GetEDDBUpdate()
         {
             try
             {
@@ -566,7 +554,7 @@ namespace EDDiscovery
                         updatedb = true;
                     }
                     else
-                        LogText("Failed." + Environment.NewLine, Color.Red);
+                        LogTextHighlight("Failed." + Environment.NewLine);
 
 
                     eddb.GetCommodities();
@@ -588,11 +576,11 @@ namespace EDDiscovery
                         updatedb = true;
                     }
                     else
-                        LogText("Failed." + Environment.NewLine, Color.Red);
+                        LogTextHighlight("Failed." + Environment.NewLine);
 
                 }
 
-                
+
 
                 if (updatedb || eddbforceupdate)
                 {
@@ -609,7 +597,7 @@ namespace EDDiscovery
                     TravelHistoryControl.LogText("GetEDSCSystems exception:" + ex.Message + Environment.NewLine);
                 });
             }
-           
+
         }
 
         private void DBUpdateEDDB(EDDBClass eddb)
@@ -620,7 +608,6 @@ namespace EDDiscovery
             LogText("Add new EDDB data to database." + Environment.NewLine);
             eddb.Add2DB(eddbsystems, eddbstations);
 
-            
             eddbsystems.Clear();
             eddbstations.Clear();
             eddbsystems = null;
@@ -643,13 +630,13 @@ namespace EDDiscovery
             }
         }
 
-        public void LogText(string text, Color col)
+        public void LogTextHighlight(string text)
         {
             try
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    TravelHistoryControl.LogText(text, col);
+                    TravelHistoryControl.LogTextHighlight(text);
 
                 });
             }
@@ -672,13 +659,13 @@ namespace EDDiscovery
             }
         }
 
-        public void LogLine(string text, Color col)
+        public void LogLineHighlight(string text)
         {
             try
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    TravelHistoryControl.LogText(text + Environment.NewLine, col);
+                    TravelHistoryControl.LogTextHighlight(text + Environment.NewLine);
 
                 });
             }
@@ -707,12 +694,6 @@ namespace EDDiscovery
         }
 
 
-      
-
-
-
-
-
         private string LoadJSON(string jfile)
         {
             string json = null;
@@ -723,8 +704,8 @@ namespace EDDiscovery
                 if (!Directory.Exists(appdata))
                     Directory.CreateDirectory(appdata);
 
-                string filename = appdata + "\\"+jfile;
-                
+                string filename = appdata + "\\" + jfile;
+
                 if (!File.Exists(filename))
                     return null;
 
@@ -743,60 +724,19 @@ namespace EDDiscovery
         }
 
 
-
-
-        private void button_Browse_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-
-
-            DialogResult dlgResult = dirdlg.ShowDialog();
-
-            if (dlgResult == DialogResult.OK)
-            {
-                textBoxNetLogDir.Text = dirdlg.SelectedPath;
-            }
-        }
-
-        private void button_Save_Click(object sender, EventArgs e)
-        {
-            SaveSettings();
-
-            tabControl1.SelectedTab = tabPageTravelHistory;
-            travelHistoryControl1.RefreshHistory();
-        }
-
         private void SaveSettings()
         {
-            _db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
-            _db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
+            settings.SaveSettings();
 
             _db.PutSettingInt("FormWidth", this.Width);
             _db.PutSettingInt("FormHeight", this.Height);
             _db.PutSettingInt("FormTop", this.Top);
             _db.PutSettingInt("FormLeft", this.Left);
-            _db.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
-            _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
-            _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
             routeControl1.SaveSettings();
+            theme.SaveSettings(null);
 
             _db.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
             _db.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
-            EDDConfig.UseDistances = checkBox_Distances.Checked;
-            EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
-            EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
-
-            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
-            EDDConfig.StoreCommanders(edcommanders);
-            dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
-            dataGridViewCommanders.Update();
-
-        }
-
-        private void routeControl1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -806,12 +746,7 @@ namespace EDDiscovery
             SaveSettings();
         }
 
-        private void travelHistoryControl1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void button_test_Click(object sender, EventArgs e)
         {
             //FormSagCarinaMission frm = new FormSagCarinaMission(this);
             //            frm.Show();
@@ -909,23 +844,11 @@ namespace EDDiscovery
 
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormSagCarinaMission frm = new FormSagCarinaMission(this);
 
             frm.Show();
-        }
-
-        private void setDefaultMapColourToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            travelHistoryControl1.setDefaultMapColour();
         }
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -938,20 +861,11 @@ namespace EDDiscovery
 
         private void InitFormControls()
         {
-            UpdateTitle();
-
             labelPanelText.Text = "Loading. Please wait!";
             panelInfo.Visible = true;
             panelInfo.BackColor = Color.Gold;
 
             routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-        }
-
-        private void UpdateTitle()
-        {
-            var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
-            var version = assemblyFullName.Split(',')[1].Split('=')[1];
-            Text = string.Format("EDDiscovery v{0}", version);
         }
 
         private void RepositionForm()
@@ -969,45 +883,7 @@ namespace EDDiscovery
             }
         }
 
-        private void InitSettingsTab()
-        {
-            // Default directory
-            bool auto = _db.GetSettingBool("NetlogDirAutoMode", true);
-            if (auto)
-            {
-                radioButton_Auto.Checked = auto;
-            }
-            else
-            {
-                radioButton_Manual.Checked = true;
-            }
-            string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
-            textBoxNetLogDir.Text = _db.GetSettingString("Netlogdir", datapath);
-
-            checkBox_Distances.Checked = EDDConfig.UseDistances;
-            checkBoxEDSMLog.Checked = EDDConfig.EDSMLog;
-            
-            checkboxSkipSlowUpdates.Checked = EDDConfig.CanSkipSlowUpdates;
-#if DEBUG
-            checkboxSkipSlowUpdates.Visible = true;
-#endif
-            textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
-            textBoxHomeSystem.Text = _db.GetSettingString("DefaultMapCenter", "Sol");
-
-            textBoxDefaultZoom.Text = _db.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
-
-            bool selectionCentre = _db.GetSettingBool("CentreMapOnSelection", true);
-            if (selectionCentre)
-            {
-                radioButtonHistorySelection.Checked = true;
-            }
-            else
-            {
-                radioButtonCentreHome.Checked = true;
-            }
-            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
-        }
-
+        
 
         private void CheckIfEliteDangerousIsRunning()
         {
@@ -1025,9 +901,9 @@ namespace EDDiscovery
         {
             if (!EliteDangerous.CheckStationLogging())
             {
-                TravelHistoryControl.LogText("Elite Dangerous is not logging system names!!! ", Color.Red);
+                TravelHistoryControl.LogTextHighlight("Elite Dangerous is not logging system names!!! ");
                 TravelHistoryControl.LogText("Add ");
-                TravelHistoryControl.LogText("VerboseLogging=\"1\" ", Color.Blue);
+                TravelHistoryControl.LogText("VerboseLogging=\"1\" ");
                 TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remember to restart Elite!" + Environment.NewLine);
 
                 labelPanelText.Text = "Elite Dangerous is not logging system names!";
@@ -1043,20 +919,7 @@ namespace EDDiscovery
             frm.Show();
         }
 
-        private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            var value = textBoxDefaultZoom.Text.Trim();
-            double parseout;
-            if (Double.TryParse(value, out parseout))
-            {
-                e.Cancel = (parseout < 0.01 || parseout > 50.0);
-            }
-            else
-            {
-                e.Cancel = true;
-            }
-        }
-
+        
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AsyncSyncEDSMSystems();
@@ -1077,7 +940,7 @@ namespace EDDiscovery
 
                 string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
                 bool newfile = false;
-                string  rwsysfiletime = "2014-01-01 00:00:00";
+                string rwsysfiletime = "2014-01-01 00:00:00";
                 LogText("Get systems from EDSM." + Environment.NewLine);
 
                 eddb.DownloadFile("http://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
@@ -1089,7 +952,7 @@ namespace EDDiscovery
                     string json = LoadJsonFile(edsmsystems);
                     List<SystemClass> systems = SystemClass.ParseEDSM(json, ref rwsysfiletime);
 
-                   
+
                     List<SystemClass> systems2Store = new List<SystemClass>();
 
                     foreach (SystemClass system in systems)
@@ -1098,7 +961,7 @@ namespace EDDiscovery
                         SystemClass sys = SystemData.GetSystem(system.name);
                         if (sys == null)
                             systems2Store.Add(system);
-                        else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y!=system.y  || sys.z != system.z)  // Case or position changed
+                        else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y != system.y || sys.z != system.z)  // Case or position changed
                             systems2Store.Add(system);
                     }
                     SystemClass.Store(systems2Store);
@@ -1152,35 +1015,13 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
         {
             /* TODO: Only focus the field if we're on the correct tab! */
-            if(fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory) {
+            if (fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory)
+            {
                 travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
             }
         }
 
-        private void tabPage3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void buttonAddCommander_Click(object sender, EventArgs e)
-        {
-            EDCommander cmdr = EDDConfig.GetNewCommander();
-
-            //List<EDCommander> dlist = (List < EDCommander > )dataGridViewCommanders.DataSource;
-            //dlist.Add(cmdr);
-            //dataGridViewCommanders.DataSource = dlist;
-            //dataGridViewCommanders.Invalidate();
-
-            //dataGridViewCommanders.Update();
-
-            EDDConfig.listCommanders.Add(cmdr);
-            dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDDConfig.listCommanders;
-            dataGridViewCommanders.Update();
-            //string[] row = new string[] { cmdr.Nr.ToString(), cmdr.Name, cmdr.APIKey, cmdr.NetLogPath };
-            //dataGridViewCommanders.Rows.Add(row);
-        }
-
+        
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
@@ -1195,21 +1036,64 @@ namespace EDDiscovery
             }
         }
 
-        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
 
+        private void AboutBox()
+        {
+            AboutForm frm = new AboutForm();
+            string atext = Assembly.GetExecutingAssembly().FullName;
+            atext = atext.Split(',')[1].Split('=')[1];
+            frm.labelVersion.Text = this.Text + " " + atext;
+            frm.ShowDialog();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AboutForm frm = new AboutForm();
-            frm.labelVersion.Text = Text;
-            frm.ShowDialog();
+            AboutBox();
         }
 
         private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://discord.gg/0qIqfCQbziTWzsQu");
         }
+
+        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (!theme.WindowsFrame && e.Button == MouseButtons.Left)           // only if theme is borderless
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
+        {
+            EDDiscoveryForm_MouseDown(sender, e);
+        }
+
+        private void panel1_Click(object sender, EventArgs e)
+        {
+            AboutBox();
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panel_grip_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCL_RESIZE, HT_RESIZE, 0);
+            }
+        }
+
+
     }
 }

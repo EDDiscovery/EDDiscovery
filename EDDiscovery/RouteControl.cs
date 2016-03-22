@@ -43,9 +43,9 @@ namespace EDDiscovery
             InitializeComponent();
             button_Route.Enabled = false;
 
-            for( int i = 0; i < metric_options.Length; i++ )
+            for (int i = 0; i < metric_options.Length; i++)
                 comboBoxRoutingMetric.Items.Add(metric_options[i]);
-            
+
         }
 
         private Thread ThreadRoute;

@@ -181,6 +181,7 @@
     <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
+    <Compile Include="EDDTheme.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EliteDangerous\AppConfig.cs" />
@@ -273,6 +274,12 @@
     </Compile>
     <Compile Include="Forms\StatsForm.Designer.cs">
       <DependentUpon>StatsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="SystemData.cs" />
     <Compile Include="SystemPosition.cs" />
@@ -375,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SystemViewForm.resx">
       <DependentUpon>SystemViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TravelHistoryControl.resx">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
