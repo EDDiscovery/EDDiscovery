@@ -83,7 +83,11 @@ namespace EDDiscovery2
                 windowsframe = GetBool(jo["windowsframe"]);
                 formopacity = GetFloat(jo["formopacity"]);
                 fontname = GetString(jo["fontname"]);
+                if (fontname == "")
+                    fontname = "Microsoft Sans Serif";
                 fontsize = GetFloat(jo["fontsize"]);
+                if (fontsize < 2)
+                    fontsize = 8.25F;
             }
 
             static private Color JGetColor(JObject jo, string name , Color defc)
@@ -163,6 +167,7 @@ namespace EDDiscovery2
         public bool WindowsFrame { get { return currentsettings.windowsframe; } set { SetCustom(); currentsettings.windowsframe = value; } }
         public double Opacity { get { return currentsettings.formopacity; } set { SetCustom(); currentsettings.formopacity = value; } }
         public string FontName { get { return currentsettings.fontname; } set { SetCustom(); currentsettings.fontname = value; } }
+        public float FontSize { get { return currentsettings.fontsize; } set { SetCustom(); currentsettings.fontsize = value; } }
 
         private Settings currentsettings;           // if name = custom, then its not a standard theme..
         private List<Settings> themelist;
@@ -231,17 +236,7 @@ namespace EDDiscovery2
                                                            SystemColors.MenuText, // checkbox
                                                            SystemColors.Menu, SystemColors.MenuText,  // menu
                                                            SystemColors.MenuText,  // label
-                                                           true, 100, "", 0));
-
-            themelist.Add(new Settings("Crazy Scheme to show painting", Color.Black,
-                                               Color.Gold, Color.Yellow,  // button
-                                               Color.Purple, Color.Gray, Color.Beige, Color.Red, // grid 
-                                               Color.White, Color.Blue, Color.Red, // travel
-                                               Color.Green, Color.White, Color.Red,  // text box
-                                               Color.Aqua, // checkbox
-                                               Color.Black, Color.Red,  // menu
-                                               Color.Chocolate,  // label
-                                               true, 100, "", 0));
+                                                           true, 100, "Microsoft Sans Serif", 8.25F));
 
             themelist.Add(new Settings("Orange Delight", Color.Black,
                                                Color.Black, Color.Orange,  // button
@@ -252,7 +247,7 @@ namespace EDDiscovery2
                                                Color.Orange, // checkbox
                                                Color.Black, Color.Orange,  // menu
                                                Color.Orange,  // label
-                                               false, 95, "", 0));
+                                               false, 95, "Microsoft Sans Serif", 8.25F));
 
             themelist.Add(new Settings("Blue Wonder", Color.DarkBlue,
                                                Color.Blue, Color.White,  // button
@@ -263,7 +258,7 @@ namespace EDDiscovery2
                                                Color.White, // checkbox
                                                Color.DarkBlue, Color.White,  // menu
                                                Color.White,  // label
-                                               false, 95, "", 0));
+                                               false, 95, "Microsoft Sans Serif", 8.25F));
 
             themelist.Add(new Settings("Green Baize", Color.FromArgb(255, 48, 121, 17),
                                                Color.FromArgb(255, 48, 121, 17), Color.White,  // button
@@ -274,7 +269,7 @@ namespace EDDiscovery2
                                                Color.White, // checkbox
                                                Color.FromArgb(255, 48, 121, 17), Color.White,  // menu
                                                Color.White,  // label
-                                               false, 95, "", 0));
+                                               false, 95, "Microsoft Sans Serif", 8.25F));
 
             string themepath = "";
 
@@ -429,25 +424,25 @@ namespace EDDiscovery2
         {
             form.Opacity = currentsettings.formopacity / 100;
             form.BackColor = currentsettings.colors[Settings.CI.form];
+            Font fnt = new Font(currentsettings.fontname, currentsettings.fontsize);
 
             foreach (Control c in form.Controls)
-                UpdateColorControls(c);
+                UpdateColorControls(c,fnt);
         }
 
-        public void UpdateColorControls(Control myControl)
+        public void UpdateColorControls(Control myControl, Font fnt)
         {
-            //Font fnt = new Font(currentsettings.fontname, currentsettings.fontsize);
-
             if (myControl is MenuStrip)
             {
                 myControl.BackColor = currentsettings.colors[Settings.CI.menu_back];
                 myControl.ForeColor = currentsettings.colors[Settings.CI.menu_fore];
-//                myControl.Font = fnt;
+                myControl.Font = fnt;
             }
             else if (myControl is RichTextBox || myControl is TextBox)
             {
                 myControl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
                 myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                myControl.Font = fnt;
             }
             else if (myControl is Panel  )
             {
@@ -458,18 +453,27 @@ namespace EDDiscovery2
             {
                 myControl.BackColor = currentsettings.colors[Settings.CI.button_back];
                 myControl.ForeColor = currentsettings.colors[Settings.CI.button_text];
+                myControl.Font = fnt;
+            }
+            else if (myControl is TabControl)
+            {
+                myControl.Font = fnt;
+                // Needs to be owner drawn..
             }
             else if (myControl is ComboBox)
             {
+                myControl.Font = fnt;
                 // Back/Fore only affects drop down list - need to owner draw..
             }
             else if (myControl is Label || myControl is GroupBox )
             {
                 myControl.ForeColor = currentsettings.colors[Settings.CI.label];
+                myControl.Font = fnt;
             }
             else if (myControl is CheckBox || myControl is RadioButton )
             {
                 myControl.ForeColor = currentsettings.colors[Settings.CI.checkbox];
+                myControl.Font = fnt;
             }
             else if (myControl is DataGridView)
             {
@@ -482,12 +486,12 @@ namespace EDDiscovery2
                 MyDgv.BackgroundColor = currentsettings.colors[Settings.CI.form];
                 MyDgv.DefaultCellStyle.BackColor = currentsettings.colors[Settings.CI.grid_background];
                 MyDgv.DefaultCellStyle.ForeColor = currentsettings.colors[Settings.CI.grid_text];
-
+                myControl.Font = fnt;
             }
 
             foreach (Control subC in myControl.Controls)
             {
-                UpdateColorControls(subC);
+                UpdateColorControls(subC,fnt);
             }
         }
 
