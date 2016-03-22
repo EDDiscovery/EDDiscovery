@@ -74,24 +74,24 @@ namespace EDDiscovery2
                 name = settingsname.Replace(".eddtheme", "");
                 colors = new Dictionary<CI, Color>();
 
-                foreach (CI ck in Enum.GetValues(typeof(CI)))
+                foreach (CI ck in Enum.GetValues(typeof(CI)))           // all enums
                 {
-                    colors.Add(ck, JGetColor(jo, ck.ToString()));
+                    Color d = (ck < Settings.CI.button_text) ? SystemColors.Menu : SystemColors.MenuText;       // pick a good default
+                    colors.Add(ck, JGetColor(jo, ck.ToString(),d));
                 }
+
                 windowsframe = GetBool(jo["windowsframe"]);
                 formopacity = GetFloat(jo["formopacity"]);
                 fontname = GetString(jo["fontname"]);
                 fontsize = GetFloat(jo["fontsize"]);
             }
 
-            static private Color JGetColor(JObject jo, string name)
+            static private Color JGetColor(JObject jo, string name , Color defc)
             {
-                
-
                 string colstr = GetString(jo[name]);
 
                 if (colstr == null)
-                    return Color.White;
+                    return defc;
 
                 return System.Drawing.ColorTranslator.FromHtml(colstr);
             }
@@ -244,7 +244,7 @@ namespace EDDiscovery2
                 currentsettings.fontsize = (float)db.GetSettingDouble("ThemeFontSize", 8);
 
                 foreach (Settings.CI ck in themelist[0].colors.Keys)         // use themelist to find the key names, as we modify currentsettings as we go and that would cause an exception
-                {                                                            
+                {
                     int d = (ck < Settings.CI.button_text) ? SystemColors.Menu.ToArgb() : SystemColors.MenuText.ToArgb();       // pick a good default
                     Color c = Color.FromArgb(db.GetSettingInt("ThemeColor" + ck.ToString(), d));
                     currentsettings.colors[ck] = c;
