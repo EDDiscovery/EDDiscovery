@@ -331,7 +331,7 @@ namespace EDDiscovery
                 dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
                 cell = dataGridViewTravel.Rows[rownr].Cells[4];
-                cell.Style.ForeColor = (item.vs == null) ? _discoveryForm.theme.MapBlockColor : Color.FromArgb(item.vs.MapColour);
+                cell.Style.ForeColor = (item.vs == null) ? Color.FromArgb(255, _discoveryForm.theme.MapBlockColor) : Color.FromArgb(item.vs.MapColour);
         }
 
 
