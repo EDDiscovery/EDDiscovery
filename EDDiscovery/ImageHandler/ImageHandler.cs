@@ -60,6 +60,8 @@ namespace EDDiscovery2.ImageHandler
             numericUpDownHeight.Value = db.GetSettingInt("ImageHandlerCropHeight", 0);
 
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
+
+            numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = checkBoxCropImage.Checked;
         }
 
         public void StartWatcher()

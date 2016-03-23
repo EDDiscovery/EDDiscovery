@@ -34,12 +34,14 @@ namespace EDDiscovery2
             SetPanel(panel_theme9, "Grid Data Back Colour", EDDTheme.Settings.CI.grid_background);
             SetPanel(panel_theme10, "Grid Data Text Colour", EDDTheme.Settings.CI.grid_text);
             SetPanel(panel_theme11, "Menu Back Colour", EDDTheme.Settings.CI.menu_back);
-            SetPanel(panel_theme12, "Menu Fore Colour", EDDTheme.Settings.CI.menu_fore);
+            SetPanel(panel_theme12, "Menu Text Colour", EDDTheme.Settings.CI.menu_fore);
             SetPanel(panel_theme13, "Travel Form Non Visited Colour", EDDTheme.Settings.CI.travelgrid_nonvisted);
             SetPanel(panel_theme14, "Travel Form Visited Colour", EDDTheme.Settings.CI.travelgrid_visited);
             SetPanel(panel_theme15, "Travel Form Map Block Colour", EDDTheme.Settings.CI.travelgrid_mapblock);
             SetPanel(panel_theme16, "Check Box Text Colour", EDDTheme.Settings.CI.checkbox);
             SetPanel(panel_theme17, "Label Text Colour", EDDTheme.Settings.CI.label);
+            SetPanel(panel_theme18, "Group box Back Colour", EDDTheme.Settings.CI.group_back);
+            SetPanel(panel_theme19, "Group box Text Colour", EDDTheme.Settings.CI.group_text);
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -49,6 +51,7 @@ namespace EDDiscovery2
 
             _discoveryForm.theme.FillComboBoxWithThemes(comboBoxTheme);                // set up combo box with default themes
             _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
+
         }
 
         public void InitSettingsTab()
@@ -90,11 +93,11 @@ namespace EDDiscovery2
 
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
 
-            UpdatePatches();
-            UpdateFontInfo();
+            UpdatePatchesEtc();
 
             trackBar_theme_opacity.Value = (int)_discoveryForm.theme.Opacity;
-            checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
+
+            this.comboBoxTheme.SelectedIndexChanged += new System.EventHandler(this.comboBoxTheme_SelectedIndexChanged);    // now turn on the handler.. 
         }
 
         public void SaveSettings()
@@ -116,7 +119,7 @@ namespace EDDiscovery2
             dataGridViewCommanders.Update();
         }
 
-        public void UpdatePatches()                                         // update patch colours..
+        public void UpdatePatchesEtc()                                         // update patch colours..
         {
             _discoveryForm.theme.UpdatePatch(panel_theme1);
             _discoveryForm.theme.UpdatePatch(panel_theme2);
@@ -135,11 +138,10 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme15);
             _discoveryForm.theme.UpdatePatch(panel_theme16);
             _discoveryForm.theme.UpdatePatch(panel_theme17);
-        }
-
-        public void UpdateFontInfo()
-        {
+            _discoveryForm.theme.UpdatePatch(panel_theme18);
+            _discoveryForm.theme.UpdatePatch(panel_theme19);
             textBox_Font.Text = _discoveryForm.theme.FontName;
+            checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
         }
 
         private void SetPanel(Panel pn, string name, EDDTheme.Settings.CI ex)
@@ -185,12 +187,23 @@ namespace EDDiscovery2
 
         private void comboBoxTheme_SelectedIndexChanged(object sender, EventArgs e) // theme selected..
         {
-            if (!_discoveryForm.theme.SetThemeByName(comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString()))    // only Custom will fail..
-                _discoveryForm.theme.SetCustom();                              // go to custom theme..
+            string themename = comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString();
+
+            string fontwanted = null;                                               // don't check custom, only a stored theme..
+            if (!themename.Equals("Custom") && !_discoveryForm.theme.IsFontAvailableInTheme(themename, out fontwanted))
+            {
+                DialogResult res = MessageBox.Show("Warning - Theme font " + fontwanted + " is not available.", "Warning", MessageBoxButtons.OK);
+
+                _discoveryForm.theme.SetCustom();                              // go to custom theme whatever
+                _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);           // reselect to custom, refires this..
+                return;
+            }
+
+            if (!_discoveryForm.theme.SetThemeByName(themename))    
+                _discoveryForm.theme.SetCustom();                                   // go to custom theme..
 
             _discoveryForm.ApplyTheme(true);
-            UpdatePatches();
-            UpdateFontInfo();
+            UpdatePatchesEtc();
         }
 
         private void trackBar_theme_opacity_MouseCaptureChanged(object sender, EventArgs e)
@@ -215,7 +228,7 @@ namespace EDDiscovery2
             {
                 _discoveryForm.ApplyTheme(true);
                 _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
-                UpdatePatches();
+                UpdatePatchesEtc();
             }
         }
 
@@ -256,7 +269,7 @@ namespace EDDiscovery2
                     _discoveryForm.theme.FontName = fd.Font.Name;
                     _discoveryForm.theme.FontSize = fd.Font.Size;
                     _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
-                    UpdateFontInfo();
+                    UpdatePatchesEtc();
                     _discoveryForm.ApplyTheme(true);
                 }
                 else

@@ -203,9 +203,9 @@ namespace EDDiscovery
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
                 travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
 
-                TravelHistoryControl.LogText("Reading travelhistory ");
+                TravelHistoryControl.LogText("Reading travel history " + Environment.NewLine);
                 travelHistoryControl1.RefreshHistory();
-                travelHistoryControl1.netlog.StartMonitor();
+                travelHistoryControl1.netlog.StartMonitor(this);
 
                 travelHistoryControl1.Enabled = true;
                 if (EliteDangerous.CheckStationLogging())
@@ -217,7 +217,8 @@ namespace EDDiscovery
                 // Check for a new installer    
                 CheckForNewInstaller();
 
-                LogLine($"{Environment.NewLine}Loading completed!");
+                LogLine("Total number of systems " + SystemData.SystemList.Count().ToString() + Environment.NewLine);
+                LogLine("Loading completed!" + Environment.NewLine);
 
                 panel_close.Enabled = true;                            // now we can safely close
                 tabControl1.Enabled = true;

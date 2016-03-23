@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.richTextBox_routeresult = new System.Windows.Forms.RichTextBox();
             this.textBox_From = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button_Route = new System.Windows.Forms.Button();
@@ -52,17 +52,17 @@
             this.label9 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // richTextBox1
+            // richTextBox_routeresult
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.richTextBox_routeresult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(3, 94);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(849, 332);
-            this.richTextBox1.TabIndex = 11;
-            this.richTextBox1.Text = "";
+            this.richTextBox_routeresult.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox_routeresult.Location = new System.Drawing.Point(3, 94);
+            this.richTextBox_routeresult.Name = "richTextBox_routeresult";
+            this.richTextBox_routeresult.Size = new System.Drawing.Size(849, 332);
+            this.richTextBox_routeresult.TabIndex = 11;
+            this.richTextBox_routeresult.Text = "";
             // 
             // textBox_From
             // 
@@ -87,11 +87,10 @@
             // 
             // button_Route
             // 
-            this.button_Route.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button_Route.Enabled = false;
             this.button_Route.Location = new System.Drawing.Point(741, 0);
             this.button_Route.Name = "button_Route";
-            this.button_Route.Size = new System.Drawing.Size(140, 27);
+            this.button_Route.Size = new System.Drawing.Size(111, 27);
             this.button_Route.TabIndex = 10;
             this.button_Route.Text = "Find route";
             this.button_Route.UseVisualStyleBackColor = true;
@@ -302,7 +301,7 @@
             this.Controls.Add(this.comboBoxRoutingMetric);
             this.Controls.Add(this.textBoxCurrent);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.richTextBox_routeresult);
             this.Controls.Add(this.textBox_Distance);
             this.Controls.Add(this.textBox_ToZ);
             this.Controls.Add(this.textBox_ToY);
@@ -330,7 +329,7 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox richTextBox_routeresult;
         internal System.Windows.Forms.TextBox textBox_From;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button_Route;

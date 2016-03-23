@@ -55,12 +55,15 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxHomeSystem = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.panel_theme19 = new System.Windows.Forms.Panel();
+            this.panel_theme18 = new System.Windows.Forms.Panel();
             this.textBox_Font = new System.Windows.Forms.TextBox();
             this.buttonSaveTheme = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -107,15 +110,14 @@
             this.groupBox1.Controls.Add(this.radioButton_Auto);
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(934, 87);
+            this.groupBox1.Size = new System.Drawing.Size(819, 87);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Elite Dangerous netlog location (If not override by commander settings below)";
             // 
             // button_Browse
             // 
-            this.button_Browse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Browse.Location = new System.Drawing.Point(744, 46);
+            this.button_Browse.Location = new System.Drawing.Point(728, 46);
             this.button_Browse.Name = "button_Browse";
             this.button_Browse.Size = new System.Drawing.Size(75, 23);
             this.button_Browse.TabIndex = 3;
@@ -125,11 +127,9 @@
             // 
             // textBoxNetLogDir
             // 
-            this.textBoxNetLogDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxNetLogDir.Location = new System.Drawing.Point(97, 48);
             this.textBoxNetLogDir.Name = "textBoxNetLogDir";
-            this.textBoxNetLogDir.Size = new System.Drawing.Size(641, 20);
+            this.textBoxNetLogDir.Size = new System.Drawing.Size(623, 20);
             this.textBoxNetLogDir.TabIndex = 2;
             // 
             // radioButton_Manual
@@ -161,7 +161,7 @@
             this.groupBox4.Controls.Add(this.dataGridViewCommanders);
             this.groupBox4.Location = new System.Drawing.Point(0, 93);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(934, 184);
+            this.groupBox4.Size = new System.Drawing.Size(819, 184);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Commanders";
@@ -198,7 +198,7 @@
             this.ColumnNetLogPath});
             this.dataGridViewCommanders.Location = new System.Drawing.Point(11, 45);
             this.dataGridViewCommanders.Name = "dataGridViewCommanders";
-            this.dataGridViewCommanders.Size = new System.Drawing.Size(868, 128);
+            this.dataGridViewCommanders.Size = new System.Drawing.Size(792, 128);
             this.dataGridViewCommanders.TabIndex = 13;
             // 
             // ColumnNr
@@ -211,25 +211,30 @@
             // 
             // ColumnCommander
             // 
+            this.ColumnCommander.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnCommander.DataPropertyName = "Name";
+            this.ColumnCommander.FillWeight = 80F;
             this.ColumnCommander.HeaderText = "Commander";
+            this.ColumnCommander.MinimumWidth = 100;
             this.ColumnCommander.Name = "ColumnCommander";
-            this.ColumnCommander.Width = 180;
             // 
             // ColumnEDSMAPIKey
             // 
+            this.ColumnEDSMAPIKey.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnEDSMAPIKey.DataPropertyName = "APIKey";
+            this.ColumnEDSMAPIKey.FillWeight = 120F;
             this.ColumnEDSMAPIKey.HeaderText = "EDSM api key";
+            this.ColumnEDSMAPIKey.MinimumWidth = 100;
             this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
-            this.ColumnEDSMAPIKey.Width = 180;
             // 
             // ColumnNetLogPath
             // 
+            this.ColumnNetLogPath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnNetLogPath.DataPropertyName = "NetLogPath";
-            this.ColumnNetLogPath.FillWeight = 300F;
+            this.ColumnNetLogPath.FillWeight = 120F;
             this.ColumnNetLogPath.HeaderText = "NetLog path";
+            this.ColumnNetLogPath.MinimumWidth = 100;
             this.ColumnNetLogPath.Name = "ColumnNetLogPath";
-            this.ColumnNetLogPath.Width = 200;
             // 
             // groupBox3
             // 
@@ -266,7 +271,7 @@
             // checkboxSkipSlowUpdates
             // 
             this.checkboxSkipSlowUpdates.AutoSize = true;
-            this.checkboxSkipSlowUpdates.BackColor = System.Drawing.Color.Gold;
+            this.checkboxSkipSlowUpdates.BackColor = System.Drawing.Color.Transparent;
             this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(17, 64);
             this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
             this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
@@ -286,7 +291,7 @@
             this.groupBox2.Controls.Add(this.textBoxHomeSystem);
             this.groupBox2.Location = new System.Drawing.Point(440, 280);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(494, 100);
+            this.groupBox2.Size = new System.Drawing.Size(379, 100);
             this.groupBox2.TabIndex = 17;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "3D Map Settings";
@@ -359,12 +364,15 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.panel_theme19);
+            this.groupBox5.Controls.Add(this.panel_theme18);
             this.groupBox5.Controls.Add(this.textBox_Font);
             this.groupBox5.Controls.Add(this.buttonSaveTheme);
             this.groupBox5.Controls.Add(this.label15);
             this.groupBox5.Controls.Add(this.label8);
             this.groupBox5.Controls.Add(this.label7);
             this.groupBox5.Controls.Add(this.label6);
+            this.groupBox5.Controls.Add(this.label16);
             this.groupBox5.Controls.Add(this.label14);
             this.groupBox5.Controls.Add(this.label13);
             this.groupBox5.Controls.Add(this.label12);
@@ -395,10 +403,32 @@
             this.groupBox5.Controls.Add(this.comboBoxTheme);
             this.groupBox5.Location = new System.Drawing.Point(3, 394);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(931, 255);
+            this.groupBox5.Size = new System.Drawing.Size(816, 171);
             this.groupBox5.TabIndex = 18;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Theme";
+            // 
+            // panel_theme19
+            // 
+            this.panel_theme19.AccessibleDescription = "";
+            this.panel_theme19.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme19.Location = new System.Drawing.Point(725, 75);
+            this.panel_theme19.Name = "panel_theme19";
+            this.panel_theme19.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme19.TabIndex = 9;
+            this.panel_theme19.Tag = "";
+            this.panel_theme19.Click += new System.EventHandler(this.panel_theme_Click);
+            // 
+            // panel_theme18
+            // 
+            this.panel_theme18.AccessibleDescription = "";
+            this.panel_theme18.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme18.Location = new System.Drawing.Point(725, 38);
+            this.panel_theme18.Name = "panel_theme18";
+            this.panel_theme18.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme18.TabIndex = 9;
+            this.panel_theme18.Tag = "";
+            this.panel_theme18.Click += new System.EventHandler(this.panel_theme_Click);
             // 
             // textBox_Font
             // 
@@ -455,6 +485,15 @@
             this.label6.Size = new System.Drawing.Size(30, 13);
             this.label6.TabIndex = 6;
             this.label6.Text = "Form";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(718, 15);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(41, 13);
+            this.label16.TabIndex = 6;
+            this.label16.Text = "Groups";
             // 
             // label14
             // 
@@ -745,7 +784,6 @@
             this.comboBoxTheme.Name = "comboBoxTheme";
             this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
             this.comboBoxTheme.TabIndex = 0;
-            this.comboBoxTheme.SelectedIndexChanged += new System.EventHandler(this.comboBoxTheme_SelectedIndexChanged);
             // 
             // Settings
             // 
@@ -831,11 +869,14 @@
         private System.Windows.Forms.Panel panel_theme2;
         private System.Windows.Forms.Panel panel_theme17;
         private System.Windows.Forms.Panel panel_theme16;
+        private System.Windows.Forms.Button buttonSaveTheme;
+        private System.Windows.Forms.TextBox textBox_Font;
+        private System.Windows.Forms.Panel panel_theme19;
+        private System.Windows.Forms.Panel panel_theme18;
+        private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
-        private System.Windows.Forms.Button buttonSaveTheme;
-        private System.Windows.Forms.TextBox textBox_Font;
     }
 }

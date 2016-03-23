@@ -29,7 +29,7 @@ namespace EDDiscovery
                     Application.Run(new EDDiscoveryForm());
                 }
             }
-            catch (TimeoutException te)
+            catch (TimeoutException)
             {
                 if (MessageBox.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {

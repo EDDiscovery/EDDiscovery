@@ -807,7 +807,7 @@ namespace EDDiscovery
                 return;
 
             }
-            sync.StartSync(EDSMSyncTo, EDSMSyncFrom);
+            sync.StartSync(EDSMSyncTo, EDSMSyncFrom,_discoveryForm.theme.MapBlockColor);
             
         }
 
