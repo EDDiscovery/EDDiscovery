@@ -381,8 +381,11 @@ namespace EDDiscovery
 
         }
 
-        public bool StartMonitor()
+        private EDDiscoveryForm _discoveryform;
+
+        public bool StartMonitor(EDDiscoveryForm ed)
         {
+            _discoveryform = ed;
             ThreadNetLog = new System.Threading.Thread(new System.Threading.ThreadStart(NetLogMain));
             ThreadNetLog.Name = "Net log";
             ThreadNetLog.Start();
@@ -486,7 +489,7 @@ namespace EDDiscovery
                                         dbsys.Source = tlUnit.id;
                                         dbsys.EDSM_sync = false;
                                         dbsys.Unit = fi.Name;
-                                        dbsys.MapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+                                        dbsys.MapColour = _discoveryform.theme.MapBlockColor.ToArgb() & 0xffffff;
                                         dbsys.Unit = fi.Name;
                                         
                                         if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)

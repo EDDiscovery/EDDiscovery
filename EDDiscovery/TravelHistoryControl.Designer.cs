@@ -29,16 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.richTextBox_History = new System.Windows.Forms.RichTextBox();
             this.button_RefreshHistory = new System.Windows.Forms.Button();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,6 +81,8 @@
             this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
             this.panelRight = new System.Windows.Forms.Panel();
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
+            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.checkBoxEDSMSyncFrom = new System.Windows.Forms.CheckBox();
             this.checkBoxEDSMSyncTo = new System.Windows.Forms.CheckBox();
             this.comboBoxCommander = new System.Windows.Forms.ComboBox();
@@ -94,8 +91,11 @@
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
             this.mapColorDialog = new System.Windows.Forms.ColorDialog();
-            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
             this.historyContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -120,7 +120,7 @@
             // button_RefreshHistory
             // 
             this.button_RefreshHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_RefreshHistory.Location = new System.Drawing.Point(517, 7);
+            this.button_RefreshHistory.Location = new System.Drawing.Point(517, 5);
             this.button_RefreshHistory.Name = "button_RefreshHistory";
             this.button_RefreshHistory.Size = new System.Drawing.Size(69, 23);
             this.button_RefreshHistory.TabIndex = 2;
@@ -151,44 +151,6 @@
             this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
             this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 140;
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.Name = "ColumnSystem";
-            this.ColumnSystem.ReadOnly = true;
-            this.ColumnSystem.Width = 200;
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.Name = "ColumnDistance";
-            this.ColumnDistance.ReadOnly = true;
-            this.ColumnDistance.Width = 70;
-            // 
-            // ColumnNote
-            // 
-            this.ColumnNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnNote.HeaderText = "Note";
-            this.ColumnNote.Name = "ColumnNote";
-            this.ColumnNote.ReadOnly = true;
-            // 
-            // mapColour
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
-            this.mapColour.HeaderText = "Map";
-            this.mapColour.Name = "mapColour";
-            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
-            this.mapColour.Width = 30;
             // 
             // historyContextMenu
             // 
@@ -230,7 +192,7 @@
             // 
             // comboBoxHistoryWindow
             // 
-            this.comboBoxHistoryWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxHistoryWindow.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxHistoryWindow.FormattingEnabled = true;
             this.comboBoxHistoryWindow.Items.AddRange(new object[] {
             "6 Hours",
@@ -242,7 +204,7 @@
             "Month",
             "Last 20",
             "All"});
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(259, 8);
+            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(101, 6);
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 21);
             this.comboBoxHistoryWindow.TabIndex = 0;
@@ -250,9 +212,8 @@
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(163, 11);
+            this.label2.Location = new System.Drawing.Point(3, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 13);
             this.label2.TabIndex = 0;
@@ -693,6 +654,17 @@
             this.dataGridViewNearest.TabIndex = 23;
             this.dataGridViewNearest.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
+            // Col1
+            // 
+            this.Col1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Col1.HeaderText = "Name";
+            this.Col1.Name = "Col1";
+            // 
+            // Distance
+            // 
+            this.Distance.HeaderText = "Distance";
+            this.Distance.Name = "Distance";
+            // 
             // checkBoxEDSMSyncFrom
             // 
             this.checkBoxEDSMSyncFrom.AutoSize = true;
@@ -727,19 +699,17 @@
             // 
             // textBoxFilter
             // 
-            this.textBoxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxFilter.Location = new System.Drawing.Point(411, 9);
+            this.textBoxFilter.Location = new System.Drawing.Point(312, 6);
             this.textBoxFilter.Name = "textBoxFilter";
-            this.textBoxFilter.Size = new System.Drawing.Size(100, 20);
+            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(364, 11);
+            this.label1.Location = new System.Drawing.Point(254, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 13);
             this.label1.TabIndex = 24;
@@ -772,16 +742,43 @@
             // 
             this.mapColorDialog.SolidColorOnly = true;
             // 
-            // Col1
+            // ColumnTime
             // 
-            this.Col1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Col1.HeaderText = "Name";
-            this.Col1.Name = "Col1";
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.Width = 150;
             // 
-            // Distance
+            // ColumnSystem
             // 
-            this.Distance.HeaderText = "Distance";
-            this.Distance.Name = "Distance";
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.ReadOnly = true;
+            this.ColumnSystem.Width = 200;
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.Name = "ColumnDistance";
+            this.ColumnDistance.ReadOnly = true;
+            this.ColumnDistance.Width = 70;
+            // 
+            // ColumnNote
+            // 
+            this.ColumnNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnNote.HeaderText = "Note";
+            this.ColumnNote.Name = "ColumnNote";
+            this.ColumnNote.ReadOnly = true;
+            // 
+            // mapColour
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle4;
+            this.mapColour.HeaderText = "Map";
+            this.mapColour.Name = "mapColour";
+            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
+            this.mapColour.Width = 30;
             // 
             // TravelHistoryControl
             // 
@@ -859,11 +856,6 @@
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem starMapColourToolStripMenuItem;
         private System.Windows.Forms.ColorDialog mapColorDialog;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
         internal System.Windows.Forms.TextBox textBoxDistanceToNextSystem;
         private System.Windows.Forms.ToolStripMenuItem hideSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveToAnotherCommanderToolStripMenuItem;
@@ -874,5 +866,10 @@
         private System.Windows.Forms.DataGridView dataGridViewNearest;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
+        private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
     }
 }

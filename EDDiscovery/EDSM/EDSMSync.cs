@@ -22,6 +22,7 @@ namespace EDDiscovery2.EDSM
         bool Exit = false;
         bool _syncTo = false;
         bool _syncFrom = false;
+        Color _defmapcolour = Color.Pink;
         private EDDiscoveryForm mainForm;
         public event EDSMNewSystemEventHandler OnNewEDSMTravelLog;
 
@@ -30,12 +31,14 @@ namespace EDDiscovery2.EDSM
             mainForm = frm;
         }
 
-        public bool StartSync(bool syncto, bool syncfrom)
+        public bool StartSync(bool syncto, bool syncfrom,Color defmapcolour)
         {
             if (running) // Only start once.
                 return false;
             _syncTo = syncto;
             _syncFrom = syncfrom;
+            _defmapcolour = defmapcolour;
+
             ThreadEDSMSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
             ThreadEDSMSync.Name = "EDSM Sync";
             ThreadEDSMSync.Start();
@@ -139,7 +142,6 @@ namespace EDDiscovery2.EDSM
                 if (_syncFrom)
                 {
                     // Check for new systems from EDSM
-                    int defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
                     foreach (var system in log)
                     {
                         SystemPosition ps2 = (from c in mainForm.VisitedSystems where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
@@ -164,7 +166,7 @@ namespace EDDiscovery2.EDSM
 
                             vs.Name = system.Name;
                             vs.Time = system.time;
-                            vs.MapColour = defaultColour;
+                            vs.MapColour = _defmapcolour.ToArgb() & 0xffffff;
                             vs.EDSM_sync = true;
 
 

@@ -20,7 +20,6 @@ namespace EDDiscovery
 {
     public partial class RouteControl : UserControl
     {
-        Graph G;
         internal TravelHistoryControl travelhistorycontrol1;
         internal bool changesilence = false;
         private SQLiteDBClass db;
@@ -56,7 +55,7 @@ namespace EDDiscovery
 
 
             button_Route.Enabled = false;           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
-            richTextBox1.Clear();
+            richTextBox_routeresult.Clear();
 
             ThreadRoute = new System.Threading.Thread(new System.Threading.ThreadStart(RouteMain));
             ThreadRoute.Name = "Thread Route";
@@ -220,7 +219,7 @@ namespace EDDiscovery
                             metric = (deviation <= 250) ? distancefromwantedx2 : metric;
                         else if (routemethod == metric_maximum500ly)
                             metric = (deviation <= 500) ? distancefromwantedx2 : metric;
-                        else
+                        else if ( routemethod == metric_waypointdev2 )
                             metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
 
                         if (metric < bestmindistance)
@@ -275,7 +274,7 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    richTextBox1.AppendText(msg);
+                    richTextBox_routeresult.AppendText(msg);
                 });
             }
             catch
@@ -338,7 +337,7 @@ namespace EDDiscovery
             UpdateFrom(true);
             textBox_Range.ReadOnly = false;
             comboBoxRoutingMetric.Enabled = true;
-            richTextBox1.Text = "In either the From or To box areas, either enter a system name in the upper text Box," + Environment.NewLine +
+            richTextBox_routeresult.Text = "In either the From or To box areas, either enter a system name in the upper text Box," + Environment.NewLine +
                                 "or enter a set of galactic co-ordinates in the bottom three boxes (xyz)." + Environment.NewLine + Environment.NewLine +
                                 "If you enter a system, its co-ordinates will be shown in the lower three boxes." + Environment.NewLine +
                                 "If you enter galactic co-ordinates, the nearest system will be shown in the upper box." + Environment.NewLine +
