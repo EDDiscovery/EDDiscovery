@@ -95,7 +95,7 @@ namespace EDDiscovery2.PlanetSystems
 
             dictComboPlanetDesc.Clear();
             dictComboStarDesc.Clear();
-            foreach (EDPlanet obj in EDPlanet.listObjectTypes)
+            foreach (EDWorld obj in EDWorld.listObjectTypes)
             {
                 if (obj.IsPlanet)
                 {
@@ -138,7 +138,7 @@ namespace EDDiscovery2.PlanetSystems
 
         private void SetSystem(string systemname)
         {
-            List<EDPlanet> planets;
+            List<EDWorld> planets;
             List<EDStar> stars;
             if (systemname == null)
                 return;
@@ -147,7 +147,7 @@ namespace EDDiscovery2.PlanetSystems
 
             edObjects.Clear();
 
-            planets = edmat.GetAllPlanets(textBoxSystemName.Text);
+            planets = edmat.GetAllWorlds(textBoxSystemName.Text);
             stars = edmat.GetAllStars(textBoxSystemName.Text);
 
             edObjects.AddRange(planets);
@@ -159,9 +159,9 @@ namespace EDDiscovery2.PlanetSystems
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
-            EDPlanet obj = new EDPlanet();
+            EDWorld obj = new EDWorld();
             obj.system = textBoxSystemName.Text;
-            obj.commander = edForm.CommanderName;
+            obj.updater = edForm.CommanderName;
             edObjects.Add(obj);
             CurrentItem = edObjects.Count - 1;
             UpDateListView();
@@ -174,9 +174,9 @@ namespace EDDiscovery2.PlanetSystems
 
             foreach (var ob in edObjects)
             {
-                if (ob is EDPlanet)
+                if (ob is EDWorld)
                 {
-                    EDPlanet planet = (EDPlanet)ob;
+                    EDWorld planet = (EDWorld)ob;
                     ListViewItem lvi;
                     lvi = listView1.Items.Add(planet.objectName);
                     lvi.SubItems.Add(planet.Description);
@@ -186,17 +186,6 @@ namespace EDDiscovery2.PlanetSystems
 
                     lvi.UseItemStyleForSubItems = false;
 
-
-                    for (int ii = 0; ii < mlist.Count; ii++)
-                    {
-                        ListViewItem.ListViewSubItem lvsi;
-                        if (planet.materials[mlist[ii].material])
-                            lvsi = lvi.SubItems.Add("X");
-                        else
-                            lvsi = lvi.SubItems.Add(" ");
-
-                        lvsi.BackColor = mlist[ii].RareityColor;
-                    }
 
                     lvi.Tag = planet;
                 }
@@ -235,22 +224,14 @@ namespace EDDiscovery2.PlanetSystems
             {
                 lvi = listView1.SelectedItems[0];
 
-                if (currentObj is EDPlanet)
+                if (currentObj is EDWorld)
                 {
-                    EDPlanet planet = (EDPlanet)currentObj;
+                    EDWorld planet = (EDWorld)currentObj;
                     lvi.SubItems[0].Text = planet.objectName;
                     lvi.SubItems[1].Text = planet.Description;
                     lvi.SubItems[2].Text = planet.gravity.ToString("0.00");
                     lvi.SubItems[3].Text = planet.arrivalPoint.ToString("0");
-
-
-                    for (int ii = 0; ii < mlist.Count; ii++)
-                    {
-                        if (planet.materials[mlist[ii].material])
-                            lvi.SubItems[3 + ii].Text = "X";
-                        else
-                            lvi.SubItems[3 + ii].Text = " ";
-                    }
+           
                 }
                 if (currentObj is EDStar)
                 {
@@ -260,11 +241,6 @@ namespace EDDiscovery2.PlanetSystems
                     lvi.SubItems[2].Text = "";
                     lvi.SubItems[3].Text = star.arrivalPoint.ToString("0");
 
-
-                    for (int ii = 0; ii < mlist.Count; ii++)
-                    {
-                        lvi.SubItems[3 + ii].Text = "";
-                    }
                 }
             }
         }
@@ -272,8 +248,8 @@ namespace EDDiscovery2.PlanetSystems
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
             UpdateEDObject(currentObj);
-            if (currentObj is EDPlanet)
-                edmat.StorePlanet((EDPlanet)currentObj);
+            if (currentObj is EDWorld)
+                edmat.StorePlanet((EDWorld)currentObj);
             if (currentObj is EDStar)
                 edmat.StoreStar((EDStar)currentObj);
 
@@ -314,9 +290,9 @@ namespace EDDiscovery2.PlanetSystems
             }
 
 
-            if (currentObj is EDPlanet)
+            if (currentObj is EDWorld)
             {
-                EDPlanet planet = (EDPlanet)currentObj;
+                EDWorld planet = (EDWorld)currentObj;
 
                 textBoxName.Text = currentObj.objectName;
 
@@ -324,9 +300,25 @@ namespace EDDiscovery2.PlanetSystems
                 var nr = (from str in dictComboPlanetDesc where str.Value == planet.Description select str.Key).FirstOrDefault<int>();
                 comboBoxType.SelectedIndex = nr;
 
-                textBoxGravity.Text = planet.gravity.ToString("0.00");
+                textBoxMass.Text = planet.mass.ToString("0.0000");
                 textBoxRadius.Text = planet.radius.ToString("0");
+
+                if (planet.gravity == 0)
+                    planet.gravity = (float)CalcG(planet.mass, planet.radius);
+
+                textBoxGravity.Text = planet.gravity.ToString("0.00");
+                textBoxSurfaceTemp.Text = planet.surfaceTemp.ToString("0");
+                textBoxPreasure.Text = planet.surfacePressure.ToString("0.00");
+
                 textBoxArrivalPoint.Text = planet.arrivalPoint.ToString("0");
+                textBoxOrbitPeriod.Text = planet.orbitPeriod.ToString("0.0");
+                textBoxRotationPeriod.Text = planet.rotationPeriod.ToString("0.0");
+                textBoxSemiMajorAxis.Text = planet.semiMajorAxis.ToString("0.00");
+                textBoxArrivalPoint.Text = planet.arrivalPoint.ToString("0.0");
+                textBoxRock.Text = planet.rockPct.ToString("0.0");
+                textBoxMetal.Text = planet.metalPct.ToString("0.0");
+                textBoxIce.Text = planet.icePct.ToString("0.0");
+
 
                 try
                 {
@@ -337,10 +329,10 @@ namespace EDDiscovery2.PlanetSystems
                 {
 
                 }
-                SetMaterials(planet, checkedListBox1);
-                SetMaterials(planet, checkedListBox2);
-                SetMaterials(planet, checkedListBox3);
-                SetMaterials(planet, checkedListBox4);
+                //SetMaterials(planet, checkedListBox1);
+                //SetMaterials(planet, checkedListBox2);
+                //SetMaterials(planet, checkedListBox3);
+                //SetMaterials(planet, checkedListBox4);
             }
             if (currentObj is EDStar)
             {
@@ -362,15 +354,7 @@ namespace EDDiscovery2.PlanetSystems
             }
         }
 
-        private void SetMaterials(EDPlanet obj, CheckedListBox box)
-        {
-            for (int i = 0; i < box.Items.Count; i++)
-            {
-                string item = (string)box.Items[i];
-                MaterialEnum mat = obj.MaterialFromString(item);
-                box.SetItemChecked(i, obj.materials[mat]);
-            }
-        }
+
 
         private void comboBoxType_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -431,24 +415,27 @@ namespace EDDiscovery2.PlanetSystems
 
         private void UpdateEDObject(EDObject obj)
         {
-            if (obj is EDPlanet)
+            if (obj is EDWorld)
             {
-                EDPlanet planet = (EDPlanet)obj;
+                EDWorld planet = (EDWorld)obj;
                 planet.objectName = textBoxName.Text;
                 planet.ObjectType = obj.String2ObjectType(comboBoxType.Text);
 
                 var culture = new CultureInfo("en-US");
+                planet.mass = float.Parse(textBoxMass.Text.Replace(",", "."), culture);
                 planet.gravity = float.Parse(textBoxGravity.Text.Replace(",", "."), culture);
                 planet.radius = float.Parse(textBoxRadius.Text.Replace(",", "."), culture);
+                planet.surfaceTemp = Int16.Parse(textBoxSurfaceTemp.Text, culture);
                 planet.arrivalPoint = float.Parse(textBoxArrivalPoint.Text.Replace(",", "."), culture);
+                planet.surfacePressure = float.Parse(textBoxSurfaceTemp.Text.Replace(",", "."), culture);
 
                 planet.atmosphere = planet.AtmosphereStr2Enum(comboBoxAtmosphere.Text);
                 planet.vulcanism = planet.VulcanismStr2Enum(comboBoxVulcanism.Text);
 
-                GetMaterials(ref planet, checkedListBox1);
-                GetMaterials(ref planet, checkedListBox2);
-                GetMaterials(ref planet, checkedListBox3);
-                GetMaterials(ref planet, checkedListBox4);
+                //GetMaterials(ref planet, checkedListBox1);
+                //GetMaterials(ref planet, checkedListBox2);
+                //GetMaterials(ref planet, checkedListBox3);
+                //GetMaterials(ref planet, checkedListBox4);
             }
 
             if (obj is EDStar)
@@ -476,25 +463,30 @@ namespace EDDiscovery2.PlanetSystems
         }
 
 
-        private void GetMaterials(ref EDPlanet obj, CheckedListBox box)
-        {
-            for (int i = 0; i < box.Items.Count; i++)
-            {
-                string item = (string)box.Items[i];
-                MaterialEnum mat = obj.MaterialFromString(item);
-                obj.materials[mat] =  box.GetItemChecked(i);
-            }
-        }
+
 
         private void toolStripButtonAddStar_Click(object sender, EventArgs e)
         {
             EDStar obj = new EDStar();
             obj.system = textBoxSystemName.Text;
-            obj.commander = edForm.CommanderName;
+            obj.updater = edForm.CommanderName;
             edObjects.Add(obj);
             CurrentItem = edObjects.Count - 1;
             UpDateListView();
         }
+
+        private void panelPlanets_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private double CalcG(double mass, double radius)
+        {
+            if (mass == 0 || radius == 0)
+                return 0;
+            return mass * 5.9722E+24 * 6.67E-11 / ((radius * 1000)* (radius * 1000)) / 9.80665;
+        }
+
     }
 
 }

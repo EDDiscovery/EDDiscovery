@@ -62,20 +62,23 @@ namespace EDDiscovery
                 textBoxCoordinateY.Text = TargetSystem.y.ToString();
                 textBoxCoordinateZ.Text = TargetSystem.z.ToString();
 
-                labelStatus.Text = "Has Coordinates!";
-                labelStatus.BackColor = Color.LawnGreen;
+                SetStatus("Has Coordinates!");
             }
             else
             {
-                labelStatus.Text = "Enter Distances";
-                labelStatus.BackColor = Color.LightBlue;
+                SetStatus("Enter Distances");
             }
 
             UnfreezeTrilaterationUI();
             dataGridViewDistances.Focus();
 
             PopulateSuggestedSystems();
-            PopulateClosestSystems();
+            //PopulateClosestSystems();
+
+
+            Thread ViewPushedSystemsThread = new Thread(ViewPushedSystems) { Name = "EDSM get pushed systems" };
+            ViewPushedSystemsThread.Start();
+
         }
 
         private List<SystemClass> GetEnteredSystems()
@@ -149,11 +152,22 @@ namespace EDDiscovery
 
                 if (value == "")
                 {
+                    dataGridViewDistances.Rows[e.RowIndex].ErrorText = null;
                     return;
                 }
 
-                var regex = new Regex(@"^\d{1,5}([,.]\d{1,2})?$");
-                e.Cancel = !regex.Match(e.FormattedValue.ToString()).Success;
+                //var regex = new Regex(@"^((\d{1,2}[,.]\d{3})|(\d{1,5}))([,.]\d{1,2})?$");
+                //e.Cancel = !regex.Match(e.FormattedValue.ToString()).Success;
+                double dummy;
+                if ( double.TryParse(value, out dummy))
+                {
+                    dataGridViewDistances.Rows[e.RowIndex].ErrorText = null;
+                }
+                else
+                {
+                    e.Cancel = true;
+                    dataGridViewDistances.Rows[e.RowIndex].ErrorText = "Invalid number";
+                }
             }
         }
 
@@ -167,7 +181,7 @@ namespace EDDiscovery
             {
                 if (!edsm.IsKnownSystem(systemName))
                 {
-                    LogText("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine, Color.Red);                    
+                    LogTextHighlight("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine);                    
                 }
                 else
                 {
@@ -196,7 +210,7 @@ namespace EDDiscovery
             else
             {
                 dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown";
-                dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = Color.Salmon;
+                dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = _discoveryForm.theme.NonVisitedSystemColor;
             }
         }
 
@@ -206,7 +220,6 @@ namespace EDDiscovery
             {
                 var cell = dataGridViewDistances[e.ColumnIndex, e.RowIndex];
                 var value = cell.Value as string;
-                cell.Style.BackColor = Color.White;
                 if (value == null)
                 {
                     return;
@@ -223,7 +236,7 @@ namespace EDDiscovery
                 }
                 if (enteredSystems.Where(es => es.name == value).Count() > 0)
                 {
-                    LogText("Duplicate system entry is not allowed" + Environment.NewLine, Color.Red);
+                    LogTextHighlight("Duplicate system entry is not allowed" + Environment.NewLine);
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
                         dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
@@ -244,8 +257,13 @@ namespace EDDiscovery
             }
             else if (e.ColumnIndex == 1)
             {
-                // trigger trilateration calculation
-                RunTrilateration();
+                if (dataGridViewDistances[1, e.RowIndex].Value != null && !string.IsNullOrEmpty(dataGridViewDistances[1, e.RowIndex].Value.ToString()))
+                {
+                    double dist = double.Parse(dataGridViewDistances[1, e.RowIndex].Value.ToString());
+                    dataGridViewDistances[1, e.RowIndex].Value = dist.ToString();
+                    // trigger trilateration calculation
+                    RunTrilateration();
+                }
             }
             /* skip to the next editable cell */
             skipReadOnlyCells = true;
@@ -289,8 +307,8 @@ namespace EDDiscovery
                 var system = (SystemClass)systemCell.Tag;
                 if (system != null && system.HasCoordinate)
                 {
-                    var culture = new CultureInfo("en-US");
-                    var distance = double.Parse(distanceCell.Value.ToString().Replace(",", "."), culture);
+                    //var culture = new CultureInfo("en-US");
+                    var distance = double.Parse(distanceCell.Value.ToString());
 
                     var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
 
@@ -306,8 +324,7 @@ namespace EDDiscovery
             Invoke((MethodInvoker) delegate
             {
                 LogText("Starting trilateration..." + Environment.NewLine);
-                labelStatus.Text = "Calculating…";
-                labelStatus.BackColor = Color.Gold;
+                SetStatus("Calculating…");
             });
 
             var trilateration = new Trilateration {Logger = Console.WriteLine};
@@ -349,8 +366,7 @@ namespace EDDiscovery
 
                     LogText("Trilateration successful (" + spentTimeString + "), exact coordinates found." + Environment.NewLine);
                     LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + " Sol: " + SystemData.Distance(s1, s3).ToString("0.0") +  " Sag A* " + SystemData.Distance(s2, s3).ToString("0.0") + Environment.NewLine);
-                    labelStatus.Text = "Success, coordinates found!";
-                    labelStatus.BackColor = Color.LawnGreen;
+                    SetStatus("Success, coordinates found!");
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NotExact || trilaterationResult.State == Trilateration.ResultState.MultipleSolutions)
             {
@@ -359,8 +375,7 @@ namespace EDDiscovery
                     LogText("Trilateration not successful (" + spentTimeString + "), only approximate coordinates found." + Environment.NewLine);
                     //LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
                     LogText("Enter more distances." + Environment.NewLine);
-                    labelStatus.Text = "Enter More Distances";
-                    labelStatus.BackColor = Color.Orange;
+                    SetStatus("Enter More Distances");
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NeedMoreDistances)
             {
@@ -368,12 +383,12 @@ namespace EDDiscovery
                 {
                     LogText("Trilateration not successful (" + spentTimeString + "), coordinates not found." + Environment.NewLine);
                     LogText("Enter more distances." + Environment.NewLine);
-                    labelStatus.Text = "Enter More Distances";
-                    labelStatus.BackColor = Color.Red;
+                    SetStatus("Enter More Distances");
                     ClearCalculatedDataGridViewDistancesRows();
                 });
             }
-            
+
+
             // update trilaterated coordinates
             if (trilaterationResult.Coordinate != null)
             {
@@ -449,15 +464,13 @@ namespace EDDiscovery
 
                 if (systemEntry.Distance == calculatedDistance)
                 {
-                    calculatedDistanceCell.Style.ForeColor = Color.Green;
                     statusCell.Value = "OK";
-                    statusCell.Style.ForeColor = Color.Green;
-                } else
+                    statusCell.Style.ForeColor = _discoveryForm.theme.VisitedSystemColor;
+                }
+                else
                 {
-                        //hasInvalidDistances = true;
-                    calculatedDistanceCell.Style.ForeColor = Color.Salmon;
                     statusCell.Value = "Wrong distance?";
-                    statusCell.Style.ForeColor = Color.Salmon;
+                    statusCell.Style.ForeColor = _discoveryForm.theme.NonVisitedSystemColor;
                 }
             }
 
@@ -581,6 +594,31 @@ namespace EDDiscovery
             }
         }
 
+        // Runs as a thread.
+        private void ViewPushedSystems()
+        {
+            List<String> systems = edsm.GetPushedSystems();
+
+            this.BeginInvoke(new MethodInvoker(() =>
+            {
+                dataGridViewClosestSystems.Rows.Clear();
+            }));
+
+            foreach (String system in systems)
+            {
+                SystemClass star = SystemData.GetSystem(system);
+                if (star == null)
+                    star = new SystemClass(system);
+
+                this.BeginInvoke(new MethodInvoker(() =>
+                {
+                    var index = dataGridViewClosestSystems.Rows.Add(system);
+                    dataGridViewClosestSystems[0, index].Tag = star;
+                }));
+            }
+
+
+        } 
 
         private void PopulateClosestSystems()
         {
@@ -593,7 +631,7 @@ namespace EDDiscovery
                 return;
             }
 
-            labelLastKnownSystem.Text = lastKnown.name;
+            //labelLastKnownSystem.Text = lastKnown.name;
 
             var closest = (from systems
                            in SystemData.SystemList
@@ -683,13 +721,13 @@ namespace EDDiscovery
                 trilaterationThread = null;
             }
 
-            // edge case - make sure distances were trilaterated OR the current system already has known coordinates
-            if (lastTrilatelationResult == null && !CurrentSystem.HasCoordinate)
-            {
-                LogText("EDSM submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
-                UnfreezeTrilaterationUI();
-                return;
-            }
+            //// edge case - make sure distances were trilaterated OR the current system already has known coordinates
+            //if (lastTrilatelationResult == null && !CurrentSystem.HasCoordinate)
+            //{
+            //    LogText("EDSM submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
+            //    UnfreezeTrilaterationUI();
+            //    return;
+            //}
 
             EDSMSubmissionThread = new Thread(SubmitToEDSM) {Name = "EDSM Submission"};
             EDSMSubmissionThread.Start();
@@ -714,7 +752,6 @@ namespace EDDiscovery
                 edsm.commanderName = commanderName;
             }
             var distances = new Dictionary<string, double>();
-            var culture = new CultureInfo("en-US");
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
                 var systemCell = dataGridViewDistances[0, i];
@@ -722,7 +759,7 @@ namespace EDDiscovery
                 if (systemCell.Value != null && distanceCell.Value != null)
                 {
                     var system = systemCell.Value.ToString();
-                    var distance = double.Parse(distanceCell.Value.ToString().Replace(",", "."), culture);
+                    var distance = double.Parse(distanceCell.Value.ToString());
                     // can over-ride drop down now if it's a real system so you could add duplicates if you wanted (even once I've figured out issue #81 which makes it easy if not likely...)
                     if (!distances.Keys.Contains(system))
                     {
@@ -746,15 +783,15 @@ namespace EDDiscovery
             {
                 if (responseOkM && trilaterationOkM)
                 {
-                    LogText("EDSM submission succeeded, trilateration successful." + Environment.NewLine, Color.Green);
+                    LogText("EDSM submission succeeded, trilateration successful." + Environment.NewLine);
                 }
                 else if (responseOkM)
                 {
-                    LogText("EDSM submission succeeded, but trilateration failed. Try adding more distances." + Environment.NewLine, Color.Orange);
+                    LogTextHighlight("EDSM submission succeeded, but trilateration failed. Try adding more distances." + Environment.NewLine);
                 }
                 else
                 {
-                    LogText("EDSM submission failed." + Environment.NewLine, Color.Red);
+                    LogTextHighlight("EDSM submission failed." + Environment.NewLine);
                 }
 
             });
@@ -800,14 +837,21 @@ namespace EDDiscovery
             RunTrilateration();
         }
 
-
+        private void SetStatus(string st)
+        {
+            labelStatus.Text = st;
+        }
 
         public void LogText(string text)
         {
-            LogText(text, Color.Black);
+            LogTextColor(text, _discoveryForm.theme.TextBlock);
+        }
+        public void LogTextHighlight(string text)
+        {
+            LogTextColor(text, _discoveryForm.theme.TextBlockHighlightColor);
         }
 
-        public void LogText(string text, Color color)
+        private void LogTextColor(string text, Color color)
         {
             try
             {
@@ -836,6 +880,7 @@ namespace EDDiscovery
             var system = (SystemClass)dataGridViewSuggestedSystems[0, e.RowIndex].Tag;
             AddSystemToDataGridViewDistances(system);
             dataGridViewSuggestedSystems.Rows.RemoveAt(e.RowIndex);
+            System.Windows.Forms.Clipboard.SetText(system.name); // copy to clipboard, speeds up search
         }
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
@@ -945,7 +990,7 @@ namespace EDDiscovery
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
-                        dataGridViewDistances[3, i].Style.ForeColor = Color.Green;
+                        dataGridViewDistances[3, i].Style.ForeColor = _discoveryForm.theme.VisitedSystemColor;
                         dataGridViewDistances[3, i].Value = "Position found";
                     }
                 }

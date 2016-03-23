@@ -349,11 +349,16 @@ namespace EDDiscovery2
             if (listHistory.Count > 1)
             {
                 Pen pen = new Pen(Color.FromArgb(listHistory[1].vs.MapColour), 2);
+                if (pen.Color.A == 0)
+                    pen.Color = Color.FromArgb(255, pen.Color);
                 for (int ii = 1; ii < listHistory.Count; ii++)
                 {
                     if (listHistory[ii].vs.MapColour != listHistory[ii-1].vs.MapColour)
                     {
                         pen = new Pen(Color.FromArgb(listHistory[ii].vs.MapColour), 2);
+                        if (pen.Color.A == 0)
+                            pen.Color = Color.FromArgb(255, pen.Color);
+                        
                     }
                     DrawLine(gfx, pen, listHistory[ii - 1].curSystem, listHistory[ii].curSystem);
                 }

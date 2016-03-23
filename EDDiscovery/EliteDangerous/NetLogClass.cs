@@ -117,6 +117,8 @@ namespace EDDiscovery
         public List<SystemPosition> ParseFiles(RichTextBox richTextBox_History, int defaultMapColour, int commander)
         {
             string datapath;
+            DirectoryInfo dirInfo;
+
             datapath = GetNetLogPath();
 
             if (datapath == null)
@@ -124,7 +126,7 @@ namespace EDDiscovery
                 AppendText(richTextBox_History, "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
                 return null;
             }
-            DirectoryInfo dirInfo = new DirectoryInfo(datapath);
+
 
             if (!Directory.Exists(datapath))   // if logfiles directory is not found
             {
@@ -134,6 +136,15 @@ namespace EDDiscovery
                     AppendText(richTextBox_History, "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
                     //MessageBox.Show("Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab", "EDDiscovery Error", MessageBoxButtons.OK);
                 }
+                return null;
+            }
+            try
+            {
+                dirInfo = new DirectoryInfo(datapath);
+            }
+            catch (Exception ex)
+            {
+                AppendText(richTextBox_History, "Could not create Directory info: " + ex.Message + Environment.NewLine, Color.Red);
                 return null;
             }
 
@@ -370,8 +381,11 @@ namespace EDDiscovery
 
         }
 
-        public bool StartMonitor()
+        private EDDiscoveryForm _discoveryform;
+
+        public bool StartMonitor(EDDiscoveryForm ed)
         {
+            _discoveryform = ed;
             ThreadNetLog = new System.Threading.Thread(new System.Threading.ThreadStart(NetLogMain));
             ThreadNetLog.Name = "Net log";
             ThreadNetLog.Start();
@@ -475,7 +489,7 @@ namespace EDDiscovery
                                         dbsys.Source = tlUnit.id;
                                         dbsys.EDSM_sync = false;
                                         dbsys.Unit = fi.Name;
-                                        dbsys.MapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+                                        dbsys.MapColour = _discoveryform.theme.MapBlockColor.ToArgb() & 0xffffff;
                                         dbsys.Unit = fi.Name;
                                         
                                         if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
