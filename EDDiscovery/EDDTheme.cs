@@ -234,10 +234,10 @@ namespace EDDiscovery2
             themelist.Clear();
 
             themelist.Add(new Settings("Windows Default", SystemColors.Menu,
-                                                           SystemColors.Menu, SystemColors.MenuText,  // button
+                                                           SystemColors.ControlLightLight, SystemColors.MenuText,  // button
                                                            SystemColors.Menu, SystemColors.MenuText,  // grid border
-                                                           SystemColors.Menu, SystemColors.MenuText,  // grid
-                                                           SystemColors.MenuText, Color.Blue, Color.Red, // travel
+                                                           SystemColors.ControlLightLight, SystemColors.MenuText,  // grid
+                                                           Color.Blue, SystemColors.MenuText, Color.Red, // travel
                                                            SystemColors.Menu, SystemColors.MenuText, Color.Red,  // text
                                                            SystemColors.MenuText, // checkbox
                                                            SystemColors.Menu, SystemColors.MenuText,  // menu
