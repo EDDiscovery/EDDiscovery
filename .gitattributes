@@ -1,3 +1,7 @@
+* text = auto
+[core]
+	autocrlf=true
+
 # Fix text files to crlf on output, LF in repo
 *.cs eol=crlf
 *.sln eol=crlf
