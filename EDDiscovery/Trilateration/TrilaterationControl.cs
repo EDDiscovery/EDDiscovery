@@ -149,6 +149,8 @@ namespace EDDiscovery
             if (e.ColumnIndex == 1)
             {
                 var value = e.FormattedValue.ToString().Trim();
+                if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
+                    value = value.Replace(".", ",");
 
                 if (value == "")
                 {
@@ -259,7 +261,11 @@ namespace EDDiscovery
             {
                 if (dataGridViewDistances[1, e.RowIndex].Value != null && !string.IsNullOrEmpty(dataGridViewDistances[1, e.RowIndex].Value.ToString()))
                 {
-                    double dist = double.Parse(dataGridViewDistances[1, e.RowIndex].Value.ToString());
+                    var value = dataGridViewDistances[1, e.RowIndex].Value.ToString().Trim();
+                    if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
+                        value = value.Replace(".", ",");
+
+                    double dist = double.Parse(value);
                     dataGridViewDistances[1, e.RowIndex].Value = dist.ToString();
                     // trigger trilateration calculation
                     RunTrilateration();
@@ -307,8 +313,10 @@ namespace EDDiscovery
                 var system = (SystemClass)systemCell.Tag;
                 if (system != null && system.HasCoordinate)
                 {
-                    //var culture = new CultureInfo("en-US");
-                    var distance = double.Parse(distanceCell.Value.ToString());
+                    var value = distanceCell.Value.ToString().Trim();
+                    if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
+                        value = value.Replace(".", ",");
+                    var distance = double.Parse(value);
 
                     var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
 
@@ -759,7 +767,12 @@ namespace EDDiscovery
                 if (systemCell.Value != null && distanceCell.Value != null)
                 {
                     var system = systemCell.Value.ToString();
-                    var distance = double.Parse(distanceCell.Value.ToString());
+
+                    var value = distanceCell.Value.ToString().Trim();
+                    if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
+                        value = value.Replace(".", ",");
+
+                    var distance = double.Parse(value);
                     // can over-ride drop down now if it's a real system so you could add duplicates if you wanted (even once I've figured out issue #81 which makes it easy if not likely...)
                     if (!distances.Keys.Contains(system))
                     {
