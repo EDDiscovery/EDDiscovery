@@ -238,7 +238,6 @@ namespace EDDiscovery
             
             if (dataGridViewTravel.Rows.Count > 0)
             {
-                lastRowIndex = 0;
                 ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[0].Cells[1].Tag));
             }
             System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
@@ -593,9 +592,6 @@ namespace EDDiscovery
         {
             if (e.RowIndex >= 0)
             {
-                //string  SysName = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                lastRowIndex = e.RowIndex;
-
                 ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[e.RowIndex].Cells[1].Tag));
             }
 
@@ -621,13 +617,10 @@ namespace EDDiscovery
             map.Show();
         }
 
-        private int lastRowIndex;
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                //string SysName = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                lastRowIndex = e.RowIndex;
                 ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[e.RowIndex].Cells[1].Tag));
 
                 if (e.ColumnIndex == 3)       // note column
@@ -665,10 +658,11 @@ namespace EDDiscovery
                 distance.Store();
                 SQLiteDBClass.AddDistanceToCache(distance);
 
-                dataGridViewTravel.Rows[lastRowIndex].Cells[2].Value = textBoxDistance.Text.Trim();
+                if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                    dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[2].Value = textBoxDistance.Text.Trim();
+                              
             }
         }
-
   
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
@@ -678,7 +672,8 @@ namespace EDDiscovery
 
         private void richTextBoxNote_TextChanged(object sender, EventArgs e)
         {
-            dataGridViewTravel.Rows[lastRowIndex].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
+            if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
         }
 
         private void StoreSystemNote()
@@ -698,7 +693,6 @@ namespace EDDiscovery
                 if (currentSysPos == null || currentSysPos.curSystem == null)
                     return;
 
-                //SystemPosition sp = (SystemPosition)dataGridView1.Rows[lastRowIndex].Cells[1].Tag;
                 txt = richTextBoxNote.Text;
 
                 
@@ -730,7 +724,9 @@ namespace EDDiscovery
 
                     
                     currentSysPos.curSystem.Note = txt;
-                    dataGridViewTravel.Rows[lastRowIndex].Cells[3].Value = txt;
+
+                    if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                        dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[3].Value = txt;
 
                     if (edsm.commanderName == null || edsm.apiKey == null)
                         return;
@@ -895,7 +891,6 @@ namespace EDDiscovery
                     textBoxDistanceToNextSystem.Enabled = true;
 
                     AddHistoryRow(true, item, item2);
-                    lastRowIndex += 1;
                     StoreSystemNote();
                 });
             }
