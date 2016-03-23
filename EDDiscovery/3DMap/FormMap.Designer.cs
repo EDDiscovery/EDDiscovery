@@ -202,7 +202,7 @@ namespace EDDiscovery2
             // buttonHistory
             // 
             this.buttonHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonHistory.Image = global::EDDiscovery2.Properties.Resources.Travelicon;
+            this.buttonHistory.Image = global::EDDiscovery.Properties.Resources.Travelicon;
             this.buttonHistory.Location = new System.Drawing.Point(605, 5);
             this.buttonHistory.Name = "buttonHistory";
             this.buttonHistory.Size = new System.Drawing.Size(22, 23);
@@ -214,7 +214,7 @@ namespace EDDiscovery2
             // buttonHome
             // 
             this.buttonHome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonHome.Image = global::EDDiscovery2.Properties.Resources.Homeicon;
+            this.buttonHome.Image = global::EDDiscovery.Properties.Resources.Homeicon;
             this.buttonHome.Location = new System.Drawing.Point(577, 5);
             this.buttonHome.Name = "buttonHome";
             this.buttonHome.Size = new System.Drawing.Size(22, 23);
