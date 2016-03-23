@@ -1,5 +1,14 @@
 Release log: 
 
+2016-03-23  Beta 3.0.0
+
+* First version of Theme support. (Robby)
+* Perform log file parsing using a regular expression Fixes  bug then ED logs  position incorrectly (Myshka)
+* Prevent runtime error on deleting distance in trilateration. (Ian666)
+* Check for actual current system when clicking the Trilaterate button (Ian666)
+* Update to routing (Robby)
+* Reduced memory usage for distances. (Finwen)
+
 2016-03-13 Version 2.7.6
 * Solve a DirectoryInfo exception then path is not valid.
 * Get pushed systems from EDSM in a thread so UI do not need to wait for request..
