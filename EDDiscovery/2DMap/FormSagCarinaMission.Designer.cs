@@ -140,7 +140,7 @@
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Image = global::EDDiscovery2.Properties.Resources.save;
+            this.buttonSave.Image = global::EDDiscovery.Properties.Resources.save;
             this.buttonSave.Location = new System.Drawing.Point(1127, 0);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(30, 28);

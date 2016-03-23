@@ -7,8 +7,8 @@
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EDDiscovery2</RootNamespace>
-    <AssemblyName>EDDiscovery2</AssemblyName>
+    <RootNamespace>EDDiscovery</RootNamespace>
+    <AssemblyName>EDDiscovery</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
