@@ -7,8 +7,8 @@
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EDDiscovery2</RootNamespace>
-    <AssemblyName>EDDiscovery2</AssemblyName>
+    <RootNamespace>EDDiscovery</RootNamespace>
+    <AssemblyName>EDDiscovery</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -29,7 +29,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.7.4.0</ApplicationVersion>
+    <ApplicationVersion>2.7.6.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -181,6 +181,7 @@
     <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
+    <Compile Include="EDDTheme.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EliteDangerous\AppConfig.cs" />
@@ -221,7 +222,8 @@
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
     <Compile Include="PlanetSystems\edmaterializer.cs" />
-    <Compile Include="PlanetSystems\EDPlanet.cs" />
+    <Compile Include="PlanetSystems\EDMaterials.cs" />
+    <Compile Include="PlanetSystems\EDWorld.cs" />
     <Compile Include="PlanetSystems\EDStar.cs" />
     <Compile Include="PlanetSystems\FormProspecting.cs">
       <SubType>Form</SubType>
@@ -272,6 +274,12 @@
     </Compile>
     <Compile Include="Forms\StatsForm.Designer.cs">
       <DependentUpon>StatsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="SystemData.cs" />
     <Compile Include="SystemPosition.cs" />
@@ -374,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SystemViewForm.resx">
       <DependentUpon>SystemViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TravelHistoryControl.resx">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>

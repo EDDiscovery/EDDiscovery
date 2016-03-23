@@ -78,9 +78,9 @@
             this.textBoxScreenshotsDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.textBoxScreenshotsDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(131, 26);
+            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(169, 26);
             this.textBoxScreenshotsDir.Name = "textBoxScreenshotsDir";
-            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(311, 20);
+            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(273, 20);
             this.textBoxScreenshotsDir.TabIndex = 1;
             this.textBoxScreenshotsDir.Leave += new System.EventHandler(this.textBoxScreenshotsDir_Leave);
             // 
@@ -129,15 +129,16 @@
             this.textBoxOutputDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputDir.Location = new System.Drawing.Point(131, 52);
+            this.textBoxOutputDir.Location = new System.Drawing.Point(169, 52);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
-            this.textBoxOutputDir.Size = new System.Drawing.Size(311, 20);
+            this.textBoxOutputDir.Size = new System.Drawing.Size(273, 20);
             this.textBoxOutputDir.TabIndex = 3;
             this.textBoxOutputDir.Leave += new System.EventHandler(this.textBoxOutputDir_Leave);
             // 
             // comboBoxFormat
             // 
             this.comboBoxFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFormat.FormattingEnabled = true;
             this.comboBoxFormat.ItemHeight = 13;
             this.comboBoxFormat.Items.AddRange(new object[] {
@@ -195,7 +196,7 @@
             "DD-MM-YYYY HH-MM-SS Sysname",
             "MM-DD-YYYY HH-MM-SS Sysname",
             "Keep original"});
-            this.comboBoxFileNameFormat.Location = new System.Drawing.Point(131, 101);
+            this.comboBoxFileNameFormat.Location = new System.Drawing.Point(171, 101);
             this.comboBoxFileNameFormat.Name = "comboBoxFileNameFormat";
             this.comboBoxFileNameFormat.Size = new System.Drawing.Size(218, 21);
             this.comboBoxFileNameFormat.TabIndex = 7;
@@ -215,7 +216,7 @@
             this.textBoxFileNameExample.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.textBoxFileNameExample.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxFileNameExample.Location = new System.Drawing.Point(370, 101);
+            this.textBoxFileNameExample.Location = new System.Drawing.Point(436, 101);
             this.textBoxFileNameExample.Name = "textBoxFileNameExample";
             this.textBoxFileNameExample.ReadOnly = true;
             this.textBoxFileNameExample.Size = new System.Drawing.Size(184, 20);

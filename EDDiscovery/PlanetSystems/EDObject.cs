@@ -28,7 +28,6 @@ namespace EDDiscovery2.PlanetSystems
         WaterGiant,
         Belt,
 
-
         Unknown_Star = 100,
         Star_O,
         Star_B,
@@ -70,7 +69,6 @@ namespace EDDiscovery2.PlanetSystems
         BlackHole,
         SuperBlackHole,
     }
-
   
 
 
@@ -158,7 +156,7 @@ public enum AtmosphereEnum
         public int id;
         public string system;
         public string objectName;
-        public string commander;
+        public string updater;
         protected ObjectTypesEnum objectType;
         protected ObjectsType type;
 
@@ -173,6 +171,7 @@ public enum AtmosphereEnum
         public DateTime updated_at;
         public DateTime created_at;
 
+        public string image_url;
 
         static protected List<ObjectsType> objectsTypes = ObjectsType.GetAllTypes();
         static private Dictionary<string, ObjectTypesEnum> objectAliases = ObjectsType.GetAllTypesAlias();
@@ -208,7 +207,7 @@ public enum AtmosphereEnum
 
         public ObjectTypesEnum String2ObjectType(string v)
         {
-            EDPlanet ed = new EDPlanet();
+            EDWorld ed = new EDWorld();
             if (v == null)
                 return ObjectTypesEnum.UnknownObject;
 

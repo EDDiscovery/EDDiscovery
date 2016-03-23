@@ -53,14 +53,15 @@ namespace EDDiscovery2.ImageHandler
             textBoxScreenshotsDir.Text = db.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
 
             checkBoxPreview.Checked = db.GetSettingBool("ImageHandlerPreview", false);
-            checkBoxCropImage.Checked = db.GetSettingBool("ImageHandlerCropImage", false);
-            groupBoxCropSettings.Enabled = checkBoxCropImage.Checked;
+            checkBoxCropImage.Checked = db.GetSettingBool("ImageHandlerCropImage", false);      // fires the checked handler which sets the readonly mode of the controls
             numericUpDownTop.Value = db.GetSettingInt("ImageHandlerCropTop", 0);
             numericUpDownLeft.Value = db.GetSettingInt("ImageHandlerCropLeft", 0);
             numericUpDownWidth.Value = db.GetSettingInt("ImageHandlerCropWidth", 0);
             numericUpDownHeight.Value = db.GetSettingInt("ImageHandlerCropHeight", 0);
 
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
+
+            numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = checkBoxCropImage.Checked;
         }
 
         public void StartWatcher()
@@ -322,7 +323,7 @@ namespace EDDiscovery2.ImageHandler
         {
             try {
                 CheckBox cb = sender as CheckBox;
-                groupBoxCropSettings.Enabled = cb.Checked;
+                numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = cb.Checked;
                 db.PutSettingBool("ImageHandlerCropImage", cb.Checked);
             } catch( Exception ex ) {
                 System.Diagnostics.Trace.WriteLine("Exception checkBoxCropImage_CheckedChanged: " + ex.Message);

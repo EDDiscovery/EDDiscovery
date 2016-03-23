@@ -40,17 +40,8 @@
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddStar = new System.Windows.Forms.ToolStripButton();
             this.panelPlanets = new System.Windows.Forms.Panel();
-            this.label13 = new System.Windows.Forms.Label();
-            this.checkedListBox4 = new System.Windows.Forms.CheckedListBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.checkedListBox3 = new System.Windows.Forms.CheckedListBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.checkedListBox2 = new System.Windows.Forms.CheckedListBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.comboBoxTerrainDifficulty = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxRadius = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -65,6 +56,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panelStar = new System.Windows.Forms.Panel();
+            this.label23 = new System.Windows.Forms.Label();
+            this.textBoxStarLuminosity = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.textBoxStarNote = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.textBoxS_ArrivalPoint = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
@@ -87,10 +82,30 @@
             this.label14 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.buttonLoad = new System.Windows.Forms.Button();
-            this.textBoxStarNote = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.textBoxStarLuminosity = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBoxMass = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBoxSurfaceTemp = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBoxPreasure = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBoxOrbitPeriod = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.textBoxRotationPeriod = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.textBoxSemiMajorAxis = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBoxMetal = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.textBoxRock = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.textBoxIce = new System.Windows.Forms.TextBox();
+            this.comboBoxReserve = new System.Windows.Forms.ComboBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.textBoxNotes = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panelPlanets.SuspendLayout();
@@ -130,7 +145,7 @@
             // 
             this.textBoxName.Location = new System.Drawing.Point(72, 13);
             this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(103, 20);
+            this.textBoxName.Size = new System.Drawing.Size(142, 20);
             this.textBoxName.TabIndex = 0;
             this.textBoxName.TextChanged += new System.EventHandler(this.textBoxName_TextChanged);
             // 
@@ -206,17 +221,32 @@
             // 
             // panelPlanets
             // 
+            this.panelPlanets.Controls.Add(this.textBoxNotes);
+            this.panelPlanets.Controls.Add(this.label33);
+            this.panelPlanets.Controls.Add(this.comboBox1);
+            this.panelPlanets.Controls.Add(this.label32);
+            this.panelPlanets.Controls.Add(this.comboBoxReserve);
+            this.panelPlanets.Controls.Add(this.label31);
+            this.panelPlanets.Controls.Add(this.label30);
+            this.panelPlanets.Controls.Add(this.textBoxIce);
+            this.panelPlanets.Controls.Add(this.label28);
+            this.panelPlanets.Controls.Add(this.textBoxMetal);
+            this.panelPlanets.Controls.Add(this.label29);
+            this.panelPlanets.Controls.Add(this.textBoxRock);
+            this.panelPlanets.Controls.Add(this.label27);
+            this.panelPlanets.Controls.Add(this.textBoxSemiMajorAxis);
+            this.panelPlanets.Controls.Add(this.label24);
+            this.panelPlanets.Controls.Add(this.textBoxRotationPeriod);
             this.panelPlanets.Controls.Add(this.label13);
-            this.panelPlanets.Controls.Add(this.checkedListBox4);
+            this.panelPlanets.Controls.Add(this.textBoxOrbitPeriod);
             this.panelPlanets.Controls.Add(this.label12);
-            this.panelPlanets.Controls.Add(this.checkedListBox3);
+            this.panelPlanets.Controls.Add(this.textBoxPreasure);
             this.panelPlanets.Controls.Add(this.label11);
-            this.panelPlanets.Controls.Add(this.checkedListBox2);
+            this.panelPlanets.Controls.Add(this.textBoxSurfaceTemp);
             this.panelPlanets.Controls.Add(this.label10);
-            this.panelPlanets.Controls.Add(this.checkedListBox1);
+            this.panelPlanets.Controls.Add(this.textBoxMass);
             this.panelPlanets.Controls.Add(this.comboBoxTerrainDifficulty);
             this.panelPlanets.Controls.Add(this.label9);
-            this.panelPlanets.Controls.Add(this.checkBox1);
             this.panelPlanets.Controls.Add(this.label8);
             this.panelPlanets.Controls.Add(this.textBoxRadius);
             this.panelPlanets.Controls.Add(this.label7);
@@ -236,116 +266,12 @@
             this.panelPlanets.Name = "panelPlanets";
             this.panelPlanets.Size = new System.Drawing.Size(923, 149);
             this.panelPlanets.TabIndex = 7;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(791, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(49, 13);
-            this.label13.TabIndex = 28;
-            this.label13.Text = "Very rare";
-            // 
-            // checkedListBox4
-            // 
-            this.checkedListBox4.BackColor = System.Drawing.Color.Salmon;
-            this.checkedListBox4.CheckOnClick = true;
-            this.checkedListBox4.FormattingEnabled = true;
-            this.checkedListBox4.Items.AddRange(new object[] {
-            "Antimony",
-            "Polonium",
-            "Ruthenium",
-            "Technetium",
-            "Tellurium",
-            "Yttrium"});
-            this.checkedListBox4.Location = new System.Drawing.Point(794, 16);
-            this.checkedListBox4.Name = "checkedListBox4";
-            this.checkedListBox4.Size = new System.Drawing.Size(93, 124);
-            this.checkedListBox4.TabIndex = 27;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(692, -1);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(30, 13);
-            this.label12.TabIndex = 26;
-            this.label12.Text = "Rare";
-            // 
-            // checkedListBox3
-            // 
-            this.checkedListBox3.BackColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.checkedListBox3.CheckOnClick = true;
-            this.checkedListBox3.FormattingEnabled = true;
-            this.checkedListBox3.Items.AddRange(new object[] {
-            "Cadmium",
-            "Mercury",
-            "Molybdenum",
-            "Niobium",
-            "Tin",
-            "Tungsten"});
-            this.checkedListBox3.Location = new System.Drawing.Point(695, 15);
-            this.checkedListBox3.Name = "checkedListBox3";
-            this.checkedListBox3.Size = new System.Drawing.Size(93, 124);
-            this.checkedListBox3.TabIndex = 25;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(593, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(48, 13);
-            this.label11.TabIndex = 24;
-            this.label11.Text = "Common";
-            // 
-            // checkedListBox2
-            // 
-            this.checkedListBox2.BackColor = System.Drawing.Color.LightGreen;
-            this.checkedListBox2.CheckOnClick = true;
-            this.checkedListBox2.FormattingEnabled = true;
-            this.checkedListBox2.Items.AddRange(new object[] {
-            "Arsenic",
-            "Chromium",
-            "Germanium",
-            "Manganese",
-            "Selenium",
-            "Vanadium",
-            "Zinc",
-            "Zirconium"});
-            this.checkedListBox2.Location = new System.Drawing.Point(596, 15);
-            this.checkedListBox2.Name = "checkedListBox2";
-            this.checkedListBox2.Size = new System.Drawing.Size(93, 124);
-            this.checkedListBox2.TabIndex = 23;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(494, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(71, 13);
-            this.label10.TabIndex = 22;
-            this.label10.Text = "Very common";
-            // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.BackColor = System.Drawing.Color.LightBlue;
-            this.checkedListBox1.CheckOnClick = true;
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
-            "Carbon",
-            "Iron",
-            "Nickel",
-            "Phosphorus",
-            "Sulphur"});
-            this.checkedListBox1.Location = new System.Drawing.Point(497, 16);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(93, 124);
-            this.checkedListBox1.TabIndex = 21;
+            this.panelPlanets.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlanets_Paint);
             // 
             // comboBoxTerrainDifficulty
             // 
             this.comboBoxTerrainDifficulty.FormattingEnabled = true;
-            this.comboBoxTerrainDifficulty.Location = new System.Drawing.Point(90, 92);
+            this.comboBoxTerrainDifficulty.Location = new System.Drawing.Point(280, 120);
             this.comboBoxTerrainDifficulty.Name = "comboBoxTerrainDifficulty";
             this.comboBoxTerrainDifficulty.Size = new System.Drawing.Size(85, 21);
             this.comboBoxTerrainDifficulty.TabIndex = 8;
@@ -353,26 +279,16 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 95);
+            this.label9.Location = new System.Drawing.Point(191, 124);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(81, 13);
             this.label9.TabIndex = 19;
             this.label9.Text = "Terrain difficulty";
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(400, 41);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(91, 17);
-            this.checkBox1.TabIndex = 5;
-            this.checkBox1.Text = "Terraformable";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(181, 69);
+            this.label8.Location = new System.Drawing.Point(219, 44);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(60, 13);
             this.label8.TabIndex = 17;
@@ -380,15 +296,15 @@
             // 
             // textBoxRadius
             // 
-            this.textBoxRadius.Location = new System.Drawing.Point(242, 66);
+            this.textBoxRadius.Location = new System.Drawing.Point(280, 41);
             this.textBoxRadius.Name = "textBoxRadius";
-            this.textBoxRadius.Size = new System.Drawing.Size(103, 20);
+            this.textBoxRadius.Size = new System.Drawing.Size(66, 20);
             this.textBoxRadius.TabIndex = 7;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 69);
+            this.label7.Location = new System.Drawing.Point(665, 45);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(62, 13);
             this.label7.TabIndex = 15;
@@ -396,15 +312,15 @@
             // 
             // textBoxArrivalPoint
             // 
-            this.textBoxArrivalPoint.Location = new System.Drawing.Point(72, 66);
+            this.textBoxArrivalPoint.Location = new System.Drawing.Point(734, 42);
             this.textBoxArrivalPoint.Name = "textBoxArrivalPoint";
-            this.textBoxArrivalPoint.Size = new System.Drawing.Size(103, 20);
+            this.textBoxArrivalPoint.Size = new System.Drawing.Size(65, 20);
             this.textBoxArrivalPoint.TabIndex = 6;
             // 
             // comboBoxVulcanism
             // 
             this.comboBoxVulcanism.FormattingEnabled = true;
-            this.comboBoxVulcanism.Location = new System.Drawing.Point(242, 39);
+            this.comboBoxVulcanism.Location = new System.Drawing.Point(72, 92);
             this.comboBoxVulcanism.Name = "comboBoxVulcanism";
             this.comboBoxVulcanism.Size = new System.Drawing.Size(107, 21);
             this.comboBoxVulcanism.TabIndex = 4;
@@ -413,7 +329,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(181, 42);
+            this.label6.Location = new System.Drawing.Point(11, 95);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(55, 13);
             this.label6.TabIndex = 12;
@@ -422,7 +338,7 @@
             // comboBoxAtmosphere
             // 
             this.comboBoxAtmosphere.FormattingEnabled = true;
-            this.comboBoxAtmosphere.Location = new System.Drawing.Point(72, 39);
+            this.comboBoxAtmosphere.Location = new System.Drawing.Point(280, 92);
             this.comboBoxAtmosphere.Name = "comboBoxAtmosphere";
             this.comboBoxAtmosphere.Size = new System.Drawing.Size(103, 21);
             this.comboBoxAtmosphere.TabIndex = 3;
@@ -430,7 +346,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 42);
+            this.label5.Location = new System.Drawing.Point(211, 95);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(63, 13);
             this.label5.TabIndex = 10;
@@ -439,7 +355,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(381, 15);
+            this.label4.Location = new System.Drawing.Point(372, 44);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(40, 13);
             this.label4.TabIndex = 9;
@@ -447,16 +363,16 @@
             // 
             // textBoxGravity
             // 
-            this.textBoxGravity.Location = new System.Drawing.Point(422, 12);
+            this.textBoxGravity.Location = new System.Drawing.Point(413, 41);
             this.textBoxGravity.Name = "textBoxGravity";
-            this.textBoxGravity.Size = new System.Drawing.Size(58, 20);
+            this.textBoxGravity.Size = new System.Drawing.Size(65, 20);
             this.textBoxGravity.TabIndex = 2;
             this.textBoxGravity.TextChanged += new System.EventHandler(this.textBoxGravity_TextChanged);
             // 
             // comboBoxType
             // 
             this.comboBoxType.FormattingEnabled = true;
-            this.comboBoxType.Location = new System.Drawing.Point(242, 12);
+            this.comboBoxType.Location = new System.Drawing.Point(280, 12);
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(107, 21);
             this.comboBoxType.TabIndex = 1;
@@ -465,7 +381,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(181, 15);
+            this.label3.Location = new System.Drawing.Point(239, 15);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(31, 13);
             this.label3.TabIndex = 6;
@@ -511,6 +427,39 @@
             this.panelStar.Size = new System.Drawing.Size(923, 149);
             this.panelStar.TabIndex = 9;
             this.panelStar.Paint += new System.Windows.Forms.PaintEventHandler(this.panelStar_Paint);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(10, 104);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(56, 13);
+            this.label23.TabIndex = 39;
+            this.label23.Text = "Luminosity";
+            // 
+            // textBoxStarLuminosity
+            // 
+            this.textBoxStarLuminosity.Location = new System.Drawing.Point(72, 101);
+            this.textBoxStarLuminosity.Name = "textBoxStarLuminosity";
+            this.textBoxStarLuminosity.Size = new System.Drawing.Size(121, 20);
+            this.textBoxStarLuminosity.TabIndex = 38;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(277, 108);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(30, 13);
+            this.label18.TabIndex = 37;
+            this.label18.Text = "Note";
+            // 
+            // textBoxStarNote
+            // 
+            this.textBoxStarNote.Location = new System.Drawing.Point(316, 97);
+            this.textBoxStarNote.Multiline = true;
+            this.textBoxStarNote.Name = "textBoxStarNote";
+            this.textBoxStarNote.Size = new System.Drawing.Size(325, 43);
+            this.textBoxStarNote.TabIndex = 36;
             // 
             // label17
             // 
@@ -684,8 +633,8 @@
             // 
             this.panelBottom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelBottom.Controls.Add(this.panelStar);
             this.panelBottom.Controls.Add(this.panelPlanets);
+            this.panelBottom.Controls.Add(this.panelStar);
             this.panelBottom.Location = new System.Drawing.Point(12, 285);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(923, 149);
@@ -701,38 +650,199 @@
             this.buttonLoad.UseVisualStyleBackColor = true;
             this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
-            // textBoxStarNote
+            // label10
             // 
-            this.textBoxStarNote.Location = new System.Drawing.Point(316, 97);
-            this.textBoxStarNote.Multiline = true;
-            this.textBoxStarNote.Name = "textBoxStarNote";
-            this.textBoxStarNote.Size = new System.Drawing.Size(325, 43);
-            this.textBoxStarNote.TabIndex = 36;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(31, 41);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(32, 13);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "Mass";
             // 
-            // label18
+            // textBoxMass
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(277, 108);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(30, 13);
-            this.label18.TabIndex = 37;
-            this.label18.Text = "Note";
+            this.textBoxMass.Location = new System.Drawing.Point(72, 38);
+            this.textBoxMass.Name = "textBoxMass";
+            this.textBoxMass.Size = new System.Drawing.Size(66, 20);
+            this.textBoxMass.TabIndex = 20;
             // 
-            // label23
+            // label11
             // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(10, 104);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(56, 13);
-            this.label23.TabIndex = 39;
-            this.label23.Text = "Luminosity";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(31, 67);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(34, 13);
+            this.label11.TabIndex = 23;
+            this.label11.Text = "Temp";
             // 
-            // textBoxStarLuminosity
+            // textBoxSurfaceTemp
             // 
-            this.textBoxStarLuminosity.Location = new System.Drawing.Point(72, 101);
-            this.textBoxStarLuminosity.Name = "textBoxStarLuminosity";
-            this.textBoxStarLuminosity.Size = new System.Drawing.Size(121, 20);
-            this.textBoxStarLuminosity.TabIndex = 38;
+            this.textBoxSurfaceTemp.Location = new System.Drawing.Point(72, 64);
+            this.textBoxSurfaceTemp.Name = "textBoxSurfaceTemp";
+            this.textBoxSurfaceTemp.Size = new System.Drawing.Size(66, 20);
+            this.textBoxSurfaceTemp.TabIndex = 22;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(220, 69);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(54, 13);
+            this.label12.TabIndex = 25;
+            this.label12.Text = "Preassure";
+            // 
+            // textBoxPreasure
+            // 
+            this.textBoxPreasure.Location = new System.Drawing.Point(280, 67);
+            this.textBoxPreasure.Name = "textBoxPreasure";
+            this.textBoxPreasure.Size = new System.Drawing.Size(66, 20);
+            this.textBoxPreasure.TabIndex = 24;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(531, 12);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(56, 13);
+            this.label13.TabIndex = 27;
+            this.label13.Text = "Orb period";
+            // 
+            // textBoxOrbitPeriod
+            // 
+            this.textBoxOrbitPeriod.Location = new System.Drawing.Point(591, 9);
+            this.textBoxOrbitPeriod.Name = "textBoxOrbitPeriod";
+            this.textBoxOrbitPeriod.Size = new System.Drawing.Size(65, 20);
+            this.textBoxOrbitPeriod.TabIndex = 26;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(674, 13);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(56, 13);
+            this.label24.TabIndex = 29;
+            this.label24.Text = "Rot period";
+            // 
+            // textBoxRotationPeriod
+            // 
+            this.textBoxRotationPeriod.Location = new System.Drawing.Point(734, 10);
+            this.textBoxRotationPeriod.Name = "textBoxRotationPeriod";
+            this.textBoxRotationPeriod.Size = new System.Drawing.Size(65, 20);
+            this.textBoxRotationPeriod.TabIndex = 28;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(508, 43);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(79, 13);
+            this.label27.TabIndex = 31;
+            this.label27.Text = "Semi major axis";
+            // 
+            // textBoxSemiMajorAxis
+            // 
+            this.textBoxSemiMajorAxis.Location = new System.Drawing.Point(591, 40);
+            this.textBoxSemiMajorAxis.Name = "textBoxSemiMajorAxis";
+            this.textBoxSemiMajorAxis.Size = new System.Drawing.Size(65, 20);
+            this.textBoxSemiMajorAxis.TabIndex = 30;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(683, 71);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(44, 13);
+            this.label28.TabIndex = 35;
+            this.label28.Text = "Metal %";
+            // 
+            // textBoxMetal
+            // 
+            this.textBoxMetal.Location = new System.Drawing.Point(734, 68);
+            this.textBoxMetal.Name = "textBoxMetal";
+            this.textBoxMetal.Size = new System.Drawing.Size(65, 20);
+            this.textBoxMetal.TabIndex = 34;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(543, 70);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(44, 13);
+            this.label29.TabIndex = 33;
+            this.label29.Text = "Rock %";
+            // 
+            // textBoxRock
+            // 
+            this.textBoxRock.Location = new System.Drawing.Point(591, 67);
+            this.textBoxRock.Name = "textBoxRock";
+            this.textBoxRock.Size = new System.Drawing.Size(65, 20);
+            this.textBoxRock.TabIndex = 32;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(816, 72);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(33, 13);
+            this.label30.TabIndex = 37;
+            this.label30.Text = "Ice %";
+            // 
+            // textBoxIce
+            // 
+            this.textBoxIce.Location = new System.Drawing.Point(855, 67);
+            this.textBoxIce.Name = "textBoxIce";
+            this.textBoxIce.Size = new System.Drawing.Size(65, 20);
+            this.textBoxIce.TabIndex = 36;
+            // 
+            // comboBoxReserve
+            // 
+            this.comboBoxReserve.FormattingEnabled = true;
+            this.comboBoxReserve.Location = new System.Drawing.Point(591, 96);
+            this.comboBoxReserve.Name = "comboBoxReserve";
+            this.comboBoxReserve.Size = new System.Drawing.Size(107, 21);
+            this.comboBoxReserve.TabIndex = 38;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(530, 99);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(47, 13);
+            this.label31.TabIndex = 39;
+            this.label31.Text = "Reserve";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(72, 121);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(107, 21);
+            this.comboBox1.TabIndex = 40;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(10, 123);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(52, 13);
+            this.label32.TabIndex = 41;
+            this.label32.Text = "Terraform";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(431, 127);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(35, 13);
+            this.label33.TabIndex = 42;
+            this.label33.Text = "Notes";
+            // 
+            // textBoxNotes
+            // 
+            this.textBoxNotes.Location = new System.Drawing.Point(475, 123);
+            this.textBoxNotes.Name = "textBoxNotes";
+            this.textBoxNotes.Size = new System.Drawing.Size(445, 20);
+            this.textBoxNotes.TabIndex = 43;
             // 
             // PlanetsForm
             // 
@@ -747,7 +857,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxSystemName);
             this.Name = "PlanetsForm";
-            this.Text = "PlanetsForm";
+            this.Text = "Star and Worlds";
             this.Load += new System.EventHandler(this.PlanetsForm_Load);
             this.Shown += new System.EventHandler(this.PlanetsForm_Shown);
             this.panel1.ResumeLayout(false);
@@ -785,21 +895,12 @@
         private System.Windows.Forms.TextBox textBoxGravity;
         private System.Windows.Forms.ComboBox comboBoxTerrainDifficulty;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBoxRadius;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBoxArrivalPoint;
         private System.Windows.Forms.ComboBox comboBoxVulcanism;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.CheckedListBox checkedListBox4;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.CheckedListBox checkedListBox3;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.CheckedListBox checkedListBox2;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ToolStripButton toolStripButtonAddStar;
         private System.Windows.Forms.Panel panelStar;
@@ -828,5 +929,29 @@
         private System.Windows.Forms.TextBox textBoxStarNote;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.TextBox textBoxStarLuminosity;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBoxPreasure;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox textBoxSurfaceTemp;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox textBoxMass;
+        private System.Windows.Forms.TextBox textBoxNotes;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.ComboBox comboBoxReserve;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TextBox textBoxIce;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox textBoxMetal;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.TextBox textBoxRock;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox textBoxSemiMajorAxis;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox textBoxRotationPeriod;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBoxOrbitPeriod;
     }
 }
