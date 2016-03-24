@@ -77,7 +77,7 @@
             this.panel_theme10 = new System.Windows.Forms.Panel();
             this.panel_theme17 = new System.Windows.Forms.Panel();
             this.panel_theme16 = new System.Windows.Forms.Panel();
-            this.panel_theme15 = new System.Windows.Forms.Panel();
+            this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
             this.panel_theme14 = new System.Windows.Forms.Panel();
             this.panel_theme13 = new System.Windows.Forms.Panel();
             this.panel_theme12 = new System.Windows.Forms.Panel();
@@ -93,6 +93,7 @@
             this.checkBox_theme_windowframe = new System.Windows.Forms.CheckBox();
             this.comboBoxTheme = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.label17 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
@@ -282,6 +283,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label17);
             this.groupBox2.Controls.Add(this.textBoxDefaultZoom);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.radioButtonHistorySelection);
@@ -289,6 +291,7 @@
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.textBoxHomeSystem);
+            this.groupBox2.Controls.Add(this.panel_defaultmapcolor);
             this.groupBox2.Location = new System.Drawing.Point(440, 280);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(379, 100);
@@ -386,7 +389,6 @@
             this.groupBox5.Controls.Add(this.panel_theme10);
             this.groupBox5.Controls.Add(this.panel_theme17);
             this.groupBox5.Controls.Add(this.panel_theme16);
-            this.groupBox5.Controls.Add(this.panel_theme15);
             this.groupBox5.Controls.Add(this.panel_theme14);
             this.groupBox5.Controls.Add(this.panel_theme13);
             this.groupBox5.Controls.Add(this.panel_theme12);
@@ -624,16 +626,16 @@
             this.panel_theme16.Tag = "";
             this.panel_theme16.Click += new System.EventHandler(this.panel_theme_Click);
             // 
-            // panel_theme15
+            // panel_defaultmapcolor
             // 
-            this.panel_theme15.AccessibleDescription = "";
-            this.panel_theme15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme15.Location = new System.Drawing.Point(633, 117);
-            this.panel_theme15.Name = "panel_theme15";
-            this.panel_theme15.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme15.TabIndex = 5;
-            this.panel_theme15.Tag = "";
-            this.panel_theme15.Click += new System.EventHandler(this.panel_theme_Click);
+            this.panel_defaultmapcolor.AccessibleDescription = "";
+            this.panel_defaultmapcolor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_defaultmapcolor.Location = new System.Drawing.Point(335, 70);
+            this.panel_defaultmapcolor.Name = "panel_defaultmapcolor";
+            this.panel_defaultmapcolor.Size = new System.Drawing.Size(28, 20);
+            this.panel_defaultmapcolor.TabIndex = 5;
+            this.panel_defaultmapcolor.Tag = "";
+            this.panel_defaultmapcolor.Click += new System.EventHandler(this.panel_defaultmapcolor_Click);
             // 
             // panel_theme14
             // 
@@ -785,6 +787,15 @@
             this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
             this.comboBoxTheme.TabIndex = 0;
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(237, 73);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(92, 13);
+            this.label17.TabIndex = 7;
+            this.label17.Text = "Default Map Color";
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -857,7 +868,7 @@
         private System.Windows.Forms.Panel panel_theme3;
         private System.Windows.Forms.Panel panel_theme6;
         private System.Windows.Forms.Panel panel_theme10;
-        private System.Windows.Forms.Panel panel_theme15;
+        private System.Windows.Forms.Panel panel_defaultmapcolor;
         private System.Windows.Forms.Panel panel_theme14;
         private System.Windows.Forms.Panel panel_theme13;
         private System.Windows.Forms.Panel panel_theme12;
@@ -878,5 +889,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
+        private System.Windows.Forms.Label label17;
     }
 }
