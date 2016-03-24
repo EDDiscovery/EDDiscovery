@@ -25,6 +25,7 @@ namespace EDDiscovery
     public partial class TravelHistoryControl : UserControl
     {
         private static EDDiscoveryForm _discoveryForm;
+        public int defaultMapColour;
         public EDSMSync sync;
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
@@ -53,6 +54,7 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             sync = new EDSMSync(_discoveryForm);
             var db = new SQLiteDBClass();
+            defaultMapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
             EDSMSyncTo = db.GetSettingBool("EDSMSyncTo", true);
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
@@ -249,7 +251,7 @@ namespace EDDiscovery
 
         private void GetVisitedSystems(int commander)
         {                                                       // for backwards compatibility, don't store RGB value.
-            visitedSystems = netlog.ParseFiles(richTextBox_History, _discoveryForm.theme.MapBlockColor.ToArgb() & 0xFFFFFF, commander);
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour, commander);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
@@ -330,7 +332,7 @@ namespace EDDiscovery
                 dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
                 cell = dataGridViewTravel.Rows[rownr].Cells[4];
-                cell.Style.ForeColor = (item.vs == null) ? Color.FromArgb(255, _discoveryForm.theme.MapBlockColor) : Color.FromArgb(item.vs.MapColour);
+                cell.Style.ForeColor = (item.vs == null) ? Color.FromArgb(defaultMapColour) : Color.FromArgb(item.vs.MapColour);
         }
 
 
