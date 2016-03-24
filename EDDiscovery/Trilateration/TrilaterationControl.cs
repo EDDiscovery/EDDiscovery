@@ -916,6 +916,10 @@ namespace EDDiscovery
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
 			Set(CurrentSystem);
+
+            //for (int i = 0; i < 100; i++)     // use this to test the docking is right
+            //    LogText("Hello " + i.ToString() + Environment.NewLine);
+
         }
 
         private void toolStripButtonMap_Click(object sender, EventArgs e)
