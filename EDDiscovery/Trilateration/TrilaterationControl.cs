@@ -43,6 +43,7 @@ namespace EDDiscovery
             var db = new SQLiteDBClass();
             edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
             edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+            SetTriStatus("Press Start New");
         }
         
         public void Set(ISystem system)
@@ -62,11 +63,11 @@ namespace EDDiscovery
                 textBoxCoordinateY.Text = TargetSystem.y.ToString();
                 textBoxCoordinateZ.Text = TargetSystem.z.ToString();
 
-                SetStatus("Has Coordinates!");
+                SetTriStatusSuccess("Has Coordinates!");
             }
             else
             {
-                SetStatus("Enter Distances");
+                SetTriStatus("Enter Distances");
             }
 
             UnfreezeTrilaterationUI();
@@ -332,7 +333,7 @@ namespace EDDiscovery
             Invoke((MethodInvoker) delegate
             {
                 LogText("Starting trilateration..." + Environment.NewLine);
-                SetStatus("Calculating…");
+                SetTriStatus("Calculating…");
             });
 
             var trilateration = new Trilateration {Logger = Console.WriteLine};
@@ -374,7 +375,7 @@ namespace EDDiscovery
 
                     LogText("Trilateration successful (" + spentTimeString + "), exact coordinates found." + Environment.NewLine);
                     LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + " Sol: " + SystemData.Distance(s1, s3).ToString("0.0") +  " Sag A* " + SystemData.Distance(s2, s3).ToString("0.0") + Environment.NewLine);
-                    SetStatus("Success, coordinates found!");
+                    SetTriStatus("Success, coordinates found!");
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NotExact || trilaterationResult.State == Trilateration.ResultState.MultipleSolutions)
             {
@@ -383,7 +384,7 @@ namespace EDDiscovery
                     LogText("Trilateration not successful (" + spentTimeString + "), only approximate coordinates found." + Environment.NewLine);
                     //LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
                     LogText("Enter more distances." + Environment.NewLine);
-                    SetStatus("Enter More Distances");
+                    SetTriStatus("Enter More Distances");
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NeedMoreDistances)
             {
@@ -391,7 +392,7 @@ namespace EDDiscovery
                 {
                     LogText("Trilateration not successful (" + spentTimeString + "), coordinates not found." + Environment.NewLine);
                     LogText("Enter more distances." + Environment.NewLine);
-                    SetStatus("Enter More Distances");
+                    SetTriStatus("Enter More Distances");
                     ClearCalculatedDataGridViewDistancesRows();
                 });
             }
@@ -850,14 +851,30 @@ namespace EDDiscovery
             RunTrilateration();
         }
 
-        private void SetStatus(string st)
+        private void SetTriStatus(string st)
         {
-            labelStatus.Text = st;
+            textBox_status.ForeColor = _discoveryForm.theme.TextBlockColor;
+            textBox_status.BackColor = _discoveryForm.theme.TextBackColor;
+            textBox_status.Text = st;
+        }
+
+        private void SetTriStatusSuccess(string st)
+        {
+            textBox_status.ForeColor = _discoveryForm.theme.TextBackColor;
+            textBox_status.BackColor = _discoveryForm.theme.TextBlockSuccessColor;
+            textBox_status.Text = st;
+        }
+
+        private void SetTriStatusError(string st)
+        {
+            textBox_status.ForeColor = _discoveryForm.theme.TextBackColor;
+            textBox_status.BackColor = _discoveryForm.theme.TextBlockHighlightColor;
+            textBox_status.Text = st;
         }
 
         public void LogText(string text)
         {
-            LogTextColor(text, _discoveryForm.theme.TextBlock);
+            LogTextColor(text, _discoveryForm.theme.TextBlockColor);
         }
         public void LogTextHighlight(string text)
         {
@@ -899,6 +916,10 @@ namespace EDDiscovery
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
 			Set(CurrentSystem);
+
+            //for (int i = 0; i < 100; i++)     // use this to test the docking is right
+            //    LogText("Hello " + i.ToString() + Environment.NewLine);
+
         }
 
         private void toolStripButtonMap_Click(object sender, EventArgs e)

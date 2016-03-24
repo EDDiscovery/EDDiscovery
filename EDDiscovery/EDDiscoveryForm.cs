@@ -80,7 +80,7 @@ namespace EDDiscovery
             }
             _edsmSync = new EDSMSync(this);
 
-
+            theme.LoadThemes();                                         // default themes and ones on disk loaded
             theme.RestoreSettings();                                    // theme, remember your saved settings
 
             trilaterationControl.InitControl(this);
@@ -218,7 +218,7 @@ namespace EDDiscovery
                 CheckForNewInstaller();
 
                 LogLine("Total number of systems " + SystemData.SystemList.Count().ToString() + Environment.NewLine);
-                LogLine("Loading completed!" + Environment.NewLine);
+                LogLineSuccess("Loading completed!" + Environment.NewLine);
 
                 panel_close.Enabled = true;                            // now we can safely close
                 tabControl1.Enabled = true;
@@ -509,7 +509,7 @@ namespace EDDiscovery
 
                     if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
                     {
-                        LogTextHighlight("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine);
+                        LogLineHighlight("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine);
                     }
 
                 }
@@ -555,7 +555,7 @@ namespace EDDiscovery
                         updatedb = true;
                     }
                     else
-                        LogTextHighlight("Failed." + Environment.NewLine);
+                        LogLineHighlight("Failed." + Environment.NewLine);
 
 
                     eddb.GetCommodities();
@@ -577,7 +577,7 @@ namespace EDDiscovery
                         updatedb = true;
                     }
                     else
-                        LogTextHighlight("Failed." + Environment.NewLine);
+                        LogLineHighlight("Failed." + Environment.NewLine);
 
                 }
 
@@ -631,21 +631,6 @@ namespace EDDiscovery
             }
         }
 
-        public void LogTextHighlight(string text)
-        {
-            try
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    TravelHistoryControl.LogTextHighlight(text);
-
-                });
-            }
-            catch
-            {
-            }
-        }
-
         public void LogLine(string text)
         {
             try
@@ -667,6 +652,21 @@ namespace EDDiscovery
                 Invoke((MethodInvoker)delegate
                 {
                     TravelHistoryControl.LogTextHighlight(text + Environment.NewLine);
+
+                });
+            }
+            catch
+            {
+            }
+        }
+
+        public void LogLineSuccess(string text)
+        {
+            try
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogTextSuccess(text + Environment.NewLine);
 
                 });
             }

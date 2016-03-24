@@ -29,11 +29,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.richTextBox_History = new System.Windows.Forms.RichTextBox();
             this.button_RefreshHistory = new System.Windows.Forms.Button();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,11 +96,6 @@
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
             this.mapColorDialog = new System.Windows.Forms.ColorDialog();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
             this.historyContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -151,6 +151,44 @@
             this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
             this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.Width = 150;
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.ReadOnly = true;
+            this.ColumnSystem.Width = 200;
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.Name = "ColumnDistance";
+            this.ColumnDistance.ReadOnly = true;
+            this.ColumnDistance.Width = 70;
+            // 
+            // ColumnNote
+            // 
+            this.ColumnNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnNote.HeaderText = "Note";
+            this.ColumnNote.Name = "ColumnNote";
+            this.ColumnNote.ReadOnly = true;
+            // 
+            // mapColour
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle3;
+            this.mapColour.HeaderText = "Map";
+            this.mapColour.Name = "mapColour";
+            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
+            this.mapColour.Width = 30;
             // 
             // historyContextMenu
             // 
@@ -240,10 +278,11 @@
             // 
             // textBoxSystem
             // 
-            this.textBoxSystem.Location = new System.Drawing.Point(50, 6);
+            this.textBoxSystem.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxSystem.Location = new System.Drawing.Point(50, 9);
             this.textBoxSystem.Name = "textBoxSystem";
             this.textBoxSystem.ReadOnly = true;
-            this.textBoxSystem.Size = new System.Drawing.Size(203, 20);
+            this.textBoxSystem.Size = new System.Drawing.Size(203, 13);
             this.textBoxSystem.TabIndex = 15;
             this.textBoxSystem.TabStop = false;
             // 
@@ -296,10 +335,11 @@
             // 
             // textBoxSolDist
             // 
-            this.textBoxSolDist.Location = new System.Drawing.Point(50, 81);
+            this.textBoxSolDist.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxSolDist.Location = new System.Drawing.Point(50, 84);
             this.textBoxSolDist.Name = "textBoxSolDist";
             this.textBoxSolDist.ReadOnly = true;
-            this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
+            this.textBoxSolDist.Size = new System.Drawing.Size(67, 13);
             this.textBoxSolDist.TabIndex = 42;
             this.textBoxSolDist.TabStop = false;
             // 
@@ -345,19 +385,21 @@
             // 
             // textBoxState
             // 
-            this.textBoxState.Location = new System.Drawing.Point(182, 78);
+            this.textBoxState.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxState.Location = new System.Drawing.Point(182, 81);
             this.textBoxState.Name = "textBoxState";
             this.textBoxState.ReadOnly = true;
-            this.textBoxState.Size = new System.Drawing.Size(71, 20);
+            this.textBoxState.Size = new System.Drawing.Size(71, 13);
             this.textBoxState.TabIndex = 37;
             this.textBoxState.TabStop = false;
             // 
             // textBoxEconomy
             // 
-            this.textBoxEconomy.Location = new System.Drawing.Point(182, 61);
+            this.textBoxEconomy.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxEconomy.Location = new System.Drawing.Point(182, 64);
             this.textBoxEconomy.Name = "textBoxEconomy";
             this.textBoxEconomy.ReadOnly = true;
-            this.textBoxEconomy.Size = new System.Drawing.Size(71, 20);
+            this.textBoxEconomy.Size = new System.Drawing.Size(71, 13);
             this.textBoxEconomy.TabIndex = 33;
             this.textBoxEconomy.TabStop = false;
             // 
@@ -383,19 +425,21 @@
             // 
             // textBoxGovernment
             // 
-            this.textBoxGovernment.Location = new System.Drawing.Point(182, 97);
+            this.textBoxGovernment.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxGovernment.Location = new System.Drawing.Point(182, 100);
             this.textBoxGovernment.Name = "textBoxGovernment";
             this.textBoxGovernment.ReadOnly = true;
-            this.textBoxGovernment.Size = new System.Drawing.Size(71, 20);
+            this.textBoxGovernment.Size = new System.Drawing.Size(71, 13);
             this.textBoxGovernment.TabIndex = 35;
             this.textBoxGovernment.TabStop = false;
             // 
             // textBoxAllegiance
             // 
-            this.textBoxAllegiance.Location = new System.Drawing.Point(182, 43);
+            this.textBoxAllegiance.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxAllegiance.Location = new System.Drawing.Point(182, 46);
             this.textBoxAllegiance.Name = "textBoxAllegiance";
             this.textBoxAllegiance.ReadOnly = true;
-            this.textBoxAllegiance.Size = new System.Drawing.Size(71, 20);
+            this.textBoxAllegiance.Size = new System.Drawing.Size(71, 13);
             this.textBoxAllegiance.TabIndex = 31;
             this.textBoxAllegiance.TabStop = false;
             // 
@@ -431,10 +475,11 @@
             // 
             // textBoxVisits
             // 
-            this.textBoxVisits.Location = new System.Drawing.Point(182, 25);
+            this.textBoxVisits.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxVisits.Location = new System.Drawing.Point(182, 28);
             this.textBoxVisits.Name = "textBoxVisits";
             this.textBoxVisits.ReadOnly = true;
-            this.textBoxVisits.Size = new System.Drawing.Size(71, 20);
+            this.textBoxVisits.Size = new System.Drawing.Size(71, 13);
             this.textBoxVisits.TabIndex = 29;
             this.textBoxVisits.TabStop = false;
             // 
@@ -522,10 +567,11 @@
             // 
             // textBoxZ
             // 
-            this.textBoxZ.Location = new System.Drawing.Point(50, 61);
+            this.textBoxZ.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxZ.Location = new System.Drawing.Point(50, 64);
             this.textBoxZ.Name = "textBoxZ";
             this.textBoxZ.ReadOnly = true;
-            this.textBoxZ.Size = new System.Drawing.Size(67, 20);
+            this.textBoxZ.Size = new System.Drawing.Size(67, 13);
             this.textBoxZ.TabIndex = 19;
             this.textBoxZ.TabStop = false;
             // 
@@ -552,19 +598,21 @@
             // 
             // textBoxY
             // 
-            this.textBoxY.Location = new System.Drawing.Point(50, 43);
+            this.textBoxY.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxY.Location = new System.Drawing.Point(50, 46);
             this.textBoxY.Name = "textBoxY";
             this.textBoxY.ReadOnly = true;
-            this.textBoxY.Size = new System.Drawing.Size(67, 20);
+            this.textBoxY.Size = new System.Drawing.Size(67, 13);
             this.textBoxY.TabIndex = 17;
             this.textBoxY.TabStop = false;
             // 
             // textBoxX
             // 
-            this.textBoxX.Location = new System.Drawing.Point(50, 25);
+            this.textBoxX.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxX.Location = new System.Drawing.Point(50, 28);
             this.textBoxX.Name = "textBoxX";
             this.textBoxX.ReadOnly = true;
-            this.textBoxX.Size = new System.Drawing.Size(67, 20);
+            this.textBoxX.Size = new System.Drawing.Size(67, 13);
             this.textBoxX.TabIndex = 17;
             this.textBoxX.TabStop = false;
             // 
@@ -741,44 +789,6 @@
             // mapColorDialog
             // 
             this.mapColorDialog.SolidColorOnly = true;
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 150;
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.Name = "ColumnSystem";
-            this.ColumnSystem.ReadOnly = true;
-            this.ColumnSystem.Width = 200;
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.Name = "ColumnDistance";
-            this.ColumnDistance.ReadOnly = true;
-            this.ColumnDistance.Width = 70;
-            // 
-            // ColumnNote
-            // 
-            this.ColumnNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnNote.HeaderText = "Note";
-            this.ColumnNote.Name = "ColumnNote";
-            this.ColumnNote.ReadOnly = true;
-            // 
-            // mapColour
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle4;
-            this.mapColour.HeaderText = "Map";
-            this.mapColour.Name = "mapColour";
-            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
-            this.mapColour.Width = 30;
             // 
             // TravelHistoryControl
             // 
