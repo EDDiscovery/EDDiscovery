@@ -375,7 +375,7 @@ namespace EDDiscovery
 
                     LogText("Trilateration successful (" + spentTimeString + "), exact coordinates found." + Environment.NewLine);
                     LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + " Sol: " + SystemData.Distance(s1, s3).ToString("0.0") +  " Sag A* " + SystemData.Distance(s2, s3).ToString("0.0") + Environment.NewLine);
-                    SetTriStatus("Success, coordinates found!");
+                    SetTriStatusSuccess("Success, coordinates found!");
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NotExact || trilaterationResult.State == Trilateration.ResultState.MultipleSolutions)
             {
