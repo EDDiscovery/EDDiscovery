@@ -46,7 +46,6 @@
             this.textBoxCoordinateY = new System.Windows.Forms.TextBox();
             this.labelCoordinateZ = new System.Windows.Forms.Label();
             this.textBoxCoordinateZ = new System.Windows.Forms.TextBox();
-            this.labelStatus = new System.Windows.Forms.Label();
             this.panelImplementation = new System.Windows.Forms.Panel();
             this.labelAlgorithm = new System.Windows.Forms.Label();
             this.radioButtonAlgorithmJs = new System.Windows.Forms.RadioButton();
@@ -68,6 +67,7 @@
             this.toolStripButtonRemoveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
             this.panel_controls = new System.Windows.Forms.Panel();
+            this.textBox_status = new System.Windows.Forms.TextBox();
             this.labelstpos = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.panelImplementation.SuspendLayout();
@@ -92,7 +92,7 @@
             this.dataGridViewDistances.Dock = System.Windows.Forms.DockStyle.Left;
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
-            this.dataGridViewDistances.Size = new System.Drawing.Size(538, 354);
+            this.dataGridViewDistances.Size = new System.Drawing.Size(538, 247);
             this.dataGridViewDistances.TabIndex = 0;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
@@ -135,16 +135,17 @@
             // 
             // textBoxSystemName
             // 
-            this.textBoxSystemName.Location = new System.Drawing.Point(1, 41);
+            this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxSystemName.Location = new System.Drawing.Point(72, 25);
             this.textBoxSystemName.Name = "textBoxSystemName";
             this.textBoxSystemName.ReadOnly = true;
-            this.textBoxSystemName.Size = new System.Drawing.Size(178, 20);
+            this.textBoxSystemName.Size = new System.Drawing.Size(178, 13);
             this.textBoxSystemName.TabIndex = 1;
             // 
             // labelTargetSystem
             // 
             this.labelTargetSystem.AutoSize = true;
-            this.labelTargetSystem.Location = new System.Drawing.Point(1, 25);
+            this.labelTargetSystem.Location = new System.Drawing.Point(3, 25);
             this.labelTargetSystem.Name = "labelTargetSystem";
             this.labelTargetSystem.Size = new System.Drawing.Size(44, 13);
             this.labelTargetSystem.TabIndex = 2;
@@ -153,7 +154,7 @@
             // labelCoordinates
             // 
             this.labelCoordinates.AutoSize = true;
-            this.labelCoordinates.Location = new System.Drawing.Point(199, 25);
+            this.labelCoordinates.Location = new System.Drawing.Point(3, 47);
             this.labelCoordinates.Name = "labelCoordinates";
             this.labelCoordinates.Size = new System.Drawing.Size(122, 13);
             this.labelCoordinates.TabIndex = 5;
@@ -161,10 +162,11 @@
             // 
             // textBoxCoordinateX
             // 
-            this.textBoxCoordinateX.Location = new System.Drawing.Point(200, 41);
+            this.textBoxCoordinateX.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 46);
             this.textBoxCoordinateX.Name = "textBoxCoordinateX";
             this.textBoxCoordinateX.ReadOnly = true;
-            this.textBoxCoordinateX.Size = new System.Drawing.Size(50, 20);
+            this.textBoxCoordinateX.Size = new System.Drawing.Size(50, 13);
             this.textBoxCoordinateX.TabIndex = 6;
             this.textBoxCoordinateX.Text = "?";
             this.textBoxCoordinateX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -172,7 +174,7 @@
             // labelCoordinateX
             // 
             this.labelCoordinateX.AutoSize = true;
-            this.labelCoordinateX.Location = new System.Drawing.Point(185, 44);
+            this.labelCoordinateX.Location = new System.Drawing.Point(150, 46);
             this.labelCoordinateX.Name = "labelCoordinateX";
             this.labelCoordinateX.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateX.TabIndex = 7;
@@ -181,7 +183,7 @@
             // labelCoordinateY
             // 
             this.labelCoordinateY.AutoSize = true;
-            this.labelCoordinateY.Location = new System.Drawing.Point(252, 44);
+            this.labelCoordinateY.Location = new System.Drawing.Point(217, 46);
             this.labelCoordinateY.Name = "labelCoordinateY";
             this.labelCoordinateY.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateY.TabIndex = 9;
@@ -189,10 +191,11 @@
             // 
             // textBoxCoordinateY
             // 
-            this.textBoxCoordinateY.Location = new System.Drawing.Point(269, 41);
+            this.textBoxCoordinateY.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxCoordinateY.Location = new System.Drawing.Point(234, 46);
             this.textBoxCoordinateY.Name = "textBoxCoordinateY";
             this.textBoxCoordinateY.ReadOnly = true;
-            this.textBoxCoordinateY.Size = new System.Drawing.Size(50, 20);
+            this.textBoxCoordinateY.Size = new System.Drawing.Size(50, 13);
             this.textBoxCoordinateY.TabIndex = 8;
             this.textBoxCoordinateY.Text = "?";
             this.textBoxCoordinateY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -200,7 +203,7 @@
             // labelCoordinateZ
             // 
             this.labelCoordinateZ.AutoSize = true;
-            this.labelCoordinateZ.Location = new System.Drawing.Point(319, 44);
+            this.labelCoordinateZ.Location = new System.Drawing.Point(284, 46);
             this.labelCoordinateZ.Name = "labelCoordinateZ";
             this.labelCoordinateZ.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateZ.TabIndex = 11;
@@ -208,22 +211,14 @@
             // 
             // textBoxCoordinateZ
             // 
-            this.textBoxCoordinateZ.Location = new System.Drawing.Point(336, 41);
+            this.textBoxCoordinateZ.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxCoordinateZ.Location = new System.Drawing.Point(301, 46);
             this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
             this.textBoxCoordinateZ.ReadOnly = true;
-            this.textBoxCoordinateZ.Size = new System.Drawing.Size(50, 20);
+            this.textBoxCoordinateZ.Size = new System.Drawing.Size(50, 13);
             this.textBoxCoordinateZ.TabIndex = 10;
             this.textBoxCoordinateZ.Text = "?";
             this.textBoxCoordinateZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // labelStatus
-            // 
-            this.labelStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelStatus.Location = new System.Drawing.Point(122, 3);
-            this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(160, 19);
-            this.labelStatus.TabIndex = 12;
-            this.labelStatus.Text = "Awaiting Start";
             // 
             // panelImplementation
             // 
@@ -273,9 +268,7 @@
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 99);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -289,8 +282,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridViewClosestSystems);
             this.splitContainer1.Panel2.Controls.Add(this.richTextBox_History);
-            this.splitContainer1.Size = new System.Drawing.Size(924, 530);
-            this.splitContainer1.SplitterDistance = 354;
+            this.splitContainer1.Size = new System.Drawing.Size(924, 582);
+            this.splitContainer1.SplitterDistance = 247;
             this.splitContainer1.TabIndex = 20;
             // 
             // dataGridViewSuggestedSystems
@@ -316,7 +309,7 @@
             this.dataGridViewSuggestedSystems.Name = "dataGridViewSuggestedSystems";
             this.dataGridViewSuggestedSystems.ReadOnly = true;
             this.dataGridViewSuggestedSystems.RowHeadersVisible = false;
-            this.dataGridViewSuggestedSystems.Size = new System.Drawing.Size(386, 354);
+            this.dataGridViewSuggestedSystems.Size = new System.Drawing.Size(386, 247);
             this.dataGridViewSuggestedSystems.TabIndex = 18;
             this.dataGridViewSuggestedSystems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewSuggestedSystems_CellClick);
             // 
@@ -352,7 +345,7 @@
             this.dataGridViewClosestSystems.Name = "dataGridViewClosestSystems";
             this.dataGridViewClosestSystems.ReadOnly = true;
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(386, 172);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(386, 331);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
@@ -378,7 +371,7 @@
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Left;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
-            this.richTextBox_History.Size = new System.Drawing.Size(538, 172);
+            this.richTextBox_History.Size = new System.Drawing.Size(538, 331);
             this.richTextBox_History.TabIndex = 6;
             this.richTextBox_History.Text = "";
             // 
@@ -466,6 +459,7 @@
             // 
             // panel_controls
             // 
+            this.panel_controls.Controls.Add(this.textBox_status);
             this.panel_controls.Controls.Add(this.labelstpos);
             this.panel_controls.Controls.Add(this.labelSuggestedSystems);
             this.panel_controls.Controls.Add(this.textBoxSystemName);
@@ -477,13 +471,21 @@
             this.panel_controls.Controls.Add(this.labelCoordinateY);
             this.panel_controls.Controls.Add(this.textBoxCoordinateZ);
             this.panel_controls.Controls.Add(this.labelCoordinateZ);
-            this.panel_controls.Controls.Add(this.labelStatus);
             this.panel_controls.Controls.Add(this.panelImplementation);
             this.panel_controls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_controls.Location = new System.Drawing.Point(0, 25);
             this.panel_controls.Name = "panel_controls";
             this.panel_controls.Size = new System.Drawing.Size(924, 74);
             this.panel_controls.TabIndex = 24;
+            // 
+            // textBox_status
+            // 
+            this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox_status.Location = new System.Drawing.Point(102, 4);
+            this.textBox_status.Name = "textBox_status";
+            this.textBox_status.ReadOnly = true;
+            this.textBox_status.Size = new System.Drawing.Size(167, 13);
+            this.textBox_status.TabIndex = 21;
             // 
             // labelstpos
             // 
@@ -531,7 +533,6 @@
         private System.Windows.Forms.TextBox textBoxCoordinateY;
         private System.Windows.Forms.Label labelCoordinateZ;
         private System.Windows.Forms.TextBox textBoxCoordinateZ;
-        private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.Panel panelImplementation;
         private System.Windows.Forms.RadioButton radioButtonAlgorithmJs;
         private System.Windows.Forms.RadioButton radioButtonAlgorithmCsharp;
@@ -559,5 +560,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
+        private System.Windows.Forms.TextBox textBox_status;
     }
 }
