@@ -22,7 +22,7 @@ namespace EDDiscovery2.EDSM
         bool Exit = false;
         bool _syncTo = false;
         bool _syncFrom = false;
-        Color _defmapcolour = Color.Pink;
+        int _defmapcolour = 0;
         private EDDiscoveryForm mainForm;
         public event EDSMNewSystemEventHandler OnNewEDSMTravelLog;
 
@@ -31,7 +31,7 @@ namespace EDDiscovery2.EDSM
             mainForm = frm;
         }
 
-        public bool StartSync(bool syncto, bool syncfrom,Color defmapcolour)
+        public bool StartSync(bool syncto, bool syncfrom, int defmapcolour)
         {
             if (running) // Only start once.
                 return false;
@@ -166,7 +166,7 @@ namespace EDDiscovery2.EDSM
 
                             vs.Name = system.Name;
                             vs.Time = system.time;
-                            vs.MapColour = _defmapcolour.ToArgb() & 0xffffff;
+                            vs.MapColour = _defmapcolour;
                             vs.EDSM_sync = true;
 
 

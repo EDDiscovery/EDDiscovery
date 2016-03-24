@@ -33,7 +33,7 @@ namespace EDDiscovery2
                 button_text,                            // >= means its a text default
                 grid_bordertext,
                 grid_text,
-                travelgrid_nonvisted, travelgrid_visited, travelgrid_mapblock,
+                travelgrid_nonvisted, travelgrid_visited,
                 textbox_fore, textbox_highlight,
                 checkbox,
                 menu_fore,
@@ -51,7 +51,7 @@ namespace EDDiscovery2
             public Settings(String n, Color f,
                                         Color bb, Color bf,
                                         Color gb, Color gbt, Color gbck, Color gt,
-                                        Color tn, Color tv, Color tm,
+                                        Color tn, Color tv, 
                                         Color tbb, Color tbf, Color tbh,
                                         Color c,
                                         Color mb, Color mf,
@@ -64,7 +64,7 @@ namespace EDDiscovery2
                 colors.Add(CI.form, f);
                 colors.Add(CI.button_back, bb); colors.Add(CI.button_text, bf);
                 colors.Add(CI.grid_border, gb); colors.Add(CI.grid_bordertext, gbt); colors.Add(CI.grid_background, gbck); colors.Add(CI.grid_text, gt);
-                colors.Add(CI.travelgrid_nonvisted, tn); colors.Add(CI.travelgrid_visited, tv); colors.Add(CI.travelgrid_mapblock, tm);
+                colors.Add(CI.travelgrid_nonvisted, tn); colors.Add(CI.travelgrid_visited, tv);
                 colors.Add(CI.textbox_back, tbb); colors.Add(CI.textbox_fore, tbf); colors.Add(CI.textbox_highlight, tbh);
                 colors.Add(CI.checkbox, c);
                 colors.Add(CI.menu_back, mb); colors.Add(CI.menu_fore, mf);
@@ -168,7 +168,6 @@ namespace EDDiscovery2
         public Color TextBlockHighlightColor { get { return currentsettings.colors[Settings.CI.textbox_highlight]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_highlight] = value; } }
         public Color VisitedSystemColor { get { return currentsettings.colors[Settings.CI.travelgrid_visited]; } set { SetCustom(); currentsettings.colors[Settings.CI.travelgrid_visited] = value; } }
         public Color NonVisitedSystemColor { get { return currentsettings.colors[Settings.CI.travelgrid_nonvisted]; } set { SetCustom(); currentsettings.colors[Settings.CI.travelgrid_nonvisted] = value; } }
-        public Color MapBlockColor { get { return currentsettings.colors[Settings.CI.travelgrid_mapblock]; } set { SetCustom(); currentsettings.colors[Settings.CI.travelgrid_mapblock] = value; } }
 
         public bool WindowsFrame { get { return currentsettings.windowsframe; } set { SetCustom(); currentsettings.windowsframe = value; } }
         public double Opacity { get { return currentsettings.formopacity; } set { SetCustom(); currentsettings.formopacity = value; } }
@@ -237,7 +236,7 @@ namespace EDDiscovery2
                                                            SystemColors.ControlLightLight, SystemColors.MenuText,  // button
                                                            SystemColors.Menu, SystemColors.MenuText,  // grid border
                                                            SystemColors.ControlLightLight, SystemColors.MenuText,  // grid
-                                                           Color.Blue, SystemColors.MenuText, Color.Red, // travel
+                                                           Color.Blue, SystemColors.MenuText, // travel
                                                            SystemColors.Menu, SystemColors.MenuText, Color.Red,  // text
                                                            SystemColors.MenuText, // checkbox
                                                            SystemColors.Menu, SystemColors.MenuText,  // menu
@@ -249,7 +248,7 @@ namespace EDDiscovery2
                                                Color.Black, Color.Orange,  // button
                                                Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
                                                Color.Black, Color.Orange, // grid
-                                               Color.Orange, Color.White, Color.Red, // travel
+                                               Color.Orange, Color.White, // travel
                                                Color.Black, Color.Orange, Color.Red,  // text box
                                                Color.Orange, // checkbox
                                                Color.Black, Color.Orange,  // menu
@@ -261,7 +260,7 @@ namespace EDDiscovery2
                                                Color.Black, Color.Orange,  // button
                                                Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
                                                Color.Black, Color.Orange, // grid
-                                               Color.Orange, Color.White, Color.Red, // travel
+                                               Color.Orange, Color.White, // travel
                                                Color.Black, Color.Orange, Color.Red,  // text box
                                                Color.Orange, // checkbox
                                                Color.Black, Color.Orange,  // menu
@@ -273,7 +272,7 @@ namespace EDDiscovery2
                                                Color.Blue, Color.White,  // button
                                                Color.DarkBlue, Color.White,  // grid border
                                                Color.DarkBlue, Color.White, // grid
-                                               Color.White, Color.DarkBlue, Color.Red, // travel
+                                               Color.White, Color.DarkBlue, // travel
                                                Color.DarkBlue, Color.White, Color.Red,  // text box
                                                Color.White, // checkbox
                                                Color.DarkBlue, Color.White,  // menu
@@ -285,7 +284,7 @@ namespace EDDiscovery2
                                                Color.FromArgb(255, 48, 121, 17), Color.White,  // button
                                                Color.FromArgb(255, 48, 121, 17), Color.White,  // grid border
                                                Color.FromArgb(255, 48, 121, 17), Color.White, // grid
-                                               Color.White, Color.FromArgb(255, 48, 121, 17), Color.Red, // travel
+                                               Color.White, Color.FromArgb(255, 48, 121, 17), // travel
                                                Color.FromArgb(255, 48, 121, 17), Color.White, Color.Red,  // text box
                                                Color.White, // checkbox
                                                Color.FromArgb(255, 48, 121, 17), Color.White,  // menu
@@ -515,7 +514,7 @@ namespace EDDiscovery2
             }
             else if (myControl is Panel)
             {
-                if (!myControl.Name.Contains("theme"))                 // theme panels show settings color - don't overwrite
+                if (!( myControl.Name.Contains("theme") || myControl.Name.Contains("defaultmapcolor") ))                 // theme panels show settings color - don't overwrite
                     myControl.BackColor = currentsettings.colors[Settings.CI.form];
             }
             else if (myControl is Button || myControl is ComboBox)

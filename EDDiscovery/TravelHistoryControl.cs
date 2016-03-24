@@ -25,6 +25,7 @@ namespace EDDiscovery
     public partial class TravelHistoryControl : UserControl
     {
         private static EDDiscoveryForm _discoveryForm;
+        public int defaultMapColour;
         public EDSMSync sync;
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
@@ -53,6 +54,7 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             sync = new EDSMSync(_discoveryForm);
             var db = new SQLiteDBClass();
+            defaultMapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
             EDSMSyncTo = db.GetSettingBool("EDSMSyncTo", true);
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
@@ -238,7 +240,6 @@ namespace EDDiscovery
             
             if (dataGridViewTravel.Rows.Count > 0)
             {
-                lastRowIndex = 0;
                 ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[0].Cells[1].Tag));
             }
             System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
@@ -250,7 +251,7 @@ namespace EDDiscovery
 
         private void GetVisitedSystems(int commander)
         {                                                       // for backwards compatibility, don't store RGB value.
-            visitedSystems = netlog.ParseFiles(richTextBox_History, _discoveryForm.theme.MapBlockColor.ToArgb() & 0xFFFFFF, commander);
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour, commander);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
@@ -331,7 +332,7 @@ namespace EDDiscovery
                 dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
                 cell = dataGridViewTravel.Rows[rownr].Cells[4];
-                cell.Style.ForeColor = (item.vs == null) ? Color.FromArgb(255, _discoveryForm.theme.MapBlockColor) : Color.FromArgb(item.vs.MapColour);
+                cell.Style.ForeColor = (item.vs == null) ? Color.FromArgb(defaultMapColour) : Color.FromArgb(item.vs.MapColour);
         }
 
 
@@ -593,9 +594,6 @@ namespace EDDiscovery
         {
             if (e.RowIndex >= 0)
             {
-                //string  SysName = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                lastRowIndex = e.RowIndex;
-
                 ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[e.RowIndex].Cells[1].Tag));
             }
 
@@ -621,13 +619,10 @@ namespace EDDiscovery
             map.Show();
         }
 
-        private int lastRowIndex;
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                //string SysName = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                lastRowIndex = e.RowIndex;
                 ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[e.RowIndex].Cells[1].Tag));
 
                 if (e.ColumnIndex == 3)       // note column
@@ -665,10 +660,11 @@ namespace EDDiscovery
                 distance.Store();
                 SQLiteDBClass.AddDistanceToCache(distance);
 
-                dataGridViewTravel.Rows[lastRowIndex].Cells[2].Value = textBoxDistance.Text.Trim();
+                if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                    dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[2].Value = textBoxDistance.Text.Trim();
+                              
             }
         }
-
   
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
@@ -678,7 +674,8 @@ namespace EDDiscovery
 
         private void richTextBoxNote_TextChanged(object sender, EventArgs e)
         {
-            dataGridViewTravel.Rows[lastRowIndex].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
+            if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
         }
 
         private void StoreSystemNote()
@@ -698,7 +695,6 @@ namespace EDDiscovery
                 if (currentSysPos == null || currentSysPos.curSystem == null)
                     return;
 
-                //SystemPosition sp = (SystemPosition)dataGridView1.Rows[lastRowIndex].Cells[1].Tag;
                 txt = richTextBoxNote.Text;
 
                 
@@ -730,7 +726,9 @@ namespace EDDiscovery
 
                     
                     currentSysPos.curSystem.Note = txt;
-                    dataGridViewTravel.Rows[lastRowIndex].Cells[3].Value = txt;
+
+                    if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                        dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[3].Value = txt;
 
                     if (edsm.commanderName == null || edsm.apiKey == null)
                         return;
@@ -807,7 +805,7 @@ namespace EDDiscovery
                 return;
 
             }
-            sync.StartSync(EDSMSyncTo, EDSMSyncFrom,_discoveryForm.theme.MapBlockColor);
+            sync.StartSync(EDSMSyncTo, EDSMSyncFrom,defaultMapColour);
             
         }
 
@@ -895,7 +893,6 @@ namespace EDDiscovery
                     textBoxDistanceToNextSystem.Enabled = true;
 
                     AddHistoryRow(true, item, item2);
-                    lastRowIndex += 1;
                     StoreSystemNote();
                 });
             }

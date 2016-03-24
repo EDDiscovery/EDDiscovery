@@ -489,7 +489,7 @@ namespace EDDiscovery
                                         dbsys.Source = tlUnit.id;
                                         dbsys.EDSM_sync = false;
                                         dbsys.Unit = fi.Name;
-                                        dbsys.MapColour = _discoveryform.theme.MapBlockColor.ToArgb() & 0xffffff;
+                                        dbsys.MapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
                                         dbsys.Unit = fi.Name;
                                         
                                         if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
