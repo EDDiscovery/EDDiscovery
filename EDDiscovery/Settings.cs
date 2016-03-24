@@ -37,7 +37,6 @@ namespace EDDiscovery2
             SetPanel(panel_theme12, "Menu Text Colour", EDDTheme.Settings.CI.menu_fore);
             SetPanel(panel_theme13, "Bisited system without known position", EDDTheme.Settings.CI.travelgrid_nonvisted);
             SetPanel(panel_theme14, "Visited system with coordinates", EDDTheme.Settings.CI.travelgrid_visited);
-            //SetPanel(panel_defaultmapcolor, "Travel Form Map Block Colour", EDDTheme.Settings.CI.travelgrid_mapblock);
             SetPanel(panel_theme16, "Check Box Text Colour", EDDTheme.Settings.CI.checkbox);
             SetPanel(panel_theme17, "Label Text Colour", EDDTheme.Settings.CI.label);
             SetPanel(panel_theme18, "Group box Back Colour", EDDTheme.Settings.CI.group_back);
@@ -137,7 +136,6 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme12);
             _discoveryForm.theme.UpdatePatch(panel_theme13);
             _discoveryForm.theme.UpdatePatch(panel_theme14);
-            
             _discoveryForm.theme.UpdatePatch(panel_theme16);
             _discoveryForm.theme.UpdatePatch(panel_theme17);
             _discoveryForm.theme.UpdatePatch(panel_theme18);
@@ -279,7 +277,7 @@ namespace EDDiscovery2
             }
         }
 
-        private void panel_defaultmapcolor_Click(object sender, EventArgs e)
+        public void panel_defaultmapcolor_Click(object sender, EventArgs e)
         {
             ColorDialog mapColorDialog = new ColorDialog();
 
@@ -289,6 +287,7 @@ namespace EDDiscovery2
                 _discoveryForm.TravelControl.defaultMapColour = mapColorDialog.Color.ToArgb();
                 var db = new SQLiteDBClass();
                 db.PutSettingInt("DefaultMap", _discoveryForm.TravelControl.defaultMapColour);
+                panel_defaultmapcolor.BackColor = Color.FromArgb(_discoveryForm.TravelControl.defaultMapColour);
             }
         }
 
