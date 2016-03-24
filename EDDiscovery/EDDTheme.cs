@@ -538,7 +538,7 @@ namespace EDDiscovery2
                 Button MyDgv = (Button)myControl;
                 MyDgv.BackColor = currentsettings.colors[Settings.CI.button_back];
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.button_text];
-                if ( MyDgv.BackColor == SystemColors.Control )
+                if ( MyDgv.BackColor.ToArgb() == SystemColors.Control.ToArgb() )        // can't do a straight compare, saving colours does not include name.  so FF 240/240/240 selects windows control method
                     MyDgv.UseVisualStyleBackColor = true;           // this makes it gradient again
 
                 myControl.Font = fnt;
