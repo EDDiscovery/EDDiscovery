@@ -27,6 +27,7 @@ namespace EDDiscovery2
             SetPanel(panel_theme2, "Text box Back Colour", EDDTheme.Settings.CI.textbox_back);
             SetPanel(panel_theme3, "Text box Text Colour", EDDTheme.Settings.CI.textbox_fore);
             SetPanel(panel_theme4, "Text box Highlight Colour", EDDTheme.Settings.CI.textbox_highlight);
+            SetPanel(panel_theme15,"Text box Success Colour", EDDTheme.Settings.CI.textbox_success);
             SetPanel(panel_theme5, "Button Back Colour", EDDTheme.Settings.CI.button_back);
             SetPanel(panel_theme6, "Button Text Colour", EDDTheme.Settings.CI.button_text);
             SetPanel(panel_theme7, "Grid Border Back Colour", EDDTheme.Settings.CI.grid_border);
@@ -35,7 +36,7 @@ namespace EDDiscovery2
             SetPanel(panel_theme10, "Grid Data Text Colour", EDDTheme.Settings.CI.grid_text);
             SetPanel(panel_theme11, "Menu Back Colour", EDDTheme.Settings.CI.menu_back);
             SetPanel(panel_theme12, "Menu Text Colour", EDDTheme.Settings.CI.menu_fore);
-            SetPanel(panel_theme13, "Bisited system without known position", EDDTheme.Settings.CI.travelgrid_nonvisted);
+            SetPanel(panel_theme13, "Visited system without known position", EDDTheme.Settings.CI.travelgrid_nonvisted);
             SetPanel(panel_theme14, "Visited system with coordinates", EDDTheme.Settings.CI.travelgrid_visited);
             SetPanel(panel_theme16, "Check Box Text Colour", EDDTheme.Settings.CI.checkbox);
             SetPanel(panel_theme17, "Label Text Colour", EDDTheme.Settings.CI.label);
@@ -136,6 +137,7 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme12);
             _discoveryForm.theme.UpdatePatch(panel_theme13);
             _discoveryForm.theme.UpdatePatch(panel_theme14);
+            _discoveryForm.theme.UpdatePatch(panel_theme15);
             _discoveryForm.theme.UpdatePatch(panel_theme16);
             _discoveryForm.theme.UpdatePatch(panel_theme17);
             _discoveryForm.theme.UpdatePatch(panel_theme18);
@@ -192,7 +194,10 @@ namespace EDDiscovery2
             string fontwanted = null;                                               // don't check custom, only a stored theme..
             if (!themename.Equals("Custom") && !_discoveryForm.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
-                DialogResult res = MessageBox.Show("Warning - Theme font " + fontwanted + " is not available.", "Warning", MessageBoxButtons.OK);
+                DialogResult res = MessageBox.Show("The font used by this theme is not available on your system" + Environment.NewLine +
+                      "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
+                      "Install this font and you can use this scheme.",
+                      "Warning", MessageBoxButtons.OK);
 
                 _discoveryForm.theme.SetCustom();                              // go to custom theme whatever
                 _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);           // reselect to custom, refires this..
