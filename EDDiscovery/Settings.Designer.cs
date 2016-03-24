@@ -47,6 +47,7 @@
             this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
             this.checkboxSkipSlowUpdates = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.textBoxDefaultZoom = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.radioButtonHistorySelection = new System.Windows.Forms.RadioButton();
@@ -54,6 +55,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxHomeSystem = new System.Windows.Forms.TextBox();
+            this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.panel_theme19 = new System.Windows.Forms.Panel();
             this.panel_theme18 = new System.Windows.Forms.Panel();
@@ -77,7 +79,6 @@
             this.panel_theme10 = new System.Windows.Forms.Panel();
             this.panel_theme17 = new System.Windows.Forms.Panel();
             this.panel_theme16 = new System.Windows.Forms.Panel();
-            this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
             this.panel_theme14 = new System.Windows.Forms.Panel();
             this.panel_theme13 = new System.Windows.Forms.Panel();
             this.panel_theme12 = new System.Windows.Forms.Panel();
@@ -93,7 +94,6 @@
             this.checkBox_theme_windowframe = new System.Windows.Forms.CheckBox();
             this.comboBoxTheme = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.label17 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
@@ -299,11 +299,20 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "3D Map Settings";
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(224, 73);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(92, 13);
+            this.label17.TabIndex = 7;
+            this.label17.Text = "Default Map Color";
+            // 
             // textBoxDefaultZoom
             // 
             this.textBoxDefaultZoom.Location = new System.Drawing.Point(118, 70);
             this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
-            this.textBoxDefaultZoom.Size = new System.Drawing.Size(107, 20);
+            this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
             this.textBoxDefaultZoom.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDefaultZoom_Validating);
             // 
@@ -364,6 +373,17 @@
             this.textBoxHomeSystem.Name = "textBoxHomeSystem";
             this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
             this.textBoxHomeSystem.TabIndex = 0;
+            // 
+            // panel_defaultmapcolor
+            // 
+            this.panel_defaultmapcolor.AccessibleDescription = "";
+            this.panel_defaultmapcolor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_defaultmapcolor.Location = new System.Drawing.Point(335, 70);
+            this.panel_defaultmapcolor.Name = "panel_defaultmapcolor";
+            this.panel_defaultmapcolor.Size = new System.Drawing.Size(28, 20);
+            this.panel_defaultmapcolor.TabIndex = 5;
+            this.panel_defaultmapcolor.Tag = "";
+            this.panel_defaultmapcolor.Click += new System.EventHandler(this.panel_defaultmapcolor_Click);
             // 
             // groupBox5
             // 
@@ -626,17 +646,6 @@
             this.panel_theme16.Tag = "";
             this.panel_theme16.Click += new System.EventHandler(this.panel_theme_Click);
             // 
-            // panel_defaultmapcolor
-            // 
-            this.panel_defaultmapcolor.AccessibleDescription = "";
-            this.panel_defaultmapcolor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_defaultmapcolor.Location = new System.Drawing.Point(335, 70);
-            this.panel_defaultmapcolor.Name = "panel_defaultmapcolor";
-            this.panel_defaultmapcolor.Size = new System.Drawing.Size(28, 20);
-            this.panel_defaultmapcolor.TabIndex = 5;
-            this.panel_defaultmapcolor.Tag = "";
-            this.panel_defaultmapcolor.Click += new System.EventHandler(this.panel_defaultmapcolor_Click);
-            // 
             // panel_theme14
             // 
             this.panel_theme14.AccessibleDescription = "";
@@ -786,15 +795,6 @@
             this.comboBoxTheme.Name = "comboBoxTheme";
             this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
             this.comboBoxTheme.TabIndex = 0;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(237, 73);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(92, 13);
-            this.label17.TabIndex = 7;
-            this.label17.Text = "Default Map Color";
             // 
             // Settings
             // 

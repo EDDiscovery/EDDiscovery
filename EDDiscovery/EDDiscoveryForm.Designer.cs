@@ -59,17 +59,18 @@
             this.panel_minimize = new System.Windows.Forms.Panel();
             this.panel_close = new System.Windows.Forms.Panel();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.settings = new EDDiscovery2.Settings();
             this.tabPageRoute = new System.Windows.Forms.TabPage();
+            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
+            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
+            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.label_version = new System.Windows.Forms.Label();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
-            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
-            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
-            this.routeControl1 = new EDDiscovery.RouteControl();
-            this.settings = new EDDiscovery2.Settings();
+            this.label_version = new System.Windows.Forms.Label();
+            this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
@@ -101,7 +102,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(216, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(308, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -113,7 +114,8 @@
             this.showLogfilesToolStripMenuItem,
             this.show2DMapsToolStripMenuItem,
             this.prospectingToolStripMenuItem,
-            this.statisticsToolStripMenuItem});
+            this.statisticsToolStripMenuItem,
+            this.changeMapColorToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -196,7 +198,7 @@
             // keepOnTopToolStripMenuItem
             // 
             this.keepOnTopToolStripMenuItem.Name = "keepOnTopToolStripMenuItem";
-            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.keepOnTopToolStripMenuItem.Text = "Keep on Top";
             this.keepOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepOnTopToolStripMenuItem_Click);
             // 
@@ -204,7 +206,7 @@
             // 
             this.fastTravelToolStripMenuItem.CheckOnClick = true;
             this.fastTravelToolStripMenuItem.Name = "fastTravelToolStripMenuItem";
-            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.fastTravelToolStripMenuItem.Text = "Fast Travel";
             // 
             // helpToolStripMenuItem
@@ -341,6 +343,14 @@
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
+            // settings
+            // 
+            this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.settings.Location = new System.Drawing.Point(3, 3);
+            this.settings.Name = "settings";
+            this.settings.Size = new System.Drawing.Size(979, 665);
+            this.settings.TabIndex = 0;
+            // 
             // tabPageRoute
             // 
             this.tabPageRoute.Controls.Add(this.routeControl1);
@@ -352,6 +362,14 @@
             this.tabPageRoute.Text = "Route";
             this.tabPageRoute.UseVisualStyleBackColor = true;
             // 
+            // routeControl1
+            // 
+            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.routeControl1.Location = new System.Drawing.Point(3, 3);
+            this.routeControl1.Name = "routeControl1";
+            this.routeControl1.Size = new System.Drawing.Size(979, 665);
+            this.routeControl1.TabIndex = 0;
+            // 
             // tabPageScreenshots
             // 
             this.tabPageScreenshots.Controls.Add(this.imageHandler1);
@@ -361,6 +379,14 @@
             this.tabPageScreenshots.TabIndex = 4;
             this.tabPageScreenshots.Text = "Screenshots";
             this.tabPageScreenshots.UseVisualStyleBackColor = true;
+            // 
+            // imageHandler1
+            // 
+            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
+            this.imageHandler1.Name = "imageHandler1";
+            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
+            this.imageHandler1.TabIndex = 0;
             // 
             // tabPageTriletaration
             // 
@@ -372,6 +398,14 @@
             this.tabPageTriletaration.TabIndex = 3;
             this.tabPageTriletaration.Text = "Trilateration";
             this.tabPageTriletaration.UseVisualStyleBackColor = true;
+            // 
+            // trilaterationControl
+            // 
+            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
+            this.trilaterationControl.Name = "trilaterationControl";
+            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
+            this.trilaterationControl.TabIndex = 21;
             // 
             // tabControl1
             // 
@@ -397,6 +431,14 @@
             this.tabPageTravelHistory.Text = "Travel history";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
             // 
+            // travelHistoryControl1
+            // 
+            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl1.Name = "travelHistoryControl1";
+            this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
+            this.travelHistoryControl1.TabIndex = 0;
+            // 
             // label_version
             // 
             this.label_version.AutoSize = true;
@@ -406,45 +448,12 @@
             this.label_version.TabIndex = 21;
             this.label_version.Text = "Version Label";
             // 
-            // travelHistoryControl1
+            // changeMapColorToolStripMenuItem
             // 
-            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl1.Name = "travelHistoryControl1";
-            this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
-            this.travelHistoryControl1.TabIndex = 0;
-            // 
-            // trilaterationControl
-            // 
-            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
-            this.trilaterationControl.TabIndex = 21;
-            // 
-            // imageHandler1
-            // 
-            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
-            this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
-            this.imageHandler1.TabIndex = 0;
-            // 
-            // routeControl1
-            // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(979, 665);
-            this.routeControl1.TabIndex = 0;
-            // 
-            // settings
-            // 
-            this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.settings.Location = new System.Drawing.Point(3, 3);
-            this.settings.Name = "settings";
-            this.settings.Size = new System.Drawing.Size(979, 665);
-            this.settings.TabIndex = 0;
+            this.changeMapColorToolStripMenuItem.Name = "changeMapColorToolStripMenuItem";
+            this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.changeMapColorToolStripMenuItem.Text = "Set Default Map Colour";
+            this.changeMapColorToolStripMenuItem.Click += new System.EventHandler(this.changeMapColorToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -528,6 +537,7 @@
         private System.Windows.Forms.TabPage tabPageTravelHistory;
         private TravelHistoryControl travelHistoryControl1;
         private System.Windows.Forms.Label label_version;
+        private System.Windows.Forms.ToolStripMenuItem changeMapColorToolStripMenuItem;
     }
 }
 
