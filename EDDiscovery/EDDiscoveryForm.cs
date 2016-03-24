@@ -1095,6 +1095,9 @@ namespace EDDiscovery
             }
         }
 
-
+        private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            settings.panel_defaultmapcolor_Click(sender, e);
+        }
     }
 }
