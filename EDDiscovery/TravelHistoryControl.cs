@@ -84,12 +84,17 @@ namespace EDDiscovery
 
         static public void LogText(string text)
         {
-            LogTextColor(text, _discoveryForm.theme.TextBlock );
+            LogTextColor(text, _discoveryForm.theme.TextBlockColor );
         }
 
         static public void LogTextHighlight(string text)
         {
             LogTextColor(text, _discoveryForm.theme.TextBlockHighlightColor);
+        }
+
+        static public void LogTextSuccess(string text)
+        {
+            LogTextColor(text, _discoveryForm.theme.TextBlockSuccessColor);
         }
 
         static public void LogTextColor( string text, Color color)
