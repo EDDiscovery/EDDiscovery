@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrilaterationControl));
             this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,8 +67,8 @@
             this.toolStripButtonRemoveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
             this.panel_controls = new System.Windows.Forms.Panel();
-            this.labelstpos = new System.Windows.Forms.Label();
             this.textBox_status = new System.Windows.Forms.TextBox();
+            this.labelstpos = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.panelImplementation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -92,7 +92,7 @@
             this.dataGridViewDistances.Dock = System.Windows.Forms.DockStyle.Left;
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
-            this.dataGridViewDistances.Size = new System.Drawing.Size(538, 354);
+            this.dataGridViewDistances.Size = new System.Drawing.Size(538, 225);
             this.dataGridViewDistances.TabIndex = 0;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
@@ -136,7 +136,7 @@
             // textBoxSystemName
             // 
             this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxSystemName.Location = new System.Drawing.Point(3, 45);
+            this.textBoxSystemName.Location = new System.Drawing.Point(72, 25);
             this.textBoxSystemName.Name = "textBoxSystemName";
             this.textBoxSystemName.ReadOnly = true;
             this.textBoxSystemName.Size = new System.Drawing.Size(178, 13);
@@ -145,7 +145,7 @@
             // labelTargetSystem
             // 
             this.labelTargetSystem.AutoSize = true;
-            this.labelTargetSystem.Location = new System.Drawing.Point(1, 25);
+            this.labelTargetSystem.Location = new System.Drawing.Point(3, 25);
             this.labelTargetSystem.Name = "labelTargetSystem";
             this.labelTargetSystem.Size = new System.Drawing.Size(44, 13);
             this.labelTargetSystem.TabIndex = 2;
@@ -154,7 +154,7 @@
             // labelCoordinates
             // 
             this.labelCoordinates.AutoSize = true;
-            this.labelCoordinates.Location = new System.Drawing.Point(185, 25);
+            this.labelCoordinates.Location = new System.Drawing.Point(3, 47);
             this.labelCoordinates.Name = "labelCoordinates";
             this.labelCoordinates.Size = new System.Drawing.Size(122, 13);
             this.labelCoordinates.TabIndex = 5;
@@ -163,7 +163,7 @@
             // textBoxCoordinateX
             // 
             this.textBoxCoordinateX.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxCoordinateX.Location = new System.Drawing.Point(200, 44);
+            this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 46);
             this.textBoxCoordinateX.Name = "textBoxCoordinateX";
             this.textBoxCoordinateX.ReadOnly = true;
             this.textBoxCoordinateX.Size = new System.Drawing.Size(50, 13);
@@ -174,7 +174,7 @@
             // labelCoordinateX
             // 
             this.labelCoordinateX.AutoSize = true;
-            this.labelCoordinateX.Location = new System.Drawing.Point(185, 44);
+            this.labelCoordinateX.Location = new System.Drawing.Point(150, 46);
             this.labelCoordinateX.Name = "labelCoordinateX";
             this.labelCoordinateX.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateX.TabIndex = 7;
@@ -183,7 +183,7 @@
             // labelCoordinateY
             // 
             this.labelCoordinateY.AutoSize = true;
-            this.labelCoordinateY.Location = new System.Drawing.Point(252, 44);
+            this.labelCoordinateY.Location = new System.Drawing.Point(217, 46);
             this.labelCoordinateY.Name = "labelCoordinateY";
             this.labelCoordinateY.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateY.TabIndex = 9;
@@ -192,7 +192,7 @@
             // textBoxCoordinateY
             // 
             this.textBoxCoordinateY.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxCoordinateY.Location = new System.Drawing.Point(269, 44);
+            this.textBoxCoordinateY.Location = new System.Drawing.Point(234, 46);
             this.textBoxCoordinateY.Name = "textBoxCoordinateY";
             this.textBoxCoordinateY.ReadOnly = true;
             this.textBoxCoordinateY.Size = new System.Drawing.Size(50, 13);
@@ -203,7 +203,7 @@
             // labelCoordinateZ
             // 
             this.labelCoordinateZ.AutoSize = true;
-            this.labelCoordinateZ.Location = new System.Drawing.Point(319, 44);
+            this.labelCoordinateZ.Location = new System.Drawing.Point(284, 46);
             this.labelCoordinateZ.Name = "labelCoordinateZ";
             this.labelCoordinateZ.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateZ.TabIndex = 11;
@@ -212,7 +212,7 @@
             // textBoxCoordinateZ
             // 
             this.textBoxCoordinateZ.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxCoordinateZ.Location = new System.Drawing.Point(336, 44);
+            this.textBoxCoordinateZ.Location = new System.Drawing.Point(301, 46);
             this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
             this.textBoxCoordinateZ.ReadOnly = true;
             this.textBoxCoordinateZ.Size = new System.Drawing.Size(50, 13);
@@ -285,7 +285,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.dataGridViewClosestSystems);
             this.splitContainer1.Panel2.Controls.Add(this.richTextBox_History);
             this.splitContainer1.Size = new System.Drawing.Size(924, 530);
-            this.splitContainer1.SplitterDistance = 354;
+            this.splitContainer1.SplitterDistance = 225;
             this.splitContainer1.TabIndex = 20;
             // 
             // dataGridViewSuggestedSystems
@@ -293,14 +293,14 @@
             this.dataGridViewSuggestedSystems.AllowUserToAddRows = false;
             this.dataGridViewSuggestedSystems.AllowUserToDeleteRows = false;
             this.dataGridViewSuggestedSystems.AllowUserToResizeRows = false;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewSuggestedSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewSuggestedSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridViewSuggestedSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewSuggestedSystems.ColumnHeadersVisible = false;
             this.dataGridViewSuggestedSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -311,7 +311,7 @@
             this.dataGridViewSuggestedSystems.Name = "dataGridViewSuggestedSystems";
             this.dataGridViewSuggestedSystems.ReadOnly = true;
             this.dataGridViewSuggestedSystems.RowHeadersVisible = false;
-            this.dataGridViewSuggestedSystems.Size = new System.Drawing.Size(386, 354);
+            this.dataGridViewSuggestedSystems.Size = new System.Drawing.Size(386, 225);
             this.dataGridViewSuggestedSystems.TabIndex = 18;
             this.dataGridViewSuggestedSystems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewSuggestedSystems_CellClick);
             // 
@@ -329,14 +329,14 @@
             this.dataGridViewClosestSystems.AllowUserToDeleteRows = false;
             this.dataGridViewClosestSystems.AllowUserToResizeRows = false;
             this.dataGridViewClosestSystems.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.dataGridViewClosestSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewClosestSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumnClosestSystemsSystem,
@@ -347,7 +347,7 @@
             this.dataGridViewClosestSystems.Name = "dataGridViewClosestSystems";
             this.dataGridViewClosestSystems.ReadOnly = true;
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(386, 172);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(386, 301);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
@@ -373,7 +373,7 @@
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Left;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
-            this.richTextBox_History.Size = new System.Drawing.Size(538, 172);
+            this.richTextBox_History.Size = new System.Drawing.Size(538, 301);
             this.richTextBox_History.TabIndex = 6;
             this.richTextBox_History.Text = "";
             // 
@@ -480,15 +480,6 @@
             this.panel_controls.Size = new System.Drawing.Size(924, 74);
             this.panel_controls.TabIndex = 24;
             // 
-            // labelstpos
-            // 
-            this.labelstpos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelstpos.Location = new System.Drawing.Point(3, 3);
-            this.labelstpos.Name = "labelstpos";
-            this.labelstpos.Size = new System.Drawing.Size(90, 19);
-            this.labelstpos.TabIndex = 20;
-            this.labelstpos.Text = "Current Status:";
-            // 
             // textBox_status
             // 
             this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -497,6 +488,15 @@
             this.textBox_status.ReadOnly = true;
             this.textBox_status.Size = new System.Drawing.Size(167, 13);
             this.textBox_status.TabIndex = 21;
+            // 
+            // labelstpos
+            // 
+            this.labelstpos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelstpos.Location = new System.Drawing.Point(3, 3);
+            this.labelstpos.Name = "labelstpos";
+            this.labelstpos.Size = new System.Drawing.Size(90, 19);
+            this.labelstpos.TabIndex = 20;
+            this.labelstpos.Text = "Current Status:";
             // 
             // TrilaterationControl
             // 
