@@ -10,15 +10,11 @@ using EDDiscovery;
 using System.IO;
 using System.Diagnostics;
 
-// TODO:
-// 1. ComboBoxes need owner draw
-// 2. grid borders - why can't I change their colors even though their are members for it - is it being overriden during construction?
-// 3. Fonts - enable them on visual elements.
-
 namespace EDDiscovery2
 {
     public class EDDTheme
     {
+
         public struct Settings
         {
             public enum CI
@@ -30,11 +26,11 @@ namespace EDDiscovery2
                 textbox_back,
                 menu_back,
                 group_back,
-                button_text,                            // >= means its a text default
+                button_text,                            
                 grid_bordertext,
                 grid_text,
                 travelgrid_nonvisted, travelgrid_visited,
-                textbox_fore, textbox_highlight,
+                textbox_fore, textbox_highlight, textbox_success,
                 checkbox,
                 menu_fore,
                 label,
@@ -52,7 +48,7 @@ namespace EDDiscovery2
                                         Color bb, Color bf,
                                         Color gb, Color gbt, Color gbck, Color gt,
                                         Color tn, Color tv, 
-                                        Color tbb, Color tbf, Color tbh,
+                                        Color tbb, Color tbf, Color tbh, Color tbs,
                                         Color c,
                                         Color mb, Color mf,
                                         Color l,
@@ -65,7 +61,7 @@ namespace EDDiscovery2
                 colors.Add(CI.button_back, bb); colors.Add(CI.button_text, bf);
                 colors.Add(CI.grid_border, gb); colors.Add(CI.grid_bordertext, gbt); colors.Add(CI.grid_background, gbck); colors.Add(CI.grid_text, gt);
                 colors.Add(CI.travelgrid_nonvisted, tn); colors.Add(CI.travelgrid_visited, tv);
-                colors.Add(CI.textbox_back, tbb); colors.Add(CI.textbox_fore, tbf); colors.Add(CI.textbox_highlight, tbh);
+                colors.Add(CI.textbox_back, tbb); colors.Add(CI.textbox_fore, tbf); colors.Add(CI.textbox_highlight, tbh); colors.Add(CI.textbox_success, tbs);
                 colors.Add(CI.checkbox, c);
                 colors.Add(CI.menu_back, mb); colors.Add(CI.menu_fore, mf);
                 colors.Add(CI.label, l);
@@ -75,30 +71,46 @@ namespace EDDiscovery2
                 windowsframe = wf; formopacity = op; fontname = ft; fontsize = fs;
             }
 
-            public Settings(JObject jo, string settingsname)            // From json
+            public Settings(JObject jo, string settingsname, Settings defcols)            // From json. defcols is the colours to use if the json does not have it.
             {
                 name = settingsname.Replace(".eddtheme", "");
                 colors = new Dictionary<CI, Color>();
 
                 foreach (CI ck in Enum.GetValues(typeof(CI)))           // all enums
                 {
-                    Color d = (ck < Settings.CI.button_text) ? SystemColors.Menu : SystemColors.MenuText;       // pick a good default
+                    Color d = defcols.colors[ck];
                     colors.Add(ck, JGetColor(jo, ck.ToString(),d));
                 }
 
-                windowsframe = GetBool(jo["windowsframe"]);
-                formopacity = GetFloat(jo["formopacity"]);
-                fontname = GetString(jo["fontname"]);
-                if (fontname == "")
-                    fontname = "Microsoft Sans Serif";
-                fontsize = GetFloat(jo["fontsize"]);
-                if (fontsize < minfontsize )
-                    fontsize = 8.25F;
+                windowsframe = GetBool(jo["windowsframe"],defcols.windowsframe);
+                formopacity = GetFloat(jo["formopacity"],(float)defcols.formopacity);
+                fontname = GetString(jo["fontname"], defcols.fontname);
+                fontsize = GetFloat(jo["fontsize"], defcols.fontsize);
+            }
+
+            public Settings(string n)                                               // gets you windows default colours
+            {
+                name = n; 
+                colors = new Dictionary<CI, Color>();
+                colors.Add(CI.form, SystemColors.Menu);
+                colors.Add(CI.button_back, SystemColors.Control); colors.Add(CI.button_text, SystemColors.ControlText);
+                colors.Add(CI.grid_border, SystemColors.Menu); colors.Add(CI.grid_bordertext, SystemColors.MenuText);
+                colors.Add(CI.grid_background, SystemColors.ControlLightLight); colors.Add(CI.grid_text, SystemColors.MenuText);
+                colors.Add(CI.travelgrid_nonvisted, Color.Blue); colors.Add(CI.travelgrid_visited, SystemColors.MenuText);
+                colors.Add(CI.textbox_back, SystemColors.Menu); colors.Add(CI.textbox_fore, SystemColors.MenuText); colors.Add(CI.textbox_highlight, Color.Red); colors.Add(CI.textbox_success, Color.Green);
+                colors.Add(CI.checkbox, SystemColors.MenuText);
+                colors.Add(CI.menu_back, SystemColors.Menu); colors.Add(CI.menu_fore, SystemColors.MenuText);
+                colors.Add(CI.label, SystemColors.MenuText);
+                colors.Add(CI.group_back, SystemColors.Menu); colors.Add(CI.group_text, SystemColors.MenuText);
+                windowsframe = true;
+                formopacity = 100;
+                fontname = defaultfont;
+                fontsize = defaultfontsize;
             }
 
             static private Color JGetColor(JObject jo, string name , Color defc)
             {
-                string colstr = GetString(jo[name]);
+                string colstr = GetString(jo[name],null);
 
                 if (colstr == null)
                     return defc;
@@ -106,38 +118,35 @@ namespace EDDiscovery2
                 return System.Drawing.ColorTranslator.FromHtml(colstr);
             }
 
-
-            static private bool GetBool(JToken jToken)
+            static private bool GetBool(JToken jToken, bool def)
             {
                 if (IsNullOrEmptyT(jToken))
-                    return false;
+                    return def;
                 return jToken.Value<bool>();
             }
 
-            static private float GetFloat(JToken jToken)
+            static private float GetFloat(JToken jToken, float def)
             {
                 if (IsNullOrEmptyT(jToken))
-                    return 0f;
+                    return def;
                 return jToken.Value<float>();
             }
 
 
-            static private int GetInt(JToken jToken)
+            static private int GetInt(JToken jToken, int def)
             {
                 if (IsNullOrEmptyT(jToken))
-                    return 0;
+                    return def;
                 return jToken.Value<int>();
             }
 
-
-            static private string GetString(JToken jToken)
+            static private string GetString(JToken jToken,string def)
             {
                 if (IsNullOrEmptyT(jToken))
-                    return null;
+                    return def;
                 return jToken.Value<string>();
             }
-
-
+            
             static private bool IsNullOrEmptyT(JToken token)
             {
                 return (token == null) ||
@@ -146,8 +155,7 @@ namespace EDDiscovery2
                        (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
                        (token.Type == JTokenType.Null);
             }
-
-
+            
             public Settings(Settings other)                // copy constructor, takes a real copy.
             {
                 name = other.name;
@@ -161,11 +169,16 @@ namespace EDDiscovery2
         }
 
         public static float minfontsize = 4;
+        public static string defaultfont = "Microsoft Sans Serif";
+        public static float defaultfontsize = 8.25F;
 
         public string Name { get { return currentsettings.name; } set { currentsettings.name = value; } }
 
-        public Color TextBlock { get { return currentsettings.colors[Settings.CI.textbox_fore]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_fore] = value; } }
+        public Color TextBackColor { get { return currentsettings.colors[Settings.CI.textbox_back]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_back] = value; } }
+        public Color TextBlockColor { get { return currentsettings.colors[Settings.CI.textbox_fore]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_fore] = value; } }
         public Color TextBlockHighlightColor { get { return currentsettings.colors[Settings.CI.textbox_highlight]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_highlight] = value; } }
+        public Color TextBlockSuccessColor { get { return currentsettings.colors[Settings.CI.textbox_success]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_success] = value; } }
+
         public Color VisitedSystemColor { get { return currentsettings.colors[Settings.CI.travelgrid_visited]; } set { SetCustom(); currentsettings.colors[Settings.CI.travelgrid_visited] = value; } }
         public Color NonVisitedSystemColor { get { return currentsettings.colors[Settings.CI.travelgrid_nonvisted]; } set { SetCustom(); currentsettings.colors[Settings.CI.travelgrid_nonvisted] = value; } }
 
@@ -180,9 +193,8 @@ namespace EDDiscovery2
 
         public EDDTheme()
         {
-            themelist = new List<Settings>();               // new one every time
-            LoadThemes();
-            currentsettings = new Settings(themelist[0]);       // copy it, not reference it.
+            themelist = new List<Settings>();           // theme list in
+            currentsettings = new Settings("Windows Default");  // this is our default
         }
 
         public void RestoreSettings()
@@ -195,8 +207,8 @@ namespace EDDiscovery2
                 currentsettings.name = db.GetSettingString("ThemeNameOf", "Custom");
                 currentsettings.windowsframe = db.GetSettingBool("ThemeWindowsFrame", true);
                 currentsettings.formopacity = db.GetSettingDouble("ThemeFormOpacity", 100);
-                currentsettings.fontname = db.GetSettingString("ThemeFont", "");
-                currentsettings.fontsize = (float)db.GetSettingDouble("ThemeFontSize", 8);
+                currentsettings.fontname = db.GetSettingString("ThemeFont", defaultfont);
+                currentsettings.fontsize = (float)db.GetSettingDouble("ThemeFontSize", defaultfontsize);
 
                 foreach (Settings.CI ck in themelist[0].colors.Keys)         // use themelist to find the key names, as we modify currentsettings as we go and that would cause an exception
                 {
@@ -232,24 +244,14 @@ namespace EDDiscovery2
         {
             themelist.Clear();
 
-            themelist.Add(new Settings("Windows Default", SystemColors.Menu,
-                                                           SystemColors.ControlLightLight, SystemColors.MenuText,  // button
-                                                           SystemColors.Menu, SystemColors.MenuText,  // grid border
-                                                           SystemColors.ControlLightLight, SystemColors.MenuText,  // grid
-                                                           Color.Blue, SystemColors.MenuText, // travel
-                                                           SystemColors.Menu, SystemColors.MenuText, Color.Red,  // text
-                                                           SystemColors.MenuText, // checkbox
-                                                           SystemColors.Menu, SystemColors.MenuText,  // menu
-                                                           SystemColors.MenuText,  // label
-                                                           SystemColors.Menu, SystemColors.MenuText,  // group
-                                                           true, 100, "Microsoft Sans Serif", 8.25F));
-
+            themelist.Add(new Settings("Windows Default"));         // windows default..
+            
             themelist.Add(new Settings("Orange Delight", Color.Black,
-                                               Color.Black, Color.Orange,  // button
+                                               Color.FromArgb(255, 48, 48, 48), Color.Orange,  // button
                                                Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
                                                Color.Black, Color.Orange, // grid
                                                Color.Orange, Color.White, // travel
-                                               Color.Black, Color.Orange, Color.Red,  // text box
+                                               Color.Black, Color.Orange, Color.Red, Color.Green, // text box
                                                Color.Orange, // checkbox
                                                Color.Black, Color.Orange,  // menu
                                                Color.Orange,  // label
@@ -257,39 +259,53 @@ namespace EDDiscovery2
                                                false, 95, "Microsoft Sans Serif", 8.25F));
 
             themelist.Add(new Settings("Elite EuroCaps", Color.Black,
-                                               Color.Black, Color.Orange,  // button
+                                               Color.FromArgb(255, 48, 48, 48), Color.Orange,  // button
                                                Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
                                                Color.Black, Color.Orange, // grid
                                                Color.Orange, Color.White, // travel
-                                               Color.Black, Color.Orange, Color.Red,  // text box
+                                               Color.Black, Color.Orange, Color.Red, Color.Green, // text box
                                                Color.Orange, // checkbox
                                                Color.Black, Color.Orange,  // menu
                                                Color.Orange,  // label
                                                Color.FromArgb(255, 32, 32, 32), Color.Orange, // group
                                                false, 95, "Euro Caps", 12F));
 
+            themelist.Add(new Settings("EuroCaps Grey",
+                                        SystemColors.Menu,
+                                        SystemColors.Control, SystemColors.ControlText,  // button
+                                        SystemColors.Menu, SystemColors.MenuText,  // grid border
+                                        SystemColors.ControlLightLight, SystemColors.MenuText,  // grid
+                                        Color.Blue, SystemColors.MenuText, // travel
+                                        SystemColors.Menu, SystemColors.MenuText, Color.Red, Color.Green, // text
+                                        SystemColors.MenuText, // checkbox
+                                        SystemColors.Menu, SystemColors.MenuText,  // menu
+                                        SystemColors.MenuText,  // label
+                                        SystemColors.Menu, SystemColors.MenuText,  // group
+                                        false, 95, "Euro Caps", 12F));
+
             themelist.Add(new Settings("Blue Wonder", Color.DarkBlue,
                                                Color.Blue, Color.White,  // button
                                                Color.DarkBlue, Color.White,  // grid border
                                                Color.DarkBlue, Color.White, // grid
                                                Color.White, Color.DarkBlue, // travel
-                                               Color.DarkBlue, Color.White, Color.Red,  // text box
+                                               Color.DarkBlue, Color.White, Color.Red, Color.Green, // text box
                                                Color.White, // checkbox
                                                Color.DarkBlue, Color.White,  // menu
                                                Color.White,  // label
                                                Color.DarkBlue, Color.White,  // group
                                                false, 95, "Microsoft Sans Serif", 8.25F));
 
-            themelist.Add(new Settings("Green Baize", Color.FromArgb(255, 48, 121, 17),
-                                               Color.FromArgb(255, 48, 121, 17), Color.White,  // button
-                                               Color.FromArgb(255, 48, 121, 17), Color.White,  // grid border
-                                               Color.FromArgb(255, 48, 121, 17), Color.White, // grid
-                                               Color.White, Color.FromArgb(255, 48, 121, 17), // travel
-                                               Color.FromArgb(255, 48, 121, 17), Color.White, Color.Red,  // text box
+            Color baizegreen = Color.FromArgb(255, 13, 68, 13);
+            themelist.Add(new Settings("Green Baize", baizegreen,
+                                               baizegreen, Color.White,  // button
+                                               baizegreen, Color.White,  // grid border
+                                               baizegreen, Color.White, // grid
+                                               Color.White, Color.FromArgb(255, 78, 190, 27), // travel
+                                               baizegreen, Color.White, Color.Red, Color.Green, // text box
                                                Color.White, // checkbox
-                                               Color.FromArgb(255, 48, 121, 17), Color.White,  // menu
+                                               baizegreen, Color.White,  // menu
                                                Color.White,  // label
-                                               Color.FromArgb(255, 48, 121, 17), Color.White, // group
+                                               baizegreen, Color.White, // group
                                                false, 95, "Microsoft Sans Serif", 8.25F));
 
             string themepath = "";
@@ -335,7 +351,7 @@ namespace EDDiscovery2
                 try
                 {
                     JObject jo = JObject.Parse(File.ReadAllText(fi.FullName));
-                    themelist.Add(new Settings(jo, fi.Name));
+                    themelist.Add(new Settings(jo, fi.Name,themelist[0]));
                 }
                 catch (Exception ex)
                 {
@@ -517,11 +533,20 @@ namespace EDDiscovery2
                 if (!( myControl.Name.Contains("theme") || myControl.Name.Contains("defaultmapcolor") ))                 // theme panels show settings color - don't overwrite
                     myControl.BackColor = currentsettings.colors[Settings.CI.form];
             }
-            else if (myControl is Button || myControl is ComboBox)
+            else if (myControl is Button )
             {
-                myControl.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.button_back]);
-                myControl.ForeColor = currentsettings.colors[Settings.CI.button_text];
+                Button MyDgv = (Button)myControl;
+                MyDgv.BackColor = currentsettings.colors[Settings.CI.button_back];
+                MyDgv.ForeColor = currentsettings.colors[Settings.CI.button_text];
+                if ( MyDgv.BackColor.ToArgb() == SystemColors.Control.ToArgb() )        // can't do a straight compare, saving colours does not include name.  so FF 240/240/240 selects windows control method
+                    MyDgv.UseVisualStyleBackColor = true;           // this makes it gradient again
+
                 myControl.Font = fnt;
+            }
+            else if ( myControl is ComboBox)
+            {
+                myControl.BackColor = currentsettings.colors[Settings.CI.button_back];
+                myControl.ForeColor = currentsettings.colors[Settings.CI.button_text];
             }
             else if (myControl is TabControl)
             {
