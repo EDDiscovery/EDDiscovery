@@ -67,7 +67,7 @@ namespace EDDiscovery
             }
             else
             {
-                SetTriStatus("Enter Distances");
+                SetTriStatusError("Enter Distances");
             }
 
             UnfreezeTrilaterationUI();
@@ -281,7 +281,7 @@ namespace EDDiscovery
             if (trilaterationThread != null)
             {
                 if (trilaterationThread.ThreadState != ThreadState.Stopped)
-                    LogText("Aborting previous trilateration attempt." + Environment.NewLine);
+                    LogTextHighlight("Aborting previous trilateration attempt." + Environment.NewLine);
                 trilaterationThread.Abort();
             }
             trilaterationThread = new Thread(RunTrilaterationWorker) { Name = "Trilateration" };
@@ -373,7 +373,7 @@ namespace EDDiscovery
                     s3.y = trilaterationResult.Coordinate.Y;
                     s3.z = trilaterationResult.Coordinate.Z;
 
-                    LogText("Trilateration successful (" + spentTimeString + "), exact coordinates found." + Environment.NewLine);
+                    LogTextSuccess("Trilateration successful (" + spentTimeString + "), exact coordinates found." + Environment.NewLine);
                     LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + " Sol: " + SystemData.Distance(s1, s3).ToString("0.0") +  " Sag A* " + SystemData.Distance(s2, s3).ToString("0.0") + Environment.NewLine);
                     SetTriStatusSuccess("Success, coordinates found!");
                 });
@@ -381,18 +381,18 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker) delegate
                 {
-                    LogText("Trilateration not successful (" + spentTimeString + "), only approximate coordinates found." + Environment.NewLine);
+                    LogTextHighlight("Trilateration not successful (" + spentTimeString + "), only approximate coordinates found." + Environment.NewLine);
                     //LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
-                    LogText("Enter more distances." + Environment.NewLine);
-                    SetTriStatus("Enter More Distances");
+                    LogTextHighlight("Enter more distances." + Environment.NewLine);
+                    SetTriStatusError("Enter More Distances");
                 });
             } else if (trilaterationResult.State == Trilateration.ResultState.NeedMoreDistances)
             {
                 Invoke((MethodInvoker) delegate
                 {
-                    LogText("Trilateration not successful (" + spentTimeString + "), coordinates not found." + Environment.NewLine);
-                    LogText("Enter more distances." + Environment.NewLine);
-                    SetTriStatus("Enter More Distances");
+                    LogTextHighlight("Trilateration not successful (" + spentTimeString + "), coordinates not found." + Environment.NewLine);
+                    LogTextHighlight("Enter more distances." + Environment.NewLine);
+                    SetTriStatusError("Enter More Distances");
                     ClearCalculatedDataGridViewDistancesRows();
                 });
             }
@@ -797,7 +797,7 @@ namespace EDDiscovery
             {
                 if (responseOkM && trilaterationOkM)
                 {
-                    LogText("EDSM submission succeeded, trilateration successful." + Environment.NewLine);
+                    LogTextSuccess("EDSM submission succeeded, trilateration successful." + Environment.NewLine);
                 }
                 else if (responseOkM)
                 {
@@ -879,6 +879,10 @@ namespace EDDiscovery
         public void LogTextHighlight(string text)
         {
             LogTextColor(text, _discoveryForm.theme.TextBlockHighlightColor);
+        }
+        public void LogTextSuccess(string text)
+        {
+            LogTextColor(text, _discoveryForm.theme.TextBlockSuccessColor);
         }
 
         private void LogTextColor(string text, Color color)
