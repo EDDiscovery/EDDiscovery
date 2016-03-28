@@ -597,6 +597,8 @@ namespace EDDiscovery2
                     Font fnt2 = new Font(currentsettings.fontname, 9F);
                     MyDgv.Columns[0].DefaultCellStyle.Font = fnt2;
                 }
+                else
+                    MyDgv.Columns[0].DefaultCellStyle.Font = fnt;
             }
 
             foreach (Control subC in myControl.Controls)
