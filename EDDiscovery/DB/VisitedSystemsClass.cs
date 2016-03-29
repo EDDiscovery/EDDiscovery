@@ -177,6 +177,74 @@ namespace EDDiscovery2.DB
             }
         }
 
+        static public VisitedSystemsClass GetLast()
+        {
+            List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
+
+
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    DataSet ds = null;
+                    cmd.Connection = cn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandTimeout = 30;
+                    cmd.CommandText = "select * from VisitedSystems Order by Time DESC Limit 1";
+
+
+                    ds = SQLiteDBClass.QueryText(cn, cmd);
+                    if (ds.Tables.Count == 0)
+                    {
+                        return null;
+                    }
+                    //
+                    if (ds.Tables[0].Rows.Count == 0)
+                    {
+                        return null;
+                    }
+
+                    VisitedSystemsClass sys = new VisitedSystemsClass(ds.Tables[0].Rows[0]);
+
+                    return sys;
+                }
+            }
+        }
+
+        internal static bool  Exist(string name, DateTime time)
+        {
+            List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
+
+
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    DataSet ds = null;
+                    cmd.Connection = cn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandTimeout = 30;
+                    cmd.CommandText = "select * from VisitedSystems where name=@name and Time=@time  Order by Time DESC Limit 1";
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@time", time);
+                    ds = SQLiteDBClass.QueryText(cn, cmd);
+                    if (ds.Tables.Count == 0)
+                    {
+                        return false;
+                    }
+                    //
+                    if (ds.Tables[0].Rows.Count == 0)
+                    {
+                        return false;
+                    }
+
+                    //VisitedSystemsClass sys = new VisitedSystemsClass(ds.Tables[0].Rows[0]);
+
+                    return true;
+                }
+            }
+        }
+
 
     }
 
