@@ -616,7 +616,7 @@ namespace EDDiscovery
             {
                 selectedSys = (SystemPosition)dataGridViewTravel.Rows[selectedLine].Cells[1].Tag;
                 selectedLine += 1;
-            } while (!selectedSys.curSystem.HasCoordinate && selectedLine <= dataGridViewTravel.Rows.Count);
+            } while (!selectedSys.curSystem.HasCoordinate && selectedLine < dataGridViewTravel.Rows.Count);
             _discoveryForm.updateMapData();
             map.Instance.Reset();
                         
