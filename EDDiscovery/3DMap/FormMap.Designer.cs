@@ -195,6 +195,7 @@ namespace EDDiscovery2
             this.toolStripButtonPerspective.Size = new System.Drawing.Size(23, 28);
             this.toolStripButtonPerspective.Text = "Perspective";
             this.toolStripButtonPerspective.ToolTipText = "Enable Perspective View";
+            this.toolStripButtonPerspective.Click += new System.EventHandler(this.toolStripButtonPerspective_Click);
             // 
             // statusStrip
             // 
