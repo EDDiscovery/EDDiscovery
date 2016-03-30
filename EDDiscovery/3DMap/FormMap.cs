@@ -851,18 +851,38 @@ namespace EDDiscovery2
 
         private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Delta > 0)
-            {
-                _zoom *= (float)ZoomFact;
-                if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
-            }
-            if (e.Delta < 0)
-            {
-                _zoom /= (float)ZoomFact;
-                if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
-            }
+            var kbdstate = OpenTK.Input.Keyboard.GetState();
 
-            SetupCursorXYZ();
+            if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+            {
+                if (e.Delta > 0)
+                {
+                    _cameraFov *= (float)ZoomFact;
+                    if (_cameraFov >= Math.PI * 0.8)
+                    {
+                        _cameraFov = (float)(Math.PI * 0.8);
+                    }
+                }
+                if (e.Delta < 0)
+                {
+                    _cameraFov /= (float)ZoomFact;
+                }
+            }
+            else
+            {
+                if (e.Delta > 0)
+                {
+                    _zoom *= (float)ZoomFact;
+                    if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
+                }
+                if (e.Delta < 0)
+                {
+                    _zoom /= (float)ZoomFact;
+                    if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
+                }
+
+                SetupCursorXYZ();
+            }
 
             SetupViewport();
             glControl.Invalidate();
