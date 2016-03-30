@@ -50,6 +50,7 @@ namespace EDDiscovery2
 
         private Vector3 _cameraActionMovement = Vector3.Zero;
         private Vector3 _cameraActionRotation = Vector3.Zero;
+        private float _cameraFov = (float)(Math.PI / 2.0f);
 
         private KeyboardActions _kbdActions = new KeyboardActions();
         private int _oldTickCount = Environment.TickCount;
@@ -163,14 +164,23 @@ namespace EDDiscovery2
 
             if (w == 0 || h == 0) return;
 
-            float orthoW = w * (_zoom + 1.0f);
-            float orthoH = h * (_zoom + 1.0f);
+            if (toolStripButtonPerspective.Checked)
+            {
+                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
+                GL.LoadMatrix(ref perspective);
+            }
+            else
+            {
+                float orthoW = w * (_zoom + 1.0f);
+                float orthoH = h * (_zoom + 1.0f);
 
-            float orthoheight = 1000.0f * h / w;
+                float orthoheight = 1000.0f * h / w;
 
-            GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
-            //GL.Ortho(-100000.0, 100000.0, -100000.0, 100000.0, -100000.0, 100000.0); // Bottom-left corner pixel has coordinate (0, 0)
-            //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
+                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
+                //GL.Ortho(-100000.0, 100000.0, -100000.0, 100000.0, -100000.0, 100000.0); // Bottom-left corner pixel has coordinate (0, 0)
+                //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
+            }
+
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
 
@@ -571,10 +581,18 @@ namespace EDDiscovery2
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);
-            TransformWorldOrientatation();
 
-            TransformCamera();
-            FlipYAxisOnWorld();
+            if (toolStripButtonPerspective.Checked)
+            {
+                CameraLookAt();
+            }
+            else
+            {
+                TransformWorldOrientatation();
+
+                TransformCamera();
+                FlipYAxisOnWorld();
+            }
             RenderGalaxy();
 
             glControl.SwapBuffers();
@@ -594,6 +612,20 @@ namespace EDDiscovery2
             GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
             GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
             GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
+        }
+
+        private void CameraLookAt()
+        {
+            Vector3 target = _cameraPos;
+            Matrix4 transform = Matrix4.Identity;
+            transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
+            transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
+            transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
+            Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
+            Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
+            Vector3 eye = _cameraPos + eyerel;
+            Matrix4 lookat = Matrix4.LookAt(eye, target, up);
+            GL.LoadMatrix(ref lookat);
         }
 
         private void FlipYAxisOnWorld()
@@ -830,6 +862,12 @@ namespace EDDiscovery2
             OrientateMapAroundSystem(sys);
 
             ResetCamera();
+        }
+
+        private void toolStripButtonPerspective_Click(object sender, EventArgs e)
+        {
+            SetCenterSystem(CenterSystem);
+            SetupViewport();
         }
     }
 }
