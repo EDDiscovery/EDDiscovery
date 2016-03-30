@@ -592,8 +592,8 @@ namespace EDDiscovery2
                 TransformWorldOrientatation();
 
                 TransformCamera();
-                FlipYAxisOnWorld();
             }
+            FlipYAxisOnWorld();
             RenderGalaxy();
 
             glControl.SwapBuffers();
