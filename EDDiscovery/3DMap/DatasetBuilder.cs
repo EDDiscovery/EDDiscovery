@@ -224,6 +224,11 @@ namespace EDDiscovery2._3DMap
             ISystem lastknownps = null;
             foreach (SystemPosition ps in VisitedSystems)
             {
+                if (ps.curSystem == null)
+                {
+                    ps.curSystem = SystemData.GetSystem(ps.Name);
+                }
+
                 if (ps.curSystem != null && ps.curSystem.HasCoordinate)
                 {
                     ps.lastKnownSystem = lastknownps;
