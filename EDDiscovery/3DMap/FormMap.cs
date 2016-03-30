@@ -57,7 +57,8 @@ namespace EDDiscovery2
         private int _ticks = 0;
 
         private Point _mouseStartRotate;
-        private Point _mouseStartTranslate;
+        private Point _mouseStartTranslateXY;
+        private Point _mouseStartTranslateXZ;
 
         private List<SystemClass> _starList;
         private Dictionary<string, SystemClass> _visitedStars;
@@ -768,18 +769,19 @@ namespace EDDiscovery2
 
         private void glControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Left))
             {
                 _mouseStartRotate.X = e.X;
                 _mouseStartRotate.Y = e.Y;
             }
 
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
             {
-                _mouseStartTranslate.X = e.X;
-                _mouseStartTranslate.Y = e.Y;
+                _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXY.Y = e.Y;
+                _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXZ.Y = e.Y;
             }
-
         }
 
         /// <summary>
@@ -799,8 +801,8 @@ namespace EDDiscovery2
                 int dx = e.X - _mouseStartRotate.X;
                 int dy = e.Y - _mouseStartRotate.Y;
 
-                _mouseStartRotate.X = e.X;
-                _mouseStartRotate.Y = e.Y;
+                _mouseStartRotate.X = _mouseStartTranslateXZ.X = e.X;
+                _mouseStartRotate.Y = _mouseStartTranslateXZ.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
@@ -814,16 +816,34 @@ namespace EDDiscovery2
             // TODO: Turn this into Up and Down along Y Axis, like real ED map 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                int dx = e.X - _mouseStartTranslate.X;
-                int dy = e.Y - _mouseStartTranslate.Y;
+                int dx = e.X - _mouseStartTranslateXY.X;
+                int dy = e.Y - _mouseStartTranslateXY.Y;
 
-                _mouseStartTranslate.X = e.X;
-                _mouseStartTranslate.Y = e.Y;
+                _mouseStartTranslateXY.X = _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXY.Y = _mouseStartTranslateXZ.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
-                _cameraPos.Y += dy * (1.0f /_zoom) * 2.0f;
+                //_cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
+                _cameraPos.Y += -dy * (1.0f /_zoom) * 2.0f;
+
+                glControl.Invalidate();
+            }
+            if (e.Button == (System.Windows.Forms.MouseButtons.Left | System.Windows.Forms.MouseButtons.Right))
+            {
+                int dx = e.X - _mouseStartTranslateXZ.X;
+                int dy = e.Y - _mouseStartTranslateXZ.Y;
+
+                _mouseStartTranslateXZ.X = _mouseStartRotate.X = _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXZ.Y = _mouseStartRotate.Y = _mouseStartTranslateXY.Y = e.Y;
+                //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
+
+                Matrix4 transform = Matrix4.CreateRotationZ((float)(-_cameraDir.Y * Math.PI / 180.0f));
+                Vector3 translation = new Vector3(-dx * (1.0f / _zoom) * 2.0f, dy * (1.0f / _zoom) * 2.0f, 0.0f);
+                translation = Vector3.Transform(translation, transform);
+
+                _cameraPos.X += translation.X;
+                _cameraPos.Z += translation.Y;
 
                 glControl.Invalidate();
             }
@@ -868,6 +888,23 @@ namespace EDDiscovery2
         {
             SetCenterSystem(CenterSystem);
             SetupViewport();
+        }
+
+        private void glControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Left))
+            {
+                _mouseStartRotate.X = e.X;
+                _mouseStartRotate.Y = e.Y;
+            }
+
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
+            {
+                _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXY.Y = e.Y;
+                _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXZ.Y = e.Y;
+            }
         }
     }
 }
