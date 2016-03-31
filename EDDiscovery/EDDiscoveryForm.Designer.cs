@@ -38,6 +38,7 @@
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.prospectingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,7 +71,7 @@
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.label_version = new System.Windows.Forms.Label();
-            this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
@@ -115,7 +116,8 @@
             this.show2DMapsToolStripMenuItem,
             this.prospectingToolStripMenuItem,
             this.statisticsToolStripMenuItem,
-            this.changeMapColorToolStripMenuItem});
+            this.changeMapColorToolStripMenuItem,
+            this.editThemeToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -154,6 +156,13 @@
             this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.statisticsToolStripMenuItem.Text = "Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
+            // 
+            // changeMapColorToolStripMenuItem
+            // 
+            this.changeMapColorToolStripMenuItem.Name = "changeMapColorToolStripMenuItem";
+            this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.changeMapColorToolStripMenuItem.Text = "Set Default Map Colour";
+            this.changeMapColorToolStripMenuItem.Click += new System.EventHandler(this.changeMapColorToolStripMenuItem_Click);
             // 
             // adminToolStripMenuItem
             // 
@@ -448,12 +457,12 @@
             this.label_version.TabIndex = 21;
             this.label_version.Text = "Version Label";
             // 
-            // changeMapColorToolStripMenuItem
+            // editThemeToolStripMenuItem
             // 
-            this.changeMapColorToolStripMenuItem.Name = "changeMapColorToolStripMenuItem";
-            this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.changeMapColorToolStripMenuItem.Text = "Set Default Map Colour";
-            this.changeMapColorToolStripMenuItem.Click += new System.EventHandler(this.changeMapColorToolStripMenuItem_Click);
+            this.editThemeToolStripMenuItem.Name = "editThemeToolStripMenuItem";
+            this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.editThemeToolStripMenuItem.Text = "Edit Theme";
+            this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -538,6 +547,7 @@
         private TravelHistoryControl travelHistoryControl1;
         private System.Windows.Forms.Label label_version;
         private System.Windows.Forms.ToolStripMenuItem changeMapColorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
     }
 }
 

@@ -270,6 +270,18 @@ namespace EDDiscovery2
                                                Color.FromArgb(255, 32, 32, 32), Color.Orange, // group
                                                false, 95, "Euro Caps", 12F));
 
+            themelist.Add(new Settings("Elite Verdana", Color.Black,
+                                               Color.FromArgb(255, 48, 48, 48), Color.Orange,  // button
+                                               Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
+                                               Color.Black, Color.Orange, // grid
+                                               Color.Orange, Color.White, // travel
+                                               Color.Black, Color.Orange, Color.Red, Color.Green, // text box
+                                               Color.Orange, // checkbox
+                                               Color.Black, Color.Orange,  // menu
+                                               Color.Orange,  // label
+                                               Color.FromArgb(255, 32, 32, 32), Color.Orange, // group
+                                               false, 95, "Verdana", 8F));
+
             themelist.Add(new Settings("EuroCaps Grey",
                                         SystemColors.Menu,
                                         SystemColors.Control, SystemColors.ControlText,  // button
@@ -282,6 +294,19 @@ namespace EDDiscovery2
                                         SystemColors.MenuText,  // label
                                         SystemColors.Menu, SystemColors.MenuText,  // group
                                         false, 95, "Euro Caps", 12F));
+
+            themelist.Add(new Settings("Verdana Grey",
+                                        SystemColors.Menu,
+                                        SystemColors.Control, SystemColors.ControlText,  // button
+                                        SystemColors.Menu, SystemColors.MenuText,  // grid border
+                                        SystemColors.ControlLightLight, SystemColors.MenuText,  // grid
+                                        Color.Blue, SystemColors.MenuText, // travel
+                                        SystemColors.Menu, SystemColors.MenuText, Color.Red, Color.Green, // text
+                                        SystemColors.MenuText, // checkbox
+                                        SystemColors.Menu, SystemColors.MenuText,  // menu
+                                        SystemColors.MenuText,  // label
+                                        SystemColors.Menu, SystemColors.MenuText,  // group
+                                        false, 95, "Verdana", 8F));
 
             themelist.Add(new Settings("Blue Wonder", Color.DarkBlue,
                                                Color.Blue, Color.White,  // button
