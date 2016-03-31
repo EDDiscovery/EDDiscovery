@@ -146,7 +146,7 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
-            _cameraPos = new Vector3((float) CenterSystem.x, (float)CenterSystem.x, (float)CenterSystem.z);
+            _cameraPos = new Vector3((float) CenterSystem.x, -(float)CenterSystem.y, (float)CenterSystem.z);
             _cameraDir = Vector3.Zero;
 
             _zoom = _defaultZoom;
@@ -433,7 +433,7 @@ namespace EDDiscovery2
         private void UpdateStatus()
         {
             statusLabel.Text = "Use W, A, S and D keys with mouse to move the map!      ";
-            statusLabel.Text += $"Coordinates: x={_cameraPos.X} y={_cameraPos.Y} z={_cameraPos.Z}";
+            statusLabel.Text += $"Coordinates: x={_cameraPos.X} y={-_cameraPos.Y} z={_cameraPos.Z}";
             statusLabel.Text += $", Zoom: {_zoom}";
 #if DEBUG
             statusLabel.Text += $", Direction: x={_cameraDir.X} y={_cameraDir.Y} z={_cameraDir.Z}";
