@@ -236,6 +236,12 @@ namespace EDDiscovery
 
         public void DownloadMaps()
         {
+            if (CanSkipSlowUpdates())
+            {
+                LogLine("Skipping checking for new maps (DEBUG option).");
+                return;
+            }
+
             try
             {
                 if (!Directory.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps")))
@@ -1098,6 +1104,11 @@ namespace EDDiscovery
         private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             settings.panel_defaultmapcolor_Click(sender, e);
+        }
+
+        private void editThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            settings.button_edittheme_Click(this, null);
         }
     }
 }
