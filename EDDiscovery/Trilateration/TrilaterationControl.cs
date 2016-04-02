@@ -25,6 +25,7 @@ namespace EDDiscovery
         private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
         private Thread EDSMSubmissionThread;
         private EDSMClass edsm;
+        private List<WantedSystemClass> wanted;
 
         /** This global should be set if the next CurrentCellChanged() event should skip to the next editable cell.
          * This should be the case whenver a keyboard event causes cells to change, but not on mouse-initiated events */
@@ -75,7 +76,7 @@ namespace EDDiscovery
 
             PopulateSuggestedSystems();
             //PopulateClosestSystems();
-
+            PopulateLocalWantedSystems();
 
             Thread ViewPushedSystemsThread = new Thread(ViewPushedSystems) { Name = "EDSM get pushed systems" };
             ViewPushedSystemsThread.Start();
@@ -573,10 +574,10 @@ namespace EDDiscovery
             }
         }
 
-        private void ClearDataGridViewClosestSystemsRows()
-        {
-            dataGridViewClosestSystems.Rows.Clear();
-        }
+        //private void ClearDataGridViewClosestSystemsRows()
+        //{
+        //    dataGridViewClosestSystems.Rows.Clear();
+        //}
 
         private void ClearDataGridViewSuggestedSystemsRows()
         {
@@ -640,6 +641,29 @@ namespace EDDiscovery
             }
         }
 
+        private void PopulateLocalWantedSystems()
+        {
+            var db = new SQLiteDBClass();
+            wanted = db.GetAllWantedSystems();
+            if (wanted != null && wanted.Any())
+            {
+                foreach (WantedSystemClass sys in wanted)
+                {
+                    SystemClass star = SystemData.GetSystem(sys.system);
+                    if (star == null)
+                        star = new SystemClass(sys.system);
+
+                    var index = dataGridViewClosestSystems.Rows.Add("Local");
+                    dataGridViewClosestSystems[1, index].Value = sys.system;
+                    dataGridViewClosestSystems[1, index].Tag = star;
+                }
+            }
+            else
+            {
+                wanted = new List<WantedSystemClass>();
+            }
+        }
+
         // Runs as a thread.
         private void ViewPushedSystems()
         {
@@ -649,7 +673,7 @@ namespace EDDiscovery
 
                 this.BeginInvoke(new MethodInvoker(() =>
                 {
-                    dataGridViewClosestSystems.Rows.Clear();
+                    ClearPushedSystems();
                 }));
 
                 foreach (String system in systems)
@@ -660,8 +684,9 @@ namespace EDDiscovery
 
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        var index = dataGridViewClosestSystems.Rows.Add(system);
-                        dataGridViewClosestSystems[0, index].Tag = star;
+                        var index = dataGridViewClosestSystems.Rows.Add("EDSM");
+                        dataGridViewClosestSystems[1, index].Value = system;
+                        dataGridViewClosestSystems[1, index].Tag = star;
                     }));
                 }
             }
@@ -673,38 +698,46 @@ namespace EDDiscovery
                     LogText(ex.StackTrace);
                 }));
             }
-        } 
+        }
 
-        private void PopulateClosestSystems()
+        private void ClearPushedSystems()
         {
-            // TODO: in future, we want this to be "predicted" by the direction and distances
-
-            var lastKnown = LastKnownSystem;
-
-            if (lastKnown == null)
+            foreach(DataGridViewRow row in dataGridViewClosestSystems.Rows)
             {
-                return;
-            }
-
-            //labelLastKnownSystem.Text = lastKnown.name;
-
-            var closest = (from systems
-                           in SystemData.SystemList
-                           where systems != lastKnown && systems.HasCoordinate
-                           select new
-                           {
-                               System = systems,
-                               Distance = Math.Sqrt(Math.Pow(lastKnown.x - systems.x, 2) + Math.Pow(lastKnown.y - systems.y, 2) + Math.Pow(lastKnown.z - systems.z, 2))
-                           })
-                          .OrderBy(c => c.Distance)
-                          .Take(30);
-
-            foreach (var item in closest)
-            {
-                var index = dataGridViewClosestSystems.Rows.Add(item.System.name, Math.Round(item.Distance, 2).ToString("0.00") + " Ly");
-                dataGridViewClosestSystems[0, index].Tag = item.System;
+                if (row.Cells[0].Value.ToString() == "EDSM") dataGridViewClosestSystems.Rows.Remove(row);
             }
         }
+
+        //private void PopulateClosestSystems()
+        //{
+        //    // TODO: in future, we want this to be "predicted" by the direction and distances
+
+        //    var lastKnown = LastKnownSystem;
+
+        //    if (lastKnown == null)
+        //    {
+        //        return;
+        //    }
+
+        //    //labelLastKnownSystem.Text = lastKnown.name;
+
+        //    var closest = (from systems
+        //                   in SystemData.SystemList
+        //                   where systems != lastKnown && systems.HasCoordinate
+        //                   select new
+        //                   {
+        //                       System = systems,
+        //                       Distance = Math.Sqrt(Math.Pow(lastKnown.x - systems.x, 2) + Math.Pow(lastKnown.y - systems.y, 2) + Math.Pow(lastKnown.z - systems.z, 2))
+        //                   })
+        //                  .OrderBy(c => c.Distance)
+        //                  .Take(30);
+
+        //    foreach (var item in closest)
+        //    {
+        //        var index = dataGridViewClosestSystems.Rows.Add(item.System.name, Math.Round(item.Distance, 2).ToString("0.00") + " Ly");
+        //        dataGridViewClosestSystems[0, index].Tag = item.System;
+        //    }
+        //}
 
         public ISystem LastKnownSystem
         {
@@ -734,7 +767,7 @@ namespace EDDiscovery
 
         private void dataGridViewClosestSystems_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            var system = (SystemClass) dataGridViewClosestSystems[0, e.RowIndex].Tag;
+            var system = (SystemClass) dataGridViewClosestSystems[1, e.RowIndex].Tag;
             AddSystemToDataGridViewDistances(system);
         }
 
@@ -1181,6 +1214,58 @@ namespace EDDiscovery
             {
                 System.Diagnostics.Trace.WriteLine("Exception dataGridViewDistances_CurrentCellChanged: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+        }
+
+        private void addToWantedSystemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewDistances.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[0].Value.ToString();
+                WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
+                if (entry == null)
+                {
+                    WantedSystemClass toAdd = new WantedSystemClass(sysName);
+                    wanted.Add(toAdd);
+                    SystemClass star = SystemData.GetSystem(sysName);
+                    if (star == null)
+                        star = new SystemClass(sysName);
+
+                    var index = dataGridViewClosestSystems.Rows.Add("Local");
+                    dataGridViewClosestSystems[1, index].Value = sysName;
+                    dataGridViewClosestSystems[1, index].Tag = star;
+                }
+            }
+        }
+
+        private void removeFromWantedSystemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewClosestSystems.SelectedCells.Cast<DataGridViewCell>()
+                                                                       .Select(cell => cell.OwningRow)
+                                                                       .Distinct()
+                                                                       .OrderBy(cell => cell.Index);
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[1].Value.ToString();
+                if (r.Cells[0].Value.ToString() == "Local")
+                {
+                    WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
+                    if (entry != null)
+                    {
+                        entry.Delete();
+                        dataGridViewClosestSystems.Rows.Remove(r);
+                    }
+                }
+                else
+                {
+                    LogText(String.Format("{0} is pushed from EDSM and cannot be removed", sysName) + Environment.NewLine);
+                }
             }
         }
     }
