@@ -1230,6 +1230,8 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
+        
+
         private void textBoxPrevSystem_Enter(object sender, EventArgs e)
         {
             /* Automatically copy the contents to the clipboard whenever this control is activated */
@@ -1260,6 +1262,27 @@ namespace EDDiscovery
             FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm);
 
             frm.Show();
+        }
+
+        private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[0].Value.ToString();
+
+                tctrl.AddSystemToDataGridViewDistances(sysName);
+            }
+
+            this.Cursor = Cursors.Default;
         }
     }
 
