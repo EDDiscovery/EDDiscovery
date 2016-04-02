@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
             this.richTextBox_History = new System.Windows.Forms.RichTextBox();
             this.button_RefreshHistory = new System.Windows.Forms.Button();
@@ -47,7 +47,7 @@
             this.comboBoxHistoryWindow = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.buttonMap = new System.Windows.Forms.Button();
+            this.buttonMap3D = new System.Windows.Forms.Button();
             this.textBoxSystem = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
@@ -85,6 +85,7 @@
             this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
             this.textBoxDistanceToNextSystem = new System.Windows.Forms.TextBox();
             this.panelRight = new System.Windows.Forms.Panel();
+            this.buttonMap2D = new System.Windows.Forms.Button();
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -182,8 +183,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle2;
             this.mapColour.HeaderText = "Map";
             this.mapColour.Name = "mapColour";
             this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -266,15 +267,15 @@
             this.label3.TabIndex = 12;
             this.label3.Text = "Closest systems  (from last known position)";
             // 
-            // buttonMap
+            // buttonMap3D
             // 
-            this.buttonMap.Location = new System.Drawing.Point(199, 80);
-            this.buttonMap.Name = "buttonMap";
-            this.buttonMap.Size = new System.Drawing.Size(83, 23);
-            this.buttonMap.TabIndex = 4;
-            this.buttonMap.Text = "3D star map";
-            this.buttonMap.UseVisualStyleBackColor = true;
-            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
+            this.buttonMap3D.Location = new System.Drawing.Point(217, 80);
+            this.buttonMap3D.Name = "buttonMap3D";
+            this.buttonMap3D.Size = new System.Drawing.Size(65, 23);
+            this.buttonMap3D.TabIndex = 4;
+            this.buttonMap3D.Text = "3D map";
+            this.buttonMap3D.UseVisualStyleBackColor = true;
+            this.buttonMap3D.Click += new System.EventHandler(this.buttonMap_Click);
             // 
             // textBoxSystem
             // 
@@ -664,6 +665,7 @@
             // 
             // panelRight
             // 
+            this.panelRight.Controls.Add(this.buttonMap2D);
             this.panelRight.Controls.Add(this.dataGridViewNearest);
             this.panelRight.Controls.Add(this.checkBoxEDSMSyncFrom);
             this.panelRight.Controls.Add(this.checkBoxEDSMSyncTo);
@@ -672,7 +674,7 @@
             this.panelRight.Controls.Add(this.textBoxDistanceToNextSystem);
             this.panelRight.Controls.Add(this.label3);
             this.panelRight.Controls.Add(this.labelDistanceToNextSystem);
-            this.panelRight.Controls.Add(this.buttonMap);
+            this.panelRight.Controls.Add(this.buttonMap3D);
             this.panelRight.Controls.Add(this.buttonSync);
             this.panelRight.Controls.Add(this.panel1);
             this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
@@ -680,6 +682,16 @@
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(297, 586);
             this.panelRight.TabIndex = 1;
+            // 
+            // buttonMap2D
+            // 
+            this.buttonMap2D.Location = new System.Drawing.Point(146, 80);
+            this.buttonMap2D.Name = "buttonMap2D";
+            this.buttonMap2D.Size = new System.Drawing.Size(65, 23);
+            this.buttonMap2D.TabIndex = 24;
+            this.buttonMap2D.Text = "2D map";
+            this.buttonMap2D.UseVisualStyleBackColor = true;
+            this.buttonMap2D.Click += new System.EventHandler(this.button2DMap_Click);
             // 
             // dataGridViewNearest
             // 
@@ -820,7 +832,7 @@
         private System.Windows.Forms.ComboBox comboBoxHistoryWindow;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button buttonMap;
+        private System.Windows.Forms.Button buttonMap3D;
         internal System.Windows.Forms.RichTextBox richTextBox_History;
         private System.Windows.Forms.TextBox textBoxSystem;
         private System.Windows.Forms.Panel panel1;
@@ -881,5 +893,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
+        private System.Windows.Forms.Button buttonMap2D;
     }
 }

@@ -50,13 +50,15 @@ namespace EDDiscovery2
 
         private Vector3 _cameraActionMovement = Vector3.Zero;
         private Vector3 _cameraActionRotation = Vector3.Zero;
+        private float _cameraFov = (float)(Math.PI / 2.0f);
 
         private KeyboardActions _kbdActions = new KeyboardActions();
         private int _oldTickCount = Environment.TickCount;
         private int _ticks = 0;
 
         private Point _mouseStartRotate;
-        private Point _mouseStartTranslate;
+        private Point _mouseStartTranslateXY;
+        private Point _mouseStartTranslateXZ;
 
         private List<SystemClass> _starList;
         private Dictionary<string, SystemClass> _visitedStars;
@@ -144,7 +146,7 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
-            _cameraPos = new Vector3((float) CenterSystem.x, (float)CenterSystem.x, (float)CenterSystem.z);
+            _cameraPos = new Vector3((float) CenterSystem.x, -(float)CenterSystem.y, (float)CenterSystem.z);
             _cameraDir = Vector3.Zero;
 
             _zoom = _defaultZoom;
@@ -163,14 +165,23 @@ namespace EDDiscovery2
 
             if (w == 0 || h == 0) return;
 
-            float orthoW = w * (_zoom + 1.0f);
-            float orthoH = h * (_zoom + 1.0f);
+            if (toolStripButtonPerspective.Checked)
+            {
+                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
+                GL.LoadMatrix(ref perspective);
+            }
+            else
+            {
+                float orthoW = w * (_zoom + 1.0f);
+                float orthoH = h * (_zoom + 1.0f);
 
-            float orthoheight = 1000.0f * h / w;
+                float orthoheight = 1000.0f * h / w;
 
-            GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
-            //GL.Ortho(-100000.0, 100000.0, -100000.0, 100000.0, -100000.0, 100000.0); // Bottom-left corner pixel has coordinate (0, 0)
-            //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
+                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
+                //GL.Ortho(-100000.0, 100000.0, -100000.0, 100000.0, -100000.0, 100000.0); // Bottom-left corner pixel has coordinate (0, 0)
+                //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
+            }
+
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
 
@@ -422,7 +433,7 @@ namespace EDDiscovery2
         private void UpdateStatus()
         {
             statusLabel.Text = "Use W, A, S and D keys with mouse to move the map!      ";
-            statusLabel.Text += $"Coordinates: x={_cameraPos.X} y={_cameraPos.Y} z={_cameraPos.Z}";
+            statusLabel.Text += $"Coordinates: x={_cameraPos.X} y={-_cameraPos.Y} z={_cameraPos.Z}";
             statusLabel.Text += $", Zoom: {_zoom}";
 #if DEBUG
             statusLabel.Text += $", Direction: x={_cameraDir.X} y={_cameraDir.Y} z={_cameraDir.Z}";
@@ -571,9 +582,17 @@ namespace EDDiscovery2
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);
-            TransformWorldOrientatation();
 
-            TransformCamera();
+            if (toolStripButtonPerspective.Checked)
+            {
+                CameraLookAt();
+            }
+            else
+            {
+                TransformWorldOrientatation();
+
+                TransformCamera();
+            }
             FlipYAxisOnWorld();
             RenderGalaxy();
 
@@ -594,6 +613,20 @@ namespace EDDiscovery2
             GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
             GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
             GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
+        }
+
+        private void CameraLookAt()
+        {
+            Vector3 target = _cameraPos;
+            Matrix4 transform = Matrix4.Identity;
+            transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
+            transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
+            transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
+            Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
+            Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
+            Vector3 eye = _cameraPos + eyerel;
+            Matrix4 lookat = Matrix4.LookAt(eye, target, up);
+            GL.LoadMatrix(ref lookat);
         }
 
         private void FlipYAxisOnWorld()
@@ -736,18 +769,19 @@ namespace EDDiscovery2
 
         private void glControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Left))
             {
                 _mouseStartRotate.X = e.X;
                 _mouseStartRotate.Y = e.Y;
             }
 
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
             {
-                _mouseStartTranslate.X = e.X;
-                _mouseStartTranslate.Y = e.Y;
+                _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXY.Y = e.Y;
+                _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXZ.Y = e.Y;
             }
-
         }
 
         /// <summary>
@@ -767,8 +801,8 @@ namespace EDDiscovery2
                 int dx = e.X - _mouseStartRotate.X;
                 int dy = e.Y - _mouseStartRotate.Y;
 
-                _mouseStartRotate.X = e.X;
-                _mouseStartRotate.Y = e.Y;
+                _mouseStartRotate.X = _mouseStartTranslateXZ.X = e.X;
+                _mouseStartRotate.Y = _mouseStartTranslateXZ.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
@@ -782,16 +816,34 @@ namespace EDDiscovery2
             // TODO: Turn this into Up and Down along Y Axis, like real ED map 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                int dx = e.X - _mouseStartTranslate.X;
-                int dy = e.Y - _mouseStartTranslate.Y;
+                int dx = e.X - _mouseStartTranslateXY.X;
+                int dy = e.Y - _mouseStartTranslateXY.Y;
 
-                _mouseStartTranslate.X = e.X;
-                _mouseStartTranslate.Y = e.Y;
+                _mouseStartTranslateXY.X = _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXY.Y = _mouseStartTranslateXZ.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
-                _cameraPos.Y += dy * (1.0f /_zoom) * 2.0f;
+                //_cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
+                _cameraPos.Y += -dy * (1.0f /_zoom) * 2.0f;
+
+                glControl.Invalidate();
+            }
+            if (e.Button == (System.Windows.Forms.MouseButtons.Left | System.Windows.Forms.MouseButtons.Right))
+            {
+                int dx = e.X - _mouseStartTranslateXZ.X;
+                int dy = e.Y - _mouseStartTranslateXZ.Y;
+
+                _mouseStartTranslateXZ.X = _mouseStartRotate.X = _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXZ.Y = _mouseStartRotate.Y = _mouseStartTranslateXY.Y = e.Y;
+                //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
+
+                Matrix4 transform = Matrix4.CreateRotationZ((float)(-_cameraDir.Y * Math.PI / 180.0f));
+                Vector3 translation = new Vector3(-dx * (1.0f / _zoom) * 2.0f, dy * (1.0f / _zoom) * 2.0f, 0.0f);
+                translation = Vector3.Transform(translation, transform);
+
+                _cameraPos.X += translation.X;
+                _cameraPos.Z += translation.Y;
 
                 glControl.Invalidate();
             }
@@ -799,18 +851,38 @@ namespace EDDiscovery2
 
         private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Delta > 0)
-            {
-                _zoom *= (float)ZoomFact;
-                if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
-            }
-            if (e.Delta < 0)
-            {
-                _zoom /= (float)ZoomFact;
-                if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
-            }
+            var kbdstate = OpenTK.Input.Keyboard.GetState();
 
-            SetupCursorXYZ();
+            if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+            {
+                if (e.Delta > 0)
+                {
+                    _cameraFov *= (float)ZoomFact;
+                    if (_cameraFov >= Math.PI * 0.8)
+                    {
+                        _cameraFov = (float)(Math.PI * 0.8);
+                    }
+                }
+                if (e.Delta < 0)
+                {
+                    _cameraFov /= (float)ZoomFact;
+                }
+            }
+            else
+            {
+                if (e.Delta > 0)
+                {
+                    _zoom *= (float)ZoomFact;
+                    if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
+                }
+                if (e.Delta < 0)
+                {
+                    _zoom /= (float)ZoomFact;
+                    if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
+                }
+
+                SetupCursorXYZ();
+            }
 
             SetupViewport();
             glControl.Invalidate();
@@ -830,6 +902,29 @@ namespace EDDiscovery2
             OrientateMapAroundSystem(sys);
 
             ResetCamera();
+        }
+
+        private void toolStripButtonPerspective_Click(object sender, EventArgs e)
+        {
+            SetCenterSystem(CenterSystem);
+            SetupViewport();
+        }
+
+        private void glControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Left))
+            {
+                _mouseStartRotate.X = e.X;
+                _mouseStartRotate.Y = e.Y;
+            }
+
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
+            {
+                _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXY.Y = e.Y;
+                _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXZ.Y = e.Y;
+            }
         }
     }
 }
