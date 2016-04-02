@@ -47,6 +47,7 @@ namespace EDDiscovery2
             this.toolStripButtonShowAllStars = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGrid = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonPerspective = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonHistory = new System.Windows.Forms.Button();
@@ -71,6 +72,7 @@ namespace EDDiscovery2
             this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
             this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
             this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
+            this.glControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseUp);
             this.glControl.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.glControl_OnMouseWheel);
             this.glControl.Resize += new System.EventHandler(this.glControl_Resize);
             // 
@@ -115,7 +117,8 @@ namespace EDDiscovery2
             this.toolStripButtonDrawLines,
             this.toolStripButtonShowAllStars,
             this.toolStripButtonStations,
-            this.toolStripButtonGrid});
+            this.toolStripButtonGrid,
+            this.toolStripButtonPerspective});
             this.toolStripShowAllStars.Location = new System.Drawing.Point(0, 0);
             this.toolStripShowAllStars.Name = "toolStripShowAllStars";
             this.toolStripShowAllStars.Size = new System.Drawing.Size(918, 31);
@@ -182,6 +185,18 @@ namespace EDDiscovery2
             this.toolStripButtonGrid.Text = "Grid";
             this.toolStripButtonGrid.ToolTipText = "Show Grid";
             this.toolStripButtonGrid.Click += new System.EventHandler(this.toolStripButtonGrud_Click);
+            // 
+            // toolStripButtonPerspective
+            // 
+            this.toolStripButtonPerspective.CheckOnClick = true;
+            this.toolStripButtonPerspective.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPerspective.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonPerspective.Image")));
+            this.toolStripButtonPerspective.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPerspective.Name = "toolStripButtonPerspective";
+            this.toolStripButtonPerspective.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonPerspective.Text = "Perspective";
+            this.toolStripButtonPerspective.ToolTipText = "Enable Perspective View";
+            this.toolStripButtonPerspective.Click += new System.EventHandler(this.toolStripButtonPerspective_Click);
             // 
             // statusStrip
             // 
@@ -269,5 +284,6 @@ namespace EDDiscovery2
         private Button buttonHome;
         private Button buttonHistory;
         private ToolTip toolTip1;
+        private ToolStripButton toolStripButtonPerspective;
     }
     }
