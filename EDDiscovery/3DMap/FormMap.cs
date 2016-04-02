@@ -60,6 +60,7 @@ namespace EDDiscovery2
         private Point _mouseStartRotate;
         private Point _mouseStartTranslateXY;
         private Point _mouseStartTranslateXZ;
+        private Point _mouseStartMove;
 
         private List<SystemClass> _starList;
         private Dictionary<string, SystemClass> _visitedStars;
@@ -615,7 +616,7 @@ namespace EDDiscovery2
 
             ISystem cursys = null;
             Vector4d cursysloc = new Vector4d(0.0, 0.0, _zfar, 1.0);
-            double cursysdist = 7.0;
+            double cursysdistz = double.MaxValue;
 
             foreach (var sys in _starList)
             {
@@ -627,11 +628,12 @@ namespace EDDiscovery2
                     if (sysloc.Z > _znear)
                     {
                         Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
-                        if (Math.Sqrt(syssloc.X * syssloc.X + syssloc.Y * syssloc.Y) < cursysdist)
+                        double sysdist = Math.Sqrt(syssloc.X * syssloc.X + syssloc.Y * syssloc.Y);
+                        if (sysdist < 7.0 && (sysdist + Math.Abs(sysloc.Z * _zoom)) < cursysdistz)
                         {
                             cursys = sys;
                             cursysloc = sysloc;
-                            cursysdist = Math.Sqrt(syssloc.X * syssloc.X + syssloc.Y * syssloc.Y);
+                            cursysdistz = sysdist + Math.Abs(sysloc.Z * _zoom);
                         }
                     }
                 }
@@ -841,6 +843,8 @@ namespace EDDiscovery2
             {
                 _mouseStartRotate.X = e.X;
                 _mouseStartRotate.Y = e.Y;
+                _mouseStartMove.X = e.X;
+                _mouseStartMove.Y = e.Y;
             }
 
             if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
@@ -984,7 +988,11 @@ namespace EDDiscovery2
             {
                 _mouseStartRotate.X = e.X;
                 _mouseStartRotate.Y = e.Y;
-                _clickedSystem = GetMouseOverSystem(e.X, e.Y);
+
+                if (Math.Abs(e.X - _mouseStartMove.X) + Math.Abs(e.Y - _mouseStartMove.Y) < 4)
+                {
+                    _clickedSystem = GetMouseOverSystem(e.X, e.Y);
+                }
             }
 
             if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
