@@ -18,6 +18,7 @@ namespace EDDiscovery2._3DMap
         private List<IData3DSet> _datasets;
 
         public ISystem CenterSystem { get; set; } = new SystemClass();
+        public ISystem SelectedSystem { get; set; } = new SystemClass();
         public List<ISystem> StarList { get; set; } = new List<ISystem>();
         public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
         public List<SystemPosition> VisitedSystems { get; set; }
@@ -42,6 +43,7 @@ namespace EDDiscovery2._3DMap
             AddStations();
             AddVisitedSystemsInformation();
             AddCenterPointToDataset();
+            AddSelectedSystemToDataset();
             AddPOIsToDataset();
             AddTrilaterationInfoToDataset();
 
@@ -160,6 +162,18 @@ namespace EDDiscovery2._3DMap
             //GL.Enable(EnableCap.ProgramPointSize);
             dataset.Add(new PointData(CenterSystem.x, CenterSystem.y, CenterSystem.z));
             _datasets.Add(dataset);
+        }
+
+        public void AddSelectedSystemToDataset()
+        {
+            if (SelectedSystem != null)
+            {
+                var dataset = new Data3DSetClass<PointData>("Selected", Color.Orange, 5.0f);
+
+                //GL.Enable(EnableCap.ProgramPointSize);
+                dataset.Add(new PointData(SelectedSystem.x, SelectedSystem.y, SelectedSystem.z));
+                _datasets.Add(dataset);
+            }
         }
 
         public void AddPOIsToDataset()
