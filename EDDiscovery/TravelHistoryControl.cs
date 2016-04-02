@@ -910,10 +910,19 @@ namespace EDDiscovery
 
         private int GetVisitsCount(string name)
         {
-            int count = (from row in visitedSystems
-                         where row.Name == name
-                         select row).Count();
-            return count;
+            try
+            {
+                int count = (from row in visitedSystems
+                             where row.Name == name
+                             select row).Count();
+                return count;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception GetVisitsCount: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                return 0;
+            }
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
