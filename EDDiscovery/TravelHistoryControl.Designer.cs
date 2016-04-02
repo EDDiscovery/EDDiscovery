@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
             this.richTextBox_History = new System.Windows.Forms.RichTextBox();
             this.button_RefreshHistory = new System.Windows.Forms.Button();
@@ -89,6 +89,8 @@
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.closestContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxEDSMSyncFrom = new System.Windows.Forms.CheckBox();
             this.checkBoxEDSMSyncTo = new System.Windows.Forms.CheckBox();
             this.comboBoxCommander = new System.Windows.Forms.ComboBox();
@@ -102,6 +104,7 @@
             this.panel1.SuspendLayout();
             this.panelRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
+            this.closestContextMenu.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.SuspendLayout();
@@ -183,8 +186,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
             this.mapColour.HeaderText = "Map";
             this.mapColour.Name = "mapColour";
             this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -706,6 +709,7 @@
             this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Col1,
             this.Distance});
+            this.dataGridViewNearest.ContextMenuStrip = this.closestContextMenu;
             this.dataGridViewNearest.Location = new System.Drawing.Point(7, 379);
             this.dataGridViewNearest.Name = "dataGridViewNearest";
             this.dataGridViewNearest.RowHeadersVisible = false;
@@ -724,6 +728,20 @@
             // 
             this.Distance.HeaderText = "Distance";
             this.Distance.Name = "Distance";
+            // 
+            // closestContextMenu
+            // 
+            this.closestContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToTrilaterationToolStripMenuItem1});
+            this.closestContextMenu.Name = "closestContextMenu";
+            this.closestContextMenu.Size = new System.Drawing.Size(178, 48);
+            // 
+            // addToTrilaterationToolStripMenuItem1
+            // 
+            this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
+            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+            this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
+            this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
             // 
             // checkBoxEDSMSyncFrom
             // 
@@ -819,6 +837,7 @@
             this.panelRight.ResumeLayout(false);
             this.panelRight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
+            this.closestContextMenu.ResumeLayout(false);
             this.panelBottom.ResumeLayout(false);
             this.panelMain.ResumeLayout(false);
             this.panelMain.PerformLayout();
@@ -894,5 +913,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
         private System.Windows.Forms.Button buttonMap2D;
+        private System.Windows.Forms.ContextMenuStrip closestContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem1;
     }
 }
