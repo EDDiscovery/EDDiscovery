@@ -56,7 +56,7 @@ namespace EDDiscovery2
         private float _cameraSlewProgress = 1.0f;
 
         private KeyboardActions _kbdActions = new KeyboardActions();
-        private int _oldTickCount = Environment.TickCount;
+        private long _oldTickCount = DateTime.Now.Ticks / 10000;
         private int _ticks = 0;
 
         private Point _mouseStartRotate;
@@ -79,6 +79,7 @@ namespace EDDiscovery2
 
         private float _znear;
         private float _zfar;
+        private bool _useTimer;
         
         public ISystem CenterSystem {
             get
@@ -526,8 +527,8 @@ namespace EDDiscovery2
         }
         private void CalculateTimeDelta()
         {
-            var tickCount = Environment.TickCount;
-            _ticks = tickCount - _oldTickCount;
+            var tickCount = DateTime.Now.Ticks / 10000;
+            _ticks = (int)(tickCount - _oldTickCount);
             _oldTickCount = tickCount;
         }
 
@@ -843,22 +844,52 @@ namespace EDDiscovery2
             _loaded = true;
 
             Application.Idle += Application_Idle;
-
+            _useTimer = false;
         }
-
 
         private void Application_Idle(object sender, EventArgs e)
         {
-            glControl.Invalidate();
+            if (!_useTimer)
+            {
+                glControl.Invalidate();
+            }
         }
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
+            if (!_kbdActions.Any())
+            {
+                _ticks = 0;
+                _oldTickCount = DateTime.Now.Ticks / 10000;
+            }
             CalculateTimeDelta();
             HandleInputs();
             DoCameraSlew();
             UpdateCamera();
             Render();
+
+            if (_kbdActions.Any())
+            {
+                if (_useTimer)
+                {
+                    UpdateTimer.Stop();
+                    _useTimer = false;
+                }
+            }
+            else
+            {
+                if (!_useTimer)
+                {
+                    UpdateTimer.Interval = 100;
+                    UpdateTimer.Start();
+                    _useTimer = true;
+                }
+                else
+                {
+                    UpdateTimer.Stop();
+                    UpdateTimer.Start();
+                }
+            }
         }
 
         private void UpdateCamera()
@@ -1084,6 +1115,39 @@ namespace EDDiscovery2
             {
                 OrientateMapAroundSystem(sys);
             }
+        }
+        
+	private void glControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (_useTimer)
+            {
+                glControl.Invalidate();
+            }
+        }
+
+        private void glControl_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (_useTimer)
+            {
+                glControl.Invalidate();
+            }
+        }
+
+        private void FormMap_Activated(object sender, EventArgs e)
+        {
+            _useTimer = false;
+            glControl.Invalidate();
+        }
+
+        private void FormMap_Deactivate(object sender, EventArgs e)
+        {
+            _useTimer = true;
+            UpdateTimer.Stop();
+        }
+
+        private void UpdateTimer_Tick(object sender, EventArgs e)
+        {
+            glControl.Invalidate();
         }
     }
 }
