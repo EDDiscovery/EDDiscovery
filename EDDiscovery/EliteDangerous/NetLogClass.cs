@@ -228,12 +228,22 @@ namespace EDDiscovery
 
                             if (!lu.Beta)  // dont store  history in DB for beta (YET)
                             {
-                                dbsys.Add();
-                                nr++;
+                                VisitedSystemsClass last = VisitedSystemsClass.GetLast();
+
+                                if (last == null || !last.Name.Equals(dbsys.Name))  // If same name as last system. Dont Add.  otherwise we get a duplet with last from logfile before with different time. 
+                                {
+                                    if (!VisitedSystemsClass.Exist(dbsys.Name, dbsys.Time))
+                                    {
+                                        dbsys.Add();
+                                        visitedSystems.Add(ps);
+                                        nr++;
+                                    }
+                                }
                             }
-                            visitedSystems.Add(ps);
+                            
                         }
-                        
+
+
                     
                     }
 
@@ -381,8 +391,11 @@ namespace EDDiscovery
 
         }
 
-        public bool StartMonitor()
+        private EDDiscoveryForm _discoveryform;
+
+        public bool StartMonitor(EDDiscoveryForm ed)
         {
+            _discoveryform = ed;
             ThreadNetLog = new System.Threading.Thread(new System.Threading.ThreadStart(NetLogMain));
             ThreadNetLog.Name = "Net log";
             ThreadNetLog.Start();
