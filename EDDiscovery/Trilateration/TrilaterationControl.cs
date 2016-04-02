@@ -1006,7 +1006,7 @@ namespace EDDiscovery
             map.Instance.Reset();
             map.Instance.CenterSystem = centerSystem;
             map.Instance.ReferenceSystems = CurrentReferenceSystems.ToList();
-            map.Show();
+            map.Show(false);
         }
 
         private void dataGridViewDistances_CellClick(object sender, DataGridViewCellEventArgs e)
