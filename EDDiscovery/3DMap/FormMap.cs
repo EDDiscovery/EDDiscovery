@@ -228,6 +228,7 @@ namespace EDDiscovery2
                 // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
                 // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
                 CenterSystem = CenterSystem,
+                SelectedSystem = _clickedSystem,
 
                 VisitedSystems = VisitedSystems,
 
@@ -721,6 +722,7 @@ namespace EDDiscovery2
             textboxFrom.AutoCompleteCustomSource = _systemNames;
             ShowCenterSystem();
             GenerateDataSets();
+            labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
 
             //TODO: Move this functionality into DatasetBuilder
             //GenerateDataSetsAllegiance();
@@ -992,6 +994,16 @@ namespace EDDiscovery2
                 if (Math.Abs(e.X - _mouseStartMove.X) + Math.Abs(e.Y - _mouseStartMove.Y) < 4)
                 {
                     _clickedSystem = GetMouseOverSystem(e.X, e.Y);
+
+                    if (_clickedSystem == null)
+                    {
+                        labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
+                    }
+                    else
+                    {
+                        labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
+                    }
+                    SetCenterSystem(CenterSystem);
                 }
             }
 
