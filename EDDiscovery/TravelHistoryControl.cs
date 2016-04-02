@@ -610,17 +610,21 @@ namespace EDDiscovery
             var selectedLine = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
                                                            .OrderBy(row => row.Index)
-                                                           .First().Index;
-            SystemPosition selectedSys;
-            do
+                                                           .Select(r => (int?)r.Index)
+                                                           .FirstOrDefault() ?? -1;
+            SystemPosition selectedSys = null;
+            if (selectedLine >= 0)
             {
-                selectedSys = (SystemPosition)dataGridViewTravel.Rows[selectedLine].Cells[1].Tag;
-                selectedLine += 1;
-            } while (!selectedSys.curSystem.HasCoordinate && selectedLine <= dataGridViewTravel.Rows.Count);
+                do
+                {
+                    selectedSys = (SystemPosition)dataGridViewTravel.Rows[selectedLine].Cells[1].Tag;
+                    selectedLine += 1;
+                } while (!selectedSys.curSystem.HasCoordinate && selectedLine < dataGridViewTravel.Rows.Count);
+            }
             _discoveryForm.updateMapData();
             map.Instance.Reset();
                         
-            map.Instance.HistorySelection = selectedSys.curSystem.HasCoordinate ? selectedSys.Name : textBoxSystem.Text.Trim();
+            map.Instance.HistorySelection = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
             map.Show();
         }
 
@@ -910,10 +914,19 @@ namespace EDDiscovery
 
         private int GetVisitsCount(string name)
         {
-            int count = (from row in visitedSystems
-                         where row.Name == name
-                         select row).Count();
-            return count;
+            try
+            {
+                int count = (from row in visitedSystems
+                             where row.Name == name
+                             select row).Count();
+                return count;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception GetVisitsCount: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                return 0;
+            }
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -1240,6 +1253,13 @@ namespace EDDiscovery
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void button2DMap_Click(object sender, EventArgs e)
+        {
+            FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm);
+
+            frm.Show();
         }
     }
 

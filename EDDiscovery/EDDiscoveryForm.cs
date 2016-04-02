@@ -1078,6 +1078,7 @@ namespace EDDiscovery
 
         private void panel_close_Click(object sender, EventArgs e)
         {
+            Close();
             Application.Exit();
         }
 
