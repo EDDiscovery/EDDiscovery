@@ -24,8 +24,8 @@ namespace EDDiscovery
 {
     public partial class TravelHistoryControl : UserControl
     {
-        private EDDiscoveryForm _discoveryForm;
-        private int defaultColour;
+        private static EDDiscoveryForm _discoveryForm;
+        public int defaultMapColour;
         public EDSMSync sync;
         string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
 
@@ -54,7 +54,7 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             sync = new EDSMSync(_discoveryForm);
             var db = new SQLiteDBClass();
-            defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+            defaultMapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
             EDSMSyncTo = db.GetSettingBool("EDSMSyncTo", true);
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
@@ -80,14 +80,24 @@ namespace EDDiscovery
             edsm.GetNewSystems(db);
             db.GetAllSystems();
         }
-     
+
 
         static public void LogText(string text)
         {
-            LogText(text, Color.Black);
+            LogTextColor(text, _discoveryForm.theme.TextBlockColor );
         }
 
-        static public void LogText( string text, Color color)
+        static public void LogTextHighlight(string text)
+        {
+            LogTextColor(text, _discoveryForm.theme.TextBlockHighlightColor);
+        }
+
+        static public void LogTextSuccess(string text)
+        {
+            LogTextColor(text, _discoveryForm.theme.TextBlockSuccessColor);
+        }
+
+        static public void LogTextColor( string text, Color color)
         {
             try
             {
@@ -188,7 +198,7 @@ namespace EDDiscovery
                 result = (from systems in visitedSystems where systems.time > oldestData orderby systems.time descending select systems).ToList();
             }
 
-            dataGridView1.Rows.Clear();
+            dataGridViewTravel.Rows.Clear();
 
             System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
             
@@ -233,10 +243,9 @@ namespace EDDiscovery
 
             System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
             
-            if (dataGridView1.Rows.Count > 0)
+            if (dataGridViewTravel.Rows.Count > 0)
             {
-                lastRowIndex = 0;
-                ShowSystemInformation((SystemPosition)(dataGridView1.Rows[0].Cells[1].Tag));
+                ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[0].Cells[1].Tag));
             }
             System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
             sw1.Stop();
@@ -246,8 +255,8 @@ namespace EDDiscovery
         }
 
         private void GetVisitedSystems(int commander)
-        {
-            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultColour, commander);
+        {                                                       // for backwards compatibility, don't store RGB value.
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour, commander);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
@@ -312,25 +321,24 @@ namespace EDDiscovery
 
                 if (insert)
                 {
-                    dataGridView1.Rows.Insert(0, rowobj);
+                    dataGridViewTravel.Rows.Insert(0, rowobj);
                     rownr = 0;
                 }
                 else
                 {
-                    dataGridView1.Rows.Add(rowobj);
-                    rownr = dataGridView1.Rows.Count - 1;
+                    dataGridViewTravel.Rows.Add(rowobj);
+                    rownr = dataGridViewTravel.Rows.Count - 1;
                 }
 
-                var cell = dataGridView1.Rows[rownr].Cells[1];
+                var cell = dataGridViewTravel.Rows[rownr].Cells[1];
 
                 cell.Tag = item;
 
-                if (!sys1.HasCoordinate)  // Mark all systems without coordinates
-                    cell.Style.ForeColor = Color.Blue;
+                dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
-                cell = dataGridView1.Rows[rownr].Cells[4];
-                cell.Style.ForeColor = Color.FromArgb(item.vs == null ? defaultColour : item.vs.MapColour);
-            }
+                cell = dataGridViewTravel.Rows[rownr].Cells[4];
+                cell.Style.ForeColor = (item.vs == null) ? Color.FromArgb(defaultMapColour) : Color.FromArgb(item.vs.MapColour);
+        }
 
 
 
@@ -465,7 +473,7 @@ namespace EDDiscovery
                 if (name !=null)
                     label3.Text = "Closest systems from " + name.ToString();
 
-                listView1.Items.Clear();
+                dataGridViewNearest.Rows.Clear(); 
 
                 if (LastSystem == null)
                     return;
@@ -489,27 +497,18 @@ namespace EDDiscovery
                     }
                 }
 
-
                 var list = (from t in sysDist orderby t.dist select t).Take(50);
-
-
 
                 foreach (SystemDist sdist in list)
                 {
-                    ListViewItem item = new ListViewItem(sdist.name);
-                    item.SubItems.Add(sdist.dist.ToString("0.00"));
-                    listView1.Items.Add(item);
+                    object[] rowobj = { sdist.name, sdist.dist.ToString("0.00") };
+                    dataGridViewNearest.Rows.Add(rowobj);
                 }
-
-
-
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-               
             }
 
         }
@@ -543,7 +542,7 @@ namespace EDDiscovery
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance |
                 System.Reflection.BindingFlags.SetProperty,
                 null,
-                dataGridView1,
+                dataGridViewTravel,
                 new object[] { true }
             );
         }
@@ -593,17 +592,14 @@ namespace EDDiscovery
 
         private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            DataGridViewSorter.DataGridSort(dataGridView1, e.ColumnIndex);
+            DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
         }
 
         private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                //string  SysName = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                lastRowIndex = e.RowIndex;
-
-                ShowSystemInformation((SystemPosition)(dataGridView1.Rows[e.RowIndex].Cells[1].Tag));
+                ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[e.RowIndex].Cells[1].Tag));
             }
 
         }
@@ -611,31 +607,32 @@ namespace EDDiscovery
         private void buttonMap_Click(object sender, EventArgs e)
         {
             var map = _discoveryForm.Map;
-            var selectedLine = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            var selectedLine = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
                                                            .OrderBy(row => row.Index)
-                                                           .First().Index;
-            SystemPosition selectedSys;
-            do
+                                                           .Select(r => (int?)r.Index)
+                                                           .FirstOrDefault() ?? -1;
+            SystemPosition selectedSys = null;
+            if (selectedLine >= 0)
             {
-                selectedSys = (SystemPosition)dataGridView1.Rows[selectedLine].Cells[1].Tag;
-                selectedLine += 1;
-            } while (!selectedSys.curSystem.HasCoordinate && selectedLine <= dataGridView1.Rows.Count);
+                do
+                {
+                    selectedSys = (SystemPosition)dataGridViewTravel.Rows[selectedLine].Cells[1].Tag;
+                    selectedLine += 1;
+                } while (!selectedSys.curSystem.HasCoordinate && selectedLine < dataGridViewTravel.Rows.Count);
+            }
             _discoveryForm.updateMapData();
             map.Instance.Reset();
                         
-            map.Instance.HistorySelection = selectedSys.curSystem.HasCoordinate ? selectedSys.Name : textBoxSystem.Text.Trim();
+            map.Instance.HistorySelection = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
             map.Show();
         }
 
-        private int lastRowIndex;
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                //string SysName = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                lastRowIndex = e.RowIndex;
-                ShowSystemInformation((SystemPosition)(dataGridView1.Rows[e.RowIndex].Cells[1].Tag));
+                ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[e.RowIndex].Cells[1].Tag));
 
                 if (e.ColumnIndex == 3)       // note column
                 {
@@ -672,10 +669,11 @@ namespace EDDiscovery
                 distance.Store();
                 SQLiteDBClass.AddDistanceToCache(distance);
 
-                dataGridView1.Rows[lastRowIndex].Cells[2].Value = textBoxDistance.Text.Trim();
+                if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                    dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[2].Value = textBoxDistance.Text.Trim();
+                              
             }
         }
-
   
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
@@ -685,7 +683,8 @@ namespace EDDiscovery
 
         private void richTextBoxNote_TextChanged(object sender, EventArgs e)
         {
-            dataGridView1.Rows[lastRowIndex].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
+            if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
         }
 
         private void StoreSystemNote()
@@ -705,7 +704,6 @@ namespace EDDiscovery
                 if (currentSysPos == null || currentSysPos.curSystem == null)
                     return;
 
-                //SystemPosition sp = (SystemPosition)dataGridView1.Rows[lastRowIndex].Cells[1].Tag;
                 txt = richTextBoxNote.Text;
 
                 
@@ -737,7 +735,9 @@ namespace EDDiscovery
 
                     
                     currentSysPos.curSystem.Note = txt;
-                    dataGridView1.Rows[lastRowIndex].Cells[3].Value = txt;
+
+                    if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                        dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[3].Value = txt;
 
                     if (edsm.commanderName == null || edsm.apiKey == null)
                         return;
@@ -752,8 +752,8 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                LogText("Exception : " + ex.Message, Color.Red);
-                LogText(ex.StackTrace, Color.Red);
+                LogTextHighlight("Exception : " + ex.Message);
+                LogTextHighlight(ex.StackTrace);
             }
         }
 
@@ -814,7 +814,7 @@ namespace EDDiscovery
                 return;
 
             }
-            sync.StartSync(EDSMSyncTo, EDSMSyncFrom);
+            sync.StartSync(EDSMSyncTo, EDSMSyncFrom,defaultMapColour);
             
         }
 
@@ -838,9 +838,9 @@ namespace EDDiscovery
                     LogText("Arrived to system: ");
                     SystemClass sys1 = SystemData.GetSystem(name);
                     if (sys1 == null || sys1.HasCoordinate == false)
-                        LogText(name , Color.Blue);
+                        LogTextHighlight(name);
                     else
-                        LogText(name );
+                        LogText(name);
 
 
                     int count = GetVisitsCount(name);
@@ -902,7 +902,6 @@ namespace EDDiscovery
                     textBoxDistanceToNextSystem.Enabled = true;
 
                     AddHistoryRow(true, item, item2);
-                    lastRowIndex += 1;
                     StoreSystemNote();
                 });
             }
@@ -915,10 +914,19 @@ namespace EDDiscovery
 
         private int GetVisitsCount(string name)
         {
-            int count = (from row in visitedSystems
-                         where row.Name == name
-                         select row).Count();
-            return count;
+            try
+            {
+                int count = (from row in visitedSystems
+                             where row.Name == name
+                             select row).Count();
+                return count;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception GetVisitsCount: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                return 0;
+            }
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -967,8 +975,8 @@ namespace EDDiscovery
         {
             get
             {
-                if (dataGridView1 == null || dataGridView1.CurrentRow == null) return null;
-                return ((SystemPosition)dataGridView1.CurrentRow.Cells[1].Tag).curSystem;
+                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null) return null;
+                return ((SystemPosition)dataGridViewTravel.CurrentRow.Cells[1].Tag).curSystem;
             }
         }
 
@@ -1036,11 +1044,11 @@ namespace EDDiscovery
         private void FilterGridView()
         {
             string searchstr = textBoxFilter.Text.Trim();
-            dataGridView1.SuspendLayout();
+            dataGridViewTravel.SuspendLayout();
 
-            DataGridViewRow[] theRows = new DataGridViewRow[dataGridView1.Rows.Count];
-            dataGridView1.Rows.CopyTo(theRows, 0);
-            dataGridView1.Rows.Clear();
+            DataGridViewRow[] theRows = new DataGridViewRow[dataGridViewTravel.Rows.Count];
+            dataGridViewTravel.Rows.CopyTo(theRows, 0);
+            dataGridViewTravel.Rows.Clear();
 
             for (int loop = 0; loop < theRows.Length; loop++)
             {
@@ -1062,8 +1070,8 @@ namespace EDDiscovery
                 }
                 theRows[loop].Visible = found;
             }
-            dataGridView1.Rows.AddRange(theRows);
-            dataGridView1.ResumeLayout();
+            dataGridViewTravel.Rows.AddRange(theRows);
+            dataGridViewTravel.ResumeLayout();
         }
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
@@ -1073,7 +1081,7 @@ namespace EDDiscovery
 
         private void starMapColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
                                                            .Distinct();
             Color colour = selectedRows.First().Cells[4].Style.ForeColor;
@@ -1101,20 +1109,9 @@ namespace EDDiscovery
             }
         }
 
-        public void setDefaultMapColour()
-        {
-            mapColorDialog.Color = Color.FromArgb(defaultColour);
-            if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                defaultColour = mapColorDialog.Color.ToArgb();
-                var db = new SQLiteDBClass();
-                db.PutSettingInt("DefaultMap", defaultColour);
-            }
-        }
-
         private void hideSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                   .Select(cell => cell.OwningRow)
                                                                   .Distinct();
 
@@ -1140,14 +1137,14 @@ namespace EDDiscovery
                     }
                 }
                 // Remove rows
-                if (selectedRows.Count<DataGridViewRow>() == dataGridView1.Rows.Count)
+                if (selectedRows.Count<DataGridViewRow>() == dataGridViewTravel.Rows.Count)
                 {
-                    dataGridView1.Rows.Clear();
+                    dataGridViewTravel.Rows.Clear();
                 }
 
                 foreach (DataGridViewRow row in selectedRows.ToList<DataGridViewRow>())
                 {
-                    dataGridView1.Rows.Remove(row);
+                    dataGridViewTravel.Rows.Remove(row);
                 }
                 this.Cursor = Cursors.Default;
             }
@@ -1155,7 +1152,7 @@ namespace EDDiscovery
 
         private void moveToAnotherCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct();
 
@@ -1216,7 +1213,7 @@ namespace EDDiscovery
         {
             TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
 
-            IEnumerable<DataGridViewRow> selectedRows = dataGridView1.SelectedCells.Cast<DataGridViewCell>()
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()
                                                                         .OrderBy(cell => cell.Index);
@@ -1251,6 +1248,18 @@ namespace EDDiscovery
         private void checkBoxEDSMSyncFrom_CheckedChanged(object sender, EventArgs e)
         {
             EDSMSyncFrom = checkBoxEDSMSyncFrom.Checked;
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button2DMap_Click(object sender, EventArgs e)
+        {
+            FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm);
+
+            frm.Show();
         }
     }
 

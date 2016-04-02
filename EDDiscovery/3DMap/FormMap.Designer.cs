@@ -47,6 +47,7 @@ namespace EDDiscovery2
             this.toolStripButtonShowAllStars = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGrid = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonPerspective = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonHistory = new System.Windows.Forms.Button();
@@ -71,6 +72,7 @@ namespace EDDiscovery2
             this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
             this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
             this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
+            this.glControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseUp);
             this.glControl.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.glControl_OnMouseWheel);
             this.glControl.Resize += new System.EventHandler(this.glControl_Resize);
             // 
@@ -115,7 +117,8 @@ namespace EDDiscovery2
             this.toolStripButtonDrawLines,
             this.toolStripButtonShowAllStars,
             this.toolStripButtonStations,
-            this.toolStripButtonGrid});
+            this.toolStripButtonGrid,
+            this.toolStripButtonPerspective});
             this.toolStripShowAllStars.Location = new System.Drawing.Point(0, 0);
             this.toolStripShowAllStars.Name = "toolStripShowAllStars";
             this.toolStripShowAllStars.Size = new System.Drawing.Size(918, 31);
@@ -183,6 +186,18 @@ namespace EDDiscovery2
             this.toolStripButtonGrid.ToolTipText = "Show Grid";
             this.toolStripButtonGrid.Click += new System.EventHandler(this.toolStripButtonGrud_Click);
             // 
+            // toolStripButtonPerspective
+            // 
+            this.toolStripButtonPerspective.CheckOnClick = true;
+            this.toolStripButtonPerspective.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPerspective.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonPerspective.Image")));
+            this.toolStripButtonPerspective.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPerspective.Name = "toolStripButtonPerspective";
+            this.toolStripButtonPerspective.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonPerspective.Text = "Perspective";
+            this.toolStripButtonPerspective.ToolTipText = "Enable Perspective View";
+            this.toolStripButtonPerspective.Click += new System.EventHandler(this.toolStripButtonPerspective_Click);
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -202,7 +217,7 @@ namespace EDDiscovery2
             // buttonHistory
             // 
             this.buttonHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonHistory.Image = global::EDDiscovery2.Properties.Resources.Travelicon;
+            this.buttonHistory.Image = global::EDDiscovery.Properties.Resources.Travelicon;
             this.buttonHistory.Location = new System.Drawing.Point(605, 5);
             this.buttonHistory.Name = "buttonHistory";
             this.buttonHistory.Size = new System.Drawing.Size(22, 23);
@@ -214,7 +229,7 @@ namespace EDDiscovery2
             // buttonHome
             // 
             this.buttonHome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonHome.Image = global::EDDiscovery2.Properties.Resources.Homeicon;
+            this.buttonHome.Image = global::EDDiscovery.Properties.Resources.Homeicon;
             this.buttonHome.Location = new System.Drawing.Point(577, 5);
             this.buttonHome.Name = "buttonHome";
             this.buttonHome.Size = new System.Drawing.Size(22, 23);
@@ -269,5 +284,6 @@ namespace EDDiscovery2
         private Button buttonHome;
         private Button buttonHistory;
         private ToolTip toolTip1;
+        private ToolStripButton toolStripButtonPerspective;
     }
     }

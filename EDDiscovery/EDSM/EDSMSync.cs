@@ -22,6 +22,7 @@ namespace EDDiscovery2.EDSM
         bool Exit = false;
         bool _syncTo = false;
         bool _syncFrom = false;
+        int _defmapcolour = 0;
         private EDDiscoveryForm mainForm;
         public event EDSMNewSystemEventHandler OnNewEDSMTravelLog;
 
@@ -30,12 +31,14 @@ namespace EDDiscovery2.EDSM
             mainForm = frm;
         }
 
-        public bool StartSync(bool syncto, bool syncfrom)
+        public bool StartSync(bool syncto, bool syncfrom, int defmapcolour)
         {
             if (running) // Only start once.
                 return false;
             _syncTo = syncto;
             _syncFrom = syncfrom;
+            _defmapcolour = defmapcolour;
+
             ThreadEDSMSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
             ThreadEDSMSync.Name = "EDSM Sync";
             ThreadEDSMSync.Start();
@@ -80,7 +83,7 @@ namespace EDDiscovery2.EDSM
                     // Send Unsynced system to EDSM.
 
                     List<SystemPosition> systems = (from s in mainForm.VisitedSystems where s.vs != null && s.vs.EDSM_sync == false && s.vs.Commander == EDDiscoveryForm.EDDConfig.CurrentCommander.Nr select s).ToList<SystemPosition>();
-                    mainForm.LogLine("EDSM: Sending " + systems.Count.ToString() + " flightlog entries", Color.Black);
+                    mainForm.LogLine("EDSM: Sending " + systems.Count.ToString() + " flightlog entries");
                     foreach (var system in systems)
                     {
                         string json = null;
@@ -122,7 +125,7 @@ namespace EDDiscovery2.EDSM
                                 }
                                 else
                                 {
-                                    mainForm.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr, Color.Red);
+                                    mainForm.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr);
                                     System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name);
                                     break;
                                 }
@@ -139,7 +142,6 @@ namespace EDDiscovery2.EDSM
                 if (_syncFrom)
                 {
                     // Check for new systems from EDSM
-                    int defaultColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
                     foreach (var system in log)
                     {
                         SystemPosition ps2 = (from c in mainForm.VisitedSystems where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
@@ -164,7 +166,7 @@ namespace EDDiscovery2.EDSM
 
                             vs.Name = system.Name;
                             vs.Time = system.time;
-                            vs.MapColour = defaultColour;
+                            vs.MapColour = _defmapcolour;
                             vs.EDSM_sync = true;
 
 
@@ -175,7 +177,7 @@ namespace EDDiscovery2.EDSM
                         }
                     }
                 }
-                mainForm.LogLine("EDSM sync Done", Color.Black);
+                mainForm.LogLine("EDSM sync Done");
 
                 if (newsystem)
                     OnNewEDSMTravelLog(this);
@@ -183,7 +185,7 @@ namespace EDDiscovery2.EDSM
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
-                mainForm.LogLine("EDSM sync Exception " + ex.Message, Color.Red);
+                mainForm.LogLineHighlight("EDSM sync Exception " );
             }
 
         }
