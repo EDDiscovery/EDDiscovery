@@ -21,8 +21,10 @@ namespace EDDiscovery
     public partial class RouteControl : UserControl
     {
         internal TravelHistoryControl travelhistorycontrol1;
+        private EDDiscoveryForm _discoveryForm;
         internal bool changesilence = false;
         private SQLiteDBClass db;
+        private List<SystemClass> routeSystems;
 
         int metric_nearestwaypoint = 0;     // easiest way to synchronise metric text and index's. 
         int metric_mindevfrompath = 1;
@@ -46,6 +48,11 @@ namespace EDDiscovery
 
         }
 
+        public void InitControl(EDDiscoveryForm discoveryForm)
+        {
+            _discoveryForm = discoveryForm;
+        }
+
         private Thread ThreadRoute;
 
         private void button_Route_Click_1(object sender, EventArgs e)
@@ -54,7 +61,7 @@ namespace EDDiscovery
                 db = new SQLiteDBClass();
 
 
-            button_Route.Enabled = false;           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
+            ToggleButtons(false);           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
             richTextBox_routeresult.Clear();
 
             ThreadRoute = new System.Threading.Thread(new System.Threading.ThreadStart(RouteMain));
@@ -96,7 +103,7 @@ namespace EDDiscovery
                 DialogResult res = MessageBox.Show("This will result in a large number (" + possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
                 if (res != System.Windows.Forms.DialogResult.Yes)
                 {
-                    this.Invoke(new Action(() => button_Route.Enabled = true));
+                    this.Invoke(new Action(() => ToggleButtons(true)));
                     return;
                 }
             }
@@ -105,15 +112,22 @@ namespace EDDiscovery
                             tosys, usingcoordsto, coordsto,
                               maxrange, routemethod);
 
-            this.Invoke(new Action(() => button_Route.Enabled = true));
+            this.Invoke(new Action(() => ToggleButtons(true)));
         }
 
+        private void ToggleButtons(bool state)
+        {
+            button_Route.Enabled = state;
+            cmd3DMap.Enabled = state;
+        }
 
         private void RouteIterative(string fromsys, bool usingcoordsfrom, Point3D coordsfrom,
                            string tosys, bool usingcoordsto, Point3D coordsto,
                            float maxrange,int routemethod)
         {
             double traveldistance = Point3D.DistanceBetween(coordsfrom, coordsto);      // its based on a percentage of the traveldistance
+            routeSystems = new List<SystemClass>();
+            routeSystems.Add(SystemData.GetSystem(textBox_From.Text));
 
             AppendText("Searching route from " + fromsys + " to " + tosys + " using " + metric_options[routemethod] + " metric" + Environment.NewLine);
             AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
@@ -158,6 +172,7 @@ namespace EDDiscovery
                     deviation = Point3D.DistanceBetween(curpos.InterceptPoint(nextpos, bestposition), bestposition);
                     nextpos = bestposition;
                     sysname = bestsystem.name;
+                    routeSystems.Add(bestsystem);
                 }
 
                 AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00} WPd:{6,8:0.00}ly Dev:{7,8:0.00}ly" + Environment.NewLine,
@@ -168,7 +183,7 @@ namespace EDDiscovery
                 jump++;
 
             } while (true);
-
+            routeSystems.Add(SystemData.GetSystem(textBox_To.Text));
             actualdistance += Point3D.DistanceBetween(curpos, coordsto);
             AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
             AppendText(string.Format(Environment.NewLine + "Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance, actualdistance));
@@ -613,6 +628,25 @@ namespace EDDiscovery
         private void comboBoxRoutingMetric_SelectedIndexChanged(object sender, EventArgs e)
         {
             button_Route.Enabled = IsValid();
+        }
+
+        private void cmd3DMap_Click(object sender, EventArgs e)
+        {
+            var map = _discoveryForm.Map;
+            map.Instance.Reset();
+            if (routeSystems != null && routeSystems.Any())
+            {
+                float zoom = 400 / float.Parse(textBox_Distance.Text) ;
+                if (zoom < 0.01) zoom = 0.01f;
+                if (zoom > 50) zoom = 50f;
+                map.Instance.CenterSystem = routeSystems.First();
+                map.Instance.PlannedRoute = routeSystems;
+                map.Show(false, zoom);
+            }
+            else
+            {
+                map.Show();
+            }
         }
     }
 }

@@ -69,6 +69,7 @@ namespace EDDiscovery2
         private float _defaultZoom;
         public List<SystemClass> ReferenceSystems { get; set; }
         public List<SystemPosition> VisitedSystems { get; set; }
+        public List<SystemClass> PlannedRoute { get; set; }
 
         public string HistorySelection { get; set; }
         
@@ -129,15 +130,19 @@ namespace EDDiscovery2
             InitializeComponent();
         }
 
-        public void Prepare()
+        public void Prepare(bool CenterFromSettings, float zoomOverRide)
         {
             var db = new SQLiteDBClass();
             _homeSystem = db.GetSettingString("DefaultMapCenter", "Sol");
-            _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0);
-            bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
+            if (zoomOverRide <= 50 && zoomOverRide >= 0.01) { _defaultZoom = zoomOverRide; }
+            else
+                { _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0); }
+            if (CenterFromSettings)
+            {
+                bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
 
-            CenterSystemName = selectionCentre ? HistorySelection : _homeSystem;
-
+                CenterSystemName = selectionCentre ? HistorySelection : _homeSystem;
+            }
             OrientateMapAroundSystem(CenterSystem);
 
             ResetCamera();
@@ -233,6 +238,10 @@ namespace EDDiscovery2
             if (ReferenceSystems != null)
             {
                 builder.ReferenceSystems = ReferenceSystems.ConvertAll(system => (ISystem)system);
+            }
+            if (PlannedRoute != null)
+            {
+                builder.PlannedRoute = PlannedRoute.ConvertAll(system => (ISystem)system);
             }
 
             _datasets = builder.Build();
@@ -341,6 +350,7 @@ namespace EDDiscovery2
         {
             CenterSystem = null;
             ReferenceSystems = null;
+            PlannedRoute = null;
         }
 
         /*
