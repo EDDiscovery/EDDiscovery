@@ -143,6 +143,8 @@ namespace EDDiscovery.DB
                 if (dbver < 9)
                     UpgradeDB9();
 
+                if (dbver < 10)
+                    UpgradeDB10();
 
                 dbUpgraded = true;
                 return true;
@@ -465,10 +467,37 @@ namespace EDDiscovery.DB
         }
 
 
-
-
-
         private bool UpgradeDB10()
+        {
+            string query1 = "CREATE TABLE wanted_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, systemname TEXT UNIQUE NOT NULL)";
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery9.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+            try
+            {
+                ExecuteQuery(query1);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB10 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 10);
+
+            return true;
+        }
+
+
+        private bool UpgradeDB11()
         {
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
@@ -479,7 +508,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery9.sqlite"));
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery10.sqlite"));
             }
             catch (Exception ex)
             {
@@ -499,10 +528,10 @@ namespace EDDiscovery.DB
             {
                 System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB9 error: " + ex.Message);
+                MessageBox.Show("UpgradeDB11 error: " + ex.Message);
             }
 
-            PutSettingInt("DBVer", 9);
+            PutSettingInt("DBVer", 11);
 
             return true;
         }
@@ -735,7 +764,49 @@ namespace EDDiscovery.DB
             }
         }
 
+        public List<WantedSystemClass> GetAllWantedSystems()
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        DataSet ds = null;
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = "select * from wanted_systems";
 
+                        ds = SqlQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0)
+                        {
+                            return null;
+                        }
+                        //
+                        if (ds.Tables[0].Rows.Count == 0)
+                        {
+                            return null;
+                        }
+
+                        List<WantedSystemClass> retVal = new List<WantedSystemClass>();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            WantedSystemClass sys = new WantedSystemClass(dr);
+                            retVal.Add(sys);
+                        }
+
+                        return retVal;
+
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public int QueryValueInt(string query, int defaultvalue)
         {

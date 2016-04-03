@@ -22,6 +22,7 @@ namespace EDDiscovery2._3DMap
         public List<ISystem> StarList { get; set; } = new List<ISystem>();
         public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
         public List<SystemPosition> VisitedSystems { get; set; }
+        public List<ISystem> PlannedRoute { get; set; } = new List<ISystem>();
 
         public bool GridLines { get; set; } = false;
         public bool DrawLines { get; set; } = false;
@@ -46,6 +47,7 @@ namespace EDDiscovery2._3DMap
             AddSelectedSystemToDataset();
             AddPOIsToDataset();
             AddTrilaterationInfoToDataset();
+            AddRoutePlannerInfoToDataset();
 
             return _datasets;
         }
@@ -217,6 +219,21 @@ namespace EDDiscovery2._3DMap
                 sw.Stop();
                 System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
                 _datasets.Add(lineSet);
+            }
+        }
+
+        public void AddRoutePlannerInfoToDataset()
+        {
+            if (PlannedRoute != null && PlannedRoute.Any())
+            {
+                var routeLines = new Data3DSetClass<LineData>("PlannedRoute", Color.DarkOrange, 25.0f);
+                ISystem prevSystem = PlannedRoute.First();
+                foreach (ISystem point in PlannedRoute.Skip(1))
+                {
+                    routeLines.Add(new LineData(prevSystem.x, prevSystem.y, prevSystem.z, point.x, point.y, point.z));
+                    prevSystem = point;
+                }
+                _datasets.Add(routeLines);
             }
         }
 
