@@ -41,6 +41,7 @@ namespace EDDiscovery2
 
         private AutoCompleteStringCollection _systemNames;
         private ISystem _centerSystem;
+        private ISystem _clickedSystem;
         private bool _loaded = false;
 
         private float _zoom = 1.0f;
@@ -59,6 +60,7 @@ namespace EDDiscovery2
         private Point _mouseStartRotate;
         private Point _mouseStartTranslateXY;
         private Point _mouseStartTranslateXZ;
+        private Point _mouseStartMove;
 
         private List<SystemClass> _starList;
         private Dictionary<string, SystemClass> _visitedStars;
@@ -71,6 +73,9 @@ namespace EDDiscovery2
         public List<SystemPosition> VisitedSystems { get; set; }
 
         public string HistorySelection { get; set; }
+
+        private float _znear;
+        private float _zfar;
         
         public ISystem CenterSystem {
             get
@@ -169,6 +174,8 @@ namespace EDDiscovery2
             {
                 Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
                 GL.LoadMatrix(ref perspective);
+                _znear = 1.0f;
+                _zfar = 1000000.0f;
             }
             else
             {
@@ -178,11 +185,14 @@ namespace EDDiscovery2
                 float orthoheight = 1000.0f * h / w;
 
                 GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
+                _znear = -5000.0f;
+                _zfar = 5000.0f;
                 //GL.Ortho(-100000.0, 100000.0, -100000.0, 100000.0, -100000.0, 100000.0); // Bottom-left corner pixel has coordinate (0, 0)
                 //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
             }
 
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
+
         }
 
 
@@ -218,6 +228,7 @@ namespace EDDiscovery2
                 // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
                 // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
                 CenterSystem = CenterSystem,
+                SelectedSystem = _clickedSystem,
 
                 VisitedSystems = VisitedSystems,
 
@@ -574,6 +585,66 @@ namespace EDDiscovery2
             }
         }
 
+        private ISystem GetMouseOverSystem(int x, int y)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            y = glControl.Height - y;
+            if (y < 5)
+            {
+                y = 5;
+            }
+            else if (y > glControl.Height - 5)
+            {
+                y = glControl.Height - 5;
+            }
+
+            if (x < 5)
+            {
+                x = 5;
+            }
+            else if (x > glControl.Width - 5)
+            {
+                x = glControl.Width - 5;
+            }
+
+            double w2 = glControl.Width / 2.0;
+            double h2 = glControl.Height / 2.0;
+            Matrix4d proj;
+            Matrix4d mview;
+            GL.GetDouble(GetPName.ProjectionMatrix, out proj);
+            GL.GetDouble(GetPName.ModelviewMatrix, out mview);
+            Matrix4d resmat = Matrix4d.Mult(mview, proj);
+
+            ISystem cursys = null;
+            Vector4d cursysloc = new Vector4d(0.0, 0.0, _zfar, 1.0);
+            double cursysdistz = double.MaxValue;
+
+            foreach (var sys in _starList)
+            {
+                if (sys.HasCoordinate)
+                {
+                    Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
+                    Vector4d sysloc = Vector4d.Transform(syspos, resmat);
+
+                    if (sysloc.Z > _znear)
+                    {
+                        Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
+                        double sysdist = Math.Sqrt(syssloc.X * syssloc.X + syssloc.Y * syssloc.Y);
+                        if (sysdist < 7.0 && (sysdist + Math.Abs(sysloc.Z * _zoom)) < cursysdistz)
+                        {
+                            cursys = sys;
+                            cursysloc = sysloc;
+                            cursysdistz = sysdist + Math.Abs(sysloc.Z * _zoom);
+                        }
+                    }
+                }
+            }
+
+            sw.Stop();
+            var t = sw.ElapsedMilliseconds;
+            return cursys;
+        }
+
         private void Render()
         {
             if (!_loaded) // Play nice
@@ -651,6 +722,7 @@ namespace EDDiscovery2
             textboxFrom.AutoCompleteCustomSource = _systemNames;
             ShowCenterSystem();
             GenerateDataSets();
+            labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
 
             //TODO: Move this functionality into DatasetBuilder
             //GenerateDataSetsAllegiance();
@@ -773,6 +845,8 @@ namespace EDDiscovery2
             {
                 _mouseStartRotate.X = e.X;
                 _mouseStartRotate.Y = e.Y;
+                _mouseStartMove.X = e.X;
+                _mouseStartMove.Y = e.Y;
             }
 
             if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
@@ -916,6 +990,21 @@ namespace EDDiscovery2
             {
                 _mouseStartRotate.X = e.X;
                 _mouseStartRotate.Y = e.Y;
+
+                if (Math.Abs(e.X - _mouseStartMove.X) + Math.Abs(e.Y - _mouseStartMove.Y) < 4)
+                {
+                    _clickedSystem = GetMouseOverSystem(e.X, e.Y);
+
+                    if (_clickedSystem == null)
+                    {
+                        labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
+                    }
+                    else
+                    {
+                        labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
+                    }
+                    SetCenterSystem(CenterSystem);
+                }
             }
 
             if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
@@ -924,6 +1013,16 @@ namespace EDDiscovery2
                 _mouseStartTranslateXY.Y = e.Y;
                 _mouseStartTranslateXZ.X = e.X;
                 _mouseStartTranslateXZ.Y = e.Y;
+            }
+        }
+
+        private void glControl_DoubleClick(object sender, EventArgs e)
+        {
+            ISystem sys = _clickedSystem;
+            if (sys != null)
+            {
+                OrientateMapAroundSystem(sys);
+                ResetCamera();
             }
         }
     }
