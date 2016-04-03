@@ -53,8 +53,13 @@ namespace EDDiscovery2
             this.buttonHistory = new System.Windows.Forms.Button();
             this.buttonHome = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.labelClickedSystemCoords = new System.Windows.Forms.Label();
+            this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
+            this.dotSystemCoords = new System.Windows.Forms.PictureBox();
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dotSystemCoords)).BeginInit();
             this.SuspendLayout();
             // 
             // glControl
@@ -70,6 +75,7 @@ namespace EDDiscovery2
             this.glControl.VSync = false;
             this.glControl.Load += new System.EventHandler(this.glControl_Load);
             this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
+            this.glControl.DoubleClick += new System.EventHandler(this.glControl_DoubleClick);
             this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
             this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
             this.glControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseUp);
@@ -238,11 +244,46 @@ namespace EDDiscovery2
             this.buttonHome.UseVisualStyleBackColor = true;
             this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
             // 
+            // labelClickedSystemCoords
+            // 
+            this.labelClickedSystemCoords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelClickedSystemCoords.AutoSize = true;
+            this.labelClickedSystemCoords.Location = new System.Drawing.Point(658, 28);
+            this.labelClickedSystemCoords.Name = "labelClickedSystemCoords";
+            this.labelClickedSystemCoords.Size = new System.Drawing.Size(57, 13);
+            this.labelClickedSystemCoords.TabIndex = 24;
+            this.labelClickedSystemCoords.Text = "Sol x=0.00";
+            // 
+            // dotSelectedSystemCoords
+            // 
+            this.dotSelectedSystemCoords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dotSelectedSystemCoords.Image = global::EDDiscovery.Properties.Resources.OrangeDot;
+            this.dotSelectedSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.OrangeDot;
+            this.dotSelectedSystemCoords.Location = new System.Drawing.Point(644, 29);
+            this.dotSelectedSystemCoords.Name = "dotSelectedSystemCoords";
+            this.dotSelectedSystemCoords.Size = new System.Drawing.Size(12, 12);
+            this.dotSelectedSystemCoords.TabIndex = 26;
+            this.dotSelectedSystemCoords.TabStop = false;
+            // 
+            // dotSystemCoords
+            // 
+            this.dotSystemCoords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dotSystemCoords.Image = global::EDDiscovery.Properties.Resources.YellowDot;
+            this.dotSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.YellowDot;
+            this.dotSystemCoords.Location = new System.Drawing.Point(644, 11);
+            this.dotSystemCoords.Name = "dotSystemCoords";
+            this.dotSystemCoords.Size = new System.Drawing.Size(12, 12);
+            this.dotSystemCoords.TabIndex = 25;
+            this.dotSystemCoords.TabStop = false;
+            // 
             // FormMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(918, 554);
+            this.Controls.Add(this.dotSelectedSystemCoords);
+            this.Controls.Add(this.dotSystemCoords);
+            this.Controls.Add(this.labelClickedSystemCoords);
             this.Controls.Add(this.buttonHistory);
             this.Controls.Add(this.buttonHome);
             this.Controls.Add(this.statusStrip);
@@ -261,6 +302,8 @@ namespace EDDiscovery2
             this.toolStripShowAllStars.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dotSystemCoords)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -285,5 +328,8 @@ namespace EDDiscovery2
         private Button buttonHistory;
         private ToolTip toolTip1;
         private ToolStripButton toolStripButtonPerspective;
+        private Label labelClickedSystemCoords;
+        private PictureBox dotSystemCoords;
+        private PictureBox dotSelectedSystemCoords;
     }
     }
