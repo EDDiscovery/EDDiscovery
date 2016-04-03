@@ -344,7 +344,7 @@ namespace EDDiscovery2.EDSM
             if (json == null)
                 return false;
 
-            return (json.ToString() != "-1");
+            return (json.ToString() != "[]");
         }
 
         public List<String> GetPushedSystems()
