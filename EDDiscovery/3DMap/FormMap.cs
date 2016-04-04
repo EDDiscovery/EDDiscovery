@@ -38,6 +38,7 @@ namespace EDDiscovery2
         private const double ZoomMax = 50;
         private const double ZoomMin = 0.01;
         private const double ZoomFact = 1.2589254117941672104239541063958;
+        private const double CameraSlewTime = 1.0;
 
         private AutoCompleteStringCollection _systemNames;
         private ISystem _centerSystem;
@@ -52,6 +53,7 @@ namespace EDDiscovery2
         private Vector3 _cameraActionMovement = Vector3.Zero;
         private Vector3 _cameraActionRotation = Vector3.Zero;
         private float _cameraFov = (float)(Math.PI / 2.0f);
+        private float _cameraSlewProgress = 1.0f;
 
         private KeyboardActions _kbdActions = new KeyboardActions();
         private int _oldTickCount = Environment.TickCount;
@@ -71,6 +73,7 @@ namespace EDDiscovery2
         private float _defaultZoom;
         public List<SystemClass> ReferenceSystems { get; set; }
         public List<SystemPosition> VisitedSystems { get; set; }
+        public List<SystemClass> PlannedRoute { get; set; }
 
         public string HistorySelection { get; set; }
 
@@ -134,15 +137,19 @@ namespace EDDiscovery2
             InitializeComponent();
         }
 
-        public void Prepare()
+        public void Prepare(bool CenterFromSettings, float zoomOverRide)
         {
             var db = new SQLiteDBClass();
             _homeSystem = db.GetSettingString("DefaultMapCenter", "Sol");
-            _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0);
-            bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
+            if (zoomOverRide <= 50 && zoomOverRide >= 0.01) { _defaultZoom = zoomOverRide; }
+            else
+                { _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0); }
+            if (CenterFromSettings)
+            {
+                bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
 
-            CenterSystemName = selectionCentre ? HistorySelection : _homeSystem;
-
+                CenterSystemName = selectionCentre ? HistorySelection : _homeSystem;
+            }
             OrientateMapAroundSystem(CenterSystem);
 
             ResetCamera();
@@ -155,6 +162,40 @@ namespace EDDiscovery2
             _cameraDir = Vector3.Zero;
 
             _zoom = _defaultZoom;
+        }
+
+        private void StartCameraSlew()
+        {
+            _oldTickCount = Environment.TickCount;
+            _ticks = 0;
+            _cameraSlewProgress = 0.0f;
+        }
+
+        private void DoCameraSlew()
+        {
+            if (_kbdActions.Any())
+            {
+                _cameraSlewProgress = 1.0f;
+            }
+
+            if (_cameraSlewProgress < 1.0f)
+            {
+                _cameraActionMovement = Vector3.Zero;
+                var newprogress = _cameraSlewProgress + _ticks / (CameraSlewTime * 1000);
+                var totvector = new Vector3((float)(CenterSystem.x - _cameraPos.X), (float)(-CenterSystem.y - _cameraPos.Y), (float)(CenterSystem.z - _cameraPos.Z));
+                if (newprogress >= 1.0f)
+                {
+                    _cameraPos = new Vector3((float)CenterSystem.x, (float)(-CenterSystem.y), (float)CenterSystem.z);
+                }
+                else
+                {
+                    var slewstart = Math.Sin((_cameraSlewProgress - 0.5) * Math.PI);
+                    var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
+                    var slewfact = (slewend - slewstart) / (1.0 - slewstart);
+                    _cameraPos += Vector3.Multiply(totvector, (float)slewfact);
+                }
+                _cameraSlewProgress = (float)newprogress;
+            }
         }
 
         /// <summary>
@@ -244,6 +285,10 @@ namespace EDDiscovery2
             if (ReferenceSystems != null)
             {
                 builder.ReferenceSystems = ReferenceSystems.ConvertAll(system => (ISystem)system);
+            }
+            if (PlannedRoute != null)
+            {
+                builder.PlannedRoute = PlannedRoute.ConvertAll(system => (ISystem)system);
             }
 
             _datasets = builder.Build();
@@ -352,6 +397,7 @@ namespace EDDiscovery2
         {
             CenterSystem = null;
             ReferenceSystems = null;
+            PlannedRoute = null;
         }
 
         /*
@@ -465,6 +511,7 @@ namespace EDDiscovery2
             CenterSystem = system;
             textboxFrom.Text = system.name;
             SetCenterSystem(system);
+            StartCameraSlew();
         }
         private void CalculateTimeDelta()
         {
@@ -739,8 +786,6 @@ namespace EDDiscovery2
         {
             SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
             OrientateMapAroundSystem(sys);
-
-            ResetCamera();
         }
         
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -800,6 +845,7 @@ namespace EDDiscovery2
         {
             CalculateTimeDelta();
             HandleInputs();
+            DoCameraSlew();
             UpdateCamera();
             Render();
         }
@@ -841,6 +887,8 @@ namespace EDDiscovery2
 
         private void glControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            _cameraSlewProgress = 1.0f;
+
             if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Left))
             {
                 _mouseStartRotate.X = e.X;
@@ -872,6 +920,8 @@ namespace EDDiscovery2
             // http://www.opentk.com/node/3738
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
+                _cameraSlewProgress = 1.0f;
+
                 int dx = e.X - _mouseStartRotate.X;
                 int dy = e.Y - _mouseStartRotate.Y;
 
@@ -890,6 +940,8 @@ namespace EDDiscovery2
             // TODO: Turn this into Up and Down along Y Axis, like real ED map 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
+                _cameraSlewProgress = 1.0f;
+
                 int dx = e.X - _mouseStartTranslateXY.X;
                 int dy = e.Y - _mouseStartTranslateXY.Y;
 
@@ -905,6 +957,8 @@ namespace EDDiscovery2
             }
             if (e.Button == (System.Windows.Forms.MouseButtons.Left | System.Windows.Forms.MouseButtons.Right))
             {
+                _cameraSlewProgress = 1.0f;
+
                 int dx = e.X - _mouseStartTranslateXZ.X;
                 int dy = e.Y - _mouseStartTranslateXZ.Y;
 
@@ -966,16 +1020,12 @@ namespace EDDiscovery2
         {
             ISystem sys = SystemData.GetSystem(_homeSystem) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             OrientateMapAroundSystem(sys);
-
-            ResetCamera();
         }
 
         private void buttonHistory_Click(object sender, EventArgs e)
         {
             ISystem sys = SystemData.GetSystem(HistorySelection) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             OrientateMapAroundSystem(sys);
-
-            ResetCamera();
         }
 
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
@@ -1022,7 +1072,6 @@ namespace EDDiscovery2
             if (sys != null)
             {
                 OrientateMapAroundSystem(sys);
-                ResetCamera();
             }
         }
     }
