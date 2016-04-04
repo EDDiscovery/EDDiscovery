@@ -1213,19 +1213,22 @@ namespace EDDiscovery
             string sysName = "";
             foreach (DataGridViewRow r in selectedRows)
             {
-                sysName = r.Cells[0].Value.ToString();
-                WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
-                if (entry == null)
+                if (r.Cells[0].Value != null)
                 {
-                    WantedSystemClass toAdd = new WantedSystemClass(sysName);
-                    wanted.Add(toAdd);
-                    SystemClass star = SystemData.GetSystem(sysName);
-                    if (star == null)
-                        star = new SystemClass(sysName);
+                    sysName = r.Cells[0].Value.ToString();
+                    WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
+                    if (entry == null)
+                    {
+                        WantedSystemClass toAdd = new WantedSystemClass(sysName);
+                        wanted.Add(toAdd);
+                        SystemClass star = SystemData.GetSystem(sysName);
+                        if (star == null)
+                            star = new SystemClass(sysName);
 
-                    var index = dataGridViewClosestSystems.Rows.Add("Local");
-                    dataGridViewClosestSystems[1, index].Value = sysName;
-                    dataGridViewClosestSystems[1, index].Tag = star;
+                        var index = dataGridViewClosestSystems.Rows.Add("Local");
+                        dataGridViewClosestSystems[1, index].Value = sysName;
+                        dataGridViewClosestSystems[1, index].Tag = star;
+                    }
                 }
             }
         }
