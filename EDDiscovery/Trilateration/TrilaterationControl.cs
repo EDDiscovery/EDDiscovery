@@ -1216,20 +1216,26 @@ namespace EDDiscovery
                 if (r.Cells[0].Value != null)
                 {
                     sysName = r.Cells[0].Value.ToString();
-                    WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
-                    if (entry == null)
-                    {
-                        WantedSystemClass toAdd = new WantedSystemClass(sysName);
-                        wanted.Add(toAdd);
-                        SystemClass star = SystemData.GetSystem(sysName);
-                        if (star == null)
-                            star = new SystemClass(sysName);
-
-                        var index = dataGridViewClosestSystems.Rows.Add("Local");
-                        dataGridViewClosestSystems[1, index].Value = sysName;
-                        dataGridViewClosestSystems[1, index].Tag = star;
-                    }
+                    AddWantedSystem(sysName);
                 }
+            }
+        }
+
+        public void AddWantedSystem(string sysName)
+        {
+            if (wanted == null) wanted = new List<WantedSystemClass>();
+            WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
+            if (entry == null)
+            {
+                WantedSystemClass toAdd = new WantedSystemClass(sysName);
+                wanted.Add(toAdd);
+                SystemClass star = SystemData.GetSystem(sysName);
+                if (star == null)
+                    star = new SystemClass(sysName);
+
+                var index = dataGridViewClosestSystems.Rows.Add("Local");
+                dataGridViewClosestSystems[1, index].Value = sysName;
+                dataGridViewClosestSystems[1, index].Tag = star;
             }
         }
 
@@ -1250,6 +1256,7 @@ namespace EDDiscovery
                     {
                         entry.Delete();
                         dataGridViewClosestSystems.Rows.Remove(r);
+                        wanted.Remove(entry);
                     }
                 }
                 else
