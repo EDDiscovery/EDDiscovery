@@ -40,6 +40,7 @@
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,21 +58,21 @@
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
-            this.settings = new EDDiscovery2.Settings();
             this.tabPageRoute = new System.Windows.Forms.TabPage();
-            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
-            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this.panel_grip = new System.Windows.Forms.Panel();
-            this.panel_minimize = new System.Windows.Forms.Panel();
-            this.panel_close = new System.Windows.Forms.Panel();
+            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
+            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
+            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
+            this.routeControl1 = new EDDiscovery.RouteControl();
+            this.settings = new EDDiscovery2.Settings();
+            this.panel_grip = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.panel_close = new ExtendedControls.DrawnPanel();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
@@ -117,7 +118,8 @@
             this.prospectingToolStripMenuItem,
             this.statisticsToolStripMenuItem,
             this.changeMapColorToolStripMenuItem,
-            this.editThemeToolStripMenuItem});
+            this.editThemeToolStripMenuItem,
+            this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -170,6 +172,13 @@
             this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.editThemeToolStripMenuItem.Text = "Edit Theme";
             this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // adminToolStripMenuItem
             // 
@@ -311,14 +320,6 @@
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
-            // settings
-            // 
-            this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.settings.Location = new System.Drawing.Point(3, 3);
-            this.settings.Name = "settings";
-            this.settings.Size = new System.Drawing.Size(979, 665);
-            this.settings.TabIndex = 0;
-            // 
             // tabPageRoute
             // 
             this.tabPageRoute.Controls.Add(this.routeControl1);
@@ -330,14 +331,6 @@
             this.tabPageRoute.Text = "Route";
             this.tabPageRoute.UseVisualStyleBackColor = true;
             // 
-            // routeControl1
-            // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(979, 665);
-            this.routeControl1.TabIndex = 0;
-            // 
             // tabPageScreenshots
             // 
             this.tabPageScreenshots.Controls.Add(this.imageHandler1);
@@ -347,15 +340,6 @@
             this.tabPageScreenshots.TabIndex = 4;
             this.tabPageScreenshots.Text = "Screenshots";
             this.tabPageScreenshots.UseVisualStyleBackColor = true;
-            // 
-            // imageHandler1
-            // 
-            this.imageHandler1.AutoSize = true;
-            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
-            this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
-            this.imageHandler1.TabIndex = 0;
             // 
             // tabPageTriletaration
             // 
@@ -367,14 +351,6 @@
             this.tabPageTriletaration.TabIndex = 3;
             this.tabPageTriletaration.Text = "Trilateration";
             this.tabPageTriletaration.UseVisualStyleBackColor = true;
-            // 
-            // trilaterationControl
-            // 
-            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
-            this.trilaterationControl.TabIndex = 21;
             // 
             // tabControl1
             // 
@@ -400,14 +376,6 @@
             this.tabPageTravelHistory.Text = "Travel history";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
             // 
-            // travelHistoryControl1
-            // 
-            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl1.Name = "travelHistoryControl1";
-            this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
-            this.travelHistoryControl1.TabIndex = 0;
-            // 
             // label_version
             // 
             this.label_version.AutoSize = true;
@@ -429,13 +397,55 @@
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.panel1_Click);
             // 
+            // travelHistoryControl1
+            // 
+            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl1.Name = "travelHistoryControl1";
+            this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
+            this.travelHistoryControl1.TabIndex = 0;
+            // 
+            // trilaterationControl
+            // 
+            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
+            this.trilaterationControl.Name = "trilaterationControl";
+            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
+            this.trilaterationControl.TabIndex = 21;
+            // 
+            // imageHandler1
+            // 
+            this.imageHandler1.AutoSize = true;
+            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
+            this.imageHandler1.Name = "imageHandler1";
+            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
+            this.imageHandler1.TabIndex = 0;
+            // 
+            // routeControl1
+            // 
+            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.routeControl1.Location = new System.Drawing.Point(3, 3);
+            this.routeControl1.Name = "routeControl1";
+            this.routeControl1.Size = new System.Drawing.Size(979, 665);
+            this.routeControl1.TabIndex = 0;
+            // 
+            // settings
+            // 
+            this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.settings.Location = new System.Drawing.Point(3, 3);
+            this.settings.Name = "settings";
+            this.settings.Size = new System.Drawing.Size(979, 665);
+            this.settings.TabIndex = 0;
+            // 
             // panel_grip
             // 
             this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panel_grip.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_grip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_grip.BackgroundImage")));
             this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_grip.Image = ExtendedControls.DrawnPanel.ImageType.Gripper;
             this.panel_grip.Location = new System.Drawing.Point(977, 727);
+            this.panel_grip.MarginSize = 5;
             this.panel_grip.Name = "panel_grip";
             this.panel_grip.Size = new System.Drawing.Size(16, 16);
             this.panel_grip.TabIndex = 16;
@@ -445,9 +455,10 @@
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_minimize.BackgroundImage = global::EDDiscovery.Properties.Resources.minimize4;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.Image = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(941, 1);
+            this.panel_minimize.MarginSize = 6;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 20;
@@ -457,9 +468,10 @@
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_close.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_close.BackgroundImage")));
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.Image = ExtendedControls.DrawnPanel.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(966, 1);
+            this.panel_close.MarginSize = 6;
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 19;
@@ -533,9 +545,9 @@
         private System.Windows.Forms.Panel panel_eddiscovery;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eDDiscoveryChatDiscordToolStripMenuItem;
-        private System.Windows.Forms.Panel panel_close;
-        private System.Windows.Forms.Panel panel_minimize;
-        private System.Windows.Forms.Panel panel_grip;
+        private ExtendedControls.DrawnPanel panel_close;
+        private ExtendedControls.DrawnPanel panel_minimize;
+        private ExtendedControls.DrawnPanel panel_grip;
         private System.Windows.Forms.TabPage tabPageSettings;
         private EDDiscovery2.Settings settings;
         private System.Windows.Forms.TabPage tabPageRoute;
@@ -550,6 +562,7 @@
         private System.Windows.Forms.Label label_version;
         private System.Windows.Forms.ToolStripMenuItem changeMapColorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
