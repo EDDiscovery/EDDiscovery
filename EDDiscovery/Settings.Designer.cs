@@ -29,13 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button_Browse = new System.Windows.Forms.Button();
-            this.textBoxNetLogDir = new System.Windows.Forms.TextBox();
+            this.button_Browse = new ExtendedControls.ButtonExt();
+            this.textBoxNetLogDir = new ExtendedControls.TextBoxBorder();
             this.radioButton_Manual = new System.Windows.Forms.RadioButton();
             this.radioButton_Auto = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.buttonAddCommander = new System.Windows.Forms.Button();
+            this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.label2 = new System.Windows.Forms.Label();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -48,19 +49,19 @@
             this.checkboxSkipSlowUpdates = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.textBoxDefaultZoom = new System.Windows.Forms.TextBox();
+            this.textBoxDefaultZoom = new ExtendedControls.TextBoxBorder();
             this.label5 = new System.Windows.Forms.Label();
             this.radioButtonHistorySelection = new System.Windows.Forms.RadioButton();
             this.radioButtonCentreHome = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBoxHomeSystem = new System.Windows.Forms.TextBox();
+            this.textBoxHomeSystem = new ExtendedControls.TextBoxBorder();
             this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
-            this.buttonSaveTheme = new System.Windows.Forms.Button();
-            this.comboBoxTheme = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.button_edittheme = new System.Windows.Forms.Button();
             this.groupBoxTheme = new System.Windows.Forms.GroupBox();
+            this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();
+            this.button_edittheme = new ExtendedControls.ButtonExt();
+            this.buttonSaveTheme = new ExtendedControls.ButtonExt();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
@@ -84,6 +85,8 @@
             // 
             // button_Browse
             // 
+            this.button_Browse.BorderColorScaling = 1.25F;
+            this.button_Browse.ButtonColorScaling = 0.5F;
             this.button_Browse.Location = new System.Drawing.Point(728, 46);
             this.button_Browse.Name = "button_Browse";
             this.button_Browse.Size = new System.Drawing.Size(75, 23);
@@ -94,6 +97,9 @@
             // 
             // textBoxNetLogDir
             // 
+            this.textBoxNetLogDir.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxNetLogDir.BorderPadding = 1;
+            this.textBoxNetLogDir.BorderSize = 1;
             this.textBoxNetLogDir.Location = new System.Drawing.Point(97, 48);
             this.textBoxNetLogDir.Name = "textBoxNetLogDir";
             this.textBoxNetLogDir.Size = new System.Drawing.Size(623, 20);
@@ -135,6 +141,8 @@
             // 
             // buttonAddCommander
             // 
+            this.buttonAddCommander.BorderColorScaling = 1.25F;
+            this.buttonAddCommander.ButtonColorScaling = 0.5F;
             this.buttonAddCommander.Location = new System.Drawing.Point(11, 16);
             this.buttonAddCommander.Name = "buttonAddCommander";
             this.buttonAddCommander.Size = new System.Drawing.Size(104, 23);
@@ -276,6 +284,9 @@
             // 
             // textBoxDefaultZoom
             // 
+            this.textBoxDefaultZoom.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxDefaultZoom.BorderPadding = 1;
+            this.textBoxDefaultZoom.BorderSize = 1;
             this.textBoxDefaultZoom.Location = new System.Drawing.Point(118, 70);
             this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
@@ -335,6 +346,9 @@
             // 
             this.textBoxHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxHomeSystem.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxHomeSystem.BorderPadding = 1;
+            this.textBoxHomeSystem.BorderSize = 1;
             this.textBoxHomeSystem.Location = new System.Drawing.Point(120, 19);
             this.textBoxHomeSystem.Name = "textBoxHomeSystem";
             this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
@@ -351,35 +365,6 @@
             this.panel_defaultmapcolor.Tag = "";
             this.panel_defaultmapcolor.Click += new System.EventHandler(this.panel_defaultmapcolor_Click);
             // 
-            // buttonSaveTheme
-            // 
-            this.buttonSaveTheme.Location = new System.Drawing.Point(13, 55);
-            this.buttonSaveTheme.Name = "buttonSaveTheme";
-            this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
-            this.buttonSaveTheme.TabIndex = 7;
-            this.buttonSaveTheme.Text = "Save Theme";
-            this.buttonSaveTheme.UseVisualStyleBackColor = true;
-            this.buttonSaveTheme.Click += new System.EventHandler(this.buttonSaveTheme_Click);
-            // 
-            // comboBoxTheme
-            // 
-            this.comboBoxTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTheme.FormattingEnabled = true;
-            this.comboBoxTheme.Location = new System.Drawing.Point(7, 19);
-            this.comboBoxTheme.Name = "comboBoxTheme";
-            this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
-            this.comboBoxTheme.TabIndex = 0;
-            // 
-            // button_edittheme
-            // 
-            this.button_edittheme.Location = new System.Drawing.Point(199, 55);
-            this.button_edittheme.Name = "button_edittheme";
-            this.button_edittheme.Size = new System.Drawing.Size(75, 23);
-            this.button_edittheme.TabIndex = 10;
-            this.button_edittheme.Text = "Edit Theme";
-            this.button_edittheme.UseVisualStyleBackColor = true;
-            this.button_edittheme.Click += new System.EventHandler(this.button_edittheme_Click);
-            // 
             // groupBoxTheme
             // 
             this.groupBoxTheme.Controls.Add(this.comboBoxTheme);
@@ -387,10 +372,54 @@
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.Location = new System.Drawing.Point(4, 403);
             this.groupBoxTheme.Name = "groupBoxTheme";
-            this.groupBoxTheme.Size = new System.Drawing.Size(425, 100);
+            this.groupBoxTheme.Size = new System.Drawing.Size(425, 120);
             this.groupBoxTheme.TabIndex = 18;
             this.groupBoxTheme.TabStop = false;
             this.groupBoxTheme.Text = "Theme";
+            // 
+            // comboBoxTheme
+            // 
+            this.comboBoxTheme.ArrowWidth = 1;
+            this.comboBoxTheme.BackColor = System.Drawing.Color.Gray;
+            this.comboBoxTheme.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxTheme.ButtonColorScaling = 0.5F;
+            this.comboBoxTheme.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxTheme.DropDownHeight = 150;
+            this.comboBoxTheme.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxTheme.ItemHeight = 20;
+            this.comboBoxTheme.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxTheme.Items")));
+            this.comboBoxTheme.Location = new System.Drawing.Point(7, 19);
+            this.comboBoxTheme.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxTheme.Name = "comboBoxTheme";
+            this.comboBoxTheme.ScrollBarWidth = 16;
+            this.comboBoxTheme.SelectedIndex = -1;
+            this.comboBoxTheme.SelectedItem = null;
+            this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
+            this.comboBoxTheme.TabIndex = 0;
+            // 
+            // button_edittheme
+            // 
+            this.button_edittheme.BorderColorScaling = 1.25F;
+            this.button_edittheme.ButtonColorScaling = 0.5F;
+            this.button_edittheme.Location = new System.Drawing.Point(291, 63);
+            this.button_edittheme.Name = "button_edittheme";
+            this.button_edittheme.Size = new System.Drawing.Size(95, 23);
+            this.button_edittheme.TabIndex = 10;
+            this.button_edittheme.Text = "Edit Theme";
+            this.button_edittheme.UseVisualStyleBackColor = true;
+            this.button_edittheme.Click += new System.EventHandler(this.button_edittheme_Click);
+            // 
+            // buttonSaveTheme
+            // 
+            this.buttonSaveTheme.BorderColorScaling = 1.25F;
+            this.buttonSaveTheme.ButtonColorScaling = 0.5F;
+            this.buttonSaveTheme.Location = new System.Drawing.Point(291, 19);
+            this.buttonSaveTheme.Name = "buttonSaveTheme";
+            this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
+            this.buttonSaveTheme.TabIndex = 7;
+            this.buttonSaveTheme.Text = "Save Theme";
+            this.buttonSaveTheme.UseVisualStyleBackColor = true;
+            this.buttonSaveTheme.Click += new System.EventHandler(this.buttonSaveTheme_Click);
             // 
             // Settings
             // 
@@ -420,12 +449,12 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button_Browse;
-        private System.Windows.Forms.TextBox textBoxNetLogDir;
+        private ExtendedControls.ButtonExt button_Browse;
+        private ExtendedControls.TextBoxBorder textBoxNetLogDir;
         private System.Windows.Forms.RadioButton radioButton_Manual;
         private System.Windows.Forms.RadioButton radioButton_Auto;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button buttonAddCommander;
+        private ExtendedControls.ButtonExt buttonAddCommander;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dataGridViewCommanders;
         private System.Windows.Forms.GroupBox groupBox3;
@@ -433,23 +462,23 @@
         private System.Windows.Forms.CheckBox checkBoxEDSMLog;
         public System.Windows.Forms.CheckBox checkboxSkipSlowUpdates;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox textBoxDefaultZoom;
+        private ExtendedControls.TextBoxBorder textBoxDefaultZoom;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.RadioButton radioButtonHistorySelection;
         private System.Windows.Forms.RadioButton radioButtonCentreHome;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBoxHomeSystem;
-        private System.Windows.Forms.ComboBox comboBoxTheme;
+        private ExtendedControls.TextBoxBorder textBoxHomeSystem;
+        private ExtendedControls.ComboBoxCustom comboBoxTheme;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panel_defaultmapcolor;
-        private System.Windows.Forms.Button buttonSaveTheme;
+        private ExtendedControls.ButtonExt buttonSaveTheme;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Button button_edittheme;
+        private ExtendedControls.ButtonExt button_edittheme;
         private System.Windows.Forms.GroupBox groupBoxTheme;
     }
 }

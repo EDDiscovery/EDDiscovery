@@ -17,6 +17,7 @@ namespace EDDiscovery2
     {
         private EDDiscoveryForm _discoveryForm;
         private SQLiteDBClass _db;
+        private ThemeEditor themeeditor = null;
 
         public Settings()
         {
@@ -28,8 +29,23 @@ namespace EDDiscovery2
             _discoveryForm = discoveryForm;
             _db = new SQLiteDBClass();
 
-            _discoveryForm.theme.FillComboBoxWithThemes(comboBoxTheme);                // set up combo box with default themes
-            _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
+            ResetThemeList();
+            SetEntryThemeComboBox();
+        }
+
+        void SetEntryThemeComboBox()
+        {
+            int i = _discoveryForm.theme.GetIndexOfCurrentTheme();
+            if (i == -1)
+                comboBoxTheme.SelectedItem = "Custom";
+            else
+                comboBoxTheme.SelectedIndex = i;
+        }
+
+        private void ResetThemeList()
+        {
+            comboBoxTheme.Items = _discoveryForm.theme.GetThemeList();
+            comboBoxTheme.Items.Add("Custom");
         }
 
         public void InitSettingsTab()
@@ -72,9 +88,8 @@ namespace EDDiscovery2
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
 
             panel_defaultmapcolor.BackColor = Color.FromArgb(_discoveryForm.TravelControl.defaultMapColour);
-
-
-            this.comboBoxTheme.SelectedIndexChanged += new System.EventHandler(this.comboBoxTheme_SelectedIndexChanged);    // now turn on the handler.. 
+            
+            this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler.. 
         }
 
         public void SaveSettings()
@@ -155,17 +170,19 @@ namespace EDDiscovery2
             {
                 DialogResult res = MessageBox.Show("The font used by this theme is not available on your system" + Environment.NewLine +
                       "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
-                      "Install this font and you can use this scheme.",
+                      "Install this font and you can use this scheme." + Environment.NewLine +
+                      "EuroCaps font is available www.edassets.org.",
                       "Warning", MessageBoxButtons.OK);
 
                 _discoveryForm.theme.SetCustom();                              // go to custom theme whatever
-                _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);           // reselect to custom, refires this..
+                SetEntryThemeComboBox();
                 return;
             }
 
             if (!_discoveryForm.theme.SetThemeByName(themename))
                 _discoveryForm.theme.SetCustom();                                   // go to custom theme..
 
+            SetEntryThemeComboBox();
             _discoveryForm.ApplyTheme(true);
         }
 
@@ -181,24 +198,42 @@ namespace EDDiscovery2
             {
                 _discoveryForm.theme.SaveSettings(dlg.FileName);        // should create a new theme files
                 _discoveryForm.theme.LoadThemes();          // make sure up to data - we added a theme, reload them all
-                _discoveryForm.theme.Name = Path.GetFileNameWithoutExtension(dlg.FileName); // go to the name
+                _discoveryForm.theme.Name = Path.GetFileNameWithoutExtension(dlg.FileName); // go to the theme name
 
-                _discoveryForm.theme.FillComboBoxWithThemes(comboBoxTheme);   // set up combo box with default themes
+                ResetThemeList();
 
-                if (!_discoveryForm.theme.SetComboBoxIndex(comboBoxTheme))    // if can't select it, probably saved it somewhere else..
-                {
+                int curindex = _discoveryForm.theme.GetIndexOfCurrentTheme();       // get theme index.. may be -1 if theme not loaded back
+
+                if ( curindex == -1 )                                   // if not loaded, back to custom
                     _discoveryForm.theme.SetCustom();   // custom
-                }
+
+                SetEntryThemeComboBox();
             }
         }
 
         public void button_edittheme_Click(object sender, EventArgs e)
         {
-            ThemeDialog themedialog = new ThemeDialog();
-            themedialog.InitForm(_discoveryForm);
-            themedialog.ShowDialog();
-            themedialog.Dispose();
-            _discoveryForm.theme.SetComboBoxIndex(comboBoxTheme);                      // given the theme selected, set the combo box
+            if (themeeditor == null)                    // no theme editor, make one..
+            {
+                themeeditor = new ThemeEditor();
+                themeeditor.InitForm(_discoveryForm);
+                themeeditor.FormClosing += close_edit;  // lets see when it closes
+
+                comboBoxTheme.Enabled = false;          // no doing this while theme editor is open
+                buttonSaveTheme.Enabled = false;
+
+                themeeditor.Show();                     // run form
+            }
+            else
+                themeeditor.BringToFront();             // its up, make it at front to show it
+        }
+
+        public void close_edit(object sender, FormClosingEventArgs e)
+        {
+            themeeditor = null;                         // called when editor closes
+            SetEntryThemeComboBox();
+            comboBoxTheme.Enabled = true;          // no doing this while theme editor is open
+            buttonSaveTheme.Enabled = true;
         }
     }
 }

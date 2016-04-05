@@ -29,23 +29,23 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrilaterationControl));
             this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textBoxSystemName = new System.Windows.Forms.TextBox();
+            this.textBoxSystemName = new ExtendedControls.TextBoxBorder();
             this.labelTargetSystem = new System.Windows.Forms.Label();
             this.labelCoordinates = new System.Windows.Forms.Label();
-            this.textBoxCoordinateX = new System.Windows.Forms.TextBox();
+            this.textBoxCoordinateX = new ExtendedControls.TextBoxBorder();
             this.labelCoordinateX = new System.Windows.Forms.Label();
             this.labelCoordinateY = new System.Windows.Forms.Label();
-            this.textBoxCoordinateY = new System.Windows.Forms.TextBox();
+            this.textBoxCoordinateY = new ExtendedControls.TextBoxBorder();
             this.labelCoordinateZ = new System.Windows.Forms.Label();
-            this.textBoxCoordinateZ = new System.Windows.Forms.TextBox();
+            this.textBoxCoordinateZ = new ExtendedControls.TextBoxBorder();
             this.panelImplementation = new System.Windows.Forms.Panel();
             this.labelAlgorithm = new System.Windows.Forms.Label();
             this.radioButtonAlgorithmJs = new System.Windows.Forms.RadioButton();
@@ -57,7 +57,7 @@
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.richTextBox_History = new System.Windows.Forms.RichTextBox();
+            this.richTextBox_History = new ExtendedControls.RichTextBoxBorder();
             this.labelSuggestedSystems = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSubmitDistances = new System.Windows.Forms.ToolStripButton();
@@ -67,7 +67,7 @@
             this.toolStripButtonRemoveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
             this.panel_controls = new System.Windows.Forms.Panel();
-            this.textBox_status = new System.Windows.Forms.TextBox();
+            this.textBox_status = new ExtendedControls.TextBoxBorder();
             this.labelstpos = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.panelImplementation.SuspendLayout();
@@ -135,6 +135,9 @@
             // 
             // textBoxSystemName
             // 
+            this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSystemName.BorderPadding = 1;
+            this.textBoxSystemName.BorderSize = 1;
             this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxSystemName.Location = new System.Drawing.Point(72, 25);
             this.textBoxSystemName.Name = "textBoxSystemName";
@@ -162,11 +165,13 @@
             // 
             // textBoxCoordinateX
             // 
-            this.textBoxCoordinateX.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxCoordinateX.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCoordinateX.BorderPadding = 1;
+            this.textBoxCoordinateX.BorderSize = 1;
             this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 46);
             this.textBoxCoordinateX.Name = "textBoxCoordinateX";
             this.textBoxCoordinateX.ReadOnly = true;
-            this.textBoxCoordinateX.Size = new System.Drawing.Size(50, 13);
+            this.textBoxCoordinateX.Size = new System.Drawing.Size(60, 20);
             this.textBoxCoordinateX.TabIndex = 6;
             this.textBoxCoordinateX.Text = "?";
             this.textBoxCoordinateX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -174,7 +179,7 @@
             // labelCoordinateX
             // 
             this.labelCoordinateX.AutoSize = true;
-            this.labelCoordinateX.Location = new System.Drawing.Point(150, 46);
+            this.labelCoordinateX.Location = new System.Drawing.Point(148, 47);
             this.labelCoordinateX.Name = "labelCoordinateX";
             this.labelCoordinateX.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateX.TabIndex = 7;
@@ -183,7 +188,7 @@
             // labelCoordinateY
             // 
             this.labelCoordinateY.AutoSize = true;
-            this.labelCoordinateY.Location = new System.Drawing.Point(217, 46);
+            this.labelCoordinateY.Location = new System.Drawing.Point(228, 47);
             this.labelCoordinateY.Name = "labelCoordinateY";
             this.labelCoordinateY.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateY.TabIndex = 9;
@@ -191,11 +196,13 @@
             // 
             // textBoxCoordinateY
             // 
-            this.textBoxCoordinateY.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxCoordinateY.Location = new System.Drawing.Point(234, 46);
+            this.textBoxCoordinateY.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCoordinateY.BorderPadding = 1;
+            this.textBoxCoordinateY.BorderSize = 1;
+            this.textBoxCoordinateY.Location = new System.Drawing.Point(245, 46);
             this.textBoxCoordinateY.Name = "textBoxCoordinateY";
             this.textBoxCoordinateY.ReadOnly = true;
-            this.textBoxCoordinateY.Size = new System.Drawing.Size(50, 13);
+            this.textBoxCoordinateY.Size = new System.Drawing.Size(60, 20);
             this.textBoxCoordinateY.TabIndex = 8;
             this.textBoxCoordinateY.Text = "?";
             this.textBoxCoordinateY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -203,7 +210,7 @@
             // labelCoordinateZ
             // 
             this.labelCoordinateZ.AutoSize = true;
-            this.labelCoordinateZ.Location = new System.Drawing.Point(284, 46);
+            this.labelCoordinateZ.Location = new System.Drawing.Point(309, 47);
             this.labelCoordinateZ.Name = "labelCoordinateZ";
             this.labelCoordinateZ.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateZ.TabIndex = 11;
@@ -211,11 +218,13 @@
             // 
             // textBoxCoordinateZ
             // 
-            this.textBoxCoordinateZ.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxCoordinateZ.Location = new System.Drawing.Point(301, 46);
+            this.textBoxCoordinateZ.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCoordinateZ.BorderPadding = 1;
+            this.textBoxCoordinateZ.BorderSize = 1;
+            this.textBoxCoordinateZ.Location = new System.Drawing.Point(325, 46);
             this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
             this.textBoxCoordinateZ.ReadOnly = true;
-            this.textBoxCoordinateZ.Size = new System.Drawing.Size(50, 13);
+            this.textBoxCoordinateZ.Size = new System.Drawing.Size(60, 20);
             this.textBoxCoordinateZ.TabIndex = 10;
             this.textBoxCoordinateZ.Text = "?";
             this.textBoxCoordinateZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -225,7 +234,7 @@
             this.panelImplementation.Controls.Add(this.labelAlgorithm);
             this.panelImplementation.Controls.Add(this.radioButtonAlgorithmJs);
             this.panelImplementation.Controls.Add(this.radioButtonAlgorithmCsharp);
-            this.panelImplementation.Location = new System.Drawing.Point(411, 0);
+            this.panelImplementation.Location = new System.Drawing.Point(467, 4);
             this.panelImplementation.Name = "panelImplementation";
             this.panelImplementation.Size = new System.Drawing.Size(49, 63);
             this.panelImplementation.TabIndex = 16;
@@ -291,14 +300,14 @@
             this.dataGridViewSuggestedSystems.AllowUserToAddRows = false;
             this.dataGridViewSuggestedSystems.AllowUserToDeleteRows = false;
             this.dataGridViewSuggestedSystems.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewSuggestedSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewSuggestedSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewSuggestedSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewSuggestedSystems.ColumnHeadersVisible = false;
             this.dataGridViewSuggestedSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -327,14 +336,14 @@
             this.dataGridViewClosestSystems.AllowUserToDeleteRows = false;
             this.dataGridViewClosestSystems.AllowUserToResizeRows = false;
             this.dataGridViewClosestSystems.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewClosestSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewClosestSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumnClosestSystemsSystem,
@@ -368,6 +377,9 @@
             // 
             // richTextBox_History
             // 
+            this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
+            this.richTextBox_History.BorderPadding = 1;
+            this.richTextBox_History.BorderSize = 1;
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Left;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
@@ -480,6 +492,9 @@
             // 
             // textBox_status
             // 
+            this.textBox_status.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_status.BorderPadding = 1;
+            this.textBox_status.BorderSize = 1;
             this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox_status.Location = new System.Drawing.Point(102, 4);
             this.textBox_status.Name = "textBox_status";
@@ -524,15 +539,15 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox textBoxSystemName;
+        private ExtendedControls.TextBoxBorder textBoxSystemName;
         private System.Windows.Forms.Label labelTargetSystem;
         private System.Windows.Forms.Label labelCoordinates;
-        private System.Windows.Forms.TextBox textBoxCoordinateX;
+        private ExtendedControls.TextBoxBorder textBoxCoordinateX;
         private System.Windows.Forms.Label labelCoordinateX;
         private System.Windows.Forms.Label labelCoordinateY;
-        private System.Windows.Forms.TextBox textBoxCoordinateY;
+        private ExtendedControls.TextBoxBorder textBoxCoordinateY;
         private System.Windows.Forms.Label labelCoordinateZ;
-        private System.Windows.Forms.TextBox textBoxCoordinateZ;
+        private ExtendedControls.TextBoxBorder textBoxCoordinateZ;
         private System.Windows.Forms.Panel panelImplementation;
         private System.Windows.Forms.RadioButton radioButtonAlgorithmJs;
         private System.Windows.Forms.RadioButton radioButtonAlgorithmCsharp;
@@ -544,7 +559,7 @@
         private System.Windows.Forms.Label labelSuggestedSystems;
         private System.Windows.Forms.DataGridView dataGridViewSuggestedSystems;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnSuggestedSystemsSystem;
-        internal System.Windows.Forms.RichTextBox richTextBox_History;
+        internal ExtendedControls.RichTextBoxBorder richTextBox_History;
         private System.Windows.Forms.DataGridView dataGridViewClosestSystems;
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         protected System.Windows.Forms.DataGridView dataGridViewDistances;
@@ -560,6 +575,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
-        private System.Windows.Forms.TextBox textBox_status;
+        private ExtendedControls.TextBoxBorder textBox_status;
     }
 }
