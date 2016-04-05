@@ -37,6 +37,8 @@
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.trilatContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxSystemName = new System.Windows.Forms.TextBox();
             this.labelTargetSystem = new System.Windows.Forms.Label();
             this.labelCoordinates = new System.Windows.Forms.Label();
@@ -55,6 +57,10 @@
             this.dataGridViewSuggestedSystems = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnSuggestedSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
+            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.wantedContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeFromWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.richTextBox_History = new System.Windows.Forms.RichTextBox();
             this.labelSuggestedSystems = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -67,13 +73,8 @@
             this.panel_controls = new System.Windows.Forms.Panel();
             this.textBox_status = new System.Windows.Forms.TextBox();
             this.labelstpos = new System.Windows.Forms.Label();
-            this.trilatContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wantedContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.removeFromWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
+            this.trilatContextMenu.SuspendLayout();
             this.panelImplementation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -81,10 +82,9 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuggestedSystems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).BeginInit();
+            this.wantedContextMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel_controls.SuspendLayout();
-            this.trilatContextMenu.SuspendLayout();
-            this.wantedContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewDistances
@@ -139,6 +139,20 @@
             this.ColumnStatus.MinimumWidth = 75;
             this.ColumnStatus.Name = "ColumnStatus";
             this.ColumnStatus.ReadOnly = true;
+            // 
+            // trilatContextMenu
+            // 
+            this.trilatContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToWantedSystemsToolStripMenuItem});
+            this.trilatContextMenu.Name = "trilatContextMenu";
+            this.trilatContextMenu.Size = new System.Drawing.Size(198, 26);
+            // 
+            // addToWantedSystemsToolStripMenuItem
+            // 
+            this.addToWantedSystemsToolStripMenuItem.Name = "addToWantedSystemsToolStripMenuItem";
+            this.addToWantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.addToWantedSystemsToolStripMenuItem.Text = "Add to wanted systems";
+            this.addToWantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.addToWantedSystemsToolStripMenuItem_Click);
             // 
             // textBoxSystemName
             // 
@@ -357,6 +371,34 @@
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
+            // Source
+            // 
+            this.Source.HeaderText = "Source";
+            this.Source.Name = "Source";
+            this.Source.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumnClosestSystemsSystem
+            // 
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.HeaderText = "Wanted System";
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.MinimumWidth = 100;
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
+            this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
+            // 
+            // wantedContextMenu
+            // 
+            this.wantedContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeFromWantedSystemsToolStripMenuItem});
+            this.wantedContextMenu.Name = "wantedContextMenu";
+            this.wantedContextMenu.Size = new System.Drawing.Size(234, 26);
+            // 
+            // removeFromWantedSystemsToolStripMenuItem
+            // 
+            this.removeFromWantedSystemsToolStripMenuItem.Name = "removeFromWantedSystemsToolStripMenuItem";
+            this.removeFromWantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.removeFromWantedSystemsToolStripMenuItem.Text = "Remove from wanted systems";
+            this.removeFromWantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.removeFromWantedSystemsToolStripMenuItem_Click);
+            // 
             // richTextBox_History
             // 
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Left;
@@ -487,48 +529,6 @@
             this.labelstpos.TabIndex = 20;
             this.labelstpos.Text = "Current Status:";
             // 
-            // trilatContextMenu
-            // 
-            this.trilatContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToWantedSystemsToolStripMenuItem});
-            this.trilatContextMenu.Name = "trilatContextMenu";
-            this.trilatContextMenu.Size = new System.Drawing.Size(198, 26);
-            // 
-            // addToWantedSystemsToolStripMenuItem
-            // 
-            this.addToWantedSystemsToolStripMenuItem.Name = "addToWantedSystemsToolStripMenuItem";
-            this.addToWantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.addToWantedSystemsToolStripMenuItem.Text = "Add to wanted systems";
-            this.addToWantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.addToWantedSystemsToolStripMenuItem_Click);
-            // 
-            // wantedContextMenu
-            // 
-            this.wantedContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.removeFromWantedSystemsToolStripMenuItem});
-            this.wantedContextMenu.Name = "wantedContextMenu";
-            this.wantedContextMenu.Size = new System.Drawing.Size(234, 26);
-            // 
-            // removeFromWantedSystemsToolStripMenuItem
-            // 
-            this.removeFromWantedSystemsToolStripMenuItem.Name = "removeFromWantedSystemsToolStripMenuItem";
-            this.removeFromWantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.removeFromWantedSystemsToolStripMenuItem.Text = "Remove from wanted systems";
-            this.removeFromWantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.removeFromWantedSystemsToolStripMenuItem_Click);
-            // 
-            // Source
-            // 
-            this.Source.HeaderText = "Source";
-            this.Source.Name = "Source";
-            this.Source.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumnClosestSystemsSystem
-            // 
-            this.dataGridViewTextBoxColumnClosestSystemsSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumnClosestSystemsSystem.HeaderText = "Wanted System";
-            this.dataGridViewTextBoxColumnClosestSystemsSystem.MinimumWidth = 100;
-            this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
-            this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
-            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -539,6 +539,7 @@
             this.Name = "TrilaterationControl";
             this.Size = new System.Drawing.Size(924, 681);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).EndInit();
+            this.trilatContextMenu.ResumeLayout(false);
             this.panelImplementation.ResumeLayout(false);
             this.panelImplementation.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -547,12 +548,11 @@
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuggestedSystems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).EndInit();
+            this.wantedContextMenu.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.panel_controls.ResumeLayout(false);
             this.panel_controls.PerformLayout();
-            this.trilatContextMenu.ResumeLayout(false);
-            this.wantedContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
