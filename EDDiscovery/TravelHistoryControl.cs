@@ -548,29 +548,27 @@ namespace EDDiscovery
             );
         }
 
-        private bool cmdlistloaded;
         private void LoadCommandersListBox()
         {
+            comboBoxCommander.Enabled = false;
             commanders = new List<EDCommander>();
 
             commanders.Add(new EDCommander(-1, "Hidden log", ""));
             commanders.AddRange(EDDiscoveryForm.EDDConfig.listCommanders);
 
-            cmdlistloaded = false;
             comboBoxCommander.DataSource = null;
             comboBoxCommander.DataSource = commanders;
             comboBoxCommander.ValueMember = "Nr";
             comboBoxCommander.DisplayMember = "Name";
-            cmdlistloaded = true;
             comboBoxCommander.SelectedIndex = 1;
 
+            comboBoxCommander.Enabled = true;
 
         }
 
         private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            if (comboBoxCommander.SelectedIndex >= 0 && cmdlistloaded)
+            if (comboBoxCommander.SelectedIndex >= 0 )
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 activecommander = itm.Nr;

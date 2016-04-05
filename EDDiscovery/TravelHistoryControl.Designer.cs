@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -69,7 +69,6 @@
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.checkBoxEDSMSyncFrom = new System.Windows.Forms.CheckBox();
             this.checkBoxEDSMSyncTo = new System.Windows.Forms.CheckBox();
-            this.comboBoxCommander = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
@@ -78,6 +77,7 @@
             this.button_RefreshHistory = new ExtendedControls.ButtonExt();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.richTextBox_History = new ExtendedControls.RichTextBoxBorder();
+            this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.textBoxDistanceToNextSystem = new ExtendedControls.TextBoxBorder();
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
@@ -159,8 +159,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
             this.mapColour.HeaderText = "Map";
             this.mapColour.Name = "mapColour";
             this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -421,10 +421,10 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(9, 7);
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(28, 10);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(96, 20);
+            this.label6.Size = new System.Drawing.Size(63, 13);
             this.label6.TabIndex = 17;
             this.label6.Text = "Commander";
             // 
@@ -510,16 +510,6 @@
             this.checkBoxEDSMSyncTo.UseVisualStyleBackColor = true;
             this.checkBoxEDSMSyncTo.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncTo_CheckedChanged);
             // 
-            // comboBoxCommander
-            // 
-            this.comboBoxCommander.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCommander.FormattingEnabled = true;
-            this.comboBoxCommander.Location = new System.Drawing.Point(114, 9);
-            this.comboBoxCommander.Name = "comboBoxCommander";
-            this.comboBoxCommander.Size = new System.Drawing.Size(162, 21);
-            this.comboBoxCommander.TabIndex = 0;
-            this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -586,6 +576,8 @@
             this.comboBoxHistoryWindow.ArrowWidth = 1;
             this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
             this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
+            this.comboBoxHistoryWindow.DataSource = null;
+            this.comboBoxHistoryWindow.DisplayMember = null;
             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxHistoryWindow.DropDownHeight = 200;
             this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -599,6 +591,7 @@
             this.comboBoxHistoryWindow.SelectedItem = null;
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
             this.comboBoxHistoryWindow.TabIndex = 0;
+            this.comboBoxHistoryWindow.ValueMember = null;
             this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // richTextBox_History
@@ -615,6 +608,28 @@
             this.richTextBox_History.TabIndex = 0;
             this.richTextBox_History.TabStop = false;
             this.richTextBox_History.Text = "";
+            // 
+            // comboBoxCommander
+            // 
+            this.comboBoxCommander.ArrowWidth = 1;
+            this.comboBoxCommander.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxCommander.ButtonColorScaling = 0.5F;
+            this.comboBoxCommander.DataSource = null;
+            this.comboBoxCommander.DisplayMember = null;
+            this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCommander.DropDownHeight = 200;
+            this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCommander.ItemHeight = 20;
+            this.comboBoxCommander.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxCommander.Items")));
+            this.comboBoxCommander.Location = new System.Drawing.Point(114, 7);
+            this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCommander.Name = "comboBoxCommander";
+            this.comboBoxCommander.ScrollBarWidth = 16;
+            this.comboBoxCommander.SelectedIndex = -1;
+            this.comboBoxCommander.SelectedItem = null;
+            this.comboBoxCommander.Size = new System.Drawing.Size(162, 21);
+            this.comboBoxCommander.TabIndex = 0;
+            this.comboBoxCommander.ValueMember = null;
             // 
             // textBoxDistanceToNextSystem
             // 
@@ -912,7 +927,7 @@
         internal ExtendedControls.TextBoxBorder textBoxDistanceToNextSystem;
         private System.Windows.Forms.ToolStripMenuItem hideSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveToAnotherCommanderToolStripMenuItem;
-        private System.Windows.Forms.ComboBox comboBoxCommander;
+        private ExtendedControls.ComboBoxCustom comboBoxCommander;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem;
         internal System.Windows.Forms.CheckBox checkBoxEDSMSyncFrom;
         internal System.Windows.Forms.CheckBox checkBoxEDSMSyncTo;

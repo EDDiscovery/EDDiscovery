@@ -74,7 +74,7 @@ namespace ExtendedControls
                 Rectangle buttonarea = ClientRectangle;
                 buttonarea.Inflate(-1, -1);                     // inside it.
 
-                Console.WriteLine("Paint " + this.Name + " " + ClientRectangle.ToString());
+                //Console.WriteLine("Paint " + this.Name + " " + ClientRectangle.ToString());
 
                 Color back;
                 Brush b;
