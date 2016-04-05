@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,13 +28,20 @@ namespace ExtendedControls
 
         public void Repaint() { firstpaint = true; Invalidate(); }     // MUST call after setting any of the above after first paint.
 
+        public int SelectedIndex { get { return selected; } set { UpdateSelected(value); } }
+
+        // attach a IList datasource with a property called DisplayMember
+        public object DataSource { get { return datasourceobject; } set { SetDS(value, datasourcedisplaymember); } }
+        public string DisplayMember { get { return datasourcedisplaymember; } set { SetDS(datasourceobject, value); } }
+        public object SelectedItem { get { return GetSelectedObject(); } set { SetSelectedObject(value); } }
+
+        // only required if SelectedValue required.
+        public string ValueMember { get { return datasourcevaluemember; } set { datasourcevaluemember = value; } }
+        public object SelectedValue { get { return GetSelectedValue(); } }      // only supporting get.
+
         // events
         public delegate void OnSelectedIndexChanged(object sender, EventArgs e);
         public event OnSelectedIndexChanged SelectedIndexChanged;
-
-        // Select new items...
-        public int SelectedIndex { get { return selected; } set { UpdateSelected(value); } }
-        public string SelectedItem { get { return (selected >= 0&&selected < Items.Count) ? Items[selected] : null; } set { UpdateSelected(value); } }
 
         // internals
         private int selected = -1;
@@ -45,6 +54,9 @@ namespace ExtendedControls
         private Point arrowpt1, arrowpt2, arrowpt3;
         private Point arrowpt1c, arrowpt2c, arrowpt3c;
         private ListControlCustom clc;
+        private object datasourceobject = null;
+        private string datasourcedisplaymember = null;
+        private string datasourcevaluemember = null;
 
         private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
         public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
@@ -107,8 +119,8 @@ namespace ExtendedControls
             }
             else
             {
-                textb = new SolidBrush(Multiply(this.ForeColor,0.5F));
-                p = new Pen(Multiply(this.BorderColor,0.5F));
+                textb = new SolidBrush(Multiply(this.ForeColor, 0.5F));
+                p = new Pen(Multiply(this.BorderColor, 0.5F));
                 p2 = null;
             }
 
@@ -117,7 +129,7 @@ namespace ExtendedControls
             {
                 ComboBoxRenderer.DrawTextBox(e.Graphics, topBoxTextArea,
                     this.Text, this.Font, (isActivated) ? ComboBoxState.Pressed : (Enabled) ? ComboBoxState.Normal : ComboBoxState.Disabled);
-                ComboBoxRenderer.DrawDropDownButton(e.Graphics, arrowRectangleArea, (Enabled) ? arrowState: ComboBoxState.Disabled );
+                ComboBoxRenderer.DrawDropDownButton(e.Graphics, arrowRectangleArea, (Enabled) ? arrowState : ComboBoxState.Disabled);
             }
             else
             {
@@ -167,13 +179,13 @@ namespace ExtendedControls
             textb.Dispose();
             p.Dispose();
 
-            if ( p2 != null )
+            if (p2 != null)
                 p2.Dispose();
         }
 
         private void Activate()
         {
-            if (!isActivated && Items != null && Items.Count > 0 )          // if not activated, and no point if no items
+            if (!isActivated && Items != null && Items.Count > 0)          // if not activated, and no point if no items
             {
                 Point ourposonparent;
                 Control parentform = FindParentForm(out ourposonparent);        // Can't add it to parent directly, it might be a group box.
@@ -184,7 +196,7 @@ namespace ExtendedControls
                 if (fittableitems > Items.Count())                             // no point doing more than we have..
                     fittableitems = Items.Count();
 
-                clc.Size = new Size(ClientRectangle.Width, fittableitems*ItemHeight+2); //+2 is for a border, just in case we paint one
+                clc.Size = new Size(ClientRectangle.Width, fittableitems * ItemHeight + 2); //+2 is for a border, just in case we paint one
                 clc.BackColor = DropDownBackgroundColor;
                 clc.ForeColor = ForeColor;
                 clc.BorderColor = BorderColor;
@@ -283,7 +295,7 @@ namespace ExtendedControls
 
         private void UpdateSelected(int v)
         {
-            if (v == selected || Items == null )        // either means do nothing
+            if (v == selected || Items == null)        // either means do nothing
             {
             }
             else if (v >= 0 && v < Items.Count)
@@ -305,7 +317,7 @@ namespace ExtendedControls
             Invalidate();       // may not be activated so need to invalidate
         }
 
-        private void UpdateSelected(string v)
+        private void UpdateSelected(string v)           // not used as of now - keep
         {
             if (Items != null)
             {
@@ -372,5 +384,104 @@ namespace ExtendedControls
             }
         }
 
+        private void SetDS(object o, string vmember)            // data source or display member is changing..
+        {
+            bool clearit = false;
+
+            if (o != datasourceobject)                        // if we changed, remember it
+            {
+                datasourceobject = o;
+                clearit = true;
+            }
+
+            if (datasourcedisplaymember == null || !datasourcedisplaymember.Equals(vmember))
+            {
+                datasourcedisplaymember = vmember;
+                clearit = true;
+            }
+
+            if (clearit)                                            // if we changed, start from scratch
+            {
+                DeActivate();                                       // just in case..
+                Items.Clear();
+                Text = "";
+                selected = -1;
+            }
+            // if we changed, and we have members
+            if (clearit && datasourcedisplaymember != null && datasourceobject != null)
+            {
+                IList objl = datasourceobject as IList;             // its an IList, so iterate
+
+                foreach (object oi in objl)
+                {
+                    Type ti = oi.GetType();
+                    PropertyInfo pi = ti.GetProperty(datasourcedisplaymember);
+
+                    if (pi != null)                                 // properties only
+                    {
+                        if (pi.PropertyType.Name.Equals("String"))  // string properties (for now) only
+                        {
+                            string s = (string)(pi.GetValue(oi,null));
+                            Items.Add(s);                           // add it to items..
+                        }
+                        else
+                            throw new ArgumentException("DisplayMember only string properties supported");
+                    }
+                    else
+                        throw new ArgumentException("DisplayMember supports only properties");
+                }
+            }
+
+            Repaint();
+        }
+
+        private object GetSelectedObject()                                  // if datasource attached, return selected object
+        {
+            if (datasourceobject != null && selected >= 0)
+            {
+                IList objl = datasourceobject as IList;
+                return objl[selected];
+            }
+            else
+                return null;
+        }
+
+        private void SetSelectedObject(object value)                        // if datasource attached, set index by object
+        {
+            if (datasourceobject != null)
+            {
+                IList objl = datasourceobject as IList;
+
+                int index = 0;
+
+                foreach (object oi in objl)
+                {
+                    if (oi == value)            // if object match..
+                    {
+                        UpdateSelected(index);
+                        break;
+                    }
+
+                    index++;
+                }
+            }
+        }
+
+        private object GetSelectedValue()                                  // if datasource attached, return selected object
+        {
+            if (datasourceobject != null && selected >= 0 && datasourcevaluemember != null)
+            {
+                IList objl = datasourceobject as IList;
+                object oi = objl[selected];
+
+                Type ti = oi.GetType();
+                PropertyInfo pi = ti.GetProperty(datasourcevaluemember);
+
+                if (pi != null)
+                    return pi.GetValue(oi,null);         // return value..
+            }
+
+            return null;
+        }
     }
 }
