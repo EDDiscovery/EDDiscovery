@@ -47,8 +47,6 @@
             this.panel_system = new System.Windows.Forms.Panel();
             this.label_warning = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.buttonRoss = new System.Windows.Forms.Button();
-            this.buttonEDDB = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -83,6 +81,8 @@
             this.buttonSync = new ExtendedControls.ButtonExt();
             this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
             this.buttonTrilaterate = new ExtendedControls.ButtonExt();
+            this.buttonRoss = new ExtendedControls.DrawnPanel();
+            this.buttonEDDB = new ExtendedControls.DrawnPanel();
             this.textBoxState = new ExtendedControls.TextBoxBorder();
             this.textBoxEconomy = new ExtendedControls.TextBoxBorder();
             this.textBoxGovernment = new ExtendedControls.TextBoxBorder();
@@ -279,36 +279,6 @@
             this.label14.TabIndex = 43;
             this.label14.Text = "Sol";
             this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // buttonRoss
-            // 
-            this.buttonRoss.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonRoss.BackgroundImage")));
-            this.buttonRoss.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonRoss.FlatAppearance.BorderSize = 0;
-            this.buttonRoss.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonRoss.Location = new System.Drawing.Point(274, 6);
-            this.buttonRoss.Name = "buttonRoss";
-            this.buttonRoss.Size = new System.Drawing.Size(16, 20);
-            this.buttonRoss.TabIndex = 40;
-            this.buttonRoss.TabStop = false;
-            this.toolTipEddb.SetToolTip(this.buttonRoss, "Click to edit system in Ross");
-            this.buttonRoss.UseVisualStyleBackColor = true;
-            this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
-            // 
-            // buttonEDDB
-            // 
-            this.buttonEDDB.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonEDDB.BackgroundImage")));
-            this.buttonEDDB.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonEDDB.FlatAppearance.BorderSize = 0;
-            this.buttonEDDB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonEDDB.Location = new System.Drawing.Point(259, 6);
-            this.buttonEDDB.Name = "buttonEDDB";
-            this.buttonEDDB.Size = new System.Drawing.Size(16, 20);
-            this.buttonEDDB.TabIndex = 39;
-            this.buttonEDDB.TabStop = false;
-            this.toolTipEddb.SetToolTip(this.buttonEDDB, "Click to show system in EDDB");
-            this.buttonEDDB.UseVisualStyleBackColor = true;
-            this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
             // 
             // label12
             // 
@@ -690,6 +660,32 @@
             this.buttonTrilaterate.UseVisualStyleBackColor = true;
             this.buttonTrilaterate.Click += new System.EventHandler(this.buttonTrilaterate_Click);
             // 
+            // buttonRoss
+            // 
+            this.buttonRoss.BackColor = System.Drawing.SystemColors.ControlText;
+            this.buttonRoss.ForeColor = System.Drawing.SystemColors.Control;
+            this.buttonRoss.Image = ExtendedControls.DrawnPanel.ImageType.Ross;
+            this.buttonRoss.Location = new System.Drawing.Point(275, 6);
+            this.buttonRoss.MarginSize = 0;
+            this.buttonRoss.Name = "buttonRoss";
+            this.buttonRoss.Size = new System.Drawing.Size(20, 20);
+            this.buttonRoss.TabIndex = 40;
+            this.toolTipEddb.SetToolTip(this.buttonRoss, "Click to edit system in Ross");
+            this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
+            // 
+            // buttonEDDB
+            // 
+            this.buttonEDDB.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonEDDB.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.buttonEDDB.Image = ExtendedControls.DrawnPanel.ImageType.EDDB;
+            this.buttonEDDB.Location = new System.Drawing.Point(252, 6);
+            this.buttonEDDB.MarginSize = 0;
+            this.buttonEDDB.Name = "buttonEDDB";
+            this.buttonEDDB.Size = new System.Drawing.Size(20, 20);
+            this.buttonEDDB.TabIndex = 39;
+            this.toolTipEddb.SetToolTip(this.buttonEDDB, "Click to show system in EDDB");
+            this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
+            // 
             // textBoxState
             // 
             this.textBoxState.BorderColor = System.Drawing.Color.Transparent;
@@ -698,7 +694,7 @@
             this.textBoxState.Location = new System.Drawing.Point(182, 82);
             this.textBoxState.Name = "textBoxState";
             this.textBoxState.ReadOnly = true;
-            this.textBoxState.Size = new System.Drawing.Size(71, 20);
+            this.textBoxState.Size = new System.Drawing.Size(66, 20);
             this.textBoxState.TabIndex = 37;
             this.textBoxState.TabStop = false;
             // 
@@ -710,7 +706,7 @@
             this.textBoxEconomy.Location = new System.Drawing.Point(182, 64);
             this.textBoxEconomy.Name = "textBoxEconomy";
             this.textBoxEconomy.ReadOnly = true;
-            this.textBoxEconomy.Size = new System.Drawing.Size(71, 20);
+            this.textBoxEconomy.Size = new System.Drawing.Size(66, 20);
             this.textBoxEconomy.TabIndex = 33;
             this.textBoxEconomy.TabStop = false;
             // 
@@ -722,7 +718,7 @@
             this.textBoxGovernment.Location = new System.Drawing.Point(182, 100);
             this.textBoxGovernment.Name = "textBoxGovernment";
             this.textBoxGovernment.ReadOnly = true;
-            this.textBoxGovernment.Size = new System.Drawing.Size(71, 20);
+            this.textBoxGovernment.Size = new System.Drawing.Size(66, 20);
             this.textBoxGovernment.TabIndex = 35;
             this.textBoxGovernment.TabStop = false;
             // 
@@ -734,7 +730,7 @@
             this.textBoxAllegiance.Location = new System.Drawing.Point(182, 46);
             this.textBoxAllegiance.Name = "textBoxAllegiance";
             this.textBoxAllegiance.ReadOnly = true;
-            this.textBoxAllegiance.Size = new System.Drawing.Size(71, 20);
+            this.textBoxAllegiance.Size = new System.Drawing.Size(66, 20);
             this.textBoxAllegiance.TabIndex = 31;
             this.textBoxAllegiance.TabStop = false;
             // 
@@ -746,7 +742,7 @@
             this.textBoxVisits.Location = new System.Drawing.Point(182, 28);
             this.textBoxVisits.Name = "textBoxVisits";
             this.textBoxVisits.ReadOnly = true;
-            this.textBoxVisits.Size = new System.Drawing.Size(71, 20);
+            this.textBoxVisits.Size = new System.Drawing.Size(66, 20);
             this.textBoxVisits.TabIndex = 29;
             this.textBoxVisits.TabStop = false;
             // 
@@ -841,11 +837,10 @@
             this.textBoxSystem.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxSystem.BorderPadding = 1;
             this.textBoxSystem.BorderSize = 1;
-            this.textBoxSystem.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxSystem.Location = new System.Drawing.Point(50, 9);
             this.textBoxSystem.Name = "textBoxSystem";
             this.textBoxSystem.ReadOnly = true;
-            this.textBoxSystem.Size = new System.Drawing.Size(203, 13);
+            this.textBoxSystem.Size = new System.Drawing.Size(198, 20);
             this.textBoxSystem.TabIndex = 15;
             this.textBoxSystem.TabStop = false;
             // 
@@ -908,9 +903,9 @@
         private ExtendedControls.TextBoxBorder textBoxState;
         private System.Windows.Forms.Label label13;
         private ExtendedControls.TextBoxBorder textBoxGovernment;
-        private System.Windows.Forms.Button buttonEDDB;
+        private ExtendedControls.DrawnPanel buttonEDDB;
         private System.Windows.Forms.ToolTip toolTipEddb;
-        private System.Windows.Forms.Button buttonRoss;
+        private ExtendedControls.DrawnPanel buttonRoss;
         private ExtendedControls.ButtonExt buttonTrilaterate;
         private System.Windows.Forms.Label labelDistanceToNextSystem;
         private System.Windows.Forms.Panel panelRight;
