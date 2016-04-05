@@ -349,8 +349,7 @@ namespace EDDiscovery
                                 "  from a straight line journey to the destination" + Environment.NewLine +
                                 "  Options exist to limit the deviation allowed." + Environment.NewLine +
                                 "  A mix of Options exist to limit the deviation allowed and allow combinations of" + Environment.NewLine +
-                                "  waypoint distance and deviation. Experiment to find the best path" + Environment.NewLine + Environment.NewLine +
-                                "Alternately use the AStar algorithm, but this does not work for large jumps ranges (>40) or out of the bubble" + Environment.NewLine + Environment.NewLine
+                                "  waypoint distance and deviation. Experiment to find the best path" + Environment.NewLine + Environment.NewLine
                 ;
 
         }

@@ -59,6 +59,7 @@ namespace EDDiscovery
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
             checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
+            comboBoxHistoryWindow.Items.AddRange(new string[] { "6 Hours", "12 Hours", "24 Hours", "3 days", "Week", "2 Weeks", "Month", "Last 20", "All" });
         }
 
 

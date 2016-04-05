@@ -39,6 +39,7 @@
             this.prospectingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,10 +56,6 @@
             this.eDDiscoveryChatDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this.panel_grip = new System.Windows.Forms.Panel();
-            this.panel_minimize = new System.Windows.Forms.Panel();
-            this.panel_close = new System.Windows.Forms.Panel();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery2.Settings();
             this.tabPageRoute = new System.Windows.Forms.TabPage();
@@ -71,7 +68,10 @@
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.label_version = new System.Windows.Forms.Label();
-            this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel_eddiscovery = new System.Windows.Forms.Panel();
+            this.panel_grip = new System.Windows.Forms.Panel();
+            this.panel_minimize = new System.Windows.Forms.Panel();
+            this.panel_close = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
@@ -103,7 +103,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(308, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(216, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -163,6 +163,13 @@
             this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.changeMapColorToolStripMenuItem.Text = "Set Default Map Colour";
             this.changeMapColorToolStripMenuItem.Click += new System.EventHandler(this.changeMapColorToolStripMenuItem_Click);
+            // 
+            // editThemeToolStripMenuItem
+            // 
+            this.editThemeToolStripMenuItem.Name = "editThemeToolStripMenuItem";
+            this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.editThemeToolStripMenuItem.Text = "Edit Theme";
+            this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
             // 
             // adminToolStripMenuItem
             // 
@@ -293,54 +300,6 @@
             this.labelPanelText.TabIndex = 0;
             this.labelPanelText.Text = "Loading. Please wait!";
             // 
-            // panel_eddiscovery
-            // 
-            this.panel_eddiscovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_eddiscovery.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_eddiscovery.BackgroundImage")));
-            this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_eddiscovery.Location = new System.Drawing.Point(818, 1);
-            this.panel_eddiscovery.Name = "panel_eddiscovery";
-            this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
-            this.panel_eddiscovery.TabIndex = 18;
-            this.panel_eddiscovery.Click += new System.EventHandler(this.panel1_Click);
-            // 
-            // panel_grip
-            // 
-            this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel_grip.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_grip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_grip.BackgroundImage")));
-            this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_grip.Location = new System.Drawing.Point(977, 727);
-            this.panel_grip.Name = "panel_grip";
-            this.panel_grip.Size = new System.Drawing.Size(16, 16);
-            this.panel_grip.TabIndex = 16;
-            this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
-            // 
-            // panel_minimize
-            // 
-            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_minimize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_minimize.BackgroundImage")));
-            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_minimize.Location = new System.Drawing.Point(943, 1);
-            this.panel_minimize.Name = "panel_minimize";
-            this.panel_minimize.Size = new System.Drawing.Size(22, 24);
-            this.panel_minimize.TabIndex = 20;
-            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
-            // 
-            // panel_close
-            // 
-            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_close.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_close.BackgroundImage")));
-            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.Location = new System.Drawing.Point(961, 1);
-            this.panel_close.Name = "panel_close";
-            this.panel_close.Size = new System.Drawing.Size(32, 24);
-            this.panel_close.TabIndex = 19;
-            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
-            // 
             // tabPageSettings
             // 
             this.tabPageSettings.Controls.Add(this.settings);
@@ -391,6 +350,7 @@
             // 
             // imageHandler1
             // 
+            this.imageHandler1.AutoSize = true;
             this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageHandler1.Location = new System.Drawing.Point(0, 0);
             this.imageHandler1.Name = "imageHandler1";
@@ -457,12 +417,53 @@
             this.label_version.TabIndex = 21;
             this.label_version.Text = "Version Label";
             // 
-            // editThemeToolStripMenuItem
+            // panel_eddiscovery
             // 
-            this.editThemeToolStripMenuItem.Name = "editThemeToolStripMenuItem";
-            this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.editThemeToolStripMenuItem.Text = "Edit Theme";
-            this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
+            this.panel_eddiscovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_eddiscovery.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_eddiscovery.BackgroundImage")));
+            this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_eddiscovery.Location = new System.Drawing.Point(818, 1);
+            this.panel_eddiscovery.Name = "panel_eddiscovery";
+            this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
+            this.panel_eddiscovery.TabIndex = 18;
+            this.panel_eddiscovery.Click += new System.EventHandler(this.panel1_Click);
+            // 
+            // panel_grip
+            // 
+            this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel_grip.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_grip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_grip.BackgroundImage")));
+            this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_grip.Location = new System.Drawing.Point(977, 727);
+            this.panel_grip.Name = "panel_grip";
+            this.panel_grip.Size = new System.Drawing.Size(16, 16);
+            this.panel_grip.TabIndex = 16;
+            this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
+            // 
+            // panel_minimize
+            // 
+            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_minimize.BackgroundImage = global::EDDiscovery.Properties.Resources.minimize4;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.Location = new System.Drawing.Point(941, 1);
+            this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
+            this.panel_minimize.TabIndex = 20;
+            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            // 
+            // panel_close
+            // 
+            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_close.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_close.BackgroundImage")));
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.Location = new System.Drawing.Point(966, 1);
+            this.panel_close.Name = "panel_close";
+            this.panel_close.Size = new System.Drawing.Size(24, 24);
+            this.panel_close.TabIndex = 19;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -495,6 +496,7 @@
             this.tabPageSettings.ResumeLayout(false);
             this.tabPageRoute.ResumeLayout(false);
             this.tabPageScreenshots.ResumeLayout(false);
+            this.tabPageScreenshots.PerformLayout();
             this.tabPageTriletaration.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);

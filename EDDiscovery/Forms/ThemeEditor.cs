@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace EDDiscovery2
 {
-    public partial class ThemeDialog : Form
+    public partial class ThemeEditor : Form
     {
         private EDDiscoveryForm _discoveryForm;
 
-        public ThemeDialog()
+        public ThemeEditor()
         {
             InitializeComponent();
         }
@@ -22,6 +22,8 @@ namespace EDDiscovery2
         public void InitForm(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
+            comboBox_TextBorder.DataSource = EDDTheme.TextboxBorderStyles;
+            comboBox_ButtonStyle.DataSource = EDDTheme.ButtonStyles;
 
             SetPanel(panel_theme1, "Form Back Colour", EDDTheme.Settings.CI.form);                  // using tag, and tool tips, hook up patches to enum
             SetPanel(panel_theme2, "Text box Back Colour", EDDTheme.Settings.CI.textbox_back);
@@ -42,10 +44,14 @@ namespace EDDiscovery2
             SetPanel(panel_theme17, "Label Text Colour", EDDTheme.Settings.CI.label);
             SetPanel(panel_theme18, "Group box Back Colour", EDDTheme.Settings.CI.group_back);
             SetPanel(panel_theme19, "Group box Text Colour", EDDTheme.Settings.CI.group_text);
+            SetPanel(panel_theme30, "Text Box Border Colour", EDDTheme.Settings.CI.textbox_border);
+            SetPanel(panel_theme31, "Button Border Colour", EDDTheme.Settings.CI.button_border);
 
             UpdatePatchesEtc();
 
             trackBar_theme_opacity.Value = (int)_discoveryForm.theme.Opacity;
+            comboBox_TextBorder.SelectedItem = _discoveryForm.theme.TextBlockBorderStyle;
+            comboBox_ButtonStyle.SelectedItem = _discoveryForm.theme.ButtonStyle;
         }
 
         public void UpdatePatchesEtc()                                         // update patch colours..
@@ -69,6 +75,8 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme17);
             _discoveryForm.theme.UpdatePatch(panel_theme18);
             _discoveryForm.theme.UpdatePatch(panel_theme19);
+            _discoveryForm.theme.UpdatePatch(panel_theme30);
+            _discoveryForm.theme.UpdatePatch(panel_theme31);
             textBox_Font.Text = _discoveryForm.theme.FontName;
             checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
         }
@@ -77,7 +85,9 @@ namespace EDDiscovery2
         {
             toolTip1.SetToolTip(pn, name);        // assign tool tips and indicate which color to edit
             pn.Tag = ex;
+            pn.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
         }
+
         private void trackBar_theme_opacity_MouseCaptureChanged(object sender, EventArgs e)
         {
             _discoveryForm.theme.Opacity = (double)trackBar_theme_opacity.Value;
@@ -126,6 +136,19 @@ namespace EDDiscovery2
                     MessageBox.Show("Font does not have regular style");
             }
 
+        }
+
+        private void comboBox_TextBorder_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            _discoveryForm.theme.TextBlockBorderStyle = (string)comboBox_TextBorder.SelectedItem;
+            _discoveryForm.ApplyTheme(true);
+
+        }
+
+        private void comboBox_ButtonStyle_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            _discoveryForm.theme.ButtonStyle = (string)comboBox_ButtonStyle.SelectedItem;
+            _discoveryForm.ApplyTheme(true);
         }
     }
 }

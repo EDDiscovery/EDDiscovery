@@ -7661,13 +7661,6 @@
         QDN+A0Y1IwABcQggUzNEfOA0QwEFmhkYAAqwdAUciUDwAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="panel_minimize.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAe
-        vAAAHrwB7kRN9wAAAAd0SU1FB+ADEQsHJAqCZv8AAABASURBVEhL7czBCQAwCENRl8z+o1hEepNULD01
-        D/7NaCIi8ohfduQARsU2X3DluFNs8wVXjjvFNl9w+3Ca/MVsARL/eYd5ibczAAAAAElFTkSuQmCC
-</value>
-  </data>
   <data name="panel_close.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -7680,7 +7673,7 @@
 </value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>25</value>
+    <value>59</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

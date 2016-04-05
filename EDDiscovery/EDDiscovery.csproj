@@ -170,6 +170,21 @@
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
+    <Compile Include="Controls\ButtonExt.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ComboBoxCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ListControlCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\RichTextBoxBorder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TextBoxBorder.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DB\InMemory\VisitedSystemsClass.cs" />
     <Compile Include="DB\ISystem.cs" />
     <Compile Include="DB\InMemory\SystemClass.cs" />
@@ -206,11 +221,11 @@
     <Compile Include="Forms\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ThemeDialog.cs">
+    <Compile Include="Forms\ThemeEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ThemeDialog.Designer.cs">
-      <DependentUpon>ThemeDialog.cs</DependentUpon>
+    <Compile Include="Forms\ThemeEditor.Designer.cs">
+      <DependentUpon>ThemeEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="HTTP\EDMaterializerCom.cs" />
     <Compile Include="HTTP\HttpCom.cs" />
@@ -320,6 +335,7 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\minimize4.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
@@ -352,8 +368,8 @@
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ThemeDialog.resx">
-      <DependentUpon>ThemeDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ThemeEditor.resx">
+      <DependentUpon>ThemeEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ImageHandler\ImageHandler.resx">
       <DependentUpon>ImageHandler.cs</DependentUpon>

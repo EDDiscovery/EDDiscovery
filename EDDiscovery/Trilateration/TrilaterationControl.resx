@@ -129,6 +129,21 @@
   <metadata name="ColumnStatus.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="ColumnSystem.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ColumnDistance.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ColumnCalculated.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ColumnStatus.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="toolTipAlgorithm.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <metadata name="toolTipAlgorithm.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
@@ -210,7 +225,7 @@
   <data name="toolStripButtonMap.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAPWSURBVEhLlVXbb1RFGN8iDxIfRBB9UQFDCMRHEmxiyZwz
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAPWSURBVEhLlVXbb1RFGN8iDxIfRBB9UQFDCMRHgmliyZwz
         u+UmBuiemVOwuzOzW6qJRl6IFxLSFyAaQFORhABVCaHxknInJpraSNQG0CYaBRSND8Q+qP8AKQ/+fnOm
         y3a7TdNfMsl833z3b+ab3EwQSXWZ1PYlqdz7UpuBbNm+WJkd7Un30iA2e8DIC5G230tdviU7zL9Cl3+N
         E3cWjs7ByW1RLP0ttbsZKXcln5j1QW1miG09jyK6izSeT02UT90mGP2loHoejpV7M1Z2F2XoROpK7Ffi
@@ -222,11 +237,11 @@
         A5Wpsrl9qGc58GtAKY7J1KpAejRzQCONmRLkR8q+B0NmAFF8lCnXLzsKxx9P4mn3hb+Kk3mfgDcyiYeF
         rE4iyNOZA9SRkdUvf1vQ1HpeZtxcnMSDEd7Aep7nZxeCDmwfBLpCZjWwRHCsA+mRRddQIm27wZtaIvB9
         iaZrMlLfh6v2aiA9mjpQdjeCeT2QNaDsH0C2kuPIbXZNfWTaHQqkRzMHMHSiMVNC6NKftbnkR27DQ5NJ
-        dTUiG+LAEx1mBbJpj7U5xcZzn09Ly5VSD6DW1wtpdWVQ8+ArhtPhQGYMjmds/aho39r1GCNF6cbbtPuP
-        Tx99+ozGuIejz7nnqHhWu3sI8LW2xC2iLkcFz/iaSdcAA4OI7u2s++YOy8PMZhp2eFBfspnhA+rH+UEG
+        9VlENsSBJzrMCmTTHmtzio3nPp+WliulHkCtrxfS6sqg5sFXDKfDgcwYHM/Y+lHRvrXrMUaK0o23afcf
+        nz769BmNcQ9Hn3PPUbFau3sI8LW2xC2iLkcFz/iaSdcAA4OI7u2s++YOy8PMZhp2eFBfspnhA+rH+UEG
         E0TugwPO/wUYz8KYB8mLdKXI8e0FgCYOhieGWmuSzEPfLrGfE4NvCgqq9FRctDf4/Jkqa0yn7AfP6x1E
         qclzymLbQlmc7aHu2tQ+yfNpQe9MkVOSzZSp20BFZjjhQHZWH+ctwShZwwxQmh8Q/af8VoOZmeFHLj8T
-        TMVs7pdvsVx8yeD9BYNj2Q9ov2Y2QW32YMp5ZQ2cHfDzJZsxB8gTW7ufCGLTIJf7H3kT8RuoL3FEAAAA
+        TMVs7pdvsVx8yeD9BYNj2Q9ov2Y2QW32YMp5ZQ2cHfDzJZsxB8gTW7ufCGLTIJf7H3RH8RmMyVFjAAAA
         AElFTkSuQmCC
 </value>
   </data>

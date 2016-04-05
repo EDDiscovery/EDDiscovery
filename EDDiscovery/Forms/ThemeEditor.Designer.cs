@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery2
 {
-    partial class ThemeDialog
+    partial class ThemeEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.buttonOK = new System.Windows.Forms.Button();
             this.groupBoxColors = new System.Windows.Forms.GroupBox();
-            this.comboBox_ButtonBorder = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.comboBox_ButtonStyle = new System.Windows.Forms.ComboBox();
             this.comboBox_TextBorder = new System.Windows.Forms.ComboBox();
             this.panel_theme19 = new System.Windows.Forms.Panel();
             this.panel_theme18 = new System.Windows.Forms.Panel();
@@ -43,7 +44,6 @@
             this.label19 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
@@ -87,7 +87,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(584, 491);
+            this.buttonOK.Location = new System.Drawing.Point(584, 477);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 0;
@@ -97,7 +97,8 @@
             // 
             // groupBoxColors
             // 
-            this.groupBoxColors.Controls.Add(this.comboBox_ButtonBorder);
+            this.groupBoxColors.Controls.Add(this.label8);
+            this.groupBoxColors.Controls.Add(this.comboBox_ButtonStyle);
             this.groupBoxColors.Controls.Add(this.comboBox_TextBorder);
             this.groupBoxColors.Controls.Add(this.panel_theme19);
             this.groupBoxColors.Controls.Add(this.panel_theme18);
@@ -109,7 +110,6 @@
             this.groupBoxColors.Controls.Add(this.label19);
             this.groupBoxColors.Controls.Add(this.label4);
             this.groupBoxColors.Controls.Add(this.label15);
-            this.groupBoxColors.Controls.Add(this.label8);
             this.groupBoxColors.Controls.Add(this.label7);
             this.groupBoxColors.Controls.Add(this.label6);
             this.groupBoxColors.Controls.Add(this.label16);
@@ -146,21 +146,42 @@
             this.groupBoxColors.TabStop = false;
             this.groupBoxColors.Text = "Colours";
             // 
-            // comboBox_ButtonBorder
+            // label8
             // 
-            this.comboBox_ButtonBorder.FormattingEnabled = true;
-            this.comboBox_ButtonBorder.Location = new System.Drawing.Point(351, 223);
-            this.comboBox_ButtonBorder.Name = "comboBox_ButtonBorder";
-            this.comboBox_ButtonBorder.Size = new System.Drawing.Size(121, 21);
-            this.comboBox_ButtonBorder.TabIndex = 10;
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(36, 101);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(28, 13);
+            this.label8.TabIndex = 6;
+            this.label8.Text = "Fore";
+            // 
+            // comboBox_ButtonStyle
+            // 
+            this.comboBox_ButtonStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_ButtonStyle.FormattingEnabled = true;
+            this.comboBox_ButtonStyle.Items.AddRange(new object[] {
+            "System",
+            "Flat",
+            "Gradient"});
+            this.comboBox_ButtonStyle.Location = new System.Drawing.Point(351, 223);
+            this.comboBox_ButtonStyle.Name = "comboBox_ButtonStyle";
+            this.comboBox_ButtonStyle.Size = new System.Drawing.Size(121, 21);
+            this.comboBox_ButtonStyle.TabIndex = 10;
+            this.comboBox_ButtonStyle.SelectionChangeCommitted += new System.EventHandler(this.comboBox_ButtonStyle_SelectionChangeCommitted);
             // 
             // comboBox_TextBorder
             // 
+            this.comboBox_TextBorder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_TextBorder.FormattingEnabled = true;
+            this.comboBox_TextBorder.Items.AddRange(new object[] {
+            "System",
+            "Flat",
+            "Gradient"});
             this.comboBox_TextBorder.Location = new System.Drawing.Point(150, 223);
             this.comboBox_TextBorder.Name = "comboBox_TextBorder";
             this.comboBox_TextBorder.Size = new System.Drawing.Size(121, 21);
             this.comboBox_TextBorder.TabIndex = 10;
+            this.comboBox_TextBorder.SelectionChangeCommitted += new System.EventHandler(this.comboBox_TextBorder_SelectionChangeCommitted);
             // 
             // panel_theme19
             // 
@@ -185,7 +206,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(86, 269);
+            this.label2.Location = new System.Drawing.Point(87, 269);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 6;
@@ -194,7 +215,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(287, 269);
+            this.label18.Location = new System.Drawing.Point(291, 269);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(38, 13);
             this.label18.TabIndex = 6;
@@ -248,25 +269,16 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(86, 142);
+            this.label15.Location = new System.Drawing.Point(87, 142);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(48, 13);
             this.label15.TabIndex = 6;
             this.label15.Text = "Highlight";
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(24, 97);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(28, 13);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "Fore";
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(24, 57);
+            this.label7.Location = new System.Drawing.Point(36, 56);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(32, 13);
             this.label7.TabIndex = 6;
@@ -362,7 +374,6 @@
             this.panel_theme15.Size = new System.Drawing.Size(28, 28);
             this.panel_theme15.TabIndex = 5;
             this.panel_theme15.Tag = "";
-            this.panel_theme15.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme31
             // 
@@ -373,7 +384,6 @@
             this.panel_theme31.Size = new System.Drawing.Size(28, 28);
             this.panel_theme31.TabIndex = 5;
             this.panel_theme31.Tag = "";
-            this.panel_theme31.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme30
             // 
@@ -384,7 +394,6 @@
             this.panel_theme30.Size = new System.Drawing.Size(28, 28);
             this.panel_theme30.TabIndex = 5;
             this.panel_theme30.Tag = "";
-            this.panel_theme30.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme4
             // 
@@ -395,7 +404,6 @@
             this.panel_theme4.Size = new System.Drawing.Size(28, 28);
             this.panel_theme4.TabIndex = 5;
             this.panel_theme4.Tag = "";
-            this.panel_theme4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme3
             // 
@@ -406,7 +414,6 @@
             this.panel_theme3.Size = new System.Drawing.Size(28, 28);
             this.panel_theme3.TabIndex = 5;
             this.panel_theme3.Tag = "";
-            this.panel_theme3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme6
             // 
@@ -417,7 +424,6 @@
             this.panel_theme6.Size = new System.Drawing.Size(28, 28);
             this.panel_theme6.TabIndex = 5;
             this.panel_theme6.Tag = "";
-            this.panel_theme6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme10
             // 
@@ -428,7 +434,6 @@
             this.panel_theme10.Size = new System.Drawing.Size(28, 28);
             this.panel_theme10.TabIndex = 5;
             this.panel_theme10.Tag = "";
-            this.panel_theme10.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme17
             // 
@@ -439,7 +444,6 @@
             this.panel_theme17.Size = new System.Drawing.Size(28, 28);
             this.panel_theme17.TabIndex = 5;
             this.panel_theme17.Tag = "";
-            this.panel_theme17.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme16
             // 
@@ -450,7 +454,6 @@
             this.panel_theme16.Size = new System.Drawing.Size(28, 28);
             this.panel_theme16.TabIndex = 5;
             this.panel_theme16.Tag = "";
-            this.panel_theme16.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme14
             // 
@@ -461,7 +464,6 @@
             this.panel_theme14.Size = new System.Drawing.Size(28, 28);
             this.panel_theme14.TabIndex = 5;
             this.panel_theme14.Tag = "";
-            this.panel_theme14.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme13
             // 
@@ -472,7 +474,6 @@
             this.panel_theme13.Size = new System.Drawing.Size(28, 28);
             this.panel_theme13.TabIndex = 5;
             this.panel_theme13.Tag = "";
-            this.panel_theme13.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme12
             // 
@@ -483,7 +484,6 @@
             this.panel_theme12.Size = new System.Drawing.Size(28, 28);
             this.panel_theme12.TabIndex = 5;
             this.panel_theme12.Tag = "";
-            this.panel_theme12.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme11
             // 
@@ -494,7 +494,6 @@
             this.panel_theme11.Size = new System.Drawing.Size(28, 28);
             this.panel_theme11.TabIndex = 5;
             this.panel_theme11.Tag = "";
-            this.panel_theme11.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme9
             // 
@@ -505,7 +504,6 @@
             this.panel_theme9.Size = new System.Drawing.Size(28, 28);
             this.panel_theme9.TabIndex = 5;
             this.panel_theme9.Tag = "";
-            this.panel_theme9.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme8
             // 
@@ -516,7 +514,6 @@
             this.panel_theme8.Size = new System.Drawing.Size(28, 28);
             this.panel_theme8.TabIndex = 5;
             this.panel_theme8.Tag = "";
-            this.panel_theme8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme7
             // 
@@ -527,7 +524,6 @@
             this.panel_theme7.Size = new System.Drawing.Size(28, 28);
             this.panel_theme7.TabIndex = 5;
             this.panel_theme7.Tag = "";
-            this.panel_theme7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme5
             // 
@@ -538,7 +534,6 @@
             this.panel_theme5.Size = new System.Drawing.Size(28, 28);
             this.panel_theme5.TabIndex = 5;
             this.panel_theme5.Tag = "";
-            this.panel_theme5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme2
             // 
@@ -549,7 +544,6 @@
             this.panel_theme2.Size = new System.Drawing.Size(28, 28);
             this.panel_theme2.TabIndex = 5;
             this.panel_theme2.Tag = "";
-            this.panel_theme2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // panel_theme1
             // 
@@ -560,17 +554,15 @@
             this.panel_theme1.Size = new System.Drawing.Size(28, 28);
             this.panel_theme1.TabIndex = 5;
             this.panel_theme1.Tag = "";
-            this.panel_theme1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_theme_Click);
             // 
             // textBox_Font
             // 
-            this.textBox_Font.Location = new System.Drawing.Point(263, 27);
+            this.textBox_Font.Location = new System.Drawing.Point(261, 29);
             this.textBox_Font.Name = "textBox_Font";
             this.textBox_Font.ReadOnly = true;
             this.textBox_Font.Size = new System.Drawing.Size(159, 20);
             this.textBox_Font.TabIndex = 8;
             this.textBox_Font.Text = "Font Elite Dangerous";
-            this.textBox_Font.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBox_Font_MouseClick);
             // 
             // label_opacity
             // 
@@ -626,11 +618,11 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Font";
             // 
-            // ThemeDialog
+            // ThemeEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(678, 526);
+            this.ClientSize = new System.Drawing.Size(672, 512);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxColors);
@@ -638,8 +630,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "ThemeDialog";
-            this.Text = "ThemeDialog";
+            this.Name = "ThemeEditor";
+            this.Text = "Edit Theme";
             this.groupBoxColors.ResumeLayout(false);
             this.groupBoxColors.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).EndInit();
@@ -696,7 +688,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panel_theme30;
         private System.Windows.Forms.ComboBox comboBox_TextBorder;
-        private System.Windows.Forms.ComboBox comboBox_ButtonBorder;
+        private System.Windows.Forms.ComboBox comboBox_ButtonStyle;
         private System.Windows.Forms.Panel panel_theme31;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox groupBox1;

@@ -28,20 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageHandler));
             this.checkBoxAutoConvert = new System.Windows.Forms.CheckBox();
-            this.textBoxScreenshotsDir = new System.Windows.Forms.TextBox();
+            this.textBoxScreenshotsDir = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
-            this.buttonChnageEDScreenshot = new System.Windows.Forms.Button();
-            this.buttonImageStore = new System.Windows.Forms.Button();
+            this.buttonChnageEDScreenshot = new ExtendedControls.ButtonExt();
+            this.buttonImageStore = new ExtendedControls.ButtonExt();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBoxOutputDir = new System.Windows.Forms.TextBox();
-            this.comboBoxFormat = new System.Windows.Forms.ComboBox();
+            this.textBoxOutputDir = new ExtendedControls.TextBoxBorder();
+            this.comboBoxFormat = new ExtendedControls.ComboBoxCustom();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.checkBoxRemove = new System.Windows.Forms.CheckBox();
-            this.comboBoxFileNameFormat = new System.Windows.Forms.ComboBox();
+            this.comboBoxFileNameFormat = new ExtendedControls.ComboBoxCustom();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBoxFileNameExample = new System.Windows.Forms.TextBox();
+            this.textBoxFileNameExample = new ExtendedControls.TextBoxBorder();
             this.checkBoxPreview = new System.Windows.Forms.CheckBox();
             this.checkBoxCropImage = new System.Windows.Forms.CheckBox();
             this.groupBoxCropSettings = new System.Windows.Forms.GroupBox();
@@ -54,18 +55,24 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.checkBoxHires = new System.Windows.Forms.CheckBox();
+            this.groupBox_Preview = new System.Windows.Forms.GroupBox();
+            this.groupBox_Prevcontrols = new System.Windows.Forms.GroupBox();
+            this.groupBox_Controls = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBoxCropSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTop)).BeginInit();
+            this.groupBox_Preview.SuspendLayout();
+            this.groupBox_Prevcontrols.SuspendLayout();
+            this.groupBox_Controls.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkBoxAutoConvert
             // 
             this.checkBoxAutoConvert.AutoSize = true;
-            this.checkBoxAutoConvert.Location = new System.Drawing.Point(6, 3);
+            this.checkBoxAutoConvert.Location = new System.Drawing.Point(18, 19);
             this.checkBoxAutoConvert.Name = "checkBoxAutoConvert";
             this.checkBoxAutoConvert.Size = new System.Drawing.Size(165, 17);
             this.checkBoxAutoConvert.TabIndex = 0;
@@ -76,18 +83,19 @@
             // textBoxScreenshotsDir
             // 
             this.textBoxScreenshotsDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
-            this.textBoxScreenshotsDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(169, 26);
+            this.textBoxScreenshotsDir.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxScreenshotsDir.BorderPadding = 1;
+            this.textBoxScreenshotsDir.BorderSize = 1;
+            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(184, 42);
             this.textBoxScreenshotsDir.Name = "textBoxScreenshotsDir";
-            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(273, 20);
+            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(311, 20);
             this.textBoxScreenshotsDir.TabIndex = 1;
             this.textBoxScreenshotsDir.Leave += new System.EventHandler(this.textBoxScreenshotsDir_Leave);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 29);
+            this.label1.Location = new System.Drawing.Point(15, 45);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(122, 13);
             this.label1.TabIndex = 2;
@@ -95,8 +103,9 @@
             // 
             // buttonChnageEDScreenshot
             // 
-            this.buttonChnageEDScreenshot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonChnageEDScreenshot.Location = new System.Drawing.Point(448, 26);
+            this.buttonChnageEDScreenshot.BorderColorScaling = 1.25F;
+            this.buttonChnageEDScreenshot.ButtonColorScaling = 0.5F;
+            this.buttonChnageEDScreenshot.Location = new System.Drawing.Point(512, 40);
             this.buttonChnageEDScreenshot.Name = "buttonChnageEDScreenshot";
             this.buttonChnageEDScreenshot.Size = new System.Drawing.Size(57, 23);
             this.buttonChnageEDScreenshot.TabIndex = 2;
@@ -106,8 +115,9 @@
             // 
             // buttonImageStore
             // 
-            this.buttonImageStore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonImageStore.Location = new System.Drawing.Point(448, 52);
+            this.buttonImageStore.BorderColorScaling = 1.25F;
+            this.buttonImageStore.ButtonColorScaling = 0.5F;
+            this.buttonImageStore.Location = new System.Drawing.Point(512, 66);
             this.buttonImageStore.Name = "buttonImageStore";
             this.buttonImageStore.Size = new System.Drawing.Size(57, 23);
             this.buttonImageStore.TabIndex = 4;
@@ -118,7 +128,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 55);
+            this.label2.Location = new System.Drawing.Point(15, 71);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(96, 13);
             this.label2.TabIndex = 5;
@@ -127,36 +137,39 @@
             // textBoxOutputDir
             // 
             this.textBoxOutputDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
-            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputDir.Location = new System.Drawing.Point(169, 52);
+            this.textBoxOutputDir.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxOutputDir.BorderPadding = 1;
+            this.textBoxOutputDir.BorderSize = 1;
+            this.textBoxOutputDir.Location = new System.Drawing.Point(184, 68);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
-            this.textBoxOutputDir.Size = new System.Drawing.Size(273, 20);
+            this.textBoxOutputDir.Size = new System.Drawing.Size(311, 20);
             this.textBoxOutputDir.TabIndex = 3;
             this.textBoxOutputDir.Leave += new System.EventHandler(this.textBoxOutputDir_Leave);
             // 
             // comboBoxFormat
             // 
-            this.comboBoxFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFormat.FormattingEnabled = true;
-            this.comboBoxFormat.ItemHeight = 13;
-            this.comboBoxFormat.Items.AddRange(new object[] {
-            "png",
-            "jpg",
-            "bmp",
-            "tiff"});
-            this.comboBoxFormat.Location = new System.Drawing.Point(588, 26);
+            this.comboBoxFormat.ArrowWidth = 1;
+            this.comboBoxFormat.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxFormat.ButtonColorScaling = 0.5F;
+            this.comboBoxFormat.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxFormat.DropDownHeight = 200;
+            this.comboBoxFormat.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxFormat.ItemHeight = 20;
+            this.comboBoxFormat.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxFormat.Items")));
+            this.comboBoxFormat.Location = new System.Drawing.Point(652, 42);
+            this.comboBoxFormat.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxFormat.Name = "comboBoxFormat";
-            this.comboBoxFormat.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFormat.ScrollBarWidth = 16;
+            this.comboBoxFormat.SelectedIndex = -1;
+            this.comboBoxFormat.SelectedItem = null;
+            this.comboBoxFormat.Size = new System.Drawing.Size(77, 21);
             this.comboBoxFormat.TabIndex = 5;
-            this.comboBoxFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFormat_SelectedIndexChanged);
+            this.comboBoxFormat.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxFormat_SelectedIndexChanged);
             // 
             // label3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(585, 7);
+            this.label3.Location = new System.Drawing.Point(591, 47);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 8;
@@ -164,13 +177,11 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(188, 168);
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(191, 16);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(521, 329);
+            this.pictureBox1.Size = new System.Drawing.Size(704, 493);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
@@ -178,7 +189,7 @@
             // checkBoxRemove
             // 
             this.checkBoxRemove.AutoSize = true;
-            this.checkBoxRemove.Location = new System.Drawing.Point(6, 78);
+            this.checkBoxRemove.Location = new System.Drawing.Point(18, 94);
             this.checkBoxRemove.Name = "checkBoxRemove";
             this.checkBoxRemove.Size = new System.Drawing.Size(212, 17);
             this.checkBoxRemove.TabIndex = 6;
@@ -188,24 +199,28 @@
             // 
             // comboBoxFileNameFormat
             // 
-            this.comboBoxFileNameFormat.FormattingEnabled = true;
-            this.comboBoxFileNameFormat.Items.AddRange(new object[] {
-            "Sysname (YYYYMMDD-HHMMSS)",
-            "Sysname (Windows dateformat)",
-            "YYYY-MM-DD HH-MM-SS Sysname",
-            "DD-MM-YYYY HH-MM-SS Sysname",
-            "MM-DD-YYYY HH-MM-SS Sysname",
-            "Keep original"});
-            this.comboBoxFileNameFormat.Location = new System.Drawing.Point(171, 101);
+            this.comboBoxFileNameFormat.ArrowWidth = 1;
+            this.comboBoxFileNameFormat.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxFileNameFormat.ButtonColorScaling = 0.5F;
+            this.comboBoxFileNameFormat.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxFileNameFormat.DropDownHeight = 200;
+            this.comboBoxFileNameFormat.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxFileNameFormat.ItemHeight = 20;
+            this.comboBoxFileNameFormat.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxFileNameFormat.Items")));
+            this.comboBoxFileNameFormat.Location = new System.Drawing.Point(183, 117);
+            this.comboBoxFileNameFormat.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxFileNameFormat.Name = "comboBoxFileNameFormat";
+            this.comboBoxFileNameFormat.ScrollBarWidth = 16;
+            this.comboBoxFileNameFormat.SelectedIndex = -1;
+            this.comboBoxFileNameFormat.SelectedItem = null;
             this.comboBoxFileNameFormat.Size = new System.Drawing.Size(218, 21);
             this.comboBoxFileNameFormat.TabIndex = 7;
-            this.comboBoxFileNameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileNameFormat_SelectedIndexChanged);
+            this.comboBoxFileNameFormat.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxFileNameFormat_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 104);
+            this.label4.Location = new System.Drawing.Point(15, 120);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(81, 13);
             this.label4.TabIndex = 12;
@@ -214,9 +229,10 @@
             // textBoxFileNameExample
             // 
             this.textBoxFileNameExample.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
-            this.textBoxFileNameExample.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxFileNameExample.Location = new System.Drawing.Point(436, 101);
+            this.textBoxFileNameExample.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFileNameExample.BorderPadding = 1;
+            this.textBoxFileNameExample.BorderSize = 1;
+            this.textBoxFileNameExample.Location = new System.Drawing.Point(448, 117);
             this.textBoxFileNameExample.Name = "textBoxFileNameExample";
             this.textBoxFileNameExample.ReadOnly = true;
             this.textBoxFileNameExample.Size = new System.Drawing.Size(184, 20);
@@ -226,7 +242,7 @@
             // checkBoxPreview
             // 
             this.checkBoxPreview.AutoSize = true;
-            this.checkBoxPreview.Location = new System.Drawing.Point(188, 145);
+            this.checkBoxPreview.Location = new System.Drawing.Point(104, 19);
             this.checkBoxPreview.Name = "checkBoxPreview";
             this.checkBoxPreview.Size = new System.Drawing.Size(64, 17);
             this.checkBoxPreview.TabIndex = 10;
@@ -237,7 +253,7 @@
             // checkBoxCropImage
             // 
             this.checkBoxCropImage.AutoSize = true;
-            this.checkBoxCropImage.Location = new System.Drawing.Point(6, 145);
+            this.checkBoxCropImage.Location = new System.Drawing.Point(8, 19);
             this.checkBoxCropImage.Name = "checkBoxCropImage";
             this.checkBoxCropImage.Size = new System.Drawing.Size(80, 17);
             this.checkBoxCropImage.TabIndex = 8;
@@ -255,7 +271,7 @@
             this.groupBoxCropSettings.Controls.Add(this.label7);
             this.groupBoxCropSettings.Controls.Add(this.label6);
             this.groupBoxCropSettings.Controls.Add(this.label5);
-            this.groupBoxCropSettings.Location = new System.Drawing.Point(5, 168);
+            this.groupBoxCropSettings.Location = new System.Drawing.Point(8, 65);
             this.groupBoxCropSettings.Name = "groupBoxCropSettings";
             this.groupBoxCropSettings.Size = new System.Drawing.Size(166, 125);
             this.groupBoxCropSettings.TabIndex = 9;
@@ -353,7 +369,7 @@
             // checkBoxHires
             // 
             this.checkBoxHires.AutoSize = true;
-            this.checkBoxHires.Location = new System.Drawing.Point(245, 78);
+            this.checkBoxHires.Location = new System.Drawing.Point(257, 94);
             this.checkBoxHires.Name = "checkBoxHires";
             this.checkBoxHires.Size = new System.Drawing.Size(152, 17);
             this.checkBoxHires.TabIndex = 14;
@@ -361,30 +377,61 @@
             this.checkBoxHires.UseVisualStyleBackColor = true;
             this.checkBoxHires.CheckedChanged += new System.EventHandler(this.checkBox_hires_CheckedChanged);
             // 
+            // groupBox_Preview
+            // 
+            this.groupBox_Preview.Controls.Add(this.pictureBox1);
+            this.groupBox_Preview.Controls.Add(this.groupBox_Prevcontrols);
+            this.groupBox_Preview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox_Preview.Location = new System.Drawing.Point(0, 150);
+            this.groupBox_Preview.Name = "groupBox_Preview";
+            this.groupBox_Preview.Size = new System.Drawing.Size(898, 512);
+            this.groupBox_Preview.TabIndex = 15;
+            this.groupBox_Preview.TabStop = false;
+            // 
+            // groupBox_Prevcontrols
+            // 
+            this.groupBox_Prevcontrols.Controls.Add(this.groupBoxCropSettings);
+            this.groupBox_Prevcontrols.Controls.Add(this.checkBoxCropImage);
+            this.groupBox_Prevcontrols.Controls.Add(this.checkBoxPreview);
+            this.groupBox_Prevcontrols.Dock = System.Windows.Forms.DockStyle.Left;
+            this.groupBox_Prevcontrols.Location = new System.Drawing.Point(3, 16);
+            this.groupBox_Prevcontrols.Name = "groupBox_Prevcontrols";
+            this.groupBox_Prevcontrols.Size = new System.Drawing.Size(188, 493);
+            this.groupBox_Prevcontrols.TabIndex = 11;
+            this.groupBox_Prevcontrols.TabStop = false;
+            // 
+            // groupBox_Controls
+            // 
+            this.groupBox_Controls.Controls.Add(this.checkBoxAutoConvert);
+            this.groupBox_Controls.Controls.Add(this.textBoxScreenshotsDir);
+            this.groupBox_Controls.Controls.Add(this.checkBoxHires);
+            this.groupBox_Controls.Controls.Add(this.label1);
+            this.groupBox_Controls.Controls.Add(this.textBoxFileNameExample);
+            this.groupBox_Controls.Controls.Add(this.buttonChnageEDScreenshot);
+            this.groupBox_Controls.Controls.Add(this.label4);
+            this.groupBox_Controls.Controls.Add(this.textBoxOutputDir);
+            this.groupBox_Controls.Controls.Add(this.comboBoxFileNameFormat);
+            this.groupBox_Controls.Controls.Add(this.label2);
+            this.groupBox_Controls.Controls.Add(this.checkBoxRemove);
+            this.groupBox_Controls.Controls.Add(this.buttonImageStore);
+            this.groupBox_Controls.Controls.Add(this.label3);
+            this.groupBox_Controls.Controls.Add(this.comboBoxFormat);
+            this.groupBox_Controls.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox_Controls.Location = new System.Drawing.Point(0, 0);
+            this.groupBox_Controls.Name = "groupBox_Controls";
+            this.groupBox_Controls.Size = new System.Drawing.Size(898, 150);
+            this.groupBox_Controls.TabIndex = 16;
+            this.groupBox_Controls.TabStop = false;
+            // 
             // ImageHandler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.checkBoxHires);
-            this.Controls.Add(this.checkBoxCropImage);
-            this.Controls.Add(this.groupBoxCropSettings);
-            this.Controls.Add(this.checkBoxPreview);
-            this.Controls.Add(this.textBoxFileNameExample);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.comboBoxFileNameFormat);
-            this.Controls.Add(this.checkBoxRemove);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.comboBoxFormat);
-            this.Controls.Add(this.buttonImageStore);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBoxOutputDir);
-            this.Controls.Add(this.buttonChnageEDScreenshot);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBoxScreenshotsDir);
-            this.Controls.Add(this.checkBoxAutoConvert);
+            this.AutoSize = true;
+            this.Controls.Add(this.groupBox_Preview);
+            this.Controls.Add(this.groupBox_Controls);
             this.Name = "ImageHandler";
-            this.Size = new System.Drawing.Size(712, 500);
+            this.Size = new System.Drawing.Size(898, 662);
             this.Load += new System.EventHandler(this.ImageHandler_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBoxCropSettings.ResumeLayout(false);
@@ -393,27 +440,31 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTop)).EndInit();
+            this.groupBox_Preview.ResumeLayout(false);
+            this.groupBox_Prevcontrols.ResumeLayout(false);
+            this.groupBox_Prevcontrols.PerformLayout();
+            this.groupBox_Controls.ResumeLayout(false);
+            this.groupBox_Controls.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.CheckBox checkBoxAutoConvert;
-        private System.Windows.Forms.TextBox textBoxScreenshotsDir;
+        private ExtendedControls.TextBoxBorder textBoxScreenshotsDir;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button buttonChnageEDScreenshot;
-        private System.Windows.Forms.Button buttonImageStore;
+        private ExtendedControls.ButtonExt buttonChnageEDScreenshot;
+        private ExtendedControls.ButtonExt buttonImageStore;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBoxOutputDir;
-        private System.Windows.Forms.ComboBox comboBoxFormat;
+        private ExtendedControls.TextBoxBorder textBoxOutputDir;
+        private ExtendedControls.ComboBoxCustom comboBoxFormat;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.CheckBox checkBoxRemove;
-        private System.Windows.Forms.ComboBox comboBoxFileNameFormat;
+        private ExtendedControls.ComboBoxCustom comboBoxFileNameFormat;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBoxFileNameExample;
+        private ExtendedControls.TextBoxBorder textBoxFileNameExample;
         private System.Windows.Forms.CheckBox checkBoxPreview;
         protected System.Windows.Forms.CheckBox checkBoxCropImage;
         private System.Windows.Forms.GroupBox groupBoxCropSettings;
@@ -426,5 +477,8 @@
         private System.Windows.Forms.NumericUpDown numericUpDownLeft;
         private System.Windows.Forms.NumericUpDown numericUpDownTop;
         private System.Windows.Forms.CheckBox checkBoxHires;
+        private System.Windows.Forms.GroupBox groupBox_Preview;
+        private System.Windows.Forms.GroupBox groupBox_Controls;
+        private System.Windows.Forms.GroupBox groupBox_Prevcontrols;
     }
 }

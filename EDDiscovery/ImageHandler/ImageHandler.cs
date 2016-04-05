@@ -22,6 +22,14 @@ namespace EDDiscovery2.ImageHandler
         public ImageHandler()
         {
             InitializeComponent();
+            this.comboBoxFormat.Items.AddRange(new string[] { "png", "jpg", "bmp", "tiff" });
+            this.comboBoxFileNameFormat.Items.AddRange(new string[] {
+            "Sysname (YYYYMMDD-HHMMSS)",
+            "Sysname (Windows dateformat)",
+            "YYYY-MM-DD HH-MM-SS Sysname",
+            "DD-MM-YYYY HH-MM-SS Sysname",
+            "MM-DD-YYYY HH-MM-SS Sysname",
+            "Keep original"});
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -430,7 +438,5 @@ namespace EDDiscovery2.ImageHandler
                 db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
             }
         }
-
-
     }
 }
