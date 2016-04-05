@@ -33,6 +33,8 @@ namespace ExtendedControls
         // attach a IList datasource with a property called DisplayMember
         public object DataSource { get { return datasourceobject; } set { SetDS(value, datasourcedisplaymember); } }
         public string DisplayMember { get { return datasourcedisplaymember; } set { SetDS(datasourceobject, value); } }
+
+        // if Datasource, you get the object.  Else, you get/set it by Items string value.
         public object SelectedItem { get { return GetSelectedObject(); } set { SetSelectedObject(value); } }
 
         // only required if SelectedValue required.
@@ -436,18 +438,25 @@ namespace ExtendedControls
         }
 
         private object GetSelectedObject()                                  // if datasource attached, return selected object
-        {
-            if (datasourceobject != null && selected >= 0)
+        {                                                                   // else return string
+            if (datasourceobject != null)
             {
-                IList objl = datasourceobject as IList;
-                return objl[selected];
+                if (selected >= 0)
+                {
+                    IList objl = datasourceobject as IList;
+                    return objl[selected];
+                }
+                else
+                    return null;
             }
+            else if (Items != null && selected >= 0)
+                return Items[selected];
             else
                 return null;
         }
 
         private void SetSelectedObject(object value)                        // if datasource attached, set index by object
-        {
+        {                                                                   // if no datasource, give a string..
             if (datasourceobject != null)
             {
                 IList objl = datasourceobject as IList;
@@ -464,6 +473,10 @@ namespace ExtendedControls
 
                     index++;
                 }
+            }
+            else if ( value is String )
+            {
+                UpdateSelected((string)value);
             }
         }
 
