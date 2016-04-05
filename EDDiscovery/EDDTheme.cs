@@ -663,8 +663,11 @@ namespace EDDiscovery2
             }
             else if (myControl is Panel)
             {
-                if (!( myControl.Name.Contains("defaultmapcolor") ))                 // theme panels show settings color - don't overwrite
+                if (!(myControl.Name.Contains("defaultmapcolor")))                 // theme panels show settings color - don't overwrite
+                {
                     myControl.BackColor = currentsettings.colors[Settings.CI.form];
+                    myControl.ForeColor = currentsettings.colors[Settings.CI.label];
+                }
             }
             else if (myControl is TabControl)
             {

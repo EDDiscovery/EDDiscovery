@@ -1110,5 +1110,11 @@ namespace EDDiscovery
         {
             settings.button_edittheme_Click(this, null);
         }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+            Application.Exit();
+        }
     }
 }
