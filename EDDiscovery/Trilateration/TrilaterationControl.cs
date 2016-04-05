@@ -754,8 +754,11 @@ namespace EDDiscovery
 
         private void dataGridViewClosestSystems_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            var system = (SystemClass) dataGridViewClosestSystems[1, e.RowIndex].Tag;
-            AddSystemToDataGridViewDistances(system);
+            if (e.RowIndex >= 0)
+            {
+                var system = (SystemClass)dataGridViewClosestSystems[1, e.RowIndex].Tag;
+                AddSystemToDataGridViewDistances(system);
+            }
         }
 
         /* Adds a system to the grid if it's not already in there */
