@@ -56,7 +56,7 @@ namespace EDDiscovery2
         private float _cameraSlewProgress = 1.0f;
 
         private KeyboardActions _kbdActions = new KeyboardActions();
-        private int _oldTickCount = Environment.TickCount;
+        private long _oldTickCount = DateTime.Now.Ticks / 10000;
         private int _ticks = 0;
 
         private Point _mouseStartRotate;
@@ -79,6 +79,7 @@ namespace EDDiscovery2
 
         private float _znear;
         private float _zfar;
+        private bool _useTimer;
         
         public ISystem CenterSystem {
             get
@@ -262,6 +263,17 @@ namespace EDDiscovery2
 
         private void GenerateDataSetStandard()
         {
+            if (_datasets != null)
+            {
+                foreach (var ds in _datasets)
+                {
+                    if (ds is IDisposable)
+                    {
+                        ((IDisposable)ds).Dispose();
+                    }
+                }
+            }
+
             InitStarLists();
 
             var builder = new DatasetBuilder()
@@ -306,13 +318,13 @@ namespace EDDiscovery2
 
             _datasets = new List<IData3DSet>();
 
-            datadict[(int)EDAllegiance.Alliance] = new Data3DSetClass<PointData>(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDAllegiance.Anarchy] = new Data3DSetClass<PointData>(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDAllegiance.Empire] = new Data3DSetClass<PointData>(EDAllegiance.Empire.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDAllegiance.Federation] = new Data3DSetClass<PointData>(EDAllegiance.Federation.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDAllegiance.Independent] = new Data3DSetClass<PointData>(EDAllegiance.Independent.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDAllegiance.None] = new Data3DSetClass<PointData>(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
-            datadict[(int)EDAllegiance.Unknown] = new Data3DSetClass<PointData>(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
+            datadict[(int)EDAllegiance.Alliance] = Data3DSetClass<PointData>.Create(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
+            datadict[(int)EDAllegiance.Anarchy] = Data3DSetClass<PointData>.Create(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
+            datadict[(int)EDAllegiance.Empire] = Data3DSetClass<PointData>.Create(EDAllegiance.Empire.ToString(), Color.Blue, 1.0f);
+            datadict[(int)EDAllegiance.Federation] = Data3DSetClass<PointData>.Create(EDAllegiance.Federation.ToString(), Color.Red, 1.0f);
+            datadict[(int)EDAllegiance.Independent] = Data3DSetClass<PointData>.Create(EDAllegiance.Independent.ToString(), Color.Yellow, 1.0f);
+            datadict[(int)EDAllegiance.None] = Data3DSetClass<PointData>.Create(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
+            datadict[(int)EDAllegiance.Unknown] = Data3DSetClass<PointData>.Create(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
 
             foreach (SystemClass si in _starList)
             {
@@ -342,21 +354,21 @@ namespace EDDiscovery2
 
             _datasets = new List<IData3DSet>();
 
-            datadict[(int)EDGovernment.Anarchy] = new Data3DSetClass<PointData>(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDGovernment.Colony] = new Data3DSetClass<PointData>(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
-            datadict[(int)EDGovernment.Democracy] = new Data3DSetClass<PointData>(EDGovernment.Democracy.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDGovernment.Imperial] = new Data3DSetClass<PointData>(EDGovernment.Imperial.ToString(), Color.DarkGreen, 1.0f);
-            datadict[(int)EDGovernment.Corporate] = new Data3DSetClass<PointData>(EDGovernment.Corporate.ToString(), Color.LawnGreen, 1.0f);
-            datadict[(int)EDGovernment.Communism] = new Data3DSetClass<PointData>(EDGovernment.Communism.ToString(), Color.DarkOliveGreen, 1.0f);
-            datadict[(int)EDGovernment.Feudal] = new Data3DSetClass<PointData>(EDGovernment.Feudal.ToString(), Color.LightBlue, 1.0f);
-            datadict[(int)EDGovernment.Dictatorship] = new Data3DSetClass<PointData>(EDGovernment.Dictatorship.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDGovernment.Theocracy] = new Data3DSetClass<PointData>(EDGovernment.Theocracy.ToString(), Color.DarkBlue, 1.0f);
-            datadict[(int)EDGovernment.Cooperative] = new Data3DSetClass<PointData>(EDGovernment.Cooperative.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDGovernment.Patronage] = new Data3DSetClass<PointData>(EDGovernment.Patronage.ToString(), Color.LightCyan, 1.0f);
-            datadict[(int)EDGovernment.Confederacy] = new Data3DSetClass<PointData>(EDGovernment.Confederacy.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDGovernment.Prison_Colony] = new Data3DSetClass<PointData>(EDGovernment.Prison_Colony.ToString(), Color.Orange, 1.0f);
-            datadict[(int)EDGovernment.None] = new Data3DSetClass<PointData>(EDGovernment.None.ToString(), Color.Gray, 1.0f);
-            datadict[(int)EDGovernment.Unknown] = new Data3DSetClass<PointData>(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
+            datadict[(int)EDGovernment.Anarchy] = Data3DSetClass<PointData>.Create(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
+            datadict[(int)EDGovernment.Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
+            datadict[(int)EDGovernment.Democracy] = Data3DSetClass<PointData>.Create(EDGovernment.Democracy.ToString(), Color.Green, 1.0f);
+            datadict[(int)EDGovernment.Imperial] = Data3DSetClass<PointData>.Create(EDGovernment.Imperial.ToString(), Color.DarkGreen, 1.0f);
+            datadict[(int)EDGovernment.Corporate] = Data3DSetClass<PointData>.Create(EDGovernment.Corporate.ToString(), Color.LawnGreen, 1.0f);
+            datadict[(int)EDGovernment.Communism] = Data3DSetClass<PointData>.Create(EDGovernment.Communism.ToString(), Color.DarkOliveGreen, 1.0f);
+            datadict[(int)EDGovernment.Feudal] = Data3DSetClass<PointData>.Create(EDGovernment.Feudal.ToString(), Color.LightBlue, 1.0f);
+            datadict[(int)EDGovernment.Dictatorship] = Data3DSetClass<PointData>.Create(EDGovernment.Dictatorship.ToString(), Color.Blue, 1.0f);
+            datadict[(int)EDGovernment.Theocracy] = Data3DSetClass<PointData>.Create(EDGovernment.Theocracy.ToString(), Color.DarkBlue, 1.0f);
+            datadict[(int)EDGovernment.Cooperative] = Data3DSetClass<PointData>.Create(EDGovernment.Cooperative.ToString(), Color.Purple, 1.0f);
+            datadict[(int)EDGovernment.Patronage] = Data3DSetClass<PointData>.Create(EDGovernment.Patronage.ToString(), Color.LightCyan, 1.0f);
+            datadict[(int)EDGovernment.Confederacy] = Data3DSetClass<PointData>.Create(EDGovernment.Confederacy.ToString(), Color.Red, 1.0f);
+            datadict[(int)EDGovernment.Prison_Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Prison_Colony.ToString(), Color.Orange, 1.0f);
+            datadict[(int)EDGovernment.None] = Data3DSetClass<PointData>.Create(EDGovernment.None.ToString(), Color.Gray, 1.0f);
+            datadict[(int)EDGovernment.Unknown] = Data3DSetClass<PointData>.Create(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
 
             foreach (SystemClass si in _starList)
             {
@@ -389,7 +401,7 @@ namespace EDDiscovery2
         {
             foreach (var dataset in _datasets)
             {
-                dataset.DrawAll();
+                dataset.DrawAll(glControl);
             }
         }
 
@@ -515,8 +527,8 @@ namespace EDDiscovery2
         }
         private void CalculateTimeDelta()
         {
-            var tickCount = Environment.TickCount;
-            _ticks = tickCount - _oldTickCount;
+            var tickCount = DateTime.Now.Ticks / 10000;
+            _ticks = (int)(tickCount - _oldTickCount);
             _oldTickCount = tickCount;
         }
 
@@ -832,22 +844,52 @@ namespace EDDiscovery2
             _loaded = true;
 
             Application.Idle += Application_Idle;
-
+            _useTimer = false;
         }
-
 
         private void Application_Idle(object sender, EventArgs e)
         {
-            glControl.Invalidate();
+            if (!_useTimer)
+            {
+                glControl.Invalidate();
+            }
         }
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
+            if (!_kbdActions.Any())
+            {
+                _ticks = 0;
+                _oldTickCount = DateTime.Now.Ticks / 10000;
+            }
             CalculateTimeDelta();
             HandleInputs();
             DoCameraSlew();
             UpdateCamera();
             Render();
+
+            if (_kbdActions.Any())
+            {
+                if (_useTimer)
+                {
+                    UpdateTimer.Stop();
+                    _useTimer = false;
+                }
+            }
+            else
+            {
+                if (!_useTimer)
+                {
+                    UpdateTimer.Interval = 100;
+                    UpdateTimer.Start();
+                    _useTimer = true;
+                }
+                else
+                {
+                    UpdateTimer.Stop();
+                    UpdateTimer.Start();
+                }
+            }
         }
 
         private void UpdateCamera()
@@ -1073,6 +1115,39 @@ namespace EDDiscovery2
             {
                 OrientateMapAroundSystem(sys);
             }
+        }
+        
+	private void glControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (_useTimer)
+            {
+                glControl.Invalidate();
+            }
+        }
+
+        private void glControl_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (_useTimer)
+            {
+                glControl.Invalidate();
+            }
+        }
+
+        private void FormMap_Activated(object sender, EventArgs e)
+        {
+            _useTimer = false;
+            glControl.Invalidate();
+        }
+
+        private void FormMap_Deactivate(object sender, EventArgs e)
+        {
+            _useTimer = true;
+            UpdateTimer.Stop();
+        }
+
+        private void UpdateTimer_Tick(object sender, EventArgs e)
+        {
+            glControl.Invalidate();
         }
     }
 }
