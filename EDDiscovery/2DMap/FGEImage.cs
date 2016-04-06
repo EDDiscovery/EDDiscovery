@@ -77,7 +77,7 @@ namespace EDDiscovery2
             int diffx1, diffx2, diffy1, diffy2;
             int diffpx1, diffpx2, diffpy1, diffpy2;
 
-            string json = ToJson();
+            // string json = ToJson();
             if (polynoms == null)
             {
                 if (Yaxispoints!= null && Yaxispoints.Count>0)
