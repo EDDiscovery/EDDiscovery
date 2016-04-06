@@ -1,5 +1,31 @@
 Release log: 
 
+2016-04-05 Release 3.0.4
+
+Iainross:
+
+3D Map is now centred properly and references lines drawn correctly when launched from the trilateration tab if default centre is set to Home System.
+Added 3D Map button to Route tab, plotted route is drawn onto the map when launched from there.
+Added 'Add to trilateration' context menu to Nearest Systems grid on Travel History control.
+Added context menu to Distances grid on trilateration to copy systems to wanted systems list - local wanted systems are shown in the wanted systems grid, can be added to the distances grid by clicking and are persisted between sessions.
+Added context menu to Wanted Systems grid on trilateration for deletion of locally added Wanted Systems.
+Corrected check that systems are known on EDSM so it works again (site has started returning [] rather than -1 for bad system names)
+Systems can be added to wanted from travel history
+
+klightspeed: 3DMap updates
+This adds the option for perspective rendering as an alternative to the current orthogonal rendering.
+This also maps Right-drag to Y-axis translation, and Left+Right-drag to panning on the X and Z axes.
+This adds the ability to see what star is at a given position in the 3D map, and to center the map on that star.
+A single-click on a star will select the star, but not set it as the center system.
+Double-clicking on a star will select the star, set it as the center system, and center the map on it.
+It was suggested in #160 that when the centered system is changed, the camera angle should not change. This implements this, and also slews the camera in order to reduce confusion as to where the camera moved to.
+This currently uses a sinusoidal velocity curve with a fixed 1 second slew duration regardless of distance or zoom. Clicking the mouse or pressing a movement button cancels the slew.
+
+Finwen:
+Fix rare exception in GetSystemsCount function
+After 3d map was opened the close button failed to exit EDDiscovery
+
+
 2016-03-23  Beta 3.0.0
 
 * First version of Theme support. (Robby)
