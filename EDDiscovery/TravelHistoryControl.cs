@@ -182,7 +182,7 @@ namespace EDDiscovery
 
 
             if (visitedSystems == null || visitedSystems.Count == 0)
-                GetVisitedSystems(activecommander);
+                GetVisitedSystems();
 
             if (visitedSystems == null)
                 return;
@@ -254,9 +254,9 @@ namespace EDDiscovery
                 FilterGridView();
         }
 
-        private void GetVisitedSystems(int commander)
+        private void GetVisitedSystems()
         {                                                       // for backwards compatibility, don't store RGB value.
-            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour, commander);
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
@@ -573,6 +573,7 @@ namespace EDDiscovery
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 activecommander = itm.Nr;
+                netlog.ActiveCommander = itm.Nr;
                 if (visitedSystems != null)
                     visitedSystems.Clear();
                 RefreshHistory();

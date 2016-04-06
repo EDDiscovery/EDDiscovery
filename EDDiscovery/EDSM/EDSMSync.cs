@@ -168,6 +168,7 @@ namespace EDDiscovery2.EDSM
                             vs.Time = system.time;
                             vs.MapColour = _defmapcolour;
                             vs.EDSM_sync = true;
+                            vs.Commander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
 
                             vs.Add();  // Add to DB;
