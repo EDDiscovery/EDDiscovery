@@ -39,9 +39,10 @@ namespace EDDiscovery2
         }
 
 
-
+        bool initdone = false;
         private void FormSagCarinaMission_Load(object sender, EventArgs e)
         {
+            initdone = false;
             pickerStart = new DateTimePicker();
             pickerStop = new DateTimePicker();
             host1 = new ToolStripControlHost(pickerStart);
@@ -65,9 +66,11 @@ namespace EDDiscovery2
             {
                 toolStripComboBox1.Items.Add(img.FileName);
             }
+            
             toolStripComboBox1.SelectedIndex = 0;
             toolStripComboBoxTime.SelectedIndex = 0;
-
+            initdone = true;
+            ShowSelectedImage();
         }
 
 
@@ -153,7 +156,7 @@ namespace EDDiscovery2
 
                     fgeimages.Add(fgeimg);
 
-                    ShowImage(fgeimg);
+                    
                 }
 
                 if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-02.jpg")))
@@ -183,7 +186,7 @@ namespace EDDiscovery2
 
                     fgeimages.Add(fgeimg);
 
-                    //ShowImage(fgeimg);
+                 
                 }
 
                 if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-03.jpg")))
@@ -213,7 +216,6 @@ namespace EDDiscovery2
 
                     fgeimages.Add(fgeimg);
 
-                    //ShowImage(fgeimg);
                 }
 
                 if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-04.jpg")))
@@ -243,7 +245,7 @@ namespace EDDiscovery2
 
                     fgeimages.Add(fgeimg);
 
-                    //ShowImage(fgeimg);
+                   
                 }
 
 
@@ -276,7 +278,7 @@ namespace EDDiscovery2
 
                     fgeimages.Add(fgeimg);
 
-                    ShowImage(fgeimg);
+                    
                 }
                 if (File.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps\\SC-U4.jpg")))
                 {
@@ -305,7 +307,7 @@ namespace EDDiscovery2
 
                     fgeimages.Add(fgeimg);
 
-                    ShowImage(fgeimg);
+                    
                 }
 
             }
@@ -314,7 +316,7 @@ namespace EDDiscovery2
         private void ShowImage(FGEImage fgeimg)
         {
             //currentImage = (Bitmap)Image.FromFile(fgeimg.Name, true);
-            if (fgeimg != null)
+            if (fgeimg != null && initdone)
             {
                 //panel1.BackgroundImage = new Bitmap(fgeimg.FilePath);
                 imageViewer1.Image = new Bitmap(fgeimg.FilePath);
@@ -367,15 +369,40 @@ namespace EDDiscovery2
             Point test1  = currentFGEImage.TransformCoordinate(currentFGEImage.BottomLeft);
             Point test2 = currentFGEImage.TransformCoordinate(currentFGEImage.TopRight);
 
+            DrawStars();
+
             if (Test)
             TestGrid(gfx);
         }
+
+        private void DrawStars()
+        {
+            var _starList = SQLiteDBClass.globalSystems;
+            Pen pen = new Pen(Color.White, 2);
+            Graphics gfx = Graphics.FromImage(imageViewer1.Image);
+
+            foreach (SystemClass si in _starList)
+            {
+                if (si.HasCoordinate)
+                {
+                    DrawPoint(gfx, pen, si, si);
+                }
+            }
+            pen = new Pen(Color.White, 2);
+        }
+
 
         private void DrawLine(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
         {
             gfx.DrawLine(pen, Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.x, (int)sys1.z))), Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys2.x, (int)sys2.z))));
         }
 
+        private void DrawPoint(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
+        {
+            Point point = Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.x, (int)sys1.z)));
+            gfx.FillRectangle(pen.Brush, point.X, point.Y, 1, 1);
+
+        }
 
         private void TestGrid(Graphics gfx)
         {
