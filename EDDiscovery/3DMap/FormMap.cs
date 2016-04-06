@@ -544,27 +544,36 @@ namespace EDDiscovery2
         {
             _kbdActions.Reset();
 
-            var state = OpenTK.Input.Keyboard.GetState();
+            try
+            {
+                var state = OpenTK.Input.Keyboard.GetState();
 
-            _kbdActions.Left = (state[Key.Left] || state[Key.A]);
-            _kbdActions.Right = (state[Key.Right] || state[Key.D]);
-            _kbdActions.Up = (state[Key.Up] || state[Key.W]);
-            _kbdActions.Down = (state[Key.Down] || state[Key.S]);
+                _kbdActions.Left = (state[Key.Left] || state[Key.A]);
+                _kbdActions.Right = (state[Key.Right] || state[Key.D]);
+                _kbdActions.Up = (state[Key.Up] || state[Key.W]);
+                _kbdActions.Down = (state[Key.Down] || state[Key.S]);
 
-            _kbdActions.ZoomIn = (state[Key.Plus] || state[Key.Z]);
-            _kbdActions.ZoomOut = (state[Key.Minus] || state[Key.X]);
+                _kbdActions.ZoomIn = (state[Key.Plus] || state[Key.Z]);
+                _kbdActions.ZoomOut = (state[Key.Minus] || state[Key.X]);
 
-            // Yes, much of this is overkill. but useful while development is happening
-            // I'll probably hide away the less useful options later from the Release build
-            _kbdActions.Forwards = state[Key.R];
-            _kbdActions.Backwards = state[Key.F];
+                // Yes, much of this is overkill. but useful while development is happening
+                // I'll probably hide away the less useful options later from the Release build
+                _kbdActions.Forwards = state[Key.R];
+                _kbdActions.Backwards = state[Key.F];
 
-            _kbdActions.YawLeft = state[Key.Keypad4];
-            _kbdActions.YawRight = state[Key.Keypad6];
-            _kbdActions.Pitch = state[Key.Keypad8];
-            _kbdActions.Dive = (state[Key.Keypad5] || state[Key.Keypad2]);
-            _kbdActions.RollLeft = state[Key.Keypad7];
-            _kbdActions.RollRight = state[Key.Keypad9];
+                _kbdActions.YawLeft = state[Key.Keypad4];
+                _kbdActions.YawRight = state[Key.Keypad6];
+                _kbdActions.Pitch = state[Key.Keypad8];
+                _kbdActions.Dive = (state[Key.Keypad5] || state[Key.Keypad2]);
+                _kbdActions.RollLeft = state[Key.Keypad7];
+                _kbdActions.RollRight = state[Key.Keypad9];
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"ReceiveKeybaordActions Exception: {ex.Message}");
+                return;
+            }
         }
 
         private void HandleTurningAdjustments()
