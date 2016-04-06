@@ -322,6 +322,10 @@ namespace EDDiscovery2
                 imageViewer1.Image = new Bitmap(fgeimg.FilePath);
                 imageViewer1.ZoomToFit();
                 currentFGEImage = fgeimg;
+
+                if (toolStripButtonStars.Checked)
+                    DrawStars();
+
                 DrawTravelHistory();
             }
         }
@@ -331,7 +335,8 @@ namespace EDDiscovery2
         {
             DateTime start = startDate;
 
-            
+          
+
 
             foreach (var sys in _eddiscoveryForm.TravelControl.visitedSystems)
             {
@@ -369,7 +374,6 @@ namespace EDDiscovery2
             Point test1  = currentFGEImage.TransformCoordinate(currentFGEImage.BottomLeft);
             Point test2 = currentFGEImage.TransformCoordinate(currentFGEImage.TopRight);
 
-            DrawStars();
 
             if (Test)
             TestGrid(gfx);
@@ -534,6 +538,11 @@ namespace EDDiscovery2
                         break;
                 }
             }
+        }
+
+        private void toolStripButtonStars_Click(object sender, EventArgs e)
+        {
+            ShowSelectedImage();
         }
 
         private void toolStripButtonZoomOut_Click(object sender, EventArgs e)
