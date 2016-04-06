@@ -785,7 +785,8 @@ namespace EDDiscovery2
         private void buttonCenter_Click(object sender, EventArgs e)
         {
             SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
-            OrientateMapAroundSystem(sys);
+            if (sys == null) textboxFrom.Text = String.Empty;
+            else OrientateMapAroundSystem(sys);
         }
         
         private void toolStripButton1_Click(object sender, EventArgs e)
