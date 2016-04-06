@@ -32,6 +32,7 @@ namespace EDDiscovery
         bool Exit = false;
         bool NoEvents = false;
         public event NetLogEventHandler OnNewPosition;
+        public int ActiveCommander { get; set; }
 
         SQLiteDBClass db=null;
         public List<TravelLogUnit> tlUnits;
@@ -114,7 +115,7 @@ namespace EDDiscovery
 
 
 
-        public List<SystemPosition> ParseFiles(RichTextBox richTextBox_History, int defaultMapColour, int commander)
+        public List<SystemPosition> ParseFiles(RichTextBox richTextBox_History, int defaultMapColour)
         {
             string datapath;
             DirectoryInfo dirInfo;
@@ -152,7 +153,7 @@ namespace EDDiscovery
 
             tlUnits =  TravelLogUnit.GetAll();
 
-            List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(commander);
+            List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(ActiveCommander);
 
             visitedSystems.Clear();
             // Add systems in local DB.
@@ -225,6 +226,7 @@ namespace EDDiscovery
                             dbsys.EDSM_sync = false;
                             dbsys.Unit = fi.Name;
                             dbsys.MapColour = defaultMapColour;
+                            dbsys.Commander = ActiveCommander;
 
                             if (!lu.Beta)  // dont store  history in DB for beta (YET)
                             {
@@ -501,6 +503,7 @@ namespace EDDiscovery
                                         dbsys.Unit = fi.Name;
                                         dbsys.MapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
                                         dbsys.Unit = fi.Name;
+                                        dbsys.Commander = 0;
                                         
                                         if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
                                         {
