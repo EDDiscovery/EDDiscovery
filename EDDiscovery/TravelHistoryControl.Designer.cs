@@ -44,6 +44,9 @@
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToTrilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBoxHistoryWindow = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -202,7 +205,7 @@
             this.moveToAnotherCommanderToolStripMenuItem,
             this.addToTrilaterationToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 92);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 114);
             // 
             // starMapColourToolStripMenuItem
             // 
@@ -227,10 +230,34 @@
             // 
             // addToTrilaterationToolStripMenuItem
             // 
+            this.addToTrilaterationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trilaterationToolStripMenuItem,
+            this.wantedSystemsToolStripMenuItem,
+            this.bothToolStripMenuItem});
             this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
             this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.addToTrilaterationToolStripMenuItem.Text = "Add to Trilateration";
-            this.addToTrilaterationToolStripMenuItem.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem_Click);
+            this.addToTrilaterationToolStripMenuItem.Text = "Add to ...";
+            // 
+            // trilaterationToolStripMenuItem
+            // 
+            this.trilaterationToolStripMenuItem.Name = "trilaterationToolStripMenuItem";
+            this.trilaterationToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.trilaterationToolStripMenuItem.Text = "Trilateration";
+            this.trilaterationToolStripMenuItem.Click += new System.EventHandler(this.trilaterationToolStripMenuItem_Click);
+            // 
+            // wantedSystemsToolStripMenuItem
+            // 
+            this.wantedSystemsToolStripMenuItem.Name = "wantedSystemsToolStripMenuItem";
+            this.wantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.wantedSystemsToolStripMenuItem.Text = "Wanted Systems";
+            this.wantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.wantedSystemsToolStripMenuItem_Click);
+            // 
+            // bothToolStripMenuItem
+            // 
+            this.bothToolStripMenuItem.Name = "bothToolStripMenuItem";
+            this.bothToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.bothToolStripMenuItem.Text = "Both";
+            this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
             // 
             // comboBoxHistoryWindow
             // 
@@ -734,7 +761,7 @@
             this.closestContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToTrilaterationToolStripMenuItem1});
             this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(178, 48);
+            this.closestContextMenu.Size = new System.Drawing.Size(178, 26);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
@@ -915,5 +942,8 @@
         private System.Windows.Forms.Button buttonMap2D;
         private System.Windows.Forms.ContextMenuStrip closestContextMenu;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem trilaterationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wantedSystemsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
     }
 }
