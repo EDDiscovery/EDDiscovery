@@ -56,6 +56,7 @@ namespace EDDiscovery2
             this.labelClickedSystemCoords = new System.Windows.Forms.Label();
             this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
             this.dotSystemCoords = new System.Windows.Forms.PictureBox();
+            this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).BeginInit();
@@ -72,10 +73,12 @@ namespace EDDiscovery2
             this.glControl.Name = "glControl";
             this.glControl.Size = new System.Drawing.Size(918, 485);
             this.glControl.TabIndex = 0;
-            this.glControl.VSync = false;
+            this.glControl.VSync = true;
             this.glControl.Load += new System.EventHandler(this.glControl_Load);
             this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
             this.glControl.DoubleClick += new System.EventHandler(this.glControl_DoubleClick);
+            this.glControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.glControl_KeyDown);
+            this.glControl.KeyUp += new System.Windows.Forms.KeyEventHandler(this.glControl_KeyUp);
             this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
             this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
             this.glControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseUp);
@@ -275,6 +278,9 @@ namespace EDDiscovery2
             this.dotSystemCoords.Size = new System.Drawing.Size(12, 12);
             this.dotSystemCoords.TabIndex = 25;
             this.dotSystemCoords.TabStop = false;
+            // UpdateTimer
+            // 
+            this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
             // 
             // FormMap
             // 
@@ -296,6 +302,8 @@ namespace EDDiscovery2
             this.Name = "FormMap";
             this.Text = "3D Star Map";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Activated += new System.EventHandler(this.FormMap_Activated);
+            this.Deactivate += new System.EventHandler(this.FormMap_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMap_FormClosing);
             this.Load += new System.EventHandler(this.FormMap_Load);
             this.toolStripShowAllStars.ResumeLayout(false);
@@ -331,5 +339,6 @@ namespace EDDiscovery2
         private Label labelClickedSystemCoords;
         private PictureBox dotSystemCoords;
         private PictureBox dotSelectedSystemCoords;
+        private Timer UpdateTimer;
     }
     }

@@ -172,8 +172,8 @@ namespace EDDiscovery
             {
                 travelHistoryControl1.Enabled = false;
 
-                var edsmThread = new Thread(GetEDSMSystems) { Name = "Downloading EDSM Systems" };
-                var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files" };
+                var edsmThread = new Thread(GetEDSMSystems) { Name = "Downloading EDSM Systems", IsBackground = true };
+                var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files", IsBackground = true };
                 edsmThread.Start();
                 downloadmapsThread.Start();
 
@@ -401,6 +401,7 @@ namespace EDDiscovery
         {
             ThreadEDSMDistances = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDSMDistances));
             ThreadEDSMDistances.Name = "Get Distances";
+            ThreadEDSMDistances.IsBackground = true;
             ThreadEDSMDistances.Start();
         }
 
@@ -417,6 +418,7 @@ namespace EDDiscovery
         {
             ThreadEDDB = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDDBUpdate));
             ThreadEDDB.Name = "Get EDDB Update";
+            ThreadEDDB.IsBackground = true;
             eddbforceupdate = force;
             ThreadEDDB.Start();
         }
@@ -929,7 +931,7 @@ namespace EDDiscovery
 
         private void AsyncSyncEDSMSystems()
         {
-            var EDSMThread = new Thread(SyncAllEDSMSystems) { Name = "Downloading EDSM system" };
+            var EDSMThread = new Thread(SyncAllEDSMSystems) { Name = "Downloading EDSM system", IsBackground = true };
             EDSMThread.Start();
         }
 
