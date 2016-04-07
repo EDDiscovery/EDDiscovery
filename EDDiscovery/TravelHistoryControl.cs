@@ -1191,6 +1191,13 @@ namespace EDDiscovery
                             sp.Update();
                         }
                         this.Cursor = Cursors.Default;
+
+
+                        foreach (DataGridViewRow row in selectedRows.ToList<DataGridViewRow>())
+                        {
+                            dataGridViewTravel.Rows.Remove(row);
+                        }
+
                     }
                     else   // Move all systems from the same session
                     {
