@@ -39,6 +39,7 @@
             this.imageViewer1 = new EDDiscovery2._2DMap.ImageViewer();
             this.buttonSave = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.toolStripButtonStars = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -51,7 +52,8 @@
             this.toolStripComboBoxTime,
             this.toolStripButtonZoomIn,
             this.toolStripButtonZoomOut,
-            this.toolStripButtonZoomtoFit});
+            this.toolStripButtonZoomtoFit,
+            this.toolStripButtonStars});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1157, 29);
@@ -152,6 +154,18 @@
             // 
             this.saveFileDialog1.Filter = "PNG Image|*.png|Bitmap Image|*.bmp|JPEG Image|*.jpg";
             // 
+            // toolStripButtonStars
+            // 
+            this.toolStripButtonStars.CheckOnClick = true;
+            this.toolStripButtonStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonStars.Image")));
+            this.toolStripButtonStars.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonStars.Name = "toolStripButtonStars";
+            this.toolStripButtonStars.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonStars.Text = "Stars";
+            this.toolStripButtonStars.ToolTipText = "Show all stars";
+            this.toolStripButtonStars.Click += new System.EventHandler(this.toolStripButtonStars_Click);
+            // 
             // FormSagCarinaMission
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -183,5 +197,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomtoFit;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonStars;
     }
 }
