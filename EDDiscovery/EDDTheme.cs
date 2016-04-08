@@ -629,9 +629,10 @@ namespace EDDiscovery2
                     MyDgv.FlatStyle = (currentsettings.buttonstyle.Equals(ButtonStyles[1])) ? FlatStyle.Flat : FlatStyle.Popup;
                     MyDgv.TabControlBorderColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.tabcontrol_borderlines], 0.6F);
                     MyDgv.TabControlBorderBrightColor = currentsettings.colors[Settings.CI.tabcontrol_borderlines];
+                    MyDgv.TabNotSelectedBorderColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.tabcontrol_borderlines], 0.4F);
                     MyDgv.TabNotSelectedColor = currentsettings.colors[Settings.CI.button_back];
                     MyDgv.TabSelectedColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], 1.4F);
-                    MyDgv.TabMouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], 1.2F);
+                    MyDgv.TabMouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], 1.3F);
                     MyDgv.TextSelectedColor = currentsettings.colors[Settings.CI.button_text];
                     MyDgv.TextNotSelectedColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_text], 0.8F);
                     MyDgv.TabStyle = new ExtendedControls.TabStyleAngled();
