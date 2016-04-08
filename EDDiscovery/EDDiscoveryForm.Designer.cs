@@ -61,7 +61,7 @@
             this.tabPageRoute = new System.Windows.Forms.TabPage();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
@@ -556,7 +556,7 @@
         private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
         private System.Windows.Forms.TabPage tabPageTriletaration;
         public TrilaterationControl trilaterationControl;
-        private System.Windows.Forms.TabControl tabControl1;
+        private ExtendedControls.TabControlCustom tabControl1;
         private System.Windows.Forms.TabPage tabPageTravelHistory;
         private TravelHistoryControl travelHistoryControl1;
         private System.Windows.Forms.Label label_version;

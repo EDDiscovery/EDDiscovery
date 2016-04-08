@@ -46,6 +46,9 @@ namespace EDDiscovery2
             SetPanel(panel_theme19, "Group box Text Colour", EDDTheme.Settings.CI.group_text);
             SetPanel(panel_theme30, "Text Box Border Colour", EDDTheme.Settings.CI.textbox_border);
             SetPanel(panel_theme31, "Button Border Colour", EDDTheme.Settings.CI.button_border);
+            SetPanel(panel_theme32, "Grid Border Line Colour", EDDTheme.Settings.CI.grid_borderlines);
+            SetPanel(panel_theme33, "Group box Border Line Colour", EDDTheme.Settings.CI.group_borderlines);
+            SetPanel(panel_theme35, "Tab Control Border Line Colour", EDDTheme.Settings.CI.tabcontrol_borderlines);
 
             UpdatePatchesEtc();
 
@@ -77,6 +80,9 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme19);
             _discoveryForm.theme.UpdatePatch(panel_theme30);
             _discoveryForm.theme.UpdatePatch(panel_theme31);
+            _discoveryForm.theme.UpdatePatch(panel_theme32);
+            _discoveryForm.theme.UpdatePatch(panel_theme33);
+            _discoveryForm.theme.UpdatePatch(panel_theme35);
             textBox_Font.Text = _discoveryForm.theme.FontName;
             checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
         }
@@ -150,5 +156,6 @@ namespace EDDiscovery2
             _discoveryForm.theme.ButtonStyle = (string)comboBox_ButtonStyle.SelectedItem;
             _discoveryForm.ApplyTheme(true);
         }
+
     }
 }

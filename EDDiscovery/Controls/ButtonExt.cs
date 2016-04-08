@@ -16,6 +16,7 @@ namespace ExtendedControls
 
         public float ButtonColorScaling { get; set; } = 0.5F;
         public float BorderColorScaling { get; set; } = 1.25F;
+        public float ButtonDisabledScaling { get; set; } = 0.5F;
 
         // Internal
 
@@ -84,7 +85,7 @@ namespace ExtendedControls
                 {
                     back = Multiply(BackColor, 0.5F);
                     b = new System.Drawing.Drawing2D.LinearGradientBrush(buttonarea, back, Multiply(back, ButtonColorScaling), 90);
-                    p = new Pen(Multiply(FlatAppearance.BorderColor, 0.5F));
+                    p = new Pen(Multiply(FlatAppearance.BorderColor, ButtonDisabledScaling));
                 }
                 else
                 {

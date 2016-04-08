@@ -57,7 +57,6 @@ namespace EDDiscovery
             InitializeComponent();
             panel_close.Enabled = false;                            // no closing until we are ready for it..
             tabControl1.Enabled = false;
-
             EDDConfig = new EDDConfig();
 
             //_fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");

@@ -28,23 +28,15 @@ namespace EDDiscovery2
             public enum CI
             {
                 form,
-                button_back,
-                grid_border,
-                grid_background,
-                textbox_back,
-                menu_back,
-                group_back,
-                button_border,
-                textbox_border,
-                button_text,                            
-                grid_bordertext,
-                grid_text,
+                button_back, button_border, button_text,
+                grid_border, grid_background, grid_bordertext, grid_text, grid_borderlines,
+                textbox_fore, textbox_highlight, textbox_success,textbox_back, textbox_border,
+                menu_back, menu_fore,
+                group_back, group_text, group_borderlines,
                 travelgrid_nonvisted, travelgrid_visited,
-                textbox_fore, textbox_highlight, textbox_success,
                 checkbox,
-                menu_fore,
                 label,
-                group_text
+                tabcontrol_borderlines
             };
 
             public string name;         // name of scheme
@@ -58,20 +50,22 @@ namespace EDDiscovery2
 
             public Settings(String n, Color f,
                                         Color bb, Color bf, Color bborder, string bstyle,
-                                        Color gb, Color gbt, Color gbck, Color gt,
+                                        Color gb, Color gbt, Color gbck, Color gt, Color gridlines,
                                         Color tn, Color tv, 
                                         Color tbb, Color tbf, Color tbh, Color tbs, Color tbborder, string tbbstyle , 
                                         Color c,
                                         Color mb, Color mf,
                                         Color l,
-                                        Color grpb, Color grpt,
+                                        Color grpb, Color grpt, Color grlines,
+                                        Color tabborderlines,
                                         bool wf, double op, string ft, float fs)            // ft = empty means don't set it
             {
                 name = n;
                 colors = new Dictionary<CI, Color>();
                 colors.Add(CI.form, f);
                 colors.Add(CI.button_back, bb); colors.Add(CI.button_text, bf); colors.Add(CI.button_border,bborder);
-                colors.Add(CI.grid_border, gb); colors.Add(CI.grid_bordertext, gbt); colors.Add(CI.grid_background, gbck); colors.Add(CI.grid_text, gt);
+                colors.Add(CI.grid_border, gb); colors.Add(CI.grid_bordertext, gbt);
+                colors.Add(CI.grid_background, gbck); colors.Add(CI.grid_text, gt); colors.Add(CI.grid_borderlines, gridlines);
                 colors.Add(CI.travelgrid_nonvisted, tn); colors.Add(CI.travelgrid_visited, tv);
                 colors.Add(CI.textbox_back, tbb); colors.Add(CI.textbox_fore, tbf);
                 colors.Add(CI.textbox_highlight, tbh); colors.Add(CI.textbox_success, tbs);
@@ -79,8 +73,8 @@ namespace EDDiscovery2
                 colors.Add(CI.checkbox, c);
                 colors.Add(CI.menu_back, mb); colors.Add(CI.menu_fore, mf);
                 colors.Add(CI.label, l);
-                colors.Add(CI.group_back, grpb);
-                colors.Add(CI.group_text, grpt);
+                colors.Add(CI.group_back, grpb); colors.Add(CI.group_text, grpt); colors.Add(CI.group_borderlines, grlines);
+                colors.Add(CI.tabcontrol_borderlines, tabborderlines);
                 buttonstyle = bstyle; textboxborderstyle = tbbstyle;
                 windowsframe = wf; formopacity = op; fontname = ft; fontsize = fs;
             }
@@ -111,13 +105,14 @@ namespace EDDiscovery2
                 colors.Add(CI.form, SystemColors.Menu);
                 colors.Add(CI.button_back, SystemColors.Control); colors.Add(CI.button_text, SystemColors.ControlText); colors.Add(CI.button_border, SystemColors.Menu);
                 colors.Add(CI.grid_border, SystemColors.Menu); colors.Add(CI.grid_bordertext, SystemColors.MenuText);
-                colors.Add(CI.grid_background, SystemColors.ControlLightLight); colors.Add(CI.grid_text, SystemColors.MenuText);
+                colors.Add(CI.grid_background, SystemColors.ControlLightLight); colors.Add(CI.grid_text, SystemColors.MenuText); colors.Add(CI.grid_borderlines, SystemColors.ControlDark);
                 colors.Add(CI.travelgrid_nonvisted, Color.Blue); colors.Add(CI.travelgrid_visited, SystemColors.MenuText);
                 colors.Add(CI.textbox_back, SystemColors.Menu); colors.Add(CI.textbox_fore, SystemColors.MenuText); colors.Add(CI.textbox_highlight, Color.Red); colors.Add(CI.textbox_success, Color.Green); colors.Add(CI.textbox_border, SystemColors.Menu);
                 colors.Add(CI.checkbox, SystemColors.MenuText);
                 colors.Add(CI.menu_back, SystemColors.Menu); colors.Add(CI.menu_fore, SystemColors.MenuText);
                 colors.Add(CI.label, SystemColors.MenuText);
-                colors.Add(CI.group_back, SystemColors.Menu); colors.Add(CI.group_text, SystemColors.MenuText);
+                colors.Add(CI.group_back, SystemColors.Menu); colors.Add(CI.group_text, SystemColors.MenuText); colors.Add(CI.group_borderlines, SystemColors.ControlDark);
+                colors.Add(CI.tabcontrol_borderlines, SystemColors.ControlDark);
                 buttonstyle = buttonstyle_system;
                 textboxborderstyle = textboxborderstyle_fixed3D;
                 windowsframe = true;
@@ -277,38 +272,41 @@ namespace EDDiscovery2
             themelist.Add(new Settings("Orange Delight", Color.Black,
                 Color.FromArgb(255, 48, 48, 48), Color.Orange, Color.DarkOrange, buttonstyle_gradient, // button
                 Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
-                Color.Black, Color.Orange, // grid
+                Color.Black, Color.Orange, Color.DarkOrange, // grid
                 Color.Orange, Color.White, // travel
                 Color.Black, Color.Orange, Color.Red, Color.Green, Color.DarkOrange, textboxborderstyle_color, // text box
                 Color.Orange, // checkbox
                 Color.Black, Color.Orange,  // menu
                 Color.Orange,  // label
-                Color.FromArgb(255, 32,32,32), Color.Orange, // group
+                Color.FromArgb(255, 32,32,32), Color.Orange, Color.DarkOrange, // group
+                Color.DarkOrange,
                 false, 95, "Microsoft Sans Serif", 8.25F));
 
             themelist.Add(new Settings("Elite EuroCaps", Color.Black,
                 Color.FromArgb(255, 48, 48, 48), Color.Orange, Color.DarkOrange, buttonstyle_gradient, // button
                 Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
-                Color.Black, Color.Orange, // grid
+                Color.Black, Color.Orange, Color.DarkOrange, // grid
                 Color.Orange, Color.White, // travel
                 Color.Black, Color.Orange, Color.Red, Color.Green, Color.DarkOrange, textboxborderstyle_color, // text box
                 Color.Orange, // checkbox
                 Color.Black, Color.Orange,  // menu
                 Color.Orange,  // label
-                Color.FromArgb(255, 32, 32, 32), Color.Orange, // group
+                Color.FromArgb(255, 32, 32, 32), Color.Orange, Color.DarkOrange, // group
+                Color.DarkOrange,
                 false, 95, "Euro Caps", 12F));
 
             Color butback = Color.FromArgb(255,32, 32, 32);
             themelist.Add(new Settings("Elite EuroCaps Less Border", Color.Black,
                 Color.FromArgb(255, 64, 64, 64), Color.Orange, Color.FromArgb(255, 96, 96, 96), buttonstyle_gradient, // button
                 Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
-                butback, Color.Orange, // grid
+                butback, Color.Orange, Color.DarkOrange, // grid
                 Color.Orange, Color.White, // travel
                 butback, Color.Orange, Color.Red, Color.Green, Color.FromArgb(255,64,64,64), textboxborderstyle_color, // text box
                 Color.Orange, // checkbox
                 Color.Black, Color.Orange,  // menu
                 Color.Orange,  // label
-                Color.Black, Color.Orange, // group
+                Color.Black, Color.Orange, Color.DarkOrange, // group
+                Color.DarkOrange,
                 false, 100, "Euro Caps", 12F));
 
             themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite Verdana", "Verdana", 8F));
@@ -317,13 +315,14 @@ namespace EDDiscovery2
                                         SystemColors.Menu,
                                         SystemColors.Control, SystemColors.ControlText, Color.DarkGray, buttonstyle_gradient,// button
                                         SystemColors.Menu, SystemColors.MenuText,  // grid border
-                                        SystemColors.ControlLightLight, SystemColors.MenuText,  // grid
+                                        SystemColors.ControlLightLight, SystemColors.MenuText,  SystemColors.ControlDark, // grid
                                         Color.Blue, SystemColors.MenuText, // travel
                                         SystemColors.Menu, SystemColors.MenuText, Color.Red, Color.Green, Color.DarkGray, textboxborderstyle_color,// text
                                         SystemColors.MenuText, // checkbox
                                         SystemColors.Menu, SystemColors.MenuText,  // menu
                                         SystemColors.MenuText,  // label
-                                        SystemColors.Menu, SystemColors.MenuText,  // group
+                                        SystemColors.Menu, SystemColors.MenuText, SystemColors.ControlDark, // group
+                                        SystemColors.ControlDark,
                                         false, 95, "Euro Caps", 12F));
 
             themelist.Add(new Settings(themelist[themelist.Count - 1], "Verdana Grey", "Verdana", 8F));
@@ -331,26 +330,28 @@ namespace EDDiscovery2
             themelist.Add(new Settings("Blue Wonder", Color.DarkBlue,
                                                Color.Blue, Color.White, Color.White, buttonstyle_gradient,// button
                                                Color.DarkBlue, Color.White,  // grid border
-                                               Color.DarkBlue, Color.White, // grid
-                                               Color.White, Color.DarkBlue, // travel
+                                               Color.DarkBlue, Color.White, Color.Blue, // grid
+                                               Color.White, Color.Cyan, // travel
                                                Color.DarkBlue, Color.White, Color.Red, Color.Green, Color.White, textboxborderstyle_color,// text box
                                                Color.White, // checkbox
                                                Color.DarkBlue, Color.White,  // menu
                                                Color.White,  // label
-                                               Color.DarkBlue, Color.White,  // group
+                                               Color.DarkBlue, Color.White, Color.Blue, // group
+                                               Color.Blue,
                                                false, 95, "Microsoft Sans Serif", 8.25F));
 
             Color baizegreen = Color.FromArgb(255, 13, 68, 13);
             themelist.Add(new Settings("Green Baize", baizegreen,
                                                baizegreen, Color.White, Color.White, buttonstyle_gradient,// button
                                                baizegreen, Color.White,  // grid border
-                                               baizegreen, Color.White, // grid
+                                               baizegreen, Color.White, Color.LightGreen, // grid
                                                Color.White, Color.FromArgb(255, 78, 190, 27), // travel
                                                baizegreen, Color.White, Color.Red, Color.Green, Color.White, textboxborderstyle_color,// text box
                                                Color.White, // checkbox
                                                baizegreen, Color.White,  // menu
                                                Color.White,  // label
-                                               baizegreen, Color.White, // group
+                                               baizegreen, Color.White, Color.LightGreen, // group
+                                               Color.LightGreen,
                                                false, 95, "Microsoft Sans Serif", 8.25F));
 
             string themepath = "";
@@ -557,11 +558,11 @@ namespace EDDiscovery2
                 MyDgv.BorderStyle = BorderStyle.None;
                 MyDgv.BorderPadding = 2;                                                    // for colour selection, 2 pixels of border padding before border..
 
-                if (currentsettings.textboxborderstyle == TextboxBorderStyles[1])
+                if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[1]))
                     MyDgv.BorderStyle = BorderStyle.FixedSingle;
-                else if (currentsettings.textboxborderstyle == TextboxBorderStyles[2])
+                else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[2]))
                     MyDgv.BorderStyle = BorderStyle.Fixed3D;
-                else if (currentsettings.textboxborderstyle == TextboxBorderStyles[3])
+                else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[3]))
                     MyDgv.BorderColor = currentsettings.colors[Settings.CI.textbox_border];
 
                 if (myControl.Font.Name.Contains("Courier"))                  // okay if we ordered a fixed font, don't override
@@ -582,13 +583,13 @@ namespace EDDiscovery2
                 MyDgv.BorderPadding = 2;                                                    // for colour selection, 2 pixels of border padding before border..
                 MyDgv.AutoSize = true;
 
-                if (currentsettings.textboxborderstyle == TextboxBorderStyles[0])
+                if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[0]))
                     MyDgv.AutoSize = false;                                                 // with no border, the autosize clips the bottom of chars..
-                else if (currentsettings.textboxborderstyle == TextboxBorderStyles[1])
+                else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[1]))
                     MyDgv.BorderStyle = BorderStyle.FixedSingle;
-                else if (currentsettings.textboxborderstyle == TextboxBorderStyles[2])
+                else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[2]))
                     MyDgv.BorderStyle = BorderStyle.Fixed3D;
-                else if (currentsettings.textboxborderstyle == TextboxBorderStyles[3])
+                else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[3]))
                     MyDgv.BorderColor = currentsettings.colors[Settings.CI.textbox_border];
 
                 myControl.Font = fnt;
@@ -598,7 +599,7 @@ namespace EDDiscovery2
                 ButtonExt MyDgv = (ButtonExt)myControl;
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.button_text];
 
-                if (currentsettings.buttonstyle == ButtonStyles[0]) // system
+                if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
                 {
                     MyDgv.FlatStyle = FlatStyle.System;
                     MyDgv.UseVisualStyleBackColor = true;           // this makes it system..
@@ -611,7 +612,7 @@ namespace EDDiscovery2
                     MyDgv.FlatAppearance.MouseOverBackColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], 1.1F);
                     MyDgv.FlatAppearance.MouseDownBackColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], 1.5F);
 
-                    if (currentsettings.buttonstyle == ButtonStyles[1]) // flat
+                    if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
                         MyDgv.FlatStyle = FlatStyle.Flat;
                     else
                         MyDgv.FlatStyle = FlatStyle.Popup;
@@ -619,12 +620,33 @@ namespace EDDiscovery2
 
                 myControl.Font = fnt;
             }
+            else if (myControl is TabControlCustom)
+            { 
+                TabControlCustom MyDgv = (TabControlCustom)myControl;
+
+                if (!currentsettings.buttonstyle.Equals(ButtonStyles[0])) // not system
+                {
+                    MyDgv.FlatStyle = (currentsettings.buttonstyle.Equals(ButtonStyles[1])) ? FlatStyle.Flat : FlatStyle.Popup;
+                    MyDgv.TabControlBorderColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.tabcontrol_borderlines], 0.6F);
+                    MyDgv.TabControlBorderBrightColor = currentsettings.colors[Settings.CI.tabcontrol_borderlines];
+                    MyDgv.TabNotSelectedColor = currentsettings.colors[Settings.CI.button_back];
+                    MyDgv.TabSelectedColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], 1.4F);
+                    MyDgv.TabMouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], 1.2F);
+                    MyDgv.TextSelectedColor = currentsettings.colors[Settings.CI.button_text];
+                    MyDgv.TextNotSelectedColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_text], 0.8F);
+                    MyDgv.TabStyle = new ExtendedControls.TabStyleAngled();
+                }
+                else
+                    MyDgv.FlatStyle = FlatStyle.System;
+
+                MyDgv.Font = fnt;
+            }
             else if (myControl is ComboBoxCustom)
             {
                 ComboBoxCustom MyDgv = (ComboBoxCustom)myControl;
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.button_text];
 
-                if (currentsettings.buttonstyle == ButtonStyles[0]) // system
+                if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
                 {
                     MyDgv.FlatStyle = FlatStyle.System;
                 }
@@ -634,7 +656,7 @@ namespace EDDiscovery2
                     MyDgv.BorderColor = currentsettings.colors[Settings.CI.button_border];
                     MyDgv.MouseOverBackgroundColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], 1.1F);
 
-                    if (currentsettings.buttonstyle == ButtonStyles[1]) // flat
+                    if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
                         MyDgv.FlatStyle = FlatStyle.Flat;
                     else
                         MyDgv.FlatStyle = FlatStyle.Popup;
@@ -669,11 +691,6 @@ namespace EDDiscovery2
                     myControl.ForeColor = currentsettings.colors[Settings.CI.label];
                 }
             }
-            else if (myControl is TabControl)
-            {
-                myControl.Font = fnt;
-                // Needs to be owner drawn..
-            }
             else if (myControl is Label)
             {
                 myControl.ForeColor = currentsettings.colors[Settings.CI.label];
@@ -706,6 +723,10 @@ namespace EDDiscovery2
                 MyDgv.DefaultCellStyle.ForeColor = currentsettings.colors[Settings.CI.grid_text];
                 MyDgv.DefaultCellStyle.SelectionBackColor = MyDgv.DefaultCellStyle.ForeColor;
                 MyDgv.DefaultCellStyle.SelectionForeColor = MyDgv.DefaultCellStyle.BackColor;
+
+                MyDgv.GridColor = currentsettings.colors[Settings.CI.grid_borderlines];
+                MyDgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                MyDgv.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
                 myControl.Font = fnt;
                 if (myControl.Name.Contains("dataGridViewTravel") && fnt.Size > 9F)

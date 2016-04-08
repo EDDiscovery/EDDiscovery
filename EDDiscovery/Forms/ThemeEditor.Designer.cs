@@ -37,7 +37,6 @@
             this.panel_theme19 = new System.Windows.Forms.Panel();
             this.panel_theme18 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
@@ -56,6 +55,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel_theme15 = new System.Windows.Forms.Panel();
             this.panel_theme31 = new System.Windows.Forms.Panel();
+            this.panel_theme33 = new System.Windows.Forms.Panel();
+            this.panel_theme32 = new System.Windows.Forms.Panel();
             this.panel_theme30 = new System.Windows.Forms.Panel();
             this.panel_theme4 = new System.Windows.Forms.Panel();
             this.panel_theme3 = new System.Windows.Forms.Panel();
@@ -80,6 +81,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.panel_theme35 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBoxColors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -103,7 +106,6 @@
             this.groupBoxColors.Controls.Add(this.panel_theme19);
             this.groupBoxColors.Controls.Add(this.panel_theme18);
             this.groupBoxColors.Controls.Add(this.label2);
-            this.groupBoxColors.Controls.Add(this.label18);
             this.groupBoxColors.Controls.Add(this.label20);
             this.groupBoxColors.Controls.Add(this.label22);
             this.groupBoxColors.Controls.Add(this.label21);
@@ -113,6 +115,7 @@
             this.groupBoxColors.Controls.Add(this.label7);
             this.groupBoxColors.Controls.Add(this.label6);
             this.groupBoxColors.Controls.Add(this.label16);
+            this.groupBoxColors.Controls.Add(this.label5);
             this.groupBoxColors.Controls.Add(this.label14);
             this.groupBoxColors.Controls.Add(this.label13);
             this.groupBoxColors.Controls.Add(this.label12);
@@ -122,6 +125,9 @@
             this.groupBoxColors.Controls.Add(this.label1);
             this.groupBoxColors.Controls.Add(this.panel_theme15);
             this.groupBoxColors.Controls.Add(this.panel_theme31);
+            this.groupBoxColors.Controls.Add(this.panel_theme35);
+            this.groupBoxColors.Controls.Add(this.panel_theme33);
+            this.groupBoxColors.Controls.Add(this.panel_theme32);
             this.groupBoxColors.Controls.Add(this.panel_theme30);
             this.groupBoxColors.Controls.Add(this.panel_theme4);
             this.groupBoxColors.Controls.Add(this.panel_theme3);
@@ -141,7 +147,7 @@
             this.groupBoxColors.Controls.Add(this.panel_theme1);
             this.groupBoxColors.Location = new System.Drawing.Point(3, 12);
             this.groupBoxColors.Name = "groupBoxColors";
-            this.groupBoxColors.Size = new System.Drawing.Size(656, 305);
+            this.groupBoxColors.Size = new System.Drawing.Size(724, 315);
             this.groupBoxColors.TabIndex = 19;
             this.groupBoxColors.TabStop = false;
             this.groupBoxColors.Text = "Colours";
@@ -163,7 +169,7 @@
             "System",
             "Flat",
             "Gradient"});
-            this.comboBox_ButtonStyle.Location = new System.Drawing.Point(351, 223);
+            this.comboBox_ButtonStyle.Location = new System.Drawing.Point(351, 278);
             this.comboBox_ButtonStyle.Name = "comboBox_ButtonStyle";
             this.comboBox_ButtonStyle.Size = new System.Drawing.Size(121, 21);
             this.comboBox_ButtonStyle.TabIndex = 10;
@@ -177,7 +183,7 @@
             "System",
             "Flat",
             "Gradient"});
-            this.comboBox_TextBorder.Location = new System.Drawing.Point(150, 223);
+            this.comboBox_TextBorder.Location = new System.Drawing.Point(150, 278);
             this.comboBox_TextBorder.Name = "comboBox_TextBorder";
             this.comboBox_TextBorder.Size = new System.Drawing.Size(121, 21);
             this.comboBox_TextBorder.TabIndex = 10;
@@ -187,7 +193,7 @@
             // 
             this.panel_theme19.AccessibleDescription = "";
             this.panel_theme19.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme19.Location = new System.Drawing.Point(540, 94);
+            this.panel_theme19.Location = new System.Drawing.Point(540, 95);
             this.panel_theme19.Name = "panel_theme19";
             this.panel_theme19.Size = new System.Drawing.Size(28, 28);
             this.panel_theme19.TabIndex = 9;
@@ -206,25 +212,16 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(87, 269);
+            this.label2.Location = new System.Drawing.Point(36, 148);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "Border";
             // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(291, 269);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(38, 13);
-            this.label18.TabIndex = 6;
-            this.label18.Text = "Border";
-            // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(410, 184);
+            this.label20.Location = new System.Drawing.Point(410, 237);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(40, 13);
             this.label20.TabIndex = 6;
@@ -233,7 +230,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(537, 184);
+            this.label22.Location = new System.Drawing.Point(537, 237);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(33, 13);
             this.label22.TabIndex = 6;
@@ -242,7 +239,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(537, 142);
+            this.label21.Location = new System.Drawing.Point(537, 193);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(55, 13);
             this.label21.TabIndex = 6;
@@ -251,7 +248,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(410, 142);
+            this.label19.Location = new System.Drawing.Point(410, 193);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(53, 13);
             this.label19.TabIndex = 6;
@@ -260,7 +257,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(87, 184);
+            this.label4.Location = new System.Drawing.Point(87, 237);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(48, 13);
             this.label4.TabIndex = 6;
@@ -269,7 +266,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(87, 142);
+            this.label15.Location = new System.Drawing.Point(87, 193);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(48, 13);
             this.label15.TabIndex = 6;
@@ -369,7 +366,7 @@
             // 
             this.panel_theme15.AccessibleDescription = "";
             this.panel_theme15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme15.Location = new System.Drawing.Point(150, 177);
+            this.panel_theme15.Location = new System.Drawing.Point(150, 230);
             this.panel_theme15.Name = "panel_theme15";
             this.panel_theme15.Size = new System.Drawing.Size(28, 28);
             this.panel_theme15.TabIndex = 5;
@@ -379,17 +376,37 @@
             // 
             this.panel_theme31.AccessibleDescription = "";
             this.panel_theme31.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme31.Location = new System.Drawing.Point(351, 261);
+            this.panel_theme31.Location = new System.Drawing.Point(351, 140);
             this.panel_theme31.Name = "panel_theme31";
             this.panel_theme31.Size = new System.Drawing.Size(28, 28);
             this.panel_theme31.TabIndex = 5;
             this.panel_theme31.Tag = "";
             // 
+            // panel_theme33
+            // 
+            this.panel_theme33.AccessibleDescription = "";
+            this.panel_theme33.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme33.Location = new System.Drawing.Point(540, 140);
+            this.panel_theme33.Name = "panel_theme33";
+            this.panel_theme33.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme33.TabIndex = 5;
+            this.panel_theme33.Tag = "";
+            // 
+            // panel_theme32
+            // 
+            this.panel_theme32.AccessibleDescription = "";
+            this.panel_theme32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme32.Location = new System.Drawing.Point(231, 140);
+            this.panel_theme32.Name = "panel_theme32";
+            this.panel_theme32.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme32.TabIndex = 5;
+            this.panel_theme32.Tag = "";
+            // 
             // panel_theme30
             // 
             this.panel_theme30.AccessibleDescription = "";
             this.panel_theme30.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme30.Location = new System.Drawing.Point(150, 261);
+            this.panel_theme30.Location = new System.Drawing.Point(150, 140);
             this.panel_theme30.Name = "panel_theme30";
             this.panel_theme30.Size = new System.Drawing.Size(28, 28);
             this.panel_theme30.TabIndex = 5;
@@ -399,7 +416,7 @@
             // 
             this.panel_theme4.AccessibleDescription = "";
             this.panel_theme4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme4.Location = new System.Drawing.Point(150, 137);
+            this.panel_theme4.Location = new System.Drawing.Point(150, 185);
             this.panel_theme4.Name = "panel_theme4";
             this.panel_theme4.Size = new System.Drawing.Size(28, 28);
             this.panel_theme4.TabIndex = 5;
@@ -409,7 +426,7 @@
             // 
             this.panel_theme3.AccessibleDescription = "";
             this.panel_theme3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme3.Location = new System.Drawing.Point(150, 94);
+            this.panel_theme3.Location = new System.Drawing.Point(150, 95);
             this.panel_theme3.Name = "panel_theme3";
             this.panel_theme3.Size = new System.Drawing.Size(28, 28);
             this.panel_theme3.TabIndex = 5;
@@ -419,7 +436,7 @@
             // 
             this.panel_theme6.AccessibleDescription = "";
             this.panel_theme6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme6.Location = new System.Drawing.Point(351, 94);
+            this.panel_theme6.Location = new System.Drawing.Point(351, 95);
             this.panel_theme6.Name = "panel_theme6";
             this.panel_theme6.Size = new System.Drawing.Size(28, 28);
             this.panel_theme6.TabIndex = 5;
@@ -429,7 +446,7 @@
             // 
             this.panel_theme10.AccessibleDescription = "";
             this.panel_theme10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme10.Location = new System.Drawing.Point(290, 94);
+            this.panel_theme10.Location = new System.Drawing.Point(290, 95);
             this.panel_theme10.Name = "panel_theme10";
             this.panel_theme10.Size = new System.Drawing.Size(28, 28);
             this.panel_theme10.TabIndex = 5;
@@ -439,7 +456,7 @@
             // 
             this.panel_theme17.AccessibleDescription = "";
             this.panel_theme17.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme17.Location = new System.Drawing.Point(608, 177);
+            this.panel_theme17.Location = new System.Drawing.Point(608, 230);
             this.panel_theme17.Name = "panel_theme17";
             this.panel_theme17.Size = new System.Drawing.Size(28, 28);
             this.panel_theme17.TabIndex = 5;
@@ -449,7 +466,7 @@
             // 
             this.panel_theme16.AccessibleDescription = "";
             this.panel_theme16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme16.Location = new System.Drawing.Point(608, 137);
+            this.panel_theme16.Location = new System.Drawing.Point(608, 185);
             this.panel_theme16.Name = "panel_theme16";
             this.panel_theme16.Size = new System.Drawing.Size(28, 28);
             this.panel_theme16.TabIndex = 5;
@@ -459,7 +476,7 @@
             // 
             this.panel_theme14.AccessibleDescription = "";
             this.panel_theme14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme14.Location = new System.Drawing.Point(472, 177);
+            this.panel_theme14.Location = new System.Drawing.Point(472, 230);
             this.panel_theme14.Name = "panel_theme14";
             this.panel_theme14.Size = new System.Drawing.Size(28, 28);
             this.panel_theme14.TabIndex = 5;
@@ -469,7 +486,7 @@
             // 
             this.panel_theme13.AccessibleDescription = "";
             this.panel_theme13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme13.Location = new System.Drawing.Point(472, 137);
+            this.panel_theme13.Location = new System.Drawing.Point(472, 185);
             this.panel_theme13.Name = "panel_theme13";
             this.panel_theme13.Size = new System.Drawing.Size(28, 28);
             this.panel_theme13.TabIndex = 5;
@@ -479,7 +496,7 @@
             // 
             this.panel_theme12.AccessibleDescription = "";
             this.panel_theme12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme12.Location = new System.Drawing.Point(413, 94);
+            this.panel_theme12.Location = new System.Drawing.Point(413, 95);
             this.panel_theme12.Name = "panel_theme12";
             this.panel_theme12.Size = new System.Drawing.Size(28, 28);
             this.panel_theme12.TabIndex = 5;
@@ -509,7 +526,7 @@
             // 
             this.panel_theme8.AccessibleDescription = "";
             this.panel_theme8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme8.Location = new System.Drawing.Point(231, 94);
+            this.panel_theme8.Location = new System.Drawing.Point(231, 95);
             this.panel_theme8.Name = "panel_theme8";
             this.panel_theme8.Size = new System.Drawing.Size(28, 28);
             this.panel_theme8.TabIndex = 5;
@@ -604,7 +621,7 @@
             this.groupBox1.Controls.Add(this.textBox_Font);
             this.groupBox1.Location = new System.Drawing.Point(3, 344);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(656, 114);
+            this.groupBox1.Size = new System.Drawing.Size(724, 114);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Other Controls";
@@ -618,11 +635,30 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Font";
             // 
+            // panel_theme35
+            // 
+            this.panel_theme35.AccessibleDescription = "";
+            this.panel_theme35.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme35.Location = new System.Drawing.Point(669, 140);
+            this.panel_theme35.Name = "panel_theme35";
+            this.panel_theme35.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme35.TabIndex = 5;
+            this.panel_theme35.Tag = "";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(651, 27);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(62, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Tab Control";
+            // 
             // ThemeEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(672, 512);
+            this.ClientSize = new System.Drawing.Size(736, 504);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxColors);
@@ -648,7 +684,6 @@
         private System.Windows.Forms.Panel panel_theme19;
         private System.Windows.Forms.Panel panel_theme18;
         private System.Windows.Forms.TextBox textBox_Font;
-        private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label21;
@@ -694,5 +729,9 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel panel_theme32;
+        private System.Windows.Forms.Panel panel_theme33;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel panel_theme35;
     }
 }
