@@ -867,18 +867,18 @@ namespace EDDiscovery2
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
-            if (!_kbdActions.Any())
+            CalculateTimeDelta();
+            if (!_kbdActions.Any() && (_cameraSlewProgress == 0.0f || _cameraSlewProgress >= 1.0f))
             {
-                _ticks = 0;
+                _ticks = 1;
                 _oldTickCount = DateTime.Now.Ticks / 10000;
             }
-            CalculateTimeDelta();
             HandleInputs();
             DoCameraSlew();
             UpdateCamera();
             Render();
 
-            if (_kbdActions.Any())
+            if (_kbdActions.Any() || _cameraSlewProgress < 1.0f)
             {
                 if (_useTimer)
                 {
