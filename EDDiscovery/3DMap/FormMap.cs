@@ -77,6 +77,7 @@ namespace EDDiscovery2
 
         public string HistorySelection { get; set; }
         public List<FGEImage> fgeimages = new List<FGEImage>();
+        public List<FGEImage> selectedmaps = new List<FGEImage>();
 
         private float _znear;
         private float _zfar;
@@ -277,7 +278,7 @@ namespace EDDiscovery2
 
             InitStarLists();
 
-            FGEImage[] mapimages = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
+            selectedmaps = GetSelectedMaps();
 
             var builder = new DatasetBuilder()
             {
@@ -288,13 +289,13 @@ namespace EDDiscovery2
 
                 VisitedSystems = VisitedSystems,
 
-                Images = mapimages,
+                Images = selectedmaps.ToArray(),
 
                 GridLines = toolStripButtonGrid.Checked,
                 DrawLines = toolStripButtonDrawLines.Checked,
                 AllSystems = toolStripButtonShowAllStars.Checked,
                 Stations = toolStripButtonStations.Checked,
-                UseImage = mapimages.Length != 0
+                UseImage = selectedmaps.Count != 0
             };
             if (_starList != null)
             {
@@ -813,6 +814,32 @@ namespace EDDiscovery2
                 item.Click += new EventHandler(dropdownMapNames_DropDownItemClicked);
                 dropdownMapNames.DropDownItems.Add(item);
             }
+        }
+
+        private List<FGEImage> GetSelectedMaps()
+        {
+            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
+            HashSet<string> newselected = new HashSet<string>(_selected.Select(f => f.FileName));
+            HashSet<string> oldselected = new HashSet<string>(selectedmaps.Select(f => f.FileName));
+            List<FGEImage> selected = new List<FGEImage>();
+
+            foreach (var sel in selectedmaps)
+            {
+                if (newselected.Contains(sel.FileName))
+                {
+                    selected.Add(sel);
+                }
+            }
+
+            foreach (var sel in _selected)
+            {
+                if (!oldselected.Contains(sel.FileName))
+                {
+                    selected.Add(sel);
+                }
+            }
+
+            return selected;
         }
 
         private void FormMap_Load(object sender, EventArgs e)
