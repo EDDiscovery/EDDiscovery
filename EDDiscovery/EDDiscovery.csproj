@@ -173,6 +173,10 @@
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\TabControlCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TabStyleCustom.cs" />
     <Compile Include="Controls\DrawnPanel.cs">
       <SubType>Component</SubType>
     </Compile>
