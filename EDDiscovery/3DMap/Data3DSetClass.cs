@@ -532,6 +532,181 @@ namespace EDDiscovery2._3DMap
         #endregion
     }
 
+    public class TexturedQuadData : IDrawingPrimative
+    {
+        public Vector3d[] Vertices;
+        public Vector4d[] Texcoords;
+        public Bitmap Texture;
+
+        public Color Color { get; set; }
+        public float Size { get; set; }
+        public PrimitiveType Type { get { return PrimitiveType.Quads; } }
+
+        private int _texid;
+        private GLControl _control;
+        private Bitmap _texture;
+
+        public TexturedQuadData(Vector3d[] vertices, Vector4d[] texcoords, Bitmap texture)
+        {
+            this.Vertices = vertices;
+            this.Texcoords = texcoords;
+            this.Texture = texture;
+        }
+
+        public void FreeTexture()
+        {
+            if (_control != null && _texid != 0)
+            {
+                if (_control.InvokeRequired)
+                {
+                    _control.Invoke(new Action(this.FreeTexture));
+                }
+                else
+                {
+                    GL.DeleteTexture(_texid);
+                    _texid = 0;
+                }
+            }
+        }
+
+        public void Draw(GLControl control)
+        {
+            if (_control != null && control != _control)
+            {
+                FreeTexture();
+            }
+
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new Action<GLControl>(this.Draw), control);
+            }
+            else
+            {
+                _control = control;
+
+                if (_texture != Texture)
+                {
+                    FreeTexture();
+                }
+
+                if (_texid == 0)
+                {
+                    Bitmap bmp = Texture;
+                    /*
+                    int newwidth = 1 << (int)(Math.Log(bmp.Width - 1, 2) + 1);
+                    int newheight = 1 << (int)(Math.Log(bmp.Height - 1, 2) + 1);
+                    if (bmp.Width != newwidth || bmp.Height != newheight)
+                    {
+                        bmp = new Bitmap(Texture, new Size(newwidth, newheight));
+                    }
+                     */
+                    GL.GenTextures(1, out _texid);
+                    GL.BindTexture(TextureTarget.Texture2D, _texid);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                    System.Drawing.Imaging.BitmapData bmpdata = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpdata.Width, bmpdata.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, bmpdata.Scan0);
+                    bmp.UnlockBits(bmpdata);
+                    _texture = Texture;
+                }
+
+                GL.Color3(Color);
+                GL.Enable(EnableCap.Texture2D);
+                GL.BindTexture(TextureTarget.Texture2D, _texid);
+                GL.Begin(PrimitiveType.Triangles);
+                GL.TexCoord4(Texcoords[0]);
+                GL.Vertex3(Vertices[0]);
+                GL.TexCoord4(Texcoords[1]);
+                GL.Vertex3(Vertices[1]);
+                GL.TexCoord4(Texcoords[2]);
+                GL.Vertex3(Vertices[2]);
+                GL.TexCoord4(Texcoords[0]);
+                GL.Vertex3(Vertices[0]);
+                GL.TexCoord4(Texcoords[2]);
+                GL.Vertex3(Vertices[2]);
+                GL.TexCoord4(Texcoords[3]);
+                GL.Vertex3(Vertices[3]);
+                GL.End();
+                GL.Disable(EnableCap.Texture2D);
+            }
+        }
+
+        protected static Vector3d[] GetVertices(FGEImage img)
+        {
+            return new Vector3d[]
+            {
+                new Vector3d(img.TopLeft.X, 0.0, img.TopLeft.Y),
+                new Vector3d(img.TopRight.X, 0.0, img.TopRight.Y),
+                new Vector3d(img.BottomRight.X, 0.0, img.BottomRight.Y),
+                new Vector3d(img.BottomLeft.X, 0.0, img.BottomLeft.Y)
+            };
+        }
+
+        protected static Vector4d[] GetTexCoords(FGEImage img, int width, int height)
+        {
+            Vector4d[] texcoords = new Vector4d[]
+            {
+                new Vector4d(img.pxTopLeft.X * 1.0 / width, img.pxTopLeft.Y * 1.0 / height, 0, 1),
+                new Vector4d(img.pxTopRight.X * 1.0 / width, img.pxTopRight.Y * 1.0 / height, 0, 1),
+                new Vector4d(img.pxBottomRight.X * 1.0 / width, img.pxBottomRight.Y * 1.0 / height, 0, 1),
+                new Vector4d(img.pxBottomLeft.X * 1.0 / width, img.pxBottomRight.Y * 1.0 / height, 0, 1)
+            };
+
+            if (img.TopLeft.X == img.BottomLeft.X &&
+                img.TopRight.X == img.BottomRight.X &&
+                img.TopLeft.Y == img.TopRight.Y &&
+                img.BottomLeft.Y == img.BottomRight.Y)
+            {
+                Vector2d a = new Vector2d(img.pxTopRight.X - img.pxBottomLeft.X, img.pxTopRight.Y - img.pxBottomLeft.Y);
+                Vector2d b = new Vector2d(img.pxTopLeft.X - img.pxBottomRight.X, img.pxTopLeft.Y - img.pxBottomRight.Y);
+                double cross = a.X * b.Y - b.X * a.Y;
+
+                if (cross != 0)
+                {
+                    Vector2d c = new Vector2d(img.pxBottomLeft.X - img.pxBottomRight.X, img.pxBottomLeft.Y - img.pxBottomRight.Y);
+                    double qa = (a.X * c.Y - c.X * a.Y) / cross;
+                    double qb = (b.X * c.Y - c.X * b.Y) / cross;
+                    if (qa > 0 && qa < 1 && qb > 0 && qb < 1)
+                    {
+                        texcoords = new Vector4d[]
+                        {
+                            texcoords[0] * qb,
+                            texcoords[1] * qa,
+                            texcoords[2] * (1 - qb),
+                            texcoords[3] * (1 - qa)
+                        };
+                    }
+                }
+            }
+
+            return texcoords;
+        }
+
+        public static TexturedQuadData FromFGEImage(FGEImage img)
+        {
+            Bitmap bmp = (Bitmap)Bitmap.FromFile(img.FilePath);
+            Vector3d[] vertices = GetVertices(img);
+            Vector4d[] texcoords = GetTexCoords(img, bmp.Width, bmp.Height);
+            return new TexturedQuadData(vertices, texcoords, bmp);
+        }
+    }
+
+    public class TexturedQuadDataCollection : Data3DSetClass<TexturedQuadData>, IDisposable
+    {
+        public TexturedQuadDataCollection(string name, Color color, float pointsize)
+            : base(name, color, pointsize)
+        {
+        }
+
+        public void Dispose()
+        {
+            foreach (var primitive in Primatives)
+            {
+                primitive.FreeTexture();
+            }
+        }
+    }
+
     public class Data3DSetClass<T> : IData3DSet where T : IDrawingPrimative
     {
         public string Name { get; set; }
@@ -583,6 +758,10 @@ namespace EDDiscovery2._3DMap
             else if (typeof(T) == typeof(LineData))
             {
                 return new LineDataCollection(name, color, pointsize) as Data3DSetClass<T>;
+            }
+            else if (typeof(T) == typeof(TexturedQuadData))
+            {
+                return new TexturedQuadDataCollection(name, color, pointsize) as Data3DSetClass<T>;
             }
             else
             {
