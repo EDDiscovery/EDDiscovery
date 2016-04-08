@@ -76,6 +76,7 @@ namespace EDDiscovery2
         public List<SystemClass> PlannedRoute { get; set; }
 
         public string HistorySelection { get; set; }
+        public List<FGEImage> fgeimages = new List<FGEImage>();
 
         private float _znear;
         private float _zfar;
@@ -276,6 +277,8 @@ namespace EDDiscovery2
 
             InitStarLists();
 
+            FGEImage[] mapimages = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
+
             var builder = new DatasetBuilder()
             {
                 // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
@@ -285,10 +288,13 @@ namespace EDDiscovery2
 
                 VisitedSystems = VisitedSystems,
 
+                Images = mapimages,
+
                 GridLines = toolStripButtonGrid.Checked,
                 DrawLines = toolStripButtonDrawLines.Checked,
                 AllSystems = toolStripButtonShowAllStars.Checked,
-                Stations = toolStripButtonStations.Checked
+                Stations = toolStripButtonStations.Checked,
+                UseImage = mapimages.Length != 0
             };
             if (_starList != null)
             {
@@ -785,9 +791,34 @@ namespace EDDiscovery2
             GL.PopMatrix();
         }
 
+        private void LoadMapImages()
+        {
+            string datapath = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Maps");
+            if (System.IO.Directory.Exists(datapath))
+            {
+                fgeimages = FGEImage.LoadImages(datapath);
+                fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
+            }
+
+            dropdownMapNames.DropDownItems.Clear();
+
+            foreach (var img in fgeimages)
+            {
+                var item = new ToolStripButton {
+                    Text = img.FileName,
+                    CheckOnClick = true,
+                    DisplayStyle = ToolStripItemDisplayStyle.Text,
+                    Tag = img
+                };
+                item.Click += new EventHandler(dropdownMapNames_DropDownItemClicked);
+                dropdownMapNames.DropDownItems.Add(item);
+            }
+        }
+
         private void FormMap_Load(object sender, EventArgs e)
         {
             textboxFrom.AutoCompleteCustomSource = _systemNames;
+            LoadMapImages();
             ShowCenterSystem();
             GenerateDataSets();
             labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
@@ -1158,6 +1189,11 @@ namespace EDDiscovery2
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
             glControl.Invalidate();
+        }
+
+        private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
+        {
+            SetCenterSystem(CenterSystem);
         }
     }
 }
