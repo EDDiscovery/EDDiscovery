@@ -59,6 +59,7 @@ namespace EDDiscovery2
             this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
             this.dotSystemCoords = new System.Windows.Forms.PictureBox();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.dropdownFilterDate = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).BeginInit();
@@ -131,7 +132,8 @@ namespace EDDiscovery2
             this.toolStripButtonGrid,
             this.toolStripButtonPerspective,
             this.toolStripSeparator1,
-            this.dropdownMapNames});
+            this.dropdownMapNames,
+            this.dropdownFilterDate});
             this.toolStripShowAllStars.Location = new System.Drawing.Point(0, 0);
             this.toolStripShowAllStars.Name = "toolStripShowAllStars";
             this.toolStripShowAllStars.Size = new System.Drawing.Size(918, 31);
@@ -301,6 +303,15 @@ namespace EDDiscovery2
             // 
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
             // 
+            // dropdownFilterDate
+            // 
+            this.dropdownFilterDate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dropdownFilterDate.Image = ((System.Drawing.Image)(resources.GetObject("dropdownFilterDate.Image")));
+            this.dropdownFilterDate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dropdownFilterDate.Name = "dropdownFilterDate";
+            this.dropdownFilterDate.Size = new System.Drawing.Size(29, 28);
+            this.dropdownFilterDate.Text = "Filter by Expedition or date";
+            // 
             // FormMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -361,5 +372,6 @@ namespace EDDiscovery2
         private Timer UpdateTimer;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripDropDownButton dropdownMapNames;
+        private ToolStripDropDownButton dropdownFilterDate;
     }
     }
