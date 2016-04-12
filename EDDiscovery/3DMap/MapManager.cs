@@ -27,9 +27,20 @@ namespace EDDiscovery2._3DMap
 
         public void Show()
         {
-            _formMap.Prepare();
+            Show(true);
+        }
+
+        public void Show(bool CenterFromSettings)
+        {
+            Show(CenterFromSettings, -1);
+        }
+
+        public void Show(bool CenterFromSettings, float OverrideZoom)
+        {
+            _formMap.Prepare(CenterFromSettings, OverrideZoom);
             _formMap.Show();
             _formMap.Focus();
         }
+
     }
 }

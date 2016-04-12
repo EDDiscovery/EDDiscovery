@@ -38,6 +38,9 @@
             this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textBoxSystemName = new ExtendedControls.TextBoxBorder();
+            this.trilatContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textBoxSystemName = new System.Windows.Forms.TextBox();
             this.labelTargetSystem = new System.Windows.Forms.Label();
             this.labelCoordinates = new System.Windows.Forms.Label();
             this.textBoxCoordinateX = new ExtendedControls.TextBoxBorder();
@@ -55,8 +58,10 @@
             this.dataGridViewSuggestedSystems = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnSuggestedSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
+            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumnClosestSystemsDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.wantedContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeFromWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.richTextBox_History = new ExtendedControls.RichTextBoxBorder();
             this.labelSuggestedSystems = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -70,6 +75,7 @@
             this.textBox_status = new ExtendedControls.TextBoxBorder();
             this.labelstpos = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
+            this.trilatContextMenu.SuspendLayout();
             this.panelImplementation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -77,6 +83,7 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuggestedSystems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).BeginInit();
+            this.wantedContextMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel_controls.SuspendLayout();
             this.SuspendLayout();
@@ -89,6 +96,7 @@
             this.ColumnDistance,
             this.ColumnCalculated,
             this.ColumnStatus});
+            this.dataGridViewDistances.ContextMenuStrip = this.trilatContextMenu;
             this.dataGridViewDistances.Dock = System.Windows.Forms.DockStyle.Left;
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
@@ -132,6 +140,20 @@
             this.ColumnStatus.MinimumWidth = 75;
             this.ColumnStatus.Name = "ColumnStatus";
             this.ColumnStatus.ReadOnly = true;
+            // 
+            // trilatContextMenu
+            // 
+            this.trilatContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToWantedSystemsToolStripMenuItem});
+            this.trilatContextMenu.Name = "trilatContextMenu";
+            this.trilatContextMenu.Size = new System.Drawing.Size(198, 26);
+            // 
+            // addToWantedSystemsToolStripMenuItem
+            // 
+            this.addToWantedSystemsToolStripMenuItem.Name = "addToWantedSystemsToolStripMenuItem";
+            this.addToWantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.addToWantedSystemsToolStripMenuItem.Text = "Add to wanted systems";
+            this.addToWantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.addToWantedSystemsToolStripMenuItem_Click);
             // 
             // textBoxSystemName
             // 
@@ -346,8 +368,9 @@
             this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewClosestSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewClosestSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumnClosestSystemsSystem,
-            this.dataGridViewTextBoxColumnClosestSystemsDistance});
+            this.Source,
+            this.dataGridViewTextBoxColumnClosestSystemsSystem});
+            this.dataGridViewClosestSystems.ContextMenuStrip = this.wantedContextMenu;
             this.dataGridViewClosestSystems.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewClosestSystems.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridViewClosestSystems.Location = new System.Drawing.Point(538, 0);
@@ -358,6 +381,12 @@
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
+            // Source
+            // 
+            this.Source.HeaderText = "Source";
+            this.Source.Name = "Source";
+            this.Source.ReadOnly = true;
+            // 
             // dataGridViewTextBoxColumnClosestSystemsSystem
             // 
             this.dataGridViewTextBoxColumnClosestSystemsSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -366,14 +395,19 @@
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
             // 
-            // dataGridViewTextBoxColumnClosestSystemsDistance
+            // wantedContextMenu
             // 
-            this.dataGridViewTextBoxColumnClosestSystemsDistance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.dataGridViewTextBoxColumnClosestSystemsDistance.HeaderText = "Distance";
-            this.dataGridViewTextBoxColumnClosestSystemsDistance.MinimumWidth = 80;
-            this.dataGridViewTextBoxColumnClosestSystemsDistance.Name = "dataGridViewTextBoxColumnClosestSystemsDistance";
-            this.dataGridViewTextBoxColumnClosestSystemsDistance.ReadOnly = true;
-            this.dataGridViewTextBoxColumnClosestSystemsDistance.Width = 80;
+            this.wantedContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeFromWantedSystemsToolStripMenuItem});
+            this.wantedContextMenu.Name = "wantedContextMenu";
+            this.wantedContextMenu.Size = new System.Drawing.Size(234, 26);
+            // 
+            // removeFromWantedSystemsToolStripMenuItem
+            // 
+            this.removeFromWantedSystemsToolStripMenuItem.Name = "removeFromWantedSystemsToolStripMenuItem";
+            this.removeFromWantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.removeFromWantedSystemsToolStripMenuItem.Text = "Remove from wanted systems";
+            this.removeFromWantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.removeFromWantedSystemsToolStripMenuItem_Click);
             // 
             // richTextBox_History
             // 
@@ -521,6 +555,7 @@
             this.Name = "TrilaterationControl";
             this.Size = new System.Drawing.Size(924, 681);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).EndInit();
+            this.trilatContextMenu.ResumeLayout(false);
             this.panelImplementation.ResumeLayout(false);
             this.panelImplementation.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -529,6 +564,7 @@
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuggestedSystems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).EndInit();
+            this.wantedContextMenu.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.panel_controls.ResumeLayout(false);
@@ -568,13 +604,17 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton toolStripButtonRemoveUnused;
         private System.Windows.Forms.Panel panel_controls;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnClosestSystemsSystem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnClosestSystemsDistance;
         private System.Windows.Forms.Label labelstpos;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
         private ExtendedControls.TextBoxBorder textBox_status;
+        private System.Windows.Forms.ContextMenuStrip trilatContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem addToWantedSystemsToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip wantedContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem removeFromWantedSystemsToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Source;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnClosestSystemsSystem;
     }
 }

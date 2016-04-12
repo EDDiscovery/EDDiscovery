@@ -18,9 +18,11 @@ namespace EDDiscovery2._3DMap
         private List<IData3DSet> _datasets;
 
         public ISystem CenterSystem { get; set; } = new SystemClass();
+        public ISystem SelectedSystem { get; set; } = new SystemClass();
         public List<ISystem> StarList { get; set; } = new List<ISystem>();
         public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
         public List<SystemPosition> VisitedSystems { get; set; }
+        public List<ISystem> PlannedRoute { get; set; } = new List<ISystem>();
 
         public bool GridLines { get; set; } = false;
         public bool DrawLines { get; set; } = false;
@@ -42,8 +44,10 @@ namespace EDDiscovery2._3DMap
             AddStations();
             AddVisitedSystemsInformation();
             AddCenterPointToDataset();
+            AddSelectedSystemToDataset();
             AddPOIsToDataset();
             AddTrilaterationInfoToDataset();
+            AddRoutePlannerInfoToDataset();
 
             return _datasets;
         }
@@ -54,7 +58,7 @@ namespace EDDiscovery2._3DMap
             if (GridLines)
             {
                 bool addstations = !Stations;
-                var datasetGrid = new Data3DSetClass<LineData>("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
+                var datasetGrid = Data3DSetClass<LineData>.Create("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
 
                 for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
                 {
@@ -74,7 +78,7 @@ namespace EDDiscovery2._3DMap
             if (AllSystems && StarList != null)
             {
                 bool addstations = !Stations;
-                var datasetS = new Data3DSetClass<PointData>("stars", Color.White, 1.0f);
+                var datasetS = Data3DSetClass<PointData>.Create("stars", Color.White, 1.0f);
 
                 foreach (ISystem si in StarList)
                 {
@@ -89,7 +93,7 @@ namespace EDDiscovery2._3DMap
         {
             if (Stations)
             {
-                var datasetS = new Data3DSetClass<PointData>("stations", Color.RoyalBlue, 1.0f);
+                var datasetS = Data3DSetClass<PointData>.Create("stations", Color.RoyalBlue, 1.0f);
 
                 foreach (ISystem si in StarList)
                 {
@@ -119,7 +123,7 @@ namespace EDDiscovery2._3DMap
                     {
                         if (DrawLines)
                         {
-                            var datasetl = new Data3DSetClass<LineData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                            var datasetl = Data3DSetClass<LineData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
                             foreach (SystemPosition sp in colour)
                             {
                                 if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
@@ -133,7 +137,7 @@ namespace EDDiscovery2._3DMap
                         }
                         else
                         {
-                            var datasetvs = new Data3DSetClass<PointData>("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                            var datasetvs = Data3DSetClass<PointData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
                             foreach (SystemPosition sp in colour)
                             {
                                 ISystem star = SystemData.GetSystem(sp.Name);
@@ -155,16 +159,28 @@ namespace EDDiscovery2._3DMap
         // dataset anymore. The origin will stay at Sol.
         public void AddCenterPointToDataset()
         {
-            var dataset = new Data3DSetClass<PointData>("Center", Color.Yellow, 5.0f);
+            var dataset = Data3DSetClass<PointData>.Create("Center", Color.Yellow, 5.0f);
 
             //GL.Enable(EnableCap.ProgramPointSize);
             dataset.Add(new PointData(CenterSystem.x, CenterSystem.y, CenterSystem.z));
             _datasets.Add(dataset);
         }
 
+        public void AddSelectedSystemToDataset()
+        {
+            if (SelectedSystem != null)
+            {
+                var dataset = Data3DSetClass<PointData>.Create("Selected", Color.Orange, 5.0f);
+
+                //GL.Enable(EnableCap.ProgramPointSize);
+                dataset.Add(new PointData(SelectedSystem.x, SelectedSystem.y, SelectedSystem.z));
+                _datasets.Add(dataset);
+            }
+        }
+
         public void AddPOIsToDataset()
         {
-            var dataset = new Data3DSetClass<PointData>("Interest", Color.Purple, 10.0f);
+            var dataset = Data3DSetClass<PointData>.Create("Interest", Color.Purple, 10.0f);
             AddSystem("sol", dataset);
             AddSystem("sagittarius a*", dataset);
             //AddSystem("polaris", dataset);
@@ -175,7 +191,7 @@ namespace EDDiscovery2._3DMap
         {
             if (ReferenceSystems != null && ReferenceSystems.Any())
             {
-                var referenceLines = new Data3DSetClass<LineData>("CurrentReference", Color.Green, 5.0f);
+                var referenceLines = Data3DSetClass<LineData>.Create("CurrentReference", Color.Green, 5.0f);
                 foreach (var refSystem in ReferenceSystems)
                 {
                     referenceLines.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, refSystem.x, refSystem.y, refSystem.z));
@@ -183,7 +199,7 @@ namespace EDDiscovery2._3DMap
 
                 _datasets.Add(referenceLines);
 
-                var lineSet = new Data3DSetClass<LineData>("SuggestedReference", Color.DarkOrange, 5.0f);
+                var lineSet = Data3DSetClass<LineData>.Create("SuggestedReference", Color.DarkOrange, 5.0f);
 
 
                 Stopwatch sw = new Stopwatch();
@@ -206,6 +222,21 @@ namespace EDDiscovery2._3DMap
             }
         }
 
+        public void AddRoutePlannerInfoToDataset()
+        {
+            if (PlannedRoute != null && PlannedRoute.Any())
+            {
+                var routeLines = Data3DSetClass<LineData>.Create("PlannedRoute", Color.DarkOrange, 25.0f);
+                ISystem prevSystem = PlannedRoute.First();
+                foreach (ISystem point in PlannedRoute.Skip(1))
+                {
+                    routeLines.Add(new LineData(prevSystem.x, prevSystem.y, prevSystem.z, point.x, point.y, point.z));
+                    prevSystem = point;
+                }
+                _datasets.Add(routeLines);
+            }
+        }
+
         private void AddSystem(string systemName, Data3DSetClass<PointData> dataset)
         {
             AddSystem(SystemData.GetSystem(systemName), dataset);
@@ -224,6 +255,11 @@ namespace EDDiscovery2._3DMap
             ISystem lastknownps = null;
             foreach (SystemPosition ps in VisitedSystems)
             {
+                if (ps.curSystem == null)
+                {
+                    ps.curSystem = SystemData.GetSystem(ps.Name);
+                }
+
                 if (ps.curSystem != null && ps.curSystem.HasCoordinate)
                 {
                     ps.lastKnownSystem = lastknownps;

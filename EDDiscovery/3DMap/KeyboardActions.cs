@@ -40,5 +40,9 @@ namespace EDDiscovery2._3DMap
             ZoomOut = false;
         }
 
+        public bool Any()
+        {
+            return Left || Right || Up || Down || Forwards || Backwards || Pitch || Dive || YawLeft || YawRight || RollLeft || RollRight || ZoomIn || ZoomOut;
+        }
     }
 }

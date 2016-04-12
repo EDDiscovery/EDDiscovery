@@ -183,7 +183,7 @@ namespace EDDiscovery
 
 
             if (visitedSystems == null || visitedSystems.Count == 0)
-                GetVisitedSystems(activecommander);
+                GetVisitedSystems();
 
             if (visitedSystems == null)
                 return;
@@ -255,9 +255,9 @@ namespace EDDiscovery
                 FilterGridView();
         }
 
-        private void GetVisitedSystems(int commander)
+        private void GetVisitedSystems()
         {                                                       // for backwards compatibility, don't store RGB value.
-            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour, commander);
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
@@ -572,6 +572,7 @@ namespace EDDiscovery
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 activecommander = itm.Nr;
+                netlog.ActiveCommander = itm.Nr;
                 if (visitedSystems != null)
                     visitedSystems.Clear();
                 RefreshHistory();
@@ -609,17 +610,21 @@ namespace EDDiscovery
             var selectedLine = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
                                                            .OrderBy(row => row.Index)
-                                                           .First().Index;
-            SystemPosition selectedSys;
-            do
+                                                           .Select(r => (int?)r.Index)
+                                                           .FirstOrDefault() ?? -1;
+            SystemPosition selectedSys = null;
+            if (selectedLine >= 0)
             {
-                selectedSys = (SystemPosition)dataGridViewTravel.Rows[selectedLine].Cells[1].Tag;
-                selectedLine += 1;
-            } while (!selectedSys.curSystem.HasCoordinate && selectedLine <= dataGridViewTravel.Rows.Count);
+                do
+                {
+                    selectedSys = (SystemPosition)dataGridViewTravel.Rows[selectedLine].Cells[1].Tag;
+                    selectedLine += 1;
+                } while (!selectedSys.curSystem.HasCoordinate && selectedLine < dataGridViewTravel.Rows.Count);
+            }
             _discoveryForm.updateMapData();
             map.Instance.Reset();
                         
-            map.Instance.HistorySelection = selectedSys.curSystem.HasCoordinate ? selectedSys.Name : textBoxSystem.Text.Trim();
+            map.Instance.HistorySelection = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
             map.Show();
         }
 
@@ -909,10 +914,19 @@ namespace EDDiscovery
 
         private int GetVisitsCount(string name)
         {
-            int count = (from row in visitedSystems
-                         where row.Name == name
-                         select row).Count();
-            return count;
+            try
+            {
+                int count = (from row in visitedSystems
+                             where row.Name == name
+                             select row).Count();
+                return count;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception GetVisitsCount: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                return 0;
+            }
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -1191,31 +1205,7 @@ namespace EDDiscovery
                 this.Cursor = Cursors.Default;
             }
         }
-
-
-
-        /* Add selected systems to trilateration grid */
-        private void addToTrilaterationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
-
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
-                                                                        .Select(cell => cell.OwningRow)
-                                                                        .Distinct()
-                                                                        .OrderBy(cell => cell.Index);
-
-            this.Cursor = Cursors.WaitCursor;
-            string sysName = "";
-            foreach (DataGridViewRow r in selectedRows)
-            {
-                sysName = r.Cells[1].Value.ToString();
-
-                tctrl.AddSystemToDataGridViewDistances(sysName);
-            }
-
-            this.Cursor = Cursors.Default;
-        }
-
+        
         private void textBoxPrevSystem_Enter(object sender, EventArgs e)
         {
             /* Automatically copy the contents to the clipboard whenever this control is activated */
@@ -1239,6 +1229,96 @@ namespace EDDiscovery
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void button2DMap_Click(object sender, EventArgs e)
+        {
+            FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm);
+
+            frm.Show();
+        }
+
+        private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[0].Value.ToString();
+
+                tctrl.AddSystemToDataGridViewDistances(sysName);
+            }
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void wantedSystemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[1].Value.ToString();
+
+                tctrl.AddWantedSystem(sysName);
+            }
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void bothToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[1].Value.ToString();
+                tctrl.AddSystemToDataGridViewDistances(sysName);
+                tctrl.AddWantedSystem(sysName);
+            }
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void trilaterationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[1].Value.ToString();
+                tctrl.AddSystemToDataGridViewDistances(sysName);
+            }
+
+            this.Cursor = Cursors.Default;
         }
     }
 
