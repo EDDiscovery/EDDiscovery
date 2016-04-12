@@ -30,12 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new ExtendedControls.GroupBoxCustom();
             this.button_Browse = new ExtendedControls.ButtonExt();
             this.textBoxNetLogDir = new ExtendedControls.TextBoxBorder();
-            this.radioButton_Manual = new System.Windows.Forms.RadioButton();
-            this.radioButton_Auto = new System.Windows.Forms.RadioButton();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.radioButton_Manual = new ExtendedControls.RadioButtonCustom();
+            this.radioButton_Auto = new ExtendedControls.RadioButtonCustom();
+            this.groupBox4 = new ExtendedControls.GroupBoxCustom();
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.label2 = new System.Windows.Forms.Label();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
@@ -43,22 +43,22 @@
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNetLogPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBox_Distances = new System.Windows.Forms.CheckBox();
-            this.checkBoxEDSMLog = new System.Windows.Forms.CheckBox();
-            this.checkboxSkipSlowUpdates = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new ExtendedControls.GroupBoxCustom();
+            this.checkBox_Distances = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxEDSMLog = new ExtendedControls.CheckBoxCustom();
+            this.checkboxSkipSlowUpdates = new ExtendedControls.CheckBoxCustom();
+            this.groupBox2 = new ExtendedControls.GroupBoxCustom();
             this.label17 = new System.Windows.Forms.Label();
             this.textBoxDefaultZoom = new ExtendedControls.TextBoxBorder();
             this.label5 = new System.Windows.Forms.Label();
-            this.radioButtonHistorySelection = new System.Windows.Forms.RadioButton();
-            this.radioButtonCentreHome = new System.Windows.Forms.RadioButton();
+            this.radioButtonHistorySelection = new ExtendedControls.RadioButtonCustom();
+            this.radioButtonCentreHome = new ExtendedControls.RadioButtonCustom();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxHomeSystem = new ExtendedControls.TextBoxBorder();
             this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBoxTheme = new System.Windows.Forms.GroupBox();
+            this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
             this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();
             this.button_edittheme = new ExtendedControls.ButtonExt();
             this.buttonSaveTheme = new ExtendedControls.ButtonExt();
@@ -72,21 +72,29 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBox1.BackColorScaling = 0.5F;
+            this.groupBox1.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBox1.BorderColorScaling = 0.5F;
             this.groupBox1.Controls.Add(this.button_Browse);
             this.groupBox1.Controls.Add(this.textBoxNetLogDir);
             this.groupBox1.Controls.Add(this.radioButton_Manual);
             this.groupBox1.Controls.Add(this.radioButton_Auto);
+            this.groupBox1.FillClientAreaWithAlternateColor = false;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(819, 87);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Elite Dangerous netlog location (If not override by commander settings below)";
+            this.groupBox1.TextPadding = 0;
+            this.groupBox1.TextStartPosition = -1;
             // 
             // button_Browse
             // 
             this.button_Browse.BorderColorScaling = 1.25F;
             this.button_Browse.ButtonColorScaling = 0.5F;
+            this.button_Browse.ButtonDisabledScaling = 0.5F;
             this.button_Browse.Location = new System.Drawing.Point(728, 46);
             this.button_Browse.Name = "button_Browse";
             this.button_Browse.Size = new System.Drawing.Size(75, 23);
@@ -119,6 +127,7 @@
             // radioButton_Auto
             // 
             this.radioButton_Auto.AutoSize = true;
+            this.radioButton_Auto.FontNerfReduction = 0.5F;
             this.radioButton_Auto.Location = new System.Drawing.Point(17, 26);
             this.radioButton_Auto.Name = "radioButton_Auto";
             this.radioButton_Auto.Size = new System.Drawing.Size(47, 17);
@@ -129,20 +138,28 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBox4.BackColorScaling = 0.5F;
+            this.groupBox4.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBox4.BorderColorScaling = 0.5F;
             this.groupBox4.Controls.Add(this.buttonAddCommander);
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.dataGridViewCommanders);
+            this.groupBox4.FillClientAreaWithAlternateColor = false;
             this.groupBox4.Location = new System.Drawing.Point(0, 93);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(819, 184);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Commanders";
+            this.groupBox4.TextPadding = 0;
+            this.groupBox4.TextStartPosition = -1;
             // 
             // buttonAddCommander
             // 
             this.buttonAddCommander.BorderColorScaling = 1.25F;
             this.buttonAddCommander.ButtonColorScaling = 0.5F;
+            this.buttonAddCommander.ButtonDisabledScaling = 0.5F;
             this.buttonAddCommander.Location = new System.Drawing.Point(11, 16);
             this.buttonAddCommander.Name = "buttonAddCommander";
             this.buttonAddCommander.Size = new System.Drawing.Size(104, 23);
@@ -213,20 +230,32 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBox3.BackColorScaling = 0.5F;
+            this.groupBox3.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBox3.BorderColorScaling = 0.5F;
             this.groupBox3.Controls.Add(this.checkBox_Distances);
             this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
             this.groupBox3.Controls.Add(this.checkboxSkipSlowUpdates);
+            this.groupBox3.FillClientAreaWithAlternateColor = false;
             this.groupBox3.Location = new System.Drawing.Point(3, 280);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(426, 100);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Controls";
+            this.groupBox3.TextPadding = 0;
+            this.groupBox3.TextStartPosition = -1;
             // 
             // checkBox_Distances
             // 
             this.checkBox_Distances.AutoSize = true;
+            this.checkBox_Distances.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBox_Distances.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBox_Distances.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBox_Distances.FontNerfReduction = 0.5F;
             this.checkBox_Distances.Location = new System.Drawing.Point(17, 18);
+            this.checkBox_Distances.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBox_Distances.Name = "checkBox_Distances";
             this.checkBox_Distances.Size = new System.Drawing.Size(346, 17);
             this.checkBox_Distances.TabIndex = 8;
@@ -236,7 +265,12 @@
             // checkBoxEDSMLog
             // 
             this.checkBoxEDSMLog.AutoSize = true;
+            this.checkBoxEDSMLog.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEDSMLog.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSMLog.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSMLog.FontNerfReduction = 0.5F;
             this.checkBoxEDSMLog.Location = new System.Drawing.Point(17, 41);
+            this.checkBoxEDSMLog.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
             this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
             this.checkBoxEDSMLog.TabIndex = 9;
@@ -247,7 +281,12 @@
             // 
             this.checkboxSkipSlowUpdates.AutoSize = true;
             this.checkboxSkipSlowUpdates.BackColor = System.Drawing.Color.Transparent;
+            this.checkboxSkipSlowUpdates.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkboxSkipSlowUpdates.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkboxSkipSlowUpdates.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkboxSkipSlowUpdates.FontNerfReduction = 0.5F;
             this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(17, 64);
+            this.checkboxSkipSlowUpdates.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
             this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
             this.checkboxSkipSlowUpdates.TabIndex = 11;
@@ -257,6 +296,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBox2.BackColorScaling = 0.5F;
+            this.groupBox2.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBox2.BorderColorScaling = 0.5F;
             this.groupBox2.Controls.Add(this.label17);
             this.groupBox2.Controls.Add(this.textBoxDefaultZoom);
             this.groupBox2.Controls.Add(this.label5);
@@ -266,12 +309,15 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.textBoxHomeSystem);
             this.groupBox2.Controls.Add(this.panel_defaultmapcolor);
+            this.groupBox2.FillClientAreaWithAlternateColor = false;
             this.groupBox2.Location = new System.Drawing.Point(440, 280);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(379, 100);
             this.groupBox2.TabIndex = 17;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "3D Map Settings";
+            this.groupBox2.TextPadding = 0;
+            this.groupBox2.TextStartPosition = -1;
             // 
             // label17
             // 
@@ -287,7 +333,7 @@
             this.textBoxDefaultZoom.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxDefaultZoom.BorderPadding = 1;
             this.textBoxDefaultZoom.BorderSize = 1;
-            this.textBoxDefaultZoom.Location = new System.Drawing.Point(118, 70);
+            this.textBoxDefaultZoom.Location = new System.Drawing.Point(120, 70);
             this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
@@ -305,7 +351,9 @@
             // radioButtonHistorySelection
             // 
             this.radioButtonHistorySelection.AutoSize = true;
-            this.radioButtonHistorySelection.Location = new System.Drawing.Point(216, 45);
+            this.radioButtonHistorySelection.FontNerfReduction = 0.5F;
+            this.radioButtonHistorySelection.Location = new System.Drawing.Point(224, 46);
+            this.radioButtonHistorySelection.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonHistorySelection.Name = "radioButtonHistorySelection";
             this.radioButtonHistorySelection.Size = new System.Drawing.Size(137, 17);
             this.radioButtonHistorySelection.TabIndex = 4;
@@ -316,7 +364,9 @@
             // radioButtonCentreHome
             // 
             this.radioButtonCentreHome.AutoSize = true;
-            this.radioButtonCentreHome.Location = new System.Drawing.Point(118, 45);
+            this.radioButtonCentreHome.FontNerfReduction = 0.5F;
+            this.radioButtonCentreHome.Location = new System.Drawing.Point(120, 46);
+            this.radioButtonCentreHome.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonCentreHome.Name = "radioButtonCentreHome";
             this.radioButtonCentreHome.Size = new System.Drawing.Size(90, 17);
             this.radioButtonCentreHome.TabIndex = 3;
@@ -367,15 +417,22 @@
             // 
             // groupBoxTheme
             // 
+            this.groupBoxTheme.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxTheme.BackColorScaling = 0.5F;
+            this.groupBoxTheme.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxTheme.BorderColorScaling = 0.5F;
             this.groupBoxTheme.Controls.Add(this.comboBoxTheme);
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
+            this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
             this.groupBoxTheme.Location = new System.Drawing.Point(4, 403);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(425, 120);
             this.groupBoxTheme.TabIndex = 18;
             this.groupBoxTheme.TabStop = false;
             this.groupBoxTheme.Text = "Theme";
+            this.groupBoxTheme.TextPadding = 0;
+            this.groupBoxTheme.TextStartPosition = -1;
             // 
             // comboBoxTheme
             // 
@@ -383,6 +440,8 @@
             this.comboBoxTheme.BackColor = System.Drawing.Color.Gray;
             this.comboBoxTheme.BorderColor = System.Drawing.Color.Red;
             this.comboBoxTheme.ButtonColorScaling = 0.5F;
+            this.comboBoxTheme.DataSource = null;
+            this.comboBoxTheme.DisplayMember = null;
             this.comboBoxTheme.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxTheme.DropDownHeight = 150;
             this.comboBoxTheme.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -396,11 +455,13 @@
             this.comboBoxTheme.SelectedItem = null;
             this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
             this.comboBoxTheme.TabIndex = 0;
+            this.comboBoxTheme.ValueMember = null;
             // 
             // button_edittheme
             // 
             this.button_edittheme.BorderColorScaling = 1.25F;
             this.button_edittheme.ButtonColorScaling = 0.5F;
+            this.button_edittheme.ButtonDisabledScaling = 0.5F;
             this.button_edittheme.Location = new System.Drawing.Point(291, 63);
             this.button_edittheme.Name = "button_edittheme";
             this.button_edittheme.Size = new System.Drawing.Size(95, 23);
@@ -413,6 +474,7 @@
             // 
             this.buttonSaveTheme.BorderColorScaling = 1.25F;
             this.buttonSaveTheme.ButtonColorScaling = 0.5F;
+            this.buttonSaveTheme.ButtonDisabledScaling = 0.5F;
             this.buttonSaveTheme.Location = new System.Drawing.Point(291, 19);
             this.buttonSaveTheme.Name = "buttonSaveTheme";
             this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
@@ -448,24 +510,24 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
+        private ExtendedControls.GroupBoxCustom groupBox1;
         private ExtendedControls.ButtonExt button_Browse;
         private ExtendedControls.TextBoxBorder textBoxNetLogDir;
-        private System.Windows.Forms.RadioButton radioButton_Manual;
-        private System.Windows.Forms.RadioButton radioButton_Auto;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private ExtendedControls.RadioButtonCustom radioButton_Manual;
+        private ExtendedControls.RadioButtonCustom radioButton_Auto;
+        private ExtendedControls.GroupBoxCustom groupBox4;
         private ExtendedControls.ButtonExt buttonAddCommander;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dataGridViewCommanders;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.CheckBox checkBox_Distances;
-        private System.Windows.Forms.CheckBox checkBoxEDSMLog;
-        public System.Windows.Forms.CheckBox checkboxSkipSlowUpdates;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private ExtendedControls.GroupBoxCustom groupBox3;
+        private ExtendedControls.CheckBoxCustom checkBox_Distances;
+        private ExtendedControls.CheckBoxCustom checkBoxEDSMLog;
+        public ExtendedControls.CheckBoxCustom checkboxSkipSlowUpdates;
+        private ExtendedControls.GroupBoxCustom groupBox2;
         private ExtendedControls.TextBoxBorder textBoxDefaultZoom;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.RadioButton radioButtonHistorySelection;
-        private System.Windows.Forms.RadioButton radioButtonCentreHome;
+        private ExtendedControls.RadioButtonCustom radioButtonHistorySelection;
+        private ExtendedControls.RadioButtonCustom radioButtonCentreHome;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private ExtendedControls.TextBoxBorder textBoxHomeSystem;
@@ -479,6 +541,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
         private System.Windows.Forms.Label label17;
         private ExtendedControls.ButtonExt button_edittheme;
-        private System.Windows.Forms.GroupBox groupBoxTheme;
+        private ExtendedControls.GroupBoxCustom groupBoxTheme;
     }
 }
