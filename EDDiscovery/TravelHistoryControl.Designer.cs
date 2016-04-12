@@ -45,14 +45,13 @@
             this.trilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.comboBoxHistoryWindow = new System.Windows.Forms.ComboBox();
+            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.panel_system = new System.Windows.Forms.Panel();
             this.label_warning = new System.Windows.Forms.Label();
             this.buttonMap3D = new System.Windows.Forms.Button();
             this.textBoxSystem = new System.Windows.Forms.TextBox();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel_system = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -87,7 +86,6 @@
             this.richTextBox_History = new ExtendedControls.RichTextBoxBorder();
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.textBoxDistanceToNextSystem = new ExtendedControls.TextBoxBorder();
-            this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
             this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
             this.buttonTrilaterate = new ExtendedControls.ButtonExt();
@@ -108,7 +106,7 @@
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
             this.historyContextMenu.SuspendLayout();
-            this.panel_system.SuspendLayout();
+            //this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
             this.closestContextMenu.SuspendLayout();
@@ -242,9 +240,7 @@
             // 
             // comboBoxHistoryWindow
             // 
-            this.comboBoxHistoryWindow.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxHistoryWindow.FormattingEnabled = true;
-            this.comboBoxHistoryWindow.Items.AddRange(new object[] {
+            this.comboBoxHistoryWindow.Items.AddRange(new string[] {
             "6 Hours",
             "12 Hours",
             "24 Hours",
@@ -258,7 +254,8 @@
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 21);
             this.comboBoxHistoryWindow.TabIndex = 0;
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
+
             // 
             // label2
             // 
@@ -658,9 +655,6 @@
             this.richTextBox_History.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBox_History.BorderPadding = 1;
-            this.richTextBox_History.BorderSize = 1;
             this.richTextBox_History.Location = new System.Drawing.Point(3, 3);
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.Size = new System.Drawing.Size(588, 91);
@@ -703,15 +697,13 @@
             // 
             // buttonMap
             // 
-            this.buttonMap.BorderColorScaling = 1.25F;
-            this.buttonMap.ButtonColorScaling = 0.5F;
-            this.buttonMap.Location = new System.Drawing.Point(199, 80);
-            this.buttonMap.Name = "buttonMap";
-            this.buttonMap.Size = new System.Drawing.Size(83, 23);
-            this.buttonMap.TabIndex = 4;
-            this.buttonMap.Text = "3D star map";
-            this.buttonMap.UseVisualStyleBackColor = true;
-            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
+            this.buttonMap3D.Location = new System.Drawing.Point(199, 80);
+            this.buttonMap3D.Name = "buttonMap";
+            this.buttonMap3D.Size = new System.Drawing.Size(83, 23);
+            this.buttonMap3D.TabIndex = 4;
+            this.buttonMap3D.Text = "3D star map";
+            this.buttonMap3D.UseVisualStyleBackColor = true;
+            this.buttonMap3D.Click += new System.EventHandler(this.buttonMap_Click);
             // 
             // buttonSync
             // 
@@ -863,9 +855,6 @@
             // 
             // textBoxDistance
             // 
-            this.textBoxDistance.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxDistance.BorderPadding = 1;
-            this.textBoxDistance.BorderSize = 1;
             this.textBoxDistance.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxDistance.Location = new System.Drawing.Point(81, 197);
             this.textBoxDistance.Name = "textBoxDistance";
@@ -923,9 +912,6 @@
             // 
             // textBoxSystem
             // 
-            this.textBoxSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSystem.BorderPadding = 1;
-            this.textBoxSystem.BorderSize = 1;
             this.textBoxSystem.Location = new System.Drawing.Point(50, 9);
             this.textBoxSystem.Name = "textBoxSystem";
             this.textBoxSystem.ReadOnly = true;
@@ -967,7 +953,7 @@
         private System.Windows.Forms.Button buttonMap3D;
         internal System.Windows.Forms.RichTextBox richTextBox_History;
         private System.Windows.Forms.TextBox textBoxSystem;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel_system;
         private System.Windows.Forms.TextBox textBoxDistance;
         private System.Windows.Forms.Label label7;
         private ExtendedControls.TextBoxBorder textBoxPrevSystem;
