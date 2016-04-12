@@ -80,6 +80,7 @@ namespace EDDiscovery
             }
             _edsmSync = new EDSMSync(this);
 
+            ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
             theme.RestoreSettings();                                    // theme, remember your saved settings
 
@@ -110,8 +111,8 @@ namespace EDDiscovery
             if (refreshhistory)
                 travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
 
-
         }
+
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
         {
