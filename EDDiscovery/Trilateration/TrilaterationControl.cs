@@ -542,19 +542,27 @@ namespace EDDiscovery
 
         public void ClearDataGridViewDistancesRows()
         {
-            // keep systems, clear distances
-            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            try
             {
-                var systemCell = dataGridViewDistances[0, i];
-                var distanceCell = dataGridViewDistances[1, i];
-                var calculatedDistanceCell = dataGridViewDistances[2, i];
-                var statusCell = dataGridViewDistances[3, i];
+                // keep systems, clear distances
+                for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+                {
+                    var systemCell = dataGridViewDistances[0, i];
+                    var distanceCell = dataGridViewDistances[1, i];
+                    var calculatedDistanceCell = dataGridViewDistances[2, i];
+                    var statusCell = dataGridViewDistances[3, i];
 
-                var system = (SystemClass)systemCell.Tag;
+                    var system = (SystemClass)systemCell.Tag;
 
-                distanceCell.Value = null;
-                calculatedDistanceCell.Value = null;
-                if (system.HasCoordinate) statusCell.Value = null;
+                    distanceCell.Value = null;
+                    calculatedDistanceCell.Value = null;
+                    if (system.HasCoordinate) statusCell.Value = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogTextHighlight("ClearDataGridViewDistancesRows Exception:" + ex.Message);
+                LogText(ex.StackTrace);
             }
         }
 
