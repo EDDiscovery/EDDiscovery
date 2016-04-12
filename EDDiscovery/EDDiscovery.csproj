@@ -154,11 +154,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="2DMap\FGEImage.cs" />
-    <Compile Include="2DMap\FormSagCarinaMission.cs">
+    <Compile Include="2DMap\Form2DMap.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="2DMap\FormSagCarinaMission.Designer.cs">
-      <DependentUpon>FormSagCarinaMission.cs</DependentUpon>
+    <Compile Include="2DMap\Form2DMap.Designer.cs">
+      <DependentUpon>Form2DMap.cs</DependentUpon>
     </Compile>
     <Compile Include="2DMap\ImageViewer.cs">
       <SubType>Component</SubType>
@@ -199,11 +199,13 @@
     <Compile Include="DB\StationClass.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\VisitedSystemsClass.cs" />
+    <Compile Include="DB\WantedSystemClass.cs" />
     <Compile Include="EDDB\Commodity.cs" />
     <Compile Include="EDDB\EDDBClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
     <Compile Include="EDDTheme.cs" />
+    <Compile Include="EDDToolStripRenderer.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EliteDangerous\AppConfig.cs" />
@@ -342,6 +344,9 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\YellowDot.png" />
+    <None Include="Resources\OrangeDot.png" />
+    <Content Include="Resources\imgCheck.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
@@ -359,8 +364,8 @@
     <Content Include="trilateration.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="2DMap\FormSagCarinaMission.resx">
-      <DependentUpon>FormSagCarinaMission.cs</DependentUpon>
+    <EmbeddedResource Include="2DMap\Form2DMap.resx">
+      <DependentUpon>Form2DMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2DMap\ImageViewer.resx">
       <DependentUpon>ImageViewer.cs</DependentUpon>

@@ -23,6 +23,7 @@ namespace EDDiscovery2
         private static string textboxborderstyle_fixed3D = TextboxBorderStyles[2];
         private static string textboxborderstyle_color = TextboxBorderStyles[3];
 
+
         public struct Settings
         {
             public enum CI
@@ -47,6 +48,8 @@ namespace EDDiscovery2
             public float fontsize;
             public string buttonstyle;
             public string textboxborderstyle;
+
+
 
             public Settings(String n, Color f,
                                         Color bb, Color bf, Color bborder, string bstyle,
@@ -210,8 +213,11 @@ namespace EDDiscovery2
         private List<Settings> themelist;
         private SQLiteDBClass db;
 
+        public EDDToolStripRenderer toolstripRenderer;
+
         public EDDTheme()
         {
+            toolstripRenderer = new EDDToolStripRenderer();
             themelist = new List<Settings>();           // theme list in
             currentsettings = new Settings("Windows Default");  // this is our default
         }
@@ -534,9 +540,33 @@ namespace EDDiscovery2
 
             foreach (Control c in form.Controls)
                 UpdateColorControls(form,c, fnt, 0);
+
+
+            UpdateToolsTripRenderer();
+
+    }
+
+    private void UpdateToolsTripRenderer()
+    {
+            toolstripRenderer.Background = currentsettings.colors[Settings.CI.menu_back];
+            toolstripRenderer.MenuText = currentsettings.colors[Settings.CI.menu_fore];
+
+            // SPecial menu border??
+            toolstripRenderer.Border = currentsettings.colors[Settings.CI.grid_border];
+            toolstripRenderer.BorderLight = currentsettings.colors[Settings.CI.grid_border];
+
+            toolstripRenderer.Dark = currentsettings.colors[Settings.CI.menu_back];
+            //Bitmap bmp = new Bitmap(1, 1);
+            toolstripRenderer.ButtonSelectedBorder = currentsettings.colors[Settings.CI.textbox_success]; ;
+            toolstripRenderer.ButtonSelectBackLight = currentsettings.colors[Settings.CI.button_text];
+            toolstripRenderer.ButtonSelectBackDark = currentsettings.colors[Settings.CI.button_back];
+
+
         }
 
-        public void UpdateColorControls(Control parent , Control myControl, Font fnt, int level)
+
+
+    public void UpdateColorControls(Control parent , Control myControl, Font fnt, int level)
         {
 #if DEBUG
             //string pad = "                             ".Substring(0, level);

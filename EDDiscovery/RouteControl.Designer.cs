@@ -53,6 +53,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.groupBox_Entries = new System.Windows.Forms.GroupBox();
             this.groupBox_Entries.SuspendLayout();
+            this.cmd3DMap = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // richTextBox_routeresult
@@ -373,10 +374,24 @@
             this.groupBox_Entries.TabIndex = 24;
             this.groupBox_Entries.TabStop = false;
             // 
+            // cmd3DMap
+            // 
+            this.cmd3DMap.Location = new System.Drawing.Point(741, 35);
+            this.cmd3DMap.Name = "cmd3DMap";
+            this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
+            this.cmd3DMap.TabIndex = 24;
+            this.cmd3DMap.Text = "3D Map";
+            this.cmd3DMap.UseVisualStyleBackColor = true;
+            this.cmd3DMap.Click += new System.EventHandler(this.cmd3DMap_Click);
+            // 
             // RouteControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cmd3DMap);
+            this.Controls.Add(this.comboBoxRoutingMetric);
+            this.Controls.Add(this.textBoxCurrent);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.richTextBox_routeresult);
             this.Controls.Add(this.groupBox_Entries);
             this.Name = "RouteControl";
@@ -412,5 +427,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.GroupBox groupBox_Entries;
+        private System.Windows.Forms.Button cmd3DMap;
     }
 }

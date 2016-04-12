@@ -79,6 +79,7 @@ namespace EDDiscovery
             }
             _edsmSync = new EDSMSync(this);
 
+            ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
             theme.RestoreSettings();                                    // theme, remember your saved settings
 
@@ -86,6 +87,7 @@ namespace EDDiscovery
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);
+            routeControl1.InitControl(this);
 
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager();
@@ -108,8 +110,8 @@ namespace EDDiscovery
             if (refreshhistory)
                 travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
 
-
         }
+
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
         {
@@ -170,8 +172,8 @@ namespace EDDiscovery
             {
                 travelHistoryControl1.Enabled = false;
 
-                var edsmThread = new Thread(GetEDSMSystems) { Name = "Downloading EDSM Systems" };
-                var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files" };
+                var edsmThread = new Thread(GetEDSMSystems) { Name = "Downloading EDSM Systems", IsBackground = true };
+                var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files", IsBackground = true };
                 edsmThread.Start();
                 downloadmapsThread.Start();
 
@@ -405,6 +407,7 @@ namespace EDDiscovery
         {
             ThreadEDSMDistances = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDSMDistances));
             ThreadEDSMDistances.Name = "Get Distances";
+            ThreadEDSMDistances.IsBackground = true;
             ThreadEDSMDistances.Start();
         }
 
@@ -421,6 +424,7 @@ namespace EDDiscovery
         {
             ThreadEDDB = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDDBUpdate));
             ThreadEDDB.Name = "Get EDDB Update";
+            ThreadEDDB.IsBackground = true;
             eddbforceupdate = force;
             ThreadEDDB.Start();
         }
@@ -933,7 +937,7 @@ namespace EDDiscovery
 
         private void AsyncSyncEDSMSystems()
         {
-            var EDSMThread = new Thread(SyncAllEDSMSystems) { Name = "Downloading EDSM system" };
+            var EDSMThread = new Thread(SyncAllEDSMSystems) { Name = "Downloading EDSM system", IsBackground = true };
             EDSMThread.Start();
         }
 
@@ -1083,6 +1087,7 @@ namespace EDDiscovery
 
         private void panel_close_Click(object sender, EventArgs e)
         {
+            Close();
             Application.Exit();
         }
 

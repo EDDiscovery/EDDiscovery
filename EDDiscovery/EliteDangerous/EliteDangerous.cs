@@ -112,81 +112,88 @@ namespace EDDiscovery2
 
         static public bool CheckED()
         {
-            Process[] processes32 = Process.GetProcessesByName("EliteDangerous32");
-            Process[] processes64 = Process.GetProcessesByName("EliteDangerous64");
-
-            Process[] processes = processes32;
-
-            if (processes == null || processes32.Length == 0)
-                processes = processes64;
-
-            if (processes == null)
+            try
             {
-                EDRunning = false;
-            }
-            else if (processes.Length == 0 )
-            {
-                EDRunning = false;
+                Process[] processes32 = Process.GetProcessesByName("EliteDangerous32");
+                Process[] processes64 = Process.GetProcessesByName("EliteDangerous64");
 
-                SQLiteDBClass db = new SQLiteDBClass();
+                Process[] processes = processes32;
 
-                if (EDDirectory==null || EDDirectory.Equals(""))
-                    EDDirectory = db.GetSettingString("EDDirectory", "");
-            }
-            else
-            {
-                string processFilename = null;
-                try
+                if (processes == null || processes32.Length == 0)
+                    processes = processes64;
+
+                if (processes == null)
                 {
-                    int id = processes[0].Id;
-                    processFilename = GetMainModuleFilepath(id);
-                    EDFileName = processFilename;
-                    //processFilename = processes[0].MainModule.FileName;
+                    EDRunning = false;
                 }
-                catch (Win32Exception)
+                else if (processes.Length == 0)
                 {
-                }
+                    EDRunning = false;
 
-                EDDirectory = Path.GetDirectoryName(EDFileName);
-                if (EDDirectory != null)
-                {
                     SQLiteDBClass db = new SQLiteDBClass();
-                    if (EDDirectory.Contains("PUBLIC_TEST_SERVER")) // BETA
-                    {
-                        db.PutSettingString("EDDirectoryBeta", EDDirectory);
-                        Beta = true;
-                    }
-                    else
-                    {
-                        Beta = false;
-                        db.PutSettingString("EDDirectory", EDDirectory);
-                    }
-                }  
-        
 
-                EDRunning = true;
+                    if (EDDirectory == null || EDDirectory.Equals(""))
+                        EDDirectory = db.GetSettingString("EDDirectory", "");
+                }
+                else
+                {
+                    string processFilename = null;
+                    try
+                    {
+                        int id = processes[0].Id;
+                        processFilename = GetMainModuleFilepath(id);
+                        EDFileName = processFilename;
+                        //processFilename = processes[0].MainModule.FileName;
+                    }
+                    catch (Win32Exception)
+                    {
+                    }
 
+                    EDDirectory = Path.GetDirectoryName(EDFileName);
+                    if (EDDirectory != null)
+                    {
+                        SQLiteDBClass db = new SQLiteDBClass();
+                        if (EDDirectory.Contains("PUBLIC_TEST_SERVER")) // BETA
+                        {
+                            db.PutSettingString("EDDirectoryBeta", EDDirectory);
+                            Beta = true;
+                        }
+                        else
+                        {
+                            Beta = false;
+                            db.PutSettingString("EDDirectory", EDDirectory);
+                        }
+                    }
+
+
+                    EDRunning = true;
+
+                }
+
+                //processes = Process.GetProcessesByName("EDLaunch");
+
+                //if (processes == null)
+                //{
+                //    EDLaunchRunning = false;
+                //}
+                //else if (processes.Length == 0)
+                //{
+                //    EDLaunchRunning = false;
+                //}
+                //else
+                //{
+
+                //    EDLaunchFileName = ProcessExecutablePath(processes[0]);
+                //    EDLaunchRunning = true;
+
+                //}
+
+                return EDRunning;
             }
-
-            //processes = Process.GetProcessesByName("EDLaunch");
-
-            //if (processes == null)
-            //{
-            //    EDLaunchRunning = false;
-            //}
-            //else if (processes.Length == 0)
-            //{
-            //    EDLaunchRunning = false;
-            //}
-            //else
-            //{
-
-            //    EDLaunchFileName = ProcessExecutablePath(processes[0]);
-            //    EDLaunchRunning = true;
-                
-            //}
-
-            return EDRunning;
+            catch (Exception)
+            {
+            }
+            return false;
         }
 
         private static  string GetMainModuleFilepath(int processId)

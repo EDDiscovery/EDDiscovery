@@ -38,9 +38,11 @@ namespace EDDiscovery2
         private const double ZoomMax = 50;
         private const double ZoomMin = 0.01;
         private const double ZoomFact = 1.2589254117941672104239541063958;
+        private const double CameraSlewTime = 1.0;
 
         private AutoCompleteStringCollection _systemNames;
         private ISystem _centerSystem;
+        private ISystem _clickedSystem;
         private bool _loaded = false;
 
         private float _zoom = 1.0f;
@@ -50,13 +52,17 @@ namespace EDDiscovery2
 
         private Vector3 _cameraActionMovement = Vector3.Zero;
         private Vector3 _cameraActionRotation = Vector3.Zero;
+        private float _cameraFov = (float)(Math.PI / 2.0f);
+        private float _cameraSlewProgress = 1.0f;
 
         private KeyboardActions _kbdActions = new KeyboardActions();
-        private int _oldTickCount = Environment.TickCount;
+        private long _oldTickCount = DateTime.Now.Ticks / 10000;
         private int _ticks = 0;
 
         private Point _mouseStartRotate;
-        private Point _mouseStartTranslate;
+        private Point _mouseStartTranslateXY;
+        private Point _mouseStartTranslateXZ;
+        private Point _mouseStartMove;
 
         private List<SystemClass> _starList;
         private Dictionary<string, SystemClass> _visitedStars;
@@ -67,8 +73,13 @@ namespace EDDiscovery2
         private float _defaultZoom;
         public List<SystemClass> ReferenceSystems { get; set; }
         public List<SystemPosition> VisitedSystems { get; set; }
+        public List<SystemClass> PlannedRoute { get; set; }
 
         public string HistorySelection { get; set; }
+
+        private float _znear;
+        private float _zfar;
+        private bool _useTimer;
         
         public ISystem CenterSystem {
             get
@@ -127,15 +138,19 @@ namespace EDDiscovery2
             InitializeComponent();
         }
 
-        public void Prepare()
+        public void Prepare(bool CenterFromSettings, float zoomOverRide)
         {
             var db = new SQLiteDBClass();
             _homeSystem = db.GetSettingString("DefaultMapCenter", "Sol");
-            _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0);
-            bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
+            if (zoomOverRide <= 50 && zoomOverRide >= 0.01) { _defaultZoom = zoomOverRide; }
+            else
+                { _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0); }
+            if (CenterFromSettings)
+            {
+                bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
 
-            CenterSystemName = selectionCentre ? HistorySelection : _homeSystem;
-
+                CenterSystemName = selectionCentre ? HistorySelection : _homeSystem;
+            }
             OrientateMapAroundSystem(CenterSystem);
 
             ResetCamera();
@@ -144,10 +159,44 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
-            _cameraPos = new Vector3((float) CenterSystem.x, (float)CenterSystem.x, (float)CenterSystem.z);
+            _cameraPos = new Vector3((float) CenterSystem.x, -(float)CenterSystem.y, (float)CenterSystem.z);
             _cameraDir = Vector3.Zero;
 
             _zoom = _defaultZoom;
+        }
+
+        private void StartCameraSlew()
+        {
+            _oldTickCount = Environment.TickCount;
+            _ticks = 0;
+            _cameraSlewProgress = 0.0f;
+        }
+
+        private void DoCameraSlew()
+        {
+            if (_kbdActions.Any())
+            {
+                _cameraSlewProgress = 1.0f;
+            }
+
+            if (_cameraSlewProgress < 1.0f)
+            {
+                _cameraActionMovement = Vector3.Zero;
+                var newprogress = _cameraSlewProgress + _ticks / (CameraSlewTime * 1000);
+                var totvector = new Vector3((float)(CenterSystem.x - _cameraPos.X), (float)(-CenterSystem.y - _cameraPos.Y), (float)(CenterSystem.z - _cameraPos.Z));
+                if (newprogress >= 1.0f)
+                {
+                    _cameraPos = new Vector3((float)CenterSystem.x, (float)(-CenterSystem.y), (float)CenterSystem.z);
+                }
+                else
+                {
+                    var slewstart = Math.Sin((_cameraSlewProgress - 0.5) * Math.PI);
+                    var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
+                    var slewfact = (slewend - slewstart) / (1.0 - slewstart);
+                    _cameraPos += Vector3.Multiply(totvector, (float)slewfact);
+                }
+                _cameraSlewProgress = (float)newprogress;
+            }
         }
 
         /// <summary>
@@ -163,15 +212,29 @@ namespace EDDiscovery2
 
             if (w == 0 || h == 0) return;
 
-            float orthoW = w * (_zoom + 1.0f);
-            float orthoH = h * (_zoom + 1.0f);
+            if (toolStripButtonPerspective.Checked)
+            {
+                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
+                GL.LoadMatrix(ref perspective);
+                _znear = 1.0f;
+                _zfar = 1000000.0f;
+            }
+            else
+            {
+                float orthoW = w * (_zoom + 1.0f);
+                float orthoH = h * (_zoom + 1.0f);
 
-            float orthoheight = 1000.0f * h / w;
+                float orthoheight = 1000.0f * h / w;
 
-            GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
-            //GL.Ortho(-100000.0, 100000.0, -100000.0, 100000.0, -100000.0, 100000.0); // Bottom-left corner pixel has coordinate (0, 0)
-            //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
+                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
+                _znear = -5000.0f;
+                _zfar = 5000.0f;
+                //GL.Ortho(-100000.0, 100000.0, -100000.0, 100000.0, -100000.0, 100000.0); // Bottom-left corner pixel has coordinate (0, 0)
+                //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
+            }
+
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
+
         }
 
 
@@ -200,6 +263,17 @@ namespace EDDiscovery2
 
         private void GenerateDataSetStandard()
         {
+            if (_datasets != null)
+            {
+                foreach (var ds in _datasets)
+                {
+                    if (ds is IDisposable)
+                    {
+                        ((IDisposable)ds).Dispose();
+                    }
+                }
+            }
+
             InitStarLists();
 
             var builder = new DatasetBuilder()
@@ -207,6 +281,7 @@ namespace EDDiscovery2
                 // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
                 // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
                 CenterSystem = CenterSystem,
+                SelectedSystem = _clickedSystem,
 
                 VisitedSystems = VisitedSystems,
 
@@ -222,6 +297,10 @@ namespace EDDiscovery2
             if (ReferenceSystems != null)
             {
                 builder.ReferenceSystems = ReferenceSystems.ConvertAll(system => (ISystem)system);
+            }
+            if (PlannedRoute != null)
+            {
+                builder.PlannedRoute = PlannedRoute.ConvertAll(system => (ISystem)system);
             }
 
             _datasets = builder.Build();
@@ -239,13 +318,13 @@ namespace EDDiscovery2
 
             _datasets = new List<IData3DSet>();
 
-            datadict[(int)EDAllegiance.Alliance] = new Data3DSetClass<PointData>(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDAllegiance.Anarchy] = new Data3DSetClass<PointData>(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDAllegiance.Empire] = new Data3DSetClass<PointData>(EDAllegiance.Empire.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDAllegiance.Federation] = new Data3DSetClass<PointData>(EDAllegiance.Federation.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDAllegiance.Independent] = new Data3DSetClass<PointData>(EDAllegiance.Independent.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDAllegiance.None] = new Data3DSetClass<PointData>(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
-            datadict[(int)EDAllegiance.Unknown] = new Data3DSetClass<PointData>(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
+            datadict[(int)EDAllegiance.Alliance] = Data3DSetClass<PointData>.Create(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
+            datadict[(int)EDAllegiance.Anarchy] = Data3DSetClass<PointData>.Create(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
+            datadict[(int)EDAllegiance.Empire] = Data3DSetClass<PointData>.Create(EDAllegiance.Empire.ToString(), Color.Blue, 1.0f);
+            datadict[(int)EDAllegiance.Federation] = Data3DSetClass<PointData>.Create(EDAllegiance.Federation.ToString(), Color.Red, 1.0f);
+            datadict[(int)EDAllegiance.Independent] = Data3DSetClass<PointData>.Create(EDAllegiance.Independent.ToString(), Color.Yellow, 1.0f);
+            datadict[(int)EDAllegiance.None] = Data3DSetClass<PointData>.Create(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
+            datadict[(int)EDAllegiance.Unknown] = Data3DSetClass<PointData>.Create(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
 
             foreach (SystemClass si in _starList)
             {
@@ -275,21 +354,21 @@ namespace EDDiscovery2
 
             _datasets = new List<IData3DSet>();
 
-            datadict[(int)EDGovernment.Anarchy] = new Data3DSetClass<PointData>(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDGovernment.Colony] = new Data3DSetClass<PointData>(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
-            datadict[(int)EDGovernment.Democracy] = new Data3DSetClass<PointData>(EDGovernment.Democracy.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDGovernment.Imperial] = new Data3DSetClass<PointData>(EDGovernment.Imperial.ToString(), Color.DarkGreen, 1.0f);
-            datadict[(int)EDGovernment.Corporate] = new Data3DSetClass<PointData>(EDGovernment.Corporate.ToString(), Color.LawnGreen, 1.0f);
-            datadict[(int)EDGovernment.Communism] = new Data3DSetClass<PointData>(EDGovernment.Communism.ToString(), Color.DarkOliveGreen, 1.0f);
-            datadict[(int)EDGovernment.Feudal] = new Data3DSetClass<PointData>(EDGovernment.Feudal.ToString(), Color.LightBlue, 1.0f);
-            datadict[(int)EDGovernment.Dictatorship] = new Data3DSetClass<PointData>(EDGovernment.Dictatorship.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDGovernment.Theocracy] = new Data3DSetClass<PointData>(EDGovernment.Theocracy.ToString(), Color.DarkBlue, 1.0f);
-            datadict[(int)EDGovernment.Cooperative] = new Data3DSetClass<PointData>(EDGovernment.Cooperative.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDGovernment.Patronage] = new Data3DSetClass<PointData>(EDGovernment.Patronage.ToString(), Color.LightCyan, 1.0f);
-            datadict[(int)EDGovernment.Confederacy] = new Data3DSetClass<PointData>(EDGovernment.Confederacy.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDGovernment.Prison_Colony] = new Data3DSetClass<PointData>(EDGovernment.Prison_Colony.ToString(), Color.Orange, 1.0f);
-            datadict[(int)EDGovernment.None] = new Data3DSetClass<PointData>(EDGovernment.None.ToString(), Color.Gray, 1.0f);
-            datadict[(int)EDGovernment.Unknown] = new Data3DSetClass<PointData>(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
+            datadict[(int)EDGovernment.Anarchy] = Data3DSetClass<PointData>.Create(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
+            datadict[(int)EDGovernment.Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
+            datadict[(int)EDGovernment.Democracy] = Data3DSetClass<PointData>.Create(EDGovernment.Democracy.ToString(), Color.Green, 1.0f);
+            datadict[(int)EDGovernment.Imperial] = Data3DSetClass<PointData>.Create(EDGovernment.Imperial.ToString(), Color.DarkGreen, 1.0f);
+            datadict[(int)EDGovernment.Corporate] = Data3DSetClass<PointData>.Create(EDGovernment.Corporate.ToString(), Color.LawnGreen, 1.0f);
+            datadict[(int)EDGovernment.Communism] = Data3DSetClass<PointData>.Create(EDGovernment.Communism.ToString(), Color.DarkOliveGreen, 1.0f);
+            datadict[(int)EDGovernment.Feudal] = Data3DSetClass<PointData>.Create(EDGovernment.Feudal.ToString(), Color.LightBlue, 1.0f);
+            datadict[(int)EDGovernment.Dictatorship] = Data3DSetClass<PointData>.Create(EDGovernment.Dictatorship.ToString(), Color.Blue, 1.0f);
+            datadict[(int)EDGovernment.Theocracy] = Data3DSetClass<PointData>.Create(EDGovernment.Theocracy.ToString(), Color.DarkBlue, 1.0f);
+            datadict[(int)EDGovernment.Cooperative] = Data3DSetClass<PointData>.Create(EDGovernment.Cooperative.ToString(), Color.Purple, 1.0f);
+            datadict[(int)EDGovernment.Patronage] = Data3DSetClass<PointData>.Create(EDGovernment.Patronage.ToString(), Color.LightCyan, 1.0f);
+            datadict[(int)EDGovernment.Confederacy] = Data3DSetClass<PointData>.Create(EDGovernment.Confederacy.ToString(), Color.Red, 1.0f);
+            datadict[(int)EDGovernment.Prison_Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Prison_Colony.ToString(), Color.Orange, 1.0f);
+            datadict[(int)EDGovernment.None] = Data3DSetClass<PointData>.Create(EDGovernment.None.ToString(), Color.Gray, 1.0f);
+            datadict[(int)EDGovernment.Unknown] = Data3DSetClass<PointData>.Create(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
 
             foreach (SystemClass si in _starList)
             {
@@ -322,7 +401,7 @@ namespace EDDiscovery2
         {
             foreach (var dataset in _datasets)
             {
-                dataset.DrawAll();
+                dataset.DrawAll(glControl);
             }
         }
 
@@ -330,6 +409,7 @@ namespace EDDiscovery2
         {
             CenterSystem = null;
             ReferenceSystems = null;
+            PlannedRoute = null;
         }
 
         /*
@@ -422,7 +502,7 @@ namespace EDDiscovery2
         private void UpdateStatus()
         {
             statusLabel.Text = "Use W, A, S and D keys with mouse to move the map!      ";
-            statusLabel.Text += $"Coordinates: x={_cameraPos.X} y={_cameraPos.Y} z={_cameraPos.Z}";
+            statusLabel.Text += $"Coordinates: x={_cameraPos.X} y={-_cameraPos.Y} z={_cameraPos.Z}";
             statusLabel.Text += $", Zoom: {_zoom}";
 #if DEBUG
             statusLabel.Text += $", Direction: x={_cameraDir.X} y={_cameraDir.Y} z={_cameraDir.Z}";
@@ -443,11 +523,12 @@ namespace EDDiscovery2
             CenterSystem = system;
             textboxFrom.Text = system.name;
             SetCenterSystem(system);
+            StartCameraSlew();
         }
         private void CalculateTimeDelta()
         {
-            var tickCount = Environment.TickCount;
-            _ticks = tickCount - _oldTickCount;
+            var tickCount = DateTime.Now.Ticks / 10000;
+            _ticks = (int)(tickCount - _oldTickCount);
             _oldTickCount = tickCount;
         }
 
@@ -463,27 +544,36 @@ namespace EDDiscovery2
         {
             _kbdActions.Reset();
 
-            var state = OpenTK.Input.Keyboard.GetState();
+            try
+            {
+                var state = OpenTK.Input.Keyboard.GetState();
 
-            _kbdActions.Left = (state[Key.Left] || state[Key.A]);
-            _kbdActions.Right = (state[Key.Right] || state[Key.D]);
-            _kbdActions.Up = (state[Key.Up] || state[Key.W]);
-            _kbdActions.Down = (state[Key.Down] || state[Key.S]);
+                _kbdActions.Left = (state[Key.Left] || state[Key.A]);
+                _kbdActions.Right = (state[Key.Right] || state[Key.D]);
+                _kbdActions.Up = (state[Key.Up] || state[Key.W]);
+                _kbdActions.Down = (state[Key.Down] || state[Key.S]);
 
-            _kbdActions.ZoomIn = (state[Key.Plus] || state[Key.Z]);
-            _kbdActions.ZoomOut = (state[Key.Minus] || state[Key.X]);
+                _kbdActions.ZoomIn = (state[Key.Plus] || state[Key.Z]);
+                _kbdActions.ZoomOut = (state[Key.Minus] || state[Key.X]);
 
-            // Yes, much of this is overkill. but useful while development is happening
-            // I'll probably hide away the less useful options later from the Release build
-            _kbdActions.Forwards = state[Key.R];
-            _kbdActions.Backwards = state[Key.F];
+                // Yes, much of this is overkill. but useful while development is happening
+                // I'll probably hide away the less useful options later from the Release build
+                _kbdActions.Forwards = state[Key.R];
+                _kbdActions.Backwards = state[Key.F];
 
-            _kbdActions.YawLeft = state[Key.Keypad4];
-            _kbdActions.YawRight = state[Key.Keypad6];
-            _kbdActions.Pitch = state[Key.Keypad8];
-            _kbdActions.Dive = (state[Key.Keypad5] || state[Key.Keypad2]);
-            _kbdActions.RollLeft = state[Key.Keypad7];
-            _kbdActions.RollRight = state[Key.Keypad9];
+                _kbdActions.YawLeft = state[Key.Keypad4];
+                _kbdActions.YawRight = state[Key.Keypad6];
+                _kbdActions.Pitch = state[Key.Keypad8];
+                _kbdActions.Dive = (state[Key.Keypad5] || state[Key.Keypad2]);
+                _kbdActions.RollLeft = state[Key.Keypad7];
+                _kbdActions.RollRight = state[Key.Keypad9];
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"ReceiveKeybaordActions Exception: {ex.Message}");
+                return;
+            }
         }
 
         private void HandleTurningAdjustments()
@@ -563,6 +653,66 @@ namespace EDDiscovery2
             }
         }
 
+        private ISystem GetMouseOverSystem(int x, int y)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            y = glControl.Height - y;
+            if (y < 5)
+            {
+                y = 5;
+            }
+            else if (y > glControl.Height - 5)
+            {
+                y = glControl.Height - 5;
+            }
+
+            if (x < 5)
+            {
+                x = 5;
+            }
+            else if (x > glControl.Width - 5)
+            {
+                x = glControl.Width - 5;
+            }
+
+            double w2 = glControl.Width / 2.0;
+            double h2 = glControl.Height / 2.0;
+            Matrix4d proj;
+            Matrix4d mview;
+            GL.GetDouble(GetPName.ProjectionMatrix, out proj);
+            GL.GetDouble(GetPName.ModelviewMatrix, out mview);
+            Matrix4d resmat = Matrix4d.Mult(mview, proj);
+
+            ISystem cursys = null;
+            Vector4d cursysloc = new Vector4d(0.0, 0.0, _zfar, 1.0);
+            double cursysdistz = double.MaxValue;
+
+            foreach (var sys in _starList)
+            {
+                if (sys.HasCoordinate)
+                {
+                    Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
+                    Vector4d sysloc = Vector4d.Transform(syspos, resmat);
+
+                    if (sysloc.Z > _znear)
+                    {
+                        Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
+                        double sysdist = Math.Sqrt(syssloc.X * syssloc.X + syssloc.Y * syssloc.Y);
+                        if (sysdist < 7.0 && (sysdist + Math.Abs(sysloc.Z * _zoom)) < cursysdistz)
+                        {
+                            cursys = sys;
+                            cursysloc = sysloc;
+                            cursysdistz = sysdist + Math.Abs(sysloc.Z * _zoom);
+                        }
+                    }
+                }
+            }
+
+            sw.Stop();
+            var t = sw.ElapsedMilliseconds;
+            return cursys;
+        }
+
         private void Render()
         {
             if (!_loaded) // Play nice
@@ -571,9 +721,17 @@ namespace EDDiscovery2
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);
-            TransformWorldOrientatation();
 
-            TransformCamera();
+            if (toolStripButtonPerspective.Checked)
+            {
+                CameraLookAt();
+            }
+            else
+            {
+                TransformWorldOrientatation();
+
+                TransformCamera();
+            }
             FlipYAxisOnWorld();
             RenderGalaxy();
 
@@ -594,6 +752,20 @@ namespace EDDiscovery2
             GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
             GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
             GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
+        }
+
+        private void CameraLookAt()
+        {
+            Vector3 target = _cameraPos;
+            Matrix4 transform = Matrix4.Identity;
+            transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
+            transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
+            transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
+            Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
+            Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
+            Vector3 eye = _cameraPos + eyerel;
+            Matrix4 lookat = Matrix4.LookAt(eye, target, up);
+            GL.LoadMatrix(ref lookat);
         }
 
         private void FlipYAxisOnWorld()
@@ -618,6 +790,7 @@ namespace EDDiscovery2
             textboxFrom.AutoCompleteCustomSource = _systemNames;
             ShowCenterSystem();
             GenerateDataSets();
+            labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
 
             //TODO: Move this functionality into DatasetBuilder
             //GenerateDataSetsAllegiance();
@@ -633,9 +806,8 @@ namespace EDDiscovery2
         private void buttonCenter_Click(object sender, EventArgs e)
         {
             SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
-            OrientateMapAroundSystem(sys);
-
-            ResetCamera();
+            if (sys == null) textboxFrom.Text = String.Empty;
+            else OrientateMapAroundSystem(sys);
         }
         
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -682,21 +854,52 @@ namespace EDDiscovery2
             _loaded = true;
 
             Application.Idle += Application_Idle;
-
+            _useTimer = false;
         }
-
 
         private void Application_Idle(object sender, EventArgs e)
         {
-            glControl.Invalidate();
+            if (!_useTimer)
+            {
+                glControl.Invalidate();
+            }
         }
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
             CalculateTimeDelta();
+            if (!_kbdActions.Any() && (_cameraSlewProgress == 0.0f || _cameraSlewProgress >= 1.0f))
+            {
+                _ticks = 1;
+                _oldTickCount = DateTime.Now.Ticks / 10000;
+            }
             HandleInputs();
+            DoCameraSlew();
             UpdateCamera();
             Render();
+
+            if (_kbdActions.Any() || _cameraSlewProgress < 1.0f)
+            {
+                if (_useTimer)
+                {
+                    UpdateTimer.Stop();
+                    _useTimer = false;
+                }
+            }
+            else
+            {
+                if (!_useTimer)
+                {
+                    UpdateTimer.Interval = 100;
+                    UpdateTimer.Start();
+                    _useTimer = true;
+                }
+                else
+                {
+                    UpdateTimer.Stop();
+                    UpdateTimer.Start();
+                }
+            }
         }
 
         private void UpdateCamera()
@@ -736,18 +939,23 @@ namespace EDDiscovery2
 
         private void glControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            _cameraSlewProgress = 1.0f;
+
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Left))
             {
                 _mouseStartRotate.X = e.X;
                 _mouseStartRotate.Y = e.Y;
+                _mouseStartMove.X = e.X;
+                _mouseStartMove.Y = e.Y;
             }
 
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
             {
-                _mouseStartTranslate.X = e.X;
-                _mouseStartTranslate.Y = e.Y;
+                _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXY.Y = e.Y;
+                _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXZ.Y = e.Y;
             }
-
         }
 
         /// <summary>
@@ -764,11 +972,13 @@ namespace EDDiscovery2
             // http://www.opentk.com/node/3738
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
+                _cameraSlewProgress = 1.0f;
+
                 int dx = e.X - _mouseStartRotate.X;
                 int dy = e.Y - _mouseStartRotate.Y;
 
-                _mouseStartRotate.X = e.X;
-                _mouseStartRotate.Y = e.Y;
+                _mouseStartRotate.X = _mouseStartTranslateXZ.X = e.X;
+                _mouseStartRotate.Y = _mouseStartTranslateXZ.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
@@ -782,16 +992,38 @@ namespace EDDiscovery2
             // TODO: Turn this into Up and Down along Y Axis, like real ED map 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                int dx = e.X - _mouseStartTranslate.X;
-                int dy = e.Y - _mouseStartTranslate.Y;
+                _cameraSlewProgress = 1.0f;
 
-                _mouseStartTranslate.X = e.X;
-                _mouseStartTranslate.Y = e.Y;
+                int dx = e.X - _mouseStartTranslateXY.X;
+                int dy = e.Y - _mouseStartTranslateXY.Y;
+
+                _mouseStartTranslateXY.X = _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXY.Y = _mouseStartTranslateXZ.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                _cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
-                _cameraPos.Y += dy * (1.0f /_zoom) * 2.0f;
+                //_cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
+                _cameraPos.Y += -dy * (1.0f /_zoom) * 2.0f;
+
+                glControl.Invalidate();
+            }
+            if (e.Button == (System.Windows.Forms.MouseButtons.Left | System.Windows.Forms.MouseButtons.Right))
+            {
+                _cameraSlewProgress = 1.0f;
+
+                int dx = e.X - _mouseStartTranslateXZ.X;
+                int dy = e.Y - _mouseStartTranslateXZ.Y;
+
+                _mouseStartTranslateXZ.X = _mouseStartRotate.X = _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXZ.Y = _mouseStartRotate.Y = _mouseStartTranslateXY.Y = e.Y;
+                //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
+
+                Matrix4 transform = Matrix4.CreateRotationZ((float)(-_cameraDir.Y * Math.PI / 180.0f));
+                Vector3 translation = new Vector3(-dx * (1.0f / _zoom) * 2.0f, dy * (1.0f / _zoom) * 2.0f, 0.0f);
+                translation = Vector3.Transform(translation, transform);
+
+                _cameraPos.X += translation.X;
+                _cameraPos.Z += translation.Y;
 
                 glControl.Invalidate();
             }
@@ -799,18 +1031,38 @@ namespace EDDiscovery2
 
         private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Delta > 0)
-            {
-                _zoom *= (float)ZoomFact;
-                if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
-            }
-            if (e.Delta < 0)
-            {
-                _zoom /= (float)ZoomFact;
-                if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
-            }
+            var kbdstate = OpenTK.Input.Keyboard.GetState();
 
-            SetupCursorXYZ();
+            if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+            {
+                if (e.Delta > 0)
+                {
+                    _cameraFov *= (float)ZoomFact;
+                    if (_cameraFov >= Math.PI * 0.8)
+                    {
+                        _cameraFov = (float)(Math.PI * 0.8);
+                    }
+                }
+                if (e.Delta < 0)
+                {
+                    _cameraFov /= (float)ZoomFact;
+                }
+            }
+            else
+            {
+                if (e.Delta > 0)
+                {
+                    _zoom *= (float)ZoomFact;
+                    if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
+                }
+                if (e.Delta < 0)
+                {
+                    _zoom /= (float)ZoomFact;
+                    if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
+                }
+
+                SetupCursorXYZ();
+            }
 
             SetupViewport();
             glControl.Invalidate();
@@ -820,16 +1072,92 @@ namespace EDDiscovery2
         {
             ISystem sys = SystemData.GetSystem(_homeSystem) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             OrientateMapAroundSystem(sys);
-
-            ResetCamera();
         }
 
         private void buttonHistory_Click(object sender, EventArgs e)
         {
             ISystem sys = SystemData.GetSystem(HistorySelection) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
             OrientateMapAroundSystem(sys);
+        }
 
-            ResetCamera();
+        private void toolStripButtonPerspective_Click(object sender, EventArgs e)
+        {
+            SetCenterSystem(CenterSystem);
+            SetupViewport();
+        }
+
+        private void glControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Left))
+            {
+                _mouseStartRotate.X = e.X;
+                _mouseStartRotate.Y = e.Y;
+
+                if (Math.Abs(e.X - _mouseStartMove.X) + Math.Abs(e.Y - _mouseStartMove.Y) < 4)
+                {
+                    _clickedSystem = GetMouseOverSystem(e.X, e.Y);
+
+                    if (_clickedSystem == null)
+                    {
+                        labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
+                    }
+                    else
+                    {
+                        labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
+                    }
+                    SetCenterSystem(CenterSystem);
+                }
+            }
+
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
+            {
+                _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXY.Y = e.Y;
+                _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXZ.Y = e.Y;
+            }
+        }
+
+        private void glControl_DoubleClick(object sender, EventArgs e)
+        {
+            ISystem sys = _clickedSystem;
+            if (sys != null)
+            {
+                OrientateMapAroundSystem(sys);
+            }
+        }
+        
+	private void glControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (_useTimer)
+            {
+                glControl.Invalidate();
+            }
+        }
+
+        private void glControl_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (_useTimer)
+            {
+                glControl.Invalidate();
+            }
+        }
+
+        private void FormMap_Activated(object sender, EventArgs e)
+        {
+            _useTimer = false;
+            glControl.Invalidate();
+        }
+
+        private void FormMap_Deactivate(object sender, EventArgs e)
+        {
+            _useTimer = true;
+            UpdateTimer.Stop();
+        }
+
+        private void UpdateTimer_Tick(object sender, EventArgs e)
+        {
+            glControl.Invalidate();
         }
     }
 }
