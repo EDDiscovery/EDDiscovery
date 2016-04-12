@@ -106,7 +106,7 @@ namespace ExtendedControls
                 SizeF sz = gr.MeasureString(p.Text, this.Font);
 
                 if (sz.Width > minsize)
-                    minsize = (int)sz.Width;
+                    minsize = (int)sz.Width+1;  // +1 due to float round down..
             }
 
             gr.Dispose();

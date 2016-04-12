@@ -666,19 +666,6 @@ namespace EDDiscovery2
                 myControl.Font = fnt;
                 MyDgv.Repaint();            // force a repaint as the individual settings do not by design.
             }
-            else if (myControl is RichTextBox || myControl is TextBox)
-            {
-                myControl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
-                myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
-
-                if (myControl.Font.Name.Contains("Courier"))                  // okay if we ordered a fixed font, don't override
-                {
-                    Font fntf = new Font(myControl.Font.Name, currentsettings.fontsize); // make one of the selected size
-                    myControl.Font = fntf;
-                }
-                else
-                    myControl.Font = fnt;
-            }
             else if (myControl is NumericUpDown)
             {                                                                   // BACK colour does not work..
                 myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore]; 
@@ -697,17 +684,56 @@ namespace EDDiscovery2
                 myControl.ForeColor = currentsettings.colors[Settings.CI.label];
                 myControl.Font = fnt;
             }
-            else if (myControl is GroupBox)
+            else if (myControl is GroupBoxCustom)
             {
-                GroupBox MyDgv = (GroupBox)myControl;
+                GroupBoxCustom MyDgv = (GroupBoxCustom)myControl;
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.group_text];
                 MyDgv.BackColor = currentsettings.colors[Settings.CI.group_back];
-                myControl.Font = fnt;
+                MyDgv.BorderColor = currentsettings.colors[Settings.CI.group_borderlines];
+                MyDgv.FlatStyle = FlatStyle.Flat;           // always in Flat, always apply our border.
+                MyDgv.Font = fnt;
             }
-            else if (myControl is CheckBox || myControl is RadioButton)
+            else if (myControl is CheckBoxCustom )
             {
-                myControl.ForeColor = currentsettings.colors[Settings.CI.checkbox];
-                myControl.Font = fnt;
+                CheckBoxCustom MyDgv = (CheckBoxCustom)myControl;
+
+                if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
+                    MyDgv.FlatStyle = FlatStyle.System;
+                else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                    MyDgv.FlatStyle = FlatStyle.Flat;
+                else
+                    MyDgv.FlatStyle = FlatStyle.Popup;
+
+                MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
+                MyDgv.ForeColor = currentsettings.colors[Settings.CI.checkbox];
+                MyDgv.CheckBoxColor = currentsettings.colors[Settings.CI.checkbox];
+                MyDgv.CheckBoxInnerColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.5F);
+                MyDgv.CheckColor = ButtonExt.Multiply(MyDgv.BackColor, 0.75F);
+                MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
+                MyDgv.Font = fnt;
+            }
+            else if ( myControl is RadioButtonCustom )
+            {
+                RadioButtonCustom MyDgv = (RadioButtonCustom)myControl;
+
+                MyDgv.FlatStyle = FlatStyle.System;
+                MyDgv.Font = fnt;
+
+                if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
+                    MyDgv.FlatStyle = FlatStyle.System;
+                else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                    MyDgv.FlatStyle = FlatStyle.Flat;
+                else
+                    MyDgv.FlatStyle = FlatStyle.Popup;
+
+                //Console.WriteLine("RB:" + myControl.Name + " Apply style " + currentsettings.buttonstyle);
+
+                MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
+                MyDgv.ForeColor = currentsettings.colors[Settings.CI.checkbox];
+                MyDgv.RadioButtonColor = currentsettings.colors[Settings.CI.checkbox];
+                MyDgv.RadioButtonInnerColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.5F);
+                MyDgv.SelectedColor = ButtonExt.Multiply(MyDgv.BackColor, 0.75F);
+                MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
             }
             else if (myControl is DataGridView)
             {
@@ -737,6 +763,11 @@ namespace EDDiscovery2
                 }
                 else
                     MyDgv.Columns[0].DefaultCellStyle.Font = fnt;
+            }
+            else
+            {
+                Type tp = myControl.GetType();
+                //Console.WriteLine("THEME: Unhandled control " + tp.Name + ":" + myControl.Name);
             }
 
             foreach (Control subC in myControl.Controls)

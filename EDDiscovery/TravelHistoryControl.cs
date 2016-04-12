@@ -69,7 +69,7 @@ namespace EDDiscovery
 
             TriggerEDSMRefresh();
             RefreshHistory();
-            
+
 
             EliteDangerous.CheckED();
         }
@@ -102,7 +102,7 @@ namespace EDDiscovery
         {
             try
             {
-                
+
                 static_richTextBox.SelectionStart = static_richTextBox.TextLength;
                 static_richTextBox.SelectionLength = 0;
 
@@ -187,7 +187,7 @@ namespace EDDiscovery
 
             if (visitedSystems == null)
                 return;
-            
+
             List<SystemPosition> result;
             if (atMost > 0)
             {
@@ -201,11 +201,11 @@ namespace EDDiscovery
 
             dataGridViewTravel.Rows.Clear();
 
-            System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-            
+//            System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
+
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
-      
+
                 SystemPosition item = result[ii];
                 SystemPosition item2;
 
@@ -242,13 +242,13 @@ namespace EDDiscovery
 
             }
 
-            System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-            
+//            System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
+
             if (dataGridViewTravel.Rows.Count > 0)
             {
                 ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[0].Cells[1].Tag));
             }
-            System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
+//            System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
             sw1.Stop();
 
             if (textBoxFilter.TextLength>0)
@@ -264,7 +264,7 @@ namespace EDDiscovery
         {
             SystemClass sys1 = null, sys2;
             double dist;
-            
+
 
             sys1 = SystemData.GetSystem(item.Name);
             if (sys1 == null)
@@ -352,7 +352,7 @@ namespace EDDiscovery
             textBoxSystem.Text = syspos.curSystem.name;
             textBoxPrevSystem.Clear();
             textBoxDistance.Text = syspos.strDistance;
-          
+
 
             if (syspos.curSystem.HasCoordinate)
             {
@@ -474,7 +474,7 @@ namespace EDDiscovery
                 if (name !=null)
                     label3.Text = "Closest systems from " + name.ToString();
 
-                dataGridViewNearest.Rows.Clear(); 
+                dataGridViewNearest.Rows.Clear();
 
                 if (LastSystem == null)
                     return;
@@ -618,7 +618,7 @@ namespace EDDiscovery
             } while (!selectedSys.curSystem.HasCoordinate && selectedLine <= dataGridViewTravel.Rows.Count);
             _discoveryForm.updateMapData();
             map.Instance.Reset();
-                        
+
             map.Instance.HistorySelection = selectedSys.curSystem.HasCoordinate ? selectedSys.Name : textBoxSystem.Text.Trim();
             map.Show();
         }
@@ -647,7 +647,7 @@ namespace EDDiscovery
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
             var dist = DistanceAsDouble(textBoxDistance.Text.Trim());
-            
+
             if (!dist.HasValue)
                 MessageBox.Show("Distance in wrong format!");
             else
@@ -666,10 +666,10 @@ namespace EDDiscovery
 
                 if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
                     dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[2].Value = textBoxDistance.Text.Trim();
-                              
+
             }
         }
-  
+
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
@@ -701,7 +701,7 @@ namespace EDDiscovery
 
                 txt = richTextBoxNote.Text;
 
-                
+
                 if (currentSysPos.curSystem.Note == null)
                     currentSysPos.curSystem.Note = "";
 
@@ -728,7 +728,7 @@ namespace EDDiscovery
                         sn.Add();
                     }
 
-                    
+
                     currentSysPos.curSystem.Note = txt;
 
                     if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
@@ -810,7 +810,7 @@ namespace EDDiscovery
 
             }
             sync.StartSync(EDSMSyncTo, EDSMSyncFrom,defaultMapColour);
-            
+
         }
 
         internal void RefreshEDSMEvent(object source)
@@ -853,7 +853,7 @@ namespace EDDiscovery
                     //                    + ", your trilateration was aborted.");
                     //}
 
-                    
+
                     SystemPosition item = result[0];
                     SystemPosition item2;
 
@@ -872,7 +872,7 @@ namespace EDDiscovery
                             if (s.name == item.Name) currentSystem = s;
                             if (s.name == item2.Name) previousSystem = s;
                         });
-                        
+
                         if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
                         {
                             var presetDistance = DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), 45);
@@ -943,7 +943,7 @@ namespace EDDiscovery
             if (currentSysPos.curSystem.id_eddb>0)
                 Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
         }
-        
+
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
             ISystem currSys = GetCurrentSystem();
@@ -956,7 +956,7 @@ namespace EDDiscovery
                 tctrl.Set(currSys);
             }
         }
-    
+
 		public ISystem CurrentSystem
         {
             get
@@ -980,7 +980,7 @@ namespace EDDiscovery
             {
                 return;
             }
-            
+
             if (!DistanceAsDouble(value, 45).HasValue) // max jump range is ~42Ly
             {
                 e.Cancel = true;
@@ -1102,8 +1102,8 @@ namespace EDDiscovery
                                                                   .Distinct();
 
 
-          
-            
+
+
             {
                 this.Cursor = Cursors.WaitCursor;
                 string sysName = "";
@@ -1114,7 +1114,7 @@ namespace EDDiscovery
 
                     sp = (SystemPosition)r.Cells[1].Tag;
 
-               
+
 
                     if (sp!= null && sp.vs != null)
                     {

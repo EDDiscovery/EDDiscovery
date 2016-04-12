@@ -45,24 +45,6 @@ namespace ExtendedControls
         public delegate void OnSelectedIndexChanged(object sender, EventArgs e);
         public event OnSelectedIndexChanged SelectedIndexChanged;
 
-        // internals
-        private int selected = -1;
-        private bool isActivated = false;
-        private bool mouseover = false;
-        private bool firstpaint = true;
-        private bool dosystem = false;
-        private ComboBoxState arrowState = ComboBoxState.Normal;
-        private Rectangle topBoxTextArea, arrowRectangleArea, topBoxOutline, topBoxTextTotalArea;
-        private Point arrowpt1, arrowpt2, arrowpt3;
-        private Point arrowpt1c, arrowpt2c, arrowpt3c;
-        private ListControlCustom clc;
-        private object datasourceobject = null;
-        private string datasourcedisplaymember = null;
-        private string datasourcevaluemember = null;
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
-
         public ComboBoxCustom() : base()
         {
             Items = new List<string>();
@@ -496,5 +478,25 @@ namespace ExtendedControls
 
             return null;
         }
+
+
+        // internals
+        private int selected = -1;
+        private bool isActivated = false;
+        private bool mouseover = false;
+        private bool firstpaint = true;
+        private bool dosystem = false;
+        private ComboBoxState arrowState = ComboBoxState.Normal;
+        private Rectangle topBoxTextArea, arrowRectangleArea, topBoxOutline, topBoxTextTotalArea;
+        private Point arrowpt1, arrowpt2, arrowpt3;
+        private Point arrowpt1c, arrowpt2c, arrowpt3c;
+        private ListControlCustom clc;
+        private object datasourceobject = null;
+        private string datasourcedisplaymember = null;
+        private string datasourcevaluemember = null;
+
+        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
+        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
+
     }
 }

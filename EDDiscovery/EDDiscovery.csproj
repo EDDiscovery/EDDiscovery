@@ -173,6 +173,15 @@
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\CheckBoxCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\GroupBoxCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\RadioButtonCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\TabControlCustom.cs">
       <SubType>Component</SubType>
     </Compile>
