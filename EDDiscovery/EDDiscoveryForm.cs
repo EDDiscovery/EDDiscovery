@@ -255,6 +255,10 @@ namespace EDDiscovery
                     DownloadMapFile("SC-L4.jpg");
                     DownloadMapFile("SC-U4.jpg");
 
+                    DownloadMapFile("SC-00.jpg");
+                    DownloadMapFile("SC-00.json");
+
+
                     DownloadMapFile("Galaxy_L.jpg");
                     DownloadMapFile("Galaxy_L.json");
                     DownloadMapFile("Galaxy_L_Grid.jpg");
