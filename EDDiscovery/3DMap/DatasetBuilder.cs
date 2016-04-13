@@ -28,6 +28,9 @@ namespace EDDiscovery2._3DMap
         public bool DrawLines { get; set; } = false;
         public bool AllSystems { get; set; } = false;
         public bool Stations { get; set; } = false;
+        public bool UseImage { get; set; } = false;
+
+        public FGEImage[] Images { get; set; } = null;
 
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
         public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
@@ -39,6 +42,7 @@ namespace EDDiscovery2._3DMap
         public List<IData3DSet> Build()
         {
             _datasets = new List<IData3DSet>();
+            AddMapImages();
             AddGridLines();
             AddStandardSystems();
             AddStations();
@@ -50,6 +54,19 @@ namespace EDDiscovery2._3DMap
             AddRoutePlannerInfoToDataset();
 
             return _datasets;
+        }
+
+        public void AddMapImages()
+        {
+            if (UseImage && Images != null && Images.Length != 0)
+            {
+                var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("mapimage", Color.White, 1.0f);
+                foreach (var img in Images)
+                {
+                    datasetMapImg.Add(TexturedQuadData.FromFGEImage(img));
+                }
+                _datasets.Add(datasetMapImg);
+            }
         }
 
         public void AddGridLines()

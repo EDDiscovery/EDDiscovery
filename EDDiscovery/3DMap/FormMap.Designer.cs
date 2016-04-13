@@ -48,6 +48,8 @@ namespace EDDiscovery2
             this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGrid = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonPerspective = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.dropdownMapNames = new System.Windows.Forms.ToolStripDropDownButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonHistory = new System.Windows.Forms.Button();
@@ -57,6 +59,7 @@ namespace EDDiscovery2
             this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
             this.dotSystemCoords = new System.Windows.Forms.PictureBox();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.dropdownFilterDate = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).BeginInit();
@@ -127,7 +130,10 @@ namespace EDDiscovery2
             this.toolStripButtonShowAllStars,
             this.toolStripButtonStations,
             this.toolStripButtonGrid,
-            this.toolStripButtonPerspective});
+            this.toolStripButtonPerspective,
+            this.toolStripSeparator1,
+            this.dropdownMapNames,
+            this.dropdownFilterDate});
             this.toolStripShowAllStars.Location = new System.Drawing.Point(0, 0);
             this.toolStripShowAllStars.Name = "toolStripShowAllStars";
             this.toolStripShowAllStars.Size = new System.Drawing.Size(918, 31);
@@ -207,6 +213,20 @@ namespace EDDiscovery2
             this.toolStripButtonPerspective.ToolTipText = "Enable Perspective View";
             this.toolStripButtonPerspective.Click += new System.EventHandler(this.toolStripButtonPerspective_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
+            // 
+            // dropdownMapNames
+            // 
+            this.dropdownMapNames.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dropdownMapNames.Image = ((System.Drawing.Image)(resources.GetObject("dropdownMapNames.Image")));
+            this.dropdownMapNames.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dropdownMapNames.Name = "dropdownMapNames";
+            this.dropdownMapNames.Size = new System.Drawing.Size(29, 28);
+            this.dropdownMapNames.Text = "Select Maps";
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -278,9 +298,19 @@ namespace EDDiscovery2
             this.dotSystemCoords.Size = new System.Drawing.Size(12, 12);
             this.dotSystemCoords.TabIndex = 25;
             this.dotSystemCoords.TabStop = false;
+            // 
             // UpdateTimer
             // 
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
+            // 
+            // dropdownFilterDate
+            // 
+            this.dropdownFilterDate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dropdownFilterDate.Image = ((System.Drawing.Image)(resources.GetObject("dropdownFilterDate.Image")));
+            this.dropdownFilterDate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dropdownFilterDate.Name = "dropdownFilterDate";
+            this.dropdownFilterDate.Size = new System.Drawing.Size(29, 28);
+            this.dropdownFilterDate.Text = "Filter by Expedition or date";
             // 
             // FormMap
             // 
@@ -340,5 +370,8 @@ namespace EDDiscovery2
         private PictureBox dotSystemCoords;
         private PictureBox dotSelectedSystemCoords;
         private Timer UpdateTimer;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripDropDownButton dropdownMapNames;
+        private ToolStripDropDownButton dropdownFilterDate;
     }
     }
