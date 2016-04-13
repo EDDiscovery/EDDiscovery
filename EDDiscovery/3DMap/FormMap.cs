@@ -76,6 +76,15 @@ namespace EDDiscovery2
         public List<SystemClass> PlannedRoute { get; set; }
 
         public string HistorySelection { get; set; }
+        public List<FGEImage> fgeimages = new List<FGEImage>();
+        public List<FGEImage> selectedmaps = new List<FGEImage>();
+
+        public DateTime startTime { get; set; }
+        public DateTime endTime { get; set; }
+        private DateTimePicker startPicker;
+        private DateTimePicker endPicker;
+        private ToolStripControlHost startPickerHost;
+        private ToolStripControlHost endPickerHost;
 
         private float _znear;
         private float _zfar;
@@ -276,6 +285,8 @@ namespace EDDiscovery2
 
             InitStarLists();
 
+            selectedmaps = GetSelectedMaps();
+
             var builder = new DatasetBuilder()
             {
                 // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
@@ -283,12 +294,15 @@ namespace EDDiscovery2
                 CenterSystem = CenterSystem,
                 SelectedSystem = _clickedSystem,
 
-                VisitedSystems = VisitedSystems,
+                VisitedSystems = VisitedSystems.Where(s => s.time >= startTime && s.time <= endTime).OrderBy(s => s.time).ToList(),
+
+                Images = selectedmaps.ToArray(),
 
                 GridLines = toolStripButtonGrid.Checked,
                 DrawLines = toolStripButtonDrawLines.Checked,
                 AllSystems = toolStripButtonShowAllStars.Checked,
-                Stations = toolStripButtonStations.Checked
+                Stations = toolStripButtonStations.Checked,
+                UseImage = selectedmaps.Count != 0
             };
             if (_starList != null)
             {
@@ -785,9 +799,159 @@ namespace EDDiscovery2
             GL.PopMatrix();
         }
 
+        private void FillExpeditions()
+        {
+            Dictionary<string, Func<DateTime>> excursions = new Dictionary<string, Func<DateTime>>()
+            {
+                { "All", () => VisitedSystems.Select(s => s.time).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
+                { "Distant Worlds", () => new DateTime(2016, 1, 14) },
+                { "FGE Expedition start", () => new DateTime(2015, 8, 1) },
+                { "Last Week", () => DateTime.Now.AddDays(-7) },
+                { "Last Month", () => DateTime.Now.AddMonths(-1) },
+                { "Last Year", () => DateTime.Now.AddYears(-1) }
+            };
+
+            foreach (var kvp in excursions)
+            {
+                var item = new ToolStripButton
+                {
+                    Text = kvp.Key,
+                    CheckOnClick = true,
+                    DisplayStyle = ToolStripItemDisplayStyle.Text
+                };
+                var startfunc = kvp.Value;
+                item.Click += (s, e) => dropdownFilterHistory_Item_Click(s, e, item, startfunc);
+                dropdownFilterDate.DropDownItems.Add(item);
+            }
+
+            var citem = new ToolStripButton
+            {
+                Text = "Custom",
+                CheckOnClick = true,
+                DisplayStyle = ToolStripItemDisplayStyle.Text
+            };
+            citem.Click += (s, e) => dropdownFilterHistory_Custom_Click(s, e, citem);
+            dropdownFilterDate.DropDownItems.Add(citem);
+
+            startTime = excursions["All"]();
+            endTime = DateTime.Now.AddDays(1);
+
+            startPicker = new DateTimePicker();
+            endPicker = new DateTimePicker();
+            startPicker.ValueChanged += StartPicker_ValueChanged;
+            endPicker.ValueChanged += EndPicker_ValueChanged;
+            startPickerHost = new ToolStripControlHost(startPicker) { Visible = false };
+            endPickerHost = new ToolStripControlHost(endPicker) { Visible = false };
+            toolStripShowAllStars.Items.Add(startPickerHost);
+            toolStripShowAllStars.Items.Add(endPickerHost);
+        }
+
+        private void EndPicker_ValueChanged(object sender, EventArgs e)
+        {
+            endTime = endPicker.Value;
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void StartPicker_ValueChanged(object sender, EventArgs e)
+        {
+            startTime = startPicker.Value;
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void dropdownFilterHistory_Custom_Click(object sender, EventArgs e, ToolStripButton sel)
+        {
+            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
+            {
+                if (item != sel)
+                {
+                    item.Checked = false;
+                }
+            }
+
+            if (startTime < startPicker.MinDate)
+            {
+                startTime = startPicker.MinDate;
+            }
+
+            startPickerHost.Visible = true;
+            endPickerHost.Visible = true;
+            startPicker.Value = startTime;
+            endPicker.Value = endTime;
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc)
+        {
+            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
+            {
+                if (item != sel)
+                {
+                    item.Checked = false;
+                }
+            }
+
+            startTime = startfunc();
+            endTime = DateTime.Now.AddDays(1);
+            startPickerHost.Visible = false;
+            endPickerHost.Visible = false;
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void LoadMapImages()
+        {
+            string datapath = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Maps");
+            if (System.IO.Directory.Exists(datapath))
+            {
+                fgeimages = FGEImage.LoadImages(datapath);
+                fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
+            }
+
+            dropdownMapNames.DropDownItems.Clear();
+
+            foreach (var img in fgeimages)
+            {
+                var item = new ToolStripButton {
+                    Text = img.FileName,
+                    CheckOnClick = true,
+                    DisplayStyle = ToolStripItemDisplayStyle.Text,
+                    Tag = img
+                };
+                item.Click += new EventHandler(dropdownMapNames_DropDownItemClicked);
+                dropdownMapNames.DropDownItems.Add(item);
+            }
+        }
+
+        private List<FGEImage> GetSelectedMaps()
+        {
+            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
+            HashSet<string> newselected = new HashSet<string>(_selected.Select(f => f.FileName));
+            HashSet<string> oldselected = new HashSet<string>(selectedmaps.Select(f => f.FileName));
+            List<FGEImage> selected = new List<FGEImage>();
+
+            foreach (var sel in selectedmaps)
+            {
+                if (newselected.Contains(sel.FileName))
+                {
+                    selected.Add(sel);
+                }
+            }
+
+            foreach (var sel in _selected)
+            {
+                if (!oldselected.Contains(sel.FileName))
+                {
+                    selected.Add(sel);
+                }
+            }
+
+            return selected;
+        }
+
         private void FormMap_Load(object sender, EventArgs e)
         {
             textboxFrom.AutoCompleteCustomSource = _systemNames;
+            LoadMapImages();
+            FillExpeditions();
             ShowCenterSystem();
             GenerateDataSets();
             labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
@@ -1158,6 +1322,11 @@ namespace EDDiscovery2
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
             glControl.Invalidate();
+        }
+
+        private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
+        {
+            SetCenterSystem(CenterSystem);
         }
     }
 }
