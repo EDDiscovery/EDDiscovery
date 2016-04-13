@@ -1,5 +1,32 @@
 Release log: 
 
+2016-04-13 Release 3.0.5
+
+klightspeed: 3dMaps
+
+Beeing able to show multiple maps on the Y=0 plane, and being able to filter by expedition or by date.
+Add support for map textures to 3D map
+Order maps by order clicked
+Add ability to filter 3DMap visited systems by date
+Camera now centers correctly on requested system again.
+Improves the performance of the 3D map significantly by using Vertex Buffer Objects. This along with Vsync should give smooth movement using the keyboard.
+Reduce the amount of CPU and GPU time being used when no movement is occurring, and stops the map being updated when the map window is not active, as requested in #60. This should also fix #161.
+
+Set active commander when saving netlogs
+
+Iainross;
+
+Prevent error centring 3D map on nonexistent system
+Merge remote-tracking branch 'blessed/master'
+Prevent error clicking on header row of wanted systems list
+Finwen:
+
+Added a custom toolstrip renderer. To make theming of menues and toolsstrip (still some work to do)
+Solved some exceptions usesers reported.
+Added a button to show all stars on 2D Map.
+Probably solved a expeption in 3D graph some users get then using a XBox controller.
+
+
 2016-04-05 Release 3.0.4
 
 Iainross:
