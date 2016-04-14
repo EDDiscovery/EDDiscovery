@@ -521,6 +521,8 @@ namespace EDDiscovery2
             //Bitmap bmp = new Bitmap(1, 1);
             toolstripRenderer.ButtonSelectedBorder = currentsettings.colors[Settings.CI.textbox_success]; ;
             toolstripRenderer.ButtonSelectBackLight = currentsettings.colors[Settings.CI.button_text];
+
+            // Need a button/Menu highlight
             toolstripRenderer.ButtonSelectBackDark = currentsettings.colors[Settings.CI.button_back];
 
 
