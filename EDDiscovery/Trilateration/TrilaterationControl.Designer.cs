@@ -57,7 +57,7 @@
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.richTextBox_History = new ExtendedControls.RichTextBoxBorder();
+            this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
             this.labelSuggestedSystems = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSubmitDistances = new System.Windows.Forms.ToolStripButton();
@@ -378,8 +378,6 @@
             // richTextBox_History
             // 
             this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBox_History.BorderPadding = 1;
-            this.richTextBox_History.BorderSize = 1;
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Left;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
@@ -559,7 +557,7 @@
         private System.Windows.Forms.Label labelSuggestedSystems;
         private System.Windows.Forms.DataGridView dataGridViewSuggestedSystems;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnSuggestedSystemsSystem;
-        internal ExtendedControls.RichTextBoxBorder richTextBox_History;
+        internal ExtendedControls.RichTextBoxScroll richTextBox_History;
         private System.Windows.Forms.DataGridView dataGridViewClosestSystems;
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         protected System.Windows.Forms.DataGridView dataGridViewDistances;

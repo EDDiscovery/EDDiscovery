@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    class GroupBoxCustom : GroupBox
+    public class GroupBoxCustom : GroupBox
     {
         // call Invalidate if changed
 

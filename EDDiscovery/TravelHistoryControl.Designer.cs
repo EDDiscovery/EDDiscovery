@@ -65,8 +65,8 @@
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.checkBoxEDSMSyncFrom = new System.Windows.Forms.CheckBox();
-            this.checkBoxEDSMSyncTo = new System.Windows.Forms.CheckBox();
+            this.checkBoxEDSMSyncFrom = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxEDSMSyncTo = new ExtendedControls.CheckBoxCustom();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
@@ -74,7 +74,7 @@
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.button_RefreshHistory = new ExtendedControls.ButtonExt();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
-            this.richTextBox_History = new ExtendedControls.RichTextBoxBorder();
+            this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.textBoxDistanceToNextSystem = new ExtendedControls.TextBoxBorder();
             this.buttonMap = new ExtendedControls.ButtonExt();
@@ -88,7 +88,7 @@
             this.textBoxGovernment = new ExtendedControls.TextBoxBorder();
             this.textBoxAllegiance = new ExtendedControls.TextBoxBorder();
             this.textBoxVisits = new ExtendedControls.TextBoxBorder();
-            this.richTextBoxNote = new ExtendedControls.RichTextBoxBorder();
+            this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
             this.buttonUpdate = new ExtendedControls.ButtonExt();
             this.textBoxDistance = new ExtendedControls.TextBoxBorder();
             this.textBoxPrevSystem = new ExtendedControls.TextBoxBorder();
@@ -570,8 +570,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBox_History.BorderPadding = 1;
-            this.richTextBox_History.BorderSize = 1;
             this.richTextBox_History.Location = new System.Drawing.Point(3, 3);
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.Size = new System.Drawing.Size(588, 91);
@@ -750,8 +748,6 @@
             // 
             this.richTextBoxNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxNote.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBoxNote.BorderPadding = 1;
-            this.richTextBoxNote.BorderSize = 1;
             this.richTextBoxNote.Location = new System.Drawing.Point(29, 123);
             this.richTextBoxNote.Name = "richTextBoxNote";
             this.richTextBoxNote.Size = new System.Drawing.Size(238, 47);
@@ -875,7 +871,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private ExtendedControls.ButtonExt buttonMap;
-        internal ExtendedControls.RichTextBoxBorder richTextBox_History;
+        internal ExtendedControls.RichTextBoxScroll richTextBox_History;
         private ExtendedControls.TextBoxBorder textBoxSystem;
         private System.Windows.Forms.Panel panel_system;
         private ExtendedControls.TextBoxBorder textBoxDistance;
@@ -890,7 +886,7 @@
         private System.Windows.Forms.Label label4;
         private ExtendedControls.ButtonExt buttonUpdate;
         private System.Windows.Forms.Label label6;
-        private ExtendedControls.RichTextBoxBorder richTextBoxNote;
+        private ExtendedControls.RichTextBoxScroll richTextBoxNote;
         private ExtendedControls.ButtonExt buttonSync;
         private System.Windows.Forms.Label label9;
         private ExtendedControls.TextBoxBorder textBoxVisits;
@@ -924,8 +920,8 @@
         private System.Windows.Forms.ToolStripMenuItem moveToAnotherCommanderToolStripMenuItem;
         private ExtendedControls.ComboBoxCustom comboBoxCommander;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem;
-        internal System.Windows.Forms.CheckBox checkBoxEDSMSyncFrom;
-        internal System.Windows.Forms.CheckBox checkBoxEDSMSyncTo;
+        internal ExtendedControls.CheckBoxCustom checkBoxEDSMSyncFrom;
+        internal ExtendedControls.CheckBoxCustom checkBoxEDSMSyncTo;
         private System.Windows.Forms.DataGridView dataGridViewNearest;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;

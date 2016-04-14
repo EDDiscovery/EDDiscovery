@@ -38,7 +38,7 @@ namespace EDDiscovery
         private SystemPosition currentSysPos = null;
 
 
-        private static RichTextBox static_richTextBox;
+        private static ExtendedControls.RichTextBoxScroll static_richTextBox;
         private int activecommander = 0;
         List<EDCommander> commanders = null;
 
@@ -100,32 +100,8 @@ namespace EDDiscovery
 
         static public void LogTextColor( string text, Color color)
         {
-            try
-            {
-
-                static_richTextBox.SelectionStart = static_richTextBox.TextLength;
-                static_richTextBox.SelectionLength = 0;
-
-                static_richTextBox.SelectionColor = color;
-                static_richTextBox.AppendText(text);
-                static_richTextBox.SelectionColor = static_richTextBox.ForeColor;
-
-                static_richTextBox.SelectionStart = static_richTextBox.Text.Length;
-                static_richTextBox.SelectionLength = 0;
-                static_richTextBox.ScrollToCaret();
-                static_richTextBox.Refresh();
-
-
-                HttpCom.WriteLog(text, "");
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception SystemClass: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
+            static_richTextBox.AppendText(text, color);
         }
-
 
         private void setRowNumber(DataGridView dgv)
         {
@@ -631,9 +607,9 @@ namespace EDDiscovery
 
                 if (e.ColumnIndex == 3)       // note column
                 {
-                    richTextBoxNote.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
-                    richTextBoxNote.ScrollToCaret();
-                    richTextBoxNote.Focus();
+                    richTextBoxNote.TextBox.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
+                    richTextBoxNote.TextBox.ScrollToCaret();
+                    richTextBoxNote.TextBox.Focus();
                 }
                 else  if (e.ColumnIndex == 2 && textBoxDistance.Enabled == true )       // distance column and on..
                 {

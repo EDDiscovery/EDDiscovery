@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageHandler));
-            this.checkBoxAutoConvert = new System.Windows.Forms.CheckBox();
+            this.checkBoxAutoConvert = new ExtendedControls.CheckBoxCustom();
             this.textBoxScreenshotsDir = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonChnageEDScreenshot = new ExtendedControls.ButtonExt();
@@ -39,12 +39,12 @@
             this.comboBoxFormat = new ExtendedControls.ComboBoxCustom();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.checkBoxRemove = new System.Windows.Forms.CheckBox();
+            this.checkBoxRemove = new ExtendedControls.CheckBoxCustom();
             this.comboBoxFileNameFormat = new ExtendedControls.ComboBoxCustom();
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxFileNameExample = new ExtendedControls.TextBoxBorder();
-            this.checkBoxPreview = new System.Windows.Forms.CheckBox();
-            this.checkBoxCropImage = new System.Windows.Forms.CheckBox();
+            this.checkBoxPreview = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCropImage = new ExtendedControls.CheckBoxCustom();
             this.groupBoxCropSettings = new ExtendedControls.GroupBoxCustom();
             this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
@@ -54,7 +54,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.checkBoxHires = new System.Windows.Forms.CheckBox();
+            this.checkBoxHires = new ExtendedControls.CheckBoxCustom();
             this.groupBox_Preview = new ExtendedControls.GroupBoxCustom();
             this.groupBox_Prevcontrols = new ExtendedControls.GroupBoxCustom();
             this.groupBox_Controls = new ExtendedControls.GroupBoxCustom();
@@ -451,7 +451,7 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox checkBoxAutoConvert;
+        private ExtendedControls.CheckBoxCustom checkBoxAutoConvert;
         private ExtendedControls.TextBoxBorder textBoxScreenshotsDir;
         private System.Windows.Forms.Label label1;
         private ExtendedControls.ButtonExt buttonChnageEDScreenshot;
@@ -461,12 +461,12 @@
         private ExtendedControls.ComboBoxCustom comboBoxFormat;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.CheckBox checkBoxRemove;
+        private ExtendedControls.CheckBoxCustom checkBoxRemove;
         private ExtendedControls.ComboBoxCustom comboBoxFileNameFormat;
         private System.Windows.Forms.Label label4;
         private ExtendedControls.TextBoxBorder textBoxFileNameExample;
-        private System.Windows.Forms.CheckBox checkBoxPreview;
-        protected System.Windows.Forms.CheckBox checkBoxCropImage;
+        private ExtendedControls.CheckBoxCustom checkBoxPreview;
+        protected ExtendedControls.CheckBoxCustom checkBoxCropImage;
         private ExtendedControls.GroupBoxCustom groupBoxCropSettings;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
@@ -476,7 +476,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDownWidth;
         private System.Windows.Forms.NumericUpDown numericUpDownLeft;
         private System.Windows.Forms.NumericUpDown numericUpDownTop;
-        private System.Windows.Forms.CheckBox checkBoxHires;
+        private ExtendedControls.CheckBoxCustom checkBoxHires;
         private ExtendedControls.GroupBoxCustom groupBox_Preview;
         private ExtendedControls.GroupBoxCustom groupBox_Controls;
         private ExtendedControls.GroupBoxCustom groupBox_Prevcontrols;

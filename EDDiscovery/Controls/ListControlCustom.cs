@@ -9,7 +9,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace ExtendedControls
 {
-    class ListControlCustom : Control
+    public class ListControlCustom : Control
     {
         // BackColor paints the whole control - set Transparent if you don't want this. (but its a fake transparent note).
 
