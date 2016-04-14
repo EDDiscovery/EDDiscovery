@@ -779,7 +779,7 @@ namespace EDDiscovery2
             else
             {
                 Type tp = myControl.GetType();
-                Console.WriteLine("THEME: Unhandled control " + tp.Name + ":" + myControl.Name);
+                Console.WriteLine("THEME: Unhandled control " + tp.Name + ":" + myControl.Name + " from " + parent.Name );
             }
 
             foreach (Control subC in myControl.Controls)

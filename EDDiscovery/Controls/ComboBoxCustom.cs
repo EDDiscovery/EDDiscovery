@@ -11,7 +11,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace ExtendedControls
 {
-    class ComboBoxCustom : Control
+    public class ComboBoxCustom : Control
     {
         // ForeColor = text, BackColor = control background
         public Color MouseOverBackgroundColor { get; set; } = Color.Silver;

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    class RichTextBoxScroll : Panel
+    public class RichTextBoxScroll : Panel
     {
         // BackColor is the colour of the panel. 
         // if BorderColor is set, BackColor gets shown, with BorderColor on top.
@@ -18,6 +18,9 @@ namespace ExtendedControls
         public Color BorderColor { get; set; } = Color.Transparent;
         public float BorderColorScaling { get; set; } = 0.5F;           // Popup style only
         public int ScrollBarWidth { get; set; } = 20;
+        public bool ShowLineCount { get; set; } = false;                // count lines
+
+        public override string Text { get { return TextBox.Text; } set { TextBox.Text = value; } }                // return only textbox text
 
         public RichTextBox TextBox;                 // Use these with caution.
         public VScrollBarCustom ScrollBar;
@@ -31,21 +34,27 @@ namespace ExtendedControls
 
         public void AppendText(string s)
         {
-            s = lc + ":" + s;
-            lc++;
+            if (ShowLineCount)
+            {
+                s = lc + ":" + s;
+                lc++;
+            }
             TextBox.AppendText(s);
             TextBox.ScrollToCaret();
             UpdateVscroll();
         }
-        int lc = 0;
 
         public void AppendText(string s, Color c)
         {
+            if (ShowLineCount)
+            {
+                s = lc + ":" + s;
+                lc++;
+            }
+
             TextBox.SelectionStart = TextBox.TextLength;
             TextBox.SelectionLength = 0;
             TextBox.SelectionColor = c;
-            s = lc + ":" + s;
-            lc++;
             TextBox.AppendText(s);
             TextBox.SelectionColor = TextBox.ForeColor;
             TextBox.SelectionStart = TextBox.TextLength;
@@ -149,11 +158,17 @@ namespace ExtendedControls
             ScrollToBar();
         }
 
+        protected override void OnGotFocus(EventArgs e)             // Focus on us is given to the text box.
+        {
+            base.OnGotFocus(e);
+            TextBox.Focus();
+        }
+
         private void UpdateVscroll()            // from the richtext, set the scroll bar
         {
             int firstVisibleLine = unchecked((int)(long)SendMessage(TextBox.Handle, EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
             int linecount = unchecked((int)(long)SendMessage(TextBox.Handle, EM_GETLINECOUNT, (IntPtr)0, (IntPtr)0));
-            Console.WriteLine("Scroll State Lines: " + linecount + " FVL: " + firstVisibleLine + " textlines " + textboxlinesestimate );
+            //Console.WriteLine("Scroll State Lines: " + linecount + " FVL: " + firstVisibleLine + " textlines " + textboxlinesestimate );
             ScrollBar.SetValueMaximumLargeChange(firstVisibleLine, linecount - 1, textboxlinesestimate);
         }
 
@@ -163,7 +178,7 @@ namespace ExtendedControls
             int scrollvalue = ScrollBar.Value;
             int delta = scrollvalue - firstVisibleLine;
 
-            Console.WriteLine("Scroll Bar:" + scrollvalue + " FVL: " + firstVisibleLine + " delta " + delta);
+            //Console.WriteLine("Scroll Bar:" + scrollvalue + " FVL: " + firstVisibleLine + " delta " + delta);
             if (delta != 0)
             {
                 SendMessage(TextBox.Handle, EM_LINESCROLL, (IntPtr)0, (IntPtr)(scrollvalue - firstVisibleLine));
@@ -183,6 +198,7 @@ namespace ExtendedControls
         #endregion
 
         private int textboxlinesestimate = 1;
+        private int lc = 1;
         private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
         public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 

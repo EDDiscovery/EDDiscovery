@@ -10,7 +10,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace ExtendedControls
 {
-    class VScrollBarCustom : Control
+    public class VScrollBarCustom : Control
     {
         // BackColor = slider color
         // ForeColor = button arrow color
