@@ -16,7 +16,8 @@ namespace ExtendedControls
         public virtual void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft)        // provide a standard version..
         {
             StringFormat f = new StringFormat();
-            f.Alignment = StringAlignment.Near;
+            //f.Alignment = StringAlignment.Near;
+            f.Alignment = StringAlignment.Center;
             f.LineAlignment = StringAlignment.Center;
             gr.SmoothingMode = SmoothingMode.AntiAlias;
             using (Brush textb = new SolidBrush(color))
@@ -134,13 +135,16 @@ namespace ExtendedControls
             using (Brush b = new System.Drawing.Drawing2D.LinearGradientBrush(borderrect, color1, color2, 90))
                 gr.FillPath(b, fill);
 
+            gr.SmoothingMode = SmoothingMode.AntiAlias;
+
             using (Pen p = new Pen(coloroutline, 1.0F))
                 gr.DrawPath(p, border);
         }
 
         public override void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft)        // provide a standard version..
         {
-            borderrect.X += shift - 1;  // shift, because its sloped.. this looks about right
+            //borderrect.X += shift - 1;  // shift, because its sloped.. this looks about right
+            borderrect.Width += shift;
             base.DrawText(gr, borderrect, index, selected, color, text, ft);
         }
     }

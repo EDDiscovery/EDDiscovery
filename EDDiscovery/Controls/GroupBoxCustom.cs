@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    public class GroupBoxCustom : GroupBox
+    class GroupBoxCustom : GroupBox
     {
         // call Invalidate if changed
 
@@ -31,7 +31,7 @@ namespace ExtendedControls
         {
             if (FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard)
                 base.OnPaint(e);
-            else // Popup and Flat are ours.
+            else if ( DisplayRectangle.Width > 0 && DisplayRectangle.Height > 0 ) // Popup and Flat are ours, as long as its got size
             {
                 int topline = DisplayRectangle.Y / 2;
 
@@ -59,9 +59,8 @@ namespace ExtendedControls
                     
                     int textlength = 0;
                     if ( this.Text != "" )
-                    {
-                        SizeF sz = e.Graphics.MeasureString(this.Text, this.Font);
-                        textlength = (int)sz.Width + TextPadding * 2 + 1;       // +1 because we are rounding down
+                    {           // +1 for rounding down..
+                        textlength = (int)e.Graphics.MeasureString(this.Text, this.Font).Width + TextPadding * 2 + 1;
                     }
 
                     int textstart = TextStartPosition;
