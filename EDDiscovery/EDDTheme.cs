@@ -278,7 +278,7 @@ namespace EDDiscovery2
                 Color.Orange, // checkbox
                 Color.Black, Color.Orange,  // menu
                 Color.Orange,  // label
-                Color.FromArgb(255, 32,32,32), Color.Orange, Color.DarkOrange, // group
+                Color.FromArgb(255, 32,32,32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange,
                 false, 95, "Microsoft Sans Serif", 8.25F));
 
@@ -291,7 +291,7 @@ namespace EDDiscovery2
                 Color.Orange, // checkbox
                 Color.Black, Color.Orange,  // menu
                 Color.Orange,  // label
-                Color.FromArgb(255, 32, 32, 32), Color.Orange, Color.DarkOrange, // group
+                Color.FromArgb(255, 32, 32, 32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange,
                 false, 95, "Euro Caps", 12F));
 
@@ -305,7 +305,7 @@ namespace EDDiscovery2
                 Color.Orange, // checkbox
                 Color.Black, Color.Orange,  // menu
                 Color.Orange,  // label
-                Color.Black, Color.Orange, Color.DarkOrange, // group
+                Color.Black, Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange,
                 false, 100, "Euro Caps", 12F));
 
@@ -549,21 +549,33 @@ namespace EDDiscovery2
                 myControl.ForeColor = currentsettings.colors[Settings.CI.menu_fore];
                 myControl.Font = fnt;
             }
-            else if (myControl is RichTextBoxBorder)
+            else if (myControl is RichTextBoxScroll)
             {
-                RichTextBoxBorder MyDgv = (RichTextBoxBorder)myControl;
-                myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
-                myControl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+                RichTextBoxScroll MyDgv = (RichTextBoxScroll)myControl;
                 MyDgv.BorderColor = Color.Transparent;
                 MyDgv.BorderStyle = BorderStyle.None;
-                MyDgv.BorderPadding = 2;                                                    // for colour selection, 2 pixels of border padding before border..
+
+                MyDgv.TextBox.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                MyDgv.TextBox.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+
+                MyDgv.ScrollBar.FlatStyle = FlatStyle.System;
 
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[1]))
                     MyDgv.BorderStyle = BorderStyle.FixedSingle;
                 else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[2]))
                     MyDgv.BorderStyle = BorderStyle.Fixed3D;
                 else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[3]))
+                {
+                    Color c1 = currentsettings.colors[Settings.CI.textbox_fore];
                     MyDgv.BorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                    MyDgv.ScrollBar.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+                    MyDgv.ScrollBar.BorderColor = MyDgv.ScrollBar.ThumbBorderColor = MyDgv.ScrollBar.ArrowBorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                    MyDgv.ScrollBar.ArrowButtonColor = MyDgv.ScrollBar.ThumbButtonColor = c1;
+                    MyDgv.ScrollBar.MouseOverButtonColor = ButtonExt.Multiply(c1, 1.4F);
+                    MyDgv.ScrollBar.MousePressedButtonColor = ButtonExt.Multiply(c1, 1.5F);
+                    MyDgv.ScrollBar.ForeColor = ButtonExt.Multiply(c1, 0.25F);
+                    MyDgv.ScrollBar.FlatStyle = FlatStyle.Popup;
+                }
 
                 if (myControl.Font.Name.Contains("Courier"))                  // okay if we ordered a fixed font, don't override
                 {
@@ -767,7 +779,7 @@ namespace EDDiscovery2
             else
             {
                 Type tp = myControl.GetType();
-                //Console.WriteLine("THEME: Unhandled control " + tp.Name + ":" + myControl.Name);
+                Console.WriteLine("THEME: Unhandled control " + tp.Name + ":" + myControl.Name);
             }
 
             foreach (Control subC in myControl.Controls)

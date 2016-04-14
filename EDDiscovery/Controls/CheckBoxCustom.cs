@@ -59,7 +59,7 @@ namespace ExtendedControls
 
                     if (FlatStyle == FlatStyle.Flat)
                     {
-                        using (Brush inner = new SolidBrush(basecolor)) 
+                        using (Brush inner = new SolidBrush(basecolor))
                             e.Graphics.FillRectangle(inner, rect);      // fill slightly over size to make sure all pixels are painted
                     }
                     else
