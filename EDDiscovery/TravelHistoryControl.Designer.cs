@@ -43,75 +43,86 @@
             this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToTrilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.labelclosests = new System.Windows.Forms.Label();
             this.panel_system = new System.Windows.Forms.Panel();
             this.label_warning = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label_Z = new System.Windows.Forms.Label();
-            this.labelDistEnter = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
-            this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
-            this.panelRight = new System.Windows.Forms.Panel();
-            this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
-            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.checkBoxEDSMSyncFrom = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxEDSMSyncTo = new ExtendedControls.CheckBoxCustom();
-            this.label1 = new System.Windows.Forms.Label();
-            this.panelBottom = new System.Windows.Forms.Panel();
-            this.panelMain = new System.Windows.Forms.Panel();
-            this.mapColorDialog = new System.Windows.Forms.ColorDialog();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.button_RefreshHistory = new ExtendedControls.ButtonExt();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
-            this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
-            this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
-            this.textBoxDistanceToNextSystem = new ExtendedControls.TextBoxBorder();
-            this.buttonMap = new ExtendedControls.ButtonExt();
-            this.buttonSync = new ExtendedControls.ButtonExt();
             this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
             this.buttonTrilaterate = new ExtendedControls.ButtonExt();
             this.buttonRoss = new ExtendedControls.DrawnPanel();
             this.buttonEDDB = new ExtendedControls.DrawnPanel();
             this.textBoxState = new ExtendedControls.TextBoxBorder();
             this.textBoxEconomy = new ExtendedControls.TextBoxBorder();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.textBoxGovernment = new ExtendedControls.TextBoxBorder();
             this.textBoxAllegiance = new ExtendedControls.TextBoxBorder();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.textBoxVisits = new ExtendedControls.TextBoxBorder();
+            this.label8 = new System.Windows.Forms.Label();
             this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
             this.buttonUpdate = new ExtendedControls.ButtonExt();
             this.textBoxDistance = new ExtendedControls.TextBoxBorder();
+            this.label7 = new System.Windows.Forms.Label();
             this.textBoxPrevSystem = new ExtendedControls.TextBoxBorder();
+            this.label_Z = new System.Windows.Forms.Label();
             this.textBoxZ = new ExtendedControls.TextBoxBorder();
+            this.labelDistEnter = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.textBoxY = new ExtendedControls.TextBoxBorder();
             this.textBoxX = new ExtendedControls.TextBoxBorder();
+            this.label4 = new System.Windows.Forms.Label();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
+            this.labelCMDR = new System.Windows.Forms.Label();
+            this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
+            this.labelDistanceToNextSystem = new System.Windows.Forms.Label();
+            this.panelRight = new System.Windows.Forms.Panel();
+            this.panel_bottomright = new System.Windows.Forms.Panel();
+            this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
+            this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
+            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panel_topright = new System.Windows.Forms.Panel();
+            this.checkBoxEDSMSyncFrom = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxEDSMSyncTo = new ExtendedControls.CheckBoxCustom();
+            this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
+            this.textBoxDistanceToNextSystem = new ExtendedControls.TextBoxBorder();
+            this.buttonMap = new ExtendedControls.ButtonExt();
+            this.buttonSync = new ExtendedControls.ButtonExt();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panelBottom = new System.Windows.Forms.Panel();
+            this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
+            this.panelMain = new System.Windows.Forms.Panel();
+            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.TopPanel = new System.Windows.Forms.Panel();
+            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.button_RefreshHistory = new ExtendedControls.ButtonExt();
+            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.mapColorDialog = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
+            this.panel_bottomright.SuspendLayout();
+            this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
+            this.panel_topright.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.panelMain.SuspendLayout();
+            this.dataViewScrollerPanel1.SuspendLayout();
+            this.TopPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewTravel
             // 
             this.dataGridViewTravel.AllowUserToAddRows = false;
             this.dataGridViewTravel.AllowUserToDeleteRows = false;
-            this.dataGridViewTravel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewTravel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
@@ -120,9 +131,11 @@
             this.ColumnNote,
             this.mapColour});
             this.dataGridViewTravel.ContextMenuStrip = this.historyContextMenu;
-            this.dataGridViewTravel.Location = new System.Drawing.Point(3, 34);
+            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
-            this.dataGridViewTravel.Size = new System.Drawing.Size(589, 508);
+            this.dataGridViewTravel.RowHeadersWidth = 50;
+            this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTravel.Size = new System.Drawing.Size(571, 516);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
@@ -132,20 +145,23 @@
             // ColumnTime
             // 
             this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.MinimumWidth = 150;
             this.ColumnTime.Name = "ColumnTime";
             this.ColumnTime.ReadOnly = true;
             this.ColumnTime.Width = 150;
             // 
             // ColumnSystem
             // 
+            this.ColumnSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.MinimumWidth = 200;
             this.ColumnSystem.Name = "ColumnSystem";
             this.ColumnSystem.ReadOnly = true;
-            this.ColumnSystem.Width = 200;
             // 
             // ColumnDistance
             // 
             this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.MinimumWidth = 70;
             this.ColumnDistance.Name = "ColumnDistance";
             this.ColumnDistance.ReadOnly = true;
             this.ColumnDistance.Width = 70;
@@ -153,7 +169,9 @@
             // ColumnNote
             // 
             this.ColumnNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnNote.FillWeight = 150F;
             this.ColumnNote.HeaderText = "Note";
+            this.ColumnNote.MinimumWidth = 100;
             this.ColumnNote.Name = "ColumnNote";
             this.ColumnNote.ReadOnly = true;
             // 
@@ -162,10 +180,11 @@
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
             this.mapColour.HeaderText = "Map";
+            this.mapColour.MinimumWidth = 40;
             this.mapColour.Name = "mapColour";
             this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
-            this.mapColour.Width = 30;
+            this.mapColour.Width = 40;
             // 
             // historyContextMenu
             // 
@@ -208,20 +227,21 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 8);
+            this.label2.Location = new System.Drawing.Point(3, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "Show History ";
             // 
-            // label3
+            // labelclosests
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 365);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(206, 13);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Closest systems  (from last known position)";
+            this.labelclosests.AutoSize = true;
+            this.labelclosests.Dock = System.Windows.Forms.DockStyle.Top;
+            this.labelclosests.Location = new System.Drawing.Point(0, 0);
+            this.labelclosests.Name = "labelclosests";
+            this.labelclosests.Size = new System.Drawing.Size(206, 13);
+            this.labelclosests.TabIndex = 12;
+            this.labelclosests.Text = "Closest systems  (from last known position)";
             // 
             // panel_system
             // 
@@ -255,9 +275,10 @@
             this.panel_system.Controls.Add(this.textBoxX);
             this.panel_system.Controls.Add(this.label4);
             this.panel_system.Controls.Add(this.textBoxSystem);
-            this.panel_system.Location = new System.Drawing.Point(7, 110);
+            this.panel_system.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_system.Location = new System.Drawing.Point(0, 100);
             this.panel_system.Name = "panel_system";
-            this.panel_system.Size = new System.Drawing.Size(293, 250);
+            this.panel_system.Size = new System.Drawing.Size(297, 250);
             this.panel_system.TabIndex = 6;
             // 
             // label_warning
@@ -280,360 +301,6 @@
             this.label14.Text = "Sol";
             this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(144, 81);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(32, 13);
-            this.label12.TabIndex = 38;
-            this.label12.Text = "State";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(149, 100);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(27, 13);
-            this.label13.TabIndex = 36;
-            this.label13.Text = "Gov";
-            this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(125, 64);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(51, 13);
-            this.label11.TabIndex = 34;
-            this.label11.Text = "Economy";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(120, 46);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(56, 13);
-            this.label10.TabIndex = 32;
-            this.label10.Text = "Allegiance";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(145, 28);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(31, 13);
-            this.label9.TabIndex = 30;
-            this.label9.Text = "Visits";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 107);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(30, 13);
-            this.label8.TabIndex = 28;
-            this.label8.Text = "Note";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 175);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(72, 13);
-            this.label7.TabIndex = 22;
-            this.label7.Text = "Distance from";
-            // 
-            // label_Z
-            // 
-            this.label_Z.AutoSize = true;
-            this.label_Z.Location = new System.Drawing.Point(30, 64);
-            this.label_Z.Name = "label_Z";
-            this.label_Z.Size = new System.Drawing.Size(14, 13);
-            this.label_Z.TabIndex = 20;
-            this.label_Z.Text = "Z";
-            this.label_Z.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // labelDistEnter
-            // 
-            this.labelDistEnter.AutoSize = true;
-            this.labelDistEnter.ForeColor = System.Drawing.Color.Black;
-            this.labelDistEnter.Location = new System.Drawing.Point(30, 46);
-            this.labelDistEnter.Name = "labelDistEnter";
-            this.labelDistEnter.Size = new System.Drawing.Size(14, 13);
-            this.labelDistEnter.TabIndex = 18;
-            this.labelDistEnter.Text = "Y";
-            this.labelDistEnter.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(30, 28);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(14, 13);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "X";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 5);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(41, 13);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "System";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(28, 10);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(63, 13);
-            this.label6.TabIndex = 17;
-            this.label6.Text = "Commander";
-            // 
-            // labelDistanceToNextSystem
-            // 
-            this.labelDistanceToNextSystem.AutoSize = true;
-            this.labelDistanceToNextSystem.Location = new System.Drawing.Point(4, 68);
-            this.labelDistanceToNextSystem.Name = "labelDistanceToNextSystem";
-            this.labelDistanceToNextSystem.Size = new System.Drawing.Size(122, 13);
-            this.labelDistanceToNextSystem.TabIndex = 20;
-            this.labelDistanceToNextSystem.Text = "Distance to next system:";
-            // 
-            // panelRight
-            // 
-            this.panelRight.Controls.Add(this.dataGridViewNearest);
-            this.panelRight.Controls.Add(this.checkBoxEDSMSyncFrom);
-            this.panelRight.Controls.Add(this.checkBoxEDSMSyncTo);
-            this.panelRight.Controls.Add(this.comboBoxCommander);
-            this.panelRight.Controls.Add(this.label6);
-            this.panelRight.Controls.Add(this.textBoxDistanceToNextSystem);
-            this.panelRight.Controls.Add(this.label3);
-            this.panelRight.Controls.Add(this.labelDistanceToNextSystem);
-            this.panelRight.Controls.Add(this.buttonMap);
-            this.panelRight.Controls.Add(this.buttonSync);
-            this.panelRight.Controls.Add(this.panel_system);
-            this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelRight.Location = new System.Drawing.Point(594, 0);
-            this.panelRight.Name = "panelRight";
-            this.panelRight.Size = new System.Drawing.Size(297, 650);
-            this.panelRight.TabIndex = 1;
-            // 
-            // dataGridViewNearest
-            // 
-            this.dataGridViewNearest.AllowUserToAddRows = false;
-            this.dataGridViewNearest.AllowUserToDeleteRows = false;
-            this.dataGridViewNearest.AllowUserToResizeColumns = false;
-            this.dataGridViewNearest.AllowUserToResizeRows = false;
-            this.dataGridViewNearest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col1,
-            this.Distance});
-            this.dataGridViewNearest.Location = new System.Drawing.Point(7, 380);
-            this.dataGridViewNearest.Name = "dataGridViewNearest";
-            this.dataGridViewNearest.RowHeadersVisible = false;
-            this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(290, 255);
-            this.dataGridViewNearest.TabIndex = 23;
-            this.dataGridViewNearest.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
-            // 
-            // Col1
-            // 
-            this.Col1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Col1.HeaderText = "Name";
-            this.Col1.Name = "Col1";
-            // 
-            // Distance
-            // 
-            this.Distance.HeaderText = "Distance";
-            this.Distance.Name = "Distance";
-            // 
-            // checkBoxEDSMSyncFrom
-            // 
-            this.checkBoxEDSMSyncFrom.AutoSize = true;
-            this.checkBoxEDSMSyncFrom.Location = new System.Drawing.Point(217, 57);
-            this.checkBoxEDSMSyncFrom.Name = "checkBoxEDSMSyncFrom";
-            this.checkBoxEDSMSyncFrom.Size = new System.Drawing.Size(83, 17);
-            this.checkBoxEDSMSyncFrom.TabIndex = 22;
-            this.checkBoxEDSMSyncFrom.Text = "From EDSM";
-            this.checkBoxEDSMSyncFrom.UseVisualStyleBackColor = true;
-            this.checkBoxEDSMSyncFrom.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncFrom_CheckedChanged);
-            // 
-            // checkBoxEDSMSyncTo
-            // 
-            this.checkBoxEDSMSyncTo.AutoSize = true;
-            this.checkBoxEDSMSyncTo.Location = new System.Drawing.Point(217, 36);
-            this.checkBoxEDSMSyncTo.Name = "checkBoxEDSMSyncTo";
-            this.checkBoxEDSMSyncTo.Size = new System.Drawing.Size(73, 17);
-            this.checkBoxEDSMSyncTo.TabIndex = 21;
-            this.checkBoxEDSMSyncTo.Text = "To EDSM";
-            this.checkBoxEDSMSyncTo.UseVisualStyleBackColor = true;
-            this.checkBoxEDSMSyncTo.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncTo_CheckedChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(254, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Search";
-            // 
-            // panelBottom
-            // 
-            this.panelBottom.Controls.Add(this.richTextBox_History);
-            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 548);
-            this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(594, 102);
-            this.panelBottom.TabIndex = 2;
-            // 
-            // panelMain
-            // 
-            this.panelMain.Controls.Add(this.label1);
-            this.panelMain.Controls.Add(this.textBoxFilter);
-            this.panelMain.Controls.Add(this.dataGridViewTravel);
-            this.panelMain.Controls.Add(this.button_RefreshHistory);
-            this.panelMain.Controls.Add(this.label2);
-            this.panelMain.Controls.Add(this.comboBoxHistoryWindow);
-            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMain.Location = new System.Drawing.Point(0, 0);
-            this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(594, 548);
-            this.panelMain.TabIndex = 0;
-            // 
-            // mapColorDialog
-            // 
-            this.mapColorDialog.SolidColorOnly = true;
-            // 
-            // textBoxFilter
-            // 
-            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxFilter.BorderPadding = 1;
-            this.textBoxFilter.BorderSize = 1;
-            this.textBoxFilter.Location = new System.Drawing.Point(312, 7);
-            this.textBoxFilter.Name = "textBoxFilter";
-            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
-            this.textBoxFilter.TabIndex = 1;
-            this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
-            this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
-            // 
-            // button_RefreshHistory
-            // 
-            this.button_RefreshHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_RefreshHistory.BorderColorScaling = 1.25F;
-            this.button_RefreshHistory.ButtonColorScaling = 0.5F;
-            this.button_RefreshHistory.Location = new System.Drawing.Point(517, 5);
-            this.button_RefreshHistory.Name = "button_RefreshHistory";
-            this.button_RefreshHistory.Size = new System.Drawing.Size(69, 23);
-            this.button_RefreshHistory.TabIndex = 2;
-            this.button_RefreshHistory.Text = "Refresh";
-            this.button_RefreshHistory.UseVisualStyleBackColor = true;
-            this.button_RefreshHistory.Click += new System.EventHandler(this.button_RefreshHistory_Click);
-            // 
-            // comboBoxHistoryWindow
-            // 
-            this.comboBoxHistoryWindow.ArrowWidth = 1;
-            this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
-            this.comboBoxHistoryWindow.DataSource = null;
-            this.comboBoxHistoryWindow.DisplayMember = null;
-            this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxHistoryWindow.DropDownHeight = 200;
-            this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxHistoryWindow.ItemHeight = 20;
-            this.comboBoxHistoryWindow.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxHistoryWindow.Items")));
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(101, 6);
-            this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
-            this.comboBoxHistoryWindow.ScrollBarWidth = 16;
-            this.comboBoxHistoryWindow.SelectedIndex = -1;
-            this.comboBoxHistoryWindow.SelectedItem = null;
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
-            this.comboBoxHistoryWindow.TabIndex = 0;
-            this.comboBoxHistoryWindow.ValueMember = null;
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
-            // 
-            // richTextBox_History
-            // 
-            this.richTextBox_History.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBox_History.Location = new System.Drawing.Point(3, 3);
-            this.richTextBox_History.Name = "richTextBox_History";
-            this.richTextBox_History.Size = new System.Drawing.Size(588, 91);
-            this.richTextBox_History.TabIndex = 0;
-            this.richTextBox_History.TabStop = false;
-            this.richTextBox_History.Text = "";
-            // 
-            // comboBoxCommander
-            // 
-            this.comboBoxCommander.ArrowWidth = 1;
-            this.comboBoxCommander.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxCommander.ButtonColorScaling = 0.5F;
-            this.comboBoxCommander.DataSource = null;
-            this.comboBoxCommander.DisplayMember = null;
-            this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCommander.DropDownHeight = 200;
-            this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCommander.ItemHeight = 20;
-            this.comboBoxCommander.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxCommander.Items")));
-            this.comboBoxCommander.Location = new System.Drawing.Point(114, 7);
-            this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCommander.Name = "comboBoxCommander";
-            this.comboBoxCommander.ScrollBarWidth = 16;
-            this.comboBoxCommander.SelectedIndex = -1;
-            this.comboBoxCommander.SelectedItem = null;
-            this.comboBoxCommander.Size = new System.Drawing.Size(162, 21);
-            this.comboBoxCommander.TabIndex = 0;
-            this.comboBoxCommander.ValueMember = null;
-            // 
-            // textBoxDistanceToNextSystem
-            // 
-            this.textBoxDistanceToNextSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxDistanceToNextSystem.BorderPadding = 1;
-            this.textBoxDistanceToNextSystem.BorderSize = 1;
-            this.textBoxDistanceToNextSystem.Location = new System.Drawing.Point(76, 86);
-            this.textBoxDistanceToNextSystem.Name = "textBoxDistanceToNextSystem";
-            this.textBoxDistanceToNextSystem.Size = new System.Drawing.Size(48, 20);
-            this.textBoxDistanceToNextSystem.TabIndex = 5;
-            this.textBoxDistanceToNextSystem.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDistanceToNextSystem_Validating);
-            // 
-            // buttonMap
-            // 
-            this.buttonMap.BorderColorScaling = 1.25F;
-            this.buttonMap.ButtonColorScaling = 0.5F;
-            this.buttonMap.Location = new System.Drawing.Point(199, 80);
-            this.buttonMap.Name = "buttonMap";
-            this.buttonMap.Size = new System.Drawing.Size(83, 23);
-            this.buttonMap.TabIndex = 4;
-            this.buttonMap.Text = "3D star map";
-            this.buttonMap.UseVisualStyleBackColor = true;
-            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
-            // 
-            // buttonSync
-            // 
-            this.buttonSync.BorderColorScaling = 1.25F;
-            this.buttonSync.ButtonColorScaling = 0.5F;
-            this.buttonSync.Location = new System.Drawing.Point(114, 38);
-            this.buttonSync.Name = "buttonSync";
-            this.buttonSync.Size = new System.Drawing.Size(100, 23);
-            this.buttonSync.TabIndex = 1;
-            this.buttonSync.Text = "Sync with EDSM";
-            this.buttonSync.UseVisualStyleBackColor = true;
-            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
-            // 
             // textBoxSolDist
             // 
             this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
@@ -650,6 +317,7 @@
             // 
             this.buttonTrilaterate.BorderColorScaling = 1.25F;
             this.buttonTrilaterate.ButtonColorScaling = 0.5F;
+            this.buttonTrilaterate.ButtonDisabledScaling = 0.5F;
             this.buttonTrilaterate.Location = new System.Drawing.Point(168, 196);
             this.buttonTrilaterate.Name = "buttonTrilaterate";
             this.buttonTrilaterate.Size = new System.Drawing.Size(99, 22);
@@ -708,6 +376,26 @@
             this.textBoxEconomy.TabIndex = 33;
             this.textBoxEconomy.TabStop = false;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(144, 81);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(32, 13);
+            this.label12.TabIndex = 38;
+            this.label12.Text = "State";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(149, 100);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(27, 13);
+            this.label13.TabIndex = 36;
+            this.label13.Text = "Gov";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // textBoxGovernment
             // 
             this.textBoxGovernment.BorderColor = System.Drawing.Color.Transparent;
@@ -732,6 +420,36 @@
             this.textBoxAllegiance.TabIndex = 31;
             this.textBoxAllegiance.TabStop = false;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(125, 64);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(51, 13);
+            this.label11.TabIndex = 34;
+            this.label11.Text = "Economy";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(120, 46);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(56, 13);
+            this.label10.TabIndex = 32;
+            this.label10.Text = "Allegiance";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(145, 28);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(31, 13);
+            this.label9.TabIndex = 30;
+            this.label9.Text = "Visits";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // textBoxVisits
             // 
             this.textBoxVisits.BorderColor = System.Drawing.Color.Transparent;
@@ -744,15 +462,26 @@
             this.textBoxVisits.TabIndex = 29;
             this.textBoxVisits.TabStop = false;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 107);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(30, 13);
+            this.label8.TabIndex = 28;
+            this.label8.Text = "Note";
+            // 
             // richTextBoxNote
             // 
             this.richTextBoxNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxNote.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBoxNote.Location = new System.Drawing.Point(29, 123);
+            this.richTextBoxNote.BorderColorScaling = 0.5F;
+            this.richTextBoxNote.Location = new System.Drawing.Point(33, 123);
             this.richTextBoxNote.Name = "richTextBoxNote";
+            this.richTextBoxNote.ScrollBarWidth = 20;
+            this.richTextBoxNote.ShowLineCount = false;
             this.richTextBoxNote.Size = new System.Drawing.Size(238, 47);
             this.richTextBoxNote.TabIndex = 0;
-            this.richTextBoxNote.Text = "";
             this.richTextBoxNote.TextChanged += new System.EventHandler(this.richTextBoxNote_TextChanged);
             this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
             // 
@@ -760,6 +489,7 @@
             // 
             this.buttonUpdate.BorderColorScaling = 1.25F;
             this.buttonUpdate.ButtonColorScaling = 0.5F;
+            this.buttonUpdate.ButtonDisabledScaling = 0.5F;
             this.buttonUpdate.Location = new System.Drawing.Point(6, 196);
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.Size = new System.Drawing.Size(69, 22);
@@ -779,6 +509,15 @@
             this.textBoxDistance.Size = new System.Drawing.Size(70, 20);
             this.textBoxDistance.TabIndex = 1;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 175);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(72, 13);
+            this.label7.TabIndex = 22;
+            this.label7.Text = "Distance from";
+            // 
             // textBoxPrevSystem
             // 
             this.textBoxPrevSystem.BorderColor = System.Drawing.Color.Transparent;
@@ -792,6 +531,16 @@
             this.textBoxPrevSystem.TabStop = false;
             this.textBoxPrevSystem.Enter += new System.EventHandler(this.textBoxPrevSystem_Enter);
             // 
+            // label_Z
+            // 
+            this.label_Z.AutoSize = true;
+            this.label_Z.Location = new System.Drawing.Point(30, 64);
+            this.label_Z.Name = "label_Z";
+            this.label_Z.Size = new System.Drawing.Size(14, 13);
+            this.label_Z.TabIndex = 20;
+            this.label_Z.Text = "Z";
+            this.label_Z.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // textBoxZ
             // 
             this.textBoxZ.BorderColor = System.Drawing.Color.Transparent;
@@ -803,6 +552,27 @@
             this.textBoxZ.Size = new System.Drawing.Size(67, 20);
             this.textBoxZ.TabIndex = 19;
             this.textBoxZ.TabStop = false;
+            // 
+            // labelDistEnter
+            // 
+            this.labelDistEnter.AutoSize = true;
+            this.labelDistEnter.ForeColor = System.Drawing.Color.Black;
+            this.labelDistEnter.Location = new System.Drawing.Point(30, 46);
+            this.labelDistEnter.Name = "labelDistEnter";
+            this.labelDistEnter.Size = new System.Drawing.Size(14, 13);
+            this.labelDistEnter.TabIndex = 18;
+            this.labelDistEnter.Text = "Y";
+            this.labelDistEnter.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(30, 28);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(14, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "X";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // textBoxY
             // 
@@ -828,6 +598,15 @@
             this.textBoxX.TabIndex = 17;
             this.textBoxX.TabStop = false;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 5);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "System";
+            // 
             // textBoxSystem
             // 
             this.textBoxSystem.BorderColor = System.Drawing.Color.Transparent;
@@ -839,6 +618,374 @@
             this.textBoxSystem.Size = new System.Drawing.Size(198, 20);
             this.textBoxSystem.TabIndex = 15;
             this.textBoxSystem.TabStop = false;
+            // 
+            // labelCMDR
+            // 
+            this.labelCMDR.AutoSize = true;
+            this.labelCMDR.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCMDR.Location = new System.Drawing.Point(6, 8);
+            this.labelCMDR.Name = "labelCMDR";
+            this.labelCMDR.Size = new System.Drawing.Size(63, 13);
+            this.labelCMDR.TabIndex = 17;
+            this.labelCMDR.Text = "Commander";
+            // 
+            // labelDistanceToNextSystem
+            // 
+            this.labelDistanceToNextSystem.AutoSize = true;
+            this.labelDistanceToNextSystem.Location = new System.Drawing.Point(6, 74);
+            this.labelDistanceToNextSystem.Name = "labelDistanceToNextSystem";
+            this.labelDistanceToNextSystem.Size = new System.Drawing.Size(122, 13);
+            this.labelDistanceToNextSystem.TabIndex = 20;
+            this.labelDistanceToNextSystem.Text = "Distance to next system:";
+            // 
+            // panelRight
+            // 
+            this.panelRight.Controls.Add(this.panel_bottomright);
+            this.panelRight.Controls.Add(this.panel_system);
+            this.panelRight.Controls.Add(this.panel_topright);
+            this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panelRight.Location = new System.Drawing.Point(594, 0);
+            this.panelRight.Name = "panelRight";
+            this.panelRight.Size = new System.Drawing.Size(297, 650);
+            this.panelRight.TabIndex = 1;
+            // 
+            // panel_bottomright
+            // 
+            this.panel_bottomright.Controls.Add(this.dataViewScrollerPanel2);
+            this.panel_bottomright.Controls.Add(this.labelclosests);
+            this.panel_bottomright.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_bottomright.Location = new System.Drawing.Point(0, 350);
+            this.panel_bottomright.Name = "panel_bottomright";
+            this.panel_bottomright.Size = new System.Drawing.Size(297, 300);
+            this.panel_bottomright.TabIndex = 25;
+            // 
+            // dataViewScrollerPanel2
+            // 
+            this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
+            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
+            this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 13);
+            this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
+            this.dataViewScrollerPanel2.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(297, 287);
+            this.dataViewScrollerPanel2.TabIndex = 24;
+            this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom2
+            // 
+            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom2.LargeChange = 0;
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(277, 21);
+            this.vScrollBarCustom2.Maximum = -1;
+            this.vScrollBarCustom2.Minimum = 0;
+            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 266);
+            this.vScrollBarCustom2.SmallChange = 1;
+            this.vScrollBarCustom2.TabIndex = 24;
+            this.vScrollBarCustom2.Text = "vScrollBarCustom2";
+            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom2.Value = -1;
+            this.vScrollBarCustom2.ValueLimited = -1;
+            // 
+            // dataGridViewNearest
+            // 
+            this.dataGridViewNearest.AllowUserToAddRows = false;
+            this.dataGridViewNearest.AllowUserToDeleteRows = false;
+            this.dataGridViewNearest.AllowUserToResizeColumns = false;
+            this.dataGridViewNearest.AllowUserToResizeRows = false;
+            this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col1,
+            this.Distance});
+            this.dataGridViewNearest.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewNearest.Name = "dataGridViewNearest";
+            this.dataGridViewNearest.RowHeadersVisible = false;
+            this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewNearest.Size = new System.Drawing.Size(277, 287);
+            this.dataGridViewNearest.TabIndex = 23;
+            this.dataGridViewNearest.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
+            // 
+            // Col1
+            // 
+            this.Col1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Col1.HeaderText = "Name";
+            this.Col1.Name = "Col1";
+            // 
+            // Distance
+            // 
+            this.Distance.HeaderText = "Distance";
+            this.Distance.Name = "Distance";
+            // 
+            // panel_topright
+            // 
+            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncFrom);
+            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncTo);
+            this.panel_topright.Controls.Add(this.comboBoxCommander);
+            this.panel_topright.Controls.Add(this.labelCMDR);
+            this.panel_topright.Controls.Add(this.textBoxDistanceToNextSystem);
+            this.panel_topright.Controls.Add(this.labelDistanceToNextSystem);
+            this.panel_topright.Controls.Add(this.buttonMap);
+            this.panel_topright.Controls.Add(this.buttonSync);
+            this.panel_topright.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_topright.Location = new System.Drawing.Point(0, 0);
+            this.panel_topright.Name = "panel_topright";
+            this.panel_topright.Size = new System.Drawing.Size(297, 100);
+            this.panel_topright.TabIndex = 26;
+            // 
+            // checkBoxEDSMSyncFrom
+            // 
+            this.checkBoxEDSMSyncFrom.AutoSize = true;
+            this.checkBoxEDSMSyncFrom.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEDSMSyncFrom.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSMSyncFrom.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSMSyncFrom.FontNerfReduction = 0.5F;
+            this.checkBoxEDSMSyncFrom.Location = new System.Drawing.Point(214, 51);
+            this.checkBoxEDSMSyncFrom.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSMSyncFrom.Name = "checkBoxEDSMSyncFrom";
+            this.checkBoxEDSMSyncFrom.Size = new System.Drawing.Size(83, 17);
+            this.checkBoxEDSMSyncFrom.TabIndex = 22;
+            this.checkBoxEDSMSyncFrom.Text = "From EDSM";
+            this.checkBoxEDSMSyncFrom.TickBoxReductionSize = 10;
+            this.checkBoxEDSMSyncFrom.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMSyncFrom.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncFrom_CheckedChanged);
+            // 
+            // checkBoxEDSMSyncTo
+            // 
+            this.checkBoxEDSMSyncTo.AutoSize = true;
+            this.checkBoxEDSMSyncTo.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEDSMSyncTo.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSMSyncTo.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSMSyncTo.FontNerfReduction = 0.5F;
+            this.checkBoxEDSMSyncTo.Location = new System.Drawing.Point(214, 32);
+            this.checkBoxEDSMSyncTo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSMSyncTo.Name = "checkBoxEDSMSyncTo";
+            this.checkBoxEDSMSyncTo.Size = new System.Drawing.Size(73, 17);
+            this.checkBoxEDSMSyncTo.TabIndex = 21;
+            this.checkBoxEDSMSyncTo.Text = "To EDSM";
+            this.checkBoxEDSMSyncTo.TickBoxReductionSize = 10;
+            this.checkBoxEDSMSyncTo.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMSyncTo.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncTo_CheckedChanged);
+            // 
+            // comboBoxCommander
+            // 
+            this.comboBoxCommander.ArrowWidth = 1;
+            this.comboBoxCommander.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxCommander.ButtonColorScaling = 0.5F;
+            this.comboBoxCommander.DataSource = null;
+            this.comboBoxCommander.DisplayMember = null;
+            this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCommander.DropDownHeight = 200;
+            this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCommander.ItemHeight = 20;
+            this.comboBoxCommander.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxCommander.Items")));
+            this.comboBoxCommander.Location = new System.Drawing.Point(106, 4);
+            this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCommander.Name = "comboBoxCommander";
+            this.comboBoxCommander.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCommander.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCommander.ScrollBarWidth = 16;
+            this.comboBoxCommander.SelectedIndex = -1;
+            this.comboBoxCommander.SelectedItem = null;
+            this.comboBoxCommander.Size = new System.Drawing.Size(191, 23);
+            this.comboBoxCommander.TabIndex = 0;
+            this.comboBoxCommander.ValueMember = null;
+            // 
+            // textBoxDistanceToNextSystem
+            // 
+            this.textBoxDistanceToNextSystem.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxDistanceToNextSystem.BorderPadding = 1;
+            this.textBoxDistanceToNextSystem.BorderSize = 1;
+            this.textBoxDistanceToNextSystem.Location = new System.Drawing.Point(151, 74);
+            this.textBoxDistanceToNextSystem.Name = "textBoxDistanceToNextSystem";
+            this.textBoxDistanceToNextSystem.Size = new System.Drawing.Size(48, 20);
+            this.textBoxDistanceToNextSystem.TabIndex = 5;
+            this.textBoxDistanceToNextSystem.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDistanceToNextSystem_Validating);
+            // 
+            // buttonMap
+            // 
+            this.buttonMap.BorderColorScaling = 1.25F;
+            this.buttonMap.ButtonColorScaling = 0.5F;
+            this.buttonMap.ButtonDisabledScaling = 0.5F;
+            this.buttonMap.Location = new System.Drawing.Point(211, 71);
+            this.buttonMap.Name = "buttonMap";
+            this.buttonMap.Size = new System.Drawing.Size(83, 23);
+            this.buttonMap.TabIndex = 4;
+            this.buttonMap.Text = "3D star map";
+            this.buttonMap.UseVisualStyleBackColor = true;
+            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
+            // 
+            // buttonSync
+            // 
+            this.buttonSync.BorderColorScaling = 1.25F;
+            this.buttonSync.ButtonColorScaling = 0.5F;
+            this.buttonSync.ButtonDisabledScaling = 0.5F;
+            this.buttonSync.Location = new System.Drawing.Point(106, 38);
+            this.buttonSync.Name = "buttonSync";
+            this.buttonSync.Size = new System.Drawing.Size(100, 23);
+            this.buttonSync.TabIndex = 1;
+            this.buttonSync.Text = "Sync with EDSM";
+            this.buttonSync.UseVisualStyleBackColor = true;
+            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(220, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 13);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "Search";
+            // 
+            // panelBottom
+            // 
+            this.panelBottom.Controls.Add(this.richTextBox_History);
+            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelBottom.Location = new System.Drawing.Point(0, 548);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(594, 102);
+            this.panelBottom.TabIndex = 2;
+            // 
+            // richTextBox_History
+            // 
+            this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
+            this.richTextBox_History.BorderColorScaling = 0.5F;
+            this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox_History.Name = "richTextBox_History";
+            this.richTextBox_History.ScrollBarWidth = 20;
+            this.richTextBox_History.ShowLineCount = false;
+            this.richTextBox_History.Size = new System.Drawing.Size(594, 102);
+            this.richTextBox_History.TabIndex = 0;
+            // 
+            // panelMain
+            // 
+            this.panelMain.Controls.Add(this.dataViewScrollerPanel1);
+            this.panelMain.Controls.Add(this.TopPanel);
+            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMain.Location = new System.Drawing.Point(0, 0);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(594, 548);
+            this.panelMain.TabIndex = 0;
+            // 
+            // dataViewScrollerPanel1
+            // 
+            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
+            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewTravel);
+            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(594, 516);
+            this.dataViewScrollerPanel1.TabIndex = 25;
+            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom1
+            // 
+            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.LargeChange = 0;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(571, 21);
+            this.vScrollBarCustom1.Maximum = -1;
+            this.vScrollBarCustom1.Minimum = 0;
+            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 495);
+            this.vScrollBarCustom1.SmallChange = 1;
+            this.vScrollBarCustom1.TabIndex = 4;
+            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom1.Value = -1;
+            this.vScrollBarCustom1.ValueLimited = -1;
+            // 
+            // TopPanel
+            // 
+            this.TopPanel.Controls.Add(this.label1);
+            this.TopPanel.Controls.Add(this.textBoxFilter);
+            this.TopPanel.Controls.Add(this.button_RefreshHistory);
+            this.TopPanel.Controls.Add(this.label2);
+            this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
+            this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.TopPanel.Location = new System.Drawing.Point(0, 0);
+            this.TopPanel.Name = "TopPanel";
+            this.TopPanel.Size = new System.Drawing.Size(594, 32);
+            this.TopPanel.TabIndex = 26;
+            // 
+            // textBoxFilter
+            // 
+            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFilter.BorderPadding = 1;
+            this.textBoxFilter.BorderSize = 1;
+            this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
+            this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
+            this.textBoxFilter.TabIndex = 1;
+            this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
+            this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
+            // 
+            // button_RefreshHistory
+            // 
+            this.button_RefreshHistory.BorderColorScaling = 1.25F;
+            this.button_RefreshHistory.ButtonColorScaling = 0.5F;
+            this.button_RefreshHistory.ButtonDisabledScaling = 0.5F;
+            this.button_RefreshHistory.Location = new System.Drawing.Point(450, 4);
+            this.button_RefreshHistory.Name = "button_RefreshHistory";
+            this.button_RefreshHistory.Size = new System.Drawing.Size(69, 23);
+            this.button_RefreshHistory.TabIndex = 2;
+            this.button_RefreshHistory.Text = "Refresh";
+            this.button_RefreshHistory.UseVisualStyleBackColor = true;
+            this.button_RefreshHistory.Click += new System.EventHandler(this.button_RefreshHistory_Click);
+            // 
+            // comboBoxHistoryWindow
+            // 
+            this.comboBoxHistoryWindow.ArrowWidth = 1;
+            this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
+            this.comboBoxHistoryWindow.DataSource = null;
+            this.comboBoxHistoryWindow.DisplayMember = null;
+            this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxHistoryWindow.DropDownHeight = 200;
+            this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxHistoryWindow.ItemHeight = 20;
+            this.comboBoxHistoryWindow.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxHistoryWindow.Items")));
+            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
+            this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
+            this.comboBoxHistoryWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxHistoryWindow.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxHistoryWindow.ScrollBarWidth = 16;
+            this.comboBoxHistoryWindow.SelectedIndex = -1;
+            this.comboBoxHistoryWindow.SelectedItem = null;
+            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
+            this.comboBoxHistoryWindow.TabIndex = 0;
+            this.comboBoxHistoryWindow.ValueMember = null;
+            this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // mapColorDialog
+            // 
+            this.mapColorDialog.SolidColorOnly = true;
             // 
             // TravelHistoryControl
             // 
@@ -855,11 +1002,17 @@
             this.panel_system.ResumeLayout(false);
             this.panel_system.PerformLayout();
             this.panelRight.ResumeLayout(false);
-            this.panelRight.PerformLayout();
+            this.panel_bottomright.ResumeLayout(false);
+            this.panel_bottomright.PerformLayout();
+            this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
+            this.panel_topright.ResumeLayout(false);
+            this.panel_topright.PerformLayout();
             this.panelBottom.ResumeLayout(false);
             this.panelMain.ResumeLayout(false);
-            this.panelMain.PerformLayout();
+            this.dataViewScrollerPanel1.ResumeLayout(false);
+            this.TopPanel.ResumeLayout(false);
+            this.TopPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -869,7 +1022,7 @@
         private ExtendedControls.ButtonExt button_RefreshHistory;
         private ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelclosests;
         private ExtendedControls.ButtonExt buttonMap;
         internal ExtendedControls.RichTextBoxScroll richTextBox_History;
         private ExtendedControls.TextBoxBorder textBoxSystem;
@@ -885,7 +1038,7 @@
         private ExtendedControls.TextBoxBorder textBoxX;
         private System.Windows.Forms.Label label4;
         private ExtendedControls.ButtonExt buttonUpdate;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelCMDR;
         private ExtendedControls.RichTextBoxScroll richTextBoxNote;
         private ExtendedControls.ButtonExt buttonSync;
         private System.Windows.Forms.Label label9;
@@ -925,11 +1078,18 @@
         private System.Windows.Forms.DataGridView dataGridViewNearest;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
+        private System.Windows.Forms.Label label_warning;
+        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
+        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private System.Windows.Forms.Panel TopPanel;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
-        private System.Windows.Forms.Label label_warning;
+        private System.Windows.Forms.Panel panel_bottomright;
+        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
+        private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
+        private System.Windows.Forms.Panel panel_topright;
     }
 }

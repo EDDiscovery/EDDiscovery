@@ -103,14 +103,6 @@ namespace EDDiscovery
             static_richTextBox.AppendText(text, color);
         }
 
-        private void setRowNumber(DataGridView dgv)
-        {
-            foreach (DataGridViewRow row in dgv.Rows)
-            {
-                row.HeaderCell.Value = (row.Index + 1).ToString();
-            }
-        }
-
         public void RefreshHistory()
         {
             Stopwatch sw1 = new Stopwatch();
@@ -448,7 +440,7 @@ namespace EDDiscovery
                 }
 
                 if (name !=null)
-                    label3.Text = "Closest systems from " + name.ToString();
+                    labelclosests.Text = "Closest systems from " + name.ToString();
 
                 dataGridViewNearest.Rows.Clear();
 

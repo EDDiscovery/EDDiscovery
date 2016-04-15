@@ -16,7 +16,6 @@ namespace ExtendedControls
         public virtual void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft)        // provide a standard version..
         {
             StringFormat f = new StringFormat();
-            //f.Alignment = StringAlignment.Near;
             f.Alignment = StringAlignment.Center;
             f.LineAlignment = StringAlignment.Center;
             gr.SmoothingMode = SmoothingMode.AntiAlias;
