@@ -16,6 +16,7 @@ namespace ExtendedControls
         public Color CheckColor { get; set; } = Color.DarkBlue;
         public Color MouseOverColor { get; set; } = Color.CornflowerBlue;
         public float FontNerfReduction { get; set; } = 0.5F;
+        public int TickBoxReductionSize { get; set; } = 10;          // no of pixels smaller than the height to make the tick box
 
         public CheckBoxCustom() : base()
         {
@@ -32,8 +33,8 @@ namespace ExtendedControls
                 using (Brush br = new SolidBrush(this.BackColor))
                     e.Graphics.FillRectangle(br, rect);
 
-                rect.Height -= 6;
-                rect.Y += 3;
+                rect.Height -= TickBoxReductionSize;
+                rect.Y += TickBoxReductionSize/2;
                 rect.Width = rect.Height;
 
                 Rectangle textarea = ClientRectangle;

@@ -176,6 +176,9 @@
     <Compile Include="Controls\CheckBoxCustom.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\DataViewScrollerPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\GroupBoxCustom.cs">
       <SubType>Component</SubType>
     </Compile>

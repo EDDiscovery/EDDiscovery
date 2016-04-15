@@ -137,7 +137,7 @@ namespace ExtendedControls
                 pxsize--;                               // tested MS Sans, Eurocaps, Calisto
 
             textboxlinesestimate = texth / pxsize;
-            Console.WriteLine("With Font " + TextBox.Font.Name + ":" + TextBox.Font.Size + " Estimate " + textboxlinesestimate + " from " + TextBox.Size.Height + " est size " + pxsize);
+            //Console.WriteLine("With Font " + TextBox.Font.Name + ":" + TextBox.Font.Size + " Estimate " + textboxlinesestimate + " from " + TextBox.Size.Height + " est size " + pxsize);
             UpdateVscroll();
         }
 
