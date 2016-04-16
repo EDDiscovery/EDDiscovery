@@ -439,7 +439,7 @@
             this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSubmitDistances.Name = "toolStripButtonSubmitDistances";
             this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(118, 22);
-            this.toolStripButtonSubmitDistances.Text = "Submit Distances";
+            this.toolStripButtonSubmitDistances.Text = "&Submit Distances";
             this.toolStripButtonSubmitDistances.Click += new System.EventHandler(this.toolStripButtonSubmitDistances_Click);
             // 
             // toolStripButtonNew
@@ -448,7 +448,7 @@
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(76, 22);
-            this.toolStripButtonNew.Text = "Start new";
+            this.toolStripButtonNew.Text = "Start &new";
             this.toolStripButtonNew.ToolTipText = "Calculate coordinates for current system";
             this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
             // 
