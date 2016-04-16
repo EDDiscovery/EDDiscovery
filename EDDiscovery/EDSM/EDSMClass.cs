@@ -372,5 +372,22 @@ namespace EDDiscovery2.EDSM
 
         }
 
+        public bool ShowSystemInEDSM(string sysName)
+        {
+            string encodedSys = HttpUtility.UrlEncode(sysName);
+            string query = "system?sysname=" + encodedSys + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&showId=1";
+            var response = RequestGet("api-v1/" + query);
+            var json = response.Body;
+            if (json == null || json.ToString() == "[]")
+                return false;
+
+            JObject msg = JObject.Parse(json);
+            string sysID = msg["id"].Value<string>();
+
+            string url = "http://www.edsm.net/show-system/index/id/" + sysID + "/name/" + encodedSys;
+            System.Diagnostics.Process.Start(url);
+            return true;
+        }
+
     }
 }
