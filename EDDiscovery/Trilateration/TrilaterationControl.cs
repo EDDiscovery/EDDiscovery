@@ -1290,7 +1290,7 @@ namespace EDDiscovery
             {
                 string sysName = cellVal.ToString();
                 EDSMClass edsm = new EDSMClass();
-                if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable");
+                if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
             }
             this.Cursor = Cursors.Default;
         }
@@ -1305,7 +1305,7 @@ namespace EDDiscovery
             this.Cursor = Cursors.WaitCursor;
             string sysName = selectedRows.First<DataGridViewRow>().Cells[1].Value.ToString();
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable");
+            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
         }
