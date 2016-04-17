@@ -11,12 +11,14 @@ using System.Windows.Forms.VisualStyles;
 
 namespace ExtendedControls
 {
-    class ComboBoxCustom : Control
+    public class ComboBoxCustom : Control
     {
         // ForeColor = text, BackColor = control background
         public Color MouseOverBackgroundColor { get; set; } = Color.Silver;
-        public Color BorderColor { get; set; } = Color.Red;
+        public Color BorderColor { get; set; } = Color.White;
         public Color DropDownBackgroundColor { get; set; } = Color.Gray;
+        public Color ScrollBarColor { get; set; } = Color.LightGray;
+        public Color ScrollBarButtonColor { get; set; } = Color.LightGray;
 
         public FlatStyle FlatStyle { get; set; } = FlatStyle.System;
         public int DropDownHeight { get; set; } = 200;
@@ -44,24 +46,6 @@ namespace ExtendedControls
         // events
         public delegate void OnSelectedIndexChanged(object sender, EventArgs e);
         public event OnSelectedIndexChanged SelectedIndexChanged;
-
-        // internals
-        private int selected = -1;
-        private bool isActivated = false;
-        private bool mouseover = false;
-        private bool firstpaint = true;
-        private bool dosystem = false;
-        private ComboBoxState arrowState = ComboBoxState.Normal;
-        private Rectangle topBoxTextArea, arrowRectangleArea, topBoxOutline, topBoxTextTotalArea;
-        private Point arrowpt1, arrowpt2, arrowpt3;
-        private Point arrowpt1c, arrowpt2c, arrowpt3c;
-        private ListControlCustom clc;
-        private object datasourceobject = null;
-        private string datasourcedisplaymember = null;
-        private string datasourcevaluemember = null;
-
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
         public ComboBoxCustom() : base()
         {
@@ -155,8 +139,9 @@ namespace ExtendedControls
                     bbck = new SolidBrush(bck);
                 }
 
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 e.Graphics.FillRectangle(bbck, topBoxTextTotalArea);
+
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
                 if (p2 != null)
                 {
@@ -171,9 +156,10 @@ namespace ExtendedControls
                         e.Graphics.DrawLine(p2, arrowpt2, arrowpt3);
                     }
                 }
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
                 e.Graphics.DrawString(this.Text, this.Font, textb, topBoxTextArea);
+
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
                 bbck.Dispose();
             }
@@ -198,8 +184,8 @@ namespace ExtendedControls
                 if (fittableitems > Items.Count())                             // no point doing more than we have..
                     fittableitems = Items.Count();
 
-                clc.Size = new Size(ClientRectangle.Width, fittableitems * ItemHeight + 2); //+2 is for a border, just in case we paint one
-                clc.BackColor = DropDownBackgroundColor;
+                clc.Size = new Size(ClientRectangle.Width, fittableitems * ItemHeight + ((FlatStyle!=FlatStyle.System) ? 4 : 0)); 
+                clc.SelectionBackColor = DropDownBackgroundColor;
                 clc.ForeColor = ForeColor;
                 clc.BorderColor = BorderColor;
                 clc.Items = Items;
@@ -208,6 +194,8 @@ namespace ExtendedControls
                 clc.FlatStyle = FlatStyle;
                 clc.SelectedIndexChanged += UserSelectedIndex;
                 clc.Font = Font;
+                clc.ScrollBarColor = ScrollBarColor;
+                clc.ScrollBarButtonColor = ScrollBarButtonColor;
                 parentform.Controls.Add(clc);
                 clc.Show();
                 clc.BringToFront();
@@ -423,7 +411,7 @@ namespace ExtendedControls
                     {
                         if (pi.PropertyType.Name.Equals("String"))  // string properties (for now) only
                         {
-                            string s = (string)(pi.GetValue(oi,null));
+                            string s = (string)(pi.GetValue(oi, null));
                             Items.Add(s);                           // add it to items..
                         }
                         else
@@ -474,7 +462,7 @@ namespace ExtendedControls
                     index++;
                 }
             }
-            else if ( value is String )
+            else if (value is String)
             {
                 UpdateSelected((string)value);
             }
@@ -491,10 +479,30 @@ namespace ExtendedControls
                 PropertyInfo pi = ti.GetProperty(datasourcevaluemember);
 
                 if (pi != null)
-                    return pi.GetValue(oi,null);         // return value..
+                    return pi.GetValue(oi, null);         // return value..
             }
 
             return null;
         }
+
+
+        // internals
+        private int selected = -1;
+        private bool isActivated = false;
+        private bool mouseover = false;
+        private bool firstpaint = true;
+        private bool dosystem = false;
+        private ComboBoxState arrowState = ComboBoxState.Normal;
+        private Rectangle topBoxTextArea, arrowRectangleArea, topBoxOutline, topBoxTextTotalArea;
+        private Point arrowpt1, arrowpt2, arrowpt3;
+        private Point arrowpt1c, arrowpt2c, arrowpt3c;
+        private ListControlCustom clc;
+        private object datasourceobject = null;
+        private string datasourcedisplaymember = null;
+        private string datasourcevaluemember = null;
+
+        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
+        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
+
     }
 }

@@ -173,6 +173,21 @@
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\CheckBoxCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DataViewScrollerPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\GroupBoxCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\RadioButtonCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\RichTextBoxScroll.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\TabControlCustom.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -190,6 +205,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\TextBoxBorder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\VScrollCustom.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DB\InMemory\VisitedSystemsClass.cs" />

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RouteControl));
-            this.richTextBox_routeresult = new ExtendedControls.RichTextBoxBorder();
+            this.richTextBox_routeresult = new ExtendedControls.RichTextBoxScroll();
             this.textBox_From = new ExtendedControls.TextBoxBorder();
             this.label3 = new System.Windows.Forms.Label();
             this.button_Route = new ExtendedControls.ButtonExt();
@@ -51,16 +51,13 @@
             this.textBox_Distance = new ExtendedControls.TextBoxBorder();
             this.label7 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.groupBox_Entries = new System.Windows.Forms.GroupBox();
+            this.groupBox_Entries = new ExtendedControls.GroupBoxCustom();
             this.groupBox_Entries.SuspendLayout();
             this.cmd3DMap = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // richTextBox_routeresult
             // 
-            this.richTextBox_routeresult.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBox_routeresult.BorderPadding = 1;
-            this.richTextBox_routeresult.BorderSize = 1;
             this.richTextBox_routeresult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_routeresult.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox_routeresult.Location = new System.Drawing.Point(0, 105);
@@ -404,7 +401,7 @@
 
         #endregion
 
-        private ExtendedControls.RichTextBoxBorder richTextBox_routeresult;
+        private ExtendedControls.RichTextBoxScroll richTextBox_routeresult;
         internal ExtendedControls.TextBoxBorder textBox_From;
         private System.Windows.Forms.Label label3;
         private ExtendedControls.ButtonExt button_Route;
@@ -426,7 +423,7 @@
         internal ExtendedControls.TextBoxBorder textBox_Distance;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.GroupBox groupBox_Entries;
+        private ExtendedControls.GroupBoxCustom groupBox_Entries;
         private System.Windows.Forms.Button cmd3DMap;
     }
 }

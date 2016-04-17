@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    abstract class TabStyleCustom
+    public abstract class TabStyleCustom
     {
         public abstract void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline);
 
         public virtual void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft)        // provide a standard version..
         {
             StringFormat f = new StringFormat();
-            f.Alignment = StringAlignment.Near;
+            f.Alignment = StringAlignment.Center;
             f.LineAlignment = StringAlignment.Center;
             gr.SmoothingMode = SmoothingMode.AntiAlias;
             using (Brush textb = new SolidBrush(color))
@@ -24,7 +24,7 @@ namespace ExtendedControls
         }
     }
 
-    class TabStyleSquare : TabStyleCustom
+    public class TabStyleSquare : TabStyleCustom
     {
         public override void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline)
         {
@@ -62,7 +62,7 @@ namespace ExtendedControls
         }
     }
 
-    class TabStyleRoundedEdge : TabStyleCustom
+    public class TabStyleRoundedEdge : TabStyleCustom
     {
         public override void DrawTab(Graphics gr, Rectangle borderrect, int index, bool selected, Color color1, Color color2, Color coloroutline)
         {
@@ -101,7 +101,7 @@ namespace ExtendedControls
         }
     }
 
-    class TabStyleAngled : TabStyleCustom
+    public class TabStyleAngled : TabStyleCustom
     {
         private const int shift = 6;
 
@@ -134,13 +134,16 @@ namespace ExtendedControls
             using (Brush b = new System.Drawing.Drawing2D.LinearGradientBrush(borderrect, color1, color2, 90))
                 gr.FillPath(b, fill);
 
+            gr.SmoothingMode = SmoothingMode.AntiAlias;
+
             using (Pen p = new Pen(coloroutline, 1.0F))
                 gr.DrawPath(p, border);
         }
 
         public override void DrawText(Graphics gr, Rectangle borderrect, int index, bool selected, Color color, string text, Font ft)        // provide a standard version..
         {
-            borderrect.X += shift - 1;  // shift, because its sloped.. this looks about right
+            //borderrect.X += shift - 1;  // shift, because its sloped.. this looks about right
+            borderrect.Width += shift;
             base.DrawText(gr, borderrect, index, selected, color, text, ft);
         }
     }

@@ -115,7 +115,7 @@ namespace EDDiscovery
 
 
 
-        public List<SystemPosition> ParseFiles(RichTextBox richTextBox_History, int defaultMapColour)
+        public List<SystemPosition> ParseFiles(ExtendedControls.RichTextBoxScroll richTextBox_History, int defaultMapColour, int commander)
         {
             string datapath;
             DirectoryInfo dirInfo;
@@ -379,18 +379,10 @@ namespace EDDiscovery
         }
 
 
-        private void AppendText(RichTextBox box, string text, Color color)
+        private void AppendText(ExtendedControls.RichTextBoxScroll box, string text, Color color)
         {
-            box.SelectionStart = box.TextLength;
-            box.SelectionLength = 0;
-
-            box.SelectionColor = color;
-            box.AppendText(text);
-            box.SelectionColor = box.ForeColor;
-            box.ScrollToCaret();
-            box.Invalidate();
+            box.AppendText(text, color);
             Application.DoEvents();
-
         }
 
         private EDDiscoveryForm _discoveryform;
