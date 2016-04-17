@@ -9,30 +9,34 @@ using System.Windows.Forms.VisualStyles;
 
 namespace ExtendedControls
 {
-    class ListControlCustom : Control
+    public class ListControlCustom : Control
     {
+        // BackColor paints the whole control - set Transparent if you don't want this. (but its a fake transparent note).
+
         public List<string> Items { get; set; }
+        public bool FitToItemsHeight { get; set; } = true;                    // if set, move the border to integer of item height.
         public int ScrollBarWidth { get; set; } = 16;
         public int ItemHeight { get; set; } = 20;
         public FlatStyle FlatStyle { get; set; } = FlatStyle.System;
+
+        public Color SelectionBackColor { get; set; } = Color.Gray;     // the area actually used (Not system)
+        public Color BorderColor { get; set; } = Color.Red;             // not system
         public float GradientColorScaling { get; set; } = 0.5F;
-        public Color BorderColor { get; set; } = Color.Red;
+        public Color ScrollBarColor { get; set; } = Color.LightGray;    // not system
+        public Color ScrollBarButtonColor { get; set; } = Color.LightGray;    // not system
+
         public int SelectedIndex { get; set; } = -1;
 
         public delegate void OnSelectedIndexChanged(object sender, EventArgs e);
         public event OnSelectedIndexChanged SelectedIndexChanged;
 
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
-
-        private int firstindex = -1;
-
-        private System.Windows.Forms.VScrollBar vScrollBar;
+        #region Implementation
 
         public ListControlCustom() : base()
         {
+            SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.OptimizedDoubleBuffer, true);
             Items = new List<string>();
-            vScrollBar = new VScrollBar();
+            vScrollBar = new VScrollBarCustom();
             vScrollBar.SmallChange = 1;
             vScrollBar.LargeChange = 1;
             Controls.Add(vScrollBar);
@@ -40,19 +44,60 @@ namespace ExtendedControls
             vScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(vScroll);
         }
 
+        protected override void OnLayout(LayoutEventArgs levent)
+        {
+            base.OnLayout(levent);
+        }
+
+        private void CalculateLayout()
+        { 
+            int bordersize = 0;
+
+            if (FlatStyle != FlatStyle.System && BorderColor != Color.Transparent)
+                bordersize = 2;
+
+            int items = (Items != null) ? Items.Count() : 0;
+            itemslayoutestimatedon = items;
+
+            displayableitems = (ClientRectangle.Height-bordersize*2) / ItemHeight;            // number of items to display
+
+            if (items > 0 && displayableitems > items)
+                displayableitems = items;
+
+            mainarea = new Rectangle(bordersize, bordersize, 
+                            ClientRectangle.Width - bordersize * 2, 
+                            (FitToItemsHeight) ? (displayableitems * ItemHeight) : (ClientRectangle.Height - bordersize*2));
+            borderrect = mainarea;
+            borderrect.Inflate(bordersize,bordersize);
+            borderrect.Width--; borderrect.Height--;        // adjust to rect not area.
+
+            if ( items > displayableitems )
+            {
+                vScrollBar.Location = new Point(mainarea.Right - ScrollBarWidth, mainarea.Y);
+                mainarea.Width -= ScrollBarWidth;
+                vScrollBar.Size = new Size(ScrollBarWidth, mainarea.Height);
+                vScrollBar.Minimum = 0;
+                vScrollBar.Maximum = Items.Count - displayableitems;
+                vScrollBar.Visible = true;
+                vScrollBar.FlatStyle = FlatStyle;
+
+                vScrollBar.BackColor = ScrollBarColor;
+                vScrollBar.BorderColor = vScrollBar.ThumbBorderColor = vScrollBar.ArrowBorderColor = BorderColor;
+                vScrollBar.ArrowButtonColor = vScrollBar.ThumbButtonColor = ScrollBarButtonColor;
+                vScrollBar.MouseOverButtonColor = Multiply(ScrollBarButtonColor, 1.4F);
+                vScrollBar.MousePressedButtonColor = Multiply(ScrollBarButtonColor, 1.5F);
+                vScrollBar.ForeColor = Multiply(ScrollBarButtonColor, 0.25F);
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            Rectangle border = new Rectangle(0, 0, ClientRectangle.Width - 1, ClientRectangle.Height - 1);
+            if (Items != null && itemslayoutestimatedon != Items.Count())  // item count changed, rework it out.
+                CalculateLayout();
 
-            Rectangle area = ClientRectangle;
-            int extraborder = (FlatStyle != FlatStyle.System) ? 1 : 0;
-            area.Inflate(-extraborder, -extraborder);
-
-            int displayableitems = DisplayableItems();
-
-            if ( firstindex < 0 )                                           // if invalid (at start)
+            if (firstindex < 0)                                           // if invalid (at start)
             {
-                if (SelectedIndex == -1 || Items == null )                  // screen out null..
+                if (SelectedIndex == -1 || Items == null)                  // screen out null..
                     firstindex = 0;
                 else
                 {
@@ -65,49 +110,44 @@ namespace ExtendedControls
                             firstindex = 0;
                     }
                 }
-            }
 
-            if (Items != null && displayableitems < Items.Count)                        // if too few..
-            {
-                vScrollBar.Location = new Point(ClientRectangle.Width - ScrollBarWidth - extraborder,
-                                                ClientRectangle.Y + extraborder);
-                vScrollBar.Size = new Size(ScrollBarWidth, area.Height);
-                area.Width -= ScrollBarWidth;
-
-                vScrollBar.Minimum = 0;
                 vScrollBar.Value = firstindex;
-                vScrollBar.Maximum = Items.Count - displayableitems;
-                vScrollBar.Visible = true;
             }
+
 
             if (FlatStyle != FlatStyle.System || !ComboBoxRenderer.IsSupported)
             {
                 Pen p = new Pen(this.BorderColor);
-                e.Graphics.DrawRectangle(p, border);
+                e.Graphics.DrawRectangle(p, borderrect);
                 p.Dispose();
 
                 Brush backb;
 
-                if (FlatStyle == FlatStyle.Popup)
-                    backb = new System.Drawing.Drawing2D.LinearGradientBrush(area, this.BackColor, Multiply(this.BackColor, GradientColorScaling), 90);
-                else
-                    backb = new SolidBrush(this.BackColor);
+                if ( this.SelectionBackColor != Color.Transparent)
+                {
+                    Color c1 = SelectionBackColor;
+                    if (FlatStyle == FlatStyle.Popup)
+                        backb = new System.Drawing.Drawing2D.LinearGradientBrush(mainarea, c1, Multiply(c1, GradientColorScaling), 90);
+                    else
+                        backb = new SolidBrush(c1);
 
-                e.Graphics.FillRectangle(backb, area);
-                backb.Dispose();
+                    e.Graphics.FillRectangle(backb, mainarea);
+                    backb.Dispose();
+                }
             }
 
             if (Items != null && Items.Count > 0)
             {
-                Rectangle pos = area;
+                Rectangle pos = mainarea;
                 pos.Height = ItemHeight;
                 int offset = 0;
 
                 Brush textb = new SolidBrush(this.ForeColor);
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
                 foreach (string s in Items)
-                {
-                    if (offset >= firstindex && offset < firstindex + displayableitems)
+                {   // if not fitting to items height, 
+                    if (offset >= firstindex && offset < firstindex + displayableitems + (FitToItemsHeight ? 0:1))
                     {
                         if (FlatStyle == FlatStyle.System && ComboBoxRenderer.IsSupported)
                         {
@@ -124,17 +164,11 @@ namespace ExtendedControls
                     offset++;
                 }
 
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
                 textb.Dispose();
             }
         }
 
-
-        public int DisplayableItems()
-        {
-            int extraborder = (FlatStyle != FlatStyle.System) ? 2 : 0;
-            int displayableitems = (ClientRectangle.Height - extraborder) / ItemHeight;
-            return displayableitems;
-        }
 
         protected void vScroll(object sender, ScrollEventArgs e)
         {
@@ -148,10 +182,20 @@ namespace ExtendedControls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            SelectedIndex = firstindex + e.Location.Y / ItemHeight;
 
-            if ( SelectedIndexChanged != null )
-                SelectedIndexChanged(this, new EventArgs());
+            int items = (Items != null) ? Items.Count() : 0;
+
+            if ( items > 0 )                                // if any items.. just to check
+            { 
+                int index = firstindex + e.Location.Y / ItemHeight;
+
+                if (index >= items)                 // due to the few pixels for border.  we let them have this
+                    index = items - 1;
+
+                SelectedIndex = index;
+                if (SelectedIndexChanged != null)
+                    SelectedIndexChanged(this, new EventArgs());
+            }
         }
 
         protected void GoUpOne()
@@ -159,14 +203,16 @@ namespace ExtendedControls
             if (firstindex > 0)
             {
                 firstindex--;
+                vScrollBar.Value = firstindex;
                 Invalidate();
             }
         }
         protected void GoDownOne()
         {
-            if (Items != null && firstindex < Items.Count() - DisplayableItems())
+            if (Items != null && firstindex < Items.Count() - displayableitems)
             {
                 firstindex++;
+                vScrollBar.Value = firstindex;
                 Invalidate();
             }
         }
@@ -200,6 +246,16 @@ namespace ExtendedControls
                 GoUpOne();
         }
 
+        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
+        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
+
+        #endregion
+
+        private VScrollBarCustom vScrollBar;
+        private Rectangle borderrect, mainarea;
+        private int itemslayoutestimatedon = -1;
+        private int displayableitems = -1;
+        private int firstindex = -1;
     }
 }
 

@@ -284,7 +284,7 @@ namespace EDDiscovery2
                 Color.Orange, // checkbox
                 Color.Black, Color.Orange,  // menu
                 Color.Orange,  // label
-                Color.FromArgb(255, 32,32,32), Color.Orange, Color.DarkOrange, // group
+                Color.FromArgb(255, 32,32,32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange,
                 false, 95, "Microsoft Sans Serif", 8.25F));
 
@@ -297,7 +297,7 @@ namespace EDDiscovery2
                 Color.Orange, // checkbox
                 Color.Black, Color.Orange,  // menu
                 Color.Orange,  // label
-                Color.FromArgb(255, 32, 32, 32), Color.Orange, Color.DarkOrange, // group
+                Color.FromArgb(255, 32, 32, 32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange,
                 false, 95, "Euro Caps", 12F));
 
@@ -311,7 +311,7 @@ namespace EDDiscovery2
                 Color.Orange, // checkbox
                 Color.Black, Color.Orange,  // menu
                 Color.Orange,  // label
-                Color.Black, Color.Orange, Color.DarkOrange, // group
+                Color.Black, Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange,
                 false, 100, "Euro Caps", 12F));
 
@@ -579,21 +579,33 @@ namespace EDDiscovery2
                 myControl.ForeColor = currentsettings.colors[Settings.CI.menu_fore];
                 myControl.Font = fnt;
             }
-            else if (myControl is RichTextBoxBorder)
+            else if (myControl is RichTextBoxScroll)
             {
-                RichTextBoxBorder MyDgv = (RichTextBoxBorder)myControl;
-                myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
-                myControl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+                RichTextBoxScroll MyDgv = (RichTextBoxScroll)myControl;
                 MyDgv.BorderColor = Color.Transparent;
                 MyDgv.BorderStyle = BorderStyle.None;
-                MyDgv.BorderPadding = 2;                                                    // for colour selection, 2 pixels of border padding before border..
+
+                MyDgv.TextBox.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                MyDgv.TextBox.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+
+                MyDgv.ScrollBar.FlatStyle = FlatStyle.System;
 
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[1]))
                     MyDgv.BorderStyle = BorderStyle.FixedSingle;
                 else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[2]))
                     MyDgv.BorderStyle = BorderStyle.Fixed3D;
                 else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[3]))
+                {
+                    Color c1 = currentsettings.colors[Settings.CI.textbox_fore];
                     MyDgv.BorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                    MyDgv.ScrollBar.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+                    MyDgv.ScrollBar.BorderColor = MyDgv.ScrollBar.ThumbBorderColor = MyDgv.ScrollBar.ArrowBorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                    MyDgv.ScrollBar.ArrowButtonColor = MyDgv.ScrollBar.ThumbButtonColor = c1;
+                    MyDgv.ScrollBar.MouseOverButtonColor = ButtonExt.Multiply(c1, 1.4F);
+                    MyDgv.ScrollBar.MousePressedButtonColor = ButtonExt.Multiply(c1, 1.5F);
+                    MyDgv.ScrollBar.ForeColor = ButtonExt.Multiply(c1, 0.25F);
+                    MyDgv.ScrollBar.FlatStyle = FlatStyle.Popup;
+                }
 
                 if (myControl.Font.Name.Contains("Courier"))                  // okay if we ordered a fixed font, don't override
                 {
@@ -651,7 +663,7 @@ namespace EDDiscovery2
                 myControl.Font = fnt;
             }
             else if (myControl is TabControlCustom)
-            { 
+            {
                 TabControlCustom MyDgv = (TabControlCustom)myControl;
 
                 if (!currentsettings.buttonstyle.Equals(ButtonStyles[0])) // not system
@@ -696,22 +708,9 @@ namespace EDDiscovery2
                 myControl.Font = fnt;
                 MyDgv.Repaint();            // force a repaint as the individual settings do not by design.
             }
-            else if (myControl is RichTextBox || myControl is TextBox)
-            {
-                myControl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
-                myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
-
-                if (myControl.Font.Name.Contains("Courier"))                  // okay if we ordered a fixed font, don't override
-                {
-                    Font fntf = new Font(myControl.Font.Name, currentsettings.fontsize); // make one of the selected size
-                    myControl.Font = fntf;
-                }
-                else
-                    myControl.Font = fnt;
-            }
             else if (myControl is NumericUpDown)
             {                                                                   // BACK colour does not work..
-                myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore]; 
+                myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
                 myControl.Font = fnt;
             }
             else if (myControl is Panel)
@@ -727,19 +726,58 @@ namespace EDDiscovery2
                 myControl.ForeColor = currentsettings.colors[Settings.CI.label];
                 myControl.Font = fnt;
             }
-            else if (myControl is GroupBox)
+            else if (myControl is GroupBoxCustom)
             {
-                GroupBox MyDgv = (GroupBox)myControl;
+                GroupBoxCustom MyDgv = (GroupBoxCustom)myControl;
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.group_text];
                 MyDgv.BackColor = currentsettings.colors[Settings.CI.group_back];
-                myControl.Font = fnt;
+                MyDgv.BorderColor = currentsettings.colors[Settings.CI.group_borderlines];
+                MyDgv.FlatStyle = FlatStyle.Flat;           // always in Flat, always apply our border.
+                MyDgv.Font = fnt;
             }
-            else if (myControl is CheckBox || myControl is RadioButton)
+            else if (myControl is CheckBoxCustom)
             {
-                myControl.ForeColor = currentsettings.colors[Settings.CI.checkbox];
-                myControl.Font = fnt;
+                CheckBoxCustom MyDgv = (CheckBoxCustom)myControl;
+
+                if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
+                    MyDgv.FlatStyle = FlatStyle.System;
+                else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                    MyDgv.FlatStyle = FlatStyle.Flat;
+                else
+                    MyDgv.FlatStyle = FlatStyle.Popup;
+
+                MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
+                MyDgv.ForeColor = currentsettings.colors[Settings.CI.checkbox];
+                MyDgv.CheckBoxColor = currentsettings.colors[Settings.CI.checkbox];
+                MyDgv.CheckBoxInnerColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.5F);
+                MyDgv.CheckColor = ButtonExt.Multiply(MyDgv.BackColor, 0.75F);
+                MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
+                MyDgv.Font = fnt;
             }
-            else if (myControl is DataGridView)
+            else if (myControl is RadioButtonCustom)
+            {
+                RadioButtonCustom MyDgv = (RadioButtonCustom)myControl;
+
+                MyDgv.FlatStyle = FlatStyle.System;
+                MyDgv.Font = fnt;
+
+                if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
+                    MyDgv.FlatStyle = FlatStyle.System;
+                else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                    MyDgv.FlatStyle = FlatStyle.Flat;
+                else
+                    MyDgv.FlatStyle = FlatStyle.Popup;
+
+                //Console.WriteLine("RB:" + myControl.Name + " Apply style " + currentsettings.buttonstyle);
+
+                MyDgv.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
+                MyDgv.ForeColor = currentsettings.colors[Settings.CI.checkbox];
+                MyDgv.RadioButtonColor = currentsettings.colors[Settings.CI.checkbox];
+                MyDgv.RadioButtonInnerColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.5F);
+                MyDgv.SelectedColor = ButtonExt.Multiply(MyDgv.BackColor, 0.75F);
+                MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
+            }
+            else if (myControl is DataGridView)                     // we theme this directly
             {
                 DataGridView MyDgv = (DataGridView)myControl;
                 MyDgv.EnableHeadersVisualStyles = false;            // without this, the colours for the grid are not applied.
@@ -759,14 +797,46 @@ namespace EDDiscovery2
                 MyDgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                 MyDgv.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
-                myControl.Font = fnt;
-                if (myControl.Name.Contains("dataGridViewTravel") && fnt.Size > 9F)
+                MyDgv.Font = fnt;           // MyDgv.RowHeadersDefaultCellStyle - can't make it work for love nor money..
+                Font fnt2;
+                
+                if (myControl.Name.Contains("dataGridViewTravel") && fnt.Size > 10F)
+                    fnt2 = new Font(currentsettings.fontname, 10F);
+                else
+                    fnt2 = fnt;
+
+                MyDgv.ColumnHeadersDefaultCellStyle.Font = fnt2;
+                MyDgv.Columns[0].DefaultCellStyle.Font = fnt2;
+
+                using (Graphics g = MyDgv.CreateGraphics())
                 {
-                    Font fnt2 = new Font(currentsettings.fontname, 9F);
-                    MyDgv.Columns[0].DefaultCellStyle.Font = fnt2;
+                    SizeF sz = g.MeasureString("99999", fnt);
+                    MyDgv.RowHeadersWidth = (int)(sz.Width + 2);        // size it to the text
+                }
+            }
+            else if (myControl is VScrollBarCustom && parent is DataViewScrollerPanel)
+            {                   // a VScrollbarCustom inside a dataview scroller panel themed as a scroller panel
+                VScrollBarCustom MyDgv = (VScrollBarCustom)myControl;
+
+                if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[3]))
+                {
+                    Color c1 = currentsettings.colors[Settings.CI.textbox_fore];
+                    MyDgv.BorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                    MyDgv.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+                    MyDgv.BorderColor = MyDgv.ThumbBorderColor = MyDgv.ArrowBorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                    MyDgv.ArrowButtonColor = MyDgv.ThumbButtonColor = c1;
+                    MyDgv.MouseOverButtonColor = ButtonExt.Multiply(c1, 1.4F);
+                    MyDgv.MousePressedButtonColor = ButtonExt.Multiply(c1, 1.5F);
+                    MyDgv.ForeColor = ButtonExt.Multiply(c1, 0.25F);
+                    MyDgv.FlatStyle = FlatStyle.Popup;
                 }
                 else
-                    MyDgv.Columns[0].DefaultCellStyle.Font = fnt;
+                    MyDgv.FlatStyle = FlatStyle.System;
+            }
+            else
+            {
+                Type tp = myControl.GetType();
+                Console.WriteLine("THEME: Unhandled control " + tp.Name + ":" + myControl.Name + " from " + parent.Name);
             }
 
             foreach (Control subC in myControl.Controls)

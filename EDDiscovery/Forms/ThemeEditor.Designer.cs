@@ -46,6 +46,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -55,6 +56,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel_theme15 = new System.Windows.Forms.Panel();
             this.panel_theme31 = new System.Windows.Forms.Panel();
+            this.panel_theme35 = new System.Windows.Forms.Panel();
             this.panel_theme33 = new System.Windows.Forms.Panel();
             this.panel_theme32 = new System.Windows.Forms.Panel();
             this.panel_theme30 = new System.Windows.Forms.Panel();
@@ -81,8 +83,6 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.panel_theme35 = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
             this.groupBoxColors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -299,6 +299,15 @@
             this.label16.TabIndex = 6;
             this.label16.Text = "Groups";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(651, 27);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(62, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Tab Control";
+            // 
             // label14
             // 
             this.label14.AutoSize = true;
@@ -381,6 +390,16 @@
             this.panel_theme31.Size = new System.Drawing.Size(28, 28);
             this.panel_theme31.TabIndex = 5;
             this.panel_theme31.Tag = "";
+            // 
+            // panel_theme35
+            // 
+            this.panel_theme35.AccessibleDescription = "";
+            this.panel_theme35.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme35.Location = new System.Drawing.Point(669, 140);
+            this.panel_theme35.Name = "panel_theme35";
+            this.panel_theme35.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme35.TabIndex = 5;
+            this.panel_theme35.Tag = "";
             // 
             // panel_theme33
             // 
@@ -580,6 +599,7 @@
             this.textBox_Font.Size = new System.Drawing.Size(159, 20);
             this.textBox_Font.TabIndex = 8;
             this.textBox_Font.Text = "Font Elite Dangerous";
+            this.textBox_Font.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBox_Font_MouseClick);
             // 
             // label_opacity
             // 
@@ -634,25 +654,6 @@
             this.label3.Size = new System.Drawing.Size(28, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Font";
-            // 
-            // panel_theme35
-            // 
-            this.panel_theme35.AccessibleDescription = "";
-            this.panel_theme35.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme35.Location = new System.Drawing.Point(669, 140);
-            this.panel_theme35.Name = "panel_theme35";
-            this.panel_theme35.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme35.TabIndex = 5;
-            this.panel_theme35.Tag = "";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(651, 27);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(62, 13);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "Tab Control";
             // 
             // ThemeEditor
             // 

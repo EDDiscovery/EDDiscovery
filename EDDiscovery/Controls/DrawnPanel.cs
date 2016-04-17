@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    class DrawnPanel : Panel
+    public class DrawnPanel : Panel
     {
         public enum ImageType { Close, Minimize, Gripper, EDDB, Ross };
         public ImageType Image { get; set; } = ImageType.Close;

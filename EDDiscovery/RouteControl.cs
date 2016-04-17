@@ -132,13 +132,14 @@ namespace EDDiscovery
             AppendText("Searching route from " + fromsys + " to " + tosys + " using " + metric_options[routemethod] + " metric" + Environment.NewLine);
             AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
 
-            AppendText(Environment.NewLine + string.Format("{0,-40}    Depart          @ {1,9:0.00},{2,8:0.00},{3,9:0.00}" + Environment.NewLine, fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
+            AppendText(Environment.NewLine);
+            AppendText(string.Format("{0,-40}    Depart          @ {1,9:0.00},{2,8:0.00},{3,9:0.00}" + Environment.NewLine, fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
 
             Point3D curpos = coordsfrom;
             int jump = 1;
             double actualdistance = 0;
 #if DEBUG
-            Console.WriteLine("-------------------------- BEGIN");
+            //Console.WriteLine("-------------------------- BEGIN");
 #endif
             do
             {
@@ -155,8 +156,8 @@ namespace EDDiscovery
                                               curpos.Z + maxrange * travelvectorperly.Z);   // where we would like to be..
 
 #if DEBUG
-                Console.WriteLine("Curpos " + curpos.X + "," + curpos.Y + "," + curpos.Z);
-                Console.WriteLine(" next" + nextpos.X + "," + nextpos.Y + "," + nextpos.Z);
+                //Console.WriteLine("Curpos " + curpos.X + "," + curpos.Y + "," + curpos.Z);
+                //Console.WriteLine(" next" + nextpos.X + "," + nextpos.Y + "," + nextpos.Z);
 #endif
                 SystemClass bestsystem;
                 Point3D bestposition;
@@ -186,7 +187,8 @@ namespace EDDiscovery
             routeSystems.Add(SystemData.GetSystem(textBox_To.Text));
             actualdistance += Point3D.DistanceBetween(curpos, coordsto);
             AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
-            AppendText(string.Format(Environment.NewLine + "Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance, actualdistance));
+            AppendText(Environment.NewLine);
+            AppendText(string.Format("Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance, actualdistance));
         }
 
         private void FindBestSystem(Point3D curpos, Point3D wantedpos, double maxfromcurpos , double maxfromwanted, 
@@ -256,7 +258,7 @@ namespace EDDiscovery
             if (system != null)
             {
 #if DEBUG
-                Console.WriteLine("Best System " + nearestsystem.name);
+                //Console.WriteLine("Best System " + nearestsystem.name);
 #endif
                 position = new Point3D(system.x, system.y, system.z);
             }
