@@ -1159,6 +1159,13 @@ namespace EDDiscovery
                             sp.Update();
                         }
                         this.Cursor = Cursors.Default;
+
+
+                        foreach (DataGridViewRow row in selectedRows.ToList<DataGridViewRow>())
+                        {
+                            dataGridViewTravel.Rows.Remove(row);
+                        }
+
                     }
                     else   // Move all systems from the same session
                     {
@@ -1285,6 +1292,36 @@ namespace EDDiscovery
                 sysName = r.Cells[1].Value.ToString();
                 tctrl.AddSystemToDataGridViewDistances(sysName);
             }
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = selectedRows.First<DataGridViewRow>().Cells[1].Value.ToString();
+            EDSMClass edsm = new EDSMClass();
+            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = selectedRows.First<DataGridViewRow>().Cells[0].Value.ToString();
+            EDSMClass edsm = new EDSMClass();
+            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
         }
