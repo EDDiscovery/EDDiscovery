@@ -40,16 +40,16 @@ namespace EDDiscovery2
         {
             get
             {
-                if (currentCmdrID >= listCommanders.Count)
-                    currentCmdrID = listCommanders.Count - 1;
-                return currentCmdrID;
+                return CurrentCommander.Nr;
             }
 
             set
             {
-                currentCmdrID = value;
-                if (currentCmdrID >= listCommanders.Count)
-                    currentCmdrID = listCommanders.Count - 1;
+                var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
+                if (cmdr != null)
+                {
+                    currentCmdrID = cmdr.index;
+                }
             }
         }
 
@@ -64,7 +64,7 @@ namespace EDDiscovery2
                     currentCmdrID = listCommanders.Count - 1;
 
 
-                return listCommanders[CurrentCmdrID];
+                return listCommanders[currentCmdrID];
             }
         }
 
