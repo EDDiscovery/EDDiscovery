@@ -73,6 +73,8 @@
             this.panel_controls = new System.Windows.Forms.Panel();
             this.textBox_status = new System.Windows.Forms.TextBox();
             this.labelstpos = new System.Windows.Forms.Label();
+            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.trilatContextMenu.SuspendLayout();
             this.panelImplementation.SuspendLayout();
@@ -143,9 +145,10 @@
             // trilatContextMenu
             // 
             this.trilatContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToWantedSystemsToolStripMenuItem});
+            this.addToWantedSystemsToolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem});
             this.trilatContextMenu.Name = "trilatContextMenu";
-            this.trilatContextMenu.Size = new System.Drawing.Size(198, 26);
+            this.trilatContextMenu.Size = new System.Drawing.Size(198, 48);
             // 
             // addToWantedSystemsToolStripMenuItem
             // 
@@ -388,9 +391,10 @@
             // wantedContextMenu
             // 
             this.wantedContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.removeFromWantedSystemsToolStripMenuItem});
+            this.removeFromWantedSystemsToolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem1});
             this.wantedContextMenu.Name = "wantedContextMenu";
-            this.wantedContextMenu.Size = new System.Drawing.Size(234, 26);
+            this.wantedContextMenu.Size = new System.Drawing.Size(234, 70);
             // 
             // removeFromWantedSystemsToolStripMenuItem
             // 
@@ -439,7 +443,7 @@
             this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSubmitDistances.Name = "toolStripButtonSubmitDistances";
             this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(118, 22);
-            this.toolStripButtonSubmitDistances.Text = "Submit Distances";
+            this.toolStripButtonSubmitDistances.Text = "&Submit Distances";
             this.toolStripButtonSubmitDistances.Click += new System.EventHandler(this.toolStripButtonSubmitDistances_Click);
             // 
             // toolStripButtonNew
@@ -448,7 +452,7 @@
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(76, 22);
-            this.toolStripButtonNew.Text = "Start new";
+            this.toolStripButtonNew.Text = "Start &new";
             this.toolStripButtonNew.ToolTipText = "Calculate coordinates for current system";
             this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
             // 
@@ -529,6 +533,20 @@
             this.labelstpos.TabIndex = 20;
             this.labelstpos.Text = "Current Status:";
             // 
+            // viewOnEDSMToolStripMenuItem
+            // 
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem1
+            // 
+            this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(233, 22);
+            this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
+            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -600,5 +618,7 @@
         private System.Windows.Forms.ToolStripMenuItem removeFromWantedSystemsToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn Source;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnClosestSystemsSystem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
     }
 }
