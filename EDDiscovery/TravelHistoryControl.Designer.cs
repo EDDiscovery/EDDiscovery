@@ -39,6 +39,8 @@
             this.trilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.comboBoxHistoryWindow = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.labelclosests = new System.Windows.Forms.Label();
             this.label_warning = new System.Windows.Forms.Label();
@@ -70,6 +72,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
+            this.mapColorDialog = new System.Windows.Forms.ColorDialog();
+            this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
             this.TopPanel = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
@@ -129,7 +134,8 @@
             this.starMapColourToolStripMenuItem,
             this.hideSystemToolStripMenuItem,
             this.moveToAnotherCommanderToolStripMenuItem,
-            this.addToTrilaterationToolStripMenuItem});
+            this.addToTrilaterationToolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
             this.historyContextMenu.Size = new System.Drawing.Size(233, 92);
             // 
@@ -184,6 +190,33 @@
             this.bothToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.bothToolStripMenuItem.Text = "Both";
             this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem
+            // 
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            // 
+            // comboBoxHistoryWindow
+            // 
+            this.comboBoxHistoryWindow.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxHistoryWindow.FormattingEnabled = true;
+            this.comboBoxHistoryWindow.Items.AddRange(new object[] {
+            "6 Hours",
+            "12 Hours",
+            "24 Hours",
+            "3 days",
+            "Week",
+            "2 Weeks",
+            "Month",
+            "Last 20",
+            "All"});
+            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(101, 6);
+            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
+            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 21);
+            this.comboBoxHistoryWindow.TabIndex = 0;
+            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -443,9 +476,10 @@
             // closestContextMenu
             // 
             this.closestContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToTrilaterationToolStripMenuItem1});
+            this.addToTrilaterationToolStripMenuItem1,
+            this.viewOnEDSMToolStripMenuItem1});
             this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(177, 26);
+            this.closestContextMenu.Size = new System.Drawing.Size(178, 70);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
@@ -1040,6 +1074,13 @@
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
+            // viewOnEDSMToolStripMenuItem1
+            // 
+            this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+            this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1150,6 +1191,8 @@
         private System.Windows.Forms.ToolStripMenuItem trilaterationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wantedSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
         private ExtendedControls.TextBoxBorder textBoxDistance;
     }
 }
