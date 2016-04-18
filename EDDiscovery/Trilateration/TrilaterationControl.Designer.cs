@@ -42,7 +42,6 @@ namespace EDDiscovery
             this.textBoxSystemName = new ExtendedControls.TextBoxBorder();
             this.trilatContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textBoxSystemName = new TextBoxBorder();
             this.labelTargetSystem = new System.Windows.Forms.Label();
             this.labelCoordinates = new System.Windows.Forms.Label();
             this.textBoxCoordinateX = new ExtendedControls.TextBoxBorder();
