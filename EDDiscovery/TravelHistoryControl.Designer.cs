@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,6 +108,8 @@
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.button_RefreshHistory = new ExtendedControls.ButtonExt();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -129,9 +131,11 @@
             this.starMapColourToolStripMenuItem,
             this.hideSystemToolStripMenuItem,
             this.moveToAnotherCommanderToolStripMenuItem,
-            this.addToTrilaterationToolStripMenuItem});
+            this.addToTrilaterationToolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 92);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 114);
+            this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // starMapColourToolStripMenuItem
             // 
@@ -694,9 +698,10 @@
             // closestContextMenu
             // 
             this.closestContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToTrilaterationToolStripMenuItem1});
+            this.addToTrilaterationToolStripMenuItem1,
+            this.viewOnEDSMToolStripMenuItem1});
             this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(177, 26);
+            this.closestContextMenu.Size = new System.Drawing.Size(177, 70);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
@@ -967,8 +972,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle5;
             this.mapColour.HeaderText = "Map";
             this.mapColour.MinimumWidth = 40;
             this.mapColour.Name = "mapColour";
@@ -1039,6 +1044,20 @@
             this.comboBoxHistoryWindow.TabIndex = 0;
             this.comboBoxHistoryWindow.ValueMember = null;
             this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // viewOnEDSMToolStripMenuItem
+            // 
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem1
+            // 
+            this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+            this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
             // TravelHistoryControl
             // 
@@ -1151,5 +1170,7 @@
         private System.Windows.Forms.ToolStripMenuItem wantedSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
         private ExtendedControls.TextBoxBorder textBoxDistance;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
     }
 }
