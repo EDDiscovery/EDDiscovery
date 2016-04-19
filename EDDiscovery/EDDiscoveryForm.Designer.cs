@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.button_test = new ExtendedControls.ButtonExt();
@@ -58,18 +59,18 @@
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.settings = new EDDiscovery2.Settings();
             this.tabPageRoute = new System.Windows.Forms.TabPage();
+            this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
+            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
+            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
+            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
-            this.trilaterationControl = new EDDiscovery.TrilaterationControl();
-            this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
-            this.routeControl1 = new EDDiscovery.RouteControl();
-            this.settings = new EDDiscovery2.Settings();
             this.panel_grip = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
@@ -85,6 +86,9 @@
             // 
             // button_test
             // 
+            this.button_test.BorderColorScaling = 1.25F;
+            this.button_test.ButtonColorScaling = 0.5F;
+            this.button_test.ButtonDisabledScaling = 0.5F;
             this.button_test.Location = new System.Drawing.Point(772, -1);
             this.button_test.Name = "button_test";
             this.button_test.Size = new System.Drawing.Size(41, 23);
@@ -320,6 +324,14 @@
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
+            // settings
+            // 
+            this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.settings.Location = new System.Drawing.Point(3, 3);
+            this.settings.Name = "settings";
+            this.settings.Size = new System.Drawing.Size(979, 665);
+            this.settings.TabIndex = 0;
+            // 
             // tabPageRoute
             // 
             this.tabPageRoute.Controls.Add(this.routeControl1);
@@ -331,6 +343,14 @@
             this.tabPageRoute.Text = "Route";
             this.tabPageRoute.UseVisualStyleBackColor = true;
             // 
+            // routeControl1
+            // 
+            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.routeControl1.Location = new System.Drawing.Point(3, 3);
+            this.routeControl1.Name = "routeControl1";
+            this.routeControl1.Size = new System.Drawing.Size(979, 665);
+            this.routeControl1.TabIndex = 0;
+            // 
             // tabPageScreenshots
             // 
             this.tabPageScreenshots.Controls.Add(this.imageHandler1);
@@ -340,6 +360,15 @@
             this.tabPageScreenshots.TabIndex = 4;
             this.tabPageScreenshots.Text = "Screenshots";
             this.tabPageScreenshots.UseVisualStyleBackColor = true;
+            // 
+            // imageHandler1
+            // 
+            this.imageHandler1.AutoSize = true;
+            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
+            this.imageHandler1.Name = "imageHandler1";
+            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
+            this.imageHandler1.TabIndex = 0;
             // 
             // tabPageTriletaration
             // 
@@ -352,6 +381,14 @@
             this.tabPageTriletaration.Text = "Trilateration";
             this.tabPageTriletaration.UseVisualStyleBackColor = true;
             // 
+            // trilaterationControl
+            // 
+            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
+            this.trilaterationControl.Name = "trilaterationControl";
+            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
+            this.trilaterationControl.TabIndex = 21;
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPageTravelHistory);
@@ -359,11 +396,24 @@
             this.tabControl1.Controls.Add(this.tabPageScreenshots);
             this.tabControl1.Controls.Add(this.tabPageRoute);
             this.tabControl1.Controls.Add(this.tabPageSettings);
+            this.tabControl1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControl1.Location = new System.Drawing.Point(0, 28);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(993, 697);
+            this.tabControl1.TabColorScaling = 0.5F;
+            this.tabControl1.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
+            this.tabControl1.TabControlBorderColor = System.Drawing.Color.DarkGray;
+            this.tabControl1.TabDisabledScaling = 0.5F;
             this.tabControl1.TabIndex = 15;
+            this.tabControl1.TabMouseOverColor = System.Drawing.Color.White;
+            this.tabControl1.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
+            this.tabControl1.TabNotSelectedColor = System.Drawing.Color.Gray;
+            this.tabControl1.TabOpaque = 100F;
+            this.tabControl1.TabSelectedColor = System.Drawing.Color.LightGray;
+            this.tabControl1.TabStyle = tabStyleSquare1;
+            this.tabControl1.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
+            this.tabControl1.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             // 
             // tabPageTravelHistory
             // 
@@ -376,10 +426,18 @@
             this.tabPageTravelHistory.Text = "Travel history";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
             // 
+            // travelHistoryControl1
+            // 
+            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl1.Name = "travelHistoryControl1";
+            this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
+            this.travelHistoryControl1.TabIndex = 0;
+            // 
             // label_version
             // 
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(296, 3);
+            this.label_version.Location = new System.Drawing.Point(296, 4);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(71, 13);
             this.label_version.TabIndex = 21;
@@ -397,47 +455,6 @@
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.panel1_Click);
             // 
-            // travelHistoryControl1
-            // 
-            this.travelHistoryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl1.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl1.Name = "travelHistoryControl1";
-            this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
-            this.travelHistoryControl1.TabIndex = 0;
-            // 
-            // trilaterationControl
-            // 
-            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
-            this.trilaterationControl.TabIndex = 21;
-            // 
-            // imageHandler1
-            // 
-            this.imageHandler1.AutoSize = true;
-            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
-            this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
-            this.imageHandler1.TabIndex = 0;
-            // 
-            // routeControl1
-            // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(979, 665);
-            this.routeControl1.TabIndex = 0;
-            // 
-            // settings
-            // 
-            this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.settings.Location = new System.Drawing.Point(3, 3);
-            this.settings.Name = "settings";
-            this.settings.Size = new System.Drawing.Size(979, 665);
-            this.settings.TabIndex = 0;
-            // 
             // panel_grip
             // 
             this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -446,6 +463,8 @@
             this.panel_grip.Image = ExtendedControls.DrawnPanel.ImageType.Gripper;
             this.panel_grip.Location = new System.Drawing.Point(977, 727);
             this.panel_grip.MarginSize = 5;
+            this.panel_grip.MouseOverColor = System.Drawing.Color.White;
+            this.panel_grip.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_grip.Name = "panel_grip";
             this.panel_grip.Size = new System.Drawing.Size(16, 16);
             this.panel_grip.TabIndex = 16;
@@ -459,6 +478,8 @@
             this.panel_minimize.Image = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(941, 1);
             this.panel_minimize.MarginSize = 6;
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 20;
@@ -472,6 +493,8 @@
             this.panel_close.Image = ExtendedControls.DrawnPanel.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(966, 1);
             this.panel_close.MarginSize = 6;
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 19;

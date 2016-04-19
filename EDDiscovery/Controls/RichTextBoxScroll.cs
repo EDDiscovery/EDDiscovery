@@ -19,6 +19,7 @@ namespace ExtendedControls
         public float BorderColorScaling { get; set; } = 0.5F;           // Popup style only
         public int ScrollBarWidth { get; set; } = 20;
         public bool ShowLineCount { get; set; } = false;                // count lines
+        public bool HideScrollBar { get; set; } = true;                   // hide if no scroll needed
 
         public override string Text { get { return TextBox.Text; } set { TextBox.Text = value; } }                // return only textbox text
 
@@ -30,6 +31,7 @@ namespace ExtendedControls
         public void Clear()
         {
             TextBox.Clear();
+            PerformLayout();
         }
 
         public void AppendText(string s)
@@ -117,6 +119,8 @@ namespace ExtendedControls
             return gr;
         }
 
+        bool visibleonlayout = false;
+
         protected override void OnLayout(LayoutEventArgs levent)
         {
             base.OnLayout(levent);
@@ -124,12 +128,7 @@ namespace ExtendedControls
             int bordersize = (BorderColor != Color.Transparent) ? 3 : 0;
             int controlh = ClientRectangle.Height - bordersize * 2;
 
-            TextBox.Location = new Point(bordersize, bordersize);
-            TextBox.Size = new Size(ClientRectangle.Width - ScrollBarWidth - bordersize * 2, controlh);
-            ScrollBar.Location = new Point(ClientRectangle.Width - ScrollBarWidth - bordersize, bordersize);
-            ScrollBar.Size = new Size(ScrollBarWidth, controlh);
-
-            int texth = TextBox.Size.Height;
+            int texth = controlh;
             int pxsize = TextBox.Font.Height;
             if (pxsize < 16)                            // this is what has been measured across FONTs, not sure why, not sure
                 pxsize++;                               // if I can progamatically find it out..
@@ -137,8 +136,16 @@ namespace ExtendedControls
                 pxsize--;                               // tested MS Sans, Eurocaps, Calisto
 
             textboxlinesestimate = texth / pxsize;
-            //Console.WriteLine("With Font " + TextBox.Font.Name + ":" + TextBox.Font.Size + " Estimate " + textboxlinesestimate + " from " + TextBox.Size.Height + " est size " + pxsize);
             UpdateVscroll();
+
+            visibleonlayout = ScrollBar.IsScrollBarOn || DesignMode || !HideScrollBar;  // Hide must be on, or in design mode, or scroll bar is on due to values
+
+            TextBox.Location = new Point(bordersize, bordersize);
+            TextBox.Size = new Size(ClientRectangle.Width - (visibleonlayout? ScrollBarWidth :0) - bordersize * 2, controlh);
+            ScrollBar.Location = new Point(ClientRectangle.Width - ScrollBarWidth - bordersize, bordersize);
+            ScrollBar.Size = new Size(ScrollBarWidth, controlh);
+
+            //Console.WriteLine("With Font " + TextBox.Font.Name + ":" + TextBox.Font.Size + " Estimate " + textboxlinesestimate + " from " + TextBox.Size.Height + " est size " + pxsize);
         }
 
 
@@ -170,6 +177,9 @@ namespace ExtendedControls
             int linecount = unchecked((int)(long)SendMessage(TextBox.Handle, EM_GETLINECOUNT, (IntPtr)0, (IntPtr)0));
             //Console.WriteLine("Scroll State Lines: " + linecount + " FVL: " + firstVisibleLine + " textlines " + textboxlinesestimate );
             ScrollBar.SetValueMaximumLargeChange(firstVisibleLine, linecount - 1, textboxlinesestimate);
+
+            if (ScrollBar.IsScrollBarOn != visibleonlayout)     // need to relayout if scroll bars pop on
+                PerformLayout();
         }
 
         private void ScrollToBar()              // from the scrollbar, scroll first line to value

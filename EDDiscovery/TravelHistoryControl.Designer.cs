@@ -305,6 +305,8 @@
             this.buttonRoss.Image = ExtendedControls.DrawnPanel.ImageType.Ross;
             this.buttonRoss.Location = new System.Drawing.Point(275, 6);
             this.buttonRoss.MarginSize = 0;
+            this.buttonRoss.MouseOverColor = System.Drawing.Color.White;
+            this.buttonRoss.MouseSelectedColor = System.Drawing.Color.Green;
             this.buttonRoss.Name = "buttonRoss";
             this.buttonRoss.Size = new System.Drawing.Size(20, 20);
             this.buttonRoss.TabIndex = 40;
@@ -318,6 +320,8 @@
             this.buttonEDDB.Image = ExtendedControls.DrawnPanel.ImageType.EDDB;
             this.buttonEDDB.Location = new System.Drawing.Point(252, 6);
             this.buttonEDDB.MarginSize = 0;
+            this.buttonEDDB.MouseOverColor = System.Drawing.Color.White;
+            this.buttonEDDB.MouseSelectedColor = System.Drawing.Color.Green;
             this.buttonEDDB.Name = "buttonEDDB";
             this.buttonEDDB.Size = new System.Drawing.Size(20, 20);
             this.buttonEDDB.TabIndex = 39;
@@ -448,6 +452,7 @@
             this.richTextBoxNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxNote.BorderColor = System.Drawing.Color.Transparent;
             this.richTextBoxNote.BorderColorScaling = 0.5F;
+            this.richTextBoxNote.HideScrollBar = true;
             this.richTextBoxNote.Location = new System.Drawing.Point(130, 123);
             this.richTextBoxNote.Name = "richTextBoxNote";
             this.richTextBoxNote.ScrollBarWidth = 20;
@@ -604,7 +609,7 @@
             // labelDistanceToNextSystem
             // 
             this.labelDistanceToNextSystem.AutoSize = true;
-            this.labelDistanceToNextSystem.Location = new System.Drawing.Point(6, 74);
+            this.labelDistanceToNextSystem.Location = new System.Drawing.Point(103, 75);
             this.labelDistanceToNextSystem.Name = "labelDistanceToNextSystem";
             this.labelDistanceToNextSystem.Size = new System.Drawing.Size(122, 13);
             this.labelDistanceToNextSystem.TabIndex = 20;
@@ -654,6 +659,7 @@
             this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom2.HideScrollBar = true;
             this.vScrollBarCustom2.LargeChange = 0;
             this.vScrollBarCustom2.Location = new System.Drawing.Point(277, 21);
             this.vScrollBarCustom2.Maximum = -1;
@@ -662,6 +668,7 @@
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
             this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 266);
+            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
             this.vScrollBarCustom2.Text = "vScrollBarCustom2";
@@ -817,7 +824,7 @@
             this.textBoxDistanceToNextSystem.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxDistanceToNextSystem.BorderPadding = 1;
             this.textBoxDistanceToNextSystem.BorderSize = 1;
-            this.textBoxDistanceToNextSystem.Location = new System.Drawing.Point(151, 74);
+            this.textBoxDistanceToNextSystem.Location = new System.Drawing.Point(242, 74);
             this.textBoxDistanceToNextSystem.Name = "textBoxDistanceToNextSystem";
             this.textBoxDistanceToNextSystem.Size = new System.Drawing.Size(48, 20);
             this.textBoxDistanceToNextSystem.TabIndex = 5;
@@ -828,11 +835,11 @@
             this.buttonMap.BorderColorScaling = 1.25F;
             this.buttonMap.ButtonColorScaling = 0.5F;
             this.buttonMap.ButtonDisabledScaling = 0.5F;
-            this.buttonMap.Location = new System.Drawing.Point(211, 71);
+            this.buttonMap.Location = new System.Drawing.Point(6, 67);
             this.buttonMap.Name = "buttonMap";
-            this.buttonMap.Size = new System.Drawing.Size(83, 23);
+            this.buttonMap.Size = new System.Drawing.Size(65, 23);
             this.buttonMap.TabIndex = 4;
-            this.buttonMap.Text = "3D star map";
+            this.buttonMap.Text = "3D map";
             this.buttonMap.UseVisualStyleBackColor = true;
             this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
             // 
@@ -872,6 +879,7 @@
             this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
             this.richTextBox_History.BorderColorScaling = 0.5F;
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox_History.HideScrollBar = true;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.ScrollBarWidth = 20;
@@ -911,6 +919,7 @@
             this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.HideScrollBar = true;
             this.vScrollBarCustom1.LargeChange = 0;
             this.vScrollBarCustom1.Location = new System.Drawing.Point(571, 21);
             this.vScrollBarCustom1.Maximum = -1;
@@ -919,6 +928,7 @@
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
             this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 495);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 4;
             this.vScrollBarCustom1.Text = "vScrollBarCustom1";
