@@ -28,6 +28,7 @@ namespace ExtendedControls
                 dgv.Scroll += DGVScroll;
                 dgv.RowsAdded += DGVRowsAdded;
                 dgv.RowsRemoved += DGVRowsRemoved;
+                dgv.MouseWheel += DGVMWheel;
             }
             else if (e.Control is VScrollBarCustom)
             {
@@ -83,6 +84,16 @@ namespace ExtendedControls
             vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, dgv.RowCount - 1, dgv.DisplayedRowCount(false));
         }
 
+        protected virtual void DGVMWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+                vsc.ValueLimited--;                 // control takes care of end limits..
+            else
+                vsc.ValueLimited++;                 // end is UserLimit, not maximum
+
+            dgv.FirstDisplayedScrollingRowIndex = vsc.Value;
+        }
+
         protected void DGVScroll(Object sender, ScrollEventArgs e)
         {
             Debug.Assert(vsc != null, "No Scroll bar attached");
@@ -93,13 +104,18 @@ namespace ExtendedControls
         protected virtual void OnScrollBarChanged(object sender, ScrollEventArgs e)
         {
             Debug.Assert(dgv != null, "No Data view attached");
-//            Console.WriteLine("VSC Scroll: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + dgv.RowCount);
+            //            Console.WriteLine("VSC Scroll: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + dgv.RowCount);
             dgv.FirstDisplayedScrollingRowIndex = vsc.Value;
         }
 
+
         #endregion
+
+        #region Variables
 
         DataGridView dgv;
         VScrollBarCustom vsc;
+
+        #endregion
     }
 }
