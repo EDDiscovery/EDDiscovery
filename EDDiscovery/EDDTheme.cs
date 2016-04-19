@@ -574,8 +574,16 @@ namespace EDDiscovery2
             //string pad = "                             ".Substring(0, level);
             //Console.WriteLine(pad + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString());
 #endif
-
-            if (myControl is MenuStrip || myControl is ToolStrip)
+            Type controltype = myControl.GetType();
+            Type parentcontroltype = parent.GetType();
+            if (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
+                controltype.Name.Equals("CheckBox") || controltype.Name.Equals("TextBox") ||
+                controltype.Name.Equals("ComboBox") || (controltype.Name.Equals("RichTextBox") && !parentcontroltype.Name.Equals("RichTextBoxScroll") ) 
+                )
+            {
+                Debug.Assert(false, myControl.Name + " of " + controltype.Name + " from " + parent.Name + " !!! Use the new controls in Controls folder - not the non visual themed ones!");
+            }
+            else if (myControl is MenuStrip || myControl is ToolStrip)
             {
                 myControl.BackColor = currentsettings.colors[Settings.CI.menu_back];
                 myControl.ForeColor = currentsettings.colors[Settings.CI.menu_fore];

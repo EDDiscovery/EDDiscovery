@@ -52,8 +52,8 @@ namespace EDDiscovery
             this.textBoxCoordinateZ = new ExtendedControls.TextBoxBorder();
             this.panelImplementation = new System.Windows.Forms.Panel();
             this.labelAlgorithm = new System.Windows.Forms.Label();
-            this.radioButtonAlgorithmJs = new System.Windows.Forms.RadioButton();
-            this.radioButtonAlgorithmCsharp = new System.Windows.Forms.RadioButton();
+            this.radioButtonAlgorithmJs = new ExtendedControls.RadioButtonCustom();
+            this.radioButtonAlgorithmCsharp = new ExtendedControls.RadioButtonCustom();
             this.toolTipAlgorithm = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.dataGridViewSuggestedSystems = new System.Windows.Forms.DataGridView();
@@ -602,8 +602,8 @@ namespace EDDiscovery
         private System.Windows.Forms.Label labelCoordinateZ;
         private ExtendedControls.TextBoxBorder textBoxCoordinateZ;
         private System.Windows.Forms.Panel panelImplementation;
-        private System.Windows.Forms.RadioButton radioButtonAlgorithmJs;
-        private System.Windows.Forms.RadioButton radioButtonAlgorithmCsharp;
+        private ExtendedControls.RadioButtonCustom radioButtonAlgorithmJs;
+        private ExtendedControls.RadioButtonCustom radioButtonAlgorithmCsharp;
         private System.Windows.Forms.Label labelAlgorithm;
         private System.Windows.Forms.ToolTip toolTipAlgorithm;
         private System.Windows.Forms.SplitContainer splitContainer1;

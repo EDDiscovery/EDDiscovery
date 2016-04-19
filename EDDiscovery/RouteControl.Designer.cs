@@ -52,19 +52,22 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.groupBox_Entries = new ExtendedControls.GroupBoxCustom();
+            this.cmd3DMap = new ExtendedControls.ButtonExt();
             this.groupBox_Entries.SuspendLayout();
-            this.cmd3DMap = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // richTextBox_routeresult
             // 
+            this.richTextBox_routeresult.BorderColor = System.Drawing.Color.Transparent;
+            this.richTextBox_routeresult.BorderColorScaling = 0.5F;
             this.richTextBox_routeresult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_routeresult.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox_routeresult.Location = new System.Drawing.Point(0, 105);
             this.richTextBox_routeresult.Name = "richTextBox_routeresult";
+            this.richTextBox_routeresult.ScrollBarWidth = 20;
+            this.richTextBox_routeresult.ShowLineCount = false;
             this.richTextBox_routeresult.Size = new System.Drawing.Size(897, 324);
             this.richTextBox_routeresult.TabIndex = 11;
-            this.richTextBox_routeresult.Text = "";
             // 
             // textBox_From
             // 
@@ -94,6 +97,7 @@
             // 
             this.button_Route.BorderColorScaling = 1.25F;
             this.button_Route.ButtonColorScaling = 0.5F;
+            this.button_Route.ButtonDisabledScaling = 0.5F;
             this.button_Route.Enabled = false;
             this.button_Route.Location = new System.Drawing.Point(745, 19);
             this.button_Route.Name = "button_Route";
@@ -283,6 +287,8 @@
             this.comboBoxRoutingMetric.ArrowWidth = 1;
             this.comboBoxRoutingMetric.BorderColor = System.Drawing.Color.Red;
             this.comboBoxRoutingMetric.ButtonColorScaling = 0.5F;
+            this.comboBoxRoutingMetric.DataSource = null;
+            this.comboBoxRoutingMetric.DisplayMember = null;
             this.comboBoxRoutingMetric.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxRoutingMetric.DropDownHeight = 200;
             this.comboBoxRoutingMetric.Enabled = false;
@@ -292,11 +298,14 @@
             this.comboBoxRoutingMetric.Location = new System.Drawing.Point(326, 76);
             this.comboBoxRoutingMetric.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
+            this.comboBoxRoutingMetric.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxRoutingMetric.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxRoutingMetric.ScrollBarWidth = 16;
             this.comboBoxRoutingMetric.SelectedIndex = -1;
             this.comboBoxRoutingMetric.SelectedItem = null;
             this.comboBoxRoutingMetric.Size = new System.Drawing.Size(234, 21);
             this.comboBoxRoutingMetric.TabIndex = 9;
+            this.comboBoxRoutingMetric.ValueMember = null;
             this.comboBoxRoutingMetric.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxRoutingMetric_SelectedIndexChanged);
             // 
             // label6
@@ -343,12 +352,14 @@
             // 
             // groupBox_Entries
             // 
+            this.groupBox_Entries.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBox_Entries.BackColorScaling = 0.5F;
+            this.groupBox_Entries.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBox_Entries.BorderColorScaling = 0.5F;
+            this.groupBox_Entries.Controls.Add(this.cmd3DMap);
             this.groupBox_Entries.Controls.Add(this.textBox_From);
-            this.groupBox_Entries.Controls.Add(this.comboBoxRoutingMetric);
             this.groupBox_Entries.Controls.Add(this.textBox_Range);
-            this.groupBox_Entries.Controls.Add(this.textBoxCurrent);
             this.groupBox_Entries.Controls.Add(this.textBox_To);
-            this.groupBox_Entries.Controls.Add(this.label5);
             this.groupBox_Entries.Controls.Add(this.label1);
             this.groupBox_Entries.Controls.Add(this.label9);
             this.groupBox_Entries.Controls.Add(this.textBox_Distance);
@@ -365,15 +376,18 @@
             this.groupBox_Entries.Controls.Add(this.label3);
             this.groupBox_Entries.Controls.Add(this.textBox_FromX);
             this.groupBox_Entries.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox_Entries.FillClientAreaWithAlternateColor = false;
             this.groupBox_Entries.Location = new System.Drawing.Point(0, 0);
             this.groupBox_Entries.Name = "groupBox_Entries";
             this.groupBox_Entries.Size = new System.Drawing.Size(897, 105);
             this.groupBox_Entries.TabIndex = 24;
             this.groupBox_Entries.TabStop = false;
+            this.groupBox_Entries.TextPadding = 0;
+            this.groupBox_Entries.TextStartPosition = -1;
             // 
             // cmd3DMap
             // 
-            this.cmd3DMap.Location = new System.Drawing.Point(741, 35);
+            this.cmd3DMap.Location = new System.Drawing.Point(745, 66);
             this.cmd3DMap.Name = "cmd3DMap";
             this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
             this.cmd3DMap.TabIndex = 24;
@@ -385,7 +399,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.cmd3DMap);
             this.Controls.Add(this.comboBoxRoutingMetric);
             this.Controls.Add(this.textBoxCurrent);
             this.Controls.Add(this.label5);
@@ -396,6 +409,7 @@
             this.groupBox_Entries.ResumeLayout(false);
             this.groupBox_Entries.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -424,6 +438,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
         private ExtendedControls.GroupBoxCustom groupBox_Entries;
-        private System.Windows.Forms.Button cmd3DMap;
+        private ExtendedControls.ButtonExt cmd3DMap;
     }
 }
