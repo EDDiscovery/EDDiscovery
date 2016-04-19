@@ -12,12 +12,13 @@ namespace ExtendedControls
 {
     public class VScrollBarCustom : Control
     {
-        // BackColor = slider color
+        // BackColor = control back colour
         // ForeColor = button arrow color
 
-        // determine style, System, Popup, Flat..                                        
+        // determine style, System, Popup, Flat..
         public FlatStyle FlatStyle { get { return flatstyle; } set { ChangeFlatStyle(value); } }
         public Color BorderColor { get; set; } = Color.White;
+        public Color SliderColor { get; set; } = Color.DarkGray;
 
         public Color ArrowButtonColor { get; set; } = Color.LightGray;
         public Color ArrowBorderColor { get; set; } = Color.LightBlue;
@@ -32,6 +33,9 @@ namespace ExtendedControls
 
         public Color MouseOverButtonColor { get; set; } = Color.Green;
         public Color MousePressedButtonColor { get; set; } = Color.Red;
+
+        public bool HideScrollBar { get; set; } = false;                   // hide if no scroll needed
+        public bool IsScrollBarOn { get { return thumbenable; } }           // is it on?
 
         public int Value { get { return thumbvalue; } set { SetValues(value, maximum, minimum, largechange, smallchange); } }
         public int ValueLimited { get { return thumbvalue; } set { SetValues(value, maximum, minimum, largechange, smallchange,true); } }
@@ -68,6 +72,11 @@ namespace ExtendedControls
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if ( !thumbenable && HideScrollBar && !DesignMode )
+            {
+                return;
+            }
+
             if (FlatStyle == FlatStyle.System && ScrollBarRenderer.IsSupported)
             {
                 ScrollBarArrowButtonState up = (mousepressed == MouseOver.MouseOverUp) ? ScrollBarArrowButtonState.UpPressed : (mouseover == MouseOver.MouseOverUp) ? ScrollBarArrowButtonState.UpHot : ScrollBarArrowButtonState.UpNormal;
@@ -100,7 +109,8 @@ namespace ExtendedControls
             }
             else
             {
-                using (Brush br = new SolidBrush(this.BackColor))
+                //Console.WriteLine("Draw " + Name + " slider " + SliderColor + " border " + BorderColor);
+                using (Brush br = new SolidBrush(this.SliderColor))
                     e.Graphics.FillRectangle(br, sliderarea);
                 using (Pen pr = new Pen(BorderColor))
                     e.Graphics.DrawRectangle(pr, borderrect);
@@ -361,7 +371,7 @@ namespace ExtendedControls
             }
 
             if ( iv )
-            { 
+            {
                 CalculateThumb();
                 Invalidate();
             }
@@ -407,7 +417,7 @@ namespace ExtendedControls
                 int sliderrangev = UserMaximum - minimum;       // Usermaximum will be > minimum, due to above < test.
                 int lthumb = Math.Min(thumbvalue, UserMaximum);         // values beyond User maximum screened out
 
-                float fposition = (float)(lthumb - minimum) / (float)sliderrangev;  
+                float fposition = (float)(lthumb - minimum) / (float)sliderrangev;
 
                 int sliderrangepx = sliderarea.Height - thumbheight;      // range of values to represent Min-Max.
                 int thumboffsetpx = (int)((float)sliderrangepx * fposition);

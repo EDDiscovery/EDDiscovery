@@ -46,7 +46,6 @@ namespace EDDiscovery
         {
             InitializeComponent();
             static_richTextBox = richTextBox_History;
-
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -60,6 +59,8 @@ namespace EDDiscovery
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
             checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
             comboBoxHistoryWindow.Items.AddRange(new string[] { "6 Hours", "12 Hours", "24 Hours", "3 days", "Week", "2 Weeks", "Month", "Last 20", "All" });
+            comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
+            LoadCommandersListBox();
         }
 
 
@@ -495,16 +496,6 @@ namespace EDDiscovery
 
         private void TravelHistoryControl_Load(object sender, EventArgs e)
         {
-            //if (!this.DesignMode)
-            //    RefreshHistory();
-
-
-            if (!this.DesignMode)
-            {
-                var db = new SQLiteDBClass();
-                comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
-                LoadCommandersListBox();
-            }
             // this improves dataGridView's scrolling performance
             typeof(DataGridView).InvokeMember(
                 "DoubleBuffered",
