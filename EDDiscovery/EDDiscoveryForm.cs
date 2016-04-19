@@ -255,7 +255,7 @@ namespace EDDiscovery
                     DownloadMapFile("SC-L4.jpg");
                     DownloadMapFile("SC-U4.jpg");
 
-                    DownloadMapFile("SC-00.jpg");
+                    DownloadMapFile("SC-00.png");
                     DownloadMapFile("SC-00.json");
 
 
@@ -272,7 +272,9 @@ namespace EDDiscovery
                     DownloadMapFile("DW3.json");
                     DownloadMapFile("DW4.jpg");
                     DownloadMapFile("DW4.json");
+
                     DeleteMapFile("DW4.png");
+                    DeleteMapFile("SC-00.jpg");
 
                     //for (int ii = -10; ii <= 60; ii += 10)
                     //{
