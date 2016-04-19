@@ -9,20 +9,32 @@ namespace ExtendedControls
 {
     public class DrawnPanel : Panel
     {
+        // Back, Fore color used
+        public Color MouseOverColor { get; set; } = Color.White;
+        public Color MouseSelectedColor { get; set; } = Color.Green;
+
         public enum ImageType { Close, Minimize, Gripper, EDDB, Ross };
         public ImageType Image { get; set; } = ImageType.Close;
         public int MarginSize { get; set; } = 4;                    // margin around icon
+
+        #region Public Functions
+        public void Captured()                                     // if doing the move capture stuff on this panel, call this
+        {
+            mousecapture = true;
+            Invalidate();
+        }
+
+        #endregion
         
-        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
-        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
+        #region Implementation
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 
             int msize = (MarginSize > 0) ? MarginSize : ClientRectangle.Width / 6;
-            Color pc = (Enabled) ? this.ForeColor : Multiply(this.ForeColor, 0.5F);
-
+            Color pc = (Enabled) ? ((mousedown||mousecapture)?MouseSelectedColor: ((mouseover)?MouseOverColor : this.ForeColor)) : Multiply(this.ForeColor, 0.5F);
+            //Console.WriteLine("Enabled" + Enabled + " Mouse over " + mouseover + " mouse down " + mousedown);
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             Pen p1 = new Pen(pc, 1.0F);
             Pen p2 = new Pen(pc, 2.0F);
@@ -92,5 +104,47 @@ namespace ExtendedControls
             p2.Dispose();
         }
 
+        protected override void OnMouseEnter(EventArgs eventargs)
+        {
+            base.OnMouseEnter(eventargs);
+            mouseover = true;
+            mousedown = false;
+            mousecapture = false;                   // mouse enter called after capture finished, so clear it
+            //Console.WriteLine("DP ME");
+            Invalidate();
+        }
+
+        protected override void OnMouseLeave(EventArgs eventargs)
+        {
+            base.OnMouseEnter(eventargs);
+            mouseover = false;
+            mousedown = false;   
+            //Console.WriteLine("DP ML");
+            Invalidate();
+        }
+
+        protected override void OnMouseDown(MouseEventArgs mevent)
+        {
+            base.OnMouseDown(mevent);
+            mousedown = true;
+            //Console.WriteLine("DP MD");
+            Invalidate();
+        }
+
+        protected override void OnMouseUp(MouseEventArgs mevent)
+        {
+            base.OnMouseDown(mevent);
+            mousedown = false;
+            //Console.WriteLine("DP MU");
+            Invalidate();
+        }
+
+        private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
+        public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
+
+        private bool mouseover = false;
+        private bool mousedown = false;
+        private bool mousecapture = false;
+        #endregion
     }
 }

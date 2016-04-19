@@ -32,10 +32,10 @@ namespace EDDiscovery2
             SetPanel(panel_theme15, "Text box Success Colour", EDDTheme.Settings.CI.textbox_success);
             SetPanel(panel_theme5, "Button Back Colour", EDDTheme.Settings.CI.button_back);
             SetPanel(panel_theme6, "Button Text Colour", EDDTheme.Settings.CI.button_text);
-            SetPanel(panel_theme7, "Grid Border Back Colour", EDDTheme.Settings.CI.grid_border);
+            SetPanel(panel_theme7, "Grid Border Back Colour", EDDTheme.Settings.CI.grid_borderback);
             SetPanel(panel_theme8, "Grid Border Text Colour", EDDTheme.Settings.CI.grid_bordertext);
-            SetPanel(panel_theme9, "Grid Data Back Colour", EDDTheme.Settings.CI.grid_background);
-            SetPanel(panel_theme10, "Grid Data Text Colour", EDDTheme.Settings.CI.grid_text);
+            SetPanel(panel_theme9, "Grid Cell Back Colour", EDDTheme.Settings.CI.grid_cellbackground);
+            SetPanel(panel_theme10, "Grid Cell Text Colour", EDDTheme.Settings.CI.grid_celltext);
             SetPanel(panel_theme11, "Menu Back Colour", EDDTheme.Settings.CI.menu_back);
             SetPanel(panel_theme12, "Menu Text Colour", EDDTheme.Settings.CI.menu_fore);
             SetPanel(panel_theme13, "Visited system without known position", EDDTheme.Settings.CI.travelgrid_nonvisted);
@@ -49,6 +49,15 @@ namespace EDDiscovery2
             SetPanel(panel_theme32, "Grid Border Line Colour", EDDTheme.Settings.CI.grid_borderlines);
             SetPanel(panel_theme33, "Group box Border Line Colour", EDDTheme.Settings.CI.group_borderlines);
             SetPanel(panel_theme35, "Tab Control Border Line Colour", EDDTheme.Settings.CI.tabcontrol_borderlines);
+            SetPanel(panel_theme40, "Text Box Scroll Bar Slider Colour", EDDTheme.Settings.CI.textbox_sliderback);
+            SetPanel(panel_theme41, "Text Box Scroll Bar Arrow Colour", EDDTheme.Settings.CI.textbox_scrollarrow);
+            SetPanel(panel_theme42, "Text Box Scroll Bar Button Colour", EDDTheme.Settings.CI.textbox_scrollbutton);
+            SetPanel(panel_theme43, "Grid Scroll Bar Slider Colour", EDDTheme.Settings.CI.grid_sliderback);
+            SetPanel(panel_theme44, "Grid Scroll Bar Arrow Colour", EDDTheme.Settings.CI.grid_scrollarrow);
+            SetPanel(panel_theme45, "Grid Scroll Bar Button Colour", EDDTheme.Settings.CI.grid_scrollbutton);
+            SetPanel(panel_theme50, "Menu Dropdown Back Colour", EDDTheme.Settings.CI.menu_dropdownback);
+            SetPanel(panel_theme51, "Menu Dropdown Text Colour", EDDTheme.Settings.CI.menu_dropdownfore);
+            SetPanel(panel_theme60, "Tool Strip Back Colour", EDDTheme.Settings.CI.toolstrip_back);
 
             UpdatePatchesEtc();
 
@@ -83,6 +92,15 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme32);
             _discoveryForm.theme.UpdatePatch(panel_theme33);
             _discoveryForm.theme.UpdatePatch(panel_theme35);
+            _discoveryForm.theme.UpdatePatch(panel_theme40);
+            _discoveryForm.theme.UpdatePatch(panel_theme41);
+            _discoveryForm.theme.UpdatePatch(panel_theme42);
+            _discoveryForm.theme.UpdatePatch(panel_theme43);
+            _discoveryForm.theme.UpdatePatch(panel_theme44);
+            _discoveryForm.theme.UpdatePatch(panel_theme45);
+            _discoveryForm.theme.UpdatePatch(panel_theme50);
+            _discoveryForm.theme.UpdatePatch(panel_theme51);
+            _discoveryForm.theme.UpdatePatch(panel_theme60);
             textBox_Font.Text = _discoveryForm.theme.FontName;
             checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
         }

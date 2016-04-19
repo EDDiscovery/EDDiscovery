@@ -1104,6 +1104,7 @@ namespace EDDiscovery
         {
             if (e.Button == MouseButtons.Left)
             {
+                panel_grip.Captured();           // tell it, doing this royally screws up the MD/MU/ME/ML calls to it
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCL_RESIZE, HT_RESIZE, 0);
             }
