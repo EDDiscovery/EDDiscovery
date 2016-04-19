@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,6 +39,7 @@
             this.trilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.labelclosests = new System.Windows.Forms.Label();
             this.label_warning = new System.Windows.Forms.Label();
@@ -84,9 +85,10 @@
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.closestContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_topright = new System.Windows.Forms.Panel();
             this.checkBoxEDSMSyncFrom = new ExtendedControls.CheckBoxCustom();
-            this.buttonMap2D = new System.Windows.Forms.Button();
+            this.buttonMap2D = new ExtendedControls.ButtonExt();
             this.checkBoxEDSMSyncTo = new ExtendedControls.CheckBoxCustom();
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.textBoxDistanceToNextSystem = new ExtendedControls.TextBoxBorder();
@@ -108,8 +110,6 @@
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.button_RefreshHistory = new ExtendedControls.ButtonExt();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
-            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -188,6 +188,13 @@
             this.bothToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.bothToolStripMenuItem.Text = "Both";
             this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem
+            // 
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             // 
             // label2
             // 
@@ -701,14 +708,21 @@
             this.addToTrilaterationToolStripMenuItem1,
             this.viewOnEDSMToolStripMenuItem1});
             this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(177, 70);
+            this.closestContextMenu.Size = new System.Drawing.Size(178, 48);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
             this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
-            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
             this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
             this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem1
+            // 
+            this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+            this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
             // panel_topright
             // 
@@ -746,6 +760,9 @@
             // 
             // buttonMap2D
             // 
+            this.buttonMap2D.BorderColorScaling = 1.25F;
+            this.buttonMap2D.ButtonColorScaling = 0.5F;
+            this.buttonMap2D.ButtonDisabledScaling = 0.5F;
             this.buttonMap2D.Location = new System.Drawing.Point(6, 38);
             this.buttonMap2D.Name = "buttonMap2D";
             this.buttonMap2D.Size = new System.Drawing.Size(65, 23);
@@ -972,8 +989,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
             this.mapColour.HeaderText = "Map";
             this.mapColour.MinimumWidth = 40;
             this.mapColour.Name = "mapColour";
@@ -1044,20 +1061,6 @@
             this.comboBoxHistoryWindow.TabIndex = 0;
             this.comboBoxHistoryWindow.ValueMember = null;
             this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
-            // 
-            // viewOnEDSMToolStripMenuItem
-            // 
-            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
-            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
-            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
-            // 
-            // viewOnEDSMToolStripMenuItem1
-            // 
-            this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
-            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
-            this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
-            this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
             // TravelHistoryControl
             // 
@@ -1163,7 +1166,7 @@
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
         private System.Windows.Forms.Panel panel_topright;
-        private System.Windows.Forms.Button buttonMap2D;
+        private ExtendedControls.ButtonExt buttonMap2D;
         private System.Windows.Forms.ContextMenuStrip closestContextMenu;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem trilaterationToolStripMenuItem;
