@@ -41,6 +41,7 @@ namespace EDDiscovery2
                 checkbox,
                 label,
                 tabcontrol_borderlines,
+                toolstrip_back
             };
 
             public string name;         // name of scheme
@@ -86,6 +87,7 @@ namespace EDDiscovery2
                 colors.Add(CI.label, l);
                 colors.Add(CI.group_back, grpb); colors.Add(CI.group_text, grpt); colors.Add(CI.group_borderlines, grlines);
                 colors.Add(CI.tabcontrol_borderlines, tabborderlines);
+                colors.Add(CI.toolstrip_back, ttb);
                 buttonstyle = bstyle; textboxborderstyle = tbbstyle;
                 windowsframe = wf; formopacity = op; fontname = ft; fontsize = fs;
             }
@@ -126,6 +128,7 @@ namespace EDDiscovery2
                 colors.Add(CI.label, SystemColors.MenuText);
                 colors.Add(CI.group_back, SystemColors.Menu); colors.Add(CI.group_text, SystemColors.MenuText); colors.Add(CI.group_borderlines, SystemColors.ControlDark);
                 colors.Add(CI.tabcontrol_borderlines, SystemColors.ControlDark);
+                colors.Add(CI.toolstrip_back, SystemColors.Menu);
                 buttonstyle = buttonstyle_system;
                 textboxborderstyle = textboxborderstyle_fixed3D;
                 windowsframe = true;
