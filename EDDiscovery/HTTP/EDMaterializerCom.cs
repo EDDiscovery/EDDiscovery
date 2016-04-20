@@ -7,6 +7,7 @@ using System.Configuration;
 
 namespace EDDiscovery2.HTTP
 {
+    using Newtonsoft.Json.Linq;
     using System;
     using System.Web;
 
@@ -69,6 +70,11 @@ namespace EDDiscovery2.HTTP
                                             string action, 
                                             Func<string, string, NameValueCollection, ResponseData> requestMethod)
         {
+            var commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+            JObject jo = JObject.Parse(json);
+            jo["user"] = HttpUtility.UrlEncode(commanderName);
+            json = jo.ToString();
+
             ResponseData response = new ResponseData(HttpStatusCode.BadRequest);
             // Attempt #1 with existing tokens
             if (_authTokens != null)

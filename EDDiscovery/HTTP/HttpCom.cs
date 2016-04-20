@@ -328,6 +328,12 @@ namespace EDDiscovery2.HTTP
         private static Object LOCK = new Object();
         static public  void WriteLog(string str1, string str2)
         {
+            if (str1 != null && str1.ToUpper().Contains("PASSWORD"))
+                str1 = "** This string contains a password so not logging it.**";
+
+            if (str2 != null && str2.ToUpper().Contains("PASSWORD"))
+                str2 = "** This string contains a password so not logging it.**";
+
             if (EDDiscoveryForm.EDDConfig.EDSMLog == false)
                 return;
 
