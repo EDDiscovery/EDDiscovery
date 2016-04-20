@@ -105,39 +105,40 @@ namespace EDDiscovery2.PlanetSystems
         {
 
             id = jo["id"].Value<int>();
-            system = jo["system"].Value<string>();
-            objectName = jo["world"].Value<string>();
-            updater = jo["updater"].Value<string>();
+            var attributes = jo["attributes"];
+            system = attributes["system-name"].Value<string>();
+            objectName = attributes["world"].Value<string>();
+            updater = attributes["updater"].Value<string>();
 
-            ObjectType = String2ObjectType(jo["world_type"].Value<string>());
+            ObjectType = String2ObjectType(attributes["world-type"].Value<string>());
 
-            mass = GetFloat(jo["mass"]);
-            radius = GetFloat(jo["radius"]);
-            gravity = GetFloat(jo["gravity"]);
-            surfaceTemp = GetInt(jo["surface_temp"]);
-            surfacePressure = GetFloat(jo["surface_pressure"]);
+            mass = GetFloat(attributes["mass"]);
+            radius = GetFloat(attributes["radius"]);
+            gravity = GetFloat(attributes["gravity"]);
+            surfaceTemp = GetInt(attributes["surface-temp"]);
+            surfacePressure = GetFloat(attributes["surface-pressure"]);
 
-            orbitPeriod = GetFloat(jo["orbit_period"]);
-            rotationPeriod = GetFloat(jo["rotation_period"]);
-            semiMajorAxis = GetFloat(jo["semi_major_axis"]);
+            orbitPeriod = GetFloat(attributes["orbit-period"]);
+            rotationPeriod = GetFloat(attributes["rotation-period"]);
+            semiMajorAxis = GetFloat(attributes["semi-major-axis"]);
 
-            terrain_difficulty = GetInt(jo["terrain_difficulty"]);
-            vulcanism = (VulcanismEnum)VulcanismStr2Enum(jo["vulcanism_type"].Value<string>());
-            rockPct = GetFloat(jo["rock_pct"]);
-            metalPct = GetFloat(jo["metal_pct"]);
-            icePct = GetFloat(jo["ice_pct"]);
-            Reserve = GetString(jo["reserve"]);
+            terrain_difficulty = GetInt(attributes["terrain-difficulty"]);
+            vulcanism = (VulcanismEnum)VulcanismStr2Enum(attributes["vulcanism-type"].Value<string>());
+            rockPct = GetFloat(attributes["rock-pct"]);
+            metalPct = GetFloat(attributes["metal-pct"]);
+            icePct = GetFloat(attributes["ice-pct"]);
+            Reserve = GetString(attributes["reserve"]);
 
-            arrivalPoint = GetFloat(jo["arrival_point"]);
-            terraformable = GetString(jo["terraformable"]);
-            notes = GetString(jo["notes"]);
-            atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(jo["atmosphere_type"].Value<string>());
-            image_url = GetString(jo["image_url"]);
+            arrivalPoint = GetFloat(attributes["arrival-point"]);
+            terraformable = GetString(attributes["terraformable"]);
+            notes = GetString(attributes["notes"]);
+            atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(attributes["atmosphere-type"].Value<string>());
+            image_url = GetString(attributes["image-url"]);
 
 
             //foreach (var mat in mlist)
             //{
-            //    materials[mat.material] = GetBool(jo[mat.Name.ToLower()]);
+            //    materials[mat.material] = GetBool(attributes[mat.Name.ToLower()]);
             //}
             return true;
         }
