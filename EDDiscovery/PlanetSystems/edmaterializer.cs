@@ -18,10 +18,9 @@ namespace EDDiscovery2.PlanetSystems
 #if DEBUG
             // Dev server. Mess with data as much as you like here
             _serverAddress = "https://ed-materializer.herokuapp.com/";
-            //_serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
 #else
             // Production
-            _serverAddress = "http://ed-materializer-env.elasticbeanstalk.com/";
+            _serverAddress = "http://api.edmaterializer.com/";
 #endif
         }
 
@@ -29,7 +28,7 @@ namespace EDDiscovery2.PlanetSystems
         public List<EDWorld>GetAllWorlds(string system)
         {
             List<EDWorld> listObjects = new List<EDWorld>();
-            string query = "api/v2/worlds";
+            string query = "api/v3/worlds";
 
             if (!String.IsNullOrEmpty(system))
                 query = query + "?system="+HttpUtility.UrlEncode(system);
@@ -46,14 +45,14 @@ namespace EDDiscovery2.PlanetSystems
                 return listObjects;
 
 
-            jArray = (JArray)jObject["worlds"];
+            jArray = (JArray)jObject["data"];
 
 
             foreach (JObject jo in jArray)
             {
                 EDWorld obj = new EDWorld();
 
-                if (obj.ParseJson(jo))
+                if (obj.ParseJson((JObject)jo))
                     listObjects.Add(obj);
             }
 
@@ -64,7 +63,7 @@ namespace EDDiscovery2.PlanetSystems
         public List<EDWorld> GetWorldSurveys(string system)
         {
             List<EDWorld> listObjects = new List<EDWorld>();
-            string query = "api/v2/world_surveys";
+            string query = "api/v3/world_surveys";
 
             if (!String.IsNullOrEmpty(system))
                 query = query + "?system=" + HttpUtility.UrlEncode(system);
@@ -81,7 +80,7 @@ namespace EDDiscovery2.PlanetSystems
                 return listObjects;
 
 
-            jArray = (JArray)jObject["world_surveys"];
+            jArray = (JArray)jObject["data"];
 
 
             foreach (JObject jo in jArray)
@@ -101,7 +100,7 @@ namespace EDDiscovery2.PlanetSystems
         public List<EDStar> GetAllStars(string system)
         {
             List<EDStar> listObjects = new List<EDStar>();
-            string query = "api/v2/stars";
+            string query = "api/v3/stars";
 
             if (!String.IsNullOrEmpty(system))
                 query = query + "?system=" + HttpUtility.UrlEncode(system);
@@ -118,7 +117,7 @@ namespace EDDiscovery2.PlanetSystems
                 return listObjects;
 
 
-            jArray = (JArray)jObject["stars"];
+            jArray = (JArray)jObject["data"];
 
 
             foreach (JObject jo in jArray)
@@ -198,7 +197,7 @@ namespace EDDiscovery2.PlanetSystems
 
             if (edobj.id == 0)
             {
-                var response = RequestSecurePost(joPost.ToString(), "api/v2/worlds");
+                var response = RequestSecurePost(joPost.ToString(), "api/v3/worlds");
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jo2 = (JObject)JObject.Parse(response.Body);
@@ -213,21 +212,21 @@ namespace EDDiscovery2.PlanetSystems
                     // - Greg
 
                     var queryParam = $"system={jo.system}&world={jo.world}";
-                    response = RequestGet($"api/v2/worlds?{queryParam}");
+                    response = RequestGet($"api/v3/worlds?{queryParam}");
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         JObject jo2 = (JObject)JObject.Parse(response.Body);
                         JObject obj = (JObject)jo2["world"][0];
                         edobj.id = obj["id"].Value<int>();
 
-                        response = RequestSecurePatch(joPost.ToString(), "api/v2/worlds/" + edobj.id.ToString());
+                        response = RequestSecurePatch(joPost.ToString(), "api/v3/worlds/" + edobj.id.ToString());
                     }
 
                 }
             }
             else
             {
-                var response = RequestSecurePatch(joPost.ToString(), "api/v2/worlds/" + edobj.id.ToString());
+                var response = RequestSecurePatch(joPost.ToString(), "api/v3/worlds/" + edobj.id.ToString());
             }
             return true;
         }
@@ -256,7 +255,7 @@ namespace EDDiscovery2.PlanetSystems
 
             if (edobj.id == 0)
             {
-                var response = RequestSecurePost(joPost.ToString(), "api/v2/stars");
+                var response = RequestSecurePost(joPost.ToString(), "api/v3/stars");
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jo2 = (JObject)JObject.Parse(response.Body);
@@ -271,21 +270,21 @@ namespace EDDiscovery2.PlanetSystems
                     // - Greg
 
                     var queryParam = $"system={jo.system}&star={jo.star}&updater={jo.updater}";
-                    response = RequestGet($"api/v2/stars?{queryParam}");
+                    response = RequestGet($"api/v3/stars?{queryParam}");
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         JObject jo2 = (JObject)JObject.Parse(response.Body);
                         JObject obj = (JObject)jo2["stars"][0];
                         edobj.id = obj["id"].Value<int>();
 
-                        response = RequestSecurePatch(joPost.ToString(), "api/v2/stars/" + edobj.id.ToString());
+                        response = RequestSecurePatch(joPost.ToString(), "api/v3/stars/" + edobj.id.ToString());
                     }
 
                 }
             }
             else
             {
-                var response = RequestSecurePatch(joPost.ToString(), "api/v2/stars/" + edobj.id.ToString());
+                var response = RequestSecurePatch(joPost.ToString(), "api/v3/stars/" + edobj.id.ToString());
             }
             return true;
 
@@ -296,7 +295,7 @@ namespace EDDiscovery2.PlanetSystems
 
         public bool DeletePlanetID(int id)
         {
-            var response = RequestDelete("api/v2/world_surveys/"+id.ToString());
+            var response = RequestDelete("api/v3/world_surveys/"+id.ToString());
             
             return true;
         }

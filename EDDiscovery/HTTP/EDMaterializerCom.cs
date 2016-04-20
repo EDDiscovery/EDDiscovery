@@ -40,8 +40,17 @@ namespace EDDiscovery2.HTTP
         {
             _authTokens = null;
             var appSettings = ConfigurationManager.AppSettings;
+#if DEBUG
+            // Testing db username/password is public so other contributors
+            // can work with it
+            var username = "edmaterializer@gmail.com";
+            var password = "Barnacles are delicious";
+#else
+            // This is for the production database, so we're keeping the
+            // credentials hidden away
             var username = appSettings["EDMaterializerUsername"];
             var password = appSettings["EDMaterializerPassword"];
+#endif
             var json = $"{{\"email\": \"{username}\", \"password\": \"{password}\"}}";
             var response = RequestPost(json, $"{_authPath}/sign_in");
             if (response.StatusCode == HttpStatusCode.OK)
