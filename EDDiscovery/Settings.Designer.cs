@@ -106,8 +106,6 @@
             // textBoxNetLogDir
             // 
             this.textBoxNetLogDir.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxNetLogDir.BorderPadding = 1;
-            this.textBoxNetLogDir.BorderSize = 1;
             this.textBoxNetLogDir.Location = new System.Drawing.Point(97, 48);
             this.textBoxNetLogDir.Name = "textBoxNetLogDir";
             this.textBoxNetLogDir.Size = new System.Drawing.Size(623, 20);
@@ -331,8 +329,6 @@
             // textBoxDefaultZoom
             // 
             this.textBoxDefaultZoom.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxDefaultZoom.BorderPadding = 1;
-            this.textBoxDefaultZoom.BorderSize = 1;
             this.textBoxDefaultZoom.Location = new System.Drawing.Point(120, 70);
             this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
@@ -397,8 +393,6 @@
             this.textBoxHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBoxHomeSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxHomeSystem.BorderPadding = 1;
-            this.textBoxHomeSystem.BorderSize = 1;
             this.textBoxHomeSystem.Location = new System.Drawing.Point(120, 19);
             this.textBoxHomeSystem.Name = "textBoxHomeSystem";
             this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);

@@ -10,6 +10,7 @@ namespace ExtendedControls
     public class DrawnPanel : Panel
     {
         // Back, Fore color used
+        public new bool Enabled { get { return enable; } set { enable = value;  Invalidate(); } }
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
 
@@ -31,10 +32,10 @@ namespace ExtendedControls
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-
             int msize = (MarginSize > 0) ? MarginSize : ClientRectangle.Width / 6;
             Color pc = (Enabled) ? ((mousedown||mousecapture)?MouseSelectedColor: ((mouseover)?MouseOverColor : this.ForeColor)) : Multiply(this.ForeColor, 0.5F);
             //Console.WriteLine("Enabled" + Enabled + " Mouse over " + mouseover + " mouse down " + mousedown);
+
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             Pen p1 = new Pen(pc, 1.0F);
             Pen p2 = new Pen(pc, 2.0F);
@@ -145,6 +146,7 @@ namespace ExtendedControls
         private bool mouseover = false;
         private bool mousedown = false;
         private bool mousecapture = false;
+        private bool enable = true;
         #endregion
     }
 }

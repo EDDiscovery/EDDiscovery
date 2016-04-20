@@ -58,6 +58,8 @@ namespace EDDiscovery2
             SetPanel(panel_theme50, "Menu Dropdown Back Colour", EDDTheme.Settings.CI.menu_dropdownback);
             SetPanel(panel_theme51, "Menu Dropdown Text Colour", EDDTheme.Settings.CI.menu_dropdownfore);
             SetPanel(panel_theme60, "Tool Strip Back Colour", EDDTheme.Settings.CI.toolstrip_back);
+            SetPanel(panel_theme61, "Tool Strip Border Colour", EDDTheme.Settings.CI.toolstrip_border);
+            SetPanel(panel_theme62, "Tool Strip Checked Colour", EDDTheme.Settings.CI.toolstrip_buttonchecked);
 
             UpdatePatchesEtc();
 
@@ -101,6 +103,8 @@ namespace EDDiscovery2
             _discoveryForm.theme.UpdatePatch(panel_theme50);
             _discoveryForm.theme.UpdatePatch(panel_theme51);
             _discoveryForm.theme.UpdatePatch(panel_theme60);
+            _discoveryForm.theme.UpdatePatch(panel_theme61);
+            _discoveryForm.theme.UpdatePatch(panel_theme62);
             textBox_Font.Text = _discoveryForm.theme.FontName;
             checkBox_theme_windowframe.Checked = _discoveryForm.theme.WindowsFrame;
         }
