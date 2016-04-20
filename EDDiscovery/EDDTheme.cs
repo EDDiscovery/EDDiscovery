@@ -842,7 +842,7 @@ namespace EDDiscovery2
                 MyDgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                 MyDgv.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
-                MyDgv.Font = fnt;           // MyDgv.RowHeadersDefaultCellStyle - can't make it work for love nor money..
+                MyDgv.Font = fnt;           
                 Font fnt2;
                 
                 if (myControl.Name.Contains("dataGridViewTravel") && fnt.Size > 10F)
@@ -851,12 +851,13 @@ namespace EDDiscovery2
                     fnt2 = fnt;
 
                 MyDgv.ColumnHeadersDefaultCellStyle.Font = fnt2;
+                MyDgv.RowHeadersDefaultCellStyle.Font = fnt2;
                 MyDgv.Columns[0].DefaultCellStyle.Font = fnt2;
 
                 using (Graphics g = MyDgv.CreateGraphics())
                 {
-                    SizeF sz = g.MeasureString("99999", fnt);
-                    MyDgv.RowHeadersWidth = (int)(sz.Width + 2);        // size it to the text
+                    SizeF sz = g.MeasureString("99999", fnt2);
+                    MyDgv.RowHeadersWidth = (int)(sz.Width + 6);        // size it to the text, need a little more for rounding
                 }
             }
             else if (myControl is VScrollBarCustom && parent is DataViewScrollerPanel)
