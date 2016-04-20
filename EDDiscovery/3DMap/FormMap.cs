@@ -35,6 +35,9 @@ namespace EDDiscovery2
             }
         }
 
+
+        private DatasetBuilder builder;
+
         private const double ZoomMax = 50;
         private const double ZoomMin = 0.01;
         private const double ZoomFact = 1.2589254117941672104239541063958;
@@ -89,7 +92,11 @@ namespace EDDiscovery2
         private float _znear;
         private float _zfar;
         private bool _useTimer;
-        
+
+        private DateTime maxstardate = new DateTime(2016,1,1);
+        bool Animatetime = false;
+
+
         public ISystem CenterSystem {
             get
             {
@@ -287,7 +294,7 @@ namespace EDDiscovery2
 
             selectedmaps = GetSelectedMaps();
 
-            var builder = new DatasetBuilder()
+            builder = new DatasetBuilder()
             {
                 // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
                 // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
@@ -1037,6 +1044,9 @@ namespace EDDiscovery2
                 _ticks = 1;
                 _oldTickCount = DateTime.Now.Ticks / 10000;
             }
+
+     
+
             HandleInputs();
             DoCameraSlew();
             UpdateCamera();
@@ -1052,7 +1062,7 @@ namespace EDDiscovery2
             }
             else
             {
-                if (!_useTimer)
+                if (!_useTimer || Animatetime)
                 {
                     UpdateTimer.Interval = 100;
                     UpdateTimer.Start();
@@ -1321,6 +1331,17 @@ namespace EDDiscovery2
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
+            if (Animatetime)
+            {
+                maxstardate = maxstardate.AddHours(10);
+
+                builder.UpdateStandardSystems(maxstardate);
+
+
+                if (maxstardate > DateTime.Now)
+                    Animatetime = false;
+            }
+
             glControl.Invalidate();
         }
 

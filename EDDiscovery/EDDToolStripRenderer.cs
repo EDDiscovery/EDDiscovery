@@ -9,11 +9,14 @@ namespace EDDiscovery2
 {
     public class EDDToolStripRenderer : ToolStripProfessionalRenderer//ToolStripSystemRenderer
     {
-        public Color Background = Color.FromArgb(255, 188,199,216);//ControlPaint.LightLight(ControlPaint.Light(Color.SlateBlue));
-        public Color Border = Color.FromArgb(255,133,145,162); //0x8591A2);//ControlPaint.LightLight(Color.SlateBlue);
-        public Color BorderLight = Color.FromArgb(255, 201,210,225); //ControlPaint.LightLight(ControlPaint.LightLight(Color.LightSlateGray));
+        public Color colMenuBackground = Color.FromArgb(255, 188,199,216);//ControlPaint.LightLight(ControlPaint.Light(Color.SlateBlue));
+        public Color colToolStripBorder = Color.FromArgb(255, 133, 145, 162); //0x8591A2);//ControlPaint.LightLight(Color.SlateBlue);
+        public Color colToolStripBackGround = Color.LightGray; 
+        public Color colToolStripSeparator = Color.FromArgb(255,133,145,162); //0x8591A2);//ControlPaint.LightLight(Color.SlateBlue);
+        public Color colMenuSelectedBack = Color.FromArgb(255, 201,210,225); //ControlPaint.LightLight(ControlPaint.LightLight(Color.LightSlateGray));
+        public Color colMenuSelectedText = Color.Black;
         public Color Dark = Color.FromArgb(255,41, 57, 85);
-        public Color MenuText = Color.White;
+        public Color colMenuText = Color.White;
 
         //Bitmap bmp = new Bitmap(1, 1);
         public Color ButtonSelectedBorder = Color.FromArgb(229, 195, 101);
@@ -24,26 +27,26 @@ namespace EDDiscovery2
         {
             if (e.ToolStrip is MenuStrip)
             {
-                using (LinearGradientBrush br = new LinearGradientBrush(new Point(0, 0), new Point(0, e.ToolStrip.Height ), BorderLight, ControlPaint.Light(Border)))
+                using (SolidBrush br = new SolidBrush(colMenuBackground))
                     e.Graphics.FillRectangle(br, e.AffectedBounds);
             }
             else if (e.ToolStrip is StatusStrip)
             {
-                e.Graphics.FillRectangle(new SolidBrush(Dark), e.AffectedBounds);
+                e.Graphics.FillRectangle(new SolidBrush(colToolStripBackGround), e.AffectedBounds);
             }
             else if (e.ToolStrip is ToolStripDropDownMenu)
             {
                 Rectangle rc = e.AffectedBounds;
                 rc.Inflate(-1, -1);
-                e.Graphics.FillRectangle(new SolidBrush(Background), rc);
+                e.Graphics.FillRectangle(new SolidBrush(colMenuBackground), rc);
                 if (e.ToolStrip is ToolStripDropDownMenu)
-                    e.Graphics.FillRectangle(new SolidBrush(BorderLight), 1, 1, 24, e.AffectedBounds.Height - 1);
+                    e.Graphics.FillRectangle(new SolidBrush(colMenuSelectedBack), 1, 1, 24, e.AffectedBounds.Height - 1);
             }
             else
             {
                 Rectangle rc = e.AffectedBounds;
                 rc.Inflate(-1, -1);
-                e.Graphics.FillRectangle(new SolidBrush(Background), rc);
+                e.Graphics.FillRectangle(new SolidBrush(colToolStripBackGround), rc);
                 //if (e.ToolStrip is ToolStripDropDownMenu)
                 //    e.Graphics.FillRectangle(new SolidBrush(Border), 1, 1, 24, e.AffectedBounds.Height - 1);
             }
@@ -57,7 +60,7 @@ namespace EDDiscovery2
             {
 
                 if (!(e.ToolStrip is MenuStrip))
-                    e.Graphics.DrawRectangle(new Pen(Border), 0, 0, e.ToolStrip.Width - 1, e.ToolStrip.Height - 1);
+                    e.Graphics.DrawRectangle(new Pen(colToolStripBorder), 0, 0, e.ToolStrip.Width - 1, e.ToolStrip.Height - 1);
                 if (!(e.ToolStrip is MenuStrip || e.ToolStrip.Parent is Form) && e.ToolStrip.Parent != null) //|| e.ToolStrip is StatusStrip
                 {
                     e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
@@ -66,13 +69,13 @@ namespace EDDiscovery2
                         using (Graphics g = Graphics.FromImage(bmp))
                             g.Clear(Color.Transparent);
                         //bmp.SetPixel(0, 0, e.ToolStrip.Parent.BackColor); //
-                        bmp.SetPixel(1, 0, Color.FromArgb(175, Border));//e.ToolStrip.Parent.BackColor));
-                        bmp.SetPixel(0, 1, Color.FromArgb(175, Border)); //e.ToolStrip.Parent.BackColor));
+                        bmp.SetPixel(1, 0, Color.FromArgb(175, colToolStripBorder));//e.ToolStrip.Parent.BackColor));
+                        bmp.SetPixel(0, 1, Color.FromArgb(175, colToolStripBorder)); //e.ToolStrip.Parent.BackColor));
                         //bmp.SetPixel(2, 0, Color.FromArgb(75, e.ToolStrip.Parent.BackColor));
                         //bmp.SetPixel(0, 2, Color.FromArgb(75, e.ToolStrip.Parent.BackColor));
-                        bmp.SetPixel(2, 1, Color.FromArgb(200, Border));
-                        bmp.SetPixel(1, 2, Color.FromArgb(200, Border));
-                        bmp.SetPixel(1, 1, Color.FromArgb(175, Border));
+                        bmp.SetPixel(2, 1, Color.FromArgb(200, colToolStripBorder));
+                        bmp.SetPixel(1, 2, Color.FromArgb(200, colToolStripBorder));
+                        bmp.SetPixel(1, 1, Color.FromArgb(175, colToolStripBorder));
                         e.Graphics.DrawImage(bmp, 0, 0);
                         bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
                         e.Graphics.DrawImage(bmp, e.ToolStrip.Width - 4, 0);
@@ -95,24 +98,27 @@ namespace EDDiscovery2
                 }
                 if (e.Item.Pressed)
                 {
-                    e.Graphics.FillRectangle(new SolidBrush(BorderLight), 1, 1, e.Item.Width - 2, e.Item.Height - 1); //.ContentRectangle);
-                    e.Graphics.DrawLine(new Pen(BorderLight), 1, 0, e.Item.Width - 3, 0);
+                    e.Graphics.FillRectangle(new SolidBrush(colMenuSelectedBack), 1, 1, e.Item.Width - 2, e.Item.Height - 1); //.ContentRectangle);
+                    e.Graphics.DrawLine(new Pen(colMenuSelectedBack), 1, 0, e.Item.Width - 3, 0);
                 }
             }
         }
 
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            e.TextColor = MenuText;
+            e.TextColor = colMenuText;
 
             if (e.ToolStrip is StatusStrip)
             {
-                e.TextColor = MenuText;
+                e.TextColor = colMenuText;
             }
-            else
-            if (e.Item.Pressed)
+            if (e.Item.Selected)
             {
-                e.TextColor = Color.LawnGreen;
+                e.TextColor = colMenuSelectedText;
+            }
+            else if (e.Item.Pressed)
+            {
+                e.TextColor = colMenuSelectedText;
             }
             base.OnRenderItemText(e);
         }
@@ -122,20 +128,20 @@ namespace EDDiscovery2
             if (e.Vertical)
             {
 
-                e.Graphics.DrawLine(new Pen(Border), 2, 0, 2, e.Item.ContentRectangle.Bottom);
+                e.Graphics.DrawLine(new Pen(colToolStripSeparator), 2, 0, 2, e.Item.ContentRectangle.Bottom);
 
                 if (!(e.ToolStrip is StatusStrip))
                 {
-                    e.Graphics.DrawLine(new Pen(BorderLight), 3, 0, 3, e.Item.ContentRectangle.Bottom);
+                    e.Graphics.DrawLine(new Pen(colToolStripSeparator), 3, 0, 3, e.Item.ContentRectangle.Bottom);
                 }
             }
             else
             {
 
-                e.Graphics.DrawLine(new Pen(Border), 0, 2, e.Item.ContentRectangle.Right, 2);
+                e.Graphics.DrawLine(new Pen(colToolStripSeparator), 0, 2, e.Item.ContentRectangle.Right, 2);
                 if (!(e.ToolStrip is StatusStrip))
                 {
-                    e.Graphics.DrawLine(new Pen(BorderLight), 0, 3, e.Item.ContentRectangle.Right, 3);
+                    e.Graphics.DrawLine(new Pen(colToolStripSeparator), 0, 3, e.Item.ContentRectangle.Right, 3);
                 }
             }
         }
@@ -234,7 +240,7 @@ namespace EDDiscovery2
             int kk = 5;
             Rectangle bnd = e.AffectedBounds;
 
-            using (Brush br = new SolidBrush(BorderLight))
+            using (Brush br = new SolidBrush(colMenuSelectedBack))
             {
                 for (int yy = 1; yy < 5; yy++)
                 {
@@ -321,9 +327,9 @@ namespace EDDiscovery2
         protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
         {
             SmoothingMode sm = e.Graphics.SmoothingMode;
-            e.Graphics.FillRectangle(new SolidBrush(BorderLight), 3,0,e.Item.Width-3, e.Item.Height);
+            e.Graphics.FillRectangle(new SolidBrush(colMenuSelectedBack), 3,0,e.Item.Width-3, e.Item.Height);
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            using (Pen pn = new Pen(BorderLight))
+            using (Pen pn = new Pen(colMenuSelectedBack))
             {
                 e.Graphics.DrawLine(pn, 1,  0, 2, 0);
                 e.Graphics.DrawLine(pn, 2, 1, 2, 3);

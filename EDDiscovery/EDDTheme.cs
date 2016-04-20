@@ -124,7 +124,7 @@ namespace EDDiscovery2
                 colors.Add(CI.textbox_back, SystemColors.Menu); colors.Add(CI.textbox_fore, SystemColors.MenuText); colors.Add(CI.textbox_highlight, Color.Red); colors.Add(CI.textbox_success, Color.Green); colors.Add(CI.textbox_border, SystemColors.Menu);
                 colors.Add(CI.textbox_sliderback, SystemColors.ControlLight); colors.Add(CI.textbox_scrollarrow, SystemColors.MenuText); colors.Add(CI.textbox_scrollbutton, SystemColors.Control);
                 colors.Add(CI.checkbox, SystemColors.MenuText);
-                colors.Add(CI.menu_back, SystemColors.Menu); colors.Add(CI.menu_fore, SystemColors.MenuText); colors.Add(CI.menu_dropdownback, SystemColors.Menu); colors.Add(CI.menu_dropdownfore, SystemColors.MenuText);
+                colors.Add(CI.menu_back, SystemColors.Menu); colors.Add(CI.menu_fore, SystemColors.MenuText); colors.Add(CI.menu_dropdownback, SystemColors.ControlLightLight); colors.Add(CI.menu_dropdownfore, SystemColors.MenuText);
                 colors.Add(CI.label, SystemColors.MenuText);
                 colors.Add(CI.group_back, SystemColors.Menu); colors.Add(CI.group_text, SystemColors.MenuText); colors.Add(CI.group_borderlines, SystemColors.ControlDark);
                 colors.Add(CI.tabcontrol_borderlines, SystemColors.ControlDark);
@@ -298,7 +298,7 @@ namespace EDDiscovery2
                 Color.Black, Color.Orange, Color.Red, Color.Green, Color.DarkOrange, textboxborderstyle_color, // text box
                 Color.Black, Color.Orange, Color.DarkOrange, // text back, arrow, button
                 Color.Orange, // checkbox
-                Color.Black, Color.Orange, Color.Black, Color.Orange,  // menu
+                Color.Black, Color.Orange, Color.DarkOrange, Color.Yellow,  // menu
                 Color.Orange,  // label
                 Color.FromArgb(255, 32,32,32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange, // tab control
@@ -317,7 +317,7 @@ namespace EDDiscovery2
                 butback, Color.Orange, Color.Red, Color.Green, Color.FromArgb(255,64,64,64), textboxborderstyle_color, // text box
                 butback, Color.Orange, Color.DarkOrange, // text back, arrow, button
                 Color.Orange, // checkbox
-                Color.Black, Color.Orange, Color.Black, Color.Orange,  // menu
+                Color.Black, Color.Orange, Color.DarkOrange, Color.Yellow,  // menu
                 Color.Orange,  // label
                 Color.Black, Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange, // tab control
@@ -336,7 +336,7 @@ namespace EDDiscovery2
                                         SystemColors.Menu, SystemColors.MenuText, Color.Red, Color.Green, Color.DarkGray, textboxborderstyle_color,// text
                                         SystemColors.ControlLightLight, SystemColors.MenuText, SystemColors.ControlDark, // text box
                                         SystemColors.MenuText, // checkbox
-                                        SystemColors.Menu, SystemColors.MenuText, SystemColors.Menu, SystemColors.MenuText,  // menu
+                                        SystemColors.Menu, SystemColors.MenuText, SystemColors.ControlLightLight, SystemColors.MenuText,  // menu
                                         SystemColors.MenuText,  // label
                                         SystemColors.Menu, SystemColors.MenuText, SystemColors.ControlDark, // group
                                         SystemColors.ControlDark, // tab control
@@ -564,20 +564,26 @@ namespace EDDiscovery2
 
         private void UpdateToolsTripRenderer()
         {
-            toolstripRenderer.Background = currentsettings.colors[Settings.CI.menu_back];
-            toolstripRenderer.MenuText = currentsettings.colors[Settings.CI.menu_fore];
+            // Menu
+            toolstripRenderer.colMenuBackground = currentsettings.colors[Settings.CI.menu_back];
+            toolstripRenderer.colMenuText = currentsettings.colors[Settings.CI.menu_fore];
+            toolstripRenderer.colMenuSelectedBack = currentsettings.colors[Settings.CI.menu_dropdownback];
+            toolstripRenderer.colMenuSelectedText = currentsettings.colors[Settings.CI.menu_dropdownfore];
 
-            // SPecial menu border??
-            toolstripRenderer.Border = currentsettings.colors[Settings.CI.grid_borderback];
-            toolstripRenderer.BorderLight = currentsettings.colors[Settings.CI.grid_borderback];
 
-            toolstripRenderer.Dark = currentsettings.colors[Settings.CI.menu_back];
+            toolstripRenderer.Dark = Color.Pink; // currentsettings.colors[Settings.CI.menu_dropdownback];
             //Bitmap bmp = new Bitmap(1, 1);
             toolstripRenderer.ButtonSelectedBorder = currentsettings.colors[Settings.CI.textbox_success]; ;
             toolstripRenderer.ButtonSelectBackLight = currentsettings.colors[Settings.CI.button_text];
 
             // Need a button/Menu highlight
-            toolstripRenderer.ButtonSelectBackDark = currentsettings.colors[Settings.CI.button_back];
+            toolstripRenderer.ButtonSelectBackDark = currentsettings.colors[Settings.CI.menu_dropdownback];
+
+            // ToolStrip
+            toolstripRenderer.colToolStripBorder = currentsettings.colors[Settings.CI.textbox_border];  // change to tool_Strip border
+            toolstripRenderer.colToolStripBackGround = currentsettings.colors[Settings.CI.toolstrip_back];
+            toolstripRenderer.colToolStripSeparator = currentsettings.colors[Settings.CI.textbox_border];  // change to tool_Strip border
+
 
 
         }
