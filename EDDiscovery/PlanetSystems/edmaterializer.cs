@@ -165,8 +165,6 @@ namespace EDDiscovery2.PlanetSystems
             jo.notes = edobj.notes;
             jo.images_url = edobj.image_url;
 
-
-
             //jo.carbon = edobj.materials[MaterialEnum.Carbon];
             //jo.iron = edobj.materials[MaterialEnum.Iron];
             //jo.nickel = edobj.materials[MaterialEnum.Nickel];
@@ -201,7 +199,7 @@ namespace EDDiscovery2.PlanetSystems
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jo2 = (JObject)JObject.Parse(response.Body);
-                    JObject obj = (JObject)jo2["world"];
+                    JObject obj = (JObject)jo2["data"];
                     edobj.id = obj["id"].Value<int>();
                 }
                 else if ((int)response.StatusCode == 422)
@@ -216,7 +214,7 @@ namespace EDDiscovery2.PlanetSystems
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         JObject jo2 = (JObject)JObject.Parse(response.Body);
-                        JObject obj = (JObject)jo2["world"][0];
+                        JObject obj = (JObject)jo2["data"][0];
                         edobj.id = obj["id"].Value<int>();
 
                         response = RequestSecurePatch(joPost.ToString(), "api/v3/worlds/" + edobj.id.ToString());
@@ -259,7 +257,7 @@ namespace EDDiscovery2.PlanetSystems
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jo2 = (JObject)JObject.Parse(response.Body);
-                    JObject obj = (JObject)jo2["star"];
+                    JObject obj = (JObject)jo2["data"];
                     edobj.id = obj["id"].Value<int>();
                 }
                 else if ((int)response.StatusCode == 422)
@@ -274,7 +272,7 @@ namespace EDDiscovery2.PlanetSystems
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         JObject jo2 = (JObject)JObject.Parse(response.Body);
-                        JObject obj = (JObject)jo2["stars"][0];
+                        JObject obj = (JObject)jo2["data"][0];
                         edobj.id = obj["id"].Value<int>();
 
                         response = RequestSecurePatch(joPost.ToString(), "api/v3/stars/" + edobj.id.ToString());
