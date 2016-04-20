@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace ExtendedControls
 
         public RichTextBoxBorder() : base()
         {
+            Debug.Assert(false, "Depreciated - use RichTextBoxScroll");
         }
 
         private const int WM_PAINT = 15;
