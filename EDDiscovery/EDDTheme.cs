@@ -41,7 +41,7 @@ namespace EDDiscovery2
                 checkbox,
                 label,
                 tabcontrol_borderlines,
-                toolstrip_back
+                toolstrip_back, toolstrip_border, toolstrip_buttonchecked
             };
 
             public string name;         // name of scheme
@@ -67,7 +67,7 @@ namespace EDDiscovery2
                                         Color l,
                                         Color grpb, Color grpt, Color grlines,
                                         Color tabborderlines,
-                                        Color ttb,
+                                        Color ttb, Color ttborder, Color ttbuttonchecked,
                                         bool wf, double op, string ft, float fs)            // ft = empty means don't set it
             {
                 name = n;
@@ -87,7 +87,7 @@ namespace EDDiscovery2
                 colors.Add(CI.label, l);
                 colors.Add(CI.group_back, grpb); colors.Add(CI.group_text, grpt); colors.Add(CI.group_borderlines, grlines);
                 colors.Add(CI.tabcontrol_borderlines, tabborderlines);
-                colors.Add(CI.toolstrip_back, ttb);
+                colors.Add(CI.toolstrip_back, ttb); colors.Add(CI.toolstrip_border, ttborder); colors.Add(CI.toolstrip_buttonchecked, ttbuttonchecked);
                 buttonstyle = bstyle; textboxborderstyle = tbbstyle;
                 windowsframe = wf; formopacity = op; fontname = ft; fontsize = fs;
             }
@@ -121,14 +121,14 @@ namespace EDDiscovery2
                 colors.Add(CI.grid_cellbackground, SystemColors.ControlLightLight); colors.Add(CI.grid_celltext, SystemColors.MenuText); colors.Add(CI.grid_borderlines, SystemColors.ControlDark);
                 colors.Add(CI.grid_sliderback, SystemColors.ControlLight); colors.Add(CI.grid_scrollarrow, SystemColors.MenuText); colors.Add(CI.grid_scrollbutton, SystemColors.Control);
                 colors.Add(CI.travelgrid_nonvisted, Color.Blue); colors.Add(CI.travelgrid_visited, SystemColors.MenuText);
-                colors.Add(CI.textbox_back, SystemColors.Menu); colors.Add(CI.textbox_fore, SystemColors.MenuText); colors.Add(CI.textbox_highlight, Color.Red); colors.Add(CI.textbox_success, Color.Green); colors.Add(CI.textbox_border, SystemColors.Menu);
+                colors.Add(CI.textbox_back, SystemColors.Window); colors.Add(CI.textbox_fore, SystemColors.WindowText); colors.Add(CI.textbox_highlight, Color.Red); colors.Add(CI.textbox_success, Color.Green); colors.Add(CI.textbox_border, SystemColors.Menu);
                 colors.Add(CI.textbox_sliderback, SystemColors.ControlLight); colors.Add(CI.textbox_scrollarrow, SystemColors.MenuText); colors.Add(CI.textbox_scrollbutton, SystemColors.Control);
                 colors.Add(CI.checkbox, SystemColors.MenuText);
                 colors.Add(CI.menu_back, SystemColors.Menu); colors.Add(CI.menu_fore, SystemColors.MenuText); colors.Add(CI.menu_dropdownback, SystemColors.ControlLightLight); colors.Add(CI.menu_dropdownfore, SystemColors.MenuText);
                 colors.Add(CI.label, SystemColors.MenuText);
                 colors.Add(CI.group_back, SystemColors.Menu); colors.Add(CI.group_text, SystemColors.MenuText); colors.Add(CI.group_borderlines, SystemColors.ControlDark);
                 colors.Add(CI.tabcontrol_borderlines, SystemColors.ControlDark);
-                colors.Add(CI.toolstrip_back, SystemColors.Menu);
+                colors.Add(CI.toolstrip_back, SystemColors.Window); colors.Add(CI.toolstrip_border, SystemColors.Menu); colors.Add(CI.toolstrip_buttonchecked, SystemColors.MenuText);
                 buttonstyle = buttonstyle_system;
                 textboxborderstyle = textboxborderstyle_fixed3D;
                 windowsframe = true;
@@ -302,7 +302,7 @@ namespace EDDiscovery2
                 Color.Orange,  // label
                 Color.FromArgb(255, 32,32,32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange, // tab control
-                Color.Black, // tooltip
+                Color.Black, Color.DarkOrange, Color.Orange, // tooltip
                 false, 95, "Microsoft Sans Serif", 8.25F));
 
             themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite EuroCaps", "Euro Caps", 12F, 95));
@@ -321,10 +321,11 @@ namespace EDDiscovery2
                 Color.Orange,  // label
                 Color.Black, Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange, // tab control
-                Color.Black, // tooltip
+                Color.Black, Color.DarkOrange, Color.Orange, // tooltip
                 false, 100, "Euro Caps", 12F));
 
             themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite Verdana", "Verdana", 8F));
+            themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite Calisto", "Calisto MT", 12F));
 
             themelist.Add(new Settings("EuroCaps Grey",
                                         SystemColors.Menu,
@@ -333,14 +334,14 @@ namespace EDDiscovery2
                                         SystemColors.ControlLightLight, SystemColors.MenuText, SystemColors.ControlDark, // grid
                                         SystemColors.ControlLightLight, SystemColors.MenuText, SystemColors.ControlDark, // grid scroll
                                         Color.Blue, SystemColors.MenuText, // travel
-                                        SystemColors.Menu, SystemColors.MenuText, Color.Red, Color.Green, Color.DarkGray, textboxborderstyle_color,// text
+                                        SystemColors.Window, SystemColors.WindowText, Color.Red, Color.Green, Color.DarkGray, textboxborderstyle_color,// text
                                         SystemColors.ControlLightLight, SystemColors.MenuText, SystemColors.ControlDark, // text box
                                         SystemColors.MenuText, // checkbox
                                         SystemColors.Menu, SystemColors.MenuText, SystemColors.ControlLightLight, SystemColors.MenuText,  // menu
                                         SystemColors.MenuText,  // label
                                         SystemColors.Menu, SystemColors.MenuText, SystemColors.ControlDark, // group
                                         SystemColors.ControlDark, // tab control
-                                        SystemColors.Menu, //tooltip
+                                        SystemColors.Window, SystemColors.Menu, SystemColors.MenuText, //tooltip
                                         false, 95, "Euro Caps", 12F));
 
             themelist.Add(new Settings(themelist[themelist.Count - 1], "Verdana Grey", "Verdana", 8F));
@@ -358,7 +359,7 @@ namespace EDDiscovery2
                                                Color.White,  // label
                                                Color.DarkBlue, Color.White, Color.Blue, // group
                                                Color.Blue,
-                                               Color.DarkBlue,
+                                               Color.DarkBlue, Color.White, Color.Red,
                                                false, 95, "Microsoft Sans Serif", 8.25F));
 
             Color baizegreen = Color.FromArgb(255, 13, 68, 13);
@@ -374,7 +375,7 @@ namespace EDDiscovery2
                                                baizegreen, Color.White, baizegreen, Color.White,  // menu
                                                Color.White,  // label
                                                baizegreen, Color.White, Color.LightGreen, // group
-                                               Color.LightGreen,
+                                               Color.LightGreen, Color.White, Color.Red,
                                                baizegreen,
                                                false, 95, "Microsoft Sans Serif", 8.25F));
 
@@ -601,9 +602,9 @@ namespace EDDiscovery2
 
             Type controltype = myControl.GetType();
             Type parentcontroltype = parent.GetType();
-            if (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
+            if (parentcontroltype.BaseType.Equals("Form") && (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
                 controltype.Name.Equals("CheckBox") || controltype.Name.Equals("TextBox") ||
-                controltype.Name.Equals("ComboBox") || (controltype.Name.Equals("RichTextBox") && !parentcontroltype.Name.Equals("RichTextBoxScroll") ) 
+                controltype.Name.Equals("ComboBox") || (controltype.Name.Equals("RichTextBox") ) )
                 )
             {
                 Debug.Assert(false, myControl.Name + " of " + controltype.Name + " from " + parent.Name + " !!! Use the new controls in Controls folder - not the non visual themed ones!");
@@ -659,7 +660,6 @@ namespace EDDiscovery2
                 myControl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
                 MyDgv.BorderColor = Color.Transparent;
                 MyDgv.BorderStyle = BorderStyle.None;
-                MyDgv.BorderPadding = 2;                                                    // for colour selection, 2 pixels of border padding before border..
                 MyDgv.AutoSize = true;
 
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[0]))
@@ -879,7 +879,20 @@ namespace EDDiscovery2
                 }
                 else
                     MyDgv.FlatStyle = FlatStyle.System;
+            }
+            else if ( myControl is NumericUpDownCustom )
+            {
+                NumericUpDownCustom MyDgv = (NumericUpDownCustom)myControl;
 
+                MyDgv.TextBoxForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                MyDgv.TextBoxBackColor = currentsettings.colors[Settings.CI.textbox_back];
+                MyDgv.BorderColor = currentsettings.colors[Settings.CI.textbox_border];
+
+                Color c1 = currentsettings.colors[Settings.CI.textbox_scrollbutton];
+                MyDgv.updown.BackColor = c1;
+                MyDgv.updown.ForeColor = currentsettings.colors[Settings.CI.textbox_scrollarrow];
+                MyDgv.updown.MouseOverColor = ButtonExt.Multiply(c1, mouseoverscaling);
+                MyDgv.updown.MouseSelectedColor = ButtonExt.Multiply(c1, mouseselectedscaling);
                 MyDgv.Invalidate();
             }
             else

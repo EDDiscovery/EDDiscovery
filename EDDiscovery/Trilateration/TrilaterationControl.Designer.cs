@@ -555,8 +555,6 @@ namespace EDDiscovery
             // textBox_status
             // 
             this.textBox_status.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_status.BorderPadding = 1;
-            this.textBox_status.BorderSize = 1;
             this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox_status.Location = new System.Drawing.Point(102, 4);
             this.textBox_status.Name = "textBox_status";
@@ -567,8 +565,6 @@ namespace EDDiscovery
             // textBoxSystemName
             // 
             this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSystemName.BorderPadding = 1;
-            this.textBoxSystemName.BorderSize = 1;
             this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxSystemName.Location = new System.Drawing.Point(72, 25);
             this.textBoxSystemName.Name = "textBoxSystemName";
@@ -579,8 +575,6 @@ namespace EDDiscovery
             // textBoxCoordinateX
             // 
             this.textBoxCoordinateX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCoordinateX.BorderPadding = 1;
-            this.textBoxCoordinateX.BorderSize = 1;
             this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 46);
             this.textBoxCoordinateX.Name = "textBoxCoordinateX";
             this.textBoxCoordinateX.ReadOnly = true;
@@ -592,8 +586,6 @@ namespace EDDiscovery
             // textBoxCoordinateY
             // 
             this.textBoxCoordinateY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCoordinateY.BorderPadding = 1;
-            this.textBoxCoordinateY.BorderSize = 1;
             this.textBoxCoordinateY.Location = new System.Drawing.Point(245, 46);
             this.textBoxCoordinateY.Name = "textBoxCoordinateY";
             this.textBoxCoordinateY.ReadOnly = true;
@@ -605,8 +597,6 @@ namespace EDDiscovery
             // textBoxCoordinateZ
             // 
             this.textBoxCoordinateZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCoordinateZ.BorderPadding = 1;
-            this.textBoxCoordinateZ.BorderSize = 1;
             this.textBoxCoordinateZ.Location = new System.Drawing.Point(325, 46);
             this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
             this.textBoxCoordinateZ.ReadOnly = true;

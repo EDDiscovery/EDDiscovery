@@ -361,17 +361,9 @@ namespace EDDiscovery
             int count = GetVisitsCount(syspos.curSystem.name);
             textBoxVisits.Text = count.ToString();
 
-            if (currentSysPos.curSystem.id_eddb > 0)  // Only enable eddb/ross for system that it knows about
-            {
-                buttonEDDB.Visible = true;
-                buttonRoss.Visible = true;
-            }
-            else
-            {
-                buttonEDDB.Visible = false;
-                buttonRoss.Visible = false;
-            }
+            bool enableedddross = (currentSysPos.curSystem.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
 
+            buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
 
             textBoxAllegiance.Text = EnumStringFormat(syspos.curSystem.allegiance.ToString());
             textBoxEconomy.Text = EnumStringFormat(syspos.curSystem.primary_economy.ToString());
@@ -889,7 +881,7 @@ namespace EDDiscovery
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-        {
+        {           // autopaint the row number..
             var grid = sender as DataGridView;
             var rowIdx = (e.RowIndex + 1).ToString();
 
@@ -901,8 +893,9 @@ namespace EDDiscovery
             };
 
             var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
-            e.Graphics.DrawString(rowIdx, this.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
 
+            using ( Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+                e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br , headerBounds, centerFormat);
         }
 
         private void buttonEDDB_Click(object sender, EventArgs e)
