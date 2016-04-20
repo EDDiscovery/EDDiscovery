@@ -182,6 +182,9 @@
     <Compile Include="Controls\GroupBoxCustom.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\NumericUpDownCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\RadioButtonCustom.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -205,6 +208,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\TextBoxBorder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\UpDown.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\VScrollCustom.cs">

@@ -74,8 +74,6 @@
             this.textBox_From.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_From.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_From.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_From.BorderPadding = 1;
-            this.textBox_From.BorderSize = 1;
             this.textBox_From.Location = new System.Drawing.Point(57, 19);
             this.textBox_From.Name = "textBox_From";
             this.textBox_From.ReadOnly = true;
@@ -139,8 +137,6 @@
             this.textBox_To.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_To.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_To.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_To.BorderPadding = 1;
-            this.textBox_To.BorderSize = 1;
             this.textBox_To.Location = new System.Drawing.Point(326, 19);
             this.textBox_To.Name = "textBox_To";
             this.textBox_To.ReadOnly = true;
@@ -152,8 +148,6 @@
             // textBox_Range
             // 
             this.textBox_Range.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_Range.BorderPadding = 1;
-            this.textBox_Range.BorderSize = 1;
             this.textBox_Range.Location = new System.Drawing.Point(624, 19);
             this.textBox_Range.Name = "textBox_Range";
             this.textBox_Range.ReadOnly = true;
@@ -167,8 +161,6 @@
             this.textBoxCurrent.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBoxCurrent.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBoxCurrent.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCurrent.BorderPadding = 1;
-            this.textBoxCurrent.BorderSize = 1;
             this.textBoxCurrent.Location = new System.Drawing.Point(57, 76);
             this.textBoxCurrent.Name = "textBoxCurrent";
             this.textBoxCurrent.ReadOnly = true;
@@ -191,8 +183,6 @@
             this.textBox_FromX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_FromX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromX.BorderPadding = 1;
-            this.textBox_FromX.BorderSize = 1;
             this.textBox_FromX.Location = new System.Drawing.Point(57, 48);
             this.textBox_FromX.Name = "textBox_FromX";
             this.textBox_FromX.ReadOnly = true;
@@ -207,8 +197,6 @@
             this.textBox_FromY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_FromY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromY.BorderPadding = 1;
-            this.textBox_FromY.BorderSize = 1;
             this.textBox_FromY.Location = new System.Drawing.Point(135, 48);
             this.textBox_FromY.Name = "textBox_FromY";
             this.textBox_FromY.ReadOnly = true;
@@ -223,8 +211,6 @@
             this.textBox_FromZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_FromZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromZ.BorderPadding = 1;
-            this.textBox_FromZ.BorderSize = 1;
             this.textBox_FromZ.Location = new System.Drawing.Point(213, 48);
             this.textBox_FromZ.Name = "textBox_FromZ";
             this.textBox_FromZ.ReadOnly = true;
@@ -239,8 +225,6 @@
             this.textBox_ToX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_ToX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToX.BorderPadding = 1;
-            this.textBox_ToX.BorderSize = 1;
             this.textBox_ToX.Location = new System.Drawing.Point(325, 47);
             this.textBox_ToX.Name = "textBox_ToX";
             this.textBox_ToX.ReadOnly = true;
@@ -255,8 +239,6 @@
             this.textBox_ToY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_ToY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToY.BorderPadding = 1;
-            this.textBox_ToY.BorderSize = 1;
             this.textBox_ToY.Location = new System.Drawing.Point(403, 47);
             this.textBox_ToY.Name = "textBox_ToY";
             this.textBox_ToY.ReadOnly = true;
@@ -271,8 +253,6 @@
             this.textBox_ToZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_ToZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToZ.BorderPadding = 1;
-            this.textBox_ToZ.BorderSize = 1;
             this.textBox_ToZ.Location = new System.Drawing.Point(481, 47);
             this.textBox_ToZ.Name = "textBox_ToZ";
             this.textBox_ToZ.ReadOnly = true;
@@ -322,8 +302,6 @@
             this.textBox_Distance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_Distance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_Distance.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_Distance.BorderPadding = 1;
-            this.textBox_Distance.BorderSize = 1;
             this.textBox_Distance.Location = new System.Drawing.Point(624, 47);
             this.textBox_Distance.Name = "textBox_Distance";
             this.textBox_Distance.ReadOnly = true;

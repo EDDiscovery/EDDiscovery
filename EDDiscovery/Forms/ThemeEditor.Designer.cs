@@ -36,9 +36,15 @@
             this.comboBox_TextBorder = new System.Windows.Forms.ComboBox();
             this.panel_theme19 = new System.Windows.Forms.Panel();
             this.panel_theme18 = new System.Windows.Forms.Panel();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -59,15 +65,24 @@
             this.panel_theme35 = new System.Windows.Forms.Panel();
             this.panel_theme33 = new System.Windows.Forms.Panel();
             this.panel_theme32 = new System.Windows.Forms.Panel();
+            this.panel_theme45 = new System.Windows.Forms.Panel();
+            this.panel_theme42 = new System.Windows.Forms.Panel();
+            this.panel_theme44 = new System.Windows.Forms.Panel();
+            this.panel_theme41 = new System.Windows.Forms.Panel();
+            this.panel_theme43 = new System.Windows.Forms.Panel();
+            this.panel_theme40 = new System.Windows.Forms.Panel();
             this.panel_theme30 = new System.Windows.Forms.Panel();
             this.panel_theme4 = new System.Windows.Forms.Panel();
             this.panel_theme3 = new System.Windows.Forms.Panel();
             this.panel_theme6 = new System.Windows.Forms.Panel();
             this.panel_theme10 = new System.Windows.Forms.Panel();
             this.panel_theme17 = new System.Windows.Forms.Panel();
+            this.panel_theme60 = new System.Windows.Forms.Panel();
             this.panel_theme16 = new System.Windows.Forms.Panel();
             this.panel_theme14 = new System.Windows.Forms.Panel();
             this.panel_theme13 = new System.Windows.Forms.Panel();
+            this.panel_theme51 = new System.Windows.Forms.Panel();
+            this.panel_theme50 = new System.Windows.Forms.Panel();
             this.panel_theme12 = new System.Windows.Forms.Panel();
             this.panel_theme11 = new System.Windows.Forms.Panel();
             this.panel_theme9 = new System.Windows.Forms.Panel();
@@ -83,21 +98,9 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.panel_theme40 = new System.Windows.Forms.Panel();
-            this.panel_theme41 = new System.Windows.Forms.Panel();
-            this.panel_theme42 = new System.Windows.Forms.Panel();
-            this.panel_theme43 = new System.Windows.Forms.Panel();
-            this.panel_theme44 = new System.Windows.Forms.Panel();
-            this.panel_theme45 = new System.Windows.Forms.Panel();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.panel_theme50 = new System.Windows.Forms.Panel();
-            this.panel_theme51 = new System.Windows.Forms.Panel();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.panel_theme60 = new System.Windows.Forms.Panel();
+            this.panel_theme61 = new System.Windows.Forms.Panel();
+            this.panel_theme62 = new System.Windows.Forms.Panel();
+            this.label27 = new System.Windows.Forms.Label();
             this.groupBoxColors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -123,6 +126,7 @@
             this.groupBoxColors.Controls.Add(this.label23);
             this.groupBoxColors.Controls.Add(this.label18);
             this.groupBoxColors.Controls.Add(this.label25);
+            this.groupBoxColors.Controls.Add(this.label27);
             this.groupBoxColors.Controls.Add(this.label24);
             this.groupBoxColors.Controls.Add(this.label17);
             this.groupBoxColors.Controls.Add(this.label2);
@@ -161,6 +165,8 @@
             this.groupBoxColors.Controls.Add(this.panel_theme6);
             this.groupBoxColors.Controls.Add(this.panel_theme10);
             this.groupBoxColors.Controls.Add(this.panel_theme17);
+            this.groupBoxColors.Controls.Add(this.panel_theme62);
+            this.groupBoxColors.Controls.Add(this.panel_theme61);
             this.groupBoxColors.Controls.Add(this.panel_theme60);
             this.groupBoxColors.Controls.Add(this.panel_theme16);
             this.groupBoxColors.Controls.Add(this.panel_theme14);
@@ -239,6 +245,51 @@
             this.panel_theme18.TabIndex = 9;
             this.panel_theme18.Tag = "";
             // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(36, 231);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(67, 13);
+            this.label23.TabIndex = 6;
+            this.label23.Text = "Scroll Button";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(36, 196);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(63, 13);
+            this.label18.TabIndex = 6;
+            this.label18.Text = "Scroll Arrow";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(312, 196);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(76, 13);
+            this.label25.TabIndex = 6;
+            this.label25.Text = "Dropdown text";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(312, 161);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(83, 13);
+            this.label24.TabIndex = 6;
+            this.label24.Text = "Dropdown back";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(36, 161);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(62, 13);
+            this.label17.TabIndex = 6;
+            this.label17.Text = "Scroll Slider";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -265,6 +316,15 @@
             this.label22.Size = new System.Drawing.Size(33, 13);
             this.label22.TabIndex = 6;
             this.label22.Text = "Label";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(728, 27);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(49, 13);
+            this.label26.TabIndex = 6;
+            this.label26.Text = "ToolStrip";
             // 
             // label21
             // 
@@ -451,6 +511,66 @@
             this.panel_theme32.TabIndex = 5;
             this.panel_theme32.Tag = "";
             // 
+            // panel_theme45
+            // 
+            this.panel_theme45.AccessibleDescription = "";
+            this.panel_theme45.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme45.Location = new System.Drawing.Point(231, 225);
+            this.panel_theme45.Name = "panel_theme45";
+            this.panel_theme45.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme45.TabIndex = 5;
+            this.panel_theme45.Tag = "";
+            // 
+            // panel_theme42
+            // 
+            this.panel_theme42.AccessibleDescription = "";
+            this.panel_theme42.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme42.Location = new System.Drawing.Point(150, 225);
+            this.panel_theme42.Name = "panel_theme42";
+            this.panel_theme42.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme42.TabIndex = 5;
+            this.panel_theme42.Tag = "";
+            // 
+            // panel_theme44
+            // 
+            this.panel_theme44.AccessibleDescription = "";
+            this.panel_theme44.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme44.Location = new System.Drawing.Point(231, 190);
+            this.panel_theme44.Name = "panel_theme44";
+            this.panel_theme44.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme44.TabIndex = 5;
+            this.panel_theme44.Tag = "";
+            // 
+            // panel_theme41
+            // 
+            this.panel_theme41.AccessibleDescription = "";
+            this.panel_theme41.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme41.Location = new System.Drawing.Point(150, 190);
+            this.panel_theme41.Name = "panel_theme41";
+            this.panel_theme41.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme41.TabIndex = 5;
+            this.panel_theme41.Tag = "";
+            // 
+            // panel_theme43
+            // 
+            this.panel_theme43.AccessibleDescription = "";
+            this.panel_theme43.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme43.Location = new System.Drawing.Point(231, 155);
+            this.panel_theme43.Name = "panel_theme43";
+            this.panel_theme43.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme43.TabIndex = 5;
+            this.panel_theme43.Tag = "";
+            // 
+            // panel_theme40
+            // 
+            this.panel_theme40.AccessibleDescription = "";
+            this.panel_theme40.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme40.Location = new System.Drawing.Point(150, 155);
+            this.panel_theme40.Name = "panel_theme40";
+            this.panel_theme40.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme40.TabIndex = 5;
+            this.panel_theme40.Tag = "";
+            // 
             // panel_theme30
             // 
             this.panel_theme30.AccessibleDescription = "";
@@ -511,6 +631,16 @@
             this.panel_theme17.TabIndex = 5;
             this.panel_theme17.Tag = "";
             // 
+            // panel_theme60
+            // 
+            this.panel_theme60.AccessibleDescription = "";
+            this.panel_theme60.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme60.Location = new System.Drawing.Point(734, 50);
+            this.panel_theme60.Name = "panel_theme60";
+            this.panel_theme60.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme60.TabIndex = 5;
+            this.panel_theme60.Tag = "";
+            // 
             // panel_theme16
             // 
             this.panel_theme16.AccessibleDescription = "";
@@ -540,6 +670,26 @@
             this.panel_theme13.Size = new System.Drawing.Size(28, 28);
             this.panel_theme13.TabIndex = 5;
             this.panel_theme13.Tag = "";
+            // 
+            // panel_theme51
+            // 
+            this.panel_theme51.AccessibleDescription = "";
+            this.panel_theme51.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme51.Location = new System.Drawing.Point(413, 190);
+            this.panel_theme51.Name = "panel_theme51";
+            this.panel_theme51.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme51.TabIndex = 5;
+            this.panel_theme51.Tag = "";
+            // 
+            // panel_theme50
+            // 
+            this.panel_theme50.AccessibleDescription = "";
+            this.panel_theme50.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme50.Location = new System.Drawing.Point(413, 155);
+            this.panel_theme50.Name = "panel_theme50";
+            this.panel_theme50.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme50.TabIndex = 5;
+            this.panel_theme50.Tag = "";
             // 
             // panel_theme12
             // 
@@ -685,149 +835,34 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Font";
             // 
-            // panel_theme40
+            // panel_theme61
             // 
-            this.panel_theme40.AccessibleDescription = "";
-            this.panel_theme40.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme40.Location = new System.Drawing.Point(150, 155);
-            this.panel_theme40.Name = "panel_theme40";
-            this.panel_theme40.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme40.TabIndex = 5;
-            this.panel_theme40.Tag = "";
+            this.panel_theme61.AccessibleDescription = "";
+            this.panel_theme61.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme61.Location = new System.Drawing.Point(734, 120);
+            this.panel_theme61.Name = "panel_theme61";
+            this.panel_theme61.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme61.TabIndex = 5;
+            this.panel_theme61.Tag = "";
             // 
-            // panel_theme41
+            // panel_theme62
             // 
-            this.panel_theme41.AccessibleDescription = "";
-            this.panel_theme41.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme41.Location = new System.Drawing.Point(150, 190);
-            this.panel_theme41.Name = "panel_theme41";
-            this.panel_theme41.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme41.TabIndex = 5;
-            this.panel_theme41.Tag = "";
+            this.panel_theme62.AccessibleDescription = "";
+            this.panel_theme62.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme62.Location = new System.Drawing.Point(731, 260);
+            this.panel_theme62.Name = "panel_theme62";
+            this.panel_theme62.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme62.TabIndex = 5;
+            this.panel_theme62.Tag = "";
             // 
-            // panel_theme42
+            // label27
             // 
-            this.panel_theme42.AccessibleDescription = "";
-            this.panel_theme42.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme42.Location = new System.Drawing.Point(150, 225);
-            this.panel_theme42.Name = "panel_theme42";
-            this.panel_theme42.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme42.TabIndex = 5;
-            this.panel_theme42.Tag = "";
-            // 
-            // panel_theme43
-            // 
-            this.panel_theme43.AccessibleDescription = "";
-            this.panel_theme43.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme43.Location = new System.Drawing.Point(231, 155);
-            this.panel_theme43.Name = "panel_theme43";
-            this.panel_theme43.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme43.TabIndex = 5;
-            this.panel_theme43.Tag = "";
-            // 
-            // panel_theme44
-            // 
-            this.panel_theme44.AccessibleDescription = "";
-            this.panel_theme44.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme44.Location = new System.Drawing.Point(231, 190);
-            this.panel_theme44.Name = "panel_theme44";
-            this.panel_theme44.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme44.TabIndex = 5;
-            this.panel_theme44.Tag = "";
-            // 
-            // panel_theme45
-            // 
-            this.panel_theme45.AccessibleDescription = "";
-            this.panel_theme45.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme45.Location = new System.Drawing.Point(231, 225);
-            this.panel_theme45.Name = "panel_theme45";
-            this.panel_theme45.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme45.TabIndex = 5;
-            this.panel_theme45.Tag = "";
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(36, 161);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(62, 13);
-            this.label17.TabIndex = 6;
-            this.label17.Text = "Scroll Slider";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(36, 196);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(63, 13);
-            this.label18.TabIndex = 6;
-            this.label18.Text = "Scroll Arrow";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(36, 231);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(67, 13);
-            this.label23.TabIndex = 6;
-            this.label23.Text = "Scroll Button";
-            // 
-            // panel_theme50
-            // 
-            this.panel_theme50.AccessibleDescription = "";
-            this.panel_theme50.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme50.Location = new System.Drawing.Point(413, 155);
-            this.panel_theme50.Name = "panel_theme50";
-            this.panel_theme50.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme50.TabIndex = 5;
-            this.panel_theme50.Tag = "";
-            // 
-            // panel_theme51
-            // 
-            this.panel_theme51.AccessibleDescription = "";
-            this.panel_theme51.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme51.Location = new System.Drawing.Point(413, 190);
-            this.panel_theme51.Name = "panel_theme51";
-            this.panel_theme51.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme51.TabIndex = 5;
-            this.panel_theme51.Tag = "";
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(312, 161);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(83, 13);
-            this.label24.TabIndex = 6;
-            this.label24.Text = "Dropdown back";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(312, 196);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(76, 13);
-            this.label25.TabIndex = 6;
-            this.label25.Text = "Dropdown text";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(728, 27);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(49, 13);
-            this.label26.TabIndex = 6;
-            this.label26.Text = "ToolStrip";
-            // 
-            // panel_theme60
-            // 
-            this.panel_theme60.AccessibleDescription = "";
-            this.panel_theme60.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme60.Location = new System.Drawing.Point(734, 50);
-            this.panel_theme60.Name = "panel_theme60";
-            this.panel_theme60.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme60.TabIndex = 5;
-            this.panel_theme60.Tag = "";
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(666, 266);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(50, 13);
+            this.label27.TabIndex = 6;
+            this.label27.Text = "Checked";
             // 
             // ThemeEditor
             // 
@@ -923,5 +958,8 @@
         private System.Windows.Forms.Panel panel_theme60;
         private System.Windows.Forms.Panel panel_theme51;
         private System.Windows.Forms.Panel panel_theme50;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Panel panel_theme62;
+        private System.Windows.Forms.Panel panel_theme61;
     }
 }

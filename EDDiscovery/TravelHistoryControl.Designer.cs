@@ -276,8 +276,7 @@
             // textBoxSolDist
             // 
             this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSolDist.BorderPadding = 1;
-            this.textBoxSolDist.BorderSize = 1;
+            this.textBoxSolDist.BorderColorScaling = 0.5F;
             this.textBoxSolDist.Location = new System.Drawing.Point(50, 82);
             this.textBoxSolDist.Name = "textBoxSolDist";
             this.textBoxSolDist.ReadOnly = true;
@@ -331,8 +330,7 @@
             // textBoxState
             // 
             this.textBoxState.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxState.BorderPadding = 1;
-            this.textBoxState.BorderSize = 1;
+            this.textBoxState.BorderColorScaling = 0.5F;
             this.textBoxState.Location = new System.Drawing.Point(182, 82);
             this.textBoxState.Name = "textBoxState";
             this.textBoxState.ReadOnly = true;
@@ -343,8 +341,7 @@
             // textBoxEconomy
             // 
             this.textBoxEconomy.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxEconomy.BorderPadding = 1;
-            this.textBoxEconomy.BorderSize = 1;
+            this.textBoxEconomy.BorderColorScaling = 0.5F;
             this.textBoxEconomy.Location = new System.Drawing.Point(182, 64);
             this.textBoxEconomy.Name = "textBoxEconomy";
             this.textBoxEconomy.ReadOnly = true;
@@ -375,8 +372,7 @@
             // textBoxGovernment
             // 
             this.textBoxGovernment.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxGovernment.BorderPadding = 1;
-            this.textBoxGovernment.BorderSize = 1;
+            this.textBoxGovernment.BorderColorScaling = 0.5F;
             this.textBoxGovernment.Location = new System.Drawing.Point(182, 100);
             this.textBoxGovernment.Name = "textBoxGovernment";
             this.textBoxGovernment.ReadOnly = true;
@@ -387,8 +383,7 @@
             // textBoxAllegiance
             // 
             this.textBoxAllegiance.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxAllegiance.BorderPadding = 1;
-            this.textBoxAllegiance.BorderSize = 1;
+            this.textBoxAllegiance.BorderColorScaling = 0.5F;
             this.textBoxAllegiance.Location = new System.Drawing.Point(182, 46);
             this.textBoxAllegiance.Name = "textBoxAllegiance";
             this.textBoxAllegiance.ReadOnly = true;
@@ -429,8 +424,7 @@
             // textBoxVisits
             // 
             this.textBoxVisits.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxVisits.BorderPadding = 1;
-            this.textBoxVisits.BorderSize = 1;
+            this.textBoxVisits.BorderColorScaling = 0.5F;
             this.textBoxVisits.Location = new System.Drawing.Point(182, 28);
             this.textBoxVisits.Name = "textBoxVisits";
             this.textBoxVisits.ReadOnly = true;
@@ -449,15 +443,14 @@
             // 
             // richTextBoxNote
             // 
-            this.richTextBoxNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxNote.BorderColor = System.Drawing.Color.Transparent;
             this.richTextBoxNote.BorderColorScaling = 0.5F;
             this.richTextBoxNote.HideScrollBar = true;
-            this.richTextBoxNote.Location = new System.Drawing.Point(130, 123);
+            this.richTextBoxNote.Location = new System.Drawing.Point(6, 123);
             this.richTextBoxNote.Name = "richTextBoxNote";
             this.richTextBoxNote.ScrollBarWidth = 20;
             this.richTextBoxNote.ShowLineCount = false;
-            this.richTextBoxNote.Size = new System.Drawing.Size(238, 47);
+            this.richTextBoxNote.Size = new System.Drawing.Size(242, 44);
             this.richTextBoxNote.TabIndex = 0;
             this.richTextBoxNote.TextChanged += new System.EventHandler(this.richTextBoxNote_TextChanged);
             this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
@@ -478,8 +471,7 @@
             // textBoxDistance
             // 
             this.textBoxDistance.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxDistance.BorderPadding = 1;
-            this.textBoxDistance.BorderSize = 1;
+            this.textBoxDistance.BorderColorScaling = 0.5F;
             this.textBoxDistance.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxDistance.Location = new System.Drawing.Point(81, 197);
             this.textBoxDistance.Name = "textBoxDistance";
@@ -498,8 +490,7 @@
             // textBoxPrevSystem
             // 
             this.textBoxPrevSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxPrevSystem.BorderPadding = 1;
-            this.textBoxPrevSystem.BorderSize = 1;
+            this.textBoxPrevSystem.BorderColorScaling = 0.5F;
             this.textBoxPrevSystem.Location = new System.Drawing.Point(90, 174);
             this.textBoxPrevSystem.Name = "textBoxPrevSystem";
             this.textBoxPrevSystem.ReadOnly = true;
@@ -521,8 +512,7 @@
             // textBoxZ
             // 
             this.textBoxZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxZ.BorderPadding = 1;
-            this.textBoxZ.BorderSize = 1;
+            this.textBoxZ.BorderColorScaling = 0.5F;
             this.textBoxZ.Location = new System.Drawing.Point(50, 64);
             this.textBoxZ.Name = "textBoxZ";
             this.textBoxZ.ReadOnly = true;
@@ -554,8 +544,7 @@
             // textBoxY
             // 
             this.textBoxY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxY.BorderPadding = 1;
-            this.textBoxY.BorderSize = 1;
+            this.textBoxY.BorderColorScaling = 0.5F;
             this.textBoxY.Location = new System.Drawing.Point(50, 46);
             this.textBoxY.Name = "textBoxY";
             this.textBoxY.ReadOnly = true;
@@ -566,8 +555,7 @@
             // textBoxX
             // 
             this.textBoxX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxX.BorderPadding = 1;
-            this.textBoxX.BorderSize = 1;
+            this.textBoxX.BorderColorScaling = 0.5F;
             this.textBoxX.Location = new System.Drawing.Point(50, 28);
             this.textBoxX.Name = "textBoxX";
             this.textBoxX.ReadOnly = true;
@@ -587,8 +575,7 @@
             // textBoxSystem
             // 
             this.textBoxSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSystem.BorderPadding = 1;
-            this.textBoxSystem.BorderSize = 1;
+            this.textBoxSystem.BorderColorScaling = 0.5F;
             this.textBoxSystem.Location = new System.Drawing.Point(50, 9);
             this.textBoxSystem.Name = "textBoxSystem";
             this.textBoxSystem.ReadOnly = true;
@@ -822,8 +809,7 @@
             // textBoxDistanceToNextSystem
             // 
             this.textBoxDistanceToNextSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxDistanceToNextSystem.BorderPadding = 1;
-            this.textBoxDistanceToNextSystem.BorderSize = 1;
+            this.textBoxDistanceToNextSystem.BorderColorScaling = 0.5F;
             this.textBoxDistanceToNextSystem.Location = new System.Drawing.Point(242, 74);
             this.textBoxDistanceToNextSystem.Name = "textBoxDistanceToNextSystem";
             this.textBoxDistanceToNextSystem.Size = new System.Drawing.Size(48, 20);
@@ -1024,8 +1010,7 @@
             // textBoxFilter
             // 
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxFilter.BorderPadding = 1;
-            this.textBoxFilter.BorderSize = 1;
+            this.textBoxFilter.BorderColorScaling = 0.5F;
             this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
