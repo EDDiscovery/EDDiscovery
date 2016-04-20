@@ -49,19 +49,8 @@ namespace EDDiscovery2.HTTP
                         WriteLog("POST " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    // Display the status.
-                    //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                    // Get the stream containing content returned by the server.
-                    dataStream = response.GetResponseStream();
-                    // Open the stream using a StreamReader for easy access.
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.
-                    var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
 
-                    // Display the content.
-                    // Clean up the streams.
-                    reader.Close();
-                    dataStream.Close();
+                    var data = getResponseData(response);
                     response.Close();
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
@@ -77,16 +66,19 @@ namespace EDDiscovery2.HTTP
                     using (WebResponse response = ex.Response)
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
+                        var data = getResponseData(httpResponse);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
-                        System.Diagnostics.Trace.WriteLine($"HTTP Error code: {httpResponse.StatusCode}");
+                        System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
+                        System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         if (EDDiscoveryForm.EDDConfig.EDSMLog)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                            WriteLog($"HTTP Error body: {data.Body}", "");
                         }
-                        return new ResponseData(httpResponse.StatusCode);
+                        return data;
                     }
                 }
             }
@@ -137,18 +129,8 @@ namespace EDDiscovery2.HTTP
                         WriteLog("PATCH " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    // Display the status.
-                    //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                    // Get the stream containing content returned by the server.
-                    dataStream = response.GetResponseStream();
-                    // Open the stream using a StreamReader for easy access.
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.
-                    var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
-                    // Display the content.
-                    // Clean up the streams.
-                    reader.Close();
-                    dataStream.Close();
+
+                    var data = getResponseData(response);
                     response.Close();
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
@@ -163,16 +145,19 @@ namespace EDDiscovery2.HTTP
                     using (WebResponse response = ex.Response)
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
+                        var data = getResponseData(httpResponse);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
-                        System.Diagnostics.Trace.WriteLine($"HTTP Error code: {httpResponse.StatusCode}");
+                        System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
+                        System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         if (EDDiscoveryForm.EDDConfig.EDSMLog)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                            WriteLog($"HTTP Error body: {data.Body}", "");
                         }
-                        return new ResponseData(httpResponse.StatusCode);
+                        return data;
                     }
                 }
             }
@@ -217,19 +202,8 @@ namespace EDDiscovery2.HTTP
                     // Get the response.
                     //request.Timeout = 740 * 1000;
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    // Display the status.
-                    //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                    // Get the stream containing content returned by the server.
-                    Stream dataStream = response.GetResponseStream();
-                    // Open the stream using a StreamReader for easy access.
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.
-                    var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
-                    var statusCode = response.StatusCode;
-                    // Display the content.
-                    // Clean up the streams.
-                    reader.Close();
-                    dataStream.Close();
+
+                    var data = getResponseData(response);
                     response.Close();
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
@@ -244,16 +218,19 @@ namespace EDDiscovery2.HTTP
                     using (WebResponse response = ex.Response)
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
+                        var data = getResponseData(httpResponse);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
-                        System.Diagnostics.Trace.WriteLine($"HTTP Error code: {httpResponse.StatusCode}");
+                        System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
+                        System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         if (EDDiscoveryForm.EDDConfig.EDSMLog)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                            WriteLog($"HTTP Error body: {data.Body}", "");
                         }
-                        return new ResponseData(httpResponse.StatusCode);
+                        return data;
                     }
                 }
             }
@@ -299,18 +276,8 @@ namespace EDDiscovery2.HTTP
                     // Get the response.
                     //request.Timeout = 740 * 1000;
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    // Display the status.
-                    //            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                    // Get the stream containing content returned by the server.
-                    Stream dataStream = response.GetResponseStream();
-                    // Open the stream using a StreamReader for easy access.
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.
-                    var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
-                    // Display the content.
-                    // Clean up the streams.
-                    reader.Close();
-                    dataStream.Close();
+
+                    var data = getResponseData(response);
                     response.Close();
 
                     if (EDDiscoveryForm.EDDConfig.EDSMLog)
@@ -325,16 +292,19 @@ namespace EDDiscovery2.HTTP
                     using (WebResponse response = ex.Response)
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
+                        var data = getResponseData(httpResponse);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
-                        System.Diagnostics.Trace.WriteLine($"HTTP Error code: {httpResponse.StatusCode}");
+                        System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
+                        System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         if (EDDiscoveryForm.EDDConfig.EDSMLog)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                            WriteLog($"HTTP Error body: {data.Body}", "");
                         }
-                        return new ResponseData(httpResponse.StatusCode);
+                        return data;
                     }
                 }
             }
@@ -378,6 +348,15 @@ namespace EDDiscovery2.HTTP
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
+        }
+        private ResponseData getResponseData(HttpWebResponse response)
+        {
+            var dataStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
+            reader.Close();
+            dataStream.Close();
+            return data;
         }
 
     }

@@ -204,20 +204,29 @@ namespace EDDiscovery2.PlanetSystems
                 }
                 else if ((int)response.StatusCode == 422)
                 {
-                    // Surprise, record is already there for some reason!
-                    // I may create an api method on the server that negates the need to check for 
-                    // this at some point
-                    // - Greg
-
                     var queryParam = $"system={jo.system}&world={jo.world}";
-                    response = RequestGet($"api/v3/worlds?{queryParam}");
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    var response2 = RequestGet($"api/v3/worlds?{queryParam}");
+                    if (response2.StatusCode == HttpStatusCode.OK)
                     {
-                        JObject jo2 = (JObject)JObject.Parse(response.Body);
-                        JObject obj = (JObject)jo2["data"][0];
-                        edobj.id = obj["id"].Value<int>();
-
-                        response = RequestSecurePatch(joPost.ToString(), "api/v3/worlds/" + edobj.id.ToString());
+                        JObject jo2 = (JObject)JObject.Parse(response2.Body);
+                        JArray items = (JArray)jo2["data"];
+                        if (items.Count > 0)
+                        {
+                            edobj.id = items[0]["id"].Value<int>();
+                            response2 = RequestSecurePatch(joPost.ToString(), "api/v3/worlds/" + edobj.id.ToString());
+                        }
+                        else
+                        {
+                            // TODO: We should make use of the error information in the JSON body to 
+                            // tell the user why this failed
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        // TODO: We should make use of the error information in the JSON body to 
+                        // tell the user why this failed
+                        return false;
                     }
 
                 }
@@ -262,20 +271,23 @@ namespace EDDiscovery2.PlanetSystems
                 }
                 else if ((int)response.StatusCode == 422)
                 {
-                    // Surprise, record is already there for some reason!
-                    // I may create an api method on the server that negates the need to check for 
-                    // this at some point
-                    // - Greg
-
                     var queryParam = $"system={jo.system}&star={jo.star}&updater={jo.updater}";
-                    response = RequestGet($"api/v3/stars?{queryParam}");
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    var response2 = RequestGet($"api/v3/stars?{queryParam}");
+                    if (response2.StatusCode == HttpStatusCode.OK)
                     {
-                        JObject jo2 = (JObject)JObject.Parse(response.Body);
-                        JObject obj = (JObject)jo2["data"][0];
-                        edobj.id = obj["id"].Value<int>();
-
-                        response = RequestSecurePatch(joPost.ToString(), "api/v3/stars/" + edobj.id.ToString());
+                        JObject jo2 = (JObject)JObject.Parse(response2.Body);
+                        JArray items = (JArray)jo2["data"];
+                        if (items.Count > 0)
+                        {
+                            edobj.id = items[0]["id"].Value<int>();
+                            response2 = RequestSecurePatch(joPost.ToString(), "api/v3/stars/" + edobj.id.ToString());
+                        }
+                        else
+                        {
+                            // TODO: We should make use of the error information in the JSON body to 
+                            // tell the user why this failed
+                            return false;
+                        }
                     }
 
                 }
