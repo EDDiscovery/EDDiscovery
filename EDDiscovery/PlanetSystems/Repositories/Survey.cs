@@ -106,6 +106,33 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             // TODO: Add materials. They will be integers for this. Use Resource of "BINARY"
             // and 1s and 0s for a simple survey.
 
+            //jo.carbon = edobj.materials[MaterialEnum.Carbon];
+            //jo.iron = edobj.materials[MaterialEnum.Iron];
+            //jo.nickel = edobj.materials[MaterialEnum.Nickel];
+            //jo.phosphorus = edobj.materials[MaterialEnum.Phosphorus];
+            //jo.sulphur = edobj.materials[MaterialEnum.Sulphur];
+            //jo.arsenic = edobj.materials[MaterialEnum.Arsenic];
+            //jo.chromium = edobj.materials[MaterialEnum.Chromium];
+            //jo.germanium = edobj.materials[MaterialEnum.Germanium];
+            //jo.manganese = edobj.materials[MaterialEnum.Manganese];
+            //jo.selenium = edobj.materials[MaterialEnum.Selenium];
+            //jo.vanadium = edobj.materials[MaterialEnum.Vanadium];
+            //jo.zinc = edobj.materials[MaterialEnum.Zinc];
+            //jo.zirconium = edobj.materials[MaterialEnum.Zirconium];
+            //jo.cadmium = edobj.materials[MaterialEnum.Cadmium];
+            //jo.mercury = edobj.materials[MaterialEnum.Mercury];
+            //jo.molybdenum = edobj.materials[MaterialEnum.Molybdenum];
+            //jo.niobium = edobj.materials[MaterialEnum.Niobium];
+            //jo.tin = edobj.materials[MaterialEnum.Tin];
+            //jo.tungsten = edobj.materials[MaterialEnum.Tungsten];
+            //jo.antimony = edobj.materials[MaterialEnum.Antimony];
+            //jo.polonium = edobj.materials[MaterialEnum.Polonium];
+            //jo.ruthenium = edobj.materials[MaterialEnum.Ruthenium];
+            //jo.technetium = edobj.materials[MaterialEnum.Technetium];
+            //jo.tellurium = edobj.materials[MaterialEnum.Tellurium];
+            //jo.yttrium = edobj.materials[MaterialEnum.Yttrium];
+
+
             JObject joPost = new JObject(new JProperty("survey", jo));
 
             ResponseData response;
