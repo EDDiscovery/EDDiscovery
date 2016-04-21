@@ -802,7 +802,7 @@
             this.comboBoxCommander.ScrollBarWidth = 16;
             this.comboBoxCommander.SelectedIndex = -1;
             this.comboBoxCommander.SelectedItem = null;
-            this.comboBoxCommander.Size = new System.Drawing.Size(191, 23);
+            this.comboBoxCommander.Size = new System.Drawing.Size(142, 23);
             this.comboBoxCommander.TabIndex = 0;
             this.comboBoxCommander.ValueMember = null;
             // 
