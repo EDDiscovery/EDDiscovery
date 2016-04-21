@@ -7,6 +7,7 @@ using System.Configuration;
 
 namespace EDDiscovery2.HTTP
 {
+    using Newtonsoft.Json.Linq;
     using System;
     using System.Web;
 
@@ -40,8 +41,17 @@ namespace EDDiscovery2.HTTP
         {
             _authTokens = null;
             var appSettings = ConfigurationManager.AppSettings;
+#if DEBUG
+            // Testing db username/password is public so other contributors
+            // can work with it
+            var username = "edmaterializer@gmail.com";
+            var password = "Barnacles are delicious";
+#else
+            // This is for the production database, so we're keeping the
+            // credentials hidden away
             var username = appSettings["EDMaterializerUsername"];
             var password = appSettings["EDMaterializerPassword"];
+#endif
             var json = $"{{\"email\": \"{username}\", \"password\": \"{password}\"}}";
             var response = RequestPost(json, $"{_authPath}/sign_in");
             if (response.StatusCode == HttpStatusCode.OK)
@@ -60,6 +70,11 @@ namespace EDDiscovery2.HTTP
                                             string action, 
                                             Func<string, string, NameValueCollection, ResponseData> requestMethod)
         {
+            var commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+            JObject jo = JObject.Parse(json);
+            jo["user"] = HttpUtility.UrlEncode(commanderName);
+            json = jo.ToString();
+
             ResponseData response = new ResponseData(HttpStatusCode.BadRequest);
             // Attempt #1 with existing tokens
             if (_authTokens != null)

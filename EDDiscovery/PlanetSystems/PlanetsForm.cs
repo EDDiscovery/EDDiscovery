@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using EDDiscovery2.DB;
 using System.Globalization;
+using EDDiscovery2.PlanetSystems;
 
 namespace EDDiscovery2.PlanetSystems
 {
@@ -16,7 +17,6 @@ namespace EDDiscovery2.PlanetSystems
     {
         public EDDiscovery.EDDiscoveryForm edForm;
         private List<EDObject> edObjects = new List<EDObject>();
-        private EdMaterializer edmat = new EdMaterializer();
         private Dictionary<int, string> dictComboPlanetDesc = new Dictionary<int, string>();
         private Dictionary<int, string> dictComboStarDesc = new Dictionary<int, string>();
 
@@ -147,8 +147,27 @@ namespace EDDiscovery2.PlanetSystems
 
             edObjects.Clear();
 
-            planets = edmat.GetAllWorlds(textBoxSystemName.Text);
-            stars = edmat.GetAllStars(textBoxSystemName.Text);
+            Repositories.World world = new Repositories.World();
+            planets = world.GetAllForSystem(textBoxSystemName.Text);
+
+            Repositories.Star star = new Repositories.Star();
+            stars = star.GetAllForSystem(textBoxSystemName.Text);
+
+            // Proof of concept tests. Assumes the 2nd planet has surveys and world surveys
+            // Uncomment to see in action! 
+
+            //if (planets != null && planets.Count > 1)
+            //{               
+            //    //pulling a world_survey from a world
+            //    var worldSurvey = planets[1].GetWorldSurvey();
+
+            //    if (worldSurvey != null)
+            //        System.Diagnostics.Trace.WriteLine($"WorldSurvey id = {worldSurvey.id}");
+
+            //    var surveys = planets[1].GetSurveys();
+            //    if (surveys != null && surveys.Count > 0 )
+            //        System.Diagnostics.Trace.WriteLine($"Survey[0] id = {surveys[0].id}");
+            //}
 
             edObjects.AddRange(planets);
             edObjects.AddRange(stars);
@@ -249,17 +268,15 @@ namespace EDDiscovery2.PlanetSystems
         {
             UpdateEDObject(currentObj);
             if (currentObj is EDWorld)
-                edmat.StorePlanet((EDWorld)currentObj);
+            {
+                Repositories.World world = new Repositories.World();
+                world.Store((EDWorld)currentObj);
+            }
             if (currentObj is EDStar)
-                edmat.StoreStar((EDStar)currentObj);
-
-            //Just Greg testing stuff. Go ahead and delete this comment if it's
-            //in your way...
-            //var edo = new EDObject();
-            //edo.system = "MarlonTest";
-            //edo.objectName = "A 1";
-            //edo.commander = "Marlon Blake";
-            //edmat.Store(edo);
+            {
+                Repositories.Star star = new Repositories.Star();
+                star.Store((EDStar)currentObj);
+            }
         }
 
 
