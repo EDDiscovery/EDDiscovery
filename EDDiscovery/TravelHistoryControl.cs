@@ -1036,8 +1036,11 @@ namespace EDDiscovery
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
                                                            .Distinct();
-            Color colour = selectedRows.First().Cells[4].Style.ForeColor;
-            mapColorDialog.Color = colour;
+            ColorDialog mapColorDialog = new ColorDialog();
+            mapColorDialog.AllowFullOpen = true;
+            mapColorDialog.FullOpen = true;
+            mapColorDialog.Color = selectedRows.First().Cells[4].Style.ForeColor;
+
             if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
             {
                 this.Cursor = Cursors.WaitCursor;
