@@ -23,9 +23,11 @@ namespace EDDiscovery2.PlanetSystems
         public float metalPct;
         public float icePct;
 
+        public int worldSurveyId;
+        public List<int> surveyIds;
+
         static public List<EDWorld> listObjectTypes = EDWorld.GetEDObjList;
         
-
         static private Dictionary<string, ObjectTypesEnum> objectAliases = ObjectsType.GetAllTypesAlias();
 
 
@@ -79,7 +81,7 @@ namespace EDDiscovery2.PlanetSystems
                         return "Class V";
                     case ObjectTypesEnum.WaterGiant:
                         return "Water Giant";
-            default:
+                    default:
                         return ObjectType.ToString();
                 }
             }
@@ -105,60 +107,68 @@ namespace EDDiscovery2.PlanetSystems
         {
 
             id = jo["id"].Value<int>();
-            system = jo["system"].Value<string>();
-            objectName = jo["world"].Value<string>();
-            updater = jo["updater"].Value<string>();
+            var attributes = jo["attributes"];
+            system = attributes["system-name"].Value<string>();
+            objectName = attributes["world"].Value<string>();
+            updater = attributes["updater"].Value<string>();
 
-            ObjectType = String2ObjectType(jo["world_type"].Value<string>());
+            ObjectType = String2ObjectType(attributes["world-type"].Value<string>());
 
-            mass = GetFloat(jo["mass"]);
-            radius = GetFloat(jo["radius"]);
-            gravity = GetFloat(jo["gravity"]);
-            surfaceTemp = GetInt(jo["surface_temp"]);
-            surfacePressure = GetFloat(jo["surface_pressure"]);
+            mass = GetFloat(attributes["mass"]);
+            radius = GetFloat(attributes["radius"]);
+            gravity = GetFloat(attributes["gravity"]);
+            surfaceTemp = GetInt(attributes["surface-temp"]);
+            surfacePressure = GetFloat(attributes["surface-pressure"]);
 
-            orbitPeriod = GetFloat(jo["orbit_period"]);
-            rotationPeriod = GetFloat(jo["rotation_period"]);
-            semiMajorAxis = GetFloat(jo["semi_major_axis"]);
+            orbitPeriod = GetFloat(attributes["orbit-period"]);
+            rotationPeriod = GetFloat(attributes["rotation-period"]);
+            semiMajorAxis = GetFloat(attributes["semi-major-axis"]);
 
-            terrain_difficulty = GetInt(jo["terrain_difficulty"]);
-            vulcanism = (VulcanismEnum)VulcanismStr2Enum(jo["vulcanism_type"].Value<string>());
-            rockPct = GetFloat(jo["rock_pct"]);
-            metalPct = GetFloat(jo["metal_pct"]);
-            icePct = GetFloat(jo["ice_pct"]);
-            Reserve = GetString(jo["reserve"]);
+            terrain_difficulty = GetInt(attributes["terrain-difficulty"]);
+            vulcanism = (VulcanismEnum)VulcanismStr2Enum(attributes["vulcanism-type"].Value<string>());
+            rockPct = GetFloat(attributes["rock-pct"]);
+            metalPct = GetFloat(attributes["metal-pct"]);
+            icePct = GetFloat(attributes["ice-pct"]);
+            Reserve = GetString(attributes["reserve"]);
 
-            arrivalPoint = GetFloat(jo["arrival_point"]);
-            terraformable = GetString(jo["terraformable"]);
-            notes = GetString(jo["notes"]);
-            atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(jo["atmosphere_type"].Value<string>());
-            image_url = GetString(jo["image_url"]);
+            arrivalPoint = GetFloat(attributes["arrival-point"]);
+            terraformable = GetString(attributes["terraformable"]);
+            notes = GetString(attributes["notes"]);
+            atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(attributes["atmosphere-type"].Value<string>());
+            image_url = GetString(attributes["image-url"]);
 
+            var relationships = (JObject) jo["relationships"];
+            var data = relationships["world-survey"]["data"] as JObject;
+            if (data != null)
+                worldSurveyId = GetInt(data["id"]);
 
-            //foreach (var mat in mlist)
-            //{
-            //    materials[mat.material] = GetBool(jo[mat.Name.ToLower()]);
-            //}
+            surveyIds = new List<int>();
+            foreach(var survey in relationships["surveys"]["data"] as JArray)
+            {
+                surveyIds.Add(GetInt(survey["id"]));
+            }
+
             return true;
         }
 
 
 
 
-        public ObjectTypesEnum ShortName2ObjectType(string v)
-        {
-            EDWorld ed = new EDWorld();
+        // WorldSurvey related I'm guessing? -Greg
+        //public ObjectTypesEnum ShortName2ObjectType(string v)
+        //{
+        //    EDWorld ed = new EDWorld();
 
-            foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
-            {
-                ed.ObjectType = mat;
-                if (v.ToLower().Equals(ed.ShortName.ToLower()))
-                    return mat;
+        //    foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
+        //    {
+        //        ed.ObjectType = mat;
+        //        if (v.ToLower().Equals(ed.ShortName.ToLower()))
+        //            return mat;
 
-            }
+        //    }
 
-            return ObjectTypesEnum.UnknownObject;
-        }
+        //    return ObjectTypesEnum.UnknownObject;
+        //}
 
         public AtmosphereEnum AtmosphereStr2Enum(string v)
         {
@@ -194,19 +204,33 @@ namespace EDDiscovery2.PlanetSystems
             return VulcanismEnum.Unknown;
         }
 
-        public MaterialEnum MaterialFromString(string v)
+        // WorldSurvey related I'm guessing? -Greg
+        //
+        //public MaterialEnum MaterialFromString(string v)
+        //{
+        //    if (v == null)
+        //        return MaterialEnum.Unknown;
+
+        //    foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
+        //    {
+        //        if (v.ToLower().Equals(mat.ToString().ToLower()))
+        //            return mat;
+        //    }
+
+        //    return MaterialEnum.Unknown;
+        //}
+
+        // Obtain a World Survey from a World object here!
+        public EDWorldSurvey GetWorldSurvey()
         {
-            if (v == null)
-                return MaterialEnum.Unknown;
-
-            foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
-            {
-                if (v.ToLower().Equals(mat.ToString().ToLower()))
-                    return mat;
-            }
-
-            return MaterialEnum.Unknown;
+            Repositories.WorldSurvey worldSurveyRepo = new Repositories.WorldSurvey();
+            return worldSurveyRepo.GetForId(worldSurveyId);
         }
 
+        public List<EDSurvey> GetSurveys()
+        {
+            Repositories.Survey surveyRepo = new Repositories.Survey();
+            return surveyRepo.GetForIds(surveyIds);
+        }
     }
 }
