@@ -153,6 +153,17 @@ namespace EDDiscovery2.PlanetSystems
             Repositories.Star star = new Repositories.Star();
             stars = star.GetAllForSystem(textBoxSystemName.Text);
 
+            // Proof of concept tests
+            // Uncomment to see in action! 
+            if (planets != null && planets.Count > 1)
+            {               
+                //pulling a world_survey from a world
+                var worldSurvey = planets[1].GetWorldSurvey();
+
+                if (worldSurvey != null)
+                    System.Diagnostics.Trace.WriteLine($"WorldSurvey id = {worldSurvey.id}");
+            }
+
             edObjects.AddRange(planets);
             edObjects.AddRange(stars);
             UpDateListView();

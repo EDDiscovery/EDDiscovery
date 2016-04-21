@@ -17,6 +17,18 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             return GetAll(scope);
         }
 
+        public EDStar GetFirstForWorld(string system, string world)
+        {
+            var scope = $"system={HttpUtility.UrlEncode(system)}&world={HttpUtility.UrlEncode(world)}";
+            return GetFirst(scope);
+        }
+
+        public EDStar GetFirst(string scope)
+        {
+            var items = GetAll(scope);
+            return (items.Count > 0) ? items[0] : null;
+        }
+
         public List<EDStar> GetAll(string scope)
         {
             List<EDStar> listObjects = new List<EDStar>();
