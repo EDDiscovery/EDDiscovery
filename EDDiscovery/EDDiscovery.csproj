@@ -223,6 +223,7 @@
     <Compile Include="PlanetSystems\AddMaterialNodeControl.Designer.cs">
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlanetSystems\EDSurvey.cs" />
     <Compile Include="PlanetSystems\EDWorldSurvey.cs" />
     <Compile Include="PlanetSystems\Repositories\Basecamp.cs" />
     <Compile Include="PlanetSystems\Repositories\EdMaterializer.cs" />

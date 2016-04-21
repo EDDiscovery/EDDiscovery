@@ -1,4 +1,5 @@
-﻿using EDDiscovery2.HTTP;
+﻿using EDDiscovery;
+using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             return GetAll(scope);
         }
 
-        public EDStar GetFirstForWorld(string system, string world)
+        public EDStar GetFirstForStar(string system, string star)
         {
-            var scope = $"system={HttpUtility.UrlEncode(system)}&world={HttpUtility.UrlEncode(world)}";
+            var scope = $"system={HttpUtility.UrlEncode(system)}&star={HttpUtility.UrlEncode(star)}";
             return GetFirst(scope);
         }
 
@@ -66,7 +67,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             dynamic jo = new JObject();
 
             jo.system = edobj.system;
-            jo.updater = edobj.updater;
+            jo.updater = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
             jo.star = edobj.objectName;
             jo.spectral_class = edobj.Description;
             jo.spectral_subclass = edobj.subclass;
@@ -118,7 +119,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
 
         public ResponseData Delete(int id)
         {
-            var response = RequestSecureDelete($"{ApiNamespace}/worlds/" + id.ToString());
+            var response = RequestSecureDelete($"{ApiNamespace}/stars/" + id.ToString());
 
             return response;
         }

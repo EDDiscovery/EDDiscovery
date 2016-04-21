@@ -1,4 +1,5 @@
-﻿using EDDiscovery2.HTTP;
+﻿using EDDiscovery;
+using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -68,7 +69,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             dynamic jo = new JObject();
 
             jo.system = edobj.system;
-            jo.updater = edobj.updater;
+            jo.updater = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
             jo.world = edobj.objectName;
             jo.world_type = edobj.Description;
 
