@@ -23,9 +23,11 @@ namespace EDDiscovery2.PlanetSystems
         public float metalPct;
         public float icePct;
 
+        public int worldSurveyId;
+        public List<int> surveyIds;
+
         static public List<EDWorld> listObjectTypes = EDWorld.GetEDObjList;
         
-
         static private Dictionary<string, ObjectTypesEnum> objectAliases = ObjectsType.GetAllTypesAlias();
 
 
@@ -79,7 +81,7 @@ namespace EDDiscovery2.PlanetSystems
                         return "Class V";
                     case ObjectTypesEnum.WaterGiant:
                         return "Water Giant";
-            default:
+                    default:
                         return ObjectType.ToString();
                 }
             }
@@ -135,31 +137,38 @@ namespace EDDiscovery2.PlanetSystems
             atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(attributes["atmosphere-type"].Value<string>());
             image_url = GetString(attributes["image-url"]);
 
+            var relationships = (JObject) jo["relationships"];
+            var data = relationships["world-survey"]["data"] as JObject;
+            if (data != null)
+                worldSurveyId = GetInt(data["id"]);
 
-            //foreach (var mat in mlist)
-            //{
-            //    materials[mat.material] = GetBool(attributes[mat.Name.ToLower()]);
-            //}
+            surveyIds = new List<int>();
+            foreach(var survey in relationships["surveys"]["data"] as JArray)
+            {
+                surveyIds.Add(GetInt(survey["id"]));
+            }
+
             return true;
         }
 
 
 
 
-        public ObjectTypesEnum ShortName2ObjectType(string v)
-        {
-            EDWorld ed = new EDWorld();
+        // WorldSurvey related I'm guessing? -Greg
+        //public ObjectTypesEnum ShortName2ObjectType(string v)
+        //{
+        //    EDWorld ed = new EDWorld();
 
-            foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
-            {
-                ed.ObjectType = mat;
-                if (v.ToLower().Equals(ed.ShortName.ToLower()))
-                    return mat;
+        //    foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
+        //    {
+        //        ed.ObjectType = mat;
+        //        if (v.ToLower().Equals(ed.ShortName.ToLower()))
+        //            return mat;
 
-            }
+        //    }
 
-            return ObjectTypesEnum.UnknownObject;
-        }
+        //    return ObjectTypesEnum.UnknownObject;
+        //}
 
         public AtmosphereEnum AtmosphereStr2Enum(string v)
         {
@@ -195,18 +204,27 @@ namespace EDDiscovery2.PlanetSystems
             return VulcanismEnum.Unknown;
         }
 
-        public MaterialEnum MaterialFromString(string v)
+        // WorldSurvey related I'm guessing? -Greg
+        //
+        //public MaterialEnum MaterialFromString(string v)
+        //{
+        //    if (v == null)
+        //        return MaterialEnum.Unknown;
+
+        //    foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
+        //    {
+        //        if (v.ToLower().Equals(mat.ToString().ToLower()))
+        //            return mat;
+        //    }
+
+        //    return MaterialEnum.Unknown;
+        //}
+
+        // Obtain a World Survey from a World object here!
+        public EDWorldSurvey GetWorldSurvey()
         {
-            if (v == null)
-                return MaterialEnum.Unknown;
-
-            foreach (MaterialEnum mat in Enum.GetValues(typeof(MaterialEnum)))
-            {
-                if (v.ToLower().Equals(mat.ToString().ToLower()))
-                    return mat;
-            }
-
-            return MaterialEnum.Unknown;
+            Repositories.WorldSurvey worldSurveyRepo = new Repositories.WorldSurvey();
+            return worldSurveyRepo.GetForId(worldSurveyId);
         }
 
     }
