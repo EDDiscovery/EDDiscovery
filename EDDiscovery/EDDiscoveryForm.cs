@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Configuration;
 
 namespace EDDiscovery
 {
@@ -219,6 +220,16 @@ namespace EDDiscovery
                 CheckForNewInstaller();
 
                 LogLine("Total number of systems " + SystemData.SystemList.Count().ToString() + Environment.NewLine);
+
+                var appSettings = ConfigurationManager.AppSettings;
+
+                if (appSettings["EDMaterializerUsername"] == null || appSettings["EDMaterializerPassword"] == null)
+                {
+                    // Note: It's ok if this happens in DEBUG build Because we now hard code the
+                    // credentials in that particular case.
+                    LogLineHighlight("WARNING: EDMaterializer credentials are missing!");
+                }
+
                 LogLineSuccess("Loading completed!" + Environment.NewLine);
 
                 panel_close.Enabled = true;                            // now we can safely close
