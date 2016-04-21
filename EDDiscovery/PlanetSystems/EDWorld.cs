@@ -227,5 +227,10 @@ namespace EDDiscovery2.PlanetSystems
             return worldSurveyRepo.GetForId(worldSurveyId);
         }
 
+        public List<EDSurvey> GetSurveys()
+        {
+            Repositories.Survey surveyRepo = new Repositories.Survey();
+            return surveyRepo.GetForIds(surveyIds);
+        }
     }
 }

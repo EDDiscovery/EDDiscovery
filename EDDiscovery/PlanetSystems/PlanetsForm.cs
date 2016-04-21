@@ -153,16 +153,21 @@ namespace EDDiscovery2.PlanetSystems
             Repositories.Star star = new Repositories.Star();
             stars = star.GetAllForSystem(textBoxSystemName.Text);
 
-            // Proof of concept tests
+            // Proof of concept tests. Assumes the 2nd planet has surveys and world surveys
             // Uncomment to see in action! 
-            if (planets != null && planets.Count > 1)
-            {               
-                //pulling a world_survey from a world
-                var worldSurvey = planets[1].GetWorldSurvey();
 
-                if (worldSurvey != null)
-                    System.Diagnostics.Trace.WriteLine($"WorldSurvey id = {worldSurvey.id}");
-            }
+            //if (planets != null && planets.Count > 1)
+            //{               
+            //    //pulling a world_survey from a world
+            //    var worldSurvey = planets[1].GetWorldSurvey();
+
+            //    if (worldSurvey != null)
+            //        System.Diagnostics.Trace.WriteLine($"WorldSurvey id = {worldSurvey.id}");
+
+            //    var surveys = planets[1].GetSurveys();
+            //    if (surveys != null && surveys.Count > 0 )
+            //        System.Diagnostics.Trace.WriteLine($"Survey[0] id = {surveys[0].id}");
+            //}
 
             edObjects.AddRange(planets);
             edObjects.AddRange(stars);
