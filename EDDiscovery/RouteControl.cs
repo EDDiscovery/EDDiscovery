@@ -72,6 +72,7 @@ namespace EDDiscovery
         private void RouteMain()
         {
             float maxrange = 30;
+            string maxrangetext = "";
             bool usingcoordsfrom = false;
             bool usingcoordsto=false;
             Point3D coordsfrom = new Point3D(0, 0, 0);
@@ -81,7 +82,7 @@ namespace EDDiscovery
             int routemethod = 0;
 
             Invoke( (MethodInvoker)delegate {                       // we are in a thread, should pick info up using a delegate
-                maxrange = float.Parse(textBox_Range.Text);
+                maxrangetext = textBox_Range.Text;
                 usingcoordsfrom = textBox_From.ReadOnly == true;
                 usingcoordsto = textBox_To.ReadOnly == true;
                 GetCoordsFrom(out coordsfrom);                      // will be valid for a system or a co-ords box
@@ -96,6 +97,7 @@ namespace EDDiscovery
             if (usingcoordsto)
                 tosys = "END POINT";
 
+            if (!float.TryParse(maxrangetext, out maxrange)) maxrange = 30;
             double possiblejumps = Point3D.DistanceBetween(coordsfrom, coordsto) / maxrange;
 
             if (possiblejumps > 100)
