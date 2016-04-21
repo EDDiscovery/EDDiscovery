@@ -275,7 +275,10 @@
     <Compile Include="PlanetSystems\AddMaterialNodeControl.Designer.cs">
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlanetSystems\edmaterializer.cs" />
+    <Compile Include="PlanetSystems\EDSurvey.cs" />
+    <Compile Include="PlanetSystems\EDWorldSurvey.cs" />
+    <Compile Include="PlanetSystems\Repositories\Basecamp.cs" />
+    <Compile Include="PlanetSystems\Repositories\EdMaterializer.cs" />
     <Compile Include="PlanetSystems\EDMaterials.cs" />
     <Compile Include="PlanetSystems\EDWorld.cs" />
     <Compile Include="PlanetSystems\EDStar.cs" />
@@ -315,6 +318,10 @@
     <Compile Include="PlanetSystems\PlanetsForm.Designer.cs">
       <DependentUpon>PlanetsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlanetSystems\Repositories\Star.cs" />
+    <Compile Include="PlanetSystems\Repositories\Survey.cs" />
+    <Compile Include="PlanetSystems\Repositories\World.cs" />
+    <Compile Include="PlanetSystems\Repositories\WorldSurvey.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteControl.cs">
