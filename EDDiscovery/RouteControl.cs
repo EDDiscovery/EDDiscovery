@@ -635,6 +635,12 @@ namespace EDDiscovery
 
         private void cmd3DMap_Click(object sender, EventArgs e)
         {
+            if (_discoveryForm.SystemNames.Count == 0)
+            {
+                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
+                return;
+            }
+
             var map = _discoveryForm.Map;
 
             map.Instance.SystemNames = _discoveryForm.SystemNames;

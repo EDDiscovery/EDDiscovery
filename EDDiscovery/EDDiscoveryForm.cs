@@ -237,7 +237,7 @@ namespace EDDiscovery
         }
 
 
-        public void DownloadMaps()
+        public void DownloadMaps()          // ASYNC process
         {
             if (CanSkipSlowUpdates())
             {
@@ -292,7 +292,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                LogText("Exception in DownloadImages:" + ex.Message + Environment.NewLine);
+                MessageBox.Show("DownloadImages exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
             }
 
         }
@@ -339,7 +339,7 @@ namespace EDDiscovery
 #endif
         }
 
-        private void GetEDSMSystems()
+        private void GetEDSMSystems()  // ASYNC process
         {
             try
             {
@@ -403,7 +403,7 @@ namespace EDDiscovery
             ThreadEDSMDistances.Start();
         }
 
-        private void GetEDSMDistances()
+        private void GetEDSMDistances() // ASYNC process
         {
             try
             {
@@ -523,7 +523,7 @@ namespace EDDiscovery
             ThreadEDDB.Start();
         }
 
-        private void GetEDDBUpdate()
+        private void GetEDDBUpdate() // ASYNC process
         {
             try
             {
