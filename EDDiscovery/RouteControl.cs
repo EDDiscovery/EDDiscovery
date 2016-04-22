@@ -42,6 +42,7 @@ namespace EDDiscovery
         {
             InitializeComponent();
             button_Route.Enabled = false;
+            cmd3DMap.Enabled = false;
 
             for (int i = 0; i < metric_options.Length; i++)
                 comboBoxRoutingMetric.Items.Add(metric_options[i]);
@@ -335,6 +336,8 @@ namespace EDDiscovery
             textBox_From.Text = db.GetSettingString("RouteFrom", "");
             textBox_To.Text = db.GetSettingString("RouteTo", "");
             textBox_Range.Text = db.GetSettingString("RouteRange", "30");
+            if (textBox_Range.Text == "")
+                textBox_Range.Text = "30";
             textBox_FromX.Text = db.GetSettingString("RouteFromX", "");
             textBox_FromY.Text = db.GetSettingString("RouteFromY", "");
             textBox_FromZ.Text = db.GetSettingString("RouteFromZ", "");
@@ -345,8 +348,7 @@ namespace EDDiscovery
             bool tostate = db.GetSettingBool("RouteToState", false);
 
             int metricvalue = db.GetSettingInt("RouteMetric", 0);
-            if (metricvalue < comboBoxRoutingMetric.Items.Count )       // just check, in case..
-                comboBoxRoutingMetric.SelectedIndex = metricvalue;
+            comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : metric_waypointdev2;
 
             SelectToMaster(tostate);
             UpdateTo(true);
@@ -634,7 +636,11 @@ namespace EDDiscovery
         private void cmd3DMap_Click(object sender, EventArgs e)
         {
             var map = _discoveryForm.Map;
+
+            map.Instance.SystemNames = _discoveryForm.SystemNames;
+            map.Instance.VisitedSystems = _discoveryForm.VisitedSystems;
             map.Instance.Reset();
+
             if (routeSystems != null && routeSystems.Any())
             {
                 float zoom = 400 / float.Parse(textBox_Distance.Text) ;

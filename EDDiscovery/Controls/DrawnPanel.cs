@@ -10,7 +10,6 @@ namespace ExtendedControls
     public class DrawnPanel : Panel
     {
         // Back, Fore color used
-        public new bool Enabled { get { return enable; } set { enable = value;  Invalidate(); } }
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
 
@@ -146,7 +145,6 @@ namespace ExtendedControls
         private bool mouseover = false;
         private bool mousedown = false;
         private bool mousecapture = false;
-        private bool enable = true;
         #endregion
     }
 }

@@ -1002,7 +1002,13 @@ namespace EDDiscovery
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-			Set(CurrentSystem);
+            if (_discoveryForm.SystemNames.Count == 0)
+            {
+                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
+                return;
+            }
+
+            Set(CurrentSystem);
 
             //for (int i = 0; i < 100; i++)     // use this to test the docking is right
               //  LogText("Hello " + i.ToString() + Environment.NewLine);
