@@ -34,11 +34,6 @@ namespace EDDiscovery
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrilaterationControl));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
-            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.trilatContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +62,13 @@ namespace EDDiscovery
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewSuggestedSystems = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnSuggestedSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataViewScrollerPanel3 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom3 = new ExtendedControls.VScrollBarCustom();
+            this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
+            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
@@ -80,7 +82,6 @@ namespace EDDiscovery
             this.textBoxCoordinateZ = new ExtendedControls.TextBoxBorder();
             this.radioButtonAlgorithmJs = new ExtendedControls.RadioButtonCustom();
             this.radioButtonAlgorithmCsharp = new ExtendedControls.RadioButtonCustom();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.trilatContextMenu.SuspendLayout();
             this.panelImplementation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -92,62 +93,11 @@ namespace EDDiscovery
             this.panel_controls.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuggestedSystems)).BeginInit();
+            this.dataViewScrollerPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).BeginInit();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dataGridViewDistances
-            // 
-            this.dataGridViewDistances.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewDistances.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnSystem,
-            this.ColumnDistance,
-            this.ColumnCalculated,
-            this.ColumnStatus});
-            this.dataGridViewDistances.ContextMenuStrip = this.trilatContextMenu;
-            this.dataGridViewDistances.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewDistances.Name = "dataGridViewDistances";
-            this.dataGridViewDistances.Size = new System.Drawing.Size(538, 247);
-            this.dataGridViewDistances.TabIndex = 0;
-            this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
-            this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
-            this.dataGridViewDistances.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellLeave);
-            this.dataGridViewDistances.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewDistances_CellValidating);
-            this.dataGridViewDistances.CurrentCellChanged += new System.EventHandler(this.dataGridViewDistances_CurrentCellChanged);
-            this.dataGridViewDistances.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridViewDistances_EditingControlShowing);
-            this.dataGridViewDistances.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewDistances_KeyDown);
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnSystem.FillWeight = 250F;
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.MinimumWidth = 75;
-            this.ColumnSystem.Name = "ColumnSystem";
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.MinimumWidth = 75;
-            this.ColumnDistance.Name = "ColumnDistance";
-            // 
-            // ColumnCalculated
-            // 
-            this.ColumnCalculated.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnCalculated.HeaderText = "Calculated";
-            this.ColumnCalculated.MinimumWidth = 75;
-            this.ColumnCalculated.Name = "ColumnCalculated";
-            this.ColumnCalculated.ReadOnly = true;
-            // 
-            // ColumnStatus
-            // 
-            this.ColumnStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnStatus.HeaderText = "Status";
-            this.ColumnStatus.MinimumWidth = 75;
-            this.ColumnStatus.Name = "ColumnStatus";
-            this.ColumnStatus.ReadOnly = true;
             // 
             // trilatContextMenu
             // 
@@ -247,7 +197,7 @@ namespace EDDiscovery
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.dataViewScrollerPanel1);
-            this.splitContainer1.Panel1.Controls.Add(this.dataGridViewDistances);
+            this.splitContainer1.Panel1.Controls.Add(this.dataViewScrollerPanel3);
             // 
             // splitContainer1.Panel2
             // 
@@ -412,6 +362,7 @@ namespace EDDiscovery
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
             this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 226);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 19;
             this.vScrollBarCustom1.Text = "vScrollBarCustom1";
@@ -456,6 +407,102 @@ namespace EDDiscovery
             this.dataGridViewTextBoxColumnSuggestedSystemsSystem.Name = "dataGridViewTextBoxColumnSuggestedSystemsSystem";
             this.dataGridViewTextBoxColumnSuggestedSystemsSystem.ReadOnly = true;
             // 
+            // dataViewScrollerPanel3
+            // 
+            this.dataViewScrollerPanel3.Controls.Add(this.vScrollBarCustom3);
+            this.dataViewScrollerPanel3.Controls.Add(this.dataGridViewDistances);
+            this.dataViewScrollerPanel3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dataViewScrollerPanel3.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel3.Location = new System.Drawing.Point(0, 0);
+            this.dataViewScrollerPanel3.Name = "dataViewScrollerPanel3";
+            this.dataViewScrollerPanel3.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel3.Size = new System.Drawing.Size(538, 247);
+            this.dataViewScrollerPanel3.TabIndex = 22;
+            this.dataViewScrollerPanel3.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom3
+            // 
+            this.vScrollBarCustom3.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom3.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom3.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom3.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom3.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom3.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom3.HideScrollBar = true;
+            this.vScrollBarCustom3.LargeChange = 1;
+            this.vScrollBarCustom3.Location = new System.Drawing.Point(518, 21);
+            this.vScrollBarCustom3.Maximum = 0;
+            this.vScrollBarCustom3.Minimum = 0;
+            this.vScrollBarCustom3.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom3.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom3.Name = "vScrollBarCustom3";
+            this.vScrollBarCustom3.Size = new System.Drawing.Size(20, 226);
+            this.vScrollBarCustom3.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom3.SmallChange = 1;
+            this.vScrollBarCustom3.TabIndex = 1;
+            this.vScrollBarCustom3.Text = "vScrollBarCustom3";
+            this.vScrollBarCustom3.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom3.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom3.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom3.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom3.Value = 0;
+            this.vScrollBarCustom3.ValueLimited = 0;
+            // 
+            // dataGridViewDistances
+            // 
+            this.dataGridViewDistances.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewDistances.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnSystem,
+            this.ColumnDistance,
+            this.ColumnCalculated,
+            this.ColumnStatus});
+            this.dataGridViewDistances.ContextMenuStrip = this.trilatContextMenu;
+            this.dataGridViewDistances.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewDistances.Name = "dataGridViewDistances";
+            this.dataGridViewDistances.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewDistances.Size = new System.Drawing.Size(518, 247);
+            this.dataGridViewDistances.TabIndex = 0;
+            this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
+            this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
+            this.dataGridViewDistances.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellLeave);
+            this.dataGridViewDistances.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewDistances_CellValidating);
+            this.dataGridViewDistances.CurrentCellChanged += new System.EventHandler(this.dataGridViewDistances_CurrentCellChanged);
+            this.dataGridViewDistances.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridViewDistances_EditingControlShowing);
+            this.dataGridViewDistances.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewDistances_KeyDown);
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnSystem.FillWeight = 250F;
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.MinimumWidth = 75;
+            this.ColumnSystem.Name = "ColumnSystem";
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.MinimumWidth = 75;
+            this.ColumnDistance.Name = "ColumnDistance";
+            // 
+            // ColumnCalculated
+            // 
+            this.ColumnCalculated.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnCalculated.HeaderText = "Calculated";
+            this.ColumnCalculated.MinimumWidth = 75;
+            this.ColumnCalculated.Name = "ColumnCalculated";
+            this.ColumnCalculated.ReadOnly = true;
+            // 
+            // ColumnStatus
+            // 
+            this.ColumnStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnStatus.HeaderText = "Status";
+            this.ColumnStatus.MinimumWidth = 75;
+            this.ColumnStatus.Name = "ColumnStatus";
+            this.ColumnStatus.ReadOnly = true;
+            // 
             // dataViewScrollerPanel2
             // 
             this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
@@ -487,6 +534,7 @@ namespace EDDiscovery
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
             this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 310);
+            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 14;
             this.vScrollBarCustom2.Text = "vScrollBarCustom2";
@@ -545,6 +593,7 @@ namespace EDDiscovery
             this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
             this.richTextBox_History.BorderColorScaling = 0.5F;
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Left;
+            this.richTextBox_History.HideScrollBar = true;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.ScrollBarWidth = 20;
@@ -555,6 +604,7 @@ namespace EDDiscovery
             // textBox_status
             // 
             this.textBox_status.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_status.BorderColorScaling = 0.5F;
             this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox_status.Location = new System.Drawing.Point(102, 4);
             this.textBox_status.Name = "textBox_status";
@@ -565,6 +615,7 @@ namespace EDDiscovery
             // textBoxSystemName
             // 
             this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSystemName.BorderColorScaling = 0.5F;
             this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxSystemName.Location = new System.Drawing.Point(72, 25);
             this.textBoxSystemName.Name = "textBoxSystemName";
@@ -575,6 +626,7 @@ namespace EDDiscovery
             // textBoxCoordinateX
             // 
             this.textBoxCoordinateX.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCoordinateX.BorderColorScaling = 0.5F;
             this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 46);
             this.textBoxCoordinateX.Name = "textBoxCoordinateX";
             this.textBoxCoordinateX.ReadOnly = true;
@@ -586,6 +638,7 @@ namespace EDDiscovery
             // textBoxCoordinateY
             // 
             this.textBoxCoordinateY.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCoordinateY.BorderColorScaling = 0.5F;
             this.textBoxCoordinateY.Location = new System.Drawing.Point(245, 46);
             this.textBoxCoordinateY.Name = "textBoxCoordinateY";
             this.textBoxCoordinateY.ReadOnly = true;
@@ -597,6 +650,7 @@ namespace EDDiscovery
             // textBoxCoordinateZ
             // 
             this.textBoxCoordinateZ.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCoordinateZ.BorderColorScaling = 0.5F;
             this.textBoxCoordinateZ.Location = new System.Drawing.Point(325, 46);
             this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
             this.textBoxCoordinateZ.ReadOnly = true;
@@ -651,7 +705,6 @@ namespace EDDiscovery
             this.Controls.Add(this.toolStrip1);
             this.Name = "TrilaterationControl";
             this.Size = new System.Drawing.Size(924, 681);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).EndInit();
             this.trilatContextMenu.ResumeLayout(false);
             this.panelImplementation.ResumeLayout(false);
             this.panelImplementation.PerformLayout();
@@ -666,6 +719,8 @@ namespace EDDiscovery
             this.panel_controls.PerformLayout();
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuggestedSystems)).EndInit();
+            this.dataViewScrollerPanel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDistances)).EndInit();
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClosestSystems)).EndInit();
             this.ResumeLayout(false);
@@ -720,5 +775,7 @@ namespace EDDiscovery
         private DataViewScrollerPanel dataViewScrollerPanel2;
         private VScrollBarCustom vScrollBarCustom2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnSuggestedSystemsSystem;
+        private DataViewScrollerPanel dataViewScrollerPanel3;
+        private VScrollBarCustom vScrollBarCustom3;
     }
 }
