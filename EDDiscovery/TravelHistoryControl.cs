@@ -478,7 +478,7 @@ namespace EDDiscovery
 
         public ISystem GetCurrentSystem()
         {
-            if (visitedSystems.Count == 0)
+            if (visitedSystems == null || visitedSystems.Count == 0)
             {
                 return null;
             }
@@ -557,6 +557,12 @@ namespace EDDiscovery
 
         private void buttonMap_Click(object sender, EventArgs e)
         {
+            if (_discoveryForm.SystemNames.Count == 0)
+            {
+                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
+                return;
+            }
+
             var map = _discoveryForm.Map;
             var selectedLine = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
@@ -572,7 +578,9 @@ namespace EDDiscovery
                     selectedLine += 1;
                 } while (!selectedSys.curSystem.HasCoordinate && selectedLine < dataGridViewTravel.Rows.Count);
             }
-            _discoveryForm.updateMapData();
+
+            map.Instance.SystemNames = _discoveryForm.SystemNames;
+            map.Instance.VisitedSystems = _discoveryForm.VisitedSystems;
             map.Instance.Reset();
 
             map.Instance.HistorySelection = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
