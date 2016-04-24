@@ -54,4 +54,16 @@ Simply ticking the "Auto convert ED screenshots" box ought to be sufficient to e
 The folders should be self explanatory.  The 'Save As' drop down allows you to select a different format to convert the image to, and the "remove original image after conversion" will obviously delete the original file.  
   
 Once enabled, taking screenshots will result in the images being renamed and/or converted as you have enabled.  E.g., instead of "Screenshot_0000.bmp" and "Screenshot_0001.bmp", one gets:  
-![](http://i.imgur.com/NHitWNi.png)
+![](http://i.imgur.com/NHitWNi.png)  
+  
+# Advanced Set-up  
+## EDSM Integration
+In order to save tri-lateration results back into EDSM, you need to have configured an API key.  
+First head over to [http://www.edsm.net/](www.edsm.net) and create yourself a free account.  With that done, in EDSM go to the user drop down and select 'My API Key'  
+![](http://i.imgur.com/6g8VGlZ.png)  
+Now copy the numbers and and letters from the API Key  
+![](http://i.imgur.com/VSwjmNh.png)  
+  
+And paste into the "EDSM api key" section of the Settings tab.  Also enter your Cmdr name.
+![](http://i.imgur.com/9MTfxP1.png)  
+That's it!  You should now be able to submit your tri-laterated distances back to EDSM as well and sync your travel logs back and forth.
