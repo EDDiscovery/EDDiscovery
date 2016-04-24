@@ -602,7 +602,7 @@ namespace EDDiscovery2
 
             Type controltype = myControl.GetType();
             Type parentcontroltype = parent.GetType();
-            if (parentcontroltype.BaseType.Equals("Form") && (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
+            if (!parentcontroltype.Namespace.Equals("ExtendedControls") && (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
                 controltype.Name.Equals("CheckBox") || controltype.Name.Equals("TextBox") ||
                 controltype.Name.Equals("ComboBox") || (controltype.Name.Equals("RichTextBox") ) )
                 )
