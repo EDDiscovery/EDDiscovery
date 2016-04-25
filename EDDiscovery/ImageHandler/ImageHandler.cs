@@ -141,10 +141,10 @@ namespace EDDiscovery2.ImageHandler
                     checkboxremove = checkBoxRemove.Checked;
                     checkboxpreview = checkBoxPreview.Checked;
                     cropimage = checkBoxCropImage.Checked;
-                    crop.X = int.Parse(numericUpDownLeft.Text);      
-                    crop.Y = int.Parse(numericUpDownTop.Text);  
-                    crop.Width = int.Parse(numericUpDownWidth.Text);
-                    crop.Height = int.Parse(numericUpDownHeight.Text);
+                    crop.X = numericUpDownLeft.Value;      
+                    crop.Y = numericUpDownTop.Value;  
+                    crop.Width = numericUpDownWidth.Value;
+                    crop.Height = numericUpDownHeight.Value;
                     extension = "." + comboBoxFormat.Text;
                     cannotexecute = textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text) && extension.Equals(".bmp");
 
