@@ -1024,7 +1024,7 @@
             this.button_RefreshHistory.BorderColorScaling = 1.25F;
             this.button_RefreshHistory.ButtonColorScaling = 0.5F;
             this.button_RefreshHistory.ButtonDisabledScaling = 0.5F;
-            this.button_RefreshHistory.Location = new System.Drawing.Point(450, 4);
+            this.button_RefreshHistory.Location = new System.Drawing.Point(522, 4);
             this.button_RefreshHistory.Name = "button_RefreshHistory";
             this.button_RefreshHistory.Size = new System.Drawing.Size(69, 23);
             this.button_RefreshHistory.TabIndex = 2;
