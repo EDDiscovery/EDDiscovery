@@ -91,7 +91,8 @@ namespace ExtendedControls
             else
                 vsc.ValueLimited++;                 // end is UserLimit, not maximum
 
-            dgv.FirstDisplayedScrollingRowIndex = vsc.Value;
+            if ( vsc.Value >= 0 )                   // we may have a situation where the scroll bar is off and value is -1.. only set if to a good value.
+                dgv.FirstDisplayedScrollingRowIndex = vsc.Value;
         }
 
         protected void DGVScroll(Object sender, ScrollEventArgs e)
