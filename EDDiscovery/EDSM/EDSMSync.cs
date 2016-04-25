@@ -86,8 +86,6 @@ namespace EDDiscovery2.EDSM
                     mainForm.LogLine("EDSM: Sending " + systems.Count.ToString() + " flightlog entries");
                     foreach (var system in systems)
                     {
-                        string json = null;
-
                         if (Exit)
                         {
                             running = false;
@@ -105,31 +103,8 @@ namespace EDDiscovery2.EDSM
 
                             }
                             else
-                                json = edsm.SetLog(system.Name, system.time);
-
-                            if (json != null)
                             {
-                                JObject msg = (JObject)JObject.Parse(json);
-
-                                int msgnum = msg["msgnum"].Value<int>();
-                                string msgstr = msg["msg"].Value<string>();
-
-
-                                if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
-                                {
-                                    if (msgnum == 100)
-                                        System.Diagnostics.Trace.WriteLine("New");
-
-                                    system.vs.EDSM_sync = true;
-                                    system.Update();
-                                }
-                                else
-                                {
-                                    mainForm.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr);
-                                    System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name);
-                                    break;
-                                }
-
+                                SendTravelLog(edsm, system, mainForm);
 
                             }
                         }
@@ -191,6 +166,43 @@ namespace EDDiscovery2.EDSM
 
         }
 
+        internal static bool SendTravelLog(EDSMClass edsm, SystemPosition system, EDDiscoveryForm mainform)
+        {
+            string json;
 
+            json = edsm.SetLog(system.Name, system.time);
+
+            if (json != null)
+            {
+                JObject msg = (JObject)JObject.Parse(json);
+
+                int msgnum = msg["msgnum"].Value<int>();
+                string msgstr = msg["msg"].Value<string>();
+
+
+                if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
+                {
+                    if (msgnum == 100)
+                        System.Diagnostics.Trace.WriteLine("New");
+
+                    system.vs.EDSM_sync = true;
+                    system.Update();
+                    return true;
+                }
+                else
+                {
+                    if (mainform!=null)
+                        mainform.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr);
+
+                    System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name);
+                    return false; 
+                }
+
+            }
+            else
+                return false;
+
+
+        }
     }
 }
