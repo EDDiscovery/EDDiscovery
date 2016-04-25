@@ -17,7 +17,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         {
             if (id > 0)
             {
-                var request = RequestGet($"{ApiNamespace}/world_surveys/{id}");
+                var request = RequestGet($"{ApiNamespace}/world-surveys/{id}");
                 if (request.StatusCode == HttpStatusCode.OK)
                 {
                     var jo = JObject.Parse(request.Body);
@@ -40,7 +40,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         public List<EDWorldSurvey> GetAll(string scope)
         {
             List<EDWorldSurvey> listObjects = new List<EDWorldSurvey>();
-            string query = ApiNamespace + "/world_surveys";
+            string query = ApiNamespace + "/world-surveys";
 
             if (!String.IsNullOrEmpty(scope))
                 query = query + "?" + scope;
