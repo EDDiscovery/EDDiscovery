@@ -106,6 +106,32 @@ namespace EDDiscovery2._3DMap
             }
         }
 
+        public void UpdateStandardSystems(DateTime maxtime)
+        {
+
+            var ds = from dataset in _datasets where dataset.Name.Equals("stars") select dataset;
+            Data3DSetClass<PointData> datasetS = (Data3DSetClass<PointData>)ds.First();
+
+            _datasets.Remove(datasetS);
+
+           datasetS = Data3DSetClass<PointData>.Create("stars", Color.White, 1.0f);
+
+            if (AllSystems && StarList != null)
+            {
+                bool addstations = !Stations;
+                //var datasetS = Data3DSetClass<PointData>.Create("stars", Color.White, 1.0f);
+
+
+                foreach (ISystem si in StarList)
+                {
+                    if (addstations || (si.population == 0 && si.CreateDate<maxtime))
+                        AddSystem(si, datasetS);
+                }
+                _datasets.Add(datasetS);
+            }
+        }
+
+
         public void AddStations()
         {
             if (Stations)
