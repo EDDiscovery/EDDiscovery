@@ -95,8 +95,7 @@ namespace EDDiscovery2
 
         private DateTime maxstardate = new DateTime(2016,1,1);
         bool Animatetime = false;
-
-
+        
         public ISystem CenterSystem {
             get
             {
@@ -1274,10 +1273,20 @@ namespace EDDiscovery2
                     if (_clickedSystem == null)
                     {
                         labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
+                        selectionAllegiance.Text = "Allegiance";
+                        selectionEconomy.Text = "Economy";
+                        selectionGov.Text = "Gov";
+                        selectionState.Text = "State";
+                        viewOnEDSMToolStripMenuItem.Enabled = false;
                     }
                     else
                     {
                         labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
+                        selectionAllegiance.Text = "Allegiance: " + _clickedSystem.allegiance;
+                        selectionEconomy.Text = "Economy: " + _clickedSystem.primary_economy;
+                        selectionGov.Text = "Gov: " + _clickedSystem.government;
+                        selectionState.Text = "State: " + _clickedSystem.state;
+                        viewOnEDSMToolStripMenuItem.Enabled = true;
                     }
                     SetCenterSystem(CenterSystem);
                 }
@@ -1348,6 +1357,23 @@ namespace EDDiscovery2
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
         {
             SetCenterSystem(CenterSystem);
+        }
+
+        private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_clickedSystem != null)
+            {
+                var edsm = new EDSM.EDSMClass();
+                edsm.ShowSystemInEDSM(_clickedSystem.name);
+            }
+        }
+
+        private void labelClickedSystemCoords_Click(object sender, EventArgs e)
+        {
+            if (_clickedSystem != null)
+            {
+                systemselectionMenuStrip.Show(labelClickedSystemCoords, 0, labelClickedSystemCoords.Height);
+            }
         }
     }
 }
