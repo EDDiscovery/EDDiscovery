@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
 using EDDiscovery2.HTTP;
+using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
@@ -38,7 +39,7 @@ namespace EDDiscovery
         private SystemPosition currentSysPos = null;
 
 
-        private static RichTextBox static_richTextBox;
+        private static ExtendedControls.RichTextBoxScroll static_richTextBox;
         private int activecommander = 0;
         List<EDCommander> commanders = null;
 
@@ -46,7 +47,6 @@ namespace EDDiscovery
         {
             InitializeComponent();
             static_richTextBox = richTextBox_History;
-
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -59,6 +59,9 @@ namespace EDDiscovery
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
             checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
+            comboBoxHistoryWindow.Items.AddRange(new string[] { "6 Hours", "12 Hours", "24 Hours", "3 days", "Week", "2 Weeks", "Month", "Last 20", "All" });
+            comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
+            LoadCommandersListBox();
         }
 
 
@@ -68,7 +71,7 @@ namespace EDDiscovery
 
             TriggerEDSMRefresh();
             RefreshHistory();
-            
+
 
             EliteDangerous.CheckED();
         }
@@ -99,39 +102,7 @@ namespace EDDiscovery
 
         static public void LogTextColor( string text, Color color)
         {
-            try
-            {
-                
-                static_richTextBox.SelectionStart = static_richTextBox.TextLength;
-                static_richTextBox.SelectionLength = 0;
-
-                static_richTextBox.SelectionColor = color;
-                static_richTextBox.AppendText(text);
-                static_richTextBox.SelectionColor = static_richTextBox.ForeColor;
-
-                static_richTextBox.SelectionStart = static_richTextBox.Text.Length;
-                static_richTextBox.SelectionLength = 0;
-                static_richTextBox.ScrollToCaret();
-                static_richTextBox.Refresh();
-
-
-                HttpCom.WriteLog(text, "");
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception SystemClass: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-        }
-
-
-        private void setRowNumber(DataGridView dgv)
-        {
-            foreach (DataGridViewRow row in dgv.Rows)
-            {
-                row.HeaderCell.Value = (row.Index + 1).ToString();
-            }
+            static_richTextBox.AppendText(text, color);
         }
 
         public void RefreshHistory()
@@ -186,7 +157,7 @@ namespace EDDiscovery
 
             if (visitedSystems == null)
                 return;
-            
+
             List<SystemPosition> result;
             if (atMost > 0)
             {
@@ -200,11 +171,11 @@ namespace EDDiscovery
 
             dataGridViewTravel.Rows.Clear();
 
-            System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-            
+//            System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
+
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
-      
+
                 SystemPosition item = result[ii];
                 SystemPosition item2;
 
@@ -241,13 +212,13 @@ namespace EDDiscovery
 
             }
 
-            System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-            
+//            System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
+
             if (dataGridViewTravel.Rows.Count > 0)
             {
                 ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[0].Cells[1].Tag));
             }
-            System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
+//            System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
             sw1.Stop();
 
             if (textBoxFilter.TextLength>0)
@@ -256,14 +227,14 @@ namespace EDDiscovery
 
         private void GetVisitedSystems()
         {                                                       // for backwards compatibility, don't store RGB value.
-            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour, activecommander);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
         {
             SystemClass sys1 = null, sys2;
             double dist;
-            
+
 
             sys1 = SystemData.GetSystem(item.Name);
             if (sys1 == null)
@@ -351,7 +322,7 @@ namespace EDDiscovery
             textBoxSystem.Text = syspos.curSystem.name;
             textBoxPrevSystem.Clear();
             textBoxDistance.Text = syspos.strDistance;
-          
+
 
             if (syspos.curSystem.HasCoordinate)
             {
@@ -391,17 +362,9 @@ namespace EDDiscovery
             int count = GetVisitsCount(syspos.curSystem.name);
             textBoxVisits.Text = count.ToString();
 
-            if (currentSysPos.curSystem.id_eddb > 0)  // Only enable eddb/ross for system that it knows about
-            {
-                buttonEDDB.Visible = true;
-                buttonRoss.Visible = true;
-            }
-            else
-            {
-                buttonEDDB.Visible = false;
-                buttonRoss.Visible = false;
-            }
+            bool enableedddross = (currentSysPos.curSystem.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
 
+            buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
 
             textBoxAllegiance.Text = EnumStringFormat(syspos.curSystem.allegiance.ToString());
             textBoxEconomy.Text = EnumStringFormat(syspos.curSystem.primary_economy.ToString());
@@ -471,9 +434,9 @@ namespace EDDiscovery
                 }
 
                 if (name !=null)
-                    label3.Text = "Closest systems from " + name.ToString();
+                    labelclosests.Text = "Closest systems from " + name.ToString();
 
-                dataGridViewNearest.Rows.Clear(); 
+                dataGridViewNearest.Rows.Clear();
 
                 if (LastSystem == null)
                     return;
@@ -516,7 +479,7 @@ namespace EDDiscovery
 
         public ISystem GetCurrentSystem()
         {
-            if (visitedSystems.Count == 0)
+            if (visitedSystems == null || visitedSystems.Count == 0)
             {
                 return null;
             }
@@ -526,16 +489,6 @@ namespace EDDiscovery
 
         private void TravelHistoryControl_Load(object sender, EventArgs e)
         {
-            //if (!this.DesignMode)
-            //    RefreshHistory();
-
-
-            if (!this.DesignMode)
-            {
-                var db = new SQLiteDBClass();
-                comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
-                LoadCommandersListBox();
-            }
             // this improves dataGridView's scrolling performance
             typeof(DataGridView).InvokeMember(
                 "DoubleBuffered",
@@ -547,29 +500,27 @@ namespace EDDiscovery
             );
         }
 
-        private bool cmdlistloaded;
         private void LoadCommandersListBox()
         {
+            comboBoxCommander.Enabled = false;
             commanders = new List<EDCommander>();
 
             commanders.Add(new EDCommander(-1, "Hidden log", ""));
             commanders.AddRange(EDDiscoveryForm.EDDConfig.listCommanders);
 
-            cmdlistloaded = false;
             comboBoxCommander.DataSource = null;
             comboBoxCommander.DataSource = commanders;
             comboBoxCommander.ValueMember = "Nr";
             comboBoxCommander.DisplayMember = "Name";
-            cmdlistloaded = true;
             comboBoxCommander.SelectedIndex = 1;
 
+            comboBoxCommander.Enabled = true;
 
         }
 
         private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            if (comboBoxCommander.SelectedIndex >= 0 && cmdlistloaded)
+            if (comboBoxCommander.SelectedIndex >= 0 )
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 activecommander = itm.Nr;
@@ -607,6 +558,12 @@ namespace EDDiscovery
 
         private void buttonMap_Click(object sender, EventArgs e)
         {
+            if (_discoveryForm.SystemNames.Count == 0)
+            {
+                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
+                return;
+            }
+
             var map = _discoveryForm.Map;
             var selectedLine = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
@@ -622,9 +579,11 @@ namespace EDDiscovery
                     selectedLine += 1;
                 } while (!selectedSys.curSystem.HasCoordinate && selectedLine < dataGridViewTravel.Rows.Count);
             }
-            _discoveryForm.updateMapData();
+
+            map.Instance.SystemNames = _discoveryForm.SystemNames;
+            map.Instance.VisitedSystems = _discoveryForm.VisitedSystems;
             map.Instance.Reset();
-                        
+
             map.Instance.HistorySelection = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
             map.Show();
         }
@@ -637,9 +596,9 @@ namespace EDDiscovery
 
                 if (e.ColumnIndex == 3)       // note column
                 {
-                    richTextBoxNote.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
-                    richTextBoxNote.ScrollToCaret();
-                    richTextBoxNote.Focus();
+                    richTextBoxNote.TextBox.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
+                    richTextBoxNote.TextBox.ScrollToCaret();
+                    richTextBoxNote.TextBox.Focus();
                 }
                 else  if (e.ColumnIndex == 2 && textBoxDistance.Enabled == true )       // distance column and on..
                 {
@@ -653,7 +612,7 @@ namespace EDDiscovery
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
             var dist = DistanceAsDouble(textBoxDistance.Text.Trim());
-            
+
             if (!dist.HasValue)
                 MessageBox.Show("Distance in wrong format!");
             else
@@ -672,10 +631,10 @@ namespace EDDiscovery
 
                 if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
                     dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[2].Value = textBoxDistance.Text.Trim();
-                              
+
             }
         }
-  
+
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
@@ -707,7 +666,7 @@ namespace EDDiscovery
 
                 txt = richTextBoxNote.Text;
 
-                
+
                 if (currentSysPos.curSystem.Note == null)
                     currentSysPos.curSystem.Note = "";
 
@@ -734,7 +693,7 @@ namespace EDDiscovery
                         sn.Add();
                     }
 
-                    
+
                     currentSysPos.curSystem.Note = txt;
 
                     if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
@@ -816,7 +775,7 @@ namespace EDDiscovery
 
             }
             sync.StartSync(EDSMSyncTo, EDSMSyncFrom,defaultMapColour);
-            
+
         }
 
         internal void RefreshEDSMEvent(object source)
@@ -859,7 +818,7 @@ namespace EDDiscovery
                     //                    + ", your trilateration was aborted.");
                     //}
 
-                    
+
                     SystemPosition item = result[0];
                     SystemPosition item2;
 
@@ -867,6 +826,15 @@ namespace EDDiscovery
                         item2 = result[1];
                     else
                         item2 = null;
+
+                    if (checkBoxEDSMSyncTo.Checked == true)
+                    {
+                        EDSMClass edsm = new EDSMClass();
+                        edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+                        edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+
+                        Task taskEDSM = Task.Factory.StartNew(() => EDSMSync.SendTravelLog(edsm, item, null));
+                    }
 
                     // grab distance to next (this) system
                     textBoxDistanceToNextSystem.Enabled = false;
@@ -878,7 +846,7 @@ namespace EDDiscovery
                             if (s.name == item.Name) currentSystem = s;
                             if (s.name == item2.Name) previousSystem = s;
                         });
-                        
+
                         if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
                         {
                             var presetDistance = DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), 45);
@@ -931,7 +899,7 @@ namespace EDDiscovery
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-        {
+        {           // autopaint the row number..
             var grid = sender as DataGridView;
             var rowIdx = (e.RowIndex + 1).ToString();
 
@@ -943,8 +911,9 @@ namespace EDDiscovery
             };
 
             var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
-            e.Graphics.DrawString(rowIdx, this.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
 
+            using ( Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+                e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br , headerBounds, centerFormat);
         }
 
         private void buttonEDDB_Click(object sender, EventArgs e)
@@ -958,7 +927,7 @@ namespace EDDiscovery
             if (currentSysPos.curSystem.id_eddb>0)
                 Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
         }
-        
+
         private void buttonTrilaterate_Click(object sender, EventArgs e)
         {
             ISystem currSys = GetCurrentSystem();
@@ -971,7 +940,7 @@ namespace EDDiscovery
                 tctrl.Set(currSys);
             }
         }
-    
+
 		public ISystem CurrentSystem
         {
             get
@@ -995,7 +964,7 @@ namespace EDDiscovery
             {
                 return;
             }
-            
+
             if (!DistanceAsDouble(value, 45).HasValue) // max jump range is ~42Ly
             {
                 e.Cancel = true;
@@ -1085,8 +1054,11 @@ namespace EDDiscovery
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
                                                            .Distinct();
-            Color colour = selectedRows.First().Cells[4].Style.ForeColor;
-            mapColorDialog.Color = colour;
+            ColorDialog mapColorDialog = new ColorDialog();
+            mapColorDialog.AllowFullOpen = true;
+            mapColorDialog.FullOpen = true;
+            mapColorDialog.Color = selectedRows.First().Cells[4].Style.ForeColor;
+
             if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
             {
                 this.Cursor = Cursors.WaitCursor;
@@ -1117,8 +1089,8 @@ namespace EDDiscovery
                                                                   .Distinct();
 
 
-          
-            
+
+
             {
                 this.Cursor = Cursors.WaitCursor;
                 string sysName = "";
@@ -1129,7 +1101,7 @@ namespace EDDiscovery
 
                     sp = (SystemPosition)r.Cells[1].Tag;
 
-               
+
 
                     if (sp!= null && sp.vs != null)
                     {
@@ -1192,13 +1164,6 @@ namespace EDDiscovery
                             sp.Update();
                         }
                         this.Cursor = Cursors.Default;
-
-
-                        foreach (DataGridViewRow row in selectedRows.ToList<DataGridViewRow>())
-                        {
-                            dataGridViewTravel.Rows.Remove(row);
-                        }
-
                     }
                     else   // Move all systems from the same session
                     {
@@ -1329,13 +1294,17 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
+        private void historyContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()
                                                                         .OrderBy(cell => cell.Index);
-
             this.Cursor = Cursors.WaitCursor;
             string sysName = selectedRows.First<DataGridViewRow>().Cells[1].Value.ToString();
             EDSMClass edsm = new EDSMClass();
@@ -1358,7 +1327,7 @@ namespace EDDiscovery
 
             this.Cursor = Cursors.Default;
         }
-    }
+}
 
 
 

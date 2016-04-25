@@ -42,6 +42,7 @@ namespace EDDiscovery
         {
             InitializeComponent();
             button_Route.Enabled = false;
+            cmd3DMap.Enabled = false;
 
             for (int i = 0; i < metric_options.Length; i++)
                 comboBoxRoutingMetric.Items.Add(metric_options[i]);
@@ -134,13 +135,14 @@ namespace EDDiscovery
             AppendText("Searching route from " + fromsys + " to " + tosys + " using " + metric_options[routemethod] + " metric" + Environment.NewLine);
             AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
 
-            AppendText(Environment.NewLine + string.Format("{0,-40}    Depart          @ {1,9:0.00},{2,8:0.00},{3,9:0.00}" + Environment.NewLine, fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
+            AppendText(Environment.NewLine);
+            AppendText(string.Format("{0,-40}    Depart          @ {1,9:0.00},{2,8:0.00},{3,9:0.00}" + Environment.NewLine, fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
 
             Point3D curpos = coordsfrom;
             int jump = 1;
             double actualdistance = 0;
 #if DEBUG
-            Console.WriteLine("-------------------------- BEGIN");
+            //Console.WriteLine("-------------------------- BEGIN");
 #endif
             do
             {
@@ -157,8 +159,8 @@ namespace EDDiscovery
                                               curpos.Z + maxrange * travelvectorperly.Z);   // where we would like to be..
 
 #if DEBUG
-                Console.WriteLine("Curpos " + curpos.X + "," + curpos.Y + "," + curpos.Z);
-                Console.WriteLine(" next" + nextpos.X + "," + nextpos.Y + "," + nextpos.Z);
+                //Console.WriteLine("Curpos " + curpos.X + "," + curpos.Y + "," + curpos.Z);
+                //Console.WriteLine(" next" + nextpos.X + "," + nextpos.Y + "," + nextpos.Z);
 #endif
                 SystemClass bestsystem;
                 Point3D bestposition;
@@ -188,7 +190,8 @@ namespace EDDiscovery
             routeSystems.Add(SystemData.GetSystem(textBox_To.Text));
             actualdistance += Point3D.DistanceBetween(curpos, coordsto);
             AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
-            AppendText(string.Format(Environment.NewLine + "Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance, actualdistance));
+            AppendText(Environment.NewLine);
+            AppendText(string.Format("Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance, actualdistance));
         }
 
         private void FindBestSystem(Point3D curpos, Point3D wantedpos, double maxfromcurpos , double maxfromwanted, 
@@ -258,7 +261,7 @@ namespace EDDiscovery
             if (system != null)
             {
 #if DEBUG
-                Console.WriteLine("Best System " + nearestsystem.name);
+                //Console.WriteLine("Best System " + nearestsystem.name);
 #endif
                 position = new Point3D(system.x, system.y, system.z);
             }
@@ -335,6 +338,8 @@ namespace EDDiscovery
             textBox_From.Text = db.GetSettingString("RouteFrom", "");
             textBox_To.Text = db.GetSettingString("RouteTo", "");
             textBox_Range.Text = db.GetSettingString("RouteRange", "30");
+            if (textBox_Range.Text == "")
+                textBox_Range.Text = "30";
             textBox_FromX.Text = db.GetSettingString("RouteFromX", "");
             textBox_FromY.Text = db.GetSettingString("RouteFromY", "");
             textBox_FromZ.Text = db.GetSettingString("RouteFromZ", "");
@@ -345,8 +350,7 @@ namespace EDDiscovery
             bool tostate = db.GetSettingBool("RouteToState", false);
 
             int metricvalue = db.GetSettingInt("RouteMetric", 0);
-            if (metricvalue < comboBoxRoutingMetric.Items.Count )       // just check, in case..
-                comboBoxRoutingMetric.SelectedIndex = metricvalue;
+            comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : metric_waypointdev2;
 
             SelectToMaster(tostate);
             UpdateTo(true);
@@ -366,8 +370,7 @@ namespace EDDiscovery
                                 "  from a straight line journey to the destination" + Environment.NewLine +
                                 "  Options exist to limit the deviation allowed." + Environment.NewLine +
                                 "  A mix of Options exist to limit the deviation allowed and allow combinations of" + Environment.NewLine +
-                                "  waypoint distance and deviation. Experiment to find the best path" + Environment.NewLine + Environment.NewLine +
-                                "Alternately use the AStar algorithm, but this does not work for large jumps ranges (>40) or out of the bubble" + Environment.NewLine + Environment.NewLine
+                                "  waypoint distance and deviation. Experiment to find the best path" + Environment.NewLine + Environment.NewLine
                 ;
 
         }
@@ -634,8 +637,18 @@ namespace EDDiscovery
 
         private void cmd3DMap_Click(object sender, EventArgs e)
         {
+            if (_discoveryForm.SystemNames.Count == 0)
+            {
+                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
+                return;
+            }
+
             var map = _discoveryForm.Map;
+
+            map.Instance.SystemNames = _discoveryForm.SystemNames;
+            map.Instance.VisitedSystems = _discoveryForm.VisitedSystems;
             map.Instance.Reset();
+
             if (routeSystems != null && routeSystems.Any())
             {
                 float zoom = 400 / float.Parse(textBox_Distance.Text) ;

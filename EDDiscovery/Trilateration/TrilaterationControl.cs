@@ -989,30 +989,14 @@ namespace EDDiscovery
 
         private void LogTextColor(string text, Color color)
         {
-            try
-            {
-
-                richTextBox_History.SelectionStart = richTextBox_History.TextLength;
-                richTextBox_History.SelectionLength = 0;
-
-                richTextBox_History.SelectionColor = color;
-                richTextBox_History.AppendText(text);
-                richTextBox_History.SelectionColor = richTextBox_History.ForeColor;
-
-                richTextBox_History.SelectionStart = richTextBox_History.Text.Length;
-                richTextBox_History.SelectionLength = 0;
-                richTextBox_History.ScrollToCaret();
-                richTextBox_History.Refresh();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception SystemClass: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
+            richTextBox_History.AppendText(text,color);
         }
 
         private void dataGridViewSuggestedSystems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1)
+                return;
+
             var system = (SystemClass)dataGridViewSuggestedSystems[0, e.RowIndex].Tag;
             AddSystemToDataGridViewDistances(system);
             dataGridViewSuggestedSystems.Rows.RemoveAt(e.RowIndex);
@@ -1021,10 +1005,16 @@ namespace EDDiscovery
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-			Set(CurrentSystem);
+            if (_discoveryForm.SystemNames.Count == 0)
+            {
+                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
+                return;
+            }
+
+            Set(CurrentSystem);
 
             //for (int i = 0; i < 100; i++)     // use this to test the docking is right
-            //    LogText("Hello " + i.ToString() + Environment.NewLine);
+              //  LogText("Hello " + i.ToString() + Environment.NewLine);
 
         }
 
