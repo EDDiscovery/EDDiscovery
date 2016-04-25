@@ -111,10 +111,10 @@ namespace EDDiscovery2
 
         private void DrawTravelHistory()
         {
+            if (_eddiscoveryForm.TravelControl.visitedSystems == null)
+                return;
+
             DateTime start = startDate;
-
-          
-
 
             foreach (var sys in _eddiscoveryForm.TravelControl.visitedSystems)
             {

@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.button_test = new System.Windows.Forms.Button();
+            this.button_test = new ExtendedControls.ButtonExt();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openEliteDangerousDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,6 +39,9 @@
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.prospectingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,10 +58,6 @@
             this.eDDiscoveryChatDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this.panel_grip = new System.Windows.Forms.Panel();
-            this.panel_minimize = new System.Windows.Forms.Panel();
-            this.panel_close = new System.Windows.Forms.Panel();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery2.Settings();
             this.tabPageRoute = new System.Windows.Forms.TabPage();
@@ -66,11 +66,14 @@
             this.imageHandler1 = new EDDiscovery2.ImageHandler.ImageHandler();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
             this.trilaterationControl = new EDDiscovery.TrilaterationControl();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
             this.label_version = new System.Windows.Forms.Label();
-            this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel_eddiscovery = new System.Windows.Forms.Panel();
+            this.panel_grip = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.panel_close = new ExtendedControls.DrawnPanel();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
@@ -83,6 +86,9 @@
             // 
             // button_test
             // 
+            this.button_test.BorderColorScaling = 1.25F;
+            this.button_test.ButtonColorScaling = 0.5F;
+            this.button_test.ButtonDisabledScaling = 0.5F;
             this.button_test.Location = new System.Drawing.Point(772, -1);
             this.button_test.Name = "button_test";
             this.button_test.Size = new System.Drawing.Size(41, 23);
@@ -102,7 +108,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(308, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(216, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -115,7 +121,9 @@
             this.show2DMapsToolStripMenuItem,
             this.prospectingToolStripMenuItem,
             this.statisticsToolStripMenuItem,
-            this.changeMapColorToolStripMenuItem});
+            this.changeMapColorToolStripMenuItem,
+            this.editThemeToolStripMenuItem,
+            this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -154,6 +162,27 @@
             this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.statisticsToolStripMenuItem.Text = "Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
+            // 
+            // changeMapColorToolStripMenuItem
+            // 
+            this.changeMapColorToolStripMenuItem.Name = "changeMapColorToolStripMenuItem";
+            this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.changeMapColorToolStripMenuItem.Text = "Set Default Map Colour";
+            this.changeMapColorToolStripMenuItem.Click += new System.EventHandler(this.changeMapColorToolStripMenuItem_Click);
+            // 
+            // editThemeToolStripMenuItem
+            // 
+            this.editThemeToolStripMenuItem.Name = "editThemeToolStripMenuItem";
+            this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.editThemeToolStripMenuItem.Text = "Edit Theme";
+            this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // adminToolStripMenuItem
             // 
@@ -284,54 +313,6 @@
             this.labelPanelText.TabIndex = 0;
             this.labelPanelText.Text = "Loading. Please wait!";
             // 
-            // panel_eddiscovery
-            // 
-            this.panel_eddiscovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_eddiscovery.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_eddiscovery.BackgroundImage")));
-            this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_eddiscovery.Location = new System.Drawing.Point(818, 1);
-            this.panel_eddiscovery.Name = "panel_eddiscovery";
-            this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
-            this.panel_eddiscovery.TabIndex = 18;
-            this.panel_eddiscovery.Click += new System.EventHandler(this.panel1_Click);
-            // 
-            // panel_grip
-            // 
-            this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel_grip.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_grip.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_grip.BackgroundImage")));
-            this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_grip.Location = new System.Drawing.Point(977, 727);
-            this.panel_grip.Name = "panel_grip";
-            this.panel_grip.Size = new System.Drawing.Size(16, 16);
-            this.panel_grip.TabIndex = 16;
-            this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
-            // 
-            // panel_minimize
-            // 
-            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_minimize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_minimize.BackgroundImage")));
-            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_minimize.Location = new System.Drawing.Point(943, 1);
-            this.panel_minimize.Name = "panel_minimize";
-            this.panel_minimize.Size = new System.Drawing.Size(22, 24);
-            this.panel_minimize.TabIndex = 20;
-            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
-            // 
-            // panel_close
-            // 
-            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_close.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_close.BackgroundImage")));
-            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.Location = new System.Drawing.Point(961, 1);
-            this.panel_close.Name = "panel_close";
-            this.panel_close.Size = new System.Drawing.Size(32, 24);
-            this.panel_close.TabIndex = 19;
-            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
-            // 
             // tabPageSettings
             // 
             this.tabPageSettings.Controls.Add(this.settings);
@@ -382,6 +363,7 @@
             // 
             // imageHandler1
             // 
+            this.imageHandler1.AutoSize = true;
             this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageHandler1.Location = new System.Drawing.Point(0, 0);
             this.imageHandler1.Name = "imageHandler1";
@@ -414,11 +396,24 @@
             this.tabControl1.Controls.Add(this.tabPageScreenshots);
             this.tabControl1.Controls.Add(this.tabPageRoute);
             this.tabControl1.Controls.Add(this.tabPageSettings);
+            this.tabControl1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControl1.Location = new System.Drawing.Point(0, 28);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(993, 697);
+            this.tabControl1.TabColorScaling = 0.5F;
+            this.tabControl1.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
+            this.tabControl1.TabControlBorderColor = System.Drawing.Color.DarkGray;
+            this.tabControl1.TabDisabledScaling = 0.5F;
             this.tabControl1.TabIndex = 15;
+            this.tabControl1.TabMouseOverColor = System.Drawing.Color.White;
+            this.tabControl1.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
+            this.tabControl1.TabNotSelectedColor = System.Drawing.Color.Gray;
+            this.tabControl1.TabOpaque = 100F;
+            this.tabControl1.TabSelectedColor = System.Drawing.Color.LightGray;
+            this.tabControl1.TabStyle = tabStyleSquare1;
+            this.tabControl1.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
+            this.tabControl1.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             // 
             // tabPageTravelHistory
             // 
@@ -442,18 +437,68 @@
             // label_version
             // 
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(296, 3);
+            this.label_version.Location = new System.Drawing.Point(296, 4);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(71, 13);
             this.label_version.TabIndex = 21;
             this.label_version.Text = "Version Label";
             // 
-            // changeMapColorToolStripMenuItem
+            // panel_eddiscovery
             // 
-            this.changeMapColorToolStripMenuItem.Name = "changeMapColorToolStripMenuItem";
-            this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.changeMapColorToolStripMenuItem.Text = "Set Default Map Colour";
-            this.changeMapColorToolStripMenuItem.Click += new System.EventHandler(this.changeMapColorToolStripMenuItem_Click);
+            this.panel_eddiscovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_eddiscovery.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_eddiscovery.BackgroundImage")));
+            this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_eddiscovery.Location = new System.Drawing.Point(818, 1);
+            this.panel_eddiscovery.Name = "panel_eddiscovery";
+            this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
+            this.panel_eddiscovery.TabIndex = 18;
+            this.panel_eddiscovery.Click += new System.EventHandler(this.panel1_Click);
+            // 
+            // panel_grip
+            // 
+            this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel_grip.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_grip.Image = ExtendedControls.DrawnPanel.ImageType.Gripper;
+            this.panel_grip.Location = new System.Drawing.Point(977, 727);
+            this.panel_grip.MarginSize = 5;
+            this.panel_grip.MouseOverColor = System.Drawing.Color.White;
+            this.panel_grip.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_grip.Name = "panel_grip";
+            this.panel_grip.Size = new System.Drawing.Size(16, 16);
+            this.panel_grip.TabIndex = 16;
+            this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
+            // 
+            // panel_minimize
+            // 
+            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.Image = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.Location = new System.Drawing.Point(941, 1);
+            this.panel_minimize.MarginSize = 6;
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
+            this.panel_minimize.TabIndex = 20;
+            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            // 
+            // panel_close
+            // 
+            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.Image = ExtendedControls.DrawnPanel.ImageType.Close;
+            this.panel_close.Location = new System.Drawing.Point(966, 1);
+            this.panel_close.MarginSize = 6;
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.Name = "panel_close";
+            this.panel_close.Size = new System.Drawing.Size(24, 24);
+            this.panel_close.TabIndex = 19;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -486,6 +531,7 @@
             this.tabPageSettings.ResumeLayout(false);
             this.tabPageRoute.ResumeLayout(false);
             this.tabPageScreenshots.ResumeLayout(false);
+            this.tabPageScreenshots.PerformLayout();
             this.tabPageTriletaration.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);
@@ -497,7 +543,7 @@
         #endregion
 
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Button button_test;
+        private ExtendedControls.ButtonExt button_test;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -522,9 +568,9 @@
         private System.Windows.Forms.Panel panel_eddiscovery;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eDDiscoveryChatDiscordToolStripMenuItem;
-        private System.Windows.Forms.Panel panel_close;
-        private System.Windows.Forms.Panel panel_minimize;
-        private System.Windows.Forms.Panel panel_grip;
+        private ExtendedControls.DrawnPanel panel_close;
+        private ExtendedControls.DrawnPanel panel_minimize;
+        private ExtendedControls.DrawnPanel panel_grip;
         private System.Windows.Forms.TabPage tabPageSettings;
         private EDDiscovery2.Settings settings;
         private System.Windows.Forms.TabPage tabPageRoute;
@@ -533,11 +579,13 @@
         private EDDiscovery2.ImageHandler.ImageHandler imageHandler1;
         private System.Windows.Forms.TabPage tabPageTriletaration;
         public TrilaterationControl trilaterationControl;
-        private System.Windows.Forms.TabControl tabControl1;
+        private ExtendedControls.TabControlCustom tabControl1;
         private System.Windows.Forms.TabPage tabPageTravelHistory;
         private TravelHistoryControl travelHistoryControl1;
         private System.Windows.Forms.Label label_version;
         private System.Windows.Forms.ToolStripMenuItem changeMapColorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
