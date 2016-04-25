@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
 using EDDiscovery2.HTTP;
+using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
@@ -825,6 +826,15 @@ namespace EDDiscovery
                         item2 = result[1];
                     else
                         item2 = null;
+
+                    if (checkBoxEDSMSyncTo.Checked == true)
+                    {
+                        EDSMClass edsm = new EDSMClass();
+                        edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+                        edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+
+                        Task taskEDSM = Task.Factory.StartNew(() => EDSMSync.SendTravelLog(edsm, item, null));
+                    }
 
                     // grab distance to next (this) system
                     textBoxDistanceToNextSystem.Enabled = false;
