@@ -50,18 +50,25 @@ namespace EDDiscovery2
             this.toolStripButtonPerspective = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.dropdownMapNames = new System.Windows.Forms.ToolStripDropDownButton();
+            this.dropdownFilterDate = new System.Windows.Forms.ToolStripDropDownButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonHistory = new System.Windows.Forms.Button();
             this.buttonHome = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.labelClickedSystemCoords = new System.Windows.Forms.Label();
+            this.systemselectionMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.selectionAllegiance = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectionEconomy = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectionState = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectionGov = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
             this.dotSystemCoords = new System.Windows.Forms.PictureBox();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.dropdownFilterDate = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            this.systemselectionMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dotSystemCoords)).BeginInit();
             this.SuspendLayout();
@@ -227,6 +234,15 @@ namespace EDDiscovery2
             this.dropdownMapNames.Size = new System.Drawing.Size(29, 28);
             this.dropdownMapNames.Text = "Select Maps";
             // 
+            // dropdownFilterDate
+            // 
+            this.dropdownFilterDate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dropdownFilterDate.Image = ((System.Drawing.Image)(resources.GetObject("dropdownFilterDate.Image")));
+            this.dropdownFilterDate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dropdownFilterDate.Name = "dropdownFilterDate";
+            this.dropdownFilterDate.Size = new System.Drawing.Size(29, 28);
+            this.dropdownFilterDate.Text = "Filter by Expedition or date";
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -276,6 +292,49 @@ namespace EDDiscovery2
             this.labelClickedSystemCoords.Size = new System.Drawing.Size(57, 13);
             this.labelClickedSystemCoords.TabIndex = 24;
             this.labelClickedSystemCoords.Text = "Sol x=0.00";
+            this.labelClickedSystemCoords.Click += new System.EventHandler(this.labelClickedSystemCoords_Click);
+            // 
+            // systemselectionMenuStrip
+            // 
+            this.systemselectionMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectionAllegiance,
+            this.selectionEconomy,
+            this.selectionState,
+            this.selectionGov,
+            this.viewOnEDSMToolStripMenuItem});
+            this.systemselectionMenuStrip.Name = "systemselectionMenuStrip";
+            this.systemselectionMenuStrip.Size = new System.Drawing.Size(151, 114);
+            // 
+            // selectionAllegiance
+            // 
+            this.selectionAllegiance.Name = "selectionAllegiance";
+            this.selectionAllegiance.Size = new System.Drawing.Size(150, 22);
+            this.selectionAllegiance.Text = "Allegiance";
+            // 
+            // selectionEconomy
+            // 
+            this.selectionEconomy.Name = "selectionEconomy";
+            this.selectionEconomy.Size = new System.Drawing.Size(150, 22);
+            this.selectionEconomy.Text = "Economy";
+            // 
+            // selectionState
+            // 
+            this.selectionState.Name = "selectionState";
+            this.selectionState.Size = new System.Drawing.Size(150, 22);
+            this.selectionState.Text = "State";
+            // 
+            // selectionGov
+            // 
+            this.selectionGov.Name = "selectionGov";
+            this.selectionGov.Size = new System.Drawing.Size(150, 22);
+            this.selectionGov.Text = "Gov";
+            // 
+            // viewOnEDSMToolStripMenuItem
+            // 
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             // 
             // dotSelectedSystemCoords
             // 
@@ -302,15 +361,6 @@ namespace EDDiscovery2
             // UpdateTimer
             // 
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
-            // 
-            // dropdownFilterDate
-            // 
-            this.dropdownFilterDate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dropdownFilterDate.Image = ((System.Drawing.Image)(resources.GetObject("dropdownFilterDate.Image")));
-            this.dropdownFilterDate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dropdownFilterDate.Name = "dropdownFilterDate";
-            this.dropdownFilterDate.Size = new System.Drawing.Size(29, 28);
-            this.dropdownFilterDate.Text = "Filter by Expedition or date";
             // 
             // FormMap
             // 
@@ -340,6 +390,7 @@ namespace EDDiscovery2
             this.toolStripShowAllStars.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.systemselectionMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dotSystemCoords)).EndInit();
             this.ResumeLayout(false);
@@ -373,5 +424,11 @@ namespace EDDiscovery2
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripDropDownButton dropdownMapNames;
         private ToolStripDropDownButton dropdownFilterDate;
+        private ContextMenuStrip systemselectionMenuStrip;
+        private ToolStripMenuItem selectionAllegiance;
+        private ToolStripMenuItem selectionEconomy;
+        private ToolStripMenuItem selectionState;
+        private ToolStripMenuItem selectionGov;
+        private ToolStripMenuItem viewOnEDSMToolStripMenuItem;
     }
     }
