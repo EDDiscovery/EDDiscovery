@@ -994,6 +994,9 @@ namespace EDDiscovery
 
         private void dataGridViewSuggestedSystems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1)
+                return;
+
             var system = (SystemClass)dataGridViewSuggestedSystems[0, e.RowIndex].Tag;
             AddSystemToDataGridViewDistances(system);
             dataGridViewSuggestedSystems.Rows.RemoveAt(e.RowIndex);
