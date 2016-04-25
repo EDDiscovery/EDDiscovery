@@ -38,7 +38,7 @@ namespace EDDiscovery2
                 menu_back, menu_fore, menu_dropdownback, menu_dropdownfore,
                 group_back, group_text, group_borderlines,
                 travelgrid_nonvisted, travelgrid_visited,
-                checkbox,
+                checkbox,checkbox_tick,
                 label,
                 tabcontrol_borderlines,
                 toolstrip_back, toolstrip_border, toolstrip_buttonchecked
@@ -62,7 +62,7 @@ namespace EDDiscovery2
                                         Color tn, Color tv, 
                                         Color tbb, Color tbf, Color tbh, Color tbs, Color tbborder, string tbbstyle ,
                                         Color tbsb, Color tbst, Color tbbut,
-                                        Color c,
+                                        Color c, Color ctick,
                                         Color mb, Color mf, Color mdb, Color mdf,
                                         Color l,
                                         Color grpb, Color grpt, Color grlines,
@@ -82,7 +82,7 @@ namespace EDDiscovery2
                 colors.Add(CI.textbox_sliderback, tbsb); colors.Add(CI.textbox_scrollarrow, tbst); colors.Add(CI.textbox_scrollbutton, tbbut);
                 colors.Add(CI.textbox_highlight, tbh); colors.Add(CI.textbox_success, tbs);
                 colors.Add(CI.textbox_border, tbborder);
-                colors.Add(CI.checkbox, c);
+                colors.Add(CI.checkbox, c); colors.Add(CI.checkbox_tick, ctick);
                 colors.Add(CI.menu_back, mb); colors.Add(CI.menu_fore, mf); colors.Add(CI.menu_dropdownback, mdb); colors.Add(CI.menu_dropdownfore, mdf);
                 colors.Add(CI.label, l);
                 colors.Add(CI.group_back, grpb); colors.Add(CI.group_text, grpt); colors.Add(CI.group_borderlines, grlines);
@@ -123,7 +123,7 @@ namespace EDDiscovery2
                 colors.Add(CI.travelgrid_nonvisted, Color.Blue); colors.Add(CI.travelgrid_visited, SystemColors.MenuText);
                 colors.Add(CI.textbox_back, SystemColors.Window); colors.Add(CI.textbox_fore, SystemColors.WindowText); colors.Add(CI.textbox_highlight, Color.Red); colors.Add(CI.textbox_success, Color.Green); colors.Add(CI.textbox_border, SystemColors.Menu);
                 colors.Add(CI.textbox_sliderback, SystemColors.ControlLight); colors.Add(CI.textbox_scrollarrow, SystemColors.MenuText); colors.Add(CI.textbox_scrollbutton, SystemColors.Control);
-                colors.Add(CI.checkbox, SystemColors.MenuText);
+                colors.Add(CI.checkbox, SystemColors.MenuText); colors.Add(CI.checkbox_tick, SystemColors.MenuHighlight);
                 colors.Add(CI.menu_back, SystemColors.Menu); colors.Add(CI.menu_fore, SystemColors.MenuText); colors.Add(CI.menu_dropdownback, SystemColors.ControlLightLight); colors.Add(CI.menu_dropdownfore, SystemColors.MenuText);
                 colors.Add(CI.label, SystemColors.MenuText);
                 colors.Add(CI.group_back, SystemColors.Menu); colors.Add(CI.group_text, SystemColors.MenuText); colors.Add(CI.group_borderlines, SystemColors.ControlDark);
@@ -297,7 +297,7 @@ namespace EDDiscovery2
                 Color.Orange, Color.White, // travel
                 Color.Black, Color.Orange, Color.Red, Color.Green, Color.DarkOrange, textboxborderstyle_color, // text box
                 Color.Black, Color.Orange, Color.DarkOrange, // text back, arrow, button
-                Color.Orange, // checkbox
+                Color.Orange, Color.FromArgb(255, 65, 33, 33), // checkbox
                 Color.Black, Color.Orange, Color.DarkOrange, Color.Yellow,  // menu
                 Color.Orange,  // label
                 Color.FromArgb(255, 32,32,32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
@@ -316,7 +316,7 @@ namespace EDDiscovery2
                 Color.Orange, Color.White, // travel
                 butback, Color.Orange, Color.Red, Color.Green, Color.FromArgb(255,64,64,64), textboxborderstyle_color, // text box
                 butback, Color.Orange, Color.DarkOrange, // text back, arrow, button
-                Color.Orange, // checkbox
+                Color.Orange, Color.FromArgb(255, 65, 33, 33),// checkbox
                 Color.Black, Color.Orange, Color.DarkOrange, Color.Yellow,  // menu
                 Color.Orange,  // label
                 Color.Black, Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
@@ -336,7 +336,7 @@ namespace EDDiscovery2
                                         Color.Blue, SystemColors.MenuText, // travel
                                         SystemColors.Window, SystemColors.WindowText, Color.Red, Color.Green, Color.DarkGray, textboxborderstyle_color,// text
                                         SystemColors.ControlLightLight, SystemColors.MenuText, SystemColors.ControlDark, // text box
-                                        SystemColors.MenuText, // checkbox
+                                        SystemColors.MenuText, SystemColors.MenuHighlight , // checkbox
                                         SystemColors.Menu, SystemColors.MenuText, SystemColors.ControlLightLight, SystemColors.MenuText,  // menu
                                         SystemColors.MenuText,  // label
                                         SystemColors.Menu, SystemColors.MenuText, SystemColors.ControlDark, // group
@@ -354,7 +354,7 @@ namespace EDDiscovery2
                                                Color.White, Color.Cyan, // travel
                                                Color.DarkBlue, Color.White, Color.Red, Color.Green, Color.White, textboxborderstyle_color,// text box
                                                Color.DarkBlue, Color.White, Color.Blue, // text scroll
-                                               Color.White, // checkbox
+                                               Color.White, Color.Black , // checkbox
                                                Color.DarkBlue, Color.White, Color.DarkBlue, Color.White,  // menu
                                                Color.White,  // label
                                                Color.DarkBlue, Color.White, Color.Blue, // group
@@ -371,7 +371,7 @@ namespace EDDiscovery2
                                                Color.White, Color.FromArgb(255, 78, 190, 27), // travel
                                                baizegreen, Color.White, Color.Red, Color.Green, Color.White, textboxborderstyle_color,// text box
                                                baizegreen, Color.White, Color.LightGreen, // text scroll
-                                               Color.White, // checkbox
+                                               Color.White, Color.Black, // checkbox
                                                baizegreen, Color.White, baizegreen, Color.White,  // menu
                                                Color.White,  // label
                                                baizegreen, Color.White, Color.LightGreen, // group
@@ -795,8 +795,9 @@ namespace EDDiscovery2
                 MyDgv.ForeColor = currentsettings.colors[Settings.CI.checkbox];
                 MyDgv.CheckBoxColor = currentsettings.colors[Settings.CI.checkbox];
                 MyDgv.CheckBoxInnerColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.5F);
-                MyDgv.CheckColor = ButtonExt.Multiply(MyDgv.BackColor, 0.75F);
+                MyDgv.CheckColor = currentsettings.colors[Settings.CI.checkbox_tick];
                 MyDgv.MouseOverColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.checkbox], 1.4F);
+                MyDgv.TickBoxReductionSize = (fnt.SizeInPoints > 10) ? 10 : 6;
                 MyDgv.Font = fnt;
             }
             else if (myControl is RadioButtonCustom)

@@ -20,6 +20,7 @@ namespace ExtendedControls
         public int SpinnerSize { get; set; } = 16;
         public bool AutoSizeTextBox { get { return autosize; } set { autosize = value; PerformLayout(); } }
         public UpDown updown = new UpDown();                            // for setting colours..
+        public override string Text { get { return (tb != null) ? (tb.Text) : ""; } }
 
         public int Maximum { get { return max; } set { Set(curvalue, value, min); } }
         public int Minimum { get { return min; } set { Set(curvalue, max, value); } }
