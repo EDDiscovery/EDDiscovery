@@ -70,7 +70,6 @@ namespace EDDiscovery2
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
-            textBoxHomeSystem.AutoCompleteCustomSource = _discoveryForm.SystemNames;
             textBoxHomeSystem.Text = _db.GetSettingString("DefaultMapCenter", "Sol");
 
             textBoxDefaultZoom.Text = _db.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
