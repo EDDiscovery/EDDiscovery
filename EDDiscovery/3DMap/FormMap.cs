@@ -16,25 +16,9 @@ using OpenTK.Input;
 
 namespace EDDiscovery2
 {
-
-
     public partial class FormMap : Form
     {
-
-        private class MyRenderer : ToolStripProfessionalRenderer
-        {
-            protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
-            {
-                var btn = e.Item as ToolStripButton;
-                if (btn != null && btn.CheckOnClick && btn.Checked)
-                {
-                    Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
-                    e.Graphics.FillRectangle(Brushes.Orange, bounds);
-                }
-                else base.OnRenderButtonBackground(e);
-            }
-        }
-
+        SQLiteDBClass db;
 
         private DatasetBuilder builder;
 
@@ -96,70 +80,24 @@ namespace EDDiscovery2
         private DateTime maxstardate = new DateTime(2016,1,1);
         bool Animatetime = false;
         
-        public ISystem CenterSystem {
-            get
-            {
-                return _centerSystem;
-            }
-            set
-            {
-                if (value != null && value.HasCoordinate)
-                {
-                    _centerSystem = value;
-                }
-                else
-                {
-                    // We need to use 0,0,0 if we don't have a center system
-                    _centerSystem = SystemData.GetSystem(_homeSystem) ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
-                }
-            }
-        }
-
-        public String CenterSystemName
-        {
-            get
-            {
-                if (CenterSystem != null)
-                {
-                    return CenterSystem.name;
-                }
-                else
-                {
-                    return "";
-                }
-            }
-            set
-            {
-                if (!String.IsNullOrWhiteSpace(value))
-                {
-                    CenterSystem = SystemData.GetSystem(value.Trim());
-                }
-            }
-        }
-
-        public AutoCompleteStringCollection SystemNames {
-            get
-            {
-                return _systemNames;
-            }
-            set
-            {
-                _systemNames = value;
-            }
-        }
-
         public FormMap()
         {
             InitializeComponent();
+            db = new SQLiteDBClass();
         }
 
         public void Prepare(bool CenterFromSettings, float zoomOverRide)
         {
-            var db = new SQLiteDBClass();
             _homeSystem = db.GetSettingString("DefaultMapCenter", "Sol");
-            if (zoomOverRide <= 50 && zoomOverRide >= 0.01) { _defaultZoom = zoomOverRide; }
+            if (zoomOverRide <= 50 && zoomOverRide >= 0.01)
+            {
+                _defaultZoom = zoomOverRide;
+            }
             else
-                { _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0); }
+            {
+                _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0);
+            }
+
             if (CenterFromSettings)
             {
                 bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
@@ -170,6 +108,14 @@ namespace EDDiscovery2
 
             ResetCamera();
             toolStripShowAllStars.Renderer = new MyRenderer();
+            toolStripButtonDrawLines.Checked = db.GetSettingBool("Map3DDrawLines", false);
+            toolStripButtonShowAllStars.Checked = db.GetSettingBool("Map3DAllStars", true);
+            toolStripButtonStations.Checked = db.GetSettingBool("Map3DButtonStations", false);
+            toolStripButtonPerspective.Checked = db.GetSettingBool("Map3DPerspective", false);
+            toolStripButtonGrid.Checked = db.GetSettingBool("Map3DCoarseGrid", true);
+            toolStripButtonFineGrid.Checked = db.GetSettingBool("Map3DFineGrid", true );
+            toolStripButtonCoords.Checked = db.GetSettingBool("Map3DCoords", true);
+            toolStripButtonEliteMovement.Checked = db.GetSettingBool("Map3DEliteMove", false);
         }
 
         private void ResetCamera()
@@ -305,6 +251,8 @@ namespace EDDiscovery2
                 Images = selectedmaps.ToArray(),
 
                 GridLines = toolStripButtonGrid.Checked,
+                FineGridLines = toolStripButtonFineGrid.Checked,
+                GridCoords = toolStripButtonCoords.Checked,
                 DrawLines = toolStripButtonDrawLines.Checked,
                 AllSystems = toolStripButtonShowAllStars.Checked,
                 Stations = toolStripButtonStations.Checked,
@@ -329,83 +277,6 @@ namespace EDDiscovery2
 
         //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
         // it out of FormMap's hair
-        private void GenerateDataSetsAllegiance()
-        {
-
-            var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
-
-            InitStarLists();
-
-            _datasets = new List<IData3DSet>();
-
-            datadict[(int)EDAllegiance.Alliance] = Data3DSetClass<PointData>.Create(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDAllegiance.Anarchy] = Data3DSetClass<PointData>.Create(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDAllegiance.Empire] = Data3DSetClass<PointData>.Create(EDAllegiance.Empire.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDAllegiance.Federation] = Data3DSetClass<PointData>.Create(EDAllegiance.Federation.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDAllegiance.Independent] = Data3DSetClass<PointData>.Create(EDAllegiance.Independent.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDAllegiance.None] = Data3DSetClass<PointData>.Create(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
-            datadict[(int)EDAllegiance.Unknown] = Data3DSetClass<PointData>.Create(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
-
-            foreach (SystemClass si in _starList)
-            {
-                if (si.HasCoordinate)
-                {
-                    datadict[(int)si.allegiance].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
-                }
-            }
-
-            foreach (var ds in datadict.Values)
-                _datasets.Add(ds);
-
-            datadict[(int)EDAllegiance.None].Visible = false;
-            datadict[(int)EDAllegiance.Unknown].Visible = false;
-
-        }
-
-
-        //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
-        // it out of FormMap's hair
-        private void GenerateDataSetsGovernment()
-        {
-
-            var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
-
-            InitStarLists();
-
-            _datasets = new List<IData3DSet>();
-
-            datadict[(int)EDGovernment.Anarchy] = Data3DSetClass<PointData>.Create(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDGovernment.Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
-            datadict[(int)EDGovernment.Democracy] = Data3DSetClass<PointData>.Create(EDGovernment.Democracy.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDGovernment.Imperial] = Data3DSetClass<PointData>.Create(EDGovernment.Imperial.ToString(), Color.DarkGreen, 1.0f);
-            datadict[(int)EDGovernment.Corporate] = Data3DSetClass<PointData>.Create(EDGovernment.Corporate.ToString(), Color.LawnGreen, 1.0f);
-            datadict[(int)EDGovernment.Communism] = Data3DSetClass<PointData>.Create(EDGovernment.Communism.ToString(), Color.DarkOliveGreen, 1.0f);
-            datadict[(int)EDGovernment.Feudal] = Data3DSetClass<PointData>.Create(EDGovernment.Feudal.ToString(), Color.LightBlue, 1.0f);
-            datadict[(int)EDGovernment.Dictatorship] = Data3DSetClass<PointData>.Create(EDGovernment.Dictatorship.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDGovernment.Theocracy] = Data3DSetClass<PointData>.Create(EDGovernment.Theocracy.ToString(), Color.DarkBlue, 1.0f);
-            datadict[(int)EDGovernment.Cooperative] = Data3DSetClass<PointData>.Create(EDGovernment.Cooperative.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDGovernment.Patronage] = Data3DSetClass<PointData>.Create(EDGovernment.Patronage.ToString(), Color.LightCyan, 1.0f);
-            datadict[(int)EDGovernment.Confederacy] = Data3DSetClass<PointData>.Create(EDGovernment.Confederacy.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDGovernment.Prison_Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Prison_Colony.ToString(), Color.Orange, 1.0f);
-            datadict[(int)EDGovernment.None] = Data3DSetClass<PointData>.Create(EDGovernment.None.ToString(), Color.Gray, 1.0f);
-            datadict[(int)EDGovernment.Unknown] = Data3DSetClass<PointData>.Create(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
-
-            foreach (SystemClass si in _starList)
-            {
-                if (si.HasCoordinate)
-                {
-                    datadict[(int)si.primary_economy].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
-                }
-            }
-
-            foreach (var ds in datadict.Values)
-                _datasets.Add(ds);
-
-            datadict[(int)EDGovernment.None].Visible = false;
-            datadict[(int)EDGovernment.Unknown].Visible = false;
-
-        }
-
         private void InitStarLists()
         {
 
@@ -432,73 +303,6 @@ namespace EDDiscovery2
             PlannedRoute = null;
         }
 
-        /*
-        private void DrawStars()
-        {
-            if (StarList == null)
-                StarList = SQLiteDBClass.globalSystems;
-
-
-            if (VisitedStars == null)
-                InitData();
-
-            GL.PointSize(1.0f);
-
-            GL.Begin(PrimitiveType.Points);
-            GL.Color3(Color.White);
-
-            foreach (SystemClass si in StarList)
-            {
-                if (si.HasCoordinate)
-                {
-                    GL.Vertex3(si.x-CenterSystem.x, si.y-CenterSystem.y, CenterSystem.z-si.z);
-                }
-            }
-            GL.End();
-
-
-
-            GL.PointSize(2.0f);
-            GL.Begin(PrimitiveType.Points);
-            GL.Color3(Color.Red);
-
-
-            if (VisitedSystems != null)
-            {
-                SystemClass star;
-
-                foreach (SystemClass sp in VisitedStars.Values)
-                {
-                    star = sp;
-                    if (star != null)
-                    {
-                        GL.Vertex3(star.x - CenterSystem.x, star.y - CenterSystem.y, CenterSystem.z- star.z);
-                    }
-                }
-            }
-            GL.End();
-
-            GL.PointSize(5.0f);
-            GL.Begin(PrimitiveType.Points);
-            GL.Enable(EnableCap.ProgramPointSize);
-            GL.Color3(Color.Yellow);
-            GL.Vertex3(0,0,0);
-            GL.End();
-        }
-
-        */
-
-        /// <summary>
-        /// Calculate Translation of  (X, Y, Z) - according to mouse input
-        /// </summary>
-        private void SetupCursorXYZ()
-        {
-            //                x =   (PointToClient(Cursor.Position).X - glControl.Width/2 ) * (zoom + 1);
-            //                y = (-PointToClient(Cursor.Position).Y + glControl.Height/2) * (zoom + 1);
-
-            //                System.Diagnostics.Trace.WriteLine("X:" + x + " Y:" + y + " Z:" + zoom);
-        }
-
         private void SetCenterSystem(ISystem sys)
         {
             if (sys == null) return;
@@ -521,11 +325,14 @@ namespace EDDiscovery2
 
         private void UpdateStatus()
         {
-            statusLabel.Text = "Use W, A, S and D keys with mouse to move the map!      ";
-            statusLabel.Text += $"Coordinates: x={_cameraPos.X} y={-_cameraPos.Y} z={_cameraPos.Z}";
-            statusLabel.Text += $", Zoom: {_zoom}";
+            if ( toolStripButtonPerspective.Checked )
+                statusLabel.Text = "Use W(fwd) S(back) A(lft) D(Rgt), R(up) F(dn) keys with the mouse. ";
+            else
+                statusLabel.Text = "Use W, A, S, D keys with the mouse. ";
+
+            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00}", _cameraPos.X, _cameraPos.Y, _cameraPos.Z, _zoom);
 #if DEBUG
-            statusLabel.Text += $", Direction: x={_cameraDir.X} y={_cameraDir.Y} z={_cameraDir.Z}";
+            statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
 #endif        
         }
 
@@ -564,29 +371,37 @@ namespace EDDiscovery2
         {
             _kbdActions.Reset();
 
+            if (!glControl.Focused)
+                return;
+
             try
             {
                 var state = OpenTK.Input.Keyboard.GetState();
 
                 _kbdActions.Left = (state[Key.Left] || state[Key.A]);
                 _kbdActions.Right = (state[Key.Right] || state[Key.D]);
-                _kbdActions.Up = (state[Key.Up] || state[Key.W]);
-                _kbdActions.Down = (state[Key.Down] || state[Key.S]);
 
-                _kbdActions.ZoomIn = (state[Key.Plus] || state[Key.Z]);
+                if (toolStripButtonPerspective.Checked)
+                {
+                    _kbdActions.Up = (state[Key.PageUp] ||state[Key.R]);     
+                    _kbdActions.Down = (state[Key.PageDown] || state[Key.F]);  
+                    _kbdActions.Forwards = state[Key.Up] || state[Key.W];                    // WASD is fore/back/left/right, R/F is up down
+                    _kbdActions.Backwards = state[Key.Down] || state[Key.S];
+                }
+                else
+                {
+                    _kbdActions.Up = state[Key.W] || state[Key.Up];
+                    _kbdActions.Down = state[Key.S] || state[Key.Down];
+                }
+
+                _kbdActions.ZoomIn = (state[Key.Plus] || state[Key.Z]);                 // additional Useful keys
                 _kbdActions.ZoomOut = (state[Key.Minus] || state[Key.X]);
-
-                // Yes, much of this is overkill. but useful while development is happening
-                // I'll probably hide away the less useful options later from the Release build
-                _kbdActions.Forwards = state[Key.R];
-                _kbdActions.Backwards = state[Key.F];
-
                 _kbdActions.YawLeft = state[Key.Keypad4];
                 _kbdActions.YawRight = state[Key.Keypad6];
                 _kbdActions.Pitch = state[Key.Keypad8];
                 _kbdActions.Dive = (state[Key.Keypad5] || state[Key.Keypad2]);
-                _kbdActions.RollLeft = state[Key.Keypad7];
-                _kbdActions.RollRight = state[Key.Keypad9];
+                _kbdActions.RollLeft = state[Key.Keypad7] || state[Key.Q];
+                _kbdActions.RollRight = state[Key.Keypad9] || state[Key.E];
 
             }
             catch (Exception ex)
@@ -642,11 +457,11 @@ namespace EDDiscovery2
             }
             if (_kbdActions.Forwards)
             {
-                _cameraActionMovement.Y = -distance;
+                _cameraActionMovement.Y = distance;
             }
             if (_kbdActions.Backwards)
             {
-                _cameraActionMovement.Y = distance;
+                _cameraActionMovement.Y = -distance;
             }
             if (_kbdActions.Up)
             {
@@ -817,6 +632,10 @@ namespace EDDiscovery2
                 { "Last Year", () => DateTime.Now.AddYears(-1) }
             };
 
+            startTime = excursions["All"]();
+            endTime = DateTime.Now.AddDays(1);
+
+            string lastsel = db.GetSettingString("Map3DFilter", "");
             foreach (var kvp in excursions)
             {
                 var item = new ToolStripButton
@@ -828,6 +647,13 @@ namespace EDDiscovery2
                 var startfunc = kvp.Value;
                 item.Click += (s, e) => dropdownFilterHistory_Item_Click(s, e, item, startfunc);
                 dropdownFilterDate.DropDownItems.Add(item);
+
+                if (item.Text.Equals(lastsel))              // if a standard one, restore.  WE are not saving custom.
+                {                                           // if custom is selected, we don't restore a tick.
+                    item.Checked = true;                    // TBD Finwen, should we not be setting a start AND end date
+                    startTime = startfunc();
+                    endTime = DateTime.Now.AddDays(1);
+                }
             }
 
             var citem = new ToolStripButton
@@ -837,10 +663,8 @@ namespace EDDiscovery2
                 DisplayStyle = ToolStripItemDisplayStyle.Text
             };
             citem.Click += (s, e) => dropdownFilterHistory_Custom_Click(s, e, citem);
-            dropdownFilterDate.DropDownItems.Add(citem);
 
-            startTime = excursions["All"]();
-            endTime = DateTime.Now.AddDays(1);
+            dropdownFilterDate.DropDownItems.Add(citem);
 
             startPicker = new DateTimePicker();
             endPicker = new DateTimePicker();
@@ -848,6 +672,8 @@ namespace EDDiscovery2
             endPicker.ValueChanged += EndPicker_ValueChanged;
             startPickerHost = new ToolStripControlHost(startPicker) { Visible = false };
             endPickerHost = new ToolStripControlHost(endPicker) { Visible = false };
+            startPickerHost.Size = new Size(150, 20);
+            endPickerHost.Size = new Size(150, 20);
             toolStripShowAllStars.Items.Add(startPickerHost);
             toolStripShowAllStars.Items.Add(endPickerHost);
         }
@@ -879,6 +705,7 @@ namespace EDDiscovery2
                 startTime = startPicker.MinDate;
             }
 
+            db.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
             startPickerHost.Visible = true;
             endPickerHost.Visible = true;
             startPicker.Value = startTime;
@@ -895,7 +722,7 @@ namespace EDDiscovery2
                     item.Checked = false;
                 }
             }
-
+            db.PutSettingString("Map3DFilter", sel.Text);
             startTime = startfunc();
             endTime = DateTime.Now.AddDays(1);
             startPickerHost.Visible = false;
@@ -916,13 +743,14 @@ namespace EDDiscovery2
 
             foreach (var img in fgeimages)
             {
-                var item = new ToolStripButton {
+                ToolStripButton item = new ToolStripButton {
                     Text = img.FileName,
                     CheckOnClick = true,
                     DisplayStyle = ToolStripItemDisplayStyle.Text,
                     Tag = img
                 };
                 item.Click += new EventHandler(dropdownMapNames_DropDownItemClicked);
+                item.Checked = db.GetSettingBool("map3DMaps" + img.FileName, false);
                 dropdownMapNames.DropDownItems.Add(item);
             }
         }
@@ -979,8 +807,8 @@ namespace EDDiscovery2
             if (sys == null) textboxFrom.Text = String.Empty;
             else OrientateMapAroundSystem(sys);
         }
-        
-        private void toolStripButton1_Click(object sender, EventArgs e)
+
+        private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
         {
             SystemPosition ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
 
@@ -990,23 +818,43 @@ namespace EDDiscovery2
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
         {
-            //toolStripButtonDrawLines.Checked = !toolStripButtonDrawLines.Checked;
+            db.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
             SetCenterSystem(CenterSystem);
         }
 
         private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
         {
+            db.PutSettingBool("Map3DAllStars", toolStripButtonShowAllStars.Checked);
             SetCenterSystem(CenterSystem);
         }
 
         private void toolStripButtonStations_Click(object sender, EventArgs e)
         {
+            db.PutSettingBool("Map3DButtonStations", toolStripButtonStations.Checked);
             SetCenterSystem(CenterSystem);
         }
 
-        private void toolStripButtonGrud_Click(object sender, EventArgs e)
+        private void toolStripButtonGrid_Click(object sender, EventArgs e)
         {
+            db.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
             SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonCoords_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
         }
 
         /// <summary>
@@ -1077,19 +925,46 @@ namespace EDDiscovery2
 
         private void UpdateCamera()
         {
-            var camera = Matrix4.Identity;
-            _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);
             _cameraDir.X = BoundedAngle(_cameraDir.X + _cameraActionRotation.X);
             _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
+            _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);        // rotate camera by asked value
+
+#if DEBUG
+            bool istranslating = (_cameraActionMovement.X != 0 || _cameraActionMovement.Y != 0 || _cameraActionMovement.Z != 0);
+            if (istranslating)
+                Console.WriteLine("move Camera " + _cameraActionMovement.X + "," + _cameraActionMovement.Y + "," + _cameraActionMovement.Z
+                    + " point " + _cameraDir.X + "," + _cameraDir.Y + "," + _cameraDir.Z);
+#endif
+
             var rotZ = Matrix4.CreateRotationZ(DegreesToRadians(_cameraDir.Z));
             var rotX = Matrix4.CreateRotationX( DegreesToRadians(_cameraDir.X) );
             var rotY = Matrix4.CreateRotationY(DegreesToRadians(_cameraDir.Y));
-            var translation = Matrix4.CreateTranslation(_cameraActionMovement);
-            camera *= translation;
-            camera *= rotZ;
-            camera *= rotX;
-            camera *= rotY;
-            _cameraPos += camera.ExtractTranslation();
+
+            bool em = toolStripButtonEliteMovement.Checked && toolStripButtonPerspective.Checked;     // elite movement
+                                                              
+            Vector3 requestedmove = new Vector3(_cameraActionMovement.X, _cameraActionMovement.Y, (em) ? 0 : _cameraActionMovement.Z);
+
+            var translation = Matrix4.CreateTranslation(requestedmove);
+            var cameramove = Matrix4.Identity;
+            cameramove *= translation;
+            cameramove *= rotZ;
+            cameramove *= rotX;
+            cameramove *= rotY;
+
+            Vector3 trans = cameramove.ExtractTranslation();
+
+            if (em)                                             // if in elite movement, Y is not affected
+            {                                                   // by ASDW.
+                trans.Y = 0;                                    // no Y translation even if camera rotated the vector into Y components
+                _cameraPos += trans;
+                _cameraPos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
+            }
+            else
+                _cameraPos += trans;
+#if DEBUG
+            if (istranslating)
+                Console.WriteLine("   em " + em + " Camera now " + _cameraPos.X + "," + _cameraPos.Y + "," + _cameraPos.Z);
+#endif
         }
 
         private float BoundedAngle(float angle)
@@ -1158,7 +1033,7 @@ namespace EDDiscovery2
                 _cameraDir.Y += (float)(dx / 4.0f);
                 _cameraDir.X += (float)(-dy / 4.0f);
 
-                SetupCursorXYZ();
+                //SetupCursorXYZ();
 
                 glControl.Invalidate();
             }
@@ -1234,7 +1109,7 @@ namespace EDDiscovery2
                     if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
                 }
 
-                SetupCursorXYZ();
+                //SetupCursorXYZ();
             }
 
             SetupViewport();
@@ -1255,6 +1130,7 @@ namespace EDDiscovery2
 
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
         {
+            db.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
             SetCenterSystem(CenterSystem);
             SetupViewport();
         }
@@ -1310,7 +1186,7 @@ namespace EDDiscovery2
             }
         }
         
-	private void glControl_KeyDown(object sender, KeyEventArgs e)
+	    private void glControl_KeyDown(object sender, KeyEventArgs e)
         {
             if (_useTimer)
             {
@@ -1356,6 +1232,8 @@ namespace EDDiscovery2
 
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
         {
+            ToolStripButton tsb = (ToolStripButton)sender;
+            db.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
             SetCenterSystem(CenterSystem);
         }
 
@@ -1375,6 +1253,222 @@ namespace EDDiscovery2
                 systemselectionMenuStrip.Show(labelClickedSystemCoords, 0, labelClickedSystemCoords.Height);
             }
         }
+
+        private class MyRenderer : ToolStripProfessionalRenderer
+        {
+            protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
+            {
+                var btn = e.Item as ToolStripButton;
+                if (btn != null && btn.CheckOnClick && btn.Checked)
+                {
+                    Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
+                    e.Graphics.FillRectangle(Brushes.Orange, bounds);
+                }
+                else base.OnRenderButtonBackground(e);
+            }
+        }
+
+        public ISystem CenterSystem
+        {
+            get
+            {
+                return _centerSystem;
+            }
+            set
+            {
+                if (value != null && value.HasCoordinate)
+                {
+                    _centerSystem = value;
+                }
+                else
+                {
+                    // We need to use 0,0,0 if we don't have a center system
+                    _centerSystem = SystemData.GetSystem(_homeSystem) ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+                }
+            }
+        }
+
+        public String CenterSystemName
+        {
+            get
+            {
+                if (CenterSystem != null)
+                {
+                    return CenterSystem.name;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            set
+            {
+                if (!String.IsNullOrWhiteSpace(value))
+                {
+                    CenterSystem = SystemData.GetSystem(value.Trim());
+                }
+            }
+        }
+
+        public AutoCompleteStringCollection SystemNames
+        {
+            get
+            {
+                return _systemNames;
+            }
+            set
+            {
+                _systemNames = value;
+            }
+        }
+
     }
 }
+
+/* DEAD CODE - removed here for clarity
+
+            private void GenerateDataSetsAllegiance()
+        {
+
+            var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
+
+            InitStarLists();
+
+            _datasets = new List<IData3DSet>();
+
+            datadict[(int)EDAllegiance.Alliance] = Data3DSetClass<PointData>.Create(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
+            datadict[(int)EDAllegiance.Anarchy] = Data3DSetClass<PointData>.Create(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
+            datadict[(int)EDAllegiance.Empire] = Data3DSetClass<PointData>.Create(EDAllegiance.Empire.ToString(), Color.Blue, 1.0f);
+            datadict[(int)EDAllegiance.Federation] = Data3DSetClass<PointData>.Create(EDAllegiance.Federation.ToString(), Color.Red, 1.0f);
+            datadict[(int)EDAllegiance.Independent] = Data3DSetClass<PointData>.Create(EDAllegiance.Independent.ToString(), Color.Yellow, 1.0f);
+            datadict[(int)EDAllegiance.None] = Data3DSetClass<PointData>.Create(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
+            datadict[(int)EDAllegiance.Unknown] = Data3DSetClass<PointData>.Create(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
+
+            foreach (SystemClass si in _starList)
+            {
+                if (si.HasCoordinate)
+                {
+                    datadict[(int)si.allegiance].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
+                }
+            }
+
+            foreach (var ds in datadict.Values)
+                _datasets.Add(ds);
+
+            datadict[(int)EDAllegiance.None].Visible = false;
+            datadict[(int)EDAllegiance.Unknown].Visible = false;
+
+        }
+
+
+        //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
+        // it out of FormMap's hair
+        private void GenerateDataSetsGovernment()
+        {
+
+            var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
+
+            InitStarLists();
+
+            _datasets = new List<IData3DSet>();
+
+            datadict[(int)EDGovernment.Anarchy] = Data3DSetClass<PointData>.Create(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
+            datadict[(int)EDGovernment.Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
+            datadict[(int)EDGovernment.Democracy] = Data3DSetClass<PointData>.Create(EDGovernment.Democracy.ToString(), Color.Green, 1.0f);
+            datadict[(int)EDGovernment.Imperial] = Data3DSetClass<PointData>.Create(EDGovernment.Imperial.ToString(), Color.DarkGreen, 1.0f);
+            datadict[(int)EDGovernment.Corporate] = Data3DSetClass<PointData>.Create(EDGovernment.Corporate.ToString(), Color.LawnGreen, 1.0f);
+            datadict[(int)EDGovernment.Communism] = Data3DSetClass<PointData>.Create(EDGovernment.Communism.ToString(), Color.DarkOliveGreen, 1.0f);
+            datadict[(int)EDGovernment.Feudal] = Data3DSetClass<PointData>.Create(EDGovernment.Feudal.ToString(), Color.LightBlue, 1.0f);
+            datadict[(int)EDGovernment.Dictatorship] = Data3DSetClass<PointData>.Create(EDGovernment.Dictatorship.ToString(), Color.Blue, 1.0f);
+            datadict[(int)EDGovernment.Theocracy] = Data3DSetClass<PointData>.Create(EDGovernment.Theocracy.ToString(), Color.DarkBlue, 1.0f);
+            datadict[(int)EDGovernment.Cooperative] = Data3DSetClass<PointData>.Create(EDGovernment.Cooperative.ToString(), Color.Purple, 1.0f);
+            datadict[(int)EDGovernment.Patronage] = Data3DSetClass<PointData>.Create(EDGovernment.Patronage.ToString(), Color.LightCyan, 1.0f);
+            datadict[(int)EDGovernment.Confederacy] = Data3DSetClass<PointData>.Create(EDGovernment.Confederacy.ToString(), Color.Red, 1.0f);
+            datadict[(int)EDGovernment.Prison_Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Prison_Colony.ToString(), Color.Orange, 1.0f);
+            datadict[(int)EDGovernment.None] = Data3DSetClass<PointData>.Create(EDGovernment.None.ToString(), Color.Gray, 1.0f);
+            datadict[(int)EDGovernment.Unknown] = Data3DSetClass<PointData>.Create(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
+
+            foreach (SystemClass si in _starList)
+            {
+                if (si.HasCoordinate)
+                {
+                    datadict[(int)si.primary_economy].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
+                }
+            }
+
+            foreach (var ds in datadict.Values)
+                _datasets.Add(ds);
+
+            datadict[(int)EDGovernment.None].Visible = false;
+            datadict[(int)EDGovernment.Unknown].Visible = false;
+
+        }
+
+
+private void DrawStars()
+{
+    if (StarList == null)
+        StarList = SQLiteDBClass.globalSystems;
+
+
+    if (VisitedStars == null)
+        InitData();
+
+    GL.PointSize(1.0f);
+
+    GL.Begin(PrimitiveType.Points);
+    GL.Color3(Color.White);
+
+    foreach (SystemClass si in StarList)
+    {
+        if (si.HasCoordinate)
+        {
+            GL.Vertex3(si.x-CenterSystem.x, si.y-CenterSystem.y, CenterSystem.z-si.z);
+        }
+    }
+    GL.End();
+
+
+
+    GL.PointSize(2.0f);
+    GL.Begin(PrimitiveType.Points);
+    GL.Color3(Color.Red);
+
+
+    if (VisitedSystems != null)
+    {
+        SystemClass star;
+
+        foreach (SystemClass sp in VisitedStars.Values)
+        {
+            star = sp;
+            if (star != null)
+            {
+                GL.Vertex3(star.x - CenterSystem.x, star.y - CenterSystem.y, CenterSystem.z- star.z);
+            }
+        }
+    }
+    GL.End();
+
+    GL.PointSize(5.0f);
+    GL.Begin(PrimitiveType.Points);
+    GL.Enable(EnableCap.ProgramPointSize);
+    GL.Color3(Color.Yellow);
+    GL.Vertex3(0,0,0);
+    GL.End();
+}
+
+    /// <summary>
+        /// Calculate Translation of  (X, Y, Z) - according to mouse input
+        /// </summary>
+        private void SetupCursorXYZ()
+        {
+            //                x =   (PointToClient(Cursor.Position).X - glControl.Width/2 ) * (zoom + 1);
+            //                y = (-PointToClient(Cursor.Position).Y + glControl.Height/2) * (zoom + 1);
+
+            //                System.Diagnostics.Trace.WriteLine("X:" + x + " Y:" + y + " Z:" + zoom);
+        }
+*/
+
+
 
