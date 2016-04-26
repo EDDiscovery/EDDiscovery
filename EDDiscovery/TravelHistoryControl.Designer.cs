@@ -805,6 +805,7 @@
             this.comboBoxCommander.Size = new System.Drawing.Size(142, 23);
             this.comboBoxCommander.TabIndex = 0;
             this.comboBoxCommander.ValueMember = null;
+            this.comboBoxCommander.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxCommander_SelectedIndexChanged);
             // 
             // textBoxDistanceToNextSystem
             // 

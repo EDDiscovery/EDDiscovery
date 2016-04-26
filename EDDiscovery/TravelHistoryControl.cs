@@ -1114,10 +1114,12 @@ namespace EDDiscovery
                 {
                     dataGridViewTravel.Rows.Clear();
                 }
-
-                foreach (DataGridViewRow row in selectedRows.ToList<DataGridViewRow>())
+                else
                 {
-                    dataGridViewTravel.Rows.Remove(row);
+                    foreach (DataGridViewRow row in selectedRows.ToList<DataGridViewRow>())
+                    {
+                        dataGridViewTravel.Rows.Remove(row);
+                    }
                 }
                 this.Cursor = Cursors.Default;
             }
@@ -1156,19 +1158,21 @@ namespace EDDiscovery
                 DialogResult red = movefrm.ShowDialog();
                 if (red == DialogResult.OK)
                 {
-                    if (movefrm.checkBoxAllInNetlog.Checked == false)   // Movel all in list.
-                    {
+
                         foreach (SystemPosition sp in listsyspos)
                         {
                             sp.vs.Commander = movefrm.selectedCommander.Nr;
                             sp.Update();
+                   
+                        }
+
+                        foreach (DataGridViewRow row in selectedRows)
+                        {
+                            dataGridViewTravel.Rows.Remove(row);
                         }
                         this.Cursor = Cursors.Default;
-                    }
-                    else   // Move all systems from the same session
-                    {
 
-                    }
+
 
                 }
 
