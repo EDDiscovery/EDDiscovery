@@ -864,16 +864,19 @@ namespace EDDiscovery
 
         private void RepositionForm()
         {
-            var top = _db.GetSettingInt("FormTop", -1);
-            if (top > 0)
-            {
-                var left = _db.GetSettingInt("FormLeft", -1);
-                var height = _db.GetSettingInt("FormHeight", -1);
-                var width = _db.GetSettingInt("FormWidth", -1);
-                this.Top = top;
-                this.Left = left;
-                this.Height = height;
-                this.Width = width;
+            if ((System.Windows.Forms.Control.ModifierKeys & Keys.Shift) != Keys.Shift)     // CLUDGE.. shift overrides position restore
+            {                                                           // for some reason, win arrows do not work on frameless windows
+                var top = _db.GetSettingInt("FormTop", -1);
+                if (top > 0)
+                {
+                    var left = _db.GetSettingInt("FormLeft", -1);
+                    var height = _db.GetSettingInt("FormHeight", -1);
+                    var width = _db.GetSettingInt("FormWidth", -1);
+                    this.Top = top;
+                    this.Left = left;
+                    this.Height = height;
+                    this.Width = width;
+                }
             }
         }
 
