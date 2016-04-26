@@ -631,14 +631,14 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        protected static Vector3d[] GetVertices(FGEImage img)
+        protected static Vector3d[] GetVertices(FGEImage img,float y = 0)
         {
             return new Vector3d[]
             {
-                new Vector3d(img.TopLeft.X, 0.0, img.TopLeft.Y),
-                new Vector3d(img.TopRight.X, 0.0, img.TopRight.Y),
-                new Vector3d(img.BottomRight.X, 0.0, img.BottomRight.Y),
-                new Vector3d(img.BottomLeft.X, 0.0, img.BottomLeft.Y)
+                new Vector3d(img.TopLeft.X, y, img.TopLeft.Y),
+                new Vector3d(img.TopRight.X, y, img.TopRight.Y),
+                new Vector3d(img.BottomRight.X, y, img.BottomRight.Y),
+                new Vector3d(img.BottomLeft.X, y, img.BottomLeft.Y)
             };
         }
 
@@ -682,11 +682,27 @@ namespace EDDiscovery2._3DMap
             return texcoords;
         }
 
-        public static TexturedQuadData FromFGEImage(FGEImage img)
+        public static TexturedQuadData FromFGEImage(FGEImage img , float y = 0)
         {
             Bitmap bmp = (Bitmap)Bitmap.FromFile(img.FilePath);
-            Vector3d[] vertices = GetVertices(img);
+            Vector3d[] vertices = GetVertices(img,y);
             Vector4d[] texcoords = GetTexCoords(img, bmp.Width, bmp.Height);
+            return new TexturedQuadData(vertices, texcoords, bmp);
+        }
+
+        public static TexturedQuadData FromBitmap(Bitmap bmp, Point topleft, Point topright, Point bottomleft, Point bottomright, float y = 0)
+        {
+            FGEImage fge = new FGEImage("null");
+            fge.TopLeft = topleft;
+            fge.TopRight = topright;
+            fge.BottomLeft = bottomleft;
+            fge.BottomRight = bottomright;
+            fge.pxTopLeft = new Point(0, bmp.Height - 1);
+            fge.pxTopRight = new Point(bmp.Width - 1, bmp.Height - 1);
+            fge.pxBottomLeft = new Point(0, 0);
+            fge.pxBottomRight = new Point(bmp.Width - 1, 0);
+            Vector3d[] vertices = GetVertices(fge,y);
+            Vector4d[] texcoords = GetTexCoords(fge, bmp.Width, bmp.Height);
             return new TexturedQuadData(vertices, texcoords, bmp);
         }
     }

@@ -47,8 +47,13 @@ namespace EDDiscovery2
             this.toolStripButtonShowAllStars = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGrid = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonFineGrid = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonCoords = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonPerspective = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonEliteMovement = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.dropdownMapNames = new System.Windows.Forms.ToolStripDropDownButton();
             this.dropdownFilterDate = new System.Windows.Forms.ToolStripDropDownButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -66,11 +71,13 @@ namespace EDDiscovery2
             this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
             this.dotSystemCoords = new System.Windows.Forms.PictureBox();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.panelRight = new System.Windows.Forms.Panel();
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.systemselectionMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dotSystemCoords)).BeginInit();
+            this.panelRight.SuspendLayout();
             this.SuspendLayout();
             // 
             // glControl
@@ -97,33 +104,32 @@ namespace EDDiscovery2
             // 
             // textboxFrom
             // 
-            this.textboxFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textboxFrom.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textboxFrom.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textboxFrom.Location = new System.Drawing.Point(365, 7);
+            this.textboxFrom.Location = new System.Drawing.Point(3, 9);
             this.textboxFrom.Name = "textboxFrom";
             this.textboxFrom.Size = new System.Drawing.Size(125, 20);
             this.textboxFrom.TabIndex = 16;
             this.textboxFrom.TabStop = false;
             this.textboxFrom.Text = "Sol";
+            this.toolTip1.SetToolTip(this.textboxFrom, "Home System");
             // 
             // buttonCenter
             // 
-            this.buttonCenter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCenter.Location = new System.Drawing.Point(496, 5);
+            this.buttonCenter.Location = new System.Drawing.Point(134, 7);
             this.buttonCenter.Name = "buttonCenter";
-            this.buttonCenter.Size = new System.Drawing.Size(75, 23);
+            this.buttonCenter.Size = new System.Drawing.Size(47, 23);
             this.buttonCenter.TabIndex = 17;
             this.buttonCenter.TabStop = false;
             this.buttonCenter.Text = "Center";
+            this.toolTip1.SetToolTip(this.buttonCenter, "Center map on system");
             this.buttonCenter.UseVisualStyleBackColor = true;
             this.buttonCenter.Click += new System.EventHandler(this.buttonCenter_Click);
             // 
             // labelSystemCoords
             // 
-            this.labelSystemCoords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelSystemCoords.AutoSize = true;
-            this.labelSystemCoords.Location = new System.Drawing.Point(658, 10);
+            this.labelSystemCoords.Location = new System.Drawing.Point(260, 3);
             this.labelSystemCoords.Name = "labelSystemCoords";
             this.labelSystemCoords.Size = new System.Drawing.Size(57, 13);
             this.labelSystemCoords.TabIndex = 18;
@@ -131,19 +137,26 @@ namespace EDDiscovery2
             // 
             // toolStripShowAllStars
             // 
+            this.toolStripShowAllStars.AutoSize = false;
+            this.toolStripShowAllStars.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStripShowAllStars.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonLastKnownPosition,
             this.toolStripButtonDrawLines,
             this.toolStripButtonShowAllStars,
             this.toolStripButtonStations,
             this.toolStripButtonGrid,
+            this.toolStripButtonFineGrid,
+            this.toolStripButtonCoords,
+            this.toolStripSeparator3,
             this.toolStripButtonPerspective,
             this.toolStripSeparator1,
+            this.toolStripButtonEliteMovement,
+            this.toolStripSeparator2,
             this.dropdownMapNames,
             this.dropdownFilterDate});
             this.toolStripShowAllStars.Location = new System.Drawing.Point(0, 0);
             this.toolStripShowAllStars.Name = "toolStripShowAllStars";
-            this.toolStripShowAllStars.Size = new System.Drawing.Size(918, 31);
+            this.toolStripShowAllStars.Size = new System.Drawing.Size(331, 40);
             this.toolStripShowAllStars.TabIndex = 19;
             this.toolStripShowAllStars.Text = "toolStrip1";
             // 
@@ -153,9 +166,9 @@ namespace EDDiscovery2
             this.toolStripButtonLastKnownPosition.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLastKnownPosition.Image")));
             this.toolStripButtonLastKnownPosition.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLastKnownPosition.Name = "toolStripButtonLastKnownPosition";
-            this.toolStripButtonLastKnownPosition.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonLastKnownPosition.Size = new System.Drawing.Size(23, 37);
             this.toolStripButtonLastKnownPosition.Text = "Last known position";
-            this.toolStripButtonLastKnownPosition.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripButtonLastKnownPosition.Click += new System.EventHandler(this.toolStripLastKnownPosition_Click);
             // 
             // toolStripButtonDrawLines
             // 
@@ -165,7 +178,7 @@ namespace EDDiscovery2
             this.toolStripButtonDrawLines.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDrawLines.Image")));
             this.toolStripButtonDrawLines.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDrawLines.Name = "toolStripButtonDrawLines";
-            this.toolStripButtonDrawLines.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonDrawLines.Size = new System.Drawing.Size(23, 37);
             this.toolStripButtonDrawLines.Text = "Draw lines";
             this.toolStripButtonDrawLines.Click += new System.EventHandler(this.toolStripButtonDrawLines_Click);
             // 
@@ -178,7 +191,7 @@ namespace EDDiscovery2
             this.toolStripButtonShowAllStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonShowAllStars.Image")));
             this.toolStripButtonShowAllStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonShowAllStars.Name = "toolStripButtonShowAllStars";
-            this.toolStripButtonShowAllStars.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonShowAllStars.Size = new System.Drawing.Size(23, 37);
             this.toolStripButtonShowAllStars.Text = "Show all stars";
             this.toolStripButtonShowAllStars.Click += new System.EventHandler(this.toolStripButtonShowAllStars_Click);
             // 
@@ -192,7 +205,7 @@ namespace EDDiscovery2
             this.toolStripButtonStations.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonStations.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonStations.Name = "toolStripButtonStations";
-            this.toolStripButtonStations.Size = new System.Drawing.Size(28, 28);
+            this.toolStripButtonStations.Size = new System.Drawing.Size(28, 37);
             this.toolStripButtonStations.Text = "Stations";
             this.toolStripButtonStations.Click += new System.EventHandler(this.toolStripButtonStations_Click);
             // 
@@ -203,10 +216,39 @@ namespace EDDiscovery2
             this.toolStripButtonGrid.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGrid.Image")));
             this.toolStripButtonGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonGrid.Name = "toolStripButtonGrid";
-            this.toolStripButtonGrid.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonGrid.Size = new System.Drawing.Size(23, 37);
             this.toolStripButtonGrid.Text = "Grid";
-            this.toolStripButtonGrid.ToolTipText = "Show Grid";
-            this.toolStripButtonGrid.Click += new System.EventHandler(this.toolStripButtonGrud_Click);
+            this.toolStripButtonGrid.ToolTipText = "Show Coarse Grid";
+            this.toolStripButtonGrid.Click += new System.EventHandler(this.toolStripButtonGrid_Click);
+            // 
+            // toolStripButtonFineGrid
+            // 
+            this.toolStripButtonFineGrid.CheckOnClick = true;
+            this.toolStripButtonFineGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFineGrid.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFineGrid.Image")));
+            this.toolStripButtonFineGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFineGrid.Name = "toolStripButtonFineGrid";
+            this.toolStripButtonFineGrid.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonFineGrid.Text = "Grid";
+            this.toolStripButtonFineGrid.ToolTipText = "Show Fine Grid";
+            this.toolStripButtonFineGrid.Click += new System.EventHandler(this.toolStripButtonFineGrid_Click);
+            // 
+            // toolStripButtonCoords
+            // 
+            this.toolStripButtonCoords.CheckOnClick = true;
+            this.toolStripButtonCoords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCoords.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCoords.Image")));
+            this.toolStripButtonCoords.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCoords.Name = "toolStripButtonCoords";
+            this.toolStripButtonCoords.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonCoords.Text = "Grid";
+            this.toolStripButtonCoords.ToolTipText = "Show Grid Coordinates";
+            this.toolStripButtonCoords.Click += new System.EventHandler(this.toolStripButtonCoords_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 40);
             // 
             // toolStripButtonPerspective
             // 
@@ -215,15 +257,32 @@ namespace EDDiscovery2
             this.toolStripButtonPerspective.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonPerspective.Image")));
             this.toolStripButtonPerspective.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonPerspective.Name = "toolStripButtonPerspective";
-            this.toolStripButtonPerspective.Size = new System.Drawing.Size(23, 28);
+            this.toolStripButtonPerspective.Size = new System.Drawing.Size(23, 37);
             this.toolStripButtonPerspective.Text = "Perspective";
-            this.toolStripButtonPerspective.ToolTipText = "Enable Perspective View";
+            this.toolStripButtonPerspective.ToolTipText = "Show Perspective View";
             this.toolStripButtonPerspective.Click += new System.EventHandler(this.toolStripButtonPerspective_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 40);
+            // 
+            // toolStripButtonEliteMovement
+            // 
+            this.toolStripButtonEliteMovement.CheckOnClick = true;
+            this.toolStripButtonEliteMovement.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEliteMovement.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonEliteMovement.Image")));
+            this.toolStripButtonEliteMovement.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEliteMovement.Name = "toolStripButtonEliteMovement";
+            this.toolStripButtonEliteMovement.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonEliteMovement.Text = "Grid";
+            this.toolStripButtonEliteMovement.ToolTipText = "Elite Movement Mode (Perspective only, ASWD does not affect Y)";
+            this.toolStripButtonEliteMovement.Click += new System.EventHandler(this.toolStripButtonEliteMovement_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 40);
             // 
             // dropdownMapNames
             // 
@@ -231,7 +290,7 @@ namespace EDDiscovery2
             this.dropdownMapNames.Image = ((System.Drawing.Image)(resources.GetObject("dropdownMapNames.Image")));
             this.dropdownMapNames.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.dropdownMapNames.Name = "dropdownMapNames";
-            this.dropdownMapNames.Size = new System.Drawing.Size(29, 28);
+            this.dropdownMapNames.Size = new System.Drawing.Size(29, 37);
             this.dropdownMapNames.Text = "Select Maps";
             // 
             // dropdownFilterDate
@@ -240,7 +299,7 @@ namespace EDDiscovery2
             this.dropdownFilterDate.Image = ((System.Drawing.Image)(resources.GetObject("dropdownFilterDate.Image")));
             this.dropdownFilterDate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.dropdownFilterDate.Name = "dropdownFilterDate";
-            this.dropdownFilterDate.Size = new System.Drawing.Size(29, 28);
+            this.dropdownFilterDate.Size = new System.Drawing.Size(29, 37);
             this.dropdownFilterDate.Text = "Filter by Expedition or date";
             // 
             // statusStrip
@@ -261,9 +320,8 @@ namespace EDDiscovery2
             // 
             // buttonHistory
             // 
-            this.buttonHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonHistory.Image = global::EDDiscovery.Properties.Resources.Travelicon;
-            this.buttonHistory.Location = new System.Drawing.Point(605, 5);
+            this.buttonHistory.Location = new System.Drawing.Point(215, 7);
             this.buttonHistory.Name = "buttonHistory";
             this.buttonHistory.Size = new System.Drawing.Size(22, 23);
             this.buttonHistory.TabIndex = 23;
@@ -273,9 +331,8 @@ namespace EDDiscovery2
             // 
             // buttonHome
             // 
-            this.buttonHome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonHome.Image = global::EDDiscovery.Properties.Resources.Homeicon;
-            this.buttonHome.Location = new System.Drawing.Point(577, 5);
+            this.buttonHome.Location = new System.Drawing.Point(187, 7);
             this.buttonHome.Name = "buttonHome";
             this.buttonHome.Size = new System.Drawing.Size(22, 23);
             this.buttonHome.TabIndex = 22;
@@ -285,9 +342,8 @@ namespace EDDiscovery2
             // 
             // labelClickedSystemCoords
             // 
-            this.labelClickedSystemCoords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelClickedSystemCoords.AutoSize = true;
-            this.labelClickedSystemCoords.Location = new System.Drawing.Point(658, 28);
+            this.labelClickedSystemCoords.Location = new System.Drawing.Point(260, 22);
             this.labelClickedSystemCoords.Name = "labelClickedSystemCoords";
             this.labelClickedSystemCoords.Size = new System.Drawing.Size(57, 13);
             this.labelClickedSystemCoords.TabIndex = 24;
@@ -338,10 +394,9 @@ namespace EDDiscovery2
             // 
             // dotSelectedSystemCoords
             // 
-            this.dotSelectedSystemCoords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dotSelectedSystemCoords.Image = global::EDDiscovery.Properties.Resources.OrangeDot;
             this.dotSelectedSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.OrangeDot;
-            this.dotSelectedSystemCoords.Location = new System.Drawing.Point(644, 29);
+            this.dotSelectedSystemCoords.Location = new System.Drawing.Point(242, 22);
             this.dotSelectedSystemCoords.Name = "dotSelectedSystemCoords";
             this.dotSelectedSystemCoords.Size = new System.Drawing.Size(12, 12);
             this.dotSelectedSystemCoords.TabIndex = 26;
@@ -349,10 +404,9 @@ namespace EDDiscovery2
             // 
             // dotSystemCoords
             // 
-            this.dotSystemCoords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dotSystemCoords.Image = global::EDDiscovery.Properties.Resources.YellowDot;
             this.dotSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.YellowDot;
-            this.dotSystemCoords.Location = new System.Drawing.Point(644, 11);
+            this.dotSystemCoords.Location = new System.Drawing.Point(242, 4);
             this.dotSystemCoords.Name = "dotSystemCoords";
             this.dotSystemCoords.Size = new System.Drawing.Size(12, 12);
             this.dotSystemCoords.TabIndex = 25;
@@ -362,22 +416,31 @@ namespace EDDiscovery2
             // 
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
             // 
+            // panelRight
+            // 
+            this.panelRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelRight.Controls.Add(this.labelClickedSystemCoords);
+            this.panelRight.Controls.Add(this.dotSelectedSystemCoords);
+            this.panelRight.Controls.Add(this.textboxFrom);
+            this.panelRight.Controls.Add(this.buttonCenter);
+            this.panelRight.Controls.Add(this.labelSystemCoords);
+            this.panelRight.Controls.Add(this.dotSystemCoords);
+            this.panelRight.Controls.Add(this.buttonHome);
+            this.panelRight.Controls.Add(this.buttonHistory);
+            this.panelRight.Location = new System.Drawing.Point(332, 0);
+            this.panelRight.Name = "panelRight";
+            this.panelRight.Size = new System.Drawing.Size(586, 40);
+            this.panelRight.TabIndex = 27;
+            // 
             // FormMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(918, 554);
-            this.Controls.Add(this.dotSelectedSystemCoords);
-            this.Controls.Add(this.dotSystemCoords);
-            this.Controls.Add(this.labelClickedSystemCoords);
-            this.Controls.Add(this.buttonHistory);
-            this.Controls.Add(this.buttonHome);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.labelSystemCoords);
-            this.Controls.Add(this.buttonCenter);
-            this.Controls.Add(this.textboxFrom);
             this.Controls.Add(this.glControl);
             this.Controls.Add(this.toolStripShowAllStars);
+            this.Controls.Add(this.panelRight);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMap";
             this.Text = "3D Star Map";
@@ -393,6 +456,8 @@ namespace EDDiscovery2
             this.systemselectionMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dotSystemCoords)).EndInit();
+            this.panelRight.ResumeLayout(false);
+            this.panelRight.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -430,5 +495,11 @@ namespace EDDiscovery2
         private ToolStripMenuItem selectionState;
         private ToolStripMenuItem selectionGov;
         private ToolStripMenuItem viewOnEDSMToolStripMenuItem;
+        private ToolStripButton toolStripButtonFineGrid;
+        private ToolStripButton toolStripButtonCoords;
+        private ToolStripButton toolStripButtonEliteMovement;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripSeparator toolStripSeparator3;
+        private Panel panelRight;
     }
     }
