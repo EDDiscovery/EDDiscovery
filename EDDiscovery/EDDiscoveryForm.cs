@@ -185,10 +185,11 @@ namespace EDDiscovery
                 SystemNames.Clear();                                // EDSM systems have loaded, make up names
                 foreach (SystemClass system in SystemData.SystemList)
                 {
-                    SystemNames.Add(system.name);
+                    SystemNames.Add(system.name);                   // DANGER - using SystemNames in other controls while its loading freezes the UI
                 }
 
-
+                Console.WriteLine("Systems Loaded");
+                
                 OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
 
                 GetEDSMDistancesAsync();
@@ -197,6 +198,7 @@ namespace EDDiscovery
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                 routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
+                settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
 
                 imageHandler1.StartWatcher();
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..

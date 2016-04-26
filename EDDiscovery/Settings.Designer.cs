@@ -106,6 +106,7 @@
             // textBoxNetLogDir
             // 
             this.textBoxNetLogDir.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxNetLogDir.BorderColorScaling = 0.5F;
             this.textBoxNetLogDir.Location = new System.Drawing.Point(97, 48);
             this.textBoxNetLogDir.Name = "textBoxNetLogDir";
             this.textBoxNetLogDir.Size = new System.Drawing.Size(623, 20);
@@ -114,8 +115,14 @@
             // radioButton_Manual
             // 
             this.radioButton_Manual.AutoSize = true;
+            this.radioButton_Manual.FontNerfReduction = 0.5F;
             this.radioButton_Manual.Location = new System.Drawing.Point(17, 49);
+            this.radioButton_Manual.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButton_Manual.Name = "radioButton_Manual";
+            this.radioButton_Manual.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButton_Manual.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButton_Manual.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButton_Manual.SelectedColorRing = System.Drawing.Color.Black;
             this.radioButton_Manual.Size = new System.Drawing.Size(60, 17);
             this.radioButton_Manual.TabIndex = 1;
             this.radioButton_Manual.TabStop = true;
@@ -127,7 +134,12 @@
             this.radioButton_Auto.AutoSize = true;
             this.radioButton_Auto.FontNerfReduction = 0.5F;
             this.radioButton_Auto.Location = new System.Drawing.Point(17, 26);
+            this.radioButton_Auto.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButton_Auto.Name = "radioButton_Auto";
+            this.radioButton_Auto.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButton_Auto.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButton_Auto.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButton_Auto.SelectedColorRing = System.Drawing.Color.Black;
             this.radioButton_Auto.Size = new System.Drawing.Size(47, 17);
             this.radioButton_Auto.TabIndex = 0;
             this.radioButton_Auto.TabStop = true;
@@ -258,6 +270,7 @@
             this.checkBox_Distances.Size = new System.Drawing.Size(346, 17);
             this.checkBox_Distances.TabIndex = 8;
             this.checkBox_Distances.Text = "Get Distances from EDSM (Uses more memory normally not needed)";
+            this.checkBox_Distances.TickBoxReductionSize = 10;
             this.checkBox_Distances.UseVisualStyleBackColor = true;
             // 
             // checkBoxEDSMLog
@@ -273,6 +286,7 @@
             this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
             this.checkBoxEDSMLog.TabIndex = 9;
             this.checkBoxEDSMLog.Text = "Log EDSM requests";
+            this.checkBoxEDSMLog.TickBoxReductionSize = 10;
             this.checkBoxEDSMLog.UseVisualStyleBackColor = true;
             // 
             // checkboxSkipSlowUpdates
@@ -289,6 +303,7 @@
             this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
             this.checkboxSkipSlowUpdates.TabIndex = 11;
             this.checkboxSkipSlowUpdates.Text = "DEBUG ONLY: Skip slow updates on startup";
+            this.checkboxSkipSlowUpdates.TickBoxReductionSize = 10;
             this.checkboxSkipSlowUpdates.UseVisualStyleBackColor = false;
             this.checkboxSkipSlowUpdates.Visible = false;
             // 
@@ -329,6 +344,7 @@
             // textBoxDefaultZoom
             // 
             this.textBoxDefaultZoom.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxDefaultZoom.BorderColorScaling = 0.5F;
             this.textBoxDefaultZoom.Location = new System.Drawing.Point(120, 70);
             this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
@@ -351,6 +367,10 @@
             this.radioButtonHistorySelection.Location = new System.Drawing.Point(224, 46);
             this.radioButtonHistorySelection.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonHistorySelection.Name = "radioButtonHistorySelection";
+            this.radioButtonHistorySelection.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButtonHistorySelection.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButtonHistorySelection.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButtonHistorySelection.SelectedColorRing = System.Drawing.Color.Black;
             this.radioButtonHistorySelection.Size = new System.Drawing.Size(137, 17);
             this.radioButtonHistorySelection.TabIndex = 4;
             this.radioButtonHistorySelection.TabStop = true;
@@ -364,6 +384,10 @@
             this.radioButtonCentreHome.Location = new System.Drawing.Point(120, 46);
             this.radioButtonCentreHome.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonCentreHome.Name = "radioButtonCentreHome";
+            this.radioButtonCentreHome.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButtonCentreHome.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButtonCentreHome.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButtonCentreHome.SelectedColorRing = System.Drawing.Color.Black;
             this.radioButtonCentreHome.Size = new System.Drawing.Size(90, 17);
             this.radioButtonCentreHome.TabIndex = 3;
             this.radioButtonCentreHome.TabStop = true;
@@ -393,6 +417,7 @@
             this.textBoxHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBoxHomeSystem.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxHomeSystem.BorderColorScaling = 0.5F;
             this.textBoxHomeSystem.Location = new System.Drawing.Point(120, 19);
             this.textBoxHomeSystem.Name = "textBoxHomeSystem";
             this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
@@ -444,6 +469,8 @@
             this.comboBoxTheme.Location = new System.Drawing.Point(7, 19);
             this.comboBoxTheme.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTheme.Name = "comboBoxTheme";
+            this.comboBoxTheme.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxTheme.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxTheme.ScrollBarWidth = 16;
             this.comboBoxTheme.SelectedIndex = -1;
             this.comboBoxTheme.SelectedItem = null;
@@ -524,7 +551,7 @@
         private ExtendedControls.RadioButtonCustom radioButtonCentreHome;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private ExtendedControls.TextBoxBorder textBoxHomeSystem;
+        public ExtendedControls.TextBoxBorder textBoxHomeSystem;
         private ExtendedControls.ComboBoxCustom comboBoxTheme;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panel_defaultmapcolor;
