@@ -21,7 +21,7 @@ namespace EDDiscovery2
 
         public bool Init(bool multisystems)
         {
-            checkBoxAllInNetlog.Visible = multisystems;
+            //checkBoxAllInNetlog.Visible = multisystems;
             return true;
         }
 
