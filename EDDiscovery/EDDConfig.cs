@@ -130,12 +130,14 @@ namespace EDDiscovery2
            
 
             EDCommander cmdr = new EDCommander(0, _db.GetSettingString("EDCommanderName0", commanderName),  _db.GetSettingString("EDCommanderApiKey0", apikey));
+            cmdr.NetLogPath = _db.GetSettingString("EDCommanderNetLogPath0", null);
             listCommanders.Add(cmdr);
 
 
             for (int ii = 1; ii < 100; ii++)
             {
                 cmdr = new EDCommander(ii, _db.GetSettingString("EDCommanderName"+ii.ToString(), ""), _db.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
+                cmdr.NetLogPath = _db.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
                 if (!cmdr.Name.Equals(""))
                     listCommanders.Add(cmdr);
             }
