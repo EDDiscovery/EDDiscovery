@@ -1031,6 +1031,19 @@ namespace EDDiscovery
             Application.Exit();
         }
 
+        private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
+
+            foreach (VisitedSystemsClass vs in vsall)
+            {
+                if (vs.Commander != 0)
+                {
+                    vs.Commander = 0;
+                    vs.Update();
+                }
+            }
+        }
         #endregion
 
         #region AsyncEDSM
@@ -1108,18 +1121,5 @@ namespace EDDiscovery
         #endregion
 
         
-        private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
-
-            foreach (VisitedSystemsClass vs in vsall)
-            {
-                if (vs.Commander != 0)
-                {
-                    vs.Commander = 0;
-                    vs.Update();
-                }
-            }
-        }
     }
 }
