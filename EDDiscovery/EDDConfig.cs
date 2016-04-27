@@ -8,6 +8,19 @@ namespace EDDiscovery2
 {
     public class EDDConfig
     {
+        private static EDDConfig _instance;
+        public static EDDConfig Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new EDDConfig();
+                }
+                return _instance;
+            }
+        }
+
         private bool _useDistances;
         private bool _EDSMLog;
         readonly public string LogIndex;
@@ -17,7 +30,7 @@ namespace EDDiscovery2
 
         SQLiteDBClass _db = new SQLiteDBClass();
 
-        public EDDConfig()
+        private EDDConfig()
         {
             LogIndex = DateTime.Now.ToString("yyyyMMdd");
         }
