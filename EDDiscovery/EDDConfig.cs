@@ -49,6 +49,7 @@ namespace EDDiscovery2
                 if (cmdr != null)
                 {
                     currentCmdrID = cmdr.index;
+                    _db.PutSettingInt("ActiveCommander", value);
                 }
             }
         }
@@ -105,6 +106,12 @@ namespace EDDiscovery2
                 _EDSMLog = _db.GetSettingBool("EDSMLog", false);
                 _canSkipSlowUpdates = _db.GetSettingBool("CanSkipSlowUpdates", false);
                 LoadCommanders();
+                int activecommander = _db.GetSettingInt("ActiveCommander", 0);
+                var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
+                if (cmdr != null)
+                {
+                    currentCmdrID = cmdr.index;
+                }
             }
             catch (Exception ex)
             {
