@@ -43,15 +43,15 @@ namespace EDDiscovery
                 if (db == null)
                     db = new SQLiteDBClass();
 
-                string netlogdirstored = db.GetSettingString("Netlogdir", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Developments\\Products");
+                string netlogdirstored = EDDConfig.Instance.NetLogDir;
                 string datapath = null;
-                if (db.GetSettingBool("NetlogDirAutoMode", true))
+                if (EDDConfig.Instance.NetLogDirAutoMode)
                 {
                     if (EliteDangerous.EDDirectory != null && EliteDangerous.EDDirectory.Length > 0)
                     {
                         datapath = Path.Combine(EliteDangerous.EDDirectory, "Logs");
                         if (!netlogdirstored.Equals(datapath))
-                            db.PutSettingString("Netlogdir", datapath);
+                            EDDConfig.Instance.NetLogDir = datapath;
                         return datapath;
                     }
 
@@ -90,8 +90,8 @@ namespace EDDiscovery
 
                     if (newfi != null)
                     {
-                        db.PutSettingString("Netlogdir" , newfi.DirectoryName);
-                        db.PutSettingBool("NetlogDirAutoMode" , false);
+                        EDDConfig.Instance.NetLogDir = newfi.DirectoryName;
+                        EDDConfig.Instance.NetLogDirAutoMode = false;
                         datapath = newfi.DirectoryName;
                     }
 
@@ -100,7 +100,11 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    datapath = db.GetSettingString("Netlogdir", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Developments\\Products");
+                    datapath = EDDConfig.Instance.NetLogDir;
+                    if (EDDConfig.Instance.CurrentCommander.NetLogPath != null)
+                    {
+                        datapath = EDDConfig.Instance.CurrentCommander.NetLogPath;
+                    }
                 }
 
                 return datapath;

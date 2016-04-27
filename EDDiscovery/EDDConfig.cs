@@ -27,6 +27,12 @@ namespace EDDiscovery2
         private bool _canSkipSlowUpdates = false;
         public List<EDCommander> listCommanders;
         private int currentCmdrID=0;
+        private Dictionary<string, object> settings = new Dictionary<string, object>();
+        private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
+        {
+            { "Netlogdir", () => System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments", "Products") },
+            { "NetlogDirAutoMode", () => true },
+        };
 
         SQLiteDBClass _db = new SQLiteDBClass();
 
@@ -109,7 +115,64 @@ namespace EDDiscovery2
             }
         }
 
+        public string NetLogDir { get { return GetSettingString("Netlogdir"); } set { PutSettingString("Netlogdir", value); } }
+        public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
 
+        private bool GetSettingBool(string key)
+        {
+            return GetSetting<bool>(key, _db.GetSettingBool);
+        }
+
+        private int GetSettingInt(string key)
+        {
+            return GetSetting<int>(key, _db.GetSettingInt);
+        }
+
+        private double GetSettingDouble(string key)
+        {
+            return GetSetting<double>(key, _db.GetSettingDouble);
+        }
+
+        private string GetSettingString(string key)
+        {
+            return GetSetting<string>(key, _db.GetSettingString);
+        }
+
+        private T GetSetting<T>(string key, Func<string,T,T> getter)
+        {
+            if (!settings.ContainsKey(key))
+            {
+                settings[key] = getter(key, (T)defaults[key]());
+            }
+
+            return (T)settings[key];
+        }
+
+        private bool PutSettingBool(string key, bool value)
+        {
+            return PutSetting<bool>(key, value, _db.PutSettingBool);
+        }
+
+        private bool PutSettingInt(string key, int value)
+        {
+            return PutSetting<int>(key, value, _db.PutSettingInt);
+        }
+
+        private bool PutSettingDouble(string key, double value)
+        {
+            return PutSetting<double>(key, value, _db.PutSettingDouble);
+        }
+
+        private bool PutSettingString(string key, string value)
+        {
+            return PutSetting<string>(key, value, _db.PutSettingString);
+        }
+
+        private bool PutSetting<T>(string key, T value, Func<string,T,bool> setter)
+        {
+            settings[key] = value;
+            return setter(key, value);
+        }
 
         public void Update()
         {
@@ -133,7 +196,6 @@ namespace EDDiscovery2
             }
 
         }
-
 
         private void LoadCommanders()
         {
