@@ -1350,7 +1350,7 @@ namespace EDDiscovery2
                     info += Environment.NewLine + "State: " + hoversystem.state;
 
                 info += Environment.NewLine + "Distance from " + CenterSystemName + " " + distcsn.ToString("0.0");
-                if (_historyselection != null)
+                if (_historyselection != null && !_historyselection.name.Equals(CenterSystem.name))
                 {
                     double disthist = Math.Sqrt((hoversystem.x - _historyselection.x) * (hoversystem.x - _historyselection.x) + (hoversystem.y - _historyselection.y) * (hoversystem.y - _historyselection.y) + (hoversystem.z - _historyselection.z) * (hoversystem.z - _historyselection.z));
                     info += Environment.NewLine + "Distance from " + _historyselection.name + " " + disthist.ToString("0.0");
