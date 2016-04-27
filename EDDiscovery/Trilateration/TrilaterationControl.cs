@@ -285,16 +285,19 @@ namespace EDDiscovery
             }
             else if (e.ColumnIndex == 1)
             {
-                if (dataGridViewDistances[1, e.RowIndex].Value != null && !string.IsNullOrEmpty(dataGridViewDistances[1, e.RowIndex].Value.ToString()))
+                if (dataGridViewDistances[1, e.RowIndex].Value != null && !string.IsNullOrEmpty(dataGridViewDistances[1, e.RowIndex].Value.ToString().Trim()))
                 {
                     var value = dataGridViewDistances[1, e.RowIndex].Value.ToString().Trim();
                     if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
                         value = value.Replace(".", ",");
 
-                    double dist = double.Parse(value);
-                    dataGridViewDistances[1, e.RowIndex].Value = dist.ToString();
-                    // trigger trilateration calculation
-                    RunTrilateration();
+                    double dist;
+                    if (double.TryParse(value, out dist))
+                    {
+                        dataGridViewDistances[1, e.RowIndex].Value = dist.ToString("F2");
+                        // trigger trilateration calculation
+                        RunTrilateration();
+                    }
                 }
             }
             /* skip to the next editable cell */
@@ -344,11 +347,13 @@ namespace EDDiscovery
                         var value = distanceCell.Value.ToString().Trim();
                         if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
                             value = value.Replace(".", ",");
-                        var distance = double.Parse(value);
+                        double distance;
+                        if (double.TryParse(value, out distance))
+                        {
+                            var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
 
-                        var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
-
-                        systemsEntries.Add(system, entry);
+                            systemsEntries.Add(system, entry);
+                        }
                     }
                 }
 
@@ -864,11 +869,14 @@ namespace EDDiscovery
                         if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
                             value = value.Replace(".", ",");
 
-                        var distance = double.Parse(value);
-                        // can over-ride drop down now if it's a real system so you could add duplicates if you wanted (even once I've figured out issue #81 which makes it easy if not likely...)
-                        if (!distances.Keys.Contains(system))
+                        double distance;
+                        if (double.TryParse(value, out distance))
                         {
-                            distances.Add(system, distance);
+                            // can over-ride drop down now if it's a real system so you could add duplicates if you wanted (even once I've figured out issue #81 which makes it easy if not likely...)
+                            if (!distances.Keys.Contains(system))
+                            {
+                                distances.Add(system, distance);
+                            }
                         }
                     }
 
