@@ -32,7 +32,6 @@ namespace EDDiscovery
         bool Exit = false;
         bool NoEvents = false;
         public event NetLogEventHandler OnNewPosition;
-        public int ActiveCommander { get; set; }
 
         SQLiteDBClass db=null;
         public List<TravelLogUnit> tlUnits;
@@ -153,7 +152,7 @@ namespace EDDiscovery
 
             tlUnits =  TravelLogUnit.GetAll();
 
-            List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(ActiveCommander);
+            List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(EDDConfig.Instance.CurrentCmdrID);
 
             visitedSystems.Clear();
             // Add systems in local DB.
@@ -226,7 +225,7 @@ namespace EDDiscovery
                             dbsys.EDSM_sync = false;
                             dbsys.Unit = fi.Name;
                             dbsys.MapColour = defaultMapColour;
-                            dbsys.Commander = ActiveCommander;
+                            dbsys.Commander = EDDConfig.Instance.CurrentCmdrID;
 
                             if (!lu.Beta)  // dont store  history in DB for beta (YET)
                             {
