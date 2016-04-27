@@ -1336,10 +1336,19 @@ namespace EDDiscovery2
 
                 string info = hoversystem.name;
                 info += Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.x.ToString("0.00"), hoversystem.y.ToString("0.00"), hoversystem.z.ToString("0.00"));
-                info += Environment.NewLine + "Allegiance: " + hoversystem.allegiance;
-                info += Environment.NewLine + "Economy: " + hoversystem.primary_economy;
-                info += Environment.NewLine + "Gov: " + hoversystem.government;
-                info += Environment.NewLine + "State: " + hoversystem.state;
+
+                if (hoversystem.allegiance != EDAllegiance.Unknown)
+                    info += Environment.NewLine + "Allegiance: " + hoversystem.allegiance;
+
+                if (hoversystem.primary_economy != EDEconomy.Unknown)
+                    info += Environment.NewLine + "Economy: " + hoversystem.primary_economy;
+
+                if (hoversystem.government != EDGovernment.Unknown)
+                    info += Environment.NewLine + "Government: " + hoversystem.allegiance;
+
+                if (hoversystem.state != EDState.Unknown)
+                    info += Environment.NewLine + "State: " + hoversystem.state;
+
                 info += Environment.NewLine + "Distance from " + CenterSystemName + " " + distcsn.ToString("0.0");
                 if (_historyselection != null)
                 {
