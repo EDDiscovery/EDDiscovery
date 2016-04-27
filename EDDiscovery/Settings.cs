@@ -54,7 +54,7 @@ namespace EDDiscovery2
 
         public void InitSettingsTab()
         {
-            bool auto = _db.GetSettingBool("NetlogDirAutoMode", true);
+            bool auto = EDDConfig.Instance.NetLogDirAutoMode;
 
             if (auto)
             {
@@ -66,7 +66,7 @@ namespace EDDiscovery2
             }
 
             string datapath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
-            textBoxNetLogDir.Text = _db.GetSettingString("Netlogdir", datapath);
+            textBoxNetLogDir.Text = EDDConfig.Instance.NetLogDir;
 
             checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
@@ -97,8 +97,8 @@ namespace EDDiscovery2
 
         public void SaveSettings()
         {
-            _db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
-            _db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
+            EDDConfig.Instance.NetLogDirAutoMode = radioButton_Auto.Checked;
+            EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
             _db.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
             _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
             _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
