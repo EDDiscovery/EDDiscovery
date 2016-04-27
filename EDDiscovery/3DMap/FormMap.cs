@@ -18,6 +18,8 @@ namespace EDDiscovery2
 {
     public partial class FormMap : Form
     {
+        #region Variables
+
         SQLiteDBClass db;
 
         private DatasetBuilder builder;
@@ -29,6 +31,7 @@ namespace EDDiscovery2
 
         private AutoCompleteStringCollection _systemNames;
         private ISystem _centerSystem;
+        private ISystem _historyselection;
         private ISystem _clickedSystem;
         private bool _loaded = false;
 
@@ -50,6 +53,9 @@ namespace EDDiscovery2
         private Point _mouseStartTranslateXY;
         private Point _mouseStartTranslateXZ;
         private Point _mouseStartMove;
+        private Point _mouseHover;
+        Timer _mousehovertick = new Timer();
+        System.Windows.Forms.ToolTip _mousehovertooltip = null;
 
         private List<SystemClass> _starList;
         private Dictionary<string, SystemClass> _visitedStars;
@@ -79,14 +85,27 @@ namespace EDDiscovery2
 
         private DateTime maxstardate = new DateTime(2016,1,1);
         bool Animatetime = false;
-        
+
+        #endregion
+
+        #region Initialisation
+
         public FormMap()
         {
             InitializeComponent();
             db = new SQLiteDBClass();
+            _mousehovertick.Tick += new EventHandler(MouseHoverTick);
+            _mousehovertick.Interval = 500;
         }
 
-        public void Prepare(bool CenterFromSettings, float zoomOverRide)
+        public void Reset()
+        {
+            CenterSystem = null;
+            ReferenceSystems = null;
+            PlannedRoute = null;
+        }
+
+        public void Prepare(bool CenterFromSettings, float zoomOverRide )
         {
             _homeSystem = db.GetSettingString("DefaultMapCenter", "Sol");
             if (zoomOverRide <= 50 && zoomOverRide >= 0.01)
@@ -104,6 +123,9 @@ namespace EDDiscovery2
 
                 CenterSystemName = selectionCentre ? HistorySelection : _homeSystem;
             }
+
+            _historyselection = SystemData.GetSystem(HistorySelection);
+
             OrientateMapAroundSystem(CenterSystem);
 
             ResetCamera();
@@ -118,47 +140,161 @@ namespace EDDiscovery2
             toolStripButtonEliteMovement.Checked = db.GetSettingBool("Map3DEliteMove", false);
         }
 
-        private void ResetCamera()
+        private void FormMap_Load(object sender, EventArgs e)
         {
-            _cameraPos = new Vector3((float) CenterSystem.x, -(float)CenterSystem.y, (float)CenterSystem.z);
-            _cameraDir = Vector3.Zero;
+            textboxFrom.AutoCompleteCustomSource = _systemNames;
+            LoadMapImages();
+            FillExpeditions();
+            ShowCenterSystem();
+            GenerateDataSets();
+            labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
 
-            _zoom = _defaultZoom;
+            //TODO: Move this functionality into DatasetBuilder
+            //GenerateDataSetsAllegiance();
+            //GenerateDataSetsGovernment();
         }
 
-        private void StartCameraSlew()
+        private void FormMap_Activated(object sender, EventArgs e)
         {
-            _oldTickCount = Environment.TickCount;
-            _ticks = 0;
-            _cameraSlewProgress = 0.0f;
+            _useTimer = false;
+            glControl.Invalidate();
         }
 
-        private void DoCameraSlew()
+        private void FormMap_Deactivate(object sender, EventArgs e)
         {
-            if (_kbdActions.Any())
+            _useTimer = true;
+            UpdateTimer.Stop();
+        }
+
+        private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
+        private void LoadMapImages()
+        {
+            string datapath = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Maps");
+            if (System.IO.Directory.Exists(datapath))
             {
-                _cameraSlewProgress = 1.0f;
+                fgeimages = FGEImage.LoadImages(datapath);
+                fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
             }
 
-            if (_cameraSlewProgress < 1.0f)
+            dropdownMapNames.DropDownItems.Clear();
+
+            foreach (var img in fgeimages)
             {
-                _cameraActionMovement = Vector3.Zero;
-                var newprogress = _cameraSlewProgress + _ticks / (CameraSlewTime * 1000);
-                var totvector = new Vector3((float)(CenterSystem.x - _cameraPos.X), (float)(-CenterSystem.y - _cameraPos.Y), (float)(CenterSystem.z - _cameraPos.Z));
-                if (newprogress >= 1.0f)
+                ToolStripButton item = new ToolStripButton
                 {
-                    _cameraPos = new Vector3((float)CenterSystem.x, (float)(-CenterSystem.y), (float)CenterSystem.z);
-                }
-                else
-                {
-                    var slewstart = Math.Sin((_cameraSlewProgress - 0.5) * Math.PI);
-                    var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
-                    var slewfact = (slewend - slewstart) / (1.0 - slewstart);
-                    _cameraPos += Vector3.Multiply(totvector, (float)slewfact);
-                }
-                _cameraSlewProgress = (float)newprogress;
+                    Text = img.FileName,
+                    CheckOnClick = true,
+                    DisplayStyle = ToolStripItemDisplayStyle.Text,
+                    Tag = img
+                };
+                item.Click += new EventHandler(dropdownMapNames_DropDownItemClicked);
+                item.Checked = db.GetSettingBool("map3DMaps" + img.FileName, false);
+                dropdownMapNames.DropDownItems.Add(item);
             }
         }
+
+        private void FillExpeditions()
+        {
+            Dictionary<string, Func<DateTime>> excursions = new Dictionary<string, Func<DateTime>>()
+            {
+                { "All", () => VisitedSystems.Select(s => s.time).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
+                { "Distant Worlds", () => new DateTime(2016, 1, 14) },
+                { "FGE Expedition start", () => new DateTime(2015, 8, 1) },
+                { "Last Week", () => DateTime.Now.AddDays(-7) },
+                { "Last Month", () => DateTime.Now.AddMonths(-1) },
+                { "Last Year", () => DateTime.Now.AddYears(-1) }
+            };
+
+            startTime = excursions["All"]();
+            endTime = DateTime.Now.AddDays(1);
+
+            string lastsel = db.GetSettingString("Map3DFilter", "");
+            foreach (var kvp in excursions)
+            {
+                var item = new ToolStripButton
+                {
+                    Text = kvp.Key,
+                    CheckOnClick = true,
+                    DisplayStyle = ToolStripItemDisplayStyle.Text
+                };
+                var startfunc = kvp.Value;
+                item.Click += (s, e) => dropdownFilterHistory_Item_Click(s, e, item, startfunc);
+                dropdownFilterDate.DropDownItems.Add(item);
+
+                if (item.Text.Equals(lastsel))              // if a standard one, restore.  WE are not saving custom.
+                {                                           // if custom is selected, we don't restore a tick.
+                    item.Checked = true;                    // TBD Finwen, should we not be setting a start AND end date
+                    startTime = startfunc();
+                    endTime = DateTime.Now.AddDays(1);
+                }
+            }
+
+            var citem = new ToolStripButton
+            {
+                Text = "Custom",
+                CheckOnClick = true,
+                DisplayStyle = ToolStripItemDisplayStyle.Text
+            };
+            citem.Click += (s, e) => dropdownFilterHistory_Custom_Click(s, e, citem);
+
+            dropdownFilterDate.DropDownItems.Add(citem);
+
+            startPicker = new DateTimePicker();
+            endPicker = new DateTimePicker();
+            startPicker.ValueChanged += StartPicker_ValueChanged;
+            endPicker.ValueChanged += EndPicker_ValueChanged;
+            startPickerHost = new ToolStripControlHost(startPicker) { Visible = false };
+            endPickerHost = new ToolStripControlHost(endPicker) { Visible = false };
+            startPickerHost.Size = new Size(150, 20);
+            endPickerHost.Size = new Size(150, 20);
+            toolStripShowAllStars.Items.Add(startPickerHost);
+            toolStripShowAllStars.Items.Add(endPickerHost);
+        }
+
+        /// <summary>
+        /// Loads Control
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void glControl_Load(object sender, EventArgs e)
+        {
+
+            GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
+
+            SetupViewport();
+
+            _loaded = true;
+
+            Application.Idle += Application_Idle;
+            _useTimer = false;
+        }
+
+
+        private void Application_Idle(object sender, EventArgs e)
+        {
+            if (!_useTimer)
+            {
+                glControl.Invalidate();
+            }
+        }
+
+
+        private void glControl_Resize(object sender, EventArgs e)
+        {
+            if (!_loaded)
+                return;
+
+            SetupViewport();
+        }
+
+        #endregion
+
+        #region Viewport
 
         /// <summary>
         /// Setup the Viewport
@@ -198,24 +334,9 @@ namespace EDDiscovery2
 
         }
 
+        #endregion
 
-        public void InitData()
-        {
-            _visitedStars = new Dictionary<string, SystemClass>();
-
-            if (VisitedSystems != null)
-            {
-                foreach (SystemPosition sp in VisitedSystems)
-                {
-                    SystemClass star = SystemData.GetSystem(sp.Name);
-                    if (star != null && star.HasCoordinate)
-                    {
-                        _visitedStars[star.SearchName] = star;
-                    }
-                }
-            }
-        }
-
+        #region Generate Data Sets
 
         private void GenerateDataSets()
         {
@@ -274,7 +395,6 @@ namespace EDDiscovery2
             _datasets = builder.Build();
         }
 
-
         //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
         // it out of FormMap's hair
         private void InitStarLists()
@@ -288,20 +408,52 @@ namespace EDDiscovery2
                 InitData();
         }
 
-        private void DrawStars()
+        public void InitData()
         {
-            foreach (var dataset in _datasets)
+            _visitedStars = new Dictionary<string, SystemClass>();
+
+            if (VisitedSystems != null)
             {
-                dataset.DrawAll(glControl);
+                foreach (SystemPosition sp in VisitedSystems)
+                {
+                    SystemClass star = SystemData.GetSystem(sp.Name);
+                    if (star != null && star.HasCoordinate)
+                    {
+                        _visitedStars[star.SearchName] = star;
+                    }
+                }
             }
         }
 
-        public void Reset()
+        private List<FGEImage> GetSelectedMaps()
         {
-            CenterSystem = null;
-            ReferenceSystems = null;
-            PlannedRoute = null;
+            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
+            HashSet<string> newselected = new HashSet<string>(_selected.Select(f => f.FileName));
+            HashSet<string> oldselected = new HashSet<string>(selectedmaps.Select(f => f.FileName));
+            List<FGEImage> selected = new List<FGEImage>();
+
+            foreach (var sel in selectedmaps)
+            {
+                if (newselected.Contains(sel.FileName))
+                {
+                    selected.Add(sel);
+                }
+            }
+
+            foreach (var sel in _selected)
+            {
+                if (!oldselected.Contains(sel.FileName))
+                {
+                    selected.Add(sel);
+                }
+            }
+
+            return selected;
         }
+
+        #endregion
+
+        #region Set Orientation
 
         private void SetCenterSystem(ISystem sys)
         {
@@ -323,19 +475,6 @@ namespace EDDiscovery2
             labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", CenterSystem.name, CenterSystem.x.ToString("0.00"), CenterSystem.y.ToString("0.00"), CenterSystem.z.ToString("0.00"));
         }
 
-        private void UpdateStatus()
-        {
-            if ( toolStripButtonPerspective.Checked )
-                statusLabel.Text = "Use W(fwd) S(back) A(lft) D(Rgt), R(up) F(dn) keys with the mouse. ";
-            else
-                statusLabel.Text = "Use W, A, S, D keys with the mouse. ";
-
-            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00}", _cameraPos.X, _cameraPos.Y, _cameraPos.Z, _zoom);
-#if DEBUG
-            statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
-#endif        
-        }
-
         private void OrientateMapAroundSystem(String systemName)
         {
             if (!String.IsNullOrWhiteSpace(systemName))
@@ -352,12 +491,10 @@ namespace EDDiscovery2
             SetCenterSystem(system);
             StartCameraSlew();
         }
-        private void CalculateTimeDelta()
-        {
-            var tickCount = DateTime.Now.Ticks / 10000;
-            _ticks = (int)(tickCount - _oldTickCount);
-            _oldTickCount = tickCount;
-        }
+
+        #endregion
+
+        #region Keyboard
 
         private void HandleInputs()
         {
@@ -488,6 +625,448 @@ namespace EDDiscovery2
             }
         }
 
+        #endregion
+
+        #region Render
+
+        private void Render()
+        {
+            if (!_loaded) // Play nice
+                return;
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            GL.MatrixMode(MatrixMode.Modelview);
+
+            if (toolStripButtonPerspective.Checked)
+            {
+                CameraLookAt();
+            }
+            else
+            {
+                TransformWorldOrientatation();
+
+                TransformCamera();
+            }
+            FlipYAxisOnWorld();
+            RenderGalaxy();
+
+            glControl.SwapBuffers();
+            UpdateStatus();
+        }
+
+        private void TransformWorldOrientatation()
+        {
+            GL.LoadIdentity();
+            GL.Rotate(-90.0, 1, 0, 0);
+        }
+
+        private void TransformCamera()
+        {
+            GL.Scale(_zoom, _zoom, _zoom);
+            GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);
+            GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
+            GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
+            GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
+        }
+
+        private void CameraLookAt()
+        {
+            Vector3 target = _cameraPos;
+            Matrix4 transform = Matrix4.Identity;
+            transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
+            transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
+            transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
+            Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
+            Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
+            Vector3 eye = _cameraPos + eyerel;
+            Matrix4 lookat = Matrix4.LookAt(eye, target, up);
+            GL.LoadMatrix(ref lookat);
+        }
+
+        private void FlipYAxisOnWorld()
+        {
+            GL.Scale(1.0, -1.0, 1.0);
+        }
+
+        private void RenderGalaxy()
+        {
+            GL.Enable(EnableCap.PointSmooth);
+            GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+            GL.PushMatrix();
+            DrawStars();
+            GL.PopMatrix();
+        }
+
+        private void DrawStars()
+        {
+            foreach (var dataset in _datasets)
+            {
+                dataset.DrawAll(glControl);
+            }
+        }
+
+        private void UpdateStatus()
+        {
+            if (toolStripButtonPerspective.Checked)
+                statusLabel.Text = "Use W(fwd) S(back) A(lft) D(Rgt), R(up) F(dn) keys with the mouse. ";
+            else
+                statusLabel.Text = "Use W, A, S, D keys with the mouse. ";
+
+            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00}", _cameraPos.X, _cameraPos.Y, _cameraPos.Z, _zoom);
+#if DEBUG
+            statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
+#endif        
+        }
+
+        private void CalculateTimeDelta()
+        {
+            var tickCount = DateTime.Now.Ticks / 10000;
+            _ticks = (int)(tickCount - _oldTickCount);
+            _oldTickCount = tickCount;
+        }
+
+        private void glControl_Paint(object sender, PaintEventArgs e)
+        {
+            CalculateTimeDelta();
+            if (!_kbdActions.Any() && (_cameraSlewProgress == 0.0f || _cameraSlewProgress >= 1.0f))
+            {
+                _ticks = 1;
+                _oldTickCount = DateTime.Now.Ticks / 10000;
+            }
+
+            HandleInputs();
+            DoCameraSlew();
+            UpdateCamera();
+            Render();
+
+            if (_kbdActions.Any() || _cameraSlewProgress < 1.0f)
+            {
+                if (_useTimer)
+                {
+                    UpdateTimer.Stop();
+                    _useTimer = false;
+                }
+            }
+            else
+            {
+                if (!_useTimer || Animatetime)
+                {
+                    UpdateTimer.Interval = 100;
+                    UpdateTimer.Start();
+                    _useTimer = true;
+                }
+                else
+                {
+                    UpdateTimer.Stop();
+                    UpdateTimer.Start();
+                }
+            }
+        }
+
+        private void UpdateTimer_Tick(object sender, EventArgs e)
+        {
+            if (Animatetime)
+            {
+                maxstardate = maxstardate.AddHours(10);
+
+                builder.UpdateStandardSystems(maxstardate);
+
+
+                if (maxstardate > DateTime.Now)
+                    Animatetime = false;
+            }
+
+            glControl.Invalidate();
+        }
+
+        #endregion
+
+        #region Camera Slew and Update
+
+        private void ResetCamera()
+        {
+            _cameraPos = new Vector3((float)CenterSystem.x, -(float)CenterSystem.y, (float)CenterSystem.z);
+            _cameraDir = Vector3.Zero;
+
+            _zoom = _defaultZoom;
+        }
+
+        private void StartCameraSlew()
+        {
+            _oldTickCount = Environment.TickCount;
+            _ticks = 0;
+            _cameraSlewProgress = 0.0f;
+        }
+
+        private void DoCameraSlew()
+        {
+            if (_kbdActions.Any())
+            {
+                _cameraSlewProgress = 1.0f;
+            }
+
+            if (_cameraSlewProgress < 1.0f)
+            {
+                _cameraActionMovement = Vector3.Zero;
+                var newprogress = _cameraSlewProgress + _ticks / (CameraSlewTime * 1000);
+                var totvector = new Vector3((float)(CenterSystem.x - _cameraPos.X), (float)(-CenterSystem.y - _cameraPos.Y), (float)(CenterSystem.z - _cameraPos.Z));
+                if (newprogress >= 1.0f)
+                {
+                    _cameraPos = new Vector3((float)CenterSystem.x, (float)(-CenterSystem.y), (float)CenterSystem.z);
+                }
+                else
+                {
+                    var slewstart = Math.Sin((_cameraSlewProgress - 0.5) * Math.PI);
+                    var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
+                    var slewfact = (slewend - slewstart) / (1.0 - slewstart);
+                    _cameraPos += Vector3.Multiply(totvector, (float)slewfact);
+                }
+                _cameraSlewProgress = (float)newprogress;
+            }
+        }
+
+        private void UpdateCamera()
+        {
+            _cameraDir.X = BoundedAngle(_cameraDir.X + _cameraActionRotation.X);
+            _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
+            _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);        // rotate camera by asked value
+
+#if DEBUG
+            bool istranslating = (_cameraActionMovement.X != 0 || _cameraActionMovement.Y != 0 || _cameraActionMovement.Z != 0);
+            if (istranslating)
+                Console.WriteLine("move Camera " + _cameraActionMovement.X + "," + _cameraActionMovement.Y + "," + _cameraActionMovement.Z
+                    + " point " + _cameraDir.X + "," + _cameraDir.Y + "," + _cameraDir.Z);
+#endif
+
+            var rotZ = Matrix4.CreateRotationZ(DegreesToRadians(_cameraDir.Z));
+            var rotX = Matrix4.CreateRotationX(DegreesToRadians(_cameraDir.X));
+            var rotY = Matrix4.CreateRotationY(DegreesToRadians(_cameraDir.Y));
+
+            bool em = toolStripButtonEliteMovement.Checked && toolStripButtonPerspective.Checked;     // elite movement
+
+            Vector3 requestedmove = new Vector3(_cameraActionMovement.X, _cameraActionMovement.Y, (em) ? 0 : _cameraActionMovement.Z);
+
+            var translation = Matrix4.CreateTranslation(requestedmove);
+            var cameramove = Matrix4.Identity;
+            cameramove *= translation;
+            cameramove *= rotZ;
+            cameramove *= rotX;
+            cameramove *= rotY;
+
+            Vector3 trans = cameramove.ExtractTranslation();
+
+            if (em)                                             // if in elite movement, Y is not affected
+            {                                                   // by ASDW.
+                trans.Y = 0;                                    // no Y translation even if camera rotated the vector into Y components
+                _cameraPos += trans;
+                _cameraPos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
+            }
+            else
+                _cameraPos += trans;
+#if DEBUG
+            if (istranslating)
+                Console.WriteLine("   em " + em + " Camera now " + _cameraPos.X + "," + _cameraPos.Y + "," + _cameraPos.Z);
+#endif
+        }
+
+        private float BoundedAngle(float angle)
+        {
+            return ((angle + 360 + 180) % 360) - 180;
+        }
+
+        private float DegreesToRadians(float angle)
+        {
+            return (float)(Math.PI * angle / 180.0);
+        }
+
+        #endregion
+
+        #region User Controls
+
+        private void EndPicker_ValueChanged(object sender, EventArgs e)
+        {
+            endTime = endPicker.Value;
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void StartPicker_ValueChanged(object sender, EventArgs e)
+        {
+            startTime = startPicker.Value;
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void dropdownFilterHistory_Custom_Click(object sender, EventArgs e, ToolStripButton sel)
+        {
+            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
+            {
+                if (item != sel)
+                {
+                    item.Checked = false;
+                }
+            }
+
+            if (startTime < startPicker.MinDate)
+            {
+                startTime = startPicker.MinDate;
+            }
+
+            db.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
+            startPickerHost.Visible = true;
+            endPickerHost.Visible = true;
+            startPicker.Value = startTime;
+            endPicker.Value = endTime;
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc)
+        {
+            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
+            {
+                if (item != sel)
+                {
+                    item.Checked = false;
+                }
+            }
+            db.PutSettingString("Map3DFilter", sel.Text);
+            startTime = startfunc();
+            endTime = DateTime.Now.AddDays(1);
+            startPickerHost.Visible = false;
+            endPickerHost.Visible = false;
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void buttonCenter_Click(object sender, EventArgs e)
+        {
+            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
+            if (sys == null) textboxFrom.Text = String.Empty;
+            else OrientateMapAroundSystem(sys);
+        }
+
+        private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
+        {
+            SystemPosition ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
+
+            if (ps2 != null)
+                SetCenterSystem(ps2.curSystem);
+        }
+
+        private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DAllStars", toolStripButtonShowAllStars.Checked);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonStations_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DButtonStations", toolStripButtonStations.Checked);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonGrid_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonCoords_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
+        }
+
+        private void buttonHome_Click(object sender, EventArgs e)
+        {
+            ISystem sys = SystemData.GetSystem(_homeSystem) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+            OrientateMapAroundSystem(sys);
+        }
+
+        private void buttonHistory_Click(object sender, EventArgs e)
+        {
+            ISystem sys = SystemData.GetSystem(HistorySelection) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
+            OrientateMapAroundSystem(sys);
+        }
+
+        private void toolStripButtonPerspective_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
+            SetCenterSystem(CenterSystem);
+            SetupViewport();
+        }
+
+        private void glControl_DoubleClick(object sender, EventArgs e)
+        {
+            ISystem sys = _clickedSystem;
+            if (sys != null)
+            {
+                OrientateMapAroundSystem(sys);
+            }
+        }
+
+        private void glControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (_useTimer)
+            {
+                glControl.Invalidate();
+            }
+        }
+
+        private void glControl_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (_useTimer)
+            {
+                glControl.Invalidate();
+            }
+        }
+
+        private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
+        {
+            ToolStripButton tsb = (ToolStripButton)sender;
+            db.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
+            SetCenterSystem(CenterSystem);
+        }
+
+        private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_clickedSystem != null)
+            {
+                var edsm = new EDSM.EDSMClass();
+                edsm.ShowSystemInEDSM(_clickedSystem.name);
+            }
+        }
+
+        private void labelClickedSystemCoords_Click(object sender, EventArgs e)
+        {
+            if (_clickedSystem != null)
+            {
+                systemselectionMenuStrip.Show(labelClickedSystemCoords, 0, labelClickedSystemCoords.Height);
+            }
+        }
+
+        #endregion
+
+        #region Mouse
+
         private ISystem GetMouseOverSystem(int x, int y)
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -548,443 +1127,6 @@ namespace EDDiscovery2
             return cursys;
         }
 
-        private void Render()
-        {
-            if (!_loaded) // Play nice
-                return;
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            GL.MatrixMode(MatrixMode.Modelview);
-
-            if (toolStripButtonPerspective.Checked)
-            {
-                CameraLookAt();
-            }
-            else
-            {
-                TransformWorldOrientatation();
-
-                TransformCamera();
-            }
-            FlipYAxisOnWorld();
-            RenderGalaxy();
-
-            glControl.SwapBuffers();
-            UpdateStatus();
-        }
-
-
-        private void TransformWorldOrientatation()
-        {
-            GL.LoadIdentity();
-            GL.Rotate(-90.0, 1, 0, 0);
-        }
-        private void TransformCamera()
-        {
-            GL.Scale(_zoom, _zoom, _zoom);
-            GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);
-            GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
-            GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
-            GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
-        }
-
-        private void CameraLookAt()
-        {
-            Vector3 target = _cameraPos;
-            Matrix4 transform = Matrix4.Identity;
-            transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
-            transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
-            transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
-            Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
-            Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
-            Vector3 eye = _cameraPos + eyerel;
-            Matrix4 lookat = Matrix4.LookAt(eye, target, up);
-            GL.LoadMatrix(ref lookat);
-        }
-
-        private void FlipYAxisOnWorld()
-        {
-            GL.Scale(1.0, -1.0, 1.0);
-        }
-
-        private void RenderGalaxy()
-        {
-            GL.Enable(EnableCap.PointSmooth);
-            GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
-            GL.PushMatrix();
-            DrawStars();
-            GL.PopMatrix();
-        }
-
-        private void FillExpeditions()
-        {
-            Dictionary<string, Func<DateTime>> excursions = new Dictionary<string, Func<DateTime>>()
-            {
-                { "All", () => VisitedSystems.Select(s => s.time).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
-                { "Distant Worlds", () => new DateTime(2016, 1, 14) },
-                { "FGE Expedition start", () => new DateTime(2015, 8, 1) },
-                { "Last Week", () => DateTime.Now.AddDays(-7) },
-                { "Last Month", () => DateTime.Now.AddMonths(-1) },
-                { "Last Year", () => DateTime.Now.AddYears(-1) }
-            };
-
-            startTime = excursions["All"]();
-            endTime = DateTime.Now.AddDays(1);
-
-            string lastsel = db.GetSettingString("Map3DFilter", "");
-            foreach (var kvp in excursions)
-            {
-                var item = new ToolStripButton
-                {
-                    Text = kvp.Key,
-                    CheckOnClick = true,
-                    DisplayStyle = ToolStripItemDisplayStyle.Text
-                };
-                var startfunc = kvp.Value;
-                item.Click += (s, e) => dropdownFilterHistory_Item_Click(s, e, item, startfunc);
-                dropdownFilterDate.DropDownItems.Add(item);
-
-                if (item.Text.Equals(lastsel))              // if a standard one, restore.  WE are not saving custom.
-                {                                           // if custom is selected, we don't restore a tick.
-                    item.Checked = true;                    // TBD Finwen, should we not be setting a start AND end date
-                    startTime = startfunc();
-                    endTime = DateTime.Now.AddDays(1);
-                }
-            }
-
-            var citem = new ToolStripButton
-            {
-                Text = "Custom",
-                CheckOnClick = true,
-                DisplayStyle = ToolStripItemDisplayStyle.Text
-            };
-            citem.Click += (s, e) => dropdownFilterHistory_Custom_Click(s, e, citem);
-
-            dropdownFilterDate.DropDownItems.Add(citem);
-
-            startPicker = new DateTimePicker();
-            endPicker = new DateTimePicker();
-            startPicker.ValueChanged += StartPicker_ValueChanged;
-            endPicker.ValueChanged += EndPicker_ValueChanged;
-            startPickerHost = new ToolStripControlHost(startPicker) { Visible = false };
-            endPickerHost = new ToolStripControlHost(endPicker) { Visible = false };
-            startPickerHost.Size = new Size(150, 20);
-            endPickerHost.Size = new Size(150, 20);
-            toolStripShowAllStars.Items.Add(startPickerHost);
-            toolStripShowAllStars.Items.Add(endPickerHost);
-        }
-
-        private void EndPicker_ValueChanged(object sender, EventArgs e)
-        {
-            endTime = endPicker.Value;
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void StartPicker_ValueChanged(object sender, EventArgs e)
-        {
-            startTime = startPicker.Value;
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void dropdownFilterHistory_Custom_Click(object sender, EventArgs e, ToolStripButton sel)
-        {
-            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
-            {
-                if (item != sel)
-                {
-                    item.Checked = false;
-                }
-            }
-
-            if (startTime < startPicker.MinDate)
-            {
-                startTime = startPicker.MinDate;
-            }
-
-            db.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
-            startPickerHost.Visible = true;
-            endPickerHost.Visible = true;
-            startPicker.Value = startTime;
-            endPicker.Value = endTime;
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc)
-        {
-            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
-            {
-                if (item != sel)
-                {
-                    item.Checked = false;
-                }
-            }
-            db.PutSettingString("Map3DFilter", sel.Text);
-            startTime = startfunc();
-            endTime = DateTime.Now.AddDays(1);
-            startPickerHost.Visible = false;
-            endPickerHost.Visible = false;
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void LoadMapImages()
-        {
-            string datapath = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Maps");
-            if (System.IO.Directory.Exists(datapath))
-            {
-                fgeimages = FGEImage.LoadImages(datapath);
-                fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
-            }
-
-            dropdownMapNames.DropDownItems.Clear();
-
-            foreach (var img in fgeimages)
-            {
-                ToolStripButton item = new ToolStripButton {
-                    Text = img.FileName,
-                    CheckOnClick = true,
-                    DisplayStyle = ToolStripItemDisplayStyle.Text,
-                    Tag = img
-                };
-                item.Click += new EventHandler(dropdownMapNames_DropDownItemClicked);
-                item.Checked = db.GetSettingBool("map3DMaps" + img.FileName, false);
-                dropdownMapNames.DropDownItems.Add(item);
-            }
-        }
-
-        private List<FGEImage> GetSelectedMaps()
-        {
-            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
-            HashSet<string> newselected = new HashSet<string>(_selected.Select(f => f.FileName));
-            HashSet<string> oldselected = new HashSet<string>(selectedmaps.Select(f => f.FileName));
-            List<FGEImage> selected = new List<FGEImage>();
-
-            foreach (var sel in selectedmaps)
-            {
-                if (newselected.Contains(sel.FileName))
-                {
-                    selected.Add(sel);
-                }
-            }
-
-            foreach (var sel in _selected)
-            {
-                if (!oldselected.Contains(sel.FileName))
-                {
-                    selected.Add(sel);
-                }
-            }
-
-            return selected;
-        }
-
-        private void FormMap_Load(object sender, EventArgs e)
-        {
-            textboxFrom.AutoCompleteCustomSource = _systemNames;
-            LoadMapImages();
-            FillExpeditions();
-            ShowCenterSystem();
-            GenerateDataSets();
-            labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
-
-            //TODO: Move this functionality into DatasetBuilder
-            //GenerateDataSetsAllegiance();
-            //GenerateDataSetsGovernment();
-        }
-
-        private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            this.Hide();
-        }
-
-        private void buttonCenter_Click(object sender, EventArgs e)
-        {
-            SystemClass sys = SystemData.GetSystem(textboxFrom.Text);
-            if (sys == null) textboxFrom.Text = String.Empty;
-            else OrientateMapAroundSystem(sys);
-        }
-
-        private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
-        {
-            SystemPosition ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
-
-            if (ps2 != null)
-                SetCenterSystem(ps2.curSystem);
-        }
-
-        private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
-        {
-            db.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
-        {
-            db.PutSettingBool("Map3DAllStars", toolStripButtonShowAllStars.Checked);
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void toolStripButtonStations_Click(object sender, EventArgs e)
-        {
-            db.PutSettingBool("Map3DButtonStations", toolStripButtonStations.Checked);
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void toolStripButtonGrid_Click(object sender, EventArgs e)
-        {
-            db.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
-        {
-            db.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void toolStripButtonCoords_Click(object sender, EventArgs e)
-        {
-            db.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
-        {
-            db.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
-        }
-
-        /// <summary>
-        /// Loads Control
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void glControl_Load(object sender, EventArgs e)
-        {
-
-            GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
-
-            SetupViewport();
-
-            _loaded = true;
-
-            Application.Idle += Application_Idle;
-            _useTimer = false;
-        }
-
-        private void Application_Idle(object sender, EventArgs e)
-        {
-            if (!_useTimer)
-            {
-                glControl.Invalidate();
-            }
-        }
-
-        private void glControl_Paint(object sender, PaintEventArgs e)
-        {
-            CalculateTimeDelta();
-            if (!_kbdActions.Any() && (_cameraSlewProgress == 0.0f || _cameraSlewProgress >= 1.0f))
-            {
-                _ticks = 1;
-                _oldTickCount = DateTime.Now.Ticks / 10000;
-            }
-
-     
-
-            HandleInputs();
-            DoCameraSlew();
-            UpdateCamera();
-            Render();
-
-            if (_kbdActions.Any() || _cameraSlewProgress < 1.0f)
-            {
-                if (_useTimer)
-                {
-                    UpdateTimer.Stop();
-                    _useTimer = false;
-                }
-            }
-            else
-            {
-                if (!_useTimer || Animatetime)
-                {
-                    UpdateTimer.Interval = 100;
-                    UpdateTimer.Start();
-                    _useTimer = true;
-                }
-                else
-                {
-                    UpdateTimer.Stop();
-                    UpdateTimer.Start();
-                }
-            }
-        }
-
-        private void UpdateCamera()
-        {
-            _cameraDir.X = BoundedAngle(_cameraDir.X + _cameraActionRotation.X);
-            _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
-            _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);        // rotate camera by asked value
-
-#if DEBUG
-            bool istranslating = (_cameraActionMovement.X != 0 || _cameraActionMovement.Y != 0 || _cameraActionMovement.Z != 0);
-            if (istranslating)
-                Console.WriteLine("move Camera " + _cameraActionMovement.X + "," + _cameraActionMovement.Y + "," + _cameraActionMovement.Z
-                    + " point " + _cameraDir.X + "," + _cameraDir.Y + "," + _cameraDir.Z);
-#endif
-
-            var rotZ = Matrix4.CreateRotationZ(DegreesToRadians(_cameraDir.Z));
-            var rotX = Matrix4.CreateRotationX( DegreesToRadians(_cameraDir.X) );
-            var rotY = Matrix4.CreateRotationY(DegreesToRadians(_cameraDir.Y));
-
-            bool em = toolStripButtonEliteMovement.Checked && toolStripButtonPerspective.Checked;     // elite movement
-                                                              
-            Vector3 requestedmove = new Vector3(_cameraActionMovement.X, _cameraActionMovement.Y, (em) ? 0 : _cameraActionMovement.Z);
-
-            var translation = Matrix4.CreateTranslation(requestedmove);
-            var cameramove = Matrix4.Identity;
-            cameramove *= translation;
-            cameramove *= rotZ;
-            cameramove *= rotX;
-            cameramove *= rotY;
-
-            Vector3 trans = cameramove.ExtractTranslation();
-
-            if (em)                                             // if in elite movement, Y is not affected
-            {                                                   // by ASDW.
-                trans.Y = 0;                                    // no Y translation even if camera rotated the vector into Y components
-                _cameraPos += trans;
-                _cameraPos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
-            }
-            else
-                _cameraPos += trans;
-#if DEBUG
-            if (istranslating)
-                Console.WriteLine("   em " + em + " Camera now " + _cameraPos.X + "," + _cameraPos.Y + "," + _cameraPos.Z);
-#endif
-        }
-
-        private float BoundedAngle(float angle)
-        {
-            return ((angle + 360 + 180) % 360) - 180;
-        }
-
-        private float DegreesToRadians(float angle)
-        {
-            return (float) (Math.PI * angle / 180.0);
-        }
-
-        private void glControl_Resize(object sender, EventArgs e)
-        {
-            if (!_loaded)
-                return;
-
-            SetupViewport();
-        }
-
         private void glControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             _cameraSlewProgress = 1.0f;
@@ -995,6 +1137,48 @@ namespace EDDiscovery2
                 _mouseStartRotate.Y = e.Y;
                 _mouseStartMove.X = e.X;
                 _mouseStartMove.Y = e.Y;
+            }
+
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
+            {
+                _mouseStartTranslateXY.X = e.X;
+                _mouseStartTranslateXY.Y = e.Y;
+                _mouseStartTranslateXZ.X = e.X;
+                _mouseStartTranslateXZ.Y = e.Y;
+            }
+        }
+
+        private void glControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Left))
+            {
+                _mouseStartRotate.X = e.X;
+                _mouseStartRotate.Y = e.Y;
+
+                if (Math.Abs(e.X - _mouseStartMove.X) + Math.Abs(e.Y - _mouseStartMove.Y) < 8)
+                {
+                    _clickedSystem = GetMouseOverSystem(e.X, e.Y);
+
+                    if (_clickedSystem == null)
+                    {
+                        labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
+                        selectionAllegiance.Text = "Allegiance";
+                        selectionEconomy.Text = "Economy";
+                        selectionGov.Text = "Gov";
+                        selectionState.Text = "State";
+                        viewOnEDSMToolStripMenuItem.Enabled = false;
+                    }
+                    else
+                    {
+                        labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
+                        selectionAllegiance.Text = "Allegiance: " + _clickedSystem.allegiance;
+                        selectionEconomy.Text = "Economy: " + _clickedSystem.primary_economy;
+                        selectionGov.Text = "Gov: " + _clickedSystem.government;
+                        selectionState.Text = "State: " + _clickedSystem.state;
+                        viewOnEDSMToolStripMenuItem.Enabled = true;
+                    }
+                    SetCenterSystem(CenterSystem);
+                }
             }
 
             if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
@@ -1051,7 +1235,7 @@ namespace EDDiscovery2
 
 
                 //_cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
-                _cameraPos.Y += -dy * (1.0f /_zoom) * 2.0f;
+                _cameraPos.Y += -dy * (1.0f / _zoom) * 2.0f;
 
                 glControl.Invalidate();
             }
@@ -1074,6 +1258,29 @@ namespace EDDiscovery2
                 _cameraPos.Z += translation.Y;
 
                 glControl.Invalidate();
+            }
+            else //
+            {
+                if (_mousehovertooltip != null)
+                {
+                    if (Math.Abs(e.X - _mouseHover.X) + Math.Abs(e.Y - _mouseHover.Y) > 8)
+                    {
+                        _mousehovertooltip.Dispose();
+                        _mousehovertooltip = null;
+                    }
+                }
+                else if (_mousehovertick.Enabled)
+                {
+                    if (Math.Abs(e.X - _mouseHover.X) + Math.Abs(e.Y - _mouseHover.Y) > 8)
+                    {
+                        _mousehovertick.Stop();
+                    }
+                }
+                else
+                {
+                    _mouseHover = e.Location;
+                    _mousehovertick.Start();
+                }
             }
         }
 
@@ -1116,143 +1323,42 @@ namespace EDDiscovery2
             glControl.Invalidate();
         }
 
-        private void buttonHome_Click(object sender, EventArgs e)
+        void MouseHoverTick(object sender, EventArgs e)
         {
-            ISystem sys = SystemData.GetSystem(_homeSystem) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
-            OrientateMapAroundSystem(sys);
-        }
+            _mousehovertick.Stop();
+            ISystem hoversystem = GetMouseOverSystem(_mouseHover.X, _mouseHover.Y);
 
-        private void buttonHistory_Click(object sender, EventArgs e)
-        {
-            ISystem sys = SystemData.GetSystem(HistorySelection) ?? SystemData.GetSystem("sol") ?? new SystemClass { name = "Sol", SearchName = "sol", x = 0, y = 0, z = 0 };
-            OrientateMapAroundSystem(sys);
-        }
-
-        private void toolStripButtonPerspective_Click(object sender, EventArgs e)
-        {
-            db.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
-            SetCenterSystem(CenterSystem);
-            SetupViewport();
-        }
-
-        private void glControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Left))
+            if (hoversystem != null)
             {
-                _mouseStartRotate.X = e.X;
-                _mouseStartRotate.Y = e.Y;
+                //Console.WriteLine("Hovering over " + hoversystem.name);
 
-                if (Math.Abs(e.X - _mouseStartMove.X) + Math.Abs(e.Y - _mouseStartMove.Y) < 4)
+                double distcsn = Math.Sqrt((hoversystem.x - CenterSystem.x) * (hoversystem.x - CenterSystem.x) + (hoversystem.y - CenterSystem.y) * (hoversystem.y - CenterSystem.y) + (hoversystem.z - CenterSystem.z) * (hoversystem.z - CenterSystem.z));
+
+                string info = hoversystem.name;
+                info += Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.x.ToString("0.00"), hoversystem.y.ToString("0.00"), hoversystem.z.ToString("0.00"));
+                info += Environment.NewLine + "Allegiance: " + hoversystem.allegiance;
+                info += Environment.NewLine + "Economy: " + hoversystem.primary_economy;
+                info += Environment.NewLine + "Gov: " + hoversystem.government;
+                info += Environment.NewLine + "State: " + hoversystem.state;
+                info += Environment.NewLine + "Distance from " + CenterSystemName + " " + distcsn.ToString("0.0");
+                if (_historyselection != null)
                 {
-                    _clickedSystem = GetMouseOverSystem(e.X, e.Y);
-
-                    if (_clickedSystem == null)
-                    {
-                        labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
-                        selectionAllegiance.Text = "Allegiance";
-                        selectionEconomy.Text = "Economy";
-                        selectionGov.Text = "Gov";
-                        selectionState.Text = "State";
-                        viewOnEDSMToolStripMenuItem.Enabled = false;
-                    }
-                    else
-                    {
-                        labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
-                        selectionAllegiance.Text = "Allegiance: " + _clickedSystem.allegiance;
-                        selectionEconomy.Text = "Economy: " + _clickedSystem.primary_economy;
-                        selectionGov.Text = "Gov: " + _clickedSystem.government;
-                        selectionState.Text = "State: " + _clickedSystem.state;
-                        viewOnEDSMToolStripMenuItem.Enabled = true;
-                    }
-                    SetCenterSystem(CenterSystem);
+                    double disthist = Math.Sqrt((hoversystem.x - _historyselection.x) * (hoversystem.x - _historyselection.x) + (hoversystem.y - _historyselection.y) * (hoversystem.y - _historyselection.y) + (hoversystem.z - _historyselection.z) * (hoversystem.z - _historyselection.z));
+                    info += Environment.NewLine + "Distance from " + _historyselection.name + " " + disthist.ToString("0.0");
                 }
-            }
 
-            if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
-            {
-                _mouseStartTranslateXY.X = e.X;
-                _mouseStartTranslateXY.Y = e.Y;
-                _mouseStartTranslateXZ.X = e.X;
-                _mouseStartTranslateXZ.Y = e.Y;
-            }
-        }
-
-        private void glControl_DoubleClick(object sender, EventArgs e)
-        {
-            ISystem sys = _clickedSystem;
-            if (sys != null)
-            {
-                OrientateMapAroundSystem(sys);
-            }
-        }
-        
-	    private void glControl_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (_useTimer)
-            {
-                glControl.Invalidate();
+                _mousehovertooltip = new System.Windows.Forms.ToolTip();
+                _mousehovertooltip.InitialDelay = 0;
+                _mousehovertooltip.AutoPopDelay = 30000;
+                _mousehovertooltip.ReshowDelay = 0;
+                _mousehovertooltip.IsBalloon = true;
+                _mousehovertooltip.SetToolTip(glControl, info);
             }
         }
 
-        private void glControl_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (_useTimer)
-            {
-                glControl.Invalidate();
-            }
-        }
+        #endregion
 
-        private void FormMap_Activated(object sender, EventArgs e)
-        {
-            _useTimer = false;
-            glControl.Invalidate();
-        }
-
-        private void FormMap_Deactivate(object sender, EventArgs e)
-        {
-            _useTimer = true;
-            UpdateTimer.Stop();
-        }
-
-        private void UpdateTimer_Tick(object sender, EventArgs e)
-        {
-            if (Animatetime)
-            {
-                maxstardate = maxstardate.AddHours(10);
-
-                builder.UpdateStandardSystems(maxstardate);
-
-
-                if (maxstardate > DateTime.Now)
-                    Animatetime = false;
-            }
-
-            glControl.Invalidate();
-        }
-
-        private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
-        {
-            ToolStripButton tsb = (ToolStripButton)sender;
-            db.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
-            SetCenterSystem(CenterSystem);
-        }
-
-        private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (_clickedSystem != null)
-            {
-                var edsm = new EDSM.EDSMClass();
-                edsm.ShowSystemInEDSM(_clickedSystem.name);
-            }
-        }
-
-        private void labelClickedSystemCoords_Click(object sender, EventArgs e)
-        {
-            if (_clickedSystem != null)
-            {
-                systemselectionMenuStrip.Show(labelClickedSystemCoords, 0, labelClickedSystemCoords.Height);
-            }
-        }
+        #region Misc
 
         private class MyRenderer : ToolStripProfessionalRenderer
         {
@@ -1322,6 +1428,7 @@ namespace EDDiscovery2
             }
         }
 
+        #endregion
     }
 }
 
