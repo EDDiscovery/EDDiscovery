@@ -99,7 +99,7 @@ namespace EDDiscovery2
             InitializeComponent();
             db = new SQLiteDBClass();
             _mousehovertick.Tick += new EventHandler(MouseHoverTick);
-            _mousehovertick.Interval = 500;
+            _mousehovertick.Interval = 250;
         }
 
         public void Prepare(string historysel, string homesys , string centersys, float zoom )
