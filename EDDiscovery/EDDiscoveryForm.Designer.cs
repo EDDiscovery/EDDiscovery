@@ -572,7 +572,7 @@
         private ExtendedControls.DrawnPanel panel_minimize;
         private ExtendedControls.DrawnPanel panel_grip;
         private System.Windows.Forms.TabPage tabPageSettings;
-        private EDDiscovery2.Settings settings;
+        public  EDDiscovery2.Settings settings;
         private System.Windows.Forms.TabPage tabPageRoute;
         private RouteControl routeControl1;
         private System.Windows.Forms.TabPage tabPageScreenshots;

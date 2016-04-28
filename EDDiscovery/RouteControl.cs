@@ -647,20 +647,18 @@ namespace EDDiscovery
 
             map.Instance.SystemNames = _discoveryForm.SystemNames;
             map.Instance.VisitedSystems = _discoveryForm.VisitedSystems;
-            map.Instance.Reset();
 
             if (routeSystems != null && routeSystems.Any())
             {
                 float zoom = 400 / float.Parse(textBox_Distance.Text) ;
                 if (zoom < 0.01) zoom = 0.01f;
                 if (zoom > 50) zoom = 50f;
-                map.Instance.CenterSystem = routeSystems.First();
-                map.Instance.PlannedRoute = routeSystems;
-                map.Show(false, zoom);
+                map.ShowPlanned(routeSystems.First().name, _discoveryForm.settings.MapHomeSystem, routeSystems.First().name, zoom,routeSystems);
             }
             else
             {
-                map.Show();
+                MessageBox.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
+                return;
             }
         }
     }
