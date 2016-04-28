@@ -899,8 +899,10 @@ namespace EDDiscovery2
             }
             else
             {
-                Type tp = myControl.GetType();
-                Console.WriteLine("THEME: Unhandled control " + tp.Name + ":" + myControl.Name + " from " + parent.Name);
+                if (!parentcontroltype.Namespace.Equals("ExtendedControls"))
+                {
+                    Console.WriteLine("THEME: Unhandled control " + controltype.Name + ":" + myControl.Name + " from " + parent.Name);
+                }
             }
 
             foreach (Control subC in myControl.Controls)

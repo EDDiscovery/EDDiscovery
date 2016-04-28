@@ -19,6 +19,10 @@ namespace EDDiscovery2
         private SQLiteDBClass _db;
         private ThemeEditor themeeditor = null;
 
+        public string MapHomeSystem { get { return textBoxHomeSystem.Text; } }
+        public double MapZoom { get { return Double.Parse(textBoxDefaultZoom.Text); } }
+        public bool MapCentreOnSelection { get { return radioButtonHistorySelection.Checked; } }
+
         public Settings()
         {
             InitializeComponent();
