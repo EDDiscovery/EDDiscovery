@@ -37,24 +37,56 @@ namespace EDDiscovery2._3DMap
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
         public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
 
+        int gridunitSize = 1000;
+
         public DatasetBuilder()
-        {            
+        {
         }
 
-        public List<IData3DSet> Build()
+        public List<IData3DSet> BuildMaps()
         {
             _datasets = new List<IData3DSet>();
             AddMapImages();
+            return _datasets;
+        }
+
+        public List<IData3DSet> BuildGridLines()
+        {
+            _datasets = new List<IData3DSet>();
             AddGridLines();
+            return _datasets;
+        }
+
+        public List<IData3DSet> BuildGridCoords()
+        {
+            _datasets = new List<IData3DSet>();
+            AddGridCoords();
+            return _datasets;
+        }
+
+        public List<IData3DSet> BuildStars()
+        {
+            _datasets = new List<IData3DSet>();
             AddStandardSystems();
             AddStations();
+            AddPOIsToDataset();
+            return _datasets;
+        }
+
+        public List<IData3DSet> BuildVisitedSystems()
+        {
+            _datasets = new List<IData3DSet>();
             AddVisitedSystemsInformation();
+            AddRoutePlannerInfoToDataset();
+            AddTrilaterationInfoToDataset();
+            return _datasets;
+        }
+
+        public List<IData3DSet> BuildSelected()
+        {
+            _datasets = new List<IData3DSet>();
             AddCenterPointToDataset();
             AddSelectedSystemToDataset();
-            AddPOIsToDataset();
-            AddTrilaterationInfoToDataset();
-            AddRoutePlannerInfoToDataset();
-
             return _datasets;
         }
 
@@ -86,6 +118,39 @@ namespace EDDiscovery2._3DMap
             return text_bmp;
         }
 
+        public void AddGridCoords()
+        {
+            if (GridCoords)
+            {
+                Font fnt = new Font("MS Sans Serif", 20F);
+
+                int bitmapwidth, bitmapheight;
+                Bitmap text_bmp = new Bitmap(100, 30);
+                using (Graphics g = Graphics.FromImage(text_bmp))
+                {
+                    SizeF sz = g.MeasureString("-99999,-99999", fnt);
+                    bitmapwidth = (int)sz.Width + 4;
+                    bitmapheight = (int)sz.Height + 4;
+                }
+                var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("text bitmap", Color.White, 1.0f);
+
+                int textwidthly = 300;
+                int textheightly = 50;
+
+                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
+                {
+                    for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += gridunitSize)
+                    {
+                        datasetMapImg.Add(TexturedQuadData.FromBitmap(DrawGridBitmap(x, z, fnt, bitmapwidth, bitmapheight),
+                            new Point((int)x, (int)z), new Point((int)x + textwidthly, (int)z),
+                            new Point((int)x, (int)z + textheightly), new Point((int)x + textwidthly, (int)z + textheightly)));
+                    }
+                }
+
+                _datasets.Add(datasetMapImg);
+            }
+        }
+
         public void AddGridLines()
         {
             int unitSize = 1000;
@@ -107,39 +172,9 @@ namespace EDDiscovery2._3DMap
                 _datasets.Add(datasetGrid);
             }
 
-            if (GridCoords)
-            {
-                Font fnt = new Font("MS Sans Serif", 20F);
-
-                int bitmapwidth, bitmapheight;
-                Bitmap text_bmp = new Bitmap(100, 30);
-                using (Graphics g = Graphics.FromImage(text_bmp))
-                {
-                    SizeF sz = g.MeasureString("-99999,-99999", fnt);
-                    bitmapwidth = (int)sz.Width + 4;
-                    bitmapheight = (int)sz.Height + 4;
-                }
-                var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("text bitmap", Color.White, 1.0f);
-
-                int textwidthly = 300;
-                int textheightly = 50;
-
-                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
-                {
-                    for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += unitSize)
-                    {
-                        datasetMapImg.Add(TexturedQuadData.FromBitmap(DrawGridBitmap(x, z, fnt, bitmapwidth, bitmapheight),
-                            new Point((int)x, (int)z), new Point((int)x + textwidthly, (int)z),
-                            new Point((int)x, (int)z + textheightly), new Point((int)x + textwidthly, (int)z + textheightly)));
-                    }
-                }
-
-                _datasets.Add(datasetMapImg);
-            }
-
             if (FineGridLines)
             {
-                int smallUnitSize = 100;
+                int smallUnitSize = gridunitSize / 10;
                 var smalldatasetGrid = Data3DSetClass<LineData>.Create("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#202020"), 0.6f);
 
                 int ratio = unitSize / smallUnitSize;
@@ -177,7 +212,7 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public void UpdateStandardSystems(DateTime maxtime)
+        public void UpdateStandardSystems(ref List<IData3DSet> _datasets , DateTime maxtime)     // modify this dataset
         {
 
             var ds = from dataset in _datasets where dataset.Name.Equals("stars") select dataset;
@@ -190,9 +225,7 @@ namespace EDDiscovery2._3DMap
             if (AllSystems && StarList != null)
             {
                 bool addstations = !Stations;
-                //var datasetS = Data3DSetClass<PointData>.Create("stars", Color.White, 1.0f);
-
-
+         
                 foreach (ISystem si in StarList)
                 {
                     if (addstations || (si.population == 0 && si.CreateDate<maxtime))

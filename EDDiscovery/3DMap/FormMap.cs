@@ -22,7 +22,12 @@ namespace EDDiscovery2
 
         SQLiteDBClass db;
 
-        private DatasetBuilder builder;
+        private List<IData3DSet> _datasets_gridlines;
+        private List<IData3DSet> _datasets_gridcoords;
+        private List<IData3DSet> _datasets_maps;
+        private List<IData3DSet> _datasets_stars;
+        private List<IData3DSet> _datasets_selectedsystems;
+        private List<IData3DSet> _datasets_visitedsystems;
 
         private const double ZoomMax = 50;
         private const double ZoomMin = 0.01;
@@ -60,13 +65,12 @@ namespace EDDiscovery2
         private List<SystemClass> _starList;
         private Dictionary<string, SystemClass> _visitedStars;
 
-        private List<IData3DSet> _datasets;
 
         private string _homeSystem;
         private float _defaultZoom;
-        public List<SystemClass> ReferenceSystems { get; set; }
+        private List<SystemClass> ReferenceSystems { get; set; }
         public List<SystemPosition> VisitedSystems { get; set; }
-        public List<SystemClass> PlannedRoute { get; set; }
+        private List<SystemClass> PlannedRoute { get; set; }
 
         public string HistorySelection { get; set; }
         public List<FGEImage> fgeimages = new List<FGEImage>();
@@ -83,7 +87,7 @@ namespace EDDiscovery2
         private float _zfar;
         private bool _useTimer;
 
-        private DateTime maxstardate = new DateTime(2016,1,1);
+        private DateTime maxstardate = new DateTime(2016, 1, 1);
         bool Animatetime = false;
 
         #endregion
@@ -98,33 +102,16 @@ namespace EDDiscovery2
             _mousehovertick.Interval = 500;
         }
 
-        public void Reset()
+        public void Prepare(string historysel, string homesys , string centersys, float zoom )
         {
-            CenterSystem = null;
+            HistorySelection = historysel;
+            _historyselection = SystemData.GetSystem(HistorySelection);
+            _homeSystem = homesys;
+            CenterSystemName = centersys;
+            _defaultZoom = zoom;
+
             ReferenceSystems = null;
             PlannedRoute = null;
-        }
-
-        public void Prepare(bool CenterFromSettings, float zoomOverRide )
-        {
-            _homeSystem = db.GetSettingString("DefaultMapCenter", "Sol");
-            if (zoomOverRide <= 50 && zoomOverRide >= 0.01)
-            {
-                _defaultZoom = zoomOverRide;
-            }
-            else
-            {
-                _defaultZoom = (float)db.GetSettingDouble("DefaultMapZoom", 1.0);
-            }
-
-            if (CenterFromSettings)
-            {
-                bool selectionCentre = db.GetSettingBool("CentreMapOnSelection", true);
-
-                CenterSystemName = selectionCentre ? HistorySelection : _homeSystem;
-            }
-
-            _historyselection = SystemData.GetSystem(HistorySelection);
 
             OrientateMapAroundSystem(CenterSystem);
 
@@ -138,20 +125,35 @@ namespace EDDiscovery2
             toolStripButtonFineGrid.Checked = db.GetSettingBool("Map3DFineGrid", true );
             toolStripButtonCoords.Checked = db.GetSettingBool("Map3DCoords", true);
             toolStripButtonEliteMovement.Checked = db.GetSettingBool("Map3DEliteMove", false);
+
+            textboxFrom.AutoCompleteCustomSource = _systemNames;
+        }
+
+        public void SetPlannedRoute(List<SystemClass> plannedr)
+        {
+            PlannedRoute = plannedr;
+            GenerateDataSetsVisitedSystems();
+        }
+
+        public void SetReferenceSystems(List<SystemClass> refsys)
+        {
+            ReferenceSystems = refsys;
+            GenerateDataSetsVisitedSystems();
         }
 
         private void FormMap_Load(object sender, EventArgs e)
         {
-            textboxFrom.AutoCompleteCustomSource = _systemNames;
             LoadMapImages();
             FillExpeditions();
             ShowCenterSystem();
-            GenerateDataSets();
             labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
 
-            //TODO: Move this functionality into DatasetBuilder
-            //GenerateDataSetsAllegiance();
-            //GenerateDataSetsGovernment();
+            GenerateDataSetsGridLines();
+            GenerateDataSetsGridCoords();
+            GenerateDataSetsMaps();
+            GenerateDataSetsStars();
+            GenerateDataSetsSelectedSystems();
+            GenerateDataSetsVisitedSystems();
         }
 
         private void FormMap_Activated(object sender, EventArgs e)
@@ -338,12 +340,61 @@ namespace EDDiscovery2
 
         #region Generate Data Sets
 
-        private void GenerateDataSets()
+        private void GenerateDataSetsGridLines()
         {
-            GenerateDataSetStandard();
+            //Console.WriteLine("Data set due to " + Environment.StackTrace);
+            DeleteDataset(ref _datasets_gridlines);
+            DatasetBuilder builder = CreateBuilder();
+            _datasets_gridlines = builder.BuildGridLines();
+            builder = null;
         }
 
-        private void GenerateDataSetStandard()
+        private void GenerateDataSetsGridCoords()
+        {
+            //Console.WriteLine("Data set due to " + Environment.StackTrace);
+            DeleteDataset(ref _datasets_gridcoords);
+            DatasetBuilder builder = CreateBuilder();
+            _datasets_gridcoords = builder.BuildGridCoords();
+            builder = null;
+        }
+
+        private void GenerateDataSetsMaps()
+        {
+            //Console.WriteLine("STARS Data set due to " + Environment.StackTrace);
+            DeleteDataset(ref _datasets_maps);
+            DatasetBuilder builder = CreateBuilder();
+            _datasets_maps = builder.BuildMaps();
+            builder = null;
+        }
+
+        private void GenerateDataSetsStars()
+        {
+            //Console.WriteLine("Data set due to " + Environment.StackTrace);
+            DeleteDataset(ref _datasets_stars);
+            DatasetBuilder builder = CreateBuilder();
+            _datasets_stars = builder.BuildStars();
+            builder = null;
+        }
+
+        private void GenerateDataSetsVisitedSystems()
+        {
+            //Console.WriteLine("Data set due to " + Environment.StackTrace);
+            DeleteDataset(ref _datasets_visitedsystems);
+            DatasetBuilder builder = CreateBuilder();
+            _datasets_visitedsystems = builder.BuildVisitedSystems();
+            builder = null;
+        }
+
+        private void GenerateDataSetsSelectedSystems()
+        {
+            //Console.WriteLine("Data set due to " + Environment.StackTrace);
+            DeleteDataset(ref _datasets_selectedsystems);
+            DatasetBuilder builder = CreateBuilder();
+            _datasets_selectedsystems = builder.BuildSelected();
+            builder = null;
+        }
+
+        private void DeleteDataset(ref List<IData3DSet> _datasets)
         {
             if (_datasets != null)
             {
@@ -355,12 +406,15 @@ namespace EDDiscovery2
                     }
                 }
             }
+        }
 
+        private DatasetBuilder CreateBuilder()
+        {
             InitStarLists();
 
             selectedmaps = GetSelectedMaps();
 
-            builder = new DatasetBuilder()
+            DatasetBuilder builder = new DatasetBuilder()
             {
                 // TODO: I'm working on deprecating "Origin" so that everything is build with an origin of (0,0,0) and the camera moves instead.
                 // This will allow us a little more flexibility with moving the cursor around and improving translation/rotations.
@@ -392,7 +446,7 @@ namespace EDDiscovery2
                 builder.PlannedRoute = PlannedRoute.ConvertAll(system => (ISystem)system);
             }
 
-            _datasets = builder.Build();
+            return builder;
         }
 
         //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
@@ -455,14 +509,13 @@ namespace EDDiscovery2
 
         #region Set Orientation
 
-        private void SetCenterSystem(ISystem sys)
+        private void SetCenterSystemTo(ISystem sys)
         {
             if (sys == null) return;
 
             CenterSystem = sys;
             ShowCenterSystem();
-
-            GenerateDataSets();
+            GenerateDataSetsSelectedSystems();
             glControl.Invalidate();
         }
 
@@ -488,7 +541,7 @@ namespace EDDiscovery2
         {
             CenterSystem = system;
             textboxFrom.Text = system.name;
-            SetCenterSystem(system);
+            SetCenterSystemTo(system);
             StartCameraSlew();
         }
 
@@ -498,13 +551,13 @@ namespace EDDiscovery2
 
         private void HandleInputs()
         {
-            ReceiveKeybaordActions();
+            ReceiveKeyboardActions();
             HandleTurningAdjustments();
             HandleMovementAdjustments();
             HandleZoomAdjustment();
         }
 
-        private void ReceiveKeybaordActions()
+        private void ReceiveKeyboardActions()
         {
             _kbdActions.Reset();
 
@@ -552,7 +605,7 @@ namespace EDDiscovery2
         {
             _cameraActionRotation = Vector3.Zero;
 
-            var angle = (float)  _ticks * 0.1f;
+            var angle = (float)  _ticks * 0.075f;
             if (_kbdActions.YawLeft)
             {
                 _cameraActionRotation.Z = -angle;
@@ -583,7 +636,9 @@ namespace EDDiscovery2
         private void HandleMovementAdjustments()
         {
             _cameraActionMovement = Vector3.Zero;
-            var distance = _ticks * (1.0f / _zoom);
+            float zoomlimited = Math.Min(Math.Max(_zoom, 0.01F), 15.0F);
+            var distance = _ticks * (0.5f / zoomlimited);
+            //Console.WriteLine("Distance " + distance + " zoom " + _zoom + " lzoom " + zoomlimited );
             if (_kbdActions.Left)
             {
                 _cameraActionMovement.X = -distance;
@@ -703,10 +758,18 @@ namespace EDDiscovery2
 
         private void DrawStars()
         {
-            foreach (var dataset in _datasets)
-            {
+            foreach (var dataset in _datasets_maps)                     // needs to be in order of background to foreground objects
                 dataset.DrawAll(glControl);
-            }
+            foreach (var dataset in _datasets_gridlines)
+                dataset.DrawAll(glControl);
+            foreach (var dataset in _datasets_gridcoords)
+                dataset.DrawAll(glControl);
+            foreach (var dataset in _datasets_stars)
+                dataset.DrawAll(glControl);
+            foreach (var dataset in _datasets_selectedsystems)
+                dataset.DrawAll(glControl);
+            foreach (var dataset in _datasets_visitedsystems)
+                dataset.DrawAll(glControl);
         }
 
         private void UpdateStatus()
@@ -732,6 +795,8 @@ namespace EDDiscovery2
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
             CalculateTimeDelta();
+            //Console.WriteLine("Paint at " + Environment.TickCount + " Delta " + _ticks);
+
             if (!_kbdActions.Any() && (_cameraSlewProgress == 0.0f || _cameraSlewProgress >= 1.0f))
             {
                 _ticks = 1;
@@ -773,8 +838,9 @@ namespace EDDiscovery2
             {
                 maxstardate = maxstardate.AddHours(10);
 
-                builder.UpdateStandardSystems(maxstardate);
-
+                DatasetBuilder build = CreateBuilder();
+                build.UpdateStandardSystems(ref _datasets_stars, maxstardate);
+                build = null;
 
                 if (maxstardate > DateTime.Now)
                     Animatetime = false;
@@ -837,9 +903,9 @@ namespace EDDiscovery2
 
 #if DEBUG
             bool istranslating = (_cameraActionMovement.X != 0 || _cameraActionMovement.Y != 0 || _cameraActionMovement.Z != 0);
-            if (istranslating)
-                Console.WriteLine("move Camera " + _cameraActionMovement.X + "," + _cameraActionMovement.Y + "," + _cameraActionMovement.Z
-                    + " point " + _cameraDir.X + "," + _cameraDir.Y + "," + _cameraDir.Z);
+//            if (istranslating)
+//                Console.WriteLine("move Camera " + _cameraActionMovement.X + "," + _cameraActionMovement.Y + "," + _cameraActionMovement.Z
+//                    + " point " + _cameraDir.X + "," + _cameraDir.Y + "," + _cameraDir.Z);
 #endif
 
             var rotZ = Matrix4.CreateRotationZ(DegreesToRadians(_cameraDir.Z));
@@ -868,8 +934,8 @@ namespace EDDiscovery2
             else
                 _cameraPos += trans;
 #if DEBUG
-            if (istranslating)
-                Console.WriteLine("   em " + em + " Camera now " + _cameraPos.X + "," + _cameraPos.Y + "," + _cameraPos.Z);
+//            if (istranslating)
+//                Console.WriteLine("   em " + em + " Camera now " + _cameraPos.X + "," + _cameraPos.Y + "," + _cameraPos.Z);
 #endif
         }
 
@@ -890,13 +956,15 @@ namespace EDDiscovery2
         private void EndPicker_ValueChanged(object sender, EventArgs e)
         {
             endTime = endPicker.Value;
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
         }
 
         private void StartPicker_ValueChanged(object sender, EventArgs e)
         {
             startTime = startPicker.Value;
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
         }
 
         private void dropdownFilterHistory_Custom_Click(object sender, EventArgs e, ToolStripButton sel)
@@ -919,7 +987,8 @@ namespace EDDiscovery2
             endPickerHost.Visible = true;
             startPicker.Value = startTime;
             endPicker.Value = endTime;
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
         }
 
         private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc)
@@ -936,7 +1005,8 @@ namespace EDDiscovery2
             endTime = DateTime.Now.AddDays(1);
             startPickerHost.Visible = false;
             endPickerHost.Visible = false;
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
         }
 
         private void buttonCenter_Click(object sender, EventArgs e)
@@ -951,43 +1021,49 @@ namespace EDDiscovery2
             SystemPosition ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
 
             if (ps2 != null)
-                SetCenterSystem(ps2.curSystem);
+                SetCenterSystemTo(ps2.curSystem);
         }
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
         }
 
         private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DAllStars", toolStripButtonShowAllStars.Checked);
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsStars();
+            glControl.Invalidate();
         }
 
         private void toolStripButtonStations_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DButtonStations", toolStripButtonStations.Checked);
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsStars();
+            glControl.Invalidate();
         }
 
         private void toolStripButtonGrid_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsGridLines();
+            glControl.Invalidate();
         }
 
         private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsGridLines();
+            glControl.Invalidate();
         }
 
         private void toolStripButtonCoords_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsGridCoords();
+            glControl.Invalidate();
         }
 
         private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
@@ -1010,7 +1086,6 @@ namespace EDDiscovery2
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
-            SetCenterSystem(CenterSystem);
             SetupViewport();
         }
 
@@ -1043,7 +1118,8 @@ namespace EDDiscovery2
         {
             ToolStripButton tsb = (ToolStripButton)sender;
             db.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
-            SetCenterSystem(CenterSystem);
+            GenerateDataSetsMaps();
+            glControl.Invalidate();
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1176,8 +1252,8 @@ namespace EDDiscovery2
                         selectionGov.Text = "Gov: " + _clickedSystem.government;
                         selectionState.Text = "State: " + _clickedSystem.state;
                         viewOnEDSMToolStripMenuItem.Enabled = true;
+                        SetCenterSystemTo(CenterSystem);
                     }
-                    SetCenterSystem(CenterSystem);
                 }
             }
 
