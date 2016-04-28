@@ -386,6 +386,12 @@ namespace EDDiscovery
                     DownloadMapFile("DW4.jpg");
                     DownloadMapFile("DW4.json");
 
+                    DownloadMapFile("Formidine.png");
+                    DownloadMapFile("Formidine.json");
+                    DownloadMapFile("Formidine trans.png");
+                    DownloadMapFile("Formidine trans.json");
+
+
                     DeleteMapFile("DW4.png");
                     DeleteMapFile("SC-00.jpg");
 
