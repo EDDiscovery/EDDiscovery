@@ -519,7 +519,7 @@ namespace EDDiscovery
                                             dbsys.Source = tlUnit.id;
                                             dbsys.EDSM_sync = false;
                                             dbsys.Unit = fi.Name;
-                                            dbsys.MapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+                                            dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
                                             dbsys.Unit = fi.Name;
                                             dbsys.Commander = 0;
 

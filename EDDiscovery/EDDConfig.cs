@@ -32,6 +32,7 @@ namespace EDDiscovery2
         {
             { "Netlogdir", () => System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments", "Products") },
             { "NetlogDirAutoMode", () => true },
+            { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() }
         };
 
         SQLiteDBClass _db = new SQLiteDBClass();
@@ -117,6 +118,7 @@ namespace EDDiscovery2
 
         public string NetLogDir { get { return GetSettingString("Netlogdir"); } set { PutSettingString("Netlogdir", value); } }
         public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
+        public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
 
         private bool GetSettingBool(string key)
         {

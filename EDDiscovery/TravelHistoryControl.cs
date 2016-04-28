@@ -54,7 +54,7 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             sync = new EDSMSync(_discoveryForm);
             var db = new SQLiteDBClass();
-            defaultMapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+            defaultMapColour = EDDConfig.Instance.DefaultMapColour;
             EDSMSyncTo = db.GetSettingBool("EDSMSyncTo", true);
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
