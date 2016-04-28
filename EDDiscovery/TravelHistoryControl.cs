@@ -512,7 +512,10 @@ namespace EDDiscovery
             comboBoxCommander.DataSource = commanders;
             comboBoxCommander.ValueMember = "Nr";
             comboBoxCommander.DisplayMember = "Name";
-            comboBoxCommander.SelectedIndex = 1;
+
+            EDCommander currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander;
+            comboBoxCommander.SelectedIndex = commanders.IndexOf(currentcmdr);
+            activecommander = currentcmdr.Nr;
 
             comboBoxCommander.Enabled = true;
 
