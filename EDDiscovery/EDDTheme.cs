@@ -517,8 +517,12 @@ namespace EDDiscovery2
 
             if (i != -1)
             {
+                int size = (int)themelist[i].fontsize;
                 fontwanted = themelist[i].fontname;
-                using (Font fntnew = new Font(fontwanted, themelist[i].fontsize, FontStyle.Regular))
+                if (size < 1)
+                    size = 9;
+
+                using (Font fntnew = new Font(fontwanted, size, FontStyle.Regular))
                 {
                     return string.Compare(fntnew.Name, fontwanted, true) == 0;
                 }
