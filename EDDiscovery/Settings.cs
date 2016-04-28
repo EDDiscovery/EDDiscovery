@@ -54,7 +54,7 @@ namespace EDDiscovery2
 
         public void InitSettingsTab()
         {
-            bool auto = _db.GetSettingBool("NetlogDirAutoMode", true);
+            bool auto = EDDConfig.Instance.NetLogDirAutoMode;
 
             if (auto)
             {
@@ -65,8 +65,10 @@ namespace EDDiscovery2
                 radioButton_Manual.Checked = true;
             }
 
-            string datapath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
-            textBoxNetLogDir.Text = _db.GetSettingString("Netlogdir", datapath);
+            textBoxNetLogDir.Text = EDDConfig.Instance.NetLogDir;
+
+            EDDConfig.Instance.NetLogDirAutoModeChanged += EDDConfig_NetLogDirAutoModeChanged;
+            EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
 
             checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
@@ -97,8 +99,8 @@ namespace EDDiscovery2
 
         public void SaveSettings()
         {
-            _db.PutSettingBool("NetlogDirAutoMode", radioButton_Auto.Checked);
-            _db.PutSettingString("Netlogdir", textBoxNetLogDir.Text);
+            EDDConfig.Instance.NetLogDirAutoMode = radioButton_Auto.Checked;
+            EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
             _db.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
             _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
             _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
@@ -129,6 +131,42 @@ namespace EDDiscovery2
             }
         }
 
+        private void textBoxNetLogDir_Validating(object sender, CancelEventArgs e)
+        {
+            var path = textBoxNetLogDir.Text;
+            if (!Directory.Exists(path))
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void textBoxNetLogDir_Validated(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
+        }
+
+        private void radioButton_Auto_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.NetLogDirAutoMode = radioButton_Auto.Checked;
+        }
+
+        private void EDDConfig_NetLogDirChanged()
+        {
+            if (EDDConfig.Instance.NetLogDir != textBoxNetLogDir.Text)
+            {
+                textBoxNetLogDir.Text = EDDConfig.Instance.NetLogDir;
+            }
+        }
+
+        private void EDDConfig_NetLogDirAutoModeChanged()
+        {
+            if (EDDConfig.Instance.NetLogDirAutoMode != radioButton_Auto.Checked)
+            {
+                radioButton_Auto.Checked = EDDConfig.Instance.NetLogDirAutoMode;
+                radioButton_Manual.Checked = !EDDConfig.Instance.NetLogDirAutoMode;
+            }
+        }
+
         private void button_Browse_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dirdlg = new FolderBrowserDialog();
@@ -138,6 +176,7 @@ namespace EDDiscovery2
             if (dlgResult == DialogResult.OK)
             {
                 textBoxNetLogDir.Text = dirdlg.SelectedPath;
+                EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
             }
         }
 
@@ -160,7 +199,7 @@ namespace EDDiscovery2
             {
                 _discoveryForm.TravelControl.defaultMapColour = mapColorDialog.Color.ToArgb();
                 var db = new SQLiteDBClass();
-                db.PutSettingInt("DefaultMap", _discoveryForm.TravelControl.defaultMapColour);
+                EDDConfig.Instance.DefaultMapColour = _discoveryForm.TravelControl.defaultMapColour;
                 panel_defaultmapcolor.BackColor = Color.FromArgb(_discoveryForm.TravelControl.defaultMapColour);
             }
         }

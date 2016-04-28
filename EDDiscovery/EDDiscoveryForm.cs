@@ -77,7 +77,7 @@ namespace EDDiscovery
             InitializeComponent();
             ProcessCommandLineOptions();
 
-            EDDConfig = new EDDConfig();
+            EDDConfig = EDDConfig.Instance;
 
             //_fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
             _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");

@@ -111,6 +111,8 @@
             this.textBoxNetLogDir.Name = "textBoxNetLogDir";
             this.textBoxNetLogDir.Size = new System.Drawing.Size(623, 20);
             this.textBoxNetLogDir.TabIndex = 2;
+            this.textBoxNetLogDir.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxNetLogDir_Validating);
+            this.textBoxNetLogDir.Validated += new System.EventHandler(this.textBoxNetLogDir_Validated);
             // 
             // radioButton_Manual
             // 
@@ -145,6 +147,7 @@
             this.radioButton_Auto.TabStop = true;
             this.radioButton_Auto.Text = "Auto";
             this.radioButton_Auto.UseVisualStyleBackColor = true;
+            this.radioButton_Auto.CheckedChanged += new System.EventHandler(this.radioButton_Auto_CheckedChanged);
             // 
             // groupBox4
             // 
