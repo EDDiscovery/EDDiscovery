@@ -227,7 +227,7 @@ namespace EDDiscovery
 
         private void GetVisitedSystems()
         {                                                       // for backwards compatibility, don't store RGB value.
-            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour, activecommander);
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)

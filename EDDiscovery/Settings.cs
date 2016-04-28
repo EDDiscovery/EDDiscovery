@@ -65,8 +65,10 @@ namespace EDDiscovery2
                 radioButton_Manual.Checked = true;
             }
 
-            string datapath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments\\Products"); // \\FORC-FDEV-D-1001\\Logs\\";
             textBoxNetLogDir.Text = EDDConfig.Instance.NetLogDir;
+
+            EDDConfig.Instance.NetLogDirAutoModeChanged += EDDConfig_NetLogDirAutoModeChanged;
+            EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
 
             checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
@@ -129,6 +131,42 @@ namespace EDDiscovery2
             }
         }
 
+        private void textBoxNetLogDir_Validating(object sender, CancelEventArgs e)
+        {
+            var path = textBoxNetLogDir.Text;
+            if (!Directory.Exists(path))
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void textBoxNetLogDir_Validated(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
+        }
+
+        private void radioButton_Auto_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.NetLogDirAutoMode = radioButton_Auto.Checked;
+        }
+
+        private void EDDConfig_NetLogDirChanged()
+        {
+            if (EDDConfig.Instance.NetLogDir != textBoxNetLogDir.Text)
+            {
+                textBoxNetLogDir.Text = EDDConfig.Instance.NetLogDir;
+            }
+        }
+
+        private void EDDConfig_NetLogDirAutoModeChanged()
+        {
+            if (EDDConfig.Instance.NetLogDirAutoMode != radioButton_Auto.Checked)
+            {
+                radioButton_Auto.Checked = EDDConfig.Instance.NetLogDirAutoMode;
+                radioButton_Manual.Checked = !EDDConfig.Instance.NetLogDirAutoMode;
+            }
+        }
+
         private void button_Browse_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dirdlg = new FolderBrowserDialog();
@@ -138,6 +176,7 @@ namespace EDDiscovery2
             if (dlgResult == DialogResult.OK)
             {
                 textBoxNetLogDir.Text = dirdlg.SelectedPath;
+                EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
             }
         }
 
