@@ -54,7 +54,7 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             sync = new EDSMSync(_discoveryForm);
             var db = new SQLiteDBClass();
-            defaultMapColour = db.GetSettingInt("DefaultMap", Color.Red.ToArgb());
+            defaultMapColour = EDDConfig.Instance.DefaultMapColour;
             EDSMSyncTo = db.GetSettingBool("EDSMSyncTo", true);
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
@@ -227,7 +227,7 @@ namespace EDDiscovery
 
         private void GetVisitedSystems()
         {                                                       // for backwards compatibility, don't store RGB value.
-            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour, activecommander);
+            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
@@ -512,7 +512,10 @@ namespace EDDiscovery
             comboBoxCommander.DataSource = commanders;
             comboBoxCommander.ValueMember = "Nr";
             comboBoxCommander.DisplayMember = "Name";
-            comboBoxCommander.SelectedIndex = 1;
+
+            EDCommander currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander;
+            comboBoxCommander.SelectedIndex = commanders.IndexOf(currentcmdr);
+            activecommander = currentcmdr.Nr;
 
             comboBoxCommander.Enabled = true;
 
@@ -524,7 +527,7 @@ namespace EDDiscovery
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 activecommander = itm.Nr;
-                netlog.ActiveCommander = itm.Nr;
+                EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
                 if (visitedSystems != null)
                     visitedSystems.Clear();
                 RefreshHistory();
