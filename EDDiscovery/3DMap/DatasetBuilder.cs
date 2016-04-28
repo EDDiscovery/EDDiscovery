@@ -25,6 +25,8 @@ namespace EDDiscovery2._3DMap
         public List<ISystem> PlannedRoute { get; set; } = new List<ISystem>();
 
         public bool GridLines { get; set; } = false;
+        public bool FineGridLines { get; set; } = false;
+        public bool GridCoords { get; set; } = false;
         public bool DrawLines { get; set; } = false;
         public bool AllSystems { get; set; } = false;
         public bool Stations { get; set; } = false;
@@ -69,24 +71,93 @@ namespace EDDiscovery2._3DMap
             }
         }
 
+        public Bitmap DrawGridBitmap(float x, float z, Font fnt, int w, int h)
+        {
+            Bitmap text_bmp = new Bitmap(w, h);
+            using (Graphics g = Graphics.FromImage(text_bmp))
+            {
+                //using (Brush br = new SolidBrush(Color.Yellow))
+                // g.FillRectangle(br, 0, 0, text_bmp.Width, text_bmp.Height);
+
+                using (Brush br = new SolidBrush((Color)System.Drawing.ColorTranslator.FromHtml("#296A6C")))
+                    g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(0, 0));
+            }
+
+            return text_bmp;
+        }
+
         public void AddGridLines()
         {
             int unitSize = 1000;
+
             if (GridLines)
             {
-                bool addstations = !Stations;
                 var datasetGrid = Data3DSetClass<LineData>.Create("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
 
                 for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
                 {
-                    datasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x,0,MaxGridPos.Y));
+                    datasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x, 0, MaxGridPos.Y));
                 }
+
                 for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += unitSize)
                 {
                     datasetGrid.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
                 }
 
                 _datasets.Add(datasetGrid);
+            }
+
+            if (GridCoords)
+            {
+                Font fnt = new Font("MS Sans Serif", 20F);
+
+                int bitmapwidth, bitmapheight;
+                Bitmap text_bmp = new Bitmap(100, 30);
+                using (Graphics g = Graphics.FromImage(text_bmp))
+                {
+                    SizeF sz = g.MeasureString("-99999,-99999", fnt);
+                    bitmapwidth = (int)sz.Width + 4;
+                    bitmapheight = (int)sz.Height + 4;
+                }
+                var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("text bitmap", Color.White, 1.0f);
+
+                int textwidthly = 300;
+                int textheightly = 50;
+
+                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
+                {
+                    for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += unitSize)
+                    {
+                        datasetMapImg.Add(TexturedQuadData.FromBitmap(DrawGridBitmap(x, z, fnt, bitmapwidth, bitmapheight),
+                            new Point((int)x, (int)z), new Point((int)x + textwidthly, (int)z),
+                            new Point((int)x, (int)z + textheightly), new Point((int)x + textwidthly, (int)z + textheightly)));
+                    }
+                }
+
+                _datasets.Add(datasetMapImg);
+            }
+
+            if (FineGridLines)
+            {
+                int smallUnitSize = 100;
+                var smalldatasetGrid = Data3DSetClass<LineData>.Create("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#202020"), 0.6f);
+
+                int ratio = unitSize / smallUnitSize;
+                int c = 0;
+
+                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += smallUnitSize)
+                {
+                    if (!GridLines || (c++ % ratio != 0))
+                        smalldatasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x, 0, MaxGridPos.Y));
+                }
+                c = 0;
+                for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += smallUnitSize)
+                {
+                    if (!GridLines || (c++ % ratio != 0))
+                        smalldatasetGrid.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
+                }
+
+                _datasets.Add(smalldatasetGrid);
             }
         }
 
