@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery;
-
+using EDDiscovery.DB;
 
 namespace EDDiscovery2._3DMap
 {
@@ -25,22 +25,27 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public void Show()
+        public void Show(string historysel, string homesys, string centersys, float zoom)
         {
-            Show(true);
-        }
-
-        public void Show(bool CenterFromSettings)
-        {
-            Show(CenterFromSettings, -1);
-        }
-
-        public void Show(bool CenterFromSettings, float OverrideZoom)
-        {
-            _formMap.Prepare(CenterFromSettings, OverrideZoom);
+            _formMap.Prepare(historysel, homesys, centersys, zoom);
             _formMap.Show();
             _formMap.Focus();
         }
 
+        public void ShowPlanned(string historysel, string homesys, string centersys, float zoom, List<SystemClass> plannedr)
+        {
+            _formMap.Prepare(historysel, homesys, centersys, zoom);
+            _formMap.SetPlannedRoute(plannedr);
+            _formMap.Show();
+            _formMap.Focus();
+        }
+
+        public void ShowTrilat(string historysel, string homesys, string centersys, float zoom, List<SystemClass> plannedr)
+        {
+            _formMap.Prepare(historysel, homesys, centersys, zoom);
+            _formMap.SetReferenceSystems(plannedr);
+            _formMap.Show();
+            _formMap.Focus();
+        }
     }
 }

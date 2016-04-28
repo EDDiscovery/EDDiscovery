@@ -582,10 +582,11 @@ namespace EDDiscovery
 
             map.Instance.SystemNames = _discoveryForm.SystemNames;
             map.Instance.VisitedSystems = _discoveryForm.VisitedSystems;
-            map.Instance.Reset();
 
-            map.Instance.HistorySelection = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
-            map.Show();
+            string selname = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
+            map.Show(selname, _discoveryForm.settings.MapHomeSystem, 
+                        _discoveryForm.settings.MapCentreOnSelection ? selname : _discoveryForm.settings.MapHomeSystem,
+                        _discoveryForm.settings.MapZoom);
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
