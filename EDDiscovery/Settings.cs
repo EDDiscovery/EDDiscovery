@@ -160,7 +160,7 @@ namespace EDDiscovery2
             {
                 _discoveryForm.TravelControl.defaultMapColour = mapColorDialog.Color.ToArgb();
                 var db = new SQLiteDBClass();
-                db.PutSettingInt("DefaultMap", _discoveryForm.TravelControl.defaultMapColour);
+                EDDConfig.Instance.DefaultMapColour = _discoveryForm.TravelControl.defaultMapColour;
                 panel_defaultmapcolor.BackColor = Color.FromArgb(_discoveryForm.TravelControl.defaultMapColour);
             }
         }
