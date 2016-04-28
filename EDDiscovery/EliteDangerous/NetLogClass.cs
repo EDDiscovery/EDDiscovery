@@ -123,7 +123,7 @@ namespace EDDiscovery
 
 
 
-        public List<SystemPosition> ParseFiles(ExtendedControls.RichTextBoxScroll richTextBox_History, int defaultMapColour, int commander)
+        public List<SystemPosition> ParseFiles(ExtendedControls.RichTextBoxScroll richTextBox_History, int defaultMapColour)
         {
             string datapath;
             DirectoryInfo dirInfo;
@@ -264,6 +264,9 @@ namespace EDDiscovery
                         AppendText(richTextBox_History, fi.Name + " " + nr.ToString() + " added to local database." + Environment.NewLine, Color.Black);
                     }
                 }
+
+                ReloadMonitor();
+
                 NoEvents = false;
             }
 
@@ -415,140 +418,172 @@ namespace EDDiscovery
             ThreadNetLog.Join();
         }
 
+        public void ReloadMonitor()
+        {
+            lock (EventLogLock)
+            {
+                string logdir = GetNetLogPath();
+                if (m_Watcher != null && m_Watcher.Path != logdir + "\\" && Directory.Exists(logdir))
+                {
+                    try
+                    {
+                        m_Watcher.EnableRaisingEvents = false;
+                        m_Watcher.Path = logdir + "\\";
+                        m_Watcher.EnableRaisingEvents = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.WriteLine("Exception while updating netlog path: " + ex.Message);
+                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                    }
+                }
+            }
+        }
 
         private void NetLogMain()
         {
-            try
+            using (m_Watcher = new System.IO.FileSystemWatcher())
             {
-                m_Watcher = new System.IO.FileSystemWatcher();
 
-                if (Directory.Exists(GetNetLogPath()))
-                {
-                    m_Watcher.Path = GetNetLogPath() + "\\";
-                    m_Watcher.Filter = "netLog*.log";
-                    m_Watcher.IncludeSubdirectories = true;
-                    m_Watcher.NotifyFilter = NotifyFilters.FileName; // | NotifyFilters.Size; 
-
-                    m_Watcher.Changed += new FileSystemEventHandler(OnChanged);
-                    m_Watcher.Created += new FileSystemEventHandler(OnChanged);
-                    m_Watcher.Deleted += new FileSystemEventHandler(OnChanged);
-                    m_Watcher.EnableRaisingEvents = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show("Net log watcher exception : " + ex.Message, "EDDiscovery Error");
-                System.Diagnostics.Trace.WriteLine("NetlogMAin exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-            }
-
-            List<TravelLogUnit> travelogUnits;
-            // Get TravelLogUnits;
-            travelogUnits = null;
-            TravelLogUnit  tlUnit=null;
-            SQLiteDBClass db = new SQLiteDBClass();
-
-            int ii =0;
-
-
-            while (!Exit)
-            {
                 try
                 {
-
-
-                    ii++;
-                    //Thread.Sleep(2000);
-                    NewLogEvent.WaitOne(2000);
-
-                    if (Exit)
+                    string logpath = GetNetLogPath();
+                    if (Directory.Exists(logpath))
                     {
-                        return;
+                        m_Watcher.Path = logpath + "\\";
+                        m_Watcher.Filter = "netLog*.log";
+                        m_Watcher.IncludeSubdirectories = true;
+                        m_Watcher.NotifyFilter = NotifyFilters.FileName; // | NotifyFilters.Size; 
+
+                        m_Watcher.Changed += new FileSystemEventHandler(OnChanged);
+                        m_Watcher.Created += new FileSystemEventHandler(OnChanged);
+                        m_Watcher.Deleted += new FileSystemEventHandler(OnChanged);
+                        m_Watcher.EnableRaisingEvents = true;
                     }
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show("Net log watcher exception : " + ex.Message, "EDDiscovery Error");
+                    System.Diagnostics.Trace.WriteLine("NetlogMAin exception : " + ex.Message);
+                    System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                    EliteDangerous.CheckED();
+                }
 
-                    lock (EventLogLock)
+                EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
+
+                List<TravelLogUnit> travelogUnits;
+                // Get TravelLogUnits;
+                travelogUnits = null;
+                TravelLogUnit tlUnit = null;
+                SQLiteDBClass db = new SQLiteDBClass();
+
+                int ii = 0;
+
+
+                while (!Exit)
+                {
+                    try
                     {
-                        if (NoEvents == false)
+
+
+                        ii++;
+                        //Thread.Sleep(2000);
+                        NewLogEvent.WaitOne(2000);
+
+                        if (Exit)
                         {
-                            NetLogFileInfo nfi;
-                            if (!NetLogFileQueue.TryDequeue(out nfi))
-                            {
-                                nfi = lastnfi;
-                            }
+                            return;
+                        }
 
-                            if (nfi != null)
-                            {
-                                FileInfo fi = new FileInfo(nfi.FileName);
+                        EliteDangerous.CheckED();
 
-                                if (fi.Length != nfi.fileSize || ii % 5 == 0)
+                        lock (EventLogLock)
+                        {
+                            if (NoEvents == false)
+                            {
+                                NetLogFileInfo nfi;
+                                if (!NetLogFileQueue.TryDequeue(out nfi))
                                 {
-                                    if (tlUnit == null || !tlUnit.Name.Equals(Path.GetFileName(nfi.FileName)))  // Create / find new travellog unit
+                                    nfi = lastnfi;
+                                }
+
+                                if (nfi != null)
+                                {
+                                    FileInfo fi = new FileInfo(nfi.FileName);
+
+                                    if (fi.Length != nfi.fileSize || ii % 5 == 0)
                                     {
-                                        travelogUnits = TravelLogUnit.GetAll();
-                                        // Check if we alreade have parse the file and stored in DB.
-                                        if (tlUnit == null)
-                                            tlUnit = (from c in travelogUnits where c.Name == fi.Name select c).FirstOrDefault<TravelLogUnit>();
-
-                                        if (tlUnit == null)
+                                        if (tlUnit == null || !tlUnit.Name.Equals(Path.GetFileName(nfi.FileName)))  // Create / find new travellog unit
                                         {
-                                            tlUnit = new TravelLogUnit();
-                                            tlUnit.Name = fi.Name;
-                                            tlUnit.Path = Path.GetDirectoryName(fi.FullName);
-                                            tlUnit.Size = 0;  // Add real size after data is in DB //;(int)fi.Length;
-                                            tlUnit.type = 1;
-                                            tlUnit.Add();
-                                            travelogUnits.Add(tlUnit);
-                                        }
-                                    }
+                                            travelogUnits = TravelLogUnit.GetAll();
+                                            // Check if we alreade have parse the file and stored in DB.
+                                            if (tlUnit == null)
+                                                tlUnit = (from c in travelogUnits where c.Name == fi.Name select c).FirstOrDefault<TravelLogUnit>();
 
-
-                                    int nrsystems = visitedSystems.Count;
-                                    ParseFile(fi, visitedSystems);
-                                    if (nrsystems < visitedSystems.Count) // Om vi har fler system
-                                    {
-                                        System.Diagnostics.Trace.WriteLine("New systems " + nrsystems.ToString() + ":" + visitedSystems.Count.ToString());
-                                        for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
-                                        {
-                                            VisitedSystemsClass dbsys = new VisitedSystemsClass();
-
-                                            dbsys.Name = visitedSystems[nr].Name;
-                                            dbsys.Time = visitedSystems[nr].time;
-                                            dbsys.Source = tlUnit.id;
-                                            dbsys.EDSM_sync = false;
-                                            dbsys.Unit = fi.Name;
-                                            dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
-                                            dbsys.Unit = fi.Name;
-                                            dbsys.Commander = 0;
-
-                                            if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
+                                            if (tlUnit == null)
                                             {
-                                                dbsys.Add();
+                                                tlUnit = new TravelLogUnit();
+                                                tlUnit.Name = fi.Name;
+                                                tlUnit.Path = Path.GetDirectoryName(fi.FullName);
+                                                tlUnit.Size = 0;  // Add real size after data is in DB //;(int)fi.Length;
+                                                tlUnit.type = 1;
+                                                tlUnit.Add();
+                                                travelogUnits.Add(tlUnit);
                                             }
-                                            visitedSystems[nr].vs = dbsys;
                                         }
-                                    }
-                                    else
-                                    {
-                                        //System.Diagnostics.Trace.WriteLine("No change");
+
+
+                                        int nrsystems = visitedSystems.Count;
+                                        ParseFile(fi, visitedSystems);
+                                        if (nrsystems < visitedSystems.Count) // Om vi har fler system
+                                        {
+                                            System.Diagnostics.Trace.WriteLine("New systems " + nrsystems.ToString() + ":" + visitedSystems.Count.ToString());
+                                            for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
+                                            {
+                                                VisitedSystemsClass dbsys = new VisitedSystemsClass();
+
+                                                dbsys.Name = visitedSystems[nr].Name;
+                                                dbsys.Time = visitedSystems[nr].time;
+                                                dbsys.Source = tlUnit.id;
+                                                dbsys.EDSM_sync = false;
+                                                dbsys.Unit = fi.Name;
+                                                dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
+                                                dbsys.Unit = fi.Name;
+                                                dbsys.Commander = 0;
+
+                                                if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
+                                                {
+                                                    dbsys.Add();
+                                                }
+                                                visitedSystems[nr].vs = dbsys;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //System.Diagnostics.Trace.WriteLine("No change");
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.WriteLine("NetlogMAin exception : " + ex.Message);
+                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                    }
+
+
                 }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Trace.WriteLine("NetlogMAin exception : " + ex.Message);
-                    System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                }
+            }
 
-
-        }
+            m_Watcher = null;
         }
 
+        private void EDDConfig_NetLogDirChanged()
+        {
+            ReloadMonitor();
+        }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {

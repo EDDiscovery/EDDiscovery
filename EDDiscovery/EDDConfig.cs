@@ -35,6 +35,12 @@ namespace EDDiscovery2
             { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() }
         };
 
+        private Dictionary<string, Action> onchange = new Dictionary<string, Action>
+        {
+            { "Netlogdir", () => { } },
+            { "NetlogDirAutoMode", () => { } }
+        };
+
         SQLiteDBClass _db = new SQLiteDBClass();
 
         private EDDConfig()
@@ -120,6 +126,9 @@ namespace EDDiscovery2
         public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
 
+        public event Action NetLogDirChanged { add { onchange["Netlogdir"] += value; } remove { onchange["Netlogdir"] -= value; } }
+        public event Action NetLogDirAutoModeChanged { add { onchange["NetlogDirAutoMode"] += value; } remove { onchange["NetlogDirAutoMode"] -= value; } }
+
         private bool GetSettingBool(string key)
         {
             return GetSetting<bool>(key, _db.GetSettingBool);
@@ -144,7 +153,13 @@ namespace EDDiscovery2
         {
             if (!settings.ContainsKey(key))
             {
-                settings[key] = getter(key, (T)defaults[key]());
+                T defval = default(T);
+                if (defaults.ContainsKey(key))
+                {
+                    defval = (T)defaults[key]();
+                }
+
+                settings[key] = getter(key, defval);
             }
 
             return (T)settings[key];
@@ -173,7 +188,20 @@ namespace EDDiscovery2
         private bool PutSetting<T>(string key, T value, Func<string,T,bool> setter)
         {
             settings[key] = value;
-            return setter(key, value);
+
+            if (setter(key, value))
+            {
+                if (onchange.ContainsKey(key))
+                {
+                    onchange[key]();
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void Update()
