@@ -751,7 +751,7 @@ namespace EDDiscovery2._3DMap
                 GL.EnableClientState(ArrayCap.TextureCoordArray);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, TexVboID);
                 GL.TexCoordPointer(4, TexCoordPointerType.Double, 0, 0);
-                GL.Color3(Color);
+                GL.Color4(Color);
                 GL.DrawArrays(PrimitiveType.Triangles, 0, vbosize);
                 GL.DisableClientState(ArrayCap.TextureCoordArray);
                 GL.DisableClientState(ArrayCap.VertexArray);
