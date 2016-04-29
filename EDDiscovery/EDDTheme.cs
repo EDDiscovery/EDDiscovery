@@ -26,6 +26,9 @@ namespace EDDiscovery2
 
         public struct Settings
         {
+            static int MajorThemeID = 1;         // Change if major change made outside of number of colors.
+            static public int ThemeID { get { return MajorThemeID * 10000 + Enum.GetNames(typeof(CI)).Length; } }
+
             public enum CI
             {
                 form,
@@ -236,12 +239,28 @@ namespace EDDiscovery2
             currentsettings = new Settings("Windows Default");  // this is our default
         }
 
+
         public void RestoreSettings()
         {
             if (db == null)
                 db = new SQLiteDBClass();
 
-            if (db.keyExists( "ThemeNameOf"))           // if there.. get the others with a good default in case the db is screwed.
+            Console.WriteLine("Theme ID " + Settings.ThemeID);
+
+            int themeidstored = db.GetSettingInt("ThemeID", -1);
+
+            if ( themeidstored != -1 && themeidstored != Settings.ThemeID )
+            {
+                DialogResult res = MessageBox.Show("The theme stored has missing colors or other missing information" + Environment.NewLine +
+                      "that this new version of EDDiscovery needs." + Environment.NewLine + Environment.NewLine +
+                      "Choose OK to use the stored theme, and then correct the missing colors or other information manually using the Theme Editor in Settings" + Environment.NewLine + Environment.NewLine +
+                      "Choose Cancel to go back to windows default, then pick a new standard theme.", "ED Discovery Theme Warning!" , MessageBoxButtons.OKCancel);
+
+                if (res == DialogResult.Cancel)     // if cancel, we abort,
+                    return;
+            }
+
+            if (db.keyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
             {
                 currentsettings.name = db.GetSettingString("ThemeNameOf", "Custom");
                 currentsettings.windowsframe = db.GetSettingBool("ThemeWindowsFrame", true);
@@ -253,7 +272,7 @@ namespace EDDiscovery2
 
                 foreach (Settings.CI ck in themelist[0].colors.Keys)         // use themelist to find the key names, as we modify currentsettings as we go and that would cause an exception
                 {
-                    int d = (ck < Settings.CI.button_text) ? SystemColors.Menu.ToArgb() : SystemColors.MenuText.ToArgb();       // pick a good default
+                    int d = themelist[0].colors[ck].ToArgb();               // use windows default colors.
                     Color c = Color.FromArgb(db.GetSettingInt("ThemeColor" + ck.ToString(), d));
                     currentsettings.colors[ck] = c;
                 }
@@ -265,6 +284,7 @@ namespace EDDiscovery2
             if (db == null)
                 db = new SQLiteDBClass();
 
+            db.PutSettingInt("ThemeID", Settings.ThemeID);
             db.PutSettingString("ThemeNameOf", currentsettings.name);
             db.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
             db.PutSettingDouble("ThemeFormOpacity", currentsettings.formopacity);
@@ -288,7 +308,7 @@ namespace EDDiscovery2
             themelist.Clear();
 
             themelist.Add(new Settings("Windows Default"));         // windows default..
-            
+
             themelist.Add(new Settings("Orange Delight", Color.Black,
                 Color.FromArgb(255, 48, 48, 48), Color.Orange, Color.DarkOrange, buttonstyle_gradient, // button
                 Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
@@ -300,7 +320,7 @@ namespace EDDiscovery2
                 Color.Orange, Color.FromArgb(255, 65, 33, 33), // checkbox
                 Color.Black, Color.Orange, Color.DarkOrange, Color.Yellow,  // menu
                 Color.Orange,  // label
-                Color.FromArgb(255, 32,32,32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
+                Color.FromArgb(255, 32, 32, 32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
                 Color.DarkOrange, // tab control
                 Color.Black, Color.DarkOrange, Color.Orange, // tooltip
                 false, 95, "Microsoft Sans Serif", 8.25F));
@@ -326,6 +346,26 @@ namespace EDDiscovery2
 
             themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite Verdana", "Verdana", 8F));
             themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite Calisto", "Calisto MT", 12F));
+
+            Color r1 = Color.FromArgb(255, 160, 0, 0);
+            Color r2 = Color.FromArgb(255, 64, 0, 0);
+            themelist.Add(new Settings("Night Vision", Color.Black,
+                Color.FromArgb(255, 48, 48, 48), r1, r2, buttonstyle_gradient, // button
+                r2, Color.Black,  // grid border
+                Color.Black, r1, r2, // grid
+                Color.Black, r1, r2, // grid back, arrow, button
+                r1, Color.Green, // travel
+                Color.Black, r1, Color.Orange, Color.Green, r2, textboxborderstyle_color, // text box
+                Color.Black, r1, r2, // text back, arrow, button
+                r1, Color.FromArgb(255, 65, 33, 33), // checkbox
+                Color.Black, r1, r2, Color.Yellow,  // menu
+                r1,  // label
+                Color.FromArgb(255, 8, 8, 8), r1, Color.FromArgb(255, 130, 71, 0), // group
+                r2, // tab control
+                Color.Black, r2, r1, // tooltip
+                false, 95, "Microsoft Sans Serif", 10F));
+
+            themelist.Add(new Settings(themelist[themelist.Count - 1], "Night Vision EuroCaps", "Euro Caps", 12F, 95));
 
             themelist.Add(new Settings("EuroCaps Grey",
                                         SystemColors.Menu,
@@ -739,6 +779,8 @@ namespace EDDiscovery2
                     MyDgv.BackColor = MyDgv.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
                     MyDgv.BorderColor = currentsettings.colors[Settings.CI.button_border];
                     MyDgv.MouseOverBackgroundColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], mouseoverscaling);
+                    MyDgv.ScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
+                    MyDgv.ScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
 
                     if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
                         MyDgv.FlatStyle = FlatStyle.Flat;

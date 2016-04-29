@@ -107,8 +107,8 @@
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopPanel = new System.Windows.Forms.Panel();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.button_RefreshHistory = new ExtendedControls.ButtonExt();
+            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
@@ -702,19 +702,19 @@
             this.addToTrilaterationToolStripMenuItem1,
             this.viewOnEDSMToolStripMenuItem1});
             this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(177, 48);
+            this.closestContextMenu.Size = new System.Drawing.Size(178, 48);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
             this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
-            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
             this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
             this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
             // 
             // viewOnEDSMToolStripMenuItem1
             // 
             this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
-            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
             this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
@@ -997,27 +997,16 @@
             // 
             // TopPanel
             // 
-            this.TopPanel.Controls.Add(this.label1);
-            this.TopPanel.Controls.Add(this.textBoxFilter);
             this.TopPanel.Controls.Add(this.button_RefreshHistory);
-            this.TopPanel.Controls.Add(this.label2);
+            this.TopPanel.Controls.Add(this.textBoxFilter);
+            this.TopPanel.Controls.Add(this.label1);
             this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
+            this.TopPanel.Controls.Add(this.label2);
             this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.TopPanel.Location = new System.Drawing.Point(0, 0);
             this.TopPanel.Name = "TopPanel";
             this.TopPanel.Size = new System.Drawing.Size(594, 32);
             this.TopPanel.TabIndex = 26;
-            // 
-            // textBoxFilter
-            // 
-            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxFilter.BorderColorScaling = 0.5F;
-            this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
-            this.textBoxFilter.Name = "textBoxFilter";
-            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
-            this.textBoxFilter.TabIndex = 1;
-            this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
-            this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
             // 
             // button_RefreshHistory
             // 
@@ -1032,6 +1021,17 @@
             this.button_RefreshHistory.Text = "Refresh";
             this.button_RefreshHistory.UseVisualStyleBackColor = true;
             this.button_RefreshHistory.Click += new System.EventHandler(this.button_RefreshHistory_Click);
+            // 
+            // textBoxFilter
+            // 
+            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFilter.BorderColorScaling = 0.5F;
+            this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
+            this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
+            this.textBoxFilter.TabIndex = 1;
+            this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
+            this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
             // 
             // comboBoxHistoryWindow
             // 
