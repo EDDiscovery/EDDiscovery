@@ -89,7 +89,7 @@ namespace EDDiscovery2._3DMap.Tests
             _subject.GridLines = true;
             _subject.MinGridPos = new Vector2(2000.0f, 12000.0f);
             _subject.MaxGridPos = new Vector2(4000.0f, 14000.0f);
-            var datasets = _subject.BuildGridLines();
+            var datasets = _subject.BuildGridLines(1.0);
 
             var dataset = (Data3DSetClass<LineData>)datasets[0];
             Assert.AreEqual(2000.0, dataset.Primatives[0].x1);
