@@ -81,6 +81,7 @@ namespace ExtendedControls
                 vScrollBar.Visible = true;
                 vScrollBar.FlatStyle = FlatStyle;
 
+                vScrollBar.SliderColor = ScrollBarColor;
                 vScrollBar.BackColor = ScrollBarColor;
                 vScrollBar.BorderColor = vScrollBar.ThumbBorderColor = vScrollBar.ArrowBorderColor = BorderColor;
                 vScrollBar.ArrowButtonColor = vScrollBar.ThumbButtonColor = ScrollBarButtonColor;
