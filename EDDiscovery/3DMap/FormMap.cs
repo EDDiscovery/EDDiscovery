@@ -345,7 +345,7 @@ namespace EDDiscovery2
             //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_gridlines);
             DatasetBuilder builder = CreateBuilder();
-            _datasets_gridlines = builder.BuildGridLines();
+            _datasets_gridlines = builder.BuildGridLines(_zoom);
             builder = null;
         }
 
@@ -354,7 +354,7 @@ namespace EDDiscovery2
             //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_gridcoords);
             DatasetBuilder builder = CreateBuilder();
-            _datasets_gridcoords = builder.BuildGridCoords();
+            _datasets_gridcoords = builder.BuildGridCoords(_zoom);
             builder = null;
         }
 
@@ -758,6 +758,11 @@ namespace EDDiscovery2
 
         private void DrawStars()
         {
+            DatasetBuilder builder = new DatasetBuilder();
+            builder.UpdateGridCoordZoom(ref _datasets_gridcoords, _zoom);
+            builder.UpdateGridZoom(ref _datasets_gridlines, _zoom);
+            builder = null;
+
             foreach (var dataset in _datasets_maps)                     // needs to be in order of background to foreground objects
                 dataset.DrawAll(glControl);
             foreach (var dataset in _datasets_gridlines)
