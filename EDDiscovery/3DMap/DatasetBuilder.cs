@@ -16,6 +16,8 @@ namespace EDDiscovery2._3DMap
     public class DatasetBuilder
     {
         private List<IData3DSet> _datasets;
+        private static Dictionary<string, TexturedQuadData> _cachedTextures = new Dictionary<string, TexturedQuadData>();
+        private static Dictionary<string, Data3DSetClass<TexturedQuadData>> _cachedCoordTextures = new Dictionary<string, Data3DSetClass<TexturedQuadData>>();
 
         public ISystem CenterSystem { get; set; } = new SystemClass();
         public ISystem SelectedSystem { get; set; } = new SystemClass();
@@ -97,22 +99,30 @@ namespace EDDiscovery2._3DMap
                 var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("mapimage", Color.White, 1.0f);
                 foreach (var img in Images)
                 {
-                    datasetMapImg.Add(TexturedQuadData.FromFGEImage(img));
+                    if (_cachedTextures.ContainsKey(img.FileName))
+                    {
+                        datasetMapImg.Add(_cachedTextures[img.FileName]);
+                    }
+                    else
+                    {
+                        var texture = TexturedQuadData.FromFGEImage(img);
+                        _cachedTextures[img.FileName] = texture;
+                        datasetMapImg.Add(texture);
+                    }
                 }
                 _datasets.Add(datasetMapImg);
             }
         }
 
-        public Bitmap DrawGridBitmap(float x, float z, Font fnt, int w, int h)
+        public Bitmap DrawGridBitmap(Bitmap text_bmp, float x, float z, Font fnt, int px, int py)
         {
-            Bitmap text_bmp = new Bitmap(w, h);
             using (Graphics g = Graphics.FromImage(text_bmp))
             {
                 //using (Brush br = new SolidBrush(Color.Yellow))
                 // g.FillRectangle(br, 0, 0, text_bmp.Width, text_bmp.Height);
 
                 using (Brush br = new SolidBrush((Color)System.Drawing.ColorTranslator.FromHtml("#296A6C")))
-                    g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(0, 0));
+                    g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(px, py));
             }
 
             return text_bmp;
@@ -122,32 +132,58 @@ namespace EDDiscovery2._3DMap
         {
             if (GridCoords)
             {
-                Font fnt = new Font("MS Sans Serif", 20F);
+                string fontname = "MS Sans Serif";
 
-                int bitmapwidth, bitmapheight;
-                Bitmap text_bmp = new Bitmap(100, 30);
-                using (Graphics g = Graphics.FromImage(text_bmp))
+                if (_cachedCoordTextures.ContainsKey(fontname))
                 {
-                    SizeF sz = g.MeasureString("-99999,-99999", fnt);
-                    bitmapwidth = (int)sz.Width + 4;
-                    bitmapheight = (int)sz.Height + 4;
+                    _datasets.Add(_cachedCoordTextures[fontname]);
                 }
-                var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("text bitmap", Color.White, 1.0f);
-
-                int textwidthly = 300;
-                int textheightly = 50;
-
-                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
+                else
                 {
-                    for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += gridunitSize)
+                    Font fnt = new Font(fontname, 20F);
+
+                    int bitmapwidth, bitmapheight;
+                    Bitmap text_bmp = new Bitmap(100, 30);
+                    using (Graphics g = Graphics.FromImage(text_bmp))
                     {
-                        datasetMapImg.Add(TexturedQuadData.FromBitmap(DrawGridBitmap(x, z, fnt, bitmapwidth, bitmapheight),
-                            new Point((int)x, (int)z), new Point((int)x + textwidthly, (int)z),
-                            new Point((int)x, (int)z + textheightly), new Point((int)x + textwidthly, (int)z + textheightly)));
+                        SizeF sz = g.MeasureString("-99999,-99999", fnt);
+                        bitmapwidth = (int)sz.Width + 4;
+                        bitmapheight = (int)sz.Height + 4;
                     }
-                }
+                    var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("text bitmap", Color.White, 1.0f);
 
-                _datasets.Add(datasetMapImg);
+                    int textheightly = 50;
+                    int textwidthly = textheightly * bitmapwidth / bitmapheight;
+
+                    int gridwide = (int)Math.Floor((MaxGridPos.X - MinGridPos.X) / gridunitSize + 1);
+                    int gridhigh = (int)Math.Floor((MaxGridPos.Y - MinGridPos.Y) / gridunitSize + 1);
+                    int texwide = 1024 / bitmapwidth;
+                    int texhigh = 1024 / bitmapheight;
+                    int numtex = (int)Math.Ceiling((gridwide * gridhigh) * 1.0 / (texwide * texhigh));
+                    List<TexturedQuadData> basetextures = Enumerable.Range(0, numtex).Select(i => new TexturedQuadData(null, null, new Bitmap(1024, 1024))).ToList();
+
+                    for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
+                    {
+                        for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += gridunitSize)
+                        {
+                            int num = (int)(Math.Floor((x - MinGridPos.X) / gridunitSize) * gridwide + Math.Floor((z - MinGridPos.Y) / gridunitSize));
+                            int tex_x = (num % texwide) * bitmapwidth;
+                            int tex_y = ((num / texwide) % texhigh) * bitmapheight;
+                            int tex_n = num / (texwide * texhigh);
+
+                            DrawGridBitmap(basetextures[tex_n].Texture, x, z, fnt, tex_x, tex_y);
+                            datasetMapImg.Add(basetextures[tex_n].CreateSubTexture(
+                                new Point((int)x, (int)z), new Point((int)x + textwidthly, (int)z),
+                                new Point((int)x, (int)z + textheightly), new Point((int)x + textwidthly, (int)z + textheightly),
+                                new Point(tex_x, tex_y + bitmapheight), new Point(tex_x + bitmapwidth, tex_y + bitmapheight),
+                                new Point(tex_x, tex_y), new Point(tex_x + bitmapwidth, tex_y)));
+                        }
+                    }
+
+                    _cachedCoordTextures[fontname] = datasetMapImg;
+
+                    _datasets.Add(datasetMapImg);
+                }
             }
         }
 
