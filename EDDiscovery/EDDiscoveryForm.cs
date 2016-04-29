@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Configuration;
 
 namespace EDDiscovery
 {
@@ -27,6 +28,8 @@ namespace EDDiscovery
 
     public partial class EDDiscoveryForm : Form
     {
+        #region Variables
+
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
         public const int WM_NCL_RESIZE = 0x112;
@@ -47,18 +50,34 @@ namespace EDDiscovery
         public string CommanderName { get; private set; }
         static public EDDConfig EDDConfig { get; private set; }
 
+        public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
+        public List<SystemPosition> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
+
+        bool option_nowindowreposition = false;                             // Cmd line options
+
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
-
         public event DistancesLoaded OnDistancesLoaded;
+
+        private bool CanSkipSlowUpdates()
+        {
+#if DEBUG
+            return EDDConfig.CanSkipSlowUpdates;
+#else
+            return false;
+#endif
+        }
+
+        #endregion
+
+        #region Initialisation
 
         public EDDiscoveryForm()
         {
             InitializeComponent();
-            panel_close.Enabled = false;                            // no closing until we are ready for it..
-            tabControl1.Enabled = false;
+            ProcessCommandLineOptions();
 
-            EDDConfig = new EDDConfig();
+            EDDConfig = EDDConfig.Instance;
 
             //_fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
             _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
@@ -80,6 +99,7 @@ namespace EDDiscovery
             }
             _edsmSync = new EDSMSync(this);
 
+            ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
             theme.RestoreSettings();                                    // theme, remember your saved settings
 
@@ -95,24 +115,6 @@ namespace EDDiscovery
             ApplyTheme(false);
         }
 
-        public void ApplyTheme(bool refreshhistory)
-        {
-            this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
-            panel_grip.Visible = !theme.WindowsFrame;
-            panel_close.Visible = !theme.WindowsFrame;
-            panel_minimize.Visible = !theme.WindowsFrame;
-            label_version.Visible = !theme.WindowsFrame;
-            label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
-            this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
-
-            theme.ApplyColors(this);
-
-            if (refreshhistory)
-                travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
-
-
-        }
-
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
         {
             if (panel_grip.Visible)
@@ -124,20 +126,10 @@ namespace EDDiscovery
                 tabControl1.Size = new Size(this.ClientSize.Width, this.ClientSize.Height - tabControl1.Location.Y);
         }
 
-        public TravelHistoryControl TravelControl
+        private void ProcessCommandLineOptions()
         {
-            get { return travelHistoryControl1; }
-        }
-
-
-        internal void ShowTrilaterationTab()
-        {
-            tabControl1.SelectedIndex = 1;
-        }
-
-        internal void ShowHistoryTab()
-        {
-            tabControl1.SelectedIndex = 0;
+            string cmdline = Environment.CommandLine;
+            option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1 );
         }
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
@@ -170,8 +162,6 @@ namespace EDDiscovery
         {
             try
             {
-                travelHistoryControl1.Enabled = false;
-
                 var edsmThread = new Thread(GetEDSMSystems) { Name = "Downloading EDSM Systems", IsBackground = true };
                 var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files", IsBackground = true };
                 edsmThread.Start();
@@ -186,15 +176,23 @@ namespace EDDiscovery
                 edsmThread.Join();
                 downloadmapsThread.Join();
 
+                SystemNames.Clear();                                // EDSM systems have loaded, make up names
+                foreach (SystemClass system in SystemData.SystemList)
+                {
+                    SystemNames.Add(system.name);                   // DANGER - using SystemNames in other controls while its loading freezes the UI
+                }
+
+                Console.WriteLine("Systems Loaded");
+                
                 OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
 
                 GetEDSMDistancesAsync();
 
-                //Application.DoEvents();
                 GetEDDBAsync(false);
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                 routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
+                settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
 
                 imageHandler1.StartWatcher();
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
@@ -208,35 +206,151 @@ namespace EDDiscovery
                 travelHistoryControl1.RefreshHistory();
                 travelHistoryControl1.netlog.StartMonitor(this);
 
-                travelHistoryControl1.Enabled = true;
                 if (EliteDangerous.CheckStationLogging())
                 {
                     panelInfo.Visible = false;
                 }
 
-
-                // Check for a new installer    
                 CheckForNewInstaller();
 
-                LogLine("Total number of systems " + SystemData.SystemList.Count().ToString() + Environment.NewLine);
-                LogLineSuccess("Loading completed!" + Environment.NewLine);
-
-                panel_close.Enabled = true;                            // now we can safely close
-                tabControl1.Enabled = true;
-
+#if DEBUG
+//Robby : not sure about this, should we be moaning about this, what if people don't want to use EDmaterializer.
+                var appSettings = ConfigurationManager.AppSettings;
+                if (appSettings["EDMaterializerUsername"] == null || appSettings["EDMaterializerPassword"] == null)
+                {
+                    // Note: It's ok if this happens in DEBUG build Because we now hard code the
+                    // credentials in that particular case.
+                    LogLineHighlight("WARNING: EDMaterializer credentials are missing!");
+                }
+#endif
+                LogLineSuccess("Loading completed, Total number of systems " + SystemData.SystemList.Count().ToString());
             }
             catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show("EDDiscovery_Load exception: " + ex.Message);
                 System.Windows.Forms.MessageBox.Show("Trace: " + ex.StackTrace);
-                travelHistoryControl1.Enabled = true;
-
             }
         }
 
-
-        public void DownloadMaps()
+        private void CheckForNewInstaller()
         {
+            {
+                EDDiscoveryServer eds = new EDDiscoveryServer();
+
+                string inst = eds.GetLastestInstaller();
+                if (inst != null)
+                {
+                    JObject jo = (JObject)JObject.Parse(inst);
+
+                    string newVersion = jo["Version"].Value<string>();
+                    string newInstaller = jo["Filename"].Value<string>();
+
+                    var currentVersion = Application.ProductVersion;
+
+                    Version v1, v2;
+                    v1 = new Version(newVersion);
+                    v2 = new Version(currentVersion);
+
+                    if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
+                    {
+                        LogLineHighlight("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine);
+                    }
+
+                }
+            }
+        }
+
+        //Pleiades Sector WU-O B16-0
+        //Pleiades Sector WU-O b6-0
+
+        private void InitFormControls()
+        {
+            labelPanelText.Text = "Loading. Please wait!";
+            panelInfo.Visible = true;
+            panelInfo.BackColor = Color.Gold;
+
+            routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+        }
+
+        private void RepositionForm()
+        {
+            var top = _db.GetSettingInt("FormTop", -1);
+            if (top > 0 && option_nowindowreposition == false )
+            {
+                var left = _db.GetSettingInt("FormLeft", -1);
+                var height = _db.GetSettingInt("FormHeight", -1);
+                var width = _db.GetSettingInt("FormWidth", -1);
+                this.Top = top;
+                this.Left = left;
+                this.Height = height;
+                this.Width = width;
+            }
+        }
+
+        private void CheckIfEliteDangerousIsRunning()
+        {
+            if (EliteDangerous.EDRunning)
+            {
+                TravelHistoryControl.LogText("EliteDangerous is running." + Environment.NewLine);
+            }
+            else
+            {
+                TravelHistoryControl.LogText("EliteDangerous is not running ." + Environment.NewLine);
+            }
+        }
+
+        private void CheckIfVerboseLoggingIsTurnedOn()
+        {
+            if (!EliteDangerous.CheckStationLogging())
+            {
+                TravelHistoryControl.LogTextHighlight("Elite Dangerous is not logging system names!!! ");
+                TravelHistoryControl.LogText("Add ");
+                TravelHistoryControl.LogText("VerboseLogging=\"1\" ");
+                TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remember to restart Elite!" + Environment.NewLine);
+
+                labelPanelText.Text = "Elite Dangerous is not logging system names!";
+                panelInfo.BackColor = Color.Salmon;
+            }
+        }
+
+        private void EDDiscoveryForm_Activated(object sender, EventArgs e)
+        {
+            /* TODO: Only focus the field if we're on the correct tab! */
+            if (fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory)
+            {
+                travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
+            }
+        }
+
+        public void ApplyTheme(bool refreshhistory)
+        {
+            this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
+            panel_grip.Visible = !theme.WindowsFrame;
+            panel_close.Visible = !theme.WindowsFrame;
+            panel_minimize.Visible = !theme.WindowsFrame;
+            label_version.Visible = !theme.WindowsFrame;
+            label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
+
+            theme.ApplyColors(this);
+
+            if (refreshhistory)
+                travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
+
+        }
+
+        #endregion
+
+        #region Information Downloads
+
+        public void DownloadMaps()          // ASYNC process
+        {
+            if (CanSkipSlowUpdates())
+            {
+                LogLine("Skipping checking for new maps (DEBUG option).");
+                return;
+            }
+
             try
             {
                 if (!Directory.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps")))
@@ -254,6 +368,10 @@ namespace EDDiscovery
                     DownloadMapFile("SC-L4.jpg");
                     DownloadMapFile("SC-U4.jpg");
 
+                    DownloadMapFile("SC-00.png");
+                    DownloadMapFile("SC-00.json");
+
+
                     DownloadMapFile("Galaxy_L.jpg");
                     DownloadMapFile("Galaxy_L.json");
                     DownloadMapFile("Galaxy_L_Grid.jpg");
@@ -267,7 +385,15 @@ namespace EDDiscovery
                     DownloadMapFile("DW3.json");
                     DownloadMapFile("DW4.jpg");
                     DownloadMapFile("DW4.json");
+
+                    DownloadMapFile("Formidine.png");
+                    DownloadMapFile("Formidine.json");
+                    DownloadMapFile("Formidine trans.png");
+                    DownloadMapFile("Formidine trans.json");
+
+
                     DeleteMapFile("DW4.png");
+                    DeleteMapFile("SC-00.jpg");
 
                     //for (int ii = -10; ii <= 60; ii += 10)
                     //{
@@ -278,15 +404,9 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                LogText("Exception in DownloadImages:" + ex.Message + Environment.NewLine);
+                MessageBox.Show("DownloadImages exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
             }
 
-        }
-
-        public void updateMapData()
-        {
-            Map.Instance.SystemNames = SystemNames;
-            Map.Instance.VisitedSystems = VisitedSystems;
         }
 
         private bool DownloadMapFile(string file)
@@ -321,17 +441,7 @@ namespace EDDiscovery
 
         }
 
-
-        private bool CanSkipSlowUpdates()
-        {
-#if DEBUG
-            return EDDConfig.CanSkipSlowUpdates;
-#else
-            return false;
-#endif
-        }
-
-        private void GetEDSMSystems()
+        private void GetEDSMSystems()  // ASYNC process
         {
             try
             {
@@ -339,12 +449,6 @@ namespace EDDiscovery
                 string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
                 CommanderName = EDDConfig.CurrentCommander.Name;
-                //Invoke((MethodInvoker) delegate {
-                //    travelHistoryControl1.textBoxCmdrName.Text = CommanderName;
-                //});
-
-
-                //                List<SystemClass> systems = SystemClass.ParseEDSC(json, ref rwsysfiletime);
                 DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
 
                 if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
@@ -355,45 +459,34 @@ namespace EDDiscovery
                 {
                     if (CanSkipSlowUpdates())
                     {
-                        LogLine("Skipping loading updates (DEBUG option).");
-                        LogLine("  Need to turn this back on again? Look in the Settings tab.");
+                        LogLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
                     }
                     else
                     {
                         string retstr = edsm.GetNewSystems(_db);
-                        Invoke((MethodInvoker)delegate
+
+                        try
                         {
-                            TravelHistoryControl.LogText(retstr);
-                        });
+                            Invoke((MethodInvoker)delegate
+                            {
+                                TravelHistoryControl.LogText(retstr);
+                            });
+                        }
+                        catch ( Exception )
+                        { }         // don't moan here.. its probably due to the UI going away due to a close..
                     }
 
                 }
 
                 _db.GetAllSystemNotes();
                 _db.GetAllSystems();
-
-
-                Invoke((MethodInvoker)delegate
-                {
-                    SystemNames.Clear();
-                    foreach (SystemClass system in SystemData.SystemList)
-                    {
-                        SystemNames.Add(system.name);
-                    }
-                });
-
             }
             catch (Exception ex)
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    TravelHistoryControl.LogText("GetEDSMSystems exception:" + ex.Message + Environment.NewLine);
-                    TravelHistoryControl.LogText(ex.StackTrace + Environment.NewLine);
-                });
+                MessageBox.Show("GetEDSMSystems exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
             }
 
             GC.Collect();
-
         }
 
         private Thread ThreadEDSMDistances;
@@ -405,26 +498,7 @@ namespace EDDiscovery
             ThreadEDSMDistances.Start();
         }
 
-        private Thread ThreadEDDB;
-
-        public List<SystemPosition> VisitedSystems
-        {
-            get { return travelHistoryControl1.visitedSystems; }
-        }
-
-
-        private bool eddbforceupdate;
-        private void GetEDDBAsync(bool force)
-        {
-            ThreadEDDB = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDDBUpdate));
-            ThreadEDDB.Name = "Get EDDB Update";
-            ThreadEDDB.IsBackground = true;
-            eddbforceupdate = force;
-            ThreadEDDB.Start();
-        }
-
-
-        private void GetEDSMDistances()
+        private void GetEDSMDistances() // ASYNC process
         {
             try
             {
@@ -458,8 +532,11 @@ namespace EDDiscovery
                         }
                     }
 
-
-                    LogText("Checking for new distances from EDSM. ");
+                    try
+                    {
+                        LogLine("Checking for new distances from EDSM. ");
+                    }
+                    catch (Exception) { }
 
 
                     Application.DoEvents();
@@ -468,57 +545,30 @@ namespace EDDiscovery
                     dists = new List<DistanceClass>();
                     dists = DistanceClass.ParseEDSM(json, ref lstdist);
 
-                    if (json == null)
-                        LogText("No response from server." + Environment.NewLine);
-
-                    else
-                        LogText("Found " + dists.Count.ToString() + " new distances." + Environment.NewLine);
+                    try
+                    { 
+                        if (json == null)
+                            LogText("No response from server." + Environment.NewLine);
+                        else
+                            LogText("Found " + dists.Count.ToString() + " new distances." + Environment.NewLine);
+                    }
+                    catch ( Exception )          // don't moan, probably the UI has been closed.
+                    { }
 
                     Application.DoEvents();
                     DistanceClass.Store(dists);
                     _db.PutSettingString("EDSCLastDist", lstdist);
                 }
                 _db.GetAllDistances(EDDConfig.UseDistances);  // Load user added distances
-                updateMapData();
                 OnDistancesLoaded();
                 GC.Collect();
             }
             catch (Exception ex)
             {
-                LogText("GetEDSMDistances exception:" + ex.Message + Environment.NewLine);
-                LogText(ex.StackTrace + Environment.NewLine);
+                MessageBox.Show("GetEDSMDistances exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
             }
 
         }
-
-        private void CheckForNewInstaller()
-        {
-            {
-                EDDiscoveryServer eds = new EDDiscoveryServer();
-
-                string inst = eds.GetLastestInstaller();
-                if (inst != null)
-                {
-                    JObject jo = (JObject)JObject.Parse(inst);
-
-                    string newVersion = jo["Version"].Value<string>();
-                    string newInstaller = jo["Filename"].Value<string>();
-
-                    var currentVersion = Application.ProductVersion;
-
-                    Version v1, v2;
-                    v1 = new Version(newVersion);
-                    v2 = new Version(currentVersion);
-
-                    if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
-                    {
-                        LogLineHighlight("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine);
-                    }
-
-                }
-            }
-        }
-
 
         internal void DistancesLoaded()
         {
@@ -528,8 +578,18 @@ namespace EDDiscovery
             });
         }
 
+        private Thread ThreadEDDB;
+        private bool eddbforceupdate;
+        private void GetEDDBAsync(bool force)
+        {
+            ThreadEDDB = new System.Threading.Thread(new System.Threading.ThreadStart(GetEDDBUpdate));
+            ThreadEDDB.Name = "Get EDDB Update";
+            ThreadEDDB.IsBackground = true;
+            eddbforceupdate = force;
+            ThreadEDDB.Start();
+        }
 
-        private void GetEDDBUpdate()
+        private void GetEDDBUpdate() // ASYNC process
         {
             try
             {
@@ -584,8 +644,6 @@ namespace EDDiscovery
 
                 }
 
-
-
                 if (updatedb || eddbforceupdate)
                 {
                     DBUpdateEDDB(eddb);
@@ -596,12 +654,8 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    TravelHistoryControl.LogText("GetEDSCSystems exception:" + ex.Message + Environment.NewLine);
-                });
+                MessageBox.Show("GetEDDBUpdate exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
             }
-
         }
 
         private void DBUpdateEDDB(EDDBClass eddb)
@@ -619,6 +673,9 @@ namespace EDDiscovery
             LogText("EDDB update done." + Environment.NewLine);
         }
 
+        #endregion
+
+        #region Logging
 
         private void LogText(string text)
         {
@@ -678,6 +735,9 @@ namespace EDDiscovery
             }
         }
 
+        #endregion
+
+        #region JSONandMisc
         static public string LoadJsonFile(string filename)
         {
             string json = null;
@@ -727,6 +787,14 @@ namespace EDDiscovery
             return json;
         }
 
+        internal void ShowTrilaterationTab()
+        {
+            tabControl1.SelectedIndex = 1;
+        }
+
+        #endregion
+
+        #region Closing
 
         private void SaveSettings()
         {
@@ -749,6 +817,10 @@ namespace EDDiscovery
             _edsmSync.StopSync();
             SaveSettings();
         }
+
+        #endregion
+
+        #region ButtonsAndMouse
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -860,61 +932,6 @@ namespace EDDiscovery
             GetEDDBAsync(true);
         }
 
-        //Pleiades Sector WU-O B16-0
-        //Pleiades Sector WU-O b6-0
-
-        private void InitFormControls()
-        {
-            labelPanelText.Text = "Loading. Please wait!";
-            panelInfo.Visible = true;
-            panelInfo.BackColor = Color.Gold;
-
-            routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-        }
-
-        private void RepositionForm()
-        {
-            var top = _db.GetSettingInt("FormTop", -1);
-            if (top > 0)
-            {
-                var left = _db.GetSettingInt("FormLeft", -1);
-                var height = _db.GetSettingInt("FormHeight", -1);
-                var width = _db.GetSettingInt("FormWidth", -1);
-                this.Top = top;
-                this.Left = left;
-                this.Height = height;
-                this.Width = width;
-            }
-        }
-
-        
-
-        private void CheckIfEliteDangerousIsRunning()
-        {
-            if (EliteDangerous.EDRunning)
-            {
-                TravelHistoryControl.LogText("EliteDangerous is running." + Environment.NewLine);
-            }
-            else
-            {
-                TravelHistoryControl.LogText("EliteDangerous is not running ." + Environment.NewLine);
-            }
-        }
-
-        private void CheckIfVerboseLoggingIsTurnedOn()
-        {
-            if (!EliteDangerous.CheckStationLogging())
-            {
-                TravelHistoryControl.LogTextHighlight("Elite Dangerous is not logging system names!!! ");
-                TravelHistoryControl.LogText("Add ");
-                TravelHistoryControl.LogText("VerboseLogging=\"1\" ");
-                TravelHistoryControl.LogText("to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remember to restart Elite!" + Environment.NewLine);
-
-                labelPanelText.Text = "Elite Dangerous is not logging system names!";
-                panelInfo.BackColor = Color.Salmon;
-            }
-        }
-
         private void prospectingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PlanetsForm frm = new PlanetsForm();
@@ -922,12 +939,120 @@ namespace EDDiscovery
             frm.InitForm(this);
             frm.Show();
         }
-
-        
+                
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AsyncSyncEDSMSystems();
         }
+
+        private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/EDDiscovery/EDDiscovery");
+        }
+
+        private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
+        }
+
+        private void keepOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            mi.Checked = !mi.Checked;
+            this.TopMost = mi.Checked;
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panel_grip_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                panel_grip.Captured();           // tell it, doing this royally screws up the MD/MU/ME/ML calls to it
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCL_RESIZE, HT_RESIZE, 0);
+            }
+        }
+
+        private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            settings.panel_defaultmapcolor_Click(sender, e);
+        }
+
+        private void editThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            settings.button_edittheme_Click(this, null);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+            Application.Exit();
+        }
+
+        private void AboutBox()
+        {
+            AboutForm frm = new AboutForm();
+            string atext = Assembly.GetExecutingAssembly().FullName;
+            atext = atext.Split(',')[1].Split('=')[1];
+            frm.labelVersion.Text = this.Text + " " + atext;
+            frm.ShowDialog();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox();
+        }
+
+        private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://discord.gg/0qIqfCQbziTWzsQu");
+        }
+
+        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (!theme.WindowsFrame && e.Button == MouseButtons.Left)           // only if theme is borderless
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
+        {
+            EDDiscoveryForm_MouseDown(sender, e);
+        }
+
+        private void panel1_Click(object sender, EventArgs e)
+        {
+            AboutBox();
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+            Application.Exit();
+        }
+
+        private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
+
+            foreach (VisitedSystemsClass vs in vsall)
+            {
+                if (vs.Commander != 0)
+                {
+                    vs.Commander = 0;
+                    vs.Update();
+                }
+            }
+        }
+        #endregion
+
+        #region AsyncEDSM
 
         private void AsyncSyncEDSMSystems()
         {
@@ -999,109 +1124,8 @@ namespace EDDiscovery
 
         }
 
-        private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery");
-        }
-
-        private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
-        }
-
-        private void keepOnTopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem mi = sender as ToolStripMenuItem;
-            mi.Checked = !mi.Checked;
-            this.TopMost = mi.Checked;
-        }
-
-        private void EDDiscoveryForm_Activated(object sender, EventArgs e)
-        {
-            /* TODO: Only focus the field if we're on the correct tab! */
-            if (fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory)
-            {
-                travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
-            }
-        }
+        #endregion
 
         
-        private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
-
-            foreach (VisitedSystemsClass vs in vsall)
-            {
-                if (vs.Commander != 0)
-                {
-                    vs.Commander = 0;
-                    vs.Update();
-                }
-            }
-        }
-
-
-        private void AboutBox()
-        {
-            AboutForm frm = new AboutForm();
-            string atext = Assembly.GetExecutingAssembly().FullName;
-            atext = atext.Split(',')[1].Split('=')[1];
-            frm.labelVersion.Text = this.Text + " " + atext;
-            frm.ShowDialog();
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AboutBox();
-        }
-
-        private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://discord.gg/0qIqfCQbziTWzsQu");
-        }
-
-        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (!theme.WindowsFrame && e.Button == MouseButtons.Left)           // only if theme is borderless
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-            }
-        }
-
-        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
-        {
-            EDDiscoveryForm_MouseDown(sender, e);
-        }
-
-        private void panel1_Click(object sender, EventArgs e)
-        {
-            AboutBox();
-        }
-
-        private void panel_close_Click(object sender, EventArgs e)
-        {
-            Close();
-            Application.Exit();
-        }
-
-        private void panel_minimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void panel_grip_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCL_RESIZE, HT_RESIZE, 0);
-            }
-        }
-
-        private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            settings.panel_defaultmapcolor_Click(sender, e);
-        }
     }
 }

@@ -89,7 +89,7 @@ namespace EDDiscovery2._3DMap.Tests
             _subject.GridLines = true;
             _subject.MinGridPos = new Vector2(2000.0f, 12000.0f);
             _subject.MaxGridPos = new Vector2(4000.0f, 14000.0f);
-            var datasets = _subject.Build();
+            var datasets = _subject.BuildGridLines(1.0);
 
             var dataset = (Data3DSetClass<LineData>)datasets[0];
             Assert.AreEqual(2000.0, dataset.Primatives[0].x1);
@@ -100,7 +100,7 @@ namespace EDDiscovery2._3DMap.Tests
         public void When_building_all_systems()
         {
             _subject.AllSystems = true;
-            var datasets = _subject.Build();
+            var datasets = _subject.BuildStars();
 
             var dataset = (Data3DSetClass<PointData>)datasets[0];
 
@@ -118,7 +118,7 @@ namespace EDDiscovery2._3DMap.Tests
         public void When_building_stations()
         {
             _subject.Stations = true;
-            var datasets = _subject.Build();
+            var datasets = _subject.BuildStars();
 
             var dataset = (Data3DSetClass<PointData>)datasets[0];
 
@@ -160,7 +160,7 @@ namespace EDDiscovery2._3DMap.Tests
         {
             _subject.StarList = null;
             _subject.AllSystems = true;
-            var datasets = _subject.Build();
+            var datasets = _subject.BuildStars();
 
             Assert.AreEqual("Center", datasets[0].Name);
             Assert.AreEqual("Interest", datasets[1].Name);

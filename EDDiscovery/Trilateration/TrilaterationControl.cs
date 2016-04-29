@@ -285,16 +285,19 @@ namespace EDDiscovery
             }
             else if (e.ColumnIndex == 1)
             {
-                if (dataGridViewDistances[1, e.RowIndex].Value != null && !string.IsNullOrEmpty(dataGridViewDistances[1, e.RowIndex].Value.ToString()))
+                if (dataGridViewDistances[1, e.RowIndex].Value != null && !string.IsNullOrEmpty(dataGridViewDistances[1, e.RowIndex].Value.ToString().Trim()))
                 {
                     var value = dataGridViewDistances[1, e.RowIndex].Value.ToString().Trim();
                     if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
                         value = value.Replace(".", ",");
 
-                    double dist = double.Parse(value);
-                    dataGridViewDistances[1, e.RowIndex].Value = dist.ToString();
-                    // trigger trilateration calculation
-                    RunTrilateration();
+                    double dist;
+                    if (double.TryParse(value, out dist))
+                    {
+                        dataGridViewDistances[1, e.RowIndex].Value = dist.ToString("F2");
+                        // trigger trilateration calculation
+                        RunTrilateration();
+                    }
                 }
             }
             /* skip to the next editable cell */
@@ -344,11 +347,13 @@ namespace EDDiscovery
                         var value = distanceCell.Value.ToString().Trim();
                         if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
                             value = value.Replace(".", ",");
-                        var distance = double.Parse(value);
+                        double distance;
+                        if (double.TryParse(value, out distance))
+                        {
+                            var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
 
-                        var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
-
-                        systemsEntries.Add(system, entry);
+                            systemsEntries.Add(system, entry);
+                        }
                     }
                 }
 
@@ -542,19 +547,27 @@ namespace EDDiscovery
 
         public void ClearDataGridViewDistancesRows()
         {
-            // keep systems, clear distances
-            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+            try
             {
-                var systemCell = dataGridViewDistances[0, i];
-                var distanceCell = dataGridViewDistances[1, i];
-                var calculatedDistanceCell = dataGridViewDistances[2, i];
-                var statusCell = dataGridViewDistances[3, i];
+                // keep systems, clear distances
+                for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
+                {
+                    var systemCell = dataGridViewDistances[0, i];
+                    var distanceCell = dataGridViewDistances[1, i];
+                    var calculatedDistanceCell = dataGridViewDistances[2, i];
+                    var statusCell = dataGridViewDistances[3, i];
 
-                var system = (SystemClass)systemCell.Tag;
+                    var system = (SystemClass)systemCell.Tag;
 
-                distanceCell.Value = null;
-                calculatedDistanceCell.Value = null;
-                if (system.HasCoordinate) statusCell.Value = null;
+                    distanceCell.Value = null;
+                    calculatedDistanceCell.Value = null;
+                    if (system.HasCoordinate) statusCell.Value = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogTextHighlight("ClearDataGridViewDistancesRows Exception:" + ex.Message);
+                LogText(ex.StackTrace);
             }
         }
 
@@ -856,11 +869,14 @@ namespace EDDiscovery
                         if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
                             value = value.Replace(".", ",");
 
-                        var distance = double.Parse(value);
-                        // can over-ride drop down now if it's a real system so you could add duplicates if you wanted (even once I've figured out issue #81 which makes it easy if not likely...)
-                        if (!distances.Keys.Contains(system))
+                        double distance;
+                        if (double.TryParse(value, out distance))
                         {
-                            distances.Add(system, distance);
+                            // can over-ride drop down now if it's a real system so you could add duplicates if you wanted (even once I've figured out issue #81 which makes it easy if not likely...)
+                            if (!distances.Keys.Contains(system))
+                            {
+                                distances.Add(system, distance);
+                            }
                         }
                     }
 
@@ -981,30 +997,14 @@ namespace EDDiscovery
 
         private void LogTextColor(string text, Color color)
         {
-            try
-            {
-
-                richTextBox_History.SelectionStart = richTextBox_History.TextLength;
-                richTextBox_History.SelectionLength = 0;
-
-                richTextBox_History.SelectionColor = color;
-                richTextBox_History.AppendText(text);
-                richTextBox_History.SelectionColor = richTextBox_History.ForeColor;
-
-                richTextBox_History.SelectionStart = richTextBox_History.Text.Length;
-                richTextBox_History.SelectionLength = 0;
-                richTextBox_History.ScrollToCaret();
-                richTextBox_History.Refresh();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception SystemClass: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
+            richTextBox_History.AppendText(text,color);
         }
 
         private void dataGridViewSuggestedSystems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1)
+                return;
+
             var system = (SystemClass)dataGridViewSuggestedSystems[0, e.RowIndex].Tag;
             AddSystemToDataGridViewDistances(system);
             dataGridViewSuggestedSystems.Rows.RemoveAt(e.RowIndex);
@@ -1013,10 +1013,16 @@ namespace EDDiscovery
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-			Set(CurrentSystem);
+            if (_discoveryForm.SystemNames.Count == 0)
+            {
+                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
+                return;
+            }
+
+            Set(CurrentSystem);
 
             //for (int i = 0; i < 100; i++)     // use this to test the docking is right
-            //    LogText("Hello " + i.ToString() + Environment.NewLine);
+              //  LogText("Hello " + i.ToString() + Environment.NewLine);
 
         }
 
@@ -1026,10 +1032,8 @@ namespace EDDiscovery
             if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = LastKnownSystem;
             var map = _discoveryForm.Map;
 
-            map.Instance.Reset();
-            map.Instance.CenterSystem = centerSystem;
-            map.Instance.ReferenceSystems = CurrentReferenceSystems.ToList();
-            map.Show(false);
+            map.ShowTrilat(centerSystem.name, _discoveryForm.settings.MapHomeSystem , centerSystem.name, 
+                        _discoveryForm.settings.MapZoom , CurrentReferenceSystems.ToList());
         }
 
         private void dataGridViewDistances_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -1267,6 +1271,39 @@ namespace EDDiscovery
                     LogText(String.Format("{0} is pushed from EDSM and cannot be removed", sysName) + Environment.NewLine);
                 }
             }
+        }
+
+        private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewDistances.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            var cellVal = selectedRows.First<DataGridViewRow>().Cells[0].Value;
+            if (cellVal != null)
+            {
+                string sysName = cellVal.ToString();
+                EDSMClass edsm = new EDSMClass();
+                if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
+            }
+            this.Cursor = Cursors.Default;
+        }
+
+        private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewClosestSystems.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = selectedRows.First<DataGridViewRow>().Cells[1].Value.ToString();
+            EDSMClass edsm = new EDSMClass();
+            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
+
+            this.Cursor = Cursors.Default;
         }
     }
 }
