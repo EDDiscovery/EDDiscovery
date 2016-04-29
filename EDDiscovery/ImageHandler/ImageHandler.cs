@@ -22,6 +22,14 @@ namespace EDDiscovery2.ImageHandler
         public ImageHandler()
         {
             InitializeComponent();
+            this.comboBoxFormat.Items.AddRange(new string[] { "png", "jpg", "bmp", "tiff" });
+            this.comboBoxFileNameFormat.Items.AddRange(new string[] {
+            "Sysname (YYYYMMDD-HHMMSS)",
+            "Sysname (Windows dateformat)",
+            "YYYY-MM-DD HH-MM-SS Sysname",
+            "DD-MM-YYYY HH-MM-SS Sysname",
+            "MM-DD-YYYY HH-MM-SS Sysname",
+            "Keep original"});
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -133,10 +141,10 @@ namespace EDDiscovery2.ImageHandler
                     checkboxremove = checkBoxRemove.Checked;
                     checkboxpreview = checkBoxPreview.Checked;
                     cropimage = checkBoxCropImage.Checked;
-                    crop.X = int.Parse(numericUpDownLeft.Text);      
-                    crop.Y = int.Parse(numericUpDownTop.Text);  
-                    crop.Width = int.Parse(numericUpDownWidth.Text);
-                    crop.Height = int.Parse(numericUpDownHeight.Text);
+                    crop.X = numericUpDownLeft.Value;      
+                    crop.Y = numericUpDownTop.Value;  
+                    crop.Width = numericUpDownWidth.Value;
+                    crop.Height = numericUpDownHeight.Value;
                     extension = "." + comboBoxFormat.Text;
                     cannotexecute = textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text) && extension.Equals(".bmp");
 
@@ -321,69 +329,33 @@ namespace EDDiscovery2.ImageHandler
 
         private void checkBoxCropImage_CheckedChanged(object sender, EventArgs e)
         {
-            try {
-                CheckBox cb = sender as CheckBox;
-                numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = cb.Checked;
-                db.PutSettingBool("ImageHandlerCropImage", cb.Checked);
-            } catch( Exception ex ) {
-                System.Diagnostics.Trace.WriteLine("Exception checkBoxCropImage_CheckedChanged: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
+            CheckBox cb = sender as CheckBox;
+            numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = cb.Checked;
+            db.PutSettingBool("ImageHandlerCropImage", cb.Checked);
         }
 
         private void numericUpDownTop_Leave(object sender, EventArgs e)
         {
-            try {
-                NumericUpDown ud = sender as NumericUpDown;
-                db.PutSettingInt("ImageHandlerCropTop", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception numericUpDownTop_Leave: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
+            ExtendedControls.NumericUpDownCustom ud = sender as ExtendedControls.NumericUpDownCustom;
+            db.PutSettingInt("ImageHandlerCropTop", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
         }
 
         private void numericUpDownLeft_Leave(object sender, EventArgs e)
         {
-            try
-            {
-                NumericUpDown ud = sender as NumericUpDown;
-                db.PutSettingInt("ImageHandlerCropLeft", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception numericUpDownLeft_Leave: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
+            ExtendedControls.NumericUpDownCustom ud = sender as ExtendedControls.NumericUpDownCustom;
+            db.PutSettingInt("ImageHandlerCropLeft", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
         }
 
         private void numericUpDownWidth_Leave(object sender, EventArgs e)
         {
-            try
-            {
-                NumericUpDown ud = sender as NumericUpDown;
-                db.PutSettingInt("ImageHandlerCropWidth", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception numericUpDownWidth_Leave: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
+            ExtendedControls.NumericUpDownCustom ud = sender as ExtendedControls.NumericUpDownCustom;
+            db.PutSettingInt("ImageHandlerCropWidth", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
         }
 
         private void numericUpDownHeight_Leave(object sender, EventArgs e)
         {
-            try
-            {
-                NumericUpDown ud = sender as NumericUpDown;
-                db.PutSettingInt("ImageHandlerCropHeight", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception numericUpDownHeight_Leave: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
+            ExtendedControls.NumericUpDownCustom ud = sender as ExtendedControls.NumericUpDownCustom;
+            db.PutSettingInt("ImageHandlerCropHeight", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
         }
 
         private void checkBoxPreview_CheckedChanged(object sender, EventArgs e)
@@ -430,7 +402,5 @@ namespace EDDiscovery2.ImageHandler
                 db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
             }
         }
-
-
     }
 }

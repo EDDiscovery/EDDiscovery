@@ -30,7 +30,6 @@
         {
             this.comboBoxCommanders = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkBoxAllInNetlog = new System.Windows.Forms.CheckBox();
             this.buttonTransfer = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -53,16 +52,6 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Move selected history to commander.";
             // 
-            // checkBoxAllInNetlog
-            // 
-            this.checkBoxAllInNetlog.AutoSize = true;
-            this.checkBoxAllInNetlog.Location = new System.Drawing.Point(12, 77);
-            this.checkBoxAllInNetlog.Name = "checkBoxAllInNetlog";
-            this.checkBoxAllInNetlog.Size = new System.Drawing.Size(161, 17);
-            this.checkBoxAllInNetlog.TabIndex = 2;
-            this.checkBoxAllInNetlog.Text = "Move all in the same session";
-            this.checkBoxAllInNetlog.UseVisualStyleBackColor = true;
-            // 
             // buttonTransfer
             // 
             this.buttonTransfer.Location = new System.Drawing.Point(253, 12);
@@ -79,7 +68,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(340, 113);
             this.Controls.Add(this.buttonTransfer);
-            this.Controls.Add(this.checkBoxAllInNetlog);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBoxCommanders);
             this.Name = "MoveToCommander";
@@ -95,6 +83,5 @@
         private System.Windows.Forms.ComboBox comboBoxCommanders;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonTransfer;
-        internal System.Windows.Forms.CheckBox checkBoxAllInNetlog;
     }
 }

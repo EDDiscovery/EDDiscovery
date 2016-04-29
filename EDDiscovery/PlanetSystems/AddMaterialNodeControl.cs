@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EDDiscovery2.PlanetSystems.Repositories;
 using EDDiscovery2.PlanetSystems;
 
 namespace EDDiscovery2
@@ -13,7 +14,6 @@ namespace EDDiscovery2
     public partial class AddMaterialNodeControl : UserControl
     {
         string currentSystem;
-        EdMaterializer edmat;
         public string CurrentSystem
         {
             get
@@ -31,14 +31,14 @@ namespace EDDiscovery2
         public AddMaterialNodeControl()
         {
             InitializeComponent();
-            edmat = new EdMaterializer();
             PopulateColumn();
         }
 
 
         private void GetData()
         {
-           List<EDWorld> objs = edmat.GetAllWorlds(currentSystem);
+            World world = new World();
+            List<EDWorld> objs = world.GetAllForSystem(currentSystem);
         }
 
         private Dictionary<int, string> dictComboShortNames = new Dictionary<int, string>();

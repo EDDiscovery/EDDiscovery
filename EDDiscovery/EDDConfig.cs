@@ -8,16 +8,42 @@ namespace EDDiscovery2
 {
     public class EDDConfig
     {
+        private static EDDConfig _instance;
+        public static EDDConfig Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new EDDConfig();
+                }
+                return _instance;
+            }
+        }
+
         private bool _useDistances;
         private bool _EDSMLog;
         readonly public string LogIndex;
         private bool _canSkipSlowUpdates = false;
         public List<EDCommander> listCommanders;
         private int currentCmdrID=0;
+        private Dictionary<string, object> settings = new Dictionary<string, object>();
+        private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
+        {
+            { "Netlogdir", () => System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments", "Products") },
+            { "NetlogDirAutoMode", () => true },
+            { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() }
+        };
+
+        private Dictionary<string, Action> onchange = new Dictionary<string, Action>
+        {
+            { "Netlogdir", () => { } },
+            { "NetlogDirAutoMode", () => { } }
+        };
 
         SQLiteDBClass _db = new SQLiteDBClass();
 
-        public EDDConfig()
+        private EDDConfig()
         {
             LogIndex = DateTime.Now.ToString("yyyyMMdd");
         }
@@ -40,16 +66,17 @@ namespace EDDiscovery2
         {
             get
             {
-                if (currentCmdrID >= listCommanders.Count)
-                    currentCmdrID = listCommanders.Count - 1;
-                return currentCmdrID;
+                return CurrentCommander.Nr;
             }
 
             set
             {
-                currentCmdrID = value;
-                if (currentCmdrID >= listCommanders.Count)
-                    currentCmdrID = listCommanders.Count - 1;
+                var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == value);
+                if (cmdr != null)
+                {
+                    currentCmdrID = cmdr.index;
+                    _db.PutSettingInt("ActiveCommander", value);
+                }
             }
         }
 
@@ -64,7 +91,7 @@ namespace EDDiscovery2
                     currentCmdrID = listCommanders.Count - 1;
 
 
-                return listCommanders[CurrentCmdrID];
+                return listCommanders[currentCmdrID];
             }
         }
 
@@ -95,7 +122,87 @@ namespace EDDiscovery2
             }
         }
 
+        public string NetLogDir { get { return GetSettingString("Netlogdir"); } set { PutSettingString("Netlogdir", value); } }
+        public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
+        public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
 
+        public event Action NetLogDirChanged { add { onchange["Netlogdir"] += value; } remove { onchange["Netlogdir"] -= value; } }
+        public event Action NetLogDirAutoModeChanged { add { onchange["NetlogDirAutoMode"] += value; } remove { onchange["NetlogDirAutoMode"] -= value; } }
+
+        private bool GetSettingBool(string key)
+        {
+            return GetSetting<bool>(key, _db.GetSettingBool);
+        }
+
+        private int GetSettingInt(string key)
+        {
+            return GetSetting<int>(key, _db.GetSettingInt);
+        }
+
+        private double GetSettingDouble(string key)
+        {
+            return GetSetting<double>(key, _db.GetSettingDouble);
+        }
+
+        private string GetSettingString(string key)
+        {
+            return GetSetting<string>(key, _db.GetSettingString);
+        }
+
+        private T GetSetting<T>(string key, Func<string,T,T> getter)
+        {
+            if (!settings.ContainsKey(key))
+            {
+                T defval = default(T);
+                if (defaults.ContainsKey(key))
+                {
+                    defval = (T)defaults[key]();
+                }
+
+                settings[key] = getter(key, defval);
+            }
+
+            return (T)settings[key];
+        }
+
+        private bool PutSettingBool(string key, bool value)
+        {
+            return PutSetting<bool>(key, value, _db.PutSettingBool);
+        }
+
+        private bool PutSettingInt(string key, int value)
+        {
+            return PutSetting<int>(key, value, _db.PutSettingInt);
+        }
+
+        private bool PutSettingDouble(string key, double value)
+        {
+            return PutSetting<double>(key, value, _db.PutSettingDouble);
+        }
+
+        private bool PutSettingString(string key, string value)
+        {
+            return PutSetting<string>(key, value, _db.PutSettingString);
+        }
+
+        private bool PutSetting<T>(string key, T value, Func<string,T,bool> setter)
+        {
+            settings[key] = value;
+
+            if (setter(key, value))
+            {
+                if (onchange.ContainsKey(key))
+                {
+                    onchange[key]();
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public void Update()
         {
@@ -105,6 +212,12 @@ namespace EDDiscovery2
                 _EDSMLog = _db.GetSettingBool("EDSMLog", false);
                 _canSkipSlowUpdates = _db.GetSettingBool("CanSkipSlowUpdates", false);
                 LoadCommanders();
+                int activecommander = _db.GetSettingInt("ActiveCommander", 0);
+                var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
+                if (cmdr != null)
+                {
+                    currentCmdrID = cmdr.index;
+                }
             }
             catch (Exception ex)
             {
@@ -113,7 +226,6 @@ namespace EDDiscovery2
             }
 
         }
-
 
         private void LoadCommanders()
         {
@@ -130,12 +242,14 @@ namespace EDDiscovery2
            
 
             EDCommander cmdr = new EDCommander(0, _db.GetSettingString("EDCommanderName0", commanderName),  _db.GetSettingString("EDCommanderApiKey0", apikey));
+            cmdr.NetLogPath = _db.GetSettingString("EDCommanderNetLogPath0", null);
             listCommanders.Add(cmdr);
 
 
             for (int ii = 1; ii < 100; ii++)
             {
                 cmdr = new EDCommander(ii, _db.GetSettingString("EDCommanderName"+ii.ToString(), ""), _db.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
+                cmdr.NetLogPath = _db.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
                 if (!cmdr.Name.Equals(""))
                     listCommanders.Add(cmdr);
             }

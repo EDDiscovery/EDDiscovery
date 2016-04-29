@@ -16,6 +16,8 @@ namespace EDDiscovery2._3DMap
     public class DatasetBuilder
     {
         private List<IData3DSet> _datasets;
+        private static Dictionary<string, TexturedQuadData> _cachedTextures = new Dictionary<string, TexturedQuadData>();
+        private static Dictionary<string, List<Data3DSetClass<TexturedQuadData>>> _cachedCoordTextures = new Dictionary<string, List<Data3DSetClass<TexturedQuadData>>>();
 
         public ISystem CenterSystem { get; set; } = new SystemClass();
         public ISystem SelectedSystem { get; set; } = new SystemClass();
@@ -25,51 +27,251 @@ namespace EDDiscovery2._3DMap
         public List<ISystem> PlannedRoute { get; set; } = new List<ISystem>();
 
         public bool GridLines { get; set; } = false;
+        public bool FineGridLines { get; set; } = false;
+        public bool GridCoords { get; set; } = false;
         public bool DrawLines { get; set; } = false;
         public bool AllSystems { get; set; } = false;
         public bool Stations { get; set; } = false;
+        public bool UseImage { get; set; } = false;
+
+        public FGEImage[] Images { get; set; } = null;
 
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
         public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
 
+        int gridunitSize = 1000;
+
         public DatasetBuilder()
-        {            
+        {
         }
 
-        public List<IData3DSet> Build()
+        public List<IData3DSet> BuildMaps()
         {
             _datasets = new List<IData3DSet>();
-            AddGridLines();
-            AddStandardSystems();
-            AddStations();
-            AddVisitedSystemsInformation();
-            AddCenterPointToDataset();
-            AddSelectedSystemToDataset();
-            AddPOIsToDataset();
-            AddTrilaterationInfoToDataset();
-            AddRoutePlannerInfoToDataset();
-
+            AddMapImages();
             return _datasets;
         }
 
-        public void AddGridLines()
+        public List<IData3DSet> BuildGridLines(double zoom)
         {
-            int unitSize = 1000;
+            _datasets = new List<IData3DSet>();
+            AddGridLines(zoom);
+            return _datasets;
+        }
+
+        public List<IData3DSet> BuildGridCoords(double zoom)
+        {
+            _datasets = new List<IData3DSet>();
+            AddGridCoords(zoom);
+            return _datasets;
+        }
+
+        public List<IData3DSet> BuildStars()
+        {
+            _datasets = new List<IData3DSet>();
+            AddStandardSystems();
+            AddStations();
+            AddPOIsToDataset();
+            return _datasets;
+        }
+
+        public List<IData3DSet> BuildVisitedSystems()
+        {
+            _datasets = new List<IData3DSet>();
+            AddVisitedSystemsInformation();
+            AddRoutePlannerInfoToDataset();
+            AddTrilaterationInfoToDataset();
+            return _datasets;
+        }
+
+        public List<IData3DSet> BuildSelected()
+        {
+            _datasets = new List<IData3DSet>();
+            AddCenterPointToDataset();
+            AddSelectedSystemToDataset();
+            return _datasets;
+        }
+
+        public void AddMapImages()
+        {
+            if (UseImage && Images != null && Images.Length != 0)
+            {
+                var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("mapimage", Color.White, 1.0f);
+                foreach (var img in Images)
+                {
+                    if (_cachedTextures.ContainsKey(img.FileName))
+                    {
+                        datasetMapImg.Add(_cachedTextures[img.FileName]);
+                    }
+                    else
+                    {
+                        var texture = TexturedQuadData.FromFGEImage(img);
+                        _cachedTextures[img.FileName] = texture;
+                        datasetMapImg.Add(texture);
+                    }
+                }
+                _datasets.Add(datasetMapImg);
+            }
+        }
+
+        public Bitmap DrawGridBitmap(Bitmap text_bmp, float x, float z, Font fnt, int px, int py)
+        {
+            using (Graphics g = Graphics.FromImage(text_bmp))
+            {
+                //using (Brush br = new SolidBrush(Color.Yellow))
+                // g.FillRectangle(br, 0, 0, text_bmp.Width, text_bmp.Height);
+
+                using (Brush br = new SolidBrush((Color)System.Drawing.ColorTranslator.FromHtml("#296A6C")))
+                    g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(px, py));
+            }
+
+            return text_bmp;
+        }
+
+        public void AddGridCoords(double zoom)
+        {
+            if (GridCoords)
+            {
+                string fontname = "MS Sans Serif";
+
+                if (_cachedCoordTextures.ContainsKey(fontname))
+                {
+                    _datasets.AddRange(_cachedCoordTextures[fontname]);
+                }
+                else
+                {
+                    Font fnt = new Font(fontname, 20F);
+
+                    int bitmapwidth, bitmapheight;
+                    Bitmap text_bmp = new Bitmap(100, 30);
+                    using (Graphics g = Graphics.FromImage(text_bmp))
+                    {
+                        SizeF sz = g.MeasureString("-99999,-99999", fnt);
+                        bitmapwidth = (int)sz.Width + 4;
+                        bitmapheight = (int)sz.Height + 4;
+                    }
+                    var datasetMapImgLOD1 = Data3DSetClass<TexturedQuadData>.Create("text bitmap LOD1", Color.White, 1.0f);
+                    var datasetMapImgLOD2 = Data3DSetClass<TexturedQuadData>.Create("text bitmap LOD2", Color.FromArgb(128, Color.White), 1.0f);
+
+                    int textheightly = 50;
+                    int textwidthly = textheightly * bitmapwidth / bitmapheight;
+
+                    int gridwideLOD1 = (int)Math.Floor((MaxGridPos.X - MinGridPos.X) / gridunitSize + 1);
+                    int gridhighLOD1 = (int)Math.Floor((MaxGridPos.Y - MinGridPos.Y) / gridunitSize + 1);
+                    int gridwideLOD2 = (int)Math.Floor((MaxGridPos.X - MinGridPos.X) / (gridunitSize * 10) + 1);
+                    int gridhighLOD2 = (int)Math.Floor((MaxGridPos.Y - MinGridPos.Y) / (gridunitSize * 10) + 1);
+                    int texwide = 1024 / bitmapwidth;
+                    int texhigh = 1024 / bitmapheight;
+                    int numtexLOD1 = (int)Math.Ceiling((gridwideLOD1 * gridhighLOD1) * 1.0 / (texwide * texhigh));
+                    int numtexLOD2 = (int)Math.Ceiling((gridwideLOD2 * gridhighLOD2) * 1.0 / (texwide * texhigh));
+
+                    List<TexturedQuadData> basetexturesLOD1 = Enumerable.Range(0, numtexLOD1).Select(i => new TexturedQuadData(null, null, new Bitmap(1024, 1024))).ToList();
+                    List<TexturedQuadData> basetexturesLOD2 = Enumerable.Range(0, numtexLOD2).Select(i => new TexturedQuadData(null, null, new Bitmap(1024, 1024))).ToList();
+
+                    for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
+                    {
+                        for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += gridunitSize)
+                        {
+                            int num = (int)(Math.Floor((x - MinGridPos.X) / gridunitSize) * gridwideLOD1 + Math.Floor((z - MinGridPos.Y) / gridunitSize));
+                            int tex_x = (num % texwide) * bitmapwidth;
+                            int tex_y = ((num / texwide) % texhigh) * bitmapheight;
+                            int tex_n = num / (texwide * texhigh);
+
+                            DrawGridBitmap(basetexturesLOD1[tex_n].Texture, x, z, fnt, tex_x, tex_y);
+                            datasetMapImgLOD1.Add(basetexturesLOD1[tex_n].CreateSubTexture(
+                                new Point((int)x, (int)z), new Point((int)x + textwidthly, (int)z),
+                                new Point((int)x, (int)z + textheightly), new Point((int)x + textwidthly, (int)z + textheightly),
+                                new Point(tex_x, tex_y + bitmapheight), new Point(tex_x + bitmapwidth, tex_y + bitmapheight),
+                                new Point(tex_x, tex_y), new Point(tex_x + bitmapwidth, tex_y)));
+                        }
+                    }
+
+                    for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize * 10)
+                    {
+                        for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += gridunitSize * 10)
+                        {
+                            int num = (int)(Math.Floor((x - MinGridPos.X) / (gridunitSize * 10)) * gridwideLOD2 + Math.Floor((z - MinGridPos.Y) / (gridunitSize * 10)));
+                            int tex_x = (num % texwide) * bitmapwidth;
+                            int tex_y = ((num / texwide) % texhigh) * bitmapheight;
+                            int tex_n = num / (texwide * texhigh);
+
+                            DrawGridBitmap(basetexturesLOD2[tex_n].Texture, x, z, fnt, tex_x, tex_y);
+                            datasetMapImgLOD2.Add(basetexturesLOD2[tex_n].CreateSubTexture(
+                                new Point((int)x, (int)z), new Point((int)x + textwidthly * 10, (int)z),
+                                new Point((int)x, (int)z + textheightly * 10), new Point((int)x + textwidthly * 10, (int)z + textheightly * 10),
+                                new Point(tex_x, tex_y + bitmapheight), new Point(tex_x + bitmapwidth, tex_y + bitmapheight),
+                                new Point(tex_x, tex_y), new Point(tex_x + bitmapwidth, tex_y)));
+                        }
+                    }
+
+                    _cachedCoordTextures[fontname] = new List<Data3DSetClass<TexturedQuadData>>
+                    {
+                        datasetMapImgLOD1,
+                        datasetMapImgLOD2
+                    };
+
+                    _datasets.Add(datasetMapImgLOD1);
+                    _datasets.Add(datasetMapImgLOD2);
+                }
+
+                UpdateGridCoordZoom(ref _datasets, zoom);
+            }
+        }
+
+        public void AddGridLines(double zoom)
+        {
+            if (FineGridLines)
+            {
+                int smallUnitSize = gridunitSize / 10;
+                var smalldatasetGrid = Data3DSetClass<LineData>.Create("gridLOD0", (Color)System.Drawing.ColorTranslator.FromHtml("#202020"), 0.6f);
+
+                int ratio = gridunitSize / smallUnitSize;
+                int c = 0;
+
+                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += smallUnitSize)
+                {
+                    if (!GridLines || (c++ % ratio != 0))
+                        smalldatasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x, 0, MaxGridPos.Y));
+                }
+                c = 0;
+                for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += smallUnitSize)
+                {
+                    if (!GridLines || (c++ % ratio != 0))
+                        smalldatasetGrid.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
+                }
+
+                _datasets.Add(smalldatasetGrid);
+            }
+
             if (GridLines)
             {
-                bool addstations = !Stations;
-                var datasetGrid = Data3DSetClass<LineData>.Create("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
+                var datasetGridLOD1 = Data3DSetClass<LineData>.Create("gridLOD1", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
 
-                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
+                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
                 {
-                    datasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x,0,MaxGridPos.Y));
-                }
-                for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += unitSize)
-                {
-                    datasetGrid.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
+                    datasetGridLOD1.Add(new LineData(x, 0, MinGridPos.Y, x, 0, MaxGridPos.Y));
                 }
 
-                _datasets.Add(datasetGrid);
+                for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += gridunitSize)
+                {
+                    datasetGridLOD1.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
+                }
+
+                _datasets.Add(datasetGridLOD1);
+
+                var datasetGridLOD2 = Data3DSetClass<LineData>.Create("gridLOD2", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
+
+                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize * 10)
+                {
+                    datasetGridLOD2.Add(new LineData(x, 0, MinGridPos.Y, x, 0, MaxGridPos.Y));
+                }
+
+                for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += gridunitSize * 10)
+                {
+                    datasetGridLOD2.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
+                }
+
+                _datasets.Add(datasetGridLOD2);
             }
         }
 
@@ -88,6 +290,71 @@ namespace EDDiscovery2._3DMap
                 _datasets.Add(datasetS);
             }
         }
+
+        public void UpdateGridZoom(ref List<IData3DSet> _datasets, double zoom)
+        {
+            double LOD1fade = Math.Max(Math.Min((zoom / 0.1 - 1.0) / 5.0, 1.0), 0.5);
+
+            var gridLOD1 = _datasets.SingleOrDefault(s => s.Name == "gridLOD1");
+            if (gridLOD1 != null)
+            {
+                var colour = (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C");
+                colour = Color.FromArgb((int)(colour.R * LOD1fade), (int)(colour.G * LOD1fade), (int)(colour.B * LOD1fade));
+                var newgrid = Data3DSetClass<LineData>.Create("gridLOD1", colour, 0.6f);
+
+                foreach (var line in ((Data3DSetClass<LineData>)gridLOD1).Primatives)
+                {
+                    newgrid.Add(line);
+                }
+
+                int index = _datasets.IndexOf(gridLOD1);
+                _datasets.Remove(gridLOD1);
+                ((IDisposable)gridLOD1).Dispose();
+                _datasets.Insert(index, newgrid);
+            }
+        }
+
+        public void UpdateGridCoordZoom(ref List<IData3DSet> _datasets, double zoom)
+        {
+            double LOD2fade = Math.Max(Math.Min((0.2 / zoom - 1.0) / 2.0, 1.0), 0.0);
+
+            var gridLOD2 = _datasets.SingleOrDefault(s => s.Name == "text bitmap LOD2");
+            if (gridLOD2 != null)
+            {
+                var newgrid = Data3DSetClass<TexturedQuadData>.Create("text bitmap LOD2", Color.FromArgb((int)(255 * LOD2fade), Color.White), 1.0f);
+                foreach (var tex in ((Data3DSetClass<TexturedQuadData>)gridLOD2).Primatives)
+                {
+                    newgrid.Add(tex);
+                }
+
+                _datasets.Remove(gridLOD2);
+                _datasets.Add(newgrid);
+            }
+        }
+
+        public void UpdateStandardSystems(ref List<IData3DSet> _datasets , DateTime maxtime)     // modify this dataset
+        {
+
+            var ds = from dataset in _datasets where dataset.Name.Equals("stars") select dataset;
+            Data3DSetClass<PointData> datasetS = (Data3DSetClass<PointData>)ds.First();
+
+            _datasets.Remove(datasetS);
+
+           datasetS = Data3DSetClass<PointData>.Create("stars", Color.White, 1.0f);
+
+            if (AllSystems && StarList != null)
+            {
+                bool addstations = !Stations;
+         
+                foreach (ISystem si in StarList)
+                {
+                    if (addstations || (si.population == 0 && si.CreateDate<maxtime))
+                        AddSystem(si, datasetS);
+                }
+                _datasets.Add(datasetS);
+            }
+        }
+
 
         public void AddStations()
         {
