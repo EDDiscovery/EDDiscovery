@@ -191,23 +191,6 @@ namespace EDDiscovery2._3DMap
         {
             int unitSize = 1000;
 
-            if (GridLines)
-            {
-                var datasetGrid = Data3DSetClass<LineData>.Create("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
-
-                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
-                {
-                    datasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x, 0, MaxGridPos.Y));
-                }
-
-                for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += unitSize)
-                {
-                    datasetGrid.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
-                }
-
-                _datasets.Add(datasetGrid);
-            }
-
             if (FineGridLines)
             {
                 int smallUnitSize = gridunitSize / 10;
@@ -229,6 +212,23 @@ namespace EDDiscovery2._3DMap
                 }
 
                 _datasets.Add(smalldatasetGrid);
+            }
+
+            if (GridLines)
+            {
+                var datasetGrid = Data3DSetClass<LineData>.Create("grid", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
+
+                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += unitSize)
+                {
+                    datasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x, 0, MaxGridPos.Y));
+                }
+
+                for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += unitSize)
+                {
+                    datasetGrid.Add(new LineData(MinGridPos.X, 0, z, MaxGridPos.X, 0, z));
+                }
+
+                _datasets.Add(datasetGrid);
             }
         }
 
