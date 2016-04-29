@@ -56,7 +56,7 @@ namespace EDDiscovery
                  * Also, please note that due to E:D bugs, these entries can be at the end of a line as well, not just on a line of their own.
                  * The RegExp below actually just finds the pattern somewhere in the line, so it caters for rubbish at the end too.
                  */
-                Regex pattern = new Regex(@"{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:\d+\((?<SystemName>.*?)\) Body:(?<Body>\d+) Pos:\(.*?\) (?<TravelMode>\w+)");
+                Regex pattern = new Regex(@"{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:\d+\((?<SystemName>.*?)\) Body:(?<Body>\d+) Pos:\(.*?\)( (?<TravelMode>\w+))?");
 
                 Match match = pattern.Match(line);
 
@@ -66,9 +66,6 @@ namespace EDDiscovery
 
                 sp.Nr = int.Parse(match.Groups["Body"].Value);
                 sp.Name = match.Groups["SystemName"].Value;
-
-                // Debug
-                string travelMode = match.Groups["TravelMode"].Value;
 
                 if (hour >= lasttime.Hour)
                 {
