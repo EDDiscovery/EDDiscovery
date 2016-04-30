@@ -263,6 +263,35 @@ namespace EDDiscovery2.EDSM
             return listDistances;
         }
 
+        public int GetComments(DateTime starttime, out List<SystemNoteClass> notes)
+        {
+            notes = new List<SystemNoteClass>();
+
+            var json = GetComments(starttime);
+            if (json == null)
+            {
+                return 0;
+            }
+
+            JObject msg = JObject.Parse(json);
+            int msgnr = msg["msgnum"].Value<int>();
+
+            JArray comments = (JArray)msg["comments"];
+            if (comments != null)
+            {
+                foreach (JObject jo in comments)
+                {
+                    SystemNoteClass note = new SystemNoteClass();
+                    note.Name = jo["system"].Value<string>();
+                    note.Note = jo["comment"].Value<string>();
+                    note.Time = DateTime.ParseExact(jo["lastUpdate"].Value<string>(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                    notes.Add(note);
+                }
+            }
+
+            return msgnr;
+        }
+
         public string GetComments(DateTime starttime)
         {
             SQLiteDBClass db = new SQLiteDBClass();
