@@ -72,7 +72,9 @@ namespace EDDiscovery2.EDSM
 
                 //string comments =  edsm.GetComments(new DateTime(2015, 1, 1));
                 List<SystemPosition> log;
+                List<SystemNoteClass> notes;
                 int ret = edsm.GetLogs(new DateTime(2011, 1, 1), out log);
+                int nret = edsm.GetComments(new DateTime(2011, 1, 1), out notes);
 
                 if (log == null)
                     log = new List<SystemPosition>();
@@ -150,6 +152,26 @@ namespace EDDiscovery2.EDSM
                             System.Diagnostics.Trace.WriteLine("New from EDSM");
                             newsystem = true;
 
+                        }
+                    }
+
+                    // Sync comments from EDSM
+                    foreach (var note in notes)
+                    {
+                        string searchname = note.Name.ToLower();
+                        if (SQLiteDBClass.globalSystemNotes.ContainsKey(searchname))
+                        {
+                            SystemNoteClass dbnote = SQLiteDBClass.globalSystemNotes[searchname];
+                            if (note.Time > dbnote.Time)
+                            {
+                                dbnote.Time = note.Time;
+                                dbnote.Note = note.Note;
+                                dbnote.Update();
+                            }
+                        }
+                        else
+                        {
+                            note.Add();
                         }
                     }
                 }
