@@ -146,6 +146,12 @@ namespace EDDiscovery.DB
                 if (dbver < 10)
                     UpgradeDB10();
 
+                if (dbver < 11)
+                    UpgradeDB11();
+
+                if (dbver < 12)
+                    UpgradeDB12();
+
                 dbUpgraded = true;
                 return true;
             }
@@ -536,6 +542,37 @@ namespace EDDiscovery.DB
             return true;
         }
 
+        private bool UpgradeDB12()
+        {
+            string query1 = "CREATE TABLE routes_expeditions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT UNIQUE NOT NULL, start DATETIME, end DATETIME)";
+            string query2 = "CREATE TABLE route_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, routeid INTEGER NOT NULL, systemname TEXT NOT NULL)";
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery11.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+            try
+            {
+                ExecuteQuery(query1);
+                ExecuteQuery(query2);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB12 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 12);
+
+            return true;
+        }
+
         private void ExecuteQuery(string query)
         {
             if (Connect2DB())
@@ -806,6 +843,66 @@ namespace EDDiscovery.DB
             {
                 return null;
             }
+        }
+
+        public List<SavedRouteClass> GetAllSavedRoutes()
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                {
+                    using (SQLiteCommand cmd1 = new SQLiteCommand())
+                    {
+                        DataSet ds1 = null;
+                        cmd1.Connection = cn;
+                        cmd1.CommandType = CommandType.Text;
+                        cmd1.CommandTimeout = 30;
+                        cmd1.CommandText = "select * from routes_expeditions";
+
+                        ds1 = SqlQueryText(cn, cmd1);
+                        if (ds1.Tables.Count == 0)
+                        {
+                            return null;
+                        }
+                        //
+                        if (ds1.Tables[0].Rows.Count == 0)
+                        {
+                            return new List<SavedRouteClass>();
+                        }
+
+                        using (SQLiteCommand cmd2 = new SQLiteCommand())
+                        {
+                            DataSet ds2 = null;
+                            cmd2.Connection = cn;
+                            cmd2.CommandType = CommandType.Text;
+                            cmd2.CommandTimeout = 30;
+                            cmd2.CommandText = "select * from route_systems";
+
+                            ds2 = SqlQueryText(cn, cmd2);
+
+                            List<SavedRouteClass> retVal = new List<SavedRouteClass>();
+
+                            foreach (DataRow dr in ds1.Tables[0].Rows)
+                            {
+                                DataRow[] syslist = new DataRow[0];
+                                if (ds2.Tables.Count != 0)
+                                {
+                                    syslist = ds2.Tables[0].Select(String.Format("routeid = {0}", dr["id"]), "id ASC");
+                                }
+                                SavedRouteClass sys = new SavedRouteClass(dr, syslist);
+                                retVal.Add(sys);
+                            }
+
+                            return retVal;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
         }
 
         public int QueryValueInt(string query, int defaultvalue)
