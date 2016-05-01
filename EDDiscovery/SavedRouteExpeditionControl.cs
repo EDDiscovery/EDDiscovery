@@ -19,6 +19,8 @@ namespace EDDiscovery
         private EDDiscoveryForm _discoveryForm;
         private EDSMClass edsm;
         private int _currentRouteIndex;
+        private Rectangle _dragBox;
+        private int _dragRowIndex;
 
         public SavedRouteExpeditionControl()
         {
@@ -45,6 +47,155 @@ namespace EDDiscovery
             }
         }
 
+        private float CalculateRouteMaxDistFromOrigin()
+        {
+            if (dataGridViewRouteSystems.Rows.Count < 2)
+                return 100;
+
+            double maxdist = 25;
+            var rows = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>().Where(r => r.Cells[0].Value != null).ToList();
+            List<SystemClass> systems = rows.Select(r => r.Cells[0].Tag as SystemClass).ToList();
+            SystemClass sys0 = systems.FirstOrDefault(s => s != null && s.HasCoordinate);
+
+            if (sys0 != null)
+            {
+                foreach (var sys in systems.Where(s => s != null))
+                {
+                    double dist;
+                    if (sys.HasCoordinate)
+                    {
+                        dist = SystemData.Distance(sys0, sys);
+                    }
+                    else
+                    {
+                        dist = DistanceClass.Distance(sys0, sys);
+                    }
+
+                    if (dist > maxdist)
+                    {
+                        maxdist = dist;
+                    }
+                }
+            }
+
+            return (float)maxdist;
+        }
+
+        private SystemClass GetSystem(string sysname)
+        {
+            SystemClass sys = SystemData.GetSystem(sysname);
+
+            if (sys == null)
+            {
+                if (edsm.IsKnownSystem(sysname))
+                {
+                    sys = new SystemClass(sysname);
+                }
+            }
+
+            return sys;
+        }
+
+        private void UpdateSystemRow(int rowindex)
+        {
+            if (rowindex < dataGridViewRouteSystems.Rows.Count &&
+                dataGridViewRouteSystems[0, rowindex].Value != null)
+            {
+                string sysname = dataGridViewRouteSystems[0, rowindex].Value.ToString();
+                var sys = GetSystem(sysname);
+                dataGridViewRouteSystems[1, rowindex].Value = "";
+
+                if (rowindex > 0 && rowindex < dataGridViewRouteSystems.Rows.Count &&
+                    dataGridViewRouteSystems[0, rowindex - 1].Value != null &&
+                    dataGridViewRouteSystems[0, rowindex].Value != null)
+                {
+                    string prevsysname = dataGridViewRouteSystems[0, rowindex - 1].Value.ToString();
+                    var prevsys = GetSystem(prevsysname);
+
+                    if (sys != null && prevsys != null)
+                    {
+                        double dist;
+                        if (sys.HasCoordinate && prevsys.HasCoordinate)
+                        {
+                            dist = SystemData.Distance(sys, prevsys);
+                        }
+                        else
+                        {
+                            dist = DistanceClass.Distance(sys, prevsys);
+                        }
+
+                        string strdist = ((double)dist).ToString("0.00");
+                        dataGridViewRouteSystems[1, rowindex].Value = strdist;
+                    }
+                }
+
+                dataGridViewRouteSystems[0, rowindex].Tag = sys;
+                dataGridViewRouteSystems.Rows[rowindex].DefaultCellStyle.ForeColor = (sys != null && sys.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
+
+                if (sys != null)
+                {
+                    string sysnote = sys.Note == null ? "" : sys.Note;
+                    dataGridViewRouteSystems[2, rowindex].Value = sysnote;
+                }
+
+                if (sys == null && sysname != "")
+                {
+                    dataGridViewRouteSystems.Rows[rowindex].ErrorText = "System not known to EDSM";
+                }
+                else
+                {
+                    dataGridViewRouteSystems.Rows[rowindex].ErrorText = "";
+                }
+            }
+        }
+
+        private void UpdateSystemRows()
+        {
+            for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
+            {
+                UpdateSystemRow(i);
+            }
+        }
+
+        private void UpdateRouteInfo(SavedRouteClass route)
+        {
+            route.Name = textBoxRouteName.Text.Trim();
+            route.Systems.Clear();
+            route.Systems.AddRange(dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>().Where(r => r.Cells[0].Value != null).Select(r => r.Cells[0].Value.ToString()));
+
+            if (dateTimePickerStartDate.Checked)
+            {
+                route.StartDate = dateTimePickerStartDate.Value.Date;
+
+                if (dateTimePickerStartTime.Checked)
+                {
+                    route.StartDate += dateTimePickerStartTime.Value.TimeOfDay;
+                }
+            }
+            else
+            {
+                route.StartDate = null;
+            }
+
+            if (dateTimePickerEndDate.Checked)
+            {
+                route.EndDate = dateTimePickerEndDate.Value.Date;
+
+                if (dateTimePickerEndTime.Checked)
+                {
+                    route.EndDate += dateTimePickerEndTime.Value.TimeOfDay;
+                }
+                else
+                {
+                    route.EndDate += new TimeSpan(23, 59, 59);
+                }
+            }
+            else
+            {
+                route.EndDate = null;
+            }
+        }
+
         private void toolStripComboBoxRouteSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
             SavedRouteClass newroute = new SavedRouteClass();
@@ -52,10 +203,13 @@ namespace EDDiscovery
 
             if (!newroute.Equals(_currentRoute))
             {
-                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
+                if (_currentRoute.Name != null)
                 {
-                    toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
+                    var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                    if (result == DialogResult.No)
+                    {
+                        toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
+                    }
                 }
             }
 
@@ -147,40 +301,6 @@ namespace EDDiscovery
             dataGridViewRouteSystems.Rows.Clear();
         }
 
-        private float CalculateRouteMaxDistFromOrigin()
-        {
-            if (dataGridViewRouteSystems.Rows.Count < 2)
-                return 100;
-
-            double maxdist = 25;
-            var rows = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>().Where(r => r.Cells[0].Value != null).ToList();
-            List<SystemClass> systems = rows.Select(r => r.Cells[0].Tag as SystemClass).ToList();
-            SystemClass sys0 = systems.FirstOrDefault(s => s != null && s.HasCoordinate);
-
-            if (sys0 != null)
-            {
-                foreach (var sys in systems.Where(s => s != null))
-                {
-                    double dist;
-                    if (sys.HasCoordinate)
-                    {
-                        dist = SystemData.Distance(sys0, sys);
-                    }
-                    else
-                    {
-                        dist = DistanceClass.Distance(sys0, sys);
-                    }
-
-                    if (dist > maxdist)
-                    {
-                        maxdist = dist;
-                    }
-                }
-            }
-
-            return (float)maxdist;
-        }
-
         private void toolStripButtonShowOn3DMap_Click(object sender, EventArgs e)
         {
             if (_discoveryForm.SystemNames.Count == 0)
@@ -231,107 +351,6 @@ namespace EDDiscovery
             }
         }
 
-        private SystemClass GetSystem(string sysname)
-        {
-            SystemClass sys = SystemData.GetSystem(sysname);
-
-            if (sys == null)
-            {
-                if (edsm.IsKnownSystem(sysname))
-                {
-                    sys = new SystemClass(sysname);
-                }
-            }
-
-            return sys;
-        }
-
-        private void UpdateSystemRow(int rowindex)
-        {
-            if (rowindex < dataGridViewRouteSystems.Rows.Count &&
-                dataGridViewRouteSystems[0, rowindex].Value != null)
-            {
-                string sysname = dataGridViewRouteSystems[0, rowindex].Value.ToString();
-                var sys = GetSystem(sysname);
-                if (rowindex > 0 && rowindex < dataGridViewRouteSystems.Rows.Count &&
-                    dataGridViewRouteSystems[0, rowindex - 1].Value != null &&
-                    dataGridViewRouteSystems[0, rowindex].Value != null)
-                {
-                    string prevsysname = dataGridViewRouteSystems[0, rowindex - 1].Value.ToString();
-                    var prevsys = GetSystem(prevsysname);
-
-                    if (sys != null && prevsys != null)
-                    {
-                        double dist;
-                        if (sys.HasCoordinate && prevsys.HasCoordinate)
-                        {
-                            dist = SystemData.Distance(sys, prevsys);
-                        }
-                        else
-                        {
-                            dist = DistanceClass.Distance(sys, prevsys);
-                        }
-
-                        string sysnote = sys.Note == null ? "" : sys.Note;
-                        string strdist = ((double)dist).ToString("0.00");
-                        dataGridViewRouteSystems[1, rowindex].Value = strdist;
-                        dataGridViewRouteSystems[2, rowindex].Value = sysnote;
-                    }
-                }
-
-                dataGridViewRouteSystems[0, rowindex].Tag = sys;
-                dataGridViewRouteSystems.Rows[rowindex].DefaultCellStyle.ForeColor = (sys != null && sys.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
-
-                if (sys == null && sysname != "")
-                {
-                    dataGridViewRouteSystems.Rows[rowindex].ErrorText = "System not known to EDSM";
-                }
-                else
-                {
-                    dataGridViewRouteSystems.Rows[rowindex].ErrorText = "";
-                }
-            }
-        }
-
-        private void UpdateRouteInfo(SavedRouteClass route)
-        {
-            route.Name = textBoxRouteName.Text.Trim();
-            route.Systems.Clear();
-            route.Systems.AddRange(dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>().Where(r => r.Cells[0].Value != null).Select(r => r.Cells[0].Value.ToString()));
-
-            if (dateTimePickerStartDate.Checked)
-            {
-                route.StartDate = dateTimePickerStartDate.Value.Date;
-
-                if (dateTimePickerStartTime.Checked)
-                {
-                    route.StartDate += dateTimePickerStartTime.Value.TimeOfDay;
-                }
-            }
-            else
-            {
-                route.StartDate = null;
-            }
-
-            if (dateTimePickerEndDate.Checked)
-            {
-                route.EndDate = dateTimePickerEndDate.Value.Date;
-
-                if (dateTimePickerEndTime.Checked)
-                {
-                    route.EndDate += dateTimePickerEndTime.Value.TimeOfDay;
-                }
-                else
-                {
-                    route.EndDate += new TimeSpan(23, 59, 59);
-                }
-            }
-            else
-            {
-                route.EndDate = null;
-            }
-        }
-
         private void dataGridViewRouteSystems_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -359,8 +378,66 @@ namespace EDDiscovery
             textbox.AutoCompleteCustomSource = items;
         }
 
-        private void toolStripComboBoxRouteSelection_Validating(object sender, CancelEventArgs e)
+        private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button.HasFlag(MouseButtons.Left))
+            {
+                _dragRowIndex = dataGridViewRouteSystems.HitTest(e.X, e.Y).RowIndex;
+
+                if (_dragRowIndex != -1)
+                {
+                    Size dragsize = SystemInformation.DragSize;
+                    _dragBox = new Rectangle(e.X - dragsize.Width / 2, e.Y - dragsize.Height / 2, dragsize.Width, dragsize.Height);
+                }
+                else
+                {
+                    _dragBox = Rectangle.Empty;
+                }
+            }
+        }
+
+        private void dataGridViewRouteSystems_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button.HasFlag(MouseButtons.Left))
+            {
+                if (_dragBox != Rectangle.Empty && !_dragBox.Contains(e.Location))
+                {
+                    dataGridViewRouteSystems.DoDragDrop(dataGridViewRouteSystems.Rows[_dragRowIndex], DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void dataGridViewRouteSystems_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(DataGridViewRow)))
+            {
+                var data = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
+                if (data.DataGridView == dataGridViewRouteSystems)
+                {
+                    e.Effect = DragDropEffects.Move;
+                }
+            }
+        }
+
+        private void dataGridViewRouteSystems_DragDrop(object sender, DragEventArgs e)
+        {
+            Point p = dataGridViewRouteSystems.PointToClient(new Point(e.X, e.Y));
+            var insertIndex = dataGridViewRouteSystems.HitTest(p.X, p.Y).RowIndex;
+            if (insertIndex >= dataGridViewRouteSystems.Rows.Count)
+            {
+                insertIndex = dataGridViewRouteSystems.Rows.Count - 1;
+            }
+
+            if (e.Effect == DragDropEffects.Move)
+            {
+                var row = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
+                if (row.DataGridView == dataGridViewRouteSystems)
+                {
+                    dataGridViewRouteSystems.Rows.Remove(row);
+                    dataGridViewRouteSystems.Rows.Insert(insertIndex, row);
+                    UpdateSystemRows();
+                }
+            }
         }
     }
 }

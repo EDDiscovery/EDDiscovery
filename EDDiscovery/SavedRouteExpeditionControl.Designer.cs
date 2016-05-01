@@ -34,6 +34,7 @@
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonShowOn3DMap = new System.Windows.Forms.ToolStripButton();
+            this.toolStripComboBoxRouteSelection = new ExtendedControls.ToolStripComboBoxCustom();
             this.panelRouteInfo = new System.Windows.Forms.Panel();
             this.dateTimePickerEndTime = new System.Windows.Forms.DateTimePicker();
             this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
@@ -47,7 +48,6 @@
             this.SystemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.toolStripComboBoxRouteSelection = new ExtendedControls.ToolStripComboBoxCustom();
             this.toolStrip1.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
@@ -99,6 +99,29 @@
             this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(101, 22);
             this.toolStripButtonShowOn3DMap.Text = "Show on 3D Map";
             this.toolStripButtonShowOn3DMap.Click += new System.EventHandler(this.toolStripButtonShowOn3DMap_Click);
+            // 
+            // toolStripComboBoxRouteSelection
+            // 
+            this.toolStripComboBoxRouteSelection.ArrowWidth = 1;
+            this.toolStripComboBoxRouteSelection.BorderColor = System.Drawing.Color.White;
+            this.toolStripComboBoxRouteSelection.ButtonColorScaling = 0.5F;
+            this.toolStripComboBoxRouteSelection.DataSource = null;
+            this.toolStripComboBoxRouteSelection.DisplayMember = null;
+            this.toolStripComboBoxRouteSelection.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.toolStripComboBoxRouteSelection.DropDownHeight = 200;
+            this.toolStripComboBoxRouteSelection.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.toolStripComboBoxRouteSelection.ItemHeight = 20;
+            this.toolStripComboBoxRouteSelection.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("toolStripComboBoxRouteSelection.Items")));
+            this.toolStripComboBoxRouteSelection.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.toolStripComboBoxRouteSelection.Name = "toolStripComboBoxRouteSelection";
+            this.toolStripComboBoxRouteSelection.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.toolStripComboBoxRouteSelection.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.toolStripComboBoxRouteSelection.ScrollBarWidth = 16;
+            this.toolStripComboBoxRouteSelection.SelectedIndex = -1;
+            this.toolStripComboBoxRouteSelection.SelectedItem = null;
+            this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(100, 22);
+            this.toolStripComboBoxRouteSelection.ValueMember = null;
+            this.toolStripComboBoxRouteSelection.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.toolStripComboBoxRouteSelection_SelectedIndexChanged);
             // 
             // panelRouteInfo
             // 
@@ -198,6 +221,7 @@
             // 
             // dataGridViewRouteSystems
             // 
+            this.dataGridViewRouteSystems.AllowDrop = true;
             this.dataGridViewRouteSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewRouteSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SystemName,
@@ -205,12 +229,17 @@
             this.Note});
             this.dataGridViewRouteSystems.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewRouteSystems.Location = new System.Drawing.Point(0, 114);
+            this.dataGridViewRouteSystems.MultiSelect = false;
             this.dataGridViewRouteSystems.Name = "dataGridViewRouteSystems";
             this.dataGridViewRouteSystems.Size = new System.Drawing.Size(787, 436);
             this.dataGridViewRouteSystems.TabIndex = 2;
             this.dataGridViewRouteSystems.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             this.dataGridViewRouteSystems.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewRouteSystems_CellValidating);
             this.dataGridViewRouteSystems.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridViewRouteSystems_EditingControlShowing);
+            this.dataGridViewRouteSystems.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragDrop);
+            this.dataGridViewRouteSystems.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragOver);
+            this.dataGridViewRouteSystems.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseDown);
+            this.dataGridViewRouteSystems.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseMove);
             // 
             // SystemName
             // 
@@ -231,12 +260,6 @@
             this.Note.HeaderText = "Note";
             this.Note.Name = "Note";
             this.Note.ReadOnly = true;
-            // 
-            // toolStripComboBoxRouteSelection
-            // 
-            this.toolStripComboBoxRouteSelection.Name = "toolStripComboBoxRouteSelection";
-            this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(100, 22);
-            this.toolStripComboBoxRouteSelection.SelectedIndexChanged += this.toolStripComboBoxRouteSelection_SelectedIndexChanged;
             // 
             // SavedRouteExpeditionControl
             // 
