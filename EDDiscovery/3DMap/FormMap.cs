@@ -906,6 +906,12 @@ namespace EDDiscovery2
             _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
             _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);        // rotate camera by asked value
 
+            // Limit camera pitch
+            if (_cameraDir.X < 0 && _cameraDir.X > -90)
+                _cameraDir.X = 0;
+            if (_cameraDir.X > 180 || _cameraDir.X <= -90)
+                _cameraDir.X = 180;
+
 #if DEBUG
             bool istranslating = (_cameraActionMovement.X != 0 || _cameraActionMovement.Y != 0 || _cameraActionMovement.Z != 0);
 //            if (istranslating)
@@ -1298,6 +1304,11 @@ namespace EDDiscovery2
                 _cameraDir.Y += (float)(dx / 4.0f);
                 _cameraDir.X += (float)(-dy / 4.0f);
 
+                // Limit camera pitch
+                if (_cameraDir.X < 0 && _cameraDir.X > -90)
+                    _cameraDir.X = 0;
+                if (_cameraDir.X > 180 || _cameraDir.X <= -90)
+                    _cameraDir.X = 180;
                 //SetupCursorXYZ();
 
                 glControl.Invalidate();
