@@ -19,6 +19,8 @@ namespace EDDiscovery2._3DMap
         private static Dictionary<string, TexturedQuadData> _cachedTextures = new Dictionary<string, TexturedQuadData>();
         private static Dictionary<string, List<Data3DSetClass<TexturedQuadData>>> _cachedCoordTextures = new Dictionary<string, List<Data3DSetClass<TexturedQuadData>>>();
 
+        public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
+
         public ISystem CenterSystem { get; set; } = new SystemClass();
         public ISystem SelectedSystem { get; set; } = new SystemClass();
         public List<ISystem> StarList { get; set; } = new List<ISystem>();
@@ -121,7 +123,7 @@ namespace EDDiscovery2._3DMap
                 //using (Brush br = new SolidBrush(Color.Yellow))
                 // g.FillRectangle(br, 0, 0, text_bmp.Width, text_bmp.Height);
 
-                using (Brush br = new SolidBrush((Color)System.Drawing.ColorTranslator.FromHtml("#296A6C")))
+                using (Brush br = new SolidBrush(MapColours.CoarseGridLines))
                     g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(px, py));
             }
 
@@ -223,7 +225,7 @@ namespace EDDiscovery2._3DMap
             if (FineGridLines)
             {
                 int smallUnitSize = gridunitSize / 10;
-                var smalldatasetGrid = Data3DSetClass<LineData>.Create("gridLOD0", (Color)System.Drawing.ColorTranslator.FromHtml("#202020"), 0.6f);
+                var smalldatasetGrid = Data3DSetClass<LineData>.Create("gridLOD0", MapColours.FineGridLines, 0.6f);
 
                 int ratio = gridunitSize / smallUnitSize;
                 int c = 0;
@@ -245,7 +247,7 @@ namespace EDDiscovery2._3DMap
 
             if (GridLines)
             {
-                var datasetGridLOD1 = Data3DSetClass<LineData>.Create("gridLOD1", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
+                var datasetGridLOD1 = Data3DSetClass<LineData>.Create("gridLOD1", MapColours.CoarseGridLines, 0.6f);
 
                 for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
                 {
@@ -259,7 +261,7 @@ namespace EDDiscovery2._3DMap
 
                 _datasets.Add(datasetGridLOD1);
 
-                var datasetGridLOD2 = Data3DSetClass<LineData>.Create("gridLOD2", (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C"), 0.6f);
+                var datasetGridLOD2 = Data3DSetClass<LineData>.Create("gridLOD2", MapColours.CoarseGridLines, 0.6f);
 
                 for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize * 10)
                 {
@@ -280,7 +282,7 @@ namespace EDDiscovery2._3DMap
             if (AllSystems && StarList != null)
             {
                 bool addstations = !Stations;
-                var datasetS = Data3DSetClass<PointData>.Create("stars", Color.White, 1.0f);
+                var datasetS = Data3DSetClass<PointData>.Create("stars", MapColours.SystemDefault, 1.0f);
 
                 foreach (ISystem si in StarList)
                 {
@@ -298,7 +300,7 @@ namespace EDDiscovery2._3DMap
             var gridLOD1 = _datasets.SingleOrDefault(s => s.Name == "gridLOD1");
             if (gridLOD1 != null)
             {
-                var colour = (Color)System.Drawing.ColorTranslator.FromHtml("#296A6C");
+                var colour = MapColours.CoarseGridLines;
                 colour = Color.FromArgb((int)(colour.R * LOD1fade), (int)(colour.G * LOD1fade), (int)(colour.B * LOD1fade));
                 var newgrid = Data3DSetClass<LineData>.Create("gridLOD1", colour, 0.6f);
 
@@ -340,7 +342,7 @@ namespace EDDiscovery2._3DMap
 
             _datasets.Remove(datasetS);
 
-           datasetS = Data3DSetClass<PointData>.Create("stars", Color.White, 1.0f);
+           datasetS = Data3DSetClass<PointData>.Create("stars", MapColours.SystemDefault, 1.0f);
 
             if (AllSystems && StarList != null)
             {
@@ -360,7 +362,7 @@ namespace EDDiscovery2._3DMap
         {
             if (Stations)
             {
-                var datasetS = Data3DSetClass<PointData>.Create("stations", Color.RoyalBlue, 1.0f);
+                var datasetS = Data3DSetClass<PointData>.Create("stations", MapColours.StationSystem, 1.0f);
 
                 foreach (ISystem si in StarList)
                 {
@@ -426,7 +428,7 @@ namespace EDDiscovery2._3DMap
         // dataset anymore. The origin will stay at Sol.
         public void AddCenterPointToDataset()
         {
-            var dataset = Data3DSetClass<PointData>.Create("Center", Color.Yellow, 5.0f);
+            var dataset = Data3DSetClass<PointData>.Create("Center", MapColours.CentredSystem, 5.0f);
 
             //GL.Enable(EnableCap.ProgramPointSize);
             dataset.Add(new PointData(CenterSystem.x, CenterSystem.y, CenterSystem.z));
@@ -437,7 +439,7 @@ namespace EDDiscovery2._3DMap
         {
             if (SelectedSystem != null)
             {
-                var dataset = Data3DSetClass<PointData>.Create("Selected", Color.Orange, 5.0f);
+                var dataset = Data3DSetClass<PointData>.Create("Selected", MapColours.SelectedSystem, 5.0f);
 
                 //GL.Enable(EnableCap.ProgramPointSize);
                 dataset.Add(new PointData(SelectedSystem.x, SelectedSystem.y, SelectedSystem.z));
@@ -447,7 +449,7 @@ namespace EDDiscovery2._3DMap
 
         public void AddPOIsToDataset()
         {
-            var dataset = Data3DSetClass<PointData>.Create("Interest", Color.Purple, 10.0f);
+            var dataset = Data3DSetClass<PointData>.Create("Interest", MapColours.POISystem, 10.0f);
             AddSystem("sol", dataset);
             AddSystem("sagittarius a*", dataset);
             //AddSystem("polaris", dataset);
@@ -458,7 +460,7 @@ namespace EDDiscovery2._3DMap
         {
             if (ReferenceSystems != null && ReferenceSystems.Any())
             {
-                var referenceLines = Data3DSetClass<LineData>.Create("CurrentReference", Color.Green, 5.0f);
+                var referenceLines = Data3DSetClass<LineData>.Create("CurrentReference", MapColours.TrilatCurrentReference, 5.0f);
                 foreach (var refSystem in ReferenceSystems)
                 {
                     referenceLines.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, refSystem.x, refSystem.y, refSystem.z));
@@ -466,7 +468,7 @@ namespace EDDiscovery2._3DMap
 
                 _datasets.Add(referenceLines);
 
-                var lineSet = Data3DSetClass<LineData>.Create("SuggestedReference", Color.DarkOrange, 5.0f);
+                var lineSet = Data3DSetClass<LineData>.Create("SuggestedReference", MapColours.TrilatSuggestedReference, 5.0f);
 
 
                 Stopwatch sw = new Stopwatch();
@@ -493,7 +495,7 @@ namespace EDDiscovery2._3DMap
         {
             if (PlannedRoute != null && PlannedRoute.Any())
             {
-                var routeLines = Data3DSetClass<LineData>.Create("PlannedRoute", Color.DarkOrange, 25.0f);
+                var routeLines = Data3DSetClass<LineData>.Create("PlannedRoute", MapColours.PlannedRoute, 25.0f);
                 ISystem prevSystem = PlannedRoute.First();
                 foreach (ISystem point in PlannedRoute.Skip(1))
                 {
