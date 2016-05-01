@@ -69,6 +69,8 @@
             this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
+            this.tabPageRoutesExpeditions = new System.Windows.Forms.TabPage();
+            this.savedRouteExpeditionControl1 = new EDDiscovery.SavedRouteExpeditionControl();
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.panel_grip = new ExtendedControls.DrawnPanel();
@@ -82,6 +84,7 @@
             this.tabPageTriletaration.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
+            this.tabPageRoutesExpeditions.SuspendLayout();
             this.SuspendLayout();
             // 
             // button_test
@@ -395,6 +398,7 @@
             this.tabControl1.Controls.Add(this.tabPageTriletaration);
             this.tabControl1.Controls.Add(this.tabPageScreenshots);
             this.tabControl1.Controls.Add(this.tabPageRoute);
+            this.tabControl1.Controls.Add(this.tabPageRoutesExpeditions);
             this.tabControl1.Controls.Add(this.tabPageSettings);
             this.tabControl1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControl1.Location = new System.Drawing.Point(0, 28);
@@ -433,6 +437,25 @@
             this.travelHistoryControl1.Name = "travelHistoryControl1";
             this.travelHistoryControl1.Size = new System.Drawing.Size(979, 665);
             this.travelHistoryControl1.TabIndex = 0;
+            // 
+            // tabPageRoutesExpeditions
+            // 
+            this.tabPageRoutesExpeditions.Controls.Add(this.savedRouteExpeditionControl1);
+            this.tabPageRoutesExpeditions.Location = new System.Drawing.Point(4, 22);
+            this.tabPageRoutesExpeditions.Name = "tabPageRoutesExpeditions";
+            this.tabPageRoutesExpeditions.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageRoutesExpeditions.Size = new System.Drawing.Size(985, 671);
+            this.tabPageRoutesExpeditions.TabIndex = 6;
+            this.tabPageRoutesExpeditions.Text = "Routes/Expeditions";
+            this.tabPageRoutesExpeditions.UseVisualStyleBackColor = true;
+            // 
+            // savedRouteExpeditionControl1
+            // 
+            this.savedRouteExpeditionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.savedRouteExpeditionControl1.Location = new System.Drawing.Point(3, 3);
+            this.savedRouteExpeditionControl1.Name = "savedRouteExpeditionControl1";
+            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(979, 665);
+            this.savedRouteExpeditionControl1.TabIndex = 0;
             // 
             // label_version
             // 
@@ -535,6 +558,7 @@
             this.tabPageTriletaration.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);
+            this.tabPageRoutesExpeditions.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -586,6 +610,8 @@
         private System.Windows.Forms.ToolStripMenuItem changeMapColorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
+        private SavedRouteExpeditionControl savedRouteExpeditionControl1;
     }
 }
 
