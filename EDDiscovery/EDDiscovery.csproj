@@ -211,12 +211,16 @@
     <Compile Include="Controls\TextBoxBorder.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ToolStripComboBoxCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\UpDown.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\VScrollCustom.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DB\SavedRouteClass.cs" />
     <Compile Include="DB\InMemory\VisitedSystemsClass.cs" />
     <Compile Include="DB\ISystem.cs" />
     <Compile Include="DB\InMemory\SystemClass.cs" />
@@ -337,6 +341,12 @@
     <Compile Include="Forms\StatsForm.Designer.cs">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SavedRouteExpeditionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SavedRouteExpeditionControl.Designer.cs">
+      <DependentUpon>SavedRouteExpeditionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -450,6 +460,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SystemViewForm.resx">
       <DependentUpon>SystemViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SavedRouteExpeditionControl.resx">
+      <DependentUpon>SavedRouteExpeditionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
