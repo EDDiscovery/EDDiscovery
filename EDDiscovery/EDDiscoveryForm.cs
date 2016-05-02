@@ -414,7 +414,7 @@ namespace EDDiscovery
         {
             EDDBClass eddb = new EDDBClass();
             bool newfile = false;
-            if (eddb.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps\\" + file), out newfile))
+            if (eddb.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
             {
                 if (newfile)
                     LogText("Downloaded map: " + file + Environment.NewLine);
@@ -427,7 +427,7 @@ namespace EDDiscovery
 
         private void DeleteMapFile(string file)
         {
-            string filename = Path.Combine(Tools.GetAppDataDirectory(), "Maps\\" + file);
+            string filename = Path.Combine(Tools.GetAppDataDirectory(), "Maps", file);
 
             try
             {
@@ -764,12 +764,12 @@ namespace EDDiscovery
             string json = null;
             try
             {
-                string appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\EDDiscovery";
+                string appdata = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "EDDiscovery");
 
                 if (!Directory.Exists(appdata))
                     Directory.CreateDirectory(appdata);
 
-                string filename = appdata + "\\" + jfile;
+                string filename = Path.Combine(appdata, jfile);
 
                 if (!File.Exists(filename))
                     return null;
