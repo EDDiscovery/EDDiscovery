@@ -37,8 +37,8 @@ namespace EDDiscovery2.ImageHandler
             _discoveryForm = discoveryForm;
             db = new SQLiteDBClass();
 
-            string ScreenshotsDirdefault = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous";
-            string OutputDirdefault = ScreenshotsDirdefault + "\\Converted";
+            string ScreenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+            string OutputDirdefault = Path.Combine(ScreenshotsDirdefault, "Converted");
 
             try
             {
@@ -160,7 +160,7 @@ namespace EDDiscovery2.ImageHandler
                 int index = 0;
                 do                                        // add _N on the filename for index>0, to make them unique.
                 {
-                    store_name = output_folder + "\\" + CreateFileName(cur_sysname, e.FullPath, formatindex, hires) + (index==0?"":"_"+index) + extension;
+                    store_name = Path.Combine(output_folder, CreateFileName(cur_sysname, e.FullPath, formatindex, hires) + (index==0?"":"_"+index) + extension);
                     index++;
                 } while (File.Exists(store_name));          // if name exists, pick another
 

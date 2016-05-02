@@ -28,7 +28,7 @@ namespace EDDiscovery
         private static EDDiscoveryForm _discoveryForm;
         public int defaultMapColour;
         public EDSMSync sync;
-        string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
+        string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Development_s", "Products"); // \\FORC-FDEV-D-1001\\Logs\\";
 
         internal List<SystemPosition> visitedSystems;
         internal bool EDSMSyncTo = true;
