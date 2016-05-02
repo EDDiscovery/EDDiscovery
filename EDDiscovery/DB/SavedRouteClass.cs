@@ -15,6 +15,13 @@ namespace EDDiscovery.DB
             this.Systems = new List<string>();
         }
 
+        public SavedRouteClass(string name, params string[] systems)
+        {
+            this.Id = -1;
+            this.Name = name;
+            this.Systems = systems.ToList();
+        }
+
         public SavedRouteClass(DataRow dr, DataRow[] syslist)
         {
             this.Id = (int)(long)dr["id"];
