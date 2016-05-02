@@ -227,7 +227,14 @@ namespace EDDiscovery
 
         private void GetVisitedSystems()
         {                                                       // for backwards compatibility, don't store RGB value.
-            visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
+            if (activecommander >= 0)
+            {
+                visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
+            }
+            else
+            {
+                visitedSystems = VisitedSystemsClass.GetAll(activecommander).Select(s => new SystemPosition(s)).ToList();
+            }
         }
 
         private void AddHistoryRow(bool insert, SystemPosition item, SystemPosition item2)
@@ -527,7 +534,8 @@ namespace EDDiscovery
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 activecommander = itm.Nr;
-                EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
+                if (itm.Nr >= 0)
+                    EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
                 if (visitedSystems != null)
                     visitedSystems.Clear();
                 RefreshHistory();
