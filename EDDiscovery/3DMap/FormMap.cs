@@ -200,39 +200,78 @@ namespace EDDiscovery2
             }
         }
 
+        public void AddExpedition(string name, Func<DateTime> starttime, Func<DateTime> endtime)
+        {
+            _AddExpedition(name, starttime, endtime);
+        }
+
+        public void AddExpedition(string name, DateTime starttime, DateTime? endtime)
+        {
+            _AddExpedition(name, () => starttime, endtime == null ? null : new Func<DateTime>(() => (DateTime)endtime));
+        }
+
+        private ToolStripButton _AddExpedition(string name, Func<DateTime> starttime, Func<DateTime> endtime)
+        {
+            var item = new ToolStripButton
+            {
+                Text = name,
+                CheckOnClick = true,
+                DisplayStyle = ToolStripItemDisplayStyle.Text
+            };
+            item.Click += (s, e) => dropdownFilterHistory_Item_Click(s, e, item, starttime, endtime);
+            dropdownFilterDate.DropDownItems.Add(item);
+            return item;
+        }
+
         private void FillExpeditions()
         {
-            Dictionary<string, Func<DateTime>> excursions = new Dictionary<string, Func<DateTime>>()
+            Dictionary<string, Func<DateTime>> starttimes = new Dictionary<string, Func<DateTime>>()
             {
                 { "All", () => VisitedSystems.Select(s => s.time).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
-                { "Distant Worlds", () => new DateTime(2016, 1, 14) },
-                { "FGE Expedition start", () => new DateTime(2015, 8, 1) },
                 { "Last Week", () => DateTime.Now.AddDays(-7) },
                 { "Last Month", () => DateTime.Now.AddMonths(-1) },
                 { "Last Year", () => DateTime.Now.AddYears(-1) }
             };
 
-            startTime = excursions["All"]();
+            Dictionary<string, Func<DateTime>> endtimes = new Dictionary<string, Func<DateTime>>();
+
+            foreach (var expedition in db.GetAllSavedRoutes())
+            {
+                if (expedition.StartDate != null)
+                {
+                    var starttime = (DateTime)expedition.StartDate;
+                    starttimes[expedition.Name] = () => starttime;
+
+                    if (expedition.EndDate != null)
+                    {
+                        var endtime = (DateTime)expedition.EndDate;
+                        endtimes[expedition.Name] = () => endtime;
+                    }
+                }
+                else if (expedition.EndDate != null)
+                {
+                    var endtime = (DateTime)expedition.EndDate;
+                    endtimes[expedition.Name] = () => endtime;
+                    starttimes[expedition.Name] = starttimes["All"];
+                }
+            }
+
+            startTime = starttimes["All"]();
             endTime = DateTime.Now.AddDays(1);
 
             string lastsel = db.GetSettingString("Map3DFilter", "");
-            foreach (var kvp in excursions)
+            foreach (var kvp in starttimes)
             {
-                var item = new ToolStripButton
-                {
-                    Text = kvp.Key,
-                    CheckOnClick = true,
-                    DisplayStyle = ToolStripItemDisplayStyle.Text
-                };
+                var name = kvp.Key;
                 var startfunc = kvp.Value;
-                item.Click += (s, e) => dropdownFilterHistory_Item_Click(s, e, item, startfunc);
-                dropdownFilterDate.DropDownItems.Add(item);
+                var endfunc = endtimes.ContainsKey(name) ? endtimes[name] : () => DateTime.Now.AddDays(1);
+                var item = _AddExpedition(name, startfunc, endfunc);
 
                 if (item.Text.Equals(lastsel))              // if a standard one, restore.  WE are not saving custom.
                 {                                           // if custom is selected, we don't restore a tick.
                     item.Checked = true;                    // TBD Finwen, should we not be setting a start AND end date
                     startTime = startfunc();
-                    endTime = DateTime.Now.AddDays(1);
+                    endTime = endfunc();
                 }
             }
 
@@ -1002,7 +1041,7 @@ namespace EDDiscovery2
             glControl.Invalidate();
         }
 
-        private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc)
+        private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc, Func<DateTime> endfunc)
         {
             foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
             {
@@ -1013,7 +1052,7 @@ namespace EDDiscovery2
             }
             db.PutSettingString("Map3DFilter", sel.Text);
             startTime = startfunc();
-            endTime = DateTime.Now.AddDays(1);
+            endTime = endfunc == null ? DateTime.Now.AddDays(1) : endfunc();
             startPickerHost.Visible = false;
             endPickerHost.Visible = false;
             GenerateDataSetsVisitedSystems();
