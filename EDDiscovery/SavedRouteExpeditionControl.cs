@@ -25,6 +25,7 @@ namespace EDDiscovery
         public SavedRouteExpeditionControl()
         {
             InitializeComponent();
+            _currentRoute = new SavedRouteClass { Name = "" };
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -45,6 +46,16 @@ namespace EDDiscovery
             {
                 toolStripComboBoxRouteSelection.Items.Add(route.Name);
             }
+        }
+
+        public void InsertRows(int insertIndex, params string[] sysnames)
+        {
+            foreach (var row in sysnames)
+            {
+                dataGridViewRouteSystems.Rows.Insert(insertIndex, row, "", "");
+                insertIndex++;
+            }
+            UpdateSystemRows();
         }
 
         private float CalculateRouteMaxDistFromOrigin()
@@ -203,13 +214,11 @@ namespace EDDiscovery
 
             if (!newroute.Equals(_currentRoute))
             {
-                if (_currentRoute.Name != null)
+                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.No)
                 {
-                    var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                    if (result == DialogResult.No)
-                    {
-                        toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
-                    }
+                    toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
+                    return;
                 }
             }
 
@@ -297,7 +306,20 @@ namespace EDDiscovery
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            _currentRoute = new SavedRouteClass();
+            SavedRouteClass newroute = new SavedRouteClass();
+            UpdateRouteInfo(newroute);
+
+            if (!newroute.Equals(_currentRoute))
+            {
+                var result = MessageBox.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.No)
+                {
+                    toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
+                    return;
+                }
+            }
+
+            _currentRoute = new SavedRouteClass { Name = "" };
             dataGridViewRouteSystems.Rows.Clear();
         }
 
@@ -382,10 +404,10 @@ namespace EDDiscovery
         {
             if (e.Button.HasFlag(MouseButtons.Left))
             {
-                _dragRowIndex = dataGridViewRouteSystems.HitTest(e.X, e.Y).RowIndex;
-
-                if (_dragRowIndex != -1)
+                var hit = dataGridViewRouteSystems.HitTest(e.X, e.Y);
+                if (hit.Type == DataGridViewHitTestType.RowHeader && hit.RowIndex != -1)
                 {
+                    _dragRowIndex = hit.RowIndex;
                     Size dragsize = SystemInformation.DragSize;
                     _dragBox = new Rectangle(e.X - dragsize.Width / 2, e.Y - dragsize.Height / 2, dragsize.Width, dragsize.Height);
                 }
@@ -448,14 +470,127 @@ namespace EDDiscovery
             else if (e.Data.GetDataPresent(typeof(string)) && e.Effect == DragDropEffects.Copy)
             {
                 var data = e.Data.GetData(typeof(string)) as string;
-                var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToList();
-                foreach (var row in rows)
-                {
-                    dataGridViewRouteSystems.Rows.Insert(insertIndex, row, "", "");
-                    insertIndex++;
-                }
-                UpdateSystemRows();
+                var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
+                InsertRows(insertIndex, rows);
             }
+        }
+
+        private void contextMenuCopyPaste_Opening(object sender, CancelEventArgs e)
+        {
+            bool hastext = false;
+
+            try
+            {
+                hastext = Clipboard.ContainsText();
+            }
+            catch
+            {
+                System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
+            }
+
+            if (hastext)
+            {
+                pasteToolStripMenuItem.Enabled = true;
+                insertCopiedToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                pasteToolStripMenuItem.Enabled = false;
+                insertCopiedToolStripMenuItem.Enabled = false;
+            }
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DataObject obj = dataGridViewRouteSystems.GetClipboardContent();
+
+            try
+            {
+                Clipboard.SetDataObject(obj);
+            }
+            catch
+            {
+                System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
+            }
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = null;
+
+            try
+            {
+                data = Clipboard.GetText();
+            }
+            catch
+            {
+                System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
+            }
+
+            if (data != null)
+            {
+                var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
+                int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+                int insertRow = selectedRows.FirstOrDefault();
+                foreach (int index in selectedRows.Reverse())
+                {
+                    dataGridViewRouteSystems.Rows.RemoveAt(index);
+                }
+                InsertRows(insertRow, rows);
+            }
+        }
+
+        private void insertCopiedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = null;
+
+            try
+            {
+                data = Clipboard.GetText();
+            }
+            catch
+            {
+                System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
+            }
+
+            if (data != null)
+            {
+                var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
+                int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+                int insertRow = selectedRows.FirstOrDefault();
+                InsertRows(insertRow, rows);
+            }
+        }
+
+        private void dataGridViewRouteSystems_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {           // autopaint the row number..
+            var grid = sender as DataGridView;
+            var rowIdx = (e.RowIndex + 1).ToString();
+
+            if (!e.IsLastVisibleRow)
+            {
+                var centerFormat = new StringFormat()
+                {
+                    // right alignment might actually make more sense for numbers
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center
+                };
+
+                var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
+
+                using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+                    e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
+            }
+        }
+
+        private void deleteRowsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+            foreach (int index in selectedRows.Reverse())
+            {
+                dataGridViewRouteSystems.Rows.RemoveAt(index);
+            }
+            UpdateSystemRows();
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SavedRouteExpeditionControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
@@ -48,9 +49,15 @@
             this.SystemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.insertCopiedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
+            this.contextMenuCopyPaste.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -227,9 +234,9 @@
             this.SystemName,
             this.Distance,
             this.Note});
+            this.dataGridViewRouteSystems.ContextMenuStrip = this.contextMenuCopyPaste;
             this.dataGridViewRouteSystems.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewRouteSystems.Location = new System.Drawing.Point(0, 114);
-            this.dataGridViewRouteSystems.MultiSelect = false;
             this.dataGridViewRouteSystems.Name = "dataGridViewRouteSystems";
             this.dataGridViewRouteSystems.Size = new System.Drawing.Size(787, 436);
             this.dataGridViewRouteSystems.TabIndex = 2;
@@ -240,6 +247,7 @@
             this.dataGridViewRouteSystems.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragOver);
             this.dataGridViewRouteSystems.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseDown);
             this.dataGridViewRouteSystems.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseMove);
+            this.dataGridViewRouteSystems.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
             // 
             // SystemName
             // 
@@ -261,6 +269,45 @@
             this.Note.Name = "Note";
             this.Note.ReadOnly = true;
             // 
+            // contextMenuCopyPaste
+            // 
+            this.contextMenuCopyPaste.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.insertCopiedToolStripMenuItem,
+            this.deleteRowsToolStripMenuItem});
+            this.contextMenuCopyPaste.Name = "contextMenuCopyPaste";
+            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 114);
+            this.contextMenuCopyPaste.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCopyPaste_Opening);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // insertCopiedToolStripMenuItem
+            // 
+            this.insertCopiedToolStripMenuItem.Name = "insertCopiedToolStripMenuItem";
+            this.insertCopiedToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.insertCopiedToolStripMenuItem.Text = "Insert Copied Rows";
+            this.insertCopiedToolStripMenuItem.Click += new System.EventHandler(this.insertCopiedToolStripMenuItem_Click);
+            // 
+            // deleteRowsToolStripMenuItem
+            // 
+            this.deleteRowsToolStripMenuItem.Name = "deleteRowsToolStripMenuItem";
+            this.deleteRowsToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.deleteRowsToolStripMenuItem.Text = "Delete Rows";
+            this.deleteRowsToolStripMenuItem.Click += new System.EventHandler(this.deleteRowsToolStripMenuItem_Click);
+            // 
             // SavedRouteExpeditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -275,6 +322,7 @@
             this.panelRouteInfo.ResumeLayout(false);
             this.panelRouteInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).EndInit();
+            this.contextMenuCopyPaste.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,5 +349,10 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonShowOn3DMap;
         private ExtendedControls.TextBoxBorder textBoxRouteName;
         private ExtendedControls.ToolStripComboBoxCustom toolStripComboBoxRouteSelection;
+        private System.Windows.Forms.ContextMenuStrip contextMenuCopyPaste;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem insertCopiedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteRowsToolStripMenuItem;
     }
 }
