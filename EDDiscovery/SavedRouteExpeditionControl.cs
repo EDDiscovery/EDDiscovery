@@ -116,9 +116,6 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             var db = new SQLiteDBClass();
             _savedRoutes = db.GetAllSavedRoutes();
-            UpdateComboBox();
-            _currentRoute = new SavedRouteClass();
-            edsm = new EDSMClass();
 
             foreach (var initroute in InitialRoutes)
             {
@@ -128,6 +125,10 @@ namespace EDDiscovery
                     _savedRoutes.Add(initroute);
                 }
             }
+
+            UpdateComboBox();
+            _currentRoute = new SavedRouteClass();
+            edsm = new EDSMClass();
         }
 
         private void UpdateComboBox()
@@ -683,6 +684,14 @@ namespace EDDiscovery
                 dataGridViewRouteSystems.Rows.RemoveAt(index);
             }
             UpdateSystemRows();
+        }
+
+        private void buttonReverseRoute_Click(object sender, EventArgs e)
+        {
+            var route = new SavedRouteClass();
+            UpdateRouteInfo(route);
+            dataGridViewRouteSystems.Rows.Clear();
+            InsertRows(0, route.Systems.Reverse<string>().ToArray());
         }
     }
 }
