@@ -108,6 +108,7 @@ namespace EDDiscovery
             imageHandler1.InitControl(this);
             settings.InitControl(this);
             routeControl1.InitControl(this);
+            savedRouteExpeditionControl1.InitControl(this);
 
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager();
