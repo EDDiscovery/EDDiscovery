@@ -417,6 +417,10 @@ namespace EDDiscovery
                     e.Effect = DragDropEffects.Move;
                 }
             }
+            else if (e.Data.GetDataPresent(typeof(string)))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
         }
 
         private void dataGridViewRouteSystems_DragDrop(object sender, DragEventArgs e)
@@ -428,15 +432,29 @@ namespace EDDiscovery
                 insertIndex = dataGridViewRouteSystems.Rows.Count - 1;
             }
 
-            if (e.Effect == DragDropEffects.Move)
+            if (e.Data.GetDataPresent(typeof(DataGridViewRow)))
             {
-                var row = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
-                if (row.DataGridView == dataGridViewRouteSystems)
+                if (e.Effect == DragDropEffects.Move)
                 {
-                    dataGridViewRouteSystems.Rows.Remove(row);
-                    dataGridViewRouteSystems.Rows.Insert(insertIndex, row);
-                    UpdateSystemRows();
+                    var row = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
+                    if (row.DataGridView == dataGridViewRouteSystems)
+                    {
+                        dataGridViewRouteSystems.Rows.Remove(row);
+                        dataGridViewRouteSystems.Rows.Insert(insertIndex, row);
+                        UpdateSystemRows();
+                    }
                 }
+            }
+            else if (e.Data.GetDataPresent(typeof(string)) && e.Effect == DragDropEffects.Copy)
+            {
+                var data = e.Data.GetData(typeof(string)) as string;
+                var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToList();
+                foreach (var row in rows)
+                {
+                    dataGridViewRouteSystems.Rows.Insert(insertIndex, row, "", "");
+                    insertIndex++;
+                }
+                UpdateSystemRows();
             }
         }
     }
