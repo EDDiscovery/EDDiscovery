@@ -46,7 +46,7 @@ namespace EDDiscovery.DB
                 return false;
             }
 
-            return this.Name == other.Name &&
+            return (this.Name == other.Name || (String.IsNullOrEmpty(this.Name) && String.IsNullOrEmpty(other.Name))) &&
                    this.StartDate == other.StartDate &&
                    this.EndDate == other.EndDate &&
                    this.Systems.Count == other.Systems.Count &&

@@ -108,7 +108,7 @@ namespace EDDiscovery
         public SavedRouteExpeditionControl()
         {
             InitializeComponent();
-            _currentRoute = new SavedRouteClass { Name = "" };
+            _currentRoute = new SavedRouteClass("");
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -127,7 +127,7 @@ namespace EDDiscovery
             }
 
             UpdateComboBox();
-            _currentRoute = new SavedRouteClass();
+            _currentRoute = new SavedRouteClass("");
             edsm = new EDSMClass();
         }
 
@@ -228,7 +228,7 @@ namespace EDDiscovery
                             dist = DistanceClass.Distance(sys, prevsys);
                         }
 
-                        string strdist = ((double)dist).ToString("0.00");
+                        string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
                         dataGridViewRouteSystems[1, rowindex].Value = strdist;
                     }
                 }
