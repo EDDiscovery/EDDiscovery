@@ -37,6 +37,7 @@
             this.toolStripButtonShowOn3DMap = new System.Windows.Forms.ToolStripButton();
             this.toolStripComboBoxRouteSelection = new ExtendedControls.ToolStripComboBoxCustom();
             this.panelRouteInfo = new System.Windows.Forms.Panel();
+            this.buttonReverseRoute = new ExtendedControls.ButtonExt();
             this.dateTimePickerEndTime = new System.Windows.Forms.DateTimePicker();
             this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
             this.labelEndDate = new System.Windows.Forms.Label();
@@ -126,12 +127,13 @@
             this.toolStripComboBoxRouteSelection.ScrollBarWidth = 16;
             this.toolStripComboBoxRouteSelection.SelectedIndex = -1;
             this.toolStripComboBoxRouteSelection.SelectedItem = null;
-            this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(100, 22);
+            this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(150, 22);
             this.toolStripComboBoxRouteSelection.ValueMember = null;
             this.toolStripComboBoxRouteSelection.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.toolStripComboBoxRouteSelection_SelectedIndexChanged);
             // 
             // panelRouteInfo
             // 
+            this.panelRouteInfo.Controls.Add(this.buttonReverseRoute);
             this.panelRouteInfo.Controls.Add(this.dateTimePickerEndTime);
             this.panelRouteInfo.Controls.Add(this.dateTimePickerEndDate);
             this.panelRouteInfo.Controls.Add(this.labelEndDate);
@@ -145,6 +147,20 @@
             this.panelRouteInfo.Name = "panelRouteInfo";
             this.panelRouteInfo.Size = new System.Drawing.Size(787, 89);
             this.panelRouteInfo.TabIndex = 1;
+            // 
+            // buttonReverseRoute
+            // 
+            this.buttonReverseRoute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonReverseRoute.BorderColorScaling = 1.25F;
+            this.buttonReverseRoute.ButtonColorScaling = 0.5F;
+            this.buttonReverseRoute.ButtonDisabledScaling = 0.5F;
+            this.buttonReverseRoute.Location = new System.Drawing.Point(677, 55);
+            this.buttonReverseRoute.Name = "buttonReverseRoute";
+            this.buttonReverseRoute.Size = new System.Drawing.Size(107, 23);
+            this.buttonReverseRoute.TabIndex = 8;
+            this.buttonReverseRoute.Text = "Reverse Route";
+            this.buttonReverseRoute.UseVisualStyleBackColor = true;
+            this.buttonReverseRoute.Click += new System.EventHandler(this.buttonReverseRoute_Click);
             // 
             // dateTimePickerEndTime
             // 
@@ -243,11 +259,11 @@
             this.dataGridViewRouteSystems.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             this.dataGridViewRouteSystems.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewRouteSystems_CellValidating);
             this.dataGridViewRouteSystems.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridViewRouteSystems_EditingControlShowing);
+            this.dataGridViewRouteSystems.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
             this.dataGridViewRouteSystems.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragDrop);
             this.dataGridViewRouteSystems.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragOver);
             this.dataGridViewRouteSystems.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseDown);
             this.dataGridViewRouteSystems.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseMove);
-            this.dataGridViewRouteSystems.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
             // 
             // SystemName
             // 
@@ -277,7 +293,7 @@
             this.insertCopiedToolStripMenuItem,
             this.deleteRowsToolStripMenuItem});
             this.contextMenuCopyPaste.Name = "contextMenuCopyPaste";
-            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 114);
+            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 92);
             this.contextMenuCopyPaste.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCopyPaste_Opening);
             // 
             // copyToolStripMenuItem
@@ -354,5 +370,6 @@
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insertCopiedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteRowsToolStripMenuItem;
+        private ExtendedControls.ButtonExt buttonReverseRoute;
     }
 }
