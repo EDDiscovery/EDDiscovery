@@ -22,10 +22,14 @@ namespace EDDiscovery2
 
         SQLiteDBClass db;
 
-        private List<IData3DSet> _datasets_gridlines;
-        private List<IData3DSet> _datasets_gridcoords;
+        private List<IData3DSet> _datasets_finegridlines;
+        private List<IData3DSet> _datasets_coarsegridlines;
+        private List<IData3DSet> _datasets_gridlinecoords;
         private List<IData3DSet> _datasets_maps;
-        private List<IData3DSet> _datasets_stars;
+        private List<IData3DSet> _datasets_zeropopstars;
+        private List<IData3DSet> _datasets_popstarscoloured;
+        private List<IData3DSet> _datasets_popstarsuncoloured;
+        private List<IData3DSet> _datasets_poi;
         private List<IData3DSet> _datasets_selectedsystems;
         private List<IData3DSet> _datasets_visitedsystems;
 
@@ -102,7 +106,7 @@ namespace EDDiscovery2
             _mousehovertick.Interval = 250;
         }
 
-        public void Prepare(string historysel, string homesys , string centersys, float zoom )
+        public void Prepare(string historysel, string homesys, string centersys, float zoom)
         {
             HistorySelection = historysel;
             _historyselection = SystemData.GetSystem(HistorySelection);
@@ -122,7 +126,7 @@ namespace EDDiscovery2
             toolStripButtonStations.Checked = db.GetSettingBool("Map3DButtonStations", false);
             toolStripButtonPerspective.Checked = db.GetSettingBool("Map3DPerspective", false);
             toolStripButtonGrid.Checked = db.GetSettingBool("Map3DCoarseGrid", true);
-            toolStripButtonFineGrid.Checked = db.GetSettingBool("Map3DFineGrid", true );
+            toolStripButtonFineGrid.Checked = db.GetSettingBool("Map3DFineGrid", true);
             toolStripButtonCoords.Checked = db.GetSettingBool("Map3DCoords", true);
             toolStripButtonEliteMovement.Checked = db.GetSettingBool("Map3DEliteMove", false);
 
@@ -148,10 +152,8 @@ namespace EDDiscovery2
             ShowCenterSystem();
             labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
 
-            GenerateDataSetsGridLines();
-            GenerateDataSetsGridCoords();
+            GenerateDataSets();
             GenerateDataSetsMaps();
-            GenerateDataSetsStars();
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
         }
@@ -379,45 +381,58 @@ namespace EDDiscovery2
 
         #region Generate Data Sets
 
-        private void GenerateDataSetsGridLines()
+        private void GenerateDataSets()
         {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
-            DeleteDataset(ref _datasets_gridlines);
             DatasetBuilder builder = CreateBuilder();
-            _datasets_gridlines = builder.BuildGridLines(_zoom);
+
+            builder.Build();    // need a new one each time.
+            _datasets_coarsegridlines = builder.AddCoarseGridLines();
+
+            builder.Build();
+            _datasets_finegridlines = builder.AddFineGridLines();
+
+            builder.Build();
+            _datasets_gridlinecoords = builder.AddGridCoords();
+
+            builder.Build();
+            _datasets_zeropopstars = builder.AddStars(true,true);
+
+            builder.Build();
+            _datasets_popstarscoloured = builder.AddStars(false, false);
+
+            builder.Build();
+            _datasets_popstarsuncoloured = builder.AddStars(false,true);
+
+            builder.Build();
+            _datasets_poi = builder.AddPOIsToDataset();
+
             builder = null;
         }
 
-        private void GenerateDataSetsGridCoords()
+        private void UpdateDataSetsDueToZoom()
         {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
-            DeleteDataset(ref _datasets_gridcoords);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_gridcoords = builder.BuildGridCoords(_zoom);
+            DatasetBuilder builder = new DatasetBuilder();
+            if (toolStripButtonFineGrid.Checked)
+                builder.UpdateGridZoom(ref _datasets_coarsegridlines, _zoom);
+
+            if (toolStripButtonCoords.Checked)
+                builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
+
             builder = null;
         }
 
         private void GenerateDataSetsMaps()
         {
-            //Console.WriteLine("STARS Data set due to " + Environment.StackTrace);
+            Console.WriteLine("STARS Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_maps);
             DatasetBuilder builder = CreateBuilder();
             _datasets_maps = builder.BuildMaps();
             builder = null;
         }
 
-        private void GenerateDataSetsStars()
-        {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
-            DeleteDataset(ref _datasets_stars);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_stars = builder.BuildStars();
-            builder = null;
-        }
-
         private void GenerateDataSetsVisitedSystems()
         {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
+            Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_visitedsystems);
             DatasetBuilder builder = CreateBuilder();
             _datasets_visitedsystems = builder.BuildVisitedSystems();
@@ -426,7 +441,7 @@ namespace EDDiscovery2
 
         private void GenerateDataSetsSelectedSystems()
         {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
+            Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_selectedsystems);
             DatasetBuilder builder = CreateBuilder();
             _datasets_selectedsystems = builder.BuildSelected();
@@ -464,12 +479,7 @@ namespace EDDiscovery2
 
                 Images = selectedmaps.ToArray(),
 
-                GridLines = toolStripButtonGrid.Checked,
-                FineGridLines = toolStripButtonFineGrid.Checked,
-                GridCoords = toolStripButtonCoords.Checked,
                 DrawLines = toolStripButtonDrawLines.Checked,
-                AllSystems = toolStripButtonShowAllStars.Checked,
-                Stations = toolStripButtonStations.Checked,
                 UseImage = selectedmaps.Count != 0
             };
             if (_starList != null)
@@ -612,8 +622,8 @@ namespace EDDiscovery2
 
                 if (toolStripButtonPerspective.Checked)
                 {
-                    _kbdActions.Up = (state[Key.PageUp] ||state[Key.R]);     
-                    _kbdActions.Down = (state[Key.PageDown] || state[Key.F]);  
+                    _kbdActions.Up = (state[Key.PageUp] || state[Key.R]);
+                    _kbdActions.Down = (state[Key.PageDown] || state[Key.F]);
                     _kbdActions.Forwards = state[Key.Up] || state[Key.W];                    // WASD is fore/back/left/right, R/F is up down
                     _kbdActions.Backwards = state[Key.Down] || state[Key.S];
                 }
@@ -644,7 +654,7 @@ namespace EDDiscovery2
         {
             _cameraActionRotation = Vector3.Zero;
 
-            var angle = (float)  _ticks * 0.075f;
+            var angle = (float)_ticks * 0.075f;
             if (_kbdActions.YawLeft)
             {
                 _cameraActionRotation.Z = -angle;
@@ -706,6 +716,7 @@ namespace EDDiscovery2
 
         private void HandleZoomAdjustment()
         {
+            float curzoom = _zoom;
             var adjustment = 1.0f + ((float)_ticks * 0.01f);
             if (_kbdActions.ZoomIn)
             {
@@ -715,8 +726,11 @@ namespace EDDiscovery2
             if (_kbdActions.ZoomOut)
             {
                 _zoom /= (float)adjustment;
-                if (_zoom < ZoomMin) _zoom = (float) ZoomMin;
+                if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
             }
+
+            if (_zoom != curzoom)
+                UpdateDataSetsDueToZoom();
         }
 
         #endregion
@@ -797,21 +811,58 @@ namespace EDDiscovery2
 
         private void DrawStars()
         {
-            DatasetBuilder builder = new DatasetBuilder();
-            builder.UpdateGridCoordZoom(ref _datasets_gridcoords, _zoom);
-            builder.UpdateGridZoom(ref _datasets_gridlines, _zoom);
-            builder = null;
+            if (_datasets_maps == null)     // happens during debug.. paint before form load
+                return;
 
             foreach (var dataset in _datasets_maps)                     // needs to be in order of background to foreground objects
                 dataset.DrawAll(glControl);
-            foreach (var dataset in _datasets_gridlines)
+
+            if (toolStripButtonFineGrid.Checked)
+            {
+                foreach (var dataset in _datasets_finegridlines)
+                    dataset.DrawAll(glControl);
+            }
+
+            if (toolStripButtonGrid.Checked)
+            { 
+                foreach (var dataset in _datasets_coarsegridlines)
+                    dataset.DrawAll(glControl);
+            }
+
+            if (toolStripButtonCoords.Checked)
+            {
+                foreach (var dataset in _datasets_gridlinecoords)
+                    dataset.DrawAll(glControl);
+            }
+
+            if ( toolStripButtonShowAllStars.Checked )
+            {
+                foreach (var dataset in _datasets_zeropopstars)
+                    dataset.DrawAll(glControl);
+
+                if (toolStripButtonStations.Checked)
+                {
+                    foreach (var dataset in _datasets_popstarscoloured)
+                        dataset.DrawAll(glControl);
+                }
+                else
+                {
+                    foreach (var dataset in _datasets_popstarsuncoloured)
+                        dataset.DrawAll(glControl);
+                }
+            }
+            else if (toolStripButtonStations.Checked)
+            {
+                foreach (var dataset in _datasets_popstarscoloured)
+                    dataset.DrawAll(glControl);
+            }
+
+            foreach (var dataset in _datasets_poi)
                 dataset.DrawAll(glControl);
-            foreach (var dataset in _datasets_gridcoords)
-                dataset.DrawAll(glControl);
-            foreach (var dataset in _datasets_stars)
-                dataset.DrawAll(glControl);
+
             foreach (var dataset in _datasets_selectedsystems)
                 dataset.DrawAll(glControl);
+
             foreach (var dataset in _datasets_visitedsystems)
                 dataset.DrawAll(glControl);
         }
@@ -883,7 +934,7 @@ namespace EDDiscovery2
                 maxstardate = maxstardate.AddHours(10);
 
                 DatasetBuilder build = CreateBuilder();
-                build.UpdateStandardSystems(ref _datasets_stars, maxstardate);
+                build.UpdateSystems(ref _datasets_zeropopstars, maxstardate);
                 build = null;
 
                 if (maxstardate > DateTime.Now)
@@ -893,9 +944,9 @@ namespace EDDiscovery2
             glControl.Invalidate();
         }
 
-        #endregion
+#endregion
 
-        #region Camera Slew and Update
+#region Camera Slew and Update
 
         private void ResetCamera()
         {
@@ -903,6 +954,7 @@ namespace EDDiscovery2
             _cameraDir = Vector3.Zero;
 
             _zoom = _defaultZoom;
+            UpdateDataSetsDueToZoom();
         }
 
         private void StartCameraSlew()
@@ -999,9 +1051,9 @@ namespace EDDiscovery2
             return (float)(Math.PI * angle / 180.0);
         }
 
-        #endregion
+#endregion
 
-        #region User Controls
+#region User Controls
 
         private void EndPicker_ValueChanged(object sender, EventArgs e)
         {
@@ -1084,35 +1136,30 @@ namespace EDDiscovery2
         private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DAllStars", toolStripButtonShowAllStars.Checked);
-            GenerateDataSetsStars();
             glControl.Invalidate();
         }
 
         private void toolStripButtonStations_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DButtonStations", toolStripButtonStations.Checked);
-            GenerateDataSetsStars();
             glControl.Invalidate();
         }
 
         private void toolStripButtonGrid_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
-            GenerateDataSetsGridLines();
             glControl.Invalidate();
         }
 
         private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
-            GenerateDataSetsGridLines();
             glControl.Invalidate();
         }
 
         private void toolStripButtonCoords_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
-            GenerateDataSetsGridCoords();
             glControl.Invalidate();
         }
 
@@ -1189,9 +1236,9 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
 
-        #region Mouse
+#region Mouse
 
         private ISystem GetMouseOverSystem(int x, int y)
         {
@@ -1436,6 +1483,8 @@ namespace EDDiscovery2
             }
             else
             {
+                float curzoom = _zoom;
+
                 if (e.Delta > 0)
                 {
                     _zoom *= (float)ZoomFact;
@@ -1446,6 +1495,9 @@ namespace EDDiscovery2
                     _zoom /= (float)ZoomFact;
                     if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
                 }
+
+                if ( curzoom != _zoom )
+                    UpdateDataSetsDueToZoom();
 
                 //SetupCursorXYZ();
             }
@@ -1496,9 +1548,9 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
 
-        #region Misc
+#region Misc
 
         private class MyRenderer : ToolStripProfessionalRenderer
         {
@@ -1568,7 +1620,7 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
     }
 }
 
