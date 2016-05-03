@@ -17,7 +17,6 @@ namespace EDDiscovery2._3DMap
     {
         private List<IData3DSet> _datasets;
         private static Dictionary<string, TexturedQuadData> _cachedTextures = new Dictionary<string, TexturedQuadData>();
-        private static Dictionary<string, List<Data3DSetClass<TexturedQuadData>>> _cachedCoordTextures = new Dictionary<string, List<Data3DSetClass<TexturedQuadData>>>();
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
@@ -110,12 +109,6 @@ namespace EDDiscovery2._3DMap
         public List<IData3DSet> AddGridCoords()
         {
             string fontname = "MS Sans Serif";
-
-            if (_cachedCoordTextures.ContainsKey(fontname))
-            {
-                _datasets.AddRange(_cachedCoordTextures[fontname]);
-            }
-            else
             {
                 Font fnt = new Font(fontname, 20F);
 
@@ -145,7 +138,7 @@ namespace EDDiscovery2._3DMap
                 List<TexturedQuadData> basetexturesLOD1 = Enumerable.Range(0, numtexLOD1).Select(i => new TexturedQuadData(null, null, new Bitmap(1024, 1024))).ToList();
                 List<TexturedQuadData> basetexturesLOD2 = Enumerable.Range(0, numtexLOD2).Select(i => new TexturedQuadData(null, null, new Bitmap(1024, 1024))).ToList();
 
-                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
+                for (float x = MinGridPos.X; x < MaxGridPos.X; x += gridunitSize)
                 {
                     for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += gridunitSize)
                     {
@@ -163,7 +156,7 @@ namespace EDDiscovery2._3DMap
                     }
                 }
 
-                for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize * 10)
+                for (float x = MinGridPos.X; x < MaxGridPos.X; x += gridunitSize * 10)
                 {
                     for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += gridunitSize * 10)
                     {
@@ -171,7 +164,7 @@ namespace EDDiscovery2._3DMap
                         int tex_x = (num % texwide) * bitmapwidth;
                         int tex_y = ((num / texwide) % texhigh) * bitmapheight;
                         int tex_n = num / (texwide * texhigh);
-                        Console.WriteLine("tex_n " + tex_n);
+
                         DrawGridBitmap(basetexturesLOD2[tex_n].Texture, x, z, fnt, tex_x, tex_y);
                         datasetMapImgLOD2.Add(basetexturesLOD2[tex_n].CreateSubTexture(
                             new Point((int)x, (int)z), new Point((int)x + textwidthly * 10, (int)z),
@@ -180,12 +173,6 @@ namespace EDDiscovery2._3DMap
                             new Point(tex_x, tex_y), new Point(tex_x + bitmapwidth, tex_y)));
                     }
                 }
-
-                _cachedCoordTextures[fontname] = new List<Data3DSetClass<TexturedQuadData>>
-                {
-                    datasetMapImgLOD1,
-                    datasetMapImgLOD2
-                };
 
                 _datasets.Add(datasetMapImgLOD1);
                 _datasets.Add(datasetMapImgLOD2);
@@ -253,7 +240,7 @@ namespace EDDiscovery2._3DMap
             if (gridLOD1 != null)
             {
                 var colour = MapColours.CoarseGridLines;
-                Console.WriteLine("LOD1 fade"+ LOD1fade);
+                //Console.WriteLine("LOD1 fade"+ LOD1fade);
                 colour = Color.FromArgb((int)(colour.R * LOD1fade), (int)(colour.G * LOD1fade), (int)(colour.B * LOD1fade));
                 var newgrid = Data3DSetClass<LineData>.Create("gridLOD1", colour, 0.6f);
 
@@ -276,8 +263,8 @@ namespace EDDiscovery2._3DMap
             var gridLOD2 = _datasets.SingleOrDefault(s => s.Name == "text bitmap LOD2");
             if (gridLOD2 != null)
             {
-                Console.WriteLine("LOD2 fade" + LOD2fade);
-                var newgrid = Data3DSetClass<TexturedQuadData>.Create("text bitmap LOD2", Color.FromArgb((int)(255 * LOD2fade), Color.Red), 1.0f);
+                //Console.WriteLine("LOD2 fade" + LOD2fade);
+                var newgrid = Data3DSetClass<TexturedQuadData>.Create("text bitmap LOD2", Color.FromArgb((int)(255 * LOD2fade), Color.White), 1.0f);
                 foreach (var tex in ((Data3DSetClass<TexturedQuadData>)gridLOD2).Primatives)
                 {
                     newgrid.Add(tex);
@@ -288,7 +275,7 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public List<IData3DSet> AddStars(bool unpopulated, bool useunpopcolor)
+        public List<IData3DSet> AddStars(bool unpopulated, bool useunpopcolor)     
         {
             if (StarList != null)
             {

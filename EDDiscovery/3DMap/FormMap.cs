@@ -381,7 +381,7 @@ namespace EDDiscovery2
 
         #region Generate Data Sets
 
-        private void GenerateDataSets()
+        private void GenerateDataSets()         // Called ONCE only during Load.. fixed data.
         {
             DatasetBuilder builder = CreateBuilder();
 
@@ -407,6 +407,8 @@ namespace EDDiscovery2
             _datasets_poi = builder.AddPOIsToDataset();
 
             builder = null;
+
+            UpdateDataSetsDueToZoom();
         }
 
         private void UpdateDataSetsDueToZoom()
@@ -423,7 +425,7 @@ namespace EDDiscovery2
 
         private void GenerateDataSetsMaps()
         {
-            Console.WriteLine("STARS Data set due to " + Environment.StackTrace);
+            //Console.WriteLine("STARS Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_maps);
             DatasetBuilder builder = CreateBuilder();
             _datasets_maps = builder.BuildMaps();
@@ -432,7 +434,7 @@ namespace EDDiscovery2
 
         private void GenerateDataSetsVisitedSystems()
         {
-            Console.WriteLine("Data set due to " + Environment.StackTrace);
+            //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_visitedsystems);
             DatasetBuilder builder = CreateBuilder();
             _datasets_visitedsystems = builder.BuildVisitedSystems();
@@ -441,7 +443,7 @@ namespace EDDiscovery2
 
         private void GenerateDataSetsSelectedSystems()
         {
-            Console.WriteLine("Data set due to " + Environment.StackTrace);
+            //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_selectedsystems);
             DatasetBuilder builder = CreateBuilder();
             _datasets_selectedsystems = builder.BuildSelected();
@@ -1154,12 +1156,14 @@ namespace EDDiscovery2
         private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
+            UpdateDataSetsDueToZoom();
             glControl.Invalidate();
         }
 
         private void toolStripButtonCoords_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
+            UpdateDataSetsDueToZoom();
             glControl.Invalidate();
         }
 
@@ -1287,9 +1291,12 @@ namespace EDDiscovery2
                         double sysdist = Math.Sqrt(syssloc.X * syssloc.X + syssloc.Y * syssloc.Y);
                         if (sysdist < 7.0 && (sysdist + Math.Abs(sysloc.Z * _zoom)) < cursysdistz)
                         {
-                            cursys = sys;
-                            cursysloc = sysloc;
-                            cursysdistz = sysdist + Math.Abs(sysloc.Z * _zoom);
+                            if (toolStripButtonShowAllStars.Checked || (sys.population != 0 && toolStripButtonStations.Checked))
+                            {
+                                cursys = sys;
+                                cursysloc = sysloc;
+                                cursysdistz = sysdist + Math.Abs(sysloc.Z * _zoom);
+                            }
                         }
                     }
                 }
@@ -1531,6 +1538,12 @@ namespace EDDiscovery2
 
                 if (hoversystem.state != EDState.Unknown)
                     info += Environment.NewLine + "State: " + hoversystem.state;
+
+                if (hoversystem.population != 0 )
+                    info += Environment.NewLine + "Population: " + hoversystem.population;
+
+                if (hoversystem.allegiance != EDAllegiance.Unknown)
+                    info += Environment.NewLine + "Allegiance: " + hoversystem.allegiance;
 
                 info += Environment.NewLine + "Distance from " + CenterSystemName + " " + distcsn.ToString("0.0");
                 if (_historyselection != null && !_historyselection.name.Equals(CenterSystem.name))
