@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -31,25 +32,25 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
                 return Add(cn);
             }
         }
 
-        private bool Add(IDbConnection cn)
+        private bool Add(SQLiteConnection cn)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (SQLiteCommand cmd = new SQLiteCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Insert into wanted_systems (systemname) values (@systemname)";
-                SQLiteDBClass.AddParameter(cmd, "@systemname", system);
+                cmd.Parameters.AddWithValue("@systemname", system);
                 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                using (IDbCommand cmd2 = cn.CreateCommand())
+                using (SQLiteCommand cmd2 = new SQLiteCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
@@ -64,21 +65,21 @@ namespace EDDiscovery.DB
 
         public bool Delete()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
                 return Delete(cn);
             }
         }
 
-        private bool Delete(IDbConnection cn)
+        private bool Delete(SQLiteConnection cn)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (SQLiteCommand cmd = new SQLiteCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "DELETE FROM wanted_systems WHERE id = @id";
-                SQLiteDBClass.AddParameter(cmd, "@id", id);
+                cmd.Parameters.AddWithValue("@id", id);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 

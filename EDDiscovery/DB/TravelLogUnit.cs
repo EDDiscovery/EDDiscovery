@@ -3,6 +3,7 @@ using EDDiscovery.DB;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 
@@ -49,28 +50,28 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
                 return Add(cn);
             }
         }
 
-        private bool Add(IDbConnection cn)
+        private bool Add(SQLiteConnection cn)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (SQLiteCommand cmd = new SQLiteCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)";
-                SQLiteDBClass.AddParameter(cmd, "@name", Name);
-                SQLiteDBClass.AddParameter(cmd, "@type", type);
-                SQLiteDBClass.AddParameter(cmd, "@size", Size);
-                SQLiteDBClass.AddParameter(cmd, "@Path", Path);
+                cmd.Parameters.AddWithValue("@name", Name);
+                cmd.Parameters.AddWithValue("@type", type);
+                cmd.Parameters.AddWithValue("@size", Size);
+                cmd.Parameters.AddWithValue("@Path", Path);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                using (IDbCommand cmd2 = cn.CreateCommand())
+                using (SQLiteCommand cmd2 = new SQLiteCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
@@ -85,25 +86,25 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(IDbConnection cn)
+        private bool Update(SQLiteConnection cn)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (SQLiteCommand cmd = new SQLiteCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id";
-                SQLiteDBClass.AddParameter(cmd, "@ID", id);
-                SQLiteDBClass.AddParameter(cmd, "@Name", Name);
-                SQLiteDBClass.AddParameter(cmd, "@Type", type);
-                SQLiteDBClass.AddParameter(cmd, "@size", Size);
-                SQLiteDBClass.AddParameter(cmd, "@Path", Path);
+                cmd.Parameters.AddWithValue("@ID", id);
+                cmd.Parameters.AddWithValue("@Name", Name);
+                cmd.Parameters.AddWithValue("@Type", type);
+                cmd.Parameters.AddWithValue("@size", Size);
+                cmd.Parameters.AddWithValue("@Path", Path);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
@@ -117,9 +118,9 @@ namespace EDDiscovery2.DB
             List<TravelLogUnit> list = new List<TravelLogUnit>();
 
 
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
-                using (IDbCommand cmd = cn.CreateCommand())
+                using (SQLiteCommand cmd = new SQLiteCommand())
                 {
                     DataSet ds = null;
                     cmd.Connection = cn;
@@ -127,7 +128,7 @@ namespace EDDiscovery2.DB
                     cmd.CommandTimeout = 30;
                     cmd.CommandText = "select * from TravelLogUnit";
 
-                    ds = SQLiteDBClass.SqlQueryText(cn, cmd);
+                    ds = SQLiteDBClass.QueryText(cn, cmd);
                     if (ds.Tables.Count == 0)
                     {
                         return null;

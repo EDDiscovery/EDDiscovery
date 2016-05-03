@@ -5,7 +5,7 @@ using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -264,10 +264,15 @@ namespace EDDiscovery2.EDDB
 
         public bool Add2DB(List<SystemClass> eddbsystems, List<StationClass> eddbstations)
         {
+            SQLiteDBClass db = new SQLiteDBClass();
+
+            db.Connect2DB();
+
+
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
                 cn.Open();
                 int nr=0;
