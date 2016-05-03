@@ -109,7 +109,7 @@ namespace EDDiscovery
         {
             try
             {
-                string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\EDDiscovery\\";
+                string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "EDDiscovery") + Path.DirectorySeparatorChar;
 
 
                 if (!Directory.Exists(datapath))

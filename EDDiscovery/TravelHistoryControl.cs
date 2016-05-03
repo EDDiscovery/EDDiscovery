@@ -9,7 +9,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Collections;
-using System.Data.SQLite;
 using EDDiscovery.DB;
 using System.Diagnostics;
 using EDDiscovery2;
@@ -28,7 +27,7 @@ namespace EDDiscovery
         private static EDDiscoveryForm _discoveryForm;
         public int defaultMapColour;
         public EDSMSync sync;
-        string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Development_s\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
+        string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Development_s", "Products"); // \\FORC-FDEV-D-1001\\Logs\\";
 
         internal List<SystemPosition> visitedSystems;
         internal bool EDSMSyncTo = true;
