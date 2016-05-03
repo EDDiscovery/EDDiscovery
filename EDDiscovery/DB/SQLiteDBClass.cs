@@ -4,18 +4,20 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+
 namespace EDDiscovery.DB
 {
     public class SQLiteDBClass
     {
-        SQLiteConnection m_dbConnection;
+        private static Func<string, IDbConnection> _createConnection;
+        private static Func<IDbCommand, IDbDataAdapter> _createDataAdapter;
+
         internal static string ConnectionString;
         string dbfile;
 
@@ -28,6 +30,12 @@ namespace EDDiscovery.DB
 
         private static Object lockDBInit = new Object();
         private static bool dbUpgraded = false;
+
+        static SQLiteDBClass()
+        {
+            InitSqliteConstructors();
+        }
+
         public SQLiteDBClass()
         {
             lock (lockDBInit)
@@ -69,21 +77,11 @@ namespace EDDiscovery.DB
 
 
 
-        public bool Connect2DB()
-        {
-            
-
-            m_dbConnection = new SQLiteConnection(ConnectionString);
-            m_dbConnection.Open();
-
-            return true;
-        }
-
         public bool CreateDB(string file)
         {
             try
             {
-                SQLiteConnection.CreateFile(file);
+                //SQLiteConnection.CreateFile(file);
                 InitDB();
                 UpgradeDB();
                 return true;
@@ -97,11 +95,11 @@ namespace EDDiscovery.DB
             
         }
 
-
+        #region DB Initialization
         public bool InitDB()
         {
             string query = "CREATE TABLE Register (ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , \"ValueInt\" INTEGER, \"ValueDouble\" DOUBLE, \"ValueString\" TEXT, \"ValueBlob\" BLOB)";
-            ExecuteQuery(query);
+            ExecuteNonQuery(query);
 
             UpgradeDB();
             return true;
@@ -176,14 +174,14 @@ namespace EDDiscovery.DB
             string query7 = "CREATE TABLE Stations (station_id INTEGER PRIMARY KEY  NOT NULL ,system_id INTEGER REFERENCES Systems(id), name TEXT NOT NULL ,blackmarket BOOL DEFAULT (null) ,max_landing_pad_size INTEGER,distance_to_star INTEGER,type TEXT,faction TEXT,shipyard BOOL,outfitting BOOL, commodities_market BOOL)";
             string query8 = "CREATE  INDEX stationIndex ON Stations (system_id ASC)";
 
-            ExecuteQuery(query);
-            ExecuteQuery(query2);
-            ExecuteQuery(query3);
-            ExecuteQuery(query4);
-            ExecuteQuery(query5);
-            ExecuteQuery(query6);
-            ExecuteQuery(query7);
-            ExecuteQuery(query8);
+            ExecuteNonQuery(query);
+            ExecuteNonQuery(query2);
+            ExecuteNonQuery(query3);
+            ExecuteNonQuery(query4);
+            ExecuteNonQuery(query5);
+            ExecuteNonQuery(query6);
+            ExecuteNonQuery(query7);
+            ExecuteNonQuery(query8);
 
             PutSettingInt("DBVer", 2);
 
@@ -197,7 +195,7 @@ namespace EDDiscovery.DB
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN Note TEXT";
 
-            ExecuteQuery(query1);
+            ExecuteNonQuery(query1);
             PutSettingInt("DBVer", 3);
 
             return true;
@@ -221,7 +219,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                ExecuteQuery(query1);
+                ExecuteNonQuery(query1);
             }
             catch (Exception ex)
             {
@@ -273,10 +271,10 @@ namespace EDDiscovery.DB
 
             try
             {
-                ExecuteQuery(query1);
-                //ExecuteQuery(query2);
-                ExecuteQuery(query3);
-                ExecuteQuery(query4);
+                ExecuteNonQuery(query1);
+                //ExecuteNonQuery(query2);
+                ExecuteNonQuery(query3);
+                ExecuteNonQuery(query4);
             }
             catch (Exception ex)
             {
@@ -333,23 +331,23 @@ namespace EDDiscovery.DB
 
             try
             {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2);
-                //ExecuteQuery(query3);
-                ExecuteQuery(query4);
-                ExecuteQuery(query5);
-                ExecuteQuery(query6);
-                ExecuteQuery(query7);
-                ExecuteQuery(query8);
-                ExecuteQuery(query9);
-                ExecuteQuery(query10);
-                ExecuteQuery(query11);
-                ExecuteQuery(query12);
-                ExecuteQuery(query13);
-                ExecuteQuery(query14);
-                ExecuteQuery(query15);
-                ExecuteQuery(query16);
-                ExecuteQuery(query17);
+                ExecuteNonQuery(query1);
+                ExecuteNonQuery(query2);
+                //ExecuteNonQuery(query3);
+                ExecuteNonQuery(query4);
+                ExecuteNonQuery(query5);
+                ExecuteNonQuery(query6);
+                ExecuteNonQuery(query7);
+                ExecuteNonQuery(query8);
+                ExecuteNonQuery(query9);
+                ExecuteNonQuery(query10);
+                ExecuteNonQuery(query11);
+                ExecuteNonQuery(query12);
+                ExecuteNonQuery(query13);
+                ExecuteNonQuery(query14);
+                ExecuteNonQuery(query15);
+                ExecuteNonQuery(query16);
+                ExecuteNonQuery(query17);
 
             }
             catch (Exception ex)
@@ -388,9 +386,9 @@ namespace EDDiscovery.DB
 
             try
             {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2);
-                ExecuteQuery(query3);
+                ExecuteNonQuery(query1);
+                ExecuteNonQuery(query2);
+                ExecuteNonQuery(query3);
             }
             catch (Exception ex)
             {
@@ -424,7 +422,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                ExecuteQuery(query1);
+                ExecuteNonQuery(query1);
             }
             catch (Exception ex)
             {
@@ -458,7 +456,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                ExecuteQuery(query1);
+                ExecuteNonQuery(query1);
             }
             catch (Exception ex)
             {
@@ -488,7 +486,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                ExecuteQuery(query1);
+                ExecuteNonQuery(query1);
             }
             catch (Exception ex)
             {
@@ -525,10 +523,10 @@ namespace EDDiscovery.DB
 
             try
             {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2);
-                ExecuteQuery(query3);
-                ExecuteQuery(query4);
+                ExecuteNonQuery(query1);
+                ExecuteNonQuery(query2);
+                ExecuteNonQuery(query3);
+                ExecuteNonQuery(query4);
             }
             catch (Exception ex)
             {
@@ -558,8 +556,8 @@ namespace EDDiscovery.DB
 
             try
             {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2);
+                ExecuteNonQuery(query1);
+                ExecuteNonQuery(query2);
             }
             catch (Exception ex)
             {
@@ -572,35 +570,133 @@ namespace EDDiscovery.DB
 
             return true;
         }
+        #endregion
 
-        private void ExecuteQuery(string query)
+        #region DB Access
+
+        private static void InitSqliteConstructors()
         {
-            if (Connect2DB())
+            try
             {
-                SQLiteCommand command = new SQLiteCommand(query, m_dbConnection);
-                command.ExecuteNonQuery();
-
-
+                System.Reflection.Assembly mono_data_sqlite = System.Reflection.Assembly.Load("Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral");
+                Type sqliteconntype = mono_data_sqlite.GetType("Mono.Data.Sqlite.SqliteConnection", true);
+                Type sqlitedatype = mono_data_sqlite.GetType("Mono.Data.Sqlite.SqliteDataAdapter", true);
+                Type sqlitecmdtype = mono_data_sqlite.GetType("Mono.Data.Sqlite.SqliteCommand", true);
+                var connconstructor = sqliteconntype.GetConstructor(new Type[] { typeof(string) });
+                var daconstructor = sqlitedatype.GetConstructor(new Type[] { sqlitecmdtype });
+                var connfuncparam = System.Linq.Expressions.Expression.Parameter(typeof(string));
+                var connfuncexpr = System.Linq.Expressions.Expression.Lambda(
+                    System.Linq.Expressions.Expression.Convert(
+                        System.Linq.Expressions.Expression.New(connconstructor, connfuncparam),
+                        typeof(IDbConnection)
+                    ),
+                    connfuncparam);
+                var dafuncparam = System.Linq.Expressions.Expression.Parameter(typeof(IDbCommand));
+                var dafuncexpr = System.Linq.Expressions.Expression.Lambda(
+                    System.Linq.Expressions.Expression.Convert(
+                        System.Linq.Expressions.Expression.New(daconstructor,
+                            System.Linq.Expressions.Expression.Convert(dafuncparam, sqlitecmdtype)
+                        ),
+                        typeof(IDbDataAdapter)
+                    ),
+                    dafuncparam);
+                _createConnection = (Func<string, IDbConnection>)connfuncexpr.Compile();
+                _createDataAdapter = (Func<IDbCommand, IDbDataAdapter>)dafuncexpr.Compile();
             }
-            CloseDB();
+            catch
+            {
+                _createConnection = (c) => new System.Data.SQLite.SQLiteConnection(c);
+                _createDataAdapter = (c) => new System.Data.SQLite.SQLiteDataAdapter((System.Data.SQLite.SQLiteCommand)c);
+            }
         }
 
-
-        public bool CloseDB()
+        public static IDbConnection CreateConnection()
         {
-
-            m_dbConnection.Close();
-
-            return true;
+            return _createConnection(ConnectionString);
         }
 
+        public static IDbCommand CreateCommand(IDbConnection conn, string query)
+        {
+            IDbCommand cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandTimeout = 30;
+            cmd.CommandText = query;
+            return cmd;
+        }
+
+        public static IDbDataAdapter CreateDataAdapter(IDbCommand cmd)
+        {
+            return _createDataAdapter(cmd);
+        }
+
+        public static int ExecuteNonQuery(string query)
+        {
+            using (var conn = CreateConnection())
+            {
+                conn.Open();
+                using (var cmd = CreateCommand(conn, query))
+                {
+                    return cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static DataSet ExecuteQuery(string query)
+        {
+            using (var conn = CreateConnection())
+            {
+                conn.Open();
+                using (var cmd = CreateCommand(conn, query))
+                {
+                    DataSet ds = new DataSet();
+                    IDbDataAdapter da = CreateDataAdapter(cmd);
+                    da.Fill(ds);
+                    return ds;
+                }
+            }
+        }
+
+        public static object ExecuteScalar(string query)
+        {
+            using (var conn = CreateConnection())
+            {
+                conn.Open();
+                using (var cmd = CreateCommand(conn, query))
+                {
+                    return cmd.ExecuteScalar();
+                }
+            }
+        }
+
+	public static void AddParameter(IDbCommand cmd, string name, object val)
+	{
+            var par = cmd.CreateParameter();
+            par.ParameterName = name;
+            par.Value = val;
+            cmd.Parameters.Add(par);
+	}
+
+	public static void AddParameter(IDbCommand cmd, string name, DbType type)
+	{
+            var par = cmd.CreateParameter();
+            par.ParameterName = name;
+            par.DbType = type;
+            cmd.Parameters.Add(par);
+	}
+
+        public static void SetParameter(IDbCommand cmd, string name, object val)
+        {
+            ((IDataParameter)cmd.Parameters[name]).Value = val;
+        }
+        #endregion
+        
         public bool GetAllSystems()
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         DataSet ds = null;
                         cmd.Connection = cn;
@@ -654,9 +750,9 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         DataSet ds = null;
                         cmd.Connection = cn;
@@ -712,9 +808,9 @@ namespace EDDiscovery.DB
             List<DistanceClass> ldist = new List<DistanceClass>();
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         DataSet ds = null;
                         cmd.Connection = cn;
@@ -761,9 +857,9 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         DataSet ds = null;
                         cmd.Connection = cn;
@@ -805,9 +901,9 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         DataSet ds = null;
                         cmd.Connection = cn;
@@ -849,9 +945,9 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd1 = new SQLiteCommand())
+                    using (IDbCommand cmd1 = cn.CreateCommand())
                     {
                         DataSet ds1 = null;
                         cmd1.Connection = cn;
@@ -870,7 +966,7 @@ namespace EDDiscovery.DB
                             return new List<SavedRouteClass>();
                         }
 
-                        using (SQLiteCommand cmd2 = new SQLiteCommand())
+                        using (IDbCommand cmd2 = cn.CreateCommand())
                         {
                             DataSet ds2 = null;
                             cmd2.Connection = cn;
@@ -909,9 +1005,9 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         cmd.Connection = cn;
                         cmd.CommandType = CommandType.Text;
@@ -938,9 +1034,9 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         DataSet ds = null;
                         cmd.Connection = cn;
@@ -977,7 +1073,7 @@ namespace EDDiscovery.DB
             System.Diagnostics.Trace.WriteLine(text);
         }
 
-        public DataSet SqlQueryText(SQLiteConnection cn, SQLiteCommand cmd)
+        public static DataSet SqlQueryText(IDbConnection cn, IDbCommand cmd)
         {
 
             //LogLine("SqlQueryText: " + cmd.CommandText);
@@ -985,10 +1081,9 @@ namespace EDDiscovery.DB
             try
             {
                 DataSet ds = new DataSet();
-                SQLiteDataAdapter da = default(SQLiteDataAdapter);
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = cn;
-                da = new SQLiteDataAdapter(cmd);
+                IDbDataAdapter da = CreateDataAdapter(cmd);
                 cn.Open();
                 da.Fill(ds);
                 cn.Close();
@@ -1002,56 +1097,7 @@ namespace EDDiscovery.DB
 
         }
 
-        static public DataSet QueryText(SQLiteConnection cn, SQLiteCommand cmd)
-        {
-
-            //LogLine("SqlQueryText: " + cmd.CommandText);
-
-            try
-            {
-                DataSet ds = new DataSet();
-                SQLiteDataAdapter da = default(SQLiteDataAdapter);
-                cmd.CommandType = CommandType.Text;
-                cmd.Connection = cn;
-                da = new SQLiteDataAdapter(cmd);
-                cn.Open();
-                da.Fill(ds);
-                cn.Close();
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("SqlQuery Exception: " + ex.Message);
-                throw;
-            }
-
-        }
-
-
-        public int SqlNonQuery(SQLiteConnection cn, SQLiteCommand cmd)
-        {
-            int rows = 0;
-
-            LogLine("SqlNonQuery: " + cmd.CommandText);
-
-            try
-            {
-                cn.Open();
-                rows = cmd.ExecuteNonQuery();
-                cn.Close();
-                return rows;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("SqlNonQuery Exception: " + ex.Message);
-                throw;
-            }
-
-
-        }
-
-
-        static public object SqlScalar(SQLiteConnection cn, SQLiteCommand cmd)
+        static public object SqlScalar(IDbConnection cn, IDbCommand cmd)
         {
             object ret = null;
 
@@ -1073,7 +1119,7 @@ namespace EDDiscovery.DB
         }
 
 
-        static public int SqlNonQueryText(SQLiteConnection cn, SQLiteCommand cmd)
+        static public int SqlNonQueryText(IDbConnection cn, IDbCommand cmd)
         {
             int rows = 0;
 
@@ -1108,16 +1154,16 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         DataSet ds = null;
                         cmd.Connection = cn;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
                         cmd.CommandText = "select ID from Register WHERE ID=@key";
-                        cmd.Parameters.AddWithValue("@key", sKey);
+                        SQLiteDBClass.AddParameter(cmd, "@key", sKey);
 
                         ds = SqlQueryText(cn, cmd);
                         if (ds.Tables.Count == 0)
@@ -1146,15 +1192,15 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         cmd.Connection = cn;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
                         cmd.CommandText = "SELECT ValueInt from Register WHERE ID = @ID";
-                        cmd.Parameters.AddWithValue("@ID", key);
+                        SQLiteDBClass.AddParameter(cmd, "@ID", key);
                         object ob = SqlScalar(cn, cmd);
 
                         if (ob == null)
@@ -1179,16 +1225,16 @@ namespace EDDiscovery.DB
             {
                 if (keyExists(key))
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        using (IDbCommand cmd = cn.CreateCommand())
                         {
                             cmd.Connection = cn;
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandTimeout = 30;
                             cmd.CommandText = "Update Register set ValueInt = @ValueInt Where ID=@ID";
-                            cmd.Parameters.AddWithValue("@ID", key);
-                            cmd.Parameters.AddWithValue("@ValueInt", intvalue);
+                            SQLiteDBClass.AddParameter(cmd, "@ID", key);
+                            SQLiteDBClass.AddParameter(cmd, "@ValueInt", intvalue);
 
                             SqlNonQueryText(cn, cmd);
 
@@ -1198,16 +1244,16 @@ namespace EDDiscovery.DB
                 }
                 else
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        using (IDbCommand cmd = cn.CreateCommand())
                         {
                             cmd.Connection = cn;
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandTimeout = 30;
                             cmd.CommandText = "Insert into Register (ID, ValueInt) values (@ID, @valint)";
-                            cmd.Parameters.AddWithValue("@ID", key);
-                            cmd.Parameters.AddWithValue("@valint", intvalue);
+                            SQLiteDBClass.AddParameter(cmd, "@ID", key);
+                            SQLiteDBClass.AddParameter(cmd, "@valint", intvalue);
 
                             SqlNonQueryText(cn, cmd);
                             return true;
@@ -1225,15 +1271,15 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         cmd.Connection = cn;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
                         cmd.CommandText = "SELECT ValueDouble from Register WHERE ID = @ID";
-                        cmd.Parameters.AddWithValue("@ID", key);
+                        SQLiteDBClass.AddParameter(cmd, "@ID", key);
                         object ob = SqlScalar(cn, cmd);
 
                         if (ob == null)
@@ -1258,16 +1304,16 @@ namespace EDDiscovery.DB
             {
                 if (keyExists(key))
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        using (IDbCommand cmd = cn.CreateCommand())
                         {
                             cmd.Connection = cn;
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandTimeout = 30;
                             cmd.CommandText = "Update Register set ValueDouble = @ValueDouble Where ID=@ID";
-                            cmd.Parameters.AddWithValue("@ID", key);
-                            cmd.Parameters.AddWithValue("@ValueDouble", doublevalue);
+                            SQLiteDBClass.AddParameter(cmd, "@ID", key);
+                            SQLiteDBClass.AddParameter(cmd, "@ValueDouble", doublevalue);
 
                             SqlNonQueryText(cn, cmd);
 
@@ -1277,16 +1323,16 @@ namespace EDDiscovery.DB
                 }
                 else
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        using (IDbCommand cmd = cn.CreateCommand())
                         {
                             cmd.Connection = cn;
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandTimeout = 30;
                             cmd.CommandText = "Insert into Register (ID, ValueDouble) values (@ID, @valdbl)";
-                            cmd.Parameters.AddWithValue("@ID", key);
-                            cmd.Parameters.AddWithValue("@valdbl", doublevalue);
+                            SQLiteDBClass.AddParameter(cmd, "@ID", key);
+                            SQLiteDBClass.AddParameter(cmd, "@valdbl", doublevalue);
 
                             SqlNonQueryText(cn, cmd);
                             return true;
@@ -1304,15 +1350,15 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         cmd.Connection = cn;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
                         cmd.CommandText = "SELECT ValueInt from Register WHERE ID = @ID";
-                        cmd.Parameters.AddWithValue("@ID", key);
+                        SQLiteDBClass.AddParameter(cmd, "@ID", key);
                         object ob = SqlScalar(cn, cmd);
 
                         if (ob == null)
@@ -1346,18 +1392,18 @@ namespace EDDiscovery.DB
 
                 if (keyExists(key))
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        using (IDbCommand cmd = cn.CreateCommand())
                         {
                             cmd.Connection = cn;
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandTimeout = 30;
                             cmd.CommandText = "Update Register set ValueInt = @ValueInt Where ID=@ID";
-                            cmd.Parameters.AddWithValue("@ID", key);
+                            SQLiteDBClass.AddParameter(cmd, "@ID", key);
 
                             
-                            cmd.Parameters.AddWithValue("@ValueInt", intvalue);
+                            SQLiteDBClass.AddParameter(cmd, "@ValueInt", intvalue);
 
                             SqlNonQueryText(cn, cmd);
 
@@ -1367,16 +1413,16 @@ namespace EDDiscovery.DB
                 }
                 else
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        using (IDbCommand cmd = cn.CreateCommand())
                         {
                             cmd.Connection = cn;
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandTimeout = 30;
                             cmd.CommandText = "Insert into Register (ID, ValueInt) values (@ID, @valint)";
-                            cmd.Parameters.AddWithValue("@ID", key);
-                            cmd.Parameters.AddWithValue("@valint", intvalue);
+                            SQLiteDBClass.AddParameter(cmd, "@ID", key);
+                            SQLiteDBClass.AddParameter(cmd, "@valint", intvalue);
 
                             SqlNonQueryText(cn, cmd);
                             return true;
@@ -1395,15 +1441,15 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (IDbCommand cmd = cn.CreateCommand())
                     {
                         cmd.Connection = cn;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
                         cmd.CommandText = "SELECT ValueString from Register WHERE ID = @ID";
-                        cmd.Parameters.AddWithValue("@ID", key);
+                        SQLiteDBClass.AddParameter(cmd, "@ID", key);
                         object ob = SqlScalar(cn, cmd);
 
                         if (ob == null)
@@ -1431,16 +1477,16 @@ namespace EDDiscovery.DB
             {
                 if (keyExists(key))
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        using (IDbCommand cmd = cn.CreateCommand())
                         {
                             cmd.Connection = cn;
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandTimeout = 30;
                             cmd.CommandText = "Update Register set ValueString = @ValueString Where ID=@ID";
-                            cmd.Parameters.AddWithValue("@ID", key);
-                            cmd.Parameters.AddWithValue("@ValueString", strvalue);
+                            SQLiteDBClass.AddParameter(cmd, "@ID", key);
+                            SQLiteDBClass.AddParameter(cmd, "@ValueString", strvalue);
 
                             SqlNonQueryText(cn, cmd);
 
@@ -1450,16 +1496,16 @@ namespace EDDiscovery.DB
                 }
                 else
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (IDbConnection cn = SQLiteDBClass.CreateConnection())
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand())
+                        using (IDbCommand cmd = cn.CreateCommand())
                         {
                             cmd.Connection = cn;
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandTimeout = 30;
                             cmd.CommandText = "Insert into Register (ID, ValueString) values (@ID, @valint)";
-                            cmd.Parameters.AddWithValue("@ID", key);
-                            cmd.Parameters.AddWithValue("@valint", strvalue);
+                            SQLiteDBClass.AddParameter(cmd, "@ID", key);
+                            SQLiteDBClass.AddParameter(cmd, "@valint", strvalue);
 
                             SqlNonQueryText(cn, cmd);
                             return true;
