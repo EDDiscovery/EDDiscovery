@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Data.SQLite;
 
 namespace EDDiscovery.DB
 {
@@ -71,27 +72,27 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
                 return Add(cn);
             }
         }
 
-        private bool Add(IDbConnection cn)
+        private bool Add(SQLiteConnection cn)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (SQLiteCommand cmd = new SQLiteCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Insert into routes_expeditions (name, start, end) values (@name, @start, @end)";
-                SQLiteDBClass.AddParameter(cmd, "@name", Name);
-                SQLiteDBClass.AddParameter(cmd, "@start", StartDate);
-                SQLiteDBClass.AddParameter(cmd, "@end", EndDate);
+                cmd.Parameters.AddWithValue("@name", Name);
+                cmd.Parameters.AddWithValue("@start", StartDate);
+                cmd.Parameters.AddWithValue("@end", EndDate);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                using (IDbCommand cmd2 = cn.CreateCommand())
+                using (SQLiteCommand cmd2 = new SQLiteCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
@@ -101,19 +102,19 @@ namespace EDDiscovery.DB
                     Id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
                 }
 
-                using (IDbCommand cmd2 = cn.CreateCommand())
+                using (SQLiteCommand cmd2 = new SQLiteCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
                     cmd2.CommandTimeout = 30;
                     cmd2.CommandText = "INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)";
-                    SQLiteDBClass.AddParameter(cmd2, "@routeid", DbType.String);
-                    SQLiteDBClass.AddParameter(cmd2, "@name", DbType.String);
+                    cmd2.Parameters.Add("@routeid", DbType.String);
+                    cmd2.Parameters.Add("@name", DbType.String);
 
                     foreach (var sysname in Systems)
                     {
-                        SQLiteDBClass.SetParameter(cmd2, "@routeid", Id);
-                        SQLiteDBClass.SetParameter(cmd2, "@name", sysname);
+                        cmd2.Parameters["@routeid"].Value = Id;
+                        cmd2.Parameters["@name"].Value = sysname;
                         SQLiteDBClass.SqlNonQueryText(cn, cmd2);
                     }
                 }
@@ -124,50 +125,50 @@ namespace EDDiscovery.DB
 
         public bool Update()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
                 return Update(cn);
             }
         }
 
-	private bool Update(IDbConnection cn)
+        private bool Update(SQLiteConnection cn)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (SQLiteCommand cmd = new SQLiteCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "UPDATE routes_expeditions SET name=@name, start=@start, end=@end WHERE id=@id";
-                SQLiteDBClass.AddParameter(cmd, "@id", Id);
-                SQLiteDBClass.AddParameter(cmd, "@name", Name);
-                SQLiteDBClass.AddParameter(cmd, "@start", StartDate);
-                SQLiteDBClass.AddParameter(cmd, "@end", EndDate);
+                cmd.Parameters.AddWithValue("@id", Id);
+                cmd.Parameters.AddWithValue("@name", Name);
+                cmd.Parameters.AddWithValue("@start", StartDate);
+                cmd.Parameters.AddWithValue("@end", EndDate);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                using (IDbCommand cmd2 = cn.CreateCommand())
+                using (SQLiteCommand cmd2 = new SQLiteCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
                     cmd2.CommandTimeout = 30;
                     cmd2.CommandText = "DELETE FROM route_systems WHERE routeid=@routeid";
-                    SQLiteDBClass.AddParameter(cmd2, "@routeid", Id);
+                    cmd2.Parameters.AddWithValue("@routeid", Id);
                     SQLiteDBClass.SqlNonQueryText(cn, cmd2);
                 }
 
-                using (IDbCommand cmd2 = cn.CreateCommand())
+                using (SQLiteCommand cmd2 = new SQLiteCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
                     cmd2.CommandTimeout = 30;
                     cmd2.CommandText = "INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)";
-                    SQLiteDBClass.AddParameter(cmd2, "@routeid", DbType.String);
-                    SQLiteDBClass.AddParameter(cmd2, "@name", DbType.String);
+                    cmd2.Parameters.Add("@routeid", DbType.String);
+                    cmd2.Parameters.Add("@name", DbType.String);
 
                     foreach (var sysname in Systems)
                     {
-                        SQLiteDBClass.SetParameter(cmd2, "@routeid", Id);
-                        SQLiteDBClass.SetParameter(cmd2, "@name", sysname);
+                        cmd2.Parameters["@routeid"].Value = Id;
+                        cmd2.Parameters["@name"].Value = sysname;
                         SQLiteDBClass.SqlNonQueryText(cn, cmd2);
                     }
                 }
