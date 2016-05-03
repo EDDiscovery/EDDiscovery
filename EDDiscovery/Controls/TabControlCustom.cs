@@ -36,7 +36,7 @@ namespace ExtendedControls
         public float TabDisabledScaling { get; set; } = 0.5F;                   // how much darker if not selected.
         public float TabOpaque { get; set; } = 100F;                            // is the tab area opaque?
 
-        public int MinimumTabWidth { set { SendMessage(this.Handle, 0x1300 + 49, IntPtr.Zero, (IntPtr)value); } }
+        public int MinimumTabWidth { set { SendMessage(0x1300 + 49, IntPtr.Zero, (IntPtr)value); } }
         public override Font Font { get { return base.Font; } set { ChangeFont(value); } }
 
         // Auto Invalidates
@@ -65,8 +65,13 @@ namespace ExtendedControls
 
         public const int WM_SETFONT = 0x30;
         public const int WM_FONTCHANGE = 0x1d;
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
+
+        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
+        {
+            Message message = Message.Create(this.Handle, msg, wparam, lparam);
+            this.WndProc(ref message);
+            return message.Result;
+        }
 
         private void ChangeFlatStyle(FlatStyle fs)
         {
@@ -74,8 +79,8 @@ namespace ExtendedControls
                                 ControlStyles.Opaque | ControlStyles.ResizeRedraw, (fs != FlatStyle.System));
 
             // asking for a font set seems to make it set size better during start up
-            SendMessage(this.Handle, WM_SETFONT, (IntPtr)this.Font.ToHfont(), (IntPtr)(-1));
-            SendMessage(this.Handle, WM_FONTCHANGE, IntPtr.Zero, IntPtr.Zero);
+            SendMessage(WM_SETFONT, (IntPtr)this.Font.ToHfont(), (IntPtr)(-1));
+            SendMessage(WM_FONTCHANGE, IntPtr.Zero, IntPtr.Zero);
 
             flatstyle = fs;
             CleanUp();              // start afresh

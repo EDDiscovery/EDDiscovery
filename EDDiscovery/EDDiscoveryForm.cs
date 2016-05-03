@@ -35,10 +35,12 @@ namespace EDDiscovery
         public const int WM_NCL_RESIZE = 0x112;
         public const int HT_RESIZE = 61448;
 
-        [DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
+        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
+        {
+            Message message = Message.Create(this.Handle, msg, wparam, lparam);
+            this.WndProc(ref message);
+            return message.Result;
+        }
 
         //readonly string _fileTgcSystems;
         readonly string _fileEDSMDistances;
@@ -973,8 +975,8 @@ namespace EDDiscovery
             if (e.Button == MouseButtons.Left)
             {
                 panel_grip.Captured();           // tell it, doing this royally screws up the MD/MU/ME/ML calls to it
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCL_RESIZE, HT_RESIZE, 0);
+                panel_grip.Capture = false;
+                SendMessage(WM_NCL_RESIZE, (IntPtr)HT_RESIZE, IntPtr.Zero);
             }
         }
 
@@ -1017,8 +1019,8 @@ namespace EDDiscovery
         {
             if (!theme.WindowsFrame && e.Button == MouseButtons.Left)           // only if theme is borderless
             {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+                this.Capture = false;
+                SendMessage(WM_NCLBUTTONDOWN, (IntPtr)HT_CAPTION, IntPtr.Zero);
             }
         }
 
