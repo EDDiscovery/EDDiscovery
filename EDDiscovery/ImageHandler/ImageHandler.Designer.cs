@@ -56,7 +56,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.checkBoxRemove = new ExtendedControls.CheckBoxCustom();
             this.buttonImageStore = new ExtendedControls.ButtonExt();
+            this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.comboBoxScanFor = new ExtendedControls.ComboBoxCustom();
             this.comboBoxFormat = new ExtendedControls.ComboBoxCustom();
             this.groupBox_Preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -149,6 +151,7 @@
             this.numericUpDownHeight.Size = new System.Drawing.Size(57, 20);
             this.numericUpDownHeight.SpinnerSize = 16;
             this.numericUpDownHeight.TabIndex = 4;
+            this.numericUpDownHeight.Text = "0";
             this.numericUpDownHeight.TextBoxBackColor = System.Drawing.SystemColors.Window;
             this.numericUpDownHeight.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
             this.numericUpDownHeight.Value = 0;
@@ -166,6 +169,7 @@
             this.numericUpDownWidth.Size = new System.Drawing.Size(57, 20);
             this.numericUpDownWidth.SpinnerSize = 16;
             this.numericUpDownWidth.TabIndex = 3;
+            this.numericUpDownWidth.Text = "0";
             this.numericUpDownWidth.TextBoxBackColor = System.Drawing.SystemColors.Window;
             this.numericUpDownWidth.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
             this.numericUpDownWidth.Value = 0;
@@ -183,6 +187,7 @@
             this.numericUpDownLeft.Size = new System.Drawing.Size(57, 20);
             this.numericUpDownLeft.SpinnerSize = 16;
             this.numericUpDownLeft.TabIndex = 2;
+            this.numericUpDownLeft.Text = "0";
             this.numericUpDownLeft.TextBoxBackColor = System.Drawing.SystemColors.Window;
             this.numericUpDownLeft.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
             this.numericUpDownLeft.Value = 0;
@@ -200,6 +205,7 @@
             this.numericUpDownTop.Size = new System.Drawing.Size(57, 20);
             this.numericUpDownTop.SpinnerSize = 16;
             this.numericUpDownTop.TabIndex = 1;
+            this.numericUpDownTop.Text = "0";
             this.numericUpDownTop.TextBoxBackColor = System.Drawing.SystemColors.Window;
             this.numericUpDownTop.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
             this.numericUpDownTop.Value = 0;
@@ -293,7 +299,9 @@
             this.groupBox_Controls.Controls.Add(this.label2);
             this.groupBox_Controls.Controls.Add(this.checkBoxRemove);
             this.groupBox_Controls.Controls.Add(this.buttonImageStore);
+            this.groupBox_Controls.Controls.Add(this.label9);
             this.groupBox_Controls.Controls.Add(this.label3);
+            this.groupBox_Controls.Controls.Add(this.comboBoxScanFor);
             this.groupBox_Controls.Controls.Add(this.comboBoxFormat);
             this.groupBox_Controls.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox_Controls.FillClientAreaWithAlternateColor = false;
@@ -468,14 +476,48 @@
             this.buttonImageStore.UseVisualStyleBackColor = true;
             this.buttonImageStore.Click += new System.EventHandler(this.buttonImageStore_Click);
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(588, 72);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(47, 13);
+            this.label9.TabIndex = 8;
+            this.label9.Text = "Scan for";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(591, 47);
+            this.label3.Location = new System.Drawing.Point(588, 47);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 8;
             this.label3.Text = "Save as";
+            // 
+            // comboBoxScanFor
+            // 
+            this.comboBoxScanFor.ArrowWidth = 1;
+            this.comboBoxScanFor.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxScanFor.ButtonColorScaling = 0.5F;
+            this.comboBoxScanFor.DataSource = null;
+            this.comboBoxScanFor.DisplayMember = null;
+            this.comboBoxScanFor.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxScanFor.DropDownHeight = 200;
+            this.comboBoxScanFor.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxScanFor.ItemHeight = 20;
+            this.comboBoxScanFor.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxScanFor.Items")));
+            this.comboBoxScanFor.Location = new System.Drawing.Point(652, 69);
+            this.comboBoxScanFor.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxScanFor.Name = "comboBoxScanFor";
+            this.comboBoxScanFor.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxScanFor.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxScanFor.ScrollBarWidth = 16;
+            this.comboBoxScanFor.SelectedIndex = -1;
+            this.comboBoxScanFor.SelectedItem = null;
+            this.comboBoxScanFor.Size = new System.Drawing.Size(113, 21);
+            this.comboBoxScanFor.TabIndex = 5;
+            this.comboBoxScanFor.ValueMember = null;
+            this.comboBoxScanFor.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxScanFor_SelectedIndexChanged);
             // 
             // comboBoxFormat
             // 
@@ -497,7 +539,7 @@
             this.comboBoxFormat.ScrollBarWidth = 16;
             this.comboBoxFormat.SelectedIndex = -1;
             this.comboBoxFormat.SelectedItem = null;
-            this.comboBoxFormat.Size = new System.Drawing.Size(77, 21);
+            this.comboBoxFormat.Size = new System.Drawing.Size(113, 21);
             this.comboBoxFormat.TabIndex = 5;
             this.comboBoxFormat.ValueMember = null;
             this.comboBoxFormat.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxFormat_SelectedIndexChanged);
@@ -555,5 +597,7 @@
         private ExtendedControls.GroupBoxCustom groupBox_Preview;
         private ExtendedControls.GroupBoxCustom groupBox_Controls;
         private ExtendedControls.GroupBoxCustom groupBox_Prevcontrols;
+        private System.Windows.Forms.Label label9;
+        private ExtendedControls.ComboBoxCustom comboBoxScanFor;
     }
 }

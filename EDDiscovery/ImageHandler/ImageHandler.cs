@@ -30,6 +30,7 @@ namespace EDDiscovery2.ImageHandler
             "DD-MM-YYYY HH-MM-SS Sysname",
             "MM-DD-YYYY HH-MM-SS Sysname",
             "Keep original"});
+            this.comboBoxScanFor.Items.AddRange(new string[] { "bmp -ED Launcher", "jpg -Steam" });
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -50,8 +51,13 @@ namespace EDDiscovery2.ImageHandler
             {
                 comboBoxFileNameFormat.SelectedIndex = db.GetSettingInt("comboBoxFileNameFormat", 0);
             }
-            catch {}
+            catch { }
 
+            try
+            {
+                comboBoxScanFor.SelectedIndex = db.GetSettingInt("comboBoxScanFor", 0);
+            }
+            catch { }
 
             checkBoxAutoConvert.Checked = db.GetSettingBool("ImageHandlerAutoconvert", false);
             checkBoxRemove.Checked = db.GetSettingBool("checkBoxRemove", false);
@@ -85,7 +91,7 @@ namespace EDDiscovery2.ImageHandler
                 watchfolder = new System.IO.FileSystemWatcher();
                 watchfolder.Path = textBoxScreenshotsDir.Text;
 
-                watchfolder.Filter = "*.BMP";
+                watchfolder.Filter = "*." + comboBoxScanFor.Text.Substring(0,comboBoxScanFor.Text.IndexOf(" "));
                 watchfolder.NotifyFilter = NotifyFilters.FileName;
                 watchfolder.Created += watcher;
                 watchfolder.EnableRaisingEvents = true;
@@ -131,6 +137,7 @@ namespace EDDiscovery2.ImageHandler
                 Rectangle crop = new Rectangle();
                 string extension = null;
                 bool cannotexecute = false;
+                string inputext = null;
 
                 Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
                 {                                                   // I've tested that this is required..      
@@ -146,13 +153,13 @@ namespace EDDiscovery2.ImageHandler
                     crop.Width = numericUpDownWidth.Value;
                     crop.Height = numericUpDownHeight.Value;
                     extension = "." + comboBoxFormat.Text;
-                    cannotexecute = textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text) && extension.Equals(".bmp");
-
+                    inputext = comboBoxScanFor.Text.Substring(0, comboBoxScanFor.Text.IndexOf(" "));
+                    cannotexecute = textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text) && comboBoxFormat.Text.Equals(inputext);
                 });
 
                 if ( cannotexecute )                                // cannot store BMPs into the Elite dangerous folder as it creates a circular condition
                 {
-                    MessageBox.Show("Cannot convert .bmp files into the same folder as they are stored into by Elite Dangerous" + Environment.NewLine + Environment.NewLine + "Pick a different conversion folder or a different output format", "WARNING", MessageBoxButtons.OK);
+                    MessageBox.Show("Cannot convert " + inputext + " into the same folder as they are stored into" + Environment.NewLine + Environment.NewLine + "Pick a different conversion folder or a different output format", "WARNING", MessageBoxButtons.OK);
                     return;
                 }
 
@@ -313,7 +320,6 @@ namespace EDDiscovery2.ImageHandler
         private void comboBoxFileNameFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             db.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
-
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
         }
 
@@ -401,6 +407,14 @@ namespace EDDiscovery2.ImageHandler
                 textBoxOutputDir.Text = dlg.SelectedPath;
                 db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
             }
+        }
+
+        private void comboBoxScanFor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            db.PutSettingInt("comboBoxScanFor", comboBoxScanFor.SelectedIndex);
+
+            if ( watchfolder != null )      // if already watching, restart it
+                StartWatcher();
         }
     }
 }
