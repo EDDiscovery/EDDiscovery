@@ -578,7 +578,7 @@ namespace EDDiscovery.DB
         {
             try
             {
-                System.Reflection.Assembly mono_data_sqlite = System.Reflection.Assembly.Load("Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral");
+                System.Reflection.Assembly mono_data_sqlite = System.Reflection.Assembly.Load("Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756");
                 Type sqliteconntype = mono_data_sqlite.GetType("Mono.Data.Sqlite.SqliteConnection", true);
                 Type sqlitedatype = mono_data_sqlite.GetType("Mono.Data.Sqlite.SqliteDataAdapter", true);
                 Type sqlitecmdtype = mono_data_sqlite.GetType("Mono.Data.Sqlite.SqliteCommand", true);
