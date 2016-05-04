@@ -59,7 +59,7 @@ namespace EDDiscovery
                         return datapath;
                     }
 
-                    datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Frontier_Developments\\Products"; // \\FORC-FDEV-D-1001\\Logs\\";
+                    datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments", "Products"); // \\FORC-FDEV-D-1001\\Logs\\";
 
                     // Find the right subdirectory....
 
@@ -423,12 +423,12 @@ namespace EDDiscovery
             lock (EventLogLock)
             {
                 string logdir = GetNetLogPath();
-                if (m_Watcher != null && m_Watcher.Path != logdir + "\\" && Directory.Exists(logdir))
+                if (m_Watcher != null && m_Watcher.Path != logdir + Path.DirectorySeparatorChar && Directory.Exists(logdir))
                 {
                     try
                     {
                         m_Watcher.EnableRaisingEvents = false;
-                        m_Watcher.Path = logdir + "\\";
+                        m_Watcher.Path = logdir + Path.DirectorySeparatorChar;
                         m_Watcher.EnableRaisingEvents = true;
                     }
                     catch (Exception ex)
@@ -450,7 +450,7 @@ namespace EDDiscovery
                     string logpath = GetNetLogPath();
                     if (Directory.Exists(logpath))
                     {
-                        m_Watcher.Path = logpath + "\\";
+                        m_Watcher.Path = logpath + Path.DirectorySeparatorChar;
                         m_Watcher.Filter = "netLog*.log";
                         m_Watcher.IncludeSubdirectories = true;
                         m_Watcher.NotifyFilter = NotifyFilters.FileName; // | NotifyFilters.Size; 
