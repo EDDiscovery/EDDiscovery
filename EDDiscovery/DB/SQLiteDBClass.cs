@@ -77,15 +77,22 @@ namespace EDDiscovery.DB
             {
                 dbfile = GetSQLiteDBFile();
 
-                ConnectionString = "Data Source=" + dbfile + ";Pooling=true;";
-
-                if (!File.Exists(dbfile))
+                if (ConnectionString == null)
                 {
-                    CreateDB(dbfile);
-                }
-                else
-                    UpgradeDB();
+                    ConnectionString = "Data Source=" + dbfile + ";Pooling=true;";
 
+                    if (!File.Exists(dbfile))
+                    {
+                        CreateDB(dbfile);
+
+                        if (!File.Exists(dbfile))
+                        {
+                            CreateDB(dbfile);
+                        }
+                        else
+                            UpgradeDB();
+                    }
+                }
             }
         }
 
