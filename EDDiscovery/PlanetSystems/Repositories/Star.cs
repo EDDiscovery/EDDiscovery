@@ -68,23 +68,23 @@ namespace EDDiscovery2.PlanetSystems.Repositories
 
             string json = @"{
                 'data': {
-                      'type': 'stars',
-                      'attributes': {" +
-            $"            'system-name':       '{edobj.system}'," +
-            $"            'updater':           '{EDDiscoveryForm.EDDConfig.CurrentCommander.Name}'," +
-            $"            'star':              '{edobj.objectName}'," +
-            $"            'spectral-class':    '{edobj.Description}'," +
-            $"            'spectral-subclass': '{edobj.subclass}'," +
-            $"            'solar-mass':        '{edobj.mass}'," +
-            $"            'solar-radius':      '{edobj.radius}'," +
-            $"            'surface-temp':      '{edobj.surfaceTemp}'," +
-            $"            'star-age':          '{edobj.star_age}'," +
-            $"            'orbit-period':      '{edobj.orbitPeriod}'," +
-            $"            'arrival-point':     '{edobj.arrivalPoint}'," +
-            $"            'luminosity':        '{edobj.luminosity}'," +
-            $"            'notes':             '{edobj.notes}'," +
-            $"            'image-url':         '{edobj.image_url}'," +
-            @"         }
+                    'type': 'stars',
+                    'attributes': {" +
+                        JsonAttributeString("system-name",       edobj.system) +
+                        JsonAttributeString("updater",           EDDiscoveryForm.EDDConfig.CurrentCommander.Name) +
+                        JsonAttributeString("star",              edobj.objectName) +
+                        JsonAttributeString("spectral-class",    edobj.Description) +
+                        JsonAttributeString("spectral-subclass", edobj.subclass) +
+                        JsonAttributeString("solar-mass",        edobj.mass.ToString()) +
+                        JsonAttributeString("solar-radius",      edobj.radius.ToString()) +
+                        JsonAttributeString("surface-temp",      edobj.surfaceTemp.ToString()) +
+                        JsonAttributeString("star-age",          edobj.star_age.ToString()) +
+                        JsonAttributeString("orbit-period",      edobj.orbitPeriod.ToString()) +
+                        JsonAttributeString("arrival-point",     edobj.arrivalPoint.ToString()) +
+                        JsonAttributeString("luminosity",        edobj.luminosity) +
+                        JsonAttributeString("notes",             edobj.notes) +
+                        JsonAttributeString("image-url",         edobj.image_url) + @"
+                    }
                 }
             }";
             JObject joPost = JObject.Parse(json);
