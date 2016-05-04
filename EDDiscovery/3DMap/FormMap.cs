@@ -59,6 +59,12 @@ namespace EDDiscovery2
         private long _oldTickCount = DateTime.Now.Ticks / 10000;
         private int _ticks = 0;
 
+        Matrix4d _starname_resmat;       // to pass to thread..
+        List<List<ISystem>> _starname_list = null;     // lists of list, what we have done before..
+        List<float> _starname_zoomlevel = null;
+        System.Threading.Thread nsThread;
+        Timer _starnametimer = new Timer();
+
         private Point _mouseStartRotate;
         private Point _mouseStartTranslateXY;
         private Point _mouseStartTranslateXZ;
@@ -147,8 +153,6 @@ namespace EDDiscovery2
             GenerateDataSetsVisitedSystems();
         }
 
-        System.Threading.Thread nsThread;
-        Timer _starnametimer = new Timer();
 
         private void FormMap_Load(object sender, EventArgs e)
         {
@@ -509,9 +513,8 @@ namespace EDDiscovery2
             return builder;
         }
 
-        Matrix4d starname_resmat;       // to pass to thread..
-
-        private void NameStars(object sender, EventArgs e) // tick..
+        private void NameStars(object sender, EventArgs e) // tick.. way it works is a tick occurs, timer off, thread runs, thread calls 
+                                                           // delegate, work done in UI, timer reticks.  KEEP it that way!
         {
             if (Visible && toolStripButtonStarNames.Checked && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
             {
@@ -519,91 +522,171 @@ namespace EDDiscovery2
                 Matrix4d mview;
                 GL.GetDouble(GetPName.ProjectionMatrix, out proj);
                 GL.GetDouble(GetPName.ModelviewMatrix, out mview);
-                starname_resmat = Matrix4d.Mult(mview, proj);               // does not work in thread, hence tick then thread
+                _starname_resmat = Matrix4d.Mult(mview, proj);               // does not work in thread, hence tick then thread
+
+                _starnametimer.Stop();                                      // wait till the thread finishes..
 
                 //Console.WriteLine("Tick start thread");
                 nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
                 nsThread.Start();
             }
-            else if (_datasets_namedstars != null )
+            else if (_datasets_namedstars != null )                     // no stars, clean up
             {
                 DeleteDataset(ref _datasets_namedstars);
                 _datasets_namedstars = null;
+                _starname_list = null;
+                _starname_zoomlevel = null;
             }
         }
 
-        private void NamedStars() // background thread
+        private void NamedStars() // background thread.. run after timer tick
         {
-            int lylimit =2000 * 2000;
-            int limit = 500;
-            float starnamescalar = 350;
-
-            int stars = 0;
-
-            int textwidthly = Math.Min(200, Math.Max((int)(starnamescalar / _zoom), 10));
-            int textheightly = textwidthly / 5;
-            //Console.WriteLine("Stars name size " + textwidthly + " " + textheightly + " scalar " + starnamescalar + " zoom " + _zoom);
-
-            double w2 = glControl.Width / 2.0;
-            double h2 = glControl.Height / 2.0;
-
-            Vector3 modcampos = _cameraPos;
-            modcampos.Y = -modcampos.Y;
-
-            List<ISystem> returnlist = new List<ISystem>();
-
-            // optimise, sort on nearest to viewpoint..
-
-            foreach (var sys in _starList)
+            try // just in case someone tears us down..
             {
-                if (sys.HasCoordinate)
+                int limit = 100;                    // number of stars to add at one time, keeps latency low
+
+                int lylimit = 3000 * 3000;           // distance limit from viewpoint
+                float starnamescalar = 350;         // scalar multiplier
+                int textwidthly = Math.Min(200, Math.Max((int)(starnamescalar / _zoom), 10));
+                int textheightly = textwidthly / 5;
+                //Console.WriteLine("Stars name size " + textwidthly + " " + textheightly + " scalar " + starnamescalar + " zoom " + _zoom);
+
+                double w2 = glControl.Width / 2.0;
+                double h2 = glControl.Height / 2.0;
+
+                Vector3 modcampos = _cameraPos;
+                modcampos.Y = -modcampos.Y;
+
+                if (_starname_list == null)                        // per tranche, keep a list of stars processed, so we don't repeat. Plus zoom
                 {
-                    Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
-                    Vector4d sysloc = Vector4d.Transform(syspos, starname_resmat);
+                    _starname_list = new List<List<ISystem>>();    // no list of lists, make one..
+                    _starname_zoomlevel = new List<float>();        
+                }
 
-                    if (sysloc.Z > _znear)
-                    {                                                           // pixel position on screen..
-                        Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
+                List<ISystem> newstars = new List<ISystem>();     // new list
 
-                        if ((syssloc.X >= 5 && syssloc.X <= glControl.Width - 5) && (syssloc.Y >= 5 && syssloc.Y <= glControl.Height - 5))
-                        {
-                            float sqdist = ((float)sys.x - modcampos.X) * ((float)sys.x - modcampos.X) + ((float)sys.y - modcampos.Y) * ((float)sys.y - modcampos.Y) + ((float)sys.z - modcampos.Z) * ((float)sys.z - modcampos.Z);
+                int stars = 0;
 
-                            if (sqdist <= lylimit)
+                foreach (var sys in _starList)
+                {
+                    if (sys.HasCoordinate)
+                    {
+                        Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
+                        Vector4d sysloc = Vector4d.Transform(syspos, _starname_resmat);
+
+                        if (sysloc.Z > _znear)
+                        {                                                           // pixel position on screen..
+                            Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
+
+                            if ((syssloc.X >= 5 && syssloc.X <= glControl.Width - 5) && (syssloc.Y >= 5 && syssloc.Y <= glControl.Height - 5))
                             {
-                                if (stars++ > limit)
+                                if (stars > limit)          // won't be checked often.. placed here on purpose.
                                 {
-                                    // Console.WriteLine("Too many");
                                     break;
                                 }
 
-                                //   Console.WriteLine("System " + sys.name + " at " + syssloc.X + " " + syssloc.Y);
-                                returnlist.Add(sys);
+                                float sqdist = ((float)sys.x - modcampos.X) * ((float)sys.x - modcampos.X) + ((float)sys.y - modcampos.Y) * ((float)sys.y - modcampos.Y) + ((float)sys.z - modcampos.Z) * ((float)sys.z - modcampos.Z);
+
+                                if (sqdist <= lylimit)
+                                {
+                                    bool contains = false;
+                                    foreach (List<ISystem> lst in _starname_list)       // ensure we do not have it up
+                                    {
+                                        if (lst.Contains(sys))           // we have it, flag it.
+                                        {
+                                            contains = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!contains)          // okay add.
+                                    {
+                                        stars++;
+                                        //   Console.WriteLine("System " + sys.name + " at " + syssloc.X + " " + syssloc.Y);
+                                        newstars.Add(sys);
+                                    }
+                                    else
+                                    {
+                                        // Console.WriteLine("Rejecting " + sys.name + " as dup");
+                                    }
+                                }
                             }
                         }
                     }
                 }
+
+                //Console.WriteLine("Stars found " + returnlist?.Count );
+
+                Data3DSetClass<TexturedQuadData> datasetMapImg = null;
+
+                if (newstars.Count > 0)         // if we have anything to add.. 
+                {
+                    _starname_list.Add(newstars);            // record the list of lists..
+                    _starname_zoomlevel.Add(_zoom);         // record the zoom level..
+                    //Console.WriteLine("Add at " + _starname_zoomlevel.Count + " zoom " + _zoom );
+                    datasetMapImg = DatasetBuilder.AddNamedStars(newstars, textwidthly, textheightly);
+                }
+
+                Invoke((MethodInvoker)delegate
+                {
+                    ChangeNamedStars(datasetMapImg);
+                });
             }
-
-            //Console.WriteLine("Stars found " + returnlist?.Count );
-
-            DatasetBuilder builder = new DatasetBuilder(); // does not need options..
-            builder.Build();
-            List<IData3DSet> dataset = builder.AddNamedStars(returnlist, textwidthly, textheightly);
-
-            Invoke((MethodInvoker)delegate
-            {
-                ChangeNamedStars(dataset);
-            });
-
-            //Console.WriteLine("Thread stopped");
+            catch { }
         }
 
-        void ChangeNamedStars(List<IData3DSet> sl )
+
+        void ChangeNamedStars(Data3DSetClass<TexturedQuadData> morestars)      // KICKED off after thread, trying to do the least in the UI thread..
         {
-            _datasets_namedstars = sl;
-            glControl.Invalidate();
-            //Console.WriteLine("Named stars changed");
+            int max_datasets = 200;             // with the limit sets the maximum of stars to display
+
+            if ( morestars != null )            // if add more stars
+            {
+                if (_datasets_namedstars == null)
+                    _datasets_namedstars = new List<IData3DSet>();
+
+                _datasets_namedstars.Add(morestars);               
+                glControl.Invalidate();
+
+                //Console.WriteLine("Named stars changed, data sets " + _datasets_namedstars.Count + " star list sets " + _starname_list.Count );
+                _starnametimer.Interval = 50;                      // still accumulating, go nearly immediately.
+            }
+            else
+            {
+                //Console.WriteLine("No stars to add");               // slow down buckeroo
+                _starnametimer.Interval = 1000;
+            }
+
+            int removeat = -1;
+
+            for (int i = 0; i < _starname_zoomlevel.Count; i++)         
+            {
+                if (Math.Abs(_starname_zoomlevel[i] - _zoom) > 0.5F)    // remove 1 instance per cycle of a old zoom
+                {
+                    removeat = i;
+                    //Console.WriteLine("Prune zoom at " + i + " starzoomlist " + _starname_zoomlevel.Count);
+                    break;
+                }
+            }
+
+            if (removeat == -1 && _datasets_namedstars != null && _datasets_namedstars.Count > max_datasets)     // prune if too big..
+            {
+                removeat = 0;                                       // always the last..
+                //Console.WriteLine("Prune too big at " + removeat);
+            }
+
+            if (removeat != -1)
+            {
+                _starname_list.RemoveAt(removeat);                      // remove the list of stars here
+                _starname_zoomlevel.RemoveAt(removeat);
+                _datasets_namedstars.RemoveAt(removeat);                
+                glControl.Invalidate();
+            }
+
+            Debug.Assert(_starname_list.Count == _starname_zoomlevel.Count);
+            Debug.Assert(_starname_list.Count == _datasets_namedstars.Count);
+
+            _starnametimer.Start();                                      // and do another tick..
         }
 
         //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
