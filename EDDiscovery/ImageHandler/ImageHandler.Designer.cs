@@ -60,6 +60,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.comboBoxScanFor = new ExtendedControls.ComboBoxCustom();
             this.comboBoxFormat = new ExtendedControls.ComboBoxCustom();
+            this.label10 = new System.Windows.Forms.Label();
             this.groupBox_Preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox_Prevcontrols.SuspendLayout();
@@ -102,6 +103,7 @@
             this.groupBox_Prevcontrols.BackColorScaling = 0.5F;
             this.groupBox_Prevcontrols.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox_Prevcontrols.BorderColorScaling = 0.5F;
+            this.groupBox_Prevcontrols.Controls.Add(this.label10);
             this.groupBox_Prevcontrols.Controls.Add(this.groupBoxCropSettings);
             this.groupBox_Prevcontrols.Controls.Add(this.checkBoxCropImage);
             this.groupBox_Prevcontrols.Controls.Add(this.checkBoxPreview);
@@ -323,9 +325,9 @@
             this.checkBoxAutoConvert.Location = new System.Drawing.Point(18, 19);
             this.checkBoxAutoConvert.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoConvert.Name = "checkBoxAutoConvert";
-            this.checkBoxAutoConvert.Size = new System.Drawing.Size(165, 17);
+            this.checkBoxAutoConvert.Size = new System.Drawing.Size(200, 17);
             this.checkBoxAutoConvert.TabIndex = 0;
-            this.checkBoxAutoConvert.Text = "Auto convert ED screenshots";
+            this.checkBoxAutoConvert.Text = "Auto convert ED/Steam screenshots";
             this.checkBoxAutoConvert.TickBoxReductionSize = 10;
             this.checkBoxAutoConvert.UseVisualStyleBackColor = true;
             this.checkBoxAutoConvert.CheckedChanged += new System.EventHandler(this.checkBoxAutoConvert_CheckedChanged);
@@ -335,9 +337,9 @@
             this.textBoxScreenshotsDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.textBoxScreenshotsDir.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxScreenshotsDir.BorderColorScaling = 0.5F;
-            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(184, 42);
+            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(198, 42);
             this.textBoxScreenshotsDir.Name = "textBoxScreenshotsDir";
-            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(311, 20);
+            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(297, 20);
             this.textBoxScreenshotsDir.TabIndex = 1;
             this.textBoxScreenshotsDir.Leave += new System.EventHandler(this.textBoxScreenshotsDir_Leave);
             // 
@@ -363,9 +365,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(15, 45);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(122, 13);
+            this.label1.Size = new System.Drawing.Size(160, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "ED Screenshot directory";
+            this.label1.Text = "ED/Stream Screenshot directory";
             // 
             // textBoxFileNameExample
             // 
@@ -406,9 +408,9 @@
             this.textBoxOutputDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.textBoxOutputDir.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxOutputDir.BorderColorScaling = 0.5F;
-            this.textBoxOutputDir.Location = new System.Drawing.Point(184, 68);
+            this.textBoxOutputDir.Location = new System.Drawing.Point(198, 68);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
-            this.textBoxOutputDir.Size = new System.Drawing.Size(311, 20);
+            this.textBoxOutputDir.Size = new System.Drawing.Size(297, 20);
             this.textBoxOutputDir.TabIndex = 3;
             this.textBoxOutputDir.Leave += new System.EventHandler(this.textBoxOutputDir_Leave);
             // 
@@ -544,6 +546,14 @@
             this.comboBoxFormat.ValueMember = null;
             this.comboBoxFormat.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxFormat_SelectedIndexChanged);
             // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(8, 252);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(100, 65);
+            this.label10.TabIndex = 11;
+            this.label10.Text = "For Steam, select Scan For JPG and turn off remove orginals";
+            // 
             // ImageHandler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -599,5 +609,6 @@
         private ExtendedControls.GroupBoxCustom groupBox_Prevcontrols;
         private System.Windows.Forms.Label label9;
         private ExtendedControls.ComboBoxCustom comboBoxScanFor;
+        private System.Windows.Forms.Label label10;
     }
 }
