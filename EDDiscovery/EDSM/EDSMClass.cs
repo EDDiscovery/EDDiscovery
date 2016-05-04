@@ -1,10 +1,12 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
+using EDDiscovery2.EDDB;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -221,6 +223,30 @@ namespace EDDiscovery2.EDSM
             return retstr;
         }
 
+
+        internal string GetHiddenSystems()
+        {
+            EDDBClass eddb = new EDDBClass();
+
+            try
+            {
+                string edsmhiddensystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmhiddensystems.json");
+                bool newfile = false;
+                eddb.DownloadFile("http://www.edsm.net/api-v1/hidden-systems", edsmhiddensystems, out newfile);
+
+                string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
+
+                return json;
+            }
+            
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Exception: {ex.Message}");
+                Trace.WriteLine($"ETrace: {ex.StackTrace}");
+                return null;
+            }
+        
+        }
 
         public List<DistanceClass> GetDistances(string systemname)
         {
