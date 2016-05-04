@@ -304,6 +304,33 @@ namespace EDDiscovery.DB
             return true;
         }
 
+        public static bool Delete(string name)
+        {
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            {
+                cn.Open();
+
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = cn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandTimeout = 30;
+                    cmd.CommandText = "Delete from Systems where Name=@Name";
+                    cmd.Parameters.AddWithValue("@Name", name);
+
+                    SQLiteDBClass.SqlNonQueryText(cn, cmd);
+
+                }
+
+
+                cn.Close();
+
+            }
+            return true;
+        }
+
+
+
         public static List<SystemClass> ParseEDSC(string json, ref string date)
         {
             JObject edsc = null;
