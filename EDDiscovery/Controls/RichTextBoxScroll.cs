@@ -11,6 +11,16 @@ namespace ExtendedControls
 {
     public class RichTextBoxScroll : Panel
     {
+        public class RichTextBoxBack : RichTextBox
+        {
+            public IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
+            {
+                Message message = Message.Create(this.Handle, msg, wparam, lparam);
+                this.WndProc(ref message);
+                return message.Result;
+            }
+        }
+
         // BackColor is the colour of the panel. 
         // if BorderColor is set, BackColor gets shown, with BorderColor on top.
         // BorderStyle is also applied by windows around the control, set to None for BorderColor only
@@ -23,7 +33,7 @@ namespace ExtendedControls
 
         public override string Text { get { return TextBox.Text; } set { TextBox.Text = value; } }                // return only textbox text
 
-        public RichTextBox TextBox;                 // Use these with caution.
+        public RichTextBoxBack TextBox;                 // Use these with caution.
         public VScrollBarCustom ScrollBar;
 
         #region Public Functions
@@ -71,7 +81,7 @@ namespace ExtendedControls
 
         public RichTextBoxScroll() : base()
         {
-            TextBox = new RichTextBox();
+            TextBox = new RichTextBoxBack();
             ScrollBar = new VScrollBarCustom();
             Controls.Add(TextBox);
             Controls.Add(ScrollBar);
@@ -148,9 +158,6 @@ namespace ExtendedControls
             //Console.WriteLine("With Font " + TextBox.Font.Name + ":" + TextBox.Font.Size + " Estimate " + textboxlinesestimate + " from " + TextBox.Size.Height + " est size " + pxsize);
         }
 
-
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
         const int EM_GETFIRSTVISIBLELINE = 0x00CE;
         const int EM_LINESCROLL = 0x00B6;
         const int EM_GETLINECOUNT = 0x00BA;
@@ -173,8 +180,8 @@ namespace ExtendedControls
 
         private void UpdateVscroll()            // from the richtext, set the scroll bar
         {
-            int firstVisibleLine = unchecked((int)(long)SendMessage(TextBox.Handle, EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
-            int linecount = unchecked((int)(long)SendMessage(TextBox.Handle, EM_GETLINECOUNT, (IntPtr)0, (IntPtr)0));
+            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
+            int linecount = unchecked((int)(long)TextBox.SendMessage(EM_GETLINECOUNT, (IntPtr)0, (IntPtr)0));
             //Console.WriteLine("Scroll State Lines: " + linecount + " FVL: " + firstVisibleLine + " textlines " + textboxlinesestimate );
             ScrollBar.SetValueMaximumLargeChange(firstVisibleLine, linecount - 1, textboxlinesestimate);
 
@@ -184,14 +191,14 @@ namespace ExtendedControls
 
         private void ScrollToBar()              // from the scrollbar, scroll first line to value
         {
-            int firstVisibleLine = unchecked((int)(long)SendMessage(TextBox.Handle, EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
+            int firstVisibleLine = unchecked((int)(long)TextBox.SendMessage(EM_GETFIRSTVISIBLELINE, (IntPtr)0, (IntPtr)0));
             int scrollvalue = ScrollBar.Value;
             int delta = scrollvalue - firstVisibleLine;
 
             //Console.WriteLine("Scroll Bar:" + scrollvalue + " FVL: " + firstVisibleLine + " delta " + delta);
             if (delta != 0)
             {
-                SendMessage(TextBox.Handle, EM_LINESCROLL, (IntPtr)0, (IntPtr)(scrollvalue - firstVisibleLine));
+                TextBox.SendMessage(EM_LINESCROLL, (IntPtr)0, (IntPtr)(scrollvalue - firstVisibleLine));
             }
         }
 

@@ -30,6 +30,7 @@ namespace EDDiscovery2.ImageHandler
             "DD-MM-YYYY HH-MM-SS Sysname",
             "MM-DD-YYYY HH-MM-SS Sysname",
             "Keep original"});
+            this.comboBoxScanFor.Items.AddRange(new string[] { "bmp -ED Launcher", "jpg -Steam" });
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -37,8 +38,8 @@ namespace EDDiscovery2.ImageHandler
             _discoveryForm = discoveryForm;
             db = new SQLiteDBClass();
 
-            string ScreenshotsDirdefault = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous";
-            string OutputDirdefault = ScreenshotsDirdefault + "\\Converted";
+            string ScreenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+            string OutputDirdefault = Path.Combine(ScreenshotsDirdefault, "Converted");
 
             try
             {
@@ -50,8 +51,13 @@ namespace EDDiscovery2.ImageHandler
             {
                 comboBoxFileNameFormat.SelectedIndex = db.GetSettingInt("comboBoxFileNameFormat", 0);
             }
-            catch {}
+            catch { }
 
+            try
+            {
+                comboBoxScanFor.SelectedIndex = db.GetSettingInt("comboBoxScanFor", 0);
+            }
+            catch { }
 
             checkBoxAutoConvert.Checked = db.GetSettingBool("ImageHandlerAutoconvert", false);
             checkBoxRemove.Checked = db.GetSettingBool("checkBoxRemove", false);
@@ -85,7 +91,7 @@ namespace EDDiscovery2.ImageHandler
                 watchfolder = new System.IO.FileSystemWatcher();
                 watchfolder.Path = textBoxScreenshotsDir.Text;
 
-                watchfolder.Filter = "*.BMP";
+                watchfolder.Filter = "*." + comboBoxScanFor.Text.Substring(0,comboBoxScanFor.Text.IndexOf(" "));
                 watchfolder.NotifyFilter = NotifyFilters.FileName;
                 watchfolder.Created += watcher;
                 watchfolder.EnableRaisingEvents = true;
@@ -98,24 +104,36 @@ namespace EDDiscovery2.ImageHandler
 
         private void watcher(object sender, System.IO.FileSystemEventArgs e)
         {
+            if (!checkBoxAutoConvert.Checked)
+            {
+                return;
+            }
+
+            bool checkboxremove = false;
+            bool checkboxpreview = false;
+
+            Invoke((MethodInvoker)delegate
+            {
+                checkboxremove = checkBoxRemove.Checked;
+                checkboxpreview = checkBoxPreview.Checked;
+            });
+
+            string cur_sysname = "Unknown System";
+            ISystem cursys = _discoveryForm.TravelControl.GetCurrentSystem();
+
+            if (cursys != null)
+                cur_sysname = cursys.name;
+
+            Convert(e.FullPath,cur_sysname,checkboxremove,checkboxpreview);
+        }
+
+        // preparing for a convert stored function by hiving this out to a separate function..
+
+        private void Convert(string inputfile, string cur_sysname, bool removeinputfile,bool previewinputfile) // can call independent of watcher
+        {                                                                             
             try
             {
                 string output_folder = textBoxOutputDir.Text;
-                string cur_sysname = "Unknown System";
-
-                ISystem cursys = null;
-
-                if (!checkBoxAutoConvert.Checked)
-                {
-                    return;
-                }
-
-                cursys = _discoveryForm.TravelControl.GetCurrentSystem();
-
-                if (cursys!=null)
-                {
-                    cur_sysname = cursys.name;
-                }
 
                 if (!Directory.Exists(textBoxOutputDir.Text))
                     Directory.CreateDirectory(textBoxOutputDir.Text);
@@ -125,12 +143,11 @@ namespace EDDiscovery2.ImageHandler
 
                 int formatindex=0;
                 bool hires=false;
-                bool checkboxremove = false;
-                bool checkboxpreview = false;
                 bool cropimage = false;
                 Rectangle crop = new Rectangle();
                 string extension = null;
                 bool cannotexecute = false;
+                string inputext = null;
 
                 Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
                 {                                                   // I've tested that this is required..      
@@ -138,21 +155,19 @@ namespace EDDiscovery2.ImageHandler
                                                                     // other items are also picked up here in one go.
                     formatindex = comboBoxFileNameFormat.SelectedIndex;
                     hires = checkBoxHires.Checked;
-                    checkboxremove = checkBoxRemove.Checked;
-                    checkboxpreview = checkBoxPreview.Checked;
                     cropimage = checkBoxCropImage.Checked;
                     crop.X = numericUpDownLeft.Value;      
                     crop.Y = numericUpDownTop.Value;  
                     crop.Width = numericUpDownWidth.Value;
                     crop.Height = numericUpDownHeight.Value;
                     extension = "." + comboBoxFormat.Text;
-                    cannotexecute = textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text) && extension.Equals(".bmp");
-
+                    inputext = comboBoxScanFor.Text.Substring(0, comboBoxScanFor.Text.IndexOf(" "));
+                    cannotexecute = textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text) && comboBoxFormat.Text.Equals(inputext);
                 });
 
                 if ( cannotexecute )                                // cannot store BMPs into the Elite dangerous folder as it creates a circular condition
                 {
-                    MessageBox.Show("Cannot convert .bmp files into the same folder as they are stored into by Elite Dangerous" + Environment.NewLine + Environment.NewLine + "Pick a different conversion folder or a different output format", "WARNING", MessageBoxButtons.OK);
+                    MessageBox.Show("Cannot convert " + inputext + " into the same folder as they are stored into" + Environment.NewLine + Environment.NewLine + "Pick a different conversion folder or a different output format", "WARNING", MessageBoxButtons.OK);
                     return;
                 }
 
@@ -160,12 +175,12 @@ namespace EDDiscovery2.ImageHandler
                 int index = 0;
                 do                                        // add _N on the filename for index>0, to make them unique.
                 {
-                    store_name = output_folder + "\\" + CreateFileName(cur_sysname, e.FullPath, formatindex, hires) + (index==0?"":"_"+index) + extension;
+                    store_name = Path.Combine(output_folder, CreateFileName(cur_sysname, inputfile, formatindex, hires) + (index==0?"":"_"+index) + extension);
                     index++;
                 } while (File.Exists(store_name));          // if name exists, pick another
 
                 //var bmp = System.Drawing.Bitmap.FromFile(e.FullPath);
-                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(e.FullPath);
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(inputfile);
                 System.Drawing.Bitmap croppedbmp = null;
 
                 /* MKW - crop image */
@@ -222,22 +237,23 @@ namespace EDDiscovery2.ImageHandler
                 bmp.Dispose();              // need to free the bmp before any more operations on the file..
                 croppedbmp.Dispose();       // and ensure this one is freed of handles to the file.
 
-                FileInfo fi = new FileInfo(e.FullPath);
+                FileInfo fi = new FileInfo(inputfile);
                 File.SetCreationTime(store_name, fi.CreationTime);
 
-                if (checkboxpreview)        // if preview, load in
+                if (previewinputfile)        // if preview, load in
                 {
                     pictureBox1.ImageLocation = store_name;
                     pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
                 }
 
-                if (checkboxremove)         // if remove, delete original picture
+                if (removeinputfile)         // if remove, delete original picture
                 {
-                    File.Delete(e.FullPath);
+                    File.Delete(inputfile);
                 }
 
-                Invoke((MethodInvoker)delegate { TravelHistoryControl.LogText("Converted " + e.Name + " to " + store_name + Environment.NewLine ); });
-                
+                Invoke((MethodInvoker)delegate {
+                    TravelHistoryControl.LogText("Converted " + Path.GetFileName(inputfile) + " to " + 
+                        Path.GetFileName(store_name) + Environment.NewLine ); });
             }
             catch (Exception ex)
             {
@@ -313,7 +329,6 @@ namespace EDDiscovery2.ImageHandler
         private void comboBoxFileNameFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             db.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
-
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
         }
 
@@ -401,6 +416,14 @@ namespace EDDiscovery2.ImageHandler
                 textBoxOutputDir.Text = dlg.SelectedPath;
                 db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
             }
+        }
+
+        private void comboBoxScanFor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            db.PutSettingInt("comboBoxScanFor", comboBoxScanFor.SelectedIndex);
+
+            if ( watchfolder != null )      // if already watching, restart it
+                StartWatcher();
         }
     }
 }

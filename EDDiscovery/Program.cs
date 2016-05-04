@@ -60,10 +60,17 @@ namespace EDDiscovery
             string mutexId = string.Format("Global\\{{{0}}}", appGuid);
             mutex = new Mutex(false, mutexId);
 
-            var allowEveryoneRule = new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.FullControl, AccessControlType.Allow);
-            var securitySettings = new MutexSecurity();
-            securitySettings.AddAccessRule(allowEveryoneRule);
-            mutex.SetAccessControl(securitySettings);
+            try
+            {
+                var allowEveryoneRule = new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.FullControl, AccessControlType.Allow);
+                var securitySettings = new MutexSecurity();
+                securitySettings.AddAccessRule(allowEveryoneRule);
+                mutex.SetAccessControl(securitySettings);
+            }
+            catch (PlatformNotSupportedException)
+            {
+                System.Diagnostics.Trace.WriteLine("Unable to set mutex security");
+            }
         }
 
         public SingleGlobalInstance(int timeOut)

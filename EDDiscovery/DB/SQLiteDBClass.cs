@@ -51,14 +51,14 @@ namespace EDDiscovery.DB
         {
             try
             {
-                string datapath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\EDDiscovery";
+                string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "EDDiscovery");
 
 
                 if (!Directory.Exists(datapath))
                     Directory.CreateDirectory(datapath);
 
 
-                return datapath + "\\EDDiscovery.sqlite";
+                return Path.Combine(datapath, "EDDiscovery.sqlite");
             }
             catch (Exception ex)
             {
