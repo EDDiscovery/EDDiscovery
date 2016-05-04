@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -31,27 +31,28 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 return Add(cn);
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(DbConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)";
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@time", Time);
-                cmd.Parameters.AddWithValue("@note", Note);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@note", Note);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
@@ -69,24 +70,25 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnection cn)
+        private bool Update(DbConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id";
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@Name", Name);
-                cmd.Parameters.AddWithValue("@Note", Note);
-                cmd.Parameters.AddWithValue("@Time", Time);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@Name", Name);
+                cmd.AddParameterWithValue("@Note", Note);
+                cmd.AddParameterWithValue("@Time", Time);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
                 SQLiteDBClass.globalSystemNotes[Name.ToLower()] = this;

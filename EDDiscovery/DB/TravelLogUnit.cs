@@ -3,7 +3,7 @@ using EDDiscovery.DB;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -50,28 +50,29 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 return Add(cn);
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(DbConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)";
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@type", type);
-                cmd.Parameters.AddWithValue("@size", Size);
-                cmd.Parameters.AddWithValue("@Path", Path);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@type", type);
+                cmd.AddParameterWithValue("@size", Size);
+                cmd.AddParameterWithValue("@Path", Path);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
@@ -86,25 +87,26 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnection cn)
+        private bool Update(DbConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id";
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@Name", Name);
-                cmd.Parameters.AddWithValue("@Type", type);
-                cmd.Parameters.AddWithValue("@size", Size);
-                cmd.Parameters.AddWithValue("@Path", Path);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@Name", Name);
+                cmd.AddParameterWithValue("@Type", type);
+                cmd.AddParameterWithValue("@size", Size);
+                cmd.AddParameterWithValue("@Path", Path);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
@@ -117,10 +119,10 @@ namespace EDDiscovery2.DB
         {
             List<TravelLogUnit> list = new List<TravelLogUnit>();
 
-
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
-                using (SQLiteCommand cmd = new SQLiteCommand())
+                using (DbCommand cmd = cn.CreateCommand())
                 {
                     DataSet ds = null;
                     cmd.Connection = cn;

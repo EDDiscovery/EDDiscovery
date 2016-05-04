@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
-using System.Data.SQLite;
 
 namespace EDDiscovery.DB
 {
@@ -72,27 +72,28 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 return Add(cn);
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(DbConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Insert into routes_expeditions (name, start, end) values (@name, @start, @end)";
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@start", StartDate);
-                cmd.Parameters.AddWithValue("@end", EndDate);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@start", StartDate);
+                cmd.AddParameterWithValue("@end", EndDate);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
@@ -102,14 +103,14 @@ namespace EDDiscovery.DB
                     Id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
                 }
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
                     cmd2.CommandTimeout = 30;
                     cmd2.CommandText = "INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)";
-                    cmd2.Parameters.Add("@routeid", DbType.String);
-                    cmd2.Parameters.Add("@name", DbType.String);
+                    cmd2.AddParameter("@routeid", DbType.String);
+                    cmd2.AddParameter("@name", DbType.String);
 
                     foreach (var sysname in Systems)
                     {
@@ -125,45 +126,46 @@ namespace EDDiscovery.DB
 
         public bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnection cn)
+        private bool Update(DbConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "UPDATE routes_expeditions SET name=@name, start=@start, end=@end WHERE id=@id";
-                cmd.Parameters.AddWithValue("@id", Id);
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@start", StartDate);
-                cmd.Parameters.AddWithValue("@end", EndDate);
+                cmd.AddParameterWithValue("@id", Id);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@start", StartDate);
+                cmd.AddParameterWithValue("@end", EndDate);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
                     cmd2.CommandTimeout = 30;
                     cmd2.CommandText = "DELETE FROM route_systems WHERE routeid=@routeid";
-                    cmd2.Parameters.AddWithValue("@routeid", Id);
+                    cmd2.AddParameterWithValue("@routeid", Id);
                     SQLiteDBClass.SqlNonQueryText(cn, cmd2);
                 }
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand())
                 {
                     cmd2.Connection = cn;
                     cmd2.CommandType = CommandType.Text;
                     cmd2.CommandTimeout = 30;
                     cmd2.CommandText = "INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)";
-                    cmd2.Parameters.Add("@routeid", DbType.String);
-                    cmd2.Parameters.Add("@name", DbType.String);
+                    cmd2.AddParameter("@routeid", DbType.String);
+                    cmd2.AddParameter("@name", DbType.String);
 
                     foreach (var sysname in Systems)
                     {
