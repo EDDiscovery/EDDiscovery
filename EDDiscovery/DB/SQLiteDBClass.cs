@@ -12,7 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-
 namespace EDDiscovery.DB
 {
     public static class SQLiteDBExtensions
@@ -80,6 +79,8 @@ namespace EDDiscovery.DB
                 if (ConnectionString == null)
                 {
                     ConnectionString = "Data Source=" + dbfile + ";Pooling=true;";
+
+                    DbFactory = GetSqliteProviderFactory();
 
                     if (!File.Exists(dbfile))
                     {
@@ -625,6 +626,65 @@ namespace EDDiscovery.DB
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        private DbProviderFactory GetSqliteProviderFactory()
+        {
+            var factory = GetWindowsSqliteProviderFactory();
+
+            if (DbFactoryWorks(factory))
+            {
+                return factory;
+            }
+
+            factory = GetMonoSqliteProviderFactory();
+
+            if (DbFactoryWorks(factory))
+            {
+                return factory;
+            }
+
+            throw new InvalidOperationException("Unable to get a working Sqlite driver");
+        }
+
+        private bool DbFactoryWorks(DbProviderFactory factory)
+        {
+            if (factory != null)
+            {
+                try
+                {
+                    using (var conn = factory.CreateConnection())
+                    {
+                        conn.ConnectionString = ConnectionString;
+                        conn.Open();
+                        return true;
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
+        }
+
+        private DbProviderFactory GetMonoSqliteProviderFactory()
+        {
+            try
+            {
+                var asm = System.Reflection.Assembly.LoadWithPartialName("Mono.Data.Sqlite");
+                var factorytype = asm.GetType("Mono.Data.Sqlite.SqliteFactory");
+                return (DbProviderFactory)factorytype.GetConstructor(new Type[0]).Invoke(new object[0]);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private DbProviderFactory GetWindowsSqliteProviderFactory()
+        {
+            return new System.Data.SQLite.SQLiteFactory();
         }
 
         public DbConnection CreateConnection()
