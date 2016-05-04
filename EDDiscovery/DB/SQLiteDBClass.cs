@@ -56,7 +56,7 @@ namespace EDDiscovery.DB
 
     public class SQLiteDBClass
     {
-        internal static DbProviderFactory DbFactory = System.Data.SQLite.SQLiteFactory.Instance;
+        internal static DbProviderFactory DbFactory = null;
         internal static string ConnectionString;
         string dbfile;
 
@@ -630,14 +630,12 @@ namespace EDDiscovery.DB
 
         private DbProviderFactory GetSqliteProviderFactory()
         {
-            var factory = GetWindowsSqliteProviderFactory();
-
-            if (DbFactoryWorks(factory))
+            if (WindowsSqliteProviderWorks())
             {
-                return factory;
+                return GetWindowsSqliteProviderFactory();
             }
 
-            factory = GetMonoSqliteProviderFactory();
+            var factory = GetMonoSqliteProviderFactory();
 
             if (DbFactoryWorks(factory))
             {
@@ -645,6 +643,22 @@ namespace EDDiscovery.DB
             }
 
             throw new InvalidOperationException("Unable to get a working Sqlite driver");
+        }
+
+        private bool WindowsSqliteProviderWorks()
+        {
+            try
+            {
+                using (var conn = new SQLiteConnection(ConnectionString))
+                {
+                    conn.Open();
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private bool DbFactoryWorks(DbProviderFactory factory)
@@ -684,7 +698,14 @@ namespace EDDiscovery.DB
 
         private DbProviderFactory GetWindowsSqliteProviderFactory()
         {
-            return new System.Data.SQLite.SQLiteFactory();
+            try
+            {
+                return new System.Data.SQLite.SQLiteFactory();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public DbConnection CreateConnection()
