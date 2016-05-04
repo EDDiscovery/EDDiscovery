@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Specialized;
 using System.Net;
 
@@ -33,23 +34,30 @@ namespace EDDiscovery2.HTTP
             string message = "";
             try
             {
-                JObject jbody = JObject.Parse(Body);
-                JArray jerrors = (JArray)jbody["errors"];
-                if (jerrors != null)
+                if (Body.Length > 0)
                 {
-                    foreach (JObject jerror in jerrors)
+                    JObject jbody = JObject.Parse(Body);
+                    JArray jerrors = (JArray)jbody["errors"];
+                    if (jerrors != null)
                     {
-                        if (message.Length > 0)
+                        foreach (JObject jerror in jerrors)
                         {
-                            message += "\n";
+                            if (message.Length > 0)
+                            {
+                                message += "\n";
+                            }
+                            message += $"{jerror["title"]} - {jerror["detail"]}";
                         }
-                        message += $"{jerror["title"]} - {jerror["detail"]}";
                     }
                 }
+                else
+                {
+                    message = $"Server Error\nHTTP response: {StatusCode.ToString()}\n\nCheck the logs for more details";
+                }
             }
-            catch
+            catch(Exception e)
             {
-                message = "Unknown JSON API error";
+                message = $"Unknown JSON API error\n\nDetails: {e}\n\nCheck the logs for more details";
             }
             return message;
         }
