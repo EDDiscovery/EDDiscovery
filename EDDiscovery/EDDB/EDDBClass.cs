@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -267,7 +268,8 @@ namespace EDDiscovery2.EDDB
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 cn.Open();
                 int nr=0;

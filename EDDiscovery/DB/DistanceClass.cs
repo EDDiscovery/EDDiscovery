@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -235,17 +236,18 @@ namespace EDDiscovery.DB
 
         public static bool Delete(DistancsEnum distsource)
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 cn.Open();
 
-                using (IDbCommand cmd = cn.CreateCommand())
+                using (DbCommand cmd = cn.CreateCommand())
                 {
                     cmd.Connection = cn;
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
                     cmd.CommandText = "Delete from Distances where Status=@Status";
-                    SQLiteDBClass.AddParameter(cmd, "@Status", (int)distsource);
+                    cmd.AddParameterWithValue("@Status", (int)distsource);
 
 
                     SQLiteDBClass.SqlNonQueryText(cn, cmd);
@@ -270,10 +272,11 @@ namespace EDDiscovery.DB
 
                 sw.Start();
 
-                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+                var db = new SQLiteDBClass();
+                using (DbConnection cn = db.CreateConnection())
                 {
                     cn.Open();
-                    IDbTransaction transaction = cn.BeginTransaction();
+                    DbTransaction transaction = cn.BeginTransaction();
                     foreach (DistanceClass dist in dists)
                     {
                         dist.Store(cn);
@@ -298,14 +301,15 @@ namespace EDDiscovery.DB
 
         public bool Store()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 bool ret;
                  ret = Store(cn);
 
                  if (ret == true)
                  {
-                     using (IDbCommand cmd2 = cn.CreateCommand())
+                     using (DbCommand cmd2 = cn.CreateCommand())
                      {
                          cmd2.Connection = cn;
                          cmd2.CommandType = CommandType.Text;
@@ -322,23 +326,23 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Store(IDbConnection cn)
+        private bool Store(DbConnection cn)
         {
             if (CommanderCreate == null)
                 CommanderCreate = "";
 
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Insert into Distances (NameA, NameB, Dist, CommanderCreate, CreateTime, Status) values (@NameA, @NameB, @Dist, @CommanderCreate, @CreateTime, @Status)";
-                SQLiteDBClass.AddParameter(cmd, "@NameA", NameA);
-                SQLiteDBClass.AddParameter(cmd, "@NameB", NameB);
-                SQLiteDBClass.AddParameter(cmd, "@Dist", Dist);
-                SQLiteDBClass.AddParameter(cmd, "@CommanderCreate", CommanderCreate);
-                SQLiteDBClass.AddParameter(cmd, "@CreateTime", CreateTime);
-                SQLiteDBClass.AddParameter(cmd, "@Status", Status);
+                cmd.AddParameterWithValue("@NameA", NameA);
+                cmd.AddParameterWithValue("@NameB", NameB);
+                cmd.AddParameterWithValue("@Dist", Dist);
+                cmd.AddParameterWithValue("@CommanderCreate", CommanderCreate);
+                cmd.AddParameterWithValue("@CreateTime", CreateTime);
+                cmd.AddParameterWithValue("@Status", Status);
 
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
@@ -352,27 +356,28 @@ namespace EDDiscovery.DB
 
         public bool Update()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(IDbConnection cn)
+        private bool Update(DbConnection cn)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Update Distances  set NameA=@NameA, NameB=@NameB, Dist=@Dist, commandercreate=@commandercreate, CreateTime=@CreateTime, status=@status  where ID=@id";
-                SQLiteDBClass.AddParameter(cmd, "@ID", id);
-                SQLiteDBClass.AddParameter(cmd, "@NameA", NameA);
-                SQLiteDBClass.AddParameter(cmd, "@NameB", NameB);
-                SQLiteDBClass.AddParameter(cmd, "@Dist", Dist);
-                SQLiteDBClass.AddParameter(cmd, "@CommanderCreate", CommanderCreate);
-                SQLiteDBClass.AddParameter(cmd, "@CreateTime", CreateTime);
-                SQLiteDBClass.AddParameter(cmd, "@Status", Status);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@NameA", NameA);
+                cmd.AddParameterWithValue("@NameB", NameB);
+                cmd.AddParameterWithValue("@Dist", Dist);
+                cmd.AddParameterWithValue("@CommanderCreate", CommanderCreate);
+                cmd.AddParameterWithValue("@CreateTime", CreateTime);
+                cmd.AddParameterWithValue("@Status", Status);
 
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
@@ -383,21 +388,22 @@ namespace EDDiscovery.DB
 
         public bool Delete()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 return Delete(cn);
             }
         }
 
-        private bool Delete(IDbConnection cn)
+        private bool Delete(DbConnection cn)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Delete From  Distances where ID=@id";
-                SQLiteDBClass.AddParameter(cmd, "@ID", id);
+                cmd.AddParameterWithValue("@ID", id);
 
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
@@ -445,9 +451,10 @@ namespace EDDiscovery.DB
             List<DistanceClass> dists = new List<DistanceClass>();
             try
             {
-                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+                var db = new SQLiteDBClass();
+                using (DbConnection cn = db.CreateConnection())
                 {
-                    using (IDbCommand cmd = cn.CreateCommand())
+                    using (DbCommand cmd = cn.CreateCommand())
                     {
                         DataSet ds = null;
                         DataSet ds2 = null;
@@ -456,15 +463,15 @@ namespace EDDiscovery.DB
                         cmd.CommandTimeout = 30;
                         cmd.CommandText = "SELECT * FROM Distances WHERE NameA = @NameA COLLATE NOCASE  and NameB = @NameB COLLATE NOCASE ";
 
-                        SQLiteDBClass.AddParameter(cmd, "@NameA", s1.name);
-                        SQLiteDBClass.AddParameter(cmd, "@NameB", s2.name);
+                        cmd.AddParameterWithValue("@NameA", s1.name);
+                        cmd.AddParameterWithValue("@NameB", s2.name);
 
-                        ds = SQLiteDBClass.SqlQueryText(cn, cmd);
+                        ds = SQLiteDBClass.QueryText(cn, cmd);
 
                         cmd.Parameters.Clear();
-                        SQLiteDBClass.AddParameter(cmd, "@NameA", s2.name);
-                        SQLiteDBClass.AddParameter(cmd, "@NameB", s1.name);
-                        ds2 = SQLiteDBClass.SqlQueryText(cn, cmd);
+                        cmd.AddParameterWithValue("@NameA", s2.name);
+                        cmd.AddParameterWithValue("@NameB", s1.name);
+                        ds2 = SQLiteDBClass.QueryText(cn, cmd);
 
 
                         if (ds.Tables.Count > 0)

@@ -1073,6 +1073,9 @@ namespace EDDiscovery
                 string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
                 bool newfile = false;
                 string rwsysfiletime = "2014-01-01 00:00:00";
+
+                RemoveHiddenSystems(edsm);
+
                 LogText("Get systems from EDSM." + Environment.NewLine);
 
                 eddb.DownloadFile("http://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
@@ -1127,8 +1130,36 @@ namespace EDDiscovery
 
         }
 
+        private void RemoveHiddenSystems(EDSMClass edsm)
+        {
+            LogText("Get hidden systems from EDSM." + Environment.NewLine);
+
+            _db.GetAllSystems();
+            string strhiddensystems = edsm.GetHiddenSystems();
+
+            if (strhiddensystems == null || strhiddensystems.Length < 6)
+                return;
+
+
+            JArray hiddensystems = (JArray)JArray.Parse(strhiddensystems);
+
+            foreach (JObject hsys in hiddensystems)
+            {
+                // Check if sys exists first
+                SystemClass sys = SystemData.GetSystem(hsys["system"].Value<string>());
+                if (sys != null)
+                {
+                    SystemClass.Delete(sys.name);
+                }
+            }
+            
+
+
+
+            }
+
         #endregion
 
-        
+
     }
 }

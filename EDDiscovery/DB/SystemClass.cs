@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -280,17 +281,18 @@ namespace EDDiscovery.DB
 
         public static bool Delete(SystemStatusEnum source)
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 cn.Open();
 
-                using (IDbCommand cmd = cn.CreateCommand())
+                using (DbCommand cmd = cn.CreateCommand())
                 {
                     cmd.Connection = cn;
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
                     cmd.CommandText = "Delete from Systems where Status=@Status";
-                    SQLiteDBClass.AddParameter(cmd, "@Status", (int)source);
+                    cmd.AddParameterWithValue("@Status", (int)source);
 
                     SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
@@ -302,6 +304,34 @@ namespace EDDiscovery.DB
             }
             return true;
         }
+
+        public static bool Delete(string name)
+        {
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
+            {
+                cn.Open();
+
+                using (DbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.Connection = cn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandTimeout = 30;
+                    cmd.CommandText = "Delete from Systems where Name=@Name";
+                    cmd.AddParameterWithValue("@Name", name);
+
+                    SQLiteDBClass.SqlNonQueryText(cn, cmd);
+
+                }
+
+
+                cn.Close();
+
+            }
+            return true;
+        }
+
+
 
         public static List<SystemClass> ParseEDSC(string json, ref string date)
         {
@@ -394,10 +424,11 @@ namespace EDDiscovery.DB
 
                 sw.Start();
 
-                using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+                var db = new SQLiteDBClass();
+                using (DbConnection cn = db.CreateConnection())
                 {
                     cn.Open();
-                    IDbTransaction transaction = cn.BeginTransaction();
+                    DbTransaction transaction = cn.BeginTransaction();
                     foreach (SystemClass system in systems)
                     {
 
@@ -428,15 +459,16 @@ namespace EDDiscovery.DB
 
         public bool Store()
         {
-            using (IDbConnection cn = SQLiteDBClass.CreateConnection())
+            var db = new SQLiteDBClass();
+            using (DbConnection cn = db.CreateConnection())
             {
                 return Store(cn, null);
             }
         }
 
-        public bool Store(IDbConnection cn, IDbTransaction transaction)
+        public bool Store(DbConnection cn, DbTransaction transaction)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 if (id_eddb != 0)
                 {
@@ -445,33 +477,33 @@ namespace EDDiscovery.DB
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
                     cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id,  security, eddb_updated_at, state, needs_permit) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit)";
-                    SQLiteDBClass.AddParameter(cmd, "@name", name);
-                    SQLiteDBClass.AddParameter(cmd, "@x", x);
-                    SQLiteDBClass.AddParameter(cmd, "@y", y);
-                    SQLiteDBClass.AddParameter(cmd, "@z", z);
-                    SQLiteDBClass.AddParameter(cmd, "@cr", cr);
-                    SQLiteDBClass.AddParameter(cmd, "@CommanderCreate", CommanderCreate);
-                    SQLiteDBClass.AddParameter(cmd, "@Createdate", CreateDate);
-                    SQLiteDBClass.AddParameter(cmd, "@CommanderUpdate", CommanderCreate);
-                    SQLiteDBClass.AddParameter(cmd, "@updatedate", CreateDate);
-                    SQLiteDBClass.AddParameter(cmd, "@Status", (int)status);
+                    cmd.AddParameterWithValue("@name", name);
+                    cmd.AddParameterWithValue("@x", x);
+                    cmd.AddParameterWithValue("@y", y);
+                    cmd.AddParameterWithValue("@z", z);
+                    cmd.AddParameterWithValue("@cr", cr);
+                    cmd.AddParameterWithValue("@CommanderCreate", CommanderCreate);
+                    cmd.AddParameterWithValue("@Createdate", CreateDate);
+                    cmd.AddParameterWithValue("@CommanderUpdate", CommanderCreate);
+                    cmd.AddParameterWithValue("@updatedate", CreateDate);
+                    cmd.AddParameterWithValue("@Status", (int)status);
 
                     
-                    SQLiteDBClass.AddParameter(cmd, "@id_eddb", id_eddb);
-                    SQLiteDBClass.AddParameter(cmd, "@population", population);
-                    SQLiteDBClass.AddParameter(cmd, "@faction", faction);
-                    SQLiteDBClass.AddParameter(cmd, "@government_id", government);
-                    SQLiteDBClass.AddParameter(cmd, "@allegiance_id", allegiance);
-                    SQLiteDBClass.AddParameter(cmd, "@primary_economy_id", primary_economy);
-                    SQLiteDBClass.AddParameter(cmd, "@security", security);
-                    SQLiteDBClass.AddParameter(cmd, "@eddb_updated_at", eddb_updated_at);
-                    SQLiteDBClass.AddParameter(cmd, "@state", state);
-                    SQLiteDBClass.AddParameter(cmd, "@needs_permit", needs_permit);
+                    cmd.AddParameterWithValue("@id_eddb", id_eddb);
+                    cmd.AddParameterWithValue("@population", population);
+                    cmd.AddParameterWithValue("@faction", faction);
+                    cmd.AddParameterWithValue("@government_id", government);
+                    cmd.AddParameterWithValue("@allegiance_id", allegiance);
+                    cmd.AddParameterWithValue("@primary_economy_id", primary_economy);
+                    cmd.AddParameterWithValue("@security", security);
+                    cmd.AddParameterWithValue("@eddb_updated_at", eddb_updated_at);
+                    cmd.AddParameterWithValue("@state", state);
+                    cmd.AddParameterWithValue("@needs_permit", needs_permit);
 
 
                     if (Note == null)
                         Note = "";
-                    SQLiteDBClass.AddParameter(cmd, "@Note", Note);
+                    cmd.AddParameterWithValue("@Note", Note);
 
                     SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
@@ -483,20 +515,20 @@ namespace EDDiscovery.DB
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
                     cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note)";
-                    SQLiteDBClass.AddParameter(cmd, "@name", name);
-                    SQLiteDBClass.AddParameter(cmd, "@x", x);
-                    SQLiteDBClass.AddParameter(cmd, "@y", y);
-                    SQLiteDBClass.AddParameter(cmd, "@z", z);
-                    SQLiteDBClass.AddParameter(cmd, "@cr", cr);
-                    SQLiteDBClass.AddParameter(cmd, "@CommanderCreate", CommanderCreate);
-                    SQLiteDBClass.AddParameter(cmd, "@Createdate", CreateDate);
-                    SQLiteDBClass.AddParameter(cmd, "@CommanderUpdate", CommanderCreate);
-                    SQLiteDBClass.AddParameter(cmd, "@updatedate", CreateDate);
-                    SQLiteDBClass.AddParameter(cmd, "@Status", (int)status);
+                    cmd.AddParameterWithValue("@name", name);
+                    cmd.AddParameterWithValue("@x", x);
+                    cmd.AddParameterWithValue("@y", y);
+                    cmd.AddParameterWithValue("@z", z);
+                    cmd.AddParameterWithValue("@cr", cr);
+                    cmd.AddParameterWithValue("@CommanderCreate", CommanderCreate);
+                    cmd.AddParameterWithValue("@Createdate", CreateDate);
+                    cmd.AddParameterWithValue("@CommanderUpdate", CommanderCreate);
+                    cmd.AddParameterWithValue("@updatedate", CreateDate);
+                    cmd.AddParameterWithValue("@Status", (int)status);
 
                     if (Note == null)
                         Note = "";
-                    SQLiteDBClass.AddParameter(cmd, "@Note", Note);
+                    cmd.AddParameterWithValue("@Note", Note);
 
 
 
@@ -508,67 +540,67 @@ namespace EDDiscovery.DB
             }
         }
 
-        public bool Update(IDbConnection cn, int id, IDbTransaction transaction)
+        public bool Update(DbConnection cn, int id, DbTransaction transaction)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Transaction = transaction;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit  where ID=@id";
 
-                SQLiteDBClass.AddParameter(cmd, "@id", id); 
-                SQLiteDBClass.AddParameter(cmd, "@name", name);
-                SQLiteDBClass.AddParameter(cmd, "@x", x);
-                SQLiteDBClass.AddParameter(cmd, "@y", y);
-                SQLiteDBClass.AddParameter(cmd, "@z", z);
-                SQLiteDBClass.AddParameter(cmd, "@cr", cr);
-                SQLiteDBClass.AddParameter(cmd, "@CommanderCreate", CommanderCreate);
-                SQLiteDBClass.AddParameter(cmd, "@Createdate", CreateDate);
-                SQLiteDBClass.AddParameter(cmd, "@CommanderUpdate", CommanderCreate);
-                SQLiteDBClass.AddParameter(cmd, "@updatedate", CreateDate);
-                SQLiteDBClass.AddParameter(cmd, "@Status", (int)status);
+                cmd.AddParameterWithValue("@id", id); 
+                cmd.AddParameterWithValue("@name", name);
+                cmd.AddParameterWithValue("@x", x);
+                cmd.AddParameterWithValue("@y", y);
+                cmd.AddParameterWithValue("@z", z);
+                cmd.AddParameterWithValue("@cr", cr);
+                cmd.AddParameterWithValue("@CommanderCreate", CommanderCreate);
+                cmd.AddParameterWithValue("@Createdate", CreateDate);
+                cmd.AddParameterWithValue("@CommanderUpdate", CommanderCreate);
+                cmd.AddParameterWithValue("@updatedate", CreateDate);
+                cmd.AddParameterWithValue("@Status", (int)status);
                 if (Note == null)
                     Note = "";
-                SQLiteDBClass.AddParameter(cmd, "@Note", Note);
+                cmd.AddParameterWithValue("@Note", Note);
 
 
-                SQLiteDBClass.AddParameter(cmd, "@id_eddb", id_eddb);
-                SQLiteDBClass.AddParameter(cmd, "@population", population);
-                SQLiteDBClass.AddParameter(cmd, "@faction", faction);
-                SQLiteDBClass.AddParameter(cmd, "@government_id", government);
-                SQLiteDBClass.AddParameter(cmd, "@allegiance_id", allegiance);
-                SQLiteDBClass.AddParameter(cmd, "@primary_economy_id", primary_economy);
-                SQLiteDBClass.AddParameter(cmd, "@security", security);
-                SQLiteDBClass.AddParameter(cmd, "@eddb_updated_at", eddb_updated_at);
-                SQLiteDBClass.AddParameter(cmd, "@state", state);
-                SQLiteDBClass.AddParameter(cmd, "@needs_permit", needs_permit);
+                cmd.AddParameterWithValue("@id_eddb", id_eddb);
+                cmd.AddParameterWithValue("@population", population);
+                cmd.AddParameterWithValue("@faction", faction);
+                cmd.AddParameterWithValue("@government_id", government);
+                cmd.AddParameterWithValue("@allegiance_id", allegiance);
+                cmd.AddParameterWithValue("@primary_economy_id", primary_economy);
+                cmd.AddParameterWithValue("@security", security);
+                cmd.AddParameterWithValue("@eddb_updated_at", eddb_updated_at);
+                cmd.AddParameterWithValue("@state", state);
+                cmd.AddParameterWithValue("@needs_permit", needs_permit);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
                 return true;
             }
         }
 
-        public bool UpdateEDSM(IDbConnection cn, int id, IDbTransaction transaction)
+        public bool UpdateEDSM(DbConnection cn, int id, DbTransaction transaction)
         {
-            using (IDbCommand cmd = cn.CreateCommand())
+            using (DbCommand cmd = cn.CreateCommand())
             {
                 cmd.Transaction = transaction;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status   where ID=@id";
 
-                SQLiteDBClass.AddParameter(cmd, "@id", id);
-                SQLiteDBClass.AddParameter(cmd, "@name", name);
-                SQLiteDBClass.AddParameter(cmd, "@x", x);
-                SQLiteDBClass.AddParameter(cmd, "@y", y);
-                SQLiteDBClass.AddParameter(cmd, "@z", z);
-                SQLiteDBClass.AddParameter(cmd, "@cr", cr);
-                SQLiteDBClass.AddParameter(cmd, "@CommanderCreate", CommanderCreate);
-                SQLiteDBClass.AddParameter(cmd, "@Createdate", CreateDate);
-                SQLiteDBClass.AddParameter(cmd, "@CommanderUpdate", CommanderCreate);
-                SQLiteDBClass.AddParameter(cmd, "@updatedate", CreateDate);
-                SQLiteDBClass.AddParameter(cmd, "@Status", (int)status);
+                cmd.AddParameterWithValue("@id", id);
+                cmd.AddParameterWithValue("@name", name);
+                cmd.AddParameterWithValue("@x", x);
+                cmd.AddParameterWithValue("@y", y);
+                cmd.AddParameterWithValue("@z", z);
+                cmd.AddParameterWithValue("@cr", cr);
+                cmd.AddParameterWithValue("@CommanderCreate", CommanderCreate);
+                cmd.AddParameterWithValue("@Createdate", CreateDate);
+                cmd.AddParameterWithValue("@CommanderUpdate", CommanderCreate);
+                cmd.AddParameterWithValue("@updatedate", CreateDate);
+                cmd.AddParameterWithValue("@Status", (int)status);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
                 return true;
