@@ -32,6 +32,7 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_poi;
         private List<IData3DSet> _datasets_selectedsystems;
         private List<IData3DSet> _datasets_visitedsystems;
+        private List<IData3DSet> _datasets_namedstars;
 
         private const double ZoomMax = 50;
         private const double ZoomMin = 0.01;
@@ -129,6 +130,7 @@ namespace EDDiscovery2
             toolStripButtonFineGrid.Checked = db.GetSettingBool("Map3DFineGrid", true);
             toolStripButtonCoords.Checked = db.GetSettingBool("Map3DCoords", true);
             toolStripButtonEliteMovement.Checked = db.GetSettingBool("Map3DEliteMove", false);
+            toolStripButtonStarNames.Checked = db.GetSettingBool("Map3DStarNames", false);
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
         }
@@ -145,6 +147,9 @@ namespace EDDiscovery2
             GenerateDataSetsVisitedSystems();
         }
 
+        System.Threading.Thread nsThread;
+        Timer _starnametimer = new Timer();
+
         private void FormMap_Load(object sender, EventArgs e)
         {
             LoadMapImages();
@@ -156,6 +161,10 @@ namespace EDDiscovery2
             GenerateDataSetsMaps();
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
+
+            _starnametimer.Interval = 1000;
+            _starnametimer.Tick += new EventHandler(NameStars);
+            _starnametimer.Start();
         }
 
         private void FormMap_Activated(object sender, EventArgs e)
@@ -500,6 +509,103 @@ namespace EDDiscovery2
             return builder;
         }
 
+        Matrix4d starname_resmat;       // to pass to thread..
+
+        private void NameStars(object sender, EventArgs e) // tick..
+        {
+            if (Visible && toolStripButtonStarNames.Checked && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
+            {
+                Matrix4d proj;
+                Matrix4d mview;
+                GL.GetDouble(GetPName.ProjectionMatrix, out proj);
+                GL.GetDouble(GetPName.ModelviewMatrix, out mview);
+                starname_resmat = Matrix4d.Mult(mview, proj);               // does not work in thread, hence tick then thread
+
+                //Console.WriteLine("Tick start thread");
+                nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
+                nsThread.Start();
+            }
+            else if (_datasets_namedstars != null )
+            {
+                DeleteDataset(ref _datasets_namedstars);
+                _datasets_namedstars = null;
+            }
+        }
+
+        private void NamedStars() // background thread
+        {
+            int lylimit =2000 * 2000;
+            int limit = 500;
+            float starnamescalar = 350;
+
+            int stars = 0;
+
+            int textwidthly = Math.Min(200, Math.Max((int)(starnamescalar / _zoom), 10));
+            int textheightly = textwidthly / 5;
+            //Console.WriteLine("Stars name size " + textwidthly + " " + textheightly + " scalar " + starnamescalar + " zoom " + _zoom);
+
+            double w2 = glControl.Width / 2.0;
+            double h2 = glControl.Height / 2.0;
+
+            Vector3 modcampos = _cameraPos;
+            modcampos.Y = -modcampos.Y;
+
+            List<ISystem> returnlist = new List<ISystem>();
+
+            // optimise, sort on nearest to viewpoint..
+
+            foreach (var sys in _starList)
+            {
+                if (sys.HasCoordinate)
+                {
+                    Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
+                    Vector4d sysloc = Vector4d.Transform(syspos, starname_resmat);
+
+                    if (sysloc.Z > _znear)
+                    {                                                           // pixel position on screen..
+                        Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
+
+                        if ((syssloc.X >= 5 && syssloc.X <= glControl.Width - 5) && (syssloc.Y >= 5 && syssloc.Y <= glControl.Height - 5))
+                        {
+                            float sqdist = ((float)sys.x - modcampos.X) * ((float)sys.x - modcampos.X) + ((float)sys.y - modcampos.Y) * ((float)sys.y - modcampos.Y) + ((float)sys.z - modcampos.Z) * ((float)sys.z - modcampos.Z);
+
+                            if (sqdist <= lylimit)
+                            {
+                                if (stars++ > limit)
+                                {
+                                    // Console.WriteLine("Too many");
+                                    break;
+                                }
+
+                                //   Console.WriteLine("System " + sys.name + " at " + syssloc.X + " " + syssloc.Y);
+                                returnlist.Add(sys);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Console.WriteLine("Stars found " + returnlist?.Count );
+
+            DatasetBuilder builder = new DatasetBuilder(); // does not need options..
+            builder.Build();
+            List<IData3DSet> dataset = builder.AddNamedStars(returnlist, textwidthly, textheightly);
+
+            Invoke((MethodInvoker)delegate
+            {
+                ChangeNamedStars(dataset);
+            });
+
+            //Console.WriteLine("Thread stopped");
+        }
+
+        void ChangeNamedStars(List<IData3DSet> sl )
+        {
+            _datasets_namedstars = sl;
+            glControl.Invalidate();
+            //Console.WriteLine("Named stars changed");
+        }
+
         //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
         // it out of FormMap's hair
         private void InitStarLists()
@@ -837,6 +943,12 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
+            if (_datasets_namedstars != null)
+            {
+                foreach (var dataset in _datasets_namedstars)
+                    dataset.DrawAll(glControl);
+            }
+
             if ( toolStripButtonShowAllStars.Checked )
             {
                 foreach (var dataset in _datasets_zeropopstars)
@@ -1170,6 +1282,11 @@ namespace EDDiscovery2
         private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
+        }
+
+        private void toolStripButtonStarNames_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DStarNames", toolStripButtonStarNames.Checked);
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -1633,7 +1750,8 @@ namespace EDDiscovery2
             }
         }
 
-#endregion
+        #endregion
+
     }
 }
 
