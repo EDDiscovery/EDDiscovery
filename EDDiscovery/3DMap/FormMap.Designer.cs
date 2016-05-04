@@ -47,6 +47,7 @@ namespace EDDiscovery2
             this.toolStripDropDownButtonFilterStars = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripButtonShowAllStars = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonGrid = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonFineGrid = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCoords = new System.Windows.Forms.ToolStripButton();
@@ -73,7 +74,7 @@ namespace EDDiscovery2
             this.dotSystemCoords = new System.Windows.Forms.PictureBox();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.panelRight = new System.Windows.Forms.Panel();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonStarNames = new System.Windows.Forms.ToolStripButton();
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.systemselectionMenuStrip.SuspendLayout();
@@ -147,6 +148,7 @@ namespace EDDiscovery2
             this.toolStripButtonLastKnownPosition,
             this.toolStripButtonDrawLines,
             this.toolStripDropDownButtonFilterStars,
+            this.toolStripButtonStarNames,
             this.toolStripButtonGrid,
             this.toolStripButtonFineGrid,
             this.toolStripButtonCoords,
@@ -222,6 +224,11 @@ namespace EDDiscovery2
             this.toolStripButtonStations.Size = new System.Drawing.Size(77, 28);
             this.toolStripButtonStations.Text = "Stations";
             this.toolStripButtonStations.Click += new System.EventHandler(this.toolStripButtonStations_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(155, 6);
             // 
             // toolStripButtonGrid
             // 
@@ -446,10 +453,17 @@ namespace EDDiscovery2
             this.panelRight.Size = new System.Drawing.Size(586, 40);
             this.panelRight.TabIndex = 27;
             // 
-            // toolStripSeparator4
+            // toolStripButtonStarNames
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(155, 6);
+            this.toolStripButtonStarNames.CheckOnClick = true;
+            this.toolStripButtonStarNames.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonStarNames.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonStarNames.Image")));
+            this.toolStripButtonStarNames.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonStarNames.Name = "toolStripButtonStarNames";
+            this.toolStripButtonStarNames.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonStarNames.Text = "Star Names";
+            this.toolStripButtonStarNames.ToolTipText = "Enable Star Naming at higher zoom levels";
+            this.toolStripButtonStarNames.Click += new System.EventHandler(this.toolStripButtonStarNames_Click);
             // 
             // FormMap
             // 
@@ -522,5 +536,6 @@ namespace EDDiscovery2
         private Panel panelRight;
         private ToolStripDropDownButton toolStripDropDownButtonFilterStars;
         private ToolStripSeparator toolStripSeparator4;
+        private ToolStripButton toolStripButtonStarNames;
     }
     }
