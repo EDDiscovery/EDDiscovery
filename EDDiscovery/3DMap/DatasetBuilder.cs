@@ -481,7 +481,7 @@ namespace EDDiscovery2._3DMap
             return lastknownps;
         }
 
-        private Bitmap DrawString(string str, Font fnt, int w, int h)
+        static private Bitmap DrawString(string str, Font fnt, int w, int h)
         {
             Bitmap text_bmp = new Bitmap(w, h);
             using (Graphics g = Graphics.FromImage(text_bmp))
@@ -493,7 +493,7 @@ namespace EDDiscovery2._3DMap
             return text_bmp;
         }
 
-        public List<IData3DSet> AddNamedStars(List<ISystem> starlist, int textwidthly, int textheightly)
+        static public Data3DSetClass<TexturedQuadData> AddNamedStars(List<ISystem> starlist, int textwidthly, int textheightly)
         {
             string fontname = "MS Sans Serif";
 
@@ -508,7 +508,7 @@ namespace EDDiscovery2._3DMap
                 bitmapheight = (int)sz.Height + 4;
             }
 
-            var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("name bitmap", Color.White, 1.0f);
+            Data3DSetClass<TexturedQuadData> datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("name bitmap", Color.White, 1.0f);
 
             foreach (ISystem sys in starlist)
             {
@@ -519,9 +519,7 @@ namespace EDDiscovery2._3DMap
                     new Point((int)sys.x, (int)sys.z + textheightly / 2), new Point((int)sys.x + textwidthly, (int)sys.z + textheightly / 2), (float)sys.y));
             }
 
-            _datasets.Add(datasetMapImg);
-
-            return _datasets;
+            return datasetMapImg;
         }
 
     }
