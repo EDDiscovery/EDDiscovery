@@ -6,7 +6,8 @@ using System.Text;
 
 namespace EDDiscovery2.PlanetSystems
 {
-
+    // Relationships:
+    //   A WorldSurvey belongs to a single World
     public class EDWorldSurvey : EDObject
     {
         public int worldId;
@@ -64,6 +65,20 @@ namespace EDDiscovery2.PlanetSystems
             }
 
             return MaterialEnum.Unknown;
+        }
+
+        // Obtain a world object using the world-id
+        public EDWorld GetWorld()
+        {
+            if (worldId > 0)
+            {
+                Repositories.World worldRepo = new Repositories.World();
+                return worldRepo.GetForId(worldId);
+            }
+            else
+            {
+                return null;
+            }
         }
 
     }
