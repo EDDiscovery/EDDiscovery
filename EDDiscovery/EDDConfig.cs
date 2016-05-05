@@ -66,7 +66,7 @@ namespace EDDiscovery2
             { "MapColour_POISystem", () => System.Drawing.Color.Purple.ToArgb() },
             { "MapColour_TrilatCurrentReference", () => System.Drawing.Color.Green.ToArgb() },
             { "MapColour_TrilatSuggestedReference", () => System.Drawing.Color.DarkOrange.ToArgb() },
-            { "MapColour_PlannedRoute", () => System.Drawing.Color.DarkOrange.ToArgb() }
+            { "MapColour_PlannedRoute", () => System.Drawing.Color.Green.ToArgb() }
         };
 
         private Dictionary<string, Action> onchange = new Dictionary<string, Action>
