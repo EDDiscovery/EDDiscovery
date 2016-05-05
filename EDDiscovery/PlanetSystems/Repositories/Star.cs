@@ -75,12 +75,12 @@ namespace EDDiscovery2.PlanetSystems.Repositories
                         JsonAttributeString("star",              edobj.objectName) +
                         JsonAttributeString("spectral-class",    edobj.Description) +
                         JsonAttributeString("spectral-subclass", edobj.subclass) +
-                        JsonAttributeString("solar-mass",        edobj.mass.ToString()) +
-                        JsonAttributeString("solar-radius",      edobj.radius.ToString()) +
-                        JsonAttributeString("surface-temp",      edobj.surfaceTemp.ToString()) +
-                        JsonAttributeString("star-age",          edobj.star_age.ToString()) +
-                        JsonAttributeString("orbit-period",      edobj.orbitPeriod.ToString()) +
-                        JsonAttributeString("arrival-point",     edobj.arrivalPoint.ToString()) +
+                        JsonAttributeString("solar-mass",        edobj.mass.ToNullSafeString()) +
+                        JsonAttributeString("solar-radius",      edobj.radius.ToNullSafeString()) +
+                        JsonAttributeString("surface-temp",      edobj.surfaceTemp.ToNullSafeString()) +
+                        JsonAttributeString("star-age",          edobj.star_age.ToNullSafeString()) +
+                        JsonAttributeString("orbit-period",      edobj.orbitPeriod.ToNullSafeString()) +
+                        JsonAttributeString("arrival-point",     edobj.arrivalPoint.ToNullSafeString()) +
                         JsonAttributeString("luminosity",        edobj.luminosity) +
                         JsonAttributeString("notes",             edobj.notes) +
                         JsonAttributeString("image-url",         edobj.image_url) + @"
@@ -92,7 +92,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             ResponseData response;
             if (edobj.id == 0)
             {
-                response = RequestSecurePost(joPost.ToString(), $"{ ApiNamespace}/stars");
+                response = RequestSecurePost(joPost.ToString(), $"{ApiNamespace}/stars");
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     JObject jo2 = (JObject)JObject.Parse(response.Body);
