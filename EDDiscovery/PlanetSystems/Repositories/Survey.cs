@@ -88,21 +88,59 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             return listObjects;
         }
 
-        // NOTE: I haven't included code for what happens if you try to
-        // insert but a record is in the way because this shouldn't really happen
-        // with surveys. If a commander accidentally creates a duplicate it's going
-        // to actually give them that duplicate. So to avoid this scenario make sure
-        // you searched for the survey first.
+        // NOTE: With Stars and Worlds we get away with attempting to POST and resorting to a PATCH
+        // if a record is already present. This won't work for Surveys because there is no uniqueness rule.
+        // A user might create several survey records for a world each with differet Resource types.
+        // Also they may make extra sets for each Basecamp if they're using Basecamps.
+        // If in doubt search for a record first and create a new one if there isn't one in existence.
         public ResponseData Store(EDSurvey edobj)
         {
             dynamic jo = new JObject();
 
-            jo.commander = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-            jo.world_id = edobj.worldId;
-            jo.resource = edobj.resource;
-            jo.notes = edobj.notes;
-            jo.image_url = edobj.image_url;
 
+            ResponseData response;
+            if (edobj.id == 0)
+            {
+                string json = Payload(edobj);
+
+                JObject joPost = JObject.Parse(json);
+
+                response = RequestSecurePost(joPost.ToString(), $"{ApiNamespace}/surveys");
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    JObject jo2 = (JObject)JObject.Parse(response.Body);
+                    JObject obj = (JObject)jo2["data"];
+                    edobj.id = obj["id"].Value<int>();
+                }
+            }
+            else
+            {
+                string json = Payload(edobj, edobj.id);
+                JObject joPatch = JObject.Parse(json);
+
+                response = RequestSecurePatch(joPatch.ToString(), $"{ApiNamespace}/surveys/" + edobj.id.ToString());
+            }
+            return response;
+        }
+
+        public ResponseData Delete(int id)
+        {
+            var response = RequestSecureDelete($"{ApiNamespace}/surveys/" + id.ToString());
+
+            return response;
+        }
+
+        public ResponseData Delete(EDSurvey obj)
+        {
+            if (obj.id > 0)
+                return Delete(obj.id);
+            else
+                return new ResponseData(HttpStatusCode.NotFound);
+        }
+
+        // Payload can be for Insert or Update. The difference is whether there is an id or not
+        private string Payload(EDSurvey edobj, int id=0)
+        {
             // TODO: Add materials. They will be integers for this. Use Resource of "BINARY"
             // and 1s and 0s for a simple survey.
 
@@ -132,40 +170,23 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             //jo.tellurium = edobj.materials[MaterialEnum.Tellurium];
             //jo.yttrium = edobj.materials[MaterialEnum.Yttrium];
 
-
-            JObject joPost = new JObject(new JProperty("survey", jo));
-
-            ResponseData response;
-            if (edobj.id == 0)
-            {
-                response = RequestSecurePost(joPost.ToString(), $"{ApiNamespace}/surveys");
-                if (response.StatusCode == HttpStatusCode.Created)
-                {
-                    JObject jo2 = (JObject)JObject.Parse(response.Body);
-                    JObject obj = (JObject)jo2["data"];
-                    edobj.id = obj["id"].Value<int>();
+            string json = @"{
+                'data': {" +
+                    (id > 0 ? JsonAttributeString("id", id.ToString()) : "") + @"
+                    'type': 'surveys',
+                    'attributes': {" +
+                        JsonAttributeString("commander", EDDiscoveryForm.EDDConfig.CurrentCommander.Name) +
+                        JsonAttributeString("resource", edobj.resource) +
+                        JsonAttributeString("notes", edobj.notes) +
+                        JsonAttributeString("images-url", edobj.image_url) + @"
+                    }
+                    'relationships' {" +
+                        JsonAttributeString("id", edobj.worldId.ToNullSafeString()) + @"
+                        'type': 'worlds'
+                    }
                 }
-            }
-            else
-            {
-                response = RequestSecurePatch(joPost.ToString(), $"{ApiNamespace}/surveys/" + edobj.id.ToString());
-            }
-            return response;
-        }
-
-        public ResponseData Delete(int id)
-        {
-            var response = RequestSecureDelete($"{ApiNamespace}/surveys/" + id.ToString());
-
-            return response;
-        }
-
-        public ResponseData Delete(EDSurvey obj)
-        {
-            if (obj.id > 0)
-                return Delete(obj.id);
-            else
-                return new ResponseData(HttpStatusCode.NotFound);
+            }";
+            return json;
         }
 
     }
