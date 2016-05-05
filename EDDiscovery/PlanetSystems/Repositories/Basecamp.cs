@@ -93,9 +93,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             ResponseData response;
             if (edobj.id == 0)
             {
-                string json = Payload(edobj);
-
-                JObject joPost = JObject.Parse(json);
+                JObject joPost = Payload(edobj);
 
                 response = RequestSecurePost(joPost.ToString(), $"{ApiNamespace}/basecamps");
                 if (response.StatusCode == HttpStatusCode.Created)
@@ -107,8 +105,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             }
             else
             {
-                string json = Payload(edobj, edobj.id);
-                JObject joPatch = JObject.Parse(json);
+                JObject joPatch = Payload(edobj, edobj.id);
 
                 response = RequestSecurePatch(joPatch.ToString(), $"{ApiNamespace}/basecamps/" + edobj.id.ToString());
             }
@@ -131,34 +128,39 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         }
 
         // Payload can be for Insert or Update. The difference is whether there is an id or not
-        private string Payload(EDBasecamp edobj, int id = 0)
+        private JObject Payload(EDBasecamp edobj, int id = 0)
         {
-            string json = @"{
-                'data': {" +
-                    (id > 0 ? JsonAttributeString("id", id.ToString()) : "") + @"
-                    'type': 'basecamps',
-                    'attributes': {" +
-                        JsonAttributeString("updater", EDDiscoveryForm.EDDConfig.CurrentCommander.Name) +
-                        JsonAttributeString("name", edobj.name) +
-                        JsonAttributeString("description", edobj.description) +
-                        JsonAttributeString("landingZoneTerrain", edobj.landingZoneTerrain) +
-                        JsonAttributeString("terrainHue1", edobj.terrainHue1.ToNullSafeString()) +
-                        JsonAttributeString("terrainHue2", edobj.terrainHue2.ToNullSafeString()) +
-                        JsonAttributeString("terrainHue3", edobj.terrainHue3.ToNullSafeString()) +
-                        JsonAttributeString("landingZoneLat", edobj.landingZoneLat.ToNullSafeString()) +
-                        JsonAttributeString("landingZoneLon", edobj.landingZoneLon.ToNullSafeString()) +
-                        JsonAttributeString("notes", edobj.notes) +
-                        JsonAttributeString("images-url", edobj.imageUrl) + @"
-                    },
-                    'relationships' {
-                        'world' {" +
-                            JsonAttributeString("id", edobj.worldId.ToNullSafeString()) + @"
-                            'type': 'worlds'
-                        }
-                    }
-                }
-            }";
-            return json;
+            var joPayload = new JObject {
+                { "data", new JObject {
+                    { "type", "basecamps" },
+                    { "attributes", new JObject {
+                        { "updater", EDDiscoveryForm.EDDConfig.CurrentCommander.Name },
+                        { "name", edobj.name },
+                        { "description", edobj.description },
+                        { "landing-zone-terrain", edobj.landingZoneTerrain },
+                        { "terrain-hue-1", edobj.terrainHue1 },
+                        { "terrain-hue-2", edobj.terrainHue2 },
+                        { "terrain-hue-3", edobj.terrainHue3 },
+                        { "landing-zone-lat", edobj.landingZoneLat },
+                        { "landing-zone-lon", edobj.landingZoneLon },
+                        { "notes", edobj.notes },
+                        { "images-url", edobj.imageUrl },
+                    } },
+                    { "relationships", new JObject {
+                        { "worlds", new JObject {
+                            { "id",  edobj.worldId },
+                            { "type", "worlds" },
+                        } },
+                    } },
+                } }
+            };
+            if (id > 0)
+            {
+                var jData = joPayload["data"];
+                jData["id"] = id;
+            }
+
+            return joPayload;
         }
 
     }

@@ -86,38 +86,37 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         public ResponseData Store(EDWorld edobj)
         {
             dynamic jo = new JObject();
-           
-            string json = @"{
-                'data': {
-                    'type': 'worlds',
-                    'attributes': {" +
-                        JsonAttributeString("system-name", edobj.system) +
-                        JsonAttributeString("updater", EDDiscoveryForm.EDDConfig.CurrentCommander.Name) +
-                        JsonAttributeString("world", edobj.objectName) +
-                        JsonAttributeString("world-type", edobj.Description) +
-                        JsonAttributeString("mass", edobj.mass.ToNullSafeString()) +
-                        JsonAttributeString("radius", edobj.radius.ToNullSafeString()) +
-                        JsonAttributeString("gravity", edobj.gravity.ToNullSafeString()) +
-                        JsonAttributeString("surface-temp", edobj.surfaceTemp.ToNullSafeString()) +
-                        JsonAttributeString("surface-pressure", edobj.surfacePressure.ToNullSafeString()) +
-                        JsonAttributeString("orbit-period", edobj.orbitPeriod.ToNullSafeString()) +
-                        JsonAttributeString("rotation-period", edobj.rotationPeriod.ToNullSafeString()) +
-                        JsonAttributeString("semi-major-axis", edobj.semiMajorAxis.ToNullSafeString()) +
-                        JsonAttributeString("terrain-difficulty", edobj.terrain_difficulty.ToNullSafeString()) +
-                        JsonAttributeString("vulcanism-type", edobj.vulcanism.ToNullSafeString()) +
-                        JsonAttributeString("rock-pct", edobj.rockPct.ToNullSafeString()) +
-                        JsonAttributeString("metal-pct", edobj.metalPct.ToNullSafeString()) +
-                        JsonAttributeString("ice-pct", edobj.icePct.ToNullSafeString()) +
-                        JsonAttributeString("reserve", edobj.Reserve.ToNullSafeString()) +
-                        JsonAttributeString("arrival-point", edobj.arrivalPoint.ToNullSafeString()) +
-                        JsonAttributeString("terraformable", edobj.terraformable) +
-                        JsonAttributeString("atmosphere-type", edobj.atmosphere.ToNullSafeString()) +
-                        JsonAttributeString("notes", edobj.notes) +
-                        JsonAttributeString("images-url", edobj.imageUrl) + @"
-                    }
-                }
-            }";
-            JObject joPost = JObject.Parse(json);
+
+            var joPost = new JObject {
+                { "data", new JObject {
+                    { "type", "worlds" },
+                    { "attributes", new JObject {
+                        { "system-name", edobj.system },
+                        { "updater", EDDiscoveryForm.EDDConfig.CurrentCommander.Name },
+                        { "world-type", edobj.Description },
+                        { "mass", edobj.mass },
+                        { "radius", edobj.radius },
+                        { "gravity", edobj.gravity },
+                        { "surface-temp", edobj.surfaceTemp },
+                        { "surface-pressure", edobj.surfacePressure },
+                        { "orbit-period", edobj.orbitPeriod },
+                        { "rotation-period", edobj.rotationPeriod },
+                        { "semi-major-axis", edobj.semiMajorAxis },
+                        { "terrain-difficulty", edobj.terrain_difficulty },
+                        { "vulcanism-type", edobj.vulcanism.ToNullSafeString() },
+                        { "rock-pct", edobj.rockPct },
+                        { "metal-pct", edobj.metalPct },
+                        { "ice-pct", edobj.icePct },
+                        { "reserve", edobj.Reserve },
+                        { "arrival-point", edobj.arrivalPoint },
+                        { "terraformable", edobj.terraformable },
+                        { "atmosphere-type", edobj.atmosphere.ToNullSafeString() },
+                        { "notes", edobj.notes },
+                        { "images-url", edobj.imageUrl },
+                    } }
+                } }
+            };
+
 
             ResponseData response;
             if (edobj.id == 0)
