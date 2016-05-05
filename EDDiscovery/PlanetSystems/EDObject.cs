@@ -170,8 +170,9 @@ public enum AtmosphereEnum
 
         public DateTime updated_at;
         public DateTime created_at;
+        public string creator; // Read only
 
-        public string image_url;
+        public string imageUrl;
 
         static protected List<ObjectsType> objectsTypes = ObjectsType.GetAllTypes();
         static private Dictionary<string, ObjectTypesEnum> objectAliases = ObjectsType.GetAllTypesAlias();

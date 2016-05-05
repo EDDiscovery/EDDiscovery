@@ -37,7 +37,7 @@ namespace EDDiscovery2.PlanetSystems
             notes = GetString(attributes["notes"]);
             subclass = GetString(attributes["spectral-subclass"]);
             luminosity = GetString(attributes["luminosity"]);
-            image_url = GetString(attributes["image-url"]);
+            imageUrl = GetString(attributes["image-url"]);
 
             return true;
         }
