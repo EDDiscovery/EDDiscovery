@@ -32,11 +32,5 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         }
 
         public String ApiNamespace { get; } = "api/v4";
-
-        // Little helper for building up json payloads;
-        protected string JsonAttributeString(string key, string value)
-        {
-            return $"'{key}': '{value}',";
-        }
     }
 }

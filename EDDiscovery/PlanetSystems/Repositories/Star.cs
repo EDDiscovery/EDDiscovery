@@ -66,29 +66,28 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         {
             dynamic jo = new JObject();
 
-            string json = @"{
-                'data': {
-                    'type': 'stars',
-                    'attributes': {" +
-                        JsonAttributeString("system-name",       edobj.system) +
-                        JsonAttributeString("updater",           EDDiscoveryForm.EDDConfig.CurrentCommander.Name) +
-                        JsonAttributeString("star",              edobj.objectName) +
-                        JsonAttributeString("spectral-class",    edobj.Description) +
-                        JsonAttributeString("spectral-subclass", edobj.subclass) +
-                        JsonAttributeString("solar-mass",        edobj.mass.ToNullSafeString()) +
-                        JsonAttributeString("solar-radius",      edobj.radius.ToNullSafeString()) +
-                        JsonAttributeString("surface-temp",      edobj.surfaceTemp.ToNullSafeString()) +
-                        JsonAttributeString("star-age",          edobj.star_age.ToNullSafeString()) +
-                        JsonAttributeString("orbit-period",      edobj.orbitPeriod.ToNullSafeString()) +
-                        JsonAttributeString("arrival-point",     edobj.arrivalPoint.ToNullSafeString()) +
-                        JsonAttributeString("luminosity",        edobj.luminosity) +
-                        JsonAttributeString("notes",             edobj.notes) +
-                        JsonAttributeString("image-url",         edobj.imageUrl) + @"
-                    }
-                }
-            }";
-            JObject joPost = JObject.Parse(json);
- 
+            var joPost = new JObject {
+                { "data", new JObject {
+                    { "type", "stars" },
+                    { "attributes", new JObject {
+                        { "system-name", edobj.system },
+                        { "updater", EDDiscoveryForm.EDDConfig.CurrentCommander.Name },
+                        { "star", edobj.objectName },
+                        { "spectral-class", edobj.Description },
+                        { "spectral-subclass", edobj.subclass },
+                        { "solar-mass", edobj.mass },
+                        { "solar-radius", edobj.radius },
+                        { "surface-temp", edobj.surfaceTemp },
+                        { "star-age", edobj.star_age },
+                        { "orbit-period", edobj.orbitPeriod },
+                        { "arrival-point", edobj.arrivalPoint },
+                        { "luminosity", edobj.luminosity },
+                        { "notes", edobj.notes },
+                        { "image-url", edobj.imageUrl }
+                    } }
+                } }
+            };
+  
             ResponseData response;
             if (edobj.id == 0)
             {

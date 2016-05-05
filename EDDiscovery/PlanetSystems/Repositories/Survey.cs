@@ -101,9 +101,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             ResponseData response;
             if (edobj.id == 0)
             {
-                string json = Payload(edobj);
-
-                JObject joPost = JObject.Parse(json);
+                JObject joPost = Payload(edobj);
 
                 response = RequestSecurePost(joPost.ToString(), $"{ApiNamespace}/surveys");
                 if (response.StatusCode == HttpStatusCode.Created)
@@ -115,8 +113,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             }
             else
             {
-                string json = Payload(edobj, edobj.id);
-                JObject joPatch = JObject.Parse(json);
+                JObject joPatch = Payload(edobj, edobj.id);
 
                 response = RequestSecurePatch(joPatch.ToString(), $"{ApiNamespace}/surveys/" + edobj.id.ToString());
             }
@@ -139,7 +136,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         }
 
         // Payload can be for Insert or Update. The difference is whether there is an id or not
-        private string Payload(EDSurvey edobj, int id=0)
+        private JObject Payload(EDSurvey edobj, int id = 0)
         {
             // TODO: Add materials. They will be integers for this. Use Resource of "BINARY"
             // and 1s and 0s for a simple survey.
@@ -170,25 +167,30 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             //jo.tellurium = edobj.materials[MaterialEnum.Tellurium];
             //jo.yttrium = edobj.materials[MaterialEnum.Yttrium];
 
-            string json = @"{
-                'data': {" +
-                    (id > 0 ? JsonAttributeString("id", id.ToString()) : "") + @"
-                    'type': 'surveys',
-                    'attributes': {" +
-                        JsonAttributeString("commander", EDDiscoveryForm.EDDConfig.CurrentCommander.Name) +
-                        JsonAttributeString("resource", edobj.resource) +
-                        JsonAttributeString("notes", edobj.notes) +
-                        JsonAttributeString("images-url", edobj.imageUrl) + @"
-                    },
-                    'relationships' {
-                        'world' {" +
-                            JsonAttributeString("id", edobj.worldId.ToNullSafeString()) + @"
-                            'type': 'worlds'
-                        }
-                    }
-                }
-            }";
-            return json;
+            var joPayload = new JObject {
+                { "data", new JObject {
+                    { "type", "surveys" },
+                    { "attributes", new JObject {
+                        { "commander", EDDiscoveryForm.EDDConfig.CurrentCommander.Name },
+                        { "resource", edobj.resource },
+                        { "notes", edobj.notes },
+                        { "images-url", edobj.imageUrl },
+                    } },
+                    { "relationships", new JObject {
+                        { "worlds", new JObject {
+                            { "id",  edobj.worldId },
+                            { "type", "worlds" },
+                        } },
+                    } },
+                } }
+            };
+            if (id>0)
+            {
+                var jData = joPayload["data"];
+                jData["id"] = id;
+            }
+
+            return joPayload;
         }
 
     }
