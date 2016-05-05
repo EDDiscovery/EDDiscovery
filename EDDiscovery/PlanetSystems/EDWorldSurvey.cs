@@ -6,7 +6,8 @@ using System.Text;
 
 namespace EDDiscovery2.PlanetSystems
 {
-
+    // Relationships:
+    //   A WorldSurvey belongs to a single World
     public class EDWorldSurvey : EDObject
     {
         public int worldId;
@@ -17,19 +18,21 @@ namespace EDDiscovery2.PlanetSystems
 
         public bool ParseJson(JObject jo)
         {
+            //Reminder - JSONAPI attributes and relationships structure
 
             id = jo["id"].Value<int>();
             var attributes = jo["attributes"];
-            worldId = attributes["world-id"].Value<int>();
-
-
             //TODO: Not quite sure how to work with materials object in their current state, 
             //      but something like this should do it - Greg
-            
+
             //foreach (var mat in mlist)
             //{
             //    materials[mat.material] = attributes[mat.Name.ToLower()].Value<bool>();
             //}
+
+            var relationships = jo["relationships"];
+            var world = relationships["world"];
+            worldId = world["id"].Value<int>();
             return true;
         }
 
@@ -62,6 +65,20 @@ namespace EDDiscovery2.PlanetSystems
             }
 
             return MaterialEnum.Unknown;
+        }
+
+        // Obtain a world object using the world-id
+        public EDWorld GetWorld()
+        {
+            if (worldId > 0)
+            {
+                Repositories.World worldRepo = new Repositories.World();
+                return worldRepo.GetForId(worldId);
+            }
+            else
+            {
+                return null;
+            }
         }
 
     }

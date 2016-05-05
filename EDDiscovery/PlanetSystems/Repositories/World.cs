@@ -32,6 +32,25 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             return (items.Count > 0) ? items[0] : null;           
         }
 
+        public EDWorld GetForId(int id)
+        {
+            if (id > 0)
+            {
+                var request = RequestGet($"{ApiNamespace}/worlds/{id}");
+                if (request.StatusCode == HttpStatusCode.OK)
+                {
+                    var jo = JObject.Parse(request.Body);
+                    var data = jo["data"];
+                    EDWorld obj = new EDWorld();
+
+                    return (obj.ParseJson((JObject)data)) ? obj : null;
+                }
+            }
+
+            return null;
+        }
+
+
         public List<EDWorld> GetAll(string scope)
         {
             List<EDWorld> listObjects = new List<EDWorld>();
@@ -67,35 +86,38 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         public ResponseData Store(EDWorld edobj)
         {
             dynamic jo = new JObject();
-
-            jo.system = edobj.system;
-            jo.updater = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-            jo.world = edobj.objectName;
-            jo.world_type = edobj.Description;
-
-            jo.mass = edobj.mass;
-            jo.radius = edobj.radius;
-            jo.gravity = edobj.gravity;
-            jo.surface_temp = edobj.surfaceTemp;
-            jo.surface_pressure = edobj.surfacePressure;
-            jo.orbit_period = edobj.orbitPeriod;
-            jo.rotation_period = edobj.rotationPeriod;
-            jo.semi_major_axis = edobj.semiMajorAxis;
-            jo.terrain_difficulty = edobj.terrain_difficulty;
-
-            jo.vulcanism_type = edobj.vulcanism.ToString();
-            jo.rock_pct = edobj.rockPct;
-            jo.metal_pct = edobj.metalPct;
-            jo.ice_pct = edobj.metalPct;
-            jo.reserve = edobj.Reserve;
-            jo.arrival_point = edobj.arrivalPoint;
-            jo.terraformable = edobj.terraformable;
-            jo.atmosphere_type = edobj.atmosphere.ToString();
-
-            jo.notes = edobj.notes;
-            jo.images_url = edobj.image_url;
-
-            JObject joPost = new JObject(new JProperty("world", jo));
+           
+            string json = @"{
+                'data': {
+                    'type': 'worlds',
+                    'attributes': {" +
+                        JsonAttributeString("system-name", edobj.system) +
+                        JsonAttributeString("updater", EDDiscoveryForm.EDDConfig.CurrentCommander.Name) +
+                        JsonAttributeString("world", edobj.objectName) +
+                        JsonAttributeString("world-type", edobj.Description) +
+                        JsonAttributeString("mass", edobj.mass.ToNullSafeString()) +
+                        JsonAttributeString("radius", edobj.radius.ToNullSafeString()) +
+                        JsonAttributeString("gravity", edobj.gravity.ToNullSafeString()) +
+                        JsonAttributeString("surface-temp", edobj.surfaceTemp.ToNullSafeString()) +
+                        JsonAttributeString("surface-pressure", edobj.surfacePressure.ToNullSafeString()) +
+                        JsonAttributeString("orbit-period", edobj.orbitPeriod.ToNullSafeString()) +
+                        JsonAttributeString("rotation-period", edobj.rotationPeriod.ToNullSafeString()) +
+                        JsonAttributeString("semi-major-axis", edobj.semiMajorAxis.ToNullSafeString()) +
+                        JsonAttributeString("terrain-difficulty", edobj.terrain_difficulty.ToNullSafeString()) +
+                        JsonAttributeString("vulcanism-type", edobj.vulcanism.ToNullSafeString()) +
+                        JsonAttributeString("rock-pct", edobj.rockPct.ToNullSafeString()) +
+                        JsonAttributeString("metal-pct", edobj.metalPct.ToNullSafeString()) +
+                        JsonAttributeString("ice-pct", edobj.icePct.ToNullSafeString()) +
+                        JsonAttributeString("reserve", edobj.Reserve.ToNullSafeString()) +
+                        JsonAttributeString("arrival-point", edobj.arrivalPoint.ToNullSafeString()) +
+                        JsonAttributeString("terraformable", edobj.terraformable) +
+                        JsonAttributeString("atmosphere-type", edobj.atmosphere.ToNullSafeString()) +
+                        JsonAttributeString("notes", edobj.notes) +
+                        JsonAttributeString("images-url", edobj.imageUrl) + @"
+                    }
+                }
+            }";
+            JObject joPost = JObject.Parse(json);
 
             ResponseData response;
             if (edobj.id == 0)
@@ -118,6 +140,8 @@ namespace EDDiscovery2.PlanetSystems.Repositories
                         if (items.Count > 0)
                         {
                             edobj.id = items[0]["id"].Value<int>();
+                            JObject jData = (JObject)joPost["data"];
+                            jData["id"] = edobj.id;
                             response2 = RequestSecurePatch(joPost.ToString(), $"{ApiNamespace}/worlds/" + edobj.id.ToString());
                             response = response2;
                         }

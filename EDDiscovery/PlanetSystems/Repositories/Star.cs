@@ -66,23 +66,29 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         {
             dynamic jo = new JObject();
 
-            jo.system = edobj.system;
-            jo.updater = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-            jo.star = edobj.objectName;
-            jo.spectral_class = edobj.Description;
-            jo.spectral_subclass = edobj.subclass;
-            jo.solar_mass = edobj.mass;
-            jo.solar_radius = edobj.radius;
-            jo.surface_temp = edobj.surfaceTemp;
-            jo.star_age = edobj.star_age;
-            jo.orbit_period = edobj.orbitPeriod;
-            jo.arrival_point = edobj.arrivalPoint;
-            jo.luminosity = edobj.luminosity;
-            jo.notes = edobj.notes;
-            jo.image_url = edobj.image_url;
-
-            JObject joPost = new JObject(new JProperty("star", jo));
-
+            string json = @"{
+                'data': {
+                    'type': 'stars',
+                    'attributes': {" +
+                        JsonAttributeString("system-name",       edobj.system) +
+                        JsonAttributeString("updater",           EDDiscoveryForm.EDDConfig.CurrentCommander.Name) +
+                        JsonAttributeString("star",              edobj.objectName) +
+                        JsonAttributeString("spectral-class",    edobj.Description) +
+                        JsonAttributeString("spectral-subclass", edobj.subclass) +
+                        JsonAttributeString("solar-mass",        edobj.mass.ToNullSafeString()) +
+                        JsonAttributeString("solar-radius",      edobj.radius.ToNullSafeString()) +
+                        JsonAttributeString("surface-temp",      edobj.surfaceTemp.ToNullSafeString()) +
+                        JsonAttributeString("star-age",          edobj.star_age.ToNullSafeString()) +
+                        JsonAttributeString("orbit-period",      edobj.orbitPeriod.ToNullSafeString()) +
+                        JsonAttributeString("arrival-point",     edobj.arrivalPoint.ToNullSafeString()) +
+                        JsonAttributeString("luminosity",        edobj.luminosity) +
+                        JsonAttributeString("notes",             edobj.notes) +
+                        JsonAttributeString("image-url",         edobj.imageUrl) + @"
+                    }
+                }
+            }";
+            JObject joPost = JObject.Parse(json);
+ 
             ResponseData response;
             if (edobj.id == 0)
             {
@@ -104,6 +110,8 @@ namespace EDDiscovery2.PlanetSystems.Repositories
                         if (items.Count > 0)
                         {
                             edobj.id = items[0]["id"].Value<int>();
+                            JObject jData = (JObject)joPost["data"];
+                            jData["id"] = edobj.id;
                             response2 = RequestSecurePatch(joPost.ToString(), $"{ApiNamespace}/stars/" + edobj.id.ToString());
                             response = response2;
                         }
