@@ -7,6 +7,9 @@ using System.Text;
 namespace EDDiscovery2.PlanetSystems
 {
 
+    // Relationships:
+    //   A World can have a single World Survey
+    //   A World can have multiple Surveys
     public class EDWorld : EDObject
     {
         public string terraformable;
@@ -142,12 +145,13 @@ namespace EDDiscovery2.PlanetSystems
             if (data != null)
                 worldSurveyId = GetInt(data["id"]);
 
+            // TODO: Make this lookup Lazy Loading to reduce on server
+            // traffic and keep it fresh
             surveyIds = new List<int>();
             foreach(var survey in relationships["surveys"]["data"] as JArray)
             {
                 surveyIds.Add(GetInt(survey["id"]));
             }
-
             return true;
         }
 
@@ -223,8 +227,15 @@ namespace EDDiscovery2.PlanetSystems
         // Obtain a World Survey from a World object here!
         public EDWorldSurvey GetWorldSurvey()
         {
-            Repositories.WorldSurvey worldSurveyRepo = new Repositories.WorldSurvey();
-            return worldSurveyRepo.GetForId(worldSurveyId);
+            if (worldSurveyId > 0)
+            {
+                Repositories.WorldSurvey worldSurveyRepo = new Repositories.WorldSurvey();
+                return worldSurveyRepo.GetForId(worldSurveyId);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public List<EDSurvey> GetSurveys()
