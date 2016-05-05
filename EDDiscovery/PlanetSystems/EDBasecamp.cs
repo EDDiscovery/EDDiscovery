@@ -26,6 +26,7 @@ namespace EDDiscovery2.PlanetSystems
             id = jo["id"].Value<int>();
 
             var attributes = jo["attributes"];
+            updater = attributes["updater"].Value<string>();
             name = attributes["name"].Value<string>();
             description = attributes["description"].Value<string>();
             landingZoneTerrain = attributes["landing-zone-terrain"].Value<string>();
