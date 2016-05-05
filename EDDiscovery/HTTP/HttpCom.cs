@@ -11,6 +11,8 @@ namespace EDDiscovery2.HTTP
     {
         protected string _serverAddress;
 
+        public String MimeType { get; set; } = "application/json; charset=utf-8";
+
         protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null)
         {
             try
@@ -32,7 +34,7 @@ namespace EDDiscovery2.HTTP
 
                     byte[] byteArray = Encoding.UTF8.GetBytes(postData);
                     // Set the ContentType property of the WebRequest.
-                    request.ContentType = "application/json; charset=utf-8";
+                    request.ContentType = MimeType;
                     //request.Headers.Add("Accept-Encoding", "gzip,deflate");
                     // Set the ContentLength property of the WebRequest.
                     request.ContentLength = byteArray.Length;
@@ -112,7 +114,7 @@ namespace EDDiscovery2.HTTP
 
                     byte[] byteArray = Encoding.UTF8.GetBytes(postData);
                     // Set the ContentType property of the WebRequest.
-                    request.ContentType = "application/json; charset=utf-8";
+                    request.ContentType = MimeType;
                     //request.Headers.Add("Accept-Encoding", "gzip,deflate");
                     // Set the ContentLength property of the WebRequest.
                     request.ContentLength = byteArray.Length;
@@ -187,7 +189,7 @@ namespace EDDiscovery2.HTTP
                     request.Method = "GET";
 
                     // Set the ContentType property of the WebRequest.
-                    request.ContentType = "application/json; charset=utf-8";
+                    request.ContentType = MimeType;
                     request.Headers.Add("Accept-Encoding", "gzip,deflate");
                     if (headers != null)
                     {
@@ -261,7 +263,7 @@ namespace EDDiscovery2.HTTP
                     request.Method = "DELETE";
 
                     // Set the ContentType property of the WebRequest.
-                    request.ContentType = "application/json; charset=utf-8";
+                    request.ContentType = MimeType;
                     request.Headers.Add("Accept-Encoding", "gzip,deflate");
                     if (headers != null)
                     {

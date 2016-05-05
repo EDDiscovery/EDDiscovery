@@ -16,6 +16,12 @@ namespace EDDiscovery2.HTTP
         private NameValueCollection _authTokens = null;
         private readonly string _authPath = "auth";
 
+        public EDMaterizliaerCom()
+        {
+            // JSON API Mimetype: http://jsonapi.org/
+            MimeType = "application/vnd.api+json; charset=utf-8";
+        }
+
         protected ResponseData RequestSecureGet(string action)
         {
             return ManagedRequest(null, action, RequestGetWrapper);
