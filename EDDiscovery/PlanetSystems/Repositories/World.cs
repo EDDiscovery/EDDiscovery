@@ -32,6 +32,25 @@ namespace EDDiscovery2.PlanetSystems.Repositories
             return (items.Count > 0) ? items[0] : null;           
         }
 
+        public EDWorld GetForId(int id)
+        {
+            if (id > 0)
+            {
+                var request = RequestGet($"{ApiNamespace}/worlds/{id}");
+                if (request.StatusCode == HttpStatusCode.OK)
+                {
+                    var jo = JObject.Parse(request.Body);
+                    var data = jo["data"];
+                    EDWorld obj = new EDWorld();
+
+                    return (obj.ParseJson((JObject)data)) ? obj : null;
+                }
+            }
+
+            return null;
+        }
+
+
         public List<EDWorld> GetAll(string scope)
         {
             List<EDWorld> listObjects = new List<EDWorld>();

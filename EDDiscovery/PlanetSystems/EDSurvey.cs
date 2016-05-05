@@ -6,7 +6,9 @@ using System.Text;
 
 namespace EDDiscovery2.PlanetSystems
 {
-
+    // Relationships:
+    //   A Survey belongs to a single World
+    //   A Survey can optionally have a basecamp
     public class EDSurvey : EDObject
     {
         public int worldId;
@@ -64,6 +66,36 @@ namespace EDDiscovery2.PlanetSystems
             //}
             return true;
         }
+
+
+        // Obtain a world object using the world-id
+        public EDWorld GetWorld()
+        {
+            if (worldId > 0)
+            {
+                Repositories.World worldRepo = new Repositories.World();
+                return worldRepo.GetForId(worldId);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        // Go to the associated basecamp if there is one
+        public EDBasecamp GetBasecamp()
+        {
+            if (basecampId > 0)
+            {
+                Repositories.Basecamp basecampRepo = new Repositories.Basecamp();
+                return basecampRepo.GetForId(basecampId);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
     }
 }

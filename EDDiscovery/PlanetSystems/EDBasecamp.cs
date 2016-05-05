@@ -1,8 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace EDDiscovery2.PlanetSystems
 {
 
+    // Relationships:
+    //   A Basecamp belongs to a single World
+    //   A Basecamp can have Surveys
     public class EDBasecamp : EDObject
     {
         public int worldId; // A basecamp has to have a worldid
@@ -14,6 +19,7 @@ namespace EDDiscovery2.PlanetSystems
         public int terrainHue3;
         public float landingZoneLat;
         public float landingZoneLon;
+        public List<int> surveyIds;
 
         public EDBasecamp()
         {
@@ -41,7 +47,36 @@ namespace EDDiscovery2.PlanetSystems
             var relationships = jo["relationships"];
             var world = relationships["world"];
             worldId = world["id"].Value<int>();
+
+            // TODO: Make this lookup Lazy Loading to reduce on server
+            // traffic and keep it fresh
+            surveyIds = new List<int>();
+            foreach (var survey in relationships["surveys"]["data"] as JArray)
+            {
+                surveyIds.Add(GetInt(survey["id"]));
+            }
             return true;
+        }
+
+
+        // Obtain a world object using the world-id
+        public EDWorld GetWorld()
+        {
+            if (worldId > 0)
+            {
+                Repositories.World worldRepo = new Repositories.World();
+                return worldRepo.GetForId(worldId);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public List<EDSurvey> GetSurveys()
+        {
+            Repositories.Survey surveyRepo = new Repositories.Survey();
+            return surveyRepo.GetForIds(surveyIds);
         }
 
     }
