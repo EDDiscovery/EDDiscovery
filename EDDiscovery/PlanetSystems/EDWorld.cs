@@ -135,7 +135,7 @@ namespace EDDiscovery2.PlanetSystems
             terraformable = GetString(attributes["terraformable"]);
             notes = GetString(attributes["notes"]);
             atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(attributes["atmosphere-type"].Value<string>());
-            image_url = GetString(attributes["image-url"]);
+            imageUrl = GetString(attributes["image-url"]);
 
             var relationships = (JObject) jo["relationships"];
             var data = relationships["world-survey"]["data"] as JObject;

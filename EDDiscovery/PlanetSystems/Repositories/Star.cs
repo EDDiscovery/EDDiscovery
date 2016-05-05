@@ -83,7 +83,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
                         JsonAttributeString("arrival-point",     edobj.arrivalPoint.ToNullSafeString()) +
                         JsonAttributeString("luminosity",        edobj.luminosity) +
                         JsonAttributeString("notes",             edobj.notes) +
-                        JsonAttributeString("image-url",         edobj.image_url) + @"
+                        JsonAttributeString("image-url",         edobj.imageUrl) + @"
                     }
                 }
             }";

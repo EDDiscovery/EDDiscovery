@@ -38,20 +38,26 @@ namespace EDDiscovery2.PlanetSystems
 
         public bool ParseJson(JObject jo)
         {
+            //Reminder - JSONAPI attributes and relationships structure
 
             id = jo["id"].Value<int>();
+
             var attributes = jo["attributes"];
-            worldId = attributes["world-id"].Value<int>();
             commander = attributes["commander"].Value<string>();
             resource = attributes["resource"].Value<string>();
             notes = attributes["notes"].Value<string>();
             imageUrl = attributes["image-url"].Value<string>();
+
+            var relationships = jo["relationships"];
+            var world = relationships["world"];
+            worldId = world["id"].Value<int>();
+
             // surveyedBy is an array of strings. Leaving it for now;
             // surveyedAt is a date. Leaving it for now;
 
             //TODO: Not quite sure how to work with materials object in their current state, 
             //      but something like this should do it - Greg
-            
+
             //foreach (var mat in mlist)
             //{
             //    materials[mat.material] = attributes[mat.Name.ToLower()].Value<int>();
