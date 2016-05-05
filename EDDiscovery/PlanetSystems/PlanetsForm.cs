@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using EDDiscovery2.DB;
 using System.Globalization;
 using EDDiscovery2.PlanetSystems;
+using EDDiscovery2.HTTP;
+using Newtonsoft.Json.Linq;
 
 namespace EDDiscovery2.PlanetSystems
 {
@@ -270,12 +272,14 @@ namespace EDDiscovery2.PlanetSystems
             if (currentObj is EDWorld)
             {
                 Repositories.World world = new Repositories.World();
-                world.Store((EDWorld)currentObj);
+                ResponseData response = world.Store((EDWorld)currentObj);
+                OutputErrors(response);
             }
             if (currentObj is EDStar)
             {
                 Repositories.Star star = new Repositories.Star();
-                star.Store((EDStar)currentObj);
+                ResponseData response = star.Store((EDStar)currentObj);
+                OutputErrors(response);
             }
         }
 
@@ -502,6 +506,16 @@ namespace EDDiscovery2.PlanetSystems
             if (mass == 0 || radius == 0)
                 return 0;
             return mass * 5.9722E+24 * 6.67E-11 / ((radius * 1000)* (radius * 1000)) / 9.80665;
+        }
+
+        private void OutputErrors(ResponseData response)
+        {
+            if ((int)response.StatusCode >= 400)
+            {
+                var errorMsg = response.JsonApiErrorMessage();
+                MessageBox.Show(errorMsg, "Unable to save", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
     }

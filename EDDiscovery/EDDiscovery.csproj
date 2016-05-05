@@ -171,6 +171,7 @@
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -280,6 +281,7 @@
     <Compile Include="PlanetSystems\AddMaterialNodeControl.Designer.cs">
       <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlanetSystems\EDBasecamp.cs" />
     <Compile Include="PlanetSystems\EDSurvey.cs" />
     <Compile Include="PlanetSystems\EDWorldSurvey.cs" />
     <Compile Include="PlanetSystems\Repositories\Basecamp.cs" />

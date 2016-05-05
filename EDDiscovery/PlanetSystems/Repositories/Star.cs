@@ -66,23 +66,28 @@ namespace EDDiscovery2.PlanetSystems.Repositories
         {
             dynamic jo = new JObject();
 
-            jo.system = edobj.system;
-            jo.updater = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-            jo.star = edobj.objectName;
-            jo.spectral_class = edobj.Description;
-            jo.spectral_subclass = edobj.subclass;
-            jo.solar_mass = edobj.mass;
-            jo.solar_radius = edobj.radius;
-            jo.surface_temp = edobj.surfaceTemp;
-            jo.star_age = edobj.star_age;
-            jo.orbit_period = edobj.orbitPeriod;
-            jo.arrival_point = edobj.arrivalPoint;
-            jo.luminosity = edobj.luminosity;
-            jo.notes = edobj.notes;
-            jo.image_url = edobj.image_url;
-
-            JObject joPost = new JObject(new JProperty("star", jo));
-
+            var joPost = new JObject {
+                { "data", new JObject {
+                    { "type", "stars" },
+                    { "attributes", new JObject {
+                        { "system-name", edobj.system },
+                        { "updater", EDDiscoveryForm.EDDConfig.CurrentCommander.Name },
+                        { "star", edobj.objectName },
+                        { "spectral-class", edobj.Description },
+                        { "spectral-subclass", edobj.subclass },
+                        { "solar-mass", edobj.mass },
+                        { "solar-radius", edobj.radius },
+                        { "surface-temp", edobj.surfaceTemp },
+                        { "star-age", edobj.star_age },
+                        { "orbit-period", edobj.orbitPeriod },
+                        { "arrival-point", edobj.arrivalPoint },
+                        { "luminosity", edobj.luminosity },
+                        { "notes", edobj.notes },
+                        { "image-url", edobj.imageUrl }
+                    } }
+                } }
+            };
+  
             ResponseData response;
             if (edobj.id == 0)
             {
@@ -104,6 +109,8 @@ namespace EDDiscovery2.PlanetSystems.Repositories
                         if (items.Count > 0)
                         {
                             edobj.id = items[0]["id"].Value<int>();
+                            JObject jData = (JObject)joPost["data"];
+                            jData["id"] = edobj.id;
                             response2 = RequestSecurePatch(joPost.ToString(), $"{ApiNamespace}/stars/" + edobj.id.ToString());
                             response = response2;
                         }
