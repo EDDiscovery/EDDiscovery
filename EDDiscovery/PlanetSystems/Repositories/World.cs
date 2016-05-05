@@ -94,7 +94,7 @@ namespace EDDiscovery2.PlanetSystems.Repositories
                         JsonAttributeString("terraformable", edobj.terraformable) +
                         JsonAttributeString("atmosphere-type", edobj.atmosphere.ToNullSafeString()) +
                         JsonAttributeString("notes", edobj.notes) +
-                        JsonAttributeString("images-url", edobj.image_url) + @"
+                        JsonAttributeString("images-url", edobj.imageUrl) + @"
                     }
                 }
             }";

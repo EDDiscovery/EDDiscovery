@@ -178,11 +178,13 @@ namespace EDDiscovery2.PlanetSystems.Repositories
                         JsonAttributeString("commander", EDDiscoveryForm.EDDConfig.CurrentCommander.Name) +
                         JsonAttributeString("resource", edobj.resource) +
                         JsonAttributeString("notes", edobj.notes) +
-                        JsonAttributeString("images-url", edobj.image_url) + @"
-                    }
-                    'relationships' {" +
-                        JsonAttributeString("id", edobj.worldId.ToNullSafeString()) + @"
-                        'type': 'worlds'
+                        JsonAttributeString("images-url", edobj.imageUrl) + @"
+                    },
+                    'relationships' {
+                        'world' {" +
+                            JsonAttributeString("id", edobj.worldId.ToNullSafeString()) + @"
+                            'type': 'worlds'
+                        }
                     }
                 }
             }";
