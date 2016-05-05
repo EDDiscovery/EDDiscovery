@@ -113,8 +113,10 @@ namespace EDDiscovery2
             _mousehovertick.Interval = 250;
         }
 
-        public void Prepare(string historysel, string homesys, string centersys, float zoom)
+        public void Prepare(string historysel, string homesys, string centersys, float zoom , 
+                                AutoCompleteStringCollection sysname )
         {
+            _systemNames = sysname;
             HistorySelection = historysel;
             _historyselection = SystemData.GetSystem(HistorySelection);
             _homeSystem = homesys;
@@ -123,6 +125,7 @@ namespace EDDiscovery2
 
             ReferenceSystems = null;
             PlannedRoute = null;
+            VisitedSystems = null;
 
             OrientateMapAroundSystem(CenterSystem);
 
@@ -139,27 +142,37 @@ namespace EDDiscovery2
             toolStripButtonStarNames.Checked = db.GetSettingBool("Map3DStarNames", false);
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
+
+            GenerateDataSetsVisitedSystems();           // recreate 
         }
 
         public void SetPlannedRoute(List<SystemClass> plannedr)
         {
             PlannedRoute = plannedr;
             GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
         }
 
         public void SetReferenceSystems(List<SystemClass> refsys)
         {
             ReferenceSystems = refsys;
             GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
         }
 
+        public void SetVisitedSystems(List<SystemPosition> visited)
+        {
+            VisitedSystems = visited;
+            GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
+        }
 
         private void FormMap_Load(object sender, EventArgs e)
         {
             LoadMapImages();
             FillExpeditions();
             ShowCenterSystem();
-            labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
+            labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
 
             GenerateDataSets();
             GenerateDataSetsMaps();
@@ -490,7 +503,7 @@ namespace EDDiscovery2
                 CenterSystem = CenterSystem,
                 SelectedSystem = _clickedSystem,
 
-                VisitedSystems = VisitedSystems.Where(s => s.time >= startTime && s.time <= endTime).OrderBy(s => s.time).ToList(),
+                VisitedSystems = (VisitedSystems != null) ? VisitedSystems.Where(s => s.time >= startTime && s.time <= endTime).OrderBy(s => s.time).ToList() : null,
 
                 Images = selectedmaps.ToArray(),
 
@@ -1541,7 +1554,7 @@ namespace EDDiscovery2
 
                     if (_clickedSystem == null)
                     {
-                        labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
+                        labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
                         selectionAllegiance.Text = "Allegiance";
                         selectionEconomy.Text = "Economy";
                         selectionGov.Text = "Gov";
@@ -1557,6 +1570,7 @@ namespace EDDiscovery2
                         selectionState.Text = "State: " + _clickedSystem.state;
                         viewOnEDSMToolStripMenuItem.Enabled = true;
                         SetCenterSystemTo(CenterSystem);
+                        System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
                     }
                 }
             }
@@ -1837,151 +1851,4 @@ namespace EDDiscovery2
 
     }
 }
-
-/* DEAD CODE - removed here for clarity
-
-            private void GenerateDataSetsAllegiance()
-        {
-
-            var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
-
-            InitStarLists();
-
-            _datasets = new List<IData3DSet>();
-
-            datadict[(int)EDAllegiance.Alliance] = Data3DSetClass<PointData>.Create(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDAllegiance.Anarchy] = Data3DSetClass<PointData>.Create(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDAllegiance.Empire] = Data3DSetClass<PointData>.Create(EDAllegiance.Empire.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDAllegiance.Federation] = Data3DSetClass<PointData>.Create(EDAllegiance.Federation.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDAllegiance.Independent] = Data3DSetClass<PointData>.Create(EDAllegiance.Independent.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDAllegiance.None] = Data3DSetClass<PointData>.Create(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
-            datadict[(int)EDAllegiance.Unknown] = Data3DSetClass<PointData>.Create(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
-
-            foreach (SystemClass si in _starList)
-            {
-                if (si.HasCoordinate)
-                {
-                    datadict[(int)si.allegiance].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
-                }
-            }
-
-            foreach (var ds in datadict.Values)
-                _datasets.Add(ds);
-
-            datadict[(int)EDAllegiance.None].Visible = false;
-            datadict[(int)EDAllegiance.Unknown].Visible = false;
-
-        }
-
-
-        //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
-        // it out of FormMap's hair
-        private void GenerateDataSetsGovernment()
-        {
-
-            var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
-
-            InitStarLists();
-
-            _datasets = new List<IData3DSet>();
-
-            datadict[(int)EDGovernment.Anarchy] = Data3DSetClass<PointData>.Create(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDGovernment.Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
-            datadict[(int)EDGovernment.Democracy] = Data3DSetClass<PointData>.Create(EDGovernment.Democracy.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDGovernment.Imperial] = Data3DSetClass<PointData>.Create(EDGovernment.Imperial.ToString(), Color.DarkGreen, 1.0f);
-            datadict[(int)EDGovernment.Corporate] = Data3DSetClass<PointData>.Create(EDGovernment.Corporate.ToString(), Color.LawnGreen, 1.0f);
-            datadict[(int)EDGovernment.Communism] = Data3DSetClass<PointData>.Create(EDGovernment.Communism.ToString(), Color.DarkOliveGreen, 1.0f);
-            datadict[(int)EDGovernment.Feudal] = Data3DSetClass<PointData>.Create(EDGovernment.Feudal.ToString(), Color.LightBlue, 1.0f);
-            datadict[(int)EDGovernment.Dictatorship] = Data3DSetClass<PointData>.Create(EDGovernment.Dictatorship.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDGovernment.Theocracy] = Data3DSetClass<PointData>.Create(EDGovernment.Theocracy.ToString(), Color.DarkBlue, 1.0f);
-            datadict[(int)EDGovernment.Cooperative] = Data3DSetClass<PointData>.Create(EDGovernment.Cooperative.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDGovernment.Patronage] = Data3DSetClass<PointData>.Create(EDGovernment.Patronage.ToString(), Color.LightCyan, 1.0f);
-            datadict[(int)EDGovernment.Confederacy] = Data3DSetClass<PointData>.Create(EDGovernment.Confederacy.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDGovernment.Prison_Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Prison_Colony.ToString(), Color.Orange, 1.0f);
-            datadict[(int)EDGovernment.None] = Data3DSetClass<PointData>.Create(EDGovernment.None.ToString(), Color.Gray, 1.0f);
-            datadict[(int)EDGovernment.Unknown] = Data3DSetClass<PointData>.Create(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
-
-            foreach (SystemClass si in _starList)
-            {
-                if (si.HasCoordinate)
-                {
-                    datadict[(int)si.primary_economy].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
-                }
-            }
-
-            foreach (var ds in datadict.Values)
-                _datasets.Add(ds);
-
-            datadict[(int)EDGovernment.None].Visible = false;
-            datadict[(int)EDGovernment.Unknown].Visible = false;
-
-        }
-
-
-private void DrawStars()
-{
-    if (StarList == null)
-        StarList = SQLiteDBClass.globalSystems;
-
-
-    if (VisitedStars == null)
-        InitData();
-
-    GL.PointSize(1.0f);
-
-    GL.Begin(PrimitiveType.Points);
-    GL.Color3(Color.White);
-
-    foreach (SystemClass si in StarList)
-    {
-        if (si.HasCoordinate)
-        {
-            GL.Vertex3(si.x-CenterSystem.x, si.y-CenterSystem.y, CenterSystem.z-si.z);
-        }
-    }
-    GL.End();
-
-
-
-    GL.PointSize(2.0f);
-    GL.Begin(PrimitiveType.Points);
-    GL.Color3(Color.Red);
-
-
-    if (VisitedSystems != null)
-    {
-        SystemClass star;
-
-        foreach (SystemClass sp in VisitedStars.Values)
-        {
-            star = sp;
-            if (star != null)
-            {
-                GL.Vertex3(star.x - CenterSystem.x, star.y - CenterSystem.y, CenterSystem.z- star.z);
-            }
-        }
-    }
-    GL.End();
-
-    GL.PointSize(5.0f);
-    GL.Begin(PrimitiveType.Points);
-    GL.Enable(EnableCap.ProgramPointSize);
-    GL.Color3(Color.Yellow);
-    GL.Vertex3(0,0,0);
-    GL.End();
-}
-
-    /// <summary>
-        /// Calculate Translation of  (X, Y, Z) - according to mouse input
-        /// </summary>
-        private void SetupCursorXYZ()
-        {
-            //                x =   (PointToClient(Cursor.Position).X - glControl.Width/2 ) * (zoom + 1);
-            //                y = (-PointToClient(Cursor.Position).Y + glControl.Height/2) * (zoom + 1);
-
-            //                System.Diagnostics.Trace.WriteLine("X:" + x + " Y:" + y + " Z:" + zoom);
-        }
-*/
-
-
 

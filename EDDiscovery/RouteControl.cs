@@ -645,15 +645,16 @@ namespace EDDiscovery
 
             var map = _discoveryForm.Map;
 
-            map.Instance.SystemNames = _discoveryForm.SystemNames;
-            map.Instance.VisitedSystems = _discoveryForm.VisitedSystems;
-
             if (routeSystems != null && routeSystems.Any())
             {
                 float zoom = 400 / float.Parse(textBox_Distance.Text) ;
                 if (zoom < 0.01) zoom = 0.01f;
                 if (zoom > 50) zoom = 50f;
-                map.ShowPlanned(routeSystems.First().name, _discoveryForm.settings.MapHomeSystem, routeSystems.First().name, zoom,routeSystems);
+
+                map.Prepare(routeSystems.First().name, _discoveryForm.settings.MapHomeSystem, routeSystems.First().name, zoom, _discoveryForm.SystemNames);
+                map.SetPlanned(routeSystems);
+                map.SetVisited(_discoveryForm.VisitedSystems);
+                map.Show();
             }
             else
             {
