@@ -241,12 +241,14 @@ namespace EDDiscovery2
                 e.Graphics.DrawImage(e.Item.Image, rc);
             }
         }
+#endif
 
         protected override void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e)
         {
             if (!(e.ToolStrip is StatusStrip))
                 base.OnRenderStatusStripSizingGrip(e);
             
+            /*
             int kk = 5;
             Rectangle bnd = e.AffectedBounds;
 
@@ -261,9 +263,24 @@ namespace EDDiscovery2
                     kk--;
                 }
             }
+             */
             
+            using (Pen p1 = new Pen(ColorTable.GripDark))
+            {
+                int rightpx = e.AffectedBounds.Right - 1;
+                int bottompx = e.AffectedBounds.Bottom - 1;
+                int msize = 5;
+                int rightmarginpx = rightpx - msize;
+                int bottommarginpx = bottompx - msize;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    e.Graphics.DrawLine(p1, new Point(rightmarginpx - i * msize, bottompx), new Point(rightpx, bottommarginpx - i * msize));
+                }
+            }
         }
 
+#if false
         protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
         {
             Rectangle rc = e.Item.ContentRectangle;
