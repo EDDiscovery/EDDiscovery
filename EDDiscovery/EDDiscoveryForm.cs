@@ -32,9 +32,12 @@ namespace EDDiscovery
         #region Variables
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CLIENT = 0x1;
         public const int HT_CAPTION = 0x2;
+        public const int HT_BOTTOMRIGHT = 0x11;
         public const int WM_NCL_RESIZE = 0x112;
         public const int HT_RESIZE = 61448;
+        public const int WM_NCHITTEST = 0x84;
 
         private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
         {
@@ -121,6 +124,7 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
         {
+            /*
             if (panel_grip.Visible)
             {
                 panel_grip.Location = new Point(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height);
@@ -128,6 +132,7 @@ namespace EDDiscovery
             }
             else
                 tabControl1.Size = new Size(this.ClientSize.Width, this.ClientSize.Height - tabControl1.Location.Y);
+             */
         }
 
         private void ProcessCommandLineOptions()
@@ -280,8 +285,9 @@ namespace EDDiscovery
 
         public void ApplyTheme(bool refreshhistory)
         {
+            ToolStripManager.Renderer = theme.toolstripRenderer;
             this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
-            panel_grip.Visible = !theme.WindowsFrame;
+            //panel_grip.Visible = !theme.WindowsFrame;
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
             label_version.Visible = !theme.WindowsFrame;
@@ -1008,6 +1014,7 @@ namespace EDDiscovery
             this.WindowState = FormWindowState.Minimized;
         }
 
+        /*
         private void panel_grip_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -1017,6 +1024,7 @@ namespace EDDiscovery
                 SendMessage(WM_NCL_RESIZE, (IntPtr)HT_RESIZE, IntPtr.Zero);
             }
         }
+         */
 
         private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1056,6 +1064,34 @@ namespace EDDiscovery
             {
                 this.Capture = false;
                 SendMessage(WM_NCLBUTTONDOWN, (IntPtr)HT_CAPTION, IntPtr.Zero);
+            }
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WM_NCHITTEST)
+            {
+                base.WndProc(ref m);
+
+                if ((int)m.Result == HT_CLIENT)
+                {
+                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                    int y = unchecked((short)((uint)m.LParam >> 16));
+                    Point p = PointToClient(new Point(x, y));
+
+                    if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
+                    {
+                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                    }
+                    else if (!theme.WindowsFrame)
+                    {
+                        m.Result = (IntPtr)HT_CAPTION;
+                    }
+                }
+            }
+            else
+            {
+                base.WndProc(ref m);
             }
         }
 

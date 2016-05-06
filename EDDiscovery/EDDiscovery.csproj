@@ -222,6 +222,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\CustomColourTable.cs" />
+    <Compile Include="Controls\StatusStripCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\DataViewScrollerPanel.cs">
       <SubType>Component</SubType>
     </Compile>
