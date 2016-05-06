@@ -294,11 +294,6 @@ namespace EDDiscovery
                 return 0;
             }
 
-            if (nrsystems < visitedSystems.Count)
-            {
-                if (!NoEvents)
-                    OnNewPosition(this);
-            }
             return count;
         }
 
@@ -557,6 +552,8 @@ namespace EDDiscovery
                                                 }
                                                 visitedSystems[nr].vs = dbsys;
                                             }
+
+                                            OnNewPosition(this);    // NoEvents= false
                                         }
                                         else
                                         {
