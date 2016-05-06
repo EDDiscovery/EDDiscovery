@@ -649,10 +649,8 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (var conn = new SQLiteConnection(ConnectionString))
-                {
-                    conn.Open();
-                }
+                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
+                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
                 return true;
             }
             catch
