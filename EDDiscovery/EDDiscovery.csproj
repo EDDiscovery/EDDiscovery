@@ -221,6 +221,7 @@
     <Compile Include="Controls\CheckBoxCustom.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\CustomColourTable.cs" />
     <Compile Include="Controls\DataViewScrollerPanel.cs">
       <SubType>Component</SubType>
     </Compile>
