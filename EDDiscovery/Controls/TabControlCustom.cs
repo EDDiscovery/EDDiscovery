@@ -102,7 +102,7 @@ namespace ExtendedControls
 
             foreach (TabPage p in TabPages)
             {
-                Console.WriteLine("Text is " + p.Text);
+                //Console.WriteLine("Text is " + p.Text);
                 SizeF sz = gr.MeasureString(p.Text, this.Font);
 
                 if (sz.Width > minsize)

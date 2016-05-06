@@ -1220,7 +1220,7 @@ namespace EDDiscovery
         private void button2DMap_Click(object sender, EventArgs e)
         {
             FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm);
-
+            frm.Nowindowreposition = _discoveryForm.option_nowindowreposition;
             frm.Show();
         }
 

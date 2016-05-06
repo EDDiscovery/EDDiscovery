@@ -101,6 +101,8 @@ namespace EDDiscovery2
         private DateTime maxstardate = new DateTime(2016, 1, 1);
         bool Animatetime = false;
 
+        public bool Nowindowreposition { get; set; } = false;
+
         #endregion
 
         #region Initialisation
@@ -109,8 +111,6 @@ namespace EDDiscovery2
         {
             InitializeComponent();
             db = new SQLiteDBClass();
-            _mousehovertick.Tick += new EventHandler(MouseHoverTick);
-            _mousehovertick.Interval = 250;
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom , 
@@ -169,6 +169,18 @@ namespace EDDiscovery2
 
         private void FormMap_Load(object sender, EventArgs e)
         {
+            var top = db.GetSettingInt("Map3DFormTop", -1);
+
+            if (top >= 0 && Nowindowreposition == false)
+            {
+                var left = db.GetSettingInt("Map3DFormLeft", 0);
+                var height = db.GetSettingInt("Map3DFormHeight", 800);
+                var width = db.GetSettingInt("Map3DFormWidth", 800);
+                this.Location = new Point(left, top);
+                this.Size = new Size(width, height);
+                //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
+            }
+
             LoadMapImages();
             FillExpeditions();
             ShowCenterSystem();
@@ -182,6 +194,9 @@ namespace EDDiscovery2
             _starnametimer.Interval = 1000;
             _starnametimer.Tick += new EventHandler(NameStars);
             _starnametimer.Start();
+
+            _mousehovertick.Tick += new EventHandler(MouseHoverTick);
+            _mousehovertick.Interval = 250;
         }
 
         private void FormMap_Activated(object sender, EventArgs e)
@@ -198,6 +213,15 @@ namespace EDDiscovery2
 
         private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (Visible)
+            {
+                db.PutSettingInt("Map3DFormWidth", this.Width);
+                db.PutSettingInt("Map3DFormHeight", this.Height);
+                db.PutSettingInt("Map3DFormTop", this.Top);
+                db.PutSettingInt("Map3DFormLeft", this.Left);
+                //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
+            }
+
             e.Cancel = true;
             this.Hide();
         }
