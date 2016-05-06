@@ -22,12 +22,17 @@ namespace EDDiscovery2
 
         SQLiteDBClass db;
 
-        private List<IData3DSet> _datasets_gridlines;
-        private List<IData3DSet> _datasets_gridcoords;
+        private List<IData3DSet> _datasets_finegridlines;
+        private List<IData3DSet> _datasets_coarsegridlines;
+        private List<IData3DSet> _datasets_gridlinecoords;
         private List<IData3DSet> _datasets_maps;
-        private List<IData3DSet> _datasets_stars;
+        private List<IData3DSet> _datasets_zeropopstars;
+        private List<IData3DSet> _datasets_popstarscoloured;
+        private List<IData3DSet> _datasets_popstarsuncoloured;
+        private List<IData3DSet> _datasets_poi;
         private List<IData3DSet> _datasets_selectedsystems;
         private List<IData3DSet> _datasets_visitedsystems;
+        private List<IData3DSet> _datasets_namedstars;
 
         private const double ZoomMax = 50;
         private const double ZoomMin = 0.01;
@@ -53,6 +58,12 @@ namespace EDDiscovery2
         private KeyboardActions _kbdActions = new KeyboardActions();
         private long _oldTickCount = DateTime.Now.Ticks / 10000;
         private int _ticks = 0;
+
+        Matrix4d _starname_resmat;       // to pass to thread..
+        List<List<ISystem>> _starname_list = null;     // lists of list, what we have done before..
+        List<float> _starname_zoomlevel = null;
+        System.Threading.Thread nsThread;
+        Timer _starnametimer = new Timer();
 
         private Point _mouseStartRotate;
         private Point _mouseStartTranslateXY;
@@ -90,6 +101,8 @@ namespace EDDiscovery2
         private DateTime maxstardate = new DateTime(2016, 1, 1);
         bool Animatetime = false;
 
+        public bool Nowindowreposition { get; set; } = false;
+
         #endregion
 
         #region Initialisation
@@ -98,12 +111,12 @@ namespace EDDiscovery2
         {
             InitializeComponent();
             db = new SQLiteDBClass();
-            _mousehovertick.Tick += new EventHandler(MouseHoverTick);
-            _mousehovertick.Interval = 250;
         }
 
-        public void Prepare(string historysel, string homesys , string centersys, float zoom )
+        public void Prepare(string historysel, string homesys, string centersys, float zoom , 
+                                AutoCompleteStringCollection sysname )
         {
+            _systemNames = sysname;
             HistorySelection = historysel;
             _historyselection = SystemData.GetSystem(HistorySelection);
             _homeSystem = homesys;
@@ -112,6 +125,7 @@ namespace EDDiscovery2
 
             ReferenceSystems = null;
             PlannedRoute = null;
+            VisitedSystems = null;
 
             OrientateMapAroundSystem(CenterSystem);
 
@@ -122,38 +136,67 @@ namespace EDDiscovery2
             toolStripButtonStations.Checked = db.GetSettingBool("Map3DButtonStations", false);
             toolStripButtonPerspective.Checked = db.GetSettingBool("Map3DPerspective", false);
             toolStripButtonGrid.Checked = db.GetSettingBool("Map3DCoarseGrid", true);
-            toolStripButtonFineGrid.Checked = db.GetSettingBool("Map3DFineGrid", true );
+            toolStripButtonFineGrid.Checked = db.GetSettingBool("Map3DFineGrid", true);
             toolStripButtonCoords.Checked = db.GetSettingBool("Map3DCoords", true);
             toolStripButtonEliteMovement.Checked = db.GetSettingBool("Map3DEliteMove", false);
+            toolStripButtonStarNames.Checked = db.GetSettingBool("Map3DStarNames", false);
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
+
+            GenerateDataSetsVisitedSystems();           // recreate 
         }
 
         public void SetPlannedRoute(List<SystemClass> plannedr)
         {
             PlannedRoute = plannedr;
             GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
         }
 
         public void SetReferenceSystems(List<SystemClass> refsys)
         {
             ReferenceSystems = refsys;
             GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
+        }
+
+        public void SetVisitedSystems(List<SystemPosition> visited)
+        {
+            VisitedSystems = visited;
+            GenerateDataSetsVisitedSystems();
+            glControl.Invalidate();
         }
 
         private void FormMap_Load(object sender, EventArgs e)
         {
+            var top = db.GetSettingInt("Map3DFormTop", -1);
+
+            if (top >= 0 && Nowindowreposition == false)
+            {
+                var left = db.GetSettingInt("Map3DFormLeft", 0);
+                var height = db.GetSettingInt("Map3DFormHeight", 800);
+                var width = db.GetSettingInt("Map3DFormWidth", 800);
+                this.Location = new Point(left, top);
+                this.Size = new Size(width, height);
+                //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
+            }
+
             LoadMapImages();
             FillExpeditions();
             ShowCenterSystem();
-            labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
+            labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
 
-            GenerateDataSetsGridLines();
-            GenerateDataSetsGridCoords();
+            GenerateDataSets();
             GenerateDataSetsMaps();
-            GenerateDataSetsStars();
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
+
+            _starnametimer.Interval = 1000;
+            _starnametimer.Tick += new EventHandler(NameStars);
+            _starnametimer.Start();
+
+            _mousehovertick.Tick += new EventHandler(MouseHoverTick);
+            _mousehovertick.Interval = 250;
         }
 
         private void FormMap_Activated(object sender, EventArgs e)
@@ -170,6 +213,15 @@ namespace EDDiscovery2
 
         private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (Visible)
+            {
+                db.PutSettingInt("Map3DFormWidth", this.Width);
+                db.PutSettingInt("Map3DFormHeight", this.Height);
+                db.PutSettingInt("Map3DFormTop", this.Top);
+                db.PutSettingInt("Map3DFormLeft", this.Left);
+                //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
+            }
+
             e.Cancel = true;
             this.Hide();
         }
@@ -200,39 +252,78 @@ namespace EDDiscovery2
             }
         }
 
+        public void AddExpedition(string name, Func<DateTime> starttime, Func<DateTime> endtime)
+        {
+            _AddExpedition(name, starttime, endtime);
+        }
+
+        public void AddExpedition(string name, DateTime starttime, DateTime? endtime)
+        {
+            _AddExpedition(name, () => starttime, endtime == null ? null : new Func<DateTime>(() => (DateTime)endtime));
+        }
+
+        private ToolStripButton _AddExpedition(string name, Func<DateTime> starttime, Func<DateTime> endtime)
+        {
+            var item = new ToolStripButton
+            {
+                Text = name,
+                CheckOnClick = true,
+                DisplayStyle = ToolStripItemDisplayStyle.Text
+            };
+            item.Click += (s, e) => dropdownFilterHistory_Item_Click(s, e, item, starttime, endtime);
+            dropdownFilterDate.DropDownItems.Add(item);
+            return item;
+        }
+
         private void FillExpeditions()
         {
-            Dictionary<string, Func<DateTime>> excursions = new Dictionary<string, Func<DateTime>>()
+            Dictionary<string, Func<DateTime>> starttimes = new Dictionary<string, Func<DateTime>>()
             {
                 { "All", () => VisitedSystems.Select(s => s.time).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
-                { "Distant Worlds", () => new DateTime(2016, 1, 14) },
-                { "FGE Expedition start", () => new DateTime(2015, 8, 1) },
                 { "Last Week", () => DateTime.Now.AddDays(-7) },
                 { "Last Month", () => DateTime.Now.AddMonths(-1) },
                 { "Last Year", () => DateTime.Now.AddYears(-1) }
             };
 
-            startTime = excursions["All"]();
+            Dictionary<string, Func<DateTime>> endtimes = new Dictionary<string, Func<DateTime>>();
+
+            foreach (var expedition in db.GetAllSavedRoutes())
+            {
+                if (expedition.StartDate != null)
+                {
+                    var starttime = (DateTime)expedition.StartDate;
+                    starttimes[expedition.Name] = () => starttime;
+
+                    if (expedition.EndDate != null)
+                    {
+                        var endtime = (DateTime)expedition.EndDate;
+                        endtimes[expedition.Name] = () => endtime;
+                    }
+                }
+                else if (expedition.EndDate != null)
+                {
+                    var endtime = (DateTime)expedition.EndDate;
+                    endtimes[expedition.Name] = () => endtime;
+                    starttimes[expedition.Name] = starttimes["All"];
+                }
+            }
+
+            startTime = starttimes["All"]();
             endTime = DateTime.Now.AddDays(1);
 
             string lastsel = db.GetSettingString("Map3DFilter", "");
-            foreach (var kvp in excursions)
+            foreach (var kvp in starttimes)
             {
-                var item = new ToolStripButton
-                {
-                    Text = kvp.Key,
-                    CheckOnClick = true,
-                    DisplayStyle = ToolStripItemDisplayStyle.Text
-                };
+                var name = kvp.Key;
                 var startfunc = kvp.Value;
-                item.Click += (s, e) => dropdownFilterHistory_Item_Click(s, e, item, startfunc);
-                dropdownFilterDate.DropDownItems.Add(item);
+                var endfunc = endtimes.ContainsKey(name) ? endtimes[name] : () => DateTime.Now.AddDays(1);
+                var item = _AddExpedition(name, startfunc, endfunc);
 
                 if (item.Text.Equals(lastsel))              // if a standard one, restore.  WE are not saving custom.
                 {                                           // if custom is selected, we don't restore a tick.
                     item.Checked = true;                    // TBD Finwen, should we not be setting a start AND end date
                     startTime = startfunc();
-                    endTime = DateTime.Now.AddDays(1);
+                    endTime = endfunc();
                 }
             }
 
@@ -340,21 +431,45 @@ namespace EDDiscovery2
 
         #region Generate Data Sets
 
-        private void GenerateDataSetsGridLines()
+        private void GenerateDataSets()         // Called ONCE only during Load.. fixed data.
         {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
-            DeleteDataset(ref _datasets_gridlines);
             DatasetBuilder builder = CreateBuilder();
-            _datasets_gridlines = builder.BuildGridLines(_zoom);
+
+            builder.Build();    // need a new one each time.
+            _datasets_coarsegridlines = builder.AddCoarseGridLines();
+
+            builder.Build();
+            _datasets_finegridlines = builder.AddFineGridLines();
+
+            builder.Build();
+            _datasets_gridlinecoords = builder.AddGridCoords();
+
+            builder.Build();
+            _datasets_zeropopstars = builder.AddStars(true,true);
+
+            builder.Build();
+            _datasets_popstarscoloured = builder.AddStars(false, false);
+
+            builder.Build();
+            _datasets_popstarsuncoloured = builder.AddStars(false,true);
+
+            builder.Build();
+            _datasets_poi = builder.AddPOIsToDataset();
+
             builder = null;
+
+            UpdateDataSetsDueToZoom();
         }
 
-        private void GenerateDataSetsGridCoords()
+        private void UpdateDataSetsDueToZoom()
         {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
-            DeleteDataset(ref _datasets_gridcoords);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_gridcoords = builder.BuildGridCoords(_zoom);
+            DatasetBuilder builder = new DatasetBuilder();
+            if (toolStripButtonFineGrid.Checked)
+                builder.UpdateGridZoom(ref _datasets_coarsegridlines, _zoom);
+
+            if (toolStripButtonCoords.Checked)
+                builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
+
             builder = null;
         }
 
@@ -364,15 +479,6 @@ namespace EDDiscovery2
             DeleteDataset(ref _datasets_maps);
             DatasetBuilder builder = CreateBuilder();
             _datasets_maps = builder.BuildMaps();
-            builder = null;
-        }
-
-        private void GenerateDataSetsStars()
-        {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
-            DeleteDataset(ref _datasets_stars);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_stars = builder.BuildStars();
             builder = null;
         }
 
@@ -421,16 +527,11 @@ namespace EDDiscovery2
                 CenterSystem = CenterSystem,
                 SelectedSystem = _clickedSystem,
 
-                VisitedSystems = VisitedSystems.Where(s => s.time >= startTime && s.time <= endTime).OrderBy(s => s.time).ToList(),
+                VisitedSystems = (VisitedSystems != null) ? VisitedSystems.Where(s => s.time >= startTime && s.time <= endTime).OrderBy(s => s.time).ToList() : null,
 
                 Images = selectedmaps.ToArray(),
 
-                GridLines = toolStripButtonGrid.Checked,
-                FineGridLines = toolStripButtonFineGrid.Checked,
-                GridCoords = toolStripButtonCoords.Checked,
                 DrawLines = toolStripButtonDrawLines.Checked,
-                AllSystems = toolStripButtonShowAllStars.Checked,
-                Stations = toolStripButtonStations.Checked,
                 UseImage = selectedmaps.Count != 0
             };
             if (_starList != null)
@@ -447,6 +548,182 @@ namespace EDDiscovery2
             }
 
             return builder;
+        }
+
+        private void NameStars(object sender, EventArgs e) // tick.. way it works is a tick occurs, timer off, thread runs, thread calls 
+                                                           // delegate, work done in UI, timer reticks.  KEEP it that way!
+        {
+            if (Visible && toolStripButtonStarNames.Checked && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
+            {
+                Matrix4d proj;
+                Matrix4d mview;
+                GL.GetDouble(GetPName.ProjectionMatrix, out proj);
+                GL.GetDouble(GetPName.ModelviewMatrix, out mview);
+                _starname_resmat = Matrix4d.Mult(mview, proj);               // does not work in thread, hence tick then thread
+
+                _starnametimer.Stop();                                      // wait till the thread finishes..
+
+                //Console.WriteLine("Tick start thread");
+                nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
+                nsThread.Start();
+            }
+            else if (_datasets_namedstars != null )                     // no stars, clean up
+            {
+                DeleteDataset(ref _datasets_namedstars);
+                _datasets_namedstars = null;
+                _starname_list = null;
+                _starname_zoomlevel = null;
+            }
+        }
+
+        private void NamedStars() // background thread.. run after timer tick
+        {
+            try // just in case someone tears us down..
+            {
+                int limit = 100;                    // number of stars to add at one time, keeps latency low
+
+                int lylimit = 3000 * 3000;           // distance limit from viewpoint
+                float starnamescalar = 350;         // scalar multiplier
+                int textwidthly = Math.Min(200, Math.Max((int)(starnamescalar / _zoom), 10));
+                int textheightly = textwidthly / 5;
+                //Console.WriteLine("Stars name size " + textwidthly + " " + textheightly + " scalar " + starnamescalar + " zoom " + _zoom);
+
+                double w2 = glControl.Width / 2.0;
+                double h2 = glControl.Height / 2.0;
+
+                Vector3 modcampos = _cameraPos;
+                modcampos.Y = -modcampos.Y;
+
+                if (_starname_list == null)                        // per tranche, keep a list of stars processed, so we don't repeat. Plus zoom
+                {
+                    _starname_list = new List<List<ISystem>>();    // no list of lists, make one..
+                    _starname_zoomlevel = new List<float>();        
+                }
+
+                List<ISystem> newstars = new List<ISystem>();     // new list
+
+                int stars = 0;
+
+                foreach (var sys in _starList)
+                {
+                    if (sys.HasCoordinate)
+                    {
+                        Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
+                        Vector4d sysloc = Vector4d.Transform(syspos, _starname_resmat);
+
+                        if (sysloc.Z > _znear)
+                        {                                                           // pixel position on screen..
+                            Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
+
+                            if ((syssloc.X >= 5 && syssloc.X <= glControl.Width - 5) && (syssloc.Y >= 5 && syssloc.Y <= glControl.Height - 5))
+                            {
+                                if (stars > limit)          // won't be checked often.. placed here on purpose.
+                                {
+                                    break;
+                                }
+
+                                float sqdist = ((float)sys.x - modcampos.X) * ((float)sys.x - modcampos.X) + ((float)sys.y - modcampos.Y) * ((float)sys.y - modcampos.Y) + ((float)sys.z - modcampos.Z) * ((float)sys.z - modcampos.Z);
+
+                                if (sqdist <= lylimit)
+                                {
+                                    bool contains = false;
+                                    foreach (List<ISystem> lst in _starname_list)       // ensure we do not have it up
+                                    {
+                                        if (lst.Contains(sys))           // we have it, flag it.
+                                        {
+                                            contains = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!contains)          // okay add.
+                                    {
+                                        stars++;
+                                        //   Console.WriteLine("System " + sys.name + " at " + syssloc.X + " " + syssloc.Y);
+                                        newstars.Add(sys);
+                                    }
+                                    else
+                                    {
+                                        // Console.WriteLine("Rejecting " + sys.name + " as dup");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //Console.WriteLine("Stars found " + returnlist?.Count );
+
+                Data3DSetClass<TexturedQuadData> datasetMapImg = null;
+
+                if (newstars.Count > 0)         // if we have anything to add.. 
+                {
+                    _starname_list.Add(newstars);            // record the list of lists..
+                    _starname_zoomlevel.Add(_zoom);         // record the zoom level..
+                    //Console.WriteLine("Add at " + _starname_zoomlevel.Count + " zoom " + _zoom );
+                    datasetMapImg = DatasetBuilder.AddNamedStars(newstars, textwidthly, textheightly);
+                }
+
+                Invoke((MethodInvoker)delegate
+                {
+                    ChangeNamedStars(datasetMapImg);
+                });
+            }
+            catch { }
+        }
+
+
+        void ChangeNamedStars(Data3DSetClass<TexturedQuadData> morestars)      // KICKED off after thread, trying to do the least in the UI thread..
+        {
+            int max_datasets = 200;             // with the limit sets the maximum of stars to display
+
+            if ( morestars != null )            // if add more stars
+            {
+                if (_datasets_namedstars == null)
+                    _datasets_namedstars = new List<IData3DSet>();
+
+                _datasets_namedstars.Add(morestars);               
+                glControl.Invalidate();
+
+                //Console.WriteLine("Named stars changed, data sets " + _datasets_namedstars.Count + " star list sets " + _starname_list.Count );
+                _starnametimer.Interval = 50;                      // still accumulating, go nearly immediately.
+            }
+            else
+            {
+                //Console.WriteLine("No stars to add");               // slow down buckeroo
+                _starnametimer.Interval = 1000;
+            }
+
+            int removeat = -1;
+
+            for (int i = 0; i < _starname_zoomlevel.Count; i++)         
+            {
+                if (Math.Abs(_starname_zoomlevel[i] - _zoom) > 0.5F)    // remove 1 instance per cycle of a old zoom
+                {
+                    removeat = i;
+                    //Console.WriteLine("Prune zoom at " + i + " starzoomlist " + _starname_zoomlevel.Count);
+                    break;
+                }
+            }
+
+            if (removeat == -1 && _datasets_namedstars != null && _datasets_namedstars.Count > max_datasets)     // prune if too big..
+            {
+                removeat = 0;                                       // always the last..
+                //Console.WriteLine("Prune too big at " + removeat);
+            }
+
+            if (removeat != -1)
+            {
+                _starname_list.RemoveAt(removeat);                      // remove the list of stars here
+                _starname_zoomlevel.RemoveAt(removeat);
+                _datasets_namedstars.RemoveAt(removeat);                
+                glControl.Invalidate();
+            }
+
+            Debug.Assert(_starname_list.Count == _starname_zoomlevel.Count);
+            Debug.Assert(_starname_list.Count == _datasets_namedstars.Count);
+
+            _starnametimer.Start();                                      // and do another tick..
         }
 
         //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
@@ -573,8 +850,8 @@ namespace EDDiscovery2
 
                 if (toolStripButtonPerspective.Checked)
                 {
-                    _kbdActions.Up = (state[Key.PageUp] ||state[Key.R]);     
-                    _kbdActions.Down = (state[Key.PageDown] || state[Key.F]);  
+                    _kbdActions.Up = (state[Key.PageUp] || state[Key.R]);
+                    _kbdActions.Down = (state[Key.PageDown] || state[Key.F]);
                     _kbdActions.Forwards = state[Key.Up] || state[Key.W];                    // WASD is fore/back/left/right, R/F is up down
                     _kbdActions.Backwards = state[Key.Down] || state[Key.S];
                 }
@@ -605,7 +882,7 @@ namespace EDDiscovery2
         {
             _cameraActionRotation = Vector3.Zero;
 
-            var angle = (float)  _ticks * 0.075f;
+            var angle = (float)_ticks * 0.075f;
             if (_kbdActions.YawLeft)
             {
                 _cameraActionRotation.Z = -angle;
@@ -667,6 +944,7 @@ namespace EDDiscovery2
 
         private void HandleZoomAdjustment()
         {
+            float curzoom = _zoom;
             var adjustment = 1.0f + ((float)_ticks * 0.01f);
             if (_kbdActions.ZoomIn)
             {
@@ -676,8 +954,11 @@ namespace EDDiscovery2
             if (_kbdActions.ZoomOut)
             {
                 _zoom /= (float)adjustment;
-                if (_zoom < ZoomMin) _zoom = (float) ZoomMin;
+                if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
             }
+
+            if (_zoom != curzoom)
+                UpdateDataSetsDueToZoom();
         }
 
         #endregion
@@ -758,21 +1039,64 @@ namespace EDDiscovery2
 
         private void DrawStars()
         {
-            DatasetBuilder builder = new DatasetBuilder();
-            builder.UpdateGridCoordZoom(ref _datasets_gridcoords, _zoom);
-            builder.UpdateGridZoom(ref _datasets_gridlines, _zoom);
-            builder = null;
+            if (_datasets_maps == null)     // happens during debug.. paint before form load
+                return;
 
             foreach (var dataset in _datasets_maps)                     // needs to be in order of background to foreground objects
                 dataset.DrawAll(glControl);
-            foreach (var dataset in _datasets_gridlines)
+
+            if (toolStripButtonFineGrid.Checked)
+            {
+                foreach (var dataset in _datasets_finegridlines)
+                    dataset.DrawAll(glControl);
+            }
+
+            if (toolStripButtonGrid.Checked)
+            { 
+                foreach (var dataset in _datasets_coarsegridlines)
+                    dataset.DrawAll(glControl);
+            }
+
+            if (toolStripButtonCoords.Checked)
+            {
+                foreach (var dataset in _datasets_gridlinecoords)
+                    dataset.DrawAll(glControl);
+            }
+
+            if (_datasets_namedstars != null)
+            {
+                foreach (var dataset in _datasets_namedstars)
+                    dataset.DrawAll(glControl);
+            }
+
+            if ( toolStripButtonShowAllStars.Checked )
+            {
+                foreach (var dataset in _datasets_zeropopstars)
+                    dataset.DrawAll(glControl);
+
+                if (toolStripButtonStations.Checked)
+                {
+                    foreach (var dataset in _datasets_popstarscoloured)
+                        dataset.DrawAll(glControl);
+                }
+                else
+                {
+                    foreach (var dataset in _datasets_popstarsuncoloured)
+                        dataset.DrawAll(glControl);
+                }
+            }
+            else if (toolStripButtonStations.Checked)
+            {
+                foreach (var dataset in _datasets_popstarscoloured)
+                    dataset.DrawAll(glControl);
+            }
+
+            foreach (var dataset in _datasets_poi)
                 dataset.DrawAll(glControl);
-            foreach (var dataset in _datasets_gridcoords)
-                dataset.DrawAll(glControl);
-            foreach (var dataset in _datasets_stars)
-                dataset.DrawAll(glControl);
+
             foreach (var dataset in _datasets_selectedsystems)
                 dataset.DrawAll(glControl);
+
             foreach (var dataset in _datasets_visitedsystems)
                 dataset.DrawAll(glControl);
         }
@@ -844,7 +1168,7 @@ namespace EDDiscovery2
                 maxstardate = maxstardate.AddHours(10);
 
                 DatasetBuilder build = CreateBuilder();
-                build.UpdateStandardSystems(ref _datasets_stars, maxstardate);
+                build.UpdateSystems(ref _datasets_zeropopstars, maxstardate);
                 build = null;
 
                 if (maxstardate > DateTime.Now)
@@ -854,9 +1178,9 @@ namespace EDDiscovery2
             glControl.Invalidate();
         }
 
-        #endregion
+#endregion
 
-        #region Camera Slew and Update
+#region Camera Slew and Update
 
         private void ResetCamera()
         {
@@ -864,6 +1188,7 @@ namespace EDDiscovery2
             _cameraDir = Vector3.Zero;
 
             _zoom = _defaultZoom;
+            UpdateDataSetsDueToZoom();
         }
 
         private void StartCameraSlew()
@@ -905,6 +1230,12 @@ namespace EDDiscovery2
             _cameraDir.X = BoundedAngle(_cameraDir.X + _cameraActionRotation.X);
             _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
             _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);        // rotate camera by asked value
+
+            // Limit camera pitch
+            if (_cameraDir.X < 0 && _cameraDir.X > -90)
+                _cameraDir.X = 0;
+            if (_cameraDir.X > 180 || _cameraDir.X <= -90)
+                _cameraDir.X = 180;
 
 #if DEBUG
             bool istranslating = (_cameraActionMovement.X != 0 || _cameraActionMovement.Y != 0 || _cameraActionMovement.Z != 0);
@@ -954,9 +1285,9 @@ namespace EDDiscovery2
             return (float)(Math.PI * angle / 180.0);
         }
 
-        #endregion
+#endregion
 
-        #region User Controls
+#region User Controls
 
         private void EndPicker_ValueChanged(object sender, EventArgs e)
         {
@@ -996,7 +1327,7 @@ namespace EDDiscovery2
             glControl.Invalidate();
         }
 
-        private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc)
+        private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc, Func<DateTime> endfunc)
         {
             foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
             {
@@ -1007,7 +1338,7 @@ namespace EDDiscovery2
             }
             db.PutSettingString("Map3DFilter", sel.Text);
             startTime = startfunc();
-            endTime = DateTime.Now.AddDays(1);
+            endTime = endfunc == null ? DateTime.Now.AddDays(1) : endfunc();
             startPickerHost.Visible = false;
             endPickerHost.Visible = false;
             GenerateDataSetsVisitedSystems();
@@ -1039,41 +1370,43 @@ namespace EDDiscovery2
         private void toolStripButtonShowAllStars_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DAllStars", toolStripButtonShowAllStars.Checked);
-            GenerateDataSetsStars();
             glControl.Invalidate();
         }
 
         private void toolStripButtonStations_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DButtonStations", toolStripButtonStations.Checked);
-            GenerateDataSetsStars();
             glControl.Invalidate();
         }
 
         private void toolStripButtonGrid_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
-            GenerateDataSetsGridLines();
             glControl.Invalidate();
         }
 
         private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
-            GenerateDataSetsGridLines();
+            UpdateDataSetsDueToZoom();
             glControl.Invalidate();
         }
 
         private void toolStripButtonCoords_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
-            GenerateDataSetsGridCoords();
+            UpdateDataSetsDueToZoom();
             glControl.Invalidate();
         }
 
         private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
         {
             db.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
+        }
+
+        private void toolStripButtonStarNames_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DStarNames", toolStripButtonStarNames.Checked);
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -1144,9 +1477,9 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
 
-        #region Mouse
+#region Mouse
 
         private ISystem GetMouseOverSystem(int x, int y)
         {
@@ -1195,9 +1528,12 @@ namespace EDDiscovery2
                         double sysdist = Math.Sqrt(syssloc.X * syssloc.X + syssloc.Y * syssloc.Y);
                         if (sysdist < 7.0 && (sysdist + Math.Abs(sysloc.Z * _zoom)) < cursysdistz)
                         {
-                            cursys = sys;
-                            cursysloc = sysloc;
-                            cursysdistz = sysdist + Math.Abs(sysloc.Z * _zoom);
+                            if (toolStripButtonShowAllStars.Checked || (sys.population != 0 && toolStripButtonStations.Checked))
+                            {
+                                cursys = sys;
+                                cursysloc = sysloc;
+                                cursysdistz = sysdist + Math.Abs(sysloc.Z * _zoom);
+                            }
                         }
                     }
                 }
@@ -1242,7 +1578,7 @@ namespace EDDiscovery2
 
                     if (_clickedSystem == null)
                     {
-                        labelClickedSystemCoords.Text = "Click a star to select, double-click to center";
+                        labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
                         selectionAllegiance.Text = "Allegiance";
                         selectionEconomy.Text = "Economy";
                         selectionGov.Text = "Gov";
@@ -1258,6 +1594,7 @@ namespace EDDiscovery2
                         selectionState.Text = "State: " + _clickedSystem.state;
                         viewOnEDSMToolStripMenuItem.Enabled = true;
                         SetCenterSystemTo(CenterSystem);
+                        System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
                     }
                 }
             }
@@ -1298,6 +1635,11 @@ namespace EDDiscovery2
                 _cameraDir.Y += (float)(dx / 4.0f);
                 _cameraDir.X += (float)(-dy / 4.0f);
 
+                // Limit camera pitch
+                if (_cameraDir.X < 0 && _cameraDir.X > -90)
+                    _cameraDir.X = 0;
+                if (_cameraDir.X > 180 || _cameraDir.X <= -90)
+                    _cameraDir.X = 180;
                 //SetupCursorXYZ();
 
                 glControl.Invalidate();
@@ -1386,6 +1728,8 @@ namespace EDDiscovery2
             }
             else
             {
+                float curzoom = _zoom;
+
                 if (e.Delta > 0)
                 {
                     _zoom *= (float)ZoomFact;
@@ -1396,6 +1740,9 @@ namespace EDDiscovery2
                     _zoom /= (float)ZoomFact;
                     if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
                 }
+
+                if ( curzoom != _zoom )
+                    UpdateDataSetsDueToZoom();
 
                 //SetupCursorXYZ();
             }
@@ -1430,6 +1777,12 @@ namespace EDDiscovery2
                 if (hoversystem.state != EDState.Unknown)
                     info += Environment.NewLine + "State: " + hoversystem.state;
 
+                if (hoversystem.population != 0 )
+                    info += Environment.NewLine + "Population: " + hoversystem.population;
+
+                if (hoversystem.allegiance != EDAllegiance.Unknown)
+                    info += Environment.NewLine + "Allegiance: " + hoversystem.allegiance;
+
                 info += Environment.NewLine + "Distance from " + CenterSystemName + " " + distcsn.ToString("0.0");
                 if (_historyselection != null && !_historyselection.name.Equals(CenterSystem.name))
                 {
@@ -1446,9 +1799,9 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
 
-        #region Misc
+#region Misc
 
         private class MyRenderer : ToolStripProfessionalRenderer
         {
@@ -1519,153 +1872,7 @@ namespace EDDiscovery2
         }
 
         #endregion
+
     }
 }
-
-/* DEAD CODE - removed here for clarity
-
-            private void GenerateDataSetsAllegiance()
-        {
-
-            var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
-
-            InitStarLists();
-
-            _datasets = new List<IData3DSet>();
-
-            datadict[(int)EDAllegiance.Alliance] = Data3DSetClass<PointData>.Create(EDAllegiance.Alliance.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDAllegiance.Anarchy] = Data3DSetClass<PointData>.Create(EDAllegiance.Anarchy.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDAllegiance.Empire] = Data3DSetClass<PointData>.Create(EDAllegiance.Empire.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDAllegiance.Federation] = Data3DSetClass<PointData>.Create(EDAllegiance.Federation.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDAllegiance.Independent] = Data3DSetClass<PointData>.Create(EDAllegiance.Independent.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDAllegiance.None] = Data3DSetClass<PointData>.Create(EDAllegiance.None.ToString(), Color.LightGray, 1.0f);
-            datadict[(int)EDAllegiance.Unknown] = Data3DSetClass<PointData>.Create(EDAllegiance.Unknown.ToString(), Color.DarkGray, 1.0f);
-
-            foreach (SystemClass si in _starList)
-            {
-                if (si.HasCoordinate)
-                {
-                    datadict[(int)si.allegiance].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
-                }
-            }
-
-            foreach (var ds in datadict.Values)
-                _datasets.Add(ds);
-
-            datadict[(int)EDAllegiance.None].Visible = false;
-            datadict[(int)EDAllegiance.Unknown].Visible = false;
-
-        }
-
-
-        //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
-        // it out of FormMap's hair
-        private void GenerateDataSetsGovernment()
-        {
-
-            var datadict = new Dictionary<int, Data3DSetClass<PointData>>();
-
-            InitStarLists();
-
-            _datasets = new List<IData3DSet>();
-
-            datadict[(int)EDGovernment.Anarchy] = Data3DSetClass<PointData>.Create(EDGovernment.Anarchy.ToString(), Color.Yellow, 1.0f);
-            datadict[(int)EDGovernment.Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Colony.ToString(), Color.YellowGreen, 1.0f);
-            datadict[(int)EDGovernment.Democracy] = Data3DSetClass<PointData>.Create(EDGovernment.Democracy.ToString(), Color.Green, 1.0f);
-            datadict[(int)EDGovernment.Imperial] = Data3DSetClass<PointData>.Create(EDGovernment.Imperial.ToString(), Color.DarkGreen, 1.0f);
-            datadict[(int)EDGovernment.Corporate] = Data3DSetClass<PointData>.Create(EDGovernment.Corporate.ToString(), Color.LawnGreen, 1.0f);
-            datadict[(int)EDGovernment.Communism] = Data3DSetClass<PointData>.Create(EDGovernment.Communism.ToString(), Color.DarkOliveGreen, 1.0f);
-            datadict[(int)EDGovernment.Feudal] = Data3DSetClass<PointData>.Create(EDGovernment.Feudal.ToString(), Color.LightBlue, 1.0f);
-            datadict[(int)EDGovernment.Dictatorship] = Data3DSetClass<PointData>.Create(EDGovernment.Dictatorship.ToString(), Color.Blue, 1.0f);
-            datadict[(int)EDGovernment.Theocracy] = Data3DSetClass<PointData>.Create(EDGovernment.Theocracy.ToString(), Color.DarkBlue, 1.0f);
-            datadict[(int)EDGovernment.Cooperative] = Data3DSetClass<PointData>.Create(EDGovernment.Cooperative.ToString(), Color.Purple, 1.0f);
-            datadict[(int)EDGovernment.Patronage] = Data3DSetClass<PointData>.Create(EDGovernment.Patronage.ToString(), Color.LightCyan, 1.0f);
-            datadict[(int)EDGovernment.Confederacy] = Data3DSetClass<PointData>.Create(EDGovernment.Confederacy.ToString(), Color.Red, 1.0f);
-            datadict[(int)EDGovernment.Prison_Colony] = Data3DSetClass<PointData>.Create(EDGovernment.Prison_Colony.ToString(), Color.Orange, 1.0f);
-            datadict[(int)EDGovernment.None] = Data3DSetClass<PointData>.Create(EDGovernment.None.ToString(), Color.Gray, 1.0f);
-            datadict[(int)EDGovernment.Unknown] = Data3DSetClass<PointData>.Create(EDGovernment.Unknown.ToString(), Color.DarkGray, 1.0f);
-
-            foreach (SystemClass si in _starList)
-            {
-                if (si.HasCoordinate)
-                {
-                    datadict[(int)si.primary_economy].Add(new PointData(si.x - CenterSystem.x, si.y - CenterSystem.y, CenterSystem.z - si.z));
-                }
-            }
-
-            foreach (var ds in datadict.Values)
-                _datasets.Add(ds);
-
-            datadict[(int)EDGovernment.None].Visible = false;
-            datadict[(int)EDGovernment.Unknown].Visible = false;
-
-        }
-
-
-private void DrawStars()
-{
-    if (StarList == null)
-        StarList = SQLiteDBClass.globalSystems;
-
-
-    if (VisitedStars == null)
-        InitData();
-
-    GL.PointSize(1.0f);
-
-    GL.Begin(PrimitiveType.Points);
-    GL.Color3(Color.White);
-
-    foreach (SystemClass si in StarList)
-    {
-        if (si.HasCoordinate)
-        {
-            GL.Vertex3(si.x-CenterSystem.x, si.y-CenterSystem.y, CenterSystem.z-si.z);
-        }
-    }
-    GL.End();
-
-
-
-    GL.PointSize(2.0f);
-    GL.Begin(PrimitiveType.Points);
-    GL.Color3(Color.Red);
-
-
-    if (VisitedSystems != null)
-    {
-        SystemClass star;
-
-        foreach (SystemClass sp in VisitedStars.Values)
-        {
-            star = sp;
-            if (star != null)
-            {
-                GL.Vertex3(star.x - CenterSystem.x, star.y - CenterSystem.y, CenterSystem.z- star.z);
-            }
-        }
-    }
-    GL.End();
-
-    GL.PointSize(5.0f);
-    GL.Begin(PrimitiveType.Points);
-    GL.Enable(EnableCap.ProgramPointSize);
-    GL.Color3(Color.Yellow);
-    GL.Vertex3(0,0,0);
-    GL.End();
-}
-
-    /// <summary>
-        /// Calculate Translation of  (X, Y, Z) - according to mouse input
-        /// </summary>
-        private void SetupCursorXYZ()
-        {
-            //                x =   (PointToClient(Cursor.Position).X - glControl.Width/2 ) * (zoom + 1);
-            //                y = (-PointToClient(Cursor.Position).Y + glControl.Height/2) * (zoom + 1);
-
-            //                System.Diagnostics.Trace.WriteLine("X:" + x + " Y:" + y + " Z:" + zoom);
-        }
-*/
-
-
 

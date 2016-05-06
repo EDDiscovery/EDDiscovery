@@ -426,9 +426,6 @@ namespace EDDiscovery
 
             var map = _discoveryForm.Map;
 
-            map.Instance.SystemNames = _discoveryForm.SystemNames;
-            map.Instance.VisitedSystems = _discoveryForm.VisitedSystems;
-
             var route = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>().Select(s => s.Cells[0].Tag as SystemClass).Where(s => s != null && s.HasCoordinate).ToList();
 
             if (route.Count >= 2)
@@ -436,7 +433,11 @@ namespace EDDiscovery
                 float zoom = 400 / CalculateRouteMaxDistFromOrigin();
                 if (zoom < 0.01) zoom = 0.01f;
                 if (zoom > 50) zoom = 50f;
-                map.ShowPlanned(route[0].name, _discoveryForm.settings.MapHomeSystem, route[0].name, zoom, route);
+
+                map.Prepare(route[0].name, _discoveryForm.settings.MapHomeSystem, route[0].name, zoom, _discoveryForm.SystemNames);
+                map.SetVisited(_discoveryForm.VisitedSystems);
+                map.SetPlanned(route);
+                map.Show();
             }
             else
             {
