@@ -32,7 +32,8 @@ namespace EDDiscovery2
         {
             { "Netlogdir", () => System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments", "Products") },
             { "NetlogDirAutoMode", () => true },
-            { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() }
+            { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() },
+            { "UseTheme", () => true }
         };
 
         private Dictionary<string, Action> onchange = new Dictionary<string, Action>
@@ -125,6 +126,7 @@ namespace EDDiscovery2
         public string NetLogDir { get { return GetSettingString("Netlogdir"); } set { PutSettingString("Netlogdir", value); } }
         public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
+        public bool UseTheme { get { return GetSettingBool("UseTheme"); } set { PutSettingBool("UseTheme", value); } }
 
         public event Action NetLogDirChanged { add { onchange["Netlogdir"] += value; } remove { onchange["Netlogdir"] -= value; } }
         public event Action NetLogDirAutoModeChanged { add { onchange["NetlogDirAutoMode"] += value; } remove { onchange["NetlogDirAutoMode"] -= value; } }
