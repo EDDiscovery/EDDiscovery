@@ -30,10 +30,20 @@ namespace EDDiscovery
     {
         #region Variables
 
+        public const int WM_MOVE = 3;
+        public const int WM_SIZE = 5;
+        public const int WM_MOUSEMOVE = 0x200;
+        public const int WM_LBUTTONDOWN = 0x201;
+        public const int WM_LBUTTONUP = 0x202;
         public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int WM_NCLBUTTONUP = 0xA2;
+        public const int WM_NCMOUSEMOVE = 0xA0;
+        public const int HT_CLIENT = 0x1;
         public const int HT_CAPTION = 0x2;
+        public const int HT_BOTTOMRIGHT = 0x11;
         public const int WM_NCL_RESIZE = 0x112;
         public const int HT_RESIZE = 61448;
+        public const int WM_NCHITTEST = 0x84;
 
         private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
         {
@@ -41,6 +51,11 @@ namespace EDDiscovery
             this.WndProc(ref message);
             return message.Result;
         }
+
+        // Mono compatibility
+        private bool _window_dragging = false;
+        private Point _window_dragMousePos = Point.Empty;
+        private Point _window_dragWindowPos = Point.Empty;
 
         //readonly string _fileTgcSystems;
         readonly string _fileEDSMDistances;
@@ -119,6 +134,7 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
         {
+            /*
             if (panel_grip.Visible)
             {
                 panel_grip.Location = new Point(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height);
@@ -126,6 +142,7 @@ namespace EDDiscovery
             }
             else
                 tabControl1.Size = new Size(this.ClientSize.Width, this.ClientSize.Height - tabControl1.Location.Y);
+             */
         }
 
         private void ProcessCommandLineOptions()
@@ -331,8 +348,10 @@ namespace EDDiscovery
             else
                 ToolStripManager.Renderer = new ToolStripProfessionalRenderer();
 
+            this.statusStrip1.Renderer = ToolStripManager.Renderer;
+
             this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
-            panel_grip.Visible = !theme.WindowsFrame;
+            //panel_grip.Visible = !theme.WindowsFrame;
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
             label_version.Visible = !theme.WindowsFrame;
@@ -975,6 +994,7 @@ namespace EDDiscovery
             this.WindowState = FormWindowState.Minimized;
         }
 
+        /*
         private void panel_grip_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -984,6 +1004,7 @@ namespace EDDiscovery
                 SendMessage(WM_NCL_RESIZE, (IntPtr)HT_RESIZE, IntPtr.Zero);
             }
         }
+         */
 
         private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1026,6 +1047,64 @@ namespace EDDiscovery
             {
                 this.Capture = false;
                 SendMessage(WM_NCLBUTTONDOWN, (IntPtr)HT_CAPTION, IntPtr.Zero);
+            }
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            // Compatibility movement for Mono
+            if (m.Msg == WM_LBUTTONDOWN && (int)m.WParam == 1 && !theme.WindowsFrame)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                _window_dragMousePos = new Point(x, y);
+                _window_dragWindowPos = this.Location;
+                _window_dragging = true;
+                m.Result = IntPtr.Zero;
+                this.Capture = true;
+            }
+            else if (m.Msg == WM_MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
+                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
+                this.Location = _window_dragWindowPos;
+                this.Update();
+                m.Result = IntPtr.Zero;
+            }
+            else if (m.Msg == WM_LBUTTONUP)
+            {
+                _window_dragging = false;
+                _window_dragMousePos = Point.Empty;
+                _window_dragWindowPos = Point.Empty;
+                m.Result = IntPtr.Zero;
+                this.Capture = false;
+            }
+            // Windows honours NCHITTEST; Mono does not
+            else if (m.Msg == WM_NCHITTEST)
+            {
+                base.WndProc(ref m);
+
+                if ((int)m.Result == HT_CLIENT)
+                {
+                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                    int y = unchecked((short)((uint)m.LParam >> 16));
+                    Point p = PointToClient(new Point(x, y));
+
+                    if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
+                    {
+                        m.Result = (IntPtr)HT_BOTTOMRIGHT;
+                    }
+                    else if (!theme.WindowsFrame)
+                    {
+                        m.Result = (IntPtr)HT_CAPTION;
+                    }
+                }
+            }
+            else
+            {
+                base.WndProc(ref m);
             }
         }
 
