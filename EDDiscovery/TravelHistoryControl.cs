@@ -590,15 +590,14 @@ namespace EDDiscovery
                 } while (!selectedSys.curSystem.HasCoordinate && selectedLine < dataGridViewTravel.Rows.Count);
             }
 
-            map.Instance.SystemNames = _discoveryForm.SystemNames;
-            map.Instance.VisitedSystems = _discoveryForm.VisitedSystems;
-
             string selname = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
-            map.Show(selname, _discoveryForm.settings.MapHomeSystem, 
+            map.Prepare(selname, _discoveryForm.settings.MapHomeSystem,
                         _discoveryForm.settings.MapCentreOnSelection ? selname : _discoveryForm.settings.MapHomeSystem,
-                        _discoveryForm.settings.MapZoom);
+                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames);
+            map.SetVisited(visitedSystems);
+            map.Show();
         }
-
+        
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -799,7 +798,7 @@ namespace EDDiscovery
         }
 
 
-        internal void NewPosition(object source)
+        internal void NewPosition(object source)            // Called from netlog thread beware.
         {
             try
             {
@@ -883,6 +882,12 @@ namespace EDDiscovery
 
                     AddHistoryRow(true, item, item2);
                     StoreSystemNote();
+
+                    Invoke((MethodInvoker)delegate
+                    {
+                        _discoveryForm.Map.SetVisited(visitedSystems);      // update in UI thread.
+                    });
+
                 });
             }
             catch (Exception ex)
@@ -1222,7 +1227,7 @@ namespace EDDiscovery
         private void button2DMap_Click(object sender, EventArgs e)
         {
             FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm);
-
+            frm.Nowindowreposition = _discoveryForm.option_nowindowreposition;
             frm.Show();
         }
 

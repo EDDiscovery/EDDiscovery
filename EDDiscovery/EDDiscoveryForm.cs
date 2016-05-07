@@ -70,7 +70,7 @@ namespace EDDiscovery
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public List<SystemPosition> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
 
-        bool option_nowindowreposition = false;                             // Cmd line options
+        public bool option_nowindowreposition { get; set;  }  = false;                             // Cmd line options
 
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
@@ -127,7 +127,7 @@ namespace EDDiscovery
             savedRouteExpeditionControl1.InitControl(this);
 
             SystemNames = new AutoCompleteStringCollection();
-            Map = new EDDiscovery2._3DMap.MapManager();
+            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition);
 
             ApplyTheme(false);
         }
@@ -232,16 +232,16 @@ namespace EDDiscovery
 
                 CheckForNewInstaller();
 
-#if DEBUG
-//Robby : not sure about this, should we be moaning about this, what if people don't want to use EDmaterializer.
+                // Note: This is not for the end user, it's actually an alarm for us so we 
+                // know the file is missing from the installer. Without this credentials file 
+                // Prospecting data writes are broken.
                 var appSettings = ConfigurationManager.AppSettings;
                 if (appSettings["EDMaterializerUsername"] == null || appSettings["EDMaterializerPassword"] == null)
                 {
-                    // Note: It's ok if this happens in DEBUG build Because we now hard code the
+                    // Note: It's ok if this happens in DEBUG build Because we now hard coding the
                     // credentials in that particular case.
                     LogLineHighlight("WARNING: EDMaterializer credentials are missing!");
                 }
-#endif
                 LogLineSuccess("Loading completed, Total number of systems " + SystemData.SystemList.Count().ToString());
             }
             catch (Exception ex)
@@ -294,11 +294,11 @@ namespace EDDiscovery
         private void RepositionForm()
         {
             var top = _db.GetSettingInt("FormTop", -1);
-            if (top > 0 && option_nowindowreposition == false )
+            if (top >= 0 && option_nowindowreposition == false )
             {
-                var left = _db.GetSettingInt("FormLeft", -1);
-                var height = _db.GetSettingInt("FormHeight", -1);
-                var width = _db.GetSettingInt("FormWidth", -1);
+                var left = _db.GetSettingInt("FormLeft", 0);
+                var height = _db.GetSettingInt("FormHeight", 800);
+                var width = _db.GetSettingInt("FormWidth", 800);
                 this.Top = top;
                 this.Left = left;
                 this.Height = height;
@@ -950,7 +950,7 @@ namespace EDDiscovery
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormSagCarinaMission frm = new FormSagCarinaMission(this);
-
+            frm.Nowindowreposition = option_nowindowreposition;
             frm.Show();
         }
 
