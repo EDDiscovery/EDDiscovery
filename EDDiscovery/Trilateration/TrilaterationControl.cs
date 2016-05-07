@@ -1032,8 +1032,11 @@ namespace EDDiscovery
             if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = LastKnownSystem;
             var map = _discoveryForm.Map;
 
-            map.ShowTrilat(centerSystem.name, _discoveryForm.settings.MapHomeSystem , centerSystem.name, 
-                        _discoveryForm.settings.MapZoom , CurrentReferenceSystems.ToList());
+            map.Prepare(centerSystem.name, _discoveryForm.settings.MapHomeSystem, centerSystem.name,
+                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames);
+
+            map.SetReferenceSystems(CurrentReferenceSystems.ToList());
+            map.Show();
         }
 
         private void dataGridViewDistances_CellClick(object sender, DataGridViewCellEventArgs e)

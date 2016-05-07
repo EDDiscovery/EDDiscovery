@@ -9,6 +9,9 @@ using System.Web;
 
 namespace EDDiscovery2.PlanetSystems.Repositories
 {
+    // Note: A WorldSurvey is now a "view" of the sum of surveys for a given world. So
+    // It's read only. It can be used for creating quick reports on a planet's status or
+    // in search features where you juts want to know which Worlds have jumponium ingredients.
     public class WorldSurvey : EdMaterializer
     {
         // Use this to get the WorldSurvey given a world-survey id.
@@ -68,11 +71,5 @@ namespace EDDiscovery2.PlanetSystems.Repositories
 
             return listObjects;
         }
-
-        // NO STORE METHOD BY DESIGN
-        // World Surveys are now Read Only.
-        //
-        // The World Survey is calculated through updating of surveys. Note that the world_survey
-        // record is summing of all commanders surveys for a world.
     }
 }

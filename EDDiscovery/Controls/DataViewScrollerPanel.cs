@@ -66,22 +66,24 @@ namespace ExtendedControls
 
             if ( dgv != null && vsc != null )
             {
-                vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, dgv.RowCount - 1, dgv.DisplayedRowCount(false));
+                vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, dgv.Rows.GetRowCount(DataGridViewElementStates.Visible) - 1, dgv.DisplayedRowCount(false));
             }
         }
 
         protected void DGVRowsAdded(Object sender, DataGridViewRowsAddedEventArgs e)
         {
+            int rows = dgv.Rows.GetRowCount(DataGridViewElementStates.Visible);
             Debug.Assert(vsc != null, "No Scroll bar attached");
-           // Console.WriteLine("Rows Added: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + dgv.RowCount + " Added " + e.RowCount);
-            vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, dgv.RowCount - 1, dgv.DisplayedRowCount(false));
+            //Console.WriteLine("Rows Added: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + rows + " Added " + e.RowCount);
+            vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, rows - 1, dgv.DisplayedRowCount(false));
         }
 
         protected void DGVRowsRemoved(Object sender, DataGridViewRowsRemovedEventArgs e)
         {
+            int rows = dgv.Rows.GetRowCount(DataGridViewElementStates.Visible);
             Debug.Assert(vsc != null, "No Scroll bar attached");
-          //  Console.WriteLine("Rows Removed: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + dgv.RowCount +  " Removed " + e.RowCount);
-            vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, dgv.RowCount - 1, dgv.DisplayedRowCount(false));
+            //Console.WriteLine("Rows Removed: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + rows +  " Removed " + e.RowCount);
+            vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, rows - 1, dgv.DisplayedRowCount(false));
         }
 
         protected virtual void DGVMWheel(object sender, MouseEventArgs e)
@@ -91,22 +93,49 @@ namespace ExtendedControls
             else
                 vsc.ValueLimited++;                 // end is UserLimit, not maximum
 
-            if ( vsc.Value >= 0 )                   // we may have a situation where the scroll bar is off and value is -1.. only set if to a good value.
-                dgv.FirstDisplayedScrollingRowIndex = vsc.Value;
+            SetFirstDisplayed(vsc.Value);
         }
 
+        bool ignoredgvscroll = false;
         protected void DGVScroll(Object sender, ScrollEventArgs e)
         {
-            Debug.Assert(vsc != null, "No Scroll bar attached");
-//            Console.WriteLine("DGV Scroll: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + dgv.RowCount);
-            vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, dgv.RowCount - 1, dgv.DisplayedRowCount(false));
+            if (ignoredgvscroll == false)
+            {
+                int rows = dgv.Rows.GetRowCount(DataGridViewElementStates.Visible);
+                Debug.Assert(vsc != null, "No Scroll bar attached");
+                //Console.WriteLine("DGV Scroll: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + rows);
+                vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, rows - 1, dgv.DisplayedRowCount(false));
+            }
         }
 
         protected virtual void OnScrollBarChanged(object sender, ScrollEventArgs e)
         {
             Debug.Assert(dgv != null, "No Data view attached");
-            //            Console.WriteLine("VSC Scroll: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + dgv.RowCount);
-            dgv.FirstDisplayedScrollingRowIndex = vsc.Value;
+            int rows = dgv.Rows.GetRowCount(DataGridViewElementStates.Visible);
+            //Console.WriteLine("VSC Scroll: first:" + dgv.FirstDisplayedScrollingRowIndex + " disp:" + dgv.DisplayedRowCount(false) + " rows" + rows);
+            SetFirstDisplayed(vsc.Value);
+        }
+
+        private void SetFirstDisplayed(int count)                   // find first entry which is visible at this count
+        {
+            //Console.WriteLine("Want " + count );
+            for (int rowi = 0; rowi < dgv.RowCount; rowi++)
+            {
+                if (dgv.Rows[rowi].Visible == true && count-- == 0)
+                {
+                    //Console.WriteLine("Picked " + rowi + " Scroll bar " + vsc.Value);
+                    ignoredgvscroll = true;
+                    dgv.FirstDisplayedScrollingRowIndex = rowi;     // don't fire the DGVScroll.. as we can get into a cycle if rows are hidden
+                    ignoredgvscroll = false;
+                    return;
+                }
+            }
+        }
+
+        public void UpdateScroll()      // call if hide/unhide cells - no call back for this
+        {
+            int rows = dgv.Rows.GetRowCount(DataGridViewElementStates.Visible);
+            vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingRowIndex, rows - 1, dgv.DisplayedRowCount(false));
         }
 
 
