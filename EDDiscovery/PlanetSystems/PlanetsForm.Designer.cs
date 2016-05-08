@@ -40,6 +40,30 @@
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddStar = new System.Windows.Forms.ToolStripButton();
             this.panelPlanets = new System.Windows.Forms.Panel();
+            this.textBoxNotes = new System.Windows.Forms.TextBox();
+            this.label33 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.comboBoxReserve = new System.Windows.Forms.ComboBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.textBoxIce = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBoxMetal = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.textBoxRock = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.textBoxSemiMajorAxis = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.textBoxRotationPeriod = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBoxOrbitPeriod = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBoxPreasure = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBoxSurfaceTemp = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBoxMass = new System.Windows.Forms.TextBox();
             this.comboBoxTerrainDifficulty = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -82,30 +106,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.buttonLoad = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBoxMass = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBoxSurfaceTemp = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.textBoxPreasure = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textBoxOrbitPeriod = new System.Windows.Forms.TextBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.textBoxRotationPeriod = new System.Windows.Forms.TextBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.textBoxSemiMajorAxis = new System.Windows.Forms.TextBox();
-            this.label28 = new System.Windows.Forms.Label();
-            this.textBoxMetal = new System.Windows.Forms.TextBox();
-            this.label29 = new System.Windows.Forms.Label();
-            this.textBoxRock = new System.Windows.Forms.TextBox();
-            this.label30 = new System.Windows.Forms.Label();
-            this.textBoxIce = new System.Windows.Forms.TextBox();
-            this.comboBoxReserve = new System.Windows.Forms.ComboBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
-            this.textBoxNotes = new System.Windows.Forms.TextBox();
+            this.buttonEDMaterializer = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panelPlanets.SuspendLayout();
@@ -133,9 +134,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(345, 9);
+            this.button1.Location = new System.Drawing.Point(330, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(65, 23);
             this.button1.TabIndex = 3;
             this.button1.Text = "Current";
             this.button1.UseVisualStyleBackColor = true;
@@ -267,6 +268,200 @@
             this.panelPlanets.Size = new System.Drawing.Size(923, 149);
             this.panelPlanets.TabIndex = 7;
             this.panelPlanets.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlanets_Paint);
+            // 
+            // textBoxNotes
+            // 
+            this.textBoxNotes.Location = new System.Drawing.Point(475, 123);
+            this.textBoxNotes.Name = "textBoxNotes";
+            this.textBoxNotes.Size = new System.Drawing.Size(445, 20);
+            this.textBoxNotes.TabIndex = 43;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(431, 127);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(35, 13);
+            this.label33.TabIndex = 42;
+            this.label33.Text = "Notes";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(72, 121);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(107, 21);
+            this.comboBox1.TabIndex = 40;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(10, 123);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(52, 13);
+            this.label32.TabIndex = 41;
+            this.label32.Text = "Terraform";
+            // 
+            // comboBoxReserve
+            // 
+            this.comboBoxReserve.FormattingEnabled = true;
+            this.comboBoxReserve.Location = new System.Drawing.Point(591, 96);
+            this.comboBoxReserve.Name = "comboBoxReserve";
+            this.comboBoxReserve.Size = new System.Drawing.Size(107, 21);
+            this.comboBoxReserve.TabIndex = 38;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(530, 99);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(47, 13);
+            this.label31.TabIndex = 39;
+            this.label31.Text = "Reserve";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(816, 72);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(33, 13);
+            this.label30.TabIndex = 37;
+            this.label30.Text = "Ice %";
+            // 
+            // textBoxIce
+            // 
+            this.textBoxIce.Location = new System.Drawing.Point(855, 67);
+            this.textBoxIce.Name = "textBoxIce";
+            this.textBoxIce.Size = new System.Drawing.Size(65, 20);
+            this.textBoxIce.TabIndex = 36;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(683, 71);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(44, 13);
+            this.label28.TabIndex = 35;
+            this.label28.Text = "Metal %";
+            // 
+            // textBoxMetal
+            // 
+            this.textBoxMetal.Location = new System.Drawing.Point(734, 68);
+            this.textBoxMetal.Name = "textBoxMetal";
+            this.textBoxMetal.Size = new System.Drawing.Size(65, 20);
+            this.textBoxMetal.TabIndex = 34;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(543, 70);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(44, 13);
+            this.label29.TabIndex = 33;
+            this.label29.Text = "Rock %";
+            // 
+            // textBoxRock
+            // 
+            this.textBoxRock.Location = new System.Drawing.Point(591, 67);
+            this.textBoxRock.Name = "textBoxRock";
+            this.textBoxRock.Size = new System.Drawing.Size(65, 20);
+            this.textBoxRock.TabIndex = 32;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(508, 43);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(79, 13);
+            this.label27.TabIndex = 31;
+            this.label27.Text = "Semi major axis";
+            // 
+            // textBoxSemiMajorAxis
+            // 
+            this.textBoxSemiMajorAxis.Location = new System.Drawing.Point(591, 40);
+            this.textBoxSemiMajorAxis.Name = "textBoxSemiMajorAxis";
+            this.textBoxSemiMajorAxis.Size = new System.Drawing.Size(65, 20);
+            this.textBoxSemiMajorAxis.TabIndex = 30;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(674, 13);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(56, 13);
+            this.label24.TabIndex = 29;
+            this.label24.Text = "Rot period";
+            // 
+            // textBoxRotationPeriod
+            // 
+            this.textBoxRotationPeriod.Location = new System.Drawing.Point(734, 10);
+            this.textBoxRotationPeriod.Name = "textBoxRotationPeriod";
+            this.textBoxRotationPeriod.Size = new System.Drawing.Size(65, 20);
+            this.textBoxRotationPeriod.TabIndex = 28;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(531, 12);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(56, 13);
+            this.label13.TabIndex = 27;
+            this.label13.Text = "Orb period";
+            // 
+            // textBoxOrbitPeriod
+            // 
+            this.textBoxOrbitPeriod.Location = new System.Drawing.Point(591, 9);
+            this.textBoxOrbitPeriod.Name = "textBoxOrbitPeriod";
+            this.textBoxOrbitPeriod.Size = new System.Drawing.Size(65, 20);
+            this.textBoxOrbitPeriod.TabIndex = 26;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(220, 69);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(54, 13);
+            this.label12.TabIndex = 25;
+            this.label12.Text = "Preassure";
+            // 
+            // textBoxPreasure
+            // 
+            this.textBoxPreasure.Location = new System.Drawing.Point(280, 67);
+            this.textBoxPreasure.Name = "textBoxPreasure";
+            this.textBoxPreasure.Size = new System.Drawing.Size(66, 20);
+            this.textBoxPreasure.TabIndex = 24;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(31, 67);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(34, 13);
+            this.label11.TabIndex = 23;
+            this.label11.Text = "Temp";
+            // 
+            // textBoxSurfaceTemp
+            // 
+            this.textBoxSurfaceTemp.Location = new System.Drawing.Point(72, 64);
+            this.textBoxSurfaceTemp.Name = "textBoxSurfaceTemp";
+            this.textBoxSurfaceTemp.Size = new System.Drawing.Size(66, 20);
+            this.textBoxSurfaceTemp.TabIndex = 22;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(31, 41);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(32, 13);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "Mass";
+            // 
+            // textBoxMass
+            // 
+            this.textBoxMass.Location = new System.Drawing.Point(72, 38);
+            this.textBoxMass.Name = "textBoxMass";
+            this.textBoxMass.Size = new System.Drawing.Size(66, 20);
+            this.textBoxMass.TabIndex = 20;
             // 
             // comboBoxTerrainDifficulty
             // 
@@ -644,211 +839,33 @@
             // 
             this.buttonLoad.Location = new System.Drawing.Point(264, 10);
             this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(75, 23);
+            this.buttonLoad.Size = new System.Drawing.Size(65, 23);
             this.buttonLoad.TabIndex = 11;
             this.buttonLoad.Text = "Load";
             this.buttonLoad.UseVisualStyleBackColor = true;
             this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
-            // label10
+            // buttonEDMaterializer
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(31, 41);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(32, 13);
-            this.label10.TabIndex = 21;
-            this.label10.Text = "Mass";
-            // 
-            // textBoxMass
-            // 
-            this.textBoxMass.Location = new System.Drawing.Point(72, 38);
-            this.textBoxMass.Name = "textBoxMass";
-            this.textBoxMass.Size = new System.Drawing.Size(66, 20);
-            this.textBoxMass.TabIndex = 20;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(31, 67);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(34, 13);
-            this.label11.TabIndex = 23;
-            this.label11.Text = "Temp";
-            // 
-            // textBoxSurfaceTemp
-            // 
-            this.textBoxSurfaceTemp.Location = new System.Drawing.Point(72, 64);
-            this.textBoxSurfaceTemp.Name = "textBoxSurfaceTemp";
-            this.textBoxSurfaceTemp.Size = new System.Drawing.Size(66, 20);
-            this.textBoxSurfaceTemp.TabIndex = 22;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(220, 69);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(54, 13);
-            this.label12.TabIndex = 25;
-            this.label12.Text = "Preassure";
-            // 
-            // textBoxPreasure
-            // 
-            this.textBoxPreasure.Location = new System.Drawing.Point(280, 67);
-            this.textBoxPreasure.Name = "textBoxPreasure";
-            this.textBoxPreasure.Size = new System.Drawing.Size(66, 20);
-            this.textBoxPreasure.TabIndex = 24;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(531, 12);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(56, 13);
-            this.label13.TabIndex = 27;
-            this.label13.Text = "Orb period";
-            // 
-            // textBoxOrbitPeriod
-            // 
-            this.textBoxOrbitPeriod.Location = new System.Drawing.Point(591, 9);
-            this.textBoxOrbitPeriod.Name = "textBoxOrbitPeriod";
-            this.textBoxOrbitPeriod.Size = new System.Drawing.Size(65, 20);
-            this.textBoxOrbitPeriod.TabIndex = 26;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(674, 13);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(56, 13);
-            this.label24.TabIndex = 29;
-            this.label24.Text = "Rot period";
-            // 
-            // textBoxRotationPeriod
-            // 
-            this.textBoxRotationPeriod.Location = new System.Drawing.Point(734, 10);
-            this.textBoxRotationPeriod.Name = "textBoxRotationPeriod";
-            this.textBoxRotationPeriod.Size = new System.Drawing.Size(65, 20);
-            this.textBoxRotationPeriod.TabIndex = 28;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(508, 43);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(79, 13);
-            this.label27.TabIndex = 31;
-            this.label27.Text = "Semi major axis";
-            // 
-            // textBoxSemiMajorAxis
-            // 
-            this.textBoxSemiMajorAxis.Location = new System.Drawing.Point(591, 40);
-            this.textBoxSemiMajorAxis.Name = "textBoxSemiMajorAxis";
-            this.textBoxSemiMajorAxis.Size = new System.Drawing.Size(65, 20);
-            this.textBoxSemiMajorAxis.TabIndex = 30;
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(683, 71);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(44, 13);
-            this.label28.TabIndex = 35;
-            this.label28.Text = "Metal %";
-            // 
-            // textBoxMetal
-            // 
-            this.textBoxMetal.Location = new System.Drawing.Point(734, 68);
-            this.textBoxMetal.Name = "textBoxMetal";
-            this.textBoxMetal.Size = new System.Drawing.Size(65, 20);
-            this.textBoxMetal.TabIndex = 34;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(543, 70);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(44, 13);
-            this.label29.TabIndex = 33;
-            this.label29.Text = "Rock %";
-            // 
-            // textBoxRock
-            // 
-            this.textBoxRock.Location = new System.Drawing.Point(591, 67);
-            this.textBoxRock.Name = "textBoxRock";
-            this.textBoxRock.Size = new System.Drawing.Size(65, 20);
-            this.textBoxRock.TabIndex = 32;
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(816, 72);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(33, 13);
-            this.label30.TabIndex = 37;
-            this.label30.Text = "Ice %";
-            // 
-            // textBoxIce
-            // 
-            this.textBoxIce.Location = new System.Drawing.Point(855, 67);
-            this.textBoxIce.Name = "textBoxIce";
-            this.textBoxIce.Size = new System.Drawing.Size(65, 20);
-            this.textBoxIce.TabIndex = 36;
-            // 
-            // comboBoxReserve
-            // 
-            this.comboBoxReserve.FormattingEnabled = true;
-            this.comboBoxReserve.Location = new System.Drawing.Point(591, 96);
-            this.comboBoxReserve.Name = "comboBoxReserve";
-            this.comboBoxReserve.Size = new System.Drawing.Size(107, 21);
-            this.comboBoxReserve.TabIndex = 38;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(530, 99);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(47, 13);
-            this.label31.TabIndex = 39;
-            this.label31.Text = "Reserve";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(72, 121);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(107, 21);
-            this.comboBox1.TabIndex = 40;
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(10, 123);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(52, 13);
-            this.label32.TabIndex = 41;
-            this.label32.Text = "Terraform";
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(431, 127);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(35, 13);
-            this.label33.TabIndex = 42;
-            this.label33.Text = "Notes";
-            // 
-            // textBoxNotes
-            // 
-            this.textBoxNotes.Location = new System.Drawing.Point(475, 123);
-            this.textBoxNotes.Name = "textBoxNotes";
-            this.textBoxNotes.Size = new System.Drawing.Size(445, 20);
-            this.textBoxNotes.TabIndex = 43;
+            this.buttonEDMaterializer.AccessibleDescription = "Visit system in EDMaterializer web app";
+            this.buttonEDMaterializer.AccessibleName = "EDMaterializer";
+            this.buttonEDMaterializer.Image = ((System.Drawing.Image)(resources.GetObject("buttonEDMaterializer.Image")));
+            this.buttonEDMaterializer.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonEDMaterializer.Location = new System.Drawing.Point(396, 10);
+            this.buttonEDMaterializer.Name = "buttonEDMaterializer";
+            this.buttonEDMaterializer.Size = new System.Drawing.Size(56, 23);
+            this.buttonEDMaterializer.TabIndex = 12;
+            this.buttonEDMaterializer.Text = "Web";
+            this.buttonEDMaterializer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonEDMaterializer.UseVisualStyleBackColor = true;
+            this.buttonEDMaterializer.Click += new System.EventHandler(this.buttonEDMaterializer_Click);
             // 
             // PlanetsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(960, 432);
+            this.Controls.Add(this.buttonEDMaterializer);
             this.Controls.Add(this.buttonLoad);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.label14);
@@ -953,5 +970,6 @@
         private System.Windows.Forms.TextBox textBoxRotationPeriod;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox textBoxOrbitPeriod;
+        private System.Windows.Forms.Button buttonEDMaterializer;
     }
 }
