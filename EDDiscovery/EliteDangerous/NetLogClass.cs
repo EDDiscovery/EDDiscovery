@@ -237,6 +237,9 @@ namespace EDDiscovery
                                 dbsys.Unit = fi.Name;
                                 dbsys.MapColour = defaultMapColour;
                                 dbsys.Commander = EDDConfig.Instance.CurrentCmdrID;
+                                dbsys.X = ps.x;
+                                dbsys.Y = ps.y;
+                                dbsys.Z = ps.z;
 
                                 //if (!lu.Beta)  // dont store  history in DB for beta (YET)
                                 {
@@ -541,9 +544,11 @@ namespace EDDiscovery
                                                 dbsys.Time = visitedSystems[nr].time;
                                                 dbsys.Source = tlUnit.id;
                                                 dbsys.EDSM_sync = false;
-                                                dbsys.Unit = fi.Name;
                                                 dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
                                                 dbsys.Unit = fi.Name;
+                                                dbsys.X = visitedSystems[nr].x;
+                                                dbsys.Y = visitedSystems[nr].y;
+                                                dbsys.Z = visitedSystems[nr].z;
                                                 dbsys.Commander = 0;
 
                                                 if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)

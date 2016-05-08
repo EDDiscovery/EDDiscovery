@@ -356,7 +356,7 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public string SetLogWithPos(string systemName, DateTime dateVisited, float x, float y, float z)
+        public string SetLogWithPos(string systemName, DateTime dateVisited, double x, double y, double z)
         {
             var culture = new System.Globalization.CultureInfo("en-US");
             string query;
