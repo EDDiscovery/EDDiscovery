@@ -216,16 +216,6 @@ namespace EDDiscovery
 
                 CheckForNewInstaller();
 
-                // Note: This is not for the end user, it's actually an alarm for us so we 
-                // know the file is missing from the installer. Without this credentials file 
-                // Prospecting data writes are broken.
-                var appSettings = ConfigurationManager.AppSettings;
-                if (appSettings["EDMaterializerUsername"] == null || appSettings["EDMaterializerPassword"] == null)
-                {
-                    // Note: It's ok if this happens in DEBUG build Because we now hard coding the
-                    // credentials in that particular case.
-                    LogLineHighlight("WARNING: EDMaterializer credentials are missing!");
-                }
                 LogLineSuccess("Loading completed, Total number of systems " + SystemData.SystemList.Count().ToString());
             }
             catch (Exception ex)
