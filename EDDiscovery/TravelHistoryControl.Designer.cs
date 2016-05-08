@@ -805,7 +805,7 @@
             this.comboBoxCommander.Size = new System.Drawing.Size(142, 23);
             this.comboBoxCommander.TabIndex = 0;
             this.comboBoxCommander.ValueMember = null;
-            this.comboBoxCommander.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxCommander_SelectedIndexChanged);
+            this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
             // 
             // textBoxDistanceToNextSystem
             // 
@@ -1056,7 +1056,7 @@
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
             this.comboBoxHistoryWindow.TabIndex = 0;
             this.comboBoxHistoryWindow.ValueMember = null;
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // TravelHistoryControl
             // 
