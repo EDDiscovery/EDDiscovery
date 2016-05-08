@@ -80,7 +80,7 @@
             this.comboBoxRoutingMetric.Size = new System.Drawing.Size(234, 21);
             this.comboBoxRoutingMetric.TabIndex = 9;
             this.comboBoxRoutingMetric.ValueMember = null;
-            this.comboBoxRoutingMetric.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxRoutingMetric_SelectedIndexChanged);
+            this.comboBoxRoutingMetric.SelectedIndexChanged += new System.EventHandler(this.comboBoxRoutingMetric_SelectedIndexChanged);
             // 
             // richTextBox_routeresult
             // 
