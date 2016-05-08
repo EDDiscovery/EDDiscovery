@@ -192,10 +192,10 @@ namespace EDDiscovery2.EDSM
         {
             string json;
 
-            if (system.x==0.0 && system.y==0.0 && system.z==0.0)
+            if (system.vs.X==0.0 && system.vs.Y==0.0 && system.vs.Z==0.0)
                 json = edsm.SetLog(system.Name, system.time);
             else
-                json = edsm.SetLogWithPos(system.Name, system.time, system.x, system.y, system.z);
+                json = edsm.SetLogWithPos(system.Name, system.time, system.vs.X, system.vs.Y, system.vs.Z);
 
             if (json != null)
             {
