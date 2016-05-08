@@ -300,6 +300,7 @@
             // buttonRoss
             // 
             this.buttonRoss.BackColor = System.Drawing.SystemColors.ControlText;
+            this.buttonRoss.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonRoss.ForeColor = System.Drawing.SystemColors.Control;
             this.buttonRoss.Image = ExtendedControls.DrawnPanel.ImageType.Ross;
             this.buttonRoss.Location = new System.Drawing.Point(275, 6);
@@ -315,6 +316,7 @@
             // buttonEDDB
             // 
             this.buttonEDDB.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonEDDB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonEDDB.ForeColor = System.Drawing.SystemColors.ControlText;
             this.buttonEDDB.Image = ExtendedControls.DrawnPanel.ImageType.EDDB;
             this.buttonEDDB.Location = new System.Drawing.Point(252, 6);
