@@ -17,6 +17,10 @@ namespace EDDiscovery2.DB.InMemory
         public string Unit { get; set; }
         public bool EDSM_sync { get; set; }
         public int MapColour { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
+
 
         public bool Update()
         {
