@@ -238,7 +238,7 @@ namespace EDDiscovery
                                 dbsys.MapColour = defaultMapColour;
                                 dbsys.Commander = EDDConfig.Instance.CurrentCmdrID;
 
-                                if (!lu.Beta)  // dont store  history in DB for beta (YET)
+                                //if (!lu.Beta)  // dont store  history in DB for beta (YET)
                                 {
                                     VisitedSystemsClass last = VisitedSystemsClass.GetLast();
 
