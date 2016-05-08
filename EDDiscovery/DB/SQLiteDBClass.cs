@@ -85,14 +85,9 @@ namespace EDDiscovery.DB
                     if (!File.Exists(dbfile))
                     {
                         CreateDB(dbfile);
-
-                        if (!File.Exists(dbfile))
-                        {
-                            CreateDB(dbfile);
-                        }
-                        else
-                            UpgradeDB();
                     }
+                    else
+                        UpgradeDB();
                 }
             }
         }
