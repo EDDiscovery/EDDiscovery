@@ -551,7 +551,7 @@ namespace EDDiscovery
                                                 dbsys.Z = visitedSystems[nr].z;
                                                 dbsys.Commander = 0;
 
-                                                if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
+                                                //if (!tlUnit.Beta)  // dont store  history in DB for beta (YET)
                                                 {
                                                     dbsys.Add();
                                                 }
