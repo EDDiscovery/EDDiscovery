@@ -188,6 +188,9 @@ namespace EDDiscovery.DB
                 if (dbver < 12)
                     UpgradeDB12();
 
+                if (dbver < 13)
+                    UpgradeDB13();
+
                 dbUpgraded = true;
                 return true;
             }
@@ -605,6 +608,43 @@ namespace EDDiscovery.DB
             }
 
             PutSettingInt("DBVer", 12);
+
+            return true;
+        }
+
+        private bool UpgradeDB13()
+        {
+            //Default is Color.Red.ToARGB()
+            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN X double";
+            string query2 = "ALTER TABLE VisitedSystems ADD COLUMN Y double";
+            string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Z double";
+            string dbfile = GetSQLiteDBFile();
+
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery12.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+
+            try
+            {
+                ExecuteQuery(query1);
+                ExecuteQuery(query2);
+                ExecuteQuery(query3);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB13 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 13);
 
             return true;
         }

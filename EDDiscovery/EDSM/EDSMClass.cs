@@ -349,7 +349,21 @@ namespace EDDiscovery2.EDSM
         public string SetLog(string systemName, DateTime dateVisited)
         {
             string query;
-            query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+            query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
+                 "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
+                  "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+            var response = RequestGet("api-logs-v1/" + query);
+            return response.Body;
+        }
+
+        public string SetLogWithPos(string systemName, DateTime dateVisited, double x, double y, double z)
+        {
+            var culture = new System.Globalization.CultureInfo("en-US");
+            string query;
+            query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
+                 "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
+                 "&x=" + HttpUtility.UrlEncode(x.ToString(culture)) + "&y=" + HttpUtility.UrlEncode(y.ToString(culture)) + "&z=" + HttpUtility.UrlEncode(z.ToString(culture)) +
+                  "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
             var response = RequestGet("api-logs-v1/" + query);
             return response.Body;
         }

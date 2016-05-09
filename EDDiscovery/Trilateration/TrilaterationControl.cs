@@ -26,6 +26,7 @@ namespace EDDiscovery
         private Thread EDSMSubmissionThread;
         private EDSMClass edsm;
         private List<WantedSystemClass> wanted;
+        private bool _resizing;
 
         /** This global should be set if the next CurrentCellChanged() event should skip to the next editable cell.
          * This should be the case whenver a keyboard event causes cells to change, but not on mouse-initiated events */
@@ -1307,6 +1308,18 @@ namespace EDDiscovery
             if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
+        }
+
+        private void splitContainerBottom_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            if (!splitContainer1.LayoutChanging && splitContainerTop.SplitterDistance != splitContainerBottom.SplitterDistance)
+                splitContainerTop.SplitterDistance = splitContainerBottom.SplitterDistance;
+        }
+
+        private void splitContainerTop_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            if (!splitContainer1.LayoutChanging && splitContainerBottom.SplitterDistance != splitContainerTop.SplitterDistance)
+                splitContainerBottom.SplitterDistance = splitContainerTop.SplitterDistance;
         }
     }
 }
