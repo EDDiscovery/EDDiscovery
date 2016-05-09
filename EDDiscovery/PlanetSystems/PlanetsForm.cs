@@ -12,6 +12,7 @@ using System.Globalization;
 using EDDiscovery2.PlanetSystems;
 using EDDiscovery2.HTTP;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace EDDiscovery2.PlanetSystems
 {
@@ -518,6 +519,10 @@ namespace EDDiscovery2.PlanetSystems
 
         }
 
+        private void buttonEDMaterializer_Click(object sender, EventArgs e)
+        {
+            Process.Start($"http://edmaterializer.com/search?q={textBoxSystemName.Text}");
+        }
     }
 
 }
