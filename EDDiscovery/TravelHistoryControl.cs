@@ -805,88 +805,7 @@ namespace EDDiscovery
                 string name = netlog.visitedSystems.Last().Name;
                 Invoke((MethodInvoker)delegate
                 {
-                    LogText("Arrived to system: ");
-                    SystemClass sys1 = SystemData.GetSystem(name);
-                    if (sys1 == null || sys1.HasCoordinate == false)
-                        LogTextHighlight(name);
-                    else
-                        LogText(name);
-
-
-                    int count = GetVisitsCount(name);
-
-                    LogText("  : Vist nr " + count.ToString()  + Environment.NewLine);
-                    System.Diagnostics.Trace.WriteLine("Arrived to system: " + name + " " + count.ToString() + ":th visit.");
-
-                    var result = visitedSystems.OrderByDescending(a => a.time).ToList<SystemPosition>();
-
-                    //if (TrilaterationControl.Visible)
-                    //{
-                    //    CloseTrilateration();
-                    //    MessageBox.Show("You have arrived to another system while trilaterating."
-                    //                    + " As a pre-caution to prevent any mistakes with submitting wrong systems or distances"
-                    //                    + ", your trilateration was aborted.");
-                    //}
-
-
-                    SystemPosition item = result[0];
-                    SystemPosition item2;
-
-                    if (result.Count > 1)
-                        item2 = result[1];
-                    else
-                        item2 = null;
-
-                    if (checkBoxEDSMSyncTo.Checked == true)
-                    {
-                        EDSMClass edsm = new EDSMClass();
-                        edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-                        edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-
-                        Task taskEDSM = Task.Factory.StartNew(() => EDSMSync.SendTravelLog(edsm, item, null));
-                    }
-
-                    // grab distance to next (this) system
-                    textBoxDistanceToNextSystem.Enabled = false;
-                    if (textBoxDistanceToNextSystem.Text.Length > 0 && item2 != null)
-                    {
-                        SystemClass currentSystem = null, previousSystem = null;
-                        SystemData.SystemList.ForEach(s =>
-                        {
-                            if (s.name == item.Name) currentSystem = s;
-                            if (s.name == item2.Name) previousSystem = s;
-                        });
-
-                        if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
-                        {
-                            var presetDistance = DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), 45);
-                            if (presetDistance.HasValue)
-                            {
-                                var distance = new DistanceClass
-                                {
-                                    Dist = presetDistance.Value,
-                                    CreateTime = DateTime.UtcNow,
-                                    CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name,
-                                    NameA = item.Name,
-                                    NameB = item2.Name,
-                                    Status = DistancsEnum.EDDiscovery
-                                };
-                                Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
-                                distance.Store();
-                                SQLiteDBClass.AddDistanceToCache(distance);
-                            }
-                        }
-                    }
-                    textBoxDistanceToNextSystem.Clear();
-                    textBoxDistanceToNextSystem.Enabled = true;
-
-                    AddHistoryRow(true, item, item2);
-                    StoreSystemNote();
-
-                    Invoke((MethodInvoker)delegate
-                    {
-                        _discoveryForm.Map.SetVisited(visitedSystems);      // update in UI thread.
-                    });
+                    UpdateNewPosition(name);
 
                 });
             }
@@ -895,6 +814,92 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Exception NewPosition: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
+        }
+
+        private void UpdateNewPosition(string name)
+        {
+            LogText("Arrived to system: ");
+            SystemClass sys1 = SystemData.GetSystem(name);
+            if (sys1 == null || sys1.HasCoordinate == false)
+                LogTextHighlight(name);
+            else
+                LogText(name);
+
+
+            int count = GetVisitsCount(name);
+
+            LogText("  : Vist nr " + count.ToString() + Environment.NewLine);
+            System.Diagnostics.Trace.WriteLine("Arrived to system: " + name + " " + count.ToString() + ":th visit.");
+
+            var result = visitedSystems.OrderByDescending(a => a.time).ToList<SystemPosition>();
+
+            //if (TrilaterationControl.Visible)
+            //{
+            //    CloseTrilateration();
+            //    MessageBox.Show("You have arrived to another system while trilaterating."
+            //                    + " As a pre-caution to prevent any mistakes with submitting wrong systems or distances"
+            //                    + ", your trilateration was aborted.");
+            //}
+
+
+            SystemPosition item = result[0];
+            SystemPosition item2;
+
+            if (result.Count > 1)
+                item2 = result[1];
+            else
+                item2 = null;
+
+            if (checkBoxEDSMSyncTo.Checked == true)
+            {
+                EDSMClass edsm = new EDSMClass();
+                edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+                edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+
+                Task taskEDSM = Task.Factory.StartNew(() => EDSMSync.SendTravelLog(edsm, item, null));
+            }
+
+            // grab distance to next (this) system
+            textBoxDistanceToNextSystem.Enabled = false;
+            if (textBoxDistanceToNextSystem.Text.Length > 0 && item2 != null)
+            {
+                SystemClass currentSystem = null, previousSystem = null;
+                SystemData.SystemList.ForEach(s =>
+                {
+                    if (s.name == item.Name) currentSystem = s;
+                    if (s.name == item2.Name) previousSystem = s;
+                });
+
+                if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
+                {
+                    var presetDistance = DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), 45);
+                    if (presetDistance.HasValue)
+                    {
+                        var distance = new DistanceClass
+                        {
+                            Dist = presetDistance.Value,
+                            CreateTime = DateTime.UtcNow,
+                            CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name,
+                            NameA = item.Name,
+                            NameB = item2.Name,
+                            Status = DistancsEnum.EDDiscovery
+                        };
+                        Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
+                        distance.Store();
+                        SQLiteDBClass.AddDistanceToCache(distance);
+                    }
+                }
+            }
+            textBoxDistanceToNextSystem.Clear();
+            textBoxDistanceToNextSystem.Enabled = true;
+
+            AddHistoryRow(true, item, item2);
+            StoreSystemNote();
+
+            Invoke((MethodInvoker)delegate
+            {
+                _discoveryForm.Map.SetVisited(visitedSystems);      // update in UI thread.
+            });
         }
 
         private int GetVisitsCount(string name)

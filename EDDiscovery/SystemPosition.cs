@@ -15,6 +15,7 @@ namespace EDDiscovery
         public string Name;
         public int Nr;
         public int BodyNr;
+        public float x, y, z;  // New in ED 2.1
 
         public ISystem curSystem;
         public ISystem prevSystem;
@@ -49,24 +50,68 @@ namespace EDDiscovery
 
             try
             {
+                Regex pattern;
+                int hour, min, sec;
+
                 /* MKW: Use regular expressions to parse the log; much more readable and robust.
                  * Example log entry:
-                 * {09:36:16} System:0(Thuechea JE-O b11-0) Body:1 Pos:(-6.67432e+009,7.3151e+009,-1.19125e+010) Supercruise
-                 *
+                
+                From  ED  2.1 /1.6
+                   {19:21:15} System:"Ooscs Fraae JR-L d8-112" StarPos:(-11609.469,639.594,20141.875)ly  NormalFlight
+                
+                Pre ED 2.1/1.6
+                    {09:36:16} System:0(Thuechea JE-O b11-0) Body:1 Pos:(-6.67432e+009,7.3151e+009,-1.19125e+010) Supercruise
+                 
                  * Also, please note that due to E:D bugs, these entries can be at the end of a line as well, not just on a line of their own.
                  * The RegExp below actually just finds the pattern somewhere in the line, so it caters for rubbish at the end too.
                  */
-                Regex pattern = new Regex(@"{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:\d+\((?<SystemName>.*?)\) Body:(?<Body>\d+) Pos:\(.*?\)( (?<TravelMode>\w+))?");
 
-                Match match = pattern.Match(line);
+                if (line.Contains("StarPos:")) // new  ED 2.1 format
+                {
 
-                int hour = int.Parse(match.Groups["Hour"].Value);
-                int min = int.Parse(match.Groups["Minute"].Value);
-                int sec = int.Parse(match.Groups["Second"].Value);
+                    //{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:"(?<SystemName>[^"]+)" StarPos:\((?<Pos>.*?)\)ly( +(?<TravelMode>\w+))?
+                    //{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:"(?<SystemName>[^"]+)" StarPos:\((?<Pos>.*?)\)ly( +(?<TravelMode>\w+))?
+                    string rgexpstr = "{(?<Hour>\\d+):(?<Minute>\\d+):(?<Second>\\d+)} System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly( +(?<TravelMode>\\w+))?";
+                    pattern = new Regex(rgexpstr);
 
-                sp.Nr = int.Parse(match.Groups["Body"].Value);
-                sp.Name = match.Groups["SystemName"].Value;
+                    Match match = pattern.Match(line);
 
+                    hour = int.Parse(match.Groups["Hour"].Value);
+                    min = int.Parse(match.Groups["Minute"].Value);
+                    sec = int.Parse(match.Groups["Second"].Value);
+
+                    //sp.Nr = int.Parse(match.Groups["Body"].Value);
+                    sp.Name = match.Groups["SystemName"].Value;
+                    string pos = match.Groups["Pos"].Value;
+                    try
+                    {
+                        string[] xyzpos = pos.Split(',');
+                        var culture = new System.Globalization.CultureInfo("en-US");
+                        sp.x = float.Parse(xyzpos[0], culture);
+                        sp.y = float.Parse(xyzpos[1], culture);
+                        sp.z = float.Parse(xyzpos[2], culture);
+                    }
+                    catch
+                    {
+                        sp.x = 0;
+                        sp.y = 0;
+                        sp.z = 0;
+                    }
+                }
+                else
+                {
+                    pattern = new Regex(@"{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:\d+\((?<SystemName>.*?)\) Body:(?<Body>\d+) Pos:\(.*?\)( (?<TravelMode>\w+))?");
+                    Match match = pattern.Match(line);
+
+                    hour = int.Parse(match.Groups["Hour"].Value);
+                    min = int.Parse(match.Groups["Minute"].Value);
+                    sec = int.Parse(match.Groups["Second"].Value);
+
+                    //sp.Nr = int.Parse(match.Groups["Body"].Value);
+                    sp.Name = match.Groups["SystemName"].Value;
+                    
+
+                }
                 if (hour >= lasttime.Hour)
                 {
                     sp.time = new DateTime(lasttime.Year, lasttime.Month, lasttime.Day, hour, min, sec);

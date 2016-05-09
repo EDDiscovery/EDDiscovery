@@ -12,6 +12,10 @@ namespace EDDiscovery2.DB
         string Unit { get; set; }
         bool EDSM_sync { get; set; }
         int MapColour { get; set; }
+        double X { get; set; }
+        double Y { get; set; }
+        double Z { get; set; }
+
 
         bool Update();
     }

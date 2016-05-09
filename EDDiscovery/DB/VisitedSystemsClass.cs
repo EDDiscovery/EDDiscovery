@@ -24,8 +24,20 @@ namespace EDDiscovery2.DB
             Unit = (string)dr["Unit"];
             EDSM_sync = (bool)dr["edsm_sync"];
             MapColour = (int)(long)dr["Map_colour"];
-        }
 
+            if (System.DBNull.Value == dr["X"])
+            {
+                X = 0;
+                Y = 0;
+                Z = 0;
+            }
+            else
+            {
+                X = (double)dr["X"];
+                Y = (double)dr["Y"];
+                Z = (double)dr["Z"];
+            }
+        }
 
         public bool Add()
         {
@@ -43,7 +55,7 @@ namespace EDDiscovery2.DB
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour)";
+                cmd.CommandText = "Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z)";
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@time", Time);
                 cmd.AddParameterWithValue("@unit", Unit);
@@ -51,6 +63,9 @@ namespace EDDiscovery2.DB
                 cmd.AddParameterWithValue("@source", Source);
                 cmd.AddParameterWithValue("@edsm_sync", EDSM_sync);
                 cmd.AddParameterWithValue("@map_colour", MapColour);
+                cmd.AddParameterWithValue("@x", X);
+                cmd.AddParameterWithValue("@y", Y);
+                cmd.AddParameterWithValue("@z", Z);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
@@ -83,7 +98,7 @@ namespace EDDiscovery2.DB
                 cmd.Connection = cn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour  where ID=@id";
+                cmd.CommandText = "Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour, X=@x, Y=@y, Z=@z  where ID=@id";
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@Name", Name);
                 cmd.AddParameterWithValue("@Time", Time);
@@ -92,6 +107,9 @@ namespace EDDiscovery2.DB
                 cmd.AddParameterWithValue("@source", Source);
                 cmd.AddParameterWithValue("@edsm_sync", EDSM_sync);
                 cmd.AddParameterWithValue("@map_colour", MapColour);
+                cmd.AddParameterWithValue("@x", X);
+                cmd.AddParameterWithValue("@y", Y);
+                cmd.AddParameterWithValue("@z", Z);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
