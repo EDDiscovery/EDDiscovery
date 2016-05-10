@@ -53,7 +53,7 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get; private set; }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
-        public List<SystemPosition> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
+        public List<VisitedSystemsClass> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
 
         public bool option_nowindowreposition { get; set;  }  = false;                             // Cmd line options
 

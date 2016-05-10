@@ -747,7 +747,7 @@ namespace EDDiscovery
                 var lastKnown = (from systems
                     in _discoveryForm.VisitedSystems
                     where systems.curSystem != null && systems.curSystem.HasCoordinate
-                    orderby systems.time descending
+                    orderby systems.Time descending
                     select systems.curSystem).FirstOrDefault();
                 return lastKnown;
             }
@@ -760,7 +760,7 @@ namespace EDDiscovery
             {
                 var currentKnown = (from systems
                     in _discoveryForm.VisitedSystems
-                                 orderby systems.time descending
+                                 orderby systems.Time descending
                                  select systems.curSystem).FirstOrDefault();
                 return currentKnown;
             }
