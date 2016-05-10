@@ -121,6 +121,8 @@ namespace EDDiscovery2
             _historyselection = SystemData.GetSystem(HistorySelection);
             _homeSystem = homesys;
             CenterSystemName = centersys;
+            if (String.IsNullOrEmpty(CenterSystemName))
+                CenterSystemName = "Sol";
             _defaultZoom = zoom;
 
             ReferenceSystems = null;
@@ -277,6 +279,8 @@ namespace EDDiscovery2
 
         private void FillExpeditions()
         {
+            if (VisitedSystems == null || VisitedSystems.Count < 1)
+                return;
             Dictionary<string, Func<DateTime>> starttimes = new Dictionary<string, Func<DateTime>>()
             {
                 { "All", () => VisitedSystems.Select(s => s.time).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
