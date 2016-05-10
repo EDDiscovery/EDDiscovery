@@ -368,9 +368,9 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public int GetLogs(DateTime starttime, out List<SystemPosition> log)
+        public int GetLogs(DateTime starttime, out List<VisitedSystemsClass> log)
         {
-            log = new List<SystemPosition>();
+            log = new List<VisitedSystemsClass>();
 
             string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
@@ -389,13 +389,13 @@ namespace EDDiscovery2.EDSM
             {
                 foreach (JObject jo in logs)
                 {
-                    SystemPosition pos = new SystemPosition();
+                    VisitedSystemsClass pos = new VisitedSystemsClass();
 
 
                     pos.Name = jo["system"].Value<string>();
                     string str = jo["date"].Value<string>();
 
-                    pos.time = DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                    pos.Time = DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
                     log.Add(pos);
               
