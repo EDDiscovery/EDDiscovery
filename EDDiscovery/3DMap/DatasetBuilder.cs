@@ -493,7 +493,7 @@ namespace EDDiscovery2._3DMap
             return text_bmp;
         }
 
-        static public Data3DSetClass<TexturedQuadData> AddNamedStars(List<ISystem> starlist, int textwidthly, int textheightly)
+        static public Data3DSetClass<TexturedQuadData> AddNamedStars(List<SystemClassCutDown> starlist, ref int offset, int limit, List<int> idlist, int textwidthly, int textheightly)
         {
             string fontname = "MS Sans Serif";
 
@@ -510,13 +510,21 @@ namespace EDDiscovery2._3DMap
 
             Data3DSetClass<TexturedQuadData> datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("name bitmap", Color.White, 1.0f);
 
-            foreach (ISystem sys in starlist)
+            int number = 0;
+
+            foreach (SystemClassCutDown sys in starlist.Skip(offset))
             {
                 Bitmap map = DrawString(sys.name, fnt, bitmapwidth, bitmapheight);
 
                 datasetMapImg.Add(TexturedQuadData.FromBitmap(map,
                     new Point((int)sys.x, (int)sys.z - textheightly / 2), new Point((int)sys.x + textwidthly, (int)sys.z - textheightly / 2),
                     new Point((int)sys.x, (int)sys.z + textheightly / 2), new Point((int)sys.x + textwidthly, (int)sys.z + textheightly / 2), (float)sys.y));
+
+                idlist.Add(sys.id);
+                offset++;
+
+                if (++number == limit)
+                    break;
             }
 
             return datasetMapImg;
