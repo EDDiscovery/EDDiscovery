@@ -32,7 +32,6 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_poi;
         private List<IData3DSet> _datasets_selectedsystems;
         private List<IData3DSet> _datasets_visitedsystems;
-        private List<IData3DSet> _datasets_namedstars;
 
         private const double ZoomMax = 100;
         private const double ZoomMin = 0.01;
@@ -61,15 +60,10 @@ namespace EDDiscovery2
 
         Matrix4d _starname_resmat;       // to pass to thread..
 
-        List<List<int>> _starname_idlist = null;     // lists of list, what we have done before, matched against _dataset_namedstars
-        List<float> _starname_zoomlevel = null;      // as above
-        List<SystemClassCutDown> _starname_curstars = null;    // current sorted star list, abandoned if view position changes or zoom changes
+        List<SystemClassStarNames> _starnames = null;    // current sorted star list, abandoned if view position changes or zoom changes
         Vector3 _starname_curstars_lastpos;         // camera pos
-        float _starname_curstars_zoom;              // and what zoom..
-        int _starname_curstars_offset;              // where to consider the next tranch from
-
-
-        int _starname_curstars_lastx, _starname_curstars_lasty, _starname_curstars_lastz;
+        const float ZoomOff = -1000000F;
+        float _starname_curstars_zoom = ZoomOff;   // and what zoom.. 
 
         System.Threading.Thread nsThread;
         Timer _starnametimer = new Timer();
@@ -83,7 +77,7 @@ namespace EDDiscovery2
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
 
         private List<SystemClass> _starList;
-        private Dictionary<string, SystemClass> _visitedStars;
+        // removed private Dictionary<string, SystemClass> _visitedStars;
 
 
         private string _homeSystem;
@@ -125,6 +119,21 @@ namespace EDDiscovery2
         public void Prepare(string historysel, string homesys, string centersys, float zoom , 
                                 AutoCompleteStringCollection sysname )
         {
+            if (_starList == null || _starList.Count == 0)              // first time ...
+            {
+                _starList = SQLiteDBClass.globalSystems;
+
+                _starnames = new List<SystemClassStarNames>();
+
+                foreach (var sys in _starList)
+                {
+                    if (sys.HasCoordinate)            // only interested in these
+                        _starnames.Add(new SystemClassStarNames(sys));
+                }
+            }
+
+            _starname_curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
+
             _systemNames = sysname;
             HistorySelection = historysel;
             _historyselection = SystemData.GetSystem(HistorySelection);
@@ -202,7 +211,7 @@ namespace EDDiscovery2
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
 
-            _starnametimer.Interval = 1000;
+            _starnametimer.Interval = 100;
             _starnametimer.Tick += new EventHandler(NameStars);
             _starnametimer.Start();
 
@@ -529,8 +538,6 @@ namespace EDDiscovery2
 
         private DatasetBuilder CreateBuilder()
         {
-            InitStarLists();
-
             selectedmaps = GetSelectedMaps();
 
             DatasetBuilder builder = new DatasetBuilder()
@@ -580,13 +587,18 @@ namespace EDDiscovery2
                 nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
                 nsThread.Start();
             }
-            else if (_datasets_namedstars != null )                     // if stars, clean up
+            else if ( _starname_curstars_zoom > ZoomOff )                         // let tick cont
             {
-                DeleteDataset(ref _datasets_namedstars);
-                _datasets_namedstars = null;
-                _starname_idlist = null;
-                _starname_zoomlevel = null;
-                _starname_curstars = null;
+                RemoveAllNamedStars();
+            }
+        }
+
+        public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
+        {
+            public int Compare(TKey x, TKey y)
+            {
+                int result = x.CompareTo(y);
+                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate values to be added.
             }
         }
 
@@ -597,17 +609,10 @@ namespace EDDiscovery2
                 Vector3 modcampos = _cameraPos;
                 modcampos.Y = -modcampos.Y;
 
-                if ( _starname_curstars == null || 
-                    Vector3.Subtract(_starname_curstars_lastpos, modcampos).LengthSquared > 3*3*3 ||
-                    _starname_curstars_zoom != _zoom ) 
+                if (Vector3.Subtract(_starname_curstars_lastpos, modcampos).LengthSquared > 3 * 3 * 3 ||
+                    Math.Abs(_starname_curstars_zoom - _zoom) > 0.5F)           // if its worth doing a recalc..
                 {
-                    if (_starname_idlist == null)                        // per tranche, keep a list of stars processed, so we don't repeat. Plus zoom
-                    {
-                        _starname_idlist = new List<List<int>>();        // no list of lists, make one..
-                        _starname_zoomlevel = new List<float>();
-                    }
-
-                    _starname_curstars = new List<SystemClassCutDown>();
+                    //Console.WriteLine("Rescan stars zoom " + _zoom);
                     _starname_curstars_lastpos = modcampos;
                     _starname_curstars_zoom = _zoom;
 
@@ -617,185 +622,138 @@ namespace EDDiscovery2
                     double w2 = glControl.Width / 2.0;
                     double h2 = glControl.Height / 2.0;
 
-                    foreach (var sys in _starList)
+                    SortedDictionary<float,int> inviewlist = new SortedDictionary<float,int>( new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
+                    List<int> outofviewlist = new List<int>();      // who's out of view, unsorted.
+
+                    int indexno = 0;
+                    foreach (SystemClassStarNames sys in _starnames)          // we consider all stars..
                     {
-                        if (sys.HasCoordinate)
-                        {
-                            Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
-                            Vector4d sysloc = Vector4d.Transform(syspos, _starname_resmat);
+                        Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
+                        Vector4d sysloc = Vector4d.Transform(syspos, _starname_resmat);
 
-                            if (sysloc.Z > _znear)
-                            {                                                           // pixel position on screen..
-                                Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
+                        bool inviewport = false;
+                        float sqdist = 0F;
 
-                                if ((syssloc.X >= 5 && syssloc.X <= glControl.Width - 5) && (syssloc.Y >= 5 && syssloc.Y <= glControl.Height - 5))
-                                {
-                                    float sqdist = ((float)sys.x - modcampos.X) * ((float)sys.x - modcampos.X) + ((float)sys.y - modcampos.Y) * ((float)sys.y - modcampos.Y) + ((float)sys.z - modcampos.Z) * ((float)sys.z - modcampos.Z);
+                        if (sysloc.Z > _znear)
+                        {                                                           // pixel position on screen..
+                            Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
 
-                                    if (sqdist <= lylimit)
-                                    {
-                                        bool contains = false;
-                                        foreach (List<int> lst in _starname_idlist)       // ensure we do not have it up
-                                        {
-                                            if (lst.Contains(sys.id))           // we have it, flag it.
-                                            {
-                                                contains = true;
-                                                break;
-                                            }
-                                        }
-
-                                        if (!contains)          // okay add.
-                                        {
-                                            _starname_curstars.Add(new SystemClassCutDown(sys, sqdist));
-                                        }
-                                    }
-                                }
+                            if ((syssloc.X >= 5 && syssloc.X <= glControl.Width - 5) && (syssloc.Y >= 5 && syssloc.Y <= glControl.Height - 5))
+                            {
+                                sqdist = ((float)sys.x - modcampos.X) * ((float)sys.x - modcampos.X) + ((float)sys.y - modcampos.Y) * ((float)sys.y - modcampos.Y) + ((float)sys.z - modcampos.Z) * ((float)sys.z - modcampos.Z);
+                                inviewport = sqdist <= lylimit;
                             }
                         }
+
+                        if (inviewport)
+                            inviewlist.Add(sqdist, indexno);                        // we add the star to the appropriate list
+                        else
+                            outofviewlist.Add(indexno);
+
+                        indexno++;
                     }
 
-                    if (_starname_curstars.Count < 30000)
+                    string fontname = "MS Sans Serif";
+                    Font fnt = new Font(fontname, 20F);
+
+                    int bitmapwidth, bitmapheight;
+                    Bitmap text_bmp = new Bitmap(100, 30);
+                    using (Graphics g = Graphics.FromImage(text_bmp))
                     {
-                        _starname_curstars.Sort(delegate (SystemClassCutDown x, SystemClassCutDown y) { return x.distance < y.distance ? -1 : 1; });
-                        Console.WriteLine("Sorted " + _starname_curstars.Count + " at " + Environment.TickCount);
-                    }
-                    else
-                    {
-                        Console.WriteLine("UnSorted " + _starname_curstars.Count + " at " + Environment.TickCount);
+                        SizeF sz = g.MeasureString("Blah blah EX22 LYXX2", fnt);
+                        bitmapwidth = (int)sz.Width + 4;
+                        bitmapheight = (int)sz.Height + 4;
                     }
 
-                    _starname_curstars_offset = 0;                      // right start adding from here, and continue
-                }
-
-                Data3DSetClass<TexturedQuadData> datasetMapImg = null;
-
-                if (_starname_curstars.Count > _starname_curstars_offset )  // if still left to add.
-                {
                     float starnamescalar = 150;         // scalar multiplier
                     int textwidthly = Math.Min(200, Math.Max((int)(starnamescalar / _zoom), 10));
                     int textheightly = textwidthly / 5;
 
-                    Console.WriteLine("Add stars " + _starname_curstars_offset + " at " + Environment.TickCount + " width "  + textwidthly + " " + textheightly + " scalar " + starnamescalar + " zoom " + _zoom);
+                    int paintedtextures = 0;            // only worry about ones in viewport, ones outside will be disposed of soon..
+                    int limit = 1000;                   // max number of stars to show..
+                    int zoomchangenum = 0;
+                    int newpaintnum = 0;
 
-                    List<int> newids = new List<int>();
+                    foreach (int index in inviewlist.Values)            // for all in viewport..
+                    {
+                        SystemClassStarNames sys = _starnames[index];
 
-                    int limit = 100;                    // number of stars to add at one time, keeps latency low
-                    datasetMapImg = DatasetBuilder.AddNamedStars(_starname_curstars, ref _starname_curstars_offset, limit, newids, textwidthly, textheightly);
+                        bool draw = false;
 
-                    _starname_idlist.Add(newids);            // record the list of lists..
-                    _starname_zoomlevel.Add(_zoom);         // record the zoom level..
+                        if (sys.painttexture != null)                   // race, but no problem, does not matter if we make a mistake..
+                        {                                               // because we only test this, never modify it.. and if we miss it, so what, next pass will get it
+                            paintedtextures++;
+
+                            if (paintedtextures > limit)                // too many, dispose this one.  and since we do it in order, closest will be kept.
+                                sys.candisposepainttexture = true;
+                            else if (Math.Abs(sys.paintedzoomlevel - _zoom) > 0.5F)     // if zoom change, redraw
+                            {
+                                draw = true;
+                                zoomchangenum++;
+                            }
+                        }
+                        else
+                        {
+                            if (paintedtextures < limit)                // not painted, if we can paint more, do it..
+                            {
+                                draw = true;
+                                paintedtextures++;
+                                newpaintnum++;
+                            }
+                        }
+
+                        if (draw)
+                        {
+                            Bitmap map = DatasetBuilder.DrawString(sys.name, fnt, bitmapwidth, bitmapheight);
+
+                            sys.paintedzoomlevel = _zoom;
+                            sys.newtexture = TexturedQuadData.FromBitmap(map,
+                            new Point((int)sys.x, (int)sys.z - textheightly / 2), new Point((int)sys.x + textwidthly, (int)sys.z - textheightly / 2),
+                            new Point((int)sys.x, (int)sys.z + textheightly / 2), new Point((int)sys.x + textwidthly, (int)sys.z + textheightly / 2), (float)sys.y);
+
+                            sys.candisposepainttexture = false;         // order important.  set so to keep
+                        }
+                    }
+
+                    Console.WriteLine("Star repaint at " + _zoom + " new " + newpaintnum + " zoom " + zoomchangenum);
+
+                    foreach ( int index in outofviewlist )              // all out of view, remove.
+                    {
+                        _starnames[index].candisposepainttexture = true;
+                    }
                 }
 
                 Invoke((MethodInvoker)delegate
                 {
-                    ChangeNamedStars(datasetMapImg);
+                    ChangeNamedStars();
                 });
             }
             catch { }
         }
 
 
-        void ChangeNamedStars(Data3DSetClass<TexturedQuadData> morestars)      // KICKED off after thread, trying to do the least in the UI thread..
+        void ChangeNamedStars()      // KICKED off after thread, trying to do the least in the UI thread..
         {
-            int ticktime = Environment.TickCount;
-
-            todo
-// now we sort from distance, believe in it.  Generate the data set, and fill up the array until its full..
-// if we zoom, we redo the sort, and repaint..
-// if we move, we redo the sort, but just remove the ones out of the viewport..
-
-            needs much more work..
-                maybe just prune out the _namedstars.. don't have trances.. save the viewport into into the dataset class..
-
-
-            int max_datasets = 50;             // with the limit sets the maximum of stars to display
-
-            if ( morestars != null )            // if add more stars
-            {
-                if (_datasets_namedstars == null)
-                    _datasets_namedstars = new List<IData3DSet>();
-
-                _datasets_namedstars.Add(morestars);               
-                glControl.Invalidate();
-
-                //Console.WriteLine("Named stars changed, data sets " + _datasets_namedstars.Count + " star list sets " + _starname_list.Count );
-                _starnametimer.Interval = 50;                      // still accumulating, go nearly immediately.
-            }
-            else
-            {
-                //Console.WriteLine("No stars to add");               // slow down buckeroo
-                _starnametimer.Interval = 100;
-            }
-
-            int removeat;
-            do
-            {
-                removeat = -1;
-
-                Debug.Assert(_starname_idlist.Count == _starname_zoomlevel.Count);
-                Debug.Assert(_starname_idlist.Count == _datasets_namedstars.Count);
-
-                for (int i = 0; i < _starname_zoomlevel.Count; i++)
-                {
-                    if (Math.Abs(_starname_zoomlevel[i] - _zoom) > 0.5F)
-                    {
-                        removeat = i;
-                        Console.WriteLine("Prune zoom at " + i + " starzoomlist " + _starname_zoomlevel.Count);
-                        break;
-                    }
-                }
-
-                if (removeat == -1 && _datasets_namedstars != null && _datasets_namedstars.Count > max_datasets)     // prune if too big..
-                {
-                    removeat = 0;                                       // always the last..
-                    Console.WriteLine("Prune too big at " + removeat);
-                }
-
-                if (removeat != -1)
-                {
-                    _starname_idlist.RemoveAt(removeat);                      // remove the list of stars here
-                    _starname_zoomlevel.RemoveAt(removeat);
-                    _datasets_namedstars.RemoveAt(removeat);
-                    glControl.Invalidate();
-                }
-
-            } while (removeat != -1 );
-
-            Debug.Assert(_starname_idlist.Count == _starname_zoomlevel.Count);
-            Debug.Assert(_starname_idlist.Count == _datasets_namedstars.Count);
-
-            Console.WriteLine("Timer Tick " + (Environment.TickCount - ticktime));
-
+            glControl.Invalidate();
             _starnametimer.Start();                                      // and do another tick..
         }
 
-        //TODO: If we reintroduce this, I recommend extracting this out to DatasetBuilder where we can unit test it and keep
-        // it out of FormMap's hair
-        private void InitStarLists()
+        private void RemoveAllNamedStars()
         {
-            if (_starList == null || _starList.Count == 0)
-                _starList = SQLiteDBClass.globalSystems;
-
-
-            if (_visitedStars == null)
-                InitData();
-        }
-
-        public void InitData()
-        {
-            _visitedStars = new Dictionary<string, SystemClass>();
-
-            if (VisitedSystems != null)
+            bool changed = false;
+            foreach (var sys in _starnames)                             // not in viewport.. dispose all
             {
-                foreach (SystemPosition sp in VisitedSystems)
+                if (sys.painttexture != null)
                 {
-                    SystemClass star = SystemData.GetSystem(sp.Name);
-                    if (star != null && star.HasCoordinate)
-                    {
-                        _visitedStars[star.SearchName] = star;
-                    }
+                    sys.candisposepainttexture = true;
+                    changed = true;
                 }
             }
+
+            if (changed)
+                glControl.Invalidate();
+
+            _starname_curstars_zoom = ZoomOff;
         }
 
         private List<FGEImage> GetSelectedMaps()
@@ -824,9 +782,9 @@ namespace EDDiscovery2
             return selected;
         }
 
-        #endregion
+#endregion
 
-        #region Set Orientation
+#region Set Orientation
 
         private void SetCenterSystemTo(ISystem sys)
         {
@@ -864,9 +822,9 @@ namespace EDDiscovery2
             StartCameraSlew();
         }
 
-        #endregion
+#endregion
 
-        #region Keyboard
+#region Keyboard
 
         private void HandleInputs()
         {
@@ -1007,9 +965,9 @@ namespace EDDiscovery2
                 UpdateDataSetsDueToZoom();
         }
 
-        #endregion
+#endregion
 
-        #region Render
+#region Render
 
         private void Render()
         {
@@ -1083,6 +1041,9 @@ namespace EDDiscovery2
             GL.PopMatrix();
         }
 
+        int old_paint_num = 0;          //DEBUG
+        int old_zoompaint_num = 0;
+
         private void DrawStars()
         {
             if (_datasets_maps == null)     // happens during debug.. paint before form load
@@ -1098,7 +1059,7 @@ namespace EDDiscovery2
             }
 
             if (toolStripButtonGrid.Checked)
-            { 
+            {
                 foreach (var dataset in _datasets_coarsegridlines)
                     dataset.DrawAll(glControl);
             }
@@ -1109,10 +1070,48 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            if (_datasets_namedstars != null)
+            if (_starnames != null )
             {
-                foreach (var dataset in _datasets_namedstars)
-                    dataset.DrawAll(glControl);
+                int paintnum = 0;
+                int paintzoomdiff = 0;
+
+                foreach (var sys in _starnames)
+                {
+                    if (sys.candisposepainttexture)             // flag is controlled by thread.. don't clear here..
+                    {
+                        if (sys.painttexture != null)           // paint texture controlled by this foreground
+                        {
+                            sys.painttexture.Dispose();
+                            sys.painttexture = null;
+                        }
+                    }
+                    else if (sys.newtexture != null)            // new is controlled by thread..
+                    {
+                        if (sys.painttexture != null)
+                            sys.painttexture.Dispose();
+
+                        sys.painttexture = sys.newtexture;      // copy over and take another reference.. 
+                        sys.newtexture = null;                  
+                        sys.painttexture.Draw(glControl);
+                        paintnum++;
+                    }
+                    else if (sys.painttexture != null)         
+                    {
+                        sys.painttexture.Draw(glControl);
+                        if (Math.Abs(sys.paintedzoomlevel - _zoom) > 0.5F)
+                            paintzoomdiff++;
+
+                        paintnum++;
+                    }
+                }
+
+                if (old_paint_num != paintnum || old_zoompaint_num != paintzoomdiff)
+                {
+                    old_zoompaint_num = paintzoomdiff;
+                    old_paint_num = paintnum;
+                    Console.WriteLine("Painted " + paintnum + " Zoom diff " + paintzoomdiff);
+                }
+
             }
 
             if ( toolStripButtonShowAllStars.Checked )
@@ -1157,7 +1156,7 @@ namespace EDDiscovery2
             statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00}", _cameraPos.X, _cameraPos.Y, _cameraPos.Z, _zoom);
 #if DEBUG
             statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
-#endif        
+#endif
         }
 
         private void CalculateTimeDelta()
@@ -1917,19 +1916,22 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
 
     }
 
-    public class SystemClassCutDown     // unfort need this because we need distance..
+    public class SystemClassStarNames    // holds star naming data..
     {
-        public SystemClassCutDown() { }
-        public SystemClassCutDown(SystemClass other, float d = 0)
+        public SystemClassStarNames() { }
+        public SystemClassStarNames(SystemClass other)
         {
             id = other.id;
             name = other.name;
             x = other.x; y = other.y; z = other.z;
-            distance = d;
+            paintedzoomlevel = -10000000F;
+            newtexture = null;
+            painttexture = null;
+            candisposepainttexture = false;
         }
 
         public int id { get; set; }
@@ -1937,7 +1939,10 @@ namespace EDDiscovery2
         public double x { get; set; }
         public double y { get; set; }
         public double z { get; set; }
-        public float distance { get; set; }
+        public float paintedzoomlevel { get; set; }
+        public TexturedQuadData newtexture { get; set; }
+        public TexturedQuadData painttexture { get; set; }
+        public bool candisposepainttexture { get; set; }
     };
 
 }

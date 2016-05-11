@@ -481,7 +481,7 @@ namespace EDDiscovery2._3DMap
             return lastknownps;
         }
 
-        static private Bitmap DrawString(string str, Font fnt, int w, int h)
+        static public Bitmap DrawString(string str, Font fnt, int w, int h)
         {
             Bitmap text_bmp = new Bitmap(w, h);
             using (Graphics g = Graphics.FromImage(text_bmp))
@@ -491,43 +491,6 @@ namespace EDDiscovery2._3DMap
             }
 
             return text_bmp;
-        }
-
-        static public Data3DSetClass<TexturedQuadData> AddNamedStars(List<SystemClassCutDown> starlist, ref int offset, int limit, List<int> idlist, int textwidthly, int textheightly)
-        {
-            string fontname = "MS Sans Serif";
-
-            Font fnt = new Font(fontname, 20F);
-
-            int bitmapwidth, bitmapheight;
-            Bitmap text_bmp = new Bitmap(100, 30);
-            using (Graphics g = Graphics.FromImage(text_bmp))
-            {
-                SizeF sz = g.MeasureString("Blah blah EX22 LYXX2", fnt);
-                bitmapwidth = (int)sz.Width + 4;
-                bitmapheight = (int)sz.Height + 4;
-            }
-
-            Data3DSetClass<TexturedQuadData> datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("name bitmap", Color.White, 1.0f);
-
-            int number = 0;
-
-            foreach (SystemClassCutDown sys in starlist.Skip(offset))
-            {
-                Bitmap map = DrawString(sys.name, fnt, bitmapwidth, bitmapheight);
-
-                datasetMapImg.Add(TexturedQuadData.FromBitmap(map,
-                    new Point((int)sys.x, (int)sys.z - textheightly / 2), new Point((int)sys.x + textwidthly, (int)sys.z - textheightly / 2),
-                    new Point((int)sys.x, (int)sys.z + textheightly / 2), new Point((int)sys.x + textwidthly, (int)sys.z + textheightly / 2), (float)sys.y));
-
-                idlist.Add(sys.id);
-                offset++;
-
-                if (++number == limit)
-                    break;
-            }
-
-            return datasetMapImg;
         }
 
     }
