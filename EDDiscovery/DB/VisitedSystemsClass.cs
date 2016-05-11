@@ -156,7 +156,7 @@ namespace EDDiscovery2.DB
                     //{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:"(?<SystemName>[^"]+)" StarPos:\((?<Pos>.*?)\)ly( +(?<TravelMode>\w+))?
                     //{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:"(?<SystemName>[^"]+)" StarPos:\((?<Pos>.*?)\)ly( +(?<TravelMode>\w+))?
                     //string rgexpstr = "{(?<Hour>\\d+):(?<Minute>\\d+):(?<Second>\\d+)} System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly( +(?<TravelMode>\\w+))?";
-                    string rgexpstr = "{(?<Hour>\\d+):(?<Minute>\\d+):(?<Second>\\d+)} System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly Body:(?<Body>\\d+) RelPos:\\((?<Pos>.*?)\\)km( +(?<TravelMode>\\w+))?";
+                    string rgexpstr = "{(?<Hour>\\d+):(?<Minute>\\d+):(?<Second>\\d+)} System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly Body:(?<Body>\\d+) RelPos:\\((?<RelPos>.*?)\\)km( +(?<TravelMode>\\w+))?";
                     pattern = new Regex(rgexpstr);
 
                     Match match = pattern.Match(line);
@@ -172,9 +172,9 @@ namespace EDDiscovery2.DB
                     {
                         string[] xyzpos = pos.Split(',');
                         var culture = new System.Globalization.CultureInfo("en-US");
-                        sp.X = float.Parse(xyzpos[0], culture);
-                        sp.Y = float.Parse(xyzpos[1], culture);
-                        sp.Z = float.Parse(xyzpos[2], culture);
+                        sp.X = double.Parse(xyzpos[0], culture);
+                        sp.Y = double.Parse(xyzpos[1], culture);
+                        sp.Z = double.Parse(xyzpos[2], culture);
                     }
                     catch
                     {
