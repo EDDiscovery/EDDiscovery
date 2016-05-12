@@ -95,13 +95,13 @@ namespace EDDiscovery2
 
             LogText("Total Nr of jumps: " + nr + Environment.NewLine);
 
-            var queryres = from a in travelhistoryctrl.visitedSystems where a.time > DateTime.Now.AddDays(-30) select a;
+            var queryres = from a in travelhistoryctrl.visitedSystems where a.Time > DateTime.Now.AddDays(-30) select a;
             LogText("Last 30 days: " + queryres.Count().ToString() + Environment.NewLine);
 
-            queryres = from a in travelhistoryctrl.visitedSystems where a.time > DateTime.Now.AddDays(-7) select a;
+            queryres = from a in travelhistoryctrl.visitedSystems where a.Time > DateTime.Now.AddDays(-7) select a;
             LogText("Last week: " + queryres.Count().ToString() + Environment.NewLine);
 
-            queryres = from a in travelhistoryctrl.visitedSystems where a.time > DateTime.Now.AddDays(-1) select a;
+            queryres = from a in travelhistoryctrl.visitedSystems where a.Time > DateTime.Now.AddDays(-1) select a;
             LogText("Last 24 hours: " + queryres.Count().ToString() + Environment.NewLine);
 
 

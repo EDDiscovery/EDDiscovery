@@ -363,7 +363,6 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="SystemData.cs" />
-    <Compile Include="SystemPosition.cs" />
     <Compile Include="Forms\SystemViewForm.cs">
       <SubType>Form</SubType>
     </Compile>

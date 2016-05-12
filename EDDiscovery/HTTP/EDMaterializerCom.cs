@@ -10,7 +10,7 @@ namespace EDDiscovery2.HTTP
     using Newtonsoft.Json.Linq;
     using System;
     using System.Web;
-
+    using System.Windows.Forms;
     public class EDMaterizliaerCom : HttpCom
     {
         private NameValueCollection _authTokens = null;
@@ -58,16 +58,38 @@ namespace EDDiscovery2.HTTP
             var username = appSettings["EDMaterializerUsername"];
             var password = appSettings["EDMaterializerPassword"];
 #endif
-            var json = $"{{\"email\": \"{username}\", \"password\": \"{password}\"}}";
-            var response = RequestPost(json, $"{_authPath}/sign_in");
-            if (response.StatusCode == HttpStatusCode.OK)
+            ResponseData response = new ResponseData(HttpStatusCode.BadRequest);
+            if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password))
             {
-                var headers = response.Headers;
-                var tokens = new NameValueCollection();
-                tokens["access-token"] = headers["access-token"];
-                tokens["client"] = headers["client"];
-                tokens["uid"] = headers["uid"]; ;
-                _authTokens = tokens;
+                MessageBox.Show("Unabled to login to the EdMaterializer server, the credentials file is missing from the installation",
+                    "Unauthorized",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+            else
+            {
+                var joSignIn = new JObject {
+                    { "email", username },
+                    { "password", password }
+                };
+
+                response = RequestPost(joSignIn.ToString(), $"{_authPath}/sign_in");
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var headers = response.Headers;
+                    var tokens = new NameValueCollection();
+                    tokens["access-token"] = headers["access-token"];
+                    tokens["client"] = headers["client"];
+                    tokens["uid"] = headers["uid"]; ;
+                    _authTokens = tokens;
+                }
+                else
+                {
+                    MessageBox.Show("Their was an error logging in to the EdMaterializer server.\nCheck the logs for details",
+                        "Unauthorized",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
             }
             return response;
         }

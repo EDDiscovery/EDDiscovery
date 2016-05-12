@@ -71,20 +71,20 @@ namespace EDDiscovery2.EDSM
                 edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
 
                 //string comments =  edsm.GetComments(new DateTime(2015, 1, 1));
-                List<SystemPosition> log;
+                List<VisitedSystemsClass> log;
                 List<SystemNoteClass> notes;
                 int ret = edsm.GetLogs(new DateTime(2011, 1, 1), out log);
                 int nret = edsm.GetComments(new DateTime(2011, 1, 1), out notes);
 
                 if (log == null)
-                    log = new List<SystemPosition>();
+                    log = new List<VisitedSystemsClass>();
 
 
                 if (_syncTo)
                 {
                     // Send Unsynced system to EDSM.
 
-                    List<SystemPosition> systems = (from s in mainForm.VisitedSystems where s.vs != null && s.vs.EDSM_sync == false && s.vs.Commander == EDDiscoveryForm.EDDConfig.CurrentCommander.Nr select s).ToList<SystemPosition>();
+                    List<VisitedSystemsClass> systems = (from s in mainForm.VisitedSystems where s.EDSM_sync == false && s.Commander == EDDiscoveryForm.EDDConfig.CurrentCommander.Nr select s).ToList<VisitedSystemsClass>();
                     mainForm.LogLine("EDSM: Sending " + systems.Count.ToString() + " flightlog entries");
                     foreach (var system in systems)
                     {
@@ -94,13 +94,13 @@ namespace EDDiscovery2.EDSM
                             return;
                         }
 
-                        if (system.vs != null && system.vs.EDSM_sync == false)
+                        if ( system.EDSM_sync == false)
                         {
                             // check if it exist in EDSM
-                            SystemPosition ps2 = (from c in log where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
+                            VisitedSystemsClass ps2 = (from c in log where c.Name == system.Name && c.Time.Ticks == system.Time.Ticks select c).FirstOrDefault<VisitedSystemsClass>();
                             if (ps2 != null)
                             {
-                                system.vs.EDSM_sync = true;
+                                system.EDSM_sync = true;
                                 system.Update();
 
                             }
@@ -121,7 +121,7 @@ namespace EDDiscovery2.EDSM
                     // Check for new systems from EDSM
                     foreach (var system in log)
                     {
-                        SystemPosition ps2 = (from c in mainForm.VisitedSystems where c.Name == system.Name && c.time.Ticks == system.time.Ticks select c).FirstOrDefault<SystemPosition>();
+                        VisitedSystemsClass ps2 = (from c in mainForm.VisitedSystems where c.Name == system.Name && c.Time.Ticks == system.Time.Ticks select c).FirstOrDefault<VisitedSystemsClass>();
                         if (ps2 == null)  // Add to local DB...
                         {
                             if (tlu == null) // If we dontt have a travellogunit yet then create it. 
@@ -142,7 +142,7 @@ namespace EDDiscovery2.EDSM
                             vs.Unit = tlu.Name;
 
                             vs.Name = system.Name;
-                            vs.Time = system.time;
+                            vs.Time = system.Time;
                             vs.MapColour = _defmapcolour;
                             vs.EDSM_sync = true;
                             vs.Commander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
@@ -183,19 +183,19 @@ namespace EDDiscovery2.EDSM
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
-                mainForm.LogLineHighlight("EDSM sync Exception " );
+                mainForm.LogLineHighlight("EDSM sync Exception " + ex.Message);
             }
 
         }
 
-        internal static bool SendTravelLog(EDSMClass edsm, SystemPosition system, EDDiscoveryForm mainform)
+        internal static bool SendTravelLog(EDSMClass edsm, VisitedSystemsClass system, EDDiscoveryForm mainform)
         {
             string json;
 
-            if (system.vs.X==0.0 && system.vs.Y==0.0 && system.vs.Z==0.0)
-                json = edsm.SetLog(system.Name, system.time);
+            if (system.X==0.0 && system.Y==0.0 && system.Z==0.0)
+                json = edsm.SetLog(system.Name, system.Time);
             else
-                json = edsm.SetLogWithPos(system.Name, system.time, system.vs.X, system.vs.Y, system.vs.Z);
+                json = edsm.SetLogWithPos(system.Name, system.Time, system.X, system.Y, system.Z);
 
             if (json != null)
             {
@@ -210,7 +210,7 @@ namespace EDDiscovery2.EDSM
                     if (msgnum == 100)
                         System.Diagnostics.Trace.WriteLine("New");
 
-                    system.vs.EDSM_sync = true;
+                    system.EDSM_sync = true;
                     system.Update();
                     return true;
                 }

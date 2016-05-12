@@ -368,9 +368,9 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public int GetLogs(DateTime starttime, out List<SystemPosition> log)
+        public int GetLogs(DateTime starttime, out List<VisitedSystemsClass> log)
         {
-            log = new List<SystemPosition>();
+            log = new List<VisitedSystemsClass>();
 
             string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
@@ -389,13 +389,13 @@ namespace EDDiscovery2.EDSM
             {
                 foreach (JObject jo in logs)
                 {
-                    SystemPosition pos = new SystemPosition();
+                    VisitedSystemsClass pos = new VisitedSystemsClass();
 
 
                     pos.Name = jo["system"].Value<string>();
                     string str = jo["date"].Value<string>();
 
-                    pos.time = DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                    pos.Time = DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
                     log.Add(pos);
               
@@ -443,19 +443,32 @@ namespace EDDiscovery2.EDSM
 
         public bool ShowSystemInEDSM(string sysName)
         {
+            string url = GetUrlToEDSMSystem(sysName);
+            if (string.IsNullOrEmpty(url))
+            {
+                return false;
+            }
+            else
+            {
+                System.Diagnostics.Process.Start(url);
+            }
+            return true;
+        }
+
+        public string GetUrlToEDSMSystem(string sysName)
+        {
             string encodedSys = HttpUtility.UrlEncode(sysName);
             string query = "system?sysname=" + encodedSys + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&showId=1";
             var response = RequestGet("api-v1/" + query);
             var json = response.Body;
             if (json == null || json.ToString() == "[]")
-                return false;
+                return "";
 
             JObject msg = JObject.Parse(json);
             string sysID = msg["id"].Value<string>();
 
             string url = "http://www.edsm.net/show-system/index/id/" + sysID + "/name/" + encodedSys;
-            System.Diagnostics.Process.Start(url);
-            return true;
+            return url;
         }
 
     }
