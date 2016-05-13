@@ -25,7 +25,7 @@ namespace EDDiscoveryTests
             var fourDaysAgo = new SystemPosition {time = DateTime.Now.Subtract(TimeSpan.FromDays(4))};
             var input = new List<SystemPosition> { fourDaysAgo, now };
 
-            Check.That(new TravelHistoryFilter(TimeSpan.FromDays(2)).Filter(input)).ContainsExactly(now);
+            Check.That(TravelHistoryFilter.FromDays(2).Filter(input)).ContainsExactly(now);
         }
 
         [TestMethod]
@@ -36,7 +36,49 @@ namespace EDDiscoveryTests
             var thirtyDaysAgo = new SystemPosition { time = DateTime.Now.Subtract(TimeSpan.FromDays(30)) };
             var input = new List<SystemPosition> { twentyDaysAgo, tenDaysAgo, thirtyDaysAgo };
 
-            Check.That(new TravelHistoryFilter(2).Filter(input)).ContainsExactly(tenDaysAgo, twentyDaysAgo);
+            Check.That(TravelHistoryFilter.Last(2).Filter(input)).ContainsExactly(tenDaysAgo, twentyDaysAgo);
+        }
+
+        [TestMethod]
+        public void No_filter_has_correct_label()
+        {
+            Check.That(TravelHistoryFilter.NoFilter.Label).IsEqualTo("All");
+        }
+
+        [TestMethod]
+        public void last_20_filter_has_correct_label()
+        {
+            Check.That(TravelHistoryFilter.Last(20).Label).IsEqualTo("last 20");
+        }
+
+        [TestMethod]
+        public void Last_6_hours_filter_has_correct_label()
+        {
+            Check.That(TravelHistoryFilter.FromHours(6).Label).IsEqualTo("6 hours");
+        }
+
+        [TestMethod]
+        public void Last_days_filter_has_correct_label()
+        {
+            Check.That(TravelHistoryFilter.FromDays(3).Label).IsEqualTo("3 days");
+        }
+
+        [TestMethod]
+        public void Last_week_filter_has_correct_label()
+        {
+            Check.That(TravelHistoryFilter.FromWeeks(1).Label).IsEqualTo("week");
+        }
+
+        [TestMethod]
+        public void Last_3_weeks_filter_has_correct_label()
+        {
+            Check.That(TravelHistoryFilter.FromWeeks(3).Label).IsEqualTo("3 weeks");
+        }
+
+        [TestMethod]
+        public void Last_month_filter_has_correct_label()
+        {
+            Check.That(TravelHistoryFilter.LastMonth().Label).IsEqualTo("month");
         }
     }
 }
