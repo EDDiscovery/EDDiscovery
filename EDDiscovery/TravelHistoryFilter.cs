@@ -70,10 +70,5 @@ namespace EDDiscovery
                 return input;
             }
         }
-
-        public override string ToString()
-        {
-            return Label;
-        }
     }
 }
