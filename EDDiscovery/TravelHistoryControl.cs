@@ -16,6 +16,7 @@ namespace EDDiscovery
 {
     public partial class TravelHistoryControl : UserControl
     {
+        private const int MaximumJumpRange = 45;
         private static EDDiscoveryForm _discoveryForm;
         public int defaultMapColour;
         public EDSMSync sync;
@@ -850,7 +851,7 @@ namespace EDDiscovery
 
                         if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
                         {
-                            var presetDistance = DistanceParser.DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), 45);
+                            var presetDistance = DistanceParser.DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), MaximumJumpRange);
                             if (presetDistance.HasValue)
                             {
                                 var distance = new DistanceClass
@@ -966,7 +967,7 @@ namespace EDDiscovery
                 return;
             }
 
-            if (!DistanceParser.DistanceAsDouble(value, 45).HasValue) // max jump range is ~42Ly
+            if (!DistanceParser.DistanceAsDouble(value, MaximumJumpRange).HasValue) // max jump range is ~42Ly
             {
                 e.Cancel = true;
             }
