@@ -107,6 +107,7 @@
     <Compile Include="3DMap\DatasetBuilderTests.cs" />
     <Compile Include="DistanceParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TravelHistoryFilterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EDDiscovery\EDDiscovery.csproj">
