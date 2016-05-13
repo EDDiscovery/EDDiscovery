@@ -279,7 +279,7 @@ namespace EDDiscovery2._3DMap
         {
             if (StarList != null)
             {
-                var datasetS = Data3DSetClass<PointData>.Create("stars", (unpopulated || useunpopcolor) ? MapColours.SystemDefault : MapColours.StationSystem , 1.0f);
+                var datasetS = Data3DSetClass<PointData>.Create("stars", (unpopulated || useunpopcolor) ? MapColours.SystemDefault : MapColours.StationSystem , 2.0f);
 
                 foreach (ISystem si in StarList)
                 {
