@@ -30,6 +30,8 @@ namespace EDDiscovery2
             public System.Drawing.Color TrilatCurrentReference { get { return GetColour("TrilatCurrentReference"); } set { PutColour("TrilatCurrentReference", value); } }
             public System.Drawing.Color TrilatSuggestedReference { get { return GetColour("TrilatSuggestedReference"); } set { PutColour("TrilatSuggestedReference", value); } }
             public System.Drawing.Color PlannedRoute { get { return GetColour("PlannedRoute"); } set { PutColour("PlannedRoute", value); } }
+            public System.Drawing.Color NamedStar { get { return GetColour("NamedStar"); } set { PutColour("NamedStar", value); } }
+            public System.Drawing.Color NamedStarUnpopulated { get { return GetColour("NamedStarUnpop"); } set { PutColour("NamedStarUnpop", value); } }
         }
 
         private static EDDConfig _instance;
@@ -66,7 +68,9 @@ namespace EDDiscovery2
             { "MapColour_POISystem", () => System.Drawing.Color.Purple.ToArgb() },
             { "MapColour_TrilatCurrentReference", () => System.Drawing.Color.Green.ToArgb() },
             { "MapColour_TrilatSuggestedReference", () => System.Drawing.Color.DarkOrange.ToArgb() },
-            { "MapColour_PlannedRoute", () => System.Drawing.Color.Green.ToArgb() }
+            { "MapColour_PlannedRoute", () => System.Drawing.Color.Green.ToArgb() },
+            { "MapColour_NamedStar", () => System.Drawing.Color.Yellow.ToArgb() },
+            { "MapColour_NamedStarUnpop", () => System.Drawing.Color.FromArgb(255,192,192,0).ToArgb() }
         };
 
         private Dictionary<string, Action> onchange = new Dictionary<string, Action>
