@@ -188,8 +188,9 @@ namespace EDDiscovery2.EDSM
                 NewSystemTime = SQLiteDBClass.globalSystems.Max(x => x.UpdateDate);
                 lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                 lstsyst = db.GetSettingString("EDSMLastSystems", lstsyst);
+                DateTime lstsystdate;
 
-                if (lstsyst.Equals("2010-01-01 00:00:00"))
+                if (lstsyst.Equals("2010-01-01 00:00:00") || !DateTime.TryParseExact(lstsyst, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out lstsystdate))
                     lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
 
