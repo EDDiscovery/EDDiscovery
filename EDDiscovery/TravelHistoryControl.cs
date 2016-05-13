@@ -1,24 +1,15 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Collections;
-using System.Data.SQLite;
 using EDDiscovery.DB;
 using System.Diagnostics;
 using EDDiscovery2;
 using EDDiscovery2.DB;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
-using EDDiscovery2.HTTP;
 using System.Threading.Tasks;
 
 namespace EDDiscovery
@@ -28,7 +19,6 @@ namespace EDDiscovery
         private static EDDiscoveryForm _discoveryForm;
         public int defaultMapColour;
         public EDSMSync sync;
-        string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Development_s", "Products"); // \\FORC-FDEV-D-1001\\Logs\\";
 
         internal List<SystemPosition> visitedSystems;
         internal bool EDSMSyncTo = true;
@@ -59,7 +49,7 @@ namespace EDDiscovery
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
             checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
-            comboBoxHistoryWindow.Items.AddRange(new string[] { "6 Hours", "12 Hours", "24 Hours", "3 days", "Week", "2 Weeks", "Month", "Last 20", "All" });
+            comboBoxHistoryWindow.Items.AddRange(new[] { "6 Hours", "12 Hours", "24 Hours", "3 days", "Week", "2 Weeks", "Month", "Last 20", "All" });
             comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
             LoadCommandersListBox();
         }
@@ -120,34 +110,34 @@ namespace EDDiscovery
             switch (comboBoxHistoryWindow.SelectedIndex)
             {
                 case 0:
-                    maxDataAge = new TimeSpan(6, 0, 0); // 6 hours
+                    maxDataAge = TimeSpan.FromHours(6);
                     break;
                 case 1:
-                    maxDataAge = new TimeSpan(12, 0, 0); // 12 hours
+                    maxDataAge = TimeSpan.FromHours(12);
                     break;
                 case 2:
-                    maxDataAge = new TimeSpan(24, 0, 0); // 24 hours
+                    maxDataAge = TimeSpan.FromDays(1);
                     break;
                 case 3:
-                    maxDataAge = new TimeSpan(3 * 24, 0, 0); // 3 days
+                    maxDataAge = TimeSpan.FromDays(3);
                     break;
                 case 4:
-                    maxDataAge = new TimeSpan(7 * 24, 0, 0); // 1 week
+                    maxDataAge = TimeSpan.FromDays(7);
                     break;
                 case 5:
-                    maxDataAge = new TimeSpan(14 * 24, 0, 0); // 2 weeks
+                    maxDataAge = TimeSpan.FromDays(14);
                     break;
                 case 6:
-                    maxDataAge = new TimeSpan(30, 0, 0, 0); // 30 days (month)
+                    maxDataAge = TimeSpan.FromDays(30);
                     break;
                 case 7:
                     atMost = 20; // Last 20
                     break;
                 case 8:
-                    maxDataAge = new TimeSpan(100000, 24, 0, 0); // all
+                    maxDataAge = TimeSpan.FromDays(100000);
                     break;
                 default:
-                    maxDataAge = new TimeSpan(7 * 24, 0, 0); // 1 week (default)
+                    maxDataAge = TimeSpan.FromDays(7);
                     break;
             }
 
@@ -412,7 +402,7 @@ namespace EDDiscovery
         private void ShowClosestSystems(string name)
         {
             sysDist = new List<SystemDist>();
-            SystemClass LastSystem = null;
+            SystemClass lastSystem = null;
             float dx, dy, dz;
             double dist;
 
@@ -428,32 +418,32 @@ namespace EDDiscovery
                     {
                         SystemPosition item = result[ii];
 
-                        LastSystem = SystemData.GetSystem(item.Name);
+                        lastSystem = SystemData.GetSystem(item.Name);
                         name = item.Name;
-                        if (LastSystem != null)
+                        if (lastSystem != null)
                             break;
                     }
 
                 }
                 else
                 {
-                    LastSystem = SystemData.GetSystem(name);
+                    lastSystem = SystemData.GetSystem(name);
                 }
 
                 if (name !=null)
-                    labelclosests.Text = "Closest systems from " + name.ToString();
+                    labelclosests.Text = "Closest systems from " + name;
 
                 dataGridViewNearest.Rows.Clear();
 
-                if (LastSystem == null)
+                if (lastSystem == null)
                     return;
 
                 foreach (SystemClass pos in SystemData.SystemList)
                 {
 
-                    dx = (float)(pos.x - LastSystem.x);
-                    dy = (float)(pos.y - LastSystem.y);
-                    dz = (float)(pos.z - LastSystem.z);
+                    dx = (float)(pos.x - lastSystem.x);
+                    dy = (float)(pos.y - lastSystem.y);
+                    dz = (float)(pos.z - lastSystem.z);
                     dist = dx * dx + dy * dy + dz * dz;
 
                     //distance = (float)((system.x - arcsystem.x) * (system.x - arcsystem.x) + (system.y - arcsystem.y) * (system.y - arcsystem.y) + (system.z - arcsystem.z) * (system.z - arcsystem.z));
@@ -623,7 +613,7 @@ namespace EDDiscovery
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            var dist = DistanceAsDouble(textBoxDistance.Text.Trim());
+            var dist = DistanceParser.DistanceAsDouble(textBoxDistance.Text.Trim());
 
             if (!dist.HasValue)
                 MessageBox.Show("Distance in wrong format!");
@@ -685,7 +675,6 @@ namespace EDDiscovery
                 if (currentSysPos != null && !txt.Equals(currentSysPos.curSystem.Note))
                 {
                     SystemNoteClass sn;
-                    List<SystemClass> systems = new List<SystemClass>();
 
                     if (SQLiteDBClass.globalSystemNotes.ContainsKey(currentSysPos.curSystem.SearchName))
                     {
@@ -817,8 +806,8 @@ namespace EDDiscovery
 
                     int count = GetVisitsCount(name);
 
-                    LogText("  : Vist nr " + count.ToString()  + Environment.NewLine);
-                    System.Diagnostics.Trace.WriteLine("Arrived to system: " + name + " " + count.ToString() + ":th visit.");
+                    LogText("  : Vist nr " + count  + Environment.NewLine);
+                    System.Diagnostics.Trace.WriteLine("Arrived to system: " + name + " " + count + ":th visit.");
 
                     var result = visitedSystems.OrderByDescending(a => a.time).ToList<SystemPosition>();
 
@@ -861,7 +850,7 @@ namespace EDDiscovery
 
                         if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
                         {
-                            var presetDistance = DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), 45);
+                            var presetDistance = DistanceParser.DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), 45);
                             if (presetDistance.HasValue)
                             {
                                 var distance = new DistanceClass
@@ -977,46 +966,12 @@ namespace EDDiscovery
                 return;
             }
 
-            if (!DistanceAsDouble(value, 45).HasValue) // max jump range is ~42Ly
+            if (!DistanceParser.DistanceAsDouble(value, 45).HasValue) // max jump range is ~42Ly
             {
                 e.Cancel = true;
             }
         }
 
-        /// <summary>
-        /// Parse a distance as a positive double, in the formats "xx", "xx.yy", "xx,yy" or "xxxx,yy".
-        /// </summary>
-        /// <param name="value">Decimal string to be parsed.</param>
-        /// <param name="maximum">Upper limit or null if not required.</param>
-        /// <returns>Parsed value or null on conversion failure.</returns>
-        private static double? DistanceAsDouble(string value, double? maximum = null)
-        {
-            if (value.Length == 0)
-            {
-                return null;
-            }
-
-            if (!new Regex(@"^\d+([.,]\d{1,2})?$").IsMatch(value))
-            {
-                return null;
-            }
-
-            double valueDouble;
-
-            // Allow regions with , as decimal separator to  also use . as decimal separator and vice versa
-            var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-            if (!double.TryParse(decimalSeparator == "," ? value.Replace(".", ",") : value.Replace(",", "."), out valueDouble))
-            {
-                return null;
-            }
-
-            if (maximum.HasValue && valueDouble > maximum)
-            {
-                return null;
-            }
-
-            return valueDouble;
-        }
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
         {
@@ -1201,7 +1156,7 @@ namespace EDDiscovery
             TextBox tb = sender as TextBox;
             if (tb != null && tb.Text != null)
             {
-                System.Windows.Forms.Clipboard.SetText(tb.Text);
+                Clipboard.SetText(tb.Text);
             }
         }
 
@@ -1308,11 +1263,6 @@ namespace EDDiscovery
             }
 
             this.Cursor = Cursors.Default;
-        }
-
-        private void historyContextMenu_Opening(object sender, CancelEventArgs e)
-        {
-
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)

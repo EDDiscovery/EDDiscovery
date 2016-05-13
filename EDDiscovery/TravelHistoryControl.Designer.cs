@@ -136,7 +136,6 @@
             this.viewOnEDSMToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
             this.historyContextMenu.Size = new System.Drawing.Size(233, 114);
-            this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // starMapColourToolStripMenuItem
             // 
