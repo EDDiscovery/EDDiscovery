@@ -587,7 +587,7 @@ namespace EDDiscovery2
                 nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
                 nsThread.Start();
             }
-            else if ( _starname_curstars_zoom > ZoomOff )                         // let tick cont
+            else if ( _starname_curstars_zoom > ZoomOff )                         // let tick continue.. will tick again.
             {
                 RemoveAllNamedStars();
             }
@@ -598,7 +598,7 @@ namespace EDDiscovery2
             public int Compare(TKey x, TKey y)
             {
                 int result = x.CompareTo(y);
-                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate values to be added.
+                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
             }
         }
 
@@ -623,7 +623,6 @@ namespace EDDiscovery2
                     double h2 = glControl.Height / 2.0;
 
                     SortedDictionary<float,int> inviewlist = new SortedDictionary<float,int>( new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
-                    List<int> outofviewlist = new List<int>();      // who's out of view, unsorted.
 
                     int indexno = 0;
                     foreach (SystemClassStarNames sys in _starnames)          // we consider all stars..
@@ -648,7 +647,7 @@ namespace EDDiscovery2
                         if (inviewport)
                             inviewlist.Add(sqdist, indexno);                        // we add the star to the appropriate list
                         else
-                            outofviewlist.Add(indexno);
+                            sys.candisposepainttexture = true;                      // don't care, you can get rid of it in the foreground thread.
 
                         indexno++;
                     }
@@ -671,15 +670,13 @@ namespace EDDiscovery2
 
                     int paintedtextures = 0;            // only worry about ones in viewport, ones outside will be disposed of soon..
                     int limit = 1000;                   // max number of stars to show..
-                    int zoomchangenum = 0;
-                    int newpaintnum = 0;
 
-                    foreach (int index in inviewlist.Values)            // for all in viewport..
+                    foreach (int index in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                     {
                         SystemClassStarNames sys = _starnames[index];
 
                         bool draw = false;
-
+                                                                        // BE CAREFUL modifying anything about painttexture/newtexture.. its been designed so it does not need a lock.
                         if (sys.painttexture != null)                   // race, but no problem, does not matter if we make a mistake..
                         {                                               // because we only test this, never modify it.. and if we miss it, so what, next pass will get it
                             paintedtextures++;
@@ -687,10 +684,7 @@ namespace EDDiscovery2
                             if (paintedtextures > limit)                // too many, dispose this one.  and since we do it in order, closest will be kept.
                                 sys.candisposepainttexture = true;
                             else if (Math.Abs(sys.paintedzoomlevel - _zoom) > 0.5F)     // if zoom change, redraw
-                            {
                                 draw = true;
-                                zoomchangenum++;
-                            }
                         }
                         else
                         {
@@ -698,7 +692,6 @@ namespace EDDiscovery2
                             {
                                 draw = true;
                                 paintedtextures++;
-                                newpaintnum++;
                             }
                         }
 
@@ -714,16 +707,9 @@ namespace EDDiscovery2
                             sys.candisposepainttexture = false;         // order important.  set so to keep
                         }
                     }
-
-                    Console.WriteLine("Star repaint at " + _zoom + " new " + newpaintnum + " zoom " + zoomchangenum);
-
-                    foreach ( int index in outofviewlist )              // all out of view, remove.
-                    {
-                        _starnames[index].candisposepainttexture = true;
-                    }
                 }
 
-                Invoke((MethodInvoker)delegate
+                Invoke((MethodInvoker)delegate              // kick the UI thread to process.
                 {
                     ChangeNamedStars();
                 });
@@ -732,7 +718,7 @@ namespace EDDiscovery2
         }
 
 
-        void ChangeNamedStars()      // KICKED off after thread, trying to do the least in the UI thread..
+        void ChangeNamedStars()                                          // KICKED off after thread
         {
             glControl.Invalidate();
             _starnametimer.Start();                                      // and do another tick..
@@ -741,7 +727,7 @@ namespace EDDiscovery2
         private void RemoveAllNamedStars()
         {
             bool changed = false;
-            foreach (var sys in _starnames)                             // not in viewport.. dispose all
+            foreach (var sys in _starnames)                             // dispose all
             {
                 if (sys.painttexture != null)
                 {
@@ -1041,8 +1027,10 @@ namespace EDDiscovery2
             GL.PopMatrix();
         }
 
+#if DEBUG
         int old_paint_num = 0;          //DEBUG
         int old_zoompaint_num = 0;
+#endif
 
         private void DrawStars()
         {
@@ -1105,12 +1093,14 @@ namespace EDDiscovery2
                     }
                 }
 
+#if DEBUG
                 if (old_paint_num != paintnum || old_zoompaint_num != paintzoomdiff)
                 {
                     old_zoompaint_num = paintzoomdiff;
                     old_paint_num = paintnum;
-                    Console.WriteLine("Painted " + paintnum + " Zoom diff " + paintzoomdiff);
+                    //Console.WriteLine("Painted " + paintnum + " Zoom diff " + paintzoomdiff);
                 }
+#endif
 
             }
 
