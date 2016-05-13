@@ -275,11 +275,11 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public List<IData3DSet> AddStars(bool unpopulated, bool useunpopcolor)     
+        public List<IData3DSet> AddStars(bool unpopulated, bool useunpopcolor)
         {
             if (StarList != null)
             {
-                var datasetS = Data3DSetClass<PointData>.Create("stars", (unpopulated || useunpopcolor) ? MapColours.SystemDefault : MapColours.StationSystem , 2.0f);
+                var datasetS = Data3DSetClass<PointData>.Create("stars", (unpopulated || useunpopcolor) ? MapColours.SystemDefault : MapColours.StationSystem , 1.0f);
 
                 foreach (ISystem si in StarList)
                 {
@@ -381,7 +381,7 @@ namespace EDDiscovery2._3DMap
         {
             if (SelectedSystem != null)
             {
-                var dataset = Data3DSetClass<PointData>.Create("Selected", MapColours.SelectedSystem, 5.0f);
+                var dataset = Data3DSetClass<PointData>.Create("Selected", MapColours.SelectedSystem, 8.0f);
 
                 //GL.Enable(EnableCap.ProgramPointSize);
                 dataset.Add(new PointData(SelectedSystem.x, SelectedSystem.y, SelectedSystem.z));
@@ -394,7 +394,7 @@ namespace EDDiscovery2._3DMap
             var dataset = Data3DSetClass<PointData>.Create("Interest", MapColours.POISystem, 10.0f);
             AddSystem("sol", dataset);
             AddSystem("sagittarius a*", dataset);
-            //AddSystem("polaris", dataset);
+            AddSystem("CEECKIA ZQ-L C24-0", dataset);
             _datasets.Add(dataset);
             return _datasets;
         }
