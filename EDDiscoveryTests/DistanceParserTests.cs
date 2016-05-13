@@ -1,8 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using EDDiscovery;
 using NFluent;
 
@@ -38,7 +34,25 @@ namespace EDDiscoveryTests
         [TestMethod]
         public void Distance_greater_than_the_maximum_allowed_value_is_not_parsed()
         {
-            Check.That(DistanceParser.DistanceAsDouble("10", 9)).IsNull();
+            Check.That(DistanceParser.DistanceAsDouble("15", 14)).IsNull();
+        }
+
+        [TestMethod]
+        public void Distance_equal_to_the_maximum_allowed_value_is_parsed_correctly()
+        {
+            Check.That(DistanceParser.DistanceAsDouble("15", 15)).IsEqualTo(15);
+        }
+
+        [TestMethod]
+        public void Negative_distance_is_not_parsed()
+        {
+            Check.That(DistanceParser.DistanceAsDouble("-15")).IsNull();
+        }
+
+        [TestMethod]
+        public void Distance_with_more_than_2_decimals_is_not_parsed()
+        {
+            Check.That(DistanceParser.DistanceAsDouble("15.000")).IsNull();
         }
 
         [TestMethod]
