@@ -4,19 +4,25 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.IO;
 using EDDiscovery.DB;
 using System.Diagnostics;
 using EDDiscovery2;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
 using System.Threading.Tasks;
+using EDDiscovery.Controls;
 
 namespace EDDiscovery
 {
     public partial class TravelHistoryControl : UserControl
     {
-        private const int MaximumJumpRange = 45;
+        private const int MaximumJumpRange = 45; // max jump range is ~42Ly
+        private const int NoteColumnIndex = 3;
+        private const int DistanceColumnIndex = 2;
+
+        private const int DefaultTravelHistoryFilterIndex = 4;
+        private const string SingleCoordinateFormat = "#.#####";
+
         private static EDDiscoveryForm _discoveryForm;
         public int defaultMapColour;
         public EDSMSync sync;
@@ -33,7 +39,7 @@ namespace EDDiscovery
         private static ExtendedControls.RichTextBoxScroll static_richTextBox;
         private int activecommander = 0;
         List<EDCommander> commanders = null;
-
+        
         public TravelHistoryControl()
         {
             InitializeComponent();
@@ -65,7 +71,7 @@ namespace EDDiscovery
 
             comboBoxHistoryWindow.DisplayMember = nameof(TravelHistoryFilter.Label);
 
-            comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
+            comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", DefaultTravelHistoryFilterIndex);
             LoadCommandersListBox();
         }
 
@@ -249,28 +255,28 @@ namespace EDDiscovery
 
             //richTextBox_History.AppendText(item.time + " " + item.Name + Environment.NewLine);
 
-                object[] rowobj = { item.time, item.Name, diststr, item.curSystem.Note, "█" };
-                int rownr;
+            object[] rowobj = { item.time, item.Name, diststr, item.curSystem.Note, "█" };
+            int rownr;
 
-                if (insert)
-                {
-                    dataGridViewTravel.Rows.Insert(0, rowobj);
-                    rownr = 0;
-                }
-                else
-                {
-                    dataGridViewTravel.Rows.Add(rowobj);
-                    rownr = dataGridViewTravel.Rows.Count - 1;
-                }
+            if (insert)
+            {
+                dataGridViewTravel.Rows.Insert(0, rowobj);
+                rownr = 0;
+            }
+            else
+            {
+                dataGridViewTravel.Rows.Add(rowobj);
+                rownr = dataGridViewTravel.Rows.Count - 1;
+            }
 
-                var cell = dataGridViewTravel.Rows[rownr].Cells[1];
+            var cell = dataGridViewTravel.Rows[rownr].Cells[1];
 
-                cell.Tag = item;
+            cell.Tag = item;
 
-                dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
+            dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
-                cell = dataGridViewTravel.Rows[rownr].Cells[4];
-                cell.Style.ForeColor = (item.vs == null) ? Color.FromArgb(defaultMapColour) : Color.FromArgb(item.vs.MapColour);
+            cell = dataGridViewTravel.Rows[rownr].Cells[4];
+            cell.Style.ForeColor = (item.vs == null) ? Color.FromArgb(defaultMapColour) : Color.FromArgb(item.vs.MapColour);
         }
 
 
@@ -288,9 +294,9 @@ namespace EDDiscovery
 
             if (syspos.curSystem.HasCoordinate)
             {
-                textBoxX.Text = syspos.curSystem.x.ToString("#.#####");
-                textBoxY.Text = syspos.curSystem.y.ToString("#.#####");
-                textBoxZ.Text = syspos.curSystem.z.ToString("#.#####");
+                textBoxX.Text = syspos.curSystem.x.ToString(SingleCoordinateFormat);
+                textBoxY.Text = syspos.curSystem.y.ToString(SingleCoordinateFormat);
+                textBoxZ.Text = syspos.curSystem.z.ToString(SingleCoordinateFormat);
 
                 textBoxSolDist.Text = Math.Sqrt(syspos.curSystem.x * syspos.curSystem.x + syspos.curSystem.y * syspos.curSystem.y + syspos.curSystem.z * syspos.curSystem.z).ToString("0.00");
 
@@ -451,15 +457,7 @@ namespace EDDiscovery
 
         private void TravelHistoryControl_Load(object sender, EventArgs e)
         {
-            // this improves dataGridView's scrolling performance
-            typeof(DataGridView).InvokeMember(
-                "DoubleBuffered",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance |
-                System.Reflection.BindingFlags.SetProperty,
-                null,
-                dataGridViewTravel,
-                new object[] { true }
-            );
+           dataGridViewTravel.MakeDoubleBuffered();
         }
 
         private void LoadCommandersListBox()
@@ -561,13 +559,13 @@ namespace EDDiscovery
             {
                 ShowSystemInformation((SystemPosition)(dataGridViewTravel.Rows[e.RowIndex].Cells[1].Tag));
 
-                if (e.ColumnIndex == 3)       // note column
+                if (e.ColumnIndex == NoteColumnIndex)
                 {
                     richTextBoxNote.TextBox.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
                     richTextBoxNote.TextBox.ScrollToCaret();
                     richTextBoxNote.TextBox.Focus();
                 }
-                else  if (e.ColumnIndex == 2 && textBoxDistance.Enabled == true )       // distance column and on..
+                else  if (e.ColumnIndex == DistanceColumnIndex && textBoxDistance.Enabled == true )       // distance column and on..
                 {
                     textBoxDistance.Select(textBoxDistance.Text.Length, 0);     // move caret to end (in case something is there) and focus
                     textBoxDistance.Focus();
@@ -597,7 +595,7 @@ namespace EDDiscovery
                 SQLiteDBClass.AddDistanceToCache(distance);
 
                 if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
-                    dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[2].Value = textBoxDistance.Text.Trim();
+                    dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[DistanceColumnIndex].Value = textBoxDistance.Text.Trim();
 
             }
         }
@@ -611,7 +609,7 @@ namespace EDDiscovery
         private void richTextBoxNote_TextChanged(object sender, EventArgs e)
         {
             if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
-                dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[3].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
+                dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[NoteColumnIndex].Value = richTextBoxNote.Text;     // keep the grid up to date to make it seem more interactive
         }
 
         private void StoreSystemNote()
@@ -663,7 +661,7 @@ namespace EDDiscovery
                     currentSysPos.curSystem.Note = txt;
 
                     if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
-                        dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[3].Value = txt;
+                        dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[NoteColumnIndex].Value = txt;
 
                     if (edsm.commanderName == null || edsm.apiKey == null)
                         return;
@@ -931,7 +929,7 @@ namespace EDDiscovery
                 return;
             }
 
-            if (!DistanceParser.DistanceAsDouble(value, MaximumJumpRange).HasValue) // max jump range is ~42Ly
+            if (!DistanceParser.DistanceAsDouble(value, MaximumJumpRange).HasValue)
             {
                 e.Cancel = true;
             }
