@@ -5,6 +5,8 @@ namespace EDDiscovery
 {
     public static class DistanceParser
     {
+        private static readonly Regex RegexDistance = new Regex(@"^\d+([.,]\d{1,2})?$", RegexOptions.Compiled | RegexOptions.Singleline);
+
         /// <summary>
         /// Parse a distance as a positive double, in the formats "xx", "xx.yy", "xx,yy" or "xxxx,yy".
         /// </summary>
@@ -18,19 +20,14 @@ namespace EDDiscovery
                 return null;
             }
 
-            if (!new Regex(@"^\d+([.,]\d{1,2})?$").IsMatch(value))
+            if (!RegexDistance.IsMatch(value))
             {
                 return null;
             }
 
-            double valueDouble;
-
-            // Allow regions with , as decimal separator to also use . as decimal separator and vice versa
-            var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-            if (!double.TryParse(decimalSeparator == "," ? value.Replace(".", ",") : value.Replace(",", "."), out valueDouble))
-            {
-                return null;
-            }
+            // Replace comma decimal point separator with dot, as it is the invariant culture separator that we
+            // will be using to parse the distance. TryParse is not need, the regex ensures it always parses
+            var valueDouble = double.Parse(value.Replace(",", "."), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
 
             if (maximum.HasValue && valueDouble > maximum)
             {
