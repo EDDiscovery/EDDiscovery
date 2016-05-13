@@ -50,7 +50,21 @@ namespace EDDiscovery
             EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
             checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
-            comboBoxHistoryWindow.Items.AddRange(new[] { "6 Hours", "12 Hours", "24 Hours", "3 days", "Week", "2 Weeks", "Month", "Last 20", "All" });
+            comboBoxHistoryWindow.DataSource = new[]
+            {
+                TravelHistoryFilter.FromHours(6),
+                TravelHistoryFilter.FromHours(12),
+                TravelHistoryFilter.FromHours(24),
+                TravelHistoryFilter.FromDays(3),
+                TravelHistoryFilter.FromWeeks(1),
+                TravelHistoryFilter.FromWeeks(2),
+                TravelHistoryFilter.LastMonth(),
+                TravelHistoryFilter.Last(20),
+                TravelHistoryFilter.NoFilter,
+            };
+
+            comboBoxHistoryWindow.DisplayMember = nameof(TravelHistoryFilter.Label);
+
             comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", 4);
             LoadCommandersListBox();
         }
@@ -98,50 +112,7 @@ namespace EDDiscovery
 
         public void RefreshHistory()
         {
-            Stopwatch sw1 = new Stopwatch();
-            //richTextBox_History.Clear();
-
-
-            sw1.Start();
-
-
-            TimeSpan maxDataAge = TimeSpan.Zero;
-            int atMost = 0;
-
-            switch (comboBoxHistoryWindow.SelectedIndex)
-            {
-                case 0:
-                    maxDataAge = TimeSpan.FromHours(6);
-                    break;
-                case 1:
-                    maxDataAge = TimeSpan.FromHours(12);
-                    break;
-                case 2:
-                    maxDataAge = TimeSpan.FromDays(1);
-                    break;
-                case 3:
-                    maxDataAge = TimeSpan.FromDays(3);
-                    break;
-                case 4:
-                    maxDataAge = TimeSpan.FromDays(7);
-                    break;
-                case 5:
-                    maxDataAge = TimeSpan.FromDays(14);
-                    break;
-                case 6:
-                    maxDataAge = TimeSpan.FromDays(30);
-                    break;
-                case 7:
-                    atMost = 20; // Last 20
-                    break;
-                case 8:
-                    maxDataAge = TimeSpan.FromDays(100000);
-                    break;
-                default:
-                    maxDataAge = TimeSpan.FromDays(7);
-                    break;
-            }
-
+            var sw1 = Stopwatch.StartNew();
 
             if (visitedSystems == null || visitedSystems.Count == 0)
                 GetVisitedSystems();
@@ -149,16 +120,9 @@ namespace EDDiscovery
             if (visitedSystems == null)
                 return;
 
-            List<SystemPosition> result;
-            if (atMost > 0)
-            {
-                result = visitedSystems.OrderByDescending(s => s.time).Take(atMost).ToList();
-            }
-            else
-            {
-                var oldestData = DateTime.Now.Subtract(maxDataAge);
-                result = (from systems in visitedSystems where systems.time > oldestData orderby systems.time descending select systems).ToList();
-            }
+
+            var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+            List<SystemPosition> result = filter.Filter(visitedSystems);
 
             dataGridViewTravel.Rows.Clear();
 
