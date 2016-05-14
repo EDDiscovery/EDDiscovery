@@ -425,19 +425,15 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static void TouchSystem(string systemName)
+        public static void TouchSystem(SQLiteConnection connection, string systemName)
         {
-            using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+            using (SQLiteCommand cmd = connection.CreateCommand())
             {
-                using (SQLiteCommand cmd = new SQLiteCommand())
-                {
-                    cmd.Connection = cn;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandTimeout = 30;
-                    cmd.CommandText = "update systems set versiondate=datetime('now') where name=@systemName";
-                    cmd.Parameters.AddWithValue("systemName", systemName);
-                    SqlNonQuery(cn, cmd);
-                }
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandTimeout = 30;
+                cmd.CommandText = "update systems set versiondate=datetime('now') where name=@systemName";
+                cmd.Parameters.AddWithValue("systemName", systemName);
+                SqlNonQueryText(connection, cmd);
             }
         }
 
