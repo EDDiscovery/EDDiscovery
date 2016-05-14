@@ -1,6 +1,4 @@
-﻿using EDDiscovery2;
-using EDDiscovery2.DB;
-using Newtonsoft.Json.Linq;
+﻿using EDDiscovery2.DB;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +6,6 @@ using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EDDiscovery.DB
@@ -162,11 +159,48 @@ namespace EDDiscovery.DB
                 MessageBox.Show(ex.StackTrace);
                 return false;
             }
-
         }
 
+        public void PerformUpgrade(int newVersion, bool catchErrors, bool backupDbFile, string[] queries, Action doAfterQueries = null)
+        {
+            if (backupDbFile)
+            {
+                string dbfile = GetSQLiteDBFile();
 
-        private bool UpgradeDB2()
+                try
+                {
+                    File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", $"EDDiscovery{newVersion - 1}.sqlite"));
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                    System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                }
+            }
+
+            try
+            {
+                foreach (var query in queries)
+                {
+                    ExecuteQuery(query);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!catchErrors)
+                    throw;
+
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show($"UpgradeDB{newVersion} error: " + ex.Message);
+            }
+
+            doAfterQueries?.Invoke();
+
+            PutSettingInt("DBVer", newVersion);
+        }
+
+        private void UpgradeDB2()
         {
             string query = "CREATE TABLE Systems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , name TEXT NOT NULL COLLATE NOCASE , x FLOAT, y FLOAT, z FLOAT, cr INTEGER, commandercreate TEXT, createdate DATETIME, commanderupdate TEXT, updatedate DATETIME, status INTEGER, population INTEGER )";
             string query2 = "CREATE  INDEX main.SystemsIndex ON Systems (name ASC)";
@@ -177,122 +211,45 @@ namespace EDDiscovery.DB
             string query7 = "CREATE TABLE Stations (station_id INTEGER PRIMARY KEY  NOT NULL ,system_id INTEGER REFERENCES Systems(id), name TEXT NOT NULL ,blackmarket BOOL DEFAULT (null) ,max_landing_pad_size INTEGER,distance_to_star INTEGER,type TEXT,faction TEXT,shipyard BOOL,outfitting BOOL, commodities_market BOOL)";
             string query8 = "CREATE  INDEX stationIndex ON Stations (system_id ASC)";
 
-            ExecuteQuery(query);
-            ExecuteQuery(query2);
-            ExecuteQuery(query3);
-            ExecuteQuery(query4);
-            ExecuteQuery(query5);
-            ExecuteQuery(query6);
-            ExecuteQuery(query7);
-            ExecuteQuery(query8);
-
-            PutSettingInt("DBVer", 2);
-
-            return true;
+            PerformUpgrade(2, false, false, new[] {query, query2, query3, query4, query5, query6, query7, query8});
         }
 
-
-        
-
-        private bool UpgradeDB3()
+        private void UpgradeDB3()
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN Note TEXT";
-
-            ExecuteQuery(query1);
-            PutSettingInt("DBVer", 3);
-
-            return true;
+            PerformUpgrade(3, false, false, new[] { query1 });
         }
 
-        private bool UpgradeDB4()
+        private void UpgradeDB4()
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN Note TEXT";
-            string dbfile = GetSQLiteDBFile();
-
-            try
+            PerformUpgrade(4, true, true, new[] { query1 }, () =>
             {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery3.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-
-            try
-            {
-                ExecuteQuery(query1);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB4 error: " + ex.Message);
-            }
-
-            GetAllSystems();
-
-
-            foreach (SystemClass sys in globalSystems)
-            {
-                if (!string.IsNullOrEmpty(sys.Note))
+                GetAllSystems();
+                foreach (SystemClass sys in globalSystems)
                 {
-                    SystemNoteClass note = new SystemNoteClass();
+                    if (!string.IsNullOrEmpty(sys.Note))
+                    {
+                        SystemNoteClass note = new SystemNoteClass();
 
-                    note.Name = sys.name;
-                    note.Note = sys.Note;
-                    note.Time = DateTime.Now;
-                    note.Add();
+                        note.Name = sys.name;
+                        note.Note = sys.Note;
+                        note.Time = DateTime.Now;
+                        note.Add();
+                    }
                 }
-            }
-
-            
-            PutSettingInt("DBVer", 4);
-
-            return true;
+            });
         }
 
-
-        private bool UpgradeDB5()
+        private void UpgradeDB5()
         {
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Unit TEXT";
             string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Commander Integer";
             string query4 = "CREATE INDEX VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)";
-            string dbfile = GetSQLiteDBFile();
-
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery4.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-
-            try
-            {
-                ExecuteQuery(query1);
-                //ExecuteQuery(query2);
-                ExecuteQuery(query3);
-                ExecuteQuery(query4);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB4 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 5);
-
-            return true;
+            PerformUpgrade(5, true, true, new[] {query1, query3, query4});
         }
 
-
-        private bool UpgradeDB6()
+        private void UpgradeDB6()
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_eddb Integer";
             string query2 = "ALTER TABLE Systems ADD COLUMN faction TEXT";
@@ -304,14 +261,11 @@ namespace EDDiscovery.DB
             string query8 = "ALTER TABLE Systems ADD COLUMN eddb_updated_at Integer";
             string query9 = "ALTER TABLE Systems ADD COLUMN state Integer";
             string query10 = "ALTER TABLE Systems ADD COLUMN needs_permit Integer";
-
             string query11 = "DROP TABLE Stations";
             string query12 = "CREATE TABLE Stations (id INTEGER PRIMARY KEY  NOT NULL ,system_id INTEGER, name TEXT NOT NULL ,  " +
                 " max_landing_pad_size INTEGER, distance_to_star INTEGER, faction Text, government_id INTEGER, allegiance_id Integer,  state_id INTEGER, type_id Integer, " +
                 "has_commodities BOOL DEFAULT (null), has_refuel BOOL DEFAULT (null), has_repair BOOL DEFAULT (null), has_rearm BOOL DEFAULT (null), " +
                 "has_outfitting BOOL DEFAULT (null),  has_shipyard BOOL DEFAULT (null), has_blackmarket BOOL DEFAULT (null),   eddb_updated_at Integer  )";
-
-
 
             string query13 = "CREATE TABLE station_commodities (station_id INTEGER PRIMARY KEY NOT NULL, commodity_id INTEGER, type INTEGER)";
             string query14 = "CREATE INDEX station_commodities_index ON station_commodities (station_id ASC, commodity_id ASC, type ASC)";
@@ -319,308 +273,69 @@ namespace EDDiscovery.DB
             string query16 = "CREATE INDEX StationsIndex_system_ID  ON Stations (system_id ASC)";
             string query17 = "CREATE INDEX StationsIndex_system_Name  ON Stations (Name ASC)";
 
-            string dbfile = GetSQLiteDBFile();
-
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery5.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-
-            try
-            {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2);
-                //ExecuteQuery(query3);
-                ExecuteQuery(query4);
-                ExecuteQuery(query5);
-                ExecuteQuery(query6);
-                ExecuteQuery(query7);
-                ExecuteQuery(query8);
-                ExecuteQuery(query9);
-                ExecuteQuery(query10);
-                ExecuteQuery(query11);
-                ExecuteQuery(query12);
-                ExecuteQuery(query13);
-                ExecuteQuery(query14);
-                ExecuteQuery(query15);
-                ExecuteQuery(query16);
-                ExecuteQuery(query17);
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB6 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 6);
-
-            return true;
+            PerformUpgrade(6, true, true, new[] {
+                query1, query2, query4, query5, query6, query7, query8, query9, query10,
+                query11, query12, query13, query14, query15, query16, query17 });
         }
 
 
-        private bool UpgradeDB7()
+        private void UpgradeDB7()
         {
-            
             string query1 = "DROP TABLE VisitedSystems";
             string query2 = "CREATE TABLE VisitedSystems(id INTEGER PRIMARY KEY  NOT NULL, Name TEXT NOT NULL, Time DATETIME NOT NULL, Unit Text, Commander Integer, Source Integer, edsm_sync BOOL DEFAULT (null))";
             string query3 = "CREATE TABLE TravelLogUnit(id INTEGER PRIMARY KEY  NOT NULL, type INTEGER NOT NULL, name TEXT NOT NULL, size INTEGER, path TEXT)";
-
-
-            string dbfile = GetSQLiteDBFile();
-
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery6.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-
-            try
-            {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2);
-                ExecuteQuery(query3);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB7 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 7);
-
-            return true;
+            PerformUpgrade(7, true, true, new[] { query1, query2, query3 });
         }
 
-
-        private bool UpgradeDB8()
+        private void UpgradeDB8()
         {
-            //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Map_colour INTEGER DEFAULT (-65536)";
-            string dbfile = GetSQLiteDBFile();
-            
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery7.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-
-            try
-            {
-                ExecuteQuery(query1);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB8 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 8);
-
-            return true;
+            PerformUpgrade(8, true, true, new[] { query1 });
         }
 
-
-        private bool UpgradeDB9()
+        private void UpgradeDB9()
         {
-            //Default is Color.Red.ToARGB()
             string query1 = "CREATE TABLE Objects (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , SystemName TEXT NOT NULL , ObjectName TEXT NOT NULL , ObjectType INTEGER NOT NULL , ArrivalPoint Float, Gravity FLOAT, Atmosphere Integer, Vulcanism Integer, Terrain INTEGER, Carbon BOOL, Iron BOOL, Nickel BOOL, Phosphorus BOOL, Sulphur BOOL, Arsenic BOOL, Chromium BOOL, Germanium BOOL, Manganese BOOL, Selenium BOOL NOT NULL , Vanadium BOOL, Zinc BOOL, Zirconium BOOL, Cadmium BOOL, Mercury BOOL, Molybdenum BOOL, Niobium BOOL, Tin BOOL, Tungsten BOOL, Antimony BOOL, Polonium BOOL, Ruthenium BOOL, Technetium BOOL, Tellurium BOOL, Yttrium BOOL, Commander  Text, UpdateTime DATETIME, Status INTEGER )";
-            string dbfile = GetSQLiteDBFile();
-
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery8.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-
-            try
-            {
-                ExecuteQuery(query1);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB9 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 9);
-
-            return true;
+            PerformUpgrade(9, true, true, new[] { query1 });
         }
 
-
-        private bool UpgradeDB10()
+        private void UpgradeDB10()
         {
             string query1 = "CREATE TABLE wanted_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, systemname TEXT UNIQUE NOT NULL)";
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery9.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-            try
-            {
-                ExecuteQuery(query1);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB10 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 10);
-
-            return true;
+            PerformUpgrade(10, true, true, new[] { query1 });
         }
 
-
-        private bool UpgradeDB11()
+        private void UpgradeDB11()
         {
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
             string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
             string query3 = "ALTER TABLE Objects ADD COLUMN terraform Integer";
             string query4 = "ALTER TABLE VisitedSystems ADD COLUMN Status BOOL";
-            string dbfile = GetSQLiteDBFile();
-
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery10.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-
-            try
-            {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2);
-                ExecuteQuery(query3);
-                ExecuteQuery(query4);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB11 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 11);
-
-            return true;
+            PerformUpgrade(11, true, true, new[] { query1, query2, query3, query4 });
         }
 
-        private bool UpgradeDB12()
+        private void UpgradeDB12()
         {
             string query1 = "CREATE TABLE routes_expeditions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT UNIQUE NOT NULL, start DATETIME, end DATETIME)";
             string query2 = "CREATE TABLE route_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, routeid INTEGER NOT NULL, systemname TEXT NOT NULL)";
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery11.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-            try
-            {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB12 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 12);
-
-            return true;
+            PerformUpgrade(12, true, true, new[] { query1, query2 });
         }
 
-        private bool UpgradeDB13()
+        private void UpgradeDB13()
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN VersionDate DATETIME";
-            string query2 = "UPDATE TABLE Systems SET VersionDate = @now";
+            string query2 = "UPDATE Systems SET VersionDate = datetime('now')";
             string query3 = "CREATE INDEX IDX_Systems_VersionDate ON Systems (VersionDate ASC)";
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery12.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
 
-            try
-            {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2, new SQLiteParameter { ParameterName = "now", Value = DateTime.Now, DbType = DbType.DateTime });
-                ExecuteQuery(query3);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB13 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 13);
-
-            return true;
+            PerformUpgrade(13, true, true, new[] { query1, query2, query3 });
         }
 
-        private void ExecuteQuery(string query, params SQLiteParameter[] parameters)
+        private void ExecuteQuery(string query)
         {
             if (Connect2DB())
             {
                 SQLiteCommand command = new SQLiteCommand(query, m_dbConnection);
-                foreach (var p in parameters)
-                {
-                    p.Command = command;
-                }
-
-                if (parameters.Any())
-                {
-                    command.Parameters.AddRange(parameters);
-                }
                 command.ExecuteNonQuery();
             }
             CloseDB();
