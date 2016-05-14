@@ -425,6 +425,22 @@ namespace EDDiscovery.DB
             }
         }
 
+        public static void TouchSystem(string systemName)
+        {
+            using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = cn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandTimeout = 30;
+                    cmd.CommandText = "update systems set versiondate=datetime('now') where name=@systemName";
+                    cmd.Parameters.AddWithValue("systemName", systemName);
+                    SqlNonQuery(cn, cmd);
+                }
+            }
+        }
+
         private static void UpdateVersionDate(DataRow dr)
         {
             object vdRaw = dr["versiondate"];
@@ -762,7 +778,7 @@ namespace EDDiscovery.DB
             System.Diagnostics.Trace.WriteLine(text);
         }
 
-        public DataSet SqlQueryText(SQLiteConnection cn, SQLiteCommand cmd)
+        public static DataSet SqlQueryText(SQLiteConnection cn, SQLiteCommand cmd)
         {
 
             //LogLine("SqlQueryText: " + cmd.CommandText);
@@ -813,7 +829,7 @@ namespace EDDiscovery.DB
         }
 
 
-        public int SqlNonQuery(SQLiteConnection cn, SQLiteCommand cmd)
+        public static int SqlNonQuery(SQLiteConnection cn, SQLiteCommand cmd)
         {
             int rows = 0;
 
