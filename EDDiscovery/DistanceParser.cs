@@ -8,12 +8,13 @@ namespace EDDiscovery
         private static readonly Regex RegexDistance = new Regex(@"^\d+([.,]\d{1,2})?$", RegexOptions.Compiled | RegexOptions.Singleline);
 
         /// <summary>
-        /// Parse a distance as a positive double, in the formats "xx", "xx.yy", "xx,yy" or "xxxx,yy".
+        /// Parse a jump distance as a positive double, in the formats "xx", "xx.yy", "xx,yy" or "xxxx,yy".
         /// </summary>
         /// <param name="value">Decimal string to be parsed.</param>
-        /// <param name="maximum">Upper limit or null if not required.</param>
-        /// <returns>Parsed value or null on conversion failure.</returns>
-        public static double? DistanceAsDouble(string value, double? maximum = null)
+        /// <param name="maximum">Upper limit or null if not required. If this is set and the parsed value is greater, 
+        /// the result will be null</param>
+        /// <returns>Parsed value or null on conversion failure or null if value is greater than maximum value.</returns>
+        public static double? ParseJumpDistance(string value, double? maximum = null)
         {
             if (value.Length == 0)
             {
@@ -35,6 +36,24 @@ namespace EDDiscovery
             }
 
             return valueDouble;
+        }
+
+        public static double? ParseInterstellarDistance(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return null;
+            }
+
+            double result;
+            if (double.TryParse(input.Replace(",", "."), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result))
+            {
+                return result;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
