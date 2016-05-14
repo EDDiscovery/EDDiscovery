@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,9 @@ namespace EDDiscovery.DB
         public static Dictionary<string, double> dictDistances = new Dictionary<string, double>(); 
         public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
 
+        // This stores the date of the most recently updated or inserted row in the database
+        // We will use it later to only get data that was changed since that date
+        private static DateTime? versionDate = null;
 
         private static Object lockDBInit = new Object();
         private static bool dbUpgraded = false;
@@ -324,9 +328,9 @@ namespace EDDiscovery.DB
 
         private void UpgradeDB13()
         {
-            string query1 = "ALTER TABLE Systems ADD COLUMN VersionDate DATETIME";
-            string query2 = "UPDATE Systems SET VersionDate = datetime('now')";
-            string query3 = "CREATE INDEX IDX_Systems_VersionDate ON Systems (VersionDate ASC)";
+            string query1 = "ALTER TABLE Systems ADD COLUMN versiondate DATETIME";
+            string query2 = "UPDATE Systems SET versiondate = datetime('now')";
+            string query3 = "CREATE INDEX IDX_Systems_versiondate ON Systems (versiondate ASC)";
 
             PerformUpgrade(13, true, true, new[] { query1, query2, query3 });
         }
@@ -352,6 +356,9 @@ namespace EDDiscovery.DB
 
         public bool GetAllSystems()
         {
+            var sw = Stopwatch.StartNew();
+            int numSystemsReturned = 0;
+            int numMoreRecentSystems = 0;
             try
             {
                 using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
@@ -362,38 +369,53 @@ namespace EDDiscovery.DB
                         cmd.Connection = cn;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from Systems Order By name";
+
+                        // First run we haven't loaded anything yet, so load the whole table
+                        if (!versionDate.HasValue)
+                        {
+                            cmd.CommandText = "select * from Systems Order By versiondate ASC";
+                        }
+                        else
+                        {
+                            // Load from the last update we have stored in memory up to the latest present in the database
+                            cmd.CommandText = "select * from Systems where versiondate > @versiondate Order By versiondate ASC";
+                            cmd.Parameters.AddWithValue("versiondate", versionDate.Value.AddSeconds(-1)); // This should avoid datetime precision issues
+                        }
 
                         ds = SqlQueryText(cn, cmd);
                         if (ds.Tables.Count == 0)
                         {
                             return false;
                         }
-                        //
+
                         if (ds.Tables[0].Rows.Count == 0)
                         {
                             return false;
                         }
 
-                        //globalSystems.Clear();
-                        //dictSystems.Clear();
-
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
+                            numSystemsReturned++;
                             SystemClass sys = new SystemClass(dr);
 
                             if (globalSystemNotes.ContainsKey(sys.SearchName))
                             {
                                 sys.Note = globalSystemNotes[sys.SearchName].Note;
                             }
-                            
+
                             dictSystems[sys.SearchName] = sys;
+
+                            // If the row that was modified more recently than versionDate, this is the new versionDate
+                            // Next time we get the systems, we will only get the updates since that date and time.
+                            if (UpdateVersionDate(dr))
+                            {
+                                numMoreRecentSystems++;
+                            }
                         }
 
                         globalSystems = dictSystems.Values.ToList<SystemClass>();
 
                         return true;
-
                     }
                 }
             }
@@ -401,10 +423,23 @@ namespace EDDiscovery.DB
             {
                 return false;
             }
+            finally
+            {
+                System.Diagnostics.Trace.WriteLine(string.Format("GetAllSystems completed in {0}. Retrieved {1} systems from DB. Including {2} systems with updated information.", sw.Elapsed, numSystemsReturned, numMoreRecentSystems));
+            }
         }
 
-
-
+        private static bool UpdateVersionDate(DataRow dr)
+        {
+            object vdRaw = dr["versiondate"];
+            var vd = vdRaw != DBNull.Value ? (DateTime?) vdRaw : null;
+            if ((vd.HasValue && !versionDate.HasValue) || (vd > versionDate))
+            {
+                versionDate = vd;
+                return true;
+            }
+            return false;
+        }
 
         public bool GetAllDistances(bool loadAlldata)
         {
