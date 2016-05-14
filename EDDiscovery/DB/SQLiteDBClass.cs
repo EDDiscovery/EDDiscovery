@@ -358,7 +358,6 @@ namespace EDDiscovery.DB
         {
             var sw = Stopwatch.StartNew();
             int numSystemsReturned = 0;
-            int numMoreRecentSystems = 0;
             try
             {
                 using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
@@ -407,10 +406,7 @@ namespace EDDiscovery.DB
 
                             // If the row that was modified more recently than versionDate, this is the new versionDate
                             // Next time we get the systems, we will only get the updates since that date and time.
-                            if (UpdateVersionDate(dr))
-                            {
-                                numMoreRecentSystems++;
-                            }
+                            UpdateVersionDate(dr);
                         }
 
                         globalSystems = dictSystems.Values.ToList<SystemClass>();
@@ -425,20 +421,18 @@ namespace EDDiscovery.DB
             }
             finally
             {
-                System.Diagnostics.Trace.WriteLine(string.Format("GetAllSystems completed in {0}. Retrieved {1} systems from DB. Including {2} systems with updated information.", sw.Elapsed, numSystemsReturned, numMoreRecentSystems));
+                System.Diagnostics.Trace.WriteLine(string.Format("GetAllSystems completed in {0}. Retrieved {1} systems from DB. Version date is now {2}", sw.Elapsed, numSystemsReturned, versionDate));
             }
         }
 
-        private static bool UpdateVersionDate(DataRow dr)
+        private static void UpdateVersionDate(DataRow dr)
         {
             object vdRaw = dr["versiondate"];
             var vd = vdRaw != DBNull.Value ? (DateTime?) vdRaw : null;
             if ((vd.HasValue && !versionDate.HasValue) || (vd > versionDate))
             {
                 versionDate = vd;
-                return true;
             }
-            return false;
         }
 
         public bool GetAllDistances(bool loadAlldata)
