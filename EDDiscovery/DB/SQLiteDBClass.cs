@@ -21,10 +21,9 @@ namespace EDDiscovery.DB
 
         public static List<SystemClass> globalSystems = new List<SystemClass>();
         public static Dictionary<string, SystemClass> dictSystems = new Dictionary<string, SystemClass>(); 
-        
         public static Dictionary<string, double> dictDistances = new Dictionary<string, double>(); 
-
         public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
+
 
         private static Object lockDBInit = new Object();
         private static bool dbUpgraded = false;
@@ -115,7 +114,6 @@ namespace EDDiscovery.DB
             int dbver;
             try
             {
-
                 dbver = GetSettingInt("DBVer", 1);
 
                 if (dbver < 2)
@@ -151,6 +149,9 @@ namespace EDDiscovery.DB
 
                 if (dbver < 12)
                     UpgradeDB12();
+
+                if (dbver < 13)
+                    UpgradeDB13();
 
                 dbUpgraded = true;
                 return true;
@@ -235,7 +236,7 @@ namespace EDDiscovery.DB
 
             foreach (SystemClass sys in globalSystems)
             {
-                if (sys.Note != null && sys.Note.Length > 0)
+                if (!string.IsNullOrEmpty(sys.Note))
                 {
                     SystemNoteClass note = new SystemNoteClass();
 
@@ -573,14 +574,54 @@ namespace EDDiscovery.DB
             return true;
         }
 
-        private void ExecuteQuery(string query)
+        private bool UpgradeDB13()
+        {
+            string query1 = "ALTER TABLE Systems ADD COLUMN VersionDate DATETIME";
+            string query2 = "UPDATE TABLE Systems SET VersionDate = @now";
+            string query3 = "CREATE INDEX IDX_Systems_VersionDate ON Systems (VersionDate ASC)";
+            try
+            {
+                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery12.sqlite"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
+
+            try
+            {
+                ExecuteQuery(query1);
+                ExecuteQuery(query2, new SQLiteParameter { ParameterName = "now", Value = DateTime.Now, DbType = DbType.DateTime });
+                ExecuteQuery(query3);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                MessageBox.Show("UpgradeDB13 error: " + ex.Message);
+            }
+
+            PutSettingInt("DBVer", 13);
+
+            return true;
+        }
+
+        private void ExecuteQuery(string query, params SQLiteParameter[] parameters)
         {
             if (Connect2DB())
             {
                 SQLiteCommand command = new SQLiteCommand(query, m_dbConnection);
+                foreach (var p in parameters)
+                {
+                    p.Command = command;
+                }
+
+                if (parameters.Any())
+                {
+                    command.Parameters.AddRange(parameters);
+                }
                 command.ExecuteNonQuery();
-
-
             }
             CloseDB();
         }
