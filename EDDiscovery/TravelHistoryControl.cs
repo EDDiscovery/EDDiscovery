@@ -588,7 +588,7 @@ namespace EDDiscovery
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            var dist = DistanceParser.DistanceAsDouble(textBoxDistance.Text.Trim());
+            var dist = DistanceParser.ParseJumpDistance(textBoxDistance.Text.Trim());
 
             if (!dist.HasValue)
                 MessageBox.Show("Distance in wrong format!");
@@ -825,7 +825,7 @@ namespace EDDiscovery
 
                         if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
                         {
-                            var presetDistance = DistanceParser.DistanceAsDouble(textBoxDistanceToNextSystem.Text.Trim(), MaximumJumpRange);
+                            var presetDistance = DistanceParser.ParseJumpDistance(textBoxDistanceToNextSystem.Text.Trim(), MaximumJumpRange);
                             if (presetDistance.HasValue)
                             {
                                 var distance = new DistanceClass
@@ -940,7 +940,7 @@ namespace EDDiscovery
                 return;
             }
 
-            if (!DistanceParser.DistanceAsDouble(value, MaximumJumpRange).HasValue)
+            if (!DistanceParser.ParseJumpDistance(value, MaximumJumpRange).HasValue)
             {
                 e.Cancel = true;
             }
