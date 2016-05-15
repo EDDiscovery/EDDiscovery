@@ -151,11 +151,13 @@ namespace EDDiscovery.DB
                 if (dbver < 12)
                     UpgradeDB12();
 
-                if (dbver < 13)
-                    UpgradeDB13();
+                // 15 remove due to conflict between 2 branches...
 
                 if (dbver < 14)
                     UpgradeDB14();
+
+                if (dbver < 15)
+                    UpgradeDB15();
 
                 dbUpgraded = true;
                 return true;
@@ -329,15 +331,6 @@ namespace EDDiscovery.DB
             PerformUpgrade(12, true, true, new[] { query1, query2 });
         }
 
-        private void UpgradeDB13()
-        {
-            string query1 = "ALTER TABLE Systems ADD COLUMN versiondate DATETIME";
-            string query2 = "UPDATE Systems SET versiondate = datetime('now')";
-            string query3 = "CREATE INDEX IDX_Systems_versiondate ON Systems (versiondate ASC)";
-
-            PerformUpgrade(13, true, true, new[] { query1, query2, query3 });
-        }
-
 
         private bool UpgradeDB14()
         {
@@ -347,34 +340,21 @@ namespace EDDiscovery.DB
             string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Z double";
             string dbfile = GetSQLiteDBFile();
 
-            try
-            {
-                File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", "EDDiscovery12.sqlite"));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-
-            try
-            {
-                ExecuteQuery(query1);
-                ExecuteQuery(query2);
-                ExecuteQuery(query3);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                MessageBox.Show("UpgradeDB13 error: " + ex.Message);
-            }
-
-            PutSettingInt("DBVer", 13);
-
+            PerformUpgrade(14, true, true, new[] { query1, query2, query3 });
             return true;
         }
+
+        private void UpgradeDB15()
+        {
+            string query1 = "ALTER TABLE Systems ADD COLUMN versiondate DATETIME";
+            string query2 = "UPDATE Systems SET versiondate = datetime('now')";
+            string query3 = "CREATE INDEX IDX_Systems_versiondate ON Systems (versiondate ASC)";
+
+            PerformUpgrade(15, true, true, new[] { query1, query2, query3 });
+        }
+
+
+
 
         private void ExecuteQuery(string query)
         {
