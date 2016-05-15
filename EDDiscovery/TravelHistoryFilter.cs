@@ -1,3 +1,4 @@
+using EDDiscovery2.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,16 +55,16 @@ namespace EDDiscovery
             return new TravelHistoryFilter(number, $"last {number}");
         }
 
-        public List<SystemPosition> Filter(List<SystemPosition> input)
+        public List<VisitedSystemsClass> Filter(List<VisitedSystemsClass> input)
         {
             if (MaximumNumberOfItems.HasValue)
             {
-                return input.OrderByDescending(s => s.time).Take(MaximumNumberOfItems.Value).ToList();
+                return input.OrderByDescending(s => s.Time).Take(MaximumNumberOfItems.Value).ToList();
             }
             else if(MaximumDataAge.HasValue)
             {
                 var oldestData = DateTime.Now.Subtract(MaximumDataAge.Value);
-                return (from systems in input where systems.time > oldestData orderby systems.time descending select systems).ToList();
+                return (from systems in input where systems.Time > oldestData orderby systems.Time descending select systems).ToList();
             }
             else
             {
