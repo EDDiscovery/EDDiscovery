@@ -166,19 +166,14 @@ namespace EDDiscovery
                 if (e.ColumnIndex == 1)
                 {
                     var value = e.FormattedValue.ToString().Trim();
-                    if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
-                        value = value.Replace(".", ",");
-
                     if (value == "")
                     {
                         dataGridViewDistances.Rows[e.RowIndex].ErrorText = null;
                         return;
                     }
 
-                    //var regex = new Regex(@"^((\d{1,2}[,.]\d{3})|(\d{1,5}))([,.]\d{1,2})?$");
-                    //e.Cancel = !regex.Match(e.FormattedValue.ToString()).Success;
-                    double dummy;
-                    if (double.TryParse(value, out dummy))
+                    var parsed = DistanceParser.ParseInterstellarDistance(value);
+                    if (parsed.HasValue)
                     {
                         dataGridViewDistances.Rows[e.RowIndex].ErrorText = null;
                     }
@@ -210,7 +205,7 @@ namespace EDDiscovery
             {
                 if (!edsm.IsKnownSystem(systemName))
                 {
-                    LogTextHighlight("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine);                    
+                    LogTextHighlight("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine);
                 }
                 else
                 {
@@ -289,13 +284,10 @@ namespace EDDiscovery
                 if (dataGridViewDistances[1, e.RowIndex].Value != null && !string.IsNullOrEmpty(dataGridViewDistances[1, e.RowIndex].Value.ToString().Trim()))
                 {
                     var value = dataGridViewDistances[1, e.RowIndex].Value.ToString().Trim();
-                    if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
-                        value = value.Replace(".", ",");
-
-                    double dist;
-                    if (double.TryParse(value, out dist))
+                    var parsedDistance = DistanceParser.ParseInterstellarDistance(value);
+                    if (parsedDistance.HasValue)
                     {
-                        dataGridViewDistances[1, e.RowIndex].Value = dist.ToString("F2");
+                        dataGridViewDistances[1, e.RowIndex].Value = parsedDistance.Value.ToString("F2");
                         // trigger trilateration calculation
                         RunTrilateration();
                     }
@@ -346,12 +338,10 @@ namespace EDDiscovery
                     if (system != null && system.HasCoordinate)
                     {
                         var value = distanceCell.Value.ToString().Trim();
-                        if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
-                            value = value.Replace(".", ",");
-                        double distance;
-                        if (double.TryParse(value, out distance))
+                        var parsedDistance = DistanceParser.ParseInterstellarDistance(value);
+                        if (parsedDistance.HasValue)
                         {
-                            var entry = new Trilateration.Entry(system.x, system.y, system.z, distance);
+                            var entry = new Trilateration.Entry(system.x, system.y, system.z, parsedDistance.Value);
 
                             systemsEntries.Add(system, entry);
                         }
@@ -867,16 +857,14 @@ namespace EDDiscovery
                         var system = systemCell.Value.ToString();
 
                         var value = distanceCell.Value.ToString().Trim();
-                        if (Application.CurrentCulture.NumberFormat.CurrencyDecimalSeparator.Equals(","))  // To make it easier for  regions that uses , as deciaml separator. .   allow them to use . also
-                            value = value.Replace(".", ",");
+                        var parsedDistance = DistanceParser.ParseInterstellarDistance(value);
 
-                        double distance;
-                        if (double.TryParse(value, out distance))
+                        if (parsedDistance.HasValue)
                         {
                             // can over-ride drop down now if it's a real system so you could add duplicates if you wanted (even once I've figured out issue #81 which makes it easy if not likely...)
                             if (!distances.Keys.Contains(system))
                             {
-                                distances.Add(system, distance);
+                                distances.Add(system, parsedDistance.Value);
                             }
                         }
                     }
