@@ -68,7 +68,7 @@ namespace EDDiscovery
             }
             else
             {
-                return input;
+                return input.OrderByDescending(s => s.Time).ToList();
             }
         }
     }
