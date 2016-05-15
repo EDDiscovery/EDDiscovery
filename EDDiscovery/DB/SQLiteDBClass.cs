@@ -153,7 +153,7 @@ namespace EDDiscovery.DB
                     UpgradeDB12();
 
                 if (dbver < 13)
-                    UpgradeDB13();
+                    UpgradeDB14();
 
                 dbUpgraded = true;
                 return true;
@@ -577,7 +577,7 @@ namespace EDDiscovery.DB
         }
 
 
-        private bool UpgradeDB13()
+        private bool UpgradeDB14()
         {
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN X double";
