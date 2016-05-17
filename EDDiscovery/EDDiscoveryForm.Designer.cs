@@ -76,6 +76,7 @@
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
+            this.debugBetaFixHiddenLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
@@ -111,7 +112,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(216, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(307, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -128,7 +129,7 @@
             this.editThemeToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // openEliteDangerousDirectoryToolStripMenuItem
@@ -192,7 +193,8 @@
             this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.forceEDDBUpdateToolStripMenuItem,
             this.syncEDSMSystemsToolStripMenuItem,
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem});
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
+            this.debugBetaFixHiddenLogToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "Admin";
@@ -230,7 +232,7 @@
             // keepOnTopToolStripMenuItem
             // 
             this.keepOnTopToolStripMenuItem.Name = "keepOnTopToolStripMenuItem";
-            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.keepOnTopToolStripMenuItem.Text = "Keep on Top";
             this.keepOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepOnTopToolStripMenuItem_Click);
             // 
@@ -238,7 +240,7 @@
             // 
             this.fastTravelToolStripMenuItem.CheckOnClick = true;
             this.fastTravelToolStripMenuItem.Name = "fastTravelToolStripMenuItem";
-            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.fastTravelToolStripMenuItem.Text = "Fast Travel";
             // 
             // helpToolStripMenuItem
@@ -519,6 +521,13 @@
             this.statusStrip1.TabIndex = 22;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // debugBetaFixHiddenLogToolStripMenuItem
+            // 
+            this.debugBetaFixHiddenLogToolStripMenuItem.Name = "debugBetaFixHiddenLogToolStripMenuItem";
+            this.debugBetaFixHiddenLogToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.debugBetaFixHiddenLogToolStripMenuItem.Text = "(Debug) Beta fix hidden log";
+            this.debugBetaFixHiddenLogToolStripMenuItem.Click += new System.EventHandler(this.debugBetaFixHiddenLogToolStripMenuItem_Click);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -609,6 +618,7 @@
         private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
         private SavedRouteExpeditionControl savedRouteExpeditionControl1;
         private ExtendedControls.StatusStripCustom statusStrip1;
+        private System.Windows.Forms.ToolStripMenuItem debugBetaFixHiddenLogToolStripMenuItem;
     }
 }
 

@@ -172,13 +172,16 @@ namespace EDDiscovery
                     {
                         if (visitedSystems.Count == 0)
                             visitedSystems.Add(vs);
-                        else if (!vsSystemsList.Last<VisitedSystemsClass>().Name.Equals(vs.Name))  // Avoid duplicate if times exist in same system from different files.
+                        else if (!visitedSystems.Last<VisitedSystemsClass>().Name.Equals(vs.Name))  // Avoid duplicate if times exist in same system from different files.
                             visitedSystems.Add(vs);
                         else
                         {
-                            VisitedSystemsClass vs2 = (VisitedSystemsClass)vsSystemsList.Last<VisitedSystemsClass>();
-                            vs.Commander = -2; // Move to dupe user
-                            vs.Update();
+                            VisitedSystemsClass vs2 = (VisitedSystemsClass)visitedSystems.Last<VisitedSystemsClass>();
+                            if (vs2.id != vs.id)
+                            {
+                                vs.Commander = -2; // Move to dupe user
+                                vs.Update();
+                            }
                         }
 
                     }

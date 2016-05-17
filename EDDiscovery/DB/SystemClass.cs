@@ -1,5 +1,4 @@
 ﻿using EDDiscovery2;
-using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -7,8 +6,6 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace EDDiscovery.DB
 {
@@ -476,7 +473,7 @@ namespace EDDiscovery.DB
                     cmd.Transaction = transaction;
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
-                    cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id,  security, eddb_updated_at, state, needs_permit) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit)";
+                    cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id, security, eddb_updated_at, state, needs_permit, versiondate) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit, datetime('now'))";
                     cmd.AddParameterWithValue("@name", name);
                     cmd.AddParameterWithValue("@x", x);
                     cmd.AddParameterWithValue("@y", y);
@@ -514,7 +511,7 @@ namespace EDDiscovery.DB
                     cmd.Connection = cn;
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandTimeout = 30;
-                    cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note)";
+                    cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, versiondate) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, datetime('now'))";
                     cmd.AddParameterWithValue("@name", name);
                     cmd.AddParameterWithValue("@x", x);
                     cmd.AddParameterWithValue("@y", y);
@@ -547,7 +544,7 @@ namespace EDDiscovery.DB
                 cmd.Transaction = transaction;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit  where ID=@id";
+                cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit, versiondate=datetime('now') where ID=@id";
 
                 cmd.AddParameterWithValue("@id", id); 
                 cmd.AddParameterWithValue("@name", name);
@@ -588,7 +585,7 @@ namespace EDDiscovery.DB
                 cmd.Transaction = transaction;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status   where ID=@id";
+                cmd.CommandText = "Update Systems set name=@name, x=@x, y=@y, z=@z, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, versiondate=datetime('now') where ID=@id";
 
                 cmd.AddParameterWithValue("@id", id);
                 cmd.AddParameterWithValue("@name", name);
