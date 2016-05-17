@@ -516,7 +516,7 @@ namespace EDDiscovery.DB
                         {
                             // Load from the last update we have stored in memory up to the latest present in the database
                             cmd.CommandText = "select * from Systems where versiondate > @versiondate Order By versiondate ASC";
-                            cmd.Parameters.AddWithValue("versiondate", versionDate.Value.AddSeconds(-1)); // This should avoid datetime precision issues
+                            cmd.AddParameterWithValue("versiondate", versionDate.Value.AddSeconds(-1)); // This should avoid datetime precision issues
                         }
 
                         ds = SqlQueryText(cn, cmd);
@@ -563,14 +563,14 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static void TouchSystem(SQLiteConnection connection, string systemName)
+        public static void TouchSystem(DbConnection connection, string systemName)
         {
-            using (SQLiteCommand cmd = connection.CreateCommand())
+            using (DbCommand cmd = connection.CreateCommand())
             {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
                 cmd.CommandText = "update systems set versiondate=datetime('now') where name=@systemName";
-                cmd.Parameters.AddWithValue("systemName", systemName);
+                cmd.AddParameterWithValue("systemName", systemName);
                 SqlNonQueryText(connection, cmd);
             }
         }
