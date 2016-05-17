@@ -188,7 +188,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(304, 13);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Get Api key from http://www.edsm.net in  \"My account\" menu.";
+            this.label2.Text = "Get Api key from https://www.edsm.net in  \"My account\" menu.";
             // 
             // dataGridViewCommanders
             // 
