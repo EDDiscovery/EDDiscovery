@@ -1,0 +1,10 @@
+language: csharp
+solution: EDDiscovery.sln
+mono:
+  - latest
+install:
+  - nuget restore EDDiscovery.sln
+  - nuget install NUnit.ConsoleRunner -Version 3.2.1 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release EDDiscovery.sln
+  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./EDDiscoveryTests/bin/Release/EDDiscoveryTests.dll
