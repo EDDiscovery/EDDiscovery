@@ -24,25 +24,7 @@ namespace EDDiscovery
         public IVisitedSystems vs;
         
 
-        public SystemPosition()
-        {
-        }
-
-        public SystemPosition(IVisitedSystems vs)
-        {
-            Name = vs.Name;
-            time = vs.Time;
-            this.vs = vs;
-        }
-
-        public void Update()
-        {
-            if (this.vs is VisitedSystemsClass)
-            {
-                VisitedSystemsClass vsc = (VisitedSystemsClass)vs;
-                vsc.Update();
-            }
-        }
+     
 
     }
 }
