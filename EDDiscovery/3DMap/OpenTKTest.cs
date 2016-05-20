@@ -1,5 +1,6 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery2.DB;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
@@ -14,7 +15,7 @@ namespace EDDiscovery2
     class OpenTKTest
     {
         public List<SystemClass> StarList;
-        public List<SystemPosition> visitedSystems=null;
+        public List<VisitedSystemsClass> visitedSystems=null;
         private Dictionary<string, SystemClass> VisitedStars;
 
         float x = 0;
@@ -30,7 +31,7 @@ namespace EDDiscovery2
 
             if (visitedSystems != null)
             {
-                foreach (SystemPosition sp in visitedSystems)
+                foreach (VisitedSystemsClass sp in visitedSystems)
                 {
                     star = SystemData.GetSystem(sp.Name);
                     if (star != null && star.HasCoordinate)

@@ -149,20 +149,20 @@ namespace EDDiscovery2
 
             int currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
-            var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.time > start && systems.time<endDate  && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.time  select systems;
-            List<SystemPosition> listHistory = history.ToList<SystemPosition>();
+            var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.Time > start && systems.Time<endDate  && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.Time  select systems;
+            List<VisitedSystemsClass> listHistory = history.ToList<VisitedSystemsClass>();
             Graphics gfx = Graphics.FromImage(imageViewer1.Image);
             
             if (listHistory.Count > 1)
             {
-                Pen pen = new Pen(Color.FromArgb(listHistory[1].vs.MapColour), 2);
+                Pen pen = new Pen(Color.FromArgb(listHistory[1].MapColour), 2);
                 if (pen.Color.A == 0)
                     pen.Color = Color.FromArgb(255, pen.Color);
                 for (int ii = 1; ii < listHistory.Count; ii++)
                 {
-                    if (listHistory[ii].vs.MapColour != listHistory[ii-1].vs.MapColour)
+                    if (listHistory[ii].MapColour != listHistory[ii-1].MapColour)
                     {
-                        pen = new Pen(Color.FromArgb(listHistory[ii].vs.MapColour), 2);
+                        pen = new Pen(Color.FromArgb(listHistory[ii].MapColour), 2);
                         if (pen.Color.A == 0)
                             pen.Color = Color.FromArgb(255, pen.Color);
                         

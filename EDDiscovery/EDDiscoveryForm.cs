@@ -53,7 +53,7 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get; private set; }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
-        public List<SystemPosition> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
+        public List<VisitedSystemsClass> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
 
         public bool option_nowindowreposition { get; set;  }  = false;                             // Cmd line options
 
@@ -1043,6 +1043,22 @@ namespace EDDiscovery
                 }
             }
         }
+
+        private void debugBetaFixHiddenLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
+
+            foreach (VisitedSystemsClass vs in vsall)
+            {
+                if (vs.Commander == -2 && vs.Time > new DateTime(2016, 5, 5))
+                {
+                    vs.Commander = 0;
+                    vs.Update();
+                }
+            }
+
+        }
+
         #endregion
 
         #region AsyncEDSM
@@ -1068,7 +1084,7 @@ namespace EDDiscovery
 
                 LogText("Get systems from EDSM." + Environment.NewLine);
 
-                eddb.DownloadFile("http://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
+                eddb.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
 
                 if (newfile)
                 {
@@ -1147,6 +1163,7 @@ namespace EDDiscovery
 
 
             }
+
 
         #endregion
 

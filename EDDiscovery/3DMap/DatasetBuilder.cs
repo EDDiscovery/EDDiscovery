@@ -24,7 +24,7 @@ namespace EDDiscovery2._3DMap
         public ISystem SelectedSystem { get; set; } = new SystemClass();
         public List<ISystem> StarList { get; set; } = new List<ISystem>();
         public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
-        public List<SystemPosition> VisitedSystems { get; set; }
+        public List<VisitedSystemsClass> VisitedSystems { get; set; }
         public List<ISystem> PlannedRoute { get; set; } = new List<ISystem>();
 
         public bool DrawLines { get; set; } = false;
@@ -324,18 +324,18 @@ namespace EDDiscovery2._3DMap
                 // For some reason I am unable to fathom this errors during the session after DBUpgrade8
                 // colours just resolves to an object reference not set error, but after a restart it works fine
                 // Not going to waste any more time, a one time restart is hardly the worst workaround in the world...
-                IEnumerable<IGrouping<int, SystemPosition>> colours =
-                    from SystemPosition sysPos in VisitedSystems where sysPos.vs!=null
-                    group sysPos by sysPos.vs.MapColour;
+                IEnumerable<IGrouping<int, VisitedSystemsClass>> colours =
+                    from VisitedSystemsClass sysPos in VisitedSystems 
+                    group sysPos by sysPos.MapColour;
 
                 if (colours!=null)
                 {
-                    foreach (IGrouping<int, SystemPosition> colour in colours)
+                    foreach (IGrouping<int, VisitedSystemsClass> colour in colours)
                     {
                         if (DrawLines)
                         {
                             var datasetl = Data3DSetClass<LineData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                            foreach (SystemPosition sp in colour)
+                            foreach (VisitedSystemsClass sp in colour)
                             {
                                 if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
                                 {
@@ -349,7 +349,7 @@ namespace EDDiscovery2._3DMap
                         else
                         {
                             var datasetvs = Data3DSetClass<PointData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                            foreach (SystemPosition sp in colour)
+                            foreach (VisitedSystemsClass sp in colour)
                             {
                                 ISystem star = SystemData.GetSystem(sp.Name);
                                 if (star != null && star.HasCoordinate)
@@ -465,7 +465,7 @@ namespace EDDiscovery2._3DMap
         private ISystem LastKnownSystemPosition()
         {
             ISystem lastknownps = null;
-            foreach (SystemPosition ps in VisitedSystems)
+            foreach (VisitedSystemsClass ps in VisitedSystems)
             {
                 if (ps.curSystem == null)
                 {
