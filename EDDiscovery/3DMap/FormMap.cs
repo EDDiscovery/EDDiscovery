@@ -93,7 +93,7 @@ namespace EDDiscovery2
         private string _homeSystem;
         private float _defaultZoom;
         private List<SystemClass> ReferenceSystems { get; set; }
-        public List<SystemPosition> VisitedSystems { get; set; }
+        public List<VisitedSystemsClass> VisitedSystems { get; set; }
         private List<SystemClass> PlannedRoute { get; set; }
 
         public string HistorySelection { get; set; }
@@ -202,7 +202,7 @@ namespace EDDiscovery2
             glControl.Invalidate();
         }
 
-        public void SetVisitedSystems(List<SystemPosition> visited)
+        public void SetVisitedSystems(List<VisitedSystemsClass> visited)
         {
             VisitedSystems = visited;
             GenerateDataSetsVisitedSystems();
@@ -323,7 +323,7 @@ namespace EDDiscovery2
                 return;
             Dictionary<string, Func<DateTime>> starttimes = new Dictionary<string, Func<DateTime>>()
             {
-                { "All", () => VisitedSystems.Select(s => s.time).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
+                { "All", () => VisitedSystems.Select(s => s.Time).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
                 { "Last Week", () => DateTime.Now.AddDays(-7) },
                 { "Last Month", () => DateTime.Now.AddMonths(-1) },
                 { "Last Year", () => DateTime.Now.AddYears(-1) }
@@ -569,7 +569,7 @@ namespace EDDiscovery2
                 CenterSystem = CenterSystem,
                 SelectedSystem = _clickedSystem,
 
-                VisitedSystems = (VisitedSystems != null) ? VisitedSystems.Where(s => s.time >= startTime && s.time <= endTime).OrderBy(s => s.time).ToList() : null,
+                VisitedSystems = (VisitedSystems != null) ? VisitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null,
 
                 Images = selectedmaps.ToArray(),
 
@@ -1441,7 +1441,7 @@ namespace EDDiscovery2
 
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
         {
-            SystemPosition ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.time descending select c).FirstOrDefault<SystemPosition>();
+            VisitedSystemsClass ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.Time descending select c).FirstOrDefault<VisitedSystemsClass>();
 
             if (ps2 != null)
                 SetCenterSystemTo(ps2.curSystem);

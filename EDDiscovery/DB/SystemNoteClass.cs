@@ -50,6 +50,7 @@ namespace EDDiscovery2.DB
                 cmd.Parameters.AddWithValue("@note", Note);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.TouchSystem(cn, Name);
 
                 using (SQLiteCommand cmd2 = new SQLiteCommand())
                 {
@@ -89,6 +90,7 @@ namespace EDDiscovery2.DB
                 cmd.Parameters.AddWithValue("@Time", Time);
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.TouchSystem(cn, Name);
                 SQLiteDBClass.globalSystemNotes[Name.ToLower()] = this;
 
                 return true;

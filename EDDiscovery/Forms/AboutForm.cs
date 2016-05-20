@@ -57,7 +57,7 @@ namespace EDDiscovery2.Forms
 
         private void linkLabelEDSM_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://www.edsm.net/");
+            Process.Start("https://www.edsm.net/");
         }
 
         private void linkLabelEDDB_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
