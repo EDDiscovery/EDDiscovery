@@ -319,11 +319,9 @@ namespace EDDiscovery2
 
         private void FillExpeditions()
         {
-            if (VisitedSystems == null || VisitedSystems.Count < 1)
-                return;
             Dictionary<string, Func<DateTime>> starttimes = new Dictionary<string, Func<DateTime>>()
             {
-                { "All", () => VisitedSystems.Select(s => s.Time).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
+                { "All", () => (VisitedSystems == null ? new[] { DateTime.Now } : VisitedSystems.Select(s => s.Time)).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
                 { "Last Week", () => DateTime.Now.AddDays(-7) },
                 { "Last Month", () => DateTime.Now.AddMonths(-1) },
                 { "Last Year", () => DateTime.Now.AddYears(-1) }
