@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -136,7 +136,6 @@
             this.viewOnEDSMToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
             this.historyContextMenu.Size = new System.Drawing.Size(233, 114);
-            this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // starMapColourToolStripMenuItem
             // 
@@ -686,7 +685,6 @@
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewNearest.Size = new System.Drawing.Size(277, 287);
             this.dataGridViewNearest.TabIndex = 23;
-            this.dataGridViewNearest.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
             // Col1
             // 
@@ -963,9 +961,8 @@
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewTravel.Size = new System.Drawing.Size(571, 516);
             this.dataGridViewTravel.TabIndex = 3;
-            this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
-            this.dataGridViewTravel.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellContentClick);
-            this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
+            this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
+            this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellContentDoubleClick);
             this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
             // 
@@ -1004,8 +1001,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
             this.mapColour.HeaderText = "Map";
             this.mapColour.MinimumWidth = 40;
             this.mapColour.Name = "mapColour";
@@ -1048,7 +1045,6 @@
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
-            this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
             // 
             // comboBoxHistoryWindow

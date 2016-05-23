@@ -75,7 +75,33 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4" />
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.0.10\lib\Mono.Cecil.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NFluent, Version=1.3.1.0, Culture=neutral, PublicKeyToken=18828b37b84b1437, processorArchitecture=MSIL">
+      <HintPath>..\packages\NFluent.1.3.1.0\lib\net40\NFluent.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.engine, Version=3.0.5813.39036, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.0.10\lib\nunit.engine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.0.10\lib\nunit.engine.api.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.2.1\lib\net40\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NUnit3.TestAdapter, Version=3.0.10.0, Culture=neutral, PublicKeyToken=4cb40d35494691ac, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit3TestAdapter.3.0.10\lib\NUnit3.TestAdapter.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.SQLite, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net40\System.Data.SQLite.dll</HintPath>
@@ -101,7 +127,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="3DMap\DatasetBuilderTests.cs" />
+    <Compile Include="DistanceParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TravelHistoryFilterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EDDiscovery\EDDiscovery.csproj">
