@@ -32,7 +32,7 @@ namespace EDDiscovery2.EDSM
         public EDSMClass()
         {
             fromSoftware = "EDDiscovery";
-            _serverAddress = "http://www.edsm.net/";
+            _serverAddress = "https://www.edsm.net/";
 
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
@@ -233,7 +233,7 @@ namespace EDDiscovery2.EDSM
             {
                 string edsmhiddensystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmhiddensystems.json");
                 bool newfile = false;
-                eddb.DownloadFile("http://www.edsm.net/api-v1/hidden-systems", edsmhiddensystems, out newfile);
+                eddb.DownloadFile("https://www.edsm.net/api-v1/hidden-systems", edsmhiddensystems, out newfile);
 
                 string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
 
@@ -260,7 +260,7 @@ namespace EDDiscovery2.EDSM
                 var response = RequestGet("api-v1/system" + query);
                 var json = response.Body;
 
-                //http://www.edsm.net/api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
+                //https://www.edsm.net/api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
 
                 if (json.Length > 1)
                 {
@@ -468,7 +468,7 @@ namespace EDDiscovery2.EDSM
             JObject msg = JObject.Parse(json);
             string sysID = msg["id"].Value<string>();
 
-            string url = "http://www.edsm.net/show-system/index/id/" + sysID + "/name/" + encodedSys;
+            string url = "https://www.edsm.net/show-system/index/id/" + sysID + "/name/" + encodedSys;
             return url;
         }
 

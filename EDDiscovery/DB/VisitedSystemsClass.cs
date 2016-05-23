@@ -132,7 +132,7 @@ namespace EDDiscovery2.DB
             try
             {
                 Regex pattern;
-                int hour, min, sec;
+                int hour=0, min=0, sec=0;
 
                 /* MKW: Use regular expressions to parse the log; much more readable and robust.
                  * Example log entry:
@@ -168,43 +168,59 @@ namespace EDDiscovery2.DB
 
                     pattern = new Regex(rgexpstr);
 
+
                     Match match = pattern.Match(line);
 
-                    hour = int.Parse(match.Groups["Hour"].Value);
-                    min = int.Parse(match.Groups["Minute"].Value);
-                    sec = int.Parse(match.Groups["Second"].Value);
+                    if (match != null && match.Success)
+                    {
+                        hour = int.Parse(match.Groups["Hour"].Value);
+                        min = int.Parse(match.Groups["Minute"].Value);
+                        sec = int.Parse(match.Groups["Second"].Value);
 
-                    //sp.Nr = int.Parse(match.Groups["Body"].Value);
-                    sp.Name = match.Groups["SystemName"].Value;
-                    string pos = match.Groups["Pos"].Value;
-                    try
-                    {
-                        string[] xyzpos = pos.Split(',');
-                        var culture = new System.Globalization.CultureInfo("en-US");
-                        sp.X = double.Parse(xyzpos[0], culture);
-                        sp.Y = double.Parse(xyzpos[1], culture);
-                        sp.Z = double.Parse(xyzpos[2], culture);
+                        //sp.Nr = int.Parse(match.Groups["Body"].Value);
+                        sp.Name = match.Groups["SystemName"].Value;
+                        string pos = match.Groups["Pos"].Value;
+                        try
+                        {
+                            string[] xyzpos = pos.Split(',');
+                            var culture = new System.Globalization.CultureInfo("en-US");
+                            sp.X = double.Parse(xyzpos[0], culture);
+                            sp.Y = double.Parse(xyzpos[1], culture);
+                            sp.Z = double.Parse(xyzpos[2], culture);
+                        }
+                        catch
+                        {
+                            sp.X = 0;
+                            sp.Y = 0;
+                            sp.Z = 0;
+                        }
+
                     }
-                    catch
+                    else
                     {
-                        sp.X = 0;
-                        sp.Y = 0;
-                        sp.Z = 0;
+                        System.Diagnostics.Trace.WriteLine("System parse error 1:" + line);
                     }
-                }
+
+
+            }
                 else
                 {
                     pattern = new Regex(@"{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:\d+\((?<SystemName>.*?)\) Body:(?<Body>\d+) Pos:\(.*?\)( (?<TravelMode>\w+))?");
                     Match match = pattern.Match(line);
 
-                    hour = int.Parse(match.Groups["Hour"].Value);
-                    min = int.Parse(match.Groups["Minute"].Value);
-                    sec = int.Parse(match.Groups["Second"].Value);
+                    if (match != null && match.Success)
+                    {
+                        hour = int.Parse(match.Groups["Hour"].Value);
+                        min = int.Parse(match.Groups["Minute"].Value);
+                        sec = int.Parse(match.Groups["Second"].Value);
 
-                    //sp.Nr = int.Parse(match.Groups["Body"].Value);
-                    sp.Name = match.Groups["SystemName"].Value;
-
-
+                        //sp.Nr = int.Parse(match.Groups["Body"].Value);
+                        sp.Name = match.Groups["SystemName"].Value;
+                    }
+                    else
+                    {
+                        System.Diagnostics.Trace.WriteLine("System parse error 2:" + line);
+                    }
                 }
                 if (hour >= lasttime.Hour)
                 {

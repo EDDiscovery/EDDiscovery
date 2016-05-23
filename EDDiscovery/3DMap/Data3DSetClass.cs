@@ -28,6 +28,15 @@ namespace EDDiscovery2._3DMap
             this.z = z;
         }
 
+        public PointData(double x, double y, double z, float sz, Color c )
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.Size = sz;
+            this.Color = c;
+        }
+
         public PrimitiveType Type { get { return PrimitiveType.Points; } }
         public Color Color { get; set; }
         public float Size { get; set; }
@@ -764,7 +773,7 @@ namespace EDDiscovery2._3DMap
             return GetVertices(img.TopLeft, img.TopRight, img.BottomLeft, img.BottomRight, y);
         }
 
-        protected static Vector3d[] GetVertices(Point topleft, Point topright, Point bottomleft, Point bottomright, float y = 0)
+        protected static Vector3d[] GetVertices(PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
         {
             return new Vector3d[]
             {
@@ -822,7 +831,7 @@ namespace EDDiscovery2._3DMap
             return new TexturedQuadData(vertices, texcoords, bmp);
         }
 
-        public static TexturedQuadData FromBitmap(Bitmap bmp, Point topleft, Point topright, Point bottomleft, Point bottomright, float y = 0)
+        public static TexturedQuadData FromBitmap(Bitmap bmp, PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
         {
             Point pxTopLeft = new Point(0, bmp.Height - 1);
             Point pxTopRight = new Point(bmp.Width - 1, bmp.Height - 1);
