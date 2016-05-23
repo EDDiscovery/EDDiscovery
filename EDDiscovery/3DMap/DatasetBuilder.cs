@@ -275,7 +275,7 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public List<IData3DSet> AddStars(bool unpopulated, bool useunpopcolor)     
+        public List<IData3DSet> AddStars(bool unpopulated, bool useunpopcolor)
         {
             if (StarList != null)
             {
@@ -381,7 +381,7 @@ namespace EDDiscovery2._3DMap
         {
             if (SelectedSystem != null)
             {
-                var dataset = Data3DSetClass<PointData>.Create("Selected", MapColours.SelectedSystem, 5.0f);
+                var dataset = Data3DSetClass<PointData>.Create("Selected", MapColours.SelectedSystem, 8.0f);
 
                 //GL.Enable(EnableCap.ProgramPointSize);
                 dataset.Add(new PointData(SelectedSystem.x, SelectedSystem.y, SelectedSystem.z));
@@ -394,7 +394,7 @@ namespace EDDiscovery2._3DMap
             var dataset = Data3DSetClass<PointData>.Create("Interest", MapColours.POISystem, 10.0f);
             AddSystem("sol", dataset);
             AddSystem("sagittarius a*", dataset);
-            //AddSystem("polaris", dataset);
+            AddSystem("CEECKIA ZQ-L C24-0", dataset);
             _datasets.Add(dataset);
             return _datasets;
         }
@@ -481,7 +481,7 @@ namespace EDDiscovery2._3DMap
             return lastknownps;
         }
 
-        static private Bitmap DrawString(string str, Font fnt, int w, int h)
+        static public Bitmap DrawString(string str, Font fnt, int w, int h)
         {
             Bitmap text_bmp = new Bitmap(w, h);
             using (Graphics g = Graphics.FromImage(text_bmp))
@@ -491,35 +491,6 @@ namespace EDDiscovery2._3DMap
             }
 
             return text_bmp;
-        }
-
-        static public Data3DSetClass<TexturedQuadData> AddNamedStars(List<ISystem> starlist, int textwidthly, int textheightly)
-        {
-            string fontname = "MS Sans Serif";
-
-            Font fnt = new Font(fontname, 20F);
-
-            int bitmapwidth, bitmapheight;
-            Bitmap text_bmp = new Bitmap(100, 30);
-            using (Graphics g = Graphics.FromImage(text_bmp))
-            {
-                SizeF sz = g.MeasureString("Blah blah EX22 LYXX2", fnt);
-                bitmapwidth = (int)sz.Width + 4;
-                bitmapheight = (int)sz.Height + 4;
-            }
-
-            Data3DSetClass<TexturedQuadData> datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("name bitmap", Color.White, 1.0f);
-
-            foreach (ISystem sys in starlist)
-            {
-                Bitmap map = DrawString(sys.name, fnt, bitmapwidth, bitmapheight);
-
-                datasetMapImg.Add(TexturedQuadData.FromBitmap(map,
-                    new Point((int)sys.x, (int)sys.z - textheightly / 2), new Point((int)sys.x + textwidthly, (int)sys.z - textheightly / 2),
-                    new Point((int)sys.x, (int)sys.z + textheightly / 2), new Point((int)sys.x + textwidthly, (int)sys.z + textheightly / 2), (float)sys.y));
-            }
-
-            return datasetMapImg;
         }
 
     }

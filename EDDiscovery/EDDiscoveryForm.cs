@@ -1168,7 +1168,7 @@ namespace EDDiscovery
 
                 LogText("Get systems from EDSM." + Environment.NewLine);
 
-                eddb.DownloadFile("http://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
+                eddb.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
 
                 if (newfile)
                 {

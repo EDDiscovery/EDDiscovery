@@ -499,6 +499,8 @@ namespace EDDiscovery
                 if (visitedSystems != null)
                     visitedSystems.Clear();
                 RefreshHistory();
+                if (_discoveryForm.Map != null)
+                    _discoveryForm.Map.SetVisited(visitedSystems);
             }
         }
 
