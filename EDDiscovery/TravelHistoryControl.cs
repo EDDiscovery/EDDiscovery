@@ -224,12 +224,26 @@ namespace EDDiscovery
                 {
                     sys1.Note = SQLiteDBClass.globalSystemNotes[sys1.SearchName].Note;
                 }
+                if (item.HasTravelCoordinates)
+                {
+                    sys1.x = item.X;
+                    sys1.y = item.Y;
+                    sys1.z = item.Z;
+                }
             }
             if (item2 != null)
             {
                 sys2 = SystemData.GetSystem(item2.Name);
                 if (sys2 == null)
+                {
                     sys2 = new SystemClass(item2.Name);
+                    if (item2.HasTravelCoordinates)
+                    {
+                        sys2.x = item2.X;
+                        sys2.y = item2.Y;
+                        sys2.z = item2.Z;
+                    }
+                }
 
             }
             else
@@ -278,7 +292,15 @@ namespace EDDiscovery
 
             cell.Tag = item;
 
-            dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
+
+            bool hascoord; 
+
+            if (item.HasTravelCoordinates)
+              hascoord  = sys1.HasCoordinate;
+            else 
+                hascoord = true;
+
+            dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (hascoord) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
             cell = dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.Map];
             cell.Style.ForeColor = Color.FromArgb(item.MapColour);
@@ -304,32 +326,21 @@ namespace EDDiscovery
                 textBoxZ.Text = syspos.curSystem.z.ToString(SingleCoordinateFormat);
 
                 textBoxSolDist.Text = Math.Sqrt(syspos.curSystem.x * syspos.curSystem.x + syspos.curSystem.y * syspos.curSystem.y + syspos.curSystem.z * syspos.curSystem.z).ToString("0.00");
-
-                //// For test only
-                //Stopwatch sw = new Stopwatch();
-                //sw.Start();
-                //SuggestedReferences refereces = new SuggestedReferences(syspos.curSystem.x, syspos.curSystem.y, syspos.curSystem.z);
-
-                //ReferenceSystem rsys;
-
-                //for (int ii = 0; ii < 16; ii++)
-                //{
-                //    rsys = refereces.GetCandidate();
-                //    refereces.AddReferenceStar(rsys.System);
-                //    System.Diagnostics.Trace.WriteLine(rsys.System.name + " Dist: " + rsys.Distance.ToString("0.00") + " x:" + rsys.System.x.ToString() + " y:" + rsys.System.y.ToString() + " z:" + rsys.System.z.ToString() );
-                //}
-                //sw.Stop();
-                //System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-
-
             }
-            else
+            else if (syspos.X == 0.0 && syspos.Y == 0.0 && syspos.Z == 0.0)
             {
                 textBoxX.Text = "?";
                 textBoxY.Text = "?";
                 textBoxZ.Text = "?";
                 textBoxSolDist.Text = "";
+            }
+            else
+            {
+                textBoxX.Text = syspos.X.ToString(SingleCoordinateFormat);
+                textBoxY.Text = syspos.Y.ToString(SingleCoordinateFormat);
+                textBoxZ.Text = syspos.Z.ToString(SingleCoordinateFormat);
 
+                textBoxSolDist.Text = Math.Sqrt(syspos.X * syspos.X + syspos.Y * syspos.Y + syspos.Z * syspos.Z).ToString("0.00");
             }
 
             int count = GetVisitsCount(syspos.curSystem.name);
