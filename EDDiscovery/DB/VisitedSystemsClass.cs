@@ -45,6 +45,17 @@ namespace EDDiscovery2.DB
             }
         }
 
+        public bool HasTravelCoordinates
+        {
+            get
+            {
+                if (X == 0.0 && Y == 0.0 && Z == 0.0)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
         public bool Add()
         {
             using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
