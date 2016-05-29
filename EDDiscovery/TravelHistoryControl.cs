@@ -1244,13 +1244,16 @@ namespace EDDiscovery
 
         private void buttonEDSM_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
+            if (currentSysPos != null && currentSysPos.curSystem != null) // solve a possible exception
             {
-                EDSMClass edsm = new EDSMClass();
-                string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
-                Process.Start(url);
-                //if (currentSysPos.curSystem.id_eddb > 0)
-                //Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
+                if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
+                {
+                    EDSMClass edsm = new EDSMClass();
+                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
+                    Process.Start(url);
+                    //if (currentSysPos.curSystem.id_eddb > 0)
+                    //Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
+                }
             }
         }
     }
