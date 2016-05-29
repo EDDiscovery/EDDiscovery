@@ -296,9 +296,9 @@ namespace EDDiscovery
             bool hascoord; 
 
             if (item.HasTravelCoordinates)
-              hascoord  = sys1.HasCoordinate;
+              hascoord  = true;
             else 
-                hascoord = true;
+                hascoord = sys1.HasCoordinate;
 
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (hascoord) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
