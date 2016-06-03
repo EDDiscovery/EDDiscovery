@@ -22,7 +22,7 @@ namespace EDDiscovery2._3DMap
 
         public ISystem CenterSystem { get; set; } = new SystemClass();
         public ISystem SelectedSystem { get; set; } = new SystemClass();
-        public List<ISystem> StarList { get; set; } = new List<ISystem>();
+        public List<SystemClassStarNames> StarList { get; set; }
         public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
         public List<VisitedSystemsClass> VisitedSystems { get; set; }
         public List<ISystem> PlannedRoute { get; set; } = new List<ISystem>();
@@ -281,7 +281,7 @@ namespace EDDiscovery2._3DMap
             {
                 var datasetS = Data3DSetClass<PointData>.Create("stars", (unpopulated || useunpopcolor) ? MapColours.SystemDefault : MapColours.StationSystem , 1.0f);
 
-                foreach (ISystem si in StarList)
+                foreach (SystemClassStarNames si in StarList)
                 {
                     if ( (si.population == 0) == unpopulated )          // if zero population, and unpopulated is true, add.  If non zero pop, and unpolated is false, add
                         AddSystem(si, datasetS);
@@ -457,6 +457,14 @@ namespace EDDiscovery2._3DMap
         private void AddSystem(ISystem system, Data3DSetClass<PointData> dataset)
         {
             if (system != null && system.HasCoordinate)
+            {
+                dataset.Add(new PointData(system.x, system.y, system.z));
+            }
+        }
+
+        private void AddSystem(SystemClassStarNames system, Data3DSetClass<PointData> dataset)
+        {
+            if (system != null)
             {
                 dataset.Add(new PointData(system.x, system.y, system.z));
             }
