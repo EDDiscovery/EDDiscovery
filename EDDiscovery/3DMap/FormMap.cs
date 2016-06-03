@@ -27,6 +27,9 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_coarsegridlines;
         private List<IData3DSet> _datasets_gridlinecoords;
         private List<IData3DSet> _datasets_maps;
+        private List<IData3DSet> _datasets_zeropopstars;
+        private List<IData3DSet> _datasets_popstarscoloured;
+        private List<IData3DSet> _datasets_popstarsuncoloured;
         private List<IData3DSet> _datasets_poi;
         private List<IData3DSet> _datasets_selectedsystems;
         private List<IData3DSet> _datasets_visitedsystems;
@@ -35,6 +38,8 @@ namespace EDDiscovery2
         private const double ZoomMin = 0.01;
         private const double ZoomFact = 1.2589254117941672104239541063958;
         private const double CameraSlewTime = 1.0;
+
+        List<SystemClassStarNames> _starnames = null;    // star list combines data base and travelled h
 
         private AutoCompleteStringCollection _systemNames;
         private SystemClassStarNames _centerSystem;
@@ -60,7 +65,6 @@ namespace EDDiscovery2
 
         Matrix4d _starname_resmat;                  // to pass to thread..
         bool _starname_repaintall;                  // to pass to thread..
-        List<SystemClassStarNames> _starnames = null;    // star list for naming.. had position, name and textures..
         Vector3 _starname_camera_lastpos;           // last estimated camera pos
         Vector3 _starname_camera_lastdir;           // and direction..
         bool _starname_camera_paint_lookdown = false; // true, we are above the stars
@@ -121,30 +125,38 @@ namespace EDDiscovery2
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
-                                AutoCompleteStringCollection sysname)
+                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
-            if (_starnames == null )                                // first time ...
+            VisitedSystems = visited;
+
+            List<SystemClass> starList = SQLiteDBClass.globalSystems;           
+
+            _starnames = new List<SystemClassStarNames>();          // recreate every time in case changed..
+                
+            foreach (var sys in starList)
             {
-                List<SystemClass> starList = SQLiteDBClass.globalSystems;
+                if (sys.HasCoordinate)            // only interested in these
+                    _starnames.Add(new SystemClassStarNames(sys));
+            }
 
-                _starnames = new List<SystemClassStarNames>();
-
-                foreach (var sys in starList)
+            foreach (VisitedSystemsClass vsc in VisitedSystems)
+            {
+                if (vsc.HasTravelCoordinates && _starnames.Find(x => x.name.Equals(vsc.Name)) == null)
                 {
-                    if (sys.HasCoordinate)            // only interested in these
-                        _starnames.Add(new SystemClassStarNames(sys, MapColours.NamedStar, MapColours.NamedStarUnpopulated));
+                    //Console.WriteLine("New system " + vsc.Name);
+                    _starnames.Add(new SystemClassStarNames(vsc));
                 }
+            }
 
-                string fontname = "MS Sans Serif";                  // calculate once for bitmap 
-                _starnamebitmapfnt = new Font(fontname, 20F);
+            string fontname = "MS Sans Serif";                  // calculate once for bitmap 
+            _starnamebitmapfnt = new Font(fontname, 20F);
 
-                Bitmap text_bmp = new Bitmap(100, 30);
-                using (Graphics g = Graphics.FromImage(text_bmp))
-                {
-                    SizeF sz = g.MeasureString("Blah blah EX22 LYXX2", _starnamebitmapfnt);
-                    _starnamebitmapwidth = (int)sz.Width + 4;
-                    _starnamebitmapheight = (int)sz.Height + 4;
-                }
+            Bitmap text_bmp = new Bitmap(100, 30);
+            using (Graphics g = Graphics.FromImage(text_bmp))
+            {
+                SizeF sz = g.MeasureString("Blah blah EX22 LYXX2", _starnamebitmapfnt);
+                _starnamebitmapwidth = (int)sz.Width + 4;
+                _starnamebitmapheight = (int)sz.Height + 4;
             }
 
             _starname_curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
@@ -164,7 +176,6 @@ namespace EDDiscovery2
 
             ReferenceSystems = null;
             PlannedRoute = null;
-            VisitedSystems = null;
 
             OrientateMapAroundSystem(_centerSystem);
 
@@ -200,10 +211,25 @@ namespace EDDiscovery2
             glControl.Invalidate();
         }
 
-        public void SetVisitedSystems(List<VisitedSystemsClass> visited)
+        public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
         {
+            if (_starnames == null)         // if null, we are not up and running
+                return;
+
             VisitedSystems = visited;
+
+            foreach (VisitedSystemsClass vsc in VisitedSystems)
+            {
+                if (vsc.HasTravelCoordinates && _starnames.Find(x => x.name.Equals(vsc.Name)) == null)
+                {
+                    Console.WriteLine("New visited system " + vsc.Name);
+                    _starnames.Add(new SystemClassStarNames(vsc));
+                }
+            }
+            
+            GenerateDataSetsStars();                            // update the star list..
             GenerateDataSetsVisitedSystems();
+            RecalcStarNames();
             glControl.Invalidate();
         }
 
@@ -228,6 +254,7 @@ namespace EDDiscovery2
 
             GenerateDataSets();
             GenerateDataSetsMaps();
+            GenerateDataSetsStars();
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
 
@@ -492,6 +519,22 @@ namespace EDDiscovery2
             UpdateDataSetsDueToZoom();
         }
 
+        private void GenerateDataSetsStars()         // Called during Load, and if we ever add systems..
+        {
+            DatasetBuilder builder = CreateBuilder();
+
+            builder.Build();
+            _datasets_zeropopstars = builder.AddStars(true, true);
+
+            builder.Build();
+            _datasets_popstarscoloured = builder.AddStars(false, false);
+
+            builder.Build();
+            _datasets_popstarsuncoloured = builder.AddStars(false, true);
+
+            builder = null;
+        }
+
         private void UpdateDataSetsDueToZoom()
         {
             DatasetBuilder builder = new DatasetBuilder();
@@ -553,6 +596,7 @@ namespace EDDiscovery2
             {
                 CenterSystem = CreateSystemClass(_centerSystem),
                 SelectedSystem = CreateSystemClass(_clickedSystem),
+                StarList = _starnames,
 
                 VisitedSystems = (VisitedSystems != null) ? VisitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null,
 
@@ -1098,6 +1142,34 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
+            if (toolStripButtonShowAllStars.Checked)
+            {
+                foreach (var dataset in _datasets_zeropopstars)
+                    dataset.DrawAll(glControl);
+
+                if (toolStripButtonStations.Checked)
+                {
+                    foreach (var dataset in _datasets_popstarscoloured)
+                        dataset.DrawAll(glControl);
+                }
+                else
+                {
+                    foreach (var dataset in _datasets_popstarsuncoloured)
+                        dataset.DrawAll(glControl);
+                }
+            }
+            else if (toolStripButtonStations.Checked)
+            {
+                foreach (var dataset in _datasets_popstarscoloured)
+                    dataset.DrawAll(glControl);
+            }
+
+            foreach (var dataset in _datasets_poi)
+                dataset.DrawAll(glControl);
+
+            foreach (var dataset in _datasets_visitedsystems)
+                dataset.DrawAll(glControl);
+
             if (_starnames != null)
             {
                 bool showallstars = toolStripButtonShowAllStars.Checked;
@@ -1134,29 +1206,15 @@ namespace EDDiscovery2
 
                     if (sys.paintstar != null)                  // if star disk, paint..
                         sys.paintstar.Draw(glControl);
-                    else if ( showallstars )                    // if show all stars
-                    {
-                        if (showpopstars && sys.populatedstar != null)          // draw populated if present and wanted
-                            sys.populatedstar.Draw(glControl);
-                        else
-                            sys.star.Draw(glControl);           // else draw the star.. always present
-                    }
-                    else if ( showpopstars && sys.populatedstar != null)          // draw populated if present and wanted
-                        sys.populatedstar.Draw(glControl);
 
                     if (sys.painttexture != null)           // being paranoid by treating these separately. Thread may finish painting one before the other.
                         sys.painttexture.Draw(glControl);
                 }
             }
 
-            foreach (var dataset in _datasets_poi)
-                dataset.DrawAll(glControl);
-
             foreach (var dataset in _datasets_selectedsystems)
                 dataset.DrawAll(glControl);
 
-            foreach (var dataset in _datasets_visitedsystems)
-                dataset.DrawAll(glControl);
         }
 
         private void UpdateStatus()
@@ -1221,7 +1279,7 @@ namespace EDDiscovery2
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
-#if false
+
             if (Animatetime)
             {
                 maxstardate = maxstardate.AddHours(10);
@@ -1233,7 +1291,6 @@ namespace EDDiscovery2
                 if (maxstardate > DateTime.Now)
                     Animatetime = false;
             }
-#endif
 
             glControl.Invalidate();
         }
@@ -1645,13 +1702,16 @@ namespace EDDiscovery2
                     else
                     {
                         labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
-//TBD                        
-                        //selectionAllegiance.Text = "Allegiance: " + _clickedSystem.allegiance;
-                        //selectionEconomy.Text = "Economy: " + _clickedSystem.primary_economy;
-                        //selectionGov.Text = "Gov: " + _clickedSystem.government;
-                        //selectionState.Text = "State: " + _clickedSystem.state;
+
+                        if (_clickedSystem.sysclass != null)
+                        {
+                            selectionAllegiance.Text = "Allegiance: " + _clickedSystem.sysclass.allegiance;
+                            selectionEconomy.Text = "Economy: " + _clickedSystem.sysclass.primary_economy;
+                            selectionGov.Text = "Gov: " + _clickedSystem.sysclass.government;
+                            selectionState.Text = "State: " + _clickedSystem.sysclass.state;
+                        }
+
                         viewOnEDSMToolStripMenuItem.Enabled = true;
-                        SetCenterSystemTo(_clickedSystem);
                         System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
                     }
                 }
@@ -1818,34 +1878,46 @@ namespace EDDiscovery2
             {
                 //Console.WriteLine("Hovering over " + hoversystem.name);
 
-                double distcsn = Math.Sqrt((hoversystem.x - _centerSystem.x) * (hoversystem.x - _centerSystem.x) + (hoversystem.y - _centerSystem.y) * (hoversystem.y - _centerSystem.y) + (hoversystem.z - _centerSystem.z) * (hoversystem.z - _centerSystem.z));
-
                 string info = hoversystem.name;
                 info += Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.x.ToString("0.00"), hoversystem.y.ToString("0.00"), hoversystem.z.ToString("0.00"));
-//TBD
-//                if (hoversystem.allegiance != EDAllegiance.Unknown)
-//                    info += Environment.NewLine + "Allegiance: " + hoversystem.allegiance;
 
-//                if (hoversystem.primary_economy != EDEconomy.Unknown)
-//                    info += Environment.NewLine + "Economy: " + hoversystem.primary_economy;
+                if (hoversystem.sysclass != null)
+                {
+                    if (hoversystem.sysclass.allegiance != EDAllegiance.Unknown)
+                        info += Environment.NewLine + "Allegiance: " + hoversystem.sysclass.allegiance;
 
-//                if (hoversystem.government != EDGovernment.Unknown)
-//                    info += Environment.NewLine + "Government: " + hoversystem.allegiance;
+                    if (hoversystem.sysclass.primary_economy != EDEconomy.Unknown)
+                        info += Environment.NewLine + "Economy: " + hoversystem.sysclass.primary_economy;
 
-//                if (hoversystem.state != EDState.Unknown)
-//                    info += Environment.NewLine + "State: " + hoversystem.state;
+                    if (hoversystem.sysclass.government != EDGovernment.Unknown)
+                        info += Environment.NewLine + "Government: " + hoversystem.sysclass.allegiance;
+
+                    if (hoversystem.sysclass.state != EDState.Unknown)
+                        info += Environment.NewLine + "State: " + hoversystem.sysclass.state;
+
+                    if (hoversystem.sysclass.allegiance != EDAllegiance.Unknown)
+                        info += Environment.NewLine + "Allegiance: " + hoversystem.sysclass.allegiance;
+                }
 
                 if (hoversystem.population != 0 )
                     info += Environment.NewLine + "Population: " + hoversystem.population;
 
-//                if (hoversystem.allegiance != EDAllegiance.Unknown)
-//                    info += Environment.NewLine + "Allegiance: " + hoversystem.allegiance;
-
-                info += Environment.NewLine + "Distance from " + _centerSystem.name + " " + distcsn.ToString("0.0");
-                if (_historySelection != null && !_historySelection.name.Equals(_centerSystem.name))
+                if (!hoversystem.name.Equals(_centerSystem.name))   
+                {
+                    double distcsn = Math.Sqrt((hoversystem.x - _centerSystem.x) * (hoversystem.x - _centerSystem.x) + (hoversystem.y - _centerSystem.y) * (hoversystem.y - _centerSystem.y) + (hoversystem.z - _centerSystem.z) * (hoversystem.z - _centerSystem.z));
+                    info += Environment.NewLine + "Distance from " + _centerSystem.name + " " + distcsn.ToString("0.0");
+                }
+                                                                // if exists, history not hover, history not centre
+                if (_historySelection != null && !hoversystem.name.Equals(_historySelection.name) && !_historySelection.name.Equals(_centerSystem.name) )
                 {
                     double disthist = Math.Sqrt((hoversystem.x - _historySelection.x) * (hoversystem.x - _historySelection.x) + (hoversystem.y - _historySelection.y) * (hoversystem.y - _historySelection.y) + (hoversystem.z - _historySelection.z) * (hoversystem.z - _historySelection.z));
                     info += Environment.NewLine + "Distance from " + _historySelection.name + " " + disthist.ToString("0.0");
+                }
+                                                                // home not centre, home not history or history null
+                if (!_homeSystem.name.Equals(_centerSystem.name) && ( _historySelection == null || !_historySelection.name.Equals(_homeSystem.name) ) )
+                {
+                    double disthome = Math.Sqrt((hoversystem.x - _homeSystem.x) * (hoversystem.x - _homeSystem.x) + (hoversystem.y - _homeSystem.y) * (hoversystem.y - _homeSystem.y) + (hoversystem.z - _homeSystem.z) * (hoversystem.z - _homeSystem.z));
+                    info += Environment.NewLine + "Distance from " + _homeSystem.name + " " + disthome.ToString("0.0");
                 }
 
                 _mousehovertooltip = new System.Windows.Forms.ToolTip();
@@ -1896,23 +1968,28 @@ namespace EDDiscovery2
     public class SystemClassStarNames    // holds star data.. used as its kept up to date with visited systems and has extra info
     {
         public SystemClassStarNames() { }
-        public SystemClassStarNames(SystemClass other, Color cpop, Color cunpop)
+        public SystemClassStarNames(SystemClass other)
         {
-            id = other.id;
             name = other.name;
             x = other.x; y = other.y; z = other.z;
             population = other.population;
             newtexture = null; newstar = null;
             painttexture = null; paintstar = null;
             candisposepainttexture = false;
-
-            star = new PointData(x, y, z, 1.0F, cunpop);
-
-            if ( population!=0)
-                populatedstar = new PointData(x, y, z, 1.0F, cpop );
+            sysclass = other;
         }
 
-        public int id { get; set; }
+        public SystemClassStarNames(VisitedSystemsClass other)
+        {
+            name = other.Name;
+            x = other.X; y = other.Y; z = other.Z;
+            population = 0;
+            newtexture = null; newstar = null;
+            painttexture = null; paintstar = null;
+            candisposepainttexture = false;
+            sysclass = null;
+        }
+
         public string name { get; set; }
         public double x { get; set; }
         public double y { get; set; }
@@ -1923,9 +2000,7 @@ namespace EDDiscovery2
         public TexturedQuadData painttexture { get; set; }
         public PointData paintstar { get; set; }                // instead of doing a array paint.
         public bool candisposepainttexture { get; set; }
-
-        public PointData star { get; set; }                     // default image for star
-        public PointData populatedstar { get; set; }            // image for star which is populated
+        public SystemClass sysclass;                            // set if created from it
     };
 
 }

@@ -33,7 +33,7 @@ namespace EDDiscovery
         }
 
         private const int DefaultTravelHistoryFilterIndex = 4;
-        private const string SingleCoordinateFormat = "#.#####";
+        private const string SingleCoordinateFormat = "0.#####";
 
         private static EDDiscoveryForm _discoveryForm;
         public int defaultMapColour;
@@ -388,76 +388,81 @@ namespace EDDiscovery
 
         private void ShowClosestSystems(string name)
         {
-            sysDist = new List<SystemDist>();
-            SystemClass lastSystem = null;
-            float dx, dy, dz;
-            double dist;
+            Debug.Assert(name != null && name.Length != 0);
 
-            try
+            labelclosests.Text = "";
+            dataGridViewNearest.Rows.Clear();
+
+            SystemClass lastSystem = SystemData.GetSystem(name);
+
+            double x, y, z;
+
+            if ( lastSystem == null )
             {
-                if (name == null)
-                {
+                VisitedSystemsClass vsc = visitedSystems.Find(q => q.Name.Equals(name) );
 
-                    var result = visitedSystems.OrderByDescending(a => a.Time).ToList<VisitedSystemsClass>();
-
-
-                    for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
-                    {
-                        VisitedSystemsClass item = result[ii];
-
-                        lastSystem = SystemData.GetSystem(item.Name);
-                        name = item.Name;
-                        if (lastSystem != null)
-                            break;
-                    }
-
-                }
-                else
-                {
-                    lastSystem = SystemData.GetSystem(name);
-                }
-
-                if (name !=null)
-                    labelclosests.Text = "Closest systems from " + name;
-
-                dataGridViewNearest.Rows.Clear();
-
-                if (lastSystem == null)
+                if (vsc == null || !vsc.HasTravelCoordinates) // if not found, or no co-ord
                     return;
 
-                foreach (SystemClass pos in SystemData.SystemList)
+                x = vsc.X;
+                y = vsc.Y;
+                z = vsc.Z;
+            }
+            else
+            {
+                x = lastSystem.x;
+                y = lastSystem.y;
+                z = lastSystem.z;
+            }
+
+            labelclosests.Text = "Closest systems from " + name;
+
+            sysDist = new List<SystemDist>();
+            double dist;
+            double dx, dy, dz;
+
+            foreach (SystemClass pos in SystemData.SystemList)
+            {
+                dx = (pos.x - x);
+                dy = (pos.y - y);
+                dz = (pos.z - z);
+                dist = dx * dx + dy * dy + dz * dz;
+
+                if (dist > 0)
                 {
+                    SystemDist sdist = new SystemDist();
+                    sdist.name = pos.name;
+                    sdist.dist = Math.Sqrt(dist);
+                    sysDist.Add(sdist);
+                }
+            }
 
-                    dx = (float)(pos.x - lastSystem.x);
-                    dy = (float)(pos.y - lastSystem.y);
-                    dz = (float)(pos.z - lastSystem.z);
+            foreach (VisitedSystemsClass pos in visitedSystems)
+            {
+                if (pos.HasTravelCoordinates && SystemData.GetSystem(name) == null)
+                {
+                    dx = (pos.X - x);
+                    dy = (pos.Y - y);
+                    dz = (pos.Z - z);
                     dist = dx * dx + dy * dy + dz * dz;
-
-                    //distance = (float)((system.x - arcsystem.x) * (system.x - arcsystem.x) + (system.y - arcsystem.y) * (system.y - arcsystem.y) + (system.z - arcsystem.z) * (system.z - arcsystem.z));
 
                     if (dist > 0)
                     {
                         SystemDist sdist = new SystemDist();
-                        sdist.name = pos.name;
+                        sdist.name = pos.Name;
                         sdist.dist = Math.Sqrt(dist);
                         sysDist.Add(sdist);
                     }
                 }
-
-                var list = (from t in sysDist orderby t.dist select t).Take(50);
-
-                foreach (SystemDist sdist in list)
-                {
-                    object[] rowobj = { sdist.name, sdist.dist.ToString("0.00") };
-                    dataGridViewNearest.Rows.Add(rowobj);
-                }
             }
-            catch (Exception ex)
+
+            var list = (from t in sysDist orderby t.dist select t).Take(50);
+
+            foreach (SystemDist sdist in list)
             {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                object[] rowobj = { sdist.name, sdist.dist.ToString("0.00") };
+                dataGridViewNearest.Rows.Add(rowobj);
             }
-
         }
 
 
@@ -509,7 +514,7 @@ namespace EDDiscovery
                     visitedSystems.Clear();
                 RefreshHistory();
                 if (_discoveryForm.Map != null)
-                    _discoveryForm.Map.SetVisited(visitedSystems);
+                    _discoveryForm.Map.UpdateVisited(visitedSystems);
             }
         }
 
@@ -565,8 +570,7 @@ namespace EDDiscovery
             string selname = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
             map.Prepare(selname, _discoveryForm.settings.MapHomeSystem,
                         _discoveryForm.settings.MapCentreOnSelection ? selname : _discoveryForm.settings.MapHomeSystem,
-                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames);
-            map.SetVisited(visitedSystems);
+                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames, visitedSystems);
             map.Show();
         }
         
@@ -862,7 +866,7 @@ namespace EDDiscovery
 
             Invoke((MethodInvoker)delegate
             {
-                _discoveryForm.Map.SetVisited(visitedSystems);      // update in UI thread.
+                _discoveryForm.Map.UpdateVisited(visitedSystems);      // update in UI thread.
             });
         }
 
@@ -1034,7 +1038,6 @@ namespace EDDiscovery
                 .Distinct();
 
             this.Cursor = Cursors.WaitCursor;
-            string sysName = "";
             foreach (DataGridViewRow r in selectedRows)
             {
                 VisitedSystemsClass sp = null;
@@ -1070,7 +1073,6 @@ namespace EDDiscovery
             List<VisitedSystemsClass> listsyspos = new List<VisitedSystemsClass>();
 
             this.Cursor = Cursors.WaitCursor;
-            string sysName = "";
             foreach (DataGridViewRow r in selectedRows)
             {
                 VisitedSystemsClass sp = null;
