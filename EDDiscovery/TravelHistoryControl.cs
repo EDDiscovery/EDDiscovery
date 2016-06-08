@@ -534,15 +534,6 @@ namespace EDDiscovery
             DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
         }
 
-        private void dataGridViewTravel_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                ShowSystemInformation((VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag));
-            }
-
-        }
-
         private void buttonMap_Click(object sender, EventArgs e)
         {
             if (_discoveryForm.SystemNames.Count == 0)
@@ -578,7 +569,10 @@ namespace EDDiscovery
         {
             if (e.RowIndex >= 0)
             {
-                ShowSystemInformation((VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag));
+                VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag);
+
+                ShowSystemInformation(currentsys);
+                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
 
                 if (e.ColumnIndex == TravelHistoryColumns.Note)
                 {
@@ -593,6 +587,16 @@ namespace EDDiscovery
                 }
             }
 
+        }
+
+        private void dataGridViewTravel_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag);
+                ShowSystemInformation(currentsys);
+                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
+            }
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
@@ -890,7 +894,12 @@ namespace EDDiscovery
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {           // autopaint the row number..
             var grid = sender as DataGridView;
-            var rowIdx = (e.RowIndex + 1).ToString();
+            string rowIdx;
+
+            if (_discoveryForm.settings.OrderRowsInverted )
+                rowIdx = (dataGridViewTravel.Rows.Count - e.RowIndex).ToString();
+            else
+                rowIdx = (e.RowIndex + 1).ToString();
 
             var centerFormat = new StringFormat()
             {

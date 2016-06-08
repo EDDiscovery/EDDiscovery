@@ -62,6 +62,7 @@
             this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();
             this.button_edittheme = new ExtendedControls.ButtonExt();
             this.buttonSaveTheme = new ExtendedControls.ButtonExt();
+            this.checkBoxOrderRowsInverted = new ExtendedControls.CheckBoxCustom();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
@@ -186,7 +187,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(125, 21);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(304, 13);
+            this.label2.Size = new System.Drawing.Size(309, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "Get Api key from https://www.edsm.net in  \"My account\" menu.";
             // 
@@ -248,15 +249,16 @@
             this.groupBox3.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox3.BorderColorScaling = 0.5F;
             this.groupBox3.Controls.Add(this.checkBox_Distances);
+            this.groupBox3.Controls.Add(this.checkBoxOrderRowsInverted);
             this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
             this.groupBox3.Controls.Add(this.checkboxSkipSlowUpdates);
             this.groupBox3.FillClientAreaWithAlternateColor = false;
             this.groupBox3.Location = new System.Drawing.Point(3, 280);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(426, 100);
+            this.groupBox3.Size = new System.Drawing.Size(426, 117);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Controls";
+            this.groupBox3.Text = "Options";
             this.groupBox3.TextPadding = 0;
             this.groupBox3.TextStartPosition = -1;
             // 
@@ -300,7 +302,7 @@
             this.checkboxSkipSlowUpdates.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkboxSkipSlowUpdates.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkboxSkipSlowUpdates.FontNerfReduction = 0.5F;
-            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(17, 64);
+            this.checkboxSkipSlowUpdates.Location = new System.Drawing.Point(17, 87);
             this.checkboxSkipSlowUpdates.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkboxSkipSlowUpdates.Name = "checkboxSkipSlowUpdates";
             this.checkboxSkipSlowUpdates.Size = new System.Drawing.Size(238, 17);
@@ -507,6 +509,22 @@
             this.buttonSaveTheme.UseVisualStyleBackColor = true;
             this.buttonSaveTheme.Click += new System.EventHandler(this.buttonSaveTheme_Click);
             // 
+            // checkBoxOrderRowsInverted
+            // 
+            this.checkBoxOrderRowsInverted.AutoSize = true;
+            this.checkBoxOrderRowsInverted.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxOrderRowsInverted.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxOrderRowsInverted.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxOrderRowsInverted.FontNerfReduction = 0.5F;
+            this.checkBoxOrderRowsInverted.Location = new System.Drawing.Point(17, 64);
+            this.checkBoxOrderRowsInverted.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxOrderRowsInverted.Name = "checkBoxOrderRowsInverted";
+            this.checkBoxOrderRowsInverted.Size = new System.Drawing.Size(171, 17);
+            this.checkBoxOrderRowsInverted.TabIndex = 9;
+            this.checkBoxOrderRowsInverted.Text = "Order Rows By Visited Number";
+            this.checkBoxOrderRowsInverted.TickBoxReductionSize = 10;
+            this.checkBoxOrderRowsInverted.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -566,5 +584,6 @@
         private System.Windows.Forms.Label label17;
         private ExtendedControls.ButtonExt button_edittheme;
         private ExtendedControls.GroupBoxCustom groupBoxTheme;
+        private ExtendedControls.CheckBoxCustom checkBoxOrderRowsInverted;
     }
 }

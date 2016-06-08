@@ -213,24 +213,35 @@ namespace EDDiscovery2
 
         public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
         {
-            if (_starnames == null)         // if null, we are not up and running
-                return;
-
-            VisitedSystems = visited;
-
-            foreach (VisitedSystemsClass vsc in VisitedSystems)
+            if (_starnames != null)         // if null, we are not up and running
             {
-                if (vsc.HasTravelCoordinates && _starnames.Find(x => x.name.Equals(vsc.Name)) == null)
+                VisitedSystems = visited;
+
+                foreach (VisitedSystemsClass vsc in VisitedSystems)
                 {
-                    Console.WriteLine("New visited system " + vsc.Name);
-                    _starnames.Add(new SystemClassStarNames(vsc));
+                    if (vsc.HasTravelCoordinates && _starnames.Find(x => x.name.Equals(vsc.Name)) == null)
+                    {
+                        Console.WriteLine("New visited system " + vsc.Name);
+                        _starnames.Add(new SystemClassStarNames(vsc));
+                    }
                 }
+
+                GenerateDataSetsStars();                            // update the star list..
+                GenerateDataSetsVisitedSystems();
+                RecalcStarNames();
+                glControl.Invalidate();
             }
-            
-            GenerateDataSetsStars();                            // update the star list..
-            GenerateDataSetsVisitedSystems();
-            RecalcStarNames();
-            glControl.Invalidate();
+        }
+
+        public void UpdateHistorySystem(string historysel)
+        {
+            if (_starnames != null)         // if null, we are not up and running
+            {
+                SystemClassStarNames newhist = _starnames.Find(x => x.name.Equals(historysel));
+
+                if (newhist != null)
+                    _historySelection = newhist;        // only override if found in starmap (meaning it has co-ords)
+            }
         }
 
         private void FormMap_Load(object sender, EventArgs e)
