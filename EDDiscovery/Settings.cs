@@ -22,6 +22,7 @@ namespace EDDiscovery2
         public string MapHomeSystem { get { return textBoxHomeSystem.Text; } }
         public float MapZoom { get { return float.Parse(textBoxDefaultZoom.Text); } }
         public bool MapCentreOnSelection { get { return radioButtonHistorySelection.Checked; } }
+        public bool OrderRowsInverted {  get { return checkBoxOrderRowsInverted.Checked; } }
 
         public Settings()
         {
@@ -73,6 +74,7 @@ namespace EDDiscovery2
             checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
             checkboxSkipSlowUpdates.Checked = EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates;
+            checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
@@ -108,8 +110,9 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
+            EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
 
-            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            List <EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
             EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
             dataGridViewCommanders.DataSource = null;
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
