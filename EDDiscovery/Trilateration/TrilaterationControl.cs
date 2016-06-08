@@ -26,7 +26,6 @@ namespace EDDiscovery
         private Thread EDSMSubmissionThread;
         private EDSMClass edsm;
         private List<WantedSystemClass> wanted;
-        private bool _resizing;
 
         /** This global should be set if the next CurrentCellChanged() event should skip to the next editable cell.
          * This should be the case whenver a keyboard event causes cells to change, but not on mouse-initiated events */
@@ -1022,7 +1021,7 @@ namespace EDDiscovery
             var map = _discoveryForm.Map;
 
             map.Prepare(centerSystem.name, _discoveryForm.settings.MapHomeSystem, centerSystem.name,
-                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames);
+                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames,_discoveryForm.VisitedSystems);
 
             map.SetReferenceSystems(CurrentReferenceSystems.ToList());
             map.Show();
