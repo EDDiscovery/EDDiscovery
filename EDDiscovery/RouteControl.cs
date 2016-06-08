@@ -651,9 +651,8 @@ namespace EDDiscovery
                 if (zoom < 0.01) zoom = 0.01f;
                 if (zoom > 50) zoom = 50f;
 
-                map.Prepare(routeSystems.First().name, _discoveryForm.settings.MapHomeSystem, routeSystems.First().name, zoom, _discoveryForm.SystemNames);
+                map.Prepare(routeSystems.First().name, _discoveryForm.settings.MapHomeSystem, routeSystems.First().name, zoom, _discoveryForm.SystemNames, _discoveryForm.VisitedSystems);
                 map.SetPlanned(routeSystems);
-                map.SetVisited(_discoveryForm.VisitedSystems);
                 map.Show();
             }
             else
