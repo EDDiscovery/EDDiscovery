@@ -114,6 +114,8 @@ namespace EDDiscovery2
 
         public bool Nowindowreposition { get; set; } = false;
 
+        bool isActivated = false;
+
         #endregion
 
         #region Initialisation
@@ -139,12 +141,15 @@ namespace EDDiscovery2
                     _starnames.Add(new SystemClassStarNames(sys));
             }
 
-            foreach (VisitedSystemsClass vsc in VisitedSystems)
+            if (VisitedSystems != null)              // note if list is empty on first run seeing this
             {
-                if (vsc.HasTravelCoordinates && _starnames.Find(x => x.name.Equals(vsc.Name)) == null)
+                foreach (VisitedSystemsClass vsc in VisitedSystems)
                 {
-                    //Console.WriteLine("New system " + vsc.Name);
-                    _starnames.Add(new SystemClassStarNames(vsc));
+                    if (vsc.HasTravelCoordinates && _starnames.Find(x => x.name.Equals(vsc.Name)) == null)
+                    {
+                        //Console.WriteLine("New system " + vsc.Name);
+                        _starnames.Add(new SystemClassStarNames(vsc));
+                    }
                 }
             }
 
@@ -177,7 +182,7 @@ namespace EDDiscovery2
             ReferenceSystems = null;
             PlannedRoute = null;
 
-            OrientateMapAroundSystem(_centerSystem);
+            SetCenterSystemTo(_centerSystem, true);             // move to this..
 
             ResetCamera();
             toolStripShowAllStars.Renderer = new MyRenderer();
@@ -213,7 +218,7 @@ namespace EDDiscovery2
 
         public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (_starnames != null && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
             {
                 VisitedSystems = visited;
 
@@ -260,7 +265,7 @@ namespace EDDiscovery2
 
             LoadMapImages();
             FillExpeditions();
-            ShowCenterSystem();
+            SetCenterSystemLabel();
             labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
 
             GenerateDataSets();
@@ -279,12 +284,14 @@ namespace EDDiscovery2
 
         private void FormMap_Activated(object sender, EventArgs e)
         {
+            isActivated = true;
             _useTimer = false;
             glControl.Invalidate();
         }
 
         private void FormMap_Deactivate(object sender, EventArgs e)
         {
+            isActivated = false;
             _useTimer = true;
             UpdateTimer.Stop();
         }
@@ -862,46 +869,38 @@ namespace EDDiscovery2
 
             return selected;
         }
-
 #endregion
 
 #region Set Orientation
 
-        private void SetCenterSystemTo(SystemClassStarNames sys)
-        {
-            if (sys == null) return;
-
-            _centerSystem = sys;
-            ShowCenterSystem();
-            GenerateDataSetsSelectedSystems();
-            glControl.Invalidate();
-        }
-
-        private void ShowCenterSystem()
+        private void SetCenterSystemLabel()
         {
             if (_centerSystem != null)
-            {
                 labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _centerSystem.name, _centerSystem.x.ToString("0.00"), _centerSystem.y.ToString("0.00"), _centerSystem.z.ToString("0.00"));
-            }
             else
                 labelSystemCoords.Text = "No centre system";
         }
 
-        private void OrientateMapAroundSystem(String name)
+        private void SetCenterSystemTo(string name, bool moveto)
         {
-            OrientateMapAroundSystem(_starnames.Find(x => x.name.Equals(name)));
+            SetCenterSystemTo(_starnames.Find(x => x.name.Equals(name)), moveto);
         }
 
-        private void OrientateMapAroundSystem(SystemClassStarNames system)
+        private void SetCenterSystemTo(SystemClassStarNames sys, bool moveto)        
         {
-            if (system != null)
+            if (sys != null)
             {
-                _centerSystem = system;
-                textboxFrom.Text = system.name;
-                SetCenterSystemTo(system);
-                StartCameraSlew();
+                _centerSystem = sys;
+                SetCenterSystemLabel();
+                GenerateDataSetsSelectedSystems();
+
+                if (moveto)
+                    StartCameraSlew();
+
+                glControl.Invalidate();
             }
         }
+        
 
 #endregion
 
@@ -919,8 +918,8 @@ namespace EDDiscovery2
         {
             _kbdActions.Reset();
 
-            if (!glControl.Focused)
-                return;
+            if ( !isActivated || !glControl.Focused)
+                    return;
 
             try
             {
@@ -1475,19 +1474,23 @@ namespace EDDiscovery2
 
         private void buttonCenter_Click(object sender, EventArgs e)
         {
-            SystemClassStarNames sys = _starnames.Find(x => x.name.Equals(textboxFrom.Text));
-            if (sys == null)
-                textboxFrom.Text = String.Empty;
+            SystemClassStarNames sys = _starnames.Find(x => x.name.Equals(textboxFrom.Text, StringComparison.InvariantCultureIgnoreCase));
+
+            if (sys != null)
+            {
+                textboxFrom.Text = sys.name;        // normalise name (user may have different 
+                SetCenterSystemTo(sys, true);
+            }
             else
-                OrientateMapAroundSystem(sys);
+                MessageBox.Show("System " + textboxFrom.Text + " not found");
         }
 
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
         {
-            VisitedSystemsClass ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.Time descending select c).FirstOrDefault<VisitedSystemsClass>();
+            VisitedSystemsClass ps2 = (from c in VisitedSystems where c.curSystem != null && (c.HasTravelCoordinates == true || c.curSystem.HasCoordinate == true) orderby c.Time descending select c).FirstOrDefault<VisitedSystemsClass>();
 
             if (ps2 != null)
-                SetCenterSystemTo(_starnames.Find(x => x.name.Equals(ps2.curSystem.name)));
+                SetCenterSystemTo(_starnames.Find(x => x.name.Equals(ps2.curSystem.name)),true);
         }
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
@@ -1541,12 +1544,12 @@ namespace EDDiscovery2
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            OrientateMapAroundSystem(_homeSystem);
+            SetCenterSystemTo(_homeSystem,true);
         }
 
         private void buttonHistory_Click(object sender, EventArgs e)
         {
-            OrientateMapAroundSystem(_historySelection);
+            SetCenterSystemTo(_historySelection,true);
         }
 
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
@@ -1555,13 +1558,19 @@ namespace EDDiscovery2
             SetupViewport();
         }
 
+        private void dotSystemCoords_Click(object sender, EventArgs e)
+        {
+            SetCenterSystemTo(_centerSystem, true);
+        }
+
+        private void dotSelectedSystemCoords_Click(object sender, EventArgs e)
+        {
+            SetCenterSystemTo(_clickedSystem, true);
+        }
+
         private void glControl_DoubleClick(object sender, EventArgs e)
         {
-            SystemClassStarNames sys = _clickedSystem;
-            if (sys != null)
-            {
-                OrientateMapAroundSystem(sys);
-            }
+            SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
         }
 
         private void glControl_KeyDown(object sender, KeyEventArgs e)
@@ -1721,6 +1730,9 @@ namespace EDDiscovery2
                             selectionGov.Text = "Gov: " + _clickedSystem.sysclass.government;
                             selectionState.Text = "State: " + _clickedSystem.sysclass.state;
                         }
+
+                        GenerateDataSetsSelectedSystems();
+                        glControl.Invalidate();
 
                         viewOnEDSMToolStripMenuItem.Enabled = true;
                         System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
@@ -1930,6 +1942,9 @@ namespace EDDiscovery2
                     double disthome = Math.Sqrt((hoversystem.x - _homeSystem.x) * (hoversystem.x - _homeSystem.x) + (hoversystem.y - _homeSystem.y) * (hoversystem.y - _homeSystem.y) + (hoversystem.z - _homeSystem.z) * (hoversystem.z - _homeSystem.z));
                     info += Environment.NewLine + "Distance from " + _homeSystem.name + " " + disthome.ToString("0.0");
                 }
+
+                if (hoversystem.sysclass != null && hoversystem.sysclass.Note.Length > 0)
+                        info += Environment.NewLine + "Notes: " + hoversystem.sysclass.Note;
 
                 _mousehovertooltip = new System.Windows.Forms.ToolTip();
                 _mousehovertooltip.InitialDelay = 0;
