@@ -116,6 +116,7 @@ namespace EDDiscovery2
             this.textboxFrom.TabStop = false;
             this.textboxFrom.Text = "Sol";
             this.toolTip1.SetToolTip(this.textboxFrom, "Enter system to centre on");
+            this.textboxFrom.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textboxFrom_KeyUp);
             // 
             // buttonCenter
             // 
