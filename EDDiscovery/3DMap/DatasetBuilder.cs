@@ -65,8 +65,8 @@ namespace EDDiscovery2._3DMap
         public List<IData3DSet> BuildSelected()
         {
             _datasets = new List<IData3DSet>();
-            AddCenterPointToDataset();
             AddSelectedSystemToDataset();
+            AddCenterPointToDataset();
             return _datasets;
         }
 
