@@ -64,6 +64,8 @@ namespace EDDiscovery2
             this.buttonHistory = new System.Windows.Forms.Button();
             this.buttonHome = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
+            this.dotSystemCoords = new System.Windows.Forms.PictureBox();
             this.labelClickedSystemCoords = new System.Windows.Forms.Label();
             this.systemselectionMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectionAllegiance = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,15 +73,13 @@ namespace EDDiscovery2
             this.selectionState = new System.Windows.Forms.ToolStripMenuItem();
             this.selectionGov = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
-            this.dotSystemCoords = new System.Windows.Forms.PictureBox();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.panelRight = new System.Windows.Forms.Panel();
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
-            this.systemselectionMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dotSystemCoords)).BeginInit();
+            this.systemselectionMenuStrip.SuspendLayout();
             this.panelRight.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -115,7 +115,8 @@ namespace EDDiscovery2
             this.textboxFrom.TabIndex = 16;
             this.textboxFrom.TabStop = false;
             this.textboxFrom.Text = "Sol";
-            this.toolTip1.SetToolTip(this.textboxFrom, "Home System");
+            this.toolTip1.SetToolTip(this.textboxFrom, "Enter system to centre on");
+            this.textboxFrom.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textboxFrom_KeyUp);
             // 
             // buttonCenter
             // 
@@ -172,7 +173,7 @@ namespace EDDiscovery2
             this.toolStripButtonLastKnownPosition.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLastKnownPosition.Name = "toolStripButtonLastKnownPosition";
             this.toolStripButtonLastKnownPosition.Size = new System.Drawing.Size(23, 37);
-            this.toolStripButtonLastKnownPosition.Text = "Last known position";
+            this.toolStripButtonLastKnownPosition.Text = "Center map on last known position from travel history";
             this.toolStripButtonLastKnownPosition.Click += new System.EventHandler(this.toolStripLastKnownPosition_Click);
             // 
             // toolStripButtonDrawLines
@@ -358,7 +359,7 @@ namespace EDDiscovery2
             this.buttonHistory.Name = "buttonHistory";
             this.buttonHistory.Size = new System.Drawing.Size(22, 23);
             this.buttonHistory.TabIndex = 23;
-            this.toolTip1.SetToolTip(this.buttonHistory, "Centre map on selected system from Travel History");
+            this.toolTip1.SetToolTip(this.buttonHistory, "Centre map on selected system from travel history");
             this.buttonHistory.UseVisualStyleBackColor = true;
             this.buttonHistory.Click += new System.EventHandler(this.buttonHistory_Click);
             // 
@@ -369,9 +370,33 @@ namespace EDDiscovery2
             this.buttonHome.Name = "buttonHome";
             this.buttonHome.Size = new System.Drawing.Size(22, 23);
             this.buttonHome.TabIndex = 22;
-            this.toolTip1.SetToolTip(this.buttonHome, "Centre map on Home System");
+            this.toolTip1.SetToolTip(this.buttonHome, "Centre map on home system");
             this.buttonHome.UseVisualStyleBackColor = true;
             this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
+            // 
+            // dotSelectedSystemCoords
+            // 
+            this.dotSelectedSystemCoords.Image = global::EDDiscovery.Properties.Resources.OrangeDot;
+            this.dotSelectedSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.OrangeDot;
+            this.dotSelectedSystemCoords.Location = new System.Drawing.Point(242, 22);
+            this.dotSelectedSystemCoords.Name = "dotSelectedSystemCoords";
+            this.dotSelectedSystemCoords.Size = new System.Drawing.Size(12, 12);
+            this.dotSelectedSystemCoords.TabIndex = 26;
+            this.dotSelectedSystemCoords.TabStop = false;
+            this.toolTip1.SetToolTip(this.dotSelectedSystemCoords, "Centre map on this system");
+            this.dotSelectedSystemCoords.Click += new System.EventHandler(this.dotSelectedSystemCoords_Click);
+            // 
+            // dotSystemCoords
+            // 
+            this.dotSystemCoords.Image = global::EDDiscovery.Properties.Resources.YellowDot;
+            this.dotSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.YellowDot;
+            this.dotSystemCoords.Location = new System.Drawing.Point(242, 4);
+            this.dotSystemCoords.Name = "dotSystemCoords";
+            this.dotSystemCoords.Size = new System.Drawing.Size(12, 12);
+            this.dotSystemCoords.TabIndex = 25;
+            this.dotSystemCoords.TabStop = false;
+            this.toolTip1.SetToolTip(this.dotSystemCoords, "Centre map on this system");
+            this.dotSystemCoords.Click += new System.EventHandler(this.dotSystemCoords_Click);
             // 
             // labelClickedSystemCoords
             // 
@@ -425,26 +450,6 @@ namespace EDDiscovery2
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             // 
-            // dotSelectedSystemCoords
-            // 
-            this.dotSelectedSystemCoords.Image = global::EDDiscovery.Properties.Resources.OrangeDot;
-            this.dotSelectedSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.OrangeDot;
-            this.dotSelectedSystemCoords.Location = new System.Drawing.Point(242, 22);
-            this.dotSelectedSystemCoords.Name = "dotSelectedSystemCoords";
-            this.dotSelectedSystemCoords.Size = new System.Drawing.Size(12, 12);
-            this.dotSelectedSystemCoords.TabIndex = 26;
-            this.dotSelectedSystemCoords.TabStop = false;
-            // 
-            // dotSystemCoords
-            // 
-            this.dotSystemCoords.Image = global::EDDiscovery.Properties.Resources.YellowDot;
-            this.dotSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.YellowDot;
-            this.dotSystemCoords.Location = new System.Drawing.Point(242, 4);
-            this.dotSystemCoords.Name = "dotSystemCoords";
-            this.dotSystemCoords.Size = new System.Drawing.Size(12, 12);
-            this.dotSystemCoords.TabIndex = 25;
-            this.dotSystemCoords.TabStop = false;
-            // 
             // UpdateTimer
             // 
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
@@ -486,9 +491,9 @@ namespace EDDiscovery2
             this.toolStripShowAllStars.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
-            this.systemselectionMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dotSystemCoords)).EndInit();
+            this.systemselectionMenuStrip.ResumeLayout(false);
             this.panelRight.ResumeLayout(false);
             this.panelRight.PerformLayout();
             this.ResumeLayout(false);

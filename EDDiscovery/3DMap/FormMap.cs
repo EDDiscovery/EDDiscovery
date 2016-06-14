@@ -40,6 +40,7 @@ namespace EDDiscovery2
         private const double CameraSlewTime = 1.0;
 
         List<SystemClassStarNames> _starnames = null;    // star list combines data base and travelled h
+        SortedDictionary<string, SystemClassStarNames> _starnamessorted; // and a sorted list to above since its so slow to do a search
 
         private AutoCompleteStringCollection _systemNames;
         private SystemClassStarNames _centerSystem;
@@ -114,6 +115,8 @@ namespace EDDiscovery2
 
         public bool Nowindowreposition { get; set; } = false;
 
+        bool isActivated = false;
+
         #endregion
 
         #region Initialisation
@@ -132,19 +135,36 @@ namespace EDDiscovery2
             List<SystemClass> starList = SQLiteDBClass.globalSystems;           
 
             _starnames = new List<SystemClassStarNames>();          // recreate every time in case changed..
-                
+            _starnamessorted = new SortedDictionary<string, SystemClassStarNames>(StringComparer.CurrentCultureIgnoreCase); // case invariant sorted dic.
+
             foreach (var sys in starList)
             {
                 if (sys.HasCoordinate)            // only interested in these
-                    _starnames.Add(new SystemClassStarNames(sys));
+                {
+                    SystemClassStarNames scs = new SystemClassStarNames(sys);
+                    _starnames.Add(scs);
+                                                                     
+                    if (!_starnamessorted.ContainsKey(scs.name))    // protect against crap ups in the star list having duplicate names
+                        _starnamessorted.Add(scs.name, scs);        // as dictionaries don't allow duplicate entries.
+                                                                    // means it would be unsearchable but still shows..
+                }
             }
 
-            foreach (VisitedSystemsClass vsc in VisitedSystems)
+            if (VisitedSystems != null)              // note if list is empty on first run seeing this
             {
-                if (vsc.HasTravelCoordinates && _starnames.Find(x => x.name.Equals(vsc.Name)) == null)
+                foreach (VisitedSystemsClass vsc in VisitedSystems)
                 {
-                    //Console.WriteLine("New system " + vsc.Name);
-                    _starnames.Add(new SystemClassStarNames(vsc));
+                    if (vsc.HasTravelCoordinates)
+                    {
+                        if (!_starnamessorted.ContainsKey(vsc.Name))    // if not in dictionary, add
+                        {
+                            //Debug.Assert(_starnames.Find(x => x.name.Equals(vsc.Name)) == null); // double check
+//                            Console.WriteLine("Added visited system " + vsc.Name);
+                            SystemClassStarNames scs = new SystemClassStarNames(vsc);
+                            _starnames.Add(scs);
+                            _starnamessorted.Add(scs.name, scs);
+                        }
+                    }
                 }
             }
 
@@ -162,22 +182,23 @@ namespace EDDiscovery2
             _starname_curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
 
             _systemNames = sysname;
-            _centerSystem = _starnames.Find(x => x.name.Equals(centersys));
+            _centerSystem = FindSystem(centersys);
+
             if (_centerSystem == null)
-                _centerSystem = _starnames.Find(x => x.name.Equals("Sol"));
+                _centerSystem = FindSystem("Sol");
 
-            _historySelection = _starnames.Find(x => x.name.Equals(historysel));
+            _historySelection = FindSystem(historysel);
 
-            _homeSystem = _starnames.Find(x => x.name.Equals(homesys));
+            _homeSystem = FindSystem(homesys);
             if (_homeSystem == null)
-                _homeSystem = _starnames.Find(x => x.name.Equals("Sol"));
+                _homeSystem = FindSystem("Sol");
 
             _defaultZoom = zoom;
 
             ReferenceSystems = null;
             PlannedRoute = null;
 
-            OrientateMapAroundSystem(_centerSystem);
+            SetCenterSystemTo(_centerSystem, true);             // move to this..
 
             ResetCamera();
             toolStripShowAllStars.Renderer = new MyRenderer();
@@ -213,16 +234,18 @@ namespace EDDiscovery2
 
         public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (_starnames != null && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
             {
                 VisitedSystems = visited;
 
                 foreach (VisitedSystemsClass vsc in VisitedSystems)
                 {
-                    if (vsc.HasTravelCoordinates && _starnames.Find(x => x.name.Equals(vsc.Name)) == null)
+                    if (vsc.HasTravelCoordinates && !_starnamessorted.ContainsKey(vsc.Name))    // if coords and not in dictionary, add
                     {
-                        Console.WriteLine("New visited system " + vsc.Name);
-                        _starnames.Add(new SystemClassStarNames(vsc));
+                        Console.WriteLine("3dMap Added new visited system " + vsc.Name);
+                        SystemClassStarNames scs = new SystemClassStarNames(vsc);
+                        _starnames.Add(scs);
+                        _starnamessorted.Add(scs.name, scs);
                     }
                 }
 
@@ -237,7 +260,7 @@ namespace EDDiscovery2
         {
             if (_starnames != null)         // if null, we are not up and running
             {
-                SystemClassStarNames newhist = _starnames.Find(x => x.name.Equals(historysel));
+                SystemClassStarNames newhist = FindSystem(historysel);
 
                 if (newhist != null)
                     _historySelection = newhist;        // only override if found in starmap (meaning it has co-ords)
@@ -260,7 +283,7 @@ namespace EDDiscovery2
 
             LoadMapImages();
             FillExpeditions();
-            ShowCenterSystem();
+            SetCenterSystemLabel();
             labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
 
             GenerateDataSets();
@@ -279,12 +302,14 @@ namespace EDDiscovery2
 
         private void FormMap_Activated(object sender, EventArgs e)
         {
+            isActivated = true;
             _useTimer = false;
             glControl.Invalidate();
         }
 
         private void FormMap_Deactivate(object sender, EventArgs e)
         {
+            isActivated = false;
             _useTimer = true;
             UpdateTimer.Stop();
         }
@@ -862,46 +887,38 @@ namespace EDDiscovery2
 
             return selected;
         }
-
 #endregion
 
 #region Set Orientation
 
-        private void SetCenterSystemTo(SystemClassStarNames sys)
-        {
-            if (sys == null) return;
-
-            _centerSystem = sys;
-            ShowCenterSystem();
-            GenerateDataSetsSelectedSystems();
-            glControl.Invalidate();
-        }
-
-        private void ShowCenterSystem()
+        private void SetCenterSystemLabel()
         {
             if (_centerSystem != null)
-            {
                 labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _centerSystem.name, _centerSystem.x.ToString("0.00"), _centerSystem.y.ToString("0.00"), _centerSystem.z.ToString("0.00"));
-            }
             else
                 labelSystemCoords.Text = "No centre system";
         }
 
-        private void OrientateMapAroundSystem(String name)
+        private void SetCenterSystemTo(string name, bool moveto)
         {
-            OrientateMapAroundSystem(_starnames.Find(x => x.name.Equals(name)));
+            SetCenterSystemTo(FindSystem(name), moveto);
         }
 
-        private void OrientateMapAroundSystem(SystemClassStarNames system)
+        private void SetCenterSystemTo(SystemClassStarNames sys, bool moveto)        
         {
-            if (system != null)
+            if (sys != null)
             {
-                _centerSystem = system;
-                textboxFrom.Text = system.name;
-                SetCenterSystemTo(system);
-                StartCameraSlew();
+                _centerSystem = sys;
+                SetCenterSystemLabel();
+                GenerateDataSetsSelectedSystems();
+
+                if (moveto)
+                    StartCameraSlew();
+
+                glControl.Invalidate();
             }
         }
+        
 
 #endregion
 
@@ -919,8 +936,8 @@ namespace EDDiscovery2
         {
             _kbdActions.Reset();
 
-            if (!glControl.Focused)
-                return;
+            if ( !isActivated || !glControl.Focused)
+                    return;
 
             try
             {
@@ -1473,21 +1490,38 @@ namespace EDDiscovery2
             glControl.Invalidate();
         }
 
+        private void textboxFrom_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                buttonCenter_Click(sender, e);
+        }
+
         private void buttonCenter_Click(object sender, EventArgs e)
         {
-            SystemClassStarNames sys = _starnames.Find(x => x.name.Equals(textboxFrom.Text));
-            if (sys == null)
-                textboxFrom.Text = String.Empty;
+            SystemClassStarNames sys = FindSystem(textboxFrom.Text);
+
+            if (sys != null)
+            {
+                textboxFrom.Text = sys.name;        // normalise name (user may have different 
+                SetCenterSystemTo(sys, true);
+            }
             else
-                OrientateMapAroundSystem(sys);
+                MessageBox.Show("System " + textboxFrom.Text + " not found");
         }
 
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
         {
-            VisitedSystemsClass ps2 = (from c in VisitedSystems where c.curSystem != null && c.curSystem.HasCoordinate == true orderby c.Time descending select c).FirstOrDefault<VisitedSystemsClass>();
+            if (VisitedSystems != null)
+            {
+                VisitedSystemsClass ps2 = (from c in VisitedSystems where c.curSystem != null && (c.HasTravelCoordinates == true || c.curSystem.HasCoordinate == true) orderby c.Time descending select c).FirstOrDefault<VisitedSystemsClass>();
 
-            if (ps2 != null)
-                SetCenterSystemTo(_starnames.Find(x => x.name.Equals(ps2.curSystem.name)));
+                if (ps2 != null)
+                    SetCenterSystemTo(FindSystem(ps2.curSystem.name), true);
+                else
+                    MessageBox.Show("No stars with defined co-ordinates available in travel history");
+            }
+            else
+                MessageBox.Show("No travel history is available");
         }
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
@@ -1541,12 +1575,15 @@ namespace EDDiscovery2
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            OrientateMapAroundSystem(_homeSystem);
+            SetCenterSystemTo(_homeSystem,true);
         }
 
         private void buttonHistory_Click(object sender, EventArgs e)
         {
-            OrientateMapAroundSystem(_historySelection);
+            if (_historySelection == null)
+                MessageBox.Show("No travel history is available");
+            else
+                SetCenterSystemTo(_historySelection,true);
         }
 
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
@@ -1555,13 +1592,19 @@ namespace EDDiscovery2
             SetupViewport();
         }
 
+        private void dotSystemCoords_Click(object sender, EventArgs e)
+        {
+            SetCenterSystemTo(_centerSystem, true);
+        }
+
+        private void dotSelectedSystemCoords_Click(object sender, EventArgs e)
+        {
+            SetCenterSystemTo(_clickedSystem, true);
+        }
+
         private void glControl_DoubleClick(object sender, EventArgs e)
         {
-            SystemClassStarNames sys = _clickedSystem;
-            if (sys != null)
-            {
-                OrientateMapAroundSystem(sys);
-            }
+            SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
         }
 
         private void glControl_KeyDown(object sender, KeyEventArgs e)
@@ -1701,16 +1744,7 @@ namespace EDDiscovery2
                 {
                     _clickedSystem = GetMouseOverSystem(e.X, e.Y);
 
-                    if (_clickedSystem == null)
-                    {
-                        labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
-                        selectionAllegiance.Text = "Allegiance";
-                        selectionEconomy.Text = "Economy";
-                        selectionGov.Text = "Gov";
-                        selectionState.Text = "State";
-                        viewOnEDSMToolStripMenuItem.Enabled = false;
-                    }
-                    else
+                    if (_clickedSystem != null)
                     {
                         labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
 
@@ -1721,6 +1755,9 @@ namespace EDDiscovery2
                             selectionGov.Text = "Gov: " + _clickedSystem.sysclass.government;
                             selectionState.Text = "State: " + _clickedSystem.sysclass.state;
                         }
+
+                        GenerateDataSetsSelectedSystems();
+                        glControl.Invalidate();
 
                         viewOnEDSMToolStripMenuItem.Enabled = true;
                         System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
@@ -1931,6 +1968,9 @@ namespace EDDiscovery2
                     info += Environment.NewLine + "Distance from " + _homeSystem.name + " " + disthome.ToString("0.0");
                 }
 
+                if (hoversystem.sysclass != null && hoversystem.sysclass.Note.Length > 0)
+                        info += Environment.NewLine + "Notes: " + hoversystem.sysclass.Note;
+
                 _mousehovertooltip = new System.Windows.Forms.ToolTip();
                 _mousehovertooltip.InitialDelay = 0;
                 _mousehovertooltip.AutoPopDelay = 30000;
@@ -1971,7 +2011,12 @@ namespace EDDiscovery2
             return cs;
         }
 
-#endregion
+        SystemClassStarNames FindSystem(string name)            // nice wrapper for this
+        {
+            return _starnamessorted.ContainsKey(name) ? _starnamessorted[name] : null;
+        }
+
+        #endregion
 
     }
 
