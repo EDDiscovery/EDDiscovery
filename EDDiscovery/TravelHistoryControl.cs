@@ -797,7 +797,7 @@ namespace EDDiscovery
 
         private void UpdateNewPosition(string name)
         {
-            LogText("Arrived to system: ");
+            LogText("Arrived at system: ");
             SystemClass sys1 = SystemData.GetSystem(name);
             if (sys1 == null || sys1.HasCoordinate == false)
                 LogTextHighlight(name);
@@ -806,8 +806,8 @@ namespace EDDiscovery
 
             int count = GetVisitsCount(name);
 
-            LogText("  : Vist nr " + count.ToString() + Environment.NewLine);
-            System.Diagnostics.Trace.WriteLine("Arrived to system: " + name + " " + count.ToString() + ":th visit.");
+            LogText(": Visit No. " + count.ToString() + Environment.NewLine);
+            System.Diagnostics.Trace.WriteLine("Arrived at system: " + name + " " + count.ToString() + ":th visit.");
 
             var result = visitedSystems.OrderByDescending(a => a.Time).ToList<VisitedSystemsClass>();
 
