@@ -51,6 +51,7 @@ namespace EDDiscovery2
         private bool _EDSMLog;
         readonly public string LogIndex;
         private bool _canSkipSlowUpdates = false;
+        private bool _orderrowsinverted = false;
         public List<EDCommander> listCommanders;
         private int currentCmdrID=0;
         private Dictionary<string, object> settings = new Dictionary<string, object>();
@@ -160,6 +161,18 @@ namespace EDDiscovery2
             }
         }
 
+        public bool OrderRowsInverted {
+            get
+            {
+                return _orderrowsinverted;
+            }
+            set
+            {
+                _orderrowsinverted = value;
+                _db.PutSettingBool("OrderRowsInverted", value);
+            }
+        }
+
         public string NetLogDir { get { return GetSettingString("Netlogdir"); } set { PutSettingString("Netlogdir", value); } }
         public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
@@ -250,6 +263,7 @@ namespace EDDiscovery2
                 _useDistances = _db.GetSettingBool("EDSMDistances", false);
                 _EDSMLog = _db.GetSettingBool("EDSMLog", false);
                 _canSkipSlowUpdates = _db.GetSettingBool("CanSkipSlowUpdates", false);
+                _orderrowsinverted = _db.GetSettingBool("OrderRowsInverted", false);
                 LoadCommanders();
                 int activecommander = _db.GetSettingInt("ActiveCommander", 0);
                 var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
