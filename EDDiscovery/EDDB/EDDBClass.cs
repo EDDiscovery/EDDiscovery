@@ -80,7 +80,7 @@ namespace EDDiscovery2.EDDB
             return DownloadFile(url, filename, out newfile);
         }
 
-        public bool DownloadFile(string url, string filename, out bool newfile)
+        static public bool DownloadFile(string url, string filename, out bool newfile)
         {
             var etagFilename = filename + ".etag";
             var tmpFilename = filename + ".tmp";

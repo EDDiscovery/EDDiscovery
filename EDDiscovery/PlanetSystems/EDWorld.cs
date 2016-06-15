@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDDiscovery;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,63 +118,46 @@ namespace EDDiscovery2.PlanetSystems
 
             ObjectType = String2ObjectType(attributes["world-type"].Value<string>());
 
-            mass = GetFloat(attributes["mass"]);
-            radius = GetFloat(attributes["radius"]);
-            gravity = GetFloat(attributes["gravity"]);
-            surfaceTemp = GetInt(attributes["surface-temp"]);
-            surfacePressure = GetFloat(attributes["surface-pressure"]);
+            mass = Tools.GetFloat(attributes["mass"]);
+            radius = Tools.GetFloat(attributes["radius"]);
+            gravity = Tools.GetFloat(attributes["gravity"]);
+            surfaceTemp = Tools.GetInt(attributes["surface-temp"]);
+            surfacePressure = Tools.GetFloat(attributes["surface-pressure"]);
 
-            orbitPeriod = GetFloat(attributes["orbit-period"]);
-            rotationPeriod = GetFloat(attributes["rotation-period"]);
-            semiMajorAxis = GetFloat(attributes["semi-major-axis"]);
+            orbitPeriod = Tools.GetFloat(attributes["orbit-period"]);
+            rotationPeriod = Tools.GetFloat(attributes["rotation-period"]);
+            semiMajorAxis = Tools.GetFloat(attributes["semi-major-axis"]);
 
-            terrain_difficulty = GetInt(attributes["terrain-difficulty"]);
+            terrain_difficulty = Tools.GetInt(attributes["terrain-difficulty"]);
             vulcanism = (VulcanismEnum)VulcanismStr2Enum(attributes["vulcanism-type"].Value<string>());
-            rockPct = GetFloat(attributes["rock-pct"]);
-            metalPct = GetFloat(attributes["metal-pct"]);
-            icePct = GetFloat(attributes["ice-pct"]);
-            Reserve = GetString(attributes["reserve"]);
+            rockPct = Tools.GetFloat(attributes["rock-pct"]);
+            metalPct = Tools.GetFloat(attributes["metal-pct"]);
+            icePct = Tools.GetFloat(attributes["ice-pct"]);
+            Reserve = Tools.GetString(attributes["reserve"]);
 
-            arrivalPoint = GetFloat(attributes["arrival-point"]);
-            terraformable = GetString(attributes["terraformable"]);
-            notes = GetString(attributes["notes"]);
+            arrivalPoint = Tools.GetFloat(attributes["arrival-point"]);
+            terraformable = Tools.GetString(attributes["terraformable"]);
+            notes = Tools.GetString(attributes["notes"]);
             atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(attributes["atmosphere-type"].Value<string>());
-            imageUrl = GetString(attributes["image-url"]);
+            imageUrl = Tools.GetString(attributes["image-url"]);
 
             var relationships = (JObject) jo["relationships"];
             var data = relationships["world-survey"]["data"] as JObject;
             if (data != null)
-                worldSurveyId = GetInt(data["id"]);
+                worldSurveyId = Tools.GetInt(data["id"]);
 
             // TODO: Make this lookup Lazy Loading to reduce on server
             // traffic and keep it fresh
             surveyIds = new List<int>();
             foreach(var survey in relationships["surveys"]["data"] as JArray)
             {
-                surveyIds.Add(GetInt(survey["id"]));
+                surveyIds.Add(Tools.GetInt(survey["id"]));
             }
             return true;
         }
 
 
-
-
-        // WorldSurvey related I'm guessing? -Greg
-        //public ObjectTypesEnum ShortName2ObjectType(string v)
-        //{
-        //    EDWorld ed = new EDWorld();
-
-        //    foreach (ObjectTypesEnum mat in Enum.GetValues(typeof(ObjectTypesEnum)))
-        //    {
-        //        ed.ObjectType = mat;
-        //        if (v.ToLower().Equals(ed.ShortName.ToLower()))
-        //            return mat;
-
-        //    }
-
-        //    return ObjectTypesEnum.UnknownObject;
-        //}
-
+        
         public AtmosphereEnum AtmosphereStr2Enum(string v)
         {
             if (v == null)

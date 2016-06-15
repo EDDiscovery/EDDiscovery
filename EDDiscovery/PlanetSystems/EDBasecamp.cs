@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDDiscovery;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -53,7 +54,7 @@ namespace EDDiscovery2.PlanetSystems
             surveyIds = new List<int>();
             foreach (var survey in relationships["surveys"]["data"] as JArray)
             {
-                surveyIds.Add(GetInt(survey["id"]));
+                surveyIds.Add(Tools.GetInt(survey["id"]));
             }
             return true;
         }
