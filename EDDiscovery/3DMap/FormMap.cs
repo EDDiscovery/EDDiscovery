@@ -1602,11 +1602,6 @@ namespace EDDiscovery2
             SetCenterSystemTo(_clickedSystem, true);
         }
 
-        private void glControl_DoubleClick(object sender, EventArgs e)
-        {
-            SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
-        }
-
         private void glControl_KeyDown(object sender, KeyEventArgs e)
         {
             if (_useTimer)
@@ -1743,6 +1738,7 @@ namespace EDDiscovery2
                 if (Math.Abs(e.X - _mouseStartMove.X) + Math.Abs(e.Y - _mouseStartMove.Y) < 8)
                 {
                     _clickedSystem = GetMouseOverSystem(e.X, e.Y);
+                    Console.WriteLine("Mouseup " + _clickedSystem?.name);
 
                     if (_clickedSystem != null)
                     {
@@ -1772,6 +1768,12 @@ namespace EDDiscovery2
                 _mouseStartTranslateXZ.X = e.X;
                 _mouseStartTranslateXZ.Y = e.Y;
             }
+        }
+
+        private void glControl_DoubleClick(object sender, EventArgs e)
+        {
+            Console.WriteLine("Double Click");
+            SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
         }
 
         /// <summary>
