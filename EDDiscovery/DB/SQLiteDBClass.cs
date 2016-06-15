@@ -19,8 +19,9 @@ namespace EDDiscovery.DB
 
         public static List<SystemClass> globalSystems = new List<SystemClass>();
         public static Dictionary<string, SystemClass> dictSystems = new Dictionary<string, SystemClass>(); 
-        public static Dictionary<string, double> dictDistances = new Dictionary<string, double>(); 
+        public static Dictionary<string, double> dictDistances = new Dictionary<string, double>();
         public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
+        public static List<BookmarkClass> bookmarks = new List<BookmarkClass>();
 
         // This stores the date of the most recently updated or inserted row in the database
         // We will use it later to only get data that was changed since that date
@@ -71,8 +72,6 @@ namespace EDDiscovery.DB
 
         public bool Connect2DB()
         {
-            
-
             m_dbConnection = new SQLiteConnection(ConnectionString);
             m_dbConnection.Open();
 
@@ -93,8 +92,6 @@ namespace EDDiscovery.DB
                 System.Windows.Forms.MessageBox.Show(ex.Message, "GetSQLiteDBFile Exception", System.Windows.Forms.MessageBoxButtons.OK);
                 return false;
             }
-
-            
         }
 
 
@@ -159,6 +156,9 @@ namespace EDDiscovery.DB
                 if (dbver < 15)
                     UpgradeDB15();
 
+                if (dbver < 16)
+                    UpgradeDB16();
+
                 dbUpgraded = true;
                 return true;
             }
@@ -215,12 +215,12 @@ namespace EDDiscovery.DB
             string query2 = "CREATE  INDEX main.SystemsIndex ON Systems (name ASC)";
             string query3 = "CREATE TABLE Distances (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  UNIQUE , NameA TEXT NOT NULL , NameB TEXT NOT NULL , Dist FLOAT NOT NULL , CommanderCreate TEXT NOT NULL , CreateTime DATETIME NOT NULL , Status INTEGER NOT NULL )";
             string query4 = "CREATE TABLE SystemNote (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL )";
-            string query5= "CREATE INDEX DistanceName ON Distances (NameA ASC, NameB ASC)";
+            string query5 = "CREATE INDEX DistanceName ON Distances (NameA ASC, NameB ASC)";
             string query6 = "CREATE  TABLE VisitedSystems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL , SystemID INTEGER, Dist FLOAT)";
             string query7 = "CREATE TABLE Stations (station_id INTEGER PRIMARY KEY  NOT NULL ,system_id INTEGER REFERENCES Systems(id), name TEXT NOT NULL ,blackmarket BOOL DEFAULT (null) ,max_landing_pad_size INTEGER,distance_to_star INTEGER,type TEXT,faction TEXT,shipyard BOOL,outfitting BOOL, commodities_market BOOL)";
             string query8 = "CREATE  INDEX stationIndex ON Stations (system_id ASC)";
 
-            PerformUpgrade(2, false, false, new[] {query, query2, query3, query4, query5, query6, query7, query8});
+            PerformUpgrade(2, false, false, new[] { query, query2, query3, query4, query5, query6, query7, query8 });
         }
 
         private void UpgradeDB3()
@@ -353,8 +353,11 @@ namespace EDDiscovery.DB
             PerformUpgrade(15, true, true, new[] { query1, query2, query3 });
         }
 
-
-
+        private void UpgradeDB16()
+        {
+            string query = "CREATE TABLE Bookmarks (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , StarName TEXT NOT NULL, x double NOT NULL, y double NOT NULL, z double NOT NULL, Time DATETIME NOT NULL, Heading TEXT NOT NULL, Note TEXT NOT Null )";
+            PerformUpgrade(16, true, true, new[] { query });
+        }
 
         private void ExecuteQuery(string query)
         {
@@ -369,9 +372,7 @@ namespace EDDiscovery.DB
 
         public bool CloseDB()
         {
-
             m_dbConnection.Close();
-
             return true;
         }
 
@@ -723,6 +724,55 @@ namespace EDDiscovery.DB
                 return null;
             }
 
+        }
+
+        public bool GetAllBookmarks()
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        DataSet ds = null;
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = "select * from Bookmarks";
+
+                        ds = SqlQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0)
+                        {
+                            return false;
+                        }
+                        //
+                        if (ds.Tables[0].Rows.Count == 0)
+                        {
+                            return false;
+                        }
+
+                        bookmarks.Clear();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            BookmarkClass bc = new BookmarkClass(dr);
+                            bookmarks.Add(bc);
+                        }
+
+                        return true;
+
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        BookmarkClass FindBookmarkSystem(string name)
+        {
+            return bookmarks.Find(x => x.StarName.Length > 0 && x.StarName.Equals(name));
         }
 
         public int QueryValueInt(string query, int defaultvalue)
