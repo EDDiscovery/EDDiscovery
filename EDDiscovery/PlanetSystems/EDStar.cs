@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDDiscovery;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,16 +29,16 @@ namespace EDDiscovery2.PlanetSystems
             updater = attributes["updater"].Value<string>();
 
             ObjectType = String2ObjectType(attributes["spectral-class"].Value<string>());
-            radius = GetFloat(attributes["solar-radius"]);
-            mass = GetFloat(attributes["solar-mass"]);
-            surfaceTemp = GetInt(attributes["surface-temp"]);
-            star_age = GetFloat(attributes["star-age"]);
-            orbitPeriod = GetFloat(attributes["orbit-period"]);
-            arrivalPoint = GetFloat(attributes["arrival-point"]);
-            notes = GetString(attributes["notes"]);
-            subclass = GetString(attributes["spectral-subclass"]);
-            luminosity = GetString(attributes["luminosity"]);
-            imageUrl = GetString(attributes["image-url"]);
+            radius = Tools.GetFloat(attributes["solar-radius"]);
+            mass = Tools.GetFloat(attributes["solar-mass"]);
+            surfaceTemp = Tools.GetInt(attributes["surface-temp"]);
+            star_age = Tools.GetFloat(attributes["star-age"]);
+            orbitPeriod = Tools.GetFloat(attributes["orbit-period"]);
+            arrivalPoint = Tools.GetFloat(attributes["arrival-point"]);
+            notes = Tools.GetString(attributes["notes"]);
+            subclass = Tools.GetString(attributes["spectral-subclass"]);
+            luminosity = Tools.GetString(attributes["luminosity"]);
+            imageUrl = Tools.GetString(attributes["image-url"]);
 
             return true;
         }

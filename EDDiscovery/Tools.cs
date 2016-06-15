@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -123,6 +124,48 @@ namespace EDDiscovery
                 System.Windows.Forms.MessageBox.Show(ex.Message, "GetAppDataDirectory Exception", System.Windows.Forms.MessageBoxButtons.OK);
                 return null;
             }
+        }
+
+
+
+        static public bool GetBool(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return false;
+            return jToken.Value<bool>();
+        }
+
+        static public float GetFloat(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return 0f;
+            return jToken.Value<float>();
+        }
+
+
+        static public int GetInt(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return 0;
+            return jToken.Value<int>();
+        }
+
+
+        static public string GetString(JToken jToken)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return null;
+            return jToken.Value<string>();
+        }
+
+
+        static public  bool IsNullOrEmptyT(JToken token)
+        {
+            return (token == null) ||
+                   (token.Type == JTokenType.Array && !token.HasValues) ||
+                   (token.Type == JTokenType.Object && !token.HasValues) ||
+                   (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
+                   (token.Type == JTokenType.Null);
         }
 
 
