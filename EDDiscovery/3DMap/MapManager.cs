@@ -45,6 +45,11 @@ namespace EDDiscovery2._3DMap
             _formMap.UpdateHistorySystem(historysel);
         }
 
+        public void UpdateNote()
+        {
+            _formMap.UpdateNote();
+        }
+
         public void Show()
         { 
             _formMap.Show();

@@ -10,6 +10,8 @@ using System.Drawing;
 using System.Diagnostics;
 using EDDiscovery2.Trilateration;
 using OpenTK;
+using System.Resources;
+using EDDiscovery.Properties;
 
 namespace EDDiscovery2._3DMap
 {
@@ -104,6 +106,63 @@ namespace EDDiscovery2._3DMap
             }
 
             return text_bmp;
+        }
+
+        public List<IData3DSet> AddStarBookmarks(Bitmap map, double widthly, double heightly)
+        {
+            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
+            widthly /= 2;
+
+            foreach (BookmarkClass bc in SQLiteDBClass.bookmarks)
+            {
+                TexturedQuadData newtexture = TexturedQuadData.FromBitmapVert(map,
+                                             new PointF((float)(bc.x - widthly), (float)(bc.y + heightly)),
+                                                new PointF((float)(bc.x + widthly), (float)(bc.y + heightly)),
+                                             new PointF((float)(bc.x - widthly), (float)bc.y),
+                                                new PointF((float)(bc.x + widthly), (float)bc.y),
+                                             (float)bc.z);
+                datasetbks.Add(newtexture);
+            }
+
+            _datasets.Add(datasetbks);
+
+            return _datasets;
+        }
+
+        public List<IData3DSet> AddNotedBookmarks(Bitmap map, double widthly, double heightly)
+        {
+            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
+            widthly /= 2;
+
+            foreach (VisitedSystemsClass vs in VisitedSystems)
+            {
+                if (vs.curSystem != null && vs.curSystem.Note != null )
+                {
+                    //SQLiteDBClass.dictSystems.ContainsKey(vs.Name))
+                    //SystemClass vssys = SQLiteDBClass.dictSystems[vs.Name];
+
+                    string note = vs.curSystem.Note.Trim();
+
+                    if (note.Length > 0)
+                    {
+                        double x = (vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x;
+                        double y = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
+                        double z = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
+
+                        TexturedQuadData newtexture = TexturedQuadData.FromBitmapVert(map,
+                                                        new PointF((float)(x - widthly), (float)(y + heightly)),
+                                                        new PointF((float)(x + widthly), (float)(y + heightly)),
+                                                        new PointF((float)(x - widthly), (float)y),
+                                                        new PointF((float)(x + widthly), (float)y),
+                                                        (float)z);
+                        datasetbks.Add(newtexture);
+                    }
+                }
+            }
+
+            _datasets.Add(datasetbks);
+
+            return _datasets;
         }
 
         public List<IData3DSet> AddGridCoords()
@@ -489,12 +548,12 @@ namespace EDDiscovery2._3DMap
             return lastknownps;
         }
 
-        static public Bitmap DrawString(string str, Font fnt, int w, int h)
+        static public Bitmap DrawString(string str, Font fnt, int w, int h, Color textcolour)
         {
             Bitmap text_bmp = new Bitmap(w, h);
             using (Graphics g = Graphics.FromImage(text_bmp))
             {
-                using (Brush br = new SolidBrush(Color.Orange))
+                using (Brush br = new SolidBrush(textcolour))
                     g.DrawString(str, fnt, br, new Point(0, 0));
             }
 

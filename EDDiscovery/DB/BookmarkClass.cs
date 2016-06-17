@@ -11,12 +11,12 @@ namespace EDDiscovery2.DB
     public class BookmarkClass
     {
         public int id;
-        public string StarName;
-        public double x;
+        public string StarName;         // set if associated with a star, else null
+        public double x;                // x/y/z always set for render purposes
         public double y;
         public double z;
-        public DateTime Time;
-        public string Heading;
+        public DateTime Time;           
+        public string Heading;          // set if not associated with a star, else null if its a star
         public string Note;
 
         public BookmarkClass()
@@ -26,12 +26,14 @@ namespace EDDiscovery2.DB
         public BookmarkClass(DataRow dr)
         {
             id = (int)(long)dr["id"];
-            StarName = (string)dr["StarName"];
+            if (System.DBNull.Value != dr["StarName"] )
+                StarName = (string)dr["StarName"];
             x = (double)dr["x"];
             y = (double)dr["y"];
             z = (double)dr["z"];
             Time = (DateTime)dr["Time"];
-            Heading = (string)dr["Heading"];
+            if (System.DBNull.Value != dr["Heading"])
+                Heading = (string)dr["Heading"];
             Note = (string)dr["Note"];
         }
 
