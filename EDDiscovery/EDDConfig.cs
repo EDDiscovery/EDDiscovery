@@ -52,6 +52,7 @@ namespace EDDiscovery2
         readonly public string LogIndex;
         private bool _canSkipSlowUpdates = false;
         private bool _orderrowsinverted = false;
+        private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         public List<EDCommander> listCommanders;
         private int currentCmdrID=0;
         private Dictionary<string, object> settings = new Dictionary<string, object>();
@@ -170,6 +171,18 @@ namespace EDDiscovery2
             {
                 _orderrowsinverted = value;
                 _db.PutSettingBool("OrderRowsInverted", value);
+            }
+        }
+
+        public bool FocusOnNewSystem {
+            get
+            {
+                return _focusOnNewSystem;
+            }
+            set
+            {
+                _focusOnNewSystem = value;
+                _db.PutSettingBool("FocusOnNewSystem", value);
             }
         }
 
