@@ -874,9 +874,12 @@ namespace EDDiscovery
             });
 
             // Move focus to new row
-            dataGridViewTravel.ClearSelection();
-            dataGridViewTravel.Rows[0].Cells[0].Selected =true; // This won't raise the CellClick handler, which updates the rest of the form
-            dataGridViewTravel_CellClick(dataGridViewTravel, new DataGridViewCellEventArgs(0, 0));
+            if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
+            {
+                dataGridViewTravel.ClearSelection();
+                dataGridViewTravel.Rows[0].Cells[0].Selected = true; // This won't raise the CellClick handler, which updates the rest of the form
+                dataGridViewTravel_CellClick(dataGridViewTravel, new DataGridViewCellEventArgs(0, 0));
+            }
         }
 
         private int GetVisitsCount(string name)
