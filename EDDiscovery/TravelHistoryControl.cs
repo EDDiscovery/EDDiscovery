@@ -682,7 +682,6 @@ namespace EDDiscovery
                         sn.Add();
                     }
 
-
                     currentSysPos.curSystem.Note = txt;
 
                     if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
@@ -693,6 +692,8 @@ namespace EDDiscovery
 
                     if (edsm.commanderName.Length>1 && edsm.apiKey.Length>1)
                         edsm.SetComment(sn);
+
+                    _discoveryForm.Map.UpdateNote();
                 }
 
             }

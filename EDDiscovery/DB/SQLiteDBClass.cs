@@ -355,7 +355,7 @@ namespace EDDiscovery.DB
 
         private void UpgradeDB16()
         {
-            string query = "CREATE TABLE Bookmarks (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , StarName TEXT NOT NULL, x double NOT NULL, y double NOT NULL, z double NOT NULL, Time DATETIME NOT NULL, Heading TEXT NOT NULL, Note TEXT NOT Null )";
+            string query = "CREATE TABLE Bookmarks (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , StarName TEXT, x double NOT NULL, y double NOT NULL, z double NOT NULL, Time DATETIME NOT NULL, Heading TEXT, Note TEXT NOT Null )";
             PerformUpgrade(16, true, true, new[] { query });
         }
 
@@ -768,11 +768,6 @@ namespace EDDiscovery.DB
             {
                 return false;
             }
-        }
-
-        BookmarkClass FindBookmarkSystem(string name)
-        {
-            return bookmarks.Find(x => x.StarName.Length > 0 && x.StarName.Equals(name));
         }
 
         public int QueryValueInt(string query, int defaultvalue)
