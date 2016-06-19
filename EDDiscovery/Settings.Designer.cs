@@ -279,6 +279,7 @@
             this.checkBoxFocusNewSystem.Text = "Focus on New System";
             this.checkBoxFocusNewSystem.TickBoxReductionSize = 10;
             this.checkBoxFocusNewSystem.UseVisualStyleBackColor = true;
+            this.checkBoxFocusNewSystem.CheckedChanged += new System.EventHandler(this.checkBoxFocusNewSystem_CheckedChanged);
             // 
             // checkBox_Distances
             // 
