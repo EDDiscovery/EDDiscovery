@@ -283,5 +283,10 @@ namespace EDDiscovery2
             comboBoxTheme.Enabled = true;          // no doing this while theme editor is open
             buttonSaveTheme.Enabled = true;
         }
+
+        private void checkBoxFocusNewSystem_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
+        }
     }
 }
