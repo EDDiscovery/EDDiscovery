@@ -872,6 +872,14 @@ namespace EDDiscovery
             {
                 _discoveryForm.Map.UpdateVisited(visitedSystems);      // update in UI thread.
             });
+
+            // Move focus to new row
+            if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
+            {
+                dataGridViewTravel.ClearSelection();
+                dataGridViewTravel.Rows[0].Cells[0].Selected = true; // This won't raise the CellClick handler, which updates the rest of the form
+                dataGridViewTravel_CellClick(dataGridViewTravel, new DataGridViewCellEventArgs(0, 0));
+            }
         }
 
         private int GetVisitsCount(string name)
