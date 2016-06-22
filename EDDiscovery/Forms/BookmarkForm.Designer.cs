@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BookmarkForm));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.labelBookmarkNotes = new System.Windows.Forms.Label();
+            this.labelTimeMade = new System.Windows.Forms.Label();
             this.textBoxNotes = new System.Windows.Forms.TextBox();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.textBoxX = new System.Windows.Forms.TextBox();
@@ -45,7 +46,7 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
             this.labelTravelNote = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
+            this.labelTravelNoteEdit = new System.Windows.Forms.Label();
             this.textBoxTravelNote = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
@@ -67,23 +68,23 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Co-ordinates";
             // 
-            // label4
+            // labelBookmarkNotes
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 113);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(86, 13);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Bookmark Notes";
+            this.labelBookmarkNotes.AutoSize = true;
+            this.labelBookmarkNotes.Location = new System.Drawing.Point(13, 113);
+            this.labelBookmarkNotes.Name = "labelBookmarkNotes";
+            this.labelBookmarkNotes.Size = new System.Drawing.Size(86, 13);
+            this.labelBookmarkNotes.TabIndex = 0;
+            this.labelBookmarkNotes.Text = "Bookmark Notes";
             // 
-            // label5
+            // labelTimeMade
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 76);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(60, 13);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Time Made";
+            this.labelTimeMade.AutoSize = true;
+            this.labelTimeMade.Location = new System.Drawing.Point(13, 76);
+            this.labelTimeMade.Name = "labelTimeMade";
+            this.labelTimeMade.Size = new System.Drawing.Size(60, 13);
+            this.labelTimeMade.TabIndex = 0;
+            this.labelTimeMade.Text = "Time Made";
             // 
             // textBoxNotes
             // 
@@ -100,6 +101,7 @@
             this.textBoxName.ReadOnly = true;
             this.textBoxName.Size = new System.Drawing.Size(246, 20);
             this.textBoxName.TabIndex = 3;
+            this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxX
             // 
@@ -108,6 +110,7 @@
             this.textBoxX.ReadOnly = true;
             this.textBoxX.Size = new System.Drawing.Size(54, 20);
             this.textBoxX.TabIndex = 4;
+            this.textBoxX.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxY
             // 
@@ -116,6 +119,7 @@
             this.textBoxY.ReadOnly = true;
             this.textBoxY.Size = new System.Drawing.Size(54, 20);
             this.textBoxY.TabIndex = 5;
+            this.textBoxY.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxZ
             // 
@@ -124,6 +128,7 @@
             this.textBoxZ.ReadOnly = true;
             this.textBoxZ.Size = new System.Drawing.Size(54, 20);
             this.textBoxZ.TabIndex = 6;
+            this.textBoxZ.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // label3
             // 
@@ -162,7 +167,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(287, 351);
+            this.buttonOK.Location = new System.Drawing.Point(290, 327);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 1;
@@ -172,7 +177,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(209, 351);
+            this.buttonCancel.Location = new System.Drawing.Point(209, 327);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -182,7 +187,7 @@
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(16, 351);
+            this.buttonDelete.Location = new System.Drawing.Point(17, 327);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
             this.buttonDelete.TabIndex = 9;
@@ -199,14 +204,13 @@
             this.labelTravelNote.TabIndex = 0;
             this.labelTravelNote.Text = "Travel History Note";
             // 
-            // label9
+            // labelTravelNoteEdit
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(113, 325);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(116, 13);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "(Edit on Travel Screen)";
+            this.labelTravelNoteEdit.Location = new System.Drawing.Point(13, 271);
+            this.labelTravelNoteEdit.Name = "labelTravelNoteEdit";
+            this.labelTravelNoteEdit.Size = new System.Drawing.Size(79, 38);
+            this.labelTravelNoteEdit.TabIndex = 0;
+            this.labelTravelNoteEdit.Text = "(Edit on Travel Screen)";
             // 
             // textBoxTravelNote
             // 
@@ -221,7 +225,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(380, 386);
+            this.ClientSize = new System.Drawing.Size(380, 364);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -232,15 +236,16 @@
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.textBoxTravelNote);
             this.Controls.Add(this.textBoxNotes);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label9);
+            this.Controls.Add(this.labelTimeMade);
+            this.Controls.Add(this.labelTravelNoteEdit);
             this.Controls.Add(this.labelTravelNote);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.labelBookmarkNotes);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "BookmarkForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Create New Bookmark";
@@ -253,8 +258,8 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label labelBookmarkNotes;
+        private System.Windows.Forms.Label labelTimeMade;
         private System.Windows.Forms.TextBox textBoxNotes;
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.TextBox textBoxX;
@@ -268,7 +273,7 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Label labelTravelNote;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label labelTravelNoteEdit;
         private System.Windows.Forms.TextBox textBoxTravelNote;
     }
 }
