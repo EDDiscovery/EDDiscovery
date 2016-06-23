@@ -859,7 +859,7 @@ namespace EDDiscovery2._3DMap
             Point pxTopRight = new Point(bmp.Width - 1, bmp.Height - 1);
             Point pxBottomLeft = new Point(0, 0);
             Point pxBottomRight = new Point(bmp.Width - 1, 0);
-            Vector3d[] vertices = GetVerticesVert(bottomleft, bottomright, topleft, topright, z);   // flipping the order seems to make it work and be vertical
+            Vector3d[] vertices = GetVerticesVert(topleft, topright, bottomleft, bottomright, z);   // flipping the order seems to make it work and be vertical
             Vector4d[] texcoords = GetTexCoords(pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight, bmp.Width, bmp.Height);
             return new TexturedQuadData(vertices, texcoords, bmp);
         }

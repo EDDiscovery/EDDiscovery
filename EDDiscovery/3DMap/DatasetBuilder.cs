@@ -108,19 +108,34 @@ namespace EDDiscovery2._3DMap
             return text_bmp;
         }
 
-        public List<IData3DSet> AddStarBookmarks(Bitmap map, double widthly, double heightly)
+        public List<IData3DSet> AddStarBookmarks(Bitmap map, double widthly, double heightly, bool vert)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
 
             foreach (BookmarkClass bc in SQLiteDBClass.bookmarks)
             {
-                TexturedQuadData newtexture = TexturedQuadData.FromBitmapVert(map,
+                TexturedQuadData newtexture;
+
+                if (vert)
+                {
+                    newtexture = TexturedQuadData.FromBitmapVert(map,
                                              new PointF((float)(bc.x - widthly), (float)(bc.y + heightly)),
                                                 new PointF((float)(bc.x + widthly), (float)(bc.y + heightly)),
                                              new PointF((float)(bc.x - widthly), (float)bc.y),
                                                 new PointF((float)(bc.x + widthly), (float)bc.y),
                                              (float)bc.z);
+                }
+                else
+                {
+                    newtexture = TexturedQuadData.FromBitmapHorz(map,
+                                              new PointF((float)(bc.x - widthly), (float)(bc.z + heightly)),
+                                                 new PointF((float)(bc.x + widthly), (float)(bc.z + heightly)),
+                                              new PointF((float)(bc.x - widthly), (float)bc.z),
+                                                 new PointF((float)(bc.x + widthly), (float)bc.z),
+                                              (float)bc.y);
+                }
+
                 datasetbks.Add(newtexture);
             }
 
@@ -129,7 +144,7 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddNotedBookmarks(Bitmap map, double widthly, double heightly)
+        public List<IData3DSet> AddNotedBookmarks(Bitmap map, double widthly, double heightly , bool vert )
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
@@ -138,9 +153,6 @@ namespace EDDiscovery2._3DMap
             {
                 if (vs.curSystem != null && vs.curSystem.Note != null )
                 {
-                    //SQLiteDBClass.dictSystems.ContainsKey(vs.Name))
-                    //SystemClass vssys = SQLiteDBClass.dictSystems[vs.Name];
-
                     string note = vs.curSystem.Note.Trim();
 
                     if (note.Length > 0)
@@ -149,12 +161,27 @@ namespace EDDiscovery2._3DMap
                         double y = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
                         double z = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
 
-                        TexturedQuadData newtexture = TexturedQuadData.FromBitmapVert(map,
+                        TexturedQuadData newtexture;
+
+                        if (vert)
+                        {
+                            newtexture = TexturedQuadData.FromBitmapVert(map,
                                                         new PointF((float)(x - widthly), (float)(y + heightly)),
                                                         new PointF((float)(x + widthly), (float)(y + heightly)),
                                                         new PointF((float)(x - widthly), (float)y),
                                                         new PointF((float)(x + widthly), (float)y),
                                                         (float)z);
+                        }
+                        else
+                        {
+                            newtexture = TexturedQuadData.FromBitmapHorz(map,
+                                                                        new PointF((float)(x - widthly), (float)(z + heightly)),
+                                                                        new PointF((float)(x + widthly), (float)(z + heightly)),
+                                                                        new PointF((float)(x - widthly), (float)z),
+                                                                        new PointF((float)(x + widthly), (float)z),
+                                                                        (float)y);
+                        }
+
                         datasetbks.Add(newtexture);
                     }
                 }

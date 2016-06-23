@@ -183,6 +183,12 @@
     <Compile Include="Forms\BookmarkForm.Designer.cs">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\InfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InfoForm.Designer.cs">
+      <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
@@ -404,6 +410,7 @@
     <None Include="Resources\OrangeDot.png" />
     <None Include="Resources\bookmarkbrightred.png" />
     <None Include="Resources\bookmarkgreen.png" />
+    <None Include="Resources\3dmaphelp.txt" />
     <Content Include="Resources\imgCheck.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
@@ -439,6 +446,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BookmarkForm.resx">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InfoForm.resx">
+      <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThemeEditor.resx">
       <DependentUpon>ThemeEditor.cs</DependentUpon>
