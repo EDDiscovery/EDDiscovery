@@ -76,6 +76,7 @@ namespace EDDiscovery2
             checkboxSkipSlowUpdates.Checked = EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates;
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
             checkBoxFocusNewSystem.Checked = EDDiscoveryForm.EDDConfig.FocusOnNewSystem;
+            checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
@@ -113,6 +114,7 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
             EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
+            EDDiscoveryForm.EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
 
             List <EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
             EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
@@ -287,6 +289,14 @@ namespace EDDiscovery2
         private void checkBoxFocusNewSystem_CheckedChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
+        }
+
+        private void checkBoxKeepOnTop_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.KeepOnTop = checkBoxKeepOnTop.Checked;
+            this.FindForm().TopMost = checkBoxKeepOnTop.Checked;
+            //EDDiscoveryForm f = this.FindForm() as EDDiscoveryForm;            
+            //f.keepOnTopChanged(checkBoxKeepOnTop.Checked);
         }
     }
 }
