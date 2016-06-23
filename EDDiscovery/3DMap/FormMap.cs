@@ -2024,7 +2024,7 @@ namespace EDDiscovery2
     public class SystemClassStarNames    // holds star data.. used as its kept up to date with visited systems and has extra info
     {
         public SystemClassStarNames() { }
-        public SystemClassStarNames(SystemClass other)
+        public SystemClassStarNames(ISystem other)
         {
             name = other.name;
             x = other.x; y = other.y; z = other.z;
@@ -2056,7 +2056,7 @@ namespace EDDiscovery2
         public TexturedQuadData painttexture { get; set; }
         public PointData paintstar { get; set; }                // instead of doing a array paint.
         public bool candisposepainttexture { get; set; }
-        public SystemClass sysclass;                            // set if created from it
+        public ISystem sysclass;                            // set if created from it
     };
 
 }
