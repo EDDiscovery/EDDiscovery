@@ -947,7 +947,7 @@ namespace EDDiscovery2
             {
                 if (!parentcontroltype.Namespace.Equals("ExtendedControls"))
                 {
-                    Console.WriteLine("THEME: Unhandled control " + controltype.Name + ":" + myControl.Name + " from " + parent.Name);
+                    //Console.WriteLine("THEME: Unhandled control " + controltype.Name + ":" + myControl.Name + " from " + parent.Name);
                 }
             }
 

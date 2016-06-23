@@ -22,6 +22,8 @@ namespace EDDiscovery2
     {
         #region Variables
 
+        const int HELP_VERSION = 1;         // increment this to force help onto the screen of users first time.
+
         SQLiteDBClass db;
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
@@ -96,9 +98,9 @@ namespace EDDiscovery2
 
 
         private float _defaultZoom;
-        private List<SystemClass> ReferenceSystems { get; set; }
-        public List<VisitedSystemsClass> VisitedSystems { get; set; }
-        private List<SystemClass> PlannedRoute { get; set; }
+        private List<SystemClass> _referenceSystems { get; set; }
+        public List<VisitedSystemsClass> _visitedSystems { get; set; }
+        private List<SystemClass> _plannedRoute { get; set; }
 
         public List<FGEImage> fgeimages = new List<FGEImage>();
         public List<FGEImage> selectedmaps = new List<FGEImage>();
@@ -134,7 +136,7 @@ namespace EDDiscovery2
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
-            VisitedSystems = visited;
+            _visitedSystems = visited;
 
             List<SystemClass> starList = SQLiteDBClass.globalSystems;           
 
@@ -154,9 +156,9 @@ namespace EDDiscovery2
                 }
             }
 
-            if (VisitedSystems != null)              // note if list is empty on first run seeing this
+            if (_visitedSystems != null)              // note if list is empty on first run seeing this
             {
-                foreach (VisitedSystemsClass vsc in VisitedSystems)
+                foreach (VisitedSystemsClass vsc in _visitedSystems)
                 {
                     if (vsc.HasTravelCoordinates)
                     {
@@ -199,8 +201,8 @@ namespace EDDiscovery2
 
             _defaultZoom = zoom;
 
-            ReferenceSystems = null;
-            PlannedRoute = null;
+            _referenceSystems = null;
+            _plannedRoute = null;
 
             SetCenterSystemTo(_centerSystem, true);             // move to this..
 
@@ -217,6 +219,7 @@ namespace EDDiscovery2
             toolStripButtonStarNames.Checked = db.GetSettingBool("Map3DStarNames", false);
             showNoteMarksToolStripMenuItem.Checked = db.GetSettingBool("Map3DShowNoteMarks", true);
             showBookmarksToolStripMenuItem.Checked = db.GetSettingBool("Map3DShowBookmarks", true);
+            toolStripButtonAutoForward.Checked = db.GetSettingBool("Map3DAutoForward", false );
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
 
@@ -226,14 +229,14 @@ namespace EDDiscovery2
 
         public void SetPlannedRoute(List<SystemClass> plannedr)
         {
-            PlannedRoute = plannedr;
+            _plannedRoute = plannedr;
             GenerateDataSetsVisitedSystems();
             glControl.Invalidate();
         }
 
         public void SetReferenceSystems(List<SystemClass> refsys)
         {
-            ReferenceSystems = refsys;
+            _referenceSystems = refsys;
             GenerateDataSetsVisitedSystems();
             glControl.Invalidate();
         }
@@ -242,9 +245,9 @@ namespace EDDiscovery2
         {
             if (_starnames != null && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
             {
-                VisitedSystems = visited;
+                _visitedSystems = visited;
 
-                foreach (VisitedSystemsClass vsc in VisitedSystems)
+                foreach (VisitedSystemsClass vsc in _visitedSystems)
                 {
                     if (vsc.HasTravelCoordinates && !_starnamelookup.ContainsKey(vsc.Name))    // if coords and not in dictionary, add
                     {
@@ -259,6 +262,15 @@ namespace EDDiscovery2
                 GenerateDataSetsVisitedSystems();
                 RecalcStarNames();
                 glControl.Invalidate();
+
+                if (toolStripButtonAutoForward.Checked)             // auto forward?
+                {
+                    VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    if ( vs != null )
+                        SetCenterSystemTo(vs.Name, true);
+                }
+
             }
         }
 
@@ -269,7 +281,9 @@ namespace EDDiscovery2
                 SystemClassStarNames newhist = FindSystem(historysel);
 
                 if (newhist != null)
+                {
                     _historySelection = newhist;        // only override if found in starmap (meaning it has co-ords)
+                }
             }
         }
 
@@ -315,11 +329,22 @@ namespace EDDiscovery2
             _mousehovertick.Interval = 250;
         }
 
+        private void FormMap_Shown(object sender, EventArgs e)
+        {
+            int helpno = db.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
+            if (helpno != HELP_VERSION)
+            {
+                toolStripButtonHelp_Click(null, null);
+                db.PutSettingInt("Map3DShownHelp", HELP_VERSION);
+            }
+        }
+
         private void FormMap_Activated(object sender, EventArgs e)
         {
             isActivated = true;
             _useTimer = false;
             glControl.Invalidate();
+
         }
 
         private void FormMap_Deactivate(object sender, EventArgs e)
@@ -397,7 +422,7 @@ namespace EDDiscovery2
         {
             Dictionary<string, Func<DateTime>> starttimes = new Dictionary<string, Func<DateTime>>()
             {
-                { "All", () => (VisitedSystems == null ? new[] { DateTime.Now } : VisitedSystems.Select(s => s.Time)).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
+                { "All", () => (_visitedSystems == null ? new[] { DateTime.Now } : _visitedSystems.Select(s => s.Time)).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
                 { "Last Week", () => DateTime.Now.AddDays(-7) },
                 { "Last Month", () => DateTime.Now.AddMonths(-1) },
                 { "Last Year", () => DateTime.Now.AddYears(-1) }
@@ -537,8 +562,6 @@ namespace EDDiscovery2
                 GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
                 _znear = -5000.0f;
                 _zfar = 5000.0f;
-                //GL.Ortho(-100000.0, 100000.0, -100000.0, 100000.0, -100000.0, 100000.0); // Bottom-left corner pixel has coordinate (0, 0)
-                //GL.Ortho(0, orthoW, 0, orthoH, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
             }
 
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
@@ -627,8 +650,6 @@ namespace EDDiscovery2
             builder = null;
         }
 
-        private double GetBookmarkSize() { return Math.Min(Math.Max(20, 100.0 / _zoom), 500);  }
-
         private void GenerateDataSetsBookmarks()         // Called during Load, and if we ever add systems..
         {
             DeleteDataset(ref _datasets_bookedmarkedsystems);
@@ -642,7 +663,7 @@ namespace EDDiscovery2
                 DatasetBuilder builder = CreateBuilder();
 
                 builder.Build();
-                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(map, GetBookmarkSize(), GetBookmarkSize());
+                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(map, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
 
                 builder = null;
             }
@@ -661,7 +682,7 @@ namespace EDDiscovery2
                 DatasetBuilder builder = CreateBuilder();
 
                 builder.Build();
-                _datasets_notedsystems = builder.AddNotedBookmarks(map, GetBookmarkSize(), GetBookmarkSize());
+                _datasets_notedsystems = builder.AddNotedBookmarks(map, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
 
                 builder = null;
             }
@@ -692,20 +713,20 @@ namespace EDDiscovery2
                 SelectedSystem = CreateSystemClass(_clickedSystem),
                 StarList = _starnames,
 
-                VisitedSystems = (VisitedSystems != null) ? VisitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null,
+                VisitedSystems = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null,
 
                 Images = selectedmaps.ToArray(),
 
                 DrawLines = toolStripButtonDrawLines.Checked,
                 UseImage = selectedmaps.Count != 0
             };
-            if (ReferenceSystems != null)
+            if (_referenceSystems != null)
             {
-                builder.ReferenceSystems = ReferenceSystems.ConvertAll(system => (ISystem)system);
+                builder.ReferenceSystems = _referenceSystems.ConvertAll(system => (ISystem)system);
             }
-            if (PlannedRoute != null)
+            if (_plannedRoute != null)
             {
-                builder.PlannedRoute = PlannedRoute.ConvertAll(system => (ISystem)system);
+                builder.PlannedRoute = _plannedRoute.ConvertAll(system => (ISystem)system);
             }
 
             return builder;
@@ -1572,14 +1593,37 @@ namespace EDDiscovery2
                 MessageBox.Show("System " + textboxFrom.Text + " not found");
         }
 
+        private void toolStripButtonGoBackward_Click(object sender, EventArgs e)
+        {
+            if (_visitedSystems != null)
+            {
+                string name = FindNextVisitedSystem(_centerSystem.name, -1);
+                SetCenterSystemTo(name, true);
+            }
+        }
+
+        private void toolStripButtonGoForward_Click(object sender, EventArgs e)
+        {
+            if (_visitedSystems != null)
+            {
+                string name = FindNextVisitedSystem(_centerSystem.name, 1);
+                SetCenterSystemTo(name, true);
+            }
+        }
+
+        private void toolStripButtonAutoForward_Click(object sender, EventArgs e)
+        {
+            db.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
+        }
+
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
         {
-            if (VisitedSystems != null)
+            if (_visitedSystems != null)
             {
-                VisitedSystemsClass ps2 = (from c in VisitedSystems where c.curSystem != null && (c.HasTravelCoordinates == true || c.curSystem.HasCoordinate == true) orderby c.Time descending select c).FirstOrDefault<VisitedSystemsClass>();
+                VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
 
-                if (ps2 != null)
-                    SetCenterSystemTo(FindSystem(ps2.curSystem.name), true);
+                if (vs != null )
+                    SetCenterSystemTo(FindSystem(vs.Name), true);
                 else
                     MessageBox.Show("No stars with defined co-ordinates available in travel history");
             }
@@ -1693,6 +1737,9 @@ namespace EDDiscovery2
         {
             db.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
             SetupViewport();
+            GenerateDataSetsNotedSystems();
+            GenerateDataSetsBookmarks();
+            glControl.Invalidate();
         }
 
         private void dotSystemCoords_Click(object sender, EventArgs e)
@@ -1703,6 +1750,14 @@ namespace EDDiscovery2
         private void dotSelectedSystemCoords_Click(object sender, EventArgs e)
         {
             SetCenterSystemTo(_clickedSystem, true);
+        }
+
+        private void toolStripButtonHelp_Click(object sender, EventArgs e)
+        {
+            InfoForm dl = new InfoForm();
+            string text = EDDiscovery.Properties.Resources._3dmaphelp;
+            dl.Info("3D Map Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
+            dl.Show();
         }
 
         private void glControl_KeyDown(object sender, KeyEventArgs e)
@@ -2150,18 +2205,17 @@ namespace EDDiscovery2
             return false;
         }
 
-        private bool IsWithinRectangle(Vector4d topleft, Vector4d topright , Vector4d bottomleft, Vector4d bottomright, 
-                            int x, int y, out double newcursysdistz)
+        private bool IsWithinRectangle( Matrix4d area ,  int x, int y, out double newcursysdistz)
         {
             Vector2d ptopleft = new Vector2d(0, 0), pbottomright = new Vector2d(0, 0);
             Vector2d pbottomleft = new Vector2d(0, 0), ptopright = new Vector2d(0, 0);
             double ztopleft, zbottomright,zbottomleft,ztopright;
             Matrix4d resmat = GetResMat();
 
-            if (GetPixel(topleft, resmat, ref ptopleft, out ztopleft) &&
-                    GetPixel(bottomright, resmat, ref pbottomright, out zbottomright) &&
-                    GetPixel(topright, resmat, ref ptopright, out ztopright) &&
-                    GetPixel(bottomleft, resmat, ref pbottomleft, out zbottomleft) )
+            if (GetPixel(area.Row0, resmat, ref ptopleft, out ztopleft) &&
+                    GetPixel(area.Row3, resmat, ref pbottomright, out zbottomright) &&
+                    GetPixel(area.Row1, resmat, ref ptopright, out ztopright) &&
+                    GetPixel(area.Row2, resmat, ref pbottomleft, out zbottomleft) )
             {
                 GraphicsPath p = new GraphicsPath();            // a moment of inspiration, use the graphics path for the polygon hit test!
                 p.AddLine(new PointF((float)ptopleft.X, (float)ptopleft.Y), new PointF((float)ptopright.X, (float)ptopright.Y));
@@ -2179,6 +2233,26 @@ namespace EDDiscovery2
             return false;
         }
 
+        private double GetBookmarkSize() { return Math.Min(Math.Max(20, 100.0 / _zoom), 500); }
+
+        Matrix4d GetBookMarkOutline(double x, double y, double z , double bksize)
+        {
+            if (toolStripButtonPerspective.Checked)
+            {
+                return new Matrix4d(new Vector4d(x - bksize / 2, y + bksize, z, 1),         // top left
+                                new Vector4d(x + bksize / 2, y + bksize, z, 1),         // top right
+                                new Vector4d(x - bksize / 2, y, z, 1),                  // bottom left
+                                new Vector4d(x + bksize / 2, y, z, 1));                 // bottom right
+            }
+            else
+            {
+                return new Matrix4d(new Vector4d(x - bksize / 2, y, z + bksize, 1),         // top left
+                                new Vector4d(x + bksize / 2, y, z + bksize, 1),         // top right
+                                new Vector4d(x - bksize / 2, y, z, 1),                  // bottom left
+                                new Vector4d(x + bksize / 2, y, z, 1));                 // bottom right
+            }
+        }
+
         private BookmarkClass GetMouseOverBookmark(int x, int y, out double cursysdistz)
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
@@ -2191,15 +2265,10 @@ namespace EDDiscovery2
 
             foreach (BookmarkClass bc in SQLiteDBClass.bookmarks)
             {
-                Vector4d topleft = new Vector4d(bc.x - bksize / 2, bc.y + bksize, bc.z, 1);
-                Vector4d topright = new Vector4d(bc.x + bksize / 2, bc.y + bksize, bc.z, 1);
-                Vector4d bottomleft = new Vector4d(bc.x - bksize / 2, bc.y, bc.z, 1);
-                Vector4d bottomright = new Vector4d(bc.x + bksize / 2, bc.y, bc.z, 1);
-
                 //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
 
                 double newcursysdistz;
-                if (IsWithinRectangle(topleft, topright, bottomleft, bottomright, x, y, out newcursysdistz))
+                if (IsWithinRectangle(GetBookMarkOutline(bc.x, bc.y, bc.z, bksize), x, y, out newcursysdistz))
                 {
                     if (newcursysdistz < cursysdistz)
                     {
@@ -2223,7 +2292,7 @@ namespace EDDiscovery2
             SystemClass cursys = null;
             cursysdistz = double.MaxValue;
 
-            foreach (VisitedSystemsClass vs in VisitedSystems)
+            foreach (VisitedSystemsClass vs in _visitedSystems)
             {
                 if (vs.curSystem != null && vs.curSystem.Note != null)
                 {
@@ -2235,13 +2304,8 @@ namespace EDDiscovery2
                         double ly = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
                         double lz = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
 
-                        Vector4d topleft = new Vector4d(lx - bksize / 2, ly + bksize, lz, 1);
-                        Vector4d topright = new Vector4d(lx + bksize / 2, ly + bksize, lz, 1);
-                        Vector4d bottomleft = new Vector4d(lx - bksize / 2, ly, lz, 1);
-                        Vector4d bottomright = new Vector4d(lx + bksize / 2, ly, lz, 1);
-
                         double newcursysdistz;
-                        if (IsWithinRectangle(topleft, topright, bottomleft, bottomright, x, y, out newcursysdistz))
+                        if (IsWithinRectangle(GetBookMarkOutline(lx,ly,lz, bksize), x, y, out newcursysdistz))
                         { 
                             if (newcursysdistz < cursysdistz)
                             {
@@ -2340,7 +2404,7 @@ namespace EDDiscovery2
 
         #endregion
 
-            #region Misc
+        #region Misc
 
         private class MyRenderer : ToolStripProfessionalRenderer
         {
@@ -2374,7 +2438,47 @@ namespace EDDiscovery2
             return _starnamelookup.ContainsKey(name) ? _starnamelookup[name] : null;
         }
 
-#endregion
+        string FindNextVisitedSystem(string sysname, int dir)
+        {
+            int index = _visitedSystems.FindIndex(x => x.Name.Equals(sysname));
+
+            if (index != -1)
+            {
+                if (dir == -1)
+                {
+                    if (index < 1)                                  //0, we go to the end and work from back..                      
+                        index = _visitedSystems.Count;
+
+                    int indexn = _visitedSystems.FindLastIndex(index - 1, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    if ( indexn == -1 )                             // from where we were, did not find one, try from back..
+                        indexn = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    return (indexn != -1) ? _visitedSystems[indexn].Name : _centerSystem.name;
+                }
+                else
+                {
+                    index++;
+
+                    if (index == _visitedSystems.Count)             // if at end, go to beginning
+                        index = 0;
+
+                    int indexn = _visitedSystems.FindIndex(index, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    if ( indexn == -1 )                             // if not found, go to beginning
+                        indexn = _visitedSystems.FindIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    return (indexn != -1) ? _visitedSystems[indexn].Name : _centerSystem.name;
+                }
+            }
+            else
+            {
+                index = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+                return (index != -1) ? _visitedSystems[index].Name : _centerSystem.name;
+            }
+        }
+
+        #endregion
 
     }
 
