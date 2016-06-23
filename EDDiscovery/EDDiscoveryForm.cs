@@ -119,6 +119,8 @@ namespace EDDiscovery
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition);
 
+            this.TopMost = EDDConfig.KeepOnTop;
+
             ApplyTheme(false);
         }
 
@@ -957,11 +959,17 @@ namespace EDDiscovery
             Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
         }
 
+        internal void keepOnTopChanged(bool keepOnTop)
+        {
+            this.TopMost = keepOnTop;
+            EDDConfig.KeepOnTop = keepOnTop;
+        }
+
         private void keepOnTopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem mi = sender as ToolStripMenuItem;
             mi.Checked = !mi.Checked;
-            this.TopMost = mi.Checked;
+            keepOnTopChanged(mi.Checked);
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)
