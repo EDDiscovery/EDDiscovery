@@ -23,6 +23,7 @@ namespace EDDiscovery2
         public float MapZoom { get { return float.Parse(textBoxDefaultZoom.Text); } }
         public bool MapCentreOnSelection { get { return radioButtonHistorySelection.Checked; } }
         public string ThemeName { get { return comboBoxTheme.Items[comboBoxTheme.SelectedIndex]; } }
+        public bool OrderRowsInverted {  get { return checkBoxOrderRowsInverted.Checked; } }
 
         public Settings()
         {
@@ -83,6 +84,8 @@ namespace EDDiscovery2
             checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
             checkboxSkipSlowUpdates.Checked = EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates;
+            checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
+            checkBoxFocusNewSystem.Checked = EDDiscoveryForm.EDDConfig.FocusOnNewSystem;
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
@@ -118,8 +121,10 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates = checkboxSkipSlowUpdates.Checked;
+            EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
+            EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
 
-            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            List <EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
             EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
             dataGridViewCommanders.DataSource = null;
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
@@ -298,6 +303,11 @@ namespace EDDiscovery2
             SetEntryThemeComboBox();
             comboBoxTheme.Enabled = true;          // no doing this while theme editor is open
             buttonSaveTheme.Enabled = true;
+        }
+
+        private void checkBoxFocusNewSystem_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
         }
     }
 }

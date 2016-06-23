@@ -20,6 +20,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Configuration;
+using EDDiscovery.EDSM;
 
 namespace EDDiscovery
 {
@@ -76,6 +77,8 @@ namespace EDDiscovery
 
         public event DistancesLoaded OnDistancesLoaded;
 
+        public GalacticMapping galacticMapping;
+
         private bool CanSkipSlowUpdates()
         {
 #if DEBUG
@@ -95,6 +98,7 @@ namespace EDDiscovery
             ProcessCommandLineOptions();
 
             EDDConfig = EDDConfig.Instance;
+            galacticMapping = new GalacticMapping();
 
             //_fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
             _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
@@ -430,7 +434,7 @@ namespace EDDiscovery
         {
             EDDBClass eddb = new EDDBClass();
             bool newfile = false;
-            if (eddb.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
+            if (EDDBClass.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
             {
                 if (newfile)
                     LogText("Downloaded map: " + file + Environment.NewLine);
@@ -497,6 +501,11 @@ namespace EDDiscovery
 
                 _db.GetAllSystemNotes();
                 _db.GetAllSystems();
+
+                // Also update galactic mapping from EDSM
+                LogLine("Get galactic mapping from EDSM");
+                galacticMapping.DownloadFromEDSM();
+                galacticMapping.ParseData();
             }
             catch (Exception ex)
             {
@@ -1168,7 +1177,7 @@ namespace EDDiscovery
 
                 LogText("Get systems from EDSM." + Environment.NewLine);
 
-                eddb.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
+                EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
 
                 if (newfile)
                 {

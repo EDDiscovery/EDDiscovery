@@ -227,13 +227,11 @@ namespace EDDiscovery2.EDSM
 
         internal string GetHiddenSystems()
         {
-            EDDBClass eddb = new EDDBClass();
-
             try
             {
                 string edsmhiddensystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmhiddensystems.json");
                 bool newfile = false;
-                eddb.DownloadFile("https://www.edsm.net/api-v1/hidden-systems", edsmhiddensystems, out newfile);
+                EDDBClass.DownloadFile("https://www.edsm.net/api-v1/hidden-systems", edsmhiddensystems, out newfile);
 
                 string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
 

@@ -434,8 +434,7 @@ namespace EDDiscovery
                 if (zoom < 0.01) zoom = 0.01f;
                 if (zoom > 50) zoom = 50f;
 
-                map.Prepare(route[0].name, _discoveryForm.settings.MapHomeSystem, route[0].name, zoom, _discoveryForm.SystemNames);
-                map.SetVisited(_discoveryForm.VisitedSystems);
+                map.Prepare(route[0].name, _discoveryForm.settings.MapHomeSystem, route[0].name, zoom, _discoveryForm.SystemNames, _discoveryForm.VisitedSystems);
                 map.SetPlanned(route);
                 map.Show();
             }

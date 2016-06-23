@@ -176,6 +176,9 @@
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="EDSM\GalacticMapObject.cs" />
+    <Compile Include="EDSM\GalacticMapping.cs" />
+    <Compile Include="EDSM\GalMapType.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>

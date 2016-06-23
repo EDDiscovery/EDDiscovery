@@ -494,6 +494,8 @@ namespace EDDiscovery.DB
 
         public bool GetAllSystems()
         {
+            // Get system notes first
+            GetAllSystemNotes();
             var sw = Stopwatch.StartNew();
             int numSystemsReturned = 0;
             try
