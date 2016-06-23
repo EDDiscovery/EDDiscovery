@@ -20,9 +20,9 @@ namespace EDDiscovery2._3DMap
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
-                            AutoCompleteStringCollection sysname )
+                            AutoCompleteStringCollection sysname , List<VisitedSystemsClass> visited )
         {
-            _formMap.Prepare(historysel, homesys, centersys, zoom, sysname);
+            _formMap.Prepare(historysel, homesys, centersys, zoom, sysname, visited);
         }
 
         public void SetPlanned(List<SystemClass> plannedr)
@@ -35,9 +35,14 @@ namespace EDDiscovery2._3DMap
             _formMap.SetReferenceSystems(trir);
         }
 
-        public void SetVisited(List<VisitedSystemsClass> visited)
+        public void UpdateVisited(List<VisitedSystemsClass> visited)
         {
-            _formMap.SetVisitedSystems(visited);
+            _formMap.UpdateVisitedSystems(visited);
+        }
+
+        public void UpdateHistorySystem(string historysel)
+        {
+            _formMap.UpdateHistorySystem(historysel);
         }
 
         public void Show()

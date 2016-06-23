@@ -96,7 +96,7 @@ namespace EDDiscovery2._3DMap.Tests
             _subject = new DatasetBuilder
             {
                 CenterSystem = new DB.InMemory.SystemClass(),
-                StarList = SpawnStars()
+                StarList = SpawnStars().Select(s => new SystemClassStarNames(s)).ToList()
             };
         }
 
@@ -184,8 +184,8 @@ namespace EDDiscovery2._3DMap.Tests
             _subject.BuildSelected();
             var datasets = _subject.AddPOIsToDataset();
 
-            Assert.AreEqual("Center", datasets[0].Name);
-            Assert.AreEqual("Interest", datasets[2].Name);
+            Assert.AreEqual("Selected", datasets[0].Name);
+            Assert.AreEqual("Center", datasets[1].Name);
         }
     }
 }

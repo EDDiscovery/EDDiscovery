@@ -246,47 +246,6 @@ public enum AtmosphereEnum
         }
 
 
-        protected bool GetBool(JToken jToken)
-        {
-            if (IsNullOrEmptyT(jToken))
-                return false;
-            return jToken.Value<bool>();
-        }
-
-        protected float GetFloat(JToken jToken)
-        {
-            if (IsNullOrEmptyT(jToken))
-                return 0f;
-            return jToken.Value<float>();
-        }
-
-
-        protected int GetInt(JToken jToken)
-        {
-            if (IsNullOrEmptyT(jToken))
-                return 0;
-            return jToken.Value<int>();
-        }
-
-
-        protected string GetString(JToken jToken)
-        {
-            if (IsNullOrEmptyT(jToken))
-                return null;
-            return jToken.Value<string>();
-        }
-
-
-        protected bool IsNullOrEmptyT(JToken token)
-        {
-            return (token == null) ||
-                   (token.Type == JTokenType.Array && !token.HasValues) ||
-                   (token.Type == JTokenType.Object && !token.HasValues) ||
-                   (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
-                   (token.Type == JTokenType.Null);
-        }
-
-
     }
 
 }

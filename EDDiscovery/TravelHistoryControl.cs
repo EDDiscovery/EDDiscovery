@@ -35,7 +35,7 @@ namespace EDDiscovery
         }
 
         private const int DefaultTravelHistoryFilterIndex = 4;
-        private const string SingleCoordinateFormat = "#.#####";
+        private const string SingleCoordinateFormat = "0.#####";
 
         private static EDDiscoveryForm _discoveryForm;
         public int defaultMapColour;
@@ -226,12 +226,26 @@ namespace EDDiscovery
                 {
                     sys1.Note = SQLiteDBClass.globalSystemNotes[sys1.SearchName].Note;
                 }
+                if (item.HasTravelCoordinates)
+                {
+                    sys1.x = item.X;
+                    sys1.y = item.Y;
+                    sys1.z = item.Z;
+                }
             }
             if (item2 != null)
             {
                 sys2 = SystemData.GetSystem(item2.Name);
                 if (sys2 == null)
+                {
                     sys2 = new SystemClass(item2.Name);
+                    if (item2.HasTravelCoordinates)
+                    {
+                        sys2.x = item2.X;
+                        sys2.y = item2.Y;
+                        sys2.z = item2.Z;
+                    }
+                }
 
             }
             else
@@ -280,7 +294,15 @@ namespace EDDiscovery
 
             cell.Tag = item;
 
-            dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (sys1.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
+
+            bool hascoord; 
+
+            if (item.HasTravelCoordinates)
+              hascoord  = true;
+            else 
+                hascoord = sys1.HasCoordinate;
+
+            dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (hascoord) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
             cell = dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.Map];
             cell.Style.ForeColor = Color.FromArgb(item.MapColour);
@@ -306,32 +328,21 @@ namespace EDDiscovery
                 textBoxZ.Text = syspos.curSystem.z.ToString(SingleCoordinateFormat);
 
                 textBoxSolDist.Text = Math.Sqrt(syspos.curSystem.x * syspos.curSystem.x + syspos.curSystem.y * syspos.curSystem.y + syspos.curSystem.z * syspos.curSystem.z).ToString("0.00");
-
-                //// For test only
-                //Stopwatch sw = new Stopwatch();
-                //sw.Start();
-                //SuggestedReferences refereces = new SuggestedReferences(syspos.curSystem.x, syspos.curSystem.y, syspos.curSystem.z);
-
-                //ReferenceSystem rsys;
-
-                //for (int ii = 0; ii < 16; ii++)
-                //{
-                //    rsys = refereces.GetCandidate();
-                //    refereces.AddReferenceStar(rsys.System);
-                //    System.Diagnostics.Trace.WriteLine(rsys.System.name + " Dist: " + rsys.Distance.ToString("0.00") + " x:" + rsys.System.x.ToString() + " y:" + rsys.System.y.ToString() + " z:" + rsys.System.z.ToString() );
-                //}
-                //sw.Stop();
-                //System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-
-
             }
-            else
+            else if (syspos.X == 0.0 && syspos.Y == 0.0 && syspos.Z == 0.0)
             {
                 textBoxX.Text = "?";
                 textBoxY.Text = "?";
                 textBoxZ.Text = "?";
                 textBoxSolDist.Text = "";
+            }
+            else
+            {
+                textBoxX.Text = syspos.X.ToString(SingleCoordinateFormat);
+                textBoxY.Text = syspos.Y.ToString(SingleCoordinateFormat);
+                textBoxZ.Text = syspos.Z.ToString(SingleCoordinateFormat);
 
+                textBoxSolDist.Text = Math.Sqrt(syspos.X * syspos.X + syspos.Y * syspos.Y + syspos.Z * syspos.Z).ToString("0.00");
             }
 
             int count = GetVisitsCount(syspos.curSystem.name);
@@ -379,76 +390,81 @@ namespace EDDiscovery
 
         private void ShowClosestSystems(string name)
         {
-            sysDist = new List<SystemDist>();
-            SystemClass lastSystem = null;
-            float dx, dy, dz;
-            double dist;
+            Debug.Assert(name != null && name.Length != 0);
 
-            try
+            labelclosests.Text = "";
+            dataGridViewNearest.Rows.Clear();
+
+            SystemClass lastSystem = SystemData.GetSystem(name);
+
+            double x, y, z;
+
+            if ( lastSystem == null )
             {
-                if (name == null)
-                {
+                VisitedSystemsClass vsc = visitedSystems.Find(q => q.Name.Equals(name) );
 
-                    var result = visitedSystems.OrderByDescending(a => a.Time).ToList<VisitedSystemsClass>();
-
-
-                    for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
-                    {
-                        VisitedSystemsClass item = result[ii];
-
-                        lastSystem = SystemData.GetSystem(item.Name);
-                        name = item.Name;
-                        if (lastSystem != null)
-                            break;
-                    }
-
-                }
-                else
-                {
-                    lastSystem = SystemData.GetSystem(name);
-                }
-
-                if (name !=null)
-                    labelclosests.Text = "Closest systems from " + name;
-
-                dataGridViewNearest.Rows.Clear();
-
-                if (lastSystem == null)
+                if (vsc == null || !vsc.HasTravelCoordinates) // if not found, or no co-ord
                     return;
 
-                foreach (SystemClass pos in SystemData.SystemList)
+                x = vsc.X;
+                y = vsc.Y;
+                z = vsc.Z;
+            }
+            else
+            {
+                x = lastSystem.x;
+                y = lastSystem.y;
+                z = lastSystem.z;
+            }
+
+            labelclosests.Text = "Closest systems from " + name;
+
+            sysDist = new List<SystemDist>();
+            double dist;
+            double dx, dy, dz;
+
+            foreach (SystemClass pos in SystemData.SystemList)
+            {
+                dx = (pos.x - x);
+                dy = (pos.y - y);
+                dz = (pos.z - z);
+                dist = dx * dx + dy * dy + dz * dz;
+
+                if (dist > 0)
                 {
+                    SystemDist sdist = new SystemDist();
+                    sdist.name = pos.name;
+                    sdist.dist = Math.Sqrt(dist);
+                    sysDist.Add(sdist);
+                }
+            }
 
-                    dx = (float)(pos.x - lastSystem.x);
-                    dy = (float)(pos.y - lastSystem.y);
-                    dz = (float)(pos.z - lastSystem.z);
+            foreach (VisitedSystemsClass pos in visitedSystems)
+            {
+                if (pos.HasTravelCoordinates && SystemData.GetSystem(name) == null)
+                {
+                    dx = (pos.X - x);
+                    dy = (pos.Y - y);
+                    dz = (pos.Z - z);
                     dist = dx * dx + dy * dy + dz * dz;
-
-                    //distance = (float)((system.x - arcsystem.x) * (system.x - arcsystem.x) + (system.y - arcsystem.y) * (system.y - arcsystem.y) + (system.z - arcsystem.z) * (system.z - arcsystem.z));
 
                     if (dist > 0)
                     {
                         SystemDist sdist = new SystemDist();
-                        sdist.name = pos.name;
+                        sdist.name = pos.Name;
                         sdist.dist = Math.Sqrt(dist);
                         sysDist.Add(sdist);
                     }
                 }
-
-                var list = (from t in sysDist orderby t.dist select t).Take(50);
-
-                foreach (SystemDist sdist in list)
-                {
-                    object[] rowobj = { sdist.name, sdist.dist.ToString("0.00") };
-                    dataGridViewNearest.Rows.Add(rowobj);
-                }
             }
-            catch (Exception ex)
+
+            var list = (from t in sysDist orderby t.dist select t).Take(50);
+
+            foreach (SystemDist sdist in list)
             {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                object[] rowobj = { sdist.name, sdist.dist.ToString("0.00") };
+                dataGridViewNearest.Rows.Add(rowobj);
             }
-
         }
 
 
@@ -500,7 +516,7 @@ namespace EDDiscovery
                     visitedSystems.Clear();
                 RefreshHistory();
                 if (_discoveryForm.Map != null)
-                    _discoveryForm.Map.SetVisited(visitedSystems);
+                    _discoveryForm.Map.UpdateVisited(visitedSystems);
             }
         }
 
@@ -518,15 +534,6 @@ namespace EDDiscovery
         private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
-        }
-
-        private void dataGridViewTravel_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                ShowSystemInformation((VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag));
-            }
-
         }
 
         private void buttonMap_Click(object sender, EventArgs e)
@@ -556,8 +563,7 @@ namespace EDDiscovery
             string selname = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
             map.Prepare(selname, _discoveryForm.settings.MapHomeSystem,
                         _discoveryForm.settings.MapCentreOnSelection ? selname : _discoveryForm.settings.MapHomeSystem,
-                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames);
-            map.SetVisited(visitedSystems);
+                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames, visitedSystems);
             map.Show();
         }
         
@@ -565,7 +571,10 @@ namespace EDDiscovery
         {
             if (e.RowIndex >= 0)
             {
-                ShowSystemInformation((VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag));
+                VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag);
+
+                ShowSystemInformation(currentsys);
+                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
 
                 if (e.ColumnIndex == TravelHistoryColumns.Note)
                 {
@@ -580,6 +589,16 @@ namespace EDDiscovery
                 }
             }
 
+        }
+
+        private void dataGridViewTravel_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag);
+                ShowSystemInformation(currentsys);
+                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
+            }
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
@@ -780,7 +799,7 @@ namespace EDDiscovery
 
         private void UpdateNewPosition(string name)
         {
-            LogText("Arrived to system: ");
+            LogText("Arrived at system: ");
             SystemClass sys1 = SystemData.GetSystem(name);
             if (sys1 == null || sys1.HasCoordinate == false)
                 LogTextHighlight(name);
@@ -789,8 +808,8 @@ namespace EDDiscovery
 
             int count = GetVisitsCount(name);
 
-            LogText("  : Vist nr " + count.ToString() + Environment.NewLine);
-            System.Diagnostics.Trace.WriteLine("Arrived to system: " + name + " " + count.ToString() + ":th visit.");
+            LogText(": Visit No. " + count.ToString() + Environment.NewLine);
+            System.Diagnostics.Trace.WriteLine("Arrived at system: " + name + " " + count.ToString() + ":th visit.");
 
             var result = visitedSystems.OrderByDescending(a => a.Time).ToList<VisitedSystemsClass>();
 
@@ -853,8 +872,16 @@ namespace EDDiscovery
 
             Invoke((MethodInvoker)delegate
             {
-                _discoveryForm.Map.SetVisited(visitedSystems);      // update in UI thread.
+                _discoveryForm.Map.UpdateVisited(visitedSystems);      // update in UI thread.
             });
+
+            // Move focus to new row
+            if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
+            {
+                dataGridViewTravel.ClearSelection();
+                dataGridViewTravel.Rows[0].Cells[0].Selected = true; // This won't raise the CellClick handler, which updates the rest of the form
+                dataGridViewTravel_CellClick(dataGridViewTravel, new DataGridViewCellEventArgs(0, 0));
+            }
         }
 
         private int GetVisitsCount(string name)
@@ -877,7 +904,12 @@ namespace EDDiscovery
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {           // autopaint the row number..
             var grid = sender as DataGridView;
-            var rowIdx = (e.RowIndex + 1).ToString();
+            string rowIdx;
+
+            if (_discoveryForm.settings.OrderRowsInverted )
+                rowIdx = (dataGridViewTravel.Rows.Count - e.RowIndex).ToString();
+            else
+                rowIdx = (e.RowIndex + 1).ToString();
 
             var centerFormat = new StringFormat()
             {
@@ -1025,7 +1057,6 @@ namespace EDDiscovery
                 .Distinct();
 
             this.Cursor = Cursors.WaitCursor;
-            string sysName = "";
             foreach (DataGridViewRow r in selectedRows)
             {
                 VisitedSystemsClass sp = null;
@@ -1061,7 +1092,6 @@ namespace EDDiscovery
             List<VisitedSystemsClass> listsyspos = new List<VisitedSystemsClass>();
 
             this.Cursor = Cursors.WaitCursor;
-            string sysName = "";
             foreach (DataGridViewRow r in selectedRows)
             {
                 VisitedSystemsClass sp = null;
@@ -1235,13 +1265,16 @@ namespace EDDiscovery
 
         private void buttonEDSM_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
+            if (currentSysPos != null && currentSysPos.curSystem != null) // solve a possible exception
             {
-                EDSMClass edsm = new EDSMClass();
-                string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
-                Process.Start(url);
-                //if (currentSysPos.curSystem.id_eddb > 0)
-                //Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
+                if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
+                {
+                    EDSMClass edsm = new EDSMClass();
+                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
+                    Process.Start(url);
+                    //if (currentSysPos.curSystem.id_eddb > 0)
+                    //Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
+                }
             }
         }
     }
