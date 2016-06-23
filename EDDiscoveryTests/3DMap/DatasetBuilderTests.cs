@@ -96,7 +96,7 @@ namespace EDDiscovery2._3DMap.Tests
             _subject = new DatasetBuilder
             {
                 CenterSystem = new DB.InMemory.SystemClass(),
-                StarList = SpawnStars()
+                StarList = SpawnStars().Select(s => new SystemClassStarNames(s)).ToList()
             };
         }
 
