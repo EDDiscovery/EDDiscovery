@@ -117,10 +117,7 @@ namespace EDDiscovery2
 
         private float _znear;
         private float _zfar;
-        private bool _useTimer;
-
-        private DateTime maxstardate = new DateTime(2016, 1, 1);
-        bool Animatetime = false;
+        private bool _timerRunning;
 
         private bool _isActivated = false;
 
@@ -345,7 +342,7 @@ namespace EDDiscovery2
         private void FormMap_Activated(object sender, EventArgs e)
         {
             _isActivated = true;
-            _useTimer = false;
+            _timerRunning = false;      // this causes ApplicationIdle to kick the first invalidate off..
             glControl.Invalidate();
 
         }
@@ -353,7 +350,7 @@ namespace EDDiscovery2
         private void FormMap_Deactivate(object sender, EventArgs e)
         {
             _isActivated = false;
-            _useTimer = true;
+            _timerRunning = true;
             UpdateTimer.Stop();
         }
 
@@ -370,6 +367,24 @@ namespace EDDiscovery2
 
             e.Cancel = true;
             this.Hide();
+        }
+
+        private void glControl_Load(object sender, EventArgs e)
+        {
+            GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
+
+            SetupViewport();
+
+            _loaded = true;
+
+            Application.Idle += Application_Idle;
+            _timerRunning = false;              // timer is not running, app idle will kick it off..
+        }
+
+        private void Application_Idle(object sender, EventArgs e)
+        {
+            if (!_timerRunning)                 // used when keyboard or camera slew, and at first load..
+                glControl.Invalidate();
         }
 
         private void LoadMapImages()
@@ -494,34 +509,6 @@ namespace EDDiscovery2
             toolStripShowAllStars.Items.Add(startPickerHost);
             toolStripShowAllStars.Items.Add(endPickerHost);
         }
-
-        /// <summary>
-        /// Loads Control
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void glControl_Load(object sender, EventArgs e)
-        {
-
-            GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
-
-            SetupViewport();
-
-            _loaded = true;
-
-            Application.Idle += Application_Idle;
-            _useTimer = false;
-        }
-
-
-        private void Application_Idle(object sender, EventArgs e)
-        {
-            if (!_useTimer)
-            {
-                glControl.Invalidate();
-            }
-        }
-
 
         private void glControl_Resize(object sender, EventArgs e)
         {
@@ -1377,19 +1364,19 @@ namespace EDDiscovery2
 
             if (_kbdActions.Any() || _cameraSlewProgress < 1.0f)
             {
-                if (_useTimer)
+                if (_timerRunning)                              // keyboard actions and camera slew rely on application idle to kick it.
                 {
                     UpdateTimer.Stop();
-                    _useTimer = false;
+                    _timerRunning = false;
                 }
             }
             else
             {
-                if (!_useTimer || Animatetime)
+                if (!_timerRunning )                            // restart timer
                 {
                     UpdateTimer.Interval = 100;
                     UpdateTimer.Start();
-                    _useTimer = true;
+                    _timerRunning = true;
                 }
                 else
                 {
@@ -1401,20 +1388,7 @@ namespace EDDiscovery2
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
-
-            if (Animatetime)
-            {
-                maxstardate = maxstardate.AddHours(10);
-
-                DatasetBuilder build = CreateBuilder();
-                build.UpdateSystems(ref _datasets_zeropopstars, maxstardate);
-                build = null;
-
-                if (maxstardate > DateTime.Now)
-                    Animatetime = false;
-            }
-
-            glControl.Invalidate();
+            glControl.Invalidate();                             // timer tick kicks paint..
         }
 
 #endregion
@@ -1772,18 +1746,14 @@ namespace EDDiscovery2
 
         private void glControl_KeyDown(object sender, KeyEventArgs e)
         {
-            if (_useTimer)
-            {
+            if (_timerRunning)
                 glControl.Invalidate();
-            }
         }
 
         private void glControl_KeyUp(object sender, KeyEventArgs e)
         {
-            if (_useTimer)
-            {
+            if (_timerRunning)
                 glControl.Invalidate();
-            }
         }
 
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
@@ -1950,10 +1920,11 @@ namespace EDDiscovery2
 
         private void glControl_DoubleClick(object sender, EventArgs e)
         {
-            //Console.WriteLine("Double Click");
-            SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
-            travelHistoryControl.SetTravelHistoryPosition(_clickedSystem.name);
-
+            if (_clickedSystem != null)
+            {
+                SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
+                travelHistoryControl.SetTravelHistoryPosition(_clickedSystem.name);
+            }
         }
 
         /// <summary>
