@@ -138,54 +138,25 @@ namespace EDDiscovery
             if (visitedSystems == null)
                 return;
 
- 
+            for (int i = 0; i < visitedSystems.Count; i++)  // added, to make sure cursystem is filled in
+            {
+                UpdateVisitedSystemsEntries(visitedSystems[i], (i < visitedSystems.Count - 1) ? visitedSystems[i + 1] : null);
+            }
+
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
 
             dataGridViewTravel.Rows.Clear();
 
-//            System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
+            //            System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
 
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
-
                 VisitedSystemsClass item = result[ii];
-                VisitedSystemsClass item2;
-
-                if (ii < result.Count - 1)
-                    item2 = result[ii + 1];
-                else
-                    item2 = null;
-
-                AddHistoryRow(false, item, item2);
+                AddNewHistoryRow(false, item);      // for every one in filter, add a row.
             }
 
-
-            if (result.Count != visitedSystems.Count)
-            {
-                // we didn't put all the systems in the history grid
-                // make sure that the LastKnown system is properly loaded if it's not visible so trilateration can find it...
-                var lastKnown = (from systems
-                                 in visitedSystems
-                                 where systems.curSystem != null && systems.curSystem.HasCoordinate
-                                 orderby systems.Time descending
-                                 select systems.curSystem).FirstOrDefault();
-                if (lastKnown == null)
-                {
-                    for (int ii = visitedSystems.Count - 1; ii > 0; ii--)
-                    {
-                        SystemClass sys = SystemData.GetSystem(visitedSystems[ii].Name);
-                        if (visitedSystems[ii].curSystem == null && sys != null)
-                        {
-                            visitedSystems[ii].curSystem = sys;
-                            if (sys.HasCoordinate) break;
-                        }
-                    }
-                }
-
-            }
-
-//            System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
+            //            System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
 
             if (dataGridViewTravel.Rows.Count > 0)
             {
@@ -210,11 +181,10 @@ namespace EDDiscovery
             }
         }
 
-        private void AddHistoryRow(bool insert, VisitedSystemsClass item, VisitedSystemsClass item2)
+        private void UpdateVisitedSystemsEntries(VisitedSystemsClass item, VisitedSystemsClass item2)           // this is a split in two version with the same code of AddHistoryRow..
         {
-            SystemClass sys1 = null, sys2;
+            SystemClass sys1 = null, sys2;                                                                      // fills in cursystem and prevsystem, and calcs distance
             double dist;
-
 
             sys1 = SystemData.GetSystem(item.Name);
             if (sys1 == null)
@@ -244,7 +214,6 @@ namespace EDDiscovery
                         sys2.z = item2.Z;
                     }
                 }
-
             }
             else
                 sys2 = null;
@@ -252,17 +221,14 @@ namespace EDDiscovery
             item.curSystem = sys1;
             item.prevSystem = sys2;
 
-
             string diststr = "";
             dist = 0;
             if (sys2 != null)
             {
-
                 if (sys1.HasCoordinate && sys2.HasCoordinate)
                     dist = SystemData.Distance(sys1, sys2);
                 else
                 {
-
                     dist = DistanceClass.Distance(sys1, sys2);
                 }
 
@@ -271,10 +237,11 @@ namespace EDDiscovery
             }
 
             item.strDistance = diststr;
+        }
 
-            //richTextBox_History.AppendText(item.time + " " + item.Name + Environment.NewLine);
-
-            object[] rowobj = { item.Time, item.Name, diststr, item.curSystem.Note, "█" };
+        private void AddNewHistoryRow(bool insert, VisitedSystemsClass item)            // second part of add history row, adds item to view.
+        { 
+            object[] rowobj = { item.Time, item.Name, item.strDistance, item.curSystem.Note, "█" };
             int rownr;
 
             if (insert)
@@ -292,20 +259,18 @@ namespace EDDiscovery
 
             cell.Tag = item;
 
-
             bool hascoord; 
 
             if (item.HasTravelCoordinates)
-              hascoord  = true;
+                hascoord  = true;
             else 
-                hascoord = sys1.HasCoordinate;
+                hascoord = item.curSystem.HasCoordinate;
 
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (hascoord) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
             cell = dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.Map];
             cell.Style.ForeColor = Color.FromArgb(item.MapColour);
         }
-
 
 
         private void ShowSystemInformation(VisitedSystemsClass syspos)
@@ -888,7 +853,8 @@ namespace EDDiscovery
             textBoxDistanceToNextSystem.Clear();
             textBoxDistanceToNextSystem.Enabled = true;
 
-            AddHistoryRow(true, item, item2);
+            UpdateVisitedSystemsEntries(item, item2);
+            AddNewHistoryRow(true, item);
             StoreSystemNote();
 
             Invoke((MethodInvoker)delegate
