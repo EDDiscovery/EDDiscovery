@@ -589,6 +589,28 @@ namespace EDDiscovery
 
         }
 
+        private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+            {
+                if (dataGridViewTravel.SelectedCells.Count < 2 || dataGridViewTravel.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
+                {
+                    DataGridView.HitTestInfo hti = dataGridViewTravel.HitTest(e.X, e.Y);
+                    if (hti.Type == DataGridViewHitTestType.Cell)
+                    {
+                        dataGridViewTravel.ClearSelection();                // select row under cursor.
+                        dataGridViewTravel.Rows[hti.RowIndex].Selected = true;
+                    }
+                }
+            }
+        }
+
+        private void historyContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            if (dataGridViewTravel.SelectedCells.Count == 0)      // need something selected  stops context menu opening on nothing..
+                e.Cancel = true;
+        }
+
         private void dataGridViewTravel_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -1008,6 +1030,25 @@ namespace EDDiscovery
             dataGridViewTravel.ResumeLayout();
         }
 
+        private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!_discoveryForm.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
+                buttonMap_Click(sender, e);
+
+            if (_discoveryForm.Map.Is3DMapsRunning)             // double check here! for paranoia.
+            {
+                if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
+                {
+                    string s = (string)dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[TravelHistoryColumns.SystemName].Value;
+
+                    if (_discoveryForm.Map.MoveToSystem(s))
+                        _discoveryForm.Map.Show();
+                    else
+                        MessageBox.Show("System does not have co-ordinates");
+                }
+            }
+        }
+
         private void starMapColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
@@ -1267,6 +1308,23 @@ namespace EDDiscovery
                     //Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
                 }
             }
+        }
+
+        public bool SetTravelHistoryPosition( string sysname )
+        {
+            foreach (DataGridViewRow item in dataGridViewTravel.Rows)
+            {
+                string s = (string)item.Cells[TravelHistoryColumns.SystemName].Value;
+                if (s.Equals(sysname) && item.Visible )
+                {
+                    dataGridViewTravel.ClearSelection();
+                    item.Selected = true;           // select row
+                    dataGridViewTravel.CurrentCell = item.Cells[TravelHistoryColumns.SystemName];       // and ensure visible.
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 

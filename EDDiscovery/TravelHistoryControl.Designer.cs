@@ -30,8 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -129,13 +130,22 @@
             // historyContextMenu
             // 
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mapGotoStartoolStripMenuItem,
             this.starMapColourToolStripMenuItem,
             this.hideSystemToolStripMenuItem,
             this.moveToAnotherCommanderToolStripMenuItem,
             this.addToTrilaterationToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 114);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 158);
+            this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
+            // 
+            // mapGotoStartoolStripMenuItem
+            // 
+            this.mapGotoStartoolStripMenuItem.Name = "mapGotoStartoolStripMenuItem";
+            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
+            this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
             // 
             // starMapColourToolStripMenuItem
             // 
@@ -965,6 +975,7 @@
             this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellContentDoubleClick);
             this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
+            this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
             // 
             // ColumnTime
             // 
@@ -1001,8 +1012,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle4;
             this.mapColour.HeaderText = "Map";
             this.mapColour.MinimumWidth = 40;
             this.mapColour.Name = "mapColour";
@@ -1185,5 +1196,6 @@
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
         private ExtendedControls.ButtonExt buttonEDSM;
+        private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
     }
 }

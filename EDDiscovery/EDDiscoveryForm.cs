@@ -113,7 +113,7 @@ namespace EDDiscovery
             savedRouteExpeditionControl1.InitControl(this);
 
             SystemNames = new AutoCompleteStringCollection();
-            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition);
+            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition,travelHistoryControl1);
 
             ApplyTheme(false);
         }
