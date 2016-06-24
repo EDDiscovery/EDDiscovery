@@ -22,6 +22,9 @@ namespace EDDiscovery2
     {
         #region Variables
 
+        public bool noWindowReposition { get; set; } = false;                       // set externally
+        public TravelHistoryControl travelHistoryControl { get; set; } = null;      // set externally
+
         const int HELP_VERSION = 1;         // increment this to force help onto the screen of users first time.
 
         SQLiteDBClass db;
@@ -119,9 +122,9 @@ namespace EDDiscovery2
         private DateTime maxstardate = new DateTime(2016, 1, 1);
         bool Animatetime = false;
 
-        public bool Nowindowreposition { get; set; } = false;
+        private bool _isActivated = false;
 
-        bool isActivated = false;
+        public bool Is3DMapsRunning { get { return _starnames != null;  } }
 
         #endregion
 
@@ -300,7 +303,7 @@ namespace EDDiscovery2
         {
             var top = db.GetSettingInt("Map3DFormTop", -1);
 
-            if (top >= 0 && Nowindowreposition == false)
+            if (top >= 0 && noWindowReposition == false)
             {
                 var left = db.GetSettingInt("Map3DFormLeft", 0);
                 var height = db.GetSettingInt("Map3DFormHeight", 800);
@@ -341,7 +344,7 @@ namespace EDDiscovery2
 
         private void FormMap_Activated(object sender, EventArgs e)
         {
-            isActivated = true;
+            _isActivated = true;
             _useTimer = false;
             glControl.Invalidate();
 
@@ -349,7 +352,7 @@ namespace EDDiscovery2
 
         private void FormMap_Deactivate(object sender, EventArgs e)
         {
-            isActivated = false;
+            _isActivated = false;
             _useTimer = true;
             UpdateTimer.Stop();
         }
@@ -974,12 +977,15 @@ namespace EDDiscovery2
                 labelSystemCoords.Text = "No centre system";
         }
 
-        private void SetCenterSystemTo(string name, bool moveto)
+        public bool SetCenterSystemTo(string name, bool moveto)
         {
-            SetCenterSystemTo(FindSystem(name), moveto);
+            if (_starnames != null)                         // if null, we are not up and running
+                return SetCenterSystemTo(FindSystem(name), moveto);
+            else
+                return false;
         }
 
-        private void SetCenterSystemTo(SystemClassStarNames sys, bool moveto)        
+        private bool SetCenterSystemTo(SystemClassStarNames sys, bool moveto)        
         {
             if (sys != null)
             {
@@ -991,7 +997,11 @@ namespace EDDiscovery2
                     StartCameraSlew();
 
                 glControl.Invalidate();
+
+                return true;
             }
+            else
+                return false;
         }
         
 
@@ -1011,7 +1021,7 @@ namespace EDDiscovery2
         {
             _kbdActions.Reset();
 
-            if ( !isActivated || !glControl.Focused)
+            if ( !_isActivated || !glControl.Focused)
                     return;
 
             try
@@ -1942,6 +1952,8 @@ namespace EDDiscovery2
         {
             //Console.WriteLine("Double Click");
             SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
+            travelHistoryControl.SetTravelHistoryPosition(_clickedSystem.name);
+
         }
 
         /// <summary>
