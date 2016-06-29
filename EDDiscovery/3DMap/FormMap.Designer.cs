@@ -42,13 +42,21 @@ namespace EDDiscovery2
             this.buttonCenter = new System.Windows.Forms.Button();
             this.labelSystemCoords = new System.Windows.Forms.Label();
             this.toolStripShowAllStars = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonGoBackward = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonGoForward = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLastKnownPosition = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonAutoForward = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDrawLines = new System.Windows.Forms.ToolStripButton();
             this.toolStripDropDownButtonFilterStars = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripButtonShowAllStars = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonStations = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.showStarstoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showStationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButtonStarNames = new System.Windows.Forms.ToolStripButton();
+            this.toolStripDropDownButtonBookmarks = new System.Windows.Forms.ToolStripDropDownButton();
+            this.showBookmarksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showNoteMarksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newRegionBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButtonGrid = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonFineGrid = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCoords = new System.Windows.Forms.ToolStripButton();
@@ -59,6 +67,8 @@ namespace EDDiscovery2
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.dropdownMapNames = new System.Windows.Forms.ToolStripDropDownButton();
             this.dropdownFilterDate = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonHelp = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonHistory = new System.Windows.Forms.Button();
@@ -91,7 +101,7 @@ namespace EDDiscovery2
             this.glControl.BackColor = System.Drawing.Color.Black;
             this.glControl.Location = new System.Drawing.Point(0, 44);
             this.glControl.Name = "glControl";
-            this.glControl.Size = new System.Drawing.Size(984, 693);
+            this.glControl.Size = new System.Drawing.Size(1114, 753);
             this.glControl.TabIndex = 0;
             this.glControl.VSync = true;
             this.glControl.Load += new System.EventHandler(this.glControl_Load);
@@ -146,10 +156,15 @@ namespace EDDiscovery2
             this.toolStripShowAllStars.AutoSize = false;
             this.toolStripShowAllStars.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStripShowAllStars.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonGoBackward,
+            this.toolStripButtonGoForward,
             this.toolStripButtonLastKnownPosition,
+            this.toolStripButtonAutoForward,
+            this.toolStripSeparator5,
             this.toolStripButtonDrawLines,
             this.toolStripDropDownButtonFilterStars,
             this.toolStripButtonStarNames,
+            this.toolStripDropDownButtonBookmarks,
             this.toolStripButtonGrid,
             this.toolStripButtonFineGrid,
             this.toolStripButtonCoords,
@@ -159,12 +174,34 @@ namespace EDDiscovery2
             this.toolStripButtonEliteMovement,
             this.toolStripSeparator2,
             this.dropdownMapNames,
-            this.dropdownFilterDate});
+            this.dropdownFilterDate,
+            this.toolStripSeparator6,
+            this.toolStripButtonHelp});
             this.toolStripShowAllStars.Location = new System.Drawing.Point(0, 0);
             this.toolStripShowAllStars.Name = "toolStripShowAllStars";
-            this.toolStripShowAllStars.Size = new System.Drawing.Size(397, 40);
+            this.toolStripShowAllStars.Size = new System.Drawing.Size(527, 40);
             this.toolStripShowAllStars.TabIndex = 19;
             this.toolStripShowAllStars.Text = "toolStrip1";
+            // 
+            // toolStripButtonGoBackward
+            // 
+            this.toolStripButtonGoBackward.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonGoBackward.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGoBackward.Image")));
+            this.toolStripButtonGoBackward.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonGoBackward.Name = "toolStripButtonGoBackward";
+            this.toolStripButtonGoBackward.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonGoBackward.Text = "Go Backward in Travel History";
+            this.toolStripButtonGoBackward.Click += new System.EventHandler(this.toolStripButtonGoBackward_Click);
+            // 
+            // toolStripButtonGoForward
+            // 
+            this.toolStripButtonGoForward.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonGoForward.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGoForward.Image")));
+            this.toolStripButtonGoForward.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonGoForward.Name = "toolStripButtonGoForward";
+            this.toolStripButtonGoForward.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonGoForward.Text = "Go Forward in Travel History";
+            this.toolStripButtonGoForward.Click += new System.EventHandler(this.toolStripButtonGoForward_Click);
             // 
             // toolStripButtonLastKnownPosition
             // 
@@ -173,8 +210,26 @@ namespace EDDiscovery2
             this.toolStripButtonLastKnownPosition.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLastKnownPosition.Name = "toolStripButtonLastKnownPosition";
             this.toolStripButtonLastKnownPosition.Size = new System.Drawing.Size(23, 37);
-            this.toolStripButtonLastKnownPosition.Text = "Center map on last known position from travel history";
+            this.toolStripButtonLastKnownPosition.Text = "Go to latest position from travel history";
             this.toolStripButtonLastKnownPosition.Click += new System.EventHandler(this.toolStripLastKnownPosition_Click);
+            // 
+            // toolStripButtonAutoForward
+            // 
+            this.toolStripButtonAutoForward.Checked = true;
+            this.toolStripButtonAutoForward.CheckOnClick = true;
+            this.toolStripButtonAutoForward.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripButtonAutoForward.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAutoForward.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAutoForward.Image")));
+            this.toolStripButtonAutoForward.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAutoForward.Name = "toolStripButtonAutoForward";
+            this.toolStripButtonAutoForward.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonAutoForward.Text = "Go Forward Automatically on Jump";
+            this.toolStripButtonAutoForward.Click += new System.EventHandler(this.toolStripButtonAutoForward_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 40);
             // 
             // toolStripButtonDrawLines
             // 
@@ -192,44 +247,43 @@ namespace EDDiscovery2
             // 
             this.toolStripDropDownButtonFilterStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDropDownButtonFilterStars.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonShowAllStars,
-            this.toolStripButtonStations,
-            this.toolStripSeparator4});
+            this.toolStripSeparator4,
+            this.showStarstoolStripMenuItem,
+            this.showStationsToolStripMenuItem});
             this.toolStripDropDownButtonFilterStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonFilterStars.Image")));
             this.toolStripDropDownButtonFilterStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButtonFilterStars.Name = "toolStripDropDownButtonFilterStars";
             this.toolStripDropDownButtonFilterStars.Size = new System.Drawing.Size(29, 37);
             this.toolStripDropDownButtonFilterStars.Text = "Filter Stars";
             // 
-            // toolStripButtonShowAllStars
-            // 
-            this.toolStripButtonShowAllStars.Checked = true;
-            this.toolStripButtonShowAllStars.CheckOnClick = true;
-            this.toolStripButtonShowAllStars.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButtonShowAllStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonShowAllStars.Image")));
-            this.toolStripButtonShowAllStars.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonShowAllStars.Name = "toolStripButtonShowAllStars";
-            this.toolStripButtonShowAllStars.Size = new System.Drawing.Size(98, 20);
-            this.toolStripButtonShowAllStars.Text = "Show all stars";
-            this.toolStripButtonShowAllStars.Click += new System.EventHandler(this.toolStripButtonShowAllStars_Click);
-            // 
-            // toolStripButtonStations
-            // 
-            this.toolStripButtonStations.Checked = true;
-            this.toolStripButtonStations.CheckOnClick = true;
-            this.toolStripButtonStations.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButtonStations.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonStations.Image")));
-            this.toolStripButtonStations.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripButtonStations.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonStations.Name = "toolStripButtonStations";
-            this.toolStripButtonStations.Size = new System.Drawing.Size(77, 28);
-            this.toolStripButtonStations.Text = "Stations";
-            this.toolStripButtonStations.Click += new System.EventHandler(this.toolStripButtonStations_Click);
-            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(155, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(145, 6);
+            // 
+            // showStarstoolStripMenuItem
+            // 
+            this.showStarstoolStripMenuItem.Checked = true;
+            this.showStarstoolStripMenuItem.CheckOnClick = true;
+            this.showStarstoolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showStarstoolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showStarstoolStripMenuItem.Image")));
+            this.showStarstoolStripMenuItem.Name = "showStarstoolStripMenuItem";
+            this.showStarstoolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.showStarstoolStripMenuItem.Text = "Show All Stars";
+            this.showStarstoolStripMenuItem.ToolTipText = "Show all stars";
+            this.showStarstoolStripMenuItem.Click += new System.EventHandler(this.showStarstoolStripMenuItem_Click);
+            // 
+            // showStationsToolStripMenuItem
+            // 
+            this.showStationsToolStripMenuItem.Checked = true;
+            this.showStationsToolStripMenuItem.CheckOnClick = true;
+            this.showStationsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showStationsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showStationsToolStripMenuItem.Image")));
+            this.showStationsToolStripMenuItem.Name = "showStationsToolStripMenuItem";
+            this.showStationsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.showStationsToolStripMenuItem.Text = "Show Stations";
+            this.showStationsToolStripMenuItem.ToolTipText = "Show Stations";
+            this.showStationsToolStripMenuItem.Click += new System.EventHandler(this.showStationsToolStripMenuItem_Click);
             // 
             // toolStripButtonStarNames
             // 
@@ -242,6 +296,50 @@ namespace EDDiscovery2
             this.toolStripButtonStarNames.Text = "Star Names";
             this.toolStripButtonStarNames.ToolTipText = "Enable Star Naming at higher zoom levels";
             this.toolStripButtonStarNames.Click += new System.EventHandler(this.toolStripButtonStarNames_Click);
+            // 
+            // toolStripDropDownButtonBookmarks
+            // 
+            this.toolStripDropDownButtonBookmarks.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButtonBookmarks.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showBookmarksToolStripMenuItem,
+            this.showNoteMarksToolStripMenuItem,
+            this.newRegionBookmarkToolStripMenuItem});
+            this.toolStripDropDownButtonBookmarks.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonBookmarks.Image")));
+            this.toolStripDropDownButtonBookmarks.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButtonBookmarks.Name = "toolStripDropDownButtonBookmarks";
+            this.toolStripDropDownButtonBookmarks.Size = new System.Drawing.Size(29, 37);
+            this.toolStripDropDownButtonBookmarks.Text = "toolStripDropDownButton1";
+            this.toolStripDropDownButtonBookmarks.ToolTipText = "Enable or disable display of bookmarks and add a new region bookmark";
+            // 
+            // showBookmarksToolStripMenuItem
+            // 
+            this.showBookmarksToolStripMenuItem.Checked = true;
+            this.showBookmarksToolStripMenuItem.CheckOnClick = true;
+            this.showBookmarksToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showBookmarksToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showBookmarksToolStripMenuItem.Image")));
+            this.showBookmarksToolStripMenuItem.Name = "showBookmarksToolStripMenuItem";
+            this.showBookmarksToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.showBookmarksToolStripMenuItem.Text = "Show Bookmarks";
+            this.showBookmarksToolStripMenuItem.Click += new System.EventHandler(this.showBookmarksToolStripMenuItem_Click);
+            // 
+            // showNoteMarksToolStripMenuItem
+            // 
+            this.showNoteMarksToolStripMenuItem.Checked = true;
+            this.showNoteMarksToolStripMenuItem.CheckOnClick = true;
+            this.showNoteMarksToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showNoteMarksToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showNoteMarksToolStripMenuItem.Image")));
+            this.showNoteMarksToolStripMenuItem.Name = "showNoteMarksToolStripMenuItem";
+            this.showNoteMarksToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.showNoteMarksToolStripMenuItem.Text = "Show Note marks";
+            this.showNoteMarksToolStripMenuItem.Click += new System.EventHandler(this.showNoteMarksToolStripMenuItem_Click);
+            // 
+            // newRegionBookmarkToolStripMenuItem
+            // 
+            this.newRegionBookmarkToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newRegionBookmarkToolStripMenuItem.Image")));
+            this.newRegionBookmarkToolStripMenuItem.Name = "newRegionBookmarkToolStripMenuItem";
+            this.newRegionBookmarkToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.newRegionBookmarkToolStripMenuItem.Text = "New Region Bookmark";
+            this.newRegionBookmarkToolStripMenuItem.Click += new System.EventHandler(this.newRegionBookmarkToolStripMenuItem_Click);
             // 
             // toolStripButtonGrid
             // 
@@ -336,13 +434,28 @@ namespace EDDiscovery2
             this.dropdownFilterDate.Size = new System.Drawing.Size(29, 37);
             this.dropdownFilterDate.Text = "Filter by Expedition or date";
             // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 40);
+            // 
+            // toolStripButtonHelp
+            // 
+            this.toolStripButtonHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonHelp.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonHelp.Image")));
+            this.toolStripButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonHelp.Name = "toolStripButtonHelp";
+            this.toolStripButtonHelp.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonHelp.Text = "Help";
+            this.toolStripButtonHelp.Click += new System.EventHandler(this.toolStripButtonHelp_Click);
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 740);
+            this.statusStrip.Location = new System.Drawing.Point(0, 800);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(984, 22);
+            this.statusStrip.Size = new System.Drawing.Size(1114, 22);
             this.statusStrip.TabIndex = 21;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -465,7 +578,7 @@ namespace EDDiscovery2
             this.panelRight.Controls.Add(this.dotSystemCoords);
             this.panelRight.Controls.Add(this.buttonHome);
             this.panelRight.Controls.Add(this.buttonHistory);
-            this.panelRight.Location = new System.Drawing.Point(398, 0);
+            this.panelRight.Location = new System.Drawing.Point(528, 0);
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(586, 40);
             this.panelRight.TabIndex = 27;
@@ -474,7 +587,7 @@ namespace EDDiscovery2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 762);
+            this.ClientSize = new System.Drawing.Size(1114, 822);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.glControl);
             this.Controls.Add(this.toolStripShowAllStars);
@@ -487,6 +600,7 @@ namespace EDDiscovery2
             this.Deactivate += new System.EventHandler(this.FormMap_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMap_FormClosing);
             this.Load += new System.EventHandler(this.FormMap_Load);
+            this.Shown += new System.EventHandler(this.FormMap_Shown);
             this.toolStripShowAllStars.ResumeLayout(false);
             this.toolStripShowAllStars.PerformLayout();
             this.statusStrip.ResumeLayout(false);
@@ -511,8 +625,6 @@ namespace EDDiscovery2
         private ToolStrip toolStripShowAllStars;
         private ToolStripButton toolStripButtonLastKnownPosition;
         private ToolStripButton toolStripButtonDrawLines;
-        private ToolStripButton toolStripButtonShowAllStars;
-        private ToolStripButton toolStripButtonStations;
         private ToolStripButton toolStripButtonGrid;
         private StatusStrip statusStrip;
         private ToolStripStatusLabel statusLabel;
@@ -542,5 +654,17 @@ namespace EDDiscovery2
         private ToolStripDropDownButton toolStripDropDownButtonFilterStars;
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripButton toolStripButtonStarNames;
+        private ToolStripSeparator toolStripSeparator5;
+        private ToolStripDropDownButton toolStripDropDownButtonBookmarks;
+        private ToolStripMenuItem showBookmarksToolStripMenuItem;
+        private ToolStripMenuItem showNoteMarksToolStripMenuItem;
+        private ToolStripMenuItem newRegionBookmarkToolStripMenuItem;
+        private ToolStripMenuItem showStarstoolStripMenuItem;
+        private ToolStripMenuItem showStationsToolStripMenuItem;
+        private ToolStripButton toolStripButtonGoBackward;
+        private ToolStripButton toolStripButtonGoForward;
+        private ToolStripButton toolStripButtonAutoForward;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripButton toolStripButtonHelp;
     }
     }

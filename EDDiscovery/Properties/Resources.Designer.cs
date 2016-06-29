@@ -61,6 +61,37 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 3d map help
+        ///text resource
+        ///.
+        /// </summary>
+        internal static string _3dmaphelp {
+            get {
+                return ResourceManager.GetString("3dmaphelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap bookmarkbrightred {
+            get {
+                object obj = ResourceManager.GetObject("bookmarkbrightred", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap bookmarkgreen {
+            get {
+                object obj = ResourceManager.GetObject("bookmarkgreen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Homeicon {

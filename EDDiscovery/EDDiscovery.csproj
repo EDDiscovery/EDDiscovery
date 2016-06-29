@@ -172,6 +172,7 @@
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
+    <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
@@ -179,6 +180,18 @@
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
+    <Compile Include="Forms\BookmarkForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BookmarkForm.Designer.cs">
+      <DependentUpon>BookmarkForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\InfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InfoForm.Designer.cs">
+      <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
@@ -398,6 +411,9 @@
     </Content>
     <None Include="Resources\YellowDot.png" />
     <None Include="Resources\OrangeDot.png" />
+    <None Include="Resources\bookmarkbrightred.png" />
+    <None Include="Resources\bookmarkgreen.png" />
+    <None Include="Resources\3dmaphelp.txt" />
     <Content Include="Resources\imgCheck.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
@@ -430,6 +446,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BookmarkForm.resx">
+      <DependentUpon>BookmarkForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InfoForm.resx">
+      <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThemeEditor.resx">
       <DependentUpon>ThemeEditor.cs</DependentUpon>
