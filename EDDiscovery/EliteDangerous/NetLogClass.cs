@@ -121,7 +121,7 @@ namespace EDDiscovery
             }
         }
 
-
+        // called during start up and if refresh history is pressed.. 
 
         public List<VisitedSystemsClass> ParseFiles(ExtendedControls.RichTextBoxScroll richTextBox_History, int defaultMapColour)
         {
@@ -290,8 +290,10 @@ namespace EDDiscovery
                     }
                 }
             }
-            catch
+            catch( Exception ex )
             {
+                System.Diagnostics.Trace.WriteLine("Parse File exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
                 return 0;
             }
 
@@ -303,15 +305,10 @@ namespace EDDiscovery
         {
             DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
 
-            DateTime filetime = DateTime.Now.AddDays(-500);
-            string FirstLine = sr.ReadLine();
-            string line, str;
             NetLogFileInfo nfi = null;
             bool CQC = false;
 
-            str = "20" + FirstLine.Substring(0, 8) + " " + FirstLine.Substring(9, 5);
-
-            filetime = DateTime.Parse(str);
+            string FirstLine = sr.ReadLine();                  // read first line from file, may be null if file has not been written to yet
 
             if (netlogfiles.ContainsKey(fi.FullName))
             {
@@ -320,57 +317,69 @@ namespace EDDiscovery
                 sr.DiscardBufferedData();
                 CQC = nfi.CQC;
             }
-
-            while ((line = sr.ReadLine()) != null)
+            
+            if (FirstLine != null)  // may be empty if we read it too fast.. don't worry, monitor will pick it up
             {
-                if (line.Contains("[PG] [Notification] Left a playlist lobby"))
-                    CQC = false;
+                string str = "20" + FirstLine.Substring(0, 8) + " " + FirstLine.Substring(9, 5);
 
-                if (line.Contains("[PG] Destroying playlist lobby."))
-                    CQC = false;
+                DateTime filetime = DateTime.Now.AddDays(-500);
+                filetime = DateTime.Parse(str);
 
-                if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
-                    CQC = true;
-                if (line.Contains("[PG] Created playlist lobby"))
-                    CQC = true;
-                if (line.Contains("[PG] Found matchmaking lobby object"))
-                    CQC = true;
-
-                if (line.Contains(" System:") && CQC == false)
+                string line;
+                while ((line = sr.ReadLine()) != null)
                 {
-                    if (line.Contains("ProvingGround"))
-                        continue;
+                    if (line.Contains("[PG] [Notification] Left a playlist lobby"))
+                        CQC = false;
 
-                    VisitedSystemsClass ps = VisitedSystemsClass.Parse(filetime, line);
-                    if (ps != null)
-                    {   // Remove some training systems
-                        if (ps.Name.Equals("Training"))
-                            continue;
-                        if (ps.Name.Equals("Destination"))
-                            continue;
-                        if (ps.Name.Equals("Altiris"))
-                            continue;
-                        filetime = ps.Time;
+                    if (line.Contains("[PG] Destroying playlist lobby."))
+                        CQC = false;
 
-                        if (visitedSystems.Count > 0)
-                            if (visitedSystems[visitedSystems.Count - 1].Name.Equals(ps.Name))
+                    if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
+                        CQC = true;
+                    if (line.Contains("[PG] Created playlist lobby"))
+                        CQC = true;
+                    if (line.Contains("[PG] Found matchmaking lobby object"))
+                        CQC = true;
+
+                    if (line.Contains(" System:") && CQC == false)
+                    {
+                        if (line.Contains("ProvingGround"))
+                            continue;
+
+                        VisitedSystemsClass ps = VisitedSystemsClass.Parse(filetime, line);
+                        if (ps != null)
+                        {   // Remove some training systems
+                            if (ps.Name.Equals("Training"))
                                 continue;
+                            if (ps.Name.Equals("Destination"))
+                                continue;
+                            if (ps.Name.Equals("Altiris"))
+                                continue;
+                            filetime = ps.Time;
 
-                        if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma. 
-                        {
+                            if (visitedSystems.Count > 0)
+                                if (visitedSystems[visitedSystems.Count - 1].Name.Equals(ps.Name))
+                                    continue;
 
-                            
-                            visitedSystems.Add(ps);
-                            count++;
+                            if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma. 
+                            {
 
-                            //System.Diagnostics.Trace.WriteLine("Added system: " + ps.Name);
+
+                                visitedSystems.Add(ps);
+                                count++;
+
+                                //System.Diagnostics.Trace.WriteLine("Added system: " + ps.Name);
+                            }
+
+                            //Console.WriteLine(line);
                         }
-
-                        //Console.WriteLine(line);
                     }
                 }
             }
-
+            else
+            {
+                System.Diagnostics.Trace.WriteLine("File was empty (for now) " + fi.FullName);
+            }
 
             if (nfi ==null)
                 nfi = new NetLogFileInfo();
@@ -436,7 +445,7 @@ namespace EDDiscovery
             }
         }
 
-        private void NetLogMain()
+        private void NetLogMain()               // THREAD watching the files..
         {
             using (m_Watcher = new System.IO.FileSystemWatcher())
             {
@@ -480,8 +489,6 @@ namespace EDDiscovery
                 {
                     try
                     {
-
-
                         ii++;
                         //Thread.Sleep(2000);
                         NewLogEvent.WaitOne(2000);
