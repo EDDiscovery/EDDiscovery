@@ -401,8 +401,75 @@ namespace EDDiscovery2.DB
             }
         }
 
+        public static void CalculateSqDistances(List<VisitedSystemsClass> vs, SortedList<double,string> distlist , double x, double y, double z, int maxitems , bool removezerodiststar )
+        {
+            double dist;
+            double dx, dy, dz;
+            foreach (VisitedSystemsClass pos in vs)
+            {
+                if (pos.HasTravelCoordinates && distlist.IndexOfValue(pos.Name) == -1)   // if co-ords, and not in list already..
+                {
+                    dx = (pos.X - x);
+                    dy = (pos.Y - y);
+                    dz = (pos.Z - z);
+                    dist = dx * dx + dy * dy + dz * dz;
+
+                    if (dist > 0.001 || !removezerodiststar)
+                    {
+                        if (distlist.Count < maxitems)          // if less than max, add..
+                            distlist.Add(dist, pos.Name);
+                        else if (dist < distlist.Last().Key)   // if last entry (which must be the biggest) is greater than dist..
+                        {
+                            distlist.Add(dist, pos.Name);           // add in
+                            distlist.RemoveAt(maxitems);        // remove last..
+                        }
+                    }
+                }
+            }
+        }
+        
+        // centresysname is a default one
+
+        public static string FindNextVisitedSystem(List<VisitedSystemsClass> _visitedSystems, string sysname, int dir , string centresysname )
+        {
+            int index = _visitedSystems.FindIndex(x => x.Name.Equals(sysname));
+
+            if (index != -1)
+            {
+                if (dir == -1)
+                {
+                    if (index < 1)                                  //0, we go to the end and work from back..                      
+                        index = _visitedSystems.Count;
+
+                    int indexn = _visitedSystems.FindLastIndex(index - 1, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    if (indexn == -1)                             // from where we were, did not find one, try from back..
+                        indexn = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    return (indexn != -1) ? _visitedSystems[indexn].Name : centresysname;
+                }
+                else
+                {
+                    index++;
+
+                    if (index == _visitedSystems.Count)             // if at end, go to beginning
+                        index = 0;
+
+                    int indexn = _visitedSystems.FindIndex(index, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    if (indexn == -1)                             // if not found, go to beginning
+                        indexn = _visitedSystems.FindIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    return (indexn != -1) ? _visitedSystems[indexn].Name : centresysname;
+                }
+            }
+            else
+            {
+                index = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+                return (index != -1) ? _visitedSystems[index].Name : centresysname;
+            }
+        }
 
     }
-
 }
 

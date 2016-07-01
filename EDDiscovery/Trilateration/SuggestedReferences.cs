@@ -59,6 +59,8 @@ namespace EDDiscovery2.Trilateration
 
         private void AddSystemsToSectors()
         {
+            //TBD FIX
+#if false
             int aznr, altnr;
 
             foreach (SystemClass sys in SQLiteDBClass.globalSystems)
@@ -76,6 +78,7 @@ namespace EDDiscovery2.Trilateration
                     }
                 }
             }
+#endif
         }
 
 
@@ -124,10 +127,10 @@ namespace EDDiscovery2.Trilateration
             {
                 if (NrOfRefenreceSystems == 0)
                 {
-                    SystemClass sys = SystemData.GetSystem("Sol");
+                    SystemClass sys = SystemClass.GetSystem("Sol");
 
                     if (EstimatedPosition.x == 0 && EstimatedPosition.y == 0 && EstimatedPosition.z == 0)
-                        sys = SystemData.GetSystem("Sirius");
+                        sys = SystemClass.GetSystem("Sirius");
 
                     if (sys == null)
                         return null;   // Should not happend

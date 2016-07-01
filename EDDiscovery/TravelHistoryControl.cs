@@ -11,6 +11,7 @@ using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
 using System.Threading.Tasks;
 using EDDiscovery.Controls;
+using System.Threading;
 
 namespace EDDiscovery
 {
@@ -44,7 +45,6 @@ namespace EDDiscovery
         internal bool EDSMSyncFrom = true;
 
         public NetLogClass netlog = new NetLogClass();
-        List<SystemDist> sysDist = null;
         private VisitedSystemsClass currentSysPos = null;
 
 
@@ -104,7 +104,6 @@ namespace EDDiscovery
             SQLiteDBClass db = new SQLiteDBClass();
             EDSMClass edsm = new EDSMClass();
             edsm.GetNewSystems(db);
-            db.GetAllSystems();
         }
 
 
@@ -130,8 +129,6 @@ namespace EDDiscovery
 
         public void RefreshHistory()
         {
-            var sw1 = Stopwatch.StartNew();
-
             if (visitedSystems == null || visitedSystems.Count == 0)
                 GetVisitedSystems();
 
@@ -148,22 +145,16 @@ namespace EDDiscovery
 
             dataGridViewTravel.Rows.Clear();
 
-            //            System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
                 VisitedSystemsClass item = result[ii];
                 AddNewHistoryRow(false, item);      // for every one in filter, add a row.
             }
 
-            //            System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-
             if (dataGridViewTravel.Rows.Count > 0)
             {
                 ShowSystemInformation((VisitedSystemsClass)(dataGridViewTravel.Rows[0].Cells[TravelHistoryColumns.SystemName].Tag));
             }
-//            System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-            sw1.Stop();
 
             if (textBoxFilter.TextLength>0)
                 FilterGridView();
@@ -186,7 +177,7 @@ namespace EDDiscovery
             SystemClass sys1 = null, sys2;                                                                      // fills in cursystem and prevsystem, and calcs distance
             double dist;
 
-            sys1 = SystemData.GetSystem(item.Name);
+            sys1 = SystemClass.GetSystem(item.Name);
             if (sys1 == null)
             {
                 sys1 = new SystemClass(item.Name);
@@ -203,7 +194,7 @@ namespace EDDiscovery
             }
             if (item2 != null)
             {
-                sys2 = SystemData.GetSystem(item2.Name);
+                sys2 = SystemClass.GetSystem(item2.Name);
                 if (sys2 == null)
                 {
                     sys2 = new SystemClass(item2.Name);
@@ -226,7 +217,7 @@ namespace EDDiscovery
             if (sys2 != null)
             {
                 if (sys1.HasCoordinate && sys2.HasCoordinate)
-                    dist = SystemData.Distance(sys1, sys2);
+                    dist = SystemClass.Distance(sys1, sys2);
                 else
                 {
                     dist = DistanceClass.Distance(sys1, sys2);
@@ -335,10 +326,8 @@ namespace EDDiscovery
             textBoxDistance.Enabled = distedit;
             buttonUpdate.Enabled = distedit;
             buttonTrilaterate.Enabled = !syspos.curSystem.HasCoordinate && syspos.curSystem == GetCurrentSystem();
-            //buttonTrilaterate.Enabled = true; // FIXME for debugging only
 
-
-            ShowClosestSystems(syspos.Name);
+            CalculateClosestSystems(syspos.Name);
         }
 
         private string EnumStringFormat(string str)
@@ -351,20 +340,24 @@ namespace EDDiscovery
             return str.Replace("_", " ");
         }
 
-        private void ShowClosestSystems(string name)
+        public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
         {
-            Debug.Assert(name != null && name.Length != 0);
+            public int Compare(TKey x, TKey y)
+            {
+                int result = x.CompareTo(y);
+                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
+            }
+        }
 
-            labelclosests.Text = "";
-            dataGridViewNearest.Rows.Clear();
-
-            SystemClass lastSystem = SystemData.GetSystem(name);
+        private void CalculateClosestSystems(string closestname ) // threaded due to slownest of DB calc.
+        {
+            SystemClass lastSystem = SystemClass.GetSystem(closestname);
 
             double x, y, z;
 
-            if ( lastSystem == null )
+            if (lastSystem == null)
             {
-                VisitedSystemsClass vsc = visitedSystems.Find(q => q.Name.Equals(name) );
+                VisitedSystemsClass vsc = visitedSystems.Find(q => q.Name.Equals(closestname));
 
                 if (vsc == null || !vsc.HasTravelCoordinates) // if not found, or no co-ord
                     return;
@@ -380,56 +373,24 @@ namespace EDDiscovery
                 z = lastSystem.z;
             }
 
-            labelclosests.Text = "Closest systems from " + name;
+            SortedList<double, string> systemlist = new SortedList<double, string>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
 
-            sysDist = new List<SystemDist>();
-            double dist;
-            double dx, dy, dz;
+            SystemClass.GetSystemSqDistancesFrom(systemlist, x, y, z, 50, true);
+            VisitedSystemsClass.CalculateSqDistances(visitedSystems, systemlist, x, y, z, 50 , true);
 
-            foreach (SystemClass pos in SystemData.SystemList)
+            labelclosests.Text = "";
+            dataGridViewNearest.Rows.Clear();
+            if (systemlist.Count() == 0)
+                return;
+
+            labelclosests.Text = "Closest systems from " + closestname;
+
+            foreach (KeyValuePair<double,string> tvp in systemlist)
             {
-                dx = (pos.x - x);
-                dy = (pos.y - y);
-                dz = (pos.z - z);
-                dist = dx * dx + dy * dy + dz * dz;
-
-                if (dist > 0)
-                {
-                    SystemDist sdist = new SystemDist();
-                    sdist.name = pos.name;
-                    sdist.dist = Math.Sqrt(dist);
-                    sysDist.Add(sdist);
-                }
-            }
-
-            foreach (VisitedSystemsClass pos in visitedSystems)
-            {
-                if (pos.HasTravelCoordinates && SystemData.GetSystem(name) == null)
-                {
-                    dx = (pos.X - x);
-                    dy = (pos.Y - y);
-                    dz = (pos.Z - z);
-                    dist = dx * dx + dy * dy + dz * dz;
-
-                    if (dist > 0)
-                    {
-                        SystemDist sdist = new SystemDist();
-                        sdist.name = pos.Name;
-                        sdist.dist = Math.Sqrt(dist);
-                        sysDist.Add(sdist);
-                    }
-                }
-            }
-
-            var list = (from t in sysDist orderby t.dist select t).Take(50);
-
-            foreach (SystemDist sdist in list)
-            {
-                object[] rowobj = { sdist.name, sdist.dist.ToString("0.00") };
+                object[] rowobj = { tvp.Value, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
                 dataGridViewNearest.Rows.Add(rowobj);
             }
         }
-
 
         public ISystem GetCurrentSystem()
         {
@@ -783,11 +744,22 @@ namespace EDDiscovery
             }
         }
 
-        private void UpdateNewPosition(string name)
+        private void UpdateNewPosition(string name)         // in UI Thread..
         {
+            var result = visitedSystems.OrderByDescending(a => a.Time).ToList<VisitedSystemsClass>();
+            
+            VisitedSystemsClass item = result[0];
+            VisitedSystemsClass item2;
+
+            if (result.Count > 1)
+                item2 = result[1];
+            else
+                item2 = null;
+
+            UpdateVisitedSystemsEntries(item, item2);       // ensure they have system classes behind them..
+
             LogText("Arrived at system: ");
-            SystemClass sys1 = SystemData.GetSystem(name);
-            if (sys1 == null || sys1.HasCoordinate == false)
+            if ( item.HasTravelCoordinates == false && ( item.curSystem == null || item.curSystem.HasCoordinate == false) )
                 LogTextHighlight(name);
             else
                 LogText(name);
@@ -796,18 +768,6 @@ namespace EDDiscovery
 
             LogText(": Visit No. " + count.ToString() + Environment.NewLine);
             System.Diagnostics.Trace.WriteLine("Arrived at system: " + name + " " + count.ToString() + ":th visit.");
-
-            var result = visitedSystems.OrderByDescending(a => a.Time).ToList<VisitedSystemsClass>();
-
-            
-
-            VisitedSystemsClass item = result[0];
-            VisitedSystemsClass item2;
-
-            if (result.Count > 1)
-                item2 = result[1];
-            else
-                item2 = null;
 
             if (checkBoxEDSMSyncTo.Checked == true)
             {
@@ -822,16 +782,12 @@ namespace EDDiscovery
             textBoxDistanceToNextSystem.Enabled = false;
             if (textBoxDistanceToNextSystem.Text.Length > 0 && item2 != null)
             {
-                SystemClass currentSystem = null, previousSystem = null;
-                SystemData.SystemList.ForEach(s =>
-                {
-                    if (s.name == item.Name) currentSystem = s;
-                    if (s.name == item2.Name) previousSystem = s;
-                });
+                SystemClass currentSystem = (SystemClass)item.curSystem, previousSystem = (SystemClass)item2.curSystem;
 
                 if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
                 {
                     var presetDistance = DistanceParser.ParseJumpDistance(textBoxDistanceToNextSystem.Text.Trim(), MaximumJumpRange);
+
                     if (presetDistance.HasValue)
                     {
                         var distance = new DistanceClass
@@ -853,14 +809,10 @@ namespace EDDiscovery
             textBoxDistanceToNextSystem.Clear();
             textBoxDistanceToNextSystem.Enabled = true;
 
-            UpdateVisitedSystemsEntries(item, item2);
             AddNewHistoryRow(true, item);
             StoreSystemNote();
 
-            Invoke((MethodInvoker)delegate
-            {
-                _discoveryForm.Map.UpdateVisited(visitedSystems);      // update in UI thread.
-            });
+            _discoveryForm.Map.UpdateVisited(visitedSystems);      // update map
 
             // Move focus to new row
             if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
@@ -1300,14 +1252,6 @@ namespace EDDiscovery
 
             return false;
         }
-    }
-
-
-
-    public class SystemDist
-    {
-        public string name;
-        public double dist;
     }
 
 }

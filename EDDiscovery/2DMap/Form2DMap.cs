@@ -138,15 +138,6 @@ namespace EDDiscovery2
 
             DateTime start = startDate;
 
-            foreach (var sys in _eddiscoveryForm.TravelControl.visitedSystems)
-            {
-                if (sys.curSystem == null)
-                {
-                    sys.curSystem = SystemData.GetSystem(sys.Name);
-
-                }
-            }
-
             int currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
             var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.Time > start && systems.Time<endDate  && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.Time  select systems;
@@ -181,6 +172,8 @@ namespace EDDiscovery2
 
         private void DrawStars()
         {
+            // TBD FIX
+#if false
             var _starList = SQLiteDBClass.globalSystems;
             Pen pen = new Pen(Color.White, 2);
             Graphics gfx = Graphics.FromImage(imageViewer1.Image);
@@ -193,6 +186,7 @@ namespace EDDiscovery2
                 }
             }
             pen = new Pen(Color.White, 2);
+#endif
         }
 
 

@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace EDDiscovery.DB
@@ -17,15 +15,9 @@ namespace EDDiscovery.DB
         internal static string ConnectionString;
         string dbfile;
 
-        public static List<SystemClass> globalSystems = new List<SystemClass>();
-        public static Dictionary<string, SystemClass> dictSystems = new Dictionary<string, SystemClass>(); 
         public static Dictionary<string, double> dictDistances = new Dictionary<string, double>();
         public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
         public static List<BookmarkClass> bookmarks = new List<BookmarkClass>();
-
-        // This stores the date of the most recently updated or inserted row in the database
-        // We will use it later to only get data that was changed since that date
-        private static DateTime? versionDate = null;
 
         private static Object lockDBInit = new Object();
         private static bool dbUpgraded = false;
@@ -50,25 +42,8 @@ namespace EDDiscovery.DB
 
         private string GetSQLiteDBFile()
         {
-            try
-            {
-                string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "EDDiscovery");
-
-
-                if (!Directory.Exists(datapath))
-                    Directory.CreateDirectory(datapath);
-
-
-                return Path.Combine(datapath, "EDDiscovery.sqlite");
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message, "GetSQLiteDBFile Exception", System.Windows.Forms.MessageBoxButtons.OK);
-                return null;
-            }
+            return Path.Combine(Tools.GetAppDataDirectory(), "EDDiscovery.sqlite");
         }
-
-
 
         public bool Connect2DB()
         {
@@ -233,21 +208,7 @@ namespace EDDiscovery.DB
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN Note TEXT";
             PerformUpgrade(4, true, true, new[] { query1 }, () =>
-            {
-                GetAllSystems();
-                foreach (SystemClass sys in globalSystems)
-                {
-                    if (!string.IsNullOrEmpty(sys.Note))
-                    {
-                        SystemNoteClass note = new SystemNoteClass();
-
-                        note.Name = sys.name;
-                        note.Note = sys.Note;
-                        note.Time = DateTime.Now;
-                        note.Add();
-                    }
-                }
-            });
+            {  });
         }
 
         private void UpgradeDB5()
@@ -376,101 +337,6 @@ namespace EDDiscovery.DB
             return true;
         }
 
-        public bool GetAllSystems()
-        {
-            // Get system notes first
-            GetAllSystemNotes();
-            var sw = Stopwatch.StartNew();
-            int numSystemsReturned = 0;
-            try
-            {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
-                    {
-                        DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-
-                        // First run we haven't loaded anything yet, so load the whole table
-                        if (!versionDate.HasValue)
-                        {
-                            cmd.CommandText = "select * from Systems Order By versiondate ASC";
-                        }
-                        else
-                        {
-                            // Load from the last update we have stored in memory up to the latest present in the database
-                            cmd.CommandText = "select * from Systems where versiondate > @versiondate Order By versiondate ASC";
-                            cmd.Parameters.AddWithValue("versiondate", versionDate.Value.AddSeconds(-1)); // This should avoid datetime precision issues
-                        }
-
-                        ds = SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return false;
-                        }
-
-                        if (ds.Tables[0].Rows.Count == 0)
-                        {
-                            return false;
-                        }
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            numSystemsReturned++;
-                            SystemClass sys = new SystemClass(dr);
-
-                            if (globalSystemNotes.ContainsKey(sys.SearchName))
-                            {
-                                sys.Note = globalSystemNotes[sys.SearchName].Note;
-                            }
-
-                            dictSystems[sys.SearchName] = sys;
-
-                            // If the row that was modified more recently than versionDate, this is the new versionDate
-                            // Next time we get the systems, we will only get the updates since that date and time.
-                            UpdateVersionDate(dr);
-                        }
-
-                        globalSystems = dictSystems.Values.ToList<SystemClass>();
-
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
-            finally
-            {
-                System.Diagnostics.Trace.WriteLine(string.Format("GetAllSystems completed in {0}. Retrieved {1} systems from DB. Version date is now {2}", sw.Elapsed, numSystemsReturned, versionDate));
-            }
-        }
-
-        public static void TouchSystem(SQLiteConnection connection, string systemName)
-        {
-            using (SQLiteCommand cmd = connection.CreateCommand())
-            {
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "update systems set versiondate=datetime('now') where name=@systemName";
-                cmd.Parameters.AddWithValue("systemName", systemName);
-                SqlNonQueryText(connection, cmd);
-            }
-        }
-
-        private static void UpdateVersionDate(DataRow dr)
-        {
-            object vdRaw = dr["versiondate"];
-            var vd = vdRaw != DBNull.Value ? (DateTime?) vdRaw : null;
-            if ((vd.HasValue && !versionDate.HasValue) || (vd > versionDate))
-            {
-                versionDate = vd;
-            }
-        }
-
         public bool GetAllDistances(bool loadAlldata)
         {
             try
@@ -574,10 +440,7 @@ namespace EDDiscovery.DB
                 return ldist;
             }
         }
-
-
-
-
+        
         public bool GetAllSystemNotes()
         {
             try

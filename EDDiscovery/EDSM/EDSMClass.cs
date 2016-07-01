@@ -161,67 +161,34 @@ namespace EDDiscovery2.EDSM
 
 
 
-        internal string GetNewSystems(SQLiteDBClass db)
+        internal long GetNewSystems(SQLiteDBClass db)
         {
-            string json;
-            string date = "2010-01-01 00:00:00";
             string lstsyst;
-
-            string retstr = "";
-
-
-            Application.DoEvents();
-
-            db.GetAllSystems();
-
-            //if (lstsys)
-
 
             DateTime NewSystemTime;
 
-            if (SQLiteDBClass.globalSystems == null || SQLiteDBClass.globalSystems.Count ==0)
+            if (SystemClass.GetTotalSystems() == 0)
             {
                 lstsyst = "2010-01-01 00:00:00";
             }
             else
             {
-                NewSystemTime = SQLiteDBClass.globalSystems.Max(x => x.UpdateDate);
+                NewSystemTime = SystemClass.GetLastSystemEntryTime();
                 lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                 lstsyst = db.GetSettingString("EDSMLastSystems", lstsyst);
                 DateTime lstsystdate;
 
                 if (lstsyst.Equals("2010-01-01 00:00:00") || !DateTime.TryParseExact(lstsyst, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out lstsystdate))
                     lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-
-
             }
-            json = RequestSystems(lstsyst);
 
+            string json = RequestSystems(lstsyst);
 
-            List<SystemClass> listNewSystems = SystemClass.ParseEDSM(json, ref date);
-
-
-
-            List<SystemClass> systems2Store = new List<SystemClass>();
-
-            foreach (SystemClass system in listNewSystems)
-            {
-                // Check if sys exists first
-                SystemClass sys = SystemData.GetSystem(system.name);
-                if (sys == null)
-                    systems2Store.Add(system);
-                else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y != system.y || sys.z != system.z)  // Case or position changed
-                    systems2Store.Add(system);
-            }
-            SystemClass.Store(systems2Store);
-
-            retstr = systems2Store.Count.ToString() + " new systems from EDSM." + Environment.NewLine;
-            Application.DoEvents();
-
-
+            string date = "2010-01-01 00:00:00";
+            long updates = SystemClass.ParseEDSMUpdateSystems(json, ref date);
             db.PutSettingString("EDSMLastSystems", date);
 
-            return retstr;
+            return updates;
         }
 
 

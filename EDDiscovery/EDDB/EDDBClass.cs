@@ -2,6 +2,7 @@
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using EDDiscovery2.HTTP;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -171,34 +172,6 @@ namespace EDDiscovery2.EDDB
             }
         }
 
-        public List<SystemClass> ReadSystems()
-        {
-            List<SystemClass> eddbsystems = new List<SystemClass>();
-            string json;
-
-            json = ReadJson(systemFileName);
-
-            if (json == null)
-                return eddbsystems;
-
-            JArray systems = (JArray)JArray.Parse(json);
-
-            if (systems!=null)
-            {
-                foreach (JObject jo in systems)
-                {
-                    SystemClass sys = new SystemClass(jo, EDDiscovery.SystemInfoSource.EDDB);
-                    
-                    if (sys != null)
-                        eddbsystems.Add(sys);
-
-                }
-            }
-            systems = null;
-            json = null;
-            return eddbsystems;
-        }
-
         public void  ReadCommodities()
         {
             Dictionary<int, Commodity> eddbcommodities = new Dictionary<int, Commodity>();
@@ -252,7 +225,7 @@ namespace EDDiscovery2.EDDB
             {
                 foreach (JObject jo in systems)
                 {
-                    StationClass sys = new StationClass(jo, EDDiscovery.SystemInfoSource.EDDB);
+                    StationClass sys = new StationClass(jo, EDDiscovery2.DB.SystemInfoSource.EDDB);
 
                     if (sys != null)
                         eddbstations.Add(sys);
@@ -262,73 +235,82 @@ namespace EDDiscovery2.EDDB
             return eddbstations;
         }
 
-        public bool Add2DB(List<SystemClass> eddbsystems, List<StationClass> eddbstations)
+        public long UpdateSystems()
         {
-            SQLiteDBClass db = new SQLiteDBClass();
+            long updates = 0;
 
-            db.Connect2DB();
+            StreamReader sr = new StreamReader(systemFileName);         // read directly from file..
 
+            if (sr == null)
+                return 0;
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            JsonTextReader jr = new JsonTextReader(sr);               
 
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            if (jr == null)
+                return 0;
+
+            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))  // open the db
             {
                 cn.Open();
-                int nr=0;
 
-                using (var tra = cn.BeginTransaction())
+                SQLiteCommand cmd = new SQLiteCommand("select * from Systems where name = @name limit 1", cn);   // 1 return matching name
+
+                List<SystemClass> toupdate = new List<SystemClass>();
+
+                while (jr.Read())
                 {
-                    try
+                    if (jr.TokenType == JsonToken.StartObject)
                     {
-                        foreach (SystemClass sys in eddbsystems)
+                        JObject jo = JObject.Load(jr);
+
+                        SystemClass system = new SystemClass(jo, EDDiscovery2.DB.SystemInfoSource.EDDB);
+
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.AddWithValue("name", system.name);
+
+                        SQLiteDataReader reader1 = cmd.ExecuteReader();              // case insensitive
+                        if (reader1.Read())                                          // its there..
                         {
-                            SystemClass sysdb = SystemData.GetSystem(sys.name);
+                            SystemClass dbsys = new SystemClass(reader1);
 
-                            if (sysdb != null)  // Update system
+                            if (dbsys.eddb_updated_at != system.eddb_updated_at || dbsys.population != system.population)
                             {
-                                if (sysdb.eddb_updated_at != sys.eddb_updated_at ||sysdb.population!=sys.population)
-                                {
-                                    sysdb.id_eddb = sys.id_eddb;
-                                    sysdb.faction = sys.faction;
-                                    sysdb.population = sys.population;
-                                    sysdb.government = sys.government;
-                                    sysdb.allegiance = sys.allegiance;
-                                    sysdb.state = sys.state;
-                                    sysdb.security = sys.security;
-                                    sysdb.primary_economy = sys.primary_economy;
-                                    sysdb.needs_permit = sys.needs_permit;
-                                    sysdb.eddb_updated_at = sys.eddb_updated_at;
+                                dbsys.id_eddb = system.id_eddb;
+                                dbsys.faction = system.faction;
+                                dbsys.population = system.population;
+                                dbsys.government = system.government;
+                                dbsys.allegiance = system.allegiance;
+                                dbsys.state = system.state;
+                                dbsys.security = system.security;
+                                dbsys.primary_economy = system.primary_economy;
+                                dbsys.needs_permit = system.needs_permit;
+                                dbsys.eddb_updated_at = system.eddb_updated_at;
 
-
-                                    sysdb.Update(cn, sysdb.id, tra);
-                                    nr++;
-                                }
-
-                                sysdb = null;
-                            }
-                            else
-                            {
-                                System.Diagnostics.Trace.WriteLine("New system " + sys.name);
-                                sys.Store(cn, tra);
+                                toupdate.Add(dbsys);                                // add to update list
                             }
                         }
-                        System.Diagnostics.Trace.WriteLine("Add2DB  " + nr.ToString() + " eddb systems: " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-                        tra.Commit();
-                        sw.Stop();
-                        System.Diagnostics.Trace.WriteLine("Add2DB  " + nr.ToString() + " eddb systems: " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-                    }
-                    catch (Exception ex)
-                    {
-                        tra.Rollback();
-                        System.Diagnostics.Trace.WriteLine("Add2DB error: {0}" + ex.Message);
-                        throw;
-                    }
 
+                        cmd.Reset();
+                    }
                 }
+
+                SQLiteTransaction transaction = cn.BeginTransaction();
+
+                updates = toupdate.Count;
+
+                foreach (SystemClass sys in toupdate)                               // commit updates
+                {
+                    sys.Update(cn, sys.id, transaction);
+                }
+
+                transaction.Commit();
+
+                cn.Close();
+
+                GC.Collect();
             }
 
-            return true;
+            return updates;
         }
 
     }

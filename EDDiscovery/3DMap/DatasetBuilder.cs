@@ -370,7 +370,7 @@ namespace EDDiscovery2._3DMap
                 foreach (SystemClassStarNames si in StarList)
                 {
                     if ( (si.population == 0) == unpopulated )          // if zero population, and unpopulated is true, add.  If non zero pop, and unpolated is false, add
-                        AddSystem(si, datasetS);
+                        datasetS.Add(new PointData(si.x, si.y, si.z));
                 }
 
                 _datasets.Add(datasetS);
@@ -378,27 +378,6 @@ namespace EDDiscovery2._3DMap
 
             return _datasets;
         }
-
-        public void UpdateSystems(ref List<IData3DSet> _datasets , DateTime maxtime)     // modify this dataset
-        {
-            var ds = from dataset in _datasets where dataset.Name.Equals("stars") select dataset;
-            Data3DSetClass<PointData> datasetS = (Data3DSetClass<PointData>)ds.First();
-
-            _datasets.Remove(datasetS);
-
-            datasetS = Data3DSetClass<PointData>.Create("stars", MapColours.SystemDefault, 1.0f);
-
-            if (StarList != null)
-            {
-                foreach (ISystem si in StarList)
-                {
-                    if (si.population == 0 && si.CreateDate<maxtime)
-                        AddSystem(si, datasetS);
-                }
-                _datasets.Add(datasetS);
-            }
-        }
-
 
 
         private void AddVisitedSystemsInformation()
@@ -437,11 +416,9 @@ namespace EDDiscovery2._3DMap
                             var datasetvs = Data3DSetClass<PointData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
                             foreach (VisitedSystemsClass sp in colour)
                             {
-                                ISystem star = SystemData.GetSystem(sp.Name);
-                                if (star != null && star.HasCoordinate)
+                                if ( sp.curSystem != null && sp.curSystem.HasCoordinate)
                                 {
-
-                                    AddSystem(star, datasetvs);
+                                    datasetvs.Add(new PointData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z));
                                 }
                             }
                             _datasets.Add(datasetvs);
@@ -451,6 +428,7 @@ namespace EDDiscovery2._3DMap
                 }
             }
         }
+
 
         // Planned change: Centered system will be marked but won't be "center" of the galaxy
         // dataset anymore. The origin will stay at Sol.
@@ -537,20 +515,9 @@ namespace EDDiscovery2._3DMap
 
         private void AddSystem(string systemName, Data3DSetClass<PointData> dataset)
         {
-            AddSystem(SystemData.GetSystem(systemName), dataset);
-        }
+            SystemClass system = SystemClass.GetSystem(systemName);
 
-        private void AddSystem(ISystem system, Data3DSetClass<PointData> dataset)
-        {
             if (system != null && system.HasCoordinate)
-            {
-                dataset.Add(new PointData(system.x, system.y, system.z));
-            }
-        }
-
-        private void AddSystem(SystemClassStarNames system, Data3DSetClass<PointData> dataset)
-        {
-            if (system != null)
             {
                 dataset.Add(new PointData(system.x, system.y, system.z));
             }
@@ -563,7 +530,7 @@ namespace EDDiscovery2._3DMap
             {
                 if (ps.curSystem == null)
                 {
-                    ps.curSystem = SystemData.GetSystem(ps.Name);
+                    ps.curSystem = SystemClass.GetSystem(ps.Name);
                 }
 
                 if (ps.curSystem != null && ps.curSystem.HasCoordinate)

@@ -110,8 +110,8 @@ namespace EDDiscovery
         {
             try
             {
-                string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "EDDiscovery") + Path.DirectorySeparatorChar;
-
+                string appfolder = File.Exists("testappdata.txt") ? "EDTest" : "EDDiscovery";
+                string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
 
                 if (!Directory.Exists(datapath))
                     Directory.CreateDirectory(datapath);

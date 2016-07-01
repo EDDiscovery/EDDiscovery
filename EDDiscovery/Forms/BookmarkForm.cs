@@ -39,7 +39,7 @@ namespace EDDiscovery2
             labelTimeMade.Hide();
             labelBookmarkNotes.Hide();
             textBoxName.Text = name;
-            textBoxTravelNote.Text = note;
+            textBoxTravelNote.Text = (note != null) ? note : "";
             int delta = textBoxTravelNote.Location.Y - labelTimeMade.Location.Y;
             buttonOK.Location = new Point(buttonOK.Location.X, buttonOK.Location.Y - delta);
             labelTravelNote.Location = new Point(labelTravelNote.Location.X, labelTravelNote.Location.Y - delta);
