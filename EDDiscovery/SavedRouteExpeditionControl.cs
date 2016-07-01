@@ -168,7 +168,7 @@ namespace EDDiscovery
                     double dist;
                     if (sys.HasCoordinate)
                     {
-                        dist = SystemData.Distance(sys0, sys);
+                        dist = SystemClass.Distance(sys0, sys);
                     }
                     else
                     {
@@ -187,7 +187,7 @@ namespace EDDiscovery
 
         private SystemClass GetSystem(string sysname)
         {
-            SystemClass sys = SystemData.GetSystem(sysname);
+            SystemClass sys = SystemClass.GetSystem(sysname);
 
             if (sys == null)
             {
@@ -221,7 +221,7 @@ namespace EDDiscovery
                         double dist;
                         if (sys.HasCoordinate && prevsys.HasCoordinate)
                         {
-                            dist = SystemData.Distance(sys, prevsys);
+                            dist = SystemClass.Distance(sys, prevsys);
                         }
                         else
                         {
@@ -453,7 +453,7 @@ namespace EDDiscovery
                 var row = dataGridViewRouteSystems.Rows[e.RowIndex];
                 var cell = dataGridViewRouteSystems[e.ColumnIndex, e.RowIndex];
 
-                SystemClass sys = SystemData.GetSystem(sysname);
+                SystemClass sys = SystemClass.GetSystem(sysname);
 
                 if (sysname != "" && sys == null && !edsm.IsKnownSystem(sysname))
                 {
@@ -488,8 +488,10 @@ namespace EDDiscovery
             textbox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             var items = new AutoCompleteStringCollection();
 
+            // TBD Fix
+#if false
             items.AddRange(SystemData.SystemList.OrderBy(s => s.name).Select(s => s.name).ToArray());
-
+#endif
             textbox.AutoCompleteCustomSource = items;
         }
 

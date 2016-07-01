@@ -49,7 +49,8 @@ namespace EDDiscovery
         private SQLiteDBClass _db = new SQLiteDBClass();
         public EDDTheme theme = new EDDTheme();
 
-        public AutoCompleteStringCollection SystemNames { get; private set; }
+        public AutoCompleteStringCollection SystemNames;            // External one
+
         public string CommanderName { get; private set; }
         static public EDDConfig EDDConfig { get; private set; }
 
@@ -183,12 +184,7 @@ namespace EDDiscovery
                 edsmThread.Join();
                 downloadmapsThread.Join();
 
-                SystemNames.Clear();                                // EDSM systems have loaded, make up names
-                foreach (SystemClass system in SystemData.SystemList)
-                {
-                    SystemNames.Add(system.name);                   // DANGER - using SystemNames in other controls while its loading freezes the UI
-                }
-
+                SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
                 Console.WriteLine("Systems Loaded");
                 
                 OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
@@ -220,7 +216,7 @@ namespace EDDiscovery
 
                 CheckForNewInstaller();
 
-                LogLineSuccess("Loading completed, Total number of systems " + SystemData.SystemList.Count().ToString());
+                LogLineSuccess("Loading completed");
             }
             catch (Exception ex)
             {
@@ -336,9 +332,9 @@ namespace EDDiscovery
 
         }
 
-        #endregion
+#endregion
 
-        #region Information Downloads
+#region Information Downloads
 
         public void DownloadMaps()          // ASYNC process
         {
@@ -460,23 +456,13 @@ namespace EDDiscovery
                     }
                     else
                     {
-                        string retstr = edsm.GetNewSystems(_db);
-
-                        try
-                        {
-                            Invoke((MethodInvoker)delegate
-                            {
-                                TravelHistoryControl.LogText(retstr);
-                            });
-                        }
-                        catch ( Exception )
-                        { }         // don't moan here.. its probably due to the UI going away due to a close..
+                        LogLine("Checking for new EDSM systems.");
+                        long updates = edsm.GetNewSystems(_db);
+                        LogLine("EDSM updated " + updates + " systems.");
                     }
-
                 }
 
                 _db.GetAllSystemNotes();
-                _db.GetAllSystems();
                 _db.GetAllBookmarks();
 
                 // Also update galactic mapping from EDSM
@@ -606,8 +592,6 @@ namespace EDDiscovery
                 time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
                 bool updatedb = false;
 
-
-
                 // Get EDDB data once every week.
                 if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)
                 {
@@ -623,19 +607,16 @@ namespace EDDiscovery
                     else
                         LogLineHighlight("Failed." + Environment.NewLine);
 
-
                     eddb.GetCommodities();
                     eddb.ReadCommodities();
                 }
-
 
                 timestr = _db.GetSettingString("EDDBStationsLiteTime", "0");
                 time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
 
                 if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)
                 {
-
-                    LogText("Get stations from EDDB. ");
+                    LogText("Get stations from EDDB. " + Environment.NewLine);
                     if (eddb.GetStationsLite())
                     {
                         LogText("OK." + Environment.NewLine);
@@ -649,7 +630,8 @@ namespace EDDiscovery
 
                 if (updatedb || eddbforceupdate)
                 {
-                    DBUpdateEDDB(eddb);
+                    long number = eddb.UpdateSystems();
+                    LogText("EDDB update done, " + number + " systems updated" + Environment.NewLine);
                 }
 
                 return;
@@ -661,24 +643,9 @@ namespace EDDiscovery
             }
         }
 
-        private void DBUpdateEDDB(EDDBClass eddb)
-        {
-            List<SystemClass> eddbsystems = eddb.ReadSystems();
-            List<StationClass> eddbstations = eddb.ReadStations();
+#endregion
 
-            LogText("Add new EDDB data to database." + Environment.NewLine);
-            eddb.Add2DB(eddbsystems, eddbstations);
-
-            eddbsystems.Clear();
-            eddbstations.Clear();
-            eddbsystems = null;
-            GC.Collect();
-            LogText("EDDB update done." + Environment.NewLine);
-        }
-
-        #endregion
-
-        #region Logging
+#region Logging
 
         private void LogText(string text)
         {
@@ -738,9 +705,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region JSONandMisc
+#region JSONandMisc
         static public string LoadJsonFile(string filename)
         {
             string json = null;
@@ -766,16 +733,10 @@ namespace EDDiscovery
             string json = null;
             try
             {
-                string appdata = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "EDDiscovery");
-
-                if (!Directory.Exists(appdata))
-                    Directory.CreateDirectory(appdata);
-
-                string filename = Path.Combine(appdata, jfile);
+                string filename = Path.Combine(Tools.GetAppDataDirectory(), jfile);
 
                 if (!File.Exists(filename))
                     return null;
-
 
                 StreamReader reader = new StreamReader(filename);
 
@@ -795,9 +756,9 @@ namespace EDDiscovery
             tabControl1.SelectedIndex = 1;
         }
 
-        #endregion
+#endregion
 
-        #region Closing
+#region Closing
 
         private void SaveSettings()
         {
@@ -821,33 +782,36 @@ namespace EDDiscovery
             SaveSettings();
         }
 
-        #endregion
+#endregion
 
-        #region ButtonsAndMouse
+#region ButtonsAndMouse
+
+        private void xf(SystemClass sc, Object data )
+        {
+
+        }
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            //EDDiscovery2.DB.BookmarkClass bc = new EDDiscovery2.DB.BookmarkClass();
-            //bc.StarName = "Test 5";
-            //bc.Time = DateTime.Now;
-            //bc.Note = "Note here5";
-            //bc.Heading = "This is a bookmark5";
-            //bc.x = 40055;
-            //bc.y = 30055;
-            //bc.z = 20055;
-            //bc.id = 4;
+            SystemClass sys = SystemClass.GetSystem("Lembava");
+            Console.WriteLine("Name:" + sys.name);
 
-           // bc.Update();
+            sys = SystemClass.GetSystem("lEmBava");
+            Console.WriteLine("Name:" + sys.name);
 
-            //bc.id = 1;
-            //bc.Delete();
+            long totalsystems = SystemClass.GetTotalSystems();
+            Console.WriteLine("Total sys:" + totalsystems);
+
+            DateTime lasttime = SystemClass.GetLastSystemEntryTime();
+            Console.WriteLine("Last system time:" + lasttime.ToString());
 
 
-            //FormSagCarinaMission frm = new FormSagCarinaMission(this);
-            //            frm.Show();
+            //SystemClass.GetSystemList(xf, null);
 
-            //SystemViewForm frm = new SystemViewForm();
-            //frm.Show();
+
+
+
+
 
             //EdMaterializer mat = new EdMaterializer();
 
@@ -1085,9 +1049,9 @@ namespace EDDiscovery
 
         }
 
-        #endregion
+#endregion
 
-        #region AsyncEDSM
+#region AsyncEDSM
 
         private void AsyncSyncEDSMSystems()
         {
@@ -1112,43 +1076,28 @@ namespace EDDiscovery
 
                 EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
 
+                long updates = 0;
+
                 if (newfile)
                 {
-                    LogText("Adding EDSM systems." + Environment.NewLine);
-                    _db.GetAllSystems();
+                    LogText("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine);
+
                     string json = LoadJsonFile(edsmsystems);
-                    List<SystemClass> systems = SystemClass.ParseEDSM(json, ref rwsysfiletime);
 
+                    updates = SystemClass.ParseEDSMUpdateSystems(json, ref rwsysfiletime);
 
-                    List<SystemClass> systems2Store = new List<SystemClass>();
-
-                    foreach (SystemClass system in systems)
-                    {
-                        // Check if sys exists first
-                        SystemClass sys = SystemData.GetSystem(system.name);
-                        if (sys == null)
-                            systems2Store.Add(system);
-                        else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y != system.y || sys.z != system.z)  // Case or position changed
-                            systems2Store.Add(system);
-                    }
-                    SystemClass.Store(systems2Store);
-                    systems.Clear();
-                    systems = null;
-                    systems2Store.Clear();
-                    systems2Store = null;
                     json = null;
 
                     _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                    _db.GetAllSystems();
                 }
                 else
-                    LogText("No new file." + Environment.NewLine);
-
-                string retstr = edsm.GetNewSystems(_db);
-                Invoke((MethodInvoker)delegate
                 {
-                    TravelHistoryControl.LogText(retstr);
-                });
+                    LogText("No new file found on server, instead checking for new EDSM systems.");
+                    updates = edsm.GetNewSystems(_db);
+                }
+
+                if ( updates != 0 )
+                    LogLine("EDSM updated " + updates + " systems.");
 
                 GC.Collect();
             }
@@ -1166,32 +1115,26 @@ namespace EDDiscovery
         {
             LogText("Get hidden systems from EDSM." + Environment.NewLine);
 
-            _db.GetAllSystems();
             string strhiddensystems = edsm.GetHiddenSystems();
 
             if (strhiddensystems == null || strhiddensystems.Length < 6)
                 return;
-
 
             JArray hiddensystems = (JArray)JArray.Parse(strhiddensystems);
 
             foreach (JObject hsys in hiddensystems)
             {
                 // Check if sys exists first
-                SystemClass sys = SystemData.GetSystem(hsys["system"].Value<string>());
+                SystemClass sys = SystemClass.GetSystem(hsys["system"].Value<string>());
                 if (sys != null)
                 {
                     SystemClass.Delete(sys.name);
                 }
             }
-            
+        }
 
 
-
-            }
-
-
-        #endregion
+#endregion
 
 
     }

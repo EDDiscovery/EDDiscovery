@@ -269,7 +269,6 @@
     <Compile Include="3DMap\FormMap.Designer.cs">
       <DependentUpon>FormMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="3DMap\OpenTKTest.cs" />
     <Compile Include="DataGridViewSorter.cs" />
     <Compile Include="DB\DistanceClass.cs" />
     <Compile Include="DB\SQLiteDBClass.cs" />
@@ -376,7 +375,6 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="SystemData.cs" />
     <Compile Include="Forms\SystemViewForm.cs">
       <SubType>Form</SubType>
     </Compile>

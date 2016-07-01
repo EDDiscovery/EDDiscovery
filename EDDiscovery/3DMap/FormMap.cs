@@ -116,7 +116,6 @@ namespace EDDiscovery2
         private ToolStripControlHost endPickerHost;
 
         private float _znear;
-        private float _zfar;
         private bool _timerRunning;
 
         private bool _isActivated = false;
@@ -138,22 +137,12 @@ namespace EDDiscovery2
         {
             _visitedSystems = visited;
 
-            List<SystemClass> starList = SQLiteDBClass.globalSystems;           
-
-            _starnames = new List<SystemClassStarNames>();          // recreate every time in case changed..
-            _starnamelookup = new Dictionary<string, SystemClassStarNames>(StringComparer.CurrentCultureIgnoreCase); // case invariant sorted dic.
-
-            foreach (var sys in starList)
+            if (_starnames == null)                                     // only on first call
             {
-                if (sys.HasCoordinate)            // only interested in these
-                {
-                    SystemClassStarNames scs = new SystemClassStarNames(sys);
-                    _starnames.Add(scs);
-                                                                     
-                    if (!_starnamelookup.ContainsKey(scs.name))    // protect against crap ups in the star list having duplicate names
-                        _starnamelookup.Add(scs.name, scs);        // as dictionaries don't allow duplicate entries.
-                                                                    // means it would be unsearchable but still shows..
-                }
+                _starnames = new List<SystemClassStarNames>();          // recreate every time in case changed..
+                _starnamelookup = new Dictionary<string, SystemClassStarNames>(StringComparer.CurrentCultureIgnoreCase); // case invariant sorted dic.
+
+                SystemClass.GetSystemNamesList(_starnames, _starnamelookup);
             }
 
             if (_visitedSystems != null)              // note if list is empty on first run seeing this
@@ -482,7 +471,7 @@ namespace EDDiscovery2
 
                 if (item.Text.Equals(lastsel))              // if a standard one, restore.  WE are not saving custom.
                 {                                           // if custom is selected, we don't restore a tick.
-                    item.Checked = true;                    // TBD Finwen, should we not be setting a start AND end date
+                    item.Checked = true;                    
                     startTime = startfunc();
                     endTime = endfunc();
                 }
@@ -518,9 +507,9 @@ namespace EDDiscovery2
             SetupViewport();
         }
 
-        #endregion
+#endregion
 
-        #region Viewport
+#region Viewport
 
         /// <summary>
         /// Setup the Viewport
@@ -540,7 +529,6 @@ namespace EDDiscovery2
                 Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
                 GL.LoadMatrix(ref perspective);
                 _znear = 1.0f;
-                _zfar = 1000000.0f;
             }
             else
             {
@@ -551,15 +539,14 @@ namespace EDDiscovery2
 
                 GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
                 _znear = -5000.0f;
-                _zfar = 5000.0f;
             }
 
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
 
-        #endregion
+#endregion
 
-        #region Generate Data Sets
+#region Generate Data Sets
 
         private void GenerateDataSets()         // Called ONCE only during Load.. fixed data.
         {
@@ -608,7 +595,6 @@ namespace EDDiscovery2
                 builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
             builder = null;
 
-            // TBD turn off..
             GenerateDataSetsBookmarks();
             GenerateDataSetsNotedSystems();
         }
@@ -1581,7 +1567,7 @@ namespace EDDiscovery2
         {
             if (_visitedSystems != null)
             {
-                string name = FindNextVisitedSystem(_centerSystem.name, -1);
+                string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, -1, _centerSystem.name);
                 SetCenterSystemTo(name, true);
             }
         }
@@ -1590,7 +1576,7 @@ namespace EDDiscovery2
         {
             if (_visitedSystems != null)
             {
-                string name = FindNextVisitedSystem(_centerSystem.name, 1);
+                string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, 1, _centerSystem.name);
                 SetCenterSystemTo(name, true);
             }
         }
@@ -1828,12 +1814,14 @@ namespace EDDiscovery2
                 {
                     labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
 
-                    if (_clickedSystem.sysclass != null)
+                    SystemClass sysclass = SystemClass.GetSystem(_clickedSystem.name);
+
+                    if (sysclass != null)
                     {
-                        selectionAllegiance.Text = "Allegiance: " + _clickedSystem.sysclass.allegiance;
-                        selectionEconomy.Text = "Economy: " + _clickedSystem.sysclass.primary_economy;
-                        selectionGov.Text = "Gov: " + _clickedSystem.sysclass.government;
-                        selectionState.Text = "State: " + _clickedSystem.sysclass.state;
+                        selectionAllegiance.Text = "Allegiance: " + sysclass.allegiance;
+                        selectionEconomy.Text = "Economy: " + sysclass.primary_economy;
+                        selectionGov.Text = "Gov: " + sysclass.government;
+                        selectionState.Text = "State: " + sysclass.state;
                     }
 
                     GenerateDataSetsSelectedSystems();
@@ -1849,7 +1837,7 @@ namespace EDDiscovery2
                 if (cursystem != null || curbookmark != null )      // if we have a system or a bookmark..
                 {                                                   // try and find the associated bookmark..
                     BookmarkClass bkmark = (curbookmark != null) ? curbookmark : SQLiteDBClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
-                    string note = (cursystem != null && cursystem.sysclass != null) ? cursystem.sysclass.Note : null;
+                    string note = SQLiteDBClass.globalSystemNotes.ContainsKey(cursystem.name) ? SQLiteDBClass.globalSystemNotes[cursystem.name].Note : null;
 
                     BookmarkForm frm = new BookmarkForm();
 
@@ -2090,22 +2078,24 @@ namespace EDDiscovery2
                 yp = hoversystem.y;
                 zp = hoversystem.z;
 
-                if (hoversystem.sysclass != null)
+                SystemClass sysclass = SystemClass.GetSystem(hoversystem.name);
+
+                if (sysclass != null)
                 {
-                    if (hoversystem.sysclass.allegiance != EDAllegiance.Unknown)
-                        info += Environment.NewLine + "Allegiance: " + hoversystem.sysclass.allegiance;
+                    if (sysclass.allegiance != EDAllegiance.Unknown)
+                        info += Environment.NewLine + "Allegiance: " + sysclass.allegiance;
 
-                    if (hoversystem.sysclass.primary_economy != EDEconomy.Unknown)
-                        info += Environment.NewLine + "Economy: " + hoversystem.sysclass.primary_economy;
+                    if (sysclass.primary_economy != EDEconomy.Unknown)
+                        info += Environment.NewLine + "Economy: " + sysclass.primary_economy;
 
-                    if (hoversystem.sysclass.government != EDGovernment.Unknown)
-                        info += Environment.NewLine + "Government: " + hoversystem.sysclass.allegiance;
+                    if (sysclass.government != EDGovernment.Unknown)
+                        info += Environment.NewLine + "Government: " + sysclass.allegiance;
 
-                    if (hoversystem.sysclass.state != EDState.Unknown)
-                        info += Environment.NewLine + "State: " + hoversystem.sysclass.state;
+                    if (sysclass.state != EDState.Unknown)
+                        info += Environment.NewLine + "State: " + sysclass.state;
 
-                    if (hoversystem.sysclass.allegiance != EDAllegiance.Unknown)
-                        info += Environment.NewLine + "Allegiance: " + hoversystem.sysclass.allegiance;
+                    if (sysclass.allegiance != EDAllegiance.Unknown)
+                        info += Environment.NewLine + "Allegiance: " + sysclass.allegiance;
                 }
 
                 if (hoversystem.population != 0)
@@ -2141,11 +2131,14 @@ namespace EDDiscovery2
                     info += Environment.NewLine + "Distance from " + _homeSystem.name + ": " + disthome.ToString("0.0");
                 }
 
-                if (hoversystem != null && hoversystem.sysclass != null && hoversystem.sysclass.Note != null && hoversystem.sysclass.Note.Length > 0)
-                    info += Environment.NewLine + "Notes: " + hoversystem.sysclass.Note;
+                string note = SQLiteDBClass.globalSystemNotes.ContainsKey(sysname.ToLower()) ? SQLiteDBClass.globalSystemNotes[sysname.ToLower()].Note : null;
+                if (note != null && note.Trim().Length>0 )
+                {
+                    info += Environment.NewLine + "Notes: " + note.Trim();
+                }
 
                 if (curbookmark != null && curbookmark.Note != null)
-                    info += Environment.NewLine + "Bookmark Notes: " + curbookmark.Note;
+                    info += Environment.NewLine + "Bookmark Notes: " + curbookmark.Note.Trim();
 
                 _mousehovertooltip = new System.Windows.Forms.ToolTip();
                 _mousehovertooltip.InitialDelay = 0;
@@ -2156,9 +2149,9 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
 
-        #region FindObjectsOnScreen
+#region FindObjectsOnScreen
 
         Matrix4d GetResMat()
         {
@@ -2385,9 +2378,9 @@ namespace EDDiscovery2
             cursystem = GetMouseOverSystem(x, y, out curdistsystem);
         }
 
-        #endregion
+#endregion
 
-        #region Misc
+#region Misc
 
         private class MyRenderer : ToolStripProfessionalRenderer
         {
@@ -2421,47 +2414,7 @@ namespace EDDiscovery2
             return _starnamelookup.ContainsKey(name) ? _starnamelookup[name] : null;
         }
 
-        string FindNextVisitedSystem(string sysname, int dir)
-        {
-            int index = _visitedSystems.FindIndex(x => x.Name.Equals(sysname));
-
-            if (index != -1)
-            {
-                if (dir == -1)
-                {
-                    if (index < 1)                                  //0, we go to the end and work from back..                      
-                        index = _visitedSystems.Count;
-
-                    int indexn = _visitedSystems.FindLastIndex(index - 1, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-
-                    if ( indexn == -1 )                             // from where we were, did not find one, try from back..
-                        indexn = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-
-                    return (indexn != -1) ? _visitedSystems[indexn].Name : _centerSystem.name;
-                }
-                else
-                {
-                    index++;
-
-                    if (index == _visitedSystems.Count)             // if at end, go to beginning
-                        index = 0;
-
-                    int indexn = _visitedSystems.FindIndex(index, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-
-                    if ( indexn == -1 )                             // if not found, go to beginning
-                        indexn = _visitedSystems.FindIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-
-                    return (indexn != -1) ? _visitedSystems[indexn].Name : _centerSystem.name;
-                }
-            }
-            else
-            {
-                index = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-                return (index != -1) ? _visitedSystems[index].Name : _centerSystem.name;
-            }
-        }
-
-        #endregion
+#endregion
 
     }
 
@@ -2469,15 +2422,14 @@ namespace EDDiscovery2
     public class SystemClassStarNames    // holds star data.. used as its kept up to date with visited systems and has extra info
     {
         public SystemClassStarNames() { }
-        public SystemClassStarNames(ISystem other)
+        public SystemClassStarNames(string n, double xv, double yv, double zv, long p )
         {
-            name = other.name;
-            x = other.x; y = other.y; z = other.z;
-            population = other.population;
+            name = n;
+            x = xv; y = yv; z = zv;
+            population = p;
             newtexture = null; newstar = null;
             painttexture = null; paintstar = null;
             candisposepainttexture = false;
-            sysclass = other;
         }
 
         public SystemClassStarNames(VisitedSystemsClass other)
@@ -2488,7 +2440,6 @@ namespace EDDiscovery2
             newtexture = null; newstar = null;
             painttexture = null; paintstar = null;
             candisposepainttexture = false;
-            sysclass = (SystemClass)other.curSystem;
         }
 
         public string name { get; set; }
@@ -2501,7 +2452,6 @@ namespace EDDiscovery2
         public TexturedQuadData painttexture { get; set; }
         public PointData paintstar { get; set; }                // instead of doing a array paint.
         public bool candisposepainttexture { get; set; }
-        public ISystem sysclass;                            // set if created from it
     };
 
 }
