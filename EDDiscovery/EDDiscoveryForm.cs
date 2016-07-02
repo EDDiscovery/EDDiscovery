@@ -131,7 +131,7 @@ namespace EDDiscovery
             savedRouteExpeditionControl1.InitControl(this);
 
             SystemNames = new AutoCompleteStringCollection();
-            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition);
+            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition,travelHistoryControl1);
 
             ApplyTheme(false);
         }
@@ -501,6 +501,7 @@ namespace EDDiscovery
 
                 _db.GetAllSystemNotes();
                 _db.GetAllSystems();
+                _db.GetAllBookmarks();
 
                 // Also update galactic mapping from EDSM
                 LogLine("Get galactic mapping from EDSM");
@@ -850,6 +851,22 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
+            //EDDiscovery2.DB.BookmarkClass bc = new EDDiscovery2.DB.BookmarkClass();
+            //bc.StarName = "Test 5";
+            //bc.Time = DateTime.Now;
+            //bc.Note = "Note here5";
+            //bc.Heading = "This is a bookmark5";
+            //bc.x = 40055;
+            //bc.y = 30055;
+            //bc.z = 20055;
+            //bc.id = 4;
+
+           // bc.Update();
+
+            //bc.id = 1;
+            //bc.Delete();
+
+
             //FormSagCarinaMission frm = new FormSagCarinaMission(this);
             //            frm.Show();
 
