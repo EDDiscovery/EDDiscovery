@@ -486,13 +486,7 @@ namespace EDDiscovery
 
             textbox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             textbox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            var items = new AutoCompleteStringCollection();
-
-            // TBD Fix
-#if false
-            items.AddRange(SystemData.SystemList.OrderBy(s => s.name).Select(s => s.name).ToArray());
-#endif
-            textbox.AutoCompleteCustomSource = items;
+            textbox.AutoCompleteCustomSource = _discoveryForm.SystemNames;
         }
 
         private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)

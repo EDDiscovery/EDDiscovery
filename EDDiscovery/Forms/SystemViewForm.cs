@@ -31,7 +31,7 @@ namespace EDDiscovery2
 
         private void buttonShow_Click(object sender, EventArgs e)
         {
-            // TBD Class not used  broken for now due to systemdata removal.
+            // Class not used  broken for now due to systemdata removal.  would need work, maybe a helper func in systemclass.cs
 #if false
             SystemClass sys = SystemClass.GetSystem(textBox_From.Text);
             if (sys == null) return;

@@ -384,7 +384,7 @@ namespace EDDiscovery2._3DMap
         {
             if (VisitedSystems != null && VisitedSystems.Any())
             {
-                ISystem lastknownps = LastKnownSystemPosition();
+                VisitedSystemsClass.SetLastKnownSystemPosition(VisitedSystems);
 
                 // For some reason I am unable to fathom this errors during the session after DBUpgrade8
                 // colours just resolves to an object reference not set error, but after a restart it works fine
@@ -521,25 +521,6 @@ namespace EDDiscovery2._3DMap
             {
                 dataset.Add(new PointData(system.x, system.y, system.z));
             }
-        }
-
-        private ISystem LastKnownSystemPosition()
-        {
-            ISystem lastknownps = null;
-            foreach (VisitedSystemsClass ps in VisitedSystems)
-            {
-                if (ps.curSystem == null)
-                {
-                    ps.curSystem = SystemClass.GetSystem(ps.Name);
-                }
-
-                if (ps.curSystem != null && ps.curSystem.HasCoordinate)
-                {
-                    ps.lastKnownSystem = lastknownps;
-                    lastknownps = ps.curSystem;
-                }
-            }
-            return lastknownps;
         }
 
         static public Bitmap DrawString(string str, Font fnt, int w, int h, Color textcolour)
