@@ -170,6 +170,8 @@ namespace EDDiscovery
         {
             try
             {
+                CommanderName = EDDConfig.CurrentCommander.Name;
+
                 var edsmThread = new Thread(GetEDSMSystems) { Name = "Downloading EDSM Systems", IsBackground = true };
                 var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files", IsBackground = true };
                 edsmThread.Start();
@@ -441,12 +443,11 @@ namespace EDDiscovery
                 EDSMClass edsm = new EDSMClass();
                 string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
-                CommanderName = EDDConfig.CurrentCommander.Name;
                 DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
 
                 if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
                 {
-                    SyncAllEDSMSystems();
+                    SyncAllEDSMSystems();                           // big check, so we do this in another thread and release this one
                 }
                 else
                 {
@@ -476,6 +477,63 @@ namespace EDDiscovery
             }
 
             GC.Collect();
+        }
+
+        private void AsyncSyncEDSMSystems()
+        {
+            var EDSMThread = new Thread(SyncAllEDSMSystems) { Name = "Downloading EDSM system", IsBackground = true };
+            EDSMThread.Start();
+        }
+
+        private void SyncAllEDSMSystems()           // big check..
+        {
+            try
+            {
+                EDSMClass edsm = new EDSMClass();
+
+                string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
+                bool newfile = false;
+                string rwsysfiletime = "2014-01-01 00:00:00";
+
+                LogText("Get hidden systems and remove from EDSM." + Environment.NewLine);
+
+                string strhiddensystems = edsm.GetHiddenSystems();
+
+                if (strhiddensystems != null && strhiddensystems.Length >= 6)
+                    SystemClass.RemoveHiddenSystems(strhiddensystems);
+
+                LogText("Get systems from EDSM." + Environment.NewLine);
+
+                EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
+
+                long updates = 0;
+
+                if (newfile)
+                {
+                    LogText("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine);
+
+                    updates = SystemClass.ParseEDSMUpdateSystemsFile(edsmsystems, ref rwsysfiletime , true);
+
+                    _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
+                }
+                else
+                {
+                    LogText("No new file found on server, instead checking for new EDSM systems.");
+                    updates = edsm.GetNewSystems(_db);
+                }
+
+                LogLine("EDSM updated " + updates + " systems.");
+
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    TravelHistoryControl.LogText("GetAllEDSMSystems exception:" + ex.Message + Environment.NewLine);
+                });
+            }
+
         }
 
         private Thread ThreadEDSMDistances;
@@ -630,7 +688,7 @@ namespace EDDiscovery
 
                 if (updatedb || eddbforceupdate)
                 {
-                    long number = eddb.UpdateSystems();
+                    long number = SystemClass.ParseEDDBUpdateSystems(eddb.SystemFileName);
                     LogText("EDDB update done, " + number + " systems updated" + Environment.NewLine);
                 }
 
@@ -1050,92 +1108,6 @@ namespace EDDiscovery
         }
 
 #endregion
-
-#region AsyncEDSM
-
-        private void AsyncSyncEDSMSystems()
-        {
-            var EDSMThread = new Thread(SyncAllEDSMSystems) { Name = "Downloading EDSM system", IsBackground = true };
-            EDSMThread.Start();
-        }
-
-        private void SyncAllEDSMSystems()
-        {
-            try
-            {
-                EDDBClass eddb = new EDDBClass();
-                EDSMClass edsm = new EDSMClass();
-
-                string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
-                bool newfile = false;
-                string rwsysfiletime = "2014-01-01 00:00:00";
-
-                RemoveHiddenSystems(edsm);
-
-                LogText("Get systems from EDSM." + Environment.NewLine);
-
-                EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
-
-                long updates = 0;
-
-                if (newfile)
-                {
-                    LogText("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine);
-
-                    string json = LoadJsonFile(edsmsystems);
-
-                    updates = SystemClass.ParseEDSMUpdateSystems(json, ref rwsysfiletime);
-
-                    json = null;
-
-                    _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                }
-                else
-                {
-                    LogText("No new file found on server, instead checking for new EDSM systems.");
-                    updates = edsm.GetNewSystems(_db);
-                }
-
-                if ( updates != 0 )
-                    LogLine("EDSM updated " + updates + " systems.");
-
-                GC.Collect();
-            }
-            catch (Exception ex)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    TravelHistoryControl.LogText("GetAllEDSMSystems exception:" + ex.Message + Environment.NewLine);
-                });
-            }
-
-        }
-
-        private void RemoveHiddenSystems(EDSMClass edsm)
-        {
-            LogText("Get hidden systems from EDSM." + Environment.NewLine);
-
-            string strhiddensystems = edsm.GetHiddenSystems();
-
-            if (strhiddensystems == null || strhiddensystems.Length < 6)
-                return;
-
-            JArray hiddensystems = (JArray)JArray.Parse(strhiddensystems);
-
-            foreach (JObject hsys in hiddensystems)
-            {
-                // Check if sys exists first
-                SystemClass sys = SystemClass.GetSystem(hsys["system"].Value<string>());
-                if (sys != null)
-                {
-                    SystemClass.Delete(sys.name);
-                }
-            }
-        }
-
-
-#endregion
-
-
-    }
+ 
+   }
 }

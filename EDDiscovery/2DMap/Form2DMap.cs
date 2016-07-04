@@ -1,6 +1,7 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
+using EMK.LightGeometry;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace EDDiscovery2
 
         private DateTimePicker pickerStart, pickerStop;
         ToolStripControlHost host1, host2;
+        List<Point3D> starpositions = null;
 
         public bool Nowindowreposition { get; set; } = false;
         SQLiteDBClass db;
@@ -172,23 +174,19 @@ namespace EDDiscovery2
 
         private void DrawStars()
         {
-            // TBD FIX
-#if false
-            var _starList = SQLiteDBClass.globalSystems;
+            if ( starpositions == null )
+                starpositions = SystemClass.GetStarPositions();
+
             Pen pen = new Pen(Color.White, 2);
             Graphics gfx = Graphics.FromImage(imageViewer1.Image);
 
-            foreach (SystemClass si in _starList)
+            foreach (Point3D si in starpositions)
             {
-                if (si.HasCoordinate)
-                {
-                    DrawPoint(gfx, pen, si, si);
-                }
+                DrawPoint(gfx, pen, si.X,si.Z );
             }
-            pen = new Pen(Color.White, 2);
-#endif
-        }
 
+            pen = new Pen(Color.White, 2);
+        }
 
         private void DrawLine(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
         {
@@ -199,7 +197,12 @@ namespace EDDiscovery2
         {
             Point point = Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.x, (int)sys1.z)));
             gfx.FillRectangle(pen.Brush, point.X, point.Y, 1, 1);
+        }
 
+        private void DrawPoint(Graphics gfx, Pen pen, double x, double z)
+        {
+            Point point = Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)x, (int)z)));
+            gfx.FillRectangle(pen.Brush, point.X, point.Y, 1, 1);
         }
 
         private void TestGrid(Graphics gfx)

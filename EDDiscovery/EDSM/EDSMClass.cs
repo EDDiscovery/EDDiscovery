@@ -135,16 +135,14 @@ namespace EDDiscovery2.EDSM
 
      public string RequestSystems(string date)
         {
-            string query;
-            //string datestr = date.ToString("yyyy-MM-dd hh:mm:ss");
             DateTime dtDate = DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
             if (dtDate.Subtract(new DateTime(2015, 5, 10)).TotalDays < 0)
                 date = "2015-05-10 00:00:00";
 
-            query = "?startdatetime=" + HttpUtility.UrlEncode(date);
-            //json1= RequestGet("systems" + query + "&coords=1&submitted=1");
-            var response = RequestGet("api-v1/systems" + query + "&coords=1&submitted=1&known=1");
+            string query = "api-v1/systems" + "?startdatetime=" + HttpUtility.UrlEncode(date) + "&coords=1&submitted=1&known=1&showId=1";
+            var response = RequestGet(query);
+
             var data = response.Body;
             return response.Body;
         }
@@ -182,10 +180,12 @@ namespace EDDiscovery2.EDSM
                     lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
             }
 
+            Console.WriteLine("EDSM Check date" + lstsyst);
+
             string json = RequestSystems(lstsyst);
 
             string date = "2010-01-01 00:00:00";
-            long updates = SystemClass.ParseEDSMUpdateSystems(json, ref date);
+            long updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date , false);
             db.PutSettingString("EDSMLastSystems", date);
 
             return updates;
@@ -198,7 +198,7 @@ namespace EDDiscovery2.EDSM
             {
                 string edsmhiddensystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmhiddensystems.json");
                 bool newfile = false;
-                EDDBClass.DownloadFile("https://www.edsm.net/api-v1/hidden-systems", edsmhiddensystems, out newfile);
+                EDDBClass.DownloadFile("https://www.edsm.net/api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
                 string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
 

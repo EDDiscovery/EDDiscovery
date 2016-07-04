@@ -1814,7 +1814,7 @@ namespace EDDiscovery2
                 {
                     labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
 
-                    SystemClass sysclass = SystemClass.GetSystem(_clickedSystem.name);
+                    SystemClass sysclass = (_clickedSystem.id != 0) ? SystemClass.GetSystem(_clickedSystem.id) : SystemClass.GetSystem(_clickedSystem.name);
 
                     if (sysclass != null)
                     {
@@ -2078,7 +2078,7 @@ namespace EDDiscovery2
                 yp = hoversystem.y;
                 zp = hoversystem.z;
 
-                SystemClass sysclass = SystemClass.GetSystem(hoversystem.name);
+                SystemClass sysclass = (hoversystem.id != 0) ? SystemClass.GetSystem(hoversystem.id) : SystemClass.GetSystem(hoversystem.name);
 
                 if (sysclass != null)
                 {
@@ -2422,8 +2422,21 @@ namespace EDDiscovery2
     public class SystemClassStarNames    // holds star data.. used as its kept up to date with visited systems and has extra info
     {
         public SystemClassStarNames() { }
-        public SystemClassStarNames(string n, double xv, double yv, double zv, long p )
+
+        public SystemClassStarNames(ISystem other)
         {
+            id = other.id;
+            name = other.name;
+            x = other.x; y = other.y; z = other.z;
+            population = other.population;
+            newtexture = null; newstar = null;
+            painttexture = null; paintstar = null;
+            candisposepainttexture = false;
+        }
+
+        public SystemClassStarNames(string n, double xv, double yv, double zv, long p , long idx )
+        {
+            id = idx;
             name = n;
             x = xv; y = yv; z = zv;
             population = p;
@@ -2434,6 +2447,7 @@ namespace EDDiscovery2
 
         public SystemClassStarNames(VisitedSystemsClass other)
         {
+            id = 0;
             name = other.Name;
             x = other.X; y = other.Y; z = other.Z;
             population = 0;
@@ -2442,6 +2456,7 @@ namespace EDDiscovery2
             candisposepainttexture = false;
         }
 
+        public long id { get; set; }                             // EDDB ID, or 0 if not known
         public string name { get; set; }
         public double x { get; set; }
         public double y { get; set; }

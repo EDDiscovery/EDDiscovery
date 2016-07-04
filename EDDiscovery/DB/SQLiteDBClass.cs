@@ -134,6 +134,9 @@ namespace EDDiscovery.DB
                 if (dbver < 16)
                     UpgradeDB16();
 
+                if (dbver < 17)
+                    UpgradeDB17();
+
                 dbUpgraded = true;
                 return true;
             }
@@ -318,6 +321,18 @@ namespace EDDiscovery.DB
         {
             string query = "CREATE TABLE Bookmarks (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , StarName TEXT, x double NOT NULL, y double NOT NULL, z double NOT NULL, Time DATETIME NOT NULL, Heading TEXT, Note TEXT NOT Null )";
             PerformUpgrade(16, true, true, new[] { query });
+        }
+
+        private void UpgradeDB17()
+        {
+            string query1 = "ALTER TABLE Systems ADD COLUMN id_edsm Integer";
+            string query2 = "CREATE INDEX Systems_EDSM_ID_Index ON Systems (id_edsm ASC)";
+            string query3 = "CREATE INDEX Systems_EDDB_ID_Index ON Systems (id_eddb ASC)";
+            PerformUpgrade(17, true, true, new[] { query1,query2,query3 }, () =>
+            {
+                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00");        // force EDSM sync..
+                PutSettingString("EDDBSystemsTime", "0");                               // force EDDB
+            });
         }
 
         private void ExecuteQuery(string query)

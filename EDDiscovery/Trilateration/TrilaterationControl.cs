@@ -58,6 +58,7 @@ namespace EDDiscovery
             if (TargetSystem == null) return;
 
             textBoxSystemName.Text = TargetSystem.name;
+
             if (TargetSystem.HasCoordinate)
             {
                 textBoxCoordinateX.Text = TargetSystem.x.ToString();
@@ -111,20 +112,7 @@ namespace EDDiscovery
 
                 textbox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 textbox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                var items = new AutoCompleteStringCollection();
-
-                var enteredSystems = GetEnteredSystems();
-                //TBD FIX
-#if false
-                items.AddRange((
-                    from s
-                    in SystemData.SystemList
-                    where s.HasCoordinate && (s.name == textbox.Text || enteredSystems.Where(lu => lu.name == s.name).Count() == 0)
-                    orderby s.name ascending
-                    select s.name
-                ).ToArray());
-#endif
-                textbox.AutoCompleteCustomSource = items;
+                textbox.AutoCompleteCustomSource = _discoveryForm.SystemNames;  // had to simplify this..  previously had it making it up dynamically from global system data.
             }
             catch (Exception ex)
             {
@@ -588,7 +576,7 @@ namespace EDDiscovery
         {
             dataGridViewSuggestedSystems.Rows.Clear();
         }
-
+        
         private void PopulateSuggestedSystems()
         {
             var lastKnown = LastKnownSystem;
@@ -612,17 +600,16 @@ namespace EDDiscovery
         private void PopulateSuggestedSystems(ICollection<string> suggestedSystems)
         {
             dataGridViewSuggestedSystems.Rows.Clear();
-            // TBD Fix
-#if false
-            foreach (var system in SystemData.SystemList)
+
+            foreach (string name in _discoveryForm.SystemNames)
             {
-                if (!suggestedSystems.Contains(system.name))
+                if (!suggestedSystems.Contains(name))
                 {
-                    continue;
+                    SystemClass v = SystemClass.GetSystem(name);
+                    if (v != null)
+                        AddSuggestedSystem(v);
                 }
-                AddSuggestedSystem(system);
             }
-#endif
         }
 
         private void AddSuggestedSystem(SystemClass system)
@@ -636,7 +623,7 @@ namespace EDDiscovery
                         return; 
             }
 
-                var index = dataGridViewSuggestedSystems.Rows.Add(system.name);
+            var index = dataGridViewSuggestedSystems.Rows.Add(system.name + " (" + system.x.ToString("0.00") + "," + system.y.ToString("0.00") + "," + system.z.ToString("0.00") +")");
             dataGridViewSuggestedSystems[0, index].Tag = system;
         }
 
@@ -702,37 +689,6 @@ namespace EDDiscovery
                 }));
             }
         }
-
-        //private void PopulateClosestSystems()
-        //{
-        //    // TODO: in future, we want this to be "predicted" by the direction and distances
-
-        //    var lastKnown = LastKnownSystem;
-
-        //    if (lastKnown == null)
-        //    {
-        //        return;
-        //    }
-
-        //    //labelLastKnownSystem.Text = lastKnown.name;
-
-        //    var closest = (from systems
-        //                   in SystemData.SystemList
-        //                   where systems != lastKnown && systems.HasCoordinate
-        //                   select new
-        //                   {
-        //                       System = systems,
-        //                       Distance = Math.Sqrt(Math.Pow(lastKnown.x - systems.x, 2) + Math.Pow(lastKnown.y - systems.y, 2) + Math.Pow(lastKnown.z - systems.z, 2))
-        //                   })
-        //                  .OrderBy(c => c.Distance)
-        //                  .Take(30);
-
-        //    foreach (var item in closest)
-        //    {
-        //        var index = dataGridViewClosestSystems.Rows.Add(item.System.name, Math.Round(item.Distance, 2).ToString("0.00") + " Ly");
-        //        dataGridViewClosestSystems[0, index].Tag = item.System;
-        //    }
-        //}
 
         public ISystem LastKnownSystem
         {

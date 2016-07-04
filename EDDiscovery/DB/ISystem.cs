@@ -8,7 +8,9 @@ namespace EDDiscovery2.DB
     // Definition of the core interface so we can swap out an "offline" version during testing
     public interface ISystem
     {
-        int id { get; set; }
+        long id { get; set; }
+        long id_edsm { get; set; }
+
         string name { get; set; }
         string SearchName { get; set; }
         double x { get; set; }
@@ -22,7 +24,7 @@ namespace EDDiscovery2.DB
         EDDiscovery.DB.SystemStatusEnum status { get; set; }
         string Note { get; set; }
 
-        int id_eddb { get; set; }
+        long id_eddb { get; set; }
         string faction { get; set; }
         long population { get; set; }
         EDGovernment government { get; set; }

@@ -135,10 +135,7 @@ namespace EDDiscovery
             if (visitedSystems == null)
                 return;
 
-            for (int i = 0; i < visitedSystems.Count; i++)  // added, to make sure cursystem is filled in
-            {
-                UpdateVisitedSystemsEntries(visitedSystems[i], (i < visitedSystems.Count - 1) ? visitedSystems[i + 1] : null);
-            }
+            VisitedSystemsClass.UpdateSys(visitedSystems);
 
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
@@ -147,8 +144,7 @@ namespace EDDiscovery
 
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
-                VisitedSystemsClass item = result[ii];
-                AddNewHistoryRow(false, item);      // for every one in filter, add a row.
+                AddNewHistoryRow(false, result[ii]);      // for every one in filter, add a row.
             }
 
             if (dataGridViewTravel.Rows.Count > 0)
@@ -172,63 +168,6 @@ namespace EDDiscovery
             }
         }
 
-        private void UpdateVisitedSystemsEntries(VisitedSystemsClass item, VisitedSystemsClass item2)           // this is a split in two version with the same code of AddHistoryRow..
-        {
-            SystemClass sys1 = null, sys2;                                                                      // fills in cursystem and prevsystem, and calcs distance
-            double dist;
-
-            sys1 = SystemClass.GetSystem(item.Name);
-            if (sys1 == null)
-            {
-                sys1 = new SystemClass(item.Name);
-                if (SQLiteDBClass.globalSystemNotes.ContainsKey(sys1.SearchName))
-                {
-                    sys1.Note = SQLiteDBClass.globalSystemNotes[sys1.SearchName].Note;
-                }
-                if (item.HasTravelCoordinates)
-                {
-                    sys1.x = item.X;
-                    sys1.y = item.Y;
-                    sys1.z = item.Z;
-                }
-            }
-            if (item2 != null)
-            {
-                sys2 = SystemClass.GetSystem(item2.Name);
-                if (sys2 == null)
-                {
-                    sys2 = new SystemClass(item2.Name);
-                    if (item2.HasTravelCoordinates)
-                    {
-                        sys2.x = item2.X;
-                        sys2.y = item2.Y;
-                        sys2.z = item2.Z;
-                    }
-                }
-            }
-            else
-                sys2 = null;
-
-            item.curSystem = sys1;
-            item.prevSystem = sys2;
-
-            string diststr = "";
-            dist = 0;
-            if (sys2 != null)
-            {
-                if (sys1.HasCoordinate && sys2.HasCoordinate)
-                    dist = SystemClass.Distance(sys1, sys2);
-                else
-                {
-                    dist = DistanceClass.Distance(sys1, sys2);
-                }
-
-                if (dist > 0)
-                    diststr = dist.ToString("0.00");
-            }
-
-            item.strDistance = diststr;
-        }
 
         private void AddNewHistoryRow(bool insert, VisitedSystemsClass item)            // second part of add history row, adds item to view.
         { 
@@ -349,7 +288,7 @@ namespace EDDiscovery
             }
         }
 
-        private void CalculateClosestSystems(string closestname ) // threaded due to slownest of DB calc.
+        private void CalculateClosestSystems(string closestname ) 
         {
             SystemClass lastSystem = SystemClass.GetSystem(closestname);
 
@@ -756,7 +695,7 @@ namespace EDDiscovery
             else
                 item2 = null;
 
-            UpdateVisitedSystemsEntries(item, item2);       // ensure they have system classes behind them..
+            VisitedSystemsClass.UpdateVisitedSystemsEntries(item, item2);       // ensure they have system classes behind them..
 
             LogText("Arrived at system: ");
             if ( item.HasTravelCoordinates == false && ( item.curSystem == null || item.curSystem.HasCoordinate == false) )

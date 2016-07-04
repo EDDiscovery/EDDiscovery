@@ -29,6 +29,7 @@ namespace EDDiscovery2.EDDB
 
         public static Dictionary<int, Commodity> commodities;
 
+        public string SystemFileName { get { return systemFileName; } }
 
         public EDDBClass()
         {
@@ -234,84 +235,5 @@ namespace EDDiscovery2.EDDB
 
             return eddbstations;
         }
-
-        public long UpdateSystems()
-        {
-            long updates = 0;
-
-            StreamReader sr = new StreamReader(systemFileName);         // read directly from file..
-
-            if (sr == null)
-                return 0;
-
-            JsonTextReader jr = new JsonTextReader(sr);               
-
-            if (jr == null)
-                return 0;
-
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))  // open the db
-            {
-                cn.Open();
-
-                SQLiteCommand cmd = new SQLiteCommand("select * from Systems where name = @name limit 1", cn);   // 1 return matching name
-
-                List<SystemClass> toupdate = new List<SystemClass>();
-
-                while (jr.Read())
-                {
-                    if (jr.TokenType == JsonToken.StartObject)
-                    {
-                        JObject jo = JObject.Load(jr);
-
-                        SystemClass system = new SystemClass(jo, EDDiscovery2.DB.SystemInfoSource.EDDB);
-
-                        cmd.Parameters.Clear();
-                        cmd.Parameters.AddWithValue("name", system.name);
-
-                        SQLiteDataReader reader1 = cmd.ExecuteReader();              // case insensitive
-                        if (reader1.Read())                                          // its there..
-                        {
-                            SystemClass dbsys = new SystemClass(reader1);
-
-                            if (dbsys.eddb_updated_at != system.eddb_updated_at || dbsys.population != system.population)
-                            {
-                                dbsys.id_eddb = system.id_eddb;
-                                dbsys.faction = system.faction;
-                                dbsys.population = system.population;
-                                dbsys.government = system.government;
-                                dbsys.allegiance = system.allegiance;
-                                dbsys.state = system.state;
-                                dbsys.security = system.security;
-                                dbsys.primary_economy = system.primary_economy;
-                                dbsys.needs_permit = system.needs_permit;
-                                dbsys.eddb_updated_at = system.eddb_updated_at;
-
-                                toupdate.Add(dbsys);                                // add to update list
-                            }
-                        }
-
-                        cmd.Reset();
-                    }
-                }
-
-                SQLiteTransaction transaction = cn.BeginTransaction();
-
-                updates = toupdate.Count;
-
-                foreach (SystemClass sys in toupdate)                               // commit updates
-                {
-                    sys.Update(cn, sys.id, transaction);
-                }
-
-                transaction.Commit();
-
-                cn.Close();
-
-                GC.Collect();
-            }
-
-            return updates;
-        }
-
     }
 }

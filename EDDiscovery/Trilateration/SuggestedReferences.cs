@@ -12,7 +12,8 @@ namespace EDDiscovery2.Trilateration
     {
         public SystemClass EstimatedPosition;
         private ReferencesSector[,] sectors;
-        int sections = 12;
+        const int sections = 12;
+        const int MaxPerSection = 1000;         // so we don't keep millions of stars in memory, limit the number of stars in each section
 
         public SuggestedReferences(double x, double y, double z)
         {
@@ -56,31 +57,26 @@ namespace EDDiscovery2.Trilateration
             }
         }
 
+        private void AddStarToSector(SystemClass sys)       // call back from AddSystemToSectors
+        {
+            if (sys.HasCoordinate)
+            {
+                ReferenceSystem refSys = new ReferenceSystem(sys, EstimatedPosition);
+
+                if (refSys.Distance > 0.0) // Exlude own position
+                {
+                    int aznr = (int)Math.Floor((refSys.Azimuth * 180 / Math.PI + 180) / (360.0 / sections));
+                    int altnr = (int)Math.Floor((refSys.Altitude * 180 / Math.PI) / (360.0 / sections));
+                    if ( sectors[aznr % sections, altnr % (sections / 2)].CandidatesCount < MaxPerSection)
+                        sectors[aznr % sections, altnr % (sections / 2)].AddCandidate(refSys);
+                }
+            }
+        }
 
         private void AddSystemsToSectors()
         {
-            //TBD FIX
-#if false
-            int aznr, altnr;
-
-            foreach (SystemClass sys in SQLiteDBClass.globalSystems)
-            {
-                if (sys.HasCoordinate)
-                {
-                    ReferenceSystem refSys = new ReferenceSystem(sys, EstimatedPosition);
-
-                    if (refSys.Distance > 0.0) // Exlude own position
-                    {
-                        aznr = (int)Math.Floor((refSys.Azimuth * 180 / Math.PI + 180) / (360.0 / sections));
-                        altnr = (int)Math.Floor((refSys.Altitude * 180 / Math.PI) / (360.0 / sections));
-
-                        sectors[aznr%sections, altnr%(sections/2)].AddCandidate(refSys);
-                    }
-                }
-            }
-#endif
+            SystemClass.ProcessStars(AddStarToSector);
         }
-
 
         public ReferenceSystem GetCandidate()
         {
