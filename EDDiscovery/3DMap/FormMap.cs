@@ -2268,6 +2268,9 @@ namespace EDDiscovery2
             SystemClass cursys = null;
             cursysdistz = double.MaxValue;
 
+            if (_visitedSystems == null)
+                return null;
+
             foreach (VisitedSystemsClass vs in _visitedSystems)
             {
                 if (vs.curSystem != null && vs.curSystem.Note != null)

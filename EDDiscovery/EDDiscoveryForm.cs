@@ -46,8 +46,8 @@ namespace EDDiscovery
         //readonly string _fileTgcSystems;
         readonly string _fileEDSMDistances;
         private EDSMSync _edsmSync;
-        private SQLiteDBClass _db = new SQLiteDBClass();
-        public EDDTheme theme = new EDDTheme();
+        private SQLiteDBClass _db;
+        public EDDTheme theme;
 
         public AutoCompleteStringCollection SystemNames;            // External one
 
@@ -82,6 +82,9 @@ namespace EDDiscovery
         {
             InitializeComponent();
             ProcessCommandLineOptions();
+
+            _db = new SQLiteDBClass();
+            theme = new EDDTheme();
 
             EDDConfig = EDDConfig.Instance;
             galacticMapping = new GalacticMapping();
@@ -138,6 +141,15 @@ namespace EDDiscovery
         {
             string cmdline = Environment.CommandLine;
             option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1 );
+
+            int pos = cmdline.IndexOf("-Appfolder", 0, StringComparison.InvariantCultureIgnoreCase);
+            if ( pos != -1 )
+            {
+                string[] nextwords = cmdline.Substring(pos + 10).Trim().Split(' ');
+                if (nextwords.Length > 0)
+                    Tools.appfolder = nextwords[0];
+            }
+
         }
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)

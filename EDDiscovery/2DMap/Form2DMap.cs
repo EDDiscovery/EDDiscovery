@@ -17,11 +17,10 @@ namespace EDDiscovery2
 {
     public partial class FormSagCarinaMission : Form
     {
-        public List<FGEImage> fgeimages = new List<FGEImage>();
+        public List<FGEImage> fgeimages;
         private FGEImage currentFGEImage;
         public readonly EDDiscoveryForm _eddiscoveryForm;
-        //        private Bitmap currentImage;
-
+        
         private DateTime startDate, endDate;
         public bool Test = false;
 
@@ -64,10 +63,8 @@ namespace EDDiscovery2
             toolStrip1.Items.Add(host2);
             pickerStart.Value = DateTime.Today.AddMonths(-1);
 
-
             this.pickerStart.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged);
             this.pickerStop.ValueChanged += new System.EventHandler(this.dateTimePickerStop_ValueChanged);
-
 
             startDate = new DateTime(2010, 1, 1);
             AddImages();
@@ -95,22 +92,20 @@ namespace EDDiscovery2
                 db.PutSettingInt("Map2DFormLeft", this.Left);
                 //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
+            imageViewer1.Image.Dispose();
+            imageViewer1.Image = null;
+            fgeimages = null;
+            starpositions = null;
+            GC.Collect();
         }
-
-
-        private void LoadImages(string datapath)
-        {
-            fgeimages = FGEImage.LoadImages(datapath);
-        }
-
-
 
         private void AddImages()
         {
+            fgeimages = new List<FGEImage>();
             string datapath = Path.Combine(Tools.GetAppDataDirectory(), "Maps");
             if (Directory.Exists(datapath))
             {
-                LoadImages(datapath);
+                fgeimages = FGEImage.LoadImages(datapath);
                 fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
             }
         }

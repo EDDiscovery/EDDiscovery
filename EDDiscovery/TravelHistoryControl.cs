@@ -346,7 +346,7 @@ namespace EDDiscovery
            dataGridViewTravel.MakeDoubleBuffered();
         }
 
-        private void LoadCommandersListBox()
+        public void LoadCommandersListBox()
         {
             comboBoxCommander.Enabled = false;
             commanders = new List<EDCommander>();
@@ -364,9 +364,8 @@ namespace EDDiscovery
             activecommander = currentcmdr.Nr;
 
             comboBoxCommander.Enabled = true;
-
         }
-
+                
         private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxCommander.SelectedIndex >= 0 )

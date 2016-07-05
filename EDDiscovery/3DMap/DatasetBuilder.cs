@@ -149,40 +149,43 @@ namespace EDDiscovery2._3DMap
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
 
-            foreach (VisitedSystemsClass vs in VisitedSystems)
+            if (VisitedSystems != null)
             {
-                if (vs.curSystem != null && vs.curSystem.Note != null )
+                foreach (VisitedSystemsClass vs in VisitedSystems)
                 {
-                    string note = vs.curSystem.Note.Trim();
-
-                    if (note.Length > 0)
+                    if (vs.curSystem != null && vs.curSystem.Note != null)
                     {
-                        double x = (vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x;
-                        double y = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
-                        double z = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
+                        string note = vs.curSystem.Note.Trim();
 
-                        TexturedQuadData newtexture;
-
-                        if (vert)
+                        if (note.Length > 0)
                         {
-                            newtexture = TexturedQuadData.FromBitmapVert(map,
-                                                        new PointF((float)(x - widthly), (float)(y + heightly)),
-                                                        new PointF((float)(x + widthly), (float)(y + heightly)),
-                                                        new PointF((float)(x - widthly), (float)y),
-                                                        new PointF((float)(x + widthly), (float)y),
-                                                        (float)z);
-                        }
-                        else
-                        {
-                            newtexture = TexturedQuadData.FromBitmapHorz(map,
-                                                                        new PointF((float)(x - widthly), (float)(z + heightly)),
-                                                                        new PointF((float)(x + widthly), (float)(z + heightly)),
-                                                                        new PointF((float)(x - widthly), (float)z),
-                                                                        new PointF((float)(x + widthly), (float)z),
-                                                                        (float)y);
-                        }
+                            double x = (vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x;
+                            double y = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
+                            double z = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
 
-                        datasetbks.Add(newtexture);
+                            TexturedQuadData newtexture;
+
+                            if (vert)
+                            {
+                                newtexture = TexturedQuadData.FromBitmapVert(map,
+                                                            new PointF((float)(x - widthly), (float)(y + heightly)),
+                                                            new PointF((float)(x + widthly), (float)(y + heightly)),
+                                                            new PointF((float)(x - widthly), (float)y),
+                                                            new PointF((float)(x + widthly), (float)y),
+                                                            (float)z);
+                            }
+                            else
+                            {
+                                newtexture = TexturedQuadData.FromBitmapHorz(map,
+                                                                            new PointF((float)(x - widthly), (float)(z + heightly)),
+                                                                            new PointF((float)(x + widthly), (float)(z + heightly)),
+                                                                            new PointF((float)(x - widthly), (float)z),
+                                                                            new PointF((float)(x + widthly), (float)z),
+                                                                            (float)y);
+                            }
+
+                            datasetbks.Add(newtexture);
+                        }
                     }
                 }
             }
