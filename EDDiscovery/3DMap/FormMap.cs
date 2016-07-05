@@ -1797,9 +1797,15 @@ namespace EDDiscovery2
         private void glControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             bool notmovedmouse = Math.Abs(e.X - _mouseDownPos.X) + Math.Abs(e.Y - _mouseDownPos.Y) < 8;
-            SystemClassStarNames cursystem = null;
-            BookmarkClass curbookmark = null;
-            bool notedsystem = false;
+
+            // system = cursystem!=null, curbookmark = null, notedsystem = false
+            // bookmark on system, cursystem!=null, curbookmark != null, notedsystem = false
+            // region bookmark. cursystem = null, curbookmark != null, notedsystem = false
+            // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
+
+            SystemClassStarNames cursystem = null;      
+            BookmarkClass curbookmark = null;           
+            bool notedsystem = false;                   
 
             if (notmovedmouse)
             {
@@ -1837,14 +1843,14 @@ namespace EDDiscovery2
                 if (cursystem != null || curbookmark != null )      // if we have a system or a bookmark..
                 {                                                   // try and find the associated bookmark..
                     BookmarkClass bkmark = (curbookmark != null) ? curbookmark : SQLiteDBClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
-                    string note = SQLiteDBClass.globalSystemNotes.ContainsKey(cursystem.name) ? SQLiteDBClass.globalSystemNotes[cursystem.name].Note : null;
+                    string note = (cursystem!=null && SQLiteDBClass.globalSystemNotes.ContainsKey(cursystem.name)) ? SQLiteDBClass.globalSystemNotes[cursystem.name].Note : null;
 
                     BookmarkForm frm = new BookmarkForm();
 
-                    if (notedsystem && bkmark == null)
+                    if (notedsystem && bkmark == null)              // note on a system
                     {
                         frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
-                        frm.SystemInfo(cursystem.name, note);
+                        frm.SystemInfo(cursystem.name, note);       // note may be passed in null
                         frm.ShowDialog();
                     }
                     else
@@ -1852,13 +1858,13 @@ namespace EDDiscovery2
                         bool regionmarker = false;
                         DateTime tme;
 
-                        if (bkmark == null)                  // new bookmark
+                        if (bkmark == null)                         // new bookmark
                         {
                             frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
                             tme = DateTime.Now;
                             frm.New(cursystem.name, note, tme.ToString());
                         }
-                        else                                    // update bookmark
+                        else                                        // update bookmark
                         {
                             frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
                             regionmarker = bkmark.Heading != null;
