@@ -337,7 +337,7 @@ namespace EDDiscovery2
 
         internal EDCommander GetNewCommander()
         {
-            int maxnr = 1;
+            int maxnr = 0;
             foreach (EDCommander cmdr in listCommanders)
             {
                 maxnr = Math.Max(cmdr.Nr, maxnr);

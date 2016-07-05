@@ -98,9 +98,6 @@ namespace EDDiscovery
                         EDDConfig.Instance.NetLogDirAutoMode = false;
                         datapath = newfi.DirectoryName;
                     }
-
-
-
                 }
                 else
                 {

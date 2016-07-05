@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -105,12 +106,12 @@ namespace EDDiscovery
             }
         }
 
+        public static string appfolder = "EDDiscovery";
 
         static internal string GetAppDataDirectory()
         {
             try
             {
-                string appfolder = File.Exists("testappdata.txt") ? "EDTest" : "EDDiscovery";
                 string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
 
                 if (!Directory.Exists(datapath))

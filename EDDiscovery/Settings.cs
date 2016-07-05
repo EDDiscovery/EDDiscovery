@@ -114,13 +114,12 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
             EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
 
-            List <EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
             EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
             dataGridViewCommanders.DataSource = null;
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
             dataGridViewCommanders.Update();
         }
-
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -189,9 +188,17 @@ namespace EDDiscovery2
         {
             EDCommander cmdr = EDDiscoveryForm.EDDConfig.GetNewCommander();
             EDDiscoveryForm.EDDConfig.listCommanders.Add(cmdr);
-            dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
+            dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
+            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;   // can't solve it, TBD
             dataGridViewCommanders.Update();
+            _discoveryForm.TravelControl.LoadCommandersListBox();
+        }
+
+        private void dataGridViewCommanders_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
+            _discoveryForm.TravelControl.LoadCommandersListBox();
         }
 
         public void panel_defaultmapcolor_Click(object sender, EventArgs e)
@@ -288,5 +295,6 @@ namespace EDDiscovery2
         {
             EDDConfig.Instance.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
         }
+
     }
 }
