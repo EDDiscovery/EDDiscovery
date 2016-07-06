@@ -724,7 +724,11 @@ namespace EDDiscovery.DB
                     cmd.CommandTimeout = 30;
                     SQLiteDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
+                    {
                         sys = new SystemClass(reader);
+                        if (SQLiteDBClass.globalSystemNotes.ContainsKey(sys.SearchName))
+                            sys.Note = SQLiteDBClass.globalSystemNotes[sys.SearchName].Note;
+                    }
                 }
 
                 if (closeit)
@@ -762,7 +766,11 @@ namespace EDDiscovery.DB
                     cmd.CommandTimeout = 30;
                     SQLiteDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
+                    {
                         sys = new SystemClass(reader);
+                        if (SQLiteDBClass.globalSystemNotes.ContainsKey(sys.SearchName))
+                            sys.Note = SQLiteDBClass.globalSystemNotes[sys.SearchName].Note;
+                    }
                 }
 
                 if (closeit)

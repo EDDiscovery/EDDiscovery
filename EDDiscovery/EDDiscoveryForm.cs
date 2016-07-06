@@ -198,6 +198,7 @@ namespace EDDiscovery
                 edsmThread.Join();
                 downloadmapsThread.Join();
 
+                
                 SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
                 Console.WriteLine("Systems Loaded");
                 
@@ -260,7 +261,7 @@ namespace EDDiscovery
 
                     if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
                     {
-                        LogLineHighlight("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller + Environment.NewLine);
+                        LogLineHighlight("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller);
                     }
 
                 }
@@ -465,16 +466,15 @@ namespace EDDiscovery
                         LogLine("EDSM updated " + updates + " systems.");
                     }
                 }
-
-                galacticMapping.ParseData();
-                _db.GetAllSystemNotes();
-                _db.GetAllBookmarks();
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show("GetEDSMSystems exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
             }
+
+            _db.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
+            _db.GetAllBookmarks();
+            galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
 
             GC.Collect();
         }
@@ -636,7 +636,7 @@ namespace EDDiscovery
                         updatedb = true;
                     }
                     else
-                        LogLineHighlight("Failed." + Environment.NewLine);
+                        LogLineHighlight("Failed to download EDDB Systems.");
 
                     eddb.GetCommodities();
                     eddb.ReadCommodities();
@@ -655,7 +655,7 @@ namespace EDDiscovery
                         updatedb = true;
                     }
                     else
-                        LogLineHighlight("Failed." + Environment.NewLine);
+                        LogLineHighlight("Failed to download EDDB station data.");
 
                 }
 
