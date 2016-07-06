@@ -33,7 +33,7 @@ namespace EDDiscovery
             public const int SystemName = 0;
         }
 
-        private const int DefaultTravelHistoryFilterIndex = 4;
+        private const int DefaultTravelHistoryFilterIndex = 8;
         private const string SingleCoordinateFormat = "0.#####";
 
         private static EDDiscoveryForm _discoveryForm;
@@ -93,17 +93,20 @@ namespace EDDiscovery
             visitedSystems = null;
 
             TriggerEDSMRefresh();
+            LogText("Refresh History." + Environment.NewLine);
             RefreshHistory();
-
+            LogText("Refresh Complete." + Environment.NewLine);
 
             EliteDangerous.CheckED();
         }
 
         public void TriggerEDSMRefresh()
         {
+            LogText("Check for new EDSM systems." + Environment.NewLine);
             SQLiteDBClass db = new SQLiteDBClass();
             EDSMClass edsm = new EDSMClass();
             edsm.GetNewSystems(db);
+            LogText("EDSM System check complete." + Environment.NewLine);
         }
 
 
@@ -135,7 +138,7 @@ namespace EDDiscovery
             if (visitedSystems == null)
                 return;
 
-            VisitedSystemsClass.UpdateSys(visitedSystems);
+            VisitedSystemsClass.UpdateSys(visitedSystems, EDDiscoveryForm.EDDConfig.UseDistances);
 
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
@@ -360,6 +363,7 @@ namespace EDDiscovery
             comboBoxCommander.DisplayMember = "Name";
 
             EDCommander currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander;
+
             comboBoxCommander.SelectedIndex = commanders.IndexOf(currentcmdr);
             activecommander = currentcmdr.Nr;
 
@@ -368,7 +372,7 @@ namespace EDDiscovery
                 
         private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxCommander.SelectedIndex >= 0 )
+            if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled )     // DONT trigger during LoadCommandersListBox
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 activecommander = itm.Nr;
@@ -494,16 +498,13 @@ namespace EDDiscovery
             else
             {
                 DistanceClass distance = new DistanceClass();
-
                 distance.Dist = dist.Value;
                 distance.CreateTime = DateTime.UtcNow;
                 distance.CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name.Trim();
                 distance.NameA = textBoxSystem.Text;
                 distance.NameB = textBoxPrevSystem.Text;
                 distance.Status = DistancsEnum.EDDiscovery;
-
                 distance.Store();
-                SQLiteDBClass.AddDistanceToCache(distance);
 
                 if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
                     dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[TravelHistoryColumns.Distance].Value = textBoxDistance.Text.Trim();
@@ -600,9 +601,8 @@ namespace EDDiscovery
                 MessageBox.Show("Please enter commander name before sending distances/ travel history to EDSM!");
                 return;
             }
-            var db = new SQLiteDBClass();
 
-            var dists = db.GetDistancesByStatus((int)DistancsEnum.EDDiscovery);
+            var dists = DistanceClass.GetDistancesByStatus((int)DistancsEnum.EDDiscovery);
 
             EDSMClass edsm = new EDSMClass();
 
@@ -693,7 +693,7 @@ namespace EDDiscovery
             else
                 item2 = null;
 
-            VisitedSystemsClass.UpdateVisitedSystemsEntries(item, item2);       // ensure they have system classes behind them..
+            VisitedSystemsClass.UpdateVisitedSystemsEntries(item, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
 
             LogText("Arrived at system: ");
             if ( item.HasTravelCoordinates == false && ( item.curSystem == null || item.curSystem.HasCoordinate == false) )
@@ -738,7 +738,6 @@ namespace EDDiscovery
                         };
                         Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
                         distance.Store();
-                        SQLiteDBClass.AddDistanceToCache(distance);
                     }
                 }
             }

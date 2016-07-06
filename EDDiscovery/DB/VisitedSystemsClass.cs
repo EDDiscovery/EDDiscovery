@@ -470,20 +470,50 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static void UpdateSys(List<VisitedSystemsClass> visitedSystems)
+        public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb)          // oldest system is lowest index
         {
-            for (int i = 0; i < visitedSystems.Count; i++)  // added, to make sure cursystem is filled in
+            foreach (VisitedSystemsClass vsc in visitedSystems)
             {
-                UpdateVisitedSystemsEntries(visitedSystems[i], (i < visitedSystems.Count - 1) ? visitedSystems[i + 1] : null);
+                if (vsc.curSystem == null)                                              // if not set before, look it up
+                {
+                    vsc.curSystem = SystemClass.GetSystem(vsc.Name);
+
+                    if (vsc.curSystem == null)                                               // not found, make one up
+                    {
+                        vsc.curSystem = new SystemClass(vsc.Name);
+                        if (SQLiteDBClass.globalSystemNotes.ContainsKey(vsc.curSystem.SearchName))
+                            vsc.curSystem.Note = SQLiteDBClass.globalSystemNotes[vsc.curSystem.SearchName].Note;
+
+                        if (vsc.HasTravelCoordinates)
+                        {
+                            vsc.curSystem.x = vsc.X;
+                            vsc.curSystem.y = vsc.Y;
+                            vsc.curSystem.z = vsc.Z;
+                        }
+                    }
+
+                    vsc.strDistance = "";                                       // set empty, must have a string in there.
+                }
+            }
+
+            for (int i = 1; i < visitedSystems.Count ; i++)                 // now we filled in current system, fill in previous system (except for last)
+            {
+                VisitedSystemsClass cur = visitedSystems[i];
+                VisitedSystemsClass prev = visitedSystems[i - 1];
+                cur.prevSystem = prev.curSystem;
+
+                if (cur.strDistance.Length == 0)                          // if empty, see if we have any data..
+                {
+                    double dist = usedistancedb ? SystemClass.DistanceIncludeDB(cur.curSystem, prev.curSystem) : SystemClass.Distance(cur.curSystem, prev.curSystem);
+                    if (dist > 0)
+                        cur.strDistance = dist.ToString("0.00");
+                }
             }
         }
 
-        public static void UpdateVisitedSystemsEntries(VisitedSystemsClass item, VisitedSystemsClass item2)           // this is a split in two version with the same code of AddHistoryRow..
+        public static void UpdateVisitedSystemsEntries(VisitedSystemsClass item, VisitedSystemsClass item2 , bool usedistancedb)           // this is a split in two version with the same code of AddHistoryRow..
         {
-            SystemClass sys1 = null, sys2;                                                                      // fills in cursystem and prevsystem, and calcs distance
-            double dist;
-
-            sys1 = SystemClass.GetSystem(item.Name);            
+            SystemClass sys1 = SystemClass.GetSystem(item.Name);            
             if (sys1 == null)
             {
                 sys1 = new SystemClass(item.Name);
@@ -498,6 +528,9 @@ namespace EDDiscovery2.DB
                     sys1.z = item.Z;
                 }
             }
+
+            SystemClass sys2 = null;
+
             if (item2 != null)
             {
                 sys2 = SystemClass.GetSystem(item2.Name);
@@ -519,16 +552,9 @@ namespace EDDiscovery2.DB
             item.prevSystem = sys2;
 
             string diststr = "";
-            dist = 0;
             if (sys2 != null)
             {
-                if (sys1.HasCoordinate && sys2.HasCoordinate)
-                    dist = SystemClass.Distance(sys1, sys2);
-                else
-                {
-                    dist = DistanceClass.Distance(sys1, sys2);
-                }
-
+                double dist = usedistancedb ? SystemClass.DistanceIncludeDB(sys1,sys2) : SystemClass.Distance(sys1, sys2);
                 if (dist > 0)
                     diststr = dist.ToString("0.00");
             }
