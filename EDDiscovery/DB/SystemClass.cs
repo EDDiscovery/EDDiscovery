@@ -249,7 +249,7 @@ namespace EDDiscovery.DB
             needs_permit = o == DBNull.Value ? 0 : (int)((long)o);
         }
 
-        public SystemClass(SQLiteDataReader dr)
+        public SystemClass(SQLiteDataReader dr)         // read from a SQLite reader after a query
         {
             Object o;
 
@@ -528,12 +528,20 @@ namespace EDDiscovery.DB
             return true;
         }
 
-        public static double Distance(SystemClass s1, SystemClass s2)
+        public static double Distance(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
         {
-            if (s1 == null || s2 == null)
+            if (s1 != null && s2 != null && s1.HasCoordinate && s2.HasCoordinate)
+                return Math.Sqrt((s1.x - s2.x) * (s1.x - s2.x) + (s1.y - s2.y) * (s1.y - s2.y) + (s1.z - s2.z) * (s1.z - s2.z));
+            else
                 return -1;
+        }
 
-            return Math.Sqrt((s1.x - s2.x) * (s1.x - s2.x) + (s1.y - s2.y) * (s1.y - s2.y) + (s1.z - s2.z) * (s1.z - s2.z));
+        public static double DistanceIncludeDB(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
+        {
+            double dist = Distance(s1, s2);
+            if (dist < 0)
+                dist = DistanceClass.FindDistance(s1, s2);
+            return dist;
         }
 
         public static void GetSystemNamesList(List<SystemClassStarNames> snlist , Dictionary<string, SystemClassStarNames> dict )
@@ -1042,7 +1050,7 @@ namespace EDDiscovery.DB
 
                         if (++c % 10000 == 0)
                         {
-                            Console.WriteLine("Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newsys " + newsystems.Count + " update " + toupdate.Count());
+                            Console.WriteLine("EDSM Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newsys " + newsystems.Count + " update " + toupdate.Count());
                             lasttc = Environment.TickCount;
                         }
 
@@ -1050,7 +1058,6 @@ namespace EDDiscovery.DB
                         {
                             cmd.Parameters.Clear();
                             cmd.Parameters.AddWithValue("id_edsm", system.id_edsm);
-                            //cmd.Parameters.AddWithValue("name", system.name + ">>>");
 
                             SQLiteDataReader reader1 = cmd.ExecuteReader();              // see if ESDM ID is there..
                             if (reader1.Read())                                          // its there..
@@ -1107,12 +1114,12 @@ namespace EDDiscovery.DB
                     {
                         sys.Store(cn2, transaction);
 
-                        if (++count % 10000 == 0)                      // had problems with DB is locked, so do it in small trances..
+                        if (++count % 100000 == 0)                      // had problems with DB is locked, so do it in small trances..
                         {
                             transaction.Commit();
                             transaction.Dispose();
                             transaction = cn2.BeginTransaction();
-                            Console.WriteLine("Store Count " + count);
+                            Console.WriteLine("EDSM Store Count " + count);
                         }
                     }
 
@@ -1242,7 +1249,7 @@ namespace EDDiscovery.DB
 
                         if (++c % 10000 == 0)
                         {
-                            Console.WriteLine("Count " + c + " Delta " + (Environment.TickCount - lasttc) + " update " + toupdate.Count());
+                            Console.WriteLine("EDDB Count " + c + " Delta " + (Environment.TickCount - lasttc) + " update " + toupdate.Count());
                             lasttc = Environment.TickCount;
                         }
                     }
@@ -1264,12 +1271,12 @@ namespace EDDiscovery.DB
                     {
                         sys.Update(cn2, sys.id, transaction);
 
-                        if (++count % 10000 == 0)                      // had problems with DB is locked, so do it in small trances..
+                        if (++count % 100000 == 0)                      // had problems with DB is locked, so do it in small trances..
                         {
                             transaction.Commit();
                             transaction.Dispose();
                             transaction = cn2.BeginTransaction();
-                            Console.WriteLine("Store Count " + count);
+                            Console.WriteLine("EDDB Store Count " + count);
                         }
                     }
 

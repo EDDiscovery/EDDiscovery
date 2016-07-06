@@ -165,15 +165,7 @@ namespace EDDiscovery
             {
                 foreach (var sys in systems.Where(s => s != null))
                 {
-                    double dist;
-                    if (sys.HasCoordinate)
-                    {
-                        dist = SystemClass.Distance(sys0, sys);
-                    }
-                    else
-                    {
-                        dist = DistanceClass.Distance(sys0, sys);
-                    }
+                    double dist = SystemClass.DistanceIncludeDB(sys0, sys);
 
                     if (dist > maxdist)
                     {
@@ -218,16 +210,7 @@ namespace EDDiscovery
 
                     if (sys != null && prevsys != null)
                     {
-                        double dist;
-                        if (sys.HasCoordinate && prevsys.HasCoordinate)
-                        {
-                            dist = SystemClass.Distance(sys, prevsys);
-                        }
-                        else
-                        {
-                            dist = DistanceClass.Distance(sys, prevsys);
-                        }
-
+                        double dist = SystemClass.DistanceIncludeDB(sys, prevsys);
                         string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
                         dataGridViewRouteSystems[1, rowindex].Value = strdist;
                     }

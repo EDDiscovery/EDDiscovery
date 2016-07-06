@@ -26,21 +26,18 @@ namespace EDDiscovery2.EDSM
 
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
-
-
+        private string EDSMDistancesFileName;
 
         public EDSMClass()
         {
             fromSoftware = "EDDiscovery";
             _serverAddress = "https://www.edsm.net/";
+            EDSMDistancesFileName = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
         }
-
-
-
-
+        
         public string SubmitDistances(string cmdr, string from, string to, double dist)
         {
             return SubmitDistances(cmdr, from, new Dictionary<string, double> { { to, dist } });
@@ -133,7 +130,7 @@ namespace EDDiscovery2.EDSM
 
         
 
-     public string RequestSystems(string date)
+        public string RequestSystems(string date)
         {
             DateTime dtDate = DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
@@ -150,15 +147,26 @@ namespace EDDiscovery2.EDSM
         public string RequestDistances(string date)
         {
             string query;
-            query = "?startdatetime=" + HttpUtility.UrlEncode(date);
+            query = "?showId=1 & submitted=1 & startdatetime=" + HttpUtility.UrlEncode(date);
 
-            var response = RequestGet("api-v1/distances" + query + "coords=1 & submitted=1");
+            var response = RequestGet("api-v1/distances" + query );
             var data = response.Body;
             return response.Body;
         }
 
+        public string GetEDSMDistances()            // download a file of distances..
+        {
+            if (File.Exists(EDSMDistancesFileName))
+                File.Delete(EDSMDistancesFileName);
+            if (File.Exists(EDSMDistancesFileName + ".etag"))
+                File.Delete(EDSMDistancesFileName + ".etag");
 
-
+            if (EDDBClass.DownloadFile("https://www.edsm.net/dump/distances.json", EDSMDistancesFileName))
+                return EDSMDistancesFileName;
+            else
+                return null;
+        }
+        
         internal long GetNewSystems(SQLiteDBClass db)
         {
             string lstsyst;

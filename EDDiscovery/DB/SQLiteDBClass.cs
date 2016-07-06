@@ -15,7 +15,6 @@ namespace EDDiscovery.DB
         internal static string ConnectionString;
         string dbfile;
 
-        public static Dictionary<string, double> dictDistances = new Dictionary<string, double>();
         public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
         public static List<BookmarkClass> bookmarks = new List<BookmarkClass>();
 
@@ -328,10 +327,14 @@ namespace EDDiscovery.DB
             string query1 = "ALTER TABLE Systems ADD COLUMN id_edsm Integer";
             string query2 = "CREATE INDEX Systems_EDSM_ID_Index ON Systems (id_edsm ASC)";
             string query3 = "CREATE INDEX Systems_EDDB_ID_Index ON Systems (id_eddb ASC)";
-            PerformUpgrade(17, true, true, new[] { query1,query2,query3 }, () =>
+            string query4 = "ALTER TABLE Distances ADD COLUMN id_edsm Integer";
+            string query5 = "CREATE INDEX Distances_EDSM_ID_Index ON Distances (id_edsm ASC)";
+
+            PerformUpgrade(17, true, true, new[] { query1,query2,query3,query4,query5 }, () =>
             {
                 PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00");        // force EDSM sync..
                 PutSettingString("EDDBSystemsTime", "0");                               // force EDDB
+                PutSettingString("EDSCLastDist", "2010-01-01 00:00:00");                // force distances
             });
         }
 
@@ -352,109 +355,6 @@ namespace EDDiscovery.DB
             return true;
         }
 
-        public bool GetAllDistances(bool loadAlldata)
-        {
-            try
-            {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
-                    {
-                        DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        if (!loadAlldata)
-                            cmd.CommandText = "select NameA,NameB, Dist from Distances WHERE status='3' or status = '4'";//         EDDiscovery = 3, EDDiscoverySubmitted = 4
-                        else
-                            cmd.CommandText = "select NameA,NameB, Dist from Distances";
-
-                        ds = SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return false;
-                        }
-                        //
-                        if (ds.Tables[0].Rows.Count == 0)
-                        {
-                            return false;
-                        }
-                        
-                        dictDistances.Clear();
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            string NameA, NameB;
-                            double dist;
-
-                            NameA = (string)dr["NameA"];
-                            NameB = (string)dr["NameB"];
-                            dist = Convert.ToDouble(dr["Dist"]);
-
-                            dictDistances[GetDistanceCacheKey(NameA, NameB)] = dist;
-                        }
-
-                        return true;
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-                return false;
-            }
-        }
-
-
-        public List<DistanceClass> GetDistancesByStatus(int status)
-        {
-            List<DistanceClass> ldist = new List<DistanceClass>();
-            try
-            {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
-                    {
-                        DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from Distances WHERE status='" + status.ToString() +  "'";
-
-                        ds = SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return ldist;
-                        }
-                        //
-                        if (ds.Tables[0].Rows.Count == 0)
-                        {
-                            return ldist;
-                        }
-
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            DistanceClass dist = new DistanceClass(dr);
-                            ldist.Add(dist);
-                        }
-
-                        return ldist;
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-                return ldist;
-            }
-        }
         
         public bool GetAllSystemNotes()
         {
@@ -1230,20 +1130,6 @@ namespace EDDiscovery.DB
 
 
             PutSettingInt(key, size);
-        }
-
-
-        public static void AddDistanceToCache(DistanceClass distance)
-        {
-            dictDistances[GetDistanceCacheKey(distance.NameA, distance.NameB)] = distance.Dist;
-        }
-
-        public static string GetDistanceCacheKey(string systemA, string systemB)
-        {
-            var systemALower = systemA.ToLower();
-            var systemBLower = systemB.ToLower();
-            var cmp = string.Compare(systemALower, systemBLower, false, CultureInfo.InvariantCulture);
-            return cmp < 0 ? systemALower + ":" + systemBLower : systemBLower + ":" + systemALower;
         }
     }
 }

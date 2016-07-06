@@ -267,9 +267,6 @@ namespace EDDiscovery
             }
         }
 
-        //Pleiades Sector WU-O B16-0
-        //Pleiades Sector WU-O b6-0
-
         private void InitFormControls()
         {
             labelPanelText.Text = "Loading. Please wait!";
@@ -363,7 +360,6 @@ namespace EDDiscovery
                 if (!Directory.Exists(Path.Combine(Tools.GetAppDataDirectory(), "Maps")))
                     Directory.CreateDirectory(Path.Combine(Tools.GetAppDataDirectory(), "Maps"));
 
-
                 LogText("Checking for new EDDiscovery maps" + Environment.NewLine);
 
                 if (DownloadMapFile("SC-01.jpg"))  // If server down only try one.
@@ -397,23 +393,15 @@ namespace EDDiscovery
                     DownloadMapFile("Formidine.json");
                     DownloadMapFile("Formidine trans.png");
                     DownloadMapFile("Formidine trans.json");
-
-
+                    
                     DeleteMapFile("DW4.png");
                     DeleteMapFile("SC-00.jpg");
-
-                    //for (int ii = -10; ii <= 60; ii += 10)
-                    //{
-                    //    DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".png");
-                    //    DownloadMapFile("Map A+00" + ii.ToString("+00;-00") + ".json");
-                    //}
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("DownloadImages exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
             }
-
         }
 
         private bool DownloadMapFile(string file)
@@ -425,7 +413,6 @@ namespace EDDiscovery
                 if (newfile)
                     LogText("Downloaded map: " + file + Environment.NewLine);
                 return true;
-
             }
             else
                 return false;
@@ -460,6 +447,10 @@ namespace EDDiscovery
                 if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
                 {
                     SyncAllEDSMSystems();                           // big check, so we do this in another thread and release this one
+
+                    // Also update galactic mapping from EDSM (MOVED here for now since we don't use this yet..)
+                    LogLine("Get galactic mapping from EDSM.");
+                    galacticMapping.DownloadFromEDSM();
                 }
                 else
                 {
@@ -475,13 +466,10 @@ namespace EDDiscovery
                     }
                 }
 
+                galacticMapping.ParseData();
                 _db.GetAllSystemNotes();
                 _db.GetAllBookmarks();
 
-                // Also update galactic mapping from EDSM
-                LogLine("Get galactic mapping from EDSM");
-                galacticMapping.DownloadFromEDSM();
-                galacticMapping.ParseData();
             }
             catch (Exception ex)
             {
@@ -563,63 +551,41 @@ namespace EDDiscovery
             {
                 if (EDDConfig.UseDistances)
                 {
-                    EDSMClass edsm = new EDSMClass();
-                    EDDBClass eddb = new EDDBClass();
                     string lstdist = _db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
-                    string json;
+                    EDSMClass edsm = new EDSMClass();
 
-                    // Get distances
-                    lstdist = _db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
-                    List<DistanceClass> dists = new List<DistanceClass>();
+                    long numbertotal = 0;
 
-                    if (lstdist.Equals("2010-01-01 00:00:00"))
+                    if (lstdist.Equals("2010-01-01 00:00:00"))          // first time ever..
                     {
-                        LogText("Downloading mirrored EDSM distance data. (Might take some time)" + Environment.NewLine);
-                        eddb.GetEDSMDistances();
-                        json = LoadJsonFile(_fileEDSMDistances);
-                        if (json != null)
+                        LogText("Downloading full EDSM distance data." + Environment.NewLine);
+                        string filename = edsm.GetEDSMDistances();
+
+                        if (filename != null)
                         {
-                            LogText("Adding mirrored EDSM distance data." + Environment.NewLine);
-
-                            dists = new List<DistanceClass>();
-                            dists = DistanceClass.ParseEDSM(json, ref lstdist);
-                            LogText("Found " + dists.Count.ToString() + " distances." + Environment.NewLine);
-
-                            Application.DoEvents();
-                            DistanceClass.Store(dists);
+                            LogText("Updating all distances with EDSM data." + Environment.NewLine);
+                            long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist,true);
+                            numbertotal += numberx;
                             _db.PutSettingString("EDSCLastDist", lstdist);
+                            LogText("EDSM Distance update done, " + numberx + " distances updated." + Environment.NewLine);
                         }
                     }
 
-                    try
-                    {
-                        LogLine("Checking for new distances from EDSM. ");
-                    }
-                    catch (Exception) { }
+                    LogText("Updating distances with EDSM data." + Environment.NewLine);
 
+                    string json = edsm.RequestDistances(lstdist);
+                    if ( json == null )
+                        LogText("No response from server." + Environment.NewLine);
 
-                    Application.DoEvents();
-                    json = edsm.RequestDistances(lstdist);
-
-                    dists = new List<DistanceClass>();
-                    dists = DistanceClass.ParseEDSM(json, ref lstdist);
-
-                    try
-                    { 
-                        if (json == null)
-                            LogText("No response from server." + Environment.NewLine);
-                        else
-                            LogText("Found " + dists.Count.ToString() + " new distances." + Environment.NewLine);
-                    }
-                    catch ( Exception )          // don't moan, probably the UI has been closed.
-                    { }
-
-                    Application.DoEvents();
-                    DistanceClass.Store(dists);
+                    long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist,false);
+                    numbertotal += number;
+                    LogText("EDSM Distance update done, " + number + " distances updated." + Environment.NewLine);
                     _db.PutSettingString("EDSCLastDist", lstdist);
+
+                    if ( numbertotal > 0 )                          // if we've done something
+                        OnDistancesLoaded();                        // may have new ones, lets go..
                 }
-                _db.GetAllDistances(EDDConfig.UseDistances);  // Load user added distances
-                OnDistancesLoaded();
+
                 GC.Collect();
             }
             catch (Exception ex)
@@ -633,7 +599,9 @@ namespace EDDiscovery
         {
             Invoke((MethodInvoker)delegate
             {
+                LogText("Refreshing history due to new distances." + Environment.NewLine);
                 travelHistoryControl1.RefreshHistory();
+                LogText("Refreshing complete." + Environment.NewLine);
             });
         }
 
@@ -653,24 +621,17 @@ namespace EDDiscovery
             try
             {
                 EDDBClass eddb = new EDDBClass();
-                string timestr;
-                DateTime time;
-
-                Thread.Sleep(1000);
-
-                timestr = _db.GetSettingString("EDDBSystemsTime", "0");
-                time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
+                string timestr = _db.GetSettingString("EDDBSystemsTime", "0");
+                DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
                 bool updatedb = false;
 
-                // Get EDDB data once every week.
-                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
                 {
-                    LogText("Get systems from EDDB. ");
+                    LogText("Get systems from EDDB. " + Environment.NewLine);
 
                     if (eddb.GetSystems())
                     {
-                        LogText("OK." + Environment.NewLine);
-
+                        LogText("Systems from EDDB downloaded." + Environment.NewLine);
                         _db.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
                         updatedb = true;
                     }
@@ -689,7 +650,7 @@ namespace EDDiscovery
                     LogText("Get stations from EDDB. " + Environment.NewLine);
                     if (eddb.GetStationsLite())
                     {
-                        LogText("OK." + Environment.NewLine);
+                        LogText("Stations from EDDB downloaded." + Environment.NewLine);
                         _db.PutSettingString("EDDBStationsLiteTime", DateTime.UtcNow.Ticks.ToString());
                         updatedb = true;
                     }
@@ -704,8 +665,7 @@ namespace EDDiscovery
                     LogText("EDDB update done, " + number + " systems updated" + Environment.NewLine);
                 }
 
-                return;
-
+                GC.Collect();
             }
             catch (Exception ex)
             {
@@ -797,30 +757,6 @@ namespace EDDiscovery
             return json;
         }
 
-
-        private string LoadJSON(string jfile)
-        {
-            string json = null;
-            try
-            {
-                string filename = Path.Combine(Tools.GetAppDataDirectory(), jfile);
-
-                if (!File.Exists(filename))
-                    return null;
-
-                StreamReader reader = new StreamReader(filename);
-
-                json = reader.ReadToEnd();
-
-                reader.Close();
-            }
-            catch
-            {
-            }
-
-            return json;
-        }
-
         internal void ShowTrilaterationTab()
         {
             tabControl1.SelectedIndex = 1;
@@ -856,65 +792,8 @@ namespace EDDiscovery
 
 #region ButtonsAndMouse
 
-        private void xf(SystemClass sc, Object data )
-        {
-
-        }
-
         private void button_test_Click(object sender, EventArgs e)
         {
-            SystemClass sys = SystemClass.GetSystem("Lembava");
-            Console.WriteLine("Name:" + sys.name);
-
-            sys = SystemClass.GetSystem("lEmBava");
-            Console.WriteLine("Name:" + sys.name);
-
-            long totalsystems = SystemClass.GetTotalSystems();
-            Console.WriteLine("Total sys:" + totalsystems);
-
-            DateTime lasttime = SystemClass.GetLastSystemEntryTime();
-            Console.WriteLine("Last system time:" + lasttime.ToString());
-
-
-            //SystemClass.GetSystemList(xf, null);
-
-
-
-
-
-
-            //EdMaterializer mat = new EdMaterializer();
-
-            //mat.GetAllWorlds(null);
-
-
-            //EDWorld obj = new EDWorld();
-
-            //obj.updater = "Test";
-            //obj.system = "Fine Ring Sector JH-V C2-4";
-            //obj.objectName = "A 3";
-            //obj.ObjectType = ObjectTypesEnum.HighMetalContent;
-            //obj.arrivalPoint = 0;
-            //obj.gravity = 0.13f;
-
-            //obj.materials[MaterialEnum.Carbon] = true;
-            //obj.materials[MaterialEnum.Iron] = true;
-            //obj.materials[MaterialEnum.Nickel] = true;
-            //obj.materials[MaterialEnum.Phosphorus] = true;
-            //obj.materials[MaterialEnum.Sulphur] = true;
-            //obj.materials[MaterialEnum.Germanium] = true;
-            //obj.materials[MaterialEnum.Selenium] = true;
-            //obj.materials[MaterialEnum.Vanadium] = true;
-            //obj.materials[MaterialEnum.Cadmium] = true;
-            //obj.materials[MaterialEnum.Molybdenum] = true;
-            //obj.materials[MaterialEnum.Tin] = true;
-            //obj.materials[MaterialEnum.Polonium] = true;
-
-            //mat.DeletePlanetID(5);
-            //mat.DeletePlanetID(6);
-            //mat.DeletePlanetID(7);
-
-            //mat.StorePlanet(obj);
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
