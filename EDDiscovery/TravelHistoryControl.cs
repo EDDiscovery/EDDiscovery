@@ -695,7 +695,7 @@ namespace EDDiscovery
 
             VisitedSystemsClass.UpdateVisitedSystemsEntries(item, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
 
-            LogText("Arrived at system: ");
+            LogText("Arrived at system ");
             if ( item.HasTravelCoordinates == false && ( item.curSystem == null || item.curSystem.HasCoordinate == false) )
                 LogTextHighlight(name);
             else
@@ -703,7 +703,7 @@ namespace EDDiscovery
 
             int count = GetVisitsCount(name);
 
-            LogText(": Visit No. " + count.ToString() + Environment.NewLine);
+            LogText(", Visit No. " + count.ToString() + Environment.NewLine);
             System.Diagnostics.Trace.WriteLine("Arrived at system: " + name + " " + count.ToString() + ":th visit.");
 
             if (checkBoxEDSMSyncTo.Checked == true)
