@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using EDDiscovery2.DB;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -238,7 +239,7 @@ namespace EDDiscovery.DB
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 30;
                         cmd.CommandText = "SELECT * FROM Distances WHERE (NameA = @NameA and NameB = @NameB) OR (NameA = @NameB and NameB = @NameA) limit 1";
-                        
+
                         cmd.Parameters.AddWithValue("@NameA", s1.name);
                         cmd.Parameters.AddWithValue("@NameB", s2.name);
                         DataSet ds = SQLiteDBClass.SqlQueryText(cn, cmd);
@@ -299,6 +300,55 @@ namespace EDDiscovery.DB
 
             return ldist;
         }
+
+        public static void FillVisitedSystems(List<VisitedSystemsClass> visitedSystems, bool usedb)
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+                {
+                    cn.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM Distances WHERE(NameA = @NameA and NameB = @NameB) OR(NameA = @NameB and NameB = @NameA) limit 1", cn);
+                    cmd.CommandTimeout = 30;
+
+                    for (int i = 1; i < visitedSystems.Count; i++)                 // now we filled in current system, fill in previous system (except for last)
+                    {
+                        VisitedSystemsClass cur = visitedSystems[i];
+                        VisitedSystemsClass prev = visitedSystems[i - 1];
+                        cur.prevSystem = prev.curSystem;
+
+                        double dist = SystemClass.Distance(cur.curSystem, prev.curSystem);  // Try the easy way
+
+                        if ( dist < 0 && usedb )     // failed, and use the db is allowed..
+                        {
+                            cmd.Parameters.Clear();
+                            cmd.Parameters.AddWithValue("@NameA", cur.Name);
+                            cmd.Parameters.AddWithValue("@NameB", prev.Name);
+
+                            SQLiteDataReader reader = cmd.ExecuteReader();
+                            if (reader.Read())
+                            {
+                                DistanceClass dst = new DistanceClass(reader);
+                                dist = dst.Dist;
+                            }
+
+                            cmd.Reset();
+                        }
+
+                        if (dist > 0)
+                            cur.strDistance = dist.ToString("0.00");
+                    }
+
+                    cn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+        }
+
 
         public static long ParseEDSMUpdateDistancesString(string json, ref string date, bool removenonedsmids)
         {

@@ -1,4 +1,5 @@
 ﻿using EDDiscovery2;
+using EDDiscovery2.DB;
 using EMK.LightGeometry;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -1012,6 +1013,41 @@ namespace EDDiscovery.DB
             }
 
             return nearestsystem;
+        }
+
+        public static void FillVisitedSystems(List<VisitedSystemsClass> visitedSystems)
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+                {
+                    cn.Open();
+                    SQLiteCommand cmd = new SQLiteCommand("select * from Systems where name = @name limit 1", cn);
+                    cmd.CommandTimeout = 30;
+
+                    foreach (VisitedSystemsClass vsc in visitedSystems)
+                    {
+                        if (vsc.curSystem == null)                                              // if not set before, look it up
+                        {
+                            cmd.Parameters.Clear();
+                            cmd.Parameters.AddWithValue("name", vsc.Name);
+
+                            SQLiteDataReader reader = cmd.ExecuteReader();
+                            if (reader.Read())
+                                vsc.curSystem = new SystemClass(reader);
+
+                            cmd.Reset();
+                        }
+                    }
+
+                    cn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
         }
 
         public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids)
