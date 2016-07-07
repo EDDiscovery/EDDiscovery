@@ -113,7 +113,7 @@ namespace EDDiscovery2._3DMap
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
 
-            foreach (BookmarkClass bc in SQLiteDBClass.bookmarks)
+            foreach (BookmarkClass bc in BookmarkClass.bookmarks)
             {
                 TexturedQuadData newtexture;
 
@@ -153,9 +153,11 @@ namespace EDDiscovery2._3DMap
             {
                 foreach (VisitedSystemsClass vs in VisitedSystems)
                 {
-                    if (vs.curSystem != null && vs.curSystem.Note != null)
+                    SystemNoteClass notecs = SystemNoteClass.GetSystemNoteClass(vs.Name);
+
+                    if (notecs != null)         // if we have a note..
                     {
-                        string note = vs.curSystem.Note.Trim();
+                        string note = notecs.Note.Trim();
 
                         if (note.Length > 0)
                         {

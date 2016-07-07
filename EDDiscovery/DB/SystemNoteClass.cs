@@ -63,7 +63,7 @@ namespace EDDiscovery2.DB
                 }
 
 
-                SQLiteDBClass.globalSystemNotes[Name.ToLower()]= this;
+                globalSystemNotes[Name.ToLower()]= this;
                 return true;
             }
         }
@@ -91,10 +91,83 @@ namespace EDDiscovery2.DB
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
                 SystemClass.TouchSystem(cn, Name);
-                SQLiteDBClass.globalSystemNotes[Name.ToLower()] = this;
+                globalSystemNotes[Name.ToLower()] = this;
 
                 return true;
             }
+        }
+
+        public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
+
+        public static bool GetAllSystemNotes()
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        DataSet ds = null;
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = "select * from SystemNote";
+
+                        ds = SQLiteDBClass.SqlQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0)
+                        {
+                            return false;
+                        }
+                        //
+                        if (ds.Tables[0].Rows.Count == 0)
+                        {
+                            return false;
+                        }
+
+                        globalSystemNotes.Clear();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            SystemNoteClass sys = new SystemNoteClass(dr);
+                            globalSystemNotes[sys.Name.ToLower()] = sys;
+                        }
+
+                        return true;
+
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static string GetSystemNote(string name)      // case insensitive.. null if not there
+        {
+            string lname = name.ToLower();
+            if (globalSystemNotes.ContainsKey(lname))
+                return globalSystemNotes[lname].Note;
+            else
+                return null;
+        }
+
+        public static string GetSystemNoteOrEmpty(string name)      // case insensitive.. empty string if not there
+        {
+            string lname = name.ToLower();
+            if (globalSystemNotes.ContainsKey(lname))
+                return globalSystemNotes[lname].Note;
+            else
+                return "";
+        }
+
+        public static SystemNoteClass GetSystemNoteClass(string name)      // case insensitive.. null if not there
+        {
+            string lname = name.ToLower();
+            if (globalSystemNotes.ContainsKey(lname))
+                return globalSystemNotes[lname];
+            else
+                return null;
         }
 
     }

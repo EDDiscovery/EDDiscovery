@@ -221,8 +221,7 @@ namespace EDDiscovery
 
                 if (sys != null)
                 {
-                    string sysnote = sys.Note == null ? "" : sys.Note;
-                    dataGridViewRouteSystems[2, rowindex].Value = sysnote;
+                    dataGridViewRouteSystems[2, rowindex].Value = SystemNoteClass.GetSystemNoteOrEmpty(sys.name);
                 }
 
                 if (sys == null && sysname != "")

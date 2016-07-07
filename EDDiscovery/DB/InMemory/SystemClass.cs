@@ -19,7 +19,7 @@ namespace EDDiscovery2.DB.InMemory
         public string CommanderUpdate { get; set; }
         public DateTime UpdateDate { get; set; }
         public EDDiscovery.DB.SystemStatusEnum status { get; set; }
-        public string Note { get; set; }
+        public string SystemNote { get; set; }
 
         public long id_eddb { get; set; }
         public string faction { get; set; }

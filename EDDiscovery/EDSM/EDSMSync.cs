@@ -158,10 +158,10 @@ namespace EDDiscovery2.EDSM
                     // Sync comments from EDSM
                     foreach (var note in notes)
                     {
-                        string searchname = note.Name.ToLower();
-                        if (SQLiteDBClass.globalSystemNotes.ContainsKey(searchname))
+                        SystemNoteClass dbnote = SystemNoteClass.GetSystemNoteClass(note.Name.ToLower());
+
+                        if ( dbnote != null )       // if there..
                         {
-                            SystemNoteClass dbnote = SQLiteDBClass.globalSystemNotes[searchname];
                             if (note.Time > dbnote.Time)
                             {
                                 dbnote.Time = note.Time;

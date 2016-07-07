@@ -1842,8 +1842,8 @@ namespace EDDiscovery2
             {
                 if (cursystem != null || curbookmark != null )      // if we have a system or a bookmark..
                 {                                                   // try and find the associated bookmark..
-                    BookmarkClass bkmark = (curbookmark != null) ? curbookmark : SQLiteDBClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
-                    string note = (cursystem!=null && SQLiteDBClass.globalSystemNotes.ContainsKey(cursystem.name)) ? SQLiteDBClass.globalSystemNotes[cursystem.name].Note : null;
+                    BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
+                    string note = (cursystem != null) ? SystemNoteClass.GetSystemNote(cursystem.name) : null;   // may be null
 
                     BookmarkForm frm = new BookmarkForm();
 
@@ -2137,7 +2137,7 @@ namespace EDDiscovery2
                     info += Environment.NewLine + "Distance from " + _homeSystem.name + ": " + disthome.ToString("0.0");
                 }
 
-                string note = SQLiteDBClass.globalSystemNotes.ContainsKey(sysname.ToLower()) ? SQLiteDBClass.globalSystemNotes[sysname.ToLower()].Note : null;
+                string note = SystemNoteClass.GetSystemNote(sysname);   // may be null
                 if (note != null && note.Trim().Length>0 )
                 {
                     info += Environment.NewLine + "Notes: " + note.Trim();
@@ -2245,7 +2245,7 @@ namespace EDDiscovery2
             BookmarkClass curbk = null;
             cursysdistz = double.MaxValue;
 
-            foreach (BookmarkClass bc in SQLiteDBClass.bookmarks)
+            foreach (BookmarkClass bc in BookmarkClass.bookmarks)
             {
                 //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
 
@@ -2279,9 +2279,11 @@ namespace EDDiscovery2
 
             foreach (VisitedSystemsClass vs in _visitedSystems)
             {
-                if (vs.curSystem != null && vs.curSystem.Note != null)
+                SystemNoteClass notecs = SystemNoteClass.GetSystemNoteClass(vs.Name);
+
+                if (notecs!=null)
                 {
-                    string note = vs.curSystem.Note.Trim();
+                    string note = notecs.Note.Trim();
 
                     if (note.Length > 0)
                     {

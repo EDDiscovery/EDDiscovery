@@ -22,7 +22,7 @@ namespace EDDiscovery2.DB
         string CommanderUpdate { get; set; }
         DateTime UpdateDate { get; set; }
         EDDiscovery.DB.SystemStatusEnum status { get; set; }
-        string Note { get; set; }
+        string SystemNote { get; set; }
 
         long id_eddb { get; set; }
         string faction { get; set; }
