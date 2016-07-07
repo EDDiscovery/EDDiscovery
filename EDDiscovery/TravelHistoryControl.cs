@@ -12,6 +12,7 @@ using EDDiscovery2.EDSM;
 using System.Threading.Tasks;
 using EDDiscovery.Controls;
 using System.Threading;
+using System.Collections.Concurrent;
 
 namespace EDDiscovery
 {
@@ -87,6 +88,9 @@ namespace EDDiscovery
 
             comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", DefaultTravelHistoryFilterIndex);
             LoadCommandersListBox();
+
+            closestthread = new Thread(CalculateClosestSystems) { Name = "Closest Calc", IsBackground = true };
+            closestthread.Start();
         }
 
 
@@ -270,7 +274,7 @@ namespace EDDiscovery
             buttonUpdate.Enabled = distedit;
             buttonTrilaterate.Enabled = !syspos.curSystem.HasCoordinate && syspos.curSystem == GetCurrentSystem();
 
-            CalculateClosestSystems(syspos.Name);
+            closestsystem_queue.Add(syspos.Name);
         }
 
         private string EnumStringFormat(string str)
@@ -292,46 +296,84 @@ namespace EDDiscovery
             }
         }
 
-        private void CalculateClosestSystems(string closestname ) 
+        Thread closestthread;
+        BlockingCollection<string> closestsystem_queue = new BlockingCollection<string>();
+        SortedList<double, string> closestsystemlist = new SortedList<double, string>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
+
+        private void CalculateClosestSystems()
         {
-            SystemClass lastSystem = SystemClass.GetSystem(closestname);
+            string closestname;
 
-            double x, y, z;
-
-            if (lastSystem == null)
+            while ( true )
             {
-                VisitedSystemsClass vsc = visitedSystems.Find(q => q.Name.Equals(closestname));
+                closestname = closestsystem_queue.Take();           // block until got one..
 
-                if (vsc == null || !vsc.HasTravelCoordinates) // if not found, or no co-ord
-                    return;
+                string namecalc="!";                    // need to keep the name as TryTake empties the string
+                closestsystemlist.Clear();
 
-                x = vsc.X;
-                y = vsc.Y;
-                z = vsc.Z;
-            }
-            else
-            {
-                x = lastSystem.x;
-                y = lastSystem.y;
-                z = lastSystem.z;
-            }
+                do
+                {
+                    string nextname;
+                    while (closestsystem_queue.TryTake(out nextname))    // try and empty the queue in case multiple ones are there
+                    {
+                        //Console.WriteLine("Chuck " + closestname);
+                        closestname = nextname;
+                    }
 
-            SortedList<double, string> systemlist = new SortedList<double, string>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
+                    SystemClass lastSystem = SystemClass.GetSystem(closestname);
 
-            SystemClass.GetSystemSqDistancesFrom(systemlist, x, y, z, 50, true);
-            VisitedSystemsClass.CalculateSqDistances(visitedSystems, systemlist, x, y, z, 50 , true);
+                    double x, y, z;
 
-            labelclosests.Text = "";
-            dataGridViewNearest.Rows.Clear();
-            if (systemlist.Count() == 0)
-                return;
+                    if (lastSystem == null)
+                    {
+                        VisitedSystemsClass vsc = null;
 
-            labelclosests.Text = "Closest systems from " + closestname;
+                        Invoke((MethodInvoker)delegate      // being paranoid about threads..
+                        {
+                            vsc = visitedSystems.Find(q => q.Name.Equals(closestname));
+                        });
 
-            foreach (KeyValuePair<double,string> tvp in systemlist)
-            {
-                object[] rowobj = { tvp.Value, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
-                dataGridViewNearest.Rows.Add(rowobj);
+                        if (vsc == null || !vsc.HasTravelCoordinates) // if not found, or no co-ord
+                            break;
+
+                        x = vsc.X;
+                        y = vsc.Y;
+                        z = vsc.Z;
+                    }
+                    else
+                    {
+                        x = lastSystem.x;
+                        y = lastSystem.y;
+                        z = lastSystem.z;
+                    }
+
+
+                    SystemClass.GetSystemSqDistancesFrom(closestsystemlist, x, y, z, 50, true);
+
+                    Invoke((MethodInvoker)delegate      // being paranoid about threads..
+                    {
+                        VisitedSystemsClass.CalculateSqDistances(visitedSystems, closestsystemlist, x, y, z, 50, true);
+                    });
+
+                    namecalc = closestname;
+
+                } while (closestsystem_queue.TryTake(out closestname));     // if there is another one there, just re-run (slow down doggy!)
+
+                Invoke((MethodInvoker)delegate
+                {
+                    labelclosests.Text = "";
+                    dataGridViewNearest.Rows.Clear();
+
+                    if (closestsystemlist.Count() > 0)
+                    {
+                        labelclosests.Text = "Closest systems from " + namecalc;
+                        foreach (KeyValuePair<double, string> tvp in closestsystemlist)
+                        {
+                            object[] rowobj = { tvp.Value, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
+                            dataGridViewNearest.Rows.Add(rowobj);
+                        }
+                    }
+                });
             }
         }
 
