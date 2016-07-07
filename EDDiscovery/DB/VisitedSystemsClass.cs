@@ -33,9 +33,9 @@ namespace EDDiscovery2.DB
 
             if (System.DBNull.Value == dr["X"])
             {
-                X = 0;
-                Y = 0;
-                Z = 0;
+                X = double.NaN;
+                Y = double.NaN;
+                Z = double.NaN;
             }
             else
             {
@@ -49,10 +49,7 @@ namespace EDDiscovery2.DB
         {
             get
             {
-                if (X == 0.0 && Y == 0.0 && Z == 0.0)
-                    return false;
-                else
-                    return true;
+                return !double.IsNaN(X);
             }
         }
 
@@ -198,9 +195,9 @@ namespace EDDiscovery2.DB
                         }
                         catch
                         {
-                            sp.X = 0;
-                            sp.Y = 0;
-                            sp.Z = 0;
+                            sp.X = double.NaN;
+                            sp.Y = double.NaN;
+                            sp.Z = double.NaN;
                         }
 
                     }
@@ -208,9 +205,8 @@ namespace EDDiscovery2.DB
                     {
                         System.Diagnostics.Trace.WriteLine("System parse error 1:" + line);
                     }
-
-
-            }
+                    
+                }
                 else
                 {
                     pattern = new Regex(@"{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:\d+\((?<SystemName>.*?)\) Body:(?<Body>\d+) Pos:\(.*?\)( (?<TravelMode>\w+))?");
