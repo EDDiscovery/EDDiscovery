@@ -192,7 +192,7 @@ namespace EDDiscovery2.EDSM
         {
             string json;
 
-            if (system.X==0.0 && system.Y==0.0 && system.Z==0.0)
+            if (!system.HasTravelCoordinates)
                 json = edsm.SetLog(system.Name, system.Time);
             else
                 json = edsm.SetLogWithPos(system.Name, system.Time, system.X, system.Y, system.Z);

@@ -218,7 +218,7 @@ namespace EDDiscovery
             textBoxPrevSystem.Clear();
             textBoxDistance.Text = syspos.strDistance;
             
-            if (syspos.curSystem.HasCoordinate)
+            if (syspos.curSystem.HasCoordinate)         // cursystem has them?
             {
                 textBoxX.Text = syspos.curSystem.x.ToString(SingleCoordinateFormat);
                 textBoxY.Text = syspos.curSystem.y.ToString(SingleCoordinateFormat);
@@ -226,7 +226,7 @@ namespace EDDiscovery
 
                 textBoxSolDist.Text = Math.Sqrt(syspos.curSystem.x * syspos.curSystem.x + syspos.curSystem.y * syspos.curSystem.y + syspos.curSystem.z * syspos.curSystem.z).ToString("0.00");
             }
-            else if (syspos.X == 0.0 && syspos.Y == 0.0 && syspos.Z == 0.0)
+            else if ( !syspos.HasTravelCoordinates )    // vsc has them? No, ?
             {
                 textBoxX.Text = "?";
                 textBoxY.Text = "?";
