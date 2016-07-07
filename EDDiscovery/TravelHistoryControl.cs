@@ -407,7 +407,7 @@ namespace EDDiscovery
         {
             if (_discoveryForm.SystemNames.Count == 0)
             {
-                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
+                MessageBox.Show("Systems have not been loaded yet or none were available at program start, please wait or restart", "No Systems Available", MessageBoxButtons.OK);
                 return;
             }
 

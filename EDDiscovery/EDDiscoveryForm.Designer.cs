@@ -46,6 +46,7 @@
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugBetaFixHiddenLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keepOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fastTravelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,7 +77,6 @@
             this.panel_grip = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
-            this.debugBetaFixHiddenLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
@@ -112,7 +112,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(307, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(308, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -129,7 +129,7 @@
             this.editThemeToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // openEliteDangerousDirectoryToolStripMenuItem
@@ -202,23 +202,30 @@
             // forceEDDBUpdateToolStripMenuItem
             // 
             this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
-            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
-            this.forceEDDBUpdateToolStripMenuItem.Text = "Force EDDB update";
+            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.forceEDDBUpdateToolStripMenuItem.Text = "Synchronise with EDDB";
             this.forceEDDBUpdateToolStripMenuItem.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
             // 
             // syncEDSMSystemsToolStripMenuItem
             // 
             this.syncEDSMSystemsToolStripMenuItem.Name = "syncEDSMSystemsToolStripMenuItem";
-            this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
-            this.syncEDSMSystemsToolStripMenuItem.Text = "Sync EDSM Systems";
+            this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.syncEDSMSystemsToolStripMenuItem.Text = "Synchronise with EDSM";
             this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
             // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
             // 
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "(DEBUG) Reset all history to first commander";
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "(Debug) Reset all history to first commander";
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click);
+            // 
+            // debugBetaFixHiddenLogToolStripMenuItem
+            // 
+            this.debugBetaFixHiddenLogToolStripMenuItem.Name = "debugBetaFixHiddenLogToolStripMenuItem";
+            this.debugBetaFixHiddenLogToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.debugBetaFixHiddenLogToolStripMenuItem.Text = "(Debug) Beta fix hidden log";
+            this.debugBetaFixHiddenLogToolStripMenuItem.Click += new System.EventHandler(this.debugBetaFixHiddenLogToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -232,7 +239,7 @@
             // keepOnTopToolStripMenuItem
             // 
             this.keepOnTopToolStripMenuItem.Name = "keepOnTopToolStripMenuItem";
-            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.keepOnTopToolStripMenuItem.Text = "Keep on Top";
             this.keepOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepOnTopToolStripMenuItem_Click);
             // 
@@ -240,7 +247,7 @@
             // 
             this.fastTravelToolStripMenuItem.CheckOnClick = true;
             this.fastTravelToolStripMenuItem.Name = "fastTravelToolStripMenuItem";
-            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.fastTravelToolStripMenuItem.Text = "Fast Travel";
             // 
             // helpToolStripMenuItem
@@ -524,13 +531,6 @@
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 19;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
-            // 
-            // debugBetaFixHiddenLogToolStripMenuItem
-            // 
-            this.debugBetaFixHiddenLogToolStripMenuItem.Name = "debugBetaFixHiddenLogToolStripMenuItem";
-            this.debugBetaFixHiddenLogToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
-            this.debugBetaFixHiddenLogToolStripMenuItem.Text = "(Debug) Beta fix hidden log";
-            this.debugBetaFixHiddenLogToolStripMenuItem.Click += new System.EventHandler(this.debugBetaFixHiddenLogToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
