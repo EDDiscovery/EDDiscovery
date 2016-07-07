@@ -472,8 +472,8 @@ namespace EDDiscovery
                 MessageBox.Show("GetEDSMSystems exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
             }
 
-            _db.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
-            _db.GetAllBookmarks();
+            SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
+            BookmarkClass.GetAllBookmarks();
             galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
 
             GC.Collect();

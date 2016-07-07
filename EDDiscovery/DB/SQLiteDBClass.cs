@@ -15,9 +15,6 @@ namespace EDDiscovery.DB
         internal static string ConnectionString;
         string dbfile;
 
-        public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
-        public static List<BookmarkClass> bookmarks = new List<BookmarkClass>();
-
         private static Object lockDBInit = new Object();
         private static bool dbUpgraded = false;
         public SQLiteDBClass()
@@ -356,49 +353,6 @@ namespace EDDiscovery.DB
         }
 
         
-        public bool GetAllSystemNotes()
-        {
-            try
-            {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
-                    {
-                        DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from SystemNote";
-
-                        ds = SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return false;
-                        }
-                        //
-                        if (ds.Tables[0].Rows.Count == 0)
-                        {
-                            return false;
-                        }
-
-                        globalSystemNotes.Clear();
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            SystemNoteClass sys = new SystemNoteClass(dr);
-                            globalSystemNotes[sys.Name.ToLower()] = sys;
-                        }
-
-                        return true;
-
-                    }
-                }
-            }
-            catch 
-            {
-                return false;
-            }
-        }
 
         public List<WantedSystemClass> GetAllWantedSystems()
         {
@@ -502,50 +456,6 @@ namespace EDDiscovery.DB
                 return null;
             }
 
-        }
-
-        public bool GetAllBookmarks()
-        {
-            try
-            {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
-                    {
-                        DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from Bookmarks";
-
-                        ds = SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return false;
-                        }
-                        //
-                        if (ds.Tables[0].Rows.Count == 0)
-                        {
-                            return false;
-                        }
-
-                        bookmarks.Clear();
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            BookmarkClass bc = new BookmarkClass(dr);
-                            bookmarks.Add(bc);
-                        }
-
-                        return true;
-
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         public int QueryValueInt(string query, int defaultvalue)

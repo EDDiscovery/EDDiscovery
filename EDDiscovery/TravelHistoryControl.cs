@@ -81,6 +81,8 @@ namespace EDDiscovery
                 TravelHistoryFilter.NoFilter,
             };
 
+            richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
+
             comboBoxHistoryWindow.DisplayMember = nameof(TravelHistoryFilter.Label);
 
             comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", DefaultTravelHistoryFilterIndex);
@@ -173,8 +175,8 @@ namespace EDDiscovery
 
 
         private void AddNewHistoryRow(bool insert, VisitedSystemsClass item)            // second part of add history row, adds item to view.
-        { 
-            object[] rowobj = { item.Time, item.Name, item.strDistance, item.curSystem.Note, "█" };
+        {
+            object[] rowobj = { item.Time, item.Name, item.strDistance, SystemNoteClass.GetSystemNoteOrEmpty(item.curSystem.name), "█" };
             int rownr;
 
             if (insert)
@@ -215,8 +217,7 @@ namespace EDDiscovery
             textBoxSystem.Text = syspos.curSystem.name;
             textBoxPrevSystem.Clear();
             textBoxDistance.Text = syspos.strDistance;
-
-
+            
             if (syspos.curSystem.HasCoordinate)
             {
                 textBoxX.Text = syspos.curSystem.x.ToString(SingleCoordinateFormat);
@@ -252,7 +253,7 @@ namespace EDDiscovery
             textBoxEconomy.Text = EnumStringFormat(syspos.curSystem.primary_economy.ToString());
             textBoxGovernment.Text = EnumStringFormat(syspos.curSystem.government.ToString());
             textBoxState.Text = EnumStringFormat(syspos.curSystem.state.ToString());
-            richTextBoxNote.Text = EnumStringFormat(syspos.curSystem.Note);
+            richTextBoxNote.Text = EnumStringFormat(SystemNoteClass.GetSystemNoteOrEmpty(syspos.Name));
 
             bool distedit = false;
 
@@ -532,44 +533,33 @@ namespace EDDiscovery
             {
                 EDSMClass edsm = new EDSMClass();
                 SQLiteDBClass db = new SQLiteDBClass();
-
-
+                
                 edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
                 edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-
-
+                
                 if (currentSysPos == null || currentSysPos.curSystem == null)
                     return;
 
                 txt = richTextBoxNote.Text;
 
+                SystemNoteClass sn = SystemNoteClass.GetSystemNoteClass(currentSysPos.curSystem.name);
 
-                if (currentSysPos.curSystem.Note == null)
-                    currentSysPos.curSystem.Note = "";
-
-                if (currentSysPos != null && !txt.Equals(currentSysPos.curSystem.Note))
+                if (currentSysPos != null && ( sn == null || !sn.Note.Equals(txt))) // if current system pos set, or no note or text change
                 {
-                    SystemNoteClass sn;
-
-                    if (SQLiteDBClass.globalSystemNotes.ContainsKey(currentSysPos.curSystem.SearchName))
-                    {
-                        sn = SQLiteDBClass.globalSystemNotes[currentSysPos.curSystem.SearchName];
+                    if ( sn != null )           // already there, update
+                    { 
                         sn.Note = txt;
                         sn.Time = DateTime.Now;
-
                         sn.Update();
                     }
                     else
                     {
                         sn = new SystemNoteClass();
-
                         sn.Name = currentSysPos.curSystem.name;
                         sn.Note = txt;
                         sn.Time = DateTime.Now;
                         sn.Add();
                     }
-
-                    currentSysPos.curSystem.Note = txt;
 
                     if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
                         dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[TravelHistoryColumns.Note].Value = txt;
