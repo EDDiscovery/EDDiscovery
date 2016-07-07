@@ -472,41 +472,26 @@ namespace EDDiscovery2.DB
 
         public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb)          // oldest system is lowest index
         {
+            SystemClass.FillVisitedSystems(visitedSystems);                 // first try and populate with SystemClass info
+            
             foreach (VisitedSystemsClass vsc in visitedSystems)
             {
-                if (vsc.curSystem == null)                                              // if not set before, look it up
+                if (vsc.curSystem == null)                                  // if no systemclass info, make a dummy
                 {
-                    vsc.curSystem = SystemClass.GetSystem(vsc.Name);
-
-                    if (vsc.curSystem == null)                                               // not found, make one up
-                    {
-                        vsc.curSystem = new SystemClass(vsc.Name);
+                    vsc.curSystem = new SystemClass(vsc.Name);
 //TBD vsc.HasTravelCoordinates
-                        if (vsc.HasTravelCoordinates)
-                        {
-                            vsc.curSystem.x = vsc.X;
-                            vsc.curSystem.y = vsc.Y;
-                            vsc.curSystem.z = vsc.Z;
-                        }
+                    if (vsc.HasTravelCoordinates)
+                    {
+                        vsc.curSystem.x = vsc.X;
+                        vsc.curSystem.y = vsc.Y;
+                        vsc.curSystem.z = vsc.Z;
                     }
-
-                    vsc.strDistance = "";                                       // set empty, must have a string in there.
                 }
+
+                vsc.strDistance = "";                                       // set empty, must have a string in there.
             }
 
-            for (int i = 1; i < visitedSystems.Count ; i++)                 // now we filled in current system, fill in previous system (except for last)
-            {
-                VisitedSystemsClass cur = visitedSystems[i];
-                VisitedSystemsClass prev = visitedSystems[i - 1];
-                cur.prevSystem = prev.curSystem;
-
-                if (cur.strDistance.Length == 0)                          // if empty, see if we have any data..
-                {
-                    double dist = usedistancedb ? SystemClass.DistanceIncludeDB(cur.curSystem, prev.curSystem) : SystemClass.Distance(cur.curSystem, prev.curSystem);
-                    if (dist > 0)
-                        cur.strDistance = dist.ToString("0.00");
-                }
-            }
+            DistanceClass.FillVisitedSystems(visitedSystems, usedistancedb);    // finally fill in the distances, indicating if can use db or not
         }
 
         public static void UpdateVisitedSystemsEntries(VisitedSystemsClass item, VisitedSystemsClass item2 , bool usedistancedb)           // this is a split in two version with the same code of AddHistoryRow..

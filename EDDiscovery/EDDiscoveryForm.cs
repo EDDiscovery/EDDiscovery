@@ -197,16 +197,9 @@ namespace EDDiscovery
 
                 edsmThread.Join();
                 downloadmapsThread.Join();
-
-                
+                                
                 SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
                 Console.WriteLine("Systems Loaded");
-                
-                OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
-
-                GetEDSMDistancesAsync();
-
-                GetEDDBAsync(false);
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                 routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
@@ -220,8 +213,11 @@ namespace EDDiscovery
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
                 travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
 
+                //long tickc = Environment.TickCount;
                 TravelHistoryControl.LogText("Reading travel history " + Environment.NewLine);
                 travelHistoryControl1.RefreshHistory();
+                //TravelHistoryControl.LogText("Time " + (Environment.TickCount-tickc) + Environment.NewLine);
+
                 travelHistoryControl1.netlog.StartMonitor(this);
 
                 if (EliteDangerous.CheckStationLogging())
@@ -232,6 +228,10 @@ namespace EDDiscovery
                 CheckForNewInstaller();
 
                 LogLineSuccess("Loading completed");
+
+                OnDistancesLoaded += new DistancesLoaded(this.DistancesLoaded);
+                GetEDSMDistancesAsync();
+                GetEDDBAsync(false);
             }
             catch (Exception ex)
             {
@@ -398,6 +398,8 @@ namespace EDDiscovery
                     DeleteMapFile("DW4.png");
                     DeleteMapFile("SC-00.jpg");
                 }
+
+                LogText("Map check complete." + Environment.NewLine);
             }
             catch (Exception ex)
             {
@@ -476,6 +478,7 @@ namespace EDDiscovery
             BookmarkClass.GetAllBookmarks();
             galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
 
+            LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
             GC.Collect();
         }
 
