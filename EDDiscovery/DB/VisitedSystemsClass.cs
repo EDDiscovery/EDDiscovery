@@ -42,6 +42,13 @@ namespace EDDiscovery2.DB
                 X = (double)dr["X"];
                 Y = (double)dr["Y"];
                 Z = (double)dr["Z"];
+
+                if (X == 0 && Y == 0 && Z == 0 && !Name.Equals("Sol"))      // previously used 0,0,0 as a invalid marker, so if its not Sol...
+                {
+                    X = double.NaN;
+                    Y = double.NaN;
+                    Z = double.NaN;
+                }
             }
         }
 
