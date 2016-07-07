@@ -73,7 +73,7 @@ namespace EDDiscovery2.DB
                     id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
                 }
 
-                SQLiteDBClass.bookmarks.Add(this);
+                bookmarks.Add(this);
                 return true;
             }
         }
@@ -105,8 +105,8 @@ namespace EDDiscovery2.DB
 
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                SQLiteDBClass.bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
-                SQLiteDBClass.bookmarks.Add(this);
+                bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
+                bookmarks.Add(this);
 
                 return true;
             }
@@ -131,10 +131,57 @@ namespace EDDiscovery2.DB
                 cmd.Parameters.AddWithValue("@id", id);
                 SQLiteDBClass.SqlNonQueryText(cn, cmd);
 
-                SQLiteDBClass.bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
+                bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
                 return true;
             }
         }
+
+        public static List<BookmarkClass> bookmarks = new List<BookmarkClass>();
+
+        public static bool GetAllBookmarks()
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        DataSet ds = null;
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = "select * from Bookmarks";
+
+                        ds = SQLiteDBClass.SqlQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0)
+                        {
+                            return false;
+                        }
+                        //
+                        if (ds.Tables[0].Rows.Count == 0)
+                        {
+                            return false;
+                        }
+
+                        bookmarks.Clear();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            BookmarkClass bc = new BookmarkClass(dr);
+                            bookmarks.Add(bc);
+                        }
+
+                        return true;
+
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
     }
 }

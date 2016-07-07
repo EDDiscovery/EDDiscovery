@@ -43,6 +43,13 @@ namespace EDDiscovery.DB
             z = double.NaN;
         }
 
+        public SystemClass(string Name, double vx, double vy, double vz)
+        {
+            name = Name;
+            SearchName = Name.ToLower();
+            status = SystemStatusEnum.Unknown;
+            x = vx; y = vy; z = vz;
+        }
 
         public SystemClass(JObject jo, EDDiscovery2.DB.SystemInfoSource source)
         {
@@ -216,7 +223,7 @@ namespace EDDiscovery.DB
             }
 
             status = (SystemStatusEnum)((long)dr["status"]);
-            Note = dr["Note"].ToString();
+            SystemNote = dr["Note"].ToString();
 
             o = dr["id_eddb"];
             id_eddb = o == DBNull.Value ? 0 : ((long)o);
@@ -287,7 +294,7 @@ namespace EDDiscovery.DB
             }
 
             status = (SystemStatusEnum)((long)dr["status"]);
-            Note = dr["Note"].ToString();
+            SystemNote = dr["Note"].ToString();
 
             o = dr["id_eddb"];
             id_eddb = o == DBNull.Value ? 0 : ((long)o);
@@ -386,8 +393,8 @@ namespace EDDiscovery.DB
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandTimeout = 30;
 
-                if (Note == null)
-                    Note = "";
+                if (SystemNote == null)
+                    SystemNote = "";
 
                 if (id_eddb != 0)
                 {
@@ -414,7 +421,7 @@ namespace EDDiscovery.DB
                     cmd.Parameters.AddWithValue("@eddb_updated_at", eddb_updated_at);
                     cmd.Parameters.AddWithValue("@state", state);
                     cmd.Parameters.AddWithValue("@needs_permit", needs_permit);
-                    cmd.Parameters.AddWithValue("@Note", Note);
+                    cmd.Parameters.AddWithValue("@Note", SystemNote);
                     cmd.Parameters.AddWithValue("@id_edsm", id_edsm);
                 }
                 else
@@ -430,7 +437,7 @@ namespace EDDiscovery.DB
                     cmd.Parameters.AddWithValue("@CommanderUpdate", CommanderCreate);
                     cmd.Parameters.AddWithValue("@updatedate", CreateDate);
                     cmd.Parameters.AddWithValue("@Status", (int)status);
-                    cmd.Parameters.AddWithValue("@Note", Note);
+                    cmd.Parameters.AddWithValue("@Note", SystemNote);
                     cmd.Parameters.AddWithValue("@id_edsm", id_edsm);
                 }
 
@@ -458,9 +465,9 @@ namespace EDDiscovery.DB
                 cmd.Parameters.AddWithValue("@CommanderUpdate", CommanderCreate);
                 cmd.Parameters.AddWithValue("@updatedate", CreateDate);
                 cmd.Parameters.AddWithValue("@Status", (int)status);
-                if (Note == null)
-                    Note = "";
-                cmd.Parameters.AddWithValue("@Note", Note);
+                if (SystemNote == null)
+                    SystemNote = "";
+                cmd.Parameters.AddWithValue("@Note", SystemNote);
 
 
                 cmd.Parameters.AddWithValue("@id_eddb", id_eddb);
@@ -724,11 +731,7 @@ namespace EDDiscovery.DB
                     cmd.CommandTimeout = 30;
                     SQLiteDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
-                    {
                         sys = new SystemClass(reader);
-                        if (SQLiteDBClass.globalSystemNotes.ContainsKey(sys.SearchName))
-                            sys.Note = SQLiteDBClass.globalSystemNotes[sys.SearchName].Note;
-                    }
                 }
 
                 if (closeit)
@@ -766,11 +769,7 @@ namespace EDDiscovery.DB
                     cmd.CommandTimeout = 30;
                     SQLiteDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
-                    {
                         sys = new SystemClass(reader);
-                        if (SQLiteDBClass.globalSystemNotes.ContainsKey(sys.SearchName))
-                            sys.Note = SQLiteDBClass.globalSystemNotes[sys.SearchName].Note;
-                    }
                 }
 
                 if (closeit)

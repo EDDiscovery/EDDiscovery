@@ -481,9 +481,7 @@ namespace EDDiscovery2.DB
                     if (vsc.curSystem == null)                                               // not found, make one up
                     {
                         vsc.curSystem = new SystemClass(vsc.Name);
-                        if (SQLiteDBClass.globalSystemNotes.ContainsKey(vsc.curSystem.SearchName))
-                            vsc.curSystem.Note = SQLiteDBClass.globalSystemNotes[vsc.curSystem.SearchName].Note;
-
+//TBD vsc.HasTravelCoordinates
                         if (vsc.HasTravelCoordinates)
                         {
                             vsc.curSystem.x = vsc.X;
@@ -517,10 +515,7 @@ namespace EDDiscovery2.DB
             if (sys1 == null)
             {
                 sys1 = new SystemClass(item.Name);
-                if (SQLiteDBClass.globalSystemNotes.ContainsKey(sys1.SearchName))
-                {
-                    sys1.Note = SQLiteDBClass.globalSystemNotes[sys1.SearchName].Note;
-                }
+
                 if (item.HasTravelCoordinates)
                 {
                     sys1.x = item.X;
