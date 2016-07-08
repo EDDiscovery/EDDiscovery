@@ -15,7 +15,6 @@ namespace EDDiscovery2.ImageHandler
 {
     public partial class ImageHandler : UserControl
     {
-        private SQLiteDBClass db;
         private EDDiscoveryForm _discoveryForm;
         private FileSystemWatcher watchfolder = null;
 
@@ -36,42 +35,41 @@ namespace EDDiscovery2.ImageHandler
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            db = new SQLiteDBClass();
 
             string ScreenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
             string OutputDirdefault = Path.Combine(ScreenshotsDirdefault, "Converted");
 
             try
             {
-                comboBoxFormat.SelectedIndex = db.GetSettingInt("ImageHandlerFormatNr", 0);
+                comboBoxFormat.SelectedIndex = SQLiteDBClass.GetSettingInt("ImageHandlerFormatNr", 0);
             }
             catch { }
 
             try
             {
-                comboBoxFileNameFormat.SelectedIndex = db.GetSettingInt("comboBoxFileNameFormat", 0);
+                comboBoxFileNameFormat.SelectedIndex = SQLiteDBClass.GetSettingInt("comboBoxFileNameFormat", 0);
             }
             catch { }
 
             try
             {
-                comboBoxScanFor.SelectedIndex = db.GetSettingInt("comboBoxScanFor", 0);
+                comboBoxScanFor.SelectedIndex = SQLiteDBClass.GetSettingInt("comboBoxScanFor", 0);
             }
             catch { }
 
-            checkBoxAutoConvert.Checked = db.GetSettingBool("ImageHandlerAutoconvert", false);
-            checkBoxRemove.Checked = db.GetSettingBool("checkBoxRemove", false);
-            checkBoxHires.Checked = db.GetSettingBool("checkBoxHires", false);
+            checkBoxAutoConvert.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerAutoconvert", false);
+            checkBoxRemove.Checked = SQLiteDBClass.GetSettingBool("checkBoxRemove", false);
+            checkBoxHires.Checked = SQLiteDBClass.GetSettingBool("checkBoxHires", false);
 
-            textBoxOutputDir.Text = db.GetSettingString("ImageHandlerOutputDir", OutputDirdefault);
-            textBoxScreenshotsDir.Text = db.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
+            textBoxOutputDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", OutputDirdefault);
+            textBoxScreenshotsDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
 
-            checkBoxPreview.Checked = db.GetSettingBool("ImageHandlerPreview", false);
-            checkBoxCropImage.Checked = db.GetSettingBool("ImageHandlerCropImage", false);      // fires the checked handler which sets the readonly mode of the controls
-            numericUpDownTop.Value = db.GetSettingInt("ImageHandlerCropTop", 0);
-            numericUpDownLeft.Value = db.GetSettingInt("ImageHandlerCropLeft", 0);
-            numericUpDownWidth.Value = db.GetSettingInt("ImageHandlerCropWidth", 0);
-            numericUpDownHeight.Value = db.GetSettingInt("ImageHandlerCropHeight", 0);
+            checkBoxPreview.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerPreview", false);
+            checkBoxCropImage.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerCropImage", false);      // fires the checked handler which sets the readonly mode of the controls
+            numericUpDownTop.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropTop", 0);
+            numericUpDownLeft.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropLeft", 0);
+            numericUpDownWidth.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropWidth", 0);
+            numericUpDownHeight.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropHeight", 0);
 
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
 
@@ -317,76 +315,76 @@ namespace EDDiscovery2.ImageHandler
 
         private void checkBoxRemove_CheckedChanged(object sender, EventArgs e)
         {
-            db.PutSettingBool("checkBoxRemove", checkBoxRemove.Checked);
+            SQLiteDBClass.PutSettingBool("checkBoxRemove", checkBoxRemove.Checked);
         }
 
         private void checkBox_hires_CheckedChanged(object sender, EventArgs e)
         {
-            db.PutSettingBool("checkBoxHires", checkBoxHires.Checked);
+            SQLiteDBClass.PutSettingBool("checkBoxHires", checkBoxHires.Checked);
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
         }
 
         private void comboBoxFileNameFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            db.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
         }
 
         private void textBoxScreenshotsDir_Leave(object sender, EventArgs e)
         {
-            db.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+            SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
         }
 
         private void textBoxOutputDir_Leave(object sender, EventArgs e)
         {
-            db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+            SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
         }
 
         private void checkBoxCropImage_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox cb = sender as CheckBox;
             numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = cb.Checked;
-            db.PutSettingBool("ImageHandlerCropImage", cb.Checked);
+            SQLiteDBClass.PutSettingBool("ImageHandlerCropImage", cb.Checked);
         }
 
         private void numericUpDownTop_Leave(object sender, EventArgs e)
         {
             ExtendedControls.NumericUpDownCustom ud = sender as ExtendedControls.NumericUpDownCustom;
-            db.PutSettingInt("ImageHandlerCropTop", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
+            SQLiteDBClass.PutSettingInt("ImageHandlerCropTop", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
         }
 
         private void numericUpDownLeft_Leave(object sender, EventArgs e)
         {
             ExtendedControls.NumericUpDownCustom ud = sender as ExtendedControls.NumericUpDownCustom;
-            db.PutSettingInt("ImageHandlerCropLeft", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
+            SQLiteDBClass.PutSettingInt("ImageHandlerCropLeft", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
         }
 
         private void numericUpDownWidth_Leave(object sender, EventArgs e)
         {
             ExtendedControls.NumericUpDownCustom ud = sender as ExtendedControls.NumericUpDownCustom;
-            db.PutSettingInt("ImageHandlerCropWidth", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
+            SQLiteDBClass.PutSettingInt("ImageHandlerCropWidth", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
         }
 
         private void numericUpDownHeight_Leave(object sender, EventArgs e)
         {
             ExtendedControls.NumericUpDownCustom ud = sender as ExtendedControls.NumericUpDownCustom;
-            db.PutSettingInt("ImageHandlerCropHeight", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
+            SQLiteDBClass.PutSettingInt("ImageHandlerCropHeight", (int)ud.Value); /* We constrain the updown from 0..1,000,000 */
         }
 
         private void checkBoxPreview_CheckedChanged(object sender, EventArgs e)
         {
-            db.PutSettingBool("ImageHandlerPreview", checkBoxPreview.Checked);
+            SQLiteDBClass.PutSettingBool("ImageHandlerPreview", checkBoxPreview.Checked);
             pictureBox1.Image = null;
         }
 
         private void comboBoxFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            db.PutSettingInt("ImageHandlerFormatNr", comboBoxFormat.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("ImageHandlerFormatNr", comboBoxFormat.SelectedIndex);
         }
 
         private void checkBoxAutoConvert_CheckedChanged(object sender, EventArgs e)
         {
-            db.PutSettingBool("ImageHandlerAutoconvert", checkBoxAutoConvert.Checked);
+            SQLiteDBClass.PutSettingBool("ImageHandlerAutoconvert", checkBoxAutoConvert.Checked);
         }
 
         private void buttonChnageEDScreenshot_Click(object sender, EventArgs e)
@@ -399,7 +397,7 @@ namespace EDDiscovery2.ImageHandler
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 textBoxScreenshotsDir.Text = dlg.SelectedPath;
-                db.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+                SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
                 StartWatcher();
             }
         }
@@ -414,13 +412,13 @@ namespace EDDiscovery2.ImageHandler
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 textBoxOutputDir.Text = dlg.SelectedPath;
-                db.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+                SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
             }
         }
 
         private void comboBoxScanFor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            db.PutSettingInt("comboBoxScanFor", comboBoxScanFor.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("comboBoxScanFor", comboBoxScanFor.SelectedIndex);
 
             if ( watchfolder != null )      // if already watching, restart it
                 StartWatcher();

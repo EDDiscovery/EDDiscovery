@@ -41,7 +41,6 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             FreezeTrilaterationUI();
             edsm = new EDSMClass();
-            var db = new SQLiteDBClass();
             edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
             edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
             SetTriStatus("Press Start New");
@@ -638,8 +637,8 @@ namespace EDDiscovery
 
         private void PopulateLocalWantedSystems()
         {
-            var db = new SQLiteDBClass();
-            wanted = db.GetAllWantedSystems();
+            wanted = WantedSystemClass.GetAllWantedSystems();
+
             if (wanted != null && wanted.Any())
             {
                 foreach (WantedSystemClass sys in wanted)

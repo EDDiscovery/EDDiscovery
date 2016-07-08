@@ -23,7 +23,6 @@ namespace EDDiscovery
         internal TravelHistoryControl travelhistorycontrol1;
         private EDDiscoveryForm _discoveryForm;
         internal bool changesilence = false;
-        private SQLiteDBClass db;
         private List<SystemClass> routeSystems;
         
         // METRICs defined by systemclass GetSystemNearestTo function
@@ -62,10 +61,6 @@ namespace EDDiscovery
 
         private void button_Route_Click_1(object sender, EventArgs e)
         {
-            if (db ==null)
-                db = new SQLiteDBClass();
-
-
             ToggleButtons(false);           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
             richTextBox_routeresult.Clear();
 
@@ -244,43 +239,37 @@ namespace EDDiscovery
 
         public void SaveSettings()
         {
-            if (db == null)
-                db = new SQLiteDBClass();
-
-            db.PutSettingString("RouteFrom", textBox_From.Text);
-            db.PutSettingString("RouteTo", textBox_To.Text);
-            db.PutSettingString("RouteRange", textBox_Range.Text);
-            db.PutSettingString("RouteFromX", textBox_FromX.Text);
-            db.PutSettingString("RouteFromY", textBox_FromY.Text);
-            db.PutSettingString("RouteFromZ", textBox_FromZ.Text);
-            db.PutSettingString("RouteToX", textBox_ToX.Text);
-            db.PutSettingString("RouteToY", textBox_ToY.Text);
-            db.PutSettingString("RouteToZ", textBox_ToZ.Text);
-            db.PutSettingBool("RouteFromState", textBox_From.ReadOnly);
-            db.PutSettingBool("RouteToState", textBox_To.ReadOnly);
-            db.PutSettingInt("RouteMetric", comboBoxRoutingMetric.SelectedIndex);
+            SQLiteDBClass.PutSettingString("RouteFrom", textBox_From.Text);
+            SQLiteDBClass.PutSettingString("RouteTo", textBox_To.Text);
+            SQLiteDBClass.PutSettingString("RouteRange", textBox_Range.Text);
+            SQLiteDBClass.PutSettingString("RouteFromX", textBox_FromX.Text);
+            SQLiteDBClass.PutSettingString("RouteFromY", textBox_FromY.Text);
+            SQLiteDBClass.PutSettingString("RouteFromZ", textBox_FromZ.Text);
+            SQLiteDBClass.PutSettingString("RouteToX", textBox_ToX.Text);
+            SQLiteDBClass.PutSettingString("RouteToY", textBox_ToY.Text);
+            SQLiteDBClass.PutSettingString("RouteToZ", textBox_ToZ.Text);
+            SQLiteDBClass.PutSettingBool("RouteFromState", textBox_From.ReadOnly);
+            SQLiteDBClass.PutSettingBool("RouteToState", textBox_To.ReadOnly);
+            SQLiteDBClass.PutSettingInt("RouteMetric", comboBoxRoutingMetric.SelectedIndex);
         }
 
         public void EnableRouteTab()
         {
-            if (db == null)
-                db = new SQLiteDBClass();
-
-            textBox_From.Text = db.GetSettingString("RouteFrom", "");
-            textBox_To.Text = db.GetSettingString("RouteTo", "");
-            textBox_Range.Text = db.GetSettingString("RouteRange", "30");
+            textBox_From.Text = SQLiteDBClass.GetSettingString("RouteFrom", "");
+            textBox_To.Text = SQLiteDBClass.GetSettingString("RouteTo", "");
+            textBox_Range.Text = SQLiteDBClass.GetSettingString("RouteRange", "30");
             if (textBox_Range.Text == "")
                 textBox_Range.Text = "30";
-            textBox_FromX.Text = db.GetSettingString("RouteFromX", "");
-            textBox_FromY.Text = db.GetSettingString("RouteFromY", "");
-            textBox_FromZ.Text = db.GetSettingString("RouteFromZ", "");
-            textBox_ToX.Text = db.GetSettingString("RouteToX", "");
-            textBox_ToY.Text = db.GetSettingString("RouteToY", "");
-            textBox_ToZ.Text = db.GetSettingString("RouteToZ", "");
-            bool fromstate = db.GetSettingBool("RouteFromState", false);
-            bool tostate = db.GetSettingBool("RouteToState", false);
+            textBox_FromX.Text = SQLiteDBClass.GetSettingString("RouteFromX", "");
+            textBox_FromY.Text = SQLiteDBClass.GetSettingString("RouteFromY", "");
+            textBox_FromZ.Text = SQLiteDBClass.GetSettingString("RouteFromZ", "");
+            textBox_ToX.Text = SQLiteDBClass.GetSettingString("RouteToX", "");
+            textBox_ToY.Text = SQLiteDBClass.GetSettingString("RouteToY", "");
+            textBox_ToZ.Text = SQLiteDBClass.GetSettingString("RouteToZ", "");
+            bool fromstate = SQLiteDBClass.GetSettingBool("RouteFromState", false);
+            bool tostate = SQLiteDBClass.GetSettingBool("RouteToState", false);
 
-            int metricvalue = db.GetSettingInt("RouteMetric", 0);
+            int metricvalue = SQLiteDBClass.GetSettingInt("RouteMetric", 0);
             comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemClass.metric_waypointdev2;
 
             SelectToMaster(tostate);

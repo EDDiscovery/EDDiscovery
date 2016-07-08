@@ -29,12 +29,10 @@ namespace EDDiscovery2
         List<Point3D> starpositions = null;
 
         public bool Nowindowreposition { get; set; } = false;
-        SQLiteDBClass db;
 
         public FormSagCarinaMission(EDDiscoveryForm frm)
         {
             _eddiscoveryForm = frm;
-            db = new SQLiteDBClass();
             InitializeComponent();
         }
 
@@ -42,13 +40,13 @@ namespace EDDiscovery2
         bool initdone = false;
         private void FormSagCarinaMission_Load(object sender, EventArgs e)
         {
-            var top = db.GetSettingInt("Map2DFormTop", -1);
+            var top = SQLiteDBClass.GetSettingInt("Map2DFormTop", -1);
 
             if (top >= 0 && Nowindowreposition == false)
             {
-                var left = db.GetSettingInt("Map2DFormLeft", 0);
-                var height = db.GetSettingInt("Map2DFormHeight", 800);
-                var width = db.GetSettingInt("Map2DFormWidth", 800);
+                var left = SQLiteDBClass.GetSettingInt("Map2DFormLeft", 0);
+                var height = SQLiteDBClass.GetSettingInt("Map2DFormHeight", 800);
+                var width = SQLiteDBClass.GetSettingInt("Map2DFormWidth", 800);
                 this.Location = new Point(left, top);
                 this.Size = new Size(width, height);
                 //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
@@ -86,10 +84,10 @@ namespace EDDiscovery2
         {
             if (Visible)
             {
-                db.PutSettingInt("Map2DFormWidth", this.Width);
-                db.PutSettingInt("Map2DFormHeight", this.Height);
-                db.PutSettingInt("Map2DFormTop", this.Top);
-                db.PutSettingInt("Map2DFormLeft", this.Left);
+                SQLiteDBClass.PutSettingInt("Map2DFormWidth", this.Width);
+                SQLiteDBClass.PutSettingInt("Map2DFormHeight", this.Height);
+                SQLiteDBClass.PutSettingInt("Map2DFormTop", this.Top);
+                SQLiteDBClass.PutSettingInt("Map2DFormLeft", this.Left);
                 //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
             imageViewer1.Image.Dispose();

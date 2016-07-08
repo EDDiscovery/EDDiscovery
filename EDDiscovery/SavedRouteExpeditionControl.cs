@@ -114,8 +114,7 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            var db = new SQLiteDBClass();
-            _savedRoutes = db.GetAllSavedRoutes();
+            _savedRoutes = SavedRouteClass.GetAllSavedRoutes();
 
             foreach (var initroute in InitialRoutes)
             {

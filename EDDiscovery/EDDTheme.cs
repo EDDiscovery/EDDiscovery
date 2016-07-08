@@ -228,8 +228,7 @@ namespace EDDiscovery2
 
         private Settings currentsettings;           // if name = custom, then its not a standard theme..
         private List<Settings> themelist;
-        private SQLiteDBClass db;
-
+        
         public EDDToolStripRenderer toolstripRenderer;
 
         public EDDTheme()
@@ -242,12 +241,10 @@ namespace EDDiscovery2
 
         public void RestoreSettings()
         {
-            if (db == null)
-                db = new SQLiteDBClass();
 
             Console.WriteLine("Theme ID " + Settings.ThemeID);
 
-            int themeidstored = db.GetSettingInt("ThemeID", -1);
+            int themeidstored = SQLiteDBClass.GetSettingInt("ThemeID", -1);
 
             if ( themeidstored != -1 && themeidstored != Settings.ThemeID )
             {
@@ -260,20 +257,20 @@ namespace EDDiscovery2
                     return;
             }
 
-            if (db.keyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
+            if (SQLiteDBClass.keyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
             {
-                currentsettings.name = db.GetSettingString("ThemeNameOf", "Custom");
-                currentsettings.windowsframe = db.GetSettingBool("ThemeWindowsFrame", true);
-                currentsettings.formopacity = db.GetSettingDouble("ThemeFormOpacity", 100);
-                currentsettings.fontname = db.GetSettingString("ThemeFont", defaultfont);
-                currentsettings.fontsize = (float)db.GetSettingDouble("ThemeFontSize", defaultfontsize);
-                currentsettings.buttonstyle = db.GetSettingString("ButtonStyle", buttonstyle_system);
-                currentsettings.textboxborderstyle = db.GetSettingString("TextBoxBorderStyle", textboxborderstyle_fixed3D);
+                currentsettings.name = SQLiteDBClass.GetSettingString("ThemeNameOf", "Custom");
+                currentsettings.windowsframe = SQLiteDBClass.GetSettingBool("ThemeWindowsFrame", true);
+                currentsettings.formopacity = SQLiteDBClass.GetSettingDouble("ThemeFormOpacity", 100);
+                currentsettings.fontname = SQLiteDBClass.GetSettingString("ThemeFont", defaultfont);
+                currentsettings.fontsize = (float)SQLiteDBClass.GetSettingDouble("ThemeFontSize", defaultfontsize);
+                currentsettings.buttonstyle = SQLiteDBClass.GetSettingString("ButtonStyle", buttonstyle_system);
+                currentsettings.textboxborderstyle = SQLiteDBClass.GetSettingString("TextBoxBorderStyle", textboxborderstyle_fixed3D);
 
                 foreach (Settings.CI ck in themelist[0].colors.Keys)         // use themelist to find the key names, as we modify currentsettings as we go and that would cause an exception
                 {
                     int d = themelist[0].colors[ck].ToArgb();               // use windows default colors.
-                    Color c = Color.FromArgb(db.GetSettingInt("ThemeColor" + ck.ToString(), d));
+                    Color c = Color.FromArgb(SQLiteDBClass.GetSettingInt("ThemeColor" + ck.ToString(), d));
                     currentsettings.colors[ck] = c;
                 }
             }
@@ -281,21 +278,18 @@ namespace EDDiscovery2
 
         public void SaveSettings(string filename)
         {
-            if (db == null)
-                db = new SQLiteDBClass();
-
-            db.PutSettingInt("ThemeID", Settings.ThemeID);
-            db.PutSettingString("ThemeNameOf", currentsettings.name);
-            db.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
-            db.PutSettingDouble("ThemeFormOpacity", currentsettings.formopacity);
-            db.PutSettingString("ThemeFont", currentsettings.fontname);
-            db.PutSettingDouble("ThemeFontSize", currentsettings.fontsize);
-            db.PutSettingString("ButtonStyle", currentsettings.buttonstyle);
-            db.PutSettingString("TextBoxBorderStyle", currentsettings.textboxborderstyle);
+            SQLiteDBClass.PutSettingInt("ThemeID", Settings.ThemeID);
+            SQLiteDBClass.PutSettingString("ThemeNameOf", currentsettings.name);
+            SQLiteDBClass.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
+            SQLiteDBClass.PutSettingDouble("ThemeFormOpacity", currentsettings.formopacity);
+            SQLiteDBClass.PutSettingString("ThemeFont", currentsettings.fontname);
+            SQLiteDBClass.PutSettingDouble("ThemeFontSize", currentsettings.fontsize);
+            SQLiteDBClass.PutSettingString("ButtonStyle", currentsettings.buttonstyle);
+            SQLiteDBClass.PutSettingString("TextBoxBorderStyle", currentsettings.textboxborderstyle);
             
             foreach (Settings.CI ck in currentsettings.colors.Keys)
             {
-                db.PutSettingInt("ThemeColor" + ck.ToString(), currentsettings.colors[ck].ToArgb());
+                SQLiteDBClass.PutSettingInt("ThemeColor" + ck.ToString(), currentsettings.colors[ck].ToArgb());
             }
 
             if ( filename != null )         

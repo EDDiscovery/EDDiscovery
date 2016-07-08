@@ -46,7 +46,6 @@ namespace EDDiscovery
         //readonly string _fileTgcSystems;
         readonly string _fileEDSMDistances;
         private EDSMSync _edsmSync;
-        private SQLiteDBClass _db;
         public EDDTheme theme;
 
         public AutoCompleteStringCollection SystemNames;            // External one
@@ -81,7 +80,6 @@ namespace EDDiscovery
             InitializeComponent();
             ProcessCommandLineOptions();
 
-            _db = new SQLiteDBClass();
             theme = new EDDTheme();
 
             EDDConfig = EDDConfig.Instance;
@@ -275,12 +273,12 @@ namespace EDDiscovery
 
         private void RepositionForm()
         {
-            var top = _db.GetSettingInt("FormTop", -1);
+            var top = SQLiteDBClass.GetSettingInt("FormTop", -1);
             if (top >= 0 && option_nowindowreposition == false )
             {
-                var left = _db.GetSettingInt("FormLeft", 0);
-                var height = _db.GetSettingInt("FormHeight", 800);
-                var width = _db.GetSettingInt("FormWidth", 800);
+                var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
+                var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
+                var width = SQLiteDBClass.GetSettingInt("FormWidth", 800);
                 this.Top = top;
                 this.Left = left;
                 this.Height = height;
@@ -441,7 +439,7 @@ namespace EDDiscovery
             try
             {
                 EDSMClass edsm = new EDSMClass();
-                string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+                string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
 
                 DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
 
@@ -462,7 +460,7 @@ namespace EDDiscovery
                     else
                     {
                         LogLine("Checking for new EDSM systems (may take a few moments).");
-                        long updates = edsm.GetNewSystems(_db);
+                        long updates = edsm.GetNewSystems();
                         LogLine("EDSM updated " + updates + " systems.");
                     }
                 }
@@ -478,7 +476,7 @@ namespace EDDiscovery
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
-            string timestr = _db.GetSettingString("EDDBSystemsTime", "0");
+            string timestr = SQLiteDBClass.GetSettingString("EDDBSystemsTime", "0");
             DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
             if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
                 performeddbsync = true;
@@ -498,7 +496,7 @@ namespace EDDiscovery
 
             if (performedsmsync)
             {
-                string rwsystime = _db.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+                string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
                 DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
 
                 try
@@ -527,12 +525,12 @@ namespace EDDiscovery
                         string rwsysfiletime = "2014-01-01 00:00:00";
                         updates = SystemClass.ParseEDSMUpdateSystemsFile(edsmsystems, ref rwsysfiletime, true);
 
-                        _db.PutSettingString("EDSMLastSystems", rwsysfiletime);
+                        SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
                     }
                     else
                     {
                         LogText("No new file found on server, instead checking for new EDSM systems.");
-                        updates = edsm.GetNewSystems(_db);
+                        updates = edsm.GetNewSystems();
                     }
 
                     LogLine("EDSM updated " + updates + " systems.");
@@ -567,7 +565,7 @@ namespace EDDiscovery
                         long number = SystemClass.ParseEDDBUpdateSystems(eddb.SystemFileName);
 
                         LogText("EDDB update done, " + number + " systems updated" + Environment.NewLine);
-                        _db.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
+                        SQLiteDBClass.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
                     }
                     else
                         LogLineHighlight("Failed to download EDDB Systems.");
@@ -585,7 +583,7 @@ namespace EDDiscovery
             {
                 try
                 {
-                    string lstdist = _db.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                    string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                     EDSMClass edsm = new EDSMClass();
 
                     long numbertotal = 0;
@@ -600,7 +598,7 @@ namespace EDDiscovery
                             LogText("Updating all distances with EDSM data." + Environment.NewLine);
                             long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist, true);
                             numbertotal += numberx;
-                            _db.PutSettingString("EDSCLastDist", lstdist);
+                            SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
                             LogText("EDSM Distance update done, " + numberx + " distances updated." + Environment.NewLine);
                         }
                     }
@@ -617,7 +615,7 @@ namespace EDDiscovery
                     }
 
                     LogText("EDSM Distance update done, " + numbertotal + " distances updated." + Environment.NewLine);
-                    _db.PutSettingString("EDSCLastDist", lstdist);
+                    SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
 
                     if (numbertotal > 0)                          // if we've done something
                         refreshhistory = true;
@@ -742,15 +740,15 @@ namespace EDDiscovery
         {
             settings.SaveSettings();
 
-            _db.PutSettingInt("FormWidth", this.Width);
-            _db.PutSettingInt("FormHeight", this.Height);
-            _db.PutSettingInt("FormTop", this.Top);
-            _db.PutSettingInt("FormLeft", this.Left);
+            SQLiteDBClass.PutSettingInt("FormWidth", this.Width);
+            SQLiteDBClass.PutSettingInt("FormHeight", this.Height);
+            SQLiteDBClass.PutSettingInt("FormTop", this.Top);
+            SQLiteDBClass.PutSettingInt("FormLeft", this.Left);
             routeControl1.SaveSettings();
             theme.SaveSettings(null);
 
-            _db.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
-            _db.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
+            SQLiteDBClass.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
+            SQLiteDBClass.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
         }
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)

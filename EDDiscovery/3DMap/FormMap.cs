@@ -27,7 +27,6 @@ namespace EDDiscovery2
 
         const int HELP_VERSION = 1;         // increment this to force help onto the screen of users first time.
 
-        SQLiteDBClass db;
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
         private List<IData3DSet> _datasets_finegridlines;
@@ -129,7 +128,6 @@ namespace EDDiscovery2
         public FormMap()
         {
             InitializeComponent();
-            db = new SQLiteDBClass();
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
@@ -197,18 +195,18 @@ namespace EDDiscovery2
 
             ResetCamera();
             toolStripShowAllStars.Renderer = new MyRenderer();
-            toolStripButtonDrawLines.Checked = db.GetSettingBool("Map3DDrawLines", false);
-            showStarstoolStripMenuItem.Checked = db.GetSettingBool("Map3DAllStars", true);
-            showStationsToolStripMenuItem.Checked = db.GetSettingBool("Map3DButtonStations", false);
-            toolStripButtonPerspective.Checked = db.GetSettingBool("Map3DPerspective", false);
-            toolStripButtonGrid.Checked = db.GetSettingBool("Map3DCoarseGrid", true);
-            toolStripButtonFineGrid.Checked = db.GetSettingBool("Map3DFineGrid", true);
-            toolStripButtonCoords.Checked = db.GetSettingBool("Map3DCoords", true);
-            toolStripButtonEliteMovement.Checked = db.GetSettingBool("Map3DEliteMove", false);
-            toolStripButtonStarNames.Checked = db.GetSettingBool("Map3DStarNames", false);
-            showNoteMarksToolStripMenuItem.Checked = db.GetSettingBool("Map3DShowNoteMarks", true);
-            showBookmarksToolStripMenuItem.Checked = db.GetSettingBool("Map3DShowBookmarks", true);
-            toolStripButtonAutoForward.Checked = db.GetSettingBool("Map3DAutoForward", false );
+            toolStripButtonDrawLines.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", false);
+            showStarstoolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DAllStars", true);
+            showStationsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonStations", false);
+            toolStripButtonPerspective.Checked = SQLiteDBClass.GetSettingBool("Map3DPerspective", false);
+            toolStripButtonGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DCoarseGrid", true);
+            toolStripButtonFineGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DFineGrid", true);
+            toolStripButtonCoords.Checked = SQLiteDBClass.GetSettingBool("Map3DCoords", true);
+            toolStripButtonEliteMovement.Checked = SQLiteDBClass.GetSettingBool("Map3DEliteMove", false);
+            toolStripButtonStarNames.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNames", false);
+            showNoteMarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowNoteMarks", true);
+            showBookmarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowBookmarks", true);
+            toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false );
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
 
@@ -287,13 +285,13 @@ namespace EDDiscovery2
 
         private void FormMap_Load(object sender, EventArgs e)
         {
-            var top = db.GetSettingInt("Map3DFormTop", -1);
+            var top = SQLiteDBClass.GetSettingInt("Map3DFormTop", -1);
 
             if (top >= 0 && noWindowReposition == false)
             {
-                var left = db.GetSettingInt("Map3DFormLeft", 0);
-                var height = db.GetSettingInt("Map3DFormHeight", 800);
-                var width = db.GetSettingInt("Map3DFormWidth", 800);
+                var left = SQLiteDBClass.GetSettingInt("Map3DFormLeft", 0);
+                var height = SQLiteDBClass.GetSettingInt("Map3DFormHeight", 800);
+                var width = SQLiteDBClass.GetSettingInt("Map3DFormWidth", 800);
                 this.Location = new Point(left, top);
                 this.Size = new Size(width, height);
                 //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
@@ -320,11 +318,11 @@ namespace EDDiscovery2
 
         private void FormMap_Shown(object sender, EventArgs e)
         {
-            int helpno = db.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
+            int helpno = SQLiteDBClass.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
             if (helpno != HELP_VERSION)
             {
                 toolStripButtonHelp_Click(null, null);
-                db.PutSettingInt("Map3DShownHelp", HELP_VERSION);
+                SQLiteDBClass.PutSettingInt("Map3DShownHelp", HELP_VERSION);
             }
         }
 
@@ -347,10 +345,10 @@ namespace EDDiscovery2
         {
             if (Visible)
             {
-                db.PutSettingInt("Map3DFormWidth", this.Width);
-                db.PutSettingInt("Map3DFormHeight", this.Height);
-                db.PutSettingInt("Map3DFormTop", this.Top);
-                db.PutSettingInt("Map3DFormLeft", this.Left);
+                SQLiteDBClass.PutSettingInt("Map3DFormWidth", this.Width);
+                SQLiteDBClass.PutSettingInt("Map3DFormHeight", this.Height);
+                SQLiteDBClass.PutSettingInt("Map3DFormTop", this.Top);
+                SQLiteDBClass.PutSettingInt("Map3DFormLeft", this.Left);
                 //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
 
@@ -397,7 +395,7 @@ namespace EDDiscovery2
                     Tag = img
                 };
                 item.Click += new EventHandler(dropdownMapNames_DropDownItemClicked);
-                item.Checked = db.GetSettingBool("map3DMaps" + img.FileName, false);
+                item.Checked = SQLiteDBClass.GetSettingBool("map3DMaps" + img.FileName, false);
                 dropdownMapNames.DropDownItems.Add(item);
             }
         }
@@ -437,7 +435,7 @@ namespace EDDiscovery2
 
             Dictionary<string, Func<DateTime>> endtimes = new Dictionary<string, Func<DateTime>>();
 
-            foreach (var expedition in db.GetAllSavedRoutes())
+            foreach (var expedition in SavedRouteClass.GetAllSavedRoutes())
             {
                 if (expedition.StartDate != null)
                 {
@@ -461,7 +459,7 @@ namespace EDDiscovery2
             startTime = starttimes["All"]();
             endTime = DateTime.Now.AddDays(1);
 
-            string lastsel = db.GetSettingString("Map3DFilter", "");
+            string lastsel = SQLiteDBClass.GetSettingString("Map3DFilter", "");
             foreach (var kvp in starttimes)
             {
                 var name = kvp.Key;
@@ -1517,7 +1515,7 @@ namespace EDDiscovery2
                 startTime = startPicker.MinDate;
             }
 
-            db.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
+            SQLiteDBClass.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
             startPickerHost.Visible = true;
             endPickerHost.Visible = true;
             startPicker.Value = startTime;
@@ -1535,7 +1533,7 @@ namespace EDDiscovery2
                     item.Checked = false;
                 }
             }
-            db.PutSettingString("Map3DFilter", sel.Text);
+            SQLiteDBClass.PutSettingString("Map3DFilter", sel.Text);
             startTime = startfunc();
             endTime = endfunc == null ? DateTime.Now.AddDays(1) : endfunc();
             startPickerHost.Visible = false;
@@ -1583,7 +1581,7 @@ namespace EDDiscovery2
 
         private void toolStripButtonAutoForward_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
         }
 
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
@@ -1603,63 +1601,63 @@ namespace EDDiscovery2
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
             GenerateDataSetsVisitedSystems();
             glControl.Invalidate();
         }
 
         private void showStarstoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
             glControl.Invalidate();
         }
 
         private void showStationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
             glControl.Invalidate();
         }
 
         private void toolStripButtonGrid_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
             glControl.Invalidate();
         }
 
         private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
             UpdateDataSetsDueToZoom();
             glControl.Invalidate();
         }
 
         private void toolStripButtonCoords_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
             UpdateDataSetsDueToZoom();
             glControl.Invalidate();
         }
 
         private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
         }
 
         private void toolStripButtonStarNames_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DStarNames", toolStripButtonStarNames.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DStarNames", toolStripButtonStarNames.Checked);
         }
 
         private void showNoteMarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
             GenerateDataSetsNotedSystems();
             glControl.Invalidate();
         }
 
         private void showBookmarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
             GenerateDataSetsBookmarks();
             glControl.Invalidate();
         }
@@ -1705,7 +1703,7 @@ namespace EDDiscovery2
 
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
             SetupViewport();
             GenerateDataSetsNotedSystems();
             GenerateDataSetsBookmarks();
@@ -1745,7 +1743,7 @@ namespace EDDiscovery2
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
         {
             ToolStripButton tsb = (ToolStripButton)sender;
-            db.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
+            SQLiteDBClass.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
             GenerateDataSetsMaps();
             glControl.Invalidate();
         }
