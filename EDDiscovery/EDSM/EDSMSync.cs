@@ -64,7 +64,6 @@ namespace EDDiscovery2.EDSM
         {
             try
             {
-                SQLiteDBClass db = new SQLiteDBClass();
                 EDSMClass edsm = new EDSMClass();
 
                 edsm.apiKey =  EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;

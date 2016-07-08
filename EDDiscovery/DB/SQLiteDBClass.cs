@@ -11,45 +11,51 @@ namespace EDDiscovery.DB
 {
     public class SQLiteDBClass
     {
-        SQLiteConnection m_dbConnection;
-        internal static string ConnectionString;
-        string dbfile;
-
-        private static Object lockDBInit = new Object();
-        private static bool dbUpgraded = false;
-        public SQLiteDBClass()
-        {
-            lock (lockDBInit)
+        internal static string ConnectionString                             // this is called when a connection is required, and it makes sure the db is up and running
+        { get
             {
-                dbfile = GetSQLiteDBFile();
-
-                ConnectionString = "Data Source=" + dbfile + ";Pooling=true;";
-
-                if (!File.Exists(dbfile))
+                lock (lockDBInit)                                           // one at a time chaps
                 {
-                    CreateDB(dbfile);
+                    if (_db == null)                                        // first one to ask for a connection string sets the db up
+                        _db = new SQLiteDBClass();
                 }
-                else
-                    UpgradeDB();
-
+                return _db.constring;
             }
         }
 
+        private static SQLiteDBClass _db = null;                            // one db class for everyone
+        private static Object lockDBInit = new Object();                    // lock to sequence construction
 
+        private string constring;
+        SQLiteConnection m_dbConnection;
+
+        private SQLiteDBClass()         // non static class functions in here are only used by the construction
+        {                               // so this is private to make sure you don't try and initialise a DB anywhere..
+            string dbfile = GetSQLiteDBFile();
+            constring = "Data Source=" + dbfile + ";Pooling=true;";
+
+            if (!File.Exists(dbfile))
+            {
+                CreateDB(dbfile);
+            }
+            else
+                UpgradeDB();
+        }
+        
         private string GetSQLiteDBFile()
         {
             return Path.Combine(Tools.GetAppDataDirectory(), "EDDiscovery.sqlite");
         }
 
-        public bool Connect2DB()
+        private bool Connect2DB()
         {
-            m_dbConnection = new SQLiteConnection(ConnectionString);
+            m_dbConnection = new SQLiteConnection(constring);
             m_dbConnection.Open();
 
             return true;
         }
 
-        public bool CreateDB(string file)
+        private bool CreateDB(string file)
         {
             try
             {
@@ -66,7 +72,7 @@ namespace EDDiscovery.DB
         }
 
 
-        public bool InitDB()
+        private bool InitDB()
         {
             string query = "CREATE TABLE Register (ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , \"ValueInt\" INTEGER, \"ValueDouble\" DOUBLE, \"ValueString\" TEXT, \"ValueBlob\" BLOB)";
             ExecuteQuery(query);
@@ -75,15 +81,12 @@ namespace EDDiscovery.DB
             return true;
         }
 
-        public bool UpgradeDB()
+        private bool UpgradeDB()
         {
-            if (dbUpgraded)
-                return true;
-
             int dbver;
             try
             {
-                dbver = GetSettingInt("DBVer", 1);
+                dbver = GetSettingInt("DBVer", 1,constring);        // use the constring one, as don't want to go back into ConnectionString code
 
                 if (dbver < 2)
                     UpgradeDB2();
@@ -133,7 +136,6 @@ namespace EDDiscovery.DB
                 if (dbver < 17)
                     UpgradeDB17();
 
-                dbUpgraded = true;
                 return true;
             }
             catch (Exception ex)
@@ -144,7 +146,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public void PerformUpgrade(int newVersion, bool catchErrors, bool backupDbFile, string[] queries, Action doAfterQueries = null)
+        private void PerformUpgrade(int newVersion, bool catchErrors, bool backupDbFile, string[] queries, Action doAfterQueries = null)
         {
             if (backupDbFile)
             {
@@ -180,7 +182,7 @@ namespace EDDiscovery.DB
 
             doAfterQueries?.Invoke();
 
-            PutSettingInt("DBVer", newVersion);
+            PutSettingInt("DBVer", newVersion,constring);
         }
 
         private void UpgradeDB2()
@@ -326,12 +328,13 @@ namespace EDDiscovery.DB
             string query3 = "CREATE INDEX Systems_EDDB_ID_Index ON Systems (id_eddb ASC)";
             string query4 = "ALTER TABLE Distances ADD COLUMN id_edsm Integer";
             string query5 = "CREATE INDEX Distances_EDSM_ID_Index ON Distances (id_edsm ASC)";
+            string query6 = "Update VisitedSystems set x=null, y=null, z=null where x=0 and y=0 and z=0 and name!=\"Sol\"";
 
-            PerformUpgrade(17, true, true, new[] { query1,query2,query3,query4,query5 }, () =>
+            PerformUpgrade(17, true, true, new[] { query1,query2,query3,query4,query5,query6 }, () =>
             {
-                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00");        // force EDSM sync..
-                PutSettingString("EDDBSystemsTime", "0");                               // force EDDB
-                PutSettingString("EDSCLastDist", "2010-01-01 00:00:00");                // force distances
+                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00",constring);        // force EDSM sync..
+                PutSettingString("EDDBSystemsTime", "0",constring);                               // force EDDB
+                PutSettingString("EDSCLastDist", "2010-01-01 00:00:00",constring);                // force distances
             });
         }
 
@@ -346,195 +349,18 @@ namespace EDDiscovery.DB
         }
 
 
-        public bool CloseDB()
+        private bool CloseDB()
         {
             m_dbConnection.Close();
             return true;
         }
 
-        
 
-        public List<WantedSystemClass> GetAllWantedSystems()
-        {
-            try
-            {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
-                    {
-                        DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from wanted_systems";
-
-                        ds = SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return null;
-                        }
-                        //
-                        if (ds.Tables[0].Rows.Count == 0)
-                        {
-                            return null;
-                        }
-
-                        List<WantedSystemClass> retVal = new List<WantedSystemClass>();
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            WantedSystemClass sys = new WantedSystemClass(dr);
-                            retVal.Add(sys);
-                        }
-
-                        return retVal;
-
-                    }
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public List<SavedRouteClass> GetAllSavedRoutes()
-        {
-            try
-            {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
-                {
-                    using (SQLiteCommand cmd1 = new SQLiteCommand())
-                    {
-                        DataSet ds1 = null;
-                        cmd1.Connection = cn;
-                        cmd1.CommandType = CommandType.Text;
-                        cmd1.CommandTimeout = 30;
-                        cmd1.CommandText = "select * from routes_expeditions";
-
-                        ds1 = SqlQueryText(cn, cmd1);
-                        if (ds1.Tables.Count == 0)
-                        {
-                            return null;
-                        }
-                        //
-                        if (ds1.Tables[0].Rows.Count == 0)
-                        {
-                            return new List<SavedRouteClass>();
-                        }
-
-                        using (SQLiteCommand cmd2 = new SQLiteCommand())
-                        {
-                            DataSet ds2 = null;
-                            cmd2.Connection = cn;
-                            cmd2.CommandType = CommandType.Text;
-                            cmd2.CommandTimeout = 30;
-                            cmd2.CommandText = "select * from route_systems";
-
-                            ds2 = SqlQueryText(cn, cmd2);
-
-                            List<SavedRouteClass> retVal = new List<SavedRouteClass>();
-
-                            foreach (DataRow dr in ds1.Tables[0].Rows)
-                            {
-                                DataRow[] syslist = new DataRow[0];
-                                if (ds2.Tables.Count != 0)
-                                {
-                                    syslist = ds2.Tables[0].Select(String.Format("routeid = {0}", dr["id"]), "id ASC");
-                                }
-                                SavedRouteClass sys = new SavedRouteClass(dr, syslist);
-                                retVal.Add(sys);
-                            }
-
-                            return retVal;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                return null;
-            }
-
-        }
-
-        public int QueryValueInt(string query, int defaultvalue)
-        {
-            try
-            {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
-                    {
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        cmd.CommandText = query;
-                        object ob = SqlScalar(cn, cmd);
-
-                        if (ob == null)
-                            return defaultvalue;
-
-                        int val = Convert.ToInt32(ob);
-
-                        return val;
-                    }
-                }
-            }
-            catch 
-            {
-                return defaultvalue;
-            }
-        }
-
-        public Object QueryValue(string query)
-        {
-            try
-            {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
-                    {
-                        DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        cmd.CommandText = query;
-
-                        ds = SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return null;
-                        }
-                        //
-                        if (ds.Tables[0].Rows.Count == 0)
-                        {
-                            return null;
-                        }
-
-
-                        return ds.Tables[0].Rows[0];
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine(ex.Message);
-                return null;
-            }
-        }
-
-        static private void LogLine(string text)
-        {
-            System.Diagnostics.Trace.WriteLine(text);
-        }
+        ///----------------------------
+        /// STATIC code helpers for other DB classes
 
         public static DataSet SqlQueryText(SQLiteConnection cn, SQLiteCommand cmd)
         {
-
-            //LogLine("SqlQueryText: " + cmd.CommandText);
-
             try
             {
                 DataSet ds = new DataSet();
@@ -552,79 +378,7 @@ namespace EDDiscovery.DB
                 System.Diagnostics.Debug.WriteLine("SqlQuery Exception: " + ex.Message);
                 throw;
             }
-
         }
-
-        static public DataSet QueryText(SQLiteConnection cn, SQLiteCommand cmd)
-        {
-
-            //LogLine("SqlQueryText: " + cmd.CommandText);
-
-            try
-            {
-                DataSet ds = new DataSet();
-                SQLiteDataAdapter da = default(SQLiteDataAdapter);
-                cmd.CommandType = CommandType.Text;
-                cmd.Connection = cn;
-                da = new SQLiteDataAdapter(cmd);
-                cn.Open();
-                da.Fill(ds);
-                cn.Close();
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("SqlQuery Exception: " + ex.Message);
-                throw;
-            }
-
-        }
-
-
-        public static int SqlNonQuery(SQLiteConnection cn, SQLiteCommand cmd)
-        {
-            int rows = 0;
-
-            LogLine("SqlNonQuery: " + cmd.CommandText);
-
-            try
-            {
-                cn.Open();
-                rows = cmd.ExecuteNonQuery();
-                cn.Close();
-                return rows;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("SqlNonQuery Exception: " + ex.Message);
-                throw;
-            }
-
-
-        }
-
-
-        static public object SqlScalar(SQLiteConnection cn, SQLiteCommand cmd)
-        {
-            object ret = null;
-
-            //LogLine("SqlScalar: " + cmd.CommandText);
-            try
-            {
-                cn.Open();
-                ret = cmd.ExecuteScalar();
-                cn.Close();
-                return ret;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("SqlNonQuery Exception: " + ex.Message);
-                throw;
-            }
-
-
-        }
-
 
         static public int SqlNonQueryText(SQLiteConnection cn, SQLiteCommand cmd)
         {
@@ -651,17 +405,40 @@ namespace EDDiscovery.DB
                 System.Diagnostics.Debug.WriteLine("SqlNonQueryText Exception: " + ex.Message);
                 throw;
             }
-
-
         }
 
-// Check if a key exists
-        public bool keyExists(string sKey)
+        static public object SqlScalar(SQLiteConnection cn, SQLiteCommand cmd)
         {
+            object ret = null;
 
+            //LogLine("SqlScalar: " + cmd.CommandText);
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                cn.Open();
+                ret = cmd.ExecuteScalar();
+                cn.Close();
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("SqlNonQuery Exception: " + ex.Message);
+                throw;
+            }
+        }
+
+        ///----------------------------
+        /// STATIC functions for discrete values
+
+        static public bool keyExists(string sKey)                   // public IF
+        {
+            return keyExists(sKey, ConnectionString);
+        }
+
+        static private bool keyExists(string sKey, string constring)
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(constring))
                 {
                     using (SQLiteCommand cmd = new SQLiteCommand())
                     {
@@ -695,11 +472,16 @@ namespace EDDiscovery.DB
         }
 
 
-        public int GetSettingInt(string key, int defaultvalue)
+        static public int GetSettingInt(string key, int defaultvalue)       // public access
         {
+            return GetSettingInt(key, defaultvalue, ConnectionString);
+        }
+
+        static private int GetSettingInt(string key, int defaultvalue, string constring )
+        { 
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                using (SQLiteConnection cn = new SQLiteConnection(constring))
                 {
                     using (SQLiteCommand cmd = new SQLiteCommand())
                     {
@@ -726,13 +508,18 @@ namespace EDDiscovery.DB
         }
 
 
-        public bool PutSettingInt(string key, int intvalue)
+        static public bool PutSettingInt(string key, int intvalue)
+        {
+            return PutSettingInt(key, intvalue, ConnectionString);
+        }
+
+        static private bool PutSettingInt(string key, int intvalue, string constring )
         {
             try
             {
-                if (keyExists(key))
+                if (keyExists(key,constring))
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (SQLiteConnection cn = new SQLiteConnection(constring))
                     {
                         using (SQLiteCommand cmd = new SQLiteCommand())
                         {
@@ -751,7 +538,7 @@ namespace EDDiscovery.DB
                 }
                 else
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (SQLiteConnection cn = new SQLiteConnection(constring))
                     {
                         using (SQLiteCommand cmd = new SQLiteCommand())
                         {
@@ -774,7 +561,7 @@ namespace EDDiscovery.DB
             }
         }
 
-		public double GetSettingDouble(string key, double defaultvalue)
+		static public double GetSettingDouble(string key, double defaultvalue)
         {
             try
             {
@@ -805,7 +592,7 @@ namespace EDDiscovery.DB
         }
 
 
-        public bool PutSettingDouble(string key, double doublevalue)
+        static public bool PutSettingDouble(string key, double doublevalue)
         {
             try
             {
@@ -853,7 +640,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public bool GetSettingBool(string key, bool defaultvalue)
+        static public bool GetSettingBool(string key, bool defaultvalue)
         {
             try
             {
@@ -888,7 +675,7 @@ namespace EDDiscovery.DB
         }
 
 
-        public bool PutSettingBool(string key, bool boolvalue)
+        static public bool PutSettingBool(string key, bool boolvalue)
         {
             try
             {
@@ -943,8 +730,7 @@ namespace EDDiscovery.DB
             }
         }
 
-
-        public string GetSettingString(string key, string defaultvalue)
+        static public string GetSettingString(string key, string defaultvalue )
         {
             try
             {
@@ -978,13 +764,18 @@ namespace EDDiscovery.DB
         }
 
 
-        public bool PutSettingString(string key, string strvalue)
+        static public bool PutSettingString(string key, string strvalue)        // public IF
+        {
+            return PutSettingString(key, strvalue, ConnectionString);
+        }
+
+        static private bool PutSettingString(string key, string strvalue , string constring)
         {
             try
             {
-                if (keyExists(key))
+                if (keyExists(key,constring))
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (SQLiteConnection cn = new SQLiteConnection(constring))
                     {
                         using (SQLiteCommand cmd = new SQLiteCommand())
                         {
@@ -1003,7 +794,7 @@ namespace EDDiscovery.DB
                 }
                 else
                 {
-                    using (SQLiteConnection cn = new SQLiteConnection(ConnectionString))
+                    using (SQLiteConnection cn = new SQLiteConnection(constring))
                     {
                         using (SQLiteCommand cmd = new SQLiteCommand())
                         {
@@ -1026,20 +817,5 @@ namespace EDDiscovery.DB
             }
         }
 
-
-        public int GetNetLogFileSize(string filename)
-        {
-            string key = "NetLogFileSize_" + Path.GetFileName(filename);
-
-            return GetSettingInt(key, -1);
-        }
-
-        public void SaveNetLogFileSize(string filename, int size)
-        {
-            string key = "NetLogFileSize_" + Path.GetFileName(filename);
-
-
-            PutSettingInt(key, size);
-        }
     }
 }

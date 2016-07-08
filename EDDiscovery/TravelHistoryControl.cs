@@ -63,10 +63,9 @@ namespace EDDiscovery
         {
             _discoveryForm = discoveryForm;
             sync = new EDSMSync(_discoveryForm);
-            var db = new SQLiteDBClass();
             defaultMapColour = EDDConfig.Instance.DefaultMapColour;
-            EDSMSyncTo = db.GetSettingBool("EDSMSyncTo", true);
-            EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
+            EDSMSyncTo = SQLiteDBClass.GetSettingBool("EDSMSyncTo", true);
+            EDSMSyncFrom = SQLiteDBClass.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
             checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
             comboBoxHistoryWindow.DataSource = new[]
@@ -86,7 +85,7 @@ namespace EDDiscovery
 
             comboBoxHistoryWindow.DisplayMember = nameof(TravelHistoryFilter.Label);
 
-            comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", DefaultTravelHistoryFilterIndex);
+            comboBoxHistoryWindow.SelectedIndex = SQLiteDBClass.GetSettingInt("EDUIHistory", DefaultTravelHistoryFilterIndex);
             LoadCommandersListBox();
 
             closestthread = new Thread(CalculateClosestSystems) { Name = "Closest Calc", IsBackground = true };
@@ -109,9 +108,8 @@ namespace EDDiscovery
         public void TriggerEDSMRefresh()
         {
             LogText("Check for new EDSM systems." + Environment.NewLine);
-            SQLiteDBClass db = new SQLiteDBClass();
             EDSMClass edsm = new EDSMClass();
-            edsm.GetNewSystems(db);
+            edsm.GetNewSystems();
             LogText("EDSM System check complete." + Environment.NewLine);
         }
 
@@ -435,8 +433,7 @@ namespace EDDiscovery
             if (visitedSystems != null)
                 RefreshHistory();
 
-            var db = new SQLiteDBClass();
-            db.PutSettingInt("EDUIHistory", comboBoxHistoryWindow.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("EDUIHistory", comboBoxHistoryWindow.SelectedIndex);
         }
 
 
@@ -574,7 +571,6 @@ namespace EDDiscovery
             try
             {
                 EDSMClass edsm = new EDSMClass();
-                SQLiteDBClass db = new SQLiteDBClass();
                 
                 edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
                 edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;

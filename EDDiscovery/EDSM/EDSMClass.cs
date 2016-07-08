@@ -167,7 +167,7 @@ namespace EDDiscovery2.EDSM
                 return null;
         }
         
-        internal long GetNewSystems(SQLiteDBClass db)
+        internal long GetNewSystems()
         {
             string lstsyst;
 
@@ -181,7 +181,7 @@ namespace EDDiscovery2.EDSM
             {
                 NewSystemTime = SystemClass.GetLastSystemEntryTime();
                 lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                lstsyst = db.GetSettingString("EDSMLastSystems", lstsyst);
+                lstsyst = SQLiteDBClass.GetSettingString("EDSMLastSystems", lstsyst);
                 DateTime lstsystdate;
 
                 if (lstsyst.Equals("2010-01-01 00:00:00") || !DateTime.TryParseExact(lstsyst, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out lstsystdate))
@@ -194,7 +194,7 @@ namespace EDDiscovery2.EDSM
 
             string date = "2010-01-01 00:00:00";
             long updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date , false);
-            db.PutSettingString("EDSMLastSystems", date);
+            SQLiteDBClass.PutSettingString("EDSMLastSystems", date);
 
             return updates;
         }
@@ -294,8 +294,6 @@ namespace EDDiscovery2.EDSM
 
         public string GetComments(DateTime starttime)
         {
-            SQLiteDBClass db = new SQLiteDBClass();
-
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query);

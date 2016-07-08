@@ -111,12 +111,10 @@ namespace EDDiscovery2.DB
                 return true;
             }
         }
-
-
+        
         static public List<TravelLogUnit> GetAll()
         {
             List<TravelLogUnit> list = new List<TravelLogUnit>();
-
 
             using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
             {
@@ -128,7 +126,7 @@ namespace EDDiscovery2.DB
                     cmd.CommandTimeout = 30;
                     cmd.CommandText = "select * from TravelLogUnit";
 
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
+                    ds = SQLiteDBClass.SqlQueryText(cn, cmd);
                     if (ds.Tables.Count == 0)
                     {
                         return null;
@@ -150,8 +148,6 @@ namespace EDDiscovery2.DB
                 }
             }
         }
-
     }
-
 }
 

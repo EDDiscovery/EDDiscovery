@@ -42,13 +42,6 @@ namespace EDDiscovery2.DB
                 X = (double)dr["X"];
                 Y = (double)dr["Y"];
                 Z = (double)dr["Z"];
-
-                if (X == 0 && Y == 0 && Z == 0 && !Name.Equals("Sol"))      // previously used 0,0,0 as a invalid marker, so if its not Sol...
-                {
-                    X = double.NaN;
-                    Y = double.NaN;
-                    Z = double.NaN;
-                }
             }
         }
 
@@ -273,7 +266,7 @@ namespace EDDiscovery2.DB
                     cmd.CommandTimeout = 30;
                     cmd.CommandText = "select * from VisitedSystems Order by Time ";
 
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
+                    ds = SQLiteDBClass.SqlQueryText(cn, cmd);
                     if (ds.Tables.Count == 0)
                     {
                         return null;
@@ -313,7 +306,7 @@ namespace EDDiscovery2.DB
                     cmd.CommandText = "select * from VisitedSystems where commander=@commander Order by Time ";
                     cmd.Parameters.AddWithValue("@commander", commander);
 
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
+                    ds = SQLiteDBClass.SqlQueryText(cn, cmd);
                     if (ds.Tables.Count == 0)
                     {
                         return null;
@@ -352,7 +345,7 @@ namespace EDDiscovery2.DB
                     cmd.CommandText = "select * from VisitedSystems Order by Time DESC Limit 1";
 
 
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
+                    ds = SQLiteDBClass.SqlQueryText(cn, cmd);
                     if (ds.Tables.Count == 0)
                     {
                         return null;
@@ -386,7 +379,7 @@ namespace EDDiscovery2.DB
                     cmd.CommandText = "select * from VisitedSystems where name=@name and Time=@time  Order by Time DESC Limit 1";
                     cmd.Parameters.AddWithValue("@name", name);
                     cmd.Parameters.AddWithValue("@time", time);
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
+                    ds = SQLiteDBClass.SqlQueryText(cn, cmd);
                     if (ds.Tables.Count == 0)
                     {
                         return false;

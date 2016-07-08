@@ -86,5 +86,51 @@ namespace EDDiscovery.DB
                 return true;
             }
         }
+
+        public static List<WantedSystemClass> GetAllWantedSystems()
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    {
+                        DataSet ds = null;
+                        cmd.Connection = cn;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 30;
+                        cmd.CommandText = "select * from wanted_systems";
+
+                        ds = SQLiteDBClass.SqlQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0)
+                        {
+                            return null;
+                        }
+                        //
+                        if (ds.Tables[0].Rows.Count == 0)
+                        {
+                            return null;
+                        }
+
+                        List<WantedSystemClass> retVal = new List<WantedSystemClass>();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            WantedSystemClass sys = new WantedSystemClass(dr);
+                            retVal.Add(sys);
+                        }
+
+                        return retVal;
+
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+
     }
 }

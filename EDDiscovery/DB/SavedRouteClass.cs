@@ -176,5 +176,65 @@ namespace EDDiscovery.DB
                 return true;
             }
         }
+
+
+        public static List<SavedRouteClass> GetAllSavedRoutes()
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+                {
+                    using (SQLiteCommand cmd1 = new SQLiteCommand())
+                    {
+                        DataSet ds1 = null;
+                        cmd1.Connection = cn;
+                        cmd1.CommandType = CommandType.Text;
+                        cmd1.CommandTimeout = 30;
+                        cmd1.CommandText = "select * from routes_expeditions";
+
+                        ds1 = SQLiteDBClass.SqlQueryText(cn, cmd1);
+                        if (ds1.Tables.Count == 0)
+                        {
+                            return null;
+                        }
+                        //
+                        if (ds1.Tables[0].Rows.Count == 0)
+                        {
+                            return new List<SavedRouteClass>();
+                        }
+
+                        using (SQLiteCommand cmd2 = new SQLiteCommand())
+                        {
+                            DataSet ds2 = null;
+                            cmd2.Connection = cn;
+                            cmd2.CommandType = CommandType.Text;
+                            cmd2.CommandTimeout = 30;
+                            cmd2.CommandText = "select * from route_systems";
+
+                            ds2 = SQLiteDBClass.SqlQueryText(cn, cmd2);
+
+                            List<SavedRouteClass> retVal = new List<SavedRouteClass>();
+
+                            foreach (DataRow dr in ds1.Tables[0].Rows)
+                            {
+                                DataRow[] syslist = new DataRow[0];
+                                if (ds2.Tables.Count != 0)
+                                {
+                                    syslist = ds2.Tables[0].Select(String.Format("routeid = {0}", dr["id"]), "id ASC");
+                                }
+                                SavedRouteClass sys = new SavedRouteClass(dr, syslist);
+                                retVal.Add(sys);
+                            }
+
+                            return retVal;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

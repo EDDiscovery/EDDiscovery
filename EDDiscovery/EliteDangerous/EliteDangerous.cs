@@ -130,10 +130,8 @@ namespace EDDiscovery2
                 {
                     EDRunning = false;
 
-                    SQLiteDBClass db = new SQLiteDBClass();
-
                     if (EDDirectory == null || EDDirectory.Equals(""))
-                        EDDirectory = db.GetSettingString("EDDirectory", "");
+                        EDDirectory = SQLiteDBClass.GetSettingString("EDDirectory", "");
                 }
                 else
                 {
@@ -152,16 +150,15 @@ namespace EDDiscovery2
                     EDDirectory = Path.GetDirectoryName(EDFileName);
                     if (EDDirectory != null)
                     {
-                        SQLiteDBClass db = new SQLiteDBClass();
                         if (EDDirectory.Contains("PUBLIC_TEST_SERVER")) // BETA
                         {
-                            db.PutSettingString("EDDirectoryBeta", EDDirectory);
+                            SQLiteDBClass.PutSettingString("EDDirectoryBeta", EDDirectory);
                             Beta = true;
                         }
                         else
                         {
                             Beta = false;
-                            db.PutSettingString("EDDirectory", EDDirectory);
+                            SQLiteDBClass.PutSettingString("EDDirectory", EDDirectory);
                         }
                     }
 
