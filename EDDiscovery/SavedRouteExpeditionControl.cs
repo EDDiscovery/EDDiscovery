@@ -37,11 +37,11 @@ namespace EDDiscovery
                 "Eok Gree TO-Q e5-3167",
                 "Pheia Briae DK-A e303",
                 "Greeroi MD-Q d6-5",
-                "Eactainds GN-W c1-6",
+                "Rendezvous Point",
                 "Oupailks BB-M c8-5",
                 "Qautheia BA-A e0",
                 "Cheae Eurl AA-A e0",
-                "Ceeckia ZQ-L c24-0"
+                "Beagle Point"
             )
             {
                 StartDate = new DateTime(2016, 1, 14, 20, 0, 0, DateTimeKind.Utc).ToLocalTime(),
@@ -70,7 +70,7 @@ namespace EDDiscovery
                 "Hyphielie GR-N d6-9",
                 "Cho Eur QY-S e3-2",
                 "Fleckia FI-Z d1-6",
-                "Ceeckia ZQ-L c24-0",
+                "Beagle Point",
                 "Myeia Thaa ZE-R d4-0",
                 "Syriae Thaa PJ-I d9-1",
                 "Pyrie Eurk QX-U e2-0",

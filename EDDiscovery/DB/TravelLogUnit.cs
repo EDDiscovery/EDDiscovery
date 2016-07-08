@@ -11,7 +11,7 @@ namespace EDDiscovery2.DB
 {
     public class TravelLogUnit
     {
-        public int id;
+        public long id;
         public string Name;
         public int type;
         public int Size;
@@ -24,7 +24,7 @@ namespace EDDiscovery2.DB
 
         public TravelLogUnit(DataRow dr)
         {
-            id = (int)(long)dr["id"];
+            id = (long)dr["id"];
             Name = (string)dr["Name"];
             type = (int)(long)dr["type"];
             Size = (int)(long)dr["size"];
@@ -50,43 +50,37 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
             {
-                return Add(cn);
+                bool ret = Add(cn);
+                cn.Close();
+                return ret;
             }
         }
 
         private bool Add(SQLiteConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)",cn))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)";
                 cmd.Parameters.AddWithValue("@name", Name);
                 cmd.Parameters.AddWithValue("@type", type);
                 cmd.Parameters.AddWithValue("@size", Size);
                 cmd.Parameters.AddWithValue("@Path", Path);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("Select Max(id) as id from TravelLogUnit",cn))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "Select Max(id) as id from TravelLogUnit";
-
-                    id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
+
                 return true;
             }
         }
 
         public bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
             {
                 return Update(cn);
             }
@@ -94,19 +88,15 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id",cn))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id";
                 cmd.Parameters.AddWithValue("@ID", id);
                 cmd.Parameters.AddWithValue("@Name", Name);
                 cmd.Parameters.AddWithValue("@Type", type);
                 cmd.Parameters.AddWithValue("@size", Size);
                 cmd.Parameters.AddWithValue("@Path", Path);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 return true;
             }
@@ -116,31 +106,17 @@ namespace EDDiscovery2.DB
         {
             List<TravelLogUnit> list = new List<TravelLogUnit>();
 
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
             {
-                using (SQLiteCommand cmd = new SQLiteCommand())
+                using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from TravelLogUnit",cn))
                 {
-                    DataSet ds = null;
-                    cmd.Connection = cn;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandTimeout = 30;
-                    cmd.CommandText = "select * from TravelLogUnit";
-
-                    ds = SQLiteDBClass.SqlQueryText(cn, cmd);
-                    if (ds.Tables.Count == 0)
-                    {
-                        return null;
-                    }
-                    //
-                    if (ds.Tables[0].Rows.Count == 0)
-                    {
+                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         return list;
-                    }
 
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         TravelLogUnit sys = new TravelLogUnit(dr);
-
                         list.Add(sys);
                     }
 

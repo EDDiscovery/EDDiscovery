@@ -12,7 +12,7 @@ namespace EDDiscovery.DB
 {
     public class WantedSystemClass
     {
-        public int id;
+        public long id;
         public string system;
 
         public WantedSystemClass()
@@ -20,7 +20,7 @@ namespace EDDiscovery.DB
 
         public WantedSystemClass(DataRow dr)
         {
-            id = (int)(long)dr["id"];
+            id = (long)dr["id"];
             system = (string)dr["systemname"];
         }
 
@@ -32,32 +32,24 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
             {
-                return Add(cn);
+                bool ret = Add(cn);
+                cn.Close();
+                return ret;
             }
         }
 
         private bool Add(SQLiteConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)",cn))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into wanted_systems (systemname) values (@systemname)";
                 cmd.Parameters.AddWithValue("@systemname", system);
-                
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("Select Max(id) as id from wanted_systems",cn))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "Select Max(id) as id from wanted_systems";
-
-                    id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
                 return true;
             }
@@ -65,7 +57,7 @@ namespace EDDiscovery.DB
 
         public bool Delete()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
             {
                 return Delete(cn);
             }
@@ -73,15 +65,11 @@ namespace EDDiscovery.DB
 
         private bool Delete(SQLiteConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("DELETE FROM wanted_systems WHERE id = @id",cn))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "DELETE FROM wanted_systems WHERE id = @id";
                 cmd.Parameters.AddWithValue("@id", id);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 return true;
             }
@@ -91,23 +79,12 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from wanted_systems",cn))
                     {
-                        DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from wanted_systems";
-
-                        ds = SQLiteDBClass.SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return null;
-                        }
-                        //
-                        if (ds.Tables[0].Rows.Count == 0)
+                        DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         {
                             return null;
                         }
@@ -121,7 +98,6 @@ namespace EDDiscovery.DB
                         }
 
                         return retVal;
-
                     }
                 }
             }
@@ -130,7 +106,5 @@ namespace EDDiscovery.DB
                 return null;
             }
         }
-
-
     }
 }

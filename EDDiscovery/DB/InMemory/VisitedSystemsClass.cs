@@ -13,7 +13,7 @@ namespace EDDiscovery2.DB.InMemory
         public string Name { get; set; }
         public DateTime Time { get; set; }
         public int Commander { get; set; }
-        public int Source { get; set; }
+        public long Source { get; set; }
         public string Unit { get; set; }
         public bool EDSM_sync { get; set; }
         public int MapColour { get; set; }
