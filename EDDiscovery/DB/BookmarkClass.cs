@@ -10,7 +10,7 @@ namespace EDDiscovery2.DB
 {
     public class BookmarkClass
     {
-        public int id;
+        public long id;
         public string StarName;         // set if associated with a star, else null
         public double x;                // x/y/z always set for render purposes
         public double y;
@@ -25,7 +25,7 @@ namespace EDDiscovery2.DB
         
         public BookmarkClass(DataRow dr)
         {
-            id = (int)(long)dr["id"];
+            id = (long)dr["id"];
             if (System.DBNull.Value != dr["StarName"] )
                 StarName = (string)dr["StarName"];
             x = (double)dr["x"];
@@ -40,20 +40,18 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))      // open connection..
             {
-                return Add(cn);
+                bool ret = Add(cn);
+                cn.Close();
+                return ret;
             }
         }
 
         private bool Add(SQLiteConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note) values (@sname, @xp, @yp, @zp, @time, @head, @note)",cn))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note) values (@sname, @xp, @yp, @zp, @time, @head, @note)";
                 cmd.Parameters.AddWithValue("@sname", StarName);
                 cmd.Parameters.AddWithValue("@xp", x);
                 cmd.Parameters.AddWithValue("@yp", y);
@@ -62,15 +60,11 @@ namespace EDDiscovery2.DB
                 cmd.Parameters.AddWithValue("@head", Heading);
                 cmd.Parameters.AddWithValue("@note", Note);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("Select Max(id) as id from Bookmarks",cn))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "Select Max(id) as id from Bookmarks";
-                    id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
 
                 bookmarks.Add(this);
@@ -80,7 +74,7 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
             {
                 return Update(cn);
             }
@@ -88,12 +82,8 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note  where ID=@id",cn))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note  where ID=@id";
                 cmd.Parameters.AddWithValue("@ID", id);
                 cmd.Parameters.AddWithValue("@sname", StarName);
                 cmd.Parameters.AddWithValue("@xp", x);
@@ -103,7 +93,7 @@ namespace EDDiscovery2.DB
                 cmd.Parameters.AddWithValue("@head", Heading);
                 cmd.Parameters.AddWithValue("@note", Note);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
                 bookmarks.Add(this);
@@ -114,7 +104,7 @@ namespace EDDiscovery2.DB
 
         public bool Delete()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
             {
                 return Delete(cn);
             }
@@ -122,14 +112,10 @@ namespace EDDiscovery2.DB
 
         private bool Delete(SQLiteConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("DELETE FROM Bookmarks WHERE id = @id",cn))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "DELETE FROM Bookmarks WHERE id = @id";
                 cmd.Parameters.AddWithValue("@id", id);
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
                 return true;
@@ -142,23 +128,15 @@ namespace EDDiscovery2.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from Bookmarks",cn))
                     {
                         DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from Bookmarks";
 
-                        ds = SQLiteDBClass.SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return false;
-                        }
-                        //
-                        if (ds.Tables[0].Rows.Count == 0)
+                        ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+
+                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         {
                             return false;
                         }
@@ -181,7 +159,5 @@ namespace EDDiscovery2.DB
                 return false;
             }
         }
-
-
     }
 }

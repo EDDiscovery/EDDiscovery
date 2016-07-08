@@ -10,7 +10,7 @@ namespace EDDiscovery2.DB
 {
     public class SystemNoteClass
     {
-        public int id;
+        public long id;
         public string Name;
         public DateTime Time;
         public string Note;
@@ -22,7 +22,7 @@ namespace EDDiscovery2.DB
 
         public SystemNoteClass(DataRow dr)
         {
-            id = (int)(long)dr["id"];
+            id = (long)dr["id"];
             Name = (string)dr["Name"];
             Time = (DateTime)dr["Time"];
             Note = (string)dr["Note"];
@@ -31,38 +31,29 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
             {
-                return Add(cn);
+                bool ret = Add(cn);
+                cn.Close();
+                return ret;
             }
         }
 
         private bool Add(SQLiteConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)",cn))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)";
                 cmd.Parameters.AddWithValue("@name", Name);
                 cmd.Parameters.AddWithValue("@time", Time);
                 cmd.Parameters.AddWithValue("@note", Note);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
-                SystemClass.TouchSystem(cn, Name);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("Select Max(id) as id from SystemNote",cn))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "Select Max(id) as id from SystemNote";
-
-                    id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
-
-
+                
                 globalSystemNotes[Name.ToLower()]= this;
                 return true;
             }
@@ -70,7 +61,7 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
             {
                 return Update(cn);
             }
@@ -78,19 +69,14 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnection cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id",cn))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id";
                 cmd.Parameters.AddWithValue("@ID", id);
                 cmd.Parameters.AddWithValue("@Name", Name);
                 cmd.Parameters.AddWithValue("@Note", Note);
                 cmd.Parameters.AddWithValue("@Time", Time);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
-                SystemClass.TouchSystem(cn, Name);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 globalSystemNotes[Name.ToLower()] = this;
 
                 return true;
@@ -103,23 +89,12 @@ namespace EDDiscovery2.DB
         {
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand())
+                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from SystemNote",cn))
                     {
-                        DataSet ds = null;
-                        cmd.Connection = cn;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 30;
-                        cmd.CommandText = "select * from SystemNote";
-
-                        ds = SQLiteDBClass.SqlQueryText(cn, cmd);
-                        if (ds.Tables.Count == 0)
-                        {
-                            return false;
-                        }
-                        //
-                        if (ds.Tables[0].Rows.Count == 0)
+                        DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         {
                             return false;
                         }
