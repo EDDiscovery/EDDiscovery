@@ -18,6 +18,9 @@ namespace EDDiscovery2.DB
 
         public VisitedSystemsClass()
         {
+            X = double.NaN;             // construct class with nulls/0's except for these, which use NaN as their no content marker.
+            Y = double.NaN;
+            Z = double.NaN;
         }
 
         public VisitedSystemsClass(DataRow dr)
