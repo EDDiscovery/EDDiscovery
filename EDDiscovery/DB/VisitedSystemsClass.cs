@@ -209,6 +209,9 @@ namespace EDDiscovery2.DB
 
                         //sp.Nr = int.Parse(match.Groups["Body"].Value);
                         sp.Name = match.Groups["SystemName"].Value;
+                        sp.X = Double.NaN;
+                        sp.Y = Double.NaN;
+                        sp.Z = Double.NaN;
                     }
                     else
                     {
