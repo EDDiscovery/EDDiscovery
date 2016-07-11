@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -67,22 +67,22 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z)"))
             {
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@time", Time);
-                cmd.Parameters.AddWithValue("@unit", Unit);
-                cmd.Parameters.AddWithValue("@commander", Commander);
-                cmd.Parameters.AddWithValue("@source", Source);
-                cmd.Parameters.AddWithValue("@edsm_sync", EDSM_sync);
-                cmd.Parameters.AddWithValue("@map_colour", MapColour);
-                cmd.Parameters.AddWithValue("@x", X);
-                cmd.Parameters.AddWithValue("@y", Y);
-                cmd.Parameters.AddWithValue("@z", Z);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@unit", Unit);
+                cmd.AddParameterWithValue("@commander", Commander);
+                cmd.AddParameterWithValue("@source", Source);
+                cmd.AddParameterWithValue("@edsm_sync", EDSM_sync);
+                cmd.AddParameterWithValue("@map_colour", MapColour);
+                cmd.AddParameterWithValue("@x", X);
+                cmd.AddParameterWithValue("@y", Y);
+                cmd.AddParameterWithValue("@z", Z);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = cn.CreateCommand("Select Max(id) as id from VisitedSystems"))
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from VisitedSystems"))
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
@@ -100,19 +100,19 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour, X=@x, Y=@y, Z=@z  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour, X=@x, Y=@y, Z=@z  where ID=@id"))
             {
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@Name", Name);
-                cmd.Parameters.AddWithValue("@Time", Time);
-                cmd.Parameters.AddWithValue("@unit", Unit);
-                cmd.Parameters.AddWithValue("@commander", Commander);
-                cmd.Parameters.AddWithValue("@source", Source);
-                cmd.Parameters.AddWithValue("@edsm_sync", EDSM_sync);
-                cmd.Parameters.AddWithValue("@map_colour", MapColour);
-                cmd.Parameters.AddWithValue("@x", X);
-                cmd.Parameters.AddWithValue("@y", Y);
-                cmd.Parameters.AddWithValue("@z", Z);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@Name", Name);
+                cmd.AddParameterWithValue("@Time", Time);
+                cmd.AddParameterWithValue("@unit", Unit);
+                cmd.AddParameterWithValue("@commander", Commander);
+                cmd.AddParameterWithValue("@source", Source);
+                cmd.AddParameterWithValue("@edsm_sync", EDSM_sync);
+                cmd.AddParameterWithValue("@map_colour", MapColour);
+                cmd.AddParameterWithValue("@x", X);
+                cmd.AddParameterWithValue("@y", Y);
+                cmd.AddParameterWithValue("@z", Z);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 return true;
@@ -251,7 +251,7 @@ namespace EDDiscovery2.DB
 
             using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time "))
+                using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time "))
                 {
                     DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
 
@@ -276,9 +276,9 @@ namespace EDDiscovery2.DB
 
             using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = cn.CreateCommand("select * from VisitedSystems where commander=@commander Order by Time "))
+                using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems where commander=@commander Order by Time "))
                 {
-                    cmd.Parameters.AddWithValue("@commander", commander);
+                    cmd.AddParameterWithValue("@commander", commander);
 
                     DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
                     if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
@@ -301,7 +301,7 @@ namespace EDDiscovery2.DB
 
             using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time DESC Limit 1"))
+                using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time DESC Limit 1"))
                 {
                     DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
                     if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
@@ -319,10 +319,10 @@ namespace EDDiscovery2.DB
         {
             using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = cn.CreateCommand("select * from VisitedSystems where name=@name and Time=@time  Order by Time DESC Limit 1"))
+                using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems where name=@name and Time=@time  Order by Time DESC Limit 1"))
                 {
-                    cmd.Parameters.AddWithValue("@name", name);
-                    cmd.Parameters.AddWithValue("@time", time);
+                    cmd.AddParameterWithValue("@name", name);
+                    cmd.AddParameterWithValue("@time", time);
                     DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
                     return !(ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0);
                 }

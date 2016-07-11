@@ -3,7 +3,7 @@ using EDDiscovery.DB;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -59,16 +59,16 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)"))
             {
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@type", type);
-                cmd.Parameters.AddWithValue("@size", Size);
-                cmd.Parameters.AddWithValue("@Path", Path);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@type", type);
+                cmd.AddParameterWithValue("@size", Size);
+                cmd.AddParameterWithValue("@Path", Path);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = cn.CreateCommand("Select Max(id) as id from TravelLogUnit"))
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from TravelLogUnit"))
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
@@ -87,13 +87,13 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id"))
             {
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@Name", Name);
-                cmd.Parameters.AddWithValue("@Type", type);
-                cmd.Parameters.AddWithValue("@size", Size);
-                cmd.Parameters.AddWithValue("@Path", Path);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@Name", Name);
+                cmd.AddParameterWithValue("@Type", type);
+                cmd.AddParameterWithValue("@size", Size);
+                cmd.AddParameterWithValue("@Path", Path);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -107,7 +107,7 @@ namespace EDDiscovery2.DB
 
             using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
+                using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
                 {
                     DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
                     if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)

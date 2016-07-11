@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -40,15 +40,15 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)"))
             {
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@time", Time);
-                cmd.Parameters.AddWithValue("@note", Note);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@note", Note);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = cn.CreateCommand("Select Max(id) as id from SystemNote"))
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from SystemNote"))
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
@@ -68,12 +68,12 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id"))
             {
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@Name", Name);
-                cmd.Parameters.AddWithValue("@Note", Note);
-                cmd.Parameters.AddWithValue("@Time", Time);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@Name", Name);
+                cmd.AddParameterWithValue("@Note", Note);
+                cmd.AddParameterWithValue("@Time", Time);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 globalSystemNotes[Name.ToLower()] = this;
@@ -90,7 +90,7 @@ namespace EDDiscovery2.DB
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = cn.CreateCommand("select * from SystemNote"))
+                    using (DbCommand cmd = cn.CreateCommand("select * from SystemNote"))
                     {
                         DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
                         if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
