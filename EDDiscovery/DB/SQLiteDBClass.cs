@@ -125,6 +125,7 @@ namespace EDDiscovery.DB
             }
 
             DbConnection cn = DbFactory.CreateConnection();
+            cn.ConnectionString = _db.constring;
             return cn;
         }
 
