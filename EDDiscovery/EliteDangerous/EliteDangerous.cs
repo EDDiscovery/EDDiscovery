@@ -109,6 +109,7 @@ namespace EDDiscovery2
         static public bool EDRunning = false;
         static public bool EDLaunchRunning = false;
         static public bool Beta = false;
+        static public bool checkedfordefaultfolder = false;
 
         static public bool CheckED()
         {
@@ -131,7 +132,13 @@ namespace EDDiscovery2
                     EDRunning = false;
 
                     if (EDDirectory == null || EDDirectory.Equals(""))
-                        EDDirectory = SQLiteDBClass.GetSettingString("EDDirectory", "");
+                    {
+                        if (!checkedfordefaultfolder)
+                        {
+                            checkedfordefaultfolder = true;                 // do it once, but no need to keep on doing it.. only this class can set it once the process starts
+                            EDDirectory = SQLiteDBClass.GetSettingString("EDDirectory", "");
+                        }
+                    }
                 }
                 else
                 {
@@ -162,28 +169,8 @@ namespace EDDiscovery2
                         }
                     }
 
-
                     EDRunning = true;
-
                 }
-
-                //processes = Process.GetProcessesByName("EDLaunch");
-
-                //if (processes == null)
-                //{
-                //    EDLaunchRunning = false;
-                //}
-                //else if (processes.Length == 0)
-                //{
-                //    EDLaunchRunning = false;
-                //}
-                //else
-                //{
-
-                //    EDLaunchFileName = ProcessExecutablePath(processes[0]);
-                //    EDLaunchRunning = true;
-
-                //}
 
                 return EDRunning;
             }

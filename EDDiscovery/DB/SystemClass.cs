@@ -331,9 +331,9 @@ namespace EDDiscovery.DB
 
         public static bool Delete(SystemStatusEnum source)
         {
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Delete from Systems where Status=@Status",cn))
+                using (SQLiteCommand cmd = cn.CreateCommand("Delete from Systems where Status=@Status"))
                 {
                     cmd.Parameters.AddWithValue("@Status", (int)source);
                     SQLiteDBClass.SQLNonQueryText(cn, cmd);
@@ -376,9 +376,9 @@ namespace EDDiscovery.DB
         }
 
 
-        public bool Store(SQLiteConnection cn, SQLiteTransaction transaction)
+        public bool Store(SQLiteConnectionED cn, SQLiteTransaction transaction)
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id, security, eddb_updated_at, state, needs_permit, versiondate, id_edsm) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit, datetime('now'),@id_edsm)", cn))
+            using (SQLiteCommand cmd = cn.CreateCommand("Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id, security, eddb_updated_at, state, needs_permit, versiondate, id_edsm) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit, datetime('now'),@id_edsm)"))
             {
                 if (SystemNote == null)
                     SystemNote = "";
@@ -431,9 +431,9 @@ namespace EDDiscovery.DB
             }
         }
 
-        public bool Update(SQLiteConnection cn, long id, SQLiteTransaction transaction)
+        public bool Update(SQLiteConnectionED cn, long id, SQLiteTransaction transaction)
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit, versiondate=datetime('now'), id_edsm=@id_edsm where ID=@id", cn, transaction))
+            using (SQLiteCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit, versiondate=datetime('now'), id_edsm=@id_edsm where ID=@id",  transaction))
             {
                 cmd.Parameters.AddWithValue("@id", id);
                 cmd.Parameters.AddWithValue("@name", name);
@@ -468,9 +468,9 @@ namespace EDDiscovery.DB
             }
         }
 
-        public bool UpdateEDSM(SQLiteConnection cn, long id, SQLiteTransaction transaction)     // only altering fields EDSM sets..
+        public bool UpdateEDSM(SQLiteConnectionED cn, long id, SQLiteTransaction transaction)     // only altering fields EDSM sets..
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, versiondate=datetime('now') where ID=@id", cn, transaction))
+            using (SQLiteCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, versiondate=datetime('now') where ID=@id",  transaction))
             {
                 cmd.Parameters.AddWithValue("@id", id);
                 cmd.Parameters.AddWithValue("@name", name);
@@ -484,26 +484,12 @@ namespace EDDiscovery.DB
 
         public enum SystemIDType { id, id_edsm, id_eddb };       // which ID to match?
 
-        public static bool Delete(long id, SQLiteConnection cn = null, SQLiteTransaction transaction = null, SystemIDType idtype = SystemIDType.id)
+        public static bool Delete(long id, SQLiteConnectionED cn = null, SQLiteTransaction transaction = null, SystemIDType idtype = SystemIDType.id)
         {
-            bool closeit = false;
-            if (cn == null)
-            {
-                cn = SQLiteDBClass.CreateConnection();
-                cn.Open();
-                closeit = true;
-            }
-
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Delete from Systems where " + idtype.ToString() + "=@id", cn, transaction))
+            using (SQLiteCommand cmd = cn.CreateCommand("Delete from Systems where " + idtype.ToString() + "=@id",  transaction))
             {
                 cmd.Parameters.AddWithValue("@id", id);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
-            }
-
-            if (closeit)
-            {
-                cn.Close();
-                cn.Dispose();
             }
 
             return true;
@@ -529,29 +515,29 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select id,name,x,y,z,population from Systems", cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand("select id,name,x,y,z,population from Systems"))
                     {
-                        SQLiteDataReader reader = cmd.ExecuteReader();
-                        while (reader.Read())
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            string name = (string)reader["name"];
-                            long population = (System.DBNull.Value == reader["population"]) ? 0 : ((long)reader["population"]);
-
-                            if (System.DBNull.Value != reader["x"] )
+                            while (reader.Read())
                             {
-                                SystemClassStarNames sys = new SystemClassStarNames(name, (double)reader["x"], (double)reader["y"], (double)reader["z"], population, (long)reader["id"]);
+                                string name = (string)reader["name"];
+                                long population = (System.DBNull.Value == reader["population"]) ? 0 : ((long)reader["population"]);
 
-                                if (!dict.ContainsKey(sys.name))    // protect against crap ups in the star list having duplicate names
-                                    dict.Add(sys.name, sys);
+                                if (System.DBNull.Value != reader["x"])
+                                {
+                                    SystemClassStarNames sys = new SystemClassStarNames(name, (double)reader["x"], (double)reader["y"], (double)reader["z"], population, (long)reader["id"]);
 
-                                snlist.Add(sys);
+                                    if (!dict.ContainsKey(sys.name))    // protect against crap ups in the star list having duplicate names
+                                        dict.Add(sys.name, sys);
+
+                                    snlist.Add(sys);
+                                }
                             }
                         }
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -565,18 +551,18 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select name from Systems", cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand("select name from Systems"))
                     {
-                        SQLiteDataReader reader = cmd.ExecuteReader();
-                        while (reader.Read())
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            asc.Add((string)reader["name"]);
+                            while (reader.Read())
+                            {
+                                asc.Add((string)reader["name"]);
+                            }
                         }
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -593,19 +579,19 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select x,y,z from Systems", cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand("select x,y,z from Systems"))
                     {
-                        SQLiteDataReader reader = cmd.ExecuteReader();
-                        while (reader.Read())
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            if (System.DBNull.Value != reader["x"])
-                                list.Add(new Point3D((double)reader["x"], (double)reader["y"], (double)reader["z"]));
+                            while (reader.Read())
+                            {
+                                if (System.DBNull.Value != reader["x"])
+                                    list.Add(new Point3D((double)reader["x"], (double)reader["y"], (double)reader["z"]));
+                            }
                         }
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -621,19 +607,19 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from Systems", cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand("select * from Systems"))
                     {
-                        SQLiteDataReader reader = cmd.ExecuteReader();
-                        while (reader.Read())
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            SystemClass sys = new SystemClass(reader);
-                            cb(sys);
+                            while (reader.Read())
+                            {
+                                SystemClass sys = new SystemClass(reader);
+                                cb(sys);
+                            }
                         }
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -649,21 +635,21 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select name from Systems", cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand("select name from Systems"))
                     {
-                        SQLiteDataReader reader = cmd.ExecuteReader();
-                        while (reader.Read())
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            string name = ((string)reader["name"]).ToUpper();
-                            if (!dict.ContainsKey(name))
-                                dict.Add(name, (int)reader["id"]);
+                            while (reader.Read())
+                            {
+                                string name = ((string)reader["name"]).ToUpper();
+                                if (!dict.ContainsKey(name))
+                                    dict.Add(name, (int)reader["id"]);
+                            }
                         }
 
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -675,7 +661,7 @@ namespace EDDiscovery.DB
             return dict;
         }
 
-        public static SystemClass GetSystem(string name, SQLiteConnection cn = null )      // with an open database, case insensitive
+        public static SystemClass GetSystem(string name, SQLiteConnectionED cn = null )      // with an open database, case insensitive
         {
             SystemClass sys = null;
 
@@ -684,21 +670,22 @@ namespace EDDiscovery.DB
                 bool closeit = false;
                 if (cn == null)
                 {
-                    cn = SQLiteDBClass.CreateConnection(true);
+                    cn = new SQLiteConnectionED();
                     closeit = true;
                 }
 
-                using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from Systems where name = @name limit 1", cn))   // 1 return matching name
+                using (SQLiteCommand cmd = cn.CreateCommand("select * from Systems where name = @name limit 1"))   // 1 return matching name
                 {
                     cmd.Parameters.AddWithValue("name", name);
-                    SQLiteDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read())
-                        sys = new SystemClass(reader);
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            sys = new SystemClass(reader);
+                    }
                 }
 
                 if (closeit)
                 {
-                    cn.Close();
                     cn.Dispose();
                 }
             }
@@ -711,7 +698,7 @@ namespace EDDiscovery.DB
             return sys;
         }
 
-        public static SystemClass GetSystem(long id, SQLiteConnection cn = null, SystemIDType idtype = SystemIDType.id )      // using an id
+        public static SystemClass GetSystem(long id, SQLiteConnectionED cn = null, SystemIDType idtype = SystemIDType.id )      // using an id
         {
             SystemClass sys = null;
 
@@ -720,21 +707,22 @@ namespace EDDiscovery.DB
                 bool closeit = false;
                 if (cn == null)
                 {
-                    cn = SQLiteDBClass.CreateConnection(true);
+                    cn = new SQLiteConnectionED();
                     closeit = true;
                 }
 
-                using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from Systems where " + idtype.ToString() + "=@id limit 1", cn))   // 1 return matching name
+                using (SQLiteCommand cmd = cn.CreateCommand("select * from Systems where " + idtype.ToString() + "=@id limit 1"))   // 1 return matching name
                 {
                     cmd.Parameters.AddWithValue("id", id);
-                    SQLiteDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read())
-                        sys = new SystemClass(reader);
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            sys = new SystemClass(reader);
+                    }
                 }
 
                 if (closeit)
                 {
-                    cn.Close();
                     cn.Dispose();
                 }
             }
@@ -753,17 +741,16 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select Count(*) from Systems", cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand("select Count(*) from Systems"))
                     {
-                        SQLiteDataReader reader = cmd.ExecuteReader();
-
-                        if (reader.Read())
-                            value = (long)reader["Count(*)"];
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                value = (long)reader["Count(*)"];
+                        }
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -781,17 +768,16 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select versiondate from Systems Order By versiondate DESC limit 1", cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand("select versiondate from Systems Order By versiondate DESC limit 1"))
                     {
-                        SQLiteDataReader reader = cmd.ExecuteReader();
-
-                        if (reader.Read() && System.DBNull.Value != reader["versiondate"])
-                            lasttime = (DateTime)reader["versiondate"];
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read() && System.DBNull.Value != reader["versiondate"])
+                                lasttime = (DateTime)reader["versiondate"];
+                        }
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -803,9 +789,9 @@ namespace EDDiscovery.DB
             return lasttime;
         }
 
-        public static void TouchSystem(SQLiteConnection cn, string systemName)
+        public static void TouchSystem(SQLiteConnectionED cn, string systemName)
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("update systems set versiondate=datetime('now') where name=@systemName",cn))
+            using (SQLiteCommand cmd = cn.CreateCommand("update systems set versiondate=datetime('now') where name=@systemName"))
             {
                 cmd.Parameters.AddWithValue("systemName", systemName);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
@@ -816,34 +802,34 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select name,x,y,z from Systems Order By (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) Limit @max", cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand("select name,x,y,z from Systems Order By (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) Limit @max"))
                     {
                         cmd.Parameters.AddWithValue("xv", x);
                         cmd.Parameters.AddWithValue("yv", y);
                         cmd.Parameters.AddWithValue("zv", z);
                         cmd.Parameters.AddWithValue("max", maxitems+1);     // 1 more, because if we are on a star, that will be returned
 
-                        SQLiteDataReader reader = cmd.ExecuteReader();
-                        while (reader.Read() && distlist.Count < maxitems )           // already sorted, and already limited to max items
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            string name = ((string)reader["name"]);
-
-                            if (System.DBNull.Value != reader["x"])                 // paranoid check for null
+                            while (reader.Read() && distlist.Count < maxitems)           // already sorted, and already limited to max items
                             {
-                                double dx = (double)reader["x"] - x;
-                                double dy = (double)reader["y"] - y;
-                                double dz = (double)reader["z"] - z;
+                                string name = ((string)reader["name"]);
 
-                                double dist = dx * dx + dy * dy + dz * dz;
-                                if (dist > 0.001 || !removezerodiststar)
-                                    distlist.Add(dist, name);
+                                if (System.DBNull.Value != reader["x"])                 // paranoid check for null
+                                {
+                                    double dx = (double)reader["x"] - x;
+                                    double dy = (double)reader["y"] - y;
+                                    double dz = (double)reader["z"] - z;
+
+                                    double dist = dx * dx + dy * dy + dz * dz;
+                                    if (dist > 0.001 || !removezerodiststar)
+                                        distlist.Add(dist, name);
+                                }
                             }
                         }
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -874,13 +860,13 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
                     string sqlquery = "select id,name, x, y, z from Systems " +
                                       "where (x-@xw)*(x-@xw)+(y-@yw)*(y-@yw)+(z-@zw)*(z-@zw)<=@maxfromwanted AND " +
                                       "(x-@xc)*(x-@xc)+(y-@yc)*(y-@yc)+(z-@zc)*(z-@zc)<=@maxfromcurrent";
                     
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand(sqlquery, cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand(sqlquery))
                     {
                         cmd.Parameters.AddWithValue("xw", wantedpos.X);
                         cmd.Parameters.AddWithValue("yw", wantedpos.Y);
@@ -894,62 +880,61 @@ namespace EDDiscovery.DB
 
                         double bestmindistance = double.MaxValue;
 
-                        SQLiteDataReader reader = cmd.ExecuteReader();
-
-                        while (reader.Read())
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            string name = (string)reader["name"];
-                            long id = (long)reader["id"];
-
-                            if (System.DBNull.Value != reader["x"]) // paranoid check, it could be null in db
+                            while (reader.Read())
                             {
+                                string name = (string)reader["name"];
+                                long id = (long)reader["id"];
 
-                                Point3D syspos = new Point3D((double)reader["x"], (double)reader["y"], (double)reader["z"]);
-
-                                double distancefromwantedx2 = Point3D.DistanceBetweenX2(wantedpos, syspos); // range between the wanted point and this, ^2
-                                double distancefromcurposx2 = Point3D.DistanceBetweenX2(curpos, syspos);    // range between the wanted point and this, ^2
-
-                                if (routemethod == metric_nearestwaypoint)
+                                if (System.DBNull.Value != reader["x"]) // paranoid check, it could be null in db
                                 {
-                                    if (distancefromwantedx2 < bestmindistance)
-                                    {
-                                        nearestsystem = GetSystem(id);
-                                        bestmindistance = distancefromwantedx2;
-                                    }
-                                }
-                                else
-                                {
-                                    Point3D interceptpoint = curpos.InterceptPoint(wantedpos, syspos);      // work out where the perp. intercept point is..
-                                    double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
-                                    double metric = 1E39;
 
-                                    if (routemethod == metric_mindevfrompath)
-                                        metric = deviation;
-                                    else if (routemethod == metric_maximum100ly)
-                                        metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
-                                    else if (routemethod == metric_maximum250ly)
-                                        metric = (deviation <= 250) ? distancefromwantedx2 : metric;
-                                    else if (routemethod == metric_maximum500ly)
-                                        metric = (deviation <= 500) ? distancefromwantedx2 : metric;
-                                    else if (routemethod == metric_waypointdev2)
-                                        metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
+                                    Point3D syspos = new Point3D((double)reader["x"], (double)reader["y"], (double)reader["z"]);
 
-                                    if (metric < bestmindistance)
+                                    double distancefromwantedx2 = Point3D.DistanceBetweenX2(wantedpos, syspos); // range between the wanted point and this, ^2
+                                    double distancefromcurposx2 = Point3D.DistanceBetweenX2(curpos, syspos);    // range between the wanted point and this, ^2
+
+                                    if (routemethod == metric_nearestwaypoint)
                                     {
-                                        nearestsystem = GetSystem(id);
-                                        bestmindistance = metric;
-                                        //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0") + " *");
+                                        if (distancefromwantedx2 < bestmindistance)
+                                        {
+                                            nearestsystem = GetSystem(id);
+                                            bestmindistance = distancefromwantedx2;
+                                        }
                                     }
                                     else
                                     {
-                                        //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0"));
+                                        Point3D interceptpoint = curpos.InterceptPoint(wantedpos, syspos);      // work out where the perp. intercept point is..
+                                        double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
+                                        double metric = 1E39;
+
+                                        if (routemethod == metric_mindevfrompath)
+                                            metric = deviation;
+                                        else if (routemethod == metric_maximum100ly)
+                                            metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
+                                        else if (routemethod == metric_maximum250ly)
+                                            metric = (deviation <= 250) ? distancefromwantedx2 : metric;
+                                        else if (routemethod == metric_maximum500ly)
+                                            metric = (deviation <= 500) ? distancefromwantedx2 : metric;
+                                        else if (routemethod == metric_waypointdev2)
+                                            metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
+
+                                        if (metric < bestmindistance)
+                                        {
+                                            nearestsystem = GetSystem(id);
+                                            bestmindistance = metric;
+                                            //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0") + " *");
+                                        }
+                                        else
+                                        {
+                                            //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0"));
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -965,9 +950,9 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from Systems where name = @name limit 1", cn);
+                    SQLiteCommand cmd = cn.CreateCommand("select * from Systems where name = @name limit 1");
 
                     foreach (VisitedSystemsClass vsc in visitedSystems)
                     {
@@ -976,15 +961,15 @@ namespace EDDiscovery.DB
                             cmd.Parameters.Clear();
                             cmd.Parameters.AddWithValue("name", vsc.Name);
 
-                            SQLiteDataReader reader = cmd.ExecuteReader();
-                            if (reader.Read())
-                                vsc.curSystem = new SystemClass(reader);
+                            using (SQLiteDataReader reader = cmd.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                    vsc.curSystem = new SystemClass(reader);
+                            }
 
                             cmd.Reset();
                         }
                     }
-
-                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -1016,11 +1001,11 @@ namespace EDDiscovery.DB
 
             bool emptydatabase = SystemClass.GetTotalSystems() == 0;            // if empty database, we can skip the lookup
 
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))  // open the db
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db
             {
                 int c = 0;
 
-                SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from Systems where id_edsm = @id_edsm limit 1", cn);   // 1 return matching EDSM ID
+                SQLiteCommand cmd = cn.CreateCommand("select * from Systems where id_edsm = @id_edsm limit 1");   // 1 return matching EDSM ID
                 
                 int lasttc = Environment.TickCount;
 
@@ -1053,26 +1038,28 @@ namespace EDDiscovery.DB
                                 cmd.Parameters.Clear();
                                 cmd.Parameters.AddWithValue("id_edsm", system.id_edsm);
 
-                                SQLiteDataReader reader1 = cmd.ExecuteReader();              // see if ESDM ID is there..
-                                if (reader1.Read())                                          // its there..
+                                using (SQLiteDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
                                 {
-                                    SystemClass dbsys = new SystemClass(reader1);
-                                    // see if EDSM data changed..
-                                    if (!dbsys.name.Equals(system.name) || Math.Abs(dbsys.x - system.x) > 0.01 || Math.Abs(dbsys.y - system.y) > 0.01 || Math.Abs(dbsys.z - system.z) > 0.01)  // name or position changed
+                                    if (reader1.Read())                                          // its there..
                                     {
-                                        dbsys.x = system.x;
-                                        dbsys.y = system.y;
-                                        dbsys.z = system.z;
-                                        dbsys.name = system.name;
+                                        SystemClass dbsys = new SystemClass(reader1);
+                                        // see if EDSM data changed..
+                                        if (!dbsys.name.Equals(system.name) || Math.Abs(dbsys.x - system.x) > 0.01 || Math.Abs(dbsys.y - system.y) > 0.01 || Math.Abs(dbsys.z - system.z) > 0.01)  // name or position changed
+                                        {
+                                            dbsys.x = system.x;
+                                            dbsys.y = system.y;
+                                            dbsys.z = system.z;
+                                            dbsys.name = system.name;
 
-                                        //Console.WriteLine("Update " + dbsys.id + " due to pos or case " + dbsys.name);
-                                        toupdate.Add(dbsys);
+                                            //Console.WriteLine("Update " + dbsys.id + " due to pos or case " + dbsys.name);
+                                            toupdate.Add(dbsys);
+                                        }
                                     }
-                                }
-                                else                                                                  // not in database..
-                                {
-                                    //Console.WriteLine("Add new system " + system.name);
-                                    newsystems.Add(system);
+                                    else                                                                  // not in database..
+                                    {
+                                        //Console.WriteLine("Add new system " + system.name);
+                                        newsystems.Add(system);
+                                    }
                                 }
                             }
 
@@ -1081,55 +1068,52 @@ namespace EDDiscovery.DB
                     }
                 }
 
-                cn.Close();
+                cmd.Dispose();
             }
 
-            using (SQLiteConnection cn2 = SQLiteDBClass.CreateConnection(true))  // open the db
+            using (SQLiteConnectionED cn2 = new SQLiteConnectionED())  // open the db
             {
                 if (toupdate.Count > 0)
                 {
-                    SQLiteTransaction transaction = cn2.BeginTransaction();
+                    using (SQLiteTransaction transaction = cn2.BeginTransaction())
+                    {
+                        foreach (SystemClass sys in toupdate)
+                            sys.UpdateEDSM(cn2, sys.id, transaction);        // do an EDSM update of only name/x/y/z, not expected to be many at a time
 
-                    foreach (SystemClass sys in toupdate)
-                        sys.UpdateEDSM(cn2, sys.id, transaction);        // do an EDSM update of only name/x/y/z, not expected to be many at a time
-
-                    transaction.Commit();
+                        transaction.Commit();
+                    }
                 }
 
                 if (newsystems.Count > 0)
                 {
                     int count = 0;
 
-                    SQLiteTransaction transaction = cn2.BeginTransaction();
-
-                    foreach (SystemClass sys in newsystems)             // do a full store, EDDB stuff will be null
+                    while (count < newsystems.Count())
                     {
-                        sys.Store(cn2, transaction);
-
-                        if (++count % 100000 == 0)                      // had problems with DB is locked, so do it in small trances..
+                        using (SQLiteTransaction transaction = cn2.BeginTransaction())
                         {
-                            transaction.Commit();
-                            transaction.Dispose();
-                            transaction = cn2.BeginTransaction();
+                            while (count < newsystems.Count())
+                            {
+                                newsystems[count].Store(cn2, transaction);
+
+                                if (++count % 100000 == 0)
+                                    break;
+                            }
+
                             Console.WriteLine("EDSM Store Count " + count);
+                            transaction.Commit();
                         }
                     }
-
-                    Console.WriteLine("Complete store");
-
-                    transaction.Commit();
                 }
 
                 if (removenonedsmids)                            // done on a full sync..
                 {
                     Console.WriteLine("Delete old ones");
-                    using (SQLiteCommand cmddel = SQLiteDBClass.CreateCommand("Delete from Systems where id_edsm is null", cn2))
+                    using (SQLiteCommand cmddel = cn2.CreateCommand("Delete from Systems where id_edsm is null"))
                     {
                         SQLiteDBClass.SQLNonQueryText(cn2, cmddel);
                     }
                 }
-
-                cn2.Close();
             }
 
             date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
@@ -1173,10 +1157,10 @@ namespace EDDiscovery.DB
 
             List<SystemClass> toupdate = new List<SystemClass>();
 
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))  // open the db
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db
             {
-                SQLiteCommand cmd1 = SQLiteDBClass.CreateCommand("select * from Systems where id_eddb = @id limit 1", cn);   // 1 return matching ID
-                SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("select * from Systems where name = @name and ABS(x-@x)<1 and ABS(y-@y)<1 and ABS(z-@z)<1 limit 1", cn);   // 1 return matching name
+                SQLiteCommand cmd1 = cn.CreateCommand("select * from Systems where id_eddb = @id limit 1");   // 1 return matching ID
+                SQLiteCommand cmd2 = cn.CreateCommand("select * from Systems where name = @name and ABS(x-@x)<1 and ABS(y-@y)<1 and ABS(z-@z)<1 limit 1");   // 1 return matching name
 
                 int c = 0;
                 int lasttc = Environment.TickCount;
@@ -1193,28 +1177,30 @@ namespace EDDiscovery.DB
                         cmd1.Parameters.Clear();
                         cmd1.Parameters.AddWithValue("id", system.id_eddb);
 
-                        SQLiteDataReader reader1 = cmd1.ExecuteReader();             // try its ID first
-                        if (reader1.Read())                                          // its there..
+                        using (SQLiteDataReader reader1 = cmd1.ExecuteReader())             // try its ID first
                         {
-                            dbsys = new SystemClass(reader1);
-                            cmd1.Reset();
-                        }
-                        else
-                        {
-                            cmd1.Reset();
-                            cmd2.Parameters.Clear();                                // else just pick the best name
-                            cmd2.Parameters.AddWithValue("name", system.name);
-                            cmd2.Parameters.AddWithValue("x", system.x);
-                            cmd2.Parameters.AddWithValue("y", system.y);
-                            cmd2.Parameters.AddWithValue("z", system.z);
-
-                            SQLiteDataReader reader2 = cmd2.ExecuteReader();        // case insensitive
-                            if (reader2.Read())                                     // its there..
+                            if (reader1.Read())                                          // its there..
                             {
-                                dbsys = new SystemClass(reader2);
+                                dbsys = new SystemClass(reader1);
+                                cmd1.Reset();
                             }
+                            else
+                            {
+                                cmd1.Reset();
+                                cmd2.Parameters.Clear();                                // else just pick the best name
+                                cmd2.Parameters.AddWithValue("name", system.name);
+                                cmd2.Parameters.AddWithValue("x", system.x);
+                                cmd2.Parameters.AddWithValue("y", system.y);
+                                cmd2.Parameters.AddWithValue("z", system.z);
 
-                            cmd2.Reset();
+                                SQLiteDataReader reader2 = cmd2.ExecuteReader();        // case insensitive
+                                if (reader2.Read())                                     // its there..
+                                {
+                                    dbsys = new SystemClass(reader2);
+                                }
+
+                                cmd2.Reset();
+                            }
                         }
 
                         if (dbsys!=null && (dbsys.id_eddb != system.id_eddb || dbsys.eddb_updated_at != system.eddb_updated_at || dbsys.population != system.population))
@@ -1240,35 +1226,34 @@ namespace EDDiscovery.DB
                         }
                     }
                 }
-                cn.Close();
+
+                cmd1.Dispose();
+                cmd2.Dispose();
             }
 
-            using (SQLiteConnection cn2 = SQLiteDBClass.CreateConnection(true))  // open the db
+            using (SQLiteConnectionED cn2 = new SQLiteConnectionED())  // open the db
             {
                 if (toupdate.Count > 0)
                 {
-                    SQLiteTransaction transaction = cn2.BeginTransaction();
-
                     int count = 0;
 
-                    foreach (SystemClass sys in toupdate)             // do a full store, EDDB stuff will be null
+                    while (count < toupdate.Count())
                     {
-                        sys.Update(cn2, sys.id, transaction);
-
-                        if (++count % 100000 == 0)                      // had problems with DB is locked, so do it in small trances..
+                        using (SQLiteTransaction transaction = cn2.BeginTransaction())
                         {
-                            transaction.Commit();
-                            transaction.Dispose();
-                            transaction = cn2.BeginTransaction();
+                            while (count < toupdate.Count())
+                            {
+                                toupdate[count].Store(cn2, transaction);
+
+                                if (++count % 100000 == 0)
+                                    break;
+                            }
+
                             Console.WriteLine("EDDB Store Count " + count);
+                            transaction.Commit();
                         }
                     }
-
-                    Console.WriteLine("Complete store");
-                    transaction.Commit();
                 }
-
-                cn2.Close();
             }
 
             return toupdate.Count();

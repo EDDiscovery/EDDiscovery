@@ -32,22 +32,21 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 bool ret = Add(cn);
-                cn.Close();
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)",cn))
+            using (SQLiteCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
             {
                 cmd.Parameters.AddWithValue("@systemname", system);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("Select Max(id) as id from wanted_systems",cn))
+                using (SQLiteCommand cmd2 = cn.CreateCommand("Select Max(id) as id from wanted_systems"))
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
@@ -57,15 +56,15 @@ namespace EDDiscovery.DB
 
         public bool Delete()
         {
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 return Delete(cn);
             }
         }
 
-        private bool Delete(SQLiteConnection cn)
+        private bool Delete(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("DELETE FROM wanted_systems WHERE id = @id",cn))
+            using (SQLiteCommand cmd = cn.CreateCommand("DELETE FROM wanted_systems WHERE id = @id"))
             {
                 cmd.Parameters.AddWithValue("@id", id);
 
@@ -79,9 +78,9 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from wanted_systems",cn))
+                    using (SQLiteCommand cmd = cn.CreateCommand("select * from wanted_systems"))
                     {
                         DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
                         if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
