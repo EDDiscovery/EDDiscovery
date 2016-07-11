@@ -50,17 +50,16 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 bool ret = Add(cn);
-                cn.Close();
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)",cn))
+            using (SQLiteCommand cmd = cn.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)"))
             {
                 cmd.Parameters.AddWithValue("@name", Name);
                 cmd.Parameters.AddWithValue("@type", type);
@@ -69,7 +68,7 @@ namespace EDDiscovery2.DB
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("Select Max(id) as id from TravelLogUnit",cn))
+                using (SQLiteCommand cmd2 = cn.CreateCommand("Select Max(id) as id from TravelLogUnit"))
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
@@ -80,15 +79,15 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnection cn)
+        private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id",cn))
+            using (SQLiteCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id"))
             {
                 cmd.Parameters.AddWithValue("@ID", id);
                 cmd.Parameters.AddWithValue("@Name", Name);
@@ -106,9 +105,9 @@ namespace EDDiscovery2.DB
         {
             List<TravelLogUnit> list = new List<TravelLogUnit>();
 
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection())
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("select * from TravelLogUnit",cn))
+                using (SQLiteCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
                 {
                     DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
                     if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)

@@ -72,17 +72,16 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 bool ret = Add(cn);     // pass it an open connection since it does multiple SQLs
-                cn.Close();
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("Insert into routes_expeditions (name, start, end) values (@name, @start, @end)",cn))
+            using (SQLiteCommand cmd = cn.CreateCommand("Insert into routes_expeditions (name, start, end) values (@name, @start, @end)"))
             {
                 cmd.Parameters.AddWithValue("@name", Name);
                 cmd.Parameters.AddWithValue("@start", StartDate);
@@ -90,12 +89,12 @@ namespace EDDiscovery.DB
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("Select Max(id) as id from routes_expeditions",cn))
+                using (SQLiteCommand cmd2 = cn.CreateCommand("Select Max(id) as id from routes_expeditions"))
                 {
                     Id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
 
-                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)",cn))
+                using (SQLiteCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
                 {
                     cmd2.Parameters.Add("@routeid", DbType.String);
                     cmd2.Parameters.Add("@name", DbType.String);
@@ -114,17 +113,16 @@ namespace EDDiscovery.DB
 
         public bool Update()
         {
-            using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 bool ret = Update(cn);
-                cn.Close();
                 return ret;
             }
         }
 
-        private bool Update(SQLiteConnection cn)
+        private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = SQLiteDBClass.CreateCommand("UPDATE routes_expeditions SET name=@name, start=@start, end=@end WHERE id=@id",cn))
+            using (SQLiteCommand cmd = cn.CreateCommand("UPDATE routes_expeditions SET name=@name, start=@start, end=@end WHERE id=@id"))
             {
                 cmd.Parameters.AddWithValue("@id", Id);
                 cmd.Parameters.AddWithValue("@name", Name);
@@ -132,13 +130,13 @@ namespace EDDiscovery.DB
                 cmd.Parameters.AddWithValue("@end", EndDate);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("DELETE FROM route_systems WHERE routeid=@routeid",cn))
+                using (SQLiteCommand cmd2 = cn.CreateCommand("DELETE FROM route_systems WHERE routeid=@routeid"))
                 {
                     cmd2.Parameters.AddWithValue("@routeid", Id);
                     SQLiteDBClass.SQLNonQueryText(cn, cmd2);
                 }
 
-                using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)",cn))
+                using (SQLiteCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
                 {
                     cmd2.Parameters.Add("@routeid", DbType.String);
                     cmd2.Parameters.Add("@name", DbType.String);
@@ -162,15 +160,15 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd1 = SQLiteDBClass.CreateCommand("select * from routes_expeditions",cn))
+                    using (SQLiteCommand cmd1 = cn.CreateCommand("select * from routes_expeditions"))
                     {
                         DataSet ds1 = SQLiteDBClass.SQLQueryText(cn, cmd1);
 
                         if (ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
                         {
-                            using (SQLiteCommand cmd2 = SQLiteDBClass.CreateCommand("select * from route_systems", cn))
+                            using (SQLiteCommand cmd2 = cn.CreateCommand("select * from route_systems"))
                             {
                                 DataSet ds2 = SQLiteDBClass.SQLQueryText(cn, cmd2);
 
@@ -187,8 +185,6 @@ namespace EDDiscovery.DB
 
                             }
                         }
-
-                        cn.Close();
                     }
                 }
             }

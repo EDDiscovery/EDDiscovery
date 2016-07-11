@@ -223,9 +223,20 @@ namespace EDDiscovery
 
                 CheckForNewInstaller();
 
-                LogLineSuccess("Loading completed, total of " + SystemClass.GetTotalSystems() + " systems");
+                long totalsystems = SystemClass.GetTotalSystems();
+                LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
 
                 AsyncPerformSync();                              // perform any async synchronisations
+
+                if (totalsystems==0)
+                {
+                    MessageBox.Show("This is the first run of ED Discovery. It will now synchronise with the " + Environment.NewLine +
+                                    "EDSM and EDDB databases to load star data." + Environment.NewLine + Environment.NewLine +
+                                    "This will take a while, up to 30 minutes." + Environment.NewLine + Environment.NewLine +
+                                    "Please wait until refreshing complete is shown, then exit this program and restart.",
+                                    "WARNING - First run");
+                }
+
             }
             catch (Exception ex)
             {
@@ -496,15 +507,6 @@ namespace EDDiscovery
             {
                 string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
                 DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
-
-                if (firstrun)
-                {
-                    MessageBox.Show("This is the first run of ED Discovery. It will now synchronise with the " + Environment.NewLine +
-                                    "EDSM and EDDB databases to load star data." + Environment.NewLine + Environment.NewLine +
-                                    "This will take a while, up to 30 minutes." + Environment.NewLine + Environment.NewLine +
-                                    "Please wait until refreshing complete is shown, then exit this program and restart.",
-                                    "WARNING - First run");
-                }
 
                 try
                 {
