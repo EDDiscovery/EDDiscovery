@@ -16,8 +16,9 @@ namespace EDDiscovery2.DB
         public double y;
         public double z;
         public DateTime Time;           
-        public string Heading;          // set if not associated with a star, else null if its a star
+        public string Heading;          // set if region bookmark, else null if its a star
         public string Note;
+        public bool isRegion { get { return Heading != null; } }
 
         public BookmarkClass()
         {

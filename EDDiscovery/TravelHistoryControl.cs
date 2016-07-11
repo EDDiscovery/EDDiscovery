@@ -131,6 +131,7 @@ namespace EDDiscovery
 
         static public void LogTextColor( string text, Color color)
         {
+            //Console.WriteLine("Text <" + text + "> from " + Environment.StackTrace);
             static_richTextBox.AppendText(text, color);
         }
 
@@ -1165,7 +1166,9 @@ namespace EDDiscovery
             this.Cursor = Cursors.WaitCursor;
             string sysName = selectedRows.First<DataGridViewRow>().Cells[TravelHistoryColumns.SystemName].Value.ToString();
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
+
+            if (!edsm.ShowSystemInEDSM(sysName))
+                LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
         }
@@ -1180,7 +1183,8 @@ namespace EDDiscovery
             this.Cursor = Cursors.WaitCursor;
             string sysName = selectedRows.First<DataGridViewRow>().Cells[ClosestSystemsColumns.SystemName].Value.ToString();
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
+            if (!edsm.ShowSystemInEDSM(sysName))
+                LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
         }
