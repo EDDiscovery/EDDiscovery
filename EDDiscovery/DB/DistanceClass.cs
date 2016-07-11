@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -55,7 +55,7 @@ namespace EDDiscovery.DB
             Status = (DistancsEnum)(long)dr["status"];
         }
 
-        public DistanceClass(SQLiteDataReader dr)
+        public DistanceClass(DbDataReader dr)
         {
             id = (long)dr["id"];
             if (System.DBNull.Value != dr["id_edsm"])
@@ -98,9 +98,9 @@ namespace EDDiscovery.DB
         {
             using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = cn.CreateCommand("Delete from Distances where Status=@Status"))
+                using (DbCommand cmd = cn.CreateCommand("Delete from Distances where Status=@Status"))
                 {
-                    cmd.Parameters.AddWithValue("@Status", (int)distsource);
+                    cmd.AddParameterWithValue("@Status", (int)distsource);
                     SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 }
             }
@@ -117,7 +117,7 @@ namespace EDDiscovery.DB
 
                 if (ret == true)
                 {
-                    using (SQLiteCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Distances"))
+                    using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Distances"))
                     {
                         id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                     }
@@ -129,20 +129,20 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Store(SQLiteConnectionED cn, SQLiteTransaction tn = null)
+        private bool Store(SQLiteConnectionED cn, DbTransaction tn = null)
         {
             if (CommanderCreate == null)
                 CommanderCreate = "";
 
-            using (SQLiteCommand cmd = cn.CreateCommand("Insert into Distances (NameA, NameB, Dist, CommanderCreate, CreateTime, Status, id_edsm) values (@NameA, @NameB, @Dist, @CommanderCreate, @CreateTime, @Status, @id_edsm)",tn))
+            using (DbCommand cmd = cn.CreateCommand("Insert into Distances (NameA, NameB, Dist, CommanderCreate, CreateTime, Status, id_edsm) values (@NameA, @NameB, @Dist, @CommanderCreate, @CreateTime, @Status, @id_edsm)",tn))
             {
-                cmd.Parameters.AddWithValue("@NameA", NameA);
-                cmd.Parameters.AddWithValue("@NameB", NameB);
-                cmd.Parameters.AddWithValue("@Dist", Dist);
-                cmd.Parameters.AddWithValue("@CommanderCreate", CommanderCreate);
-                cmd.Parameters.AddWithValue("@CreateTime", CreateTime);
-                cmd.Parameters.AddWithValue("@Status", Status);
-                cmd.Parameters.AddWithValue("@id_edsm", id_edsm);
+                cmd.AddParameterWithValue("@NameA", NameA);
+                cmd.AddParameterWithValue("@NameB", NameB);
+                cmd.AddParameterWithValue("@Dist", Dist);
+                cmd.AddParameterWithValue("@CommanderCreate", CommanderCreate);
+                cmd.AddParameterWithValue("@CreateTime", CreateTime);
+                cmd.AddParameterWithValue("@Status", Status);
+                cmd.AddParameterWithValue("@id_edsm", id_edsm);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
             }
@@ -159,18 +159,18 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Update(SQLiteConnectionED cn, SQLiteTransaction tn = null)
+        private bool Update(SQLiteConnectionED cn, DbTransaction tn = null)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Update Distances  set NameA=@NameA, NameB=@NameB, Dist=@Dist, commandercreate=@commandercreate, CreateTime=@CreateTime, status=@status, id_edsm=@id_edsm  where ID=@id",tn))
+            using (DbCommand cmd = cn.CreateCommand("Update Distances  set NameA=@NameA, NameB=@NameB, Dist=@Dist, commandercreate=@commandercreate, CreateTime=@CreateTime, status=@status, id_edsm=@id_edsm  where ID=@id",tn))
             {
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@NameA", NameA);
-                cmd.Parameters.AddWithValue("@NameB", NameB);
-                cmd.Parameters.AddWithValue("@Dist", Dist);
-                cmd.Parameters.AddWithValue("@CommanderCreate", CommanderCreate);
-                cmd.Parameters.AddWithValue("@CreateTime", CreateTime);
-                cmd.Parameters.AddWithValue("@Status", Status);
-                cmd.Parameters.AddWithValue("@id_edsm", id_edsm);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@NameA", NameA);
+                cmd.AddParameterWithValue("@NameB", NameB);
+                cmd.AddParameterWithValue("@Dist", Dist);
+                cmd.AddParameterWithValue("@CommanderCreate", CommanderCreate);
+                cmd.AddParameterWithValue("@CreateTime", CreateTime);
+                cmd.AddParameterWithValue("@Status", Status);
+                cmd.AddParameterWithValue("@id_edsm", id_edsm);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 return true;
@@ -187,9 +187,9 @@ namespace EDDiscovery.DB
 
         private bool Delete(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Delete From  Distances where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Delete From  Distances where ID=@id"))
             {
-                cmd.Parameters.AddWithValue("@ID", id);
+                cmd.AddParameterWithValue("@ID", id);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 return true;
@@ -205,10 +205,10 @@ namespace EDDiscovery.DB
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = cn.CreateCommand("SELECT * FROM Distances WHERE (NameA = @NameA and NameB = @NameB) OR (NameA = @NameB and NameB = @NameA) limit 1"))
+                    using (DbCommand cmd = cn.CreateCommand("SELECT * FROM Distances WHERE (NameA = @NameA and NameB = @NameB) OR (NameA = @NameB and NameB = @NameA) limit 1"))
                     {
-                        cmd.Parameters.AddWithValue("@NameA", s1.name);
-                        cmd.Parameters.AddWithValue("@NameB", s2.name);
+                        cmd.AddParameterWithValue("@NameA", s1.name);
+                        cmd.AddParameterWithValue("@NameB", s2.name);
                         DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
 
                         if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)     // if found.
@@ -239,7 +239,7 @@ namespace EDDiscovery.DB
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = cn.CreateCommand("select * from Distances WHERE status='" + status.ToString() + "'"))
+                    using (DbCommand cmd = cn.CreateCommand("select * from Distances WHERE status='" + status.ToString() + "'"))
                     {
                         DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
 
@@ -269,7 +269,7 @@ namespace EDDiscovery.DB
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    SQLiteCommand cmd = cn.CreateCommand("SELECT * FROM Distances WHERE(NameA = @NameA and NameB = @NameB) OR(NameA = @NameB and NameB = @NameA) limit 1");
+                    DbCommand cmd = cn.CreateCommand("SELECT * FROM Distances WHERE(NameA = @NameA and NameB = @NameB) OR(NameA = @NameB and NameB = @NameA) limit 1");
 
                     for (int i = 1; i < visitedSystems.Count; i++)                 // now we filled in current system, fill in previous system (except for last)
                     {
@@ -282,10 +282,10 @@ namespace EDDiscovery.DB
                         if ( dist < 0 && usedb )     // failed, and use the db is allowed..
                         {
                             cmd.Parameters.Clear();
-                            cmd.Parameters.AddWithValue("@NameA", cur.Name);
-                            cmd.Parameters.AddWithValue("@NameB", prev.Name);
+                            cmd.AddParameterWithValue("@NameA", cur.Name);
+                            cmd.AddParameterWithValue("@NameB", prev.Name);
 
-                            using (SQLiteDataReader reader = cmd.ExecuteReader())
+                            using (DbDataReader reader = cmd.ExecuteReader())
                             {
                                 if (reader.Read())
                                 {
@@ -293,8 +293,6 @@ namespace EDDiscovery.DB
                                     dist = dst.Dist;
                                 }
                             }
-
-                            cmd.Reset();
                         }
 
                         if (dist > 0)
@@ -333,7 +331,7 @@ namespace EDDiscovery.DB
             {
                 int c = 0;
 
-                SQLiteCommand cmd = cn.CreateCommand("select * from Distances where id_edsm=@id limit 1");   // 1 return matching
+                DbCommand cmd = cn.CreateCommand("select * from Distances where id_edsm=@id limit 1");   // 1 return matching
 
                 int lasttc = Environment.TickCount;
 
@@ -355,9 +353,9 @@ namespace EDDiscovery.DB
                         }
 
                         cmd.Parameters.Clear();
-                        cmd.Parameters.AddWithValue("id", dc.id_edsm);
+                        cmd.AddParameterWithValue("id", dc.id_edsm);
 
-                        using (SQLiteDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
+                        using (DbDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
                         {
                             if (reader1.Read())                                          // its there..
                             {
@@ -378,8 +376,6 @@ namespace EDDiscovery.DB
                                 newpairs.Add(dc);
                             }
                         }
-
-                        cmd.Reset();
                     }
                 }
 
@@ -390,7 +386,7 @@ namespace EDDiscovery.DB
             {
                 if (toupdate.Count > 0)
                 {
-                    using (SQLiteTransaction transaction = cn2.BeginTransaction())
+                    using (DbTransaction transaction = cn2.BeginTransaction())
                     {
                         foreach (DistanceClass dc in toupdate)
                             dc.Update(cn2, transaction);
@@ -405,7 +401,7 @@ namespace EDDiscovery.DB
 
                     while (count < newpairs.Count())
                     {
-                        using (SQLiteTransaction transaction = cn2.BeginTransaction())
+                        using (DbTransaction transaction = cn2.BeginTransaction())
                         {
                             while (count < newpairs.Count())
                             {
@@ -424,7 +420,7 @@ namespace EDDiscovery.DB
                 if (removenonedsmids)                            // done on a full sync..
                 {
                     Console.WriteLine("Delete old ones");
-                    using (SQLiteCommand cmddel = cn2.CreateCommand("Delete from Distances where id_edsm is null"))
+                    using (DbCommand cmddel = cn2.CreateCommand("Delete from Distances where id_edsm is null"))
                     {
                         SQLiteDBClass.SQLNonQueryText(cn2, cmddel);
                     }
