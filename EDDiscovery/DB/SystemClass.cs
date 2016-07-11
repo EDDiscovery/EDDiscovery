@@ -1014,6 +1014,8 @@ namespace EDDiscovery.DB
             List<SystemClass> newsystems = new List<SystemClass>();
             DateTime maxdate = DateTime.Parse(date, new CultureInfo("sv-SE"));
 
+            bool emptydatabase = SystemClass.GetTotalSystems() == 0;            // if empty database, we can skip the lookup
+
             using (SQLiteConnection cn = SQLiteDBClass.CreateConnection(true))  // open the db
             {
                 int c = 0;
@@ -1041,34 +1043,41 @@ namespace EDDiscovery.DB
 
                         if (system.HasCoordinate)
                         {
-                            cmd.Parameters.Clear();
-                            cmd.Parameters.AddWithValue("id_edsm", system.id_edsm);
-
-                            SQLiteDataReader reader1 = cmd.ExecuteReader();              // see if ESDM ID is there..
-                            if (reader1.Read())                                          // its there..
+                            if (emptydatabase)      // if no database, just add immediately
                             {
-                                SystemClass dbsys = new SystemClass(reader1);
-                                // see if EDSM data changed..
-                                if (!dbsys.name.Equals(system.name) || Math.Abs(dbsys.x - system.x) > 0.01 || Math.Abs(dbsys.y - system.y) > 0.01 || Math.Abs(dbsys.z - system.z) > 0.01)  // name or position changed
-                                {
-                                    dbsys.x = system.x;
-                                    dbsys.y = system.y;
-                                    dbsys.z = system.z;
-                                    dbsys.name = system.name;
-
-                                    //Console.WriteLine("Update " + dbsys.id + " due to pos or case " + dbsys.name);
-                                    toupdate.Add(dbsys);
-                                }
-                            }
-                            else                                                                  // not in database..
-                            {
-                                //Console.WriteLine("Add new system " + system.name);
+                                //Console.WriteLine("Empty database Add new system " + system.name);
                                 newsystems.Add(system);
+                            }
+                            else
+                            {
+                                cmd.Parameters.Clear();
+                                cmd.Parameters.AddWithValue("id_edsm", system.id_edsm);
+
+                                SQLiteDataReader reader1 = cmd.ExecuteReader();              // see if ESDM ID is there..
+                                if (reader1.Read())                                          // its there..
+                                {
+                                    SystemClass dbsys = new SystemClass(reader1);
+                                    // see if EDSM data changed..
+                                    if (!dbsys.name.Equals(system.name) || Math.Abs(dbsys.x - system.x) > 0.01 || Math.Abs(dbsys.y - system.y) > 0.01 || Math.Abs(dbsys.z - system.z) > 0.01)  // name or position changed
+                                    {
+                                        dbsys.x = system.x;
+                                        dbsys.y = system.y;
+                                        dbsys.z = system.z;
+                                        dbsys.name = system.name;
+
+                                        //Console.WriteLine("Update " + dbsys.id + " due to pos or case " + dbsys.name);
+                                        toupdate.Add(dbsys);
+                                    }
+                                }
+                                else                                                                  // not in database..
+                                {
+                                    //Console.WriteLine("Add new system " + system.name);
+                                    newsystems.Add(system);
+                                }
                             }
 
                             cmd.Reset();
                         }
-
                     }
                 }
 

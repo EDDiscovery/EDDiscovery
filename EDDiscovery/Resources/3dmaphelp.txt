@@ -34,9 +34,10 @@ Toolbar (from left):
 	Grid	Turn on/off coarse grid
 	Fine Grid	Turn on/off fine grid
 	10,21	Turn on/off grid coordinates
+	Perspective mode	Turn on/off perspective mode.  Perspective mode allows you to fly through the galaxy anywhere.
 	Elite Movement	Turn on/off Elite movement - keep Y the same as you travel. Useful in perspective mode only.
 	Galaxy	Display galaxy maps
-	Filter	Filter by expedition dates
+	Filter	Filter travel by expedition dates
 	?	This help
 	Star Entry	Entry box to find specific star (hit return to center)
 	Centre	Alternatively, hit this to center what is in the star entry box
@@ -45,5 +46,5 @@ Toolbar (from left):
 	Yellow Dot	Show current centered system 
 	Orange Dot	Show selected system (by left mouse click).  
 		Double click to make it centered system. 
-		Right click for information and EDSM option
+		Right click for information and EDSM information (in a web browser tab).
 

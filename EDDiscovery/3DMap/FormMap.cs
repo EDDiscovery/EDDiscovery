@@ -195,15 +195,15 @@ namespace EDDiscovery2
 
             ResetCamera();
             toolStripShowAllStars.Renderer = new MyRenderer();
-            toolStripButtonDrawLines.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", false);
+            toolStripButtonDrawLines.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", true);
             showStarstoolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DAllStars", true);
-            showStationsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonStations", false);
+            showStationsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonStations", true);
             toolStripButtonPerspective.Checked = SQLiteDBClass.GetSettingBool("Map3DPerspective", false);
             toolStripButtonGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DCoarseGrid", true);
             toolStripButtonFineGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DFineGrid", true);
             toolStripButtonCoords.Checked = SQLiteDBClass.GetSettingBool("Map3DCoords", true);
             toolStripButtonEliteMovement.Checked = SQLiteDBClass.GetSettingBool("Map3DEliteMove", false);
-            toolStripButtonStarNames.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNames", false);
+            toolStripButtonStarNames.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNames", true);
             showNoteMarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowNoteMarks", true);
             showBookmarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowBookmarks", true);
             toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false );
@@ -631,13 +631,14 @@ namespace EDDiscovery2
 
             if (showBookmarksToolStripMenuItem.Checked)
             {
-                Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
-                Debug.Assert(map != null);
+                Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
+                Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
+                Debug.Assert(mapstar != null && mapregion != null);
 
                 DatasetBuilder builder = CreateBuilder();
 
                 builder.Build();
-                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(map, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
+                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
 
                 builder = null;
             }
@@ -1568,6 +1569,8 @@ namespace EDDiscovery2
                 string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, -1, _centerSystem.name);
                 SetCenterSystemTo(name, true);
             }
+            else
+                MessageBox.Show("No travel history is available");
         }
 
         private void toolStripButtonGoForward_Click(object sender, EventArgs e)
@@ -1577,6 +1580,8 @@ namespace EDDiscovery2
                 string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, 1, _centerSystem.name);
                 SetCenterSystemTo(name, true);
             }
+            else
+                MessageBox.Show("No travel history is available");
         }
 
         private void toolStripButtonAutoForward_Click(object sender, EventArgs e)
@@ -1723,7 +1728,7 @@ namespace EDDiscovery2
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
         {
             InfoForm dl = new InfoForm();
-            string text = EDDiscovery.Properties.Resources._3dmaphelp;
+            string text = EDDiscovery.Properties.Resources.maphelp3d;
             dl.Info("3D Map Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
             dl.Show();
         }
@@ -1865,7 +1870,7 @@ namespace EDDiscovery2
                         else                                        // update bookmark
                         {
                             frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
-                            regionmarker = bkmark.Heading != null;
+                            regionmarker = bkmark.isRegion;
                             tme = bkmark.Time;
                             frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker);
                         }
