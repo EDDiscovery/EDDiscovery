@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -50,19 +50,19 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note) values (@sname, @xp, @yp, @zp, @time, @head, @note)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note) values (@sname, @xp, @yp, @zp, @time, @head, @note)"))
             {
-                cmd.Parameters.AddWithValue("@sname", StarName);
-                cmd.Parameters.AddWithValue("@xp", x);
-                cmd.Parameters.AddWithValue("@yp", y);
-                cmd.Parameters.AddWithValue("@zp", z);
-                cmd.Parameters.AddWithValue("@time", Time);
-                cmd.Parameters.AddWithValue("@head", Heading);
-                cmd.Parameters.AddWithValue("@note", Note);
+                cmd.AddParameterWithValue("@sname", StarName);
+                cmd.AddParameterWithValue("@xp", x);
+                cmd.AddParameterWithValue("@yp", y);
+                cmd.AddParameterWithValue("@zp", z);
+                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@head", Heading);
+                cmd.AddParameterWithValue("@note", Note);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
@@ -82,16 +82,16 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note  where ID=@id"))
             {
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@sname", StarName);
-                cmd.Parameters.AddWithValue("@xp", x);
-                cmd.Parameters.AddWithValue("@yp", y);
-                cmd.Parameters.AddWithValue("@zp", z);
-                cmd.Parameters.AddWithValue("@time", Time);
-                cmd.Parameters.AddWithValue("@head", Heading);
-                cmd.Parameters.AddWithValue("@note", Note);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@sname", StarName);
+                cmd.AddParameterWithValue("@xp", x);
+                cmd.AddParameterWithValue("@yp", y);
+                cmd.AddParameterWithValue("@zp", z);
+                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@head", Heading);
+                cmd.AddParameterWithValue("@note", Note);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -112,9 +112,9 @@ namespace EDDiscovery2.DB
 
         private bool Delete(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("DELETE FROM Bookmarks WHERE id = @id"))
+            using (DbCommand cmd = cn.CreateCommand("DELETE FROM Bookmarks WHERE id = @id"))
             {
-                cmd.Parameters.AddWithValue("@id", id);
+                cmd.AddParameterWithValue("@id", id);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
@@ -130,7 +130,7 @@ namespace EDDiscovery2.DB
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = cn.CreateCommand("select * from Bookmarks"))
+                    using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
                     {
                         DataSet ds = null;
 

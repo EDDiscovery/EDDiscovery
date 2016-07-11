@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -41,12 +41,12 @@ namespace EDDiscovery.DB
 
         private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
             {
-                cmd.Parameters.AddWithValue("@systemname", system);
+                cmd.AddParameterWithValue("@systemname", system);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = cn.CreateCommand("Select Max(id) as id from wanted_systems"))
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from wanted_systems"))
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
@@ -64,9 +64,9 @@ namespace EDDiscovery.DB
 
         private bool Delete(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = cn.CreateCommand("DELETE FROM wanted_systems WHERE id = @id"))
+            using (DbCommand cmd = cn.CreateCommand("DELETE FROM wanted_systems WHERE id = @id"))
             {
-                cmd.Parameters.AddWithValue("@id", id);
+                cmd.AddParameterWithValue("@id", id);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -80,7 +80,7 @@ namespace EDDiscovery.DB
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (SQLiteCommand cmd = cn.CreateCommand("select * from wanted_systems"))
+                    using (DbCommand cmd = cn.CreateCommand("select * from wanted_systems"))
                     {
                         DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
                         if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
