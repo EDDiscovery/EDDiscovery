@@ -12,7 +12,7 @@ namespace EDDiscovery.DB
 {
     public class SQLiteConnectionED : IDisposable              // USE this for connections.. 
     {
-        //static Object monitor = new Object();                 // monitor disabled for now - it prevent SQLite DB locked errors but 
+        //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
                                                                 // causes the program to become unresponsive during big DB updates
         private SQLiteConnection _cn;
 
@@ -39,6 +39,7 @@ namespace EDDiscovery.DB
         public void Dispose()
         {
             _cn.Close();
+            _cn.Dispose();
             //System.Threading.Monitor.Exit(monitor);
         }
 
