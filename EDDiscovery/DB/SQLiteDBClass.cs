@@ -114,7 +114,7 @@ namespace EDDiscovery.DB
             {
                 if (_factory == null)
                 {
-                    _factory = new SQLiteFactory();
+                    _factory = GetSqliteProviderFactory();
                 }
                 return _factory;
             }
@@ -410,6 +410,42 @@ namespace EDDiscovery.DB
                 PutSettingString("EDDBSystemsTime", "0", conn);                               // force EDDB
                 PutSettingString("EDSCLastDist", "2010-01-01 00:00:00", conn);                // force distances
             });
+        }
+
+        private static DbProviderFactory GetSqliteProviderFactory()
+        {
+            if (WindowsSqliteProviderWorks())
+            {
+                return GetWindowsSqliteProviderFactory();
+            }
+
+            throw new InvalidOperationException("Unable to get a working Sqlite driver");
+        }
+
+        private static bool WindowsSqliteProviderWorks()
+        {
+            try
+            {
+                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
+                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static DbProviderFactory GetWindowsSqliteProviderFactory()
+        {
+            try
+            {
+                return new System.Data.SQLite.SQLiteFactory();
+            }
+            catch
+            {
+                return null;
+            }
         }
         #endregion
 
