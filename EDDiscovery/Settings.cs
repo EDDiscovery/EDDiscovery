@@ -293,5 +293,9 @@ namespace EDDiscovery2
             EDDConfig.Instance.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
         }
 
+        private void checkBox_Distances_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDiscoveryForm.EDDConfig.UseDistances = checkBox_Distances.Checked;
+        }
     }
 }

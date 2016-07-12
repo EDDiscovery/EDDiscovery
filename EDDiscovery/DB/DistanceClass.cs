@@ -10,6 +10,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery.DB
 {
@@ -361,12 +362,13 @@ namespace EDDiscovery.DB
             {
                 int c = 0;
 
-                DbCommand cmd = cn.CreateCommand("select * from Distances where id_edsm=@id limit 1");   // 1 return matching
+                DbCommand cmd = null;
 
                 int lasttc = Environment.TickCount;
 
                 try
                 {
+                    cmd = cn.CreateCommand("select * from Distances where id_edsm=@id limit 1");   // 1 return matching
 
                     while (jr.Read())
                     {
@@ -420,9 +422,14 @@ namespace EDDiscovery.DB
                     }
                 }
                 catch
-                { }
-
-                cmd.Dispose();
+                {
+                    MessageBox.Show("There is a problem using the EDSM distance file." + Environment.NewLine +
+                                    "Please perform a manual EDSM distance sync (see Admin menu) next time you run the program ", "ESDM Sync Error");
+                }
+                finally
+                {
+                    if (cmd != null) cmd.Dispose();
+                }
             }
 
             using (SQLiteConnectionED cn2 = new SQLiteConnectionED())  // open the db

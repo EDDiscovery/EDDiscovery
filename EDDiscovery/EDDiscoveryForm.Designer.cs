@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare3 = new ExtendedControls.TabStyleSquare();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +77,7 @@
             this.button_test = new ExtendedControls.ButtonExt();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
+            this.synchroniseWithEDSMDistancesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -98,7 +99,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(216, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(308, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -179,6 +180,7 @@
             this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.forceEDDBUpdateToolStripMenuItem,
             this.syncEDSMSystemsToolStripMenuItem,
+            this.synchroniseWithEDSMDistancesToolStripMenuItem,
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
             this.debugBetaFixHiddenLogToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
@@ -196,7 +198,7 @@
             // 
             this.syncEDSMSystemsToolStripMenuItem.Name = "syncEDSMSystemsToolStripMenuItem";
             this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
-            this.syncEDSMSystemsToolStripMenuItem.Text = "Synchronise with EDSM";
+            this.syncEDSMSystemsToolStripMenuItem.Text = "Synchronise with EDSM Stars";
             this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
             // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
@@ -355,7 +357,7 @@
             this.tabControl1.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControl1.TabOpaque = 100F;
             this.tabControl1.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControl1.TabStyle = tabStyleSquare1;
+            this.tabControl1.TabStyle = tabStyleSquare3;
             this.tabControl1.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControl1.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             // 
@@ -394,7 +396,7 @@
             this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
             this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(186, 68);
+            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
             this.trilaterationControl.TabIndex = 21;
             // 
             // tabPageScreenshots
@@ -413,7 +415,7 @@
             this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageHandler1.Location = new System.Drawing.Point(0, 0);
             this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(192, 74);
+            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
             this.imageHandler1.TabIndex = 0;
             // 
             // tabPageRoute
@@ -432,7 +434,7 @@
             this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.routeControl1.Location = new System.Drawing.Point(3, 3);
             this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(186, 68);
+            this.routeControl1.Size = new System.Drawing.Size(979, 665);
             this.routeControl1.TabIndex = 0;
             // 
             // tabPageRoutesExpeditions
@@ -451,7 +453,7 @@
             this.savedRouteExpeditionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.savedRouteExpeditionControl1.Location = new System.Drawing.Point(3, 3);
             this.savedRouteExpeditionControl1.Name = "savedRouteExpeditionControl1";
-            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(186, 68);
+            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(979, 665);
             this.savedRouteExpeditionControl1.TabIndex = 0;
             // 
             // tabPageSettings
@@ -470,7 +472,7 @@
             this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.settings.Location = new System.Drawing.Point(3, 3);
             this.settings.Name = "settings";
-            this.settings.Size = new System.Drawing.Size(186, 68);
+            this.settings.Size = new System.Drawing.Size(979, 665);
             this.settings.TabIndex = 0;
             // 
             // panel_grip
@@ -531,6 +533,13 @@
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 19;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
+            // 
+            // synchroniseWithEDSMDistancesToolStripMenuItem
+            // 
+            this.synchroniseWithEDSMDistancesToolStripMenuItem.Name = "synchroniseWithEDSMDistancesToolStripMenuItem";
+            this.synchroniseWithEDSMDistancesToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.synchroniseWithEDSMDistancesToolStripMenuItem.Text = "Synchronise with EDSM Distances";
+            this.synchroniseWithEDSMDistancesToolStripMenuItem.Click += new System.EventHandler(this.synchroniseWithEDSMDistancesToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -623,6 +632,7 @@
         private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
         private SavedRouteExpeditionControl savedRouteExpeditionControl1;
         private System.Windows.Forms.ToolStripMenuItem debugBetaFixHiddenLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem synchroniseWithEDSMDistancesToolStripMenuItem;
     }
 }
 

@@ -436,6 +436,7 @@ namespace EDDiscovery
 
         bool performedsmsync = false;
         bool performeddbsync = false;
+        bool performedsmdistsync = false;
 
         private void CheckSystems()  // ASYNC process, done via start up, must not be too slow.
         {
@@ -443,7 +444,6 @@ namespace EDDiscovery
             {
                 EDSMClass edsm = new EDSMClass();
                 string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-
                 DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
 
                 if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
@@ -478,11 +478,16 @@ namespace EDDiscovery
             galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
-
+            
             string timestr = SQLiteDBClass.GetSettingString("EDDBSystemsTime", "0");
             DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
             if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
                 performeddbsync = true;
+
+            string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+            DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
+            if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
+                performedsmdistsync = true;
 
             GC.Collect();
         }
@@ -583,12 +588,11 @@ namespace EDDiscovery
             {
                 try
                 {
+                    long numbertotal = 0;
                     string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                     EDSMClass edsm = new EDSMClass();
 
-                    long numbertotal = 0;
-
-                    if (lstdist.Equals("2010-01-01 00:00:00"))          // first time ever..
+                    if (performedsmdistsync)
                     {
                         LogLine("Downloading full EDSM distance data.");
                         string filename = edsm.GetEDSMDistances();
@@ -603,7 +607,7 @@ namespace EDDiscovery
                         }
                     }
 
-                    LogLine("Updating distances with EDSM data.");
+                    LogLine("Updating distances with latest EDSM data.");
 
                     string json = edsm.RequestDistances(lstdist);
                     if (json == null)
@@ -620,6 +624,7 @@ namespace EDDiscovery
                     if (numbertotal > 0)                          // if we've done something
                         refreshhistory = true;
 
+                    performedsmdistsync = false;
                     GC.Collect();
                 }
                 catch (Exception ex)
@@ -627,6 +632,8 @@ namespace EDDiscovery
                     MessageBox.Show("GetEDSMDistances exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
                 }
             }
+            else
+                performedsmdistsync = false;
 
             if ( refreshhistory )
             {
@@ -846,6 +853,15 @@ namespace EDDiscovery
             if (performedsmsync == false)      // meaning we are not running this..
             {
                 performedsmsync = true;
+                AsyncPerformSync();
+            }
+        }
+
+        private void synchroniseWithEDSMDistancesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (performedsmdistsync == false)
+            {
+                performedsmdistsync = true;
                 AsyncPerformSync();
             }
         }
