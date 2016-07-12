@@ -317,9 +317,9 @@
             this.checkBox_Distances.Location = new System.Drawing.Point(17, 18);
             this.checkBox_Distances.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBox_Distances.Name = "checkBox_Distances";
-            this.checkBox_Distances.Size = new System.Drawing.Size(310, 17);
+            this.checkBox_Distances.Size = new System.Drawing.Size(219, 17);
             this.checkBox_Distances.TabIndex = 0;
-            this.checkBox_Distances.Text = "Get Distances from EDSM (Slower and normally not needed)";
+            this.checkBox_Distances.Text = "Get Distance Pairs from EDSM (Optional)";
             this.checkBox_Distances.TickBoxReductionSize = 10;
             this.checkBox_Distances.UseVisualStyleBackColor = true;
             // 

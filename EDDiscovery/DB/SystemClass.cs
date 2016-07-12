@@ -180,6 +180,8 @@ namespace EDDiscovery.DB
 
                     eddb_updated_at = jo["updated_at"].Value<int>();
 
+                    id_edsm = (long)jo["edsm_id"];                         // pick up its edsm ID
+
                     status = SystemStatusEnum.EDDB;
                 }
             }
@@ -1160,11 +1162,10 @@ namespace EDDiscovery.DB
             using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db
             {
                 DbCommand cmd1 = null;
-                DbCommand cmd2 = null;
+
                 try
                 {
-                    cmd1 = cn.CreateCommand("select * from Systems where id_eddb = @id limit 1");   // 1 return matching ID
-                    cmd2 = cn.CreateCommand("select * from Systems where name = @name and ABS(x-@x)<1 and ABS(y-@y)<1 and ABS(z-@z)<1 limit 1");   // 1 return matching name
+                    cmd1 = cn.CreateCommand("select * from Systems where id_edsm = @id limit 1");   // 1 return matching ID
 
                     int c = 0;
                     int lasttc = Environment.TickCount;
@@ -1176,50 +1177,36 @@ namespace EDDiscovery.DB
                             JObject jo = JObject.Load(jr);
 
                             SystemClass system = new SystemClass(jo, EDDiscovery2.DB.SystemInfoSource.EDDB);
-                            SystemClass dbsys = null;
 
                             cmd1.Parameters.Clear();
-                            cmd1.AddParameterWithValue("id", system.id_eddb);
+                            cmd1.AddParameterWithValue("id", system.id_edsm);           // EDDB carries EDSM ID, so find entry in dB
 
-                            using (DbDataReader reader1 = cmd1.ExecuteReader())             // try its ID first
+                            using (DbDataReader reader1 = cmd1.ExecuteReader())         // if found (if not, we ignore EDDB system)
                             {
-                                if (reader1.Read())                                          // its there..
+                                if (reader1.Read())                                     // its there.. check its got the right stuff in it.
                                 {
-                                    dbsys = new SystemClass(reader1);
-                                }
-                            }
+                                    SystemClass dbsys = new SystemClass(reader1);       // we always do an update.  if EDDB entry is not in DB, we ignore it
 
-                            if (dbsys == null)
-                            {
-                                cmd2.Parameters.Clear();                                // else just pick the best name
-                                cmd2.AddParameterWithValue("name", system.name);
-                                cmd2.AddParameterWithValue("x", system.x);
-                                cmd2.AddParameterWithValue("y", system.y);
-                                cmd2.AddParameterWithValue("z", system.z);
-
-                                using (DbDataReader reader2 = cmd2.ExecuteReader())        // case insensitive
-                                {
-                                    if (reader2.Read())                                     // its there..
+                                    if (dbsys.eddb_updated_at != system.eddb_updated_at || dbsys.population != system.population)
                                     {
-                                        dbsys = new SystemClass(reader2);
+                                        dbsys.id_eddb = system.id_eddb;
+                                        dbsys.faction = system.faction;
+                                        dbsys.population = system.population;
+                                        dbsys.government = system.government;
+                                        dbsys.allegiance = system.allegiance;
+                                        dbsys.state = system.state;
+                                        dbsys.security = system.security;
+                                        dbsys.primary_economy = system.primary_economy;
+                                        dbsys.needs_permit = system.needs_permit;
+                                        dbsys.eddb_updated_at = system.eddb_updated_at;
+
+                                        toupdate.Add(dbsys);                                // add to update list
                                     }
                                 }
-                            }
-
-                            if (dbsys != null && (dbsys.id_eddb != system.id_eddb || dbsys.eddb_updated_at != system.eddb_updated_at || dbsys.population != system.population))
-                            {
-                                dbsys.id_eddb = system.id_eddb;
-                                dbsys.faction = system.faction;
-                                dbsys.population = system.population;
-                                dbsys.government = system.government;
-                                dbsys.allegiance = system.allegiance;
-                                dbsys.state = system.state;
-                                dbsys.security = system.security;
-                                dbsys.primary_economy = system.primary_economy;
-                                dbsys.needs_permit = system.needs_permit;
-                                dbsys.eddb_updated_at = system.eddb_updated_at;
-
-                                toupdate.Add(dbsys);                                // add to update list
+                                else
+                                {
+                                    Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " Not found");
+                                }
                             }
 
                             if (++c % 10000 == 0)
@@ -1233,7 +1220,6 @@ namespace EDDiscovery.DB
                 finally
                 {
                     if (cmd1 != null) cmd1.Dispose();
-                    if (cmd2 != null) cmd2.Dispose();
                 }
             }
 
@@ -1249,7 +1235,7 @@ namespace EDDiscovery.DB
                         {
                             while (count < toupdate.Count())
                             {
-                                toupdate[count].Store(cn2, transaction);
+                                toupdate[count].Update(cn2, toupdate[count].id, transaction);       // update existing entry..
 
                                 if (++count % 100000 == 0)
                                     break;

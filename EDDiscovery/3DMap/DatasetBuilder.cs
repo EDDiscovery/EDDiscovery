@@ -464,6 +464,7 @@ namespace EDDiscovery2._3DMap
             AddSystem("sol", dataset);
             AddSystem("sagittarius a*", dataset);
             AddSystem("CEECKIA ZQ-L C24-0", dataset);
+            AddSystem("Beagle Point", dataset);
             _datasets.Add(dataset);
             return _datasets;
         }

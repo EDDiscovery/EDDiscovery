@@ -43,12 +43,10 @@ namespace EDDiscovery
             return message.Result;
         }
 
-        //readonly string _fileTgcSystems;
-        readonly string _fileEDSMDistances;
         private EDSMSync _edsmSync;
         public EDDTheme theme;
 
-        public AutoCompleteStringCollection SystemNames;            // External one
+        public AutoCompleteStringCollection SystemNames;       
 
         public string CommanderName { get; private set; }
         static public EDDConfig EDDConfig { get; private set; }
@@ -84,9 +82,6 @@ namespace EDDiscovery
 
             EDDConfig = EDDConfig.Instance;
             galacticMapping = new GalacticMapping();
-
-            //_fileTgcSystems = Path.Combine(Tools.GetAppDataDirectory(), "tgcsystems.json");
-            _fileEDSMDistances = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
             string logpath = "";
             try
@@ -228,15 +223,15 @@ namespace EDDiscovery
 
                 AsyncPerformSync();                              // perform any async synchronisations
 
-                if (totalsystems==0)
+                if ( performeddbsync || performedsmsync )
                 {
-                    MessageBox.Show("This is the first run of ED Discovery. It will now synchronise with the " + Environment.NewLine +
-                                    "EDSM and EDDB databases to load star data." + Environment.NewLine + Environment.NewLine +
-                                    "This will take a while, up to 30 minutes." + Environment.NewLine + Environment.NewLine +
-                                    "Please wait until refreshing complete is shown, then exit this program and restart.",
-                                    "WARNING - First run");
-                }
+                    string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
 
+                    MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
+                                    "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
+                                    "Please continue running ED Discovery until refresh is complete.",
+                                    "WARNING - Synchronisation to " + databases);
+                }
             }
             catch (Exception ex)
             {
@@ -501,7 +496,8 @@ namespace EDDiscovery
         private void PerformSync()           // big check.. done in a thread.
         {
             bool refreshhistory = false;
-            bool firstrun = SystemClass.GetTotalSystems() == 0;
+            bool firstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
+            bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
 
             if (performedsmsync)
             {
@@ -536,11 +532,9 @@ namespace EDDiscovery
 
                         SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
                     }
-                    else
-                    {
-                        LogLine("No new file found on server, instead checking for new EDSM systems.");
-                        updates = edsm.GetNewSystems();
-                    }
+
+                    LogLine("Now checking for recent EDSM systems.");
+                    updates += edsm.GetNewSystems();
 
                     LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
 
@@ -645,8 +639,10 @@ namespace EDDiscovery
                     if (firstrun)
                     {
                         MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
-                                        "WARNING - First run");
+                                        "Restart ED Discovery");
                     }
+                    else if (edsmoreddbsync)
+                        MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
 
                 });
             }

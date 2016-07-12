@@ -177,6 +177,34 @@ namespace EDDiscovery.DB
             }
         }
 
+        public static long GetTotalDistances()
+        {
+            long value = 0;
+
+            try
+            {
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("select Count(*) from Distances"))
+                    {
+                        using (DbDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                value = (long)reader["Count(*)"];
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+
+            return value;
+        }
+
+
         public bool Delete()
         {
             using (SQLiteConnectionED cn = new SQLiteConnectionED())
@@ -327,6 +355,8 @@ namespace EDDiscovery.DB
             List<DistanceClass> newpairs = new List<DistanceClass>();
             DateTime maxdate = DateTime.Parse(date, new CultureInfo("sv-SE"));
 
+            bool emptydatabase = GetTotalDistances() == 0;            // if empty database, we can skip the lookup
+
             using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db 
             {
                 int c = 0;
@@ -352,28 +382,35 @@ namespace EDDiscovery.DB
                             lasttc = Environment.TickCount;
                         }
 
-                        cmd.Parameters.Clear();
-                        cmd.AddParameterWithValue("id", dc.id_edsm);
-
-                        using (DbDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
+                        if (emptydatabase)                                                  // empty DB, just store..
                         {
-                            if (reader1.Read())                                          // its there..
-                            {
-                                DistanceClass dbdc = new DistanceClass(reader1);
+                            newpairs.Add(dc);
+                        }
+                        else
+                        {
+                            cmd.Parameters.Clear();
+                            cmd.AddParameterWithValue("id", dc.id_edsm);
 
-                                // see if EDSM data changed..
-                                if (!dbdc.NameA.Equals(dc.NameA) || !dbdc.NameB.Equals(dc.NameB) || Math.Abs(dbdc.Dist - dc.Dist) > 0.05)
-                                {
-                                    dbdc.NameA = dc.NameA;
-                                    dbdc.NameB = dc.NameB;
-                                    dbdc.Dist = dc.Dist;
-                                    toupdate.Add(dbdc);
-                                }
-                            }
-                            else                                                                  // not in database..
+                            using (DbDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
                             {
-                                //Console.WriteLine("Add new system " + system.name);
-                                newpairs.Add(dc);
+                                if (reader1.Read())                                          // its there..
+                                {
+                                    DistanceClass dbdc = new DistanceClass(reader1);
+
+                                    // see if EDSM data changed..
+                                    if (!dbdc.NameA.Equals(dc.NameA) || !dbdc.NameB.Equals(dc.NameB) || Math.Abs(dbdc.Dist - dc.Dist) > 0.05)
+                                    {
+                                        dbdc.NameA = dc.NameA;
+                                        dbdc.NameB = dc.NameB;
+                                        dbdc.Dist = dc.Dist;
+                                        toupdate.Add(dbdc);
+                                    }
+                                }
+                                else                                                                  // not in database..
+                                {
+                                    //Console.WriteLine("Add new system " + system.name);
+                                    newpairs.Add(dc);
+                                }
                             }
                         }
                     }
