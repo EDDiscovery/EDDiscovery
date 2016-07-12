@@ -369,23 +369,12 @@ namespace EDDiscovery.DB
     public static class SQLiteDBClass
     {
         #region Private properties / fields
-        private static DbProviderFactory _factory;
         private static Object lockDBInit = new Object();                    // lock to sequence construction
         private static string constring;                                           // connection string to use..
         #endregion
 
         #region Public properties
-        public static DbProviderFactory DbFactory
-        {
-            get
-            {
-                if (_factory == null)
-                {
-                    _factory = new SQLiteFactory();
-                }
-                return _factory;
-            }
-        }
+        public static DbProviderFactory DbFactory { get; private set; }
         #endregion
 
         #region Database Initialization
@@ -393,6 +382,8 @@ namespace EDDiscovery.DB
         {
             string dbfile = GetSQLiteDBFile();
             constring = "Data Source=" + dbfile + ";Pooling=true;";
+            DbFactory = GetSqliteProviderFactory();
+
             try
             {
                 bool fileexist = File.Exists(dbfile);
@@ -704,6 +695,42 @@ namespace EDDiscovery.DB
 
             PerformUpgrade(conn, 19, true, true, new[] { query1, query2, query3, query4 });
         }
+
+        private static DbProviderFactory GetSqliteProviderFactory()
+        {
+            if (WindowsSqliteProviderWorks())
+            {
+                return GetWindowsSqliteProviderFactory();
+            }
+
+            throw new InvalidOperationException("Unable to get a working Sqlite driver");
+        }
+
+        private static bool WindowsSqliteProviderWorks()
+        {
+            try
+            {
+                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
+                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static DbProviderFactory GetWindowsSqliteProviderFactory()
+        {
+            try
+            {
+                return new System.Data.SQLite.SQLiteFactory();
+            }
+            catch
+            {
+                return null;
+            }
+        }
         #endregion
 
             #region Database access
@@ -711,7 +738,7 @@ namespace EDDiscovery.DB
         {
             lock (lockDBInit)                                           // one at a time chaps
             {
-                if (_factory == null)                                        // first one to ask for a connection sets the db up
+                if (DbFactory == null)                                        // first one to ask for a connection sets the db up
                 {
                     InitializeDatabase();
                 }
