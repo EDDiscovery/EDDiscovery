@@ -108,18 +108,18 @@ namespace EDDiscovery2._3DMap
             return text_bmp;
         }
 
-        public List<IData3DSet> AddStarBookmarks(Bitmap map, double widthly, double heightly, bool vert)
+        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, double widthly, double heightly, bool vert)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
 
-            foreach (BookmarkClass bc in SQLiteDBClass.bookmarks)
+            foreach (BookmarkClass bc in BookmarkClass.bookmarks)
             {
                 TexturedQuadData newtexture;
 
                 if (vert)
                 {
-                    newtexture = TexturedQuadData.FromBitmapVert(map,
+                    newtexture = TexturedQuadData.FromBitmapVert((bc.isRegion) ? mapregion : mapstar,
                                              new PointF((float)(bc.x - widthly), (float)(bc.y + heightly)),
                                                 new PointF((float)(bc.x + widthly), (float)(bc.y + heightly)),
                                              new PointF((float)(bc.x - widthly), (float)bc.y),
@@ -128,7 +128,7 @@ namespace EDDiscovery2._3DMap
                 }
                 else
                 {
-                    newtexture = TexturedQuadData.FromBitmapHorz(map,
+                    newtexture = TexturedQuadData.FromBitmapHorz((bc.isRegion) ? mapregion : mapstar,
                                               new PointF((float)(bc.x - widthly), (float)(bc.z + heightly)),
                                                  new PointF((float)(bc.x + widthly), (float)(bc.z + heightly)),
                                               new PointF((float)(bc.x - widthly), (float)bc.z),
@@ -149,40 +149,45 @@ namespace EDDiscovery2._3DMap
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
 
-            foreach (VisitedSystemsClass vs in VisitedSystems)
+            if (VisitedSystems != null)
             {
-                if (vs.curSystem != null && vs.curSystem.Note != null )
+                foreach (VisitedSystemsClass vs in VisitedSystems)
                 {
-                    string note = vs.curSystem.Note.Trim();
+                    SystemNoteClass notecs = SystemNoteClass.GetSystemNoteClass(vs.Name);
 
-                    if (note.Length > 0)
+                    if (notecs != null)         // if we have a note..
                     {
-                        double x = (vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x;
-                        double y = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
-                        double z = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
+                        string note = notecs.Note.Trim();
 
-                        TexturedQuadData newtexture;
-
-                        if (vert)
+                        if (note.Length > 0)
                         {
-                            newtexture = TexturedQuadData.FromBitmapVert(map,
-                                                        new PointF((float)(x - widthly), (float)(y + heightly)),
-                                                        new PointF((float)(x + widthly), (float)(y + heightly)),
-                                                        new PointF((float)(x - widthly), (float)y),
-                                                        new PointF((float)(x + widthly), (float)y),
-                                                        (float)z);
-                        }
-                        else
-                        {
-                            newtexture = TexturedQuadData.FromBitmapHorz(map,
-                                                                        new PointF((float)(x - widthly), (float)(z + heightly)),
-                                                                        new PointF((float)(x + widthly), (float)(z + heightly)),
-                                                                        new PointF((float)(x - widthly), (float)z),
-                                                                        new PointF((float)(x + widthly), (float)z),
-                                                                        (float)y);
-                        }
+                            double x = (vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x;
+                            double y = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
+                            double z = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
 
-                        datasetbks.Add(newtexture);
+                            TexturedQuadData newtexture;
+
+                            if (vert)
+                            {
+                                newtexture = TexturedQuadData.FromBitmapVert(map,
+                                                            new PointF((float)(x - widthly), (float)(y + heightly)),
+                                                            new PointF((float)(x + widthly), (float)(y + heightly)),
+                                                            new PointF((float)(x - widthly), (float)y),
+                                                            new PointF((float)(x + widthly), (float)y),
+                                                            (float)z);
+                            }
+                            else
+                            {
+                                newtexture = TexturedQuadData.FromBitmapHorz(map,
+                                                                            new PointF((float)(x - widthly), (float)(z + heightly)),
+                                                                            new PointF((float)(x + widthly), (float)(z + heightly)),
+                                                                            new PointF((float)(x - widthly), (float)z),
+                                                                            new PointF((float)(x + widthly), (float)z),
+                                                                            (float)y);
+                            }
+
+                            datasetbks.Add(newtexture);
+                        }
                     }
                 }
             }
@@ -370,7 +375,7 @@ namespace EDDiscovery2._3DMap
                 foreach (SystemClassStarNames si in StarList)
                 {
                     if ( (si.population == 0) == unpopulated )          // if zero population, and unpopulated is true, add.  If non zero pop, and unpolated is false, add
-                        AddSystem(si, datasetS);
+                        datasetS.Add(new PointData(si.x, si.y, si.z));
                 }
 
                 _datasets.Add(datasetS);
@@ -379,33 +384,12 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public void UpdateSystems(ref List<IData3DSet> _datasets , DateTime maxtime)     // modify this dataset
-        {
-            var ds = from dataset in _datasets where dataset.Name.Equals("stars") select dataset;
-            Data3DSetClass<PointData> datasetS = (Data3DSetClass<PointData>)ds.First();
-
-            _datasets.Remove(datasetS);
-
-            datasetS = Data3DSetClass<PointData>.Create("stars", MapColours.SystemDefault, 1.0f);
-
-            if (StarList != null)
-            {
-                foreach (ISystem si in StarList)
-                {
-                    if (si.population == 0 && si.CreateDate<maxtime)
-                        AddSystem(si, datasetS);
-                }
-                _datasets.Add(datasetS);
-            }
-        }
-
-
 
         private void AddVisitedSystemsInformation()
         {
             if (VisitedSystems != null && VisitedSystems.Any())
             {
-                ISystem lastknownps = LastKnownSystemPosition();
+                VisitedSystemsClass.SetLastKnownSystemPosition(VisitedSystems);
 
                 // For some reason I am unable to fathom this errors during the session after DBUpgrade8
                 // colours just resolves to an object reference not set error, but after a restart it works fine
@@ -437,11 +421,9 @@ namespace EDDiscovery2._3DMap
                             var datasetvs = Data3DSetClass<PointData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
                             foreach (VisitedSystemsClass sp in colour)
                             {
-                                ISystem star = SystemData.GetSystem(sp.Name);
-                                if (star != null && star.HasCoordinate)
+                                if ( sp.curSystem != null && sp.curSystem.HasCoordinate)
                                 {
-
-                                    AddSystem(star, datasetvs);
+                                    datasetvs.Add(new PointData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z));
                                 }
                             }
                             _datasets.Add(datasetvs);
@@ -451,6 +433,7 @@ namespace EDDiscovery2._3DMap
                 }
             }
         }
+
 
         // Planned change: Centered system will be marked but won't be "center" of the galaxy
         // dataset anymore. The origin will stay at Sol.
@@ -481,6 +464,7 @@ namespace EDDiscovery2._3DMap
             AddSystem("sol", dataset);
             AddSystem("sagittarius a*", dataset);
             AddSystem("CEECKIA ZQ-L C24-0", dataset);
+            AddSystem("Beagle Point", dataset);
             _datasets.Add(dataset);
             return _datasets;
         }
@@ -537,42 +521,12 @@ namespace EDDiscovery2._3DMap
 
         private void AddSystem(string systemName, Data3DSetClass<PointData> dataset)
         {
-            AddSystem(SystemData.GetSystem(systemName), dataset);
-        }
+            SystemClass system = SystemClass.GetSystem(systemName);
 
-        private void AddSystem(ISystem system, Data3DSetClass<PointData> dataset)
-        {
             if (system != null && system.HasCoordinate)
             {
                 dataset.Add(new PointData(system.x, system.y, system.z));
             }
-        }
-
-        private void AddSystem(SystemClassStarNames system, Data3DSetClass<PointData> dataset)
-        {
-            if (system != null)
-            {
-                dataset.Add(new PointData(system.x, system.y, system.z));
-            }
-        }
-
-        private ISystem LastKnownSystemPosition()
-        {
-            ISystem lastknownps = null;
-            foreach (VisitedSystemsClass ps in VisitedSystems)
-            {
-                if (ps.curSystem == null)
-                {
-                    ps.curSystem = SystemData.GetSystem(ps.Name);
-                }
-
-                if (ps.curSystem != null && ps.curSystem.HasCoordinate)
-                {
-                    ps.lastKnownSystem = lastknownps;
-                    lastknownps = ps.curSystem;
-                }
-            }
-            return lastknownps;
         }
 
         static public Bitmap DrawString(string str, Font fnt, int w, int h, Color textcolour)

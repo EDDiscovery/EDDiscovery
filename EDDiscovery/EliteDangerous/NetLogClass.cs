@@ -37,16 +37,12 @@ namespace EDDiscovery
         ConcurrentQueue<NetLogFileInfo> NetLogFileQueue = new ConcurrentQueue<NetLogFileInfo>();
         public event NetLogEventHandler OnNewPosition;
 
-        SQLiteDBClass db=null;
         public List<TravelLogUnit> tlUnits;
 
         public string GetNetLogPath()
         {
             try
             {
-                if (db == null)
-                    db = new SQLiteDBClass();
-
                 string netlogdirstored = EDDConfig.Instance.NetLogDir;
                 string datapath = null;
                 if (EDDConfig.Instance.NetLogDirAutoMode)
@@ -98,9 +94,6 @@ namespace EDDiscovery
                         EDDConfig.Instance.NetLogDirAutoMode = false;
                         datapath = newfi.DirectoryName;
                     }
-
-
-
                 }
                 else
                 {
@@ -480,7 +473,6 @@ namespace EDDiscovery
                 // Get TravelLogUnits;
                 travelogUnits = null;
                 TravelLogUnit tlUnit = null;
-                SQLiteDBClass db = new SQLiteDBClass();
 
                 int ii = 0;
 

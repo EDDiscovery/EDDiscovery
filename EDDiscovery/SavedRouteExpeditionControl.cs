@@ -37,11 +37,11 @@ namespace EDDiscovery
                 "Eok Gree TO-Q e5-3167",
                 "Pheia Briae DK-A e303",
                 "Greeroi MD-Q d6-5",
-                "Eactainds GN-W c1-6",
+                "Rendezvous Point",
                 "Oupailks BB-M c8-5",
                 "Qautheia BA-A e0",
                 "Cheae Eurl AA-A e0",
-                "Ceeckia ZQ-L c24-0"
+                "Beagle Point"
             )
             {
                 StartDate = new DateTime(2016, 1, 14, 20, 0, 0, DateTimeKind.Utc).ToLocalTime(),
@@ -70,7 +70,7 @@ namespace EDDiscovery
                 "Hyphielie GR-N d6-9",
                 "Cho Eur QY-S e3-2",
                 "Fleckia FI-Z d1-6",
-                "Ceeckia ZQ-L c24-0",
+                "Beagle Point",
                 "Myeia Thaa ZE-R d4-0",
                 "Syriae Thaa PJ-I d9-1",
                 "Pyrie Eurk QX-U e2-0",
@@ -114,8 +114,7 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            var db = new SQLiteDBClass();
-            _savedRoutes = db.GetAllSavedRoutes();
+            _savedRoutes = SavedRouteClass.GetAllSavedRoutes();
 
             foreach (var initroute in InitialRoutes)
             {
@@ -165,15 +164,7 @@ namespace EDDiscovery
             {
                 foreach (var sys in systems.Where(s => s != null))
                 {
-                    double dist;
-                    if (sys.HasCoordinate)
-                    {
-                        dist = SystemData.Distance(sys0, sys);
-                    }
-                    else
-                    {
-                        dist = DistanceClass.Distance(sys0, sys);
-                    }
+                    double dist = SystemClass.DistanceIncludeDB(sys0, sys);
 
                     if (dist > maxdist)
                     {
@@ -187,7 +178,7 @@ namespace EDDiscovery
 
         private SystemClass GetSystem(string sysname)
         {
-            SystemClass sys = SystemData.GetSystem(sysname);
+            SystemClass sys = SystemClass.GetSystem(sysname);
 
             if (sys == null)
             {
@@ -218,16 +209,7 @@ namespace EDDiscovery
 
                     if (sys != null && prevsys != null)
                     {
-                        double dist;
-                        if (sys.HasCoordinate && prevsys.HasCoordinate)
-                        {
-                            dist = SystemData.Distance(sys, prevsys);
-                        }
-                        else
-                        {
-                            dist = DistanceClass.Distance(sys, prevsys);
-                        }
-
+                        double dist = SystemClass.DistanceIncludeDB(sys, prevsys);
                         string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
                         dataGridViewRouteSystems[1, rowindex].Value = strdist;
                     }
@@ -238,8 +220,7 @@ namespace EDDiscovery
 
                 if (sys != null)
                 {
-                    string sysnote = sys.Note == null ? "" : sys.Note;
-                    dataGridViewRouteSystems[2, rowindex].Value = sysnote;
+                    dataGridViewRouteSystems[2, rowindex].Value = SystemNoteClass.GetSystemNoteOrEmpty(sys.name);
                 }
 
                 if (sys == null && sysname != "")
@@ -453,7 +434,7 @@ namespace EDDiscovery
                 var row = dataGridViewRouteSystems.Rows[e.RowIndex];
                 var cell = dataGridViewRouteSystems[e.ColumnIndex, e.RowIndex];
 
-                SystemClass sys = SystemData.GetSystem(sysname);
+                SystemClass sys = SystemClass.GetSystem(sysname);
 
                 if (sysname != "" && sys == null && !edsm.IsKnownSystem(sysname))
                 {
@@ -486,11 +467,7 @@ namespace EDDiscovery
 
             textbox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             textbox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            var items = new AutoCompleteStringCollection();
-
-            items.AddRange(SystemData.SystemList.OrderBy(s => s.name).Select(s => s.name).ToArray());
-
-            textbox.AutoCompleteCustomSource = items;
+            textbox.AutoCompleteCustomSource = _discoveryForm.SystemNames;
         }
 
         private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)

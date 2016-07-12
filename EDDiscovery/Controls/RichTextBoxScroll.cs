@@ -36,6 +36,9 @@ namespace ExtendedControls
         public RichTextBoxBack TextBox;                 // Use these with caution.
         public VScrollBarCustom ScrollBar;
 
+        public delegate void OnTextBoxChanged(object sender, EventArgs e);
+        public event OnTextBoxChanged TextBoxChanged;
+
         #region Public Functions
 
         public void Clear()
@@ -93,6 +96,7 @@ namespace ExtendedControls
             ScrollBar.Show();
             TextBox.VScroll += OnVscrollChanged;
             TextBox.MouseWheel += new MouseEventHandler(MWheel);        // richtextbox without scroll bars do not handle mouse wheels
+            TextBox.TextChanged += TextChangeEventHandler;
             ScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(OnScrollBarChanged);
         }
 
@@ -210,6 +214,12 @@ namespace ExtendedControls
                 ScrollBar.ValueLimited++;           // end is UserLimit, not maximum
 
             ScrollToBar();                          // go to scroll position
+        }
+
+        protected void TextChangeEventHandler(object sender, EventArgs e)
+        {
+            if ( TextBoxChanged!=null)
+                TextBoxChanged(this, new EventArgs());
         }
 
         #endregion

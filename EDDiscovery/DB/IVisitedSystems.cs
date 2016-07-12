@@ -4,11 +4,11 @@ namespace EDDiscovery2.DB
 {
     public interface IVisitedSystems
     {
-        int id { get; set; }
+        long id { get; set; }
         string Name { get; set; }
         DateTime Time { get; set; }
         int Commander { get; set; }
-        int Source { get; set; }
+        long Source { get; set; }
         string Unit { get; set; }
         bool EDSM_sync { get; set; }
         int MapColour { get; set; }

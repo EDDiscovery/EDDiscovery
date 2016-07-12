@@ -16,7 +16,6 @@ namespace EDDiscovery2
     public partial class Settings : UserControl
     {
         private EDDiscoveryForm _discoveryForm;
-        private SQLiteDBClass _db;
         private ThemeEditor themeeditor = null;
 
         public string MapHomeSystem { get { return textBoxHomeSystem.Text; } }
@@ -33,7 +32,6 @@ namespace EDDiscovery2
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            _db = new SQLiteDBClass();
 
             ResetThemeList();
             SetEntryThemeComboBox();
@@ -89,11 +87,11 @@ namespace EDDiscovery2
 #if DEBUG
             checkboxSkipSlowUpdates.Visible = true;
 #endif
-            textBoxHomeSystem.Text = _db.GetSettingString("DefaultMapCenter", "Sol");
+            textBoxHomeSystem.Text = SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol");
 
-            textBoxDefaultZoom.Text = _db.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
+            textBoxDefaultZoom.Text = SQLiteDBClass.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
 
-            bool selectionCentre = _db.GetSettingBool("CentreMapOnSelection", true);
+            bool selectionCentre = SQLiteDBClass.GetSettingBool("CentreMapOnSelection", true);
             if (selectionCentre)
             {
                 radioButtonHistorySelection.Checked = true;
@@ -114,9 +112,9 @@ namespace EDDiscovery2
         {
             EDDConfig.Instance.NetLogDirAutoMode = radioButton_Auto.Checked;
             EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
-            _db.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
-            _db.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
-            _db.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
+            SQLiteDBClass.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
+            SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
+            SQLiteDBClass.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
 
             EDDiscoveryForm.EDDConfig.UseDistances = checkBox_Distances.Checked;
             EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
@@ -124,13 +122,12 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
             EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
 
-            List <EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
             EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
             dataGridViewCommanders.DataSource = null;
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
             dataGridViewCommanders.Update();
         }
-
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -199,9 +196,17 @@ namespace EDDiscovery2
         {
             EDCommander cmdr = EDDiscoveryForm.EDDConfig.GetNewCommander();
             EDDiscoveryForm.EDDConfig.listCommanders.Add(cmdr);
-            dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
+            dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
+            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;   // can't solve it, TBD
             dataGridViewCommanders.Update();
+            _discoveryForm.TravelControl.LoadCommandersListBox();
+        }
+
+        private void dataGridViewCommanders_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
+            _discoveryForm.TravelControl.LoadCommandersListBox();
         }
 
         public void panel_defaultmapcolor_Click(object sender, EventArgs e)
@@ -213,7 +218,6 @@ namespace EDDiscovery2
             if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
             {
                 _discoveryForm.TravelControl.defaultMapColour = mapColorDialog.Color.ToArgb();
-                var db = new SQLiteDBClass();
                 EDDConfig.Instance.DefaultMapColour = _discoveryForm.TravelControl.defaultMapColour;
                 panel_defaultmapcolor.BackColor = Color.FromArgb(_discoveryForm.TravelControl.defaultMapColour);
             }
@@ -308,6 +312,11 @@ namespace EDDiscovery2
         private void checkBoxFocusNewSystem_CheckedChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
+        }
+
+        private void checkBox_Distances_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDiscoveryForm.EDDConfig.UseDistances = checkBox_Distances.Checked;
         }
     }
 }

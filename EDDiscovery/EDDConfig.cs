@@ -82,8 +82,6 @@ namespace EDDiscovery2
             { "NetlogDirAutoMode", () => { } }
         };
 
-        SQLiteDBClass _db = new SQLiteDBClass();
-
         private EDDConfig()
         {
             LogIndex = DateTime.Now.ToString("yyyyMMdd");
@@ -99,7 +97,7 @@ namespace EDDiscovery2
             set
             {
                 _useDistances = value;
-                _db.PutSettingBool("EDSMDistances", value);
+                SQLiteDBClass.PutSettingBool("EDSMDistances", value);
             }
         }
 
@@ -116,7 +114,7 @@ namespace EDDiscovery2
                 if (cmdr != null)
                 {
                     currentCmdrID = cmdr.index;
-                    _db.PutSettingInt("ActiveCommander", value);
+                    SQLiteDBClass.PutSettingInt("ActiveCommander", value);
                 }
             }
         }
@@ -146,7 +144,7 @@ namespace EDDiscovery2
             set
             {
                 _EDSMLog = value;
-                _db.PutSettingBool("EDSMLog", value);
+                SQLiteDBClass.PutSettingBool("EDSMLog", value);
             }
         }
 
@@ -159,7 +157,7 @@ namespace EDDiscovery2
             set
             {
                 _canSkipSlowUpdates = value;
-                _db.PutSettingBool("CanSkipSlowUpdates", value);
+                SQLiteDBClass.PutSettingBool("CanSkipSlowUpdates", value);
             }
         }
 
@@ -171,7 +169,7 @@ namespace EDDiscovery2
             set
             {
                 _orderrowsinverted = value;
-                _db.PutSettingBool("OrderRowsInverted", value);
+                SQLiteDBClass.PutSettingBool("OrderRowsInverted", value);
             }
         }
 
@@ -183,7 +181,7 @@ namespace EDDiscovery2
             set
             {
                 _focusOnNewSystem = value;
-                _db.PutSettingBool("FocusOnNewSystem", value);
+                SQLiteDBClass.PutSettingBool("FocusOnNewSystem", value);
             }
         }
 
@@ -198,22 +196,22 @@ namespace EDDiscovery2
 
         private bool GetSettingBool(string key)
         {
-            return GetSetting<bool>(key, _db.GetSettingBool);
+            return GetSetting<bool>(key, SQLiteDBClass.GetSettingBool);
         }
 
         private int GetSettingInt(string key)
         {
-            return GetSetting<int>(key, _db.GetSettingInt);
+            return GetSetting<int>(key, SQLiteDBClass.GetSettingInt);
         }
 
         private double GetSettingDouble(string key)
         {
-            return GetSetting<double>(key, _db.GetSettingDouble);
+            return GetSetting<double>(key, SQLiteDBClass.GetSettingDouble);
         }
 
         private string GetSettingString(string key)
         {
-            return GetSetting<string>(key, _db.GetSettingString);
+            return GetSetting<string>(key, SQLiteDBClass.GetSettingString);
         }
 
         private T GetSetting<T>(string key, Func<string,T,T> getter)
@@ -234,22 +232,22 @@ namespace EDDiscovery2
 
         private bool PutSettingBool(string key, bool value)
         {
-            return PutSetting<bool>(key, value, _db.PutSettingBool);
+            return PutSetting<bool>(key, value, SQLiteDBClass.PutSettingBool);
         }
 
         private bool PutSettingInt(string key, int value)
         {
-            return PutSetting<int>(key, value, _db.PutSettingInt);
+            return PutSetting<int>(key, value, SQLiteDBClass.PutSettingInt);
         }
 
         private bool PutSettingDouble(string key, double value)
         {
-            return PutSetting<double>(key, value, _db.PutSettingDouble);
+            return PutSetting<double>(key, value, SQLiteDBClass.PutSettingDouble);
         }
 
         private bool PutSettingString(string key, string value)
         {
-            return PutSetting<string>(key, value, _db.PutSettingString);
+            return PutSetting<string>(key, value, SQLiteDBClass.PutSettingString);
         }
 
         private bool PutSetting<T>(string key, T value, Func<string,T,bool> setter)
@@ -275,13 +273,13 @@ namespace EDDiscovery2
         {
             try
             {
-                _useDistances = _db.GetSettingBool("EDSMDistances", false);
-                _EDSMLog = _db.GetSettingBool("EDSMLog", false);
-                _canSkipSlowUpdates = _db.GetSettingBool("CanSkipSlowUpdates", false);
-                _orderrowsinverted = _db.GetSettingBool("OrderRowsInverted", false);
-                _focusOnNewSystem = _db.GetSettingBool("FocusOnNewSystem", false);
+                _useDistances = SQLiteDBClass.GetSettingBool("EDSMDistances", false);
+                _EDSMLog = SQLiteDBClass.GetSettingBool("EDSMLog", false);
+                _canSkipSlowUpdates = SQLiteDBClass.GetSettingBool("CanSkipSlowUpdates", false);
+                _orderrowsinverted = SQLiteDBClass.GetSettingBool("OrderRowsInverted", false);
+                _focusOnNewSystem = SQLiteDBClass.GetSettingBool("FocusOnNewSystem", false);
                 LoadCommanders();
-                int activecommander = _db.GetSettingInt("ActiveCommander", 0);
+                int activecommander = SQLiteDBClass.GetSettingInt("ActiveCommander", 0);
                 var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
                 if (cmdr != null)
                 {
@@ -304,21 +302,21 @@ namespace EDDiscovery2
             listCommanders.Clear();
 
             // Migrate old settigns.
-            string apikey =  _db.GetSettingString("EDSMApiKey", "");
-            string commanderName =  _db.GetSettingString("CommanderName", "");
+            string apikey =  SQLiteDBClass.GetSettingString("EDSMApiKey", "");
+            string commanderName =  SQLiteDBClass.GetSettingString("CommanderName", "");
 
            
            
 
-            EDCommander cmdr = new EDCommander(0, _db.GetSettingString("EDCommanderName0", commanderName),  _db.GetSettingString("EDCommanderApiKey0", apikey));
-            cmdr.NetLogPath = _db.GetSettingString("EDCommanderNetLogPath0", null);
+            EDCommander cmdr = new EDCommander(0, SQLiteDBClass.GetSettingString("EDCommanderName0", commanderName),  SQLiteDBClass.GetSettingString("EDCommanderApiKey0", apikey));
+            cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath0", null);
             listCommanders.Add(cmdr);
 
 
             for (int ii = 1; ii < 100; ii++)
             {
-                cmdr = new EDCommander(ii, _db.GetSettingString("EDCommanderName"+ii.ToString(), ""), _db.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
-                cmdr.NetLogPath = _db.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
+                cmdr = new EDCommander(ii, SQLiteDBClass.GetSettingString("EDCommanderName"+ii.ToString(), ""), SQLiteDBClass.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
+                cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
                 if (!cmdr.Name.Equals(""))
                     listCommanders.Add(cmdr);
             }
@@ -329,9 +327,9 @@ namespace EDDiscovery2
         {
             foreach (EDCommander cmdr in dictcmdr)
             {
-                _db.PutSettingString("EDCommanderName" + cmdr.Nr.ToString(), cmdr.Name);
-                _db.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);
-                _db.PutSettingString("EDCommanderNetLogPath" + cmdr.Nr.ToString(), cmdr.NetLogPath);
+                SQLiteDBClass.PutSettingString("EDCommanderName" + cmdr.Nr.ToString(), cmdr.Name);
+                SQLiteDBClass.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);
+                SQLiteDBClass.PutSettingString("EDCommanderNetLogPath" + cmdr.Nr.ToString(), cmdr.NetLogPath);
             }
 
             LoadCommanders();
@@ -339,7 +337,7 @@ namespace EDDiscovery2
 
         internal EDCommander GetNewCommander()
         {
-            int maxnr = 1;
+            int maxnr = 0;
             foreach (EDCommander cmdr in listCommanders)
             {
                 maxnr = Math.Max(cmdr.Nr, maxnr);

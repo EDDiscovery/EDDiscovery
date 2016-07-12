@@ -26,21 +26,18 @@ namespace EDDiscovery2.EDSM
 
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
-
-
+        private string EDSMDistancesFileName;
 
         public EDSMClass()
         {
             fromSoftware = "EDDiscovery";
             _serverAddress = "https://www.edsm.net/";
+            EDSMDistancesFileName = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
             var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
         }
-
-
-
-
+        
         public string SubmitDistances(string cmdr, string from, string to, double dist)
         {
             return SubmitDistances(cmdr, from, new Dictionary<string, double> { { to, dist } });
@@ -133,18 +130,16 @@ namespace EDDiscovery2.EDSM
 
         
 
-     public string RequestSystems(string date)
+        public string RequestSystems(string date)
         {
-            string query;
-            //string datestr = date.ToString("yyyy-MM-dd hh:mm:ss");
             DateTime dtDate = DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
             if (dtDate.Subtract(new DateTime(2015, 5, 10)).TotalDays < 0)
                 date = "2015-05-10 00:00:00";
 
-            query = "?startdatetime=" + HttpUtility.UrlEncode(date);
-            //json1= RequestGet("systems" + query + "&coords=1&submitted=1");
-            var response = RequestGet("api-v1/systems" + query + "&coords=1&submitted=1&known=1");
+            string query = "api-v1/systems" + "?startdatetime=" + HttpUtility.UrlEncode(date) + "&coords=1&submitted=1&known=1&showId=1";
+            var response = RequestGet(query);
+
             var data = response.Body;
             return response.Body;
         }
@@ -152,76 +147,56 @@ namespace EDDiscovery2.EDSM
         public string RequestDistances(string date)
         {
             string query;
-            query = "?startdatetime=" + HttpUtility.UrlEncode(date);
+            query = "?showId=1 & submitted=1 & startdatetime=" + HttpUtility.UrlEncode(date);
 
-            var response = RequestGet("api-v1/distances" + query + "coords=1 & submitted=1");
+            var response = RequestGet("api-v1/distances" + query );
             var data = response.Body;
             return response.Body;
         }
 
-
-
-        internal string GetNewSystems(SQLiteDBClass db)
+        public string GetEDSMDistances()            // download a file of distances..
         {
-            string json;
-            string date = "2010-01-01 00:00:00";
+            if (File.Exists(EDSMDistancesFileName))
+                File.Delete(EDSMDistancesFileName);
+            if (File.Exists(EDSMDistancesFileName + ".etag"))
+                File.Delete(EDSMDistancesFileName + ".etag");
+
+            if (EDDBClass.DownloadFile("https://www.edsm.net/dump/distances.json", EDSMDistancesFileName))
+                return EDSMDistancesFileName;
+            else
+                return null;
+        }
+        
+        internal long GetNewSystems()
+        {
             string lstsyst;
-
-            string retstr = "";
-
-
-            Application.DoEvents();
-
-            db.GetAllSystems();
-
-            //if (lstsys)
-
 
             DateTime NewSystemTime;
 
-            if (SQLiteDBClass.globalSystems == null || SQLiteDBClass.globalSystems.Count ==0)
+            if (SystemClass.GetTotalSystems() == 0)
             {
                 lstsyst = "2010-01-01 00:00:00";
             }
             else
             {
-                NewSystemTime = SQLiteDBClass.globalSystems.Max(x => x.UpdateDate);
+                NewSystemTime = SystemClass.GetLastSystemEntryTime();
                 lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                lstsyst = db.GetSettingString("EDSMLastSystems", lstsyst);
+                lstsyst = SQLiteDBClass.GetSettingString("EDSMLastSystems", lstsyst);
                 DateTime lstsystdate;
 
                 if (lstsyst.Equals("2010-01-01 00:00:00") || !DateTime.TryParseExact(lstsyst, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out lstsystdate))
                     lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-
-
             }
-            json = RequestSystems(lstsyst);
 
+            Console.WriteLine("EDSM Check date" + lstsyst);
 
-            List<SystemClass> listNewSystems = SystemClass.ParseEDSM(json, ref date);
+            string json = RequestSystems(lstsyst);
 
+            string date = "2010-01-01 00:00:00";
+            long updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date , false);
+            SQLiteDBClass.PutSettingString("EDSMLastSystems", date);
 
-
-            List<SystemClass> systems2Store = new List<SystemClass>();
-
-            foreach (SystemClass system in listNewSystems)
-            {
-                // Check if sys exists first
-                SystemClass sys = SystemData.GetSystem(system.name);
-                if (sys == null)
-                    systems2Store.Add(system);
-                else if (!sys.name.Equals(system.name) || sys.x != system.x || sys.y != system.y || sys.z != system.z)  // Case or position changed
-                    systems2Store.Add(system);
-            }
-            SystemClass.Store(systems2Store);
-
-            retstr = systems2Store.Count.ToString() + " new systems from EDSM." + Environment.NewLine;
-            Application.DoEvents();
-
-
-            db.PutSettingString("EDSMLastSystems", date);
-
-            return retstr;
+            return updates;
         }
 
 
@@ -231,7 +206,7 @@ namespace EDDiscovery2.EDSM
             {
                 string edsmhiddensystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmhiddensystems.json");
                 bool newfile = false;
-                EDDBClass.DownloadFile("https://www.edsm.net/api-v1/hidden-systems", edsmhiddensystems, out newfile);
+                EDDBClass.DownloadFile("https://www.edsm.net/api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
                 string json = EDDiscovery.EDDiscoveryForm.LoadJsonFile(edsmhiddensystems);
 
@@ -319,8 +294,6 @@ namespace EDDiscovery2.EDSM
 
         public string GetComments(DateTime starttime)
         {
-            SQLiteDBClass db = new SQLiteDBClass();
-
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query);

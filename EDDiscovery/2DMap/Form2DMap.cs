@@ -1,6 +1,7 @@
 ﻿using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
+using EMK.LightGeometry;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,24 +17,22 @@ namespace EDDiscovery2
 {
     public partial class FormSagCarinaMission : Form
     {
-        public List<FGEImage> fgeimages = new List<FGEImage>();
+        public List<FGEImage> fgeimages;
         private FGEImage currentFGEImage;
         public readonly EDDiscoveryForm _eddiscoveryForm;
-        //        private Bitmap currentImage;
-
+        
         private DateTime startDate, endDate;
         public bool Test = false;
 
         private DateTimePicker pickerStart, pickerStop;
         ToolStripControlHost host1, host2;
+        List<Point3D> starpositions = null;
 
         public bool Nowindowreposition { get; set; } = false;
-        SQLiteDBClass db;
 
         public FormSagCarinaMission(EDDiscoveryForm frm)
         {
             _eddiscoveryForm = frm;
-            db = new SQLiteDBClass();
             InitializeComponent();
         }
 
@@ -41,13 +40,13 @@ namespace EDDiscovery2
         bool initdone = false;
         private void FormSagCarinaMission_Load(object sender, EventArgs e)
         {
-            var top = db.GetSettingInt("Map2DFormTop", -1);
+            var top = SQLiteDBClass.GetSettingInt("Map2DFormTop", -1);
 
             if (top >= 0 && Nowindowreposition == false)
             {
-                var left = db.GetSettingInt("Map2DFormLeft", 0);
-                var height = db.GetSettingInt("Map2DFormHeight", 800);
-                var width = db.GetSettingInt("Map2DFormWidth", 800);
+                var left = SQLiteDBClass.GetSettingInt("Map2DFormLeft", 0);
+                var height = SQLiteDBClass.GetSettingInt("Map2DFormHeight", 800);
+                var width = SQLiteDBClass.GetSettingInt("Map2DFormWidth", 800);
                 this.Location = new Point(left, top);
                 this.Size = new Size(width, height);
                 //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
@@ -62,10 +61,8 @@ namespace EDDiscovery2
             toolStrip1.Items.Add(host2);
             pickerStart.Value = DateTime.Today.AddMonths(-1);
 
-
             this.pickerStart.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged);
             this.pickerStop.ValueChanged += new System.EventHandler(this.dateTimePickerStop_ValueChanged);
-
 
             startDate = new DateTime(2010, 1, 1);
             AddImages();
@@ -87,28 +84,26 @@ namespace EDDiscovery2
         {
             if (Visible)
             {
-                db.PutSettingInt("Map2DFormWidth", this.Width);
-                db.PutSettingInt("Map2DFormHeight", this.Height);
-                db.PutSettingInt("Map2DFormTop", this.Top);
-                db.PutSettingInt("Map2DFormLeft", this.Left);
+                SQLiteDBClass.PutSettingInt("Map2DFormWidth", this.Width);
+                SQLiteDBClass.PutSettingInt("Map2DFormHeight", this.Height);
+                SQLiteDBClass.PutSettingInt("Map2DFormTop", this.Top);
+                SQLiteDBClass.PutSettingInt("Map2DFormLeft", this.Left);
                 //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
+            imageViewer1.Image.Dispose();
+            imageViewer1.Image = null;
+            fgeimages = null;
+            starpositions = null;
+            GC.Collect();
         }
-
-
-        private void LoadImages(string datapath)
-        {
-            fgeimages = FGEImage.LoadImages(datapath);
-        }
-
-
 
         private void AddImages()
         {
+            fgeimages = new List<FGEImage>();
             string datapath = Path.Combine(Tools.GetAppDataDirectory(), "Maps");
             if (Directory.Exists(datapath))
             {
-                LoadImages(datapath);
+                fgeimages = FGEImage.LoadImages(datapath);
                 fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
             }
         }
@@ -137,15 +132,6 @@ namespace EDDiscovery2
                 return;
 
             DateTime start = startDate;
-
-            foreach (var sys in _eddiscoveryForm.TravelControl.visitedSystems)
-            {
-                if (sys.curSystem == null)
-                {
-                    sys.curSystem = SystemData.GetSystem(sys.Name);
-
-                }
-            }
 
             int currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
@@ -181,20 +167,19 @@ namespace EDDiscovery2
 
         private void DrawStars()
         {
-            var _starList = SQLiteDBClass.globalSystems;
+            if ( starpositions == null )
+                starpositions = SystemClass.GetStarPositions();
+
             Pen pen = new Pen(Color.White, 2);
             Graphics gfx = Graphics.FromImage(imageViewer1.Image);
 
-            foreach (SystemClass si in _starList)
+            foreach (Point3D si in starpositions)
             {
-                if (si.HasCoordinate)
-                {
-                    DrawPoint(gfx, pen, si, si);
-                }
+                DrawPoint(gfx, pen, si.X,si.Z );
             }
+
             pen = new Pen(Color.White, 2);
         }
-
 
         private void DrawLine(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
         {
@@ -205,7 +190,12 @@ namespace EDDiscovery2
         {
             Point point = Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.x, (int)sys1.z)));
             gfx.FillRectangle(pen.Brush, point.X, point.Y, 1, 1);
+        }
 
+        private void DrawPoint(Graphics gfx, Pen pen, double x, double z)
+        {
+            Point point = Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)x, (int)z)));
+            gfx.FillRectangle(pen.Brush, point.X, point.Y, 1, 1);
         }
 
         private void TestGrid(Graphics gfx)

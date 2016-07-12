@@ -49,7 +49,7 @@ namespace EDDiscovery2.Trilateration
         {
             this.refSys = refsys;
             Azimuth = Math.Atan2(refSys.y - EstimatedPosition.y, refSys.x - EstimatedPosition.x);
-            Distance = SystemData.Distance(refSys, EstimatedPosition);
+            Distance = SystemClass.Distance(refSys, EstimatedPosition);
             Altitude= Math.Acos((refSys.z-EstimatedPosition.z)/Distance);
         }
 

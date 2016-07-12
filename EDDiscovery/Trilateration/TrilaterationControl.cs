@@ -41,7 +41,6 @@ namespace EDDiscovery
             _discoveryForm = discoveryForm;
             FreezeTrilaterationUI();
             edsm = new EDSMClass();
-            var db = new SQLiteDBClass();
             edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
             edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
             SetTriStatus("Press Start New");
@@ -58,6 +57,7 @@ namespace EDDiscovery
             if (TargetSystem == null) return;
 
             textBoxSystemName.Text = TargetSystem.name;
+
             if (TargetSystem.HasCoordinate)
             {
                 textBoxCoordinateX.Text = TargetSystem.x.ToString();
@@ -111,18 +111,7 @@ namespace EDDiscovery
 
                 textbox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 textbox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                var items = new AutoCompleteStringCollection();
-
-                var enteredSystems = GetEnteredSystems();
-                items.AddRange((
-                    from s
-                    in SystemData.SystemList
-                    where s.HasCoordinate && (s.name == textbox.Text || enteredSystems.Where(lu => lu.name == s.name).Count() == 0)
-                    orderby s.name ascending
-                    select s.name
-                ).ToArray());
-
-                textbox.AutoCompleteCustomSource = items;
+                textbox.AutoCompleteCustomSource = _discoveryForm.SystemNames;  // had to simplify this..  previously had it making it up dynamically from global system data.
             }
             catch (Exception ex)
             {
@@ -149,7 +138,7 @@ namespace EDDiscovery
                         return;
                     }
 
-                    var system = SystemData.GetSystem(value);
+                    var system = SystemClass.GetSystem(value);
                     var enteredSystems = GetEnteredSystems();
                     if (cell.Value != null)
                     {
@@ -198,7 +187,7 @@ namespace EDDiscovery
          * it creates a new System entity, otherwise logs it and returns null. */
         private SystemClass getSystemForTrilateration(string systemName)
         {
-            var system = SystemData.GetSystem(systemName);
+            var system = SystemClass.GetSystem(systemName);
 
             if (system == null)
             {
@@ -387,8 +376,8 @@ namespace EDDiscovery
                    {
                        SystemClass s1, s2, s3;
 
-                       s1 = SystemData.GetSystem("Sol");
-                       s2 = SystemData.GetSystem("Sagittarius A*");
+                       s1 = SystemClass.GetSystem("Sol");
+                       s2 = SystemClass.GetSystem("Sagittarius A*");
                        s3 = new SystemClass();
 
                        s3.x = trilaterationResult.Coordinate.X;
@@ -396,7 +385,7 @@ namespace EDDiscovery
                        s3.z = trilaterationResult.Coordinate.Z;
 
                        LogTextSuccess("Trilateration successful (" + spentTimeString + "), exact coordinates found." + Environment.NewLine);
-                       LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + " Sol: " + SystemData.Distance(s1, s3).ToString("0.0") + " Sag A* " + SystemData.Distance(s2, s3).ToString("0.0") + Environment.NewLine);
+                       LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + " Sol: " + SystemClass.Distance(s1, s3).ToString("0.0") + " Sag A* " + SystemClass.Distance(s2, s3).ToString("0.0") + Environment.NewLine);
                        SetTriStatusSuccess("Success, coordinates found!");
                    });
                 }
@@ -586,7 +575,7 @@ namespace EDDiscovery
         {
             dataGridViewSuggestedSystems.Rows.Clear();
         }
-
+        
         private void PopulateSuggestedSystems()
         {
             var lastKnown = LastKnownSystem;
@@ -610,13 +599,15 @@ namespace EDDiscovery
         private void PopulateSuggestedSystems(ICollection<string> suggestedSystems)
         {
             dataGridViewSuggestedSystems.Rows.Clear();
-            foreach (var system in SystemData.SystemList)
+
+            foreach (string name in _discoveryForm.SystemNames)
             {
-                if (!suggestedSystems.Contains(system.name))
+                if (!suggestedSystems.Contains(name))
                 {
-                    continue;
+                    SystemClass v = SystemClass.GetSystem(name);
+                    if (v != null)
+                        AddSuggestedSystem(v);
                 }
-                AddSuggestedSystem(system);
             }
         }
 
@@ -631,7 +622,7 @@ namespace EDDiscovery
                         return; 
             }
 
-                var index = dataGridViewSuggestedSystems.Rows.Add(system.name);
+            var index = dataGridViewSuggestedSystems.Rows.Add(system.name + " (" + system.x.ToString("0.00") + "," + system.y.ToString("0.00") + "," + system.z.ToString("0.00") +")");
             dataGridViewSuggestedSystems[0, index].Tag = system;
         }
 
@@ -646,13 +637,13 @@ namespace EDDiscovery
 
         private void PopulateLocalWantedSystems()
         {
-            var db = new SQLiteDBClass();
-            wanted = db.GetAllWantedSystems();
+            wanted = WantedSystemClass.GetAllWantedSystems();
+
             if (wanted != null && wanted.Any())
             {
                 foreach (WantedSystemClass sys in wanted)
                 {
-                    SystemClass star = SystemData.GetSystem(sys.system);
+                    SystemClass star = SystemClass.GetSystem(sys.system);
                     if (star == null)
                         star = new SystemClass(sys.system);
 
@@ -676,7 +667,7 @@ namespace EDDiscovery
 
                 foreach (String system in systems)
                 {
-                    SystemClass star = SystemData.GetSystem(system);
+                    SystemClass star = SystemClass.GetSystem(system);
                     if (star == null)
                         star = new SystemClass(system);
 
@@ -697,37 +688,6 @@ namespace EDDiscovery
                 }));
             }
         }
-
-        //private void PopulateClosestSystems()
-        //{
-        //    // TODO: in future, we want this to be "predicted" by the direction and distances
-
-        //    var lastKnown = LastKnownSystem;
-
-        //    if (lastKnown == null)
-        //    {
-        //        return;
-        //    }
-
-        //    //labelLastKnownSystem.Text = lastKnown.name;
-
-        //    var closest = (from systems
-        //                   in SystemData.SystemList
-        //                   where systems != lastKnown && systems.HasCoordinate
-        //                   select new
-        //                   {
-        //                       System = systems,
-        //                       Distance = Math.Sqrt(Math.Pow(lastKnown.x - systems.x, 2) + Math.Pow(lastKnown.y - systems.y, 2) + Math.Pow(lastKnown.z - systems.z, 2))
-        //                   })
-        //                  .OrderBy(c => c.Distance)
-        //                  .Take(30);
-
-        //    foreach (var item in closest)
-        //    {
-        //        var index = dataGridViewClosestSystems.Rows.Add(item.System.name, Math.Round(item.Distance, 2).ToString("0.00") + " Ly");
-        //        dataGridViewClosestSystems[0, index].Tag = item.System;
-        //    }
-        //}
 
         public ISystem LastKnownSystem
         {
@@ -1113,7 +1073,7 @@ namespace EDDiscovery
                 if (!oldSystem.HasCoordinate)
                 {
                     var value = systemCell.Value as string;
-                    var newSystem = SystemData.GetSystem(value);
+                    var newSystem = SystemClass.GetSystem(value);
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
@@ -1227,7 +1187,7 @@ namespace EDDiscovery
             {
                 WantedSystemClass toAdd = new WantedSystemClass(sysName);
                 wanted.Add(toAdd);
-                SystemClass star = SystemData.GetSystem(sysName);
+                SystemClass star = SystemClass.GetSystem(sysName);
                 if (star == null)
                     star = new SystemClass(sysName);
 

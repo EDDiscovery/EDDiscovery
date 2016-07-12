@@ -1,7 +1,7 @@
 Help for 3D star Map.
 
 Keyboard:
-	WASD	Move forward, left, back, right 
+	WASD	Move forward, left, back, right (use Shift to increase speed by 2)
 	Arrow Pad	Move forward, left, back, right 
 	RF	Move up and down
 	+ or Z	Zoom in
@@ -17,7 +17,7 @@ Keyboard:
 Mouse:
 	Move Mouse	Over star to get its information in a popup.
 	Left Button	Select star (either star or bookmark associated with a star)
-	Right Button	Update or add bookmark
+	Right Button	Update or add bookmark, or find information on region mark.
 	Double Click Left	Center on selected star
 	Left Hold	Pitch up/down
 	Right Hold	Go up/down (Y)
@@ -34,9 +34,10 @@ Toolbar (from left):
 	Grid	Turn on/off coarse grid
 	Fine Grid	Turn on/off fine grid
 	10,21	Turn on/off grid coordinates
+	Perspective mode	Turn on/off perspective mode.  Perspective mode allows you to fly through the galaxy anywhere.
 	Elite Movement	Turn on/off Elite movement - keep Y the same as you travel. Useful in perspective mode only.
 	Galaxy	Display galaxy maps
-	Filter	Filter by expedition dates
+	Filter	Filter travel by expedition dates
 	?	This help
 	Star Entry	Entry box to find specific star (hit return to center)
 	Centre	Alternatively, hit this to center what is in the star entry box
@@ -45,5 +46,5 @@ Toolbar (from left):
 	Yellow Dot	Show current centered system 
 	Orange Dot	Show selected system (by left mouse click).  
 		Double click to make it centered system. 
-		Right click for information and EDSM option
+		Right click for information and EDSM information (in a web browser tab).
 
