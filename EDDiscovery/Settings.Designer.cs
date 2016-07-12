@@ -322,6 +322,7 @@
             this.checkBox_Distances.Text = "Get Distance Pairs from EDSM (Optional)";
             this.checkBox_Distances.TickBoxReductionSize = 10;
             this.checkBox_Distances.UseVisualStyleBackColor = true;
+            this.checkBox_Distances.CheckedChanged += new System.EventHandler(this.checkBox_Distances_CheckedChanged);
             // 
             // checkBoxOrderRowsInverted
             // 
