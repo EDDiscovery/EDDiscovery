@@ -102,23 +102,12 @@ namespace EDDiscovery.DB
     public static class SQLiteDBClass
     {
         #region Private properties / fields
-        private static DbProviderFactory _factory;
         private static Object lockDBInit = new Object();                    // lock to sequence construction
         private static string constring;                                           // connection string to use..
         #endregion
 
         #region Public properties
-        public static DbProviderFactory DbFactory
-        {
-            get
-            {
-                if (_factory == null)
-                {
-                    _factory = GetSqliteProviderFactory();
-                }
-                return _factory;
-            }
-        }
+        public static DbProviderFactory DbFactory { get; private set; }
         #endregion
 
         #region Database Initialization
@@ -126,6 +115,8 @@ namespace EDDiscovery.DB
         {
             string dbfile = GetSQLiteDBFile();
             constring = "Data Source=" + dbfile + ";Pooling=true;";
+            DbFactory = GetSqliteProviderFactory();
+
             try
             {
                 bool fileexist = File.Exists(dbfile);
@@ -496,7 +487,7 @@ namespace EDDiscovery.DB
         {
             lock (lockDBInit)                                           // one at a time chaps
             {
-                if (_factory == null)                                        // first one to ask for a connection sets the db up
+                if (DbFactory == null)                                        // first one to ask for a connection sets the db up
                 {
                     InitializeDatabase();
                 }
