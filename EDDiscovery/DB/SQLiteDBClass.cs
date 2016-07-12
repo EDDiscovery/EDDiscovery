@@ -11,54 +11,6 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.DB
 {
-    public static class SQLiteDBExtensions
-    {
-        public static void AddParameterWithValue(this DbCommand cmd, string name, object val)
-        {
-            var par = cmd.CreateParameter();
-            par.ParameterName = name;
-            par.Value = val;
-            cmd.Parameters.Add(par);
-        }
-
-        public static void AddParameter(this DbCommand cmd, string name, DbType type)
-        {
-            var par = cmd.CreateParameter();
-            par.ParameterName = name;
-            par.DbType = type;
-            cmd.Parameters.Add(par);
-        }
-
-        public static void SetParameterValue(this DbCommand cmd, string name, object val)
-        {
-            cmd.Parameters[name].Value = val;
-        }
-
-        public static DbDataAdapter CreateDataAdapter(this DbCommand cmd)
-        {
-            DbDataAdapter da = SQLiteDBClass.DbFactory.CreateDataAdapter();
-            da.SelectCommand = cmd;
-            return da;
-        }
-
-        public static DbCommand CreateCommand(this DbConnection conn, string query)
-        {
-            DbCommand cmd = conn.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandTimeout = 30;
-            cmd.CommandText = query;
-            return cmd;
-        }
-
-        public static DbCommand CreateCommand(this DbConnection conn, string query, DbTransaction transaction)
-        {
-            DbCommand cmd = conn.CreateCommand(query);
-            cmd.Transaction = transaction;
-            return cmd;
-        }
-    }
-
-
     public class SQLiteConnectionED : IDisposable              // USE this for connections.. 
     {
         //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
@@ -104,10 +56,7 @@ namespace EDDiscovery.DB
         #region Private properties / fields
         private static Object lockDBInit = new Object();                    // lock to sequence construction
         private static string constring;                                           // connection string to use..
-        #endregion
-
-        #region Public properties
-        public static DbProviderFactory DbFactory { get; private set; }
+        private static DbProviderFactory DbFactory;
         #endregion
 
         #region Database Initialization
@@ -547,6 +496,52 @@ namespace EDDiscovery.DB
                 System.Diagnostics.Debug.WriteLine("SqlNonQuery Exception: " + ex.Message);
                 throw;
             }
+        }
+        #endregion
+
+        #region Extension Methods
+        public static void AddParameterWithValue(this DbCommand cmd, string name, object val)
+        {
+            var par = cmd.CreateParameter();
+            par.ParameterName = name;
+            par.Value = val;
+            cmd.Parameters.Add(par);
+        }
+
+        public static void AddParameter(this DbCommand cmd, string name, DbType type)
+        {
+            var par = cmd.CreateParameter();
+            par.ParameterName = name;
+            par.DbType = type;
+            cmd.Parameters.Add(par);
+        }
+
+        public static void SetParameterValue(this DbCommand cmd, string name, object val)
+        {
+            cmd.Parameters[name].Value = val;
+        }
+
+        public static DbDataAdapter CreateDataAdapter(this DbCommand cmd)
+        {
+            DbDataAdapter da = DbFactory.CreateDataAdapter();
+            da.SelectCommand = cmd;
+            return da;
+        }
+
+        public static DbCommand CreateCommand(this DbConnection conn, string query)
+        {
+            DbCommand cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandTimeout = 30;
+            cmd.CommandText = query;
+            return cmd;
+        }
+
+        public static DbCommand CreateCommand(this DbConnection conn, string query, DbTransaction transaction)
+        {
+            DbCommand cmd = conn.CreateCommand(query);
+            cmd.Transaction = transaction;
+            return cmd;
         }
         #endregion
 
