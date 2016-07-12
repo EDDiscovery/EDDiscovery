@@ -703,6 +703,13 @@ namespace EDDiscovery.DB
                 return GetWindowsSqliteProviderFactory();
             }
 
+            var factory = GetMonoSqliteProviderFactory();
+
+            if (DbFactoryWorks(factory))
+            {
+                return factory;
+            }
+
             throw new InvalidOperationException("Unable to get a working Sqlite driver");
         }
 
@@ -717,6 +724,41 @@ namespace EDDiscovery.DB
             catch
             {
                 return false;
+            }
+        }
+
+        private static bool DbFactoryWorks(DbProviderFactory factory)
+        {
+            if (factory != null)
+            {
+                try
+                {
+                    using (var conn = factory.CreateConnection())
+                    {
+                        conn.ConnectionString = constring;
+                        conn.Open();
+                        return true;
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
+        }
+
+        private static DbProviderFactory GetMonoSqliteProviderFactory()
+        {
+            try
+            {
+                var asm = System.Reflection.Assembly.LoadWithPartialName("Mono.Data.Sqlite");
+                var factorytype = asm.GetType("Mono.Data.Sqlite.SqliteFactory");
+                return (DbProviderFactory)factorytype.GetConstructor(new Type[0]).Invoke(new object[0]);
+            }
+            catch
+            {
+                return null;
             }
         }
 
