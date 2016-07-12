@@ -101,7 +101,13 @@ namespace EDDiscovery.DB
 
     public static class SQLiteDBClass
     {
+        #region Private properties / fields
         private static DbProviderFactory _factory;
+        private static Object lockDBInit = new Object();                    // lock to sequence construction
+        private static string constring;                                           // connection string to use..
+        #endregion
+
+        #region Public properties
         public static DbProviderFactory DbFactory
         {
             get
@@ -113,25 +119,9 @@ namespace EDDiscovery.DB
                 return _factory;
             }
         }
+        #endregion
 
-        public static DbConnection CreateCN()
-        {
-            lock (lockDBInit)                                           // one at a time chaps
-            {
-                if (_factory == null)                                        // first one to ask for a connection sets the db up
-                {
-                    InitializeDatabase();
-                }
-            }
-
-            DbConnection cn = DbFactory.CreateConnection();
-            cn.ConnectionString = constring;
-            return cn;
-        }
-
-        private static Object lockDBInit = new Object();                    // lock to sequence construction
-        private static string constring;                                           // connection string to use..
-
+        #region Database Initialization
         private static void InitializeDatabase()
         {
             string dbfile = GetSQLiteDBFile();
@@ -421,7 +411,23 @@ namespace EDDiscovery.DB
                 PutSettingString("EDSCLastDist", "2010-01-01 00:00:00", conn);                // force distances
             });
         }
+        #endregion
 
+        #region Database access
+        public static DbConnection CreateCN()
+        {
+            lock (lockDBInit)                                           // one at a time chaps
+            {
+                if (_factory == null)                                        // first one to ask for a connection sets the db up
+                {
+                    InitializeDatabase();
+                }
+            }
+
+            DbConnection cn = DbFactory.CreateConnection();
+            cn.ConnectionString = constring;
+            return cn;
+        }
 
         ///----------------------------
         /// STATIC code helpers for other DB classes
@@ -473,7 +479,9 @@ namespace EDDiscovery.DB
                 throw;
             }
         }
+        #endregion
 
+        #region Settings
         ///----------------------------
         /// STATIC functions for discrete values
 
@@ -815,6 +823,6 @@ namespace EDDiscovery.DB
                 return false;
             }
         }
-
+        #endregion
     }
 }
