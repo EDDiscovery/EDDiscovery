@@ -1009,61 +1009,63 @@ namespace EDDiscovery.DB
             {
                 int c = 0;
 
-                using (DbCommand cmd = cn.CreateCommand("select * from Systems where id_edsm = @id_edsm limit 1"))   // 1 return matching EDSM ID
+                try
                 {
-
-                    int lasttc = Environment.TickCount;
-
-                    while (jr.Read())
+                    using (DbCommand cmd = cn.CreateCommand("select * from Systems where id_edsm = @id_edsm limit 1"))   // 1 return matching EDSM ID
                     {
-                        if (jr.TokenType == JsonToken.StartObject)
+                        int lasttc = Environment.TickCount;
+
+                        while (jr.Read())
                         {
-                            JObject jo = JObject.Load(jr);
-
-                            SystemClass system = new SystemClass(jo, EDDiscovery2.DB.SystemInfoSource.EDSM);
-
-                            if (system.UpdateDate.Subtract(maxdate).TotalSeconds > 0)
-                                maxdate = system.UpdateDate;
-
-                            if (++c % 10000 == 0)
+                            if (jr.TokenType == JsonToken.StartObject)
                             {
-                                Console.WriteLine("EDSM Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newsys " + newsystems.Count + " update " + toupdate.Count());
-                                lasttc = Environment.TickCount;
-                            }
+                                JObject jo = JObject.Load(jr);
 
-                            if (system.HasCoordinate)
-                            {
-                                if (emptydatabase)      // if no database, just add immediately
+                                SystemClass system = new SystemClass(jo, EDDiscovery2.DB.SystemInfoSource.EDSM);
+
+                                if (system.UpdateDate.Subtract(maxdate).TotalSeconds > 0)
+                                    maxdate = system.UpdateDate;
+
+                                if (++c % 10000 == 0)
                                 {
-                                    //Console.WriteLine("Empty database Add new system " + system.name);
-                                    newsystems.Add(system);
+                                    Console.WriteLine("EDSM Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newsys " + newsystems.Count + " update " + toupdate.Count());
+                                    lasttc = Environment.TickCount;
                                 }
-                                else
+
+                                if (system.HasCoordinate)
                                 {
-                                    cmd.Parameters.Clear();
-                                    cmd.AddParameterWithValue("id_edsm", system.id_edsm);
-
-                                    using (DbDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
+                                    if (emptydatabase)      // if no database, just add immediately
                                     {
-                                        if (reader1.Read())                                          // its there..
-                                        {
-                                            SystemClass dbsys = new SystemClass(reader1);
-                                            // see if EDSM data changed..
-                                            if (!dbsys.name.Equals(system.name) || Math.Abs(dbsys.x - system.x) > 0.01 || Math.Abs(dbsys.y - system.y) > 0.01 || Math.Abs(dbsys.z - system.z) > 0.01)  // name or position changed
-                                            {
-                                                dbsys.x = system.x;
-                                                dbsys.y = system.y;
-                                                dbsys.z = system.z;
-                                                dbsys.name = system.name;
+                                        //Console.WriteLine("Empty database Add new system " + system.name);
+                                        newsystems.Add(system);
+                                    }
+                                    else
+                                    {
+                                        cmd.Parameters.Clear();
+                                        cmd.AddParameterWithValue("id_edsm", system.id_edsm);
 
-                                                //Console.WriteLine("Update " + dbsys.id + " due to pos or case " + dbsys.name);
-                                                toupdate.Add(dbsys);
-                                            }
-                                        }
-                                        else                                                                  // not in database..
+                                        using (DbDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
                                         {
-                                            //Console.WriteLine("Add new system " + system.name);
-                                            newsystems.Add(system);
+                                            if (reader1.Read())                                          // its there..
+                                            {
+                                                SystemClass dbsys = new SystemClass(reader1);
+                                                // see if EDSM data changed..
+                                                if (!dbsys.name.Equals(system.name) || Math.Abs(dbsys.x - system.x) > 0.01 || Math.Abs(dbsys.y - system.y) > 0.01 || Math.Abs(dbsys.z - system.z) > 0.01)  // name or position changed
+                                                {
+                                                    dbsys.x = system.x;
+                                                    dbsys.y = system.y;
+                                                    dbsys.z = system.z;
+                                                    dbsys.name = system.name;
+
+                                                    //Console.WriteLine("Update " + dbsys.id + " due to pos or case " + dbsys.name);
+                                                    toupdate.Add(dbsys);
+                                                }
+                                            }
+                                            else                                                                  // not in database..
+                                            {
+                                                //Console.WriteLine("Add new system " + system.name);
+                                                newsystems.Add(system);
+                                            }
                                         }
                                     }
                                 }
@@ -1071,6 +1073,8 @@ namespace EDDiscovery.DB
                         }
                     }
                 }
+                catch           // any errors abort
+                { }
             }
 
             using (SQLiteConnectionED cn2 = new SQLiteConnectionED())  // open the db

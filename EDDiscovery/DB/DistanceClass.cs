@@ -365,56 +365,62 @@ namespace EDDiscovery.DB
 
                 int lasttc = Environment.TickCount;
 
-                while (jr.Read())
+                try
                 {
-                    if (jr.TokenType == JsonToken.StartObject)
+
+                    while (jr.Read())
                     {
-                        JObject jo = JObject.Load(jr);
-
-                        DistanceClass dc = new DistanceClass(jo);
-
-                        if (dc.CreateTime.Subtract(maxdate).TotalSeconds > 0)
-                            maxdate = dc.CreateTime;
-
-                        if (++c % 10000 == 0)
+                        if (jr.TokenType == JsonToken.StartObject)
                         {
-                            Console.WriteLine("Dist Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newpairs " + newpairs.Count + " update " + toupdate.Count());
-                            lasttc = Environment.TickCount;
-                        }
+                            JObject jo = JObject.Load(jr);
 
-                        if (emptydatabase)                                                  // empty DB, just store..
-                        {
-                            newpairs.Add(dc);
-                        }
-                        else
-                        {
-                            cmd.Parameters.Clear();
-                            cmd.AddParameterWithValue("id", dc.id_edsm);
+                            DistanceClass dc = new DistanceClass(jo);
 
-                            using (DbDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
+                            if (dc.CreateTime.Subtract(maxdate).TotalSeconds > 0)
+                                maxdate = dc.CreateTime;
+
+                            if (++c % 10000 == 0)
                             {
-                                if (reader1.Read())                                          // its there..
-                                {
-                                    DistanceClass dbdc = new DistanceClass(reader1);
+                                Console.WriteLine("Dist Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newpairs " + newpairs.Count + " update " + toupdate.Count());
+                                lasttc = Environment.TickCount;
+                            }
 
-                                    // see if EDSM data changed..
-                                    if (!dbdc.NameA.Equals(dc.NameA) || !dbdc.NameB.Equals(dc.NameB) || Math.Abs(dbdc.Dist - dc.Dist) > 0.05)
-                                    {
-                                        dbdc.NameA = dc.NameA;
-                                        dbdc.NameB = dc.NameB;
-                                        dbdc.Dist = dc.Dist;
-                                        toupdate.Add(dbdc);
-                                    }
-                                }
-                                else                                                                  // not in database..
+                            if (emptydatabase)                                                  // empty DB, just store..
+                            {
+                                newpairs.Add(dc);
+                            }
+                            else
+                            {
+                                cmd.Parameters.Clear();
+                                cmd.AddParameterWithValue("id", dc.id_edsm);
+
+                                using (DbDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
                                 {
-                                    //Console.WriteLine("Add new system " + system.name);
-                                    newpairs.Add(dc);
+                                    if (reader1.Read())                                          // its there..
+                                    {
+                                        DistanceClass dbdc = new DistanceClass(reader1);
+
+                                        // see if EDSM data changed..
+                                        if (!dbdc.NameA.Equals(dc.NameA) || !dbdc.NameB.Equals(dc.NameB) || Math.Abs(dbdc.Dist - dc.Dist) > 0.05)
+                                        {
+                                            dbdc.NameA = dc.NameA;
+                                            dbdc.NameB = dc.NameB;
+                                            dbdc.Dist = dc.Dist;
+                                            toupdate.Add(dbdc);
+                                        }
+                                    }
+                                    else                                                                  // not in database..
+                                    {
+                                        //Console.WriteLine("Add new system " + system.name);
+                                        newpairs.Add(dc);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                catch
+                { }
 
                 cmd.Dispose();
             }
