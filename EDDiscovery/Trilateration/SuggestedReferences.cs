@@ -12,7 +12,8 @@ namespace EDDiscovery2.Trilateration
     {
         public SystemClass EstimatedPosition;
         private ReferencesSector[,] sectors;
-        int sections = 12;
+        const int sections = 12;
+        const int MaxPerSection = 1000;         // so we don't keep millions of stars in memory, limit the number of stars in each section
 
         public SuggestedReferences(double x, double y, double z)
         {
@@ -56,28 +57,26 @@ namespace EDDiscovery2.Trilateration
             }
         }
 
-
-        private void AddSystemsToSectors()
+        private void AddStarToSector(SystemClass sys)       // call back from AddSystemToSectors
         {
-            int aznr, altnr;
-
-            foreach (SystemClass sys in SQLiteDBClass.globalSystems)
+            if (sys.HasCoordinate)
             {
-                if (sys.HasCoordinate)
+                ReferenceSystem refSys = new ReferenceSystem(sys, EstimatedPosition);
+
+                if (refSys.Distance > 0.0) // Exlude own position
                 {
-                    ReferenceSystem refSys = new ReferenceSystem(sys, EstimatedPosition);
-
-                    if (refSys.Distance > 0.0) // Exlude own position
-                    {
-                        aznr = (int)Math.Floor((refSys.Azimuth * 180 / Math.PI + 180) / (360.0 / sections));
-                        altnr = (int)Math.Floor((refSys.Altitude * 180 / Math.PI) / (360.0 / sections));
-
-                        sectors[aznr%sections, altnr%(sections/2)].AddCandidate(refSys);
-                    }
+                    int aznr = (int)Math.Floor((refSys.Azimuth * 180 / Math.PI + 180) / (360.0 / sections));
+                    int altnr = (int)Math.Floor((refSys.Altitude * 180 / Math.PI) / (360.0 / sections));
+                    if ( sectors[aznr % sections, altnr % (sections / 2)].CandidatesCount < MaxPerSection)
+                        sectors[aznr % sections, altnr % (sections / 2)].AddCandidate(refSys);
                 }
             }
         }
 
+        private void AddSystemsToSectors()
+        {
+            SystemClass.ProcessStars(AddStarToSector);
+        }
 
         public ReferenceSystem GetCandidate()
         {
@@ -124,10 +123,10 @@ namespace EDDiscovery2.Trilateration
             {
                 if (NrOfRefenreceSystems == 0)
                 {
-                    SystemClass sys = SystemData.GetSystem("Sol");
+                    SystemClass sys = SystemClass.GetSystem("Sol");
 
                     if (EstimatedPosition.x == 0 && EstimatedPosition.y == 0 && EstimatedPosition.z == 0)
-                        sys = SystemData.GetSystem("Sirius");
+                        sys = SystemClass.GetSystem("Sirius");
 
                     if (sys == null)
                         return null;   // Should not happend

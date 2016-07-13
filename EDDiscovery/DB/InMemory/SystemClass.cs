@@ -6,7 +6,8 @@ namespace EDDiscovery2.DB.InMemory
     // Useful for creation of test doubles
     public class SystemClass : ISystem
     {
-        public int id { get; set; }
+        public long id { get; set; }
+        public long id_edsm { get; set; }
         public string name { get; set; }
         public string SearchName { get; set; }
         public double x { get; set; }
@@ -18,9 +19,9 @@ namespace EDDiscovery2.DB.InMemory
         public string CommanderUpdate { get; set; }
         public DateTime UpdateDate { get; set; }
         public EDDiscovery.DB.SystemStatusEnum status { get; set; }
-        public string Note { get; set; }
+        public string SystemNote { get; set; }
 
-        public int id_eddb { get; set; }
+        public long id_eddb { get; set; }
         public string faction { get; set; }
         public long population { get; set; }
         public EDGovernment government { get; set; }
@@ -30,12 +31,21 @@ namespace EDDiscovery2.DB.InMemory
         public EDEconomy primary_economy { get; set; }
         public int needs_permit { get; set; }
         public int eddb_updated_at { get; set; }
-
+        
         public bool HasCoordinate
         {
             get
             {
                 return (!double.IsNaN(x));
+            }
+        }
+
+        public bool HasEDDBInformation
+        {
+            get
+            {
+                return population != 0 || government != EDGovernment.Unknown || needs_permit != 0 || allegiance != EDAllegiance.Unknown ||
+                       state != EDState.Unknown || security != EDSecurity.Unknown || primary_economy != EDEconomy.Unknown || (faction != null && faction.Length>0); 
             }
         }
     }

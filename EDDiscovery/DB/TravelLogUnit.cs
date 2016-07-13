@@ -3,7 +3,7 @@ using EDDiscovery.DB;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -11,7 +11,7 @@ namespace EDDiscovery2.DB
 {
     public class TravelLogUnit
     {
-        public int id;
+        public long id;
         public string Name;
         public int type;
         public int Size;
@@ -24,7 +24,7 @@ namespace EDDiscovery2.DB
 
         public TravelLogUnit(DataRow dr)
         {
-            id = (int)(long)dr["id"];
+            id = (long)dr["id"];
             Name = (string)dr["Name"];
             type = (int)(long)dr["type"];
             Size = (int)(long)dr["size"];
@@ -50,99 +50,72 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                return Add(cn);
+                bool ret = Add(cn);
+                return ret;
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)";
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@type", type);
-                cmd.Parameters.AddWithValue("@size", Size);
-                cmd.Parameters.AddWithValue("@Path", Path);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@type", type);
+                cmd.AddParameterWithValue("@size", Size);
+                cmd.AddParameterWithValue("@Path", Path);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from TravelLogUnit"))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "Select Max(id) as id from TravelLogUnit";
-
-                    id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
+
                 return true;
             }
         }
 
         public bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnection cn)
+        private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id";
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@Name", Name);
-                cmd.Parameters.AddWithValue("@Type", type);
-                cmd.Parameters.AddWithValue("@size", Size);
-                cmd.Parameters.AddWithValue("@Path", Path);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@Name", Name);
+                cmd.AddParameterWithValue("@Type", type);
+                cmd.AddParameterWithValue("@size", Size);
+                cmd.AddParameterWithValue("@Path", Path);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 return true;
             }
         }
-
-
+        
         static public List<TravelLogUnit> GetAll()
         {
             List<TravelLogUnit> list = new List<TravelLogUnit>();
 
-
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = new SQLiteCommand())
+                using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
                 {
-                    DataSet ds = null;
-                    cmd.Connection = cn;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandTimeout = 30;
-                    cmd.CommandText = "select * from TravelLogUnit";
-
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
-                    if (ds.Tables.Count == 0)
-                    {
-                        return null;
-                    }
-                    //
-                    if (ds.Tables[0].Rows.Count == 0)
-                    {
+                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         return list;
-                    }
 
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         TravelLogUnit sys = new TravelLogUnit(dr);
-
                         list.Add(sys);
                     }
 
@@ -150,8 +123,6 @@ namespace EDDiscovery2.DB
                 }
             }
         }
-
     }
-
 }
 

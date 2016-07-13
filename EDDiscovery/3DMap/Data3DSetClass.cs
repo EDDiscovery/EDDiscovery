@@ -768,12 +768,12 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        protected static Vector3d[] GetVertices(FGEImage img,float y = 0)
+        protected static Vector3d[] GetVerticesHorz(FGEImage img,float y = 0)
         {
-            return GetVertices(img.TopLeft, img.TopRight, img.BottomLeft, img.BottomRight, y);
+            return GetVerticesHorz(img.TopLeft, img.TopRight, img.BottomLeft, img.BottomRight, y);
         }
 
-        protected static Vector3d[] GetVertices(PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
+        protected static Vector3d[] GetVerticesHorz(PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
         {
             return new Vector3d[]
             {
@@ -781,6 +781,17 @@ namespace EDDiscovery2._3DMap
                 new Vector3d(topright.X, y, topright.Y),
                 new Vector3d(bottomright.X, y, bottomright.Y),
                 new Vector3d(bottomleft.X, y, bottomleft.Y)
+            };
+        }
+
+        protected static Vector3d[] GetVerticesVert(PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float z = 0)
+        {
+            return new Vector3d[]
+            {
+                new Vector3d(topleft.X, topleft.Y , z),
+                new Vector3d(topright.X, topright.Y , z),
+                new Vector3d(bottomright.X, bottomright.Y , z),
+                new Vector3d(bottomleft.X, bottomleft.Y , z)
             };
         }
 
@@ -826,18 +837,29 @@ namespace EDDiscovery2._3DMap
         public static TexturedQuadData FromFGEImage(FGEImage img , float y = 0)
         {
             Bitmap bmp = (Bitmap)Bitmap.FromFile(img.FilePath);
-            Vector3d[] vertices = GetVertices(img,y);
+            Vector3d[] vertices = GetVerticesHorz(img,y);
             Vector4d[] texcoords = GetTexCoords(img, bmp.Width, bmp.Height);
             return new TexturedQuadData(vertices, texcoords, bmp);
         }
 
-        public static TexturedQuadData FromBitmap(Bitmap bmp, PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
+        public static TexturedQuadData FromBitmapHorz(Bitmap bmp, PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
         {
             Point pxTopLeft = new Point(0, bmp.Height - 1);
             Point pxTopRight = new Point(bmp.Width - 1, bmp.Height - 1);
             Point pxBottomLeft = new Point(0, 0);
             Point pxBottomRight = new Point(bmp.Width - 1, 0);
-            Vector3d[] vertices = GetVertices(topleft, topright, bottomleft, bottomright, y);
+            Vector3d[] vertices = GetVerticesHorz(topleft, topright, bottomleft, bottomright, y);
+            Vector4d[] texcoords = GetTexCoords(pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight, bmp.Width, bmp.Height);
+            return new TexturedQuadData(vertices, texcoords, bmp);
+        }
+
+        public static TexturedQuadData FromBitmapVert(Bitmap bmp, PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float z = 0)
+        {
+            Point pxTopLeft = new Point(0, bmp.Height - 1);
+            Point pxTopRight = new Point(bmp.Width - 1, bmp.Height - 1);
+            Point pxBottomLeft = new Point(0, 0);
+            Point pxBottomRight = new Point(bmp.Width - 1, 0);
+            Vector3d[] vertices = GetVerticesVert(topleft, topright, bottomleft, bottomright, z);   // flipping the order seems to make it work and be vertical
             Vector4d[] texcoords = GetTexCoords(pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight, bmp.Width, bmp.Height);
             return new TexturedQuadData(vertices, texcoords, bmp);
         }
@@ -853,7 +875,7 @@ namespace EDDiscovery2._3DMap
             fge.pxTopRight = pxTopRight;
             fge.pxBottomLeft = pxBottomLeft;
             fge.pxBottomRight = pxBottomRight;
-            Vector3d[] vertices = GetVertices(fge, y);
+            Vector3d[] vertices = GetVerticesHorz(fge, y);
             Vector4d[] texcoords = GetTexCoords(fge, Texture.Width, Texture.Height);
             return new TexturedQuadData(vertices, texcoords, this);
         }

@@ -8,7 +8,14 @@ using System.Text;
 
 namespace EDDiscovery2.DB
 {
-  
+    public enum SystemInfoSource
+    {
+        RW = 1,
+        EDSC = 2,
+        EDDB = 4,
+        EDSM = 5
+    }
+
     public class StationClass
     {
         public int id, eddb_id;
