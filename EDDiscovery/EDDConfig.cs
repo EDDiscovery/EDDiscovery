@@ -194,7 +194,7 @@ namespace EDDiscovery2
             set
             {
                 _keepOnTop = value;
-                _db.PutSettingBool("KeepOnTop", value);
+                SQLiteDBClass.PutSettingBool("KeepOnTop", value);
             }
         }
 
@@ -290,7 +290,7 @@ namespace EDDiscovery2
                 _canSkipSlowUpdates = SQLiteDBClass.GetSettingBool("CanSkipSlowUpdates", false);
                 _orderrowsinverted = SQLiteDBClass.GetSettingBool("OrderRowsInverted", false);
                 _focusOnNewSystem = SQLiteDBClass.GetSettingBool("FocusOnNewSystem", false);
-                _keepOnTop = _db.GetSettingBool("KeepOnTop", false);
+                _keepOnTop = SQLiteDBClass.GetSettingBool("KeepOnTop", false);
                 LoadCommanders();
                 int activecommander = SQLiteDBClass.GetSettingInt("ActiveCommander", 0);
                 var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);

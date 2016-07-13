@@ -319,11 +319,13 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
         {
-            /* TODO: Only focus the field if we're on the correct tab! */
-            if (fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory)
+            /* TODO: Add setting to determine -which- field should be focussed */
+            /* DISABLED FOR NOW
+            if (tabControl1.SelectedTab == tabPageTravelHistory)
             {
                 travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
             }
+            */
         }
 
         public void ApplyTheme(bool refreshhistory)
@@ -904,14 +906,6 @@ namespace EDDiscovery
         internal void keepOnTopChanged(bool keepOnTop)
         {
             this.TopMost = keepOnTop;
-            EDDConfig.KeepOnTop = keepOnTop;
-        }
-
-        private void keepOnTopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem mi = sender as ToolStripMenuItem;
-            mi.Checked = !mi.Checked;
-            keepOnTopChanged(mi.Checked);
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)

@@ -301,8 +301,7 @@ namespace EDDiscovery2
         {
             EDDConfig.Instance.KeepOnTop = checkBoxKeepOnTop.Checked;
             this.FindForm().TopMost = checkBoxKeepOnTop.Checked;
-            //EDDiscoveryForm f = this.FindForm() as EDDiscoveryForm;            
-            //f.keepOnTopChanged(checkBoxKeepOnTop.Checked);
+            _discoveryForm.keepOnTopChanged(checkBoxKeepOnTop.Checked);
         }
 
         private void checkBox_Distances_CheckedChanged(object sender, EventArgs e)
