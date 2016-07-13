@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,24 +18,27 @@ namespace EDDiscovery2.DB
 
         public VisitedSystemsClass()
         {
+            X = double.NaN;             // construct class with nulls/0's except for these, which use NaN as their no content marker.
+            Y = double.NaN;
+            Z = double.NaN;
         }
 
         public VisitedSystemsClass(DataRow dr)
         {
-            id = (int)(long)dr["id"];
+            id = (long)dr["id"];
             Name = (string)dr["Name"];
             Time = (DateTime)dr["Time"];
             Commander = (int)(long)dr["Commander"];
-            Source = (int)(long)dr["Source"];
+            Source = (long)dr["Source"];
             Unit = (string)dr["Unit"];
             EDSM_sync = (bool)dr["edsm_sync"];
             MapColour = (int)(long)dr["Map_colour"];
 
             if (System.DBNull.Value == dr["X"])
             {
-                X = 0;
-                Y = 0;
-                Z = 0;
+                X = double.NaN;
+                Y = double.NaN;
+                Z = double.NaN;
             }
             else
             {
@@ -49,50 +52,39 @@ namespace EDDiscovery2.DB
         {
             get
             {
-                if (X == 0.0 && Y == 0.0 && Z == 0.0)
-                    return false;
-                else
-                    return true;
+                return !double.IsNaN(X);
             }
         }
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                return Add(cn);
+                bool ret = Add(cn);
+                return ret;
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z)"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z)";
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@time", Time);
-                cmd.Parameters.AddWithValue("@unit", Unit);
-                cmd.Parameters.AddWithValue("@commander", Commander);
-                cmd.Parameters.AddWithValue("@source", Source);
-                cmd.Parameters.AddWithValue("@edsm_sync", EDSM_sync);
-                cmd.Parameters.AddWithValue("@map_colour", MapColour);
-                cmd.Parameters.AddWithValue("@x", X);
-                cmd.Parameters.AddWithValue("@y", Y);
-                cmd.Parameters.AddWithValue("@z", Z);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@unit", Unit);
+                cmd.AddParameterWithValue("@commander", Commander);
+                cmd.AddParameterWithValue("@source", Source);
+                cmd.AddParameterWithValue("@edsm_sync", EDSM_sync);
+                cmd.AddParameterWithValue("@map_colour", MapColour);
+                cmd.AddParameterWithValue("@x", X);
+                cmd.AddParameterWithValue("@y", Y);
+                cmd.AddParameterWithValue("@z", Z);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from VisitedSystems"))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "Select Max(id) as id from VisitedSystems";
-
-                    id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
                 return true;
             }
@@ -100,32 +92,28 @@ namespace EDDiscovery2.DB
 
         public new bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnection cn)
+        private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour, X=@x, Y=@y, Z=@z  where ID=@id"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour, X=@x, Y=@y, Z=@z  where ID=@id";
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@Name", Name);
-                cmd.Parameters.AddWithValue("@Time", Time);
-                cmd.Parameters.AddWithValue("@unit", Unit);
-                cmd.Parameters.AddWithValue("@commander", Commander);
-                cmd.Parameters.AddWithValue("@source", Source);
-                cmd.Parameters.AddWithValue("@edsm_sync", EDSM_sync);
-                cmd.Parameters.AddWithValue("@map_colour", MapColour);
-                cmd.Parameters.AddWithValue("@x", X);
-                cmd.Parameters.AddWithValue("@y", Y);
-                cmd.Parameters.AddWithValue("@z", Z);
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@Name", Name);
+                cmd.AddParameterWithValue("@Time", Time);
+                cmd.AddParameterWithValue("@unit", Unit);
+                cmd.AddParameterWithValue("@commander", Commander);
+                cmd.AddParameterWithValue("@source", Source);
+                cmd.AddParameterWithValue("@edsm_sync", EDSM_sync);
+                cmd.AddParameterWithValue("@map_colour", MapColour);
+                cmd.AddParameterWithValue("@x", X);
+                cmd.AddParameterWithValue("@y", Y);
+                cmd.AddParameterWithValue("@z", Z);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 return true;
             }
@@ -198,9 +186,9 @@ namespace EDDiscovery2.DB
                         }
                         catch
                         {
-                            sp.X = 0;
-                            sp.Y = 0;
-                            sp.Z = 0;
+                            sp.X = double.NaN;
+                            sp.Y = double.NaN;
+                            sp.Z = double.NaN;
                         }
 
                     }
@@ -208,9 +196,8 @@ namespace EDDiscovery2.DB
                     {
                         System.Diagnostics.Trace.WriteLine("System parse error 1:" + line);
                     }
-
-
-            }
+                    
+                }
                 else
                 {
                     pattern = new Regex(@"{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:\d+\((?<SystemName>.*?)\) Body:(?<Body>\d+) Pos:\(.*?\)( (?<TravelMode>\w+))?");
@@ -224,6 +211,9 @@ namespace EDDiscovery2.DB
 
                         //sp.Nr = int.Parse(match.Groups["Body"].Value);
                         sp.Name = match.Groups["SystemName"].Value;
+                        sp.X = Double.NaN;
+                        sp.Y = Double.NaN;
+                        sp.Z = Double.NaN;
                     }
                     else
                     {
@@ -259,32 +249,18 @@ namespace EDDiscovery2.DB
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
-
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = new SQLiteCommand())
+                using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time "))
                 {
-                    DataSet ds = null;
-                    cmd.Connection = cn;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandTimeout = 30;
-                    cmd.CommandText = "select * from VisitedSystems Order by Time ";
+                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
 
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
-                    if (ds.Tables.Count == 0)
-                    {
-                        return null;
-                    }
-                    //
-                    if (ds.Tables[0].Rows.Count == 0)
-                    {
+                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         return list;
-                    }
 
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         VisitedSystemsClass sys = new VisitedSystemsClass(dr);
-
                         list.Add(sys);
                     }
 
@@ -298,33 +274,19 @@ namespace EDDiscovery2.DB
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
-
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = new SQLiteCommand())
+                using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems where commander=@commander Order by Time "))
                 {
-                    DataSet ds = null;
-                    cmd.Connection = cn;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandTimeout = 30;
-                    cmd.CommandText = "select * from VisitedSystems where commander=@commander Order by Time ";
-                    cmd.Parameters.AddWithValue("@commander", commander);
+                    cmd.AddParameterWithValue("@commander", commander);
 
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
-                    if (ds.Tables.Count == 0)
-                    {
-                        return null;
-                    }
-                    //
-                    if (ds.Tables[0].Rows.Count == 0)
-                    {
+                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         return list;
-                    }
 
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         VisitedSystemsClass sys = new VisitedSystemsClass(dr);
-
                         list.Add(sys);
                     }
 
@@ -337,72 +299,189 @@ namespace EDDiscovery2.DB
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
-
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = new SQLiteCommand())
+                using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time DESC Limit 1"))
                 {
-                    DataSet ds = null;
-                    cmd.Connection = cn;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandTimeout = 30;
-                    cmd.CommandText = "select * from VisitedSystems Order by Time DESC Limit 1";
-
-
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
-                    if (ds.Tables.Count == 0)
-                    {
-                        return null;
-                    }
-                    //
-                    if (ds.Tables[0].Rows.Count == 0)
+                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                     {
                         return null;
                     }
 
                     VisitedSystemsClass sys = new VisitedSystemsClass(ds.Tables[0].Rows[0]);
-
                     return sys;
                 }
             }
         }
 
-        internal static bool  Exist(string name, DateTime time)
+        internal static bool Exist(string name, DateTime time)
         {
-            List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
-
-
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                using (SQLiteCommand cmd = new SQLiteCommand())
+                using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems where name=@name and Time=@time  Order by Time DESC Limit 1"))
                 {
-                    DataSet ds = null;
-                    cmd.Connection = cn;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandTimeout = 30;
-                    cmd.CommandText = "select * from VisitedSystems where name=@name and Time=@time  Order by Time DESC Limit 1";
-                    cmd.Parameters.AddWithValue("@name", name);
-                    cmd.Parameters.AddWithValue("@time", time);
-                    ds = SQLiteDBClass.QueryText(cn, cmd);
-                    if (ds.Tables.Count == 0)
-                    {
-                        return false;
-                    }
-                    //
-                    if (ds.Tables[0].Rows.Count == 0)
-                    {
-                        return false;
-                    }
-
-                    //VisitedSystemsClass sys = new VisitedSystemsClass(ds.Tables[0].Rows[0]);
-
-                    return true;
+                    cmd.AddParameterWithValue("@name", name);
+                    cmd.AddParameterWithValue("@time", time);
+                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                    return !(ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0);
                 }
             }
         }
 
+        public static void CalculateSqDistances(List<VisitedSystemsClass> vs, SortedList<double,string> distlist , double x, double y, double z, int maxitems , bool removezerodiststar )
+        {
+            double dist;
+            double dx, dy, dz;
+            foreach (VisitedSystemsClass pos in vs)
+            {
+                if (pos.HasTravelCoordinates && distlist.IndexOfValue(pos.Name) == -1)   // if co-ords, and not in list already..
+                {
+                    dx = (pos.X - x);
+                    dy = (pos.Y - y);
+                    dz = (pos.Z - z);
+                    dist = dx * dx + dy * dy + dz * dz;
 
+                    if (dist > 0.001 || !removezerodiststar)
+                    {
+                        if (distlist.Count < maxitems)          // if less than max, add..
+                            distlist.Add(dist, pos.Name);
+                        else if (dist < distlist.Last().Key)   // if last entry (which must be the biggest) is greater than dist..
+                        {
+                            distlist.Add(dist, pos.Name);           // add in
+                            distlist.RemoveAt(maxitems);        // remove last..
+                        }
+                    }
+                }
+            }
+        }
+        
+        // centresysname is a default one
+
+        public static string FindNextVisitedSystem(List<VisitedSystemsClass> _visitedSystems, string sysname, int dir , string centresysname )
+        {
+            int index = _visitedSystems.FindIndex(x => x.Name.Equals(sysname));
+
+            if (index != -1)
+            {
+                if (dir == -1)
+                {
+                    if (index < 1)                                  //0, we go to the end and work from back..                      
+                        index = _visitedSystems.Count;
+
+                    int indexn = _visitedSystems.FindLastIndex(index - 1, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    if (indexn == -1)                             // from where we were, did not find one, try from back..
+                        indexn = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    return (indexn != -1) ? _visitedSystems[indexn].Name : centresysname;
+                }
+                else
+                {
+                    index++;
+
+                    if (index == _visitedSystems.Count)             // if at end, go to beginning
+                        index = 0;
+
+                    int indexn = _visitedSystems.FindIndex(index, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    if (indexn == -1)                             // if not found, go to beginning
+                        indexn = _visitedSystems.FindIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+
+                    return (indexn != -1) ? _visitedSystems[indexn].Name : centresysname;
+                }
+            }
+            else
+            {
+                index = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+                return (index != -1) ? _visitedSystems[index].Name : centresysname;
+            }
+        }
+
+        public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb)          // oldest system is lowest index
+        {
+            SystemClass.FillVisitedSystems(visitedSystems);                 // first try and populate with SystemClass info
+            
+            foreach (VisitedSystemsClass vsc in visitedSystems)
+            {
+                if (vsc.curSystem == null)                                  // if no systemclass info, make a dummy
+                {
+                    vsc.curSystem = new SystemClass(vsc.Name);
+//TBD vsc.HasTravelCoordinates
+                    if (vsc.HasTravelCoordinates)
+                    {
+                        vsc.curSystem.x = vsc.X;
+                        vsc.curSystem.y = vsc.Y;
+                        vsc.curSystem.z = vsc.Z;
+                    }
+                }
+
+                vsc.strDistance = "";                                       // set empty, must have a string in there.
+            }
+
+            DistanceClass.FillVisitedSystems(visitedSystems, usedistancedb);    // finally fill in the distances, indicating if can use db or not
+        }
+
+        public static void UpdateVisitedSystemsEntries(VisitedSystemsClass item, VisitedSystemsClass item2 , bool usedistancedb)           // this is a split in two version with the same code of AddHistoryRow..
+        {
+            SystemClass sys1 = SystemClass.GetSystem(item.Name);            
+            if (sys1 == null)
+            {
+                sys1 = new SystemClass(item.Name);
+
+                if (item.HasTravelCoordinates)
+                {
+                    sys1.x = item.X;
+                    sys1.y = item.Y;
+                    sys1.z = item.Z;
+                }
+            }
+
+            SystemClass sys2 = null;
+
+            if (item2 != null)
+            {
+                sys2 = SystemClass.GetSystem(item2.Name);
+                if (sys2 == null)
+                {
+                    sys2 = new SystemClass(item2.Name);
+                    if (item2.HasTravelCoordinates)
+                    {
+                        sys2.x = item2.X;
+                        sys2.y = item2.Y;
+                        sys2.z = item2.Z;
+                    }
+                }
+            }
+            else
+                sys2 = null;
+
+            item.curSystem = sys1;
+            item.prevSystem = sys2;
+
+            string diststr = "";
+            if (sys2 != null)
+            {
+                double dist = usedistancedb ? SystemClass.DistanceIncludeDB(sys1,sys2) : SystemClass.Distance(sys1, sys2);
+                if (dist > 0)
+                    diststr = dist.ToString("0.00");
+            }
+
+            item.strDistance = diststr;
+        }
+
+        public static void SetLastKnownSystemPosition(List<VisitedSystemsClass> visitedSystems)     // go thru setting the lastknowsystem
+        {
+            ISystem lastknownps = null;
+            foreach (VisitedSystemsClass ps in visitedSystems)
+            {
+                if (ps.curSystem != null && ps.curSystem.HasCoordinate)     // cursystem is always set.. see above
+                {
+                    ps.lastKnownSystem = lastknownps;
+                    lastknownps = ps.curSystem;
+                }
+            }
+        }
     }
-
 }
 

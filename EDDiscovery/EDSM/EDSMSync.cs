@@ -64,7 +64,6 @@ namespace EDDiscovery2.EDSM
         {
             try
             {
-                SQLiteDBClass db = new SQLiteDBClass();
                 EDSMClass edsm = new EDSMClass();
 
                 edsm.apiKey =  EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
@@ -158,10 +157,10 @@ namespace EDDiscovery2.EDSM
                     // Sync comments from EDSM
                     foreach (var note in notes)
                     {
-                        string searchname = note.Name.ToLower();
-                        if (SQLiteDBClass.globalSystemNotes.ContainsKey(searchname))
+                        SystemNoteClass dbnote = SystemNoteClass.GetSystemNoteClass(note.Name.ToLower());
+
+                        if ( dbnote != null )       // if there..
                         {
-                            SystemNoteClass dbnote = SQLiteDBClass.globalSystemNotes[searchname];
                             if (note.Time > dbnote.Time)
                             {
                                 dbnote.Time = note.Time;
@@ -192,7 +191,7 @@ namespace EDDiscovery2.EDSM
         {
             string json;
 
-            if (system.X==0.0 && system.Y==0.0 && system.Z==0.0)
+            if (!system.HasTravelCoordinates)
                 json = edsm.SetLog(system.Name, system.Time);
             else
                 json = edsm.SetLogWithPos(system.Name, system.Time, system.X, system.Y, system.Z);

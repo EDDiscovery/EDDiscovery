@@ -2,6 +2,7 @@
 using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using EDDiscovery2.HTTP;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,6 @@ namespace EDDiscovery2.EDDB
         private string stationFileName;
         private string systemFileName;
         private string commoditiesFileName;
-        private string EDSMDistancesFileName;
 
         private string stationTempFileName;
         private string systemTempFileName;
@@ -28,13 +28,13 @@ namespace EDDiscovery2.EDDB
 
         public static Dictionary<int, Commodity> commodities;
 
+        public string SystemFileName { get { return systemFileName; } }
 
         public EDDBClass()
         {
             stationFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstations.json");
             systemFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems.json");
             commoditiesFileName = Path.Combine(Tools.GetAppDataDirectory(), "commodities.json");
-            EDSMDistancesFileName = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
 
             stationTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbstationslite_temp.json");
             systemTempFileName = Path.Combine(Tools.GetAppDataDirectory(), "eddbsystems_temp.json");
@@ -50,16 +50,6 @@ namespace EDDiscovery2.EDDB
             return DownloadFile("http://robert.astronet.se/Elite/eddb/v4/systems.json", systemFileName);
         }
 
-        public bool GetEDSMDistances()
-        {
-            if (File.Exists(EDSMDistancesFileName))
-                File.Delete(EDSMDistancesFileName);
-            if (File.Exists(EDSMDistancesFileName + ".etag"))
-                File.Delete(EDSMDistancesFileName + ".etag");
-            return DownloadFile("http://robert.astronet.se/Elite/edsm/edsmdist.json", EDSMDistancesFileName);
-
-
-        }
 
         public bool GetCommodities()
         {
@@ -74,7 +64,7 @@ namespace EDDiscovery2.EDDB
             return DownloadFile("http://robert.astronet.se/Elite/eddb/v4/stations.json", stationFileName);
         }
 
-        private bool DownloadFile(string url, string filename)
+        static public bool DownloadFile(string url, string filename)
         {
             bool newfile = false;
             return DownloadFile(url, filename, out newfile);
@@ -171,34 +161,6 @@ namespace EDDiscovery2.EDDB
             }
         }
 
-        public List<SystemClass> ReadSystems()
-        {
-            List<SystemClass> eddbsystems = new List<SystemClass>();
-            string json;
-
-            json = ReadJson(systemFileName);
-
-            if (json == null)
-                return eddbsystems;
-
-            JArray systems = (JArray)JArray.Parse(json);
-
-            if (systems!=null)
-            {
-                foreach (JObject jo in systems)
-                {
-                    SystemClass sys = new SystemClass(jo, EDDiscovery.SystemInfoSource.EDDB);
-                    
-                    if (sys != null)
-                        eddbsystems.Add(sys);
-
-                }
-            }
-            systems = null;
-            json = null;
-            return eddbsystems;
-        }
-
         public void  ReadCommodities()
         {
             Dictionary<int, Commodity> eddbcommodities = new Dictionary<int, Commodity>();
@@ -252,7 +214,7 @@ namespace EDDiscovery2.EDDB
             {
                 foreach (JObject jo in systems)
                 {
-                    StationClass sys = new StationClass(jo, EDDiscovery.SystemInfoSource.EDDB);
+                    StationClass sys = new StationClass(jo, EDDiscovery2.DB.SystemInfoSource.EDDB);
 
                     if (sys != null)
                         eddbstations.Add(sys);
@@ -261,75 +223,5 @@ namespace EDDiscovery2.EDDB
 
             return eddbstations;
         }
-
-        public bool Add2DB(List<SystemClass> eddbsystems, List<StationClass> eddbstations)
-        {
-            SQLiteDBClass db = new SQLiteDBClass();
-
-            db.Connect2DB();
-
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
-            {
-                cn.Open();
-                int nr=0;
-
-                using (var tra = cn.BeginTransaction())
-                {
-                    try
-                    {
-                        foreach (SystemClass sys in eddbsystems)
-                        {
-                            SystemClass sysdb = SystemData.GetSystem(sys.name);
-
-                            if (sysdb != null)  // Update system
-                            {
-                                if (sysdb.eddb_updated_at != sys.eddb_updated_at ||sysdb.population!=sys.population)
-                                {
-                                    sysdb.id_eddb = sys.id_eddb;
-                                    sysdb.faction = sys.faction;
-                                    sysdb.population = sys.population;
-                                    sysdb.government = sys.government;
-                                    sysdb.allegiance = sys.allegiance;
-                                    sysdb.state = sys.state;
-                                    sysdb.security = sys.security;
-                                    sysdb.primary_economy = sys.primary_economy;
-                                    sysdb.needs_permit = sys.needs_permit;
-                                    sysdb.eddb_updated_at = sys.eddb_updated_at;
-
-
-                                    sysdb.Update(cn, sysdb.id, tra);
-                                    nr++;
-                                }
-
-                                sysdb = null;
-                            }
-                            else
-                            {
-                                System.Diagnostics.Trace.WriteLine("New system " + sys.name);
-                                sys.Store(cn, tra);
-                            }
-                        }
-                        System.Diagnostics.Trace.WriteLine("Add2DB  " + nr.ToString() + " eddb systems: " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-                        tra.Commit();
-                        sw.Stop();
-                        System.Diagnostics.Trace.WriteLine("Add2DB  " + nr.ToString() + " eddb systems: " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-                    }
-                    catch (Exception ex)
-                    {
-                        tra.Rollback();
-                        System.Diagnostics.Trace.WriteLine("Add2DB error: {0}" + ex.Message);
-                        throw;
-                    }
-
-                }
-            }
-
-            return true;
-        }
-
     }
 }

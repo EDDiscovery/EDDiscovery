@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -12,7 +12,7 @@ namespace EDDiscovery.DB
 {
     public class WantedSystemClass
     {
-        public int id;
+        public long id;
         public string system;
 
         public WantedSystemClass()
@@ -20,7 +20,7 @@ namespace EDDiscovery.DB
 
         public WantedSystemClass(DataRow dr)
         {
-            id = (int)(long)dr["id"];
+            id = (long)dr["id"];
             system = (string)dr["systemname"];
         }
 
@@ -32,32 +32,23 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                return Add(cn);
+                bool ret = Add(cn);
+                return ret;
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into wanted_systems (systemname) values (@systemname)";
-                cmd.Parameters.AddWithValue("@systemname", system);
-                
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                cmd.AddParameterWithValue("@systemname", system);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from wanted_systems"))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "Select Max(id) as id from wanted_systems";
-
-                    id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
                 return true;
             }
@@ -65,25 +56,53 @@ namespace EDDiscovery.DB
 
         public bool Delete()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 return Delete(cn);
             }
         }
 
-        private bool Delete(SQLiteConnection cn)
+        private bool Delete(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("DELETE FROM wanted_systems WHERE id = @id"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "DELETE FROM wanted_systems WHERE id = @id";
-                cmd.Parameters.AddWithValue("@id", id);
+                cmd.AddParameterWithValue("@id", id);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 return true;
+            }
+        }
+
+        public static List<WantedSystemClass> GetAllWantedSystems()
+        {
+            try
+            {
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("select * from wanted_systems"))
+                    {
+                        DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                        {
+                            return null;
+                        }
+
+                        List<WantedSystemClass> retVal = new List<WantedSystemClass>();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            WantedSystemClass sys = new WantedSystemClass(dr);
+                            retVal.Add(sys);
+                        }
+
+                        return retVal;
+                    }
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
     }

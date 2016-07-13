@@ -23,20 +23,16 @@ namespace EDDiscovery
         internal TravelHistoryControl travelhistorycontrol1;
         private EDDiscoveryForm _discoveryForm;
         internal bool changesilence = false;
-        private SQLiteDBClass db;
         private List<SystemClass> routeSystems;
-
-        int metric_nearestwaypoint = 0;     // easiest way to synchronise metric text and index's. 
-        int metric_mindevfrompath = 1;
-        int metric_maximum100ly = 2;
-        int metric_maximum250ly = 3;
-        int metric_maximum500ly = 4;
-        int metric_waypointdev2 = 5;      
-
+        
+        // METRICs defined by systemclass GetSystemNearestTo function
         string[] metric_options = { "Nearest to Waypoint", "Minimum Deviation from Path",
                                     "Nearest to Waypoint with dev<=100ly", "Nearest to Waypoint with dev<=250ly",
                                     "Nearest to Waypoint with dev<=500ly", "Nearest to Waypoint + Deviation / 2"
                                    };
+
+        System.Windows.Forms.Timer fromupdatetimer;
+        System.Windows.Forms.Timer toupdatetimer;
 
         public RouteControl()
         {
@@ -52,16 +48,19 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
+            fromupdatetimer = new System.Windows.Forms.Timer();
+            fromupdatetimer.Interval = 500;
+            fromupdatetimer.Tick += FromUpdateTick;
+
+            toupdatetimer = new System.Windows.Forms.Timer();
+            toupdatetimer.Interval = 500;
+            toupdatetimer.Tick += ToUpdateTick;
         }
 
         private Thread ThreadRoute;
 
         private void button_Route_Click_1(object sender, EventArgs e)
         {
-            if (db ==null)
-                db = new SQLiteDBClass();
-
-
             ToggleButtons(false);           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
             richTextBox_routeresult.Clear();
 
@@ -130,7 +129,7 @@ namespace EDDiscovery
         {
             double traveldistance = Point3D.DistanceBetween(coordsfrom, coordsto);      // its based on a percentage of the traveldistance
             routeSystems = new List<SystemClass>();
-            routeSystems.Add(SystemData.GetSystem(textBox_From.Text));
+            routeSystems.Add(SystemClass.GetSystem(textBox_From.Text));
 
             AppendText("Searching route from " + fromsys + " to " + tosys + " using " + metric_options[routemethod] + " metric" + Environment.NewLine);
             AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
@@ -162,16 +161,15 @@ namespace EDDiscovery
                 //Console.WriteLine("Curpos " + curpos.X + "," + curpos.Y + "," + curpos.Z);
                 //Console.WriteLine(" next" + nextpos.X + "," + nextpos.Y + "," + nextpos.Z);
 #endif
-                SystemClass bestsystem;
-                Point3D bestposition;
+                SystemClass bestsystem = SystemClass.GetSystemNearestTo(curpos, nextpos, maxrange, maxrange - 0.5, routemethod);
 
-                FindBestSystem(curpos, nextpos, maxrange, maxrange-0.5, routemethod, out bestsystem, out bestposition);
                 string sysname = "WAYPOINT";
                 double deltafromwaypoint = 0;
                 double deviation = 0;
 
                 if (bestsystem != null)
                 {
+                    Point3D bestposition = new Point3D(bestsystem.x, bestsystem.y, bestsystem.z);
                     deltafromwaypoint = Point3D.DistanceBetween(bestposition, nextpos);     // how much in error
                     deviation = Point3D.DistanceBetween(curpos.InterceptPoint(nextpos, bestposition), bestposition);
                     nextpos = bestposition;
@@ -187,84 +185,12 @@ namespace EDDiscovery
                 jump++;
 
             } while (true);
-            routeSystems.Add(SystemData.GetSystem(textBox_To.Text));
+
+            routeSystems.Add(SystemClass.GetSystem(textBox_To.Text));
             actualdistance += Point3D.DistanceBetween(curpos, coordsto);
             AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
             AppendText(Environment.NewLine);
             AppendText(string.Format("Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance, actualdistance));
-        }
-
-        private void FindBestSystem(Point3D curpos, Point3D wantedpos, double maxfromcurpos , double maxfromwanted, 
-                                    int routemethod,
-                                    out SystemClass system, out Point3D position )
-        {
-            List<SystemClass> systems = SystemData.SystemList;
-
-            double maxfromcurposx2 = maxfromcurpos * maxfromcurpos;
-            double maxfromwantedx2 = maxfromwanted * maxfromwanted;
-
-            SystemClass nearestsystem = null;
-
-            double bestmindistance = 1E39;
-
-            for (int ii = 0; ii < systems.Count; ii++)
-            {
-                SystemClass syscheck = systems[ii];
-                Point3D syspos = new Point3D(syscheck.x, syscheck.y, syscheck.z);
-                double distancefromwantedx2 = Point3D.DistanceBetweenX2(wantedpos, syspos); // range between the wanted point and this, ^2
-                double distancefromcurposx2 = Point3D.DistanceBetweenX2(curpos, syspos);    // range between the wanted point and this, ^2
-
-                if (distancefromwantedx2 <= maxfromwantedx2 &&         // if within the radius of wanted
-                        distancefromcurposx2 <= maxfromcurposx2)          // and within the jump range of current
-                {
-                    if (routemethod == metric_nearestwaypoint)
-                    {
-                        if (distancefromwantedx2 < bestmindistance)
-                        {
-                            nearestsystem = syscheck;
-                            bestmindistance = distancefromwantedx2;
-                        }
-                    }
-                    else
-                    { 
-                        Point3D interceptpoint = curpos.InterceptPoint(wantedpos, syspos);      // work out where the perp. intercept point is..
-                        double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
-                        double metric = 1E39;
-
-                        if (routemethod == metric_mindevfrompath)                             
-                            metric = deviation;
-                        else if (routemethod == metric_maximum100ly)
-                            metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
-                        else if (routemethod == metric_maximum250ly)
-                            metric = (deviation <= 250) ? distancefromwantedx2 : metric;
-                        else if (routemethod == metric_maximum500ly)
-                            metric = (deviation <= 500) ? distancefromwantedx2 : metric;
-                        else if ( routemethod == metric_waypointdev2 )
-                            metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
-
-                        if (metric < bestmindistance)
-                        {
-                            nearestsystem = syscheck;
-                            bestmindistance = metric;
-                            //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0") + " *");
-                        }
-                        else
-                        {
-                            //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0"));
-                        }
-                    }
-                }
-            }
-
-            system = nearestsystem;
-            position = null;
-            if (system != null)
-            {
-#if DEBUG
-                //Console.WriteLine("Best System " + nearestsystem.name);
-#endif
-                position = new Point3D(system.x, system.y, system.z);
-            }
         }
 
         private void textBox_Range_KeyPress(object sender, KeyPressEventArgs e)
@@ -313,44 +239,38 @@ namespace EDDiscovery
 
         public void SaveSettings()
         {
-            if (db == null)
-                db = new SQLiteDBClass();
-
-            db.PutSettingString("RouteFrom", textBox_From.Text);
-            db.PutSettingString("RouteTo", textBox_To.Text);
-            db.PutSettingString("RouteRange", textBox_Range.Text);
-            db.PutSettingString("RouteFromX", textBox_FromX.Text);
-            db.PutSettingString("RouteFromY", textBox_FromY.Text);
-            db.PutSettingString("RouteFromZ", textBox_FromZ.Text);
-            db.PutSettingString("RouteToX", textBox_ToX.Text);
-            db.PutSettingString("RouteToY", textBox_ToY.Text);
-            db.PutSettingString("RouteToZ", textBox_ToZ.Text);
-            db.PutSettingBool("RouteFromState", textBox_From.ReadOnly);
-            db.PutSettingBool("RouteToState", textBox_To.ReadOnly);
-            db.PutSettingInt("RouteMetric", comboBoxRoutingMetric.SelectedIndex);
+            SQLiteDBClass.PutSettingString("RouteFrom", textBox_From.Text);
+            SQLiteDBClass.PutSettingString("RouteTo", textBox_To.Text);
+            SQLiteDBClass.PutSettingString("RouteRange", textBox_Range.Text);
+            SQLiteDBClass.PutSettingString("RouteFromX", textBox_FromX.Text);
+            SQLiteDBClass.PutSettingString("RouteFromY", textBox_FromY.Text);
+            SQLiteDBClass.PutSettingString("RouteFromZ", textBox_FromZ.Text);
+            SQLiteDBClass.PutSettingString("RouteToX", textBox_ToX.Text);
+            SQLiteDBClass.PutSettingString("RouteToY", textBox_ToY.Text);
+            SQLiteDBClass.PutSettingString("RouteToZ", textBox_ToZ.Text);
+            SQLiteDBClass.PutSettingBool("RouteFromState", textBox_From.ReadOnly);
+            SQLiteDBClass.PutSettingBool("RouteToState", textBox_To.ReadOnly);
+            SQLiteDBClass.PutSettingInt("RouteMetric", comboBoxRoutingMetric.SelectedIndex);
         }
 
         public void EnableRouteTab()
         {
-            if (db == null)
-                db = new SQLiteDBClass();
-
-            textBox_From.Text = db.GetSettingString("RouteFrom", "");
-            textBox_To.Text = db.GetSettingString("RouteTo", "");
-            textBox_Range.Text = db.GetSettingString("RouteRange", "30");
+            textBox_From.Text = SQLiteDBClass.GetSettingString("RouteFrom", "");
+            textBox_To.Text = SQLiteDBClass.GetSettingString("RouteTo", "");
+            textBox_Range.Text = SQLiteDBClass.GetSettingString("RouteRange", "30");
             if (textBox_Range.Text == "")
                 textBox_Range.Text = "30";
-            textBox_FromX.Text = db.GetSettingString("RouteFromX", "");
-            textBox_FromY.Text = db.GetSettingString("RouteFromY", "");
-            textBox_FromZ.Text = db.GetSettingString("RouteFromZ", "");
-            textBox_ToX.Text = db.GetSettingString("RouteToX", "");
-            textBox_ToY.Text = db.GetSettingString("RouteToY", "");
-            textBox_ToZ.Text = db.GetSettingString("RouteToZ", "");
-            bool fromstate = db.GetSettingBool("RouteFromState", false);
-            bool tostate = db.GetSettingBool("RouteToState", false);
+            textBox_FromX.Text = SQLiteDBClass.GetSettingString("RouteFromX", "");
+            textBox_FromY.Text = SQLiteDBClass.GetSettingString("RouteFromY", "");
+            textBox_FromZ.Text = SQLiteDBClass.GetSettingString("RouteFromZ", "");
+            textBox_ToX.Text = SQLiteDBClass.GetSettingString("RouteToX", "");
+            textBox_ToY.Text = SQLiteDBClass.GetSettingString("RouteToY", "");
+            textBox_ToZ.Text = SQLiteDBClass.GetSettingString("RouteToZ", "");
+            bool fromstate = SQLiteDBClass.GetSettingBool("RouteFromState", false);
+            bool tostate = SQLiteDBClass.GetSettingBool("RouteToState", false);
 
-            int metricvalue = db.GetSettingInt("RouteMetric", 0);
-            comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : metric_waypointdev2;
+            int metricvalue = SQLiteDBClass.GetSettingInt("RouteMetric", 0);
+            comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemClass.metric_waypointdev2;
 
             SelectToMaster(tostate);
             UpdateTo(true);
@@ -409,7 +329,7 @@ namespace EDDiscovery
 
             if (textBox_From.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (SystemData.GetSystem(SystemNameOnly(textBox_From.Text)) == null)
+                if (SystemClass.GetSystem(SystemNameOnly(textBox_From.Text)) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -419,7 +339,7 @@ namespace EDDiscovery
             }
             if (textBox_To.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (SystemData.GetSystem(SystemNameOnly(textBox_To.Text)) == null)
+                if (SystemClass.GetSystem(SystemNameOnly(textBox_To.Text)) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -450,7 +370,7 @@ namespace EDDiscovery
 
             if (textBox_From.ReadOnly == false)                // if entering system name..
             {
-                EDDiscovery2.DB.ISystem ds1 = SystemData.GetSystem(SystemNameOnly(textBox_From.Text));
+                EDDiscovery2.DB.ISystem ds1 = SystemClass.GetSystem(SystemNameOnly(textBox_From.Text));
 
                 if (ds1 != null)
                 {
@@ -470,14 +390,16 @@ namespace EDDiscovery
                 Point3D curpos;
                 if (GetCoordsFrom(out curpos))
                 {
-                    SystemClass nearest;
-                    double distance;
-                    FindNearestSystem(curpos, out nearest, out distance);
+                    SystemClass nearest = SystemClass.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
 
-                    if (distance < 0.1)
-                        res = nearest.name;
-                    else
-                        res = nearest.name + " @ " + distance.ToString("0.00") + "ly";
+                    if (nearest != null)
+                    {
+                        double distance = Point3D.DistanceBetween(curpos, new Point3D(nearest.x, nearest.y, nearest.z));
+                        if (distance < 0.1)
+                            res = nearest.name;
+                        else
+                            res = nearest.name + " @ " + distance.ToString("0.00") + "ly";
+                    }
                 }
 
                 textBox_From.Text = res;
@@ -504,26 +426,41 @@ namespace EDDiscovery
         private void textBox_From_Enter(object sender, EventArgs e)
         {
             SelectFromMaster(false);                              // enable system box
-            UpdateFrom(true);
+            fromupdatetimer.Stop();
+            fromupdatetimer.Start();
+//            Console.WriteLine("XYZE: Start at " + Environment.TickCount);
         }
 
         private void textBox_FromXYZ_Enter(object sender, EventArgs e)
         {
             SelectFromMaster(true);                       // coords master
-            UpdateFrom(false);
+            fromupdatetimer.Stop();
+            fromupdatetimer.Start();
             ((System.Windows.Forms.TextBox)sender).Select(0, 1000); // entering selects everything
         }
 
         private void textBox_From_TextChanged(object sender, EventArgs e)
         {
             if ( !changesilence )
-                UpdateFrom(false);
+            {
+                fromupdatetimer.Stop();
+                fromupdatetimer.Start();
+            }
+        }
+
+        void FromUpdateTick(object sender, EventArgs e)
+        {
+            fromupdatetimer.Stop();
+            UpdateFrom(false);
         }
 
         private void textBox_XYZ_From_Changed(object sender, EventArgs e)
         {
             if (!changesilence)
-                UpdateFrom(false);
+            {
+                fromupdatetimer.Stop();
+                fromupdatetimer.Start();
+            }
         }
 
         // To..
@@ -543,7 +480,7 @@ namespace EDDiscovery
 
             if (textBox_To.ReadOnly == false)                // if entering system name..
             {
-                EDDiscovery2.DB.ISystem ds1 = SystemData.GetSystem(SystemNameOnly(textBox_To.Text));
+                EDDiscovery2.DB.ISystem ds1 = SystemClass.GetSystem(SystemNameOnly(textBox_To.Text));
 
                 if (ds1 != null)
                 {
@@ -563,14 +500,16 @@ namespace EDDiscovery
                 Point3D curpos;
                 if (GetCoordsTo(out curpos))
                 {
-                    SystemClass nearest;
-                    double distance;
-                    FindNearestSystem(curpos, out nearest, out distance);
+                    SystemClass nearest = SystemClass.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
 
-                    if (distance < 0.1)
-                        res = nearest.name;
-                    else
-                        res = nearest.name + " @ " + distance.ToString("0.00") + "ly";
+                    if (nearest != null)
+                    {
+                        double distance = Point3D.DistanceBetween(curpos, new Point3D(nearest.x, nearest.y, nearest.z));
+                        if (distance < 0.1)
+                            res = nearest.name;
+                        else
+                            res = nearest.name + " @ " + distance.ToString("0.00") + "ly";
+                    }
                 }
 
                 textBox_To.Text = res;
@@ -585,49 +524,40 @@ namespace EDDiscovery
         private void textBox_To_Enter(object sender, EventArgs e)   // To has been tabbed/clicked..
         {
             SelectToMaster(false);                              // enable system box
-            UpdateTo(true);                                  // update xyz, and if valid, update name
+            toupdatetimer.Stop();
+            toupdatetimer.Start();
         }
 
         private void textBox_ToXYZ_Enter(object sender, EventArgs e)
         {
             SelectToMaster(true);                       // coords master
-            UpdateTo(false);                            // and update..
+            toupdatetimer.Stop();
+            toupdatetimer.Start();
             ((System.Windows.Forms.TextBox)sender).Select(0, 1000); // clicking highlights everything
         }
 
         private void textBox_To_TextChanged(object sender, EventArgs e)
         {
             if (!changesilence)
-                UpdateTo(false);
+            {
+                toupdatetimer.Stop();
+                toupdatetimer.Start();
+            }
         }
 
         private void textBox_XYZ_To_Changed(object sender, EventArgs e)
         {
             if (!changesilence)
-                UpdateTo(false);
+            {
+                toupdatetimer.Stop();
+                toupdatetimer.Start();
+            }
         }
 
-        private void FindNearestSystem(Point3D curpos, out SystemClass system, out double distance)
+        void ToUpdateTick(object sender, EventArgs e)
         {
-            List<SystemClass> systems = SystemData.SystemList;
-            SystemClass nearestsystem = null;
-            double mindistance = 1E19;
-
-            for (int ii = 0; ii < systems.Count; ii++)
-            {
-                SystemClass syscheck = systems[ii];
-                Point3D syspos = new Point3D(syscheck.x, syscheck.y, syscheck.z);
-                double curdistance = Point3D.DistanceBetween(curpos, syspos);
-
-                if (curdistance < mindistance)
-                {
-                    nearestsystem = syscheck;
-                    mindistance = curdistance;
-                }
-            }
-
-            system = nearestsystem;
-            distance = mindistance;
+            toupdatetimer.Stop();
+            UpdateTo(false);
         }
 
         private void comboBoxRoutingMetric_SelectedIndexChanged(object sender, EventArgs e)

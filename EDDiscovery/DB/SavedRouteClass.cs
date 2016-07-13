@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Data.SQLite;
+using System.Data.Common;
 
 namespace EDDiscovery.DB
 {
@@ -24,7 +24,7 @@ namespace EDDiscovery.DB
 
         public SavedRouteClass(DataRow dr, DataRow[] syslist)
         {
-            this.Id = (int)(long)dr["id"];
+            this.Id = (long)dr["id"];
             this.Name = (string)dr["name"];
             if (dr["start"] != DBNull.Value)
                 this.StartDate = (DateTime?)dr["start"];
@@ -33,7 +33,7 @@ namespace EDDiscovery.DB
             this.Systems = syslist.Select(s => (string)s["systemname"]).ToList();
         }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -72,50 +72,38 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                return Add(cn);
+                bool ret = Add(cn);     // pass it an open connection since it does multiple SQLs
+                return ret;
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("Insert into routes_expeditions (name, start, end) values (@name, @start, @end)"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into routes_expeditions (name, start, end) values (@name, @start, @end)";
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@start", StartDate);
-                cmd.Parameters.AddWithValue("@end", EndDate);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@start", StartDate);
+                cmd.AddParameterWithValue("@end", EndDate);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from routes_expeditions"))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "Select Max(id) as id from routes_expeditions";
-
-                    Id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                    Id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)";
-                    cmd2.Parameters.Add("@routeid", DbType.String);
-                    cmd2.Parameters.Add("@name", DbType.String);
+                    cmd2.AddParameter("@routeid", DbType.String);
+                    cmd2.AddParameter("@name", DbType.String);
 
                     foreach (var sysname in Systems)
                     {
                         cmd2.Parameters["@routeid"].Value = Id;
                         cmd2.Parameters["@name"].Value = sysname;
-                        SQLiteDBClass.SqlNonQueryText(cn, cmd2);
+                        SQLiteDBClass.SQLNonQueryText(cn, cmd2);
                     }
                 }
 
@@ -125,56 +113,86 @@ namespace EDDiscovery.DB
 
         public bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                return Update(cn);
+                bool ret = Update(cn);
+                return ret;
             }
         }
 
-        private bool Update(SQLiteConnection cn)
+        private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("UPDATE routes_expeditions SET name=@name, start=@start, end=@end WHERE id=@id"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "UPDATE routes_expeditions SET name=@name, start=@start, end=@end WHERE id=@id";
-                cmd.Parameters.AddWithValue("@id", Id);
-                cmd.Parameters.AddWithValue("@name", Name);
-                cmd.Parameters.AddWithValue("@start", StartDate);
-                cmd.Parameters.AddWithValue("@end", EndDate);
+                cmd.AddParameterWithValue("@id", Id);
+                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@start", StartDate);
+                cmd.AddParameterWithValue("@end", EndDate);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
-
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand("DELETE FROM route_systems WHERE routeid=@routeid"))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "DELETE FROM route_systems WHERE routeid=@routeid";
-                    cmd2.Parameters.AddWithValue("@routeid", Id);
-                    SQLiteDBClass.SqlNonQueryText(cn, cmd2);
+                    cmd2.AddParameterWithValue("@routeid", Id);
+                    SQLiteDBClass.SQLNonQueryText(cn, cmd2);
                 }
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)";
-                    cmd2.Parameters.Add("@routeid", DbType.String);
-                    cmd2.Parameters.Add("@name", DbType.String);
+                    cmd2.AddParameter("@routeid", DbType.String);
+                    cmd2.AddParameter("@name", DbType.String);
 
                     foreach (var sysname in Systems)
                     {
                         cmd2.Parameters["@routeid"].Value = Id;
                         cmd2.Parameters["@name"].Value = sysname;
-                        SQLiteDBClass.SqlNonQueryText(cn, cmd2);
+                        SQLiteDBClass.SQLNonQueryText(cn, cmd2);
                     }
                 }
 
                 return true;
             }
+        }
+
+
+        public static List<SavedRouteClass> GetAllSavedRoutes()
+        {
+            List<SavedRouteClass> retVal = new List<SavedRouteClass>();
+
+            try
+            {
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                {
+                    using (DbCommand cmd1 = cn.CreateCommand("select * from routes_expeditions"))
+                    {
+                        DataSet ds1 = SQLiteDBClass.SQLQueryText(cn, cmd1);
+
+                        if (ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
+                        {
+                            using (DbCommand cmd2 = cn.CreateCommand("select * from route_systems"))
+                            {
+                                DataSet ds2 = SQLiteDBClass.SQLQueryText(cn, cmd2);
+
+                                foreach (DataRow dr in ds1.Tables[0].Rows)
+                                {
+                                    DataRow[] syslist = new DataRow[0];
+                                    if (ds2.Tables.Count != 0)
+                                    {
+                                        syslist = ds2.Tables[0].Select(String.Format("routeid = {0}", dr["id"]), "id ASC");
+                                    }
+                                    SavedRouteClass sys = new SavedRouteClass(dr, syslist);
+                                    retVal.Add(sys);
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return retVal;
         }
     }
 }

@@ -109,6 +109,7 @@ namespace EDDiscovery2
         static public bool EDRunning = false;
         static public bool EDLaunchRunning = false;
         static public bool Beta = false;
+        static public bool checkedfordefaultfolder = false;
 
         static public bool CheckED()
         {
@@ -130,10 +131,14 @@ namespace EDDiscovery2
                 {
                     EDRunning = false;
 
-                    SQLiteDBClass db = new SQLiteDBClass();
-
                     if (EDDirectory == null || EDDirectory.Equals(""))
-                        EDDirectory = db.GetSettingString("EDDirectory", "");
+                    {
+                        if (!checkedfordefaultfolder)
+                        {
+                            checkedfordefaultfolder = true;                 // do it once, but no need to keep on doing it.. only this class can set it once the process starts
+                            EDDirectory = SQLiteDBClass.GetSettingString("EDDirectory", "");
+                        }
+                    }
                 }
                 else
                 {
@@ -152,41 +157,20 @@ namespace EDDiscovery2
                     EDDirectory = Path.GetDirectoryName(EDFileName);
                     if (EDDirectory != null)
                     {
-                        SQLiteDBClass db = new SQLiteDBClass();
                         if (EDDirectory.Contains("PUBLIC_TEST_SERVER")) // BETA
                         {
-                            db.PutSettingString("EDDirectoryBeta", EDDirectory);
+                            SQLiteDBClass.PutSettingString("EDDirectoryBeta", EDDirectory);
                             Beta = true;
                         }
                         else
                         {
                             Beta = false;
-                            db.PutSettingString("EDDirectory", EDDirectory);
+                            SQLiteDBClass.PutSettingString("EDDirectory", EDDirectory);
                         }
                     }
 
-
                     EDRunning = true;
-
                 }
-
-                //processes = Process.GetProcessesByName("EDLaunch");
-
-                //if (processes == null)
-                //{
-                //    EDLaunchRunning = false;
-                //}
-                //else if (processes.Length == 0)
-                //{
-                //    EDLaunchRunning = false;
-                //}
-                //else
-                //{
-
-                //    EDLaunchFileName = ProcessExecutablePath(processes[0]);
-                //    EDLaunchRunning = true;
-
-                //}
 
                 return EDRunning;
             }

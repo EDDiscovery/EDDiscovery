@@ -193,6 +193,7 @@ namespace ExtendedControls
                 clc.SelectedIndex = selected;
                 clc.FlatStyle = FlatStyle;
                 clc.SelectedIndexChanged += UserSelectedIndex;
+                clc.Leave += UserLeftList;
                 clc.Font = Font;
                 clc.ScrollBarColor = ScrollBarColor;
                 clc.ScrollBarButtonColor = ScrollBarButtonColor;
@@ -221,6 +222,11 @@ namespace ExtendedControls
         {
             int sel = clc.SelectedIndex;
             UpdateSelected(sel);
+        }
+
+        protected void UserLeftList(object sender, EventArgs e)
+        {
+            DeActivate();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
