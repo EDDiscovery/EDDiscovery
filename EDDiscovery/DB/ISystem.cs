@@ -36,5 +36,6 @@ namespace EDDiscovery2.DB
         int eddb_updated_at { get; set; }
 
         bool HasCoordinate{ get; }
+        bool HasEDDBInformation { get; }
     }
 }
