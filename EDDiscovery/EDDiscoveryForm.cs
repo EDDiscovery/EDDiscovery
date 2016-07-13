@@ -611,7 +611,7 @@ namespace EDDiscovery
 
                     string json = edsm.RequestDistances(lstdist);
                     if (json == null)
-                        LogLine("No response from server.");
+                        LogLine("No response from EDSM Distance server.");
                     else
                     {
                         long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false);

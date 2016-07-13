@@ -156,16 +156,10 @@ namespace EDDiscovery.DB
 
                     id_eddb = jo["id"].Value<int>();
 
-                    /*CommanderCreate = jo["commandercreate"].Value<string>();
-                    CreateDate = jo["createdate"].Value<DateTime>();
-                    CommanderUpdate = jo["commanderupdate"].Value<string>();
-                    UpdateDate = jo["updatedate"].Value<DateTime>();*/
-
                     faction = jo["faction"].Value<string>();
 
                     if (jo["population"].Type == JTokenType.Integer)
                         population = jo["population"].Value<long>();
-
 
                     government = EliteDangerous.Government2ID(jo["government"]);
                     allegiance = EliteDangerous.Allegiance2ID(jo["allegiance"]);
@@ -1177,6 +1171,7 @@ namespace EDDiscovery.DB
                     cmd1 = cn.CreateCommand("select * from Systems where id_edsm = @id limit 1");   // 1 return matching ID
 
                     int c = 0;
+                    int hasinfo = 0;
                     int lasttc = Environment.TickCount;
 
                     while (jr.Read())
@@ -1187,40 +1182,51 @@ namespace EDDiscovery.DB
 
                             SystemClass system = new SystemClass(jo, EDDiscovery2.DB.SystemInfoSource.EDDB);
 
-                            cmd1.Parameters.Clear();
-                            cmd1.AddParameterWithValue("id", system.id_edsm);           // EDDB carries EDSM ID, so find entry in dB
-
-                            using (DbDataReader reader1 = cmd1.ExecuteReader())         // if found (if not, we ignore EDDB system)
+                            if (system.HasEDDBInformation)                                  // screen out for speed any EDDB data with empty interesting fields
                             {
-                                if (reader1.Read())                                     // its there.. check its got the right stuff in it.
+                                hasinfo++;
+
+                                cmd1.Parameters.Clear();
+                                cmd1.AddParameterWithValue("id", system.id_edsm);           // EDDB carries EDSM ID, so find entry in dB
+
+                                //DEBUGif ( c > 30000 )  Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " Late info system");
+
+                                using (DbDataReader reader1 = cmd1.ExecuteReader())         // if found (if not, we ignore EDDB system)
                                 {
-                                    SystemClass dbsys = new SystemClass(reader1);       // we always do an update.  if EDDB entry is not in DB, we ignore it
-
-                                    if (dbsys.eddb_updated_at != system.eddb_updated_at || dbsys.population != system.population)
+                                    if (reader1.Read())                                     // its there.. check its got the right stuff in it.
                                     {
-                                        dbsys.id_eddb = system.id_eddb;
-                                        dbsys.faction = system.faction;
-                                        dbsys.population = system.population;
-                                        dbsys.government = system.government;
-                                        dbsys.allegiance = system.allegiance;
-                                        dbsys.state = system.state;
-                                        dbsys.security = system.security;
-                                        dbsys.primary_economy = system.primary_economy;
-                                        dbsys.needs_permit = system.needs_permit;
-                                        dbsys.eddb_updated_at = system.eddb_updated_at;
+                                        SystemClass dbsys = new SystemClass(reader1);       
 
-                                        toupdate.Add(dbsys);                                // add to update list
+                                        if (dbsys.eddb_updated_at != system.eddb_updated_at || dbsys.population != system.population)
+                                        {
+                                            dbsys.id_eddb = system.id_eddb;
+                                            dbsys.faction = system.faction;
+                                            dbsys.population = system.population;
+                                            dbsys.government = system.government;
+                                            dbsys.allegiance = system.allegiance;
+                                            dbsys.state = system.state;
+                                            dbsys.security = system.security;
+                                            dbsys.primary_economy = system.primary_economy;
+                                            dbsys.needs_permit = system.needs_permit;
+                                            dbsys.eddb_updated_at = system.eddb_updated_at;
+
+                                            toupdate.Add(dbsys);                                // add to update list
+                                        }
+                                    }
+                                    else
+                                    {
+//                                        Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " Not found");
                                     }
                                 }
-                                else
-                                {
-                                    Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " Not found");
-                                }
+                            }
+                            else
+                            {
+                                //Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " No info reject");
                             }
 
                             if (++c % 10000 == 0)
                             {
-                                Console.WriteLine("EDDB Count " + c + " Delta " + (Environment.TickCount - lasttc) + " update " + toupdate.Count());
+                                Console.WriteLine("EDDB Count " + c + " Delta " + (Environment.TickCount - lasttc) + " info "  + hasinfo + " update " + toupdate.Count());
                                 lasttc = Environment.TickCount;
                             }
                         }
