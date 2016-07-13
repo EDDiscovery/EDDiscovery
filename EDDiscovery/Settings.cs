@@ -69,7 +69,9 @@ namespace EDDiscovery2
             EDDConfig.Instance.NetLogDirAutoModeChanged += EDDConfig_NetLogDirAutoModeChanged;
             EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
 
+            checkBox_Distances.Enabled = false;         // disable over checked to indicate its not a user thing
             checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
+            checkBox_Distances.Enabled = true;
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
             checkboxSkipSlowUpdates.Checked = EDDiscoveryForm.EDDConfig.CanSkipSlowUpdates;
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
@@ -296,6 +298,12 @@ namespace EDDiscovery2
         private void checkBox_Distances_CheckedChanged(object sender, EventArgs e)
         {
             EDDiscoveryForm.EDDConfig.UseDistances = checkBox_Distances.Checked;
+
+            if (checkBox_Distances.Checked && checkBox_Distances.Enabled)
+            {
+                _discoveryForm.RequestDistanceSync();
+                MessageBox.Show("Requesting updated distances from EDSM, please wait");
+            }
         }
     }
 }

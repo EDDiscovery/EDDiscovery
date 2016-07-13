@@ -123,7 +123,7 @@ namespace EDDiscovery2.EDSM
             }
             catch (Exception ex)
             {
-                respstr += "Excpetion in ShowDistanceResponse: " + ex.Message;
+                respstr += "Exception in ShowDistanceResponse: " + ex.Message;
                 return false;
             }
         }
