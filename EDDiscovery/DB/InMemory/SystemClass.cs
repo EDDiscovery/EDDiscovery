@@ -39,5 +39,14 @@ namespace EDDiscovery2.DB.InMemory
                 return (!double.IsNaN(x));
             }
         }
+
+        public bool HasEDDBInformation
+        {
+            get
+            {
+                return population != 0 || government != EDGovernment.Unknown || needs_permit != 0 || allegiance != EDAllegiance.Unknown ||
+                       state != EDState.Unknown || security != EDSecurity.Unknown || primary_economy != EDEconomy.Unknown || (faction != null && faction.Length>0); 
+            }
+        }
     }
 }

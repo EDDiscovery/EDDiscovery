@@ -277,7 +277,7 @@ namespace EDDiscovery
 
                     if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
                     {
-                        LogLineHighlight("New EDDiscovery installer availble  " + "http://eddiscovery.astronet.se/release/" + newInstaller);
+                        LogLineHighlight("New EDDiscovery installer available " + "http://eddiscovery.astronet.se/release/" + newInstaller);
                     }
 
                 }
@@ -355,6 +355,9 @@ namespace EDDiscovery
             panel_minimize.Visible = !theme.WindowsFrame;
             label_version.Visible = !theme.WindowsFrame;
             label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            if (Tools.appfolder != "EDDiscovery")
+                label_version.Text += " (Using " + Tools.appfolder +")";
+
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
             if (settings.ThemeName != "None")
@@ -635,7 +638,7 @@ namespace EDDiscovery
 
                     string json = edsm.RequestDistances(lstdist);
                     if (json == null)
-                        LogLine("No response from server.");
+                        LogLine("No response from EDSM Distance server.");
                     else
                     {
                         long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false);
@@ -693,7 +696,7 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    TravelHistoryControl.LogText(text + Environment.NewLine);
+                    travelHistoryControl1.LogText(text + Environment.NewLine);
                 });
             }
             catch
@@ -707,7 +710,7 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    TravelHistoryControl.LogTextHighlight(text + Environment.NewLine);
+                    travelHistoryControl1.LogTextHighlight(text + Environment.NewLine);
 
                 });
             }
@@ -722,7 +725,7 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    TravelHistoryControl.LogTextSuccess(text + Environment.NewLine);
+                    travelHistoryControl1.LogTextSuccess(text + Environment.NewLine);
 
                 });
             }
@@ -855,15 +858,6 @@ namespace EDDiscovery
             frm.Show();
         }
 
-        private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (performeddbsync == false)           // meaning its not running
-            {
-                performeddbsync = true;
-                AsyncPerformSync();
-            }
-        }
-
         private void prospectingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PlanetsForm frm = new PlanetsForm();
@@ -871,7 +865,18 @@ namespace EDDiscovery
             frm.InitForm(this);
             frm.Show();
         }
-                
+
+        private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (performeddbsync == false)           // meaning its not running
+            {
+                performeddbsync = true;
+                AsyncPerformSync();
+            }
+            else
+                MessageBox.Show("EDDB Sync is in operation, please wait");
+        }
+
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (performedsmsync == false)      // meaning we are not running this..
@@ -879,15 +884,33 @@ namespace EDDiscovery
                 performedsmsync = true;
                 AsyncPerformSync();
             }
+            else
+                MessageBox.Show("EDSM Sync is in operation, please wait");
         }
 
         private void synchroniseWithEDSMDistancesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!EDDConfig.UseDistances)
+                MessageBox.Show("EDSM Distances are turned off, please turn on first in settings");
+            else if (performedsmdistsync == false)
+            {
+                performedsmdistsync = true;
+                AsyncPerformSync();
+            }
+            else
+                MessageBox.Show("EDSM Distances Sync is in operation, please wait");
+        }
+
+        public bool RequestDistanceSync()
         {
             if (performedsmdistsync == false)
             {
                 performedsmdistsync = true;
                 AsyncPerformSync();
+                return true;
             }
+            else
+                return false;
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)

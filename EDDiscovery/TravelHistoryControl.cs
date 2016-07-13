@@ -51,14 +51,12 @@ namespace EDDiscovery
         private VisitedSystemsClass currentSysPos = null;
 
 
-        private static ExtendedControls.RichTextBoxScroll static_richTextBox;
         private int activecommander = 0;
         List<EDCommander> commanders = null;
         
         public TravelHistoryControl()
         {
             InitializeComponent();
-            static_richTextBox = richTextBox_History;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -116,25 +114,25 @@ namespace EDDiscovery
         }
 
 
-        static public void LogText(string text)
+        public void LogText(string text)
         {
             LogTextColor(text, _discoveryForm.theme.TextBlockColor );
         }
 
-        static public void LogTextHighlight(string text)
+        public void LogTextHighlight(string text)
         {
             LogTextColor(text, _discoveryForm.theme.TextBlockHighlightColor);
         }
 
-        static public void LogTextSuccess(string text)
+        public void LogTextSuccess(string text)
         {
             LogTextColor(text, _discoveryForm.theme.TextBlockSuccessColor);
         }
 
-        static public void LogTextColor( string text, Color color)
+        public void LogTextColor( string text, Color color)
         {
             //Console.WriteLine("Text <" + text + "> from " + Environment.StackTrace);
-            static_richTextBox.AppendText(text, color);
+            richTextBox_History.AppendText(text, color);
         }
 
         public void RefreshHistory()
@@ -663,13 +661,13 @@ namespace EDDiscovery
                     bool trilok;
                     if (edsm.ShowDistanceResponse(json, out str, out trilok))
                     {
-                        LogText(str);
+                        LogText("EDSM Response " + str);
                         dist.Status = DistancsEnum.EDDiscoverySubmitted;
                         dist.Update();
                     }
                     else
                     {
-                        LogText(str);
+                        LogText("EDSM Response " + str);
                     }
                 }
             }
