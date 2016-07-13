@@ -129,17 +129,12 @@ namespace EDDiscovery
                 return null;
             }
 
-
             if (!Directory.Exists(datapath))   // if logfiles directory is not found
             {
-                if (richTextBox_History != null)
-                {
-                    richTextBox_History.Clear();
-                    AppendText(richTextBox_History, "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
-                    //MessageBox.Show("Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab", "EDDiscovery Error", MessageBoxButtons.OK);
-                }
+                AppendText(richTextBox_History, "Netlog directory is not present!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
                 return null;
             }
+
             try
             {
                 dirInfo = new DirectoryInfo(datapath);
@@ -248,9 +243,6 @@ namespace EDDiscovery
                                 }
 
                             }
-
-
-
                         }
 
                         lu.Size = (int)fi.Length;

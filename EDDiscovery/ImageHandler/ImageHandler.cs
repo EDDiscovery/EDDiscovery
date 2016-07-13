@@ -250,8 +250,8 @@ namespace EDDiscovery2.ImageHandler
                 }
 
                 Invoke((MethodInvoker)delegate {
-                    TravelHistoryControl.LogText("Converted " + Path.GetFileName(inputfile) + " to " + 
-                        Path.GetFileName(store_name) + Environment.NewLine ); });
+                    _discoveryForm.LogLine("Converted " + Path.GetFileName(inputfile) + " to " + 
+                        Path.GetFileName(store_name) ); });
             }
             catch (Exception ex)
             {
