@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.DB
 {
-    public enum SystemStatusEnum
+    public enum SystemStatusEnum                // Who made the information?
     {
         Unknown = 0,
         EDSC = 1,
