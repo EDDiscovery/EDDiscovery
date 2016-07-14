@@ -70,6 +70,7 @@ namespace EDDiscovery
         public List<VisitedSystemsClass> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
 
         public bool option_nowindowreposition { get; set;  }  = false;                             // Cmd line options
+        public bool option_debugoptions { get; set; } = false;
 
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
@@ -149,7 +150,7 @@ namespace EDDiscovery
         private void ProcessCommandLineOptions()
         {
             string cmdline = Environment.CommandLine;
-            option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1 );
+            option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1);
 
             int pos = cmdline.IndexOf("-Appfolder", 0, StringComparison.InvariantCultureIgnoreCase);
             if ( pos != -1 )
@@ -159,6 +160,7 @@ namespace EDDiscovery
                     Tools.appfolder = nextwords[0];
             }
 
+            option_debugoptions = cmdline.IndexOf("-Debug", 0, StringComparison.InvariantCultureIgnoreCase) != -1;
         }
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
@@ -174,7 +176,7 @@ namespace EDDiscovery
                 CheckIfEliteDangerousIsRunning();
                 CheckIfVerboseLoggingIsTurnedOn();
 
-                if (File.Exists("test.txt"))
+                if (option_debugoptions)
                 {
                     button_test.Visible = true;
                     prospectingToolStripMenuItem.Visible = true;
@@ -309,14 +311,20 @@ namespace EDDiscovery
 
                 var screen = SystemInformation.VirtualScreen; 
                 if( height > screen.Height ) height = screen.Height;
-                if( top + height > screen.Height) top = screen.Height - height;
+                if( top + height > screen.Height + screen.Top) top = screen.Height + screen.Top - height;
                 if( width > screen.Width ) width = screen.Width;
-                if( left + width > screen.Width ) left = screen.Width - width;
+                if( left + width > screen.Width + screen.Left ) left = screen.Width + screen.Left - width;
+                if (top < screen.Top) top = screen.Top;
+                if (left < screen.Left) left = screen.Left;
 
                 this.Top = top;
                 this.Left = left;
                 this.Height = height;
                 this.Width = width;
+
+                this.CreateParams.X = this.Left;
+                this.CreateParams.Y = this.Top;
+                this.StartPosition = FormStartPosition.Manual;
             }
         }
 
@@ -678,21 +686,25 @@ namespace EDDiscovery
 
             if ( refreshhistory )
             {
-                Invoke((MethodInvoker)delegate
+                try
                 {
-                    LogLine("Refreshing history due changes in distances or star data.");
-                    travelHistoryControl1.RefreshHistory();
-                    LogLine("Refreshing complete.");
-
-                    if (firstrun)
+                    Invoke((MethodInvoker)delegate
                     {
-                        MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
-                                        "Restart ED Discovery");
-                    }
-                    else if (edsmoreddbsync)
-                        MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
+                        LogLine("Refreshing history due changes in distances or star data.");
+                        travelHistoryControl1.RefreshHistory();
+                        LogLine("Refreshing complete.");
 
-                });
+                        if (firstrun)
+                        {
+                            MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
+                                            "Restart ED Discovery");
+                        }
+                        else if (edsmoreddbsync)
+                            MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
+
+                    });
+                }
+                catch { }
             }
         }
 
