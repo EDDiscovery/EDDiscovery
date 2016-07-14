@@ -55,6 +55,7 @@ namespace EDDiscovery
         public List<VisitedSystemsClass> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
 
         public bool option_nowindowreposition { get; set;  }  = false;                             // Cmd line options
+        public bool option_debugoptions { get; set; } = false;
 
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
@@ -133,7 +134,7 @@ namespace EDDiscovery
         private void ProcessCommandLineOptions()
         {
             string cmdline = Environment.CommandLine;
-            option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1 );
+            option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1);
 
             int pos = cmdline.IndexOf("-Appfolder", 0, StringComparison.InvariantCultureIgnoreCase);
             if ( pos != -1 )
@@ -143,6 +144,7 @@ namespace EDDiscovery
                     Tools.appfolder = nextwords[0];
             }
 
+            option_debugoptions = cmdline.IndexOf("-Debug", 0, StringComparison.InvariantCultureIgnoreCase) != -1;
         }
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
@@ -158,7 +160,7 @@ namespace EDDiscovery
                 CheckIfEliteDangerousIsRunning();
                 CheckIfVerboseLoggingIsTurnedOn();
 
-                if (File.Exists("test.txt"))
+                if (option_debugoptions)
                 {
                     button_test.Visible = true;
                     prospectingToolStripMenuItem.Visible = true;
