@@ -161,6 +161,7 @@ namespace EDDiscovery
                 if (File.Exists("test.txt"))
                 {
                     button_test.Visible = true;
+                    prospectingToolStripMenuItem.Visible = true;
                 }
             }
             catch (Exception ex)
@@ -847,6 +848,11 @@ namespace EDDiscovery
             frm.Show();
         }
 
+        private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TravelControl.buttonMap_Click(sender, e);
+        }
+
         private void prospectingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PlanetsForm frm = new PlanetsForm();
@@ -992,31 +998,36 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
-
-            foreach (VisitedSystemsClass vs in vsall)
+            if (MessageBox.Show("Confirm you wish to reset all travelled history entries to the first commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                if (vs.Commander != 0)
+                List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
+
+                foreach (VisitedSystemsClass vs in vsall)
                 {
-                    vs.Commander = 0;
-                    vs.Update();
+                    if (vs.Commander != 0)
+                    {
+                        vs.Commander = 0;
+                        vs.Update();
+                    }
                 }
             }
         }
 
         private void debugBetaFixHiddenLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
-
-            foreach (VisitedSystemsClass vs in vsall)
+            if (MessageBox.Show("Confirm you wish to reset all hidden entries after 5th may 2016 to the first commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                if (vs.Commander == -2 && vs.Time > new DateTime(2016, 5, 5))
+                List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
+
+                foreach (VisitedSystemsClass vs in vsall)
                 {
-                    vs.Commander = 0;
-                    vs.Update();
+                    if (vs.Commander == -2 && vs.Time > new DateTime(2016, 5, 5))
+                    {
+                        vs.Commander = 0;
+                        vs.Update();
+                    }
                 }
             }
-
         }
 
         #endregion

@@ -21,7 +21,7 @@ namespace EDDiscovery2.DB
         DateTime CreateDate { get; set; }
         string CommanderUpdate { get; set; }
         DateTime UpdateDate { get; set; }
-        EDDiscovery.DB.SystemStatusEnum status { get; set; }
+        EDDiscovery.DB.SystemStatusEnum status { get; set; }        // Who made this entry, where did the info come from?
         string SystemNote { get; set; }
 
         long id_eddb { get; set; }
