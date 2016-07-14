@@ -295,9 +295,11 @@ namespace EDDiscovery
 
                 var screen = SystemInformation.VirtualScreen; 
                 if( height > screen.Height ) height = screen.Height;
-                if( top + height > screen.Height) top = screen.Height - height;
+                if( top + height > screen.Height + screen.Top) top = screen.Height + screen.Top - height;
                 if( width > screen.Width ) width = screen.Width;
-                if( left + width > screen.Width ) left = screen.Width - width;
+                if( left + width > screen.Width + screen.Left ) left = screen.Width + screen.Left - width;
+                if (top < screen.Top) top = screen.Top;
+                if (left < screen.Left) left = screen.Left;
 
                 this.Top = top;
                 this.Left = left;
