@@ -41,13 +41,12 @@
             this.wantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enterDistanceToPreviousStarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.labelclosests = new System.Windows.Forms.Label();
-            this.label_warning = new System.Windows.Forms.Label();
             this.panel_system = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
             this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
-            this.buttonTrilaterate = new ExtendedControls.ButtonExt();
             this.buttonRoss = new ExtendedControls.DrawnPanel();
             this.buttonEDDB = new ExtendedControls.DrawnPanel();
             this.textBoxState = new ExtendedControls.TextBoxBorder();
@@ -62,10 +61,6 @@
             this.textBoxVisits = new ExtendedControls.TextBoxBorder();
             this.label8 = new System.Windows.Forms.Label();
             this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
-            this.buttonUpdate = new ExtendedControls.ButtonExt();
-            this.textBoxDistance = new ExtendedControls.TextBoxBorder();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBoxPrevSystem = new ExtendedControls.TextBoxBorder();
             this.label_Z = new System.Windows.Forms.Label();
             this.textBoxZ = new ExtendedControls.TextBoxBorder();
             this.labelDistEnter = new System.Windows.Forms.Label();
@@ -135,9 +130,10 @@
             this.hideSystemToolStripMenuItem,
             this.moveToAnotherCommanderToolStripMenuItem,
             this.addToTrilaterationToolStripMenuItem,
-            this.viewOnEDSMToolStripMenuItem});
+            this.viewOnEDSMToolStripMenuItem,
+            this.enterDistanceToPreviousStarToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 136);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 158);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -206,6 +202,13 @@
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             // 
+            // enterDistanceToPreviousStarToolStripMenuItem
+            // 
+            this.enterDistanceToPreviousStarToolStripMenuItem.Name = "enterDistanceToPreviousStarToolStripMenuItem";
+            this.enterDistanceToPreviousStarToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.enterDistanceToPreviousStarToolStripMenuItem.Text = "Enter distance to previous star";
+            this.enterDistanceToPreviousStarToolStripMenuItem.Click += new System.EventHandler(this.enterDistanceToPreviousStarToolStripMenuItem_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -221,26 +224,14 @@
             this.labelclosests.Dock = System.Windows.Forms.DockStyle.Top;
             this.labelclosests.Location = new System.Drawing.Point(0, 0);
             this.labelclosests.Name = "labelclosests";
-            this.labelclosests.Size = new System.Drawing.Size(206, 13);
+            this.labelclosests.Size = new System.Drawing.Size(188, 13);
             this.labelclosests.TabIndex = 12;
-            this.labelclosests.Text = "Closest systems  (from last known position)";
-            // 
-            // label_warning
-            // 
-            this.label_warning.AutoSize = true;
-            this.label_warning.Location = new System.Drawing.Point(3, 221);
-            this.label_warning.MaximumSize = new System.Drawing.Size(280, 50);
-            this.label_warning.Name = "label_warning";
-            this.label_warning.Size = new System.Drawing.Size(245, 26);
-            this.label_warning.TabIndex = 44;
-            this.label_warning.Text = "Important!!  Use galaxy map to get distance with 2 decimals. Ex 17.44";
+            this.labelclosests.Text = "Closest systems (from selected system)";
             // 
             // panel_system
             // 
-            this.panel_system.Controls.Add(this.label_warning);
             this.panel_system.Controls.Add(this.label14);
             this.panel_system.Controls.Add(this.textBoxSolDist);
-            this.panel_system.Controls.Add(this.buttonTrilaterate);
             this.panel_system.Controls.Add(this.buttonRoss);
             this.panel_system.Controls.Add(this.buttonEDDB);
             this.panel_system.Controls.Add(this.textBoxState);
@@ -255,10 +246,6 @@
             this.panel_system.Controls.Add(this.textBoxVisits);
             this.panel_system.Controls.Add(this.label8);
             this.panel_system.Controls.Add(this.richTextBoxNote);
-            this.panel_system.Controls.Add(this.buttonUpdate);
-            this.panel_system.Controls.Add(this.textBoxDistance);
-            this.panel_system.Controls.Add(this.label7);
-            this.panel_system.Controls.Add(this.textBoxPrevSystem);
             this.panel_system.Controls.Add(this.label_Z);
             this.panel_system.Controls.Add(this.textBoxZ);
             this.panel_system.Controls.Add(this.labelDistEnter);
@@ -270,7 +257,7 @@
             this.panel_system.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_system.Location = new System.Drawing.Point(0, 100);
             this.panel_system.Name = "panel_system";
-            this.panel_system.Size = new System.Drawing.Size(297, 250);
+            this.panel_system.Size = new System.Drawing.Size(297, 182);
             this.panel_system.TabIndex = 6;
             // 
             // label14
@@ -293,19 +280,6 @@
             this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
             this.textBoxSolDist.TabIndex = 42;
             this.textBoxSolDist.TabStop = false;
-            // 
-            // buttonTrilaterate
-            // 
-            this.buttonTrilaterate.BorderColorScaling = 1.25F;
-            this.buttonTrilaterate.ButtonColorScaling = 0.5F;
-            this.buttonTrilaterate.ButtonDisabledScaling = 0.5F;
-            this.buttonTrilaterate.Location = new System.Drawing.Point(168, 196);
-            this.buttonTrilaterate.Name = "buttonTrilaterate";
-            this.buttonTrilaterate.Size = new System.Drawing.Size(99, 22);
-            this.buttonTrilaterate.TabIndex = 3;
-            this.buttonTrilaterate.Text = "Trilaterate";
-            this.buttonTrilaterate.UseVisualStyleBackColor = true;
-            this.buttonTrilaterate.Click += new System.EventHandler(this.buttonTrilaterate_Click);
             // 
             // buttonRoss
             // 
@@ -467,50 +441,6 @@
             this.richTextBoxNote.TextChanged += new System.EventHandler(this.richTextBoxNote_TextChanged);
             this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
             // 
-            // buttonUpdate
-            // 
-            this.buttonUpdate.BorderColorScaling = 1.25F;
-            this.buttonUpdate.ButtonColorScaling = 0.5F;
-            this.buttonUpdate.ButtonDisabledScaling = 0.5F;
-            this.buttonUpdate.Location = new System.Drawing.Point(6, 196);
-            this.buttonUpdate.Name = "buttonUpdate";
-            this.buttonUpdate.Size = new System.Drawing.Size(69, 22);
-            this.buttonUpdate.TabIndex = 2;
-            this.buttonUpdate.Text = "Update";
-            this.buttonUpdate.UseVisualStyleBackColor = true;
-            this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
-            // 
-            // textBoxDistance
-            // 
-            this.textBoxDistance.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxDistance.BorderColorScaling = 0.5F;
-            this.textBoxDistance.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.textBoxDistance.Location = new System.Drawing.Point(81, 197);
-            this.textBoxDistance.Name = "textBoxDistance";
-            this.textBoxDistance.Size = new System.Drawing.Size(70, 20);
-            this.textBoxDistance.TabIndex = 1;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 175);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(72, 13);
-            this.label7.TabIndex = 22;
-            this.label7.Text = "Distance from";
-            // 
-            // textBoxPrevSystem
-            // 
-            this.textBoxPrevSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxPrevSystem.BorderColorScaling = 0.5F;
-            this.textBoxPrevSystem.Location = new System.Drawing.Point(90, 174);
-            this.textBoxPrevSystem.Name = "textBoxPrevSystem";
-            this.textBoxPrevSystem.ReadOnly = true;
-            this.textBoxPrevSystem.Size = new System.Drawing.Size(186, 20);
-            this.textBoxPrevSystem.TabIndex = 1;
-            this.textBoxPrevSystem.TabStop = false;
-            this.textBoxPrevSystem.Enter += new System.EventHandler(this.textBoxPrevSystem_Enter);
-            // 
             // label_Z
             // 
             this.label_Z.AutoSize = true;
@@ -630,9 +560,9 @@
             this.panel_bottomright.Controls.Add(this.dataViewScrollerPanel2);
             this.panel_bottomright.Controls.Add(this.labelclosests);
             this.panel_bottomright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_bottomright.Location = new System.Drawing.Point(0, 350);
+            this.panel_bottomright.Location = new System.Drawing.Point(0, 282);
             this.panel_bottomright.Name = "panel_bottomright";
-            this.panel_bottomright.Size = new System.Drawing.Size(297, 300);
+            this.panel_bottomright.Size = new System.Drawing.Size(297, 368);
             this.panel_bottomright.TabIndex = 25;
             // 
             // dataViewScrollerPanel2
@@ -644,7 +574,7 @@
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 13);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(297, 287);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(297, 355);
             this.dataViewScrollerPanel2.TabIndex = 24;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -666,7 +596,7 @@
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 266);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 334);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -693,7 +623,7 @@
             this.dataGridViewNearest.Name = "dataGridViewNearest";
             this.dataGridViewNearest.RowHeadersVisible = false;
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(277, 287);
+            this.dataGridViewNearest.Size = new System.Drawing.Size(277, 355);
             this.dataGridViewNearest.TabIndex = 23;
             // 
             // Col1
@@ -1124,8 +1054,6 @@
         internal ExtendedControls.RichTextBoxScroll richTextBox_History;
         private ExtendedControls.TextBoxBorder textBoxSystem;
         private System.Windows.Forms.Panel panel_system;
-        private System.Windows.Forms.Label label7;
-        private ExtendedControls.TextBoxBorder textBoxPrevSystem;
         private System.Windows.Forms.Label label_Z;
         private ExtendedControls.TextBoxBorder textBoxZ;
         private System.Windows.Forms.Label labelDistEnter;
@@ -1133,7 +1061,6 @@
         private ExtendedControls.TextBoxBorder textBoxY;
         private ExtendedControls.TextBoxBorder textBoxX;
         private System.Windows.Forms.Label label4;
-        private ExtendedControls.ButtonExt buttonUpdate;
         private System.Windows.Forms.Label labelCMDR;
         private ExtendedControls.RichTextBoxScroll richTextBoxNote;
         private ExtendedControls.ButtonExt buttonSync;
@@ -1151,7 +1078,6 @@
         private ExtendedControls.DrawnPanel buttonEDDB;
         private System.Windows.Forms.ToolTip toolTipEddb;
         private ExtendedControls.DrawnPanel buttonRoss;
-        private ExtendedControls.ButtonExt buttonTrilaterate;
         private System.Windows.Forms.Label labelDistanceToNextSystem;
         private System.Windows.Forms.Panel panelRight;
         private ExtendedControls.TextBoxBorder textBoxFilter;
@@ -1173,7 +1099,6 @@
         private System.Windows.Forms.DataGridView dataGridViewNearest;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
-        private System.Windows.Forms.Label label_warning;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private System.Windows.Forms.Panel TopPanel;
@@ -1192,10 +1117,10 @@
         private System.Windows.Forms.ToolStripMenuItem trilaterationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wantedSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
-        private ExtendedControls.TextBoxBorder textBoxDistance;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
         private ExtendedControls.ButtonExt buttonEDSM;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enterDistanceToPreviousStarToolStripMenuItem;
     }
 }

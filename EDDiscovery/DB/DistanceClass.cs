@@ -225,10 +225,10 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static double FindDistance(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
+        public static DistanceClass GetDistanceClass(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
         {
             if (s1 == null || s2 == null)
-                return -1;
+                return null;
 
             try
             {
@@ -238,15 +238,13 @@ namespace EDDiscovery.DB
                     {
                         cmd.AddParameterWithValue("@NameA", s1.name);
                         cmd.AddParameterWithValue("@NameB", s2.name);
+
                         DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
 
                         if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)     // if found.
                         {
-                            foreach (DataRow dr in ds.Tables[0].Rows)
-                            {
-                                DistanceClass dist = new DistanceClass(dr);
-                                return dist.Dist;                                   // return first entry
-                            }
+                            DistanceClass dist = new DistanceClass(ds.Tables[0].Rows[0]);
+                            return dist;
                         }
                     }
                 }
@@ -257,7 +255,14 @@ namespace EDDiscovery.DB
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
 
-            return -1;
+            return null;
+        }
+
+
+        public static double FindDistance(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
+        {
+            DistanceClass dst = GetDistanceClass(s1, s2);
+            return (dst == null) ? -1 : dst.Dist;
         }
 
         public static List<DistanceClass> GetDistancesByStatus(int status)
