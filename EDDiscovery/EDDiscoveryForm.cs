@@ -301,6 +301,10 @@ namespace EDDiscovery
                 this.Left = left;
                 this.Height = height;
                 this.Width = width;
+
+                this.CreateParams.X = this.Left;
+                this.CreateParams.Y = this.Top;
+                this.StartPosition = FormStartPosition.Manual;
             }
         }
 
