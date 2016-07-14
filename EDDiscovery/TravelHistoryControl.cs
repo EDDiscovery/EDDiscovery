@@ -690,36 +690,6 @@ namespace EDDiscovery
                 Task taskEDSM = Task.Factory.StartNew(() => EDSMSync.SendTravelLog(edsm, item, null));
             }
 
-            // grab distance to next (this) system
-            textBoxDistanceToNextSystem.Enabled = false;
-            if (textBoxDistanceToNextSystem.Text.Length > 0 && item2 != null)
-            {
-                SystemClass currentSystem = (SystemClass)item.curSystem, previousSystem = (SystemClass)item2.curSystem;
-
-                if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
-                {
-                    var presetDistance = DistanceParser.ParseJumpDistance(textBoxDistanceToNextSystem.Text.Trim(), MaximumJumpRange);
-
-                    if (presetDistance.HasValue)
-                    {
-                        var distance = new DistanceClass
-                        {
-                            Dist = presetDistance.Value,
-                            CreateTime = DateTime.UtcNow,
-                            CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name,
-                            NameA = item.Name,
-                            NameB = item2.Name,
-                            Status = DistancsEnum.EDDiscovery
-                        };
-                        Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
-                        distance.Store();
-                    }
-                }
-            }
-
-            textBoxDistanceToNextSystem.Clear();
-            textBoxDistanceToNextSystem.Enabled = true;
-
             AddNewHistoryRow(true, item);
             StoreSystemNote();
 
@@ -776,14 +746,31 @@ namespace EDDiscovery
 
         private void buttonEDDB_Click(object sender, EventArgs e)
         {
-            if (currentSysPos.curSystem.id_eddb>0)
+            if ( currentSysPos!= null && currentSysPos.curSystem.id_eddb>0)
                 Process.Start("http://eddb.io/system/" + currentSysPos.curSystem.id_eddb.ToString());
         }
 
         private void buttonRoss_Click(object sender, EventArgs e)
         {
-            if (currentSysPos.curSystem.id_eddb>0)
+            if (currentSysPos!= null && currentSysPos.curSystem.id_eddb>0)
                 Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
+        }
+
+        private void buttonEDSM_Click(object sender, EventArgs e)
+        {
+            if (currentSysPos != null && currentSysPos.curSystem != null) // solve a possible exception
+            {
+                if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
+                {
+                    EDSMClass edsm = new EDSMClass();
+                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
+
+                    if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+                        Process.Start(url);
+                    else
+                        MessageBox.Show("System unknown to EDSM");
+                }
+            }
         }
 
         public string GetCommanderName()
@@ -791,21 +778,6 @@ namespace EDDiscovery
             var value = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
             return !string.IsNullOrEmpty(value) ? value : null;
         }
-
-        private void textBoxDistanceToNextSystem_Validating(object sender, CancelEventArgs e)
-        {
-            var value = textBoxDistanceToNextSystem.Text.Trim();
-            if (value.Length == 0)
-            {
-                return;
-            }
-
-            if (!DistanceParser.ParseJumpDistance(value, MaximumJumpRange).HasValue)
-            {
-                e.Cancel = true;
-            }
-        }
-
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
         {
@@ -875,20 +847,6 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
-        private void buttonEDSM_Click(object sender, EventArgs e)
-        {
-            if (currentSysPos != null && currentSysPos.curSystem != null) // solve a possible exception
-            {
-                if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
-                {
-                    EDSMClass edsm = new EDSMClass();
-                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
-                    Process.Start(url);
-                    //if (currentSysPos.curSystem.id_eddb > 0)
-                    //Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
-                }
-            }
-        }
 
         public bool SetTravelHistoryPosition(string sysname)
         {

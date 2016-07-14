@@ -13,7 +13,10 @@ namespace ExtendedControls
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
 
-        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross };
+        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross , Text };
+
+        public string ImageText { get; set; } = null;       // for Text Type
+
         public ImageType Image { get; set; } = ImageType.Close;
         public int MarginSize { get; set; } = 4;                    // margin around icon
 
@@ -31,7 +34,7 @@ namespace ExtendedControls
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            int msize = (MarginSize > 0) ? MarginSize : ClientRectangle.Width / 6;
+            int msize = (MarginSize > 0) ? MarginSize : ClientRectangle.Height / 6;
             Color pc = (Enabled) ? ((mousedown||mousecapture)?MouseSelectedColor: ((mouseover)?MouseOverColor : this.ForeColor)) : Multiply(this.ForeColor, 0.5F);
             //Console.WriteLine("Enabled" + Enabled + " Mouse over " + mouseover + " mouse down " + mousedown);
 
@@ -73,10 +76,10 @@ namespace ExtendedControls
 
                 Pen pb = new Pen(this.BackColor, 2.0F);
                 Point pt1 = new Point(rightmarginpx, bottommarginpx - msize);
-                Point pt2 = new Point(centrehorzpx-1, bottommarginpx - msize);
-                Point pt3 = new Point(centrehorzpx-1, topmarginpx + msize);
-                Point pt4 = new Point(centrehorzpx-1 - msize, pt3.Y + 2);
-                Point pt5 = new Point(centrehorzpx-1 + msize, pt3.Y + 2);
+                Point pt2 = new Point(centrehorzpx - 1, bottommarginpx - msize);
+                Point pt3 = new Point(centrehorzpx - 1, topmarginpx + msize);
+                Point pt4 = new Point(centrehorzpx - 1 - msize, pt3.Y + 2);
+                Point pt5 = new Point(centrehorzpx - 1 + msize, pt3.Y + 2);
 
                 e.Graphics.DrawLine(pb, pt1, pt2);
                 e.Graphics.DrawLine(pb, pt2, pt3);
@@ -90,12 +93,31 @@ namespace ExtendedControls
                 Pen pb = new Pen(pc, 3.0F);
                 Point pt1 = new Point(leftmarginpx + 2, bottommarginpx);
                 Point pt2 = new Point(pt1.X, topmarginpx + 4);
-                Point pt3 = new Point(centrehorzpx+2, pt2.Y);
+                Point pt3 = new Point(centrehorzpx + 2, pt2.Y);
 
                 e.Graphics.DrawLine(pb, pt1, pt2);
                 e.Graphics.DrawLine(pb, pt2, pt3);
 
                 pb.Dispose();
+            }
+            else if (Image == ImageType.Text)
+            {
+                SizeF size = e.Graphics.MeasureString(this.ImageText, this.Font);
+                double scale = (double)(ClientRectangle.Height-topmarginpx*2) / (double)size.Height;
+                                // given the available height, scale the font up if its bigger than the current font height.
+                using (Font fnt = new Font(this.Font.Name, (float)(this.Font.SizeInPoints*scale), this.Font.Style))
+                {
+                    Brush bbck = new SolidBrush(pc);
+                    Rectangle area = new Rectangle(leftmarginpx, topmarginpx, ClientRectangle.Width - 2 * msize, ClientRectangle.Height - 2 * msize);
+                    e.Graphics.FillRectangle(bbck, area);
+                    bbck.Dispose();
+
+                    using (Brush textb = new SolidBrush(this.BackColor))
+                    {
+                        Rectangle rect = ClientRectangle;
+                        e.Graphics.DrawString(this.ImageText, fnt, textb, new Point(leftmarginpx, topmarginpx));
+                    }
+                }
             }
 
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
@@ -145,6 +167,6 @@ namespace ExtendedControls
         private bool mouseover = false;
         private bool mousedown = false;
         private bool mousecapture = false;
-        #endregion
+#endregion
     }
 }
