@@ -53,6 +53,7 @@ namespace EDDiscovery2
         private bool _canSkipSlowUpdates = false;
         private bool _orderrowsinverted = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
+        private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
         public List<EDCommander> listCommanders;
         private int currentCmdrID=0;
         private Dictionary<string, object> settings = new Dictionary<string, object>();
@@ -185,6 +186,19 @@ namespace EDDiscovery2
             }
         }
 
+        public bool KeepOnTop
+        {
+            get
+            {
+                return _keepOnTop;
+            }
+            set
+            {
+                _keepOnTop = value;
+                SQLiteDBClass.PutSettingBool("KeepOnTop", value);
+            }
+        }
+
         public string NetLogDir { get { return GetSettingString("Netlogdir"); } set { PutSettingString("Netlogdir", value); } }
         public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
@@ -278,6 +292,7 @@ namespace EDDiscovery2
                 _canSkipSlowUpdates = SQLiteDBClass.GetSettingBool("CanSkipSlowUpdates", false);
                 _orderrowsinverted = SQLiteDBClass.GetSettingBool("OrderRowsInverted", false);
                 _focusOnNewSystem = SQLiteDBClass.GetSettingBool("FocusOnNewSystem", false);
+                _keepOnTop = SQLiteDBClass.GetSettingBool("KeepOnTop", false);
                 LoadCommanders();
                 int activecommander = SQLiteDBClass.GetSettingInt("ActiveCommander", 0);
                 var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);

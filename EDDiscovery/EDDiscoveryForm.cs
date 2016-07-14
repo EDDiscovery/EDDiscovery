@@ -128,6 +128,8 @@ namespace EDDiscovery
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition,travelHistoryControl1);
 
+            this.TopMost = EDDConfig.KeepOnTop;
+
             ApplyTheme(false);
         }
 
@@ -301,6 +303,15 @@ namespace EDDiscovery
                 var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
                 var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
                 var width = SQLiteDBClass.GetSettingInt("FormWidth", 800);
+
+                // Adjust so window fits on screen; just in case user unplugged a monitor or something
+
+                var screen = SystemInformation.VirtualScreen; 
+                if( height > screen.Height ) height = screen.Height;
+                if( top + height > screen.Height) top = screen.Height - height;
+                if( width > screen.Width ) width = screen.Width;
+                if( left + width > screen.Width ) left = screen.Width - width;
+
                 this.Top = top;
                 this.Left = left;
                 this.Height = height;
@@ -333,11 +344,13 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
         {
-            /* TODO: Only focus the field if we're on the correct tab! */
-            if (fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory)
+            /* TODO: Add setting to determine -which- field should be focussed */
+            /* DISABLED FOR NOW
+            if (tabControl1.SelectedTab == tabPageTravelHistory)
             {
                 travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
             }
+            */
         }
 
         public void ApplyTheme(bool refreshhistory)
@@ -923,11 +936,9 @@ namespace EDDiscovery
             Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
         }
 
-        private void keepOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        internal void keepOnTopChanged(bool keepOnTop)
         {
-            ToolStripMenuItem mi = sender as ToolStripMenuItem;
-            mi.Checked = !mi.Checked;
-            this.TopMost = mi.Checked;
+            this.TopMost = keepOnTop;
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)

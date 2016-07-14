@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
-            ExtendedControls.TabStyleSquare tabStyleSquare3 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,11 +44,9 @@
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.synchroniseWithEDSMDistancesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugBetaFixHiddenLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.keepOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fastTravelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,7 +75,6 @@
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
-            this.synchroniseWithEDSMDistancesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -95,11 +92,10 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsToolStripMenuItem,
             this.adminToolStripMenuItem,
-            this.optionsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(308, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(155, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -201,6 +197,13 @@
             this.syncEDSMSystemsToolStripMenuItem.Text = "Synchronise with EDSM Stars";
             this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
+            // synchroniseWithEDSMDistancesToolStripMenuItem
+            // 
+            this.synchroniseWithEDSMDistancesToolStripMenuItem.Name = "synchroniseWithEDSMDistancesToolStripMenuItem";
+            this.synchroniseWithEDSMDistancesToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.synchroniseWithEDSMDistancesToolStripMenuItem.Text = "Synchronise with EDSM Distances";
+            this.synchroniseWithEDSMDistancesToolStripMenuItem.Click += new System.EventHandler(this.synchroniseWithEDSMDistancesToolStripMenuItem_Click);
+            // 
             // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
             // 
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
@@ -214,29 +217,6 @@
             this.debugBetaFixHiddenLogToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
             this.debugBetaFixHiddenLogToolStripMenuItem.Text = "(Debug) Beta fix hidden log";
             this.debugBetaFixHiddenLogToolStripMenuItem.Click += new System.EventHandler(this.debugBetaFixHiddenLogToolStripMenuItem_Click);
-            // 
-            // optionsToolStripMenuItem
-            // 
-            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.keepOnTopToolStripMenuItem,
-            this.fastTravelToolStripMenuItem});
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.optionsToolStripMenuItem.Text = "Options";
-            // 
-            // keepOnTopToolStripMenuItem
-            // 
-            this.keepOnTopToolStripMenuItem.Name = "keepOnTopToolStripMenuItem";
-            this.keepOnTopToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.keepOnTopToolStripMenuItem.Text = "Keep on Top";
-            this.keepOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepOnTopToolStripMenuItem_Click);
-            // 
-            // fastTravelToolStripMenuItem
-            // 
-            this.fastTravelToolStripMenuItem.CheckOnClick = true;
-            this.fastTravelToolStripMenuItem.Name = "fastTravelToolStripMenuItem";
-            this.fastTravelToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.fastTravelToolStripMenuItem.Text = "Fast Travel";
             // 
             // helpToolStripMenuItem
             // 
@@ -360,7 +340,7 @@
             this.tabControl1.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControl1.TabOpaque = 100F;
             this.tabControl1.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControl1.TabStyle = tabStyleSquare3;
+            this.tabControl1.TabStyle = tabStyleSquare1;
             this.tabControl1.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControl1.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             // 
@@ -529,12 +509,6 @@
             this.statusStrip1.Size = new System.Drawing.Size(993, 22);
             this.statusStrip1.TabIndex = 22;
             this.statusStrip1.Text = "statusStrip1";
-            // synchroniseWithEDSMDistancesToolStripMenuItem
-            // 
-            this.synchroniseWithEDSMDistancesToolStripMenuItem.Name = "synchroniseWithEDSMDistancesToolStripMenuItem";
-            this.synchroniseWithEDSMDistancesToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
-            this.synchroniseWithEDSMDistancesToolStripMenuItem.Text = "Synchronise with EDSM Distances";
-            this.synchroniseWithEDSMDistancesToolStripMenuItem.Click += new System.EventHandler(this.synchroniseWithEDSMDistancesToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -599,9 +573,6 @@
         private System.Windows.Forms.ToolStripMenuItem syncEDSMSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gitHubToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportIssueIdeasToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem keepOnTopToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fastTravelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem;
         private System.Windows.Forms.Panel panel_eddiscovery;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
