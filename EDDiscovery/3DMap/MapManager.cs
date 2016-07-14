@@ -59,7 +59,9 @@ namespace EDDiscovery2._3DMap
         }
 
         public void Show()
-        { 
+        {
+            _formMap.TopMost = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            // TODO: set Opacity to match EDDiscoveryForm
             _formMap.Show();
             _formMap.Focus();
         }

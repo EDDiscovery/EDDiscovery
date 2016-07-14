@@ -114,6 +114,8 @@ namespace EDDiscovery
             SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition,travelHistoryControl1);
 
+            this.TopMost = EDDConfig.KeepOnTop;
+
             ApplyTheme(false);
         }
 
@@ -317,11 +319,13 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
         {
-            /* TODO: Only focus the field if we're on the correct tab! */
-            if (fastTravelToolStripMenuItem.Checked && tabControl1.SelectedTab == tabPageTravelHistory)
+            /* TODO: Add setting to determine -which- field should be focussed */
+            /* DISABLED FOR NOW
+            if (tabControl1.SelectedTab == tabPageTravelHistory)
             {
                 travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
             }
+            */
         }
 
         public void ApplyTheme(bool refreshhistory)
@@ -899,11 +903,9 @@ namespace EDDiscovery
             Process.Start("https://github.com/EDDiscovery/EDDiscovery/issues");
         }
 
-        private void keepOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        internal void keepOnTopChanged(bool keepOnTop)
         {
-            ToolStripMenuItem mi = sender as ToolStripMenuItem;
-            mi.Checked = !mi.Checked;
-            this.TopMost = mi.Checked;
+            this.TopMost = keepOnTop;
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)
