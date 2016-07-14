@@ -289,7 +289,8 @@ namespace EDDiscovery
                 var width = SQLiteDBClass.GetSettingInt("FormWidth", 800);
 
                 // Adjust so window fits on screen; just in case user unplugged a monitor or something
-                var screen = Screen.FromControl(this).Bounds;
+
+                var screen = SystemInformation.VirtualScreen; 
                 if( height > screen.Height ) height = screen.Height;
                 if( top + height > screen.Height) top = screen.Height - height;
                 if( width > screen.Width ) width = screen.Width;
