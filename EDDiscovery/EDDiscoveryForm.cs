@@ -660,21 +660,25 @@ namespace EDDiscovery
 
             if ( refreshhistory )
             {
-                Invoke((MethodInvoker)delegate
+                try
                 {
-                    LogLine("Refreshing history due changes in distances or star data.");
-                    travelHistoryControl1.RefreshHistory();
-                    LogLine("Refreshing complete.");
-
-                    if (firstrun)
+                    Invoke((MethodInvoker)delegate
                     {
-                        MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
-                                        "Restart ED Discovery");
-                    }
-                    else if (edsmoreddbsync)
-                        MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
+                        LogLine("Refreshing history due changes in distances or star data.");
+                        travelHistoryControl1.RefreshHistory();
+                        LogLine("Refreshing complete.");
 
-                });
+                        if (firstrun)
+                        {
+                            MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
+                                            "Restart ED Discovery");
+                        }
+                        else if (edsmoreddbsync)
+                            MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
+
+                    });
+                }
+                catch { }
             }
         }
 

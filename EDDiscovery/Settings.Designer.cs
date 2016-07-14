@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
+            this.checkBoxKeepOnTop = new ExtendedControls.CheckBoxCustom();
             this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();
             this.button_edittheme = new ExtendedControls.ButtonExt();
             this.buttonSaveTheme = new ExtendedControls.ButtonExt();
@@ -50,7 +51,6 @@
             this.checkBox_Distances = new ExtendedControls.CheckBoxCustom();
             this.checkBoxOrderRowsInverted = new ExtendedControls.CheckBoxCustom();
             this.checkBoxEDSMLog = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxKeepOnTop = new ExtendedControls.CheckBoxCustom();
             this.checkboxSkipSlowUpdates = new ExtendedControls.CheckBoxCustom();
             this.groupBox4 = new ExtendedControls.GroupBoxCustom();
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
@@ -93,6 +93,23 @@
             this.groupBoxTheme.TextPadding = 0;
             this.groupBoxTheme.TextStartPosition = -1;
             // 
+            // checkBoxKeepOnTop
+            // 
+            this.checkBoxKeepOnTop.AutoSize = true;
+            this.checkBoxKeepOnTop.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxKeepOnTop.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxKeepOnTop.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxKeepOnTop.FontNerfReduction = 0.5F;
+            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(7, 63);
+            this.checkBoxKeepOnTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxKeepOnTop.Name = "checkBoxKeepOnTop";
+            this.checkBoxKeepOnTop.Size = new System.Drawing.Size(88, 17);
+            this.checkBoxKeepOnTop.TabIndex = 5;
+            this.checkBoxKeepOnTop.Text = "Keep on Top";
+            this.checkBoxKeepOnTop.TickBoxReductionSize = 10;
+            this.checkBoxKeepOnTop.UseVisualStyleBackColor = true;
+            this.checkBoxKeepOnTop.CheckedChanged += new System.EventHandler(this.checkBoxKeepOnTop_CheckedChanged);
+            // 
             // comboBoxTheme
             // 
             this.comboBoxTheme.ArrowWidth = 1;
@@ -102,7 +119,7 @@
             this.comboBoxTheme.DataSource = null;
             this.comboBoxTheme.DisplayMember = null;
             this.comboBoxTheme.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxTheme.DropDownHeight = 150;
+            this.comboBoxTheme.DropDownHeight = 100;
             this.comboBoxTheme.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTheme.ItemHeight = 20;
             this.comboBoxTheme.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxTheme.Items")));
@@ -553,23 +570,6 @@
             this.radioButton_Auto.UseVisualStyleBackColor = true;
             this.radioButton_Auto.CheckedChanged += new System.EventHandler(this.radioButton_Auto_CheckedChanged);
             // 
-            // checkBoxKeepOnTop
-            // 
-            this.checkBoxKeepOnTop.AutoSize = true;
-            this.checkBoxKeepOnTop.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxKeepOnTop.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxKeepOnTop.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxKeepOnTop.FontNerfReduction = 0.5F;
-            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(7, 63);
-            this.checkBoxKeepOnTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxKeepOnTop.Name = "checkBoxKeepOnTop";
-            this.checkBoxKeepOnTop.Size = new System.Drawing.Size(88, 17);
-            this.checkBoxKeepOnTop.TabIndex = 5;
-            this.checkBoxKeepOnTop.Text = "Keep on Top";
-            this.checkBoxKeepOnTop.TickBoxReductionSize = 10;
-            this.checkBoxKeepOnTop.UseVisualStyleBackColor = true;
-            this.checkBoxKeepOnTop.CheckedChanged += new System.EventHandler(this.checkBoxKeepOnTop_CheckedChanged);
-            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -582,6 +582,7 @@
             this.Name = "Settings";
             this.Size = new System.Drawing.Size(937, 725);
             this.groupBoxTheme.ResumeLayout(false);
+            this.groupBoxTheme.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -591,7 +592,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBoxTheme.PerformLayout();
             this.ResumeLayout(false);
 
         }
