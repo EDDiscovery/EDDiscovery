@@ -13,6 +13,9 @@ using System.Windows.Forms;
 
 namespace EDDiscovery2
 {
+// TBD icon on taskbar, see if update can be smoother.. (Updatelast). EDSM make window pop in front..
+// target system on 3dmap.
+
     public partial class SummaryPopOut : Form
     {
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -40,7 +43,7 @@ namespace EDDiscovery2
             autofade.Tick += FadeOut;
             TopMost = true;
             lt = new LabelTable(this,30);
-            UpdateControls(this);
+            UpdateEventsOnControls(this);
             this.BackColor = transparentkey;
             this.TransparencyKey = transparentkey;
         }
@@ -59,13 +62,13 @@ namespace EDDiscovery2
             panel_grip.MouseSelectedColor = ButtonExt.Multiply(textc, 1.5F);
         }
 
-        public void Update(DataGridView vsc )
+        public void Update(DataGridView vsc)
         {
-            if (vsc != null )
+            if (vsc != null)
             {
                 lt.Dispose();
 
-                for( int i = 0; i < vsc.Rows.Count; i++ )
+                for (int i = 0; i < vsc.Rows.Count; i++)
                 {
                     lt.Add(false, ((DateTime)vsc.Rows[i].Cells[0].Value).ToString("hh:mm.ss"), (string)vsc.Rows[i].Cells[1].Value, (string)vsc.Rows[i].Cells[2].Value, (string)vsc.Rows[i].Cells[3].Value);
 
@@ -74,7 +77,19 @@ namespace EDDiscovery2
                 }
             }
 
-            UpdateControls(this);
+            UpdateEventsOnControls(this);
+        }
+
+        public void UpdateTopRow(DataGridView vsc)
+        {
+            if (vsc != null)
+            {
+                Console.WriteLine("Add to top " + (string)vsc.Rows[0].Cells[1].Value);
+
+                lt.Add(true, ((DateTime)vsc.Rows[0].Cells[0].Value).ToString("hh:mm.ss"), (string)vsc.Rows[0].Cells[1].Value, (string)vsc.Rows[0].Cells[2].Value, (string)vsc.Rows[0].Cells[3].Value);
+            }
+
+            UpdateEventsOnControls(this);
         }
 
         private void SummaryPopOut_Load(object sender, EventArgs e)
@@ -115,7 +130,7 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingInt("PopOutFormLeft", this.Left);
         }
 
-        private void UpdateControls(Control ctl)
+        private void UpdateEventsOnControls(Control ctl)
         {
            // Console.WriteLine("Hook " + ctl.ToString() + " " + ctl.Name);
             ctl.MouseEnter -= MouseEnterControl;
@@ -139,7 +154,7 @@ namespace EDDiscovery2
 
             foreach (Control ctll in ctl.Controls)
             {
-                UpdateControls(ctll);
+                UpdateEventsOnControls(ctll);
             }
         }
 
@@ -261,6 +276,7 @@ namespace EDDiscovery2
 
                 entries.Insert(0, new LabelRowEntry(text, toppos, vspacing, parent));
                 entries[0].SetFormat(fnt, textcol);
+                Console.WriteLine("New entry at top" + entries[0].Name);
             }
             else
             {
@@ -292,6 +308,7 @@ namespace EDDiscovery2
         private ExtendedControls.LabelExt[] labels = new ExtendedControls.LabelExt[4];
         private ExtendedControls.DrawnPanel edsm;
         Control parent;
+        public string Name {  get { return labels[1].Text;  } }
 
         public LabelRowEntry(string[] text, int vpos, int vsize , Control p )
         {
