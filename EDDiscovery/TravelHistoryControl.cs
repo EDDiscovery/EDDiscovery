@@ -187,6 +187,7 @@ namespace EDDiscovery
             {
                 dataGridViewTravel.Rows.Insert(0, rowobj);
                 rownr = 0;
+                Console.WriteLine("Added " + item.Name);
             }
             else
             {
@@ -698,7 +699,7 @@ namespace EDDiscovery
             AddNewHistoryRow(true, item);
             StoreSystemNote();
 
-            UpdateSummaryView();
+            UpdateSummaryView(true);
 
             _discoveryForm.Map.UpdateVisited(visitedSystems);      // update map
 
@@ -903,10 +904,15 @@ namespace EDDiscovery
                 summaryPopOut.SetLabelFormat(new Font(_discoveryForm.theme.FontName, _discoveryForm.theme.FontSize), _discoveryForm.theme.LabelColor);
         }
 
-        public void UpdateSummaryView()
+        public void UpdateSummaryView( bool toprowonly = false )
         {
             if (summaryPopOut != null)
-                summaryPopOut.Update(dataGridViewTravel);
+            {
+                if ( toprowonly )
+                    summaryPopOut.UpdateTopRow(dataGridViewTravel);
+                else
+                    summaryPopOut.Update(dataGridViewTravel);
+            }
         }
 
         #region ClosestSystemRightClick
