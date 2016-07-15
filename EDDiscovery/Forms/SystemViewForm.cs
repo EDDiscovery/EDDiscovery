@@ -31,10 +31,11 @@ namespace EDDiscovery2
 
         private void buttonShow_Click(object sender, EventArgs e)
         {
-            SystemClass sys = SystemData.GetSystem(textBox_From.Text);
+            // Class not used  broken for now due to systemdata removal.  would need work, maybe a helper func in systemclass.cs
+#if false
+            SystemClass sys = SystemClass.GetSystem(textBox_From.Text);
             if (sys == null) return;
-
-
+            
             var syslist  = (from c in SystemData.SystemList orderby (c.x-sys.x)* (c.x - sys.x) + (c.y - sys.y) * (c.y - sys.y) + (c.z - sys.z) * (c.z - sys.z) select c).ToList<SystemClass>();
 
             dataGridView1.Rows.Clear();
@@ -49,7 +50,7 @@ namespace EDDiscovery2
 
             foreach (SystemClass sys2 in syslist)
             {
-                double dist = SystemData.Distance(sys, sys2);
+                double dist = SystemClass.Distance(sys, sys2);
 
                 object[] rowobj = { sys2.name, dist.ToString("0.00"), sys2.government.ToString(), sys2.allegiance.ToString(), sys2.population };
                 int rownr;
@@ -63,6 +64,7 @@ namespace EDDiscovery2
 
                 cell.Tag = sys2;
             }
+#endif
         }
 
         private void SystemViewForm_Load(object sender, EventArgs e)

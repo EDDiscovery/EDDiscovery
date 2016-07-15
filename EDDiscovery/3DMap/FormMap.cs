@@ -27,7 +27,6 @@ namespace EDDiscovery2
 
         const int HELP_VERSION = 1;         // increment this to force help onto the screen of users first time.
 
-        SQLiteDBClass db;
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
         private List<IData3DSet> _datasets_finegridlines;
@@ -116,7 +115,6 @@ namespace EDDiscovery2
         private ToolStripControlHost endPickerHost;
 
         private float _znear;
-        private float _zfar;
         private bool _timerRunning;
 
         private bool _isActivated = false;
@@ -130,7 +128,6 @@ namespace EDDiscovery2
         public FormMap()
         {
             InitializeComponent();
-            db = new SQLiteDBClass();
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
@@ -138,22 +135,12 @@ namespace EDDiscovery2
         {
             _visitedSystems = visited;
 
-            List<SystemClass> starList = SQLiteDBClass.globalSystems;           
-
-            _starnames = new List<SystemClassStarNames>();          // recreate every time in case changed..
-            _starnamelookup = new Dictionary<string, SystemClassStarNames>(StringComparer.CurrentCultureIgnoreCase); // case invariant sorted dic.
-
-            foreach (var sys in starList)
+            if (_starnames == null)                                     // only on first call
             {
-                if (sys.HasCoordinate)            // only interested in these
-                {
-                    SystemClassStarNames scs = new SystemClassStarNames(sys);
-                    _starnames.Add(scs);
-                                                                     
-                    if (!_starnamelookup.ContainsKey(scs.name))    // protect against crap ups in the star list having duplicate names
-                        _starnamelookup.Add(scs.name, scs);        // as dictionaries don't allow duplicate entries.
-                                                                    // means it would be unsearchable but still shows..
-                }
+                _starnames = new List<SystemClassStarNames>();          // recreate every time in case changed..
+                _starnamelookup = new Dictionary<string, SystemClassStarNames>(StringComparer.CurrentCultureIgnoreCase); // case invariant sorted dic.
+
+                SystemClass.GetSystemNamesList(_starnames, _starnamelookup);
             }
 
             if (_visitedSystems != null)              // note if list is empty on first run seeing this
@@ -208,18 +195,18 @@ namespace EDDiscovery2
 
             ResetCamera();
             toolStripShowAllStars.Renderer = new MyRenderer();
-            toolStripButtonDrawLines.Checked = db.GetSettingBool("Map3DDrawLines", false);
-            showStarstoolStripMenuItem.Checked = db.GetSettingBool("Map3DAllStars", true);
-            showStationsToolStripMenuItem.Checked = db.GetSettingBool("Map3DButtonStations", false);
-            toolStripButtonPerspective.Checked = db.GetSettingBool("Map3DPerspective", false);
-            toolStripButtonGrid.Checked = db.GetSettingBool("Map3DCoarseGrid", true);
-            toolStripButtonFineGrid.Checked = db.GetSettingBool("Map3DFineGrid", true);
-            toolStripButtonCoords.Checked = db.GetSettingBool("Map3DCoords", true);
-            toolStripButtonEliteMovement.Checked = db.GetSettingBool("Map3DEliteMove", false);
-            toolStripButtonStarNames.Checked = db.GetSettingBool("Map3DStarNames", false);
-            showNoteMarksToolStripMenuItem.Checked = db.GetSettingBool("Map3DShowNoteMarks", true);
-            showBookmarksToolStripMenuItem.Checked = db.GetSettingBool("Map3DShowBookmarks", true);
-            toolStripButtonAutoForward.Checked = db.GetSettingBool("Map3DAutoForward", false );
+            toolStripButtonDrawLines.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", true);
+            showStarstoolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DAllStars", true);
+            showStationsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonStations", true);
+            toolStripButtonPerspective.Checked = SQLiteDBClass.GetSettingBool("Map3DPerspective", false);
+            toolStripButtonGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DCoarseGrid", true);
+            toolStripButtonFineGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DFineGrid", true);
+            toolStripButtonCoords.Checked = SQLiteDBClass.GetSettingBool("Map3DCoords", true);
+            toolStripButtonEliteMovement.Checked = SQLiteDBClass.GetSettingBool("Map3DEliteMove", false);
+            toolStripButtonStarNames.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNames", true);
+            showNoteMarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowNoteMarks", true);
+            showBookmarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowBookmarks", true);
+            toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false );
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
 
@@ -298,13 +285,13 @@ namespace EDDiscovery2
 
         private void FormMap_Load(object sender, EventArgs e)
         {
-            var top = db.GetSettingInt("Map3DFormTop", -1);
+            var top = SQLiteDBClass.GetSettingInt("Map3DFormTop", -1);
 
             if (top >= 0 && noWindowReposition == false)
             {
-                var left = db.GetSettingInt("Map3DFormLeft", 0);
-                var height = db.GetSettingInt("Map3DFormHeight", 800);
-                var width = db.GetSettingInt("Map3DFormWidth", 800);
+                var left = SQLiteDBClass.GetSettingInt("Map3DFormLeft", 0);
+                var height = SQLiteDBClass.GetSettingInt("Map3DFormHeight", 800);
+                var width = SQLiteDBClass.GetSettingInt("Map3DFormWidth", 800);
                 this.Location = new Point(left, top);
                 this.Size = new Size(width, height);
                 //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
@@ -331,11 +318,11 @@ namespace EDDiscovery2
 
         private void FormMap_Shown(object sender, EventArgs e)
         {
-            int helpno = db.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
+            int helpno = SQLiteDBClass.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
             if (helpno != HELP_VERSION)
             {
                 toolStripButtonHelp_Click(null, null);
-                db.PutSettingInt("Map3DShownHelp", HELP_VERSION);
+                SQLiteDBClass.PutSettingInt("Map3DShownHelp", HELP_VERSION);
             }
         }
 
@@ -358,10 +345,10 @@ namespace EDDiscovery2
         {
             if (Visible)
             {
-                db.PutSettingInt("Map3DFormWidth", this.Width);
-                db.PutSettingInt("Map3DFormHeight", this.Height);
-                db.PutSettingInt("Map3DFormTop", this.Top);
-                db.PutSettingInt("Map3DFormLeft", this.Left);
+                SQLiteDBClass.PutSettingInt("Map3DFormWidth", this.Width);
+                SQLiteDBClass.PutSettingInt("Map3DFormHeight", this.Height);
+                SQLiteDBClass.PutSettingInt("Map3DFormTop", this.Top);
+                SQLiteDBClass.PutSettingInt("Map3DFormLeft", this.Left);
                 //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
 
@@ -408,7 +395,7 @@ namespace EDDiscovery2
                     Tag = img
                 };
                 item.Click += new EventHandler(dropdownMapNames_DropDownItemClicked);
-                item.Checked = db.GetSettingBool("map3DMaps" + img.FileName, false);
+                item.Checked = SQLiteDBClass.GetSettingBool("map3DMaps" + img.FileName, false);
                 dropdownMapNames.DropDownItems.Add(item);
             }
         }
@@ -448,7 +435,7 @@ namespace EDDiscovery2
 
             Dictionary<string, Func<DateTime>> endtimes = new Dictionary<string, Func<DateTime>>();
 
-            foreach (var expedition in db.GetAllSavedRoutes())
+            foreach (var expedition in SavedRouteClass.GetAllSavedRoutes())
             {
                 if (expedition.StartDate != null)
                 {
@@ -472,7 +459,7 @@ namespace EDDiscovery2
             startTime = starttimes["All"]();
             endTime = DateTime.Now.AddDays(1);
 
-            string lastsel = db.GetSettingString("Map3DFilter", "");
+            string lastsel = SQLiteDBClass.GetSettingString("Map3DFilter", "");
             foreach (var kvp in starttimes)
             {
                 var name = kvp.Key;
@@ -482,7 +469,7 @@ namespace EDDiscovery2
 
                 if (item.Text.Equals(lastsel))              // if a standard one, restore.  WE are not saving custom.
                 {                                           // if custom is selected, we don't restore a tick.
-                    item.Checked = true;                    // TBD Finwen, should we not be setting a start AND end date
+                    item.Checked = true;                    
                     startTime = startfunc();
                     endTime = endfunc();
                 }
@@ -518,9 +505,9 @@ namespace EDDiscovery2
             SetupViewport();
         }
 
-        #endregion
+#endregion
 
-        #region Viewport
+#region Viewport
 
         /// <summary>
         /// Setup the Viewport
@@ -540,7 +527,6 @@ namespace EDDiscovery2
                 Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
                 GL.LoadMatrix(ref perspective);
                 _znear = 1.0f;
-                _zfar = 1000000.0f;
             }
             else
             {
@@ -551,15 +537,14 @@ namespace EDDiscovery2
 
                 GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
                 _znear = -5000.0f;
-                _zfar = 5000.0f;
             }
 
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
 
-        #endregion
+#endregion
 
-        #region Generate Data Sets
+#region Generate Data Sets
 
         private void GenerateDataSets()         // Called ONCE only during Load.. fixed data.
         {
@@ -608,7 +593,6 @@ namespace EDDiscovery2
                 builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
             builder = null;
 
-            // TBD turn off..
             GenerateDataSetsBookmarks();
             GenerateDataSetsNotedSystems();
         }
@@ -647,13 +631,14 @@ namespace EDDiscovery2
 
             if (showBookmarksToolStripMenuItem.Checked)
             {
-                Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
-                Debug.Assert(map != null);
+                Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
+                Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
+                Debug.Assert(mapstar != null && mapregion != null);
 
                 DatasetBuilder builder = CreateBuilder();
 
                 builder.Build();
-                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(map, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
+                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
 
                 builder = null;
             }
@@ -1531,7 +1516,7 @@ namespace EDDiscovery2
                 startTime = startPicker.MinDate;
             }
 
-            db.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
+            SQLiteDBClass.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
             startPickerHost.Visible = true;
             endPickerHost.Visible = true;
             startPicker.Value = startTime;
@@ -1549,7 +1534,7 @@ namespace EDDiscovery2
                     item.Checked = false;
                 }
             }
-            db.PutSettingString("Map3DFilter", sel.Text);
+            SQLiteDBClass.PutSettingString("Map3DFilter", sel.Text);
             startTime = startfunc();
             endTime = endfunc == null ? DateTime.Now.AddDays(1) : endfunc();
             startPickerHost.Visible = false;
@@ -1581,23 +1566,27 @@ namespace EDDiscovery2
         {
             if (_visitedSystems != null)
             {
-                string name = FindNextVisitedSystem(_centerSystem.name, -1);
+                string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, -1, _centerSystem.name);
                 SetCenterSystemTo(name, true);
             }
+            else
+                MessageBox.Show("No travel history is available");
         }
 
         private void toolStripButtonGoForward_Click(object sender, EventArgs e)
         {
             if (_visitedSystems != null)
             {
-                string name = FindNextVisitedSystem(_centerSystem.name, 1);
+                string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, 1, _centerSystem.name);
                 SetCenterSystemTo(name, true);
             }
+            else
+                MessageBox.Show("No travel history is available");
         }
 
         private void toolStripButtonAutoForward_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
         }
 
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
@@ -1617,63 +1606,63 @@ namespace EDDiscovery2
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
             GenerateDataSetsVisitedSystems();
             glControl.Invalidate();
         }
 
         private void showStarstoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
             glControl.Invalidate();
         }
 
         private void showStationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
             glControl.Invalidate();
         }
 
         private void toolStripButtonGrid_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
             glControl.Invalidate();
         }
 
         private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
             UpdateDataSetsDueToZoom();
             glControl.Invalidate();
         }
 
         private void toolStripButtonCoords_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
             UpdateDataSetsDueToZoom();
             glControl.Invalidate();
         }
 
         private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
         }
 
         private void toolStripButtonStarNames_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DStarNames", toolStripButtonStarNames.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DStarNames", toolStripButtonStarNames.Checked);
         }
 
         private void showNoteMarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
             GenerateDataSetsNotedSystems();
             glControl.Invalidate();
         }
 
         private void showBookmarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
             GenerateDataSetsBookmarks();
             glControl.Invalidate();
         }
@@ -1719,7 +1708,7 @@ namespace EDDiscovery2
 
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
         {
-            db.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
             SetupViewport();
             GenerateDataSetsNotedSystems();
             GenerateDataSetsBookmarks();
@@ -1739,7 +1728,7 @@ namespace EDDiscovery2
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
         {
             InfoForm dl = new InfoForm();
-            string text = EDDiscovery.Properties.Resources._3dmaphelp;
+            string text = EDDiscovery.Properties.Resources.maphelp3d;
             dl.Info("3D Map Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
             dl.Show();
         }
@@ -1759,7 +1748,7 @@ namespace EDDiscovery2
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
         {
             ToolStripButton tsb = (ToolStripButton)sender;
-            db.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
+            SQLiteDBClass.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
             GenerateDataSetsMaps();
             glControl.Invalidate();
         }
@@ -1811,9 +1800,15 @@ namespace EDDiscovery2
         private void glControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             bool notmovedmouse = Math.Abs(e.X - _mouseDownPos.X) + Math.Abs(e.Y - _mouseDownPos.Y) < 8;
-            SystemClassStarNames cursystem = null;
-            BookmarkClass curbookmark = null;
-            bool notedsystem = false;
+
+            // system = cursystem!=null, curbookmark = null, notedsystem = false
+            // bookmark on system, cursystem!=null, curbookmark != null, notedsystem = false
+            // region bookmark. cursystem = null, curbookmark != null, notedsystem = false
+            // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
+
+            SystemClassStarNames cursystem = null;      
+            BookmarkClass curbookmark = null;           
+            bool notedsystem = false;                   
 
             if (notmovedmouse)
             {
@@ -1828,12 +1823,14 @@ namespace EDDiscovery2
                 {
                     labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
 
-                    if (_clickedSystem.sysclass != null)
+                    SystemClass sysclass = (_clickedSystem.id != 0) ? SystemClass.GetSystem(_clickedSystem.id) : SystemClass.GetSystem(_clickedSystem.name);
+
+                    if (sysclass != null)
                     {
-                        selectionAllegiance.Text = "Allegiance: " + _clickedSystem.sysclass.allegiance;
-                        selectionEconomy.Text = "Economy: " + _clickedSystem.sysclass.primary_economy;
-                        selectionGov.Text = "Gov: " + _clickedSystem.sysclass.government;
-                        selectionState.Text = "State: " + _clickedSystem.sysclass.state;
+                        selectionAllegiance.Text = "Allegiance: " + sysclass.allegiance;
+                        selectionEconomy.Text = "Economy: " + sysclass.primary_economy;
+                        selectionGov.Text = "Gov: " + sysclass.government;
+                        selectionState.Text = "State: " + sysclass.state;
                     }
 
                     GenerateDataSetsSelectedSystems();
@@ -1848,15 +1845,15 @@ namespace EDDiscovery2
             {
                 if (cursystem != null || curbookmark != null )      // if we have a system or a bookmark..
                 {                                                   // try and find the associated bookmark..
-                    BookmarkClass bkmark = (curbookmark != null) ? curbookmark : SQLiteDBClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
-                    string note = (cursystem != null && cursystem.sysclass != null) ? cursystem.sysclass.Note : null;
+                    BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
+                    string note = (cursystem != null) ? SystemNoteClass.GetSystemNote(cursystem.name) : null;   // may be null
 
                     BookmarkForm frm = new BookmarkForm();
 
-                    if (notedsystem && bkmark == null)
+                    if (notedsystem && bkmark == null)              // note on a system
                     {
                         frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
-                        frm.SystemInfo(cursystem.name, note);
+                        frm.SystemInfo(cursystem.name, note);       // note may be passed in null
                         frm.ShowDialog();
                     }
                     else
@@ -1864,16 +1861,16 @@ namespace EDDiscovery2
                         bool regionmarker = false;
                         DateTime tme;
 
-                        if (bkmark == null)                  // new bookmark
+                        if (bkmark == null)                         // new bookmark
                         {
                             frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
                             tme = DateTime.Now;
                             frm.New(cursystem.name, note, tme.ToString());
                         }
-                        else                                    // update bookmark
+                        else                                        // update bookmark
                         {
                             frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
-                            regionmarker = bkmark.Heading != null;
+                            regionmarker = bkmark.isRegion;
                             tme = bkmark.Time;
                             frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker);
                         }
@@ -2090,22 +2087,24 @@ namespace EDDiscovery2
                 yp = hoversystem.y;
                 zp = hoversystem.z;
 
-                if (hoversystem.sysclass != null)
+                SystemClass sysclass = (hoversystem.id != 0) ? SystemClass.GetSystem(hoversystem.id) : SystemClass.GetSystem(hoversystem.name);
+
+                if (sysclass != null)
                 {
-                    if (hoversystem.sysclass.allegiance != EDAllegiance.Unknown)
-                        info += Environment.NewLine + "Allegiance: " + hoversystem.sysclass.allegiance;
+                    if (sysclass.allegiance != EDAllegiance.Unknown)
+                        info += Environment.NewLine + "Allegiance: " + sysclass.allegiance;
 
-                    if (hoversystem.sysclass.primary_economy != EDEconomy.Unknown)
-                        info += Environment.NewLine + "Economy: " + hoversystem.sysclass.primary_economy;
+                    if (sysclass.primary_economy != EDEconomy.Unknown)
+                        info += Environment.NewLine + "Economy: " + sysclass.primary_economy;
 
-                    if (hoversystem.sysclass.government != EDGovernment.Unknown)
-                        info += Environment.NewLine + "Government: " + hoversystem.sysclass.allegiance;
+                    if (sysclass.government != EDGovernment.Unknown)
+                        info += Environment.NewLine + "Government: " + sysclass.allegiance;
 
-                    if (hoversystem.sysclass.state != EDState.Unknown)
-                        info += Environment.NewLine + "State: " + hoversystem.sysclass.state;
+                    if (sysclass.state != EDState.Unknown)
+                        info += Environment.NewLine + "State: " + sysclass.state;
 
-                    if (hoversystem.sysclass.allegiance != EDAllegiance.Unknown)
-                        info += Environment.NewLine + "Allegiance: " + hoversystem.sysclass.allegiance;
+                    if (sysclass.allegiance != EDAllegiance.Unknown)
+                        info += Environment.NewLine + "Allegiance: " + sysclass.allegiance;
                 }
 
                 if (hoversystem.population != 0)
@@ -2141,11 +2140,14 @@ namespace EDDiscovery2
                     info += Environment.NewLine + "Distance from " + _homeSystem.name + ": " + disthome.ToString("0.0");
                 }
 
-                if (hoversystem != null && hoversystem.sysclass != null && hoversystem.sysclass.Note != null && hoversystem.sysclass.Note.Length > 0)
-                    info += Environment.NewLine + "Notes: " + hoversystem.sysclass.Note;
+                string note = SystemNoteClass.GetSystemNote(sysname);   // may be null
+                if (note != null && note.Trim().Length>0 )
+                {
+                    info += Environment.NewLine + "Notes: " + note.Trim();
+                }
 
                 if (curbookmark != null && curbookmark.Note != null)
-                    info += Environment.NewLine + "Bookmark Notes: " + curbookmark.Note;
+                    info += Environment.NewLine + "Bookmark Notes: " + curbookmark.Note.Trim();
 
                 _mousehovertooltip = new System.Windows.Forms.ToolTip();
                 _mousehovertooltip.InitialDelay = 0;
@@ -2156,9 +2158,9 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
 
-        #region FindObjectsOnScreen
+#region FindObjectsOnScreen
 
         Matrix4d GetResMat()
         {
@@ -2246,7 +2248,7 @@ namespace EDDiscovery2
             BookmarkClass curbk = null;
             cursysdistz = double.MaxValue;
 
-            foreach (BookmarkClass bc in SQLiteDBClass.bookmarks)
+            foreach (BookmarkClass bc in BookmarkClass.bookmarks)
             {
                 //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
 
@@ -2275,11 +2277,16 @@ namespace EDDiscovery2
             SystemClass cursys = null;
             cursysdistz = double.MaxValue;
 
+            if (_visitedSystems == null)
+                return null;
+
             foreach (VisitedSystemsClass vs in _visitedSystems)
             {
-                if (vs.curSystem != null && vs.curSystem.Note != null)
+                SystemNoteClass notecs = SystemNoteClass.GetSystemNoteClass(vs.Name);
+
+                if (notecs!=null)
                 {
-                    string note = vs.curSystem.Note.Trim();
+                    string note = notecs.Note.Trim();
 
                     if (note.Length > 0)
                     {
@@ -2385,9 +2392,9 @@ namespace EDDiscovery2
             cursystem = GetMouseOverSystem(x, y, out curdistsystem);
         }
 
-        #endregion
+#endregion
 
-        #region Misc
+#region Misc
 
         private class MyRenderer : ToolStripProfessionalRenderer
         {
@@ -2421,47 +2428,7 @@ namespace EDDiscovery2
             return _starnamelookup.ContainsKey(name) ? _starnamelookup[name] : null;
         }
 
-        string FindNextVisitedSystem(string sysname, int dir)
-        {
-            int index = _visitedSystems.FindIndex(x => x.Name.Equals(sysname));
-
-            if (index != -1)
-            {
-                if (dir == -1)
-                {
-                    if (index < 1)                                  //0, we go to the end and work from back..                      
-                        index = _visitedSystems.Count;
-
-                    int indexn = _visitedSystems.FindLastIndex(index - 1, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-
-                    if ( indexn == -1 )                             // from where we were, did not find one, try from back..
-                        indexn = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-
-                    return (indexn != -1) ? _visitedSystems[indexn].Name : _centerSystem.name;
-                }
-                else
-                {
-                    index++;
-
-                    if (index == _visitedSystems.Count)             // if at end, go to beginning
-                        index = 0;
-
-                    int indexn = _visitedSystems.FindIndex(index, x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-
-                    if ( indexn == -1 )                             // if not found, go to beginning
-                        indexn = _visitedSystems.FindIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-
-                    return (indexn != -1) ? _visitedSystems[indexn].Name : _centerSystem.name;
-                }
-            }
-            else
-            {
-                index = _visitedSystems.FindLastIndex(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
-                return (index != -1) ? _visitedSystems[index].Name : _centerSystem.name;
-            }
-        }
-
-        #endregion
+#endregion
 
     }
 
@@ -2469,28 +2436,41 @@ namespace EDDiscovery2
     public class SystemClassStarNames    // holds star data.. used as its kept up to date with visited systems and has extra info
     {
         public SystemClassStarNames() { }
+
         public SystemClassStarNames(ISystem other)
         {
+            id = other.id;
             name = other.name;
             x = other.x; y = other.y; z = other.z;
             population = other.population;
             newtexture = null; newstar = null;
             painttexture = null; paintstar = null;
             candisposepainttexture = false;
-            sysclass = other;
+        }
+
+        public SystemClassStarNames(string n, double xv, double yv, double zv, long p , long idx )
+        {
+            id = idx;
+            name = n;
+            x = xv; y = yv; z = zv;
+            population = p;
+            newtexture = null; newstar = null;
+            painttexture = null; paintstar = null;
+            candisposepainttexture = false;
         }
 
         public SystemClassStarNames(VisitedSystemsClass other)
         {
+            id = 0;
             name = other.Name;
             x = other.X; y = other.Y; z = other.Z;
             population = 0;
             newtexture = null; newstar = null;
             painttexture = null; paintstar = null;
             candisposepainttexture = false;
-            sysclass = (SystemClass)other.curSystem;
         }
 
+        public long id { get; set; }                             // EDDB ID, or 0 if not known
         public string name { get; set; }
         public double x { get; set; }
         public double y { get; set; }
@@ -2501,7 +2481,6 @@ namespace EDDiscovery2
         public TexturedQuadData painttexture { get; set; }
         public PointData paintstar { get; set; }                // instead of doing a array paint.
         public bool candisposepainttexture { get; set; }
-        public ISystem sysclass;                            // set if created from it
     };
 
 }

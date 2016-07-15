@@ -259,7 +259,7 @@ namespace EDDiscovery2
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(145, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
             // 
             // showStarstoolStripMenuItem
             // 
@@ -268,7 +268,7 @@ namespace EDDiscovery2
             this.showStarstoolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showStarstoolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showStarstoolStripMenuItem.Image")));
             this.showStarstoolStripMenuItem.Name = "showStarstoolStripMenuItem";
-            this.showStarstoolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.showStarstoolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.showStarstoolStripMenuItem.Text = "Show All Stars";
             this.showStarstoolStripMenuItem.ToolTipText = "Show all stars";
             this.showStarstoolStripMenuItem.Click += new System.EventHandler(this.showStarstoolStripMenuItem_Click);
@@ -280,7 +280,7 @@ namespace EDDiscovery2
             this.showStationsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showStationsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showStationsToolStripMenuItem.Image")));
             this.showStationsToolStripMenuItem.Name = "showStationsToolStripMenuItem";
-            this.showStationsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.showStationsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.showStationsToolStripMenuItem.Text = "Show Stations";
             this.showStationsToolStripMenuItem.ToolTipText = "Show Stations";
             this.showStationsToolStripMenuItem.Click += new System.EventHandler(this.showStationsToolStripMenuItem_Click);

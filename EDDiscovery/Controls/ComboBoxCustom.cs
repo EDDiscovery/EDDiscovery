@@ -270,7 +270,7 @@ namespace ExtendedControls
             this.Text = _cbsystem.Text;
             this.Invalidate(true);
 
-            if (SelectedIndexChanged != null)
+            if (this.Enabled && SelectedIndexChanged != null)
             {
                 SelectedIndexChanged(this, e);
             }

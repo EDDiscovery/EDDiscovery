@@ -13,6 +13,8 @@ using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
 using System.Threading.Tasks;
 using EDDiscovery.Controls;
+using System.Threading;
+using System.Collections.Concurrent;
 
 namespace EDDiscovery
 {
@@ -34,7 +36,7 @@ namespace EDDiscovery
             public const int SystemName = 0;
         }
 
-        private const int DefaultTravelHistoryFilterIndex = 4;
+        private const int DefaultTravelHistoryFilterIndex = 8;
         private const string SingleCoordinateFormat = "0.#####";
 
         private static EDDiscoveryForm _discoveryForm;
@@ -46,30 +48,27 @@ namespace EDDiscovery
         internal bool EDSMSyncFrom = true;
 
         public NetLogClass netlog = new NetLogClass();
-        List<SystemDist> sysDist = null;
         private VisitedSystemsClass currentSysPos = null;
 
 
-        private static ExtendedControls.RichTextBoxScroll static_richTextBox;
         private int activecommander = 0;
         List<EDCommander> commanders = null;
         
         public TravelHistoryControl()
         {
             InitializeComponent();
-            static_richTextBox = richTextBox_History;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
             sync = new EDSMSync(_discoveryForm);
-            var db = new SQLiteDBClass();
             defaultMapColour = EDDConfig.Instance.DefaultMapColour;
-            EDSMSyncTo = db.GetSettingBool("EDSMSyncTo", true);
-            EDSMSyncFrom = db.GetSettingBool("EDSMSyncFrom", true);
+            EDSMSyncTo = SQLiteDBClass.GetSettingBool("EDSMSyncTo", true);
+            EDSMSyncFrom = SQLiteDBClass.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
             checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
+            comboBoxHistoryWindow.Enabled = false;
             comboBoxHistoryWindow.DataSource = new[]
             {
                 TravelHistoryFilter.FromHours(6),
@@ -83,10 +82,17 @@ namespace EDDiscovery
                 TravelHistoryFilter.NoFilter,
             };
 
+            richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
+
             comboBoxHistoryWindow.DisplayMember = nameof(TravelHistoryFilter.Label);
 
-            comboBoxHistoryWindow.SelectedIndex = db.GetSettingInt("EDUIHistory", DefaultTravelHistoryFilterIndex);
+            comboBoxHistoryWindow.SelectedIndex = SQLiteDBClass.GetSettingInt("EDUIHistory", DefaultTravelHistoryFilterIndex);
+            comboBoxHistoryWindow.Enabled = true;
+
             LoadCommandersListBox();
+
+            closestthread = new Thread(CalculateClosestSystems) { Name = "Closest Calc", IsBackground = true };
+            closestthread.Start();
         }
 
 
@@ -95,77 +101,67 @@ namespace EDDiscovery
             visitedSystems = null;
 
             TriggerEDSMRefresh();
+            LogText("Refresh History." + Environment.NewLine);
             RefreshHistory();
-
+            LogText("Refresh Complete." + Environment.NewLine);
 
             EliteDangerous.CheckED();
         }
 
         public void TriggerEDSMRefresh()
         {
-            SQLiteDBClass db = new SQLiteDBClass();
+            LogText("Check for new EDSM systems." + Environment.NewLine);
             EDSMClass edsm = new EDSMClass();
-            edsm.GetNewSystems(db);
-            db.GetAllSystems();
+            edsm.GetNewSystems();
+            LogText("EDSM System check complete." + Environment.NewLine);
         }
 
 
-        static public void LogText(string text)
+        public void LogText(string text)
         {
             LogTextColor(text, _discoveryForm.theme.TextBlockColor );
         }
 
-        static public void LogTextHighlight(string text)
+        public void LogTextHighlight(string text)
         {
             LogTextColor(text, _discoveryForm.theme.TextBlockHighlightColor);
         }
 
-        static public void LogTextSuccess(string text)
+        public void LogTextSuccess(string text)
         {
             LogTextColor(text, _discoveryForm.theme.TextBlockSuccessColor);
         }
 
-        static public void LogTextColor( string text, Color color)
+        public void LogTextColor( string text, Color color)
         {
-            static_richTextBox.AppendText(text, color);
+            //Console.WriteLine("Text <" + text + "> from " + Environment.StackTrace);
+            richTextBox_History.AppendText(text, color);
         }
 
         public void RefreshHistory()
         {
-            var sw1 = Stopwatch.StartNew();
-
             if (visitedSystems == null || visitedSystems.Count == 0)
                 GetVisitedSystems();
 
             if (visitedSystems == null)
                 return;
 
-            for (int i = 0; i < visitedSystems.Count; i++)  // added, to make sure cursystem is filled in
-            {
-                UpdateVisitedSystemsEntries(visitedSystems[i], (i < visitedSystems.Count - 1) ? visitedSystems[i + 1] : null);
-            }
+            VisitedSystemsClass.UpdateSys(visitedSystems, EDDiscoveryForm.EDDConfig.UseDistances);
 
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
 
             dataGridViewTravel.Rows.Clear();
 
-            //            System.Diagnostics.Trace.WriteLine("SW1: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
-                VisitedSystemsClass item = result[ii];
-                AddNewHistoryRow(false, item);      // for every one in filter, add a row.
+                AddNewHistoryRow(false, result[ii]);      // for every one in filter, add a row.
             }
-
-            //            System.Diagnostics.Trace.WriteLine("SW2: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
 
             if (dataGridViewTravel.Rows.Count > 0)
             {
                 ShowSystemInformation((VisitedSystemsClass)(dataGridViewTravel.Rows[0].Cells[TravelHistoryColumns.SystemName].Tag));
             }
-//            System.Diagnostics.Trace.WriteLine("SW3: " + (sw1.ElapsedMilliseconds / 1000.0).ToString("0.000"));
-            sw1.Stop();
 
             if (textBoxFilter.TextLength>0)
                 FilterGridView();
@@ -183,67 +179,10 @@ namespace EDDiscovery
             }
         }
 
-        private void UpdateVisitedSystemsEntries(VisitedSystemsClass item, VisitedSystemsClass item2)           // this is a split in two version with the same code of AddHistoryRow..
-        {
-            SystemClass sys1 = null, sys2;                                                                      // fills in cursystem and prevsystem, and calcs distance
-            double dist;
-
-            sys1 = SystemData.GetSystem(item.Name);
-            if (sys1 == null)
-            {
-                sys1 = new SystemClass(item.Name);
-                if (SQLiteDBClass.globalSystemNotes.ContainsKey(sys1.SearchName))
-                {
-                    sys1.Note = SQLiteDBClass.globalSystemNotes[sys1.SearchName].Note;
-                }
-                if (item.HasTravelCoordinates)
-                {
-                    sys1.x = item.X;
-                    sys1.y = item.Y;
-                    sys1.z = item.Z;
-                }
-            }
-            if (item2 != null)
-            {
-                sys2 = SystemData.GetSystem(item2.Name);
-                if (sys2 == null)
-                {
-                    sys2 = new SystemClass(item2.Name);
-                    if (item2.HasTravelCoordinates)
-                    {
-                        sys2.x = item2.X;
-                        sys2.y = item2.Y;
-                        sys2.z = item2.Z;
-                    }
-                }
-            }
-            else
-                sys2 = null;
-
-            item.curSystem = sys1;
-            item.prevSystem = sys2;
-
-            string diststr = "";
-            dist = 0;
-            if (sys2 != null)
-            {
-                if (sys1.HasCoordinate && sys2.HasCoordinate)
-                    dist = SystemData.Distance(sys1, sys2);
-                else
-                {
-                    dist = DistanceClass.Distance(sys1, sys2);
-                }
-
-                if (dist > 0)
-                    diststr = dist.ToString("0.00");
-            }
-
-            item.strDistance = diststr;
-        }
 
         private void AddNewHistoryRow(bool insert, VisitedSystemsClass item)            // second part of add history row, adds item to view.
-        { 
-            object[] rowobj = { item.Time, item.Name, item.strDistance, item.curSystem.Note, "█" };
+        {
+            object[] rowobj = { item.Time, item.Name, item.strDistance, SystemNoteClass.GetSystemNoteOrEmpty(item.curSystem.name), "█" };
             int rownr;
 
             if (insert)
@@ -282,11 +221,8 @@ namespace EDDiscovery
 
             currentSysPos = syspos;
             textBoxSystem.Text = syspos.curSystem.name;
-            textBoxPrevSystem.Clear();
-            textBoxDistance.Text = syspos.strDistance;
-
-
-            if (syspos.curSystem.HasCoordinate)
+            
+            if (syspos.curSystem.HasCoordinate)         // cursystem has them?
             {
                 textBoxX.Text = syspos.curSystem.x.ToString(SingleCoordinateFormat);
                 textBoxY.Text = syspos.curSystem.y.ToString(SingleCoordinateFormat);
@@ -294,7 +230,7 @@ namespace EDDiscovery
 
                 textBoxSolDist.Text = Math.Sqrt(syspos.curSystem.x * syspos.curSystem.x + syspos.curSystem.y * syspos.curSystem.y + syspos.curSystem.z * syspos.curSystem.z).ToString("0.00");
             }
-            else if (syspos.X == 0.0 && syspos.Y == 0.0 && syspos.Z == 0.0)
+            else if ( !syspos.HasTravelCoordinates )    // vsc has them? No, ?
             {
                 textBoxX.Text = "?";
                 textBoxY.Text = "?";
@@ -321,26 +257,9 @@ namespace EDDiscovery
             textBoxEconomy.Text = EnumStringFormat(syspos.curSystem.primary_economy.ToString());
             textBoxGovernment.Text = EnumStringFormat(syspos.curSystem.government.ToString());
             textBoxState.Text = EnumStringFormat(syspos.curSystem.state.ToString());
-            richTextBoxNote.Text = EnumStringFormat(syspos.curSystem.Note);
+            richTextBoxNote.Text = EnumStringFormat(SystemNoteClass.GetSystemNoteOrEmpty(syspos.Name));
 
-            bool distedit = false;
-
-            if (syspos.prevSystem != null)
-            {
-                textBoxPrevSystem.Text = syspos.prevSystem.name;
-
-                if (syspos.curSystem.status == SystemStatusEnum.Unknown || syspos.prevSystem.status == SystemStatusEnum.Unknown)
-                    distedit = true;
-
-            }
-
-            textBoxDistance.Enabled = distedit;
-            buttonUpdate.Enabled = distedit;
-            buttonTrilaterate.Enabled = !syspos.curSystem.HasCoordinate && syspos.curSystem == GetCurrentSystem();
-            //buttonTrilaterate.Enabled = true; // FIXME for debugging only
-
-
-            ShowClosestSystems(syspos.Name);
+            closestsystem_queue.Add(syspos.Name);
         }
 
         private string EnumStringFormat(string str)
@@ -353,93 +272,117 @@ namespace EDDiscovery
             return str.Replace("_", " ");
         }
 
-        private void ShowClosestSystems(string name)
+        public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
         {
-            Debug.Assert(name != null && name.Length != 0);
-
-            labelclosests.Text = "";
-            dataGridViewNearest.Rows.Clear();
-
-            SystemClass lastSystem = SystemData.GetSystem(name);
-
-            double x, y, z;
-
-            if ( lastSystem == null )
+            public int Compare(TKey x, TKey y)
             {
-                VisitedSystemsClass vsc = visitedSystems.Find(q => q.Name.Equals(name) );
-
-                if (vsc == null || !vsc.HasTravelCoordinates) // if not found, or no co-ord
-                    return;
-
-                x = vsc.X;
-                y = vsc.Y;
-                z = vsc.Z;
+                int result = x.CompareTo(y);
+                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
             }
-            else
+        }
+
+        Thread closestthread;
+        BlockingCollection<string> closestsystem_queue = new BlockingCollection<string>();
+        SortedList<double, string> closestsystemlist = new SortedList<double, string>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
+
+        private void CalculateClosestSystems()
+        {
+            string closestname;
+
+            while ( true )
             {
-                x = lastSystem.x;
-                y = lastSystem.y;
-                z = lastSystem.z;
-            }
+                closestname = closestsystem_queue.Take();           // block until got one..
 
-            labelclosests.Text = "Closest systems from " + name;
+                string namecalc="!";                    // need to keep the name as TryTake empties the string
+                closestsystemlist.Clear();
 
-            sysDist = new List<SystemDist>();
-            double dist;
-            double dx, dy, dz;
-
-            foreach (SystemClass pos in SystemData.SystemList)
-            {
-                dx = (pos.x - x);
-                dy = (pos.y - y);
-                dz = (pos.z - z);
-                dist = dx * dx + dy * dy + dz * dz;
-
-                if (dist > 0)
+                do
                 {
-                    SystemDist sdist = new SystemDist();
-                    sdist.name = pos.name;
-                    sdist.dist = Math.Sqrt(dist);
-                    sysDist.Add(sdist);
-                }
-            }
-
-            foreach (VisitedSystemsClass pos in visitedSystems)
-            {
-                if (pos.HasTravelCoordinates && SystemData.GetSystem(name) == null)
-                {
-                    dx = (pos.X - x);
-                    dy = (pos.Y - y);
-                    dz = (pos.Z - z);
-                    dist = dx * dx + dy * dy + dz * dz;
-
-                    if (dist > 0)
+                    string nextname;
+                    while (closestsystem_queue.TryTake(out nextname))    // try and empty the queue in case multiple ones are there
                     {
-                        SystemDist sdist = new SystemDist();
-                        sdist.name = pos.Name;
-                        sdist.dist = Math.Sqrt(dist);
-                        sysDist.Add(sdist);
+                        //Console.WriteLine("Chuck " + closestname);
+                        closestname = nextname;
                     }
-                }
-            }
 
-            var list = (from t in sysDist orderby t.dist select t).Take(50);
+                    SystemClass lastSystem = SystemClass.GetSystem(closestname);
 
-            foreach (SystemDist sdist in list)
-            {
-                object[] rowobj = { sdist.name, sdist.dist.ToString("0.00") };
-                dataGridViewNearest.Rows.Add(rowobj);
+                    double x, y, z;
+
+                    if (lastSystem == null)
+                    {
+                        VisitedSystemsClass vsc = null;
+
+                        Invoke((MethodInvoker)delegate      // being paranoid about threads..
+                        {
+                            vsc = visitedSystems.Find(q => q.Name.Equals(closestname));
+                        });
+
+                        if (vsc == null || !vsc.HasTravelCoordinates) // if not found, or no co-ord
+                            break;
+
+                        x = vsc.X;
+                        y = vsc.Y;
+                        z = vsc.Z;
+                    }
+                    else
+                    {
+                        x = lastSystem.x;
+                        y = lastSystem.y;
+                        z = lastSystem.z;
+                    }
+
+
+                    SystemClass.GetSystemSqDistancesFrom(closestsystemlist, x, y, z, 50, true);
+
+                    Invoke((MethodInvoker)delegate      // being paranoid about threads..
+                    {
+                        VisitedSystemsClass.CalculateSqDistances(visitedSystems, closestsystemlist, x, y, z, 50, true);
+                    });
+
+                    namecalc = closestname;
+
+                } while (closestsystem_queue.TryTake(out closestname));     // if there is another one there, just re-run (slow down doggy!)
+
+                Invoke((MethodInvoker)delegate
+                {
+                    labelclosests.Text = "";
+                    dataGridViewNearest.Rows.Clear();
+
+                    if (closestsystemlist.Count() > 0)
+                    {
+                        labelclosests.Text = "Closest systems from " + namecalc;
+                        foreach (KeyValuePair<double, string> tvp in closestsystemlist)
+                        {
+                            object[] rowobj = { tvp.Value, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
+                            dataGridViewNearest.Rows.Add(rowobj);
+                        }
+                    }
+                });
             }
         }
 
 
-        public ISystem GetCurrentSystem()
+        public VisitedSystemsClass CurrentSystemSelected
         {
-            if (visitedSystems == null || visitedSystems.Count == 0)
+            get
             {
-                return null;
+                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null) return null;
+                return ((VisitedSystemsClass)dataGridViewTravel.CurrentRow.Cells[TravelHistoryColumns.SystemName].Tag);
             }
-            return (from systems in visitedSystems orderby systems.Time descending select systems.curSystem).First();
+        }
+
+
+        public ISystem GetLatestSystem
+        {
+            get
+            {
+                if (visitedSystems == null || visitedSystems.Count == 0)
+                {
+                    return null;
+                }
+                return (from systems in visitedSystems orderby systems.Time descending select systems.curSystem).First();
+            }
         }
 
 
@@ -448,7 +391,7 @@ namespace EDDiscovery
            dataGridViewTravel.MakeDoubleBuffered();
         }
 
-        private void LoadCommandersListBox()
+        public void LoadCommandersListBox()
         {
             comboBoxCommander.Enabled = false;
             commanders = new List<EDCommander>();
@@ -462,16 +405,16 @@ namespace EDDiscovery
             comboBoxCommander.DisplayMember = "Name";
 
             EDCommander currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander;
+
             comboBoxCommander.SelectedIndex = commanders.IndexOf(currentcmdr);
             activecommander = currentcmdr.Nr;
 
             comboBoxCommander.Enabled = true;
-
         }
-
+                
         private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxCommander.SelectedIndex >= 0 )
+            if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled )     // DONT trigger during LoadCommandersListBox
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
                 activecommander = itm.Nr;
@@ -491,8 +434,7 @@ namespace EDDiscovery
             if (visitedSystems != null)
                 RefreshHistory();
 
-            var db = new SQLiteDBClass();
-            db.PutSettingInt("EDUIHistory", comboBoxHistoryWindow.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("EDUIHistory", comboBoxHistoryWindow.SelectedIndex);
         }
 
 
@@ -501,11 +443,11 @@ namespace EDDiscovery
             DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
         }
 
-        private void buttonMap_Click(object sender, EventArgs e)
+        public void buttonMap_Click(object sender, EventArgs e)
         {
             if (_discoveryForm.SystemNames.Count == 0)
             {
-                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
+                MessageBox.Show("Systems have not been loaded yet or none were available at program start, please wait or restart", "No Systems Available", MessageBoxButtons.OK);
                 return;
             }
 
@@ -525,13 +467,16 @@ namespace EDDiscovery
                 } while (!selectedSys.curSystem.HasCoordinate && selectedLine < dataGridViewTravel.Rows.Count);
             }
 
+            this.Cursor = Cursors.WaitCursor;
+
             string selname = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
             map.Prepare(selname, _discoveryForm.settings.MapHomeSystem,
                         _discoveryForm.settings.MapCentreOnSelection ? selname : _discoveryForm.settings.MapHomeSystem,
                         _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames, visitedSystems);
             map.Show();
+            this.Cursor = Cursors.Default;
         }
-        
+
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -547,35 +492,7 @@ namespace EDDiscovery
                     richTextBoxNote.TextBox.ScrollToCaret();
                     richTextBoxNote.TextBox.Focus();
                 }
-                else  if (e.ColumnIndex == TravelHistoryColumns.Distance && textBoxDistance.Enabled == true )       // distance column and on..
-                {
-                    textBoxDistance.Select(textBoxDistance.Text.Length, 0);     // move caret to end (in case something is there) and focus
-                    textBoxDistance.Focus();
-                }
             }
-
-        }
-
-        private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                if (dataGridViewTravel.SelectedCells.Count < 2 || dataGridViewTravel.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-                {
-                    DataGridView.HitTestInfo hti = dataGridViewTravel.HitTest(e.X, e.Y);
-                    if (hti.Type == DataGridViewHitTestType.Cell)
-                    {
-                        dataGridViewTravel.ClearSelection();                // select row under cursor.
-                        dataGridViewTravel.Rows[hti.RowIndex].Selected = true;
-                    }
-                }
-            }
-        }
-
-        private void historyContextMenu_Opening(object sender, CancelEventArgs e)
-        {
-            if (dataGridViewTravel.SelectedCells.Count == 0)      // need something selected  stops context menu opening on nothing..
-                e.Cancel = true;
         }
 
         private void dataGridViewTravel_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -587,33 +504,6 @@ namespace EDDiscovery
                 _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
             }
         }
-
-        private void buttonUpdate_Click(object sender, EventArgs e)
-        {
-            var dist = DistanceParser.ParseJumpDistance(textBoxDistance.Text.Trim());
-
-            if (!dist.HasValue)
-                MessageBox.Show("Distance in wrong format!");
-            else
-            {
-                DistanceClass distance = new DistanceClass();
-
-                distance.Dist = dist.Value;
-                distance.CreateTime = DateTime.UtcNow;
-                distance.CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name.Trim();
-                distance.NameA = textBoxSystem.Text;
-                distance.NameB = textBoxPrevSystem.Text;
-                distance.Status = DistancsEnum.EDDiscovery;
-
-                distance.Store();
-                SQLiteDBClass.AddDistanceToCache(distance);
-
-                if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
-                    dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[TravelHistoryColumns.Distance].Value = textBoxDistance.Text.Trim();
-
-            }
-        }
-
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
@@ -633,45 +523,33 @@ namespace EDDiscovery
             try
             {
                 EDSMClass edsm = new EDSMClass();
-                SQLiteDBClass db = new SQLiteDBClass();
-
-
+                
                 edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
                 edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-
-
+                
                 if (currentSysPos == null || currentSysPos.curSystem == null)
                     return;
 
                 txt = richTextBoxNote.Text;
 
+                SystemNoteClass sn = SystemNoteClass.GetSystemNoteClass(currentSysPos.curSystem.name);
 
-                if (currentSysPos.curSystem.Note == null)
-                    currentSysPos.curSystem.Note = "";
-
-                if (currentSysPos != null && !txt.Equals(currentSysPos.curSystem.Note))
+                if (currentSysPos != null && ( sn == null || !sn.Note.Equals(txt))) // if current system pos set, or no note or text change
                 {
-                    SystemNoteClass sn;
-
-                    if (SQLiteDBClass.globalSystemNotes.ContainsKey(currentSysPos.curSystem.SearchName))
-                    {
-                        sn = SQLiteDBClass.globalSystemNotes[currentSysPos.curSystem.SearchName];
+                    if ( sn != null )           // already there, update
+                    { 
                         sn.Note = txt;
                         sn.Time = DateTime.Now;
-
                         sn.Update();
                     }
                     else
                     {
                         sn = new SystemNoteClass();
-
                         sn.Name = currentSysPos.curSystem.name;
                         sn.Note = txt;
                         sn.Time = DateTime.Now;
                         sn.Add();
                     }
-
-                    currentSysPos.curSystem.Note = txt;
 
                     if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
                         dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[TravelHistoryColumns.Note].Value = txt;
@@ -703,10 +581,8 @@ namespace EDDiscovery
                 MessageBox.Show("Please enter commander name before sending distances/ travel history to EDSM!");
                 return;
             }
-            var db = new SQLiteDBClass();
 
-            var dists = db.GetDistancesByStatus((int)DistancsEnum.EDDiscovery);
-            //var dists = from p in SQLiteDBClass.dictDistances where p.Value.Status == DistancsEnum.EDDiscovery  orderby p.Value.CreateTime  select p.Value;
+            var dists = DistanceClass.GetDistancesByStatus((int)DistancsEnum.EDDiscovery);
 
             EDSMClass edsm = new EDSMClass();
 
@@ -736,13 +612,13 @@ namespace EDDiscovery
                     bool trilok;
                     if (edsm.ShowDistanceResponse(json, out str, out trilok))
                     {
-                        LogText(str);
+                        LogText("EDSM Response " + str);
                         dist.Status = DistancsEnum.EDDiscoverySubmitted;
                         dist.Update();
                     }
                     else
                     {
-                        LogText(str);
+                        LogText("EDSM Response " + str);
                     }
                 }
             }
@@ -785,24 +661,10 @@ namespace EDDiscovery
             }
         }
 
-        private void UpdateNewPosition(string name)
+        private void UpdateNewPosition(string name)         // in UI Thread..
         {
-            LogText("Arrived at system: ");
-            SystemClass sys1 = SystemData.GetSystem(name);
-            if (sys1 == null || sys1.HasCoordinate == false)
-                LogTextHighlight(name);
-            else
-                LogText(name);
-
-            int count = GetVisitsCount(name);
-
-            LogText(": Visit No. " + count.ToString() + Environment.NewLine);
-            System.Diagnostics.Trace.WriteLine("Arrived at system: " + name + " " + count.ToString() + ":th visit.");
-
             var result = visitedSystems.OrderByDescending(a => a.Time).ToList<VisitedSystemsClass>();
-
             
-
             VisitedSystemsClass item = result[0];
             VisitedSystemsClass item2;
 
@@ -810,6 +672,19 @@ namespace EDDiscovery
                 item2 = result[1];
             else
                 item2 = null;
+
+            VisitedSystemsClass.UpdateVisitedSystemsEntries(item, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
+
+            LogText("Arrived at system ");
+            if ( item.HasTravelCoordinates == false && ( item.curSystem == null || item.curSystem.HasCoordinate == false) )
+                LogTextHighlight(name);
+            else
+                LogText(name);
+
+            int count = GetVisitsCount(name);
+
+            LogText(", Visit No. " + count.ToString() + Environment.NewLine);
+            System.Diagnostics.Trace.WriteLine("Arrived at system: " + name + " " + count.ToString() + ":th visit.");
 
             if (checkBoxEDSMSyncTo.Checked == true)
             {
@@ -820,49 +695,10 @@ namespace EDDiscovery
                 Task taskEDSM = Task.Factory.StartNew(() => EDSMSync.SendTravelLog(edsm, item, null));
             }
 
-            // grab distance to next (this) system
-            textBoxDistanceToNextSystem.Enabled = false;
-            if (textBoxDistanceToNextSystem.Text.Length > 0 && item2 != null)
-            {
-                SystemClass currentSystem = null, previousSystem = null;
-                SystemData.SystemList.ForEach(s =>
-                {
-                    if (s.name == item.Name) currentSystem = s;
-                    if (s.name == item2.Name) previousSystem = s;
-                });
-
-                if (currentSystem == null || previousSystem == null || !currentSystem.HasCoordinate || !previousSystem.HasCoordinate)
-                {
-                    var presetDistance = DistanceParser.ParseJumpDistance(textBoxDistanceToNextSystem.Text.Trim(), MaximumJumpRange);
-                    if (presetDistance.HasValue)
-                    {
-                        var distance = new DistanceClass
-                        {
-                            Dist = presetDistance.Value,
-                            CreateTime = DateTime.UtcNow,
-                            CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name,
-                            NameA = item.Name,
-                            NameB = item2.Name,
-                            Status = DistancsEnum.EDDiscovery
-                        };
-                        Console.Write("Pre-set distance " + distance.NameA + " -> " + distance.NameB + " = " + distance.Dist);
-                        distance.Store();
-                        SQLiteDBClass.AddDistanceToCache(distance);
-                    }
-                }
-            }
-
-            textBoxDistanceToNextSystem.Clear();
-            textBoxDistanceToNextSystem.Enabled = true;
-
-            UpdateVisitedSystemsEntries(item, item2);
             AddNewHistoryRow(true, item);
             StoreSystemNote();
 
-            Invoke((MethodInvoker)delegate
-            {
-                _discoveryForm.Map.UpdateVisited(visitedSystems);      // update in UI thread.
-            });
+            _discoveryForm.Map.UpdateVisited(visitedSystems);      // update map
 
             // Move focus to new row
             if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
@@ -915,35 +751,30 @@ namespace EDDiscovery
 
         private void buttonEDDB_Click(object sender, EventArgs e)
         {
-            if (currentSysPos.curSystem.id_eddb>0)
+            if ( currentSysPos!= null && currentSysPos.curSystem.id_eddb>0)
                 Process.Start("http://eddb.io/system/" + currentSysPos.curSystem.id_eddb.ToString());
         }
 
         private void buttonRoss_Click(object sender, EventArgs e)
         {
-            if (currentSysPos.curSystem.id_eddb>0)
+            if (currentSysPos!= null && currentSysPos.curSystem.id_eddb>0)
                 Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
         }
 
-        private void buttonTrilaterate_Click(object sender, EventArgs e)
+        private void buttonEDSM_Click(object sender, EventArgs e)
         {
-            ISystem currSys = GetCurrentSystem();
-
-            if (currSys != null)
+            if (currentSysPos != null && currentSysPos.curSystem != null) // solve a possible exception
             {
-                TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+                if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
+                {
+                    EDSMClass edsm = new EDSMClass();
+                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
 
-                _discoveryForm.ShowTrilaterationTab();
-                tctrl.Set(currSys);
-            }
-        }
-
-        public ISystem CurrentSystem
-        {
-            get
-            {
-                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null) return null;
-                return ((VisitedSystemsClass)dataGridViewTravel.CurrentRow.Cells[TravelHistoryColumns.SystemName].Tag).curSystem;
+                    if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+                        Process.Start(url);
+                    else
+                        MessageBox.Show("System unknown to EDSM");
+                }
             }
         }
 
@@ -952,21 +783,6 @@ namespace EDDiscovery
             var value = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
             return !string.IsNullOrEmpty(value) ? value : null;
         }
-
-        private void textBoxDistanceToNextSystem_Validating(object sender, CancelEventArgs e)
-        {
-            var value = textBoxDistanceToNextSystem.Text.Trim();
-            if (value.Length == 0)
-            {
-                return;
-            }
-
-            if (!DistanceParser.ParseJumpDistance(value, MaximumJumpRange).HasValue)
-            {
-                e.Cancel = true;
-            }
-        }
-
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
         {
@@ -1006,22 +822,144 @@ namespace EDDiscovery
             dataGridViewTravel.ResumeLayout();
         }
 
+
+        private void textBoxPrevSystem_Enter(object sender, EventArgs e)
+        {
+            /* Automatically copy the contents to the clipboard whenever this control is activated */
+            TextBox tb = sender as TextBox;
+            if (tb != null && tb.Text != null)
+            {
+                Clipboard.SetText(tb.Text);
+            }
+        }
+
+        private void checkBoxEDSMSyncTo_CheckedChanged(object sender, EventArgs e)
+        {
+            EDSMSyncTo = checkBoxEDSMSyncTo.Checked;
+        }
+
+        private void checkBoxEDSMSyncFrom_CheckedChanged(object sender, EventArgs e)
+        {
+            EDSMSyncFrom = checkBoxEDSMSyncFrom.Checked;
+        }
+
+        private void button2DMap_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm);
+            frm.Nowindowreposition = _discoveryForm.option_nowindowreposition;
+            frm.Show();
+            this.Cursor = Cursors.Default;
+        }
+
+
+        public bool SetTravelHistoryPosition(string sysname)
+        {
+            foreach (DataGridViewRow item in dataGridViewTravel.Rows)
+            {
+                string s = (string)item.Cells[TravelHistoryColumns.SystemName].Value;
+                if (s.Equals(sysname) && item.Visible)
+                {
+                    dataGridViewTravel.ClearSelection();
+                    item.Selected = true;           // select row
+                    dataGridViewTravel.CurrentCell = item.Cells[TravelHistoryColumns.SystemName];       // and ensure visible.
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        #region ClosestSystemRightClick
+
+        private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = "";
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                sysName = r.Cells[ClosestSystemsColumns.SystemName].Value.ToString();
+
+                tctrl.AddSystemToDataGridViewDistances(sysName);
+            }
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .Distinct()
+                                                                        .OrderBy(cell => cell.Index);
+
+            this.Cursor = Cursors.WaitCursor;
+            string sysName = selectedRows.First<DataGridViewRow>().Cells[ClosestSystemsColumns.SystemName].Value.ToString();
+            EDSMClass edsm = new EDSMClass();
+            if (!edsm.ShowSystemInEDSM(sysName))
+                LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
+
+            this.Cursor = Cursors.Default;
+        }
+
+        #endregion
+
+        #region TravelHistoryRightClick
+
+        VisitedSystemsClass rightclicksystem = null;
+        int rightclickrow = -1;
+
+        private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)  // MAKES row selected when mouse down
+        {
+            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+            {
+                rightclicksystem = null;
+                rightclickrow = -1;
+
+                if (dataGridViewTravel.SelectedCells.Count < 2 || dataGridViewTravel.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
+                {
+                    DataGridView.HitTestInfo hti = dataGridViewTravel.HitTest(e.X, e.Y);
+                    if (hti.Type == DataGridViewHitTestType.Cell)
+                    {
+                        dataGridViewTravel.ClearSelection();                // select row under cursor.
+                        dataGridViewTravel.Rows[hti.RowIndex].Selected = true;
+                                                                            // Record who we clicked on.. only way to tell opening..
+                        rightclickrow = hti.RowIndex;
+                        rightclicksystem = (VisitedSystemsClass)dataGridViewTravel.Rows[hti.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag;
+                    }
+                }
+            }
+        }
+
+        private void historyContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            if (dataGridViewTravel.SelectedCells.Count == 0)      // need something selected  stops context menu opening on nothing..
+                e.Cancel = true;
+
+            enterDistanceToPreviousStarToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.prevSystem != null && (!rightclicksystem.curSystem.HasCoordinate || !rightclicksystem.prevSystem.HasCoordinate));
+            mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.curSystem.HasCoordinate);
+            viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
+        }
+
+        // enabled only if rightclick system is set.
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             if (!_discoveryForm.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
                 buttonMap_Click(sender, e);
+            this.Cursor = Cursors.Default;
 
             if (_discoveryForm.Map.Is3DMapsRunning)             // double check here! for paranoia.
             {
-                if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
-                {
-                    string s = (string)dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[TravelHistoryColumns.SystemName].Value;
-
-                    if (_discoveryForm.Map.MoveToSystem(s))
-                        _discoveryForm.Map.Show();
-                    else
-                        MessageBox.Show("System does not have co-ordinates");
-                }
+                if (_discoveryForm.Map.MoveToSystem(rightclicksystem.Name))
+                    _discoveryForm.Map.Show();
             }
         }
 
@@ -1039,7 +977,7 @@ namespace EDDiscovery
             {
                 this.Cursor = Cursors.WaitCursor;
                 string sysName = "";
-                foreach(DataGridViewRow r in selectedRows)
+                foreach (DataGridViewRow r in selectedRows)
                 {
                     r.Cells[TravelHistoryColumns.Map].Style.ForeColor = mapColorDialog.Color;
                     sysName = r.Cells[TravelHistoryColumns.SystemName].Value.ToString();
@@ -1068,9 +1006,9 @@ namespace EDDiscovery
             foreach (DataGridViewRow r in selectedRows)
             {
                 VisitedSystemsClass sp = null;
-                sp = (VisitedSystemsClass) r.Cells[TravelHistoryColumns.SystemName].Tag;
+                sp = (VisitedSystemsClass)r.Cells[TravelHistoryColumns.SystemName].Tag;
 
-                if (sp != null )
+                if (sp != null)
                 {
                     sp.Commander = -1;
                     sp.Update();
@@ -1104,7 +1042,7 @@ namespace EDDiscovery
             {
                 VisitedSystemsClass sp = null;
 
-                sp = (VisitedSystemsClass) r.Cells[TravelHistoryColumns.SystemName].Tag;
+                sp = (VisitedSystemsClass)r.Cells[TravelHistoryColumns.SystemName].Tag;
                 if (sp != null)
                 {
                     listsyspos.Add(sp);
@@ -1130,54 +1068,6 @@ namespace EDDiscovery
                     dataGridViewTravel.Rows.Remove(row);
                 }
             }
-                this.Cursor = Cursors.Default;
-        }
-
-        private void textBoxPrevSystem_Enter(object sender, EventArgs e)
-        {
-            /* Automatically copy the contents to the clipboard whenever this control is activated */
-            TextBox tb = sender as TextBox;
-            if (tb != null && tb.Text != null)
-            {
-                Clipboard.SetText(tb.Text);
-            }
-        }
-
-        private void checkBoxEDSMSyncTo_CheckedChanged(object sender, EventArgs e)
-        {
-            EDSMSyncTo = checkBoxEDSMSyncTo.Checked;
-        }
-
-        private void checkBoxEDSMSyncFrom_CheckedChanged(object sender, EventArgs e)
-        {
-            EDSMSyncFrom = checkBoxEDSMSyncFrom.Checked;
-        }
-
-        private void button2DMap_Click(object sender, EventArgs e)
-        {
-            FormSagCarinaMission frm = new FormSagCarinaMission(_discoveryForm);
-            frm.Nowindowreposition = _discoveryForm.option_nowindowreposition;
-            frm.Show();
-        }
-
-        private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
-
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
-                                                                        .Select(cell => cell.OwningRow)
-                                                                        .Distinct()
-                                                                        .OrderBy(cell => cell.Index);
-
-            this.Cursor = Cursors.WaitCursor;
-            string sysName = "";
-            foreach (DataGridViewRow r in selectedRows)
-            {
-                sysName = r.Cells[ClosestSystemsColumns.SystemName].Value.ToString();
-
-                tctrl.AddSystemToDataGridViewDistances(sysName);
-            }
-
             this.Cursor = Cursors.Default;
         }
 
@@ -1242,74 +1132,62 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
+        // enabled only if rightclick system is set.
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
-                                                                        .Select(cell => cell.OwningRow)
-                                                                        .Distinct()
-                                                                        .OrderBy(cell => cell.Index);
             this.Cursor = Cursors.WaitCursor;
-            string sysName = selectedRows.First<DataGridViewRow>().Cells[TravelHistoryColumns.SystemName].Value.ToString();
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
+
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
+                LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
         }
 
-        private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
+        // enabled only if rightclick system is set.
+        private void enterDistanceToPreviousStarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
-                                                                        .Select(cell => cell.OwningRow)
-                                                                        .Distinct()
-                                                                        .OrderBy(cell => cell.Index);
+            DistanceForm frm = new DistanceForm();
+            DialogResult res = frm.ShowDialog();
 
-            this.Cursor = Cursors.WaitCursor;
-            string sysName = selectedRows.First<DataGridViewRow>().Cells[ClosestSystemsColumns.SystemName].Value.ToString();
-            EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
-
-            this.Cursor = Cursors.Default;
-        }
-
-        private void buttonEDSM_Click(object sender, EventArgs e)
-        {
-            if (currentSysPos != null && currentSysPos.curSystem != null) // solve a possible exception
+            if ( res == DialogResult.OK )
             {
-                if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
-                {
-                    EDSMClass edsm = new EDSMClass();
-                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
-                    Process.Start(url);
-                    //if (currentSysPos.curSystem.id_eddb > 0)
-                    //Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.curSystem.id_eddb.ToString());
-                }
-            }
-        }
+                var dist = DistanceParser.ParseJumpDistance(frm.Value.Trim());
 
-        public bool SetTravelHistoryPosition( string sysname )
-        {
-            foreach (DataGridViewRow item in dataGridViewTravel.Rows)
-            {
-                string s = (string)item.Cells[TravelHistoryColumns.SystemName].Value;
-                if (s.Equals(sysname) && item.Visible )
+                if (!dist.HasValue)
+                    MessageBox.Show("Distance in wrong format!");
+                else
                 {
-                    dataGridViewTravel.ClearSelection();
-                    item.Selected = true;           // select row
-                    dataGridViewTravel.CurrentCell = item.Cells[TravelHistoryColumns.SystemName];       // and ensure visible.
-                    return true;
+                    DistanceClass distance = DistanceClass.GetDistanceClass(rightclicksystem.curSystem, rightclicksystem.prevSystem);
+                    DistanceClass dstore = null;
+
+                    if (distance == null)
+                    {
+                        dstore = new DistanceClass();
+                        dstore.NameA = rightclicksystem.curSystem.name;
+                        dstore.NameB = rightclicksystem.prevSystem.name;
+                    }
+                    else
+                        dstore = distance;
+
+                    dstore.Dist = dist.Value;
+                    dstore.CreateTime = DateTime.UtcNow;
+                    dstore.CommanderCreate = EDDiscoveryForm.EDDConfig.CurrentCommander.Name.Trim();
+                    dstore.Status = DistancsEnum.EDDiscovery;
+
+                    if (distance != null)
+                        dstore.Update();
+                    else
+                        dstore.Store();
+
+                    dataGridViewTravel.Rows[rightclickrow].Cells[TravelHistoryColumns.Distance].Value = frm.Value.Trim();
                 }
             }
 
-            return false;
         }
-    }
 
+        #endregion
 
-
-    public class SystemDist
-    {
-        public string name;
-        public double dist;
     }
 
 }

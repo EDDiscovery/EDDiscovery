@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -10,14 +10,15 @@ namespace EDDiscovery2.DB
 {
     public class BookmarkClass
     {
-        public int id;
+        public long id;
         public string StarName;         // set if associated with a star, else null
         public double x;                // x/y/z always set for render purposes
         public double y;
         public double z;
         public DateTime Time;           
-        public string Heading;          // set if not associated with a star, else null if its a star
+        public string Heading;          // set if region bookmark, else null if its a star
         public string Note;
+        public bool isRegion { get { return Heading != null; } }
 
         public BookmarkClass()
         {
@@ -25,7 +26,7 @@ namespace EDDiscovery2.DB
         
         public BookmarkClass(DataRow dr)
         {
-            id = (int)(long)dr["id"];
+            id = (long)dr["id"];
             if (System.DBNull.Value != dr["StarName"] )
                 StarName = (string)dr["StarName"];
             x = (double)dr["x"];
@@ -40,73 +41,62 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())      // open connection..
             {
-                return Add(cn);
+                bool ret = Add(cn);
+                return ret;
             }
         }
 
-        private bool Add(SQLiteConnection cn)
+        private bool Add(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note) values (@sname, @xp, @yp, @zp, @time, @head, @note)"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note) values (@sname, @xp, @yp, @zp, @time, @head, @note)";
-                cmd.Parameters.AddWithValue("@sname", StarName);
-                cmd.Parameters.AddWithValue("@xp", x);
-                cmd.Parameters.AddWithValue("@yp", y);
-                cmd.Parameters.AddWithValue("@zp", z);
-                cmd.Parameters.AddWithValue("@time", Time);
-                cmd.Parameters.AddWithValue("@head", Heading);
-                cmd.Parameters.AddWithValue("@note", Note);
+                cmd.AddParameterWithValue("@sname", StarName);
+                cmd.AddParameterWithValue("@xp", x);
+                cmd.AddParameterWithValue("@yp", y);
+                cmd.AddParameterWithValue("@zp", z);
+                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@head", Heading);
+                cmd.AddParameterWithValue("@note", Note);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                using (SQLiteCommand cmd2 = new SQLiteCommand())
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
                 {
-                    cmd2.Connection = cn;
-                    cmd2.CommandType = CommandType.Text;
-                    cmd2.CommandTimeout = 30;
-                    cmd2.CommandText = "Select Max(id) as id from Bookmarks";
-                    id = (int)(long)SQLiteDBClass.SqlScalar(cn, cmd2);
+                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
 
-                SQLiteDBClass.bookmarks.Add(this);
+                bookmarks.Add(this);
                 return true;
             }
         }
 
         public bool Update()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnection cn)
+        private bool Update(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note  where ID=@id"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note  where ID=@id";
-                cmd.Parameters.AddWithValue("@ID", id);
-                cmd.Parameters.AddWithValue("@sname", StarName);
-                cmd.Parameters.AddWithValue("@xp", x);
-                cmd.Parameters.AddWithValue("@yp", y);
-                cmd.Parameters.AddWithValue("@zp", z);
-                cmd.Parameters.AddWithValue("@time", Time);
-                cmd.Parameters.AddWithValue("@head", Heading);
-                cmd.Parameters.AddWithValue("@note", Note);
+                cmd.AddParameterWithValue("@ID", id);
+                cmd.AddParameterWithValue("@sname", StarName);
+                cmd.AddParameterWithValue("@xp", x);
+                cmd.AddParameterWithValue("@yp", y);
+                cmd.AddParameterWithValue("@zp", z);
+                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@head", Heading);
+                cmd.AddParameterWithValue("@note", Note);
 
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                SQLiteDBClass.bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
-                SQLiteDBClass.bookmarks.Add(this);
+                bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
+                bookmarks.Add(this);
 
                 return true;
             }
@@ -114,27 +104,60 @@ namespace EDDiscovery2.DB
 
         public bool Delete()
         {
-            using (SQLiteConnection cn = new SQLiteConnection(SQLiteDBClass.ConnectionString))
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
                 return Delete(cn);
             }
         }
 
-        private bool Delete(SQLiteConnection cn)
+        private bool Delete(SQLiteConnectionED cn)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand())
+            using (DbCommand cmd = cn.CreateCommand("DELETE FROM Bookmarks WHERE id = @id"))
             {
-                cmd.Connection = cn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = 30;
-                cmd.CommandText = "DELETE FROM Bookmarks WHERE id = @id";
-                cmd.Parameters.AddWithValue("@id", id);
-                SQLiteDBClass.SqlNonQueryText(cn, cmd);
+                cmd.AddParameterWithValue("@id", id);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                SQLiteDBClass.bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
+                bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
                 return true;
             }
         }
 
+        public static List<BookmarkClass> bookmarks = new List<BookmarkClass>();
+
+        public static bool GetAllBookmarks()
+        {
+            try
+            {
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
+                    {
+                        DataSet ds = null;
+
+                        ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+
+                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                        {
+                            return false;
+                        }
+
+                        bookmarks.Clear();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            BookmarkClass bc = new BookmarkClass(dr);
+                            bookmarks.Add(bc);
+                        }
+
+                        return true;
+
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

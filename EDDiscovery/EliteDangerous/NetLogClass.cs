@@ -37,16 +37,12 @@ namespace EDDiscovery
         ConcurrentQueue<NetLogFileInfo> NetLogFileQueue = new ConcurrentQueue<NetLogFileInfo>();
         public event NetLogEventHandler OnNewPosition;
 
-        SQLiteDBClass db=null;
         public List<TravelLogUnit> tlUnits;
 
         public string GetNetLogPath()
         {
             try
             {
-                if (db == null)
-                    db = new SQLiteDBClass();
-
                 string netlogdirstored = EDDConfig.Instance.NetLogDir;
                 string datapath = null;
                 if (EDDConfig.Instance.NetLogDirAutoMode)
@@ -98,9 +94,6 @@ namespace EDDiscovery
                         EDDConfig.Instance.NetLogDirAutoMode = false;
                         datapath = newfi.DirectoryName;
                     }
-
-
-
                 }
                 else
                 {
@@ -136,17 +129,12 @@ namespace EDDiscovery
                 return null;
             }
 
-
             if (!Directory.Exists(datapath))   // if logfiles directory is not found
             {
-                if (richTextBox_History != null)
-                {
-                    richTextBox_History.Clear();
-                    AppendText(richTextBox_History, "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
-                    //MessageBox.Show("Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab", "EDDiscovery Error", MessageBoxButtons.OK);
-                }
+                AppendText(richTextBox_History, "Netlog directory is not present!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
                 return null;
             }
+
             try
             {
                 dirInfo = new DirectoryInfo(datapath);
@@ -255,9 +243,6 @@ namespace EDDiscovery
                                 }
 
                             }
-
-
-
                         }
 
                         lu.Size = (int)fi.Length;
@@ -480,7 +465,6 @@ namespace EDDiscovery
                 // Get TravelLogUnits;
                 travelogUnits = null;
                 TravelLogUnit tlUnit = null;
-                SQLiteDBClass db = new SQLiteDBClass();
 
                 int ii = 0;
 

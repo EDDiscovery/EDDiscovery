@@ -171,7 +171,11 @@
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
+    <Compile Include="Controls\CustomColourTable.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
+    <Compile Include="Controls\StatusStripCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
@@ -186,6 +190,12 @@
     <Compile Include="Forms\BookmarkForm.Designer.cs">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DistanceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DistanceForm.Designer.cs">
+      <DependentUpon>DistanceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\InfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -197,10 +207,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\CheckBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\CustomColourTable.cs" />
-    <Compile Include="Controls\StatusStripCustom.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\DataViewScrollerPanel.cs">
@@ -273,7 +279,6 @@
     <Compile Include="3DMap\FormMap.Designer.cs">
       <DependentUpon>FormMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="3DMap\OpenTKTest.cs" />
     <Compile Include="DataGridViewSorter.cs" />
     <Compile Include="DB\DistanceClass.cs" />
     <Compile Include="DB\SQLiteDBClass.cs" />
@@ -380,7 +385,6 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="SystemData.cs" />
     <Compile Include="Forms\SystemViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -418,6 +422,7 @@
     <None Include="Resources\bookmarkbrightred.png" />
     <None Include="Resources\bookmarkgreen.png" />
     <None Include="Resources\3dmaphelp.txt" />
+    <None Include="Resources\bookmarkyellow.png" />
     <Content Include="Resources\imgCheck.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
@@ -453,6 +458,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BookmarkForm.resx">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DistanceForm.resx">
+      <DependentUpon>DistanceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>

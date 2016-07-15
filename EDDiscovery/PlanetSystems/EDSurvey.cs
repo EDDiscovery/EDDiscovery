@@ -16,7 +16,7 @@ namespace EDDiscovery2.PlanetSystems
         public string commander; // Only the original commander can update a survey. Unless it's an error flagging thing
         public string resource;
         //public string notes;
-        public string imageUrl;
+        public new string imageUrl;
         public List<string> surveyedBy;
         public DateTime surveyedAt;
 

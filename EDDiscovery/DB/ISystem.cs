@@ -8,7 +8,9 @@ namespace EDDiscovery2.DB
     // Definition of the core interface so we can swap out an "offline" version during testing
     public interface ISystem
     {
-        int id { get; set; }
+        long id { get; set; }
+        long id_edsm { get; set; }
+
         string name { get; set; }
         string SearchName { get; set; }
         double x { get; set; }
@@ -19,10 +21,10 @@ namespace EDDiscovery2.DB
         DateTime CreateDate { get; set; }
         string CommanderUpdate { get; set; }
         DateTime UpdateDate { get; set; }
-        EDDiscovery.DB.SystemStatusEnum status { get; set; }
-        string Note { get; set; }
+        EDDiscovery.DB.SystemStatusEnum status { get; set; }        // Who made this entry, where did the info come from?
+        string SystemNote { get; set; }
 
-        int id_eddb { get; set; }
+        long id_eddb { get; set; }
         string faction { get; set; }
         long population { get; set; }
         EDGovernment government { get; set; }
@@ -34,5 +36,6 @@ namespace EDDiscovery2.DB
         int eddb_updated_at { get; set; }
 
         bool HasCoordinate{ get; }
+        bool HasEDDBInformation { get; }
     }
 }
