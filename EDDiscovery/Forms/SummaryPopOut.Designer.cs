@@ -51,13 +51,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Red;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(600, 268);
             this.Controls.Add(this.panel_grip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SummaryPopOut";
             this.Text = "SummaryPopOut";
-            this.TransparencyKey = System.Drawing.Color.Red;
+            this.TransparencyKey = System.Drawing.Color.Transparent;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SummaryPopOut_FormClosing);
             this.Load += new System.EventHandler(this.SummaryPopOut_Load);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.SummaryPopOut_Layout);
