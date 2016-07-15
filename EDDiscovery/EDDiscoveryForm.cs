@@ -361,6 +361,8 @@ namespace EDDiscovery
 
             theme.ApplyColors(this);
 
+            TravelControl.UpdateSummaryTheme();
+
             if (refreshhistory)
                 travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
         }
@@ -789,12 +791,13 @@ namespace EDDiscovery
             SaveSettings();
         }
 
-#endregion
+        #endregion
 
-#region ButtonsAndMouse
+        #region ButtonsAndMouse
 
         private void button_test_Click(object sender, EventArgs e)
         {
+            TravelControl.ShowSummaryPopOut(!TravelControl.IsSummaryPopOutOn);
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1042,7 +1045,7 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
     }
 }
