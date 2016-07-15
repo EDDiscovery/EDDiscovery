@@ -610,7 +610,6 @@
             this.comboBoxHistoryWindow.DropDownHeight = 200;
             this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxHistoryWindow.ItemHeight = 20;
-            this.comboBoxHistoryWindow.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxHistoryWindow.Items")));
             this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
             this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
@@ -622,7 +621,7 @@
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
             this.comboBoxHistoryWindow.TabIndex = 0;
             this.comboBoxHistoryWindow.ValueMember = null;
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // richTextBox_History
             // 
@@ -953,7 +952,6 @@
             this.comboBoxCommander.DropDownHeight = 200;
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCommander.ItemHeight = 20;
-            this.comboBoxCommander.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxCommander.Items")));
             this.comboBoxCommander.Location = new System.Drawing.Point(114, 6);
             this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCommander.Name = "comboBoxCommander";
@@ -965,7 +963,7 @@
             this.comboBoxCommander.Size = new System.Drawing.Size(173, 23);
             this.comboBoxCommander.TabIndex = 0;
             this.comboBoxCommander.ValueMember = null;
-            this.comboBoxCommander.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxCommander_SelectedIndexChanged);
+            this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
             // 
             // buttonMap
             // 

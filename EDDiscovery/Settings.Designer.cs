@@ -122,7 +122,6 @@
             this.comboBoxTheme.DropDownHeight = 100;
             this.comboBoxTheme.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTheme.ItemHeight = 20;
-            this.comboBoxTheme.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxTheme.Items")));
             this.comboBoxTheme.Location = new System.Drawing.Point(7, 19);
             this.comboBoxTheme.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTheme.Name = "comboBoxTheme";

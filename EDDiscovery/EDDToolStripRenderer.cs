@@ -9,20 +9,27 @@ namespace EDDiscovery2
 {
     public class EDDToolStripRenderer : ToolStripProfessionalRenderer//ToolStripSystemRenderer
     {
-        public Color colMenuBackground = Color.FromArgb(255, 188,199,216);//ControlPaint.LightLight(ControlPaint.Light(Color.SlateBlue));
-        public Color colToolStripBorder = Color.FromArgb(255, 133, 145, 162); //0x8591A2);//ControlPaint.LightLight(Color.SlateBlue);
-        public Color colToolStripBackGround = Color.LightGray; 
-        public Color colToolStripSeparator = Color.FromArgb(255,133,145,162); //0x8591A2);//ControlPaint.LightLight(Color.SlateBlue);
-        public Color colMenuSelectedBack = Color.FromArgb(255, 201,210,225); //ControlPaint.LightLight(ControlPaint.LightLight(Color.LightSlateGray));
-        public Color colMenuSelectedText = Color.Black;
-        public Color Dark = Color.FromArgb(255,41, 57, 85);
-        public Color colMenuText = Color.White;
+        protected ExtendedControls.CustomColourTable _colortable;
 
-        //Bitmap bmp = new Bitmap(1, 1);
-        public Color ButtonSelectedBorder = Color.FromArgb(229, 195, 101);
-        public Color ButtonSelectBackLight = Color.FromArgb(255, 252, 242);
-        public Color ButtonSelectBackDark = Color.FromArgb(255, 236, 181);
+        public Color colMenuBackground { get { return _colortable.colMenuBackground; } set { _colortable.colMenuBackground = value; } }
+        public Color colToolStripBorder { get { return _colortable.colToolStripBorder; } set { _colortable.colToolStripBorder = value; } }
+        public Color colToolStripBackGround { get { return _colortable.colToolStripBackGround; } set { _colortable.colToolStripBackGround = value; } }
+        public Color colToolStripSeparator { get { return _colortable.colToolStripSeparator; } set { _colortable.colToolStripSeparator = value; } }
+        public Color colMenuSelectedBack { get { return _colortable.colMenuSelectedBack; } set { _colortable.colMenuSelectedBack = value; } }
+        public Color colMenuSelectedText { get { return _colortable.colMenuSelectedText; } set { _colortable.colMenuSelectedText = value; } }
+        public Color Dark { get { return _colortable.dark; } set { _colortable.dark = value; } }
+        public Color colMenuText { get { return _colortable.colMenuText; } set { _colortable.colMenuText = value; } }
+        public Color ButtonSelectedBorder { get { return _colortable.colButtonSelectedBorder; } set { _colortable.colButtonSelectedBorder = value; } }
+        public Color ButtonSelectBackLight { get { return _colortable.colButtonSelectBackLight; } set { _colortable.colButtonSelectBackLight = value; } }
+        public Color ButtonSelectBackDark { get { return _colortable.colButtonSelectBackDark; } set { _colortable.colButtonSelectBackDark = value; } }
 
+        public EDDToolStripRenderer() : base(new ExtendedControls.CustomColourTable())
+        {
+            this._colortable = (ExtendedControls.CustomColourTable)ColorTable;
+            this.RoundedEdges = true;
+        }
+
+#if false
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
         {
             if (e.ToolStrip is MenuStrip)
@@ -51,7 +58,7 @@ namespace EDDiscovery2
                 //    e.Graphics.FillRectangle(new SolidBrush(Border), 1, 1, 24, e.AffectedBounds.Height - 1);
             }
         }
-
+#endif
 
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
@@ -88,6 +95,7 @@ namespace EDDiscovery2
             }
         }
 
+#if false
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
             if (e.Item.Enabled)
@@ -103,6 +111,7 @@ namespace EDDiscovery2
                 }
             }
         }
+#endif
 
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
@@ -123,6 +132,7 @@ namespace EDDiscovery2
             base.OnRenderItemText(e);
         }
 
+#if false
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
             if (e.Vertical)
@@ -231,12 +241,14 @@ namespace EDDiscovery2
                 e.Graphics.DrawImage(e.Item.Image, rc);
             }
         }
+#endif
 
         protected override void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e)
         {
             if (!(e.ToolStrip is StatusStrip))
                 base.OnRenderStatusStripSizingGrip(e);
             
+            /*
             int kk = 5;
             Rectangle bnd = e.AffectedBounds;
 
@@ -251,9 +263,24 @@ namespace EDDiscovery2
                     kk--;
                 }
             }
+             */
             
+            using (Pen p1 = new Pen(ColorTable.GripDark))
+            {
+                int rightpx = e.AffectedBounds.Right - 1;
+                int bottompx = e.AffectedBounds.Bottom - 1;
+                int msize = 5;
+                int rightmarginpx = rightpx - msize;
+                int bottommarginpx = bottompx - msize;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    e.Graphics.DrawLine(p1, new Point(rightmarginpx - i * msize, bottompx), new Point(rightpx, bottommarginpx - i * msize));
+                }
+            }
         }
 
+#if false
         protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
         {
             Rectangle rc = e.Item.ContentRectangle;
@@ -358,5 +385,6 @@ namespace EDDiscovery2
             else
                 base.OnRenderItemImage(e);
         }
+#endif
     }
 }

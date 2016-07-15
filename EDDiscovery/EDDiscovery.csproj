@@ -171,7 +171,11 @@
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
+    <Compile Include="Controls\CustomColourTable.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
+    <Compile Include="Controls\StatusStripCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">

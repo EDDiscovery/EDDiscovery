@@ -72,10 +72,10 @@
             this.savedRouteExpeditionControl1 = new EDDiscovery.SavedRouteExpeditionControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery2.Settings();
-            this.panel_grip = new ExtendedControls.DrawnPanel();
             this.button_test = new ExtendedControls.ButtonExt();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
+            this.statusStrip1 = new ExtendedControls.StatusStripCustom();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -326,6 +326,9 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageTravelHistory);
             this.tabControl1.Controls.Add(this.tabPageTriletaration);
             this.tabControl1.Controls.Add(this.tabPageScreenshots);
@@ -465,21 +468,6 @@
             this.settings.Size = new System.Drawing.Size(186, 68);
             this.settings.TabIndex = 0;
             // 
-            // panel_grip
-            // 
-            this.panel_grip.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel_grip.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_grip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_grip.Image = ExtendedControls.DrawnPanel.ImageType.Gripper;
-            this.panel_grip.Location = new System.Drawing.Point(977, 727);
-            this.panel_grip.MarginSize = 5;
-            this.panel_grip.MouseOverColor = System.Drawing.Color.White;
-            this.panel_grip.MouseSelectedColor = System.Drawing.Color.Green;
-            this.panel_grip.Name = "panel_grip";
-            this.panel_grip.Size = new System.Drawing.Size(16, 16);
-            this.panel_grip.TabIndex = 16;
-            this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
-            // 
             // button_test
             // 
             this.button_test.BorderColorScaling = 1.25F;
@@ -524,6 +512,14 @@
             this.panel_close.TabIndex = 19;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
+            // statusStrip1
+            //
+            this.statusStrip1.Location = new System.Drawing.Point(0, 722);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(993, 22);
+            this.statusStrip1.TabIndex = 22;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -533,11 +529,11 @@
             this.Controls.Add(this.panel_eddiscovery);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panelInfo);
-            this.Controls.Add(this.panel_grip);
             this.Controls.Add(this.button_test);
             this.Controls.Add(this.panel_minimize);
             this.Controls.Add(this.panel_close);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "EDDiscoveryForm";
@@ -593,7 +589,6 @@
         private System.Windows.Forms.ToolStripMenuItem eDDiscoveryChatDiscordToolStripMenuItem;
         private ExtendedControls.DrawnPanel panel_close;
         private ExtendedControls.DrawnPanel panel_minimize;
-        private ExtendedControls.DrawnPanel panel_grip;
         private System.Windows.Forms.TabPage tabPageSettings;
         public  EDDiscovery2.Settings settings;
         private System.Windows.Forms.TabPage tabPageRoute;
@@ -611,6 +606,7 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
         private SavedRouteExpeditionControl savedRouteExpeditionControl1;
+        private ExtendedControls.StatusStripCustom statusStrip1;
         private System.Windows.Forms.ToolStripMenuItem debugBetaFixHiddenLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem synchroniseWithEDSMDistancesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;

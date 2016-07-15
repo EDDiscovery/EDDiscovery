@@ -110,26 +110,13 @@
             // 
             // toolStripComboBoxRouteSelection
             // 
-            this.toolStripComboBoxRouteSelection.ArrowWidth = 1;
-            this.toolStripComboBoxRouteSelection.BorderColor = System.Drawing.Color.White;
-            this.toolStripComboBoxRouteSelection.ButtonColorScaling = 0.5F;
-            this.toolStripComboBoxRouteSelection.DataSource = null;
-            this.toolStripComboBoxRouteSelection.DisplayMember = null;
-            this.toolStripComboBoxRouteSelection.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.toolStripComboBoxRouteSelection.DropDownHeight = 200;
             this.toolStripComboBoxRouteSelection.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.toolStripComboBoxRouteSelection.ItemHeight = 20;
-            this.toolStripComboBoxRouteSelection.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("toolStripComboBoxRouteSelection.Items")));
-            this.toolStripComboBoxRouteSelection.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboBoxRouteSelection.Name = "toolStripComboBoxRouteSelection";
-            this.toolStripComboBoxRouteSelection.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.toolStripComboBoxRouteSelection.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.toolStripComboBoxRouteSelection.ScrollBarWidth = 16;
             this.toolStripComboBoxRouteSelection.SelectedIndex = -1;
             this.toolStripComboBoxRouteSelection.SelectedItem = null;
             this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(150, 22);
-            this.toolStripComboBoxRouteSelection.ValueMember = null;
-            this.toolStripComboBoxRouteSelection.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.toolStripComboBoxRouteSelection_SelectedIndexChanged);
+            this.toolStripComboBoxRouteSelection.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxRouteSelection_SelectedIndexChanged);
             // 
             // panelRouteInfo
             // 
