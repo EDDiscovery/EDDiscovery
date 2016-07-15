@@ -211,6 +211,7 @@ namespace EDDiscovery2
 
         public string Name { get { return currentsettings.name; } set { currentsettings.name = value; } }
 
+        public Color LabelColor { get { return currentsettings.colors[Settings.CI.label]; } set { SetCustom(); currentsettings.colors[Settings.CI.label] = value; } }
         public Color TextBackColor { get { return currentsettings.colors[Settings.CI.textbox_back]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_back] = value; } }
         public Color TextBlockColor { get { return currentsettings.colors[Settings.CI.textbox_fore]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_fore] = value; } }
         public Color TextBlockHighlightColor { get { return currentsettings.colors[Settings.CI.textbox_highlight]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_highlight] = value; } }

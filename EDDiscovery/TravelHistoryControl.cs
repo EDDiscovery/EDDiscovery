@@ -48,6 +48,7 @@ namespace EDDiscovery
         public NetLogClass netlog = new NetLogClass();
         private VisitedSystemsClass currentSysPos = null;
 
+        SummaryPopOut summaryPopOut = null;
 
         private int activecommander = 0;
         List<EDCommander> commanders = null;
@@ -152,6 +153,8 @@ namespace EDDiscovery
             {
                 AddNewHistoryRow(false, result[ii]);      // for every one in filter, add a row.
             }
+
+            UpdateSummaryView();
 
             if (dataGridViewTravel.Rows.Count > 0)
             {
@@ -436,6 +439,7 @@ namespace EDDiscovery
         private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
+            UpdateSummaryView();
         }
 
         public void buttonMap_Click(object sender, EventArgs e)
@@ -556,6 +560,7 @@ namespace EDDiscovery
                         edsm.SetComment(sn);
 
                     _discoveryForm.Map.UpdateNote();
+                    UpdateSummaryView();
                 }
 
             }
@@ -692,6 +697,8 @@ namespace EDDiscovery
 
             AddNewHistoryRow(true, item);
             StoreSystemNote();
+
+            UpdateSummaryView();
 
             _discoveryForm.Map.UpdateVisited(visitedSystems);      // update map
 
@@ -863,6 +870,43 @@ namespace EDDiscovery
             }
 
             return false;
+        }
+
+        public bool IsSummaryPopOutOn {  get { return summaryPopOut != null; } }
+        public bool ShowSummaryPopOut(bool show)
+        {
+            if (!show)
+            {
+                if (summaryPopOut != null)
+                {
+                    summaryPopOut.Close();
+                    summaryPopOut = null;
+                }
+            }
+            else
+            {
+                if (summaryPopOut == null)
+                {
+                    summaryPopOut = new SummaryPopOut();
+                    summaryPopOut.SetLabelFormat(new Font(_discoveryForm.theme.FontName, _discoveryForm.theme.FontSize), _discoveryForm.theme.LabelColor);
+                    summaryPopOut.Update(dataGridViewTravel);
+                    summaryPopOut.Show();
+                }
+            }
+
+            return (summaryPopOut != null);     // on screen?
+        }
+
+        public void UpdateSummaryTheme()
+        {
+            if (summaryPopOut != null)
+                summaryPopOut.SetLabelFormat(new Font(_discoveryForm.theme.FontName, _discoveryForm.theme.FontSize), _discoveryForm.theme.LabelColor);
+        }
+
+        public void UpdateSummaryView()
+        {
+            if (summaryPopOut != null)
+                summaryPopOut.Update(dataGridViewTravel);
         }
 
         #region ClosestSystemRightClick

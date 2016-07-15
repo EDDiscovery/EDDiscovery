@@ -13,7 +13,7 @@ namespace ExtendedControls
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
 
-        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross , Text };
+        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross, Text, Move };
 
         public string ImageText { get; set; } = null;       // for Text Type
 
@@ -26,6 +26,8 @@ namespace ExtendedControls
             mousecapture = true;
             Invalidate();
         }
+
+        public bool IsCaptured { get { return mousecapture; } }
 
         #endregion
         
@@ -44,7 +46,8 @@ namespace ExtendedControls
 
             int rightpx = ClientRectangle.Width - 1;
             int bottompx = ClientRectangle.Height - 1;
-            int centrehorzpx = (ClientRectangle.Width-1) / 2;
+            int centrehorzpx = (ClientRectangle.Width - 1) / 2;
+            int centrevertpx = (ClientRectangle.Height - 1) / 2;
 
             int leftmarginpx = msize;
             int rightmarginpx = rightpx - msize;
@@ -119,6 +122,24 @@ namespace ExtendedControls
                     }
                 }
             }
+            else if (Image == ImageType.Move)
+            {
+                centrehorzpx++;
+                centrevertpx++;
+
+                int o = ClientRectangle.Width/8;
+                e.Graphics.DrawLine(p2, new Point(centrehorzpx, bottompx), new Point(centrehorzpx, topmarginpx));
+                e.Graphics.DrawLine(p1, new Point(centrehorzpx - o, bottompx - o), new Point(centrehorzpx, bottompx));
+                e.Graphics.DrawLine(p1, new Point(centrehorzpx + o, bottompx - o), new Point(centrehorzpx, bottompx));
+                e.Graphics.DrawLine(p1, new Point(centrehorzpx - o, topmarginpx + o), new Point(centrehorzpx, topmarginpx));
+                e.Graphics.DrawLine(p1, new Point(centrehorzpx + o, topmarginpx + o), new Point(centrehorzpx, topmarginpx));
+
+                e.Graphics.DrawLine(p2, new Point(leftmarginpx, centrevertpx), new Point(rightmarginpx, centrevertpx));
+                e.Graphics.DrawLine(p1, new Point(leftmarginpx + o, centrevertpx - o), new Point(leftmarginpx, centrevertpx));
+                e.Graphics.DrawLine(p1, new Point(leftmarginpx + o, centrevertpx + o), new Point(leftmarginpx, centrevertpx));
+                e.Graphics.DrawLine(p1, new Point(rightmarginpx - o, centrevertpx - o), new Point(rightmarginpx, centrevertpx));
+                e.Graphics.DrawLine(p1, new Point(rightmarginpx - o, centrevertpx + o), new Point(rightmarginpx, centrevertpx));
+            }
 
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
@@ -138,7 +159,7 @@ namespace ExtendedControls
 
         protected override void OnMouseLeave(EventArgs eventargs)
         {
-            base.OnMouseEnter(eventargs);
+            base.OnMouseLeave(eventargs);
             mouseover = false;
             mousedown = false;   
             //Console.WriteLine("DP ML");
@@ -155,7 +176,7 @@ namespace ExtendedControls
 
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            base.OnMouseDown(mevent);
+            base.OnMouseUp(mevent);
             mousedown = false;
             //Console.WriteLine("DP MU");
             Invalidate();

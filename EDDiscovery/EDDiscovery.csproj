@@ -172,6 +172,9 @@
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
+    <Compile Include="Controls\LabelExt.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
@@ -197,6 +200,12 @@
     </Compile>
     <Compile Include="Forms\InfoForm.Designer.cs">
       <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SummaryPopOut.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SummaryPopOut.Designer.cs">
+      <DependentUpon>SummaryPopOut.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Controls\ButtonExt.cs">
@@ -460,6 +469,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SummaryPopOut.resx">
+      <DependentUpon>SummaryPopOut.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThemeEditor.resx">
       <DependentUpon>ThemeEditor.cs</DependentUpon>
