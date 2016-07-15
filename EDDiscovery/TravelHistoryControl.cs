@@ -518,23 +518,16 @@ namespace EDDiscovery
 
         private void StoreSystemNote()
         {
-            string txt;
+            if (currentSysPos == null || currentSysPos.curSystem == null)
+                return;
 
             try
             {
-                EDSMClass edsm = new EDSMClass();
-                
-                edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-                edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-                
-                if (currentSysPos == null || currentSysPos.curSystem == null)
-                    return;
-
-                txt = richTextBoxNote.Text;
+                string txt = richTextBoxNote.Text.Trim();
 
                 SystemNoteClass sn = SystemNoteClass.GetSystemNoteClass(currentSysPos.curSystem.name);
 
-                if (currentSysPos != null && ( sn == null || !sn.Note.Equals(txt))) // if current system pos set, or no note or text change
+                if ( (sn == null && txt.Length>0) || (sn!=null && !sn.Note.Equals(txt))) // if no system note, and text,  or system not is not text
                 {
                     if ( sn != null )           // already there, update
                     { 
@@ -553,6 +546,11 @@ namespace EDDiscovery
 
                     if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
                         dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[TravelHistoryColumns.Note].Value = txt;
+
+                    EDSMClass edsm = new EDSMClass();
+
+                    edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+                    edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
 
                     if (edsm.commanderName == null || edsm.apiKey == null)
                         return;
