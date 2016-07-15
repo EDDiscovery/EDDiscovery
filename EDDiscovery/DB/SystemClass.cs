@@ -1129,19 +1129,23 @@ namespace EDDiscovery.DB
         {
             JsonTextReader jr = new JsonTextReader(new StringReader(json));
 
-            while (jr.Read())
+            using (SQLiteConnectionED cn2 = new SQLiteConnectionED())  // open the db
             {
-                if (jr.TokenType == JsonToken.StartObject)
+
+                while (jr.Read())
                 {
-                    JObject jo = JObject.Load(jr);
-
-                    long edsmid = (long)jo["id"];
-
-                    SystemClass cs = GetSystem(edsmid, null, SystemIDType.id_edsm);   // test before delete..
-                    if (cs != null)
+                    if (jr.TokenType == JsonToken.StartObject)
                     {
-                        Console.Write("Remove " + edsmid);
-                        Delete(edsmid, null, null, SystemIDType.id_edsm);             // and wack!
+                        JObject jo = JObject.Load(jr);
+
+                        long edsmid = (long)jo["id"];
+
+                        SystemClass cs = GetSystem(edsmid, null, SystemIDType.id_edsm);   // test before delete..
+                        if (cs != null)
+                        {
+                            Console.Write("Remove " + edsmid);
+                            Delete(edsmid, cn2, null, SystemIDType.id_edsm);             // and wack!
+                        }
                     }
                 }
             }
