@@ -1,6 +1,7 @@
 ﻿using EDDiscovery2.DB;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace EDDiscovery.DB
 {
@@ -58,6 +60,245 @@ namespace EDDiscovery.DB
         }
     }
 
+    // This class uses a monitor to ensure only one can be
+    // active at any one time
+    public class SQLiteTxnLockED : IDisposable
+    {
+        private static object _transactionLock = new object();
+        private bool _locktaken = false;
+        private static ConcurrentDictionary<Thread, bool> _waitingthreads = new ConcurrentDictionary<Thread, bool>();
+        private Thread _owningThread;
+
+        #region Constructor and Destructor
+        public SQLiteTxnLockED()
+        {
+        }
+
+        ~SQLiteTxnLockED()
+        {
+            this.Dispose(false);
+        }
+        #endregion
+
+        #region Opening and Disposal
+        public void Open()
+        {
+            // Only take the lock once
+            if (!_locktaken)
+            {
+                bool retry = false;
+
+                do
+                {
+                    try
+                    {
+                        // Add our thread to the set of threads waiting
+                        // for the lock
+                        lock (_waitingthreads)
+                        {
+                            _waitingthreads[Thread.CurrentThread] = true;
+                        }
+
+                        Monitor.Enter(_transactionLock, ref _locktaken);
+                        _owningThread = Thread.CurrentThread;
+                        _waitingthreads[Thread.CurrentThread] = false;
+                    }
+                    // Retry the lock if we are interrupted by
+                    // a leaked lock being finalized
+                    catch (ThreadInterruptedException)
+                    {
+                        if (_waitingthreads[Thread.CurrentThread] == false)
+                        {
+                            retry = true;
+                        }
+                    }
+                }
+                while (retry);
+
+                GC.ReRegisterForFinalize(this);
+            }
+        }
+
+        public void Close()
+        {
+            this.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // disposing: true if Dispose() was called, false
+        // if being finalized by the garbage collector
+        protected void Dispose(bool disposing)
+        {
+            if (_locktaken)
+            {
+                if (Thread.CurrentThread == _owningThread)
+                {
+                    Monitor.Exit(_transactionLock);
+                }
+                else
+                {
+                    // This thread doesn't own the lock, so we need to create
+                    // a new lock object and interrupt all waiting threads
+                    Console.WriteLine("ERROR: Transaction Lock Leaked");
+
+                    lock (_waitingthreads)
+                    {
+                        _transactionLock = new object();
+
+                        foreach (var thread in _waitingthreads.Keys)
+                        {
+                            if (_waitingthreads[thread])
+                            {
+                                _waitingthreads[thread] = false;
+                                thread.Interrupt();
+                            }
+                        }
+                    }
+                }
+
+                _locktaken = false;
+            }
+        }
+        #endregion
+    }
+
+    // This class wraps a DbTransaction to work around
+    // SQLite not using a monitor or mutex when locking
+    // the database
+    public class SQLiteTransactionED : DbTransaction
+    {
+        private SQLiteTxnLockED _transactionLock = null;
+
+        public DbTransaction InnerTransaction { get; private set; }
+
+        public SQLiteTransactionED(DbTransaction txn, SQLiteTxnLockED txnlock)
+        {
+            _transactionLock = txnlock;
+            InnerTransaction = txn;
+        }
+
+        #region Overridden methods and properties passed to inner transaction
+        protected override DbConnection DbConnection { get { return InnerTransaction.Connection; } }
+        public override IsolationLevel IsolationLevel { get { return InnerTransaction.IsolationLevel; } }
+
+        public override void Commit() { InnerTransaction.Commit(); }
+        public override void Rollback() { InnerTransaction.Rollback(); }
+        #endregion
+
+        // disposing: true if Dispose() was called, false
+        // if being finalized by the garbage collector
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // Close the transaction before closing the lock
+                if (InnerTransaction != null)
+                {
+                    InnerTransaction.Dispose();
+                    InnerTransaction = null;
+                }
+
+                if (_transactionLock != null)
+                {
+                    _transactionLock.Dispose();
+                    _transactionLock = null;
+                }
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+    // This class wraps a DbCommand so it can take the
+    // above transaction wrapper, and to work around
+    // SQLite not using a monitor or mutex when locking
+    // the database
+    public class SQLiteCommandED : DbCommand
+    {
+        // This is the wrapped transaction
+        protected SQLiteTransactionED _transaction;
+
+        public SQLiteCommandED(DbCommand cmd, DbTransaction txn = null)
+        {
+            InnerCommand = cmd;
+            if (txn != null)
+            {
+                SetTransaction(txn);
+            }
+        }
+
+        public DbCommand InnerCommand { get; set; }
+
+        #region Overridden methods and properties passed to inner command
+        public override string CommandText { get { return InnerCommand.CommandText; } set { InnerCommand.CommandText = value; } }
+        public override int CommandTimeout { get { return InnerCommand.CommandTimeout; } set { InnerCommand.CommandTimeout = value; } }
+        public override CommandType CommandType { get { return InnerCommand.CommandType; } set { InnerCommand.CommandType = value; } }
+        protected override DbConnection DbConnection { get { return InnerCommand.Connection; } set { InnerCommand.Connection = value; } }
+        protected override DbParameterCollection DbParameterCollection { get { return InnerCommand.Parameters; } }
+        protected override DbTransaction DbTransaction { get { return _transaction; } set { SetTransaction(value); } }
+        public override bool DesignTimeVisible { get { return InnerCommand.DesignTimeVisible; } set { InnerCommand.DesignTimeVisible = value; } }
+        public override UpdateRowSource UpdatedRowSource { get { return InnerCommand.UpdatedRowSource; } set { InnerCommand.UpdatedRowSource = value; } }
+
+        protected override DbParameter CreateDbParameter() { return InnerCommand.CreateParameter(); }
+        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) { return InnerCommand.ExecuteReader(behavior); }
+        public override void Cancel() { InnerCommand.Cancel(); }
+        public override object ExecuteScalar() { return InnerCommand.ExecuteScalar(); }
+        public override void Prepare() { InnerCommand.Prepare(); }
+        #endregion
+
+        public override int ExecuteNonQuery()
+        {
+            if (this._transaction != null)
+            {
+                // The transaction should already have the transaction lock
+                return InnerCommand.ExecuteNonQuery();
+            }
+            else
+            {
+                // Take the transaction lock for the duration of this command
+                using (var txnlock = new SQLiteTxnLockED())
+                {
+                    txnlock.Open();
+                    return InnerCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        // disposing: true if Dispose() was called, false
+        // if being finalized by the garbage collector
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (InnerCommand != null)
+                {
+                    InnerCommand.Dispose();
+                    InnerCommand = null;
+                }
+            }
+
+            base.Dispose(disposing);
+        }
+
+        protected void SetTransaction(DbTransaction txn)
+        {
+            // We only accept wrapped transactions in order to avoid deadlocks
+            if (txn == null || txn is SQLiteTransactionED)
+            {
+                _transaction = (SQLiteTransactionED)txn;
+                InnerCommand.Transaction = _transaction.InnerTransaction;
+            }
+            else
+            {
+                throw new InvalidOperationException(String.Format("Expected a {0}; got a {1}", typeof(SQLiteTransactionED).FullName, txn.GetType().FullName));
+            }
+        }
+    }
 
     public class SQLiteConnectionED : IDisposable              // USE this for connections.. 
     {
@@ -75,19 +316,45 @@ namespace EDDiscovery.DB
 
         public DbCommand CreateCommand(string cmd, DbTransaction tn = null)
         {
-            return _cn.CreateCommand(cmd, tn);
+            return new SQLiteCommandED(_cn.CreateCommand(cmd), tn);
+        }
+
+        public DbTransaction BeginTransaction(IsolationLevel isolevel)
+        {
+            // Take the transaction lock before beginning the
+            // transaction to avoid a deadlock
+            var txnlock = new SQLiteTxnLockED();
+            txnlock.Open();
+            return new SQLiteTransactionED(_cn.BeginTransaction(isolevel), txnlock);
         }
 
         public DbTransaction BeginTransaction()
         {
-            return _cn.BeginTransaction();
+            // Take the transaction lock before beginning the
+            // transaction to avoid a deadlock
+            var txnlock = new SQLiteTxnLockED();
+            txnlock.Open();
+            return new SQLiteTransactionED(_cn.BeginTransaction(), txnlock);
         }
 
         public void Dispose()
         {
-            _cn.Close();
-            _cn.Dispose();
-            //System.Threading.Monitor.Exit(monitor);
+            Dispose(true);
+        }
+        
+        // disposing: true if Dispose() was called, false
+        // if being finalized by the garbage collector
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_cn != null)
+                {
+                    _cn.Close();
+                    _cn.Dispose();
+                    _cn = null;
+                }
+            }
         }
 
         public SQLiteConnectionED(SQLiteConnection c )            // ONLY use by class below..
