@@ -154,7 +154,7 @@ namespace EDDiscovery
                 AddNewHistoryRow(false, result[ii]);      // for every one in filter, add a row.
             }
 
-            UpdateSummaryView();
+            RedrawSummaryView();
 
             if (dataGridViewTravel.Rows.Count > 0)
             {
@@ -440,7 +440,7 @@ namespace EDDiscovery
         private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
-            UpdateSummaryView();
+            RedrawSummaryView();
         }
 
         public void buttonMap_Click(object sender, EventArgs e)
@@ -559,7 +559,7 @@ namespace EDDiscovery
                         edsm.SetComment(sn);
 
                     _discoveryForm.Map.UpdateNote();
-                    UpdateSummaryView();
+                    UpdateSummaryView(dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index]);    // tell it this row was changed
                 }
 
             }
@@ -695,9 +695,10 @@ namespace EDDiscovery
             }
 
             AddNewHistoryRow(true, item);
-            StoreSystemNote();
 
-            UpdateSummaryView(true);
+            UpdateSummaryView(dataGridViewTravel.Rows[0]);         //Tell the summary
+
+            StoreSystemNote();
 
             _discoveryForm.Map.UpdateVisited(visitedSystems);      // update map
 
@@ -902,7 +903,7 @@ namespace EDDiscovery
                 summaryPopOut.SetLabelFormat(new Font(_discoveryForm.theme.FontName, _discoveryForm.theme.FontSize), _discoveryForm.theme.LabelColor);
         }
 
-        public void UpdateSummaryView( bool toprowonly = false )
+        public void RefreshSummaryView()
         {
             if (summaryPopOut != null)
             {
