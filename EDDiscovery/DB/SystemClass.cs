@@ -374,7 +374,7 @@ namespace EDDiscovery.DB
 
         public bool Store(SQLiteConnectionED cn, DbTransaction transaction)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id, security, eddb_updated_at, state, needs_permit, versiondate, id_edsm) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit, datetime('now'),@id_edsm)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id, security, eddb_updated_at, state, needs_permit, versiondate, id_edsm) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit, datetime('now'),@id_edsm)", transaction))
             {
                 if (SystemNote == null)
                     SystemNote = "";
@@ -1101,11 +1101,11 @@ namespace EDDiscovery.DB
                             {
                                 newsystems[count].Store(cn2, transaction);
 
-                                if (++count % 100000 == 0)
+                                if (++count % 10000 == 0)
                                     break;
                             }
 
-                            Console.WriteLine("EDSM Store Count " + count);
+                            Console.WriteLine("{0}: EDSM Store Count: {1}", DateTime.UtcNow, count);
                             transaction.Commit();
                         }
                     }
@@ -1261,7 +1261,7 @@ namespace EDDiscovery.DB
                             {
                                 toupdate[count].Update(cn2, toupdate[count].id, transaction);       // update existing entry..
 
-                                if (++count % 100000 == 0)
+                                if (++count % 10000 == 0)
                                     break;
                             }
 
