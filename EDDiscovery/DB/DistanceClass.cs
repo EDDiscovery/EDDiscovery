@@ -462,7 +462,7 @@ namespace EDDiscovery.DB
                             {
                                 newpairs[count].Store(cn2, transaction);
 
-                                if (++count % 100000 == 0)
+                                if (++count % 10000 == 0)
                                     break;
                             }
 
