@@ -495,6 +495,9 @@ namespace EDDiscovery.DB
                 if (dbver < 17)
                     UpgradeDB17();
 
+                if (dbver < 18)
+                    UpgradeDB18();
+
                 return true;
             }
             catch (Exception ex)
@@ -697,6 +700,15 @@ namespace EDDiscovery.DB
             });
         }
 
+        private void UpgradeDB18()
+        {
+            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN id_edsm_assigned Integer";
+            string query2 = "CREATE INDEX VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)";
+            string query3 = "CREATE INDEX VisitedSystems_position ON VisitedSystems (X, Y, Z)";
+            string query4 = "CREATE INDEX Systems_position ON Systems (X, Y, Z)";
+
+            PerformUpgrade(18, true, true, new[] { query1, query2, query3, query4 });
+        }
 
         ///----------------------------
         /// STATIC code helpers for other DB classes

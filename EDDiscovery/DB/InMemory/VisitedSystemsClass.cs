@@ -20,7 +20,7 @@ namespace EDDiscovery2.DB.InMemory
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
-
+        public long? id_edsm_assigned { get; set; }
 
         public bool Update()
         {
