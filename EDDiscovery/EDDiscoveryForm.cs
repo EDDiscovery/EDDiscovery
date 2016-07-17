@@ -43,7 +43,6 @@ namespace EDDiscovery
             return message.Result;
         }
 
-        private EDSMSync _edsmSync;
         public EDDTheme theme;
 
         public AutoCompleteStringCollection SystemNames;       
@@ -99,7 +98,6 @@ namespace EDDiscovery
                 Trace.WriteLine($"Unable to create the folder '{logpath}'");
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
-            _edsmSync = new EDSMSync(this);
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
@@ -785,7 +783,10 @@ namespace EDDiscovery
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             travelHistoryControl1.netlog.StopMonitor();
-            _edsmSync.StopSync();
+            if (travelHistoryControl1.sync != null)
+            {
+                travelHistoryControl1.sync.StopSync();
+            }
             SaveSettings();
         }
 
