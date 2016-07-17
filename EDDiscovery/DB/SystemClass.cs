@@ -951,8 +951,8 @@ namespace EDDiscovery.DB
             try
             {
                 // Indexed sets of systems
+                Dictionary<long, List<SystemClass>> systemsByVscId = new Dictionary<long, List<SystemClass>>();
                 Dictionary<string, List<SystemClass>> systemsByName = new Dictionary<string, List<SystemClass>>();
-                Dictionary<Tuple<double, double, double>, List<SystemClass>> systemsByPosition = new Dictionary<Tuple<double, double, double>, List<SystemClass>>();
                 Dictionary<long, SystemClass> systemsByEdsmId = new Dictionary<long, SystemClass>();
 
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
@@ -962,68 +962,61 @@ namespace EDDiscovery.DB
                     // than having to sift through all of the systems
                     // ourselves.
                     using (DbCommand cmd = cn.CreateCommand(
-                        "SELECT DISTINCT s.* " +
+                        "SELECT DISTINCT vsc.id AS vscid, s.* " +
                         "FROM VisitedSystems vsc " +
                         "LEFT JOIN Systems s " +
                         "ON s.Name = vsc.Name " +
                         "OR s.id_edsm = vsc.id_edsm_assigned " +
-                        "OR (s.X = vsc.X AND s.Y = vsc.Y AND s.Z = vsc.Z) " +
-                        "WHERE s.id IS NOT NULL"))
+                        "OR (s.X >= vsc.X - 0.125 AND s.X <= vsc.X + 0.125 AND s.Y >= vsc.Y - 0.125 AND s.Y <= vsc.Y + 0.125 AND s.Z >= vsc.Z - 0.125 AND s.Z <= vsc.Z + 0.125) " +
+                        "WHERE s.id IS NOT NULL " +
+                        "ORDER BY s.id ASC"))
                     {
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
+                            long lastid = -1;
+                            SystemClass sys = null;
+
                             while (reader.Read())
                             {
                                 string name = ((string)reader["name"]).ToUpper();
-                                double x = Double.NaN;
-                                double y = Double.NaN;
-                                double z = Double.NaN;
                                 long id_edsm = 0;
-                                SystemClass sys = null;
+                                long id = (long)reader["id"];
+                                long vscid = (long)reader["vscid"];
 
-                                // Get name match
-                                if (!systemsByName.ContainsKey(name))
+                                if (id != lastid)
                                 {
-                                    systemsByName[name] = new List<SystemClass>();
-                                }
-
-                                sys = new SystemClass(reader);
-                                systemsByName[name].Add(sys);
-
-                                // Get EDSM ID match
-                                if (reader["id_edsm"] != System.DBNull.Value)
-                                {
-                                    id_edsm = (long)reader["id_edsm"];
-
-                                    if (sys == null)
+                                    // Get name match
+                                    if (!systemsByName.ContainsKey(name))
                                     {
-                                        sys = new SystemClass(reader);
+                                        systemsByName[name] = new List<SystemClass>();
                                     }
 
-                                    systemsByEdsmId[id_edsm] = sys;
+                                    sys = new SystemClass(reader);
+                                    systemsByName[name].Add(sys);
+
+                                    // Get EDSM ID match
+                                    if (reader["id_edsm"] != System.DBNull.Value)
+                                    {
+                                        id_edsm = (long)reader["id_edsm"];
+
+                                        if (sys == null)
+                                        {
+                                            sys = new SystemClass(reader);
+                                        }
+
+                                        systemsByEdsmId[id_edsm] = sys;
+                                    }
+
+                                    lastid = id;
                                 }
 
-                                // Get position match
-                                if (reader["x"] != System.DBNull.Value)
+                                // Get VSC ID match
+                                if (!systemsByVscId.ContainsKey(vscid))
                                 {
-                                    x = (double)reader["x"];
-                                    y = (double)reader["y"];
-                                    z = (double)reader["z"];
-
-                                    Tuple<double, double, double> pos = new Tuple<double, double, double>(x, y, z);
-
-                                    if (!systemsByPosition.ContainsKey(pos))
-                                    {
-                                        systemsByPosition[pos] = new List<SystemClass>();
-                                    }
-
-                                    if (sys == null)
-                                    {
-                                        sys = new SystemClass(reader);
-                                    }
-
-                                    systemsByPosition[pos].Add(sys);
+                                    systemsByVscId[vscid] = new List<SystemClass>();
                                 }
+
+                                systemsByVscId[vscid].Add(sys);
                             }
                         }
                     }
@@ -1042,7 +1035,16 @@ namespace EDDiscovery.DB
                         List<SystemClass> namematches = null;
                         SystemClass edsmidmatch = null;
                         bool multimatch = false;
-                        Dictionary<long, SystemClass> matches = new Dictionary<long, SystemClass>();
+                        Dictionary<long, SystemClass> matches;
+
+                        if (systemsByVscId.ContainsKey(vsc.id))
+                        {
+                            matches = systemsByVscId[vsc.id].ToDictionary(s => s.id);
+                        }
+                        else
+                        {
+                            matches = new Dictionary<long, SystemClass>();
+                        }
 
                         if (vsc.id_edsm_assigned != null && vsc.id_edsm_assigned != 0)
                         {
@@ -1057,10 +1059,9 @@ namespace EDDiscovery.DB
 
                         if (vsc.HasTravelCoordinates)
                         {
-                            var pos = new Tuple<double, double, double>(vsc.X, vsc.Y, vsc.Z);
-                            if (systemsByPosition.ContainsKey(pos) && systemsByPosition[pos].Count >= 1)
+                            posmatches = matches.Values.Where(s => s.x >= vsc.X - 0.125 && s.x <= vsc.X + 0.125 && s.y >= vsc.X - 0.125 && s.y <= vsc.Y + 0.125 && s.z >= vsc.Z - 0.125 && s.z <= vsc.Z + 0.125).ToList();
+                            if (posmatches.Count >= 1)
                             {
-                                posmatches = systemsByPosition[pos];
                                 nameposmatches = posmatches.Where(s => s.SearchName == vsc_searchname).ToList();
 
                                 foreach (var sys in posmatches)
@@ -1086,13 +1087,13 @@ namespace EDDiscovery.DB
                         {
                             SystemClass sys = edsmidmatch;
 
-                            if (sys.SearchName == vsc_searchname && sys.x == vsc.X && sys.y == vsc.Y && sys.z == vsc.Z) // name and position matches
+                            if (sys.SearchName == vsc_searchname && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // name and position matches
                             {
                                 vsc.NameStatus = "Exact match";
                                 vsc.curSystem = sys;
                                 continue; // Continue to next system
                             }
-                            else if (sys.x == vsc.X && sys.y == vsc.Y && sys.z == vsc.Z) // position matches
+                            else if (sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // position matches
                             {
                                 vsc.NameStatus = "Name differs";
                                 vsc.curSystem = sys;
@@ -1117,7 +1118,7 @@ namespace EDDiscovery.DB
                             }
                         }
 
-                        if (posmatches != null)
+                        if (nameposmatches != null)
                         {
                             if (nameposmatches.Count == 1)
                             {
