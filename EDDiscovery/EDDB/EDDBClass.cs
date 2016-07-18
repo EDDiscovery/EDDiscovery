@@ -89,6 +89,10 @@ namespace EDDiscovery2.EDDB
                 {
                     request.Headers[HttpRequestHeader.IfNoneMatch] = etag;
                 }
+                else
+                {
+                    request.IfModifiedSince = File.GetLastWriteTimeUtc(etagFilename);
+                }
             }
 
             try
