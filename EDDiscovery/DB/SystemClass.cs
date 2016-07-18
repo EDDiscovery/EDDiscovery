@@ -958,6 +958,18 @@ namespace EDDiscovery.DB
 
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
+                    // Check that the SystemAliases table is not empty
+                    using (DbCommand cmd = cn.CreateCommand("SELECT COUNT(id) FROM SystemAliases"))
+                    {
+                        long nrows = (long)cmd.ExecuteScalar();
+
+                        if (nrows == 0)
+                        {
+                            Console.WriteLine("Populating system aliases table");
+                            RemoveHiddenSystems();
+                        }
+                    }
+
                     // Retrieve systems matching on name, position or EDSM ID.
                     // Having the database filter the systems is much quicker
                     // than having to sift through all of the systems
@@ -993,7 +1005,7 @@ namespace EDDiscovery.DB
                                 {
                                     isalias = true;
                                 }
-                                
+
                                 if (id != lastid)
                                 {
                                     sys = new SystemClass(reader);
@@ -1353,6 +1365,16 @@ namespace EDDiscovery.DB
 
             date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
             return toupdate.Count + newsystems.Count;
+        }
+
+        public static void RemoveHiddenSystems()
+        {
+            EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
+
+            string strhiddensystems = edsm.GetHiddenSystems();
+
+            if (strhiddensystems != null && strhiddensystems.Length >= 6)
+                RemoveHiddenSystems(strhiddensystems);
         }
 
         public static void RemoveHiddenSystems(string json)
