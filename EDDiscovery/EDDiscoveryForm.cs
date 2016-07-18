@@ -538,10 +538,7 @@ namespace EDDiscovery
 
                     LogLine("Get hidden systems and remove from EDSM.");
 
-                    string strhiddensystems = edsm.GetHiddenSystems();
-
-                    if (strhiddensystems != null && strhiddensystems.Length >= 6)
-                        SystemClass.RemoveHiddenSystems(strhiddensystems);
+                    SystemClass.RemoveHiddenSystems();
 
                     LogLine("Get systems from EDSM.");
 
