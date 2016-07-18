@@ -359,15 +359,15 @@ namespace EDDiscovery
 
             theme.ApplyColors(this);
 
-            TravelControl.UpdateSummaryTheme();
-
             if (refreshhistory)
                 travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
+
+            TravelControl.UpdateSummaryTheme();
         }
 
-#endregion
+        #endregion
 
-#region Information Downloads
+        #region Information Downloads
 
         public void DownloadMaps()          // ASYNC process
         {
@@ -798,7 +798,7 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            TravelControl.ShowSummaryPopOut(!TravelControl.IsSummaryPopOutOn);
+            TravelControl.ToggleSummaryPopOut();
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)

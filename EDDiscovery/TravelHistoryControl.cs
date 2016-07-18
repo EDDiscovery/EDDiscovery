@@ -154,7 +154,7 @@ namespace EDDiscovery
                 AddNewHistoryRow(false, result[ii]);      // for every one in filter, add a row.
             }
 
-            RedrawSummaryView();
+            RefreshSummaryView();
 
             if (dataGridViewTravel.Rows.Count > 0)
             {
@@ -440,7 +440,7 @@ namespace EDDiscovery
         private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
-            RedrawSummaryView();
+            RefreshSummaryView();
         }
 
         public void buttonMap_Click(object sender, EventArgs e)
@@ -559,7 +559,7 @@ namespace EDDiscovery
                         edsm.SetComment(sn);
 
                     _discoveryForm.Map.UpdateNote();
-                    UpdateSummaryView(dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index]);    // tell it this row was changed
+                    RefreshSummaryView(dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index]);    // tell it this row was changed
                 }
 
             }
@@ -696,7 +696,7 @@ namespace EDDiscovery
 
             AddNewHistoryRow(true, item);
 
-            UpdateSummaryView(dataGridViewTravel.Rows[0]);         //Tell the summary
+            RefreshSummaryView(dataGridViewTravel.Rows[0],true);         //Tell the summary new row has been added
 
             StoreSystemNote();
 
@@ -873,25 +873,22 @@ namespace EDDiscovery
         }
 
         public bool IsSummaryPopOutOn {  get { return summaryPopOut != null; } }
-        public bool ShowSummaryPopOut(bool show)
+        public bool ToggleSummaryPopOut()
         {
-            if (!show)
+            if (summaryPopOut == null || summaryPopOut.ButtonsOn )
             {
-                if (summaryPopOut != null)
-                {
+                if ( summaryPopOut != null )
                     summaryPopOut.Close();
-                    summaryPopOut = null;
-                }
+
+                summaryPopOut = new SummaryPopOut( summaryPopOut == null );
+                summaryPopOut.SetGripperColour(_discoveryForm.theme.LabelColor);
+                summaryPopOut.RefreshAll(dataGridViewTravel);
+                summaryPopOut.Show();
             }
             else
-            {
-                if (summaryPopOut == null)
-                {
-                    summaryPopOut = new SummaryPopOut();
-                    summaryPopOut.SetLabelFormat(new Font(_discoveryForm.theme.FontName, _discoveryForm.theme.FontSize), _discoveryForm.theme.LabelColor);
-                    summaryPopOut.Update(dataGridViewTravel);
-                    summaryPopOut.Show();
-                }
+            { 
+                summaryPopOut.Close();
+                summaryPopOut = null;
             }
 
             return (summaryPopOut != null);     // on screen?
@@ -900,17 +897,20 @@ namespace EDDiscovery
         public void UpdateSummaryTheme()
         {
             if (summaryPopOut != null)
-                summaryPopOut.SetLabelFormat(new Font(_discoveryForm.theme.FontName, _discoveryForm.theme.FontSize), _discoveryForm.theme.LabelColor);
+            {
+                summaryPopOut.SetGripperColour(_discoveryForm.theme.LabelColor);
+                summaryPopOut.RefreshAll(dataGridViewTravel);
+            }
         }
 
-        public void RefreshSummaryView()
+        public void RefreshSummaryView(DataGridViewRow row = null, bool add = false )
         {
             if (summaryPopOut != null)
             {
-                if ( toprowonly )
-                    summaryPopOut.UpdateTopRow(dataGridViewTravel);
+                if (row == null)
+                    summaryPopOut.RefreshAll(dataGridViewTravel);
                 else
-                    summaryPopOut.Update(dataGridViewTravel);
+                    summaryPopOut.RefreshRow(dataGridViewTravel,row, add);
             }
         }
 
