@@ -952,6 +952,7 @@ namespace EDDiscovery.DB
             {
                 // Indexed sets of systems
                 Dictionary<long, List<SystemClass>> systemsByVscId = new Dictionary<long, List<SystemClass>>();
+                Dictionary<long, List<SystemClass>> systemsAliasesByVscId = new Dictionary<long, List<SystemClass>>();
                 Dictionary<string, List<SystemClass>> systemsByName = new Dictionary<string, List<SystemClass>>();
                 Dictionary<long, SystemClass> systemsByEdsmId = new Dictionary<long, SystemClass>();
 
@@ -962,12 +963,16 @@ namespace EDDiscovery.DB
                     // than having to sift through all of the systems
                     // ourselves.
                     using (DbCommand cmd = cn.CreateCommand(
-                        "SELECT DISTINCT vsc.id AS vscid, s.* " +
+                        "SELECT DISTINCT vsc.id AS vscid, a.id AS aliasid, s.* " +
                         "FROM VisitedSystems vsc " +
+                        "LEFT JOIN SystemAliases a " +
+                        "ON a.Name = vsc.Name " +
+                        "OR a.id_edsm = vsc.id_edsm_assigned " +
                         "LEFT JOIN Systems s " +
                         "ON s.Name = vsc.Name " +
                         "OR s.id_edsm = vsc.id_edsm_assigned " +
                         "OR (s.X >= vsc.X - 0.125 AND s.X <= vsc.X + 0.125 AND s.Y >= vsc.Y - 0.125 AND s.Y <= vsc.Y + 0.125 AND s.Z >= vsc.Z - 0.125 AND s.Z <= vsc.Z + 0.125) " +
+                        "OR s.id_edsm = a.id_edsm_mergedto " +
                         "WHERE s.id IS NOT NULL " +
                         "ORDER BY s.id ASC"))
                     {
@@ -982,16 +987,23 @@ namespace EDDiscovery.DB
                                 long id_edsm = 0;
                                 long id = (long)reader["id"];
                                 long vscid = (long)reader["vscid"];
+                                bool isalias = false;
 
+                                if (reader["aliasid"] != DBNull.Value)
+                                {
+                                    isalias = true;
+                                }
+                                
                                 if (id != lastid)
                                 {
+                                    sys = new SystemClass(reader);
+
                                     // Get name match
                                     if (!systemsByName.ContainsKey(name))
                                     {
                                         systemsByName[name] = new List<SystemClass>();
                                     }
 
-                                    sys = new SystemClass(reader);
                                     systemsByName[name].Add(sys);
 
                                     // Get EDSM ID match
@@ -1011,12 +1023,24 @@ namespace EDDiscovery.DB
                                 }
 
                                 // Get VSC ID match
-                                if (!systemsByVscId.ContainsKey(vscid))
+                                if (isalias)
                                 {
-                                    systemsByVscId[vscid] = new List<SystemClass>();
-                                }
+                                    if (!systemsAliasesByVscId.ContainsKey(vscid))
+                                    {
+                                        systemsAliasesByVscId[vscid] = new List<SystemClass>();
+                                    }
 
-                                systemsByVscId[vscid].Add(sys);
+                                    systemsAliasesByVscId[vscid].Add(sys);
+                                }
+                                else
+                                {
+                                    if (!systemsByVscId.ContainsKey(vscid))
+                                    {
+                                        systemsByVscId[vscid] = new List<SystemClass>();
+                                    }
+
+                                    systemsByVscId[vscid].Add(sys);
+                                }
                             }
                         }
                     }
@@ -1078,6 +1102,14 @@ namespace EDDiscovery.DB
                             foreach (var sys in namematches)
                             {
                                 matches[sys.id] = sys;
+                            }
+                        }
+
+                        if (systemsAliasesByVscId.ContainsKey(vsc.id))
+                        {
+                            foreach (var alt in systemsAliasesByVscId[vsc.id])
+                            {
+                                matches[alt.id] = alt;
                             }
                         }
 
@@ -1337,12 +1369,31 @@ namespace EDDiscovery.DB
                         JObject jo = JObject.Load(jr);
 
                         long edsmid = (long)jo["id"];
+                        string name = (string)jo["system"];
+                        string action = (string)jo["action"];
+                        long mergedto = 0;
+
+                        if (jo["mergedTo"] != null)
+                        {
+                            mergedto = (long)jo["mergedTo"];
+                        }
 
                         SystemClass cs = GetSystem(edsmid, null, SystemIDType.id_edsm);   // test before delete..
                         if (cs != null)
                         {
                             Console.Write("Remove " + edsmid);
                             Delete(edsmid, cn2, null, SystemIDType.id_edsm);             // and wack!
+                        }
+
+                        if (mergedto > 0)
+                        {
+                            using (DbCommand cmd = cn2.CreateCommand("INSERT OR IGNORE INTO SystemAliases (name, id_edsm, id_edsm_mergedto) VALUES (@name, @id_edsm, @id_edsm_mergedto)"))
+                            {
+                                cmd.AddParameterWithValue("@name", name);
+                                cmd.AddParameterWithValue("@id_edsm", edsmid);
+                                cmd.AddParameterWithValue("@id_edsm_mergedto", mergedto);
+                                cmd.ExecuteNonQuery();
+                            }
                         }
                     }
                 }
