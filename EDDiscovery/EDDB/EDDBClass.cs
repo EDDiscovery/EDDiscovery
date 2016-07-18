@@ -47,7 +47,7 @@ namespace EDDiscovery2.EDDB
         public bool GetSystems()
         {
             if (File.Exists(stationTempFileName)) File.Delete(stationTempFileName); // migration - remove obsolete file
-            return DownloadFile("http://robert.astronet.se/Elite/eddb/v4/systems.json", systemFileName);
+            return DownloadFile("http://robert.astronet.se/Elite/eddb/v4/systems_populated.json", systemFileName);
         }
 
 
