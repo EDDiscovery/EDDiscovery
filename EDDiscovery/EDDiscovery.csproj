@@ -180,6 +180,12 @@
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
+    <Compile Include="Forms\AssignTravelLogSystemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AssignTravelLogSystemForm.Designer.cs">
+      <DependentUpon>AssignTravelLogSystemForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BookmarkForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -451,6 +457,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AssignTravelLogSystemForm.resx">
+      <DependentUpon>AssignTravelLogSystemForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BookmarkForm.resx">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
