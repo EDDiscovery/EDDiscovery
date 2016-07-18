@@ -24,7 +24,18 @@ namespace EDDiscovery.Forms
             {
                 get
                 {
-                    return LinkSystem != null ? LinkSystem.ToString() : Name;
+                    if (LinkSystem == null)
+                    {
+                        return Name;
+                    }
+                    else if (LinkSystem.HasCoordinate)
+                    {
+                        return $"{LinkSystem.name} ({LinkSystem.x},{LinkSystem.y},{LinkSystem.z}) #{LinkSystem.id_edsm}";
+                    }
+                    else
+                    {
+                        return $"{LinkSystem.name} #{LinkSystem.id_edsm}";
+                    }
                 }
             }
         }
@@ -69,7 +80,7 @@ namespace EDDiscovery.Forms
             links.Add(new SystemLink { Name = "Other", Id = -1, LinkSystem = null, UseOther = true });
 
             this.cbSystemLink.DataSource = links;
-            this.cbSystemLink.DisplayMember = "Name";
+            this.cbSystemLink.DisplayMember = "DisplayName";
             this.cbSystemLink.ValueMember = "Id";
 
             if (vsc.curSystem != null && vsc.alternatives.Contains(vsc.curSystem))
@@ -83,6 +94,15 @@ namespace EDDiscovery.Forms
         {
             SystemLink selectedItem = (SystemLink)cbSystemLink.SelectedItem;
             _linkSystem = selectedItem.LinkSystem;
+
+            if (selectedItem.LinkSystem != null)
+            {
+                lblEDSMLink.Text = selectedItem.LinkSystem.name;
+            }
+            else
+            {
+                lblEDSMLink.Text = "";
+            }
 
             if (selectedItem.LinkSystem != null && selectedItem.LinkSystem.HasCoordinate)
             {
@@ -119,6 +139,15 @@ namespace EDDiscovery.Forms
         private void cbSystemLink_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateLinkedSystem();
+        }
+
+        private void lblEDSMLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (_linkSystem != null)
+            {
+                string url = String.Format("https://www.edsm.net/show-system/index/id/{0}/name/{1}", _linkSystem.id_edsm, Uri.EscapeDataString(_linkSystem.name));
+                System.Diagnostics.Process.Start(url);
+            }
         }
     }
 }

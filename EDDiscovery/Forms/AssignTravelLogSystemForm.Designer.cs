@@ -46,6 +46,8 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnFindSystem = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lblEDSMLink = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // label1
@@ -77,6 +79,7 @@
             // 
             // cbSystemLink
             // 
+            this.cbSystemLink.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSystemLink.FormattingEnabled = true;
             this.cbSystemLink.Location = new System.Drawing.Point(151, 88);
             this.cbSystemLink.Name = "cbSystemLink";
@@ -181,7 +184,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(292, 179);
+            this.btnOK.Location = new System.Drawing.Point(292, 210);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 17;
@@ -191,7 +194,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(211, 179);
+            this.btnCancel.Location = new System.Drawing.Point(211, 210);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 18;
@@ -208,11 +211,33 @@
             this.btnFindSystem.Text = "Find";
             this.btnFindSystem.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(15, 178);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(64, 13);
+            this.label6.TabIndex = 20;
+            this.label6.Text = "EDSM Link:";
+            // 
+            // lblEDSMLink
+            // 
+            this.lblEDSMLink.AutoSize = true;
+            this.lblEDSMLink.Location = new System.Drawing.Point(148, 178);
+            this.lblEDSMLink.Name = "lblEDSMLink";
+            this.lblEDSMLink.Size = new System.Drawing.Size(58, 13);
+            this.lblEDSMLink.TabIndex = 21;
+            this.lblEDSMLink.TabStop = true;
+            this.lblEDSMLink.Text = "EDSMLink";
+            this.lblEDSMLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblEDSMLink_LinkClicked);
+            // 
             // AssignTravelLogSystemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(387, 214);
+            this.ClientSize = new System.Drawing.Size(387, 245);
+            this.Controls.Add(this.lblEDSMLink);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnFindSystem);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
@@ -258,5 +283,7 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnFindSystem;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.LinkLabel lblEDSMLink;
     }
 }
