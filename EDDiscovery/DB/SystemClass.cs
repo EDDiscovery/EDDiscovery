@@ -995,7 +995,7 @@ namespace EDDiscovery.DB
 
                             while (reader.Read())
                             {
-                                string name = ((string)reader["name"]).ToUpper();
+                                string name = ((string)reader["name"]).ToLower();
                                 long id_edsm = 0;
                                 long id = (long)reader["id"];
                                 long vscid = (long)reader["vscid"];
@@ -1062,7 +1062,7 @@ namespace EDDiscovery.DB
                 // we determine what and how well they match
                 foreach (VisitedSystemsClass vsc in visitedSystems)
                 {
-                    string vsc_searchname = vsc.Name.ToUpper();
+                    string vsc_searchname = vsc.Name.ToLower();
 
                     if (vsc.curSystem == null)                                              // if not set before, look it up
                     {
@@ -1130,17 +1130,16 @@ namespace EDDiscovery.DB
                         if (edsmidmatch != null)
                         {
                             SystemClass sys = edsmidmatch;
+                            vsc.curSystem = sys;
 
                             if (sys.SearchName == vsc_searchname && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // name and position matches
                             {
                                 vsc.NameStatus = "Exact match";
-                                vsc.curSystem = sys;
                                 continue; // Continue to next system
                             }
                             else if (sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // position matches
                             {
                                 vsc.NameStatus = "Name differs";
-                                vsc.curSystem = sys;
                                 continue; // Continue to next system
                             }
                             else if (!vsc.HasTravelCoordinates || !sys.HasCoordinate) // no coordinates available
@@ -1158,6 +1157,10 @@ namespace EDDiscovery.DB
 
                                     vsc.curSystem = sys;
                                     continue; // Continue to next system
+                                }
+                                else if (!vsc.HasTravelCoordinates)
+                                {
+                                    vsc.NameStatus = "Name differs";
                                 }
                             }
                         }

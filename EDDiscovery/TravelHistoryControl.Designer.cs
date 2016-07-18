@@ -42,6 +42,7 @@
             this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterDistanceToPreviousStarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.labelclosests = new System.Windows.Forms.Label();
             this.panel_system = new System.Windows.Forms.Panel();
@@ -129,9 +130,10 @@
             this.moveToAnotherCommanderToolStripMenuItem,
             this.addToTrilaterationToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
-            this.enterDistanceToPreviousStarToolStripMenuItem});
+            this.enterDistanceToPreviousStarToolStripMenuItem,
+            this.selectCorrectSystemToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 158);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 202);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -206,6 +208,13 @@
             this.enterDistanceToPreviousStarToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.enterDistanceToPreviousStarToolStripMenuItem.Text = "Enter distance to previous star";
             this.enterDistanceToPreviousStarToolStripMenuItem.Click += new System.EventHandler(this.enterDistanceToPreviousStarToolStripMenuItem_Click);
+            // 
+            // selectCorrectSystemToolStripMenuItem
+            // 
+            this.selectCorrectSystemToolStripMenuItem.Name = "selectCorrectSystemToolStripMenuItem";
+            this.selectCorrectSystemToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.selectCorrectSystemToolStripMenuItem.Text = "Assign new system";
+            this.selectCorrectSystemToolStripMenuItem.Click += new System.EventHandler(this.selectCorrectSystemToolStripMenuItem_Click);
             // 
             // label2
             // 
@@ -1100,5 +1109,6 @@
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterDistanceToPreviousStarToolStripMenuItem;
         private ExtendedControls.DrawnPanel buttonEDSM;
+        private System.Windows.Forms.ToolStripMenuItem selectCorrectSystemToolStripMenuItem;
     }
 }

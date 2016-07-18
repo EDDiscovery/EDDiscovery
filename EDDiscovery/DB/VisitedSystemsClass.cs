@@ -18,6 +18,14 @@ namespace EDDiscovery2.DB
         public string NameStatus;
         public List<ISystem> alternatives;
 
+        public bool IsAmbiguous
+        {
+            get
+            {
+                return alternatives != null && (alternatives.Count > 1 || (curSystem == null && alternatives.Count >= 1));
+            }
+        }
+
         public VisitedSystemsClass()
         {
             X = double.NaN;             // construct class with nulls/0's except for these, which use NaN as their no content marker.
