@@ -6,7 +6,7 @@ CREATE TABLE Distances (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  UNIQUE , 
 CREATE INDEX DistanceName ON Distances (NameA ASC, NameB ASC)
 CREATE INDEX Distances_EDSM_ID_Index ON Distances (id_edsm ASC)
 
-When enabled by the setting page, EDSM synced every 28 days, plus updated each run.  Synced to EDSM on id_edsm.  Used during fill of visited systems for pairs of systems which do not have co-ords.
+When enabled by the setting page, EDSM distance data base is synced with this table every 28 days, plus the db is updated from EDSM at each run.  Synced to EDSM on id_edsm.  Used during fill of visited systems for pairs of systems which do not have co-ords.
 
 # Objects
 for materials, not in active use. 
@@ -27,7 +27,7 @@ Not updated at present.  EDDB sync does not occur as from V4.
 # SystemNote
 CREATE TABLE SystemNote (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL , Note TEXT)
 
-User notes created by UI.
+User notes created by UI.  Name is used to find the system so may occur across EDSM duplicates.
 
 # Systems
 CREATE TABLE Systems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , name TEXT NOT NULL COLLATE NOCASE , x FLOAT, y FLOAT, z FLOAT, cr INTEGER, commandercreate TEXT, createdate DATETIME, commanderupdate TEXT, updatedate DATETIME, status INTEGER, population INTEGER , Note TEXT, id_eddb Integer, faction TEXT, government_id Integer, allegiance_id Integer, primary_economy_id Integer, security Integer, eddb_updated_at Integer, state Integer, needs_permit Integer, FirstDiscovery BOOL, versiondate DATETIME, id_edsm Integer)
@@ -37,6 +37,8 @@ CREATE INDEX Systems_EDSM_ID_Index ON Systems (id_edsm ASC)
 CREATE INDEX IDX_Systems_versiondate ON Systems (versiondate ASC)
 
 This is the system table populated by EDSM on a weekly sync, and updated on each run.  Only contains EDSM systems at present, since V4.  Any systems without EDSM ID are purged from the database as of V4.  id_edsm is used to sync to EDSM, not the name since V4.
+
+EDSM data can contain duplicates of names.
 
 cr is unknown use.
 
@@ -58,7 +60,7 @@ CREATE TABLE VisitedSystems(id INTEGER PRIMARY KEY  NOT NULL, Name TEXT NOT NULL
 
 Obtained from ED netlog files.
 Contains the Name, Time, logfile, commander, map colour, if sent to EDSM of the system visited information from the elite dangerous log files.
-Caniocal source of travelled places.
+Canoniocal source of travelled places.
 Since ED 2.1 it has x/y/z as well to indicate position that elite dangerous said the star was at.
 source is the travel log unit number
 status is not in use in the code.
@@ -66,7 +68,7 @@ status is not in use in the code.
 # route_systems
 CREATE TABLE route_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, routeid INTEGER NOT NULL, systemname TEXT NOT NULL)
 
-Contains route stars indexed into a route by routeid
+Contains route stars indexed into a route by routeid.  Order of id determines the order of the stars.
 
 # route_expeditions
 CREATE TABLE routes_expeditions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT UNIQUE NOT NULL, start DATETIME, end DATETIME)
