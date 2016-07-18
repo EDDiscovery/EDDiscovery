@@ -548,7 +548,7 @@ namespace EDDiscovery
 
                     long updates = 0;
 
-                    if (newfile)
+                    if (newfile || firstrun)
                     {
                         LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
 
