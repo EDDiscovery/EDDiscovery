@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SummaryPopOut));
             this.panel_grip = new ExtendedControls.DrawnPanel();
             this.SuspendLayout();
             // 
@@ -55,6 +56,7 @@
             this.ClientSize = new System.Drawing.Size(600, 268);
             this.Controls.Add(this.panel_grip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SummaryPopOut";
             this.Text = "SummaryPopOut";
             this.TransparencyKey = System.Drawing.Color.Transparent;
