@@ -210,6 +210,7 @@
             this.btnFindSystem.TabIndex = 19;
             this.btnFindSystem.Text = "Find";
             this.btnFindSystem.UseVisualStyleBackColor = true;
+            this.btnFindSystem.Click += new System.EventHandler(this.btnFindSystem_Click);
             // 
             // label6
             // 

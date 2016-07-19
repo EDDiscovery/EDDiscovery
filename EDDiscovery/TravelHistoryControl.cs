@@ -1183,14 +1183,16 @@ namespace EDDiscovery
 
         private void selectCorrectSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Forms.AssignTravelLogSystemForm form = new Forms.AssignTravelLogSystemForm(this, rightclicksystem);
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
+            using (Forms.AssignTravelLogSystemForm form = new Forms.AssignTravelLogSystemForm(this, rightclicksystem))
             {
-                rightclicksystem.id_edsm_assigned = form.AssignedEdsmId;
-                rightclicksystem.curSystem = form.AssignedSystem;
-                rightclicksystem.Update();
-                RefreshHistory();
+                DialogResult result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    rightclicksystem.id_edsm_assigned = form.AssignedEdsmId;
+                    rightclicksystem.curSystem = form.AssignedSystem;
+                    rightclicksystem.Update();
+                    RefreshHistory();
+                }
             }
         }
     }
