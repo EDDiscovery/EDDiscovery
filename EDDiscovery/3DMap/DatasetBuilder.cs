@@ -108,18 +108,22 @@ namespace EDDiscovery2._3DMap
             return text_bmp;
         }
 
-        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, double widthly, double heightly, bool vert)
+        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, Bitmap maptarget, double widthly, double heightly, bool vert)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
+
+            long bookmarktarget = TargetClass.GetTargetBookmark();
 
             foreach (BookmarkClass bc in BookmarkClass.bookmarks)
             {
                 TexturedQuadData newtexture;
 
+                Bitmap touse = (bc.id == bookmarktarget) ? maptarget : ((bc.isRegion) ? mapregion : mapstar);
+
                 if (vert)
                 {
-                    newtexture = TexturedQuadData.FromBitmapVert((bc.isRegion) ? mapregion : mapstar,
+                    newtexture = TexturedQuadData.FromBitmapVert(touse,
                                              new PointF((float)(bc.x - widthly), (float)(bc.y + heightly)),
                                                 new PointF((float)(bc.x + widthly), (float)(bc.y + heightly)),
                                              new PointF((float)(bc.x - widthly), (float)bc.y),
@@ -128,7 +132,7 @@ namespace EDDiscovery2._3DMap
                 }
                 else
                 {
-                    newtexture = TexturedQuadData.FromBitmapHorz((bc.isRegion) ? mapregion : mapstar,
+                    newtexture = TexturedQuadData.FromBitmapHorz(touse,
                                               new PointF((float)(bc.x - widthly), (float)(bc.z + heightly)),
                                                  new PointF((float)(bc.x + widthly), (float)(bc.z + heightly)),
                                               new PointF((float)(bc.x - widthly), (float)bc.z),
@@ -144,10 +148,12 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddNotedBookmarks(Bitmap map, double widthly, double heightly , bool vert )
+        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, double widthly, double heightly , bool vert )
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
+
+            long bookmarknoted = TargetClass.GetTargetNotedSystem();
 
             if (VisitedSystems != null)
             {
@@ -169,7 +175,7 @@ namespace EDDiscovery2._3DMap
 
                             if (vert)
                             {
-                                newtexture = TexturedQuadData.FromBitmapVert(map,
+                                newtexture = TexturedQuadData.FromBitmapVert((notecs.id == bookmarknoted) ? maptarget : map,
                                                             new PointF((float)(x - widthly), (float)(y + heightly)),
                                                             new PointF((float)(x + widthly), (float)(y + heightly)),
                                                             new PointF((float)(x - widthly), (float)y),
@@ -178,7 +184,7 @@ namespace EDDiscovery2._3DMap
                             }
                             else
                             {
-                                newtexture = TexturedQuadData.FromBitmapHorz(map,
+                                newtexture = TexturedQuadData.FromBitmapHorz((notecs.id == bookmarknoted) ? maptarget : map,
                                                                             new PointF((float)(x - widthly), (float)(z + heightly)),
                                                                             new PointF((float)(x + widthly), (float)(z + heightly)),
                                                                             new PointF((float)(x - widthly), (float)z),

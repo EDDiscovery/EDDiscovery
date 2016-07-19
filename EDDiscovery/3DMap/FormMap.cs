@@ -25,7 +25,7 @@ namespace EDDiscovery2
         public bool noWindowReposition { get; set; } = false;                       // set externally
         public TravelHistoryControl travelHistoryControl { get; set; } = null;      // set externally
 
-        const int HELP_VERSION = 1;         // increment this to force help onto the screen of users first time.
+        const int HELP_VERSION = 2;         // increment this to force help onto the screen of users first time.
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
@@ -633,12 +633,13 @@ namespace EDDiscovery2
             {
                 Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
                 Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
+                Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
                 Debug.Assert(mapstar != null && mapregion != null);
 
                 DatasetBuilder builder = CreateBuilder();
 
                 builder.Build();
-                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
+                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
 
                 builder = null;
             }
@@ -652,12 +653,13 @@ namespace EDDiscovery2
             if (showNoteMarksToolStripMenuItem.Checked)
             {
                 Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
+                Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
                 Debug.Assert(map != null);
 
                 DatasetBuilder builder = CreateBuilder();
 
                 builder.Build();
-                _datasets_notedsystems = builder.AddNotedBookmarks(map, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
+                _datasets_notedsystems = builder.AddNotedBookmarks(map, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
 
                 builder = null;
             }
@@ -1852,14 +1854,32 @@ namespace EDDiscovery2
 
                     if (notedsystem && bkmark == null)              // note on a system
                     {
+                        long targetid = TargetClass.GetTargetNotedSystem();      // who is the target of a noted system (0=none)
+                        long noteid = SystemNoteClass.GetSystemNoteClass(cursystem.name).id;
+
                         frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
-                        frm.SystemInfo(cursystem.name, note);       // note may be passed in null
+                        frm.SystemInfo(cursystem.name, note,noteid == targetid);       // note may be passed in null
                         frm.ShowDialog();
+
+                        if ((frm.IsTarget && targetid != noteid) || (!frm.IsTarget && targetid == noteid)) // changed..
+                        {
+                            if (frm.IsTarget)
+                                TargetClass.SetTargetNotedSystem(cursystem.name, noteid, cursystem.x, cursystem.y, cursystem.z);
+                            else
+                                TargetClass.ClearTarget();
+
+                            GenerateDataSetsBookmarks();
+                            GenerateDataSetsNotedSystems();
+                            glControl.Invalidate();
+                            travelHistoryControl.RefreshTargetInfo();
+                        }
                     }
                     else
                     {
                         bool regionmarker = false;
                         DateTime tme;
+
+                        long targetid = TargetClass.GetTargetBookmark();      // who is the target of a bookmark (0=none)
 
                         if (bkmark == null)                         // new bookmark
                         {
@@ -1872,7 +1892,7 @@ namespace EDDiscovery2
                             frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
                             regionmarker = bkmark.isRegion;
                             tme = bkmark.Time;
-                            frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker);
+                            frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker , targetid == bkmark.id );
                         }
 
                         DialogResult res = frm.ShowDialog();
@@ -1899,9 +1919,32 @@ namespace EDDiscovery2
                             }
                             else
                                 newcls.Add();
+
+                            if ((frm.IsTarget && targetid != newcls.id) || (!frm.IsTarget && targetid == newcls.id)) // changed..
+                            {
+                                if (frm.IsTarget)
+                                    TargetClass.SetTargetBookmark(regionmarker ? newcls.Heading : newcls.StarName, newcls.id, newcls.x, newcls.y, newcls.z);
+                                else
+                                    TargetClass.ClearTarget();
+
+
+                                GenerateDataSetsBookmarks();
+                                GenerateDataSetsNotedSystems();
+                                glControl.Invalidate();
+                                travelHistoryControl.RefreshTargetInfo();
+                            }
                         }
                         else if (res == DialogResult.Abort && bkmark != null)
                         {
+                            if (targetid == bkmark.id)
+                            {
+                                TargetClass.ClearTarget();
+                                GenerateDataSetsBookmarks();
+                                GenerateDataSetsNotedSystems();
+                                glControl.Invalidate();
+                                travelHistoryControl.RefreshTargetInfo();
+                            }
+
                             bkmark.Delete();
                         }
                     }

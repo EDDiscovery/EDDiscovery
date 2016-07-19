@@ -362,7 +362,7 @@ namespace EDDiscovery
             if (refreshhistory)
                 travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
 
-            TravelControl.UpdateSummaryTheme();
+            TravelControl.RedrawSummary();
         }
 
         #endregion
@@ -798,7 +798,6 @@ namespace EDDiscovery
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            TravelControl.ToggleSummaryPopOut();
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
