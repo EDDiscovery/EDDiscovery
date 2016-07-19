@@ -182,7 +182,7 @@ namespace EDDiscovery
 
             if (item.curSystem != null && item.curSystem.name.ToLower() != item.Name.ToLower())
             {
-                rowobj[1] = $"{item.curSystem.name} ({item.Name})";
+                rowobj[1] = $"{item.Name} ({item.curSystem.name})";
             }
 
             if (insert)
