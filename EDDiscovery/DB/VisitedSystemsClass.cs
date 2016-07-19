@@ -354,7 +354,7 @@ namespace EDDiscovery2.DB
 
             foreach (VisitedSystemsClass pos in vs)
             {
-                if (pos.HasTravelCoordinates && (pos.curSystem == null || !systems.ContainsKey(pos.curSystem.id)))   // if co-ords, and not in list already..
+                if (pos.HasTravelCoordinates && pos.curSystem != null && !systems.ContainsKey(pos.curSystem.id))   // if co-ords, and not in list already..
                 {
                     dx = (pos.X - x);
                     dy = (pos.Y - y);

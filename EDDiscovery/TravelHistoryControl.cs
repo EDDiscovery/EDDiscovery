@@ -754,8 +754,14 @@ namespace EDDiscovery
             {
                 if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
                 {
+                    long? id_edsm = currentSysPos.curSystem.id_edsm;
+                    if (id_edsm == 0)
+                    {
+                        id_edsm = null;
+                    }
+
                     EDSMClass edsm = new EDSMClass();
-                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
+                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name, id_edsm);
 
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         Process.Start(url);
@@ -888,9 +894,9 @@ namespace EDDiscovery
                                                                         .OrderBy(cell => cell.Index);
 
             this.Cursor = Cursors.WaitCursor;
-            string sysName = selectedRows.First<DataGridViewRow>().Cells[ClosestSystemsColumns.SystemName].Value.ToString();
+            ISystem system = (ISystem)selectedRows.First<DataGridViewRow>().Tag;
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysName))
+            if (!edsm.ShowSystemInEDSM(system.name, system.id_edsm))
                 LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
@@ -1124,8 +1130,14 @@ namespace EDDiscovery
         {
             this.Cursor = Cursors.WaitCursor;
             EDSMClass edsm = new EDSMClass();
+            long? id_edsm = rightclicksystem.curSystem?.id_edsm;
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
+            if (id_edsm == 0)
+            {
+                id_edsm = null;
+            }
+
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
                 LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
