@@ -16,6 +16,7 @@ namespace EDDiscovery2
         public string x { get { return textBoxX.Text; } }
         public string y { get { return textBoxY.Text; } }
         public string z { get { return textBoxZ.Text; } }
+        public bool IsTarget { get { return checkBoxTarget.Checked;  } }
 
         public BookmarkForm()
         {
@@ -29,7 +30,7 @@ namespace EDDiscovery2
             textBoxZ.Text = z.ToString("0.00");
         }
 
-        public void SystemInfo(string name, string note)
+        public void SystemInfo(string name, string note, bool target)
         {
             this.Text = "System Information";
             buttonCancel.Hide();
@@ -40,12 +41,16 @@ namespace EDDiscovery2
             labelBookmarkNotes.Hide();
             textBoxName.Text = name;
             textBoxTravelNote.Text = (note != null) ? note : "";
-            int delta = textBoxTravelNote.Location.Y - labelTimeMade.Location.Y;
+            int delta = textBoxTravelNote.Location.Y - checkBoxTarget.Location.Y;
+
+            checkBoxTarget.Location = new Point(checkBoxTarget.Location.X, labelTimeMade.Location.Y );
+
             buttonOK.Location = new Point(buttonOK.Location.X, buttonOK.Location.Y - delta);
             labelTravelNote.Location = new Point(labelTravelNote.Location.X, labelTravelNote.Location.Y - delta);
             labelTravelNoteEdit.Location = new Point(labelTravelNoteEdit.Location.X, labelTravelNoteEdit.Location.Y - delta);
             textBoxTravelNote.Location = new Point(textBoxTravelNote.Location.X, textBoxTravelNote.Location.Y - delta);
             this.Height -= delta;
+            checkBoxTarget.Checked = target;
         }
 
         public void RegionBookmark(string tme)
@@ -68,7 +73,7 @@ namespace EDDiscovery2
             buttonOK.Enabled = ValidateData();
         }
 
-        public void Update(string name, string note, string bookmarknote, string tme, bool editheading )
+        public void Update(string name, string note, string bookmarknote, string tme, bool editheading , bool istarget )
         {
             this.Text = "Update Bookmark";
             buttonOK.Text = "Update";
@@ -77,7 +82,7 @@ namespace EDDiscovery2
             textBoxNotes.Text = bookmarknote;
             textBoxTravelNote.Text = note;
             textBoxTime.Text = tme;
-
+            checkBoxTarget.Checked = istarget;
         }
 
         public void New(string name, string note, string tme)
@@ -92,14 +97,6 @@ namespace EDDiscovery2
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            //            double xv, yv, zv;
-
-            //          if (double.TryParse(x, out xv) && double.TryParse(y, out yv) && double.TryParse(z, out zv))
-            ///        {
-            //         DialogResult = DialogResult.OK;
-            //       Close();
-            // }
-            //lse
             DialogResult = DialogResult.OK;
             Close();
         }

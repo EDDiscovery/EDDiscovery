@@ -154,8 +154,6 @@ namespace EDDiscovery
                 AddNewHistoryRow(false, result[ii]);      // for every one in filter, add a row.
             }
 
-            RefreshSummaryView();
-
             if (dataGridViewTravel.Rows.Count > 0)
             {
                 ShowSystemInformation((VisitedSystemsClass)(dataGridViewTravel.Rows[0].Cells[TravelHistoryColumns.SystemName].Tag));
@@ -163,6 +161,9 @@ namespace EDDiscovery
 
             if (textBoxFilter.TextLength>0)
                 FilterGridView();
+
+            RedrawSummary();
+            RefreshTargetInfo();
         }
 
         private void GetVisitedSystems()
@@ -366,7 +367,8 @@ namespace EDDiscovery
         {
             get
             {
-                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null) return null;
+                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null)
+                    return null;
                 return ((VisitedSystemsClass)dataGridViewTravel.CurrentRow.Cells[TravelHistoryColumns.SystemName].Tag);
             }
         }
@@ -440,7 +442,7 @@ namespace EDDiscovery
         private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
-            RefreshSummaryView();
+            RedrawSummary();
         }
 
         public void buttonMap_Click(object sender, EventArgs e)
@@ -559,7 +561,7 @@ namespace EDDiscovery
                         edsm.SetComment(sn);
 
                     _discoveryForm.Map.UpdateNote();
-                    RefreshSummaryView(dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index]);    // tell it this row was changed
+                    RefreshSummaryRow(dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index]);    // tell it this row was changed
                 }
 
             }
@@ -696,12 +698,13 @@ namespace EDDiscovery
 
             AddNewHistoryRow(true, item);
 
-            RefreshSummaryView(dataGridViewTravel.Rows[0],true);         //Tell the summary new row has been added
-
             StoreSystemNote();
 
-            _discoveryForm.Map.UpdateVisited(visitedSystems);      // update map
+            _discoveryForm.Map.UpdateVisited(visitedSystems);           // update map
 
+            RefreshSummaryRow(dataGridViewTravel.Rows[0], true);         //Tell the summary new row has been added
+            RefreshTargetInfo();                                        // tell the target system its changed the latest system
+            
             // Move focus to new row
             if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
             {
@@ -853,8 +856,7 @@ namespace EDDiscovery
             frm.Show();
             this.Cursor = Cursors.Default;
         }
-
-
+        
         public bool SetTravelHistoryPosition(string sysname)
         {
             foreach (DataGridViewRow item in dataGridViewTravel.Rows)
@@ -872,6 +874,36 @@ namespace EDDiscovery
             return false;
         }
 
+        #region Target System
+
+        public void RefreshTargetInfo()
+        {
+            string name;
+            double x, y, z;
+
+            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            {
+                textBoxTarget.Text = name;
+                textBoxTargetDist.Text = "No Pos";
+
+                SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(visitedSystems);
+                if ( cs != null )
+                    textBoxTargetDist.Text = SystemClass.Distance(cs, x, y, z).ToString("0.00");
+            }
+            else
+            {
+                textBoxTarget.Text = "Set target by 3D map";
+                textBoxTargetDist.Text = "";
+            }
+
+            if (summaryPopOut != null)
+                summaryPopOut.RefreshTarget(dataGridViewTravel,visitedSystems);
+        }
+
+        #endregion 
+
+        #region Summary Pop out
+
         public bool IsSummaryPopOutOn {  get { return summaryPopOut != null; } }
         public bool ToggleSummaryPopOut()
         {
@@ -881,8 +913,7 @@ namespace EDDiscovery
                     summaryPopOut.Close();
 
                 summaryPopOut = new SummaryPopOut( summaryPopOut == null );
-                summaryPopOut.SetGripperColour(_discoveryForm.theme.LabelColor);
-                summaryPopOut.RefreshAll(dataGridViewTravel);
+                RedrawSummary();
                 summaryPopOut.Show();
             }
             else
@@ -894,25 +925,28 @@ namespace EDDiscovery
             return (summaryPopOut != null);     // on screen?
         }
 
-        public void UpdateSummaryTheme()
+        public void RedrawSummary()
         {
             if (summaryPopOut != null)
             {
                 summaryPopOut.SetGripperColour(_discoveryForm.theme.LabelColor);
-                summaryPopOut.RefreshAll(dataGridViewTravel);
+                summaryPopOut.ResetForm(dataGridViewTravel);
+                summaryPopOut.RefreshTarget(dataGridViewTravel, visitedSystems);
             }
         }
 
-        public void RefreshSummaryView(DataGridViewRow row = null, bool add = false )
+        public void RefreshSummaryRow(DataGridViewRow row , bool add = false )
         {
             if (summaryPopOut != null)
-            {
-                if (row == null)
-                    summaryPopOut.RefreshAll(dataGridViewTravel);
-                else
-                    summaryPopOut.RefreshRow(dataGridViewTravel,row, add);
-            }
+                summaryPopOut.RefreshRow(dataGridViewTravel, row, add);
         }
+
+        private void buttonExtSummaryPopOut_Click(object sender, EventArgs e)
+        {
+            ToggleSummaryPopOut();
+        }
+
+        #endregion
 
         #region ClosestSystemRightClick
 

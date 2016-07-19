@@ -33,11 +33,13 @@ namespace EDDiscovery2
         private ControlTable lt;
         private List<int> tabstops = new List<int>();
         private Font butfont = new Font("Microsoft Sans Serif", 8.25F);
+        private int statictoplines = 0;
 
         public bool ButtonsOn { get { return tabstops.Count > 5; } }
 
         public SummaryPopOut( bool buttons)
         {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             InitializeComponent();
             panel_grip.Visible = false;
             autofade.Interval = 500;
@@ -65,33 +67,104 @@ namespace EDDiscovery2
             this.TransparencyKey = transparentkey;
         }
 
-        public void RefreshAll(DataGridView vsc)
+        public void ResetForm(DataGridView vsc)
         {
             if (vsc != null)
             {
+                SuspendLayout();
                 lt.Dispose();
+                statictoplines = 0;
 
                 for (int i = 0; i < vsc.Rows.Count; i++)
                 {
-                    UpdateRow(vsc, vsc.Rows[i], false, false);
+                    UpdateRow(vsc, vsc.Rows[i], true, 200000);     // insert at end, give it a large number
                     if (lt.Full)
                         break;
                 }
-            }
 
+                ResumeLayout();
+            }
             UpdateEventsOnControls(this);
         }
+
+        public void RefreshTarget(DataGridView vsc, List<VisitedSystemsClass> vscl)
+        {
+            if (vsc != null && vscl != null)
+            {
+                SuspendLayout();
+
+                string name;
+                double x, y, z;
+                bool targetpresent = TargetClass.GetTargetPosition(out name, out x, out y, out z);
+
+                if (targetpresent)
+                {
+                    List<string> lab = new List<string>();
+
+                    if (ButtonsOn)
+                    {
+                        lab.Add("-");
+                    }
+
+                    SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(vscl);
+
+                    if (cs != null)
+                        lab.AddRange(new string[] { "Target", name, SystemClass.Distance(cs, x, y, z).ToString("0.00"), "" });
+                    else
+                        lab.AddRange(new string[] { "Target", name, "Unknown", "" });
+
+                    if (statictoplines == 0)
+                    {
+                        int row = lt.Add(lab, 0);       // insert at 0
+
+                        List<Font> fnt = new List<Font>();
+                        List<Color> cols = new List<Color>();
+
+                        if (ButtonsOn)
+                        {
+                            fnt.Add(butfont);
+                            cols.Add(panel_grip.ForeColor);
+                        }
+
+                        cols.AddRange(new Color[] { panel_grip.ForeColor, panel_grip.ForeColor, panel_grip.ForeColor, panel_grip.ForeColor });
+
+                        fnt.AddRange(new Font[] { FontSel(vsc.Columns[1].DefaultCellStyle.Font,vsc.Font) ,
+                                                    FontSel(vsc.Columns[1].DefaultCellStyle.Font,vsc.Font) ,
+                                                    FontSel(vsc.Columns[2].DefaultCellStyle.Font,vsc.Font) ,
+                                                    FontSel(vsc.Columns[3].DefaultCellStyle.Font,vsc.Font) });
+                        FormatRow(0, fnt, cols);
+                        statictoplines = 1;
+                        UpdateEventsOnControls(this);
+                    }
+                    else
+                        lt.Refresh(lab, 0);     // just refresh data
+                }
+                else
+                {
+                    if (statictoplines == 1)
+                    {
+                        lt.RemoveAt(0);
+                        statictoplines = 0;
+                    }
+                }
+
+                ResumeLayout();
+            }
+        }
+
 
         private static Font FontSel(Font f, Font g) { return (f != null) ? f : g; }
         private static Color CSel(Color f, Color g) { return (f.A != 0) ? f : g; }
 
         public void RefreshRow(DataGridView vsc, DataGridViewRow vscrow, bool addattop = false )
         {
-            UpdateRow(vsc, vscrow, !addattop, true);      // add= 0 , we do a refesh.  If all=true, we do an insert at top
+            SuspendLayout();
+            UpdateRow(vsc, vscrow, addattop , statictoplines );      // add= 0 , we do a refesh.  If all=true, we do an insert at top
             UpdateEventsOnControls(this);
+            ResumeLayout();
         }
 
-        private void UpdateRow(DataGridView vsc, DataGridViewRow vscrow, bool refreshdata , bool insertattop )
+        private void UpdateRow(DataGridView vsc, DataGridViewRow vscrow, bool addit , int insertat )
         {
             Debug.Assert(vscrow != null && vsc != null);
 
@@ -105,15 +178,15 @@ namespace EDDiscovery2
                                                 (string)vscrow.Cells[2].Value,
                                                 (string)vscrow.Cells[3].Value });
 
-            if (!refreshdata)
+            if (addit)
             {
-                int row = lt.Add(insertattop, lab);
+                int row = lt.Add(lab, insertat);
 
                 List<Font> fnt = new List<Font>();
                 List<Color> cols = new List<Color>();
 
                 if (ButtonsOn)
-                { 
+                {
                     fnt.Add(butfont);
                     cols.Add(panel_grip.ForeColor);
                 }
@@ -129,19 +202,24 @@ namespace EDDiscovery2
                     rowc = Color.White;
 
                 cols.AddRange(new Color[] { rowc, rowc, rowc, rowc });
-                
-                List<int> tabsadj = new List<int>();
-                for (int i = 0; i < tabstops.Count; i++)
-                    tabsadj.Add((int)(tabstops[i] * (double)fnt[2].SizeInPoints / 8.25));
 
-                lt.SetFormat(row, fnt, cols, tabsadj);
-//                Console.WriteLine("Add to top " + (string)vscrow.Cells[1].Value);
+                FormatRow(row, fnt, cols);
+
             }
             else
             {
-                lt.Refresh(vscrow.Index, lab);
-//                Console.WriteLine("Refresh " + vscrow.Index + " " + (string)vscrow.Cells[1].Value);
+                lt.Refresh(lab, insertat + vscrow.Index);
+                //                Console.WriteLine("Refresh " + vscrow.Index + " " + (string)vscrow.Cells[1].Value);
             }
+        }
+
+        private void FormatRow(int row, List<Font> fnt, List<Color> cols)
+        {
+            List<int> tabsadj = new List<int>();
+            for (int i = 0; i < tabstops.Count; i++)
+                tabsadj.Add((int)(tabstops[i] * (double)fnt[2].SizeInPoints / 8.25));
+
+            lt.SetFormat(row, fnt, cols, tabsadj);
         }
 
         private void SummaryPopOut_Load(object sender, EventArgs e)
@@ -287,10 +365,11 @@ namespace EDDiscovery2
     public class ControlTable : IDisposable
     {
         List<ControlRowEntry> entries = new List<ControlRowEntry>();
+        Control parent;
+
         int maxvertical;
         int toppos;
         int vspacing;
-        Control parent;
 
         public ControlTable(Control p, int m , int topp , int vspace)
         {
@@ -312,36 +391,39 @@ namespace EDDiscovery2
                 entries[row].SetFormat(f, clist, tabstops);
         }
 
-        public int Add(bool insertattop, List<string> text )      // return row that was added..
+        public int Add(List<string> text , int insertpos )      // return row that was added..
         {
-            if (insertattop)
+            if (Full)
             {
-                if (Full)
-                {
-                    entries[entries.Count-1].Dispose();
-                    entries.RemoveAt(entries.Count - 1);
-                }
+                entries[entries.Count-1].Dispose();
+                entries.RemoveAt(entries.Count - 1);
+            }
 
-                foreach (ControlRowEntry lre in entries)
-                    lre.ShiftVert(vspacing);
+            for (int i = insertpos; i < entries.Count; i++)
+                entries[i].ShiftVert(vspacing);
 
-                entries.Insert(0, new ControlRowEntry(text, toppos, vspacing, parent));
-                return 0;
+            if (insertpos >= entries.Count)
+            {
+                insertpos = entries.Count;
+                entries.Add(new ControlRowEntry(text, toppos + insertpos*vspacing, vspacing, parent));
+                return insertpos;
             }
             else
             {
-                if (Full)
-                {
-                    entries[0].Dispose();
-                    entries.RemoveAt(0);
-                }
-
-                entries.Add(new ControlRowEntry(text, toppos+vspacing*entries.Count, vspacing, parent));
-                return entries.Count - 1;
+                entries.Insert(insertpos, new ControlRowEntry(text, toppos + insertpos*vspacing, vspacing, parent));
+                return insertpos;
             }
         }
 
-        public void Refresh(int index, List<string> text )
+        public void RemoveAt( int pos )
+        {
+            for (int i = pos+1; i < entries.Count; i++)
+                entries[i].ShiftVert(-vspacing);
+            entries[pos].Dispose();
+            entries.RemoveAt(pos);
+        }
+
+        public void Refresh(List<string> text , int index )
         {
             if ( index < entries.Count )
             {
@@ -403,7 +485,6 @@ namespace EDDiscovery2
                 items[i].Text = text[i];
         }
 
-        // tabs[0] = button, tabs[1] = label[0], etc.
         public void SetFormat(List<Font> fnt, List<Color> cl, List<int> tabstops )
         {
             for (int i = 0; i < items.Count; i++)
@@ -419,9 +500,7 @@ namespace EDDiscovery2
         public void ShiftVert(int vert)
         {
             for (int i = 0; i < items.Count; i++)
-            {
                 items[i].Location = new Point(items[i].Location.X, items[i].Location.Y + vert);
-            }
         }
 
         public void Dispose()

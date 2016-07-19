@@ -499,6 +499,14 @@ namespace EDDiscovery.DB
                 return -1;
         }
 
+        public static double Distance(EDDiscovery2.DB.ISystem s1, double x, double y, double z)
+        {
+            if (s1 != null && s1.HasCoordinate )
+                return Math.Sqrt((s1.x - x) * (s1.x - x) + (s1.y - y) * (s1.y - y) + (s1.z - z) * (s1.z - z));
+            else
+                return -1;
+        }
+
         public static double DistanceIncludeDB(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
         {
             double dist = Distance(s1, s2);
