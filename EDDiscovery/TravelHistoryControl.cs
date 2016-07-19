@@ -95,13 +95,23 @@ namespace EDDiscovery
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
             visitedSystems = null;
+            try
+            {
+                TriggerEDSMRefresh();
+                LogText("Refresh History." + Environment.NewLine);
+                RefreshHistory();
+                LogText("Refresh Complete." + Environment.NewLine);
 
-            TriggerEDSMRefresh();
-            LogText("Refresh History." + Environment.NewLine);
-            RefreshHistory();
-            LogText("Refresh Complete." + Environment.NewLine);
+                EliteDangerous.CheckED();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-            EliteDangerous.CheckED();
+                LogTextHighlight("Exception : " + ex.Message);
+                LogTextHighlight(ex.StackTrace);
+            }
         }
 
         public void TriggerEDSMRefresh()
