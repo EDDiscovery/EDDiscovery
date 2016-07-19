@@ -696,6 +696,45 @@ namespace EDDiscovery.DB
             return sys;
         }
 
+        public static List<SystemClass> GetSystemsByName(string name, SQLiteConnectionED cn = null)
+        {
+            List<SystemClass> systems = new List<SystemClass>();
+            bool closeit = false;
+
+            try
+            {
+                if (cn == null)
+                {
+                    closeit = true;
+                    cn = new SQLiteConnectionED();
+                }
+
+                using (DbCommand cmd = cn.CreateCommand("select * from Systems where name = @name"))
+                {
+                    cmd.AddParameterWithValue("name", name);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                            systems.Add(new SystemClass(reader));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                if (closeit && cn != null)
+                {
+                    cn.Dispose();
+                }
+            }
+
+            return systems;
+        }
+
         public static SystemClass GetSystem(long id, SQLiteConnectionED cn = null, SystemIDType idtype = SystemIDType.id )      // using an id
         {
             SystemClass sys = null;

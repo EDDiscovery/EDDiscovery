@@ -17,6 +17,7 @@ namespace EDDiscovery.Forms
         {
             public string Name { get; set; }
             public long Id { get; set; }
+            public long EdsmId { get; set; }
             public bool UseOther { get; set; }
             public ISystem LinkSystem { get; set; }
 
@@ -46,6 +47,8 @@ namespace EDDiscovery.Forms
         private TravelHistoryControl _travelHistory;
         private ISystem _linkSystem;
         private VisitedSystemsClass _travelLogEntry;
+        private Dictionary<long, SystemLink> _systemLinks;
+        private List<SystemLink> _systemLinkList;
 
         public AssignTravelLogSystemForm(TravelHistoryControl travelHistory, VisitedSystemsClass vsc)
         {
@@ -63,29 +66,58 @@ namespace EDDiscovery.Forms
             this.tbLogCoordY.TextAlign = vsc.HasTravelCoordinates ? HorizontalAlignment.Right : HorizontalAlignment.Center;
             this.tbLogCoordZ.TextAlign = vsc.HasTravelCoordinates ? HorizontalAlignment.Right : HorizontalAlignment.Center;
 
-            this.tbManualSystemName.ReadOnly = true;
-            this.btnFindSystem.Enabled = false;
+            UpdateLinkedSystemList(vsc.curSystem);
+            tbManualSystemName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            tbManualSystemName.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            AutoCompleteStringCollection autocomplete = new AutoCompleteStringCollection();
+            SystemClass.GetSystemNames(ref autocomplete);
+            tbManualSystemName.AutoCompleteCustomSource = autocomplete;
+        }
 
-            List<SystemLink> links = new List<SystemLink>();
-            links.Add(new SystemLink { Name = "None", Id = 0, LinkSystem = null, UseOther = false });
-            
-            if (vsc.alternatives != null)
+        protected void UpdateLinkedSystemList(ISystem focus = null, List<ISystem> othersystems = null)
+        {
+            _systemLinkList = new List<SystemLink>();
+            _systemLinks = new Dictionary<long, SystemLink>();
+            _systemLinkList.Add(new SystemLink { Name = "None", Id = 0, EdsmId = 0, LinkSystem = null });
+
+            if (_travelLogEntry.alternatives != null)
             {
-                foreach (var sys in vsc.alternatives)
+                foreach (var sys in _travelLogEntry.alternatives)
                 {
-                    links.Add(new SystemLink { Name = sys.name, Id = sys.id_edsm, LinkSystem = sys, UseOther = false });
+                    var syslink = new SystemLink { Name = sys.name, Id = sys.id, EdsmId = sys.id_edsm, LinkSystem = sys };
+                    _systemLinkList.Add(syslink);
+                    _systemLinks[sys.id] = syslink;
                 }
             }
 
-            links.Add(new SystemLink { Name = "Other", Id = -1, LinkSystem = null, UseOther = true });
+            if (othersystems != null)
+            {
+                foreach (var sys in othersystems)
+                {
+                    if (!_systemLinks.ContainsKey(sys.id))
+                    {
+                        var syslink = new SystemLink
+                        {
+                            Name = sys.name,
+                            Id = sys.id,
+                            EdsmId = sys.id_edsm,
+                            LinkSystem = sys
+                        };
 
-            this.cbSystemLink.DataSource = links;
+                        _systemLinkList.Add(syslink);
+                        _systemLinks[sys.id] = syslink;
+                    }
+                }
+            }
+
+            this.cbSystemLink.DataSource = _systemLinkList;
             this.cbSystemLink.DisplayMember = "DisplayName";
             this.cbSystemLink.ValueMember = "Id";
+            this.cbSystemLink.Refresh();
 
-            if (vsc.curSystem != null && vsc.alternatives.Contains(vsc.curSystem))
+            if (focus != null && _systemLinks.ContainsKey(focus.id))
             {
-                this.cbSystemLink.SelectedItem = links.First(l => l.LinkSystem == vsc.curSystem);
+                this.cbSystemLink.SelectedItem = _systemLinks[focus.id];
                 UpdateLinkedSystem();
             }
         }
@@ -147,6 +179,17 @@ namespace EDDiscovery.Forms
             {
                 string url = String.Format("https://www.edsm.net/show-system/index/id/{0}/name/{1}", _linkSystem.id_edsm, Uri.EscapeDataString(_linkSystem.name));
                 System.Diagnostics.Process.Start(url);
+            }
+        }
+
+        private void btnFindSystem_Click(object sender, EventArgs e)
+        {
+            string name = tbManualSystemName.Text.ToLower();
+            List<SystemClass> systems = SystemClass.GetSystemsByName(name);
+
+            if (systems.Count != 0)
+            {
+                UpdateLinkedSystemList(systems[0], systems.ToList<ISystem>());
             }
         }
     }
