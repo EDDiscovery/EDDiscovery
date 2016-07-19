@@ -254,7 +254,7 @@ namespace EDDiscovery
             textBoxState.Text = EnumStringFormat(syspos.curSystem.state.ToString());
             richTextBoxNote.Text = EnumStringFormat(SystemNoteClass.GetSystemNoteOrEmpty(syspos.Name));
 
-            closestsystem_queue.Add(syspos.Name);
+            closestsystem_queue.Add(syspos);
         }
 
         private string EnumStringFormat(string str)
@@ -277,43 +277,38 @@ namespace EDDiscovery
         }
 
         Thread closestthread;
-        BlockingCollection<string> closestsystem_queue = new BlockingCollection<string>();
-        SortedList<double, string> closestsystemlist = new SortedList<double, string>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
+        BlockingCollection<VisitedSystemsClass> closestsystem_queue = new BlockingCollection<VisitedSystemsClass>();
+        SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
 
         private void CalculateClosestSystems()
         {
-            string closestname;
+            VisitedSystemsClass vsc;
 
             while ( true )
             {
-                closestname = closestsystem_queue.Take();           // block until got one..
+                VisitedSystemsClass nextsys = null;
+                VisitedSystemsClass cursys = null;
+                cursys = closestsystem_queue.Take();           // block until got one..
 
-                string namecalc="!";                    // need to keep the name as TryTake empties the string
                 closestsystemlist.Clear();
 
                 do
                 {
-                    string nextname;
-                    while (closestsystem_queue.TryTake(out nextname))    // try and empty the queue in case multiple ones are there
+                    vsc = cursys;
+
+                    while (closestsystem_queue.TryTake(out nextsys))    // try and empty the queue in case multiple ones are there
                     {
                         //Console.WriteLine("Chuck " + closestname);
-                        closestname = nextname;
+                        vsc = nextsys;
                     }
 
-                    SystemClass lastSystem = SystemClass.GetSystem(closestname);
+                    ISystem lastSystem = vsc.curSystem;
 
                     double x, y, z;
 
                     if (lastSystem == null)
                     {
-                        VisitedSystemsClass vsc = null;
-
-                        Invoke((MethodInvoker)delegate      // being paranoid about threads..
-                        {
-                            vsc = visitedSystems.Find(q => q.Name.Equals(closestname));
-                        });
-
-                        if (vsc == null || !vsc.HasTravelCoordinates) // if not found, or no co-ord
+                        if (!vsc.HasTravelCoordinates) // if not found, or no co-ord
                             break;
 
                         x = vsc.X;
@@ -327,17 +322,15 @@ namespace EDDiscovery
                         z = lastSystem.z;
                     }
 
-
-                    SystemClass.GetSystemSqDistancesFrom(closestsystemlist, x, y, z, 50, true);
+                    SystemClass.GetSystemSqDistancesFrom(closestsystemlist, x, y, z, 50, true, 1000);
 
                     Invoke((MethodInvoker)delegate      // being paranoid about threads..
                     {
                         VisitedSystemsClass.CalculateSqDistances(visitedSystems, closestsystemlist, x, y, z, 50, true);
                     });
 
-                    namecalc = closestname;
-
-                } while (closestsystem_queue.TryTake(out closestname));     // if there is another one there, just re-run (slow down doggy!)
+                    cursys = vsc;
+                } while (closestsystem_queue.TryTake(out vsc));     // if there is another one there, just re-run (slow down doggy!)
 
                 Invoke((MethodInvoker)delegate
                 {
@@ -346,11 +339,12 @@ namespace EDDiscovery
 
                     if (closestsystemlist.Count() > 0)
                     {
-                        labelclosests.Text = "Closest systems from " + namecalc;
-                        foreach (KeyValuePair<double, string> tvp in closestsystemlist)
+                        labelclosests.Text = "Closest systems from " + cursys.Name;
+                        foreach (KeyValuePair<double, ISystem> tvp in closestsystemlist)
                         {
-                            object[] rowobj = { tvp.Value, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
-                            dataGridViewNearest.Rows.Add(rowobj);
+                            object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
+                            int rowindex = dataGridViewNearest.Rows.Add(rowobj);
+                            dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
                         }
                     }
                 });
@@ -1179,8 +1173,6 @@ namespace EDDiscovery
 
         }
 
-        #endregion
-
         private void selectCorrectSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (Forms.AssignTravelLogSystemForm form = new Forms.AssignTravelLogSystemForm(this, rightclicksystem))
@@ -1195,5 +1187,7 @@ namespace EDDiscovery
                 }
             }
         }
+
+        #endregion
     }
 }

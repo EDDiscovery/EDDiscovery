@@ -346,13 +346,15 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static void CalculateSqDistances(List<VisitedSystemsClass> vs, SortedList<double,string> distlist , double x, double y, double z, int maxitems , bool removezerodiststar )
+        public static void CalculateSqDistances(List<VisitedSystemsClass> vs, SortedList<double,ISystem> distlist , double x, double y, double z, int maxitems , bool removezerodiststar )
         {
             double dist;
             double dx, dy, dz;
+            Dictionary<long, ISystem> systems = distlist.Values.ToDictionary(s => s.id);
+
             foreach (VisitedSystemsClass pos in vs)
             {
-                if (pos.HasTravelCoordinates && distlist.IndexOfValue(pos.Name) == -1)   // if co-ords, and not in list already..
+                if (pos.HasTravelCoordinates && (pos.curSystem == null || !systems.ContainsKey(pos.curSystem.id)))   // if co-ords, and not in list already..
                 {
                     dx = (pos.X - x);
                     dy = (pos.Y - y);
@@ -362,10 +364,10 @@ namespace EDDiscovery2.DB
                     if (dist > 0.001 || !removezerodiststar)
                     {
                         if (distlist.Count < maxitems)          // if less than max, add..
-                            distlist.Add(dist, pos.Name);
+                            distlist.Add(dist, pos.curSystem);
                         else if (dist < distlist.Last().Key)   // if last entry (which must be the biggest) is greater than dist..
                         {
-                            distlist.Add(dist, pos.Name);           // add in
+                            distlist.Add(dist, pos.curSystem);           // add in
                             distlist.RemoveAt(maxitems);        // remove last..
                         }
                     }

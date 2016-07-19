@@ -390,7 +390,7 @@ namespace EDDiscovery
                 Point3D curpos;
                 if (GetCoordsFrom(out curpos))
                 {
-                    SystemClass nearest = SystemClass.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemClass.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -500,7 +500,7 @@ namespace EDDiscovery
                 Point3D curpos;
                 if (GetCoordsTo(out curpos))
                 {
-                    SystemClass nearest = SystemClass.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemClass.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {

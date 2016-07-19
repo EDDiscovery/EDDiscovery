@@ -837,18 +837,29 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static void GetSystemSqDistancesFrom(SortedList<double, string> distlist, double x, double y, double z, int maxitems, bool removezerodiststar)
+        public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar, double maxdist = 200)
         {
             try
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select name,x,y,z from Systems Order By (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) Limit @max"))
+                    using (DbCommand cmd = cn.CreateCommand(
+                        "SELECT * " +
+                        "FROM Systems " +
+                        "WHERE x >= @xv - @maxdist " +
+                        "AND x <= @xv + @maxdist " +
+                        "AND y >= @yv - @maxdist " +
+                        "AND y <= @yv + @maxdist " +
+                        "AND z >= @zv - @maxdist " +
+                        "AND z <= @zv + @maxdist " +
+                        "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
+                        "LIMIT @max"))
                     {
                         cmd.AddParameterWithValue("xv", x);
                         cmd.AddParameterWithValue("yv", y);
                         cmd.AddParameterWithValue("zv", z);
                         cmd.AddParameterWithValue("max", maxitems+1);     // 1 more, because if we are on a star, that will be returned
+                        cmd.AddParameterWithValue("maxdist", maxdist);
 
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
@@ -864,7 +875,7 @@ namespace EDDiscovery.DB
 
                                     double dist = dx * dx + dy * dy + dz * dz;
                                     if (dist > 0.001 || !removezerodiststar)
-                                        distlist.Add(dist, name);
+                                        distlist.Add(dist, new SystemClass(reader));
                                 }
                             }
                         }
@@ -878,11 +889,11 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static SystemClass FindNearestSystem(double x, double y, double z, bool removezerodiststar = false)
+        public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000)
         {
-            SortedList<double, string> distlist = new SortedList<double, string>();
-            GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar);
-            return (distlist.Count > 0) ? GetSystem(distlist.First().Value) : null;
+            SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
+            GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar, maxdist);
+            return distlist.Select(v => v.Value).FirstOrDefault();
         }
 
         public const int metric_nearestwaypoint = 0;     // easiest way to synchronise metric selection..
