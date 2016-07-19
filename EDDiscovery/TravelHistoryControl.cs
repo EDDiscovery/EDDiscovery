@@ -180,6 +180,11 @@ namespace EDDiscovery
             object[] rowobj = { item.Time, item.Name, item.strDistance, SystemNoteClass.GetSystemNoteOrEmpty(item.curSystem.name), "█" };
             int rownr;
 
+            if (item.curSystem != null && item.curSystem.name.ToLower() != item.Name.ToLower())
+            {
+                rowobj[1] = $"{item.curSystem.name} ({item.Name})";
+            }
+
             if (insert)
             {
                 dataGridViewTravel.Rows.Insert(0, rowobj);
