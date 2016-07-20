@@ -298,16 +298,22 @@ namespace EDDiscovery
             {
                 closestname = closestsystem_queue.Take();           // block until got one..
 
-                string namecalc="!";                    // need to keep the name as TryTake empties the string
+                string namecalc ="!";                    // need to keep the name as TryTake empties the string
                 closestsystemlist.Clear();
 
                 do
                 {
+                    if (closestname == "!!!!!!CLOSE!!!!!")
+                        return;
+
                     string nextname;
                     while (closestsystem_queue.TryTake(out nextname))    // try and empty the queue in case multiple ones are there
                     {
                         //Console.WriteLine("Chuck " + closestname);
                         closestname = nextname;
+
+                        if (closestname == "!!!!!!CLOSE!!!!!")
+                            return;
                     }
 
                     SystemClass lastSystem = SystemClass.GetSystem(closestname);
@@ -367,6 +373,14 @@ namespace EDDiscovery
             }
         }
 
+        public void CloseClosestSystemThread()
+        {
+            if (closestthread != null && closestthread.IsAlive)
+            {
+                closestsystem_queue.Add("!!!!!!CLOSE!!!!!");
+                closestthread.Join();
+            }
+        }
 
         public VisitedSystemsClass CurrentSystemSelected
         {

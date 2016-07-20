@@ -171,76 +171,13 @@ namespace EDDiscovery
             }
         }
 
+        Thread checkSystemsThread;          // globals so we know if they are active..
+        Thread fullSyncThread;              // full sync is launched by check systems as it ends..
 
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            try
-            {
-                CommanderName = EDDConfig.CurrentCommander.Name;
-
-                var edsmThread = new Thread(CheckSystems) { Name = "Check Systems", IsBackground = true };
-                var downloadmapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files", IsBackground = true };
-                edsmThread.Start();
-                downloadmapsThread.Start();
-
-                while (edsmThread.IsAlive || downloadmapsThread.IsAlive)
-                {
-                    Thread.Sleep(50);
-                    Application.DoEvents();
-                }
-
-                edsmThread.Join();
-                downloadmapsThread.Join();
-
-                SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
-                Console.WriteLine("Systems Loaded");
-
-                routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
-                routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
-                settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
-
-                imageHandler1.StartWatcher();
-                routeControl1.EnableRouteTab(); // now we have systems, we can update this..
-
-                routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(routeControl1.NewPosition);
-                travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
-                travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
-
-                //long tickc = Environment.TickCount;
-                LogLine("Reading travel history");
-                travelHistoryControl1.RefreshHistory();
-                //LogLine("Time " + (Environment.TickCount-tickc) );
-
-                travelHistoryControl1.netlog.StartMonitor(this);
-
-                if (EliteDangerous.CheckStationLogging())
-                {
-                    panelInfo.Visible = false;
-                }
-
-                CheckForNewInstaller();
-
-                long totalsystems = SystemClass.GetTotalSystems();
-                LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
-
-                AsyncPerformSync();                              // perform any async synchronisations
-
-                if ( performeddbsync || performedsmsync )
-                {
-                    string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
-
-                    MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
-                                    "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.",
-                                    "WARNING - Synchronisation to " + databases);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show("EDDiscovery_Load exception: " + ex.Message);
-                System.Windows.Forms.MessageBox.Show("Trace: " + ex.StackTrace);
-            }
+            checkSystemsThread = new Thread(CheckSystems) { Name = "Check Systems", IsBackground = true };
+            checkSystemsThread.Start();
         }
 
         private void CheckForNewInstaller()
@@ -335,13 +272,6 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Activated(object sender, EventArgs e)
         {
-            /* TODO: Add setting to determine -which- field should be focussed */
-            /* DISABLED FOR NOW
-            if (tabControl1.SelectedTab == tabPageTravelHistory)
-            {
-                travelHistoryControl1.textBoxDistanceToNextSystem.Focus();
-            }
-            */
         }
 
         public void ApplyTheme(bool refreshhistory)
@@ -465,6 +395,12 @@ namespace EDDiscovery
         {
             try
             {
+                CommanderName = EDDConfig.CurrentCommander.Name;
+
+                Thread downloadMapsThread;
+                downloadMapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files", IsBackground = true };
+                downloadMapsThread.Start();
+
                 EDSMClass edsm = new EDSMClass();
                 string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
                 DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
@@ -490,35 +426,84 @@ namespace EDDiscovery
                         LogLine("EDSM updated " + updates + " systems.");
                     }
                 }
+
+                SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
+                BookmarkClass.GetAllBookmarks();
+                galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
+
+                LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
+
+                string timestr = SQLiteDBClass.GetSettingString("EDDBSystemsTime", "0");
+                DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
+                    performeddbsync = true;
+
+                string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
+                if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
+                    performedsmdistsync = true;
+
+                downloadMapsThread.Join();
+
+                SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
+
+                Console.WriteLine("Systems Loaded");
+
+                Invoke((MethodInvoker)delegate
+                {
+                    routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
+                    routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
+                    settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
+
+                    imageHandler1.StartWatcher();
+                    routeControl1.EnableRouteTab(); // now we have systems, we can update this..
+
+                    routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+                    travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(routeControl1.NewPosition);
+                    travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
+                    travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
+
+                    //long tickc = Environment.TickCount;
+                    LogLine("Reading travel history");
+                    travelHistoryControl1.RefreshHistory();
+                    //LogLine("Time " + (Environment.TickCount-tickc) );
+
+                    travelHistoryControl1.netlog.StartMonitor(this);
+
+                    if (EliteDangerous.CheckStationLogging())
+                    {
+                        panelInfo.Visible = false;
+                    }
+
+                    CheckForNewInstaller();
+                });
+
+                long totalsystems = SystemClass.GetTotalSystems();
+                LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+
+                AsyncPerformSync();                              // perform any async synchronisations
+
+                if (performeddbsync || performedsmsync)
+                {
+                    string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
+
+                    MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
+                                    "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
+                                    "Please continue running ED Discovery until refresh is complete.",
+                                    "WARNING - Synchronisation to " + databases);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("GetEDSMSystems exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
+                System.Windows.Forms.MessageBox.Show("Check Systems exception: " + ex.Message);
+                System.Windows.Forms.MessageBox.Show("Trace: " + ex.StackTrace);
             }
-
-            SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
-            BookmarkClass.GetAllBookmarks();
-            galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
-
-            LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
-            
-            string timestr = SQLiteDBClass.GetSettingString("EDDBSystemsTime", "0");
-            DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
-            if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
-                performeddbsync = true;
-
-            string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
-            DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
-            if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
-                performedsmdistsync = true;
-
-            GC.Collect();
         }
 
         private void AsyncPerformSync()
         {
-            var EDSMThread = new Thread(PerformSync) { Name = "Downloading EDSM system", IsBackground = true };
-            EDSMThread.Start();
+            fullSyncThread = new Thread(PerformSync) { Name = "Downloading EDSM system", IsBackground = true };
+            fullSyncThread.Start();
         }
 
         private void PerformSync()           // big check.. done in a thread.
@@ -540,6 +525,9 @@ namespace EDDiscovery
 
                     string strhiddensystems = edsm.GetHiddenSystems();
 
+                    if (PendingClose)
+                        return;
+
                     if (strhiddensystems != null && strhiddensystems.Length >= 6)
                         SystemClass.RemoveHiddenSystems(strhiddensystems);
 
@@ -548,6 +536,9 @@ namespace EDDiscovery
                     bool newfile = false;
                     string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
                     EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
+
+                    if (PendingClose)
+                        return;
 
                     long updates = 0;
 
@@ -588,6 +579,9 @@ namespace EDDiscovery
 
                     if (eddb.GetSystems())
                     {
+                        if (PendingClose)
+                            return;
+
                         LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
 
                         long number = SystemClass.ParseEDDBUpdateSystems(eddb.SystemFileName);
@@ -620,6 +614,9 @@ namespace EDDiscovery
                         LogLine("Downloading full EDSM distance data.");
                         string filename = edsm.GetEDSMDistances();
 
+                        if (PendingClose)
+                            return;
+
                         if (filename != null)
                         {
                             LogLine("Updating all distances with EDSM distance data.");
@@ -629,6 +626,9 @@ namespace EDDiscovery
                             LogLine("Local database updated with EDSM Distance data, " + numberx + " distances updated.");
                         }
                     }
+
+                    if (PendingClose)
+                        return;
 
                     LogLine("Updating distances with latest EDSM data.");
 
@@ -780,19 +780,78 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
         }
 
+        Thread safeClose;
+        System.Windows.Forms.Timer closeTimer;
+
+        public bool PendingClose { get { return safeClose != null; }  }           // we want to close boys!
+
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            travelHistoryControl1.netlog.StopMonitor();
-            if (travelHistoryControl1.sync != null)
+            if (safeClose == null)                  // so a close is a request now, and it launches a thread which cleans up the system..
             {
-                travelHistoryControl1.sync.StopSync();
+                e.Cancel = true;
+                labelPanelText.Text = "Closing, please wait!";
+                panelInfo.Visible = true;
+                LogLineHighlight("Closing down, please wait..");
+                Console.WriteLine("Close.. safe close launched");
+                safeClose = new Thread(SafeClose) { Name = "Close Down", IsBackground = true };
+                safeClose.Start();
             }
-            SaveSettings();
+            else if (safeClose.IsAlive)   // still working, cancel again..
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                Console.WriteLine("go for close");
+            }
         }
 
-#endregion
+        private void SafeClose()        // ASYNC thread..
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine("Waiting for check systems to close");
+            if (checkSystemsThread != null && checkSystemsThread.IsAlive)
+                checkSystemsThread.Join();         // wait..
 
-#region ButtonsAndMouse
+            Console.WriteLine("Waiting for full sync to close");
+            if (fullSyncThread != null && fullSyncThread.IsAlive)
+                fullSyncThread.Join();
+
+            Console.WriteLine("Stopping discrete threads");
+            travelHistoryControl1.netlog.StopMonitor();
+
+            if (travelHistoryControl1.sync != null)
+                travelHistoryControl1.sync.StopSync();
+
+            travelHistoryControl1.CloseClosestSystemThread();
+
+            Console.WriteLine("Go for close timer!");
+
+            Invoke((MethodInvoker)delegate          // we need this thread to die so close will work, so kick off a timer
+            {
+                closeTimer = new System.Windows.Forms.Timer();
+                closeTimer.Interval = 100;
+                closeTimer.Tick += new EventHandler(CloseItFinally);
+                closeTimer.Start();
+            });
+        }
+
+        void CloseItFinally(Object sender, EventArgs e )        
+        {
+            if (safeClose.IsAlive)      // still alive, try again
+                closeTimer.Start();
+            else
+            {
+                SaveSettings();         // do close now
+                Close();
+                Application.Exit();
+            }
+        }
+
+        #endregion
+
+        #region ButtonsAndMouse
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -876,37 +935,37 @@ namespace EDDiscovery
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (performeddbsync == false)           // meaning its not running
+            if (fullSyncThread != null && !fullSyncThread.IsAlive)      // we want it to have run, to completion, to allow another go..
             {
                 performeddbsync = true;
                 AsyncPerformSync();
             }
             else
-                MessageBox.Show("EDDB Sync is in operation, please wait");
+                MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (performedsmsync == false)      // meaning we are not running this..
+            if (fullSyncThread != null && !fullSyncThread.IsAlive)      // we want it to have run, to completion, to allow another go..
             {
                 performedsmsync = true;
                 AsyncPerformSync();
             }
             else
-                MessageBox.Show("EDSM Sync is in operation, please wait");
+                MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void synchroniseWithEDSMDistancesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!EDDConfig.UseDistances)
                 MessageBox.Show("EDSM Distances are turned off, please turn on first in settings");
-            else if (performedsmdistsync == false)
+            else if (fullSyncThread != null && !fullSyncThread.IsAlive)      // we want it to have run, to completion, to allow another go..
             {
                 performedsmdistsync = true;
                 AsyncPerformSync();
             }
             else
-                MessageBox.Show("EDSM Distances Sync is in operation, please wait");
+                MessageBox.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         public bool RequestDistanceSync()
@@ -964,7 +1023,6 @@ namespace EDDiscovery
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
-            Application.Exit();
         }
 
         private void AboutBox()
@@ -1006,7 +1064,6 @@ namespace EDDiscovery
         private void panel_close_Click(object sender, EventArgs e)
         {
             Close();
-            Application.Exit();
         }
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1043,7 +1100,7 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
     }
 }
