@@ -403,9 +403,13 @@ namespace EDDiscovery
 
         public void StopMonitor()
         {
-            Exit = true;
-            NewLogEvent.Set();
-            ThreadNetLog.Join();
+            if (ThreadNetLog != null)               // only stop if we have started ;-) Bug 20/7/2016
+            {
+                Exit = true;
+                NewLogEvent.Set();
+                ThreadNetLog.Join();
+                ThreadNetLog = null;
+            }
         }
 
         public void ReloadMonitor()

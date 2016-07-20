@@ -58,6 +58,11 @@ namespace EDDiscovery2
 
         public void SetGripperColour(Color grip)
         {
+            if (grip.GetBrightness() < 0.15)       // override if its too dark..
+                grip = Color.Orange;
+
+            labelExt_NoSystems.ForeColor = grip;
+
             panel_grip.ForeColor = grip;
             panel_grip.MouseOverColor = ButtonExt.Multiply(grip, 1.3F);
             panel_grip.MouseSelectedColor = ButtonExt.Multiply(grip, 1.5F);
@@ -82,6 +87,7 @@ namespace EDDiscovery2
                         break;
                 }
 
+                labelExt_NoSystems.Visible = (lt.Count == statictoplines);
                 ResumeLayout();
             }
             UpdateEventsOnControls(this);
@@ -89,7 +95,7 @@ namespace EDDiscovery2
 
         public void RefreshTarget(DataGridView vsc, List<VisitedSystemsClass> vscl)
         {
-            if (vsc != null && vscl != null)
+            if (vsc != null)
             {
                 SuspendLayout();
 
@@ -115,7 +121,7 @@ namespace EDDiscovery2
 
                     if (statictoplines == 0)
                     {
-                        int row = lt.Add(lab, 0);       // insert at 0
+                        int row = lt.Add(lab, 0, -1);       // insert at 0  with row id of -1
 
                         List<Font> fnt = new List<Font>();
                         List<Color> cols = new List<Color>();
@@ -137,7 +143,7 @@ namespace EDDiscovery2
                         UpdateEventsOnControls(this);
                     }
                     else
-                        lt.Refresh(lab, 0);     // just refresh data
+                        lt.Refresh(lab, -1);     // just refresh data, with a row ID of -1
                 }
                 else
                 {
@@ -148,6 +154,7 @@ namespace EDDiscovery2
                     }
                 }
 
+                labelExt_NoSystems.Visible = (lt.Count == statictoplines);
                 ResumeLayout();
             }
         }
@@ -168,6 +175,9 @@ namespace EDDiscovery2
         {
             Debug.Assert(vscrow != null && vsc != null);
 
+            if (!vscrow.Visible)            // may not be visible due to being turned off.. if so, reject.
+                return;
+
             List<string> lab = new List<string>();
 
             if (ButtonsOn)
@@ -178,9 +188,11 @@ namespace EDDiscovery2
                                                 (string)vscrow.Cells[2].Value,
                                                 (string)vscrow.Cells[3].Value });
 
+            labelExt_NoSystems.Visible = (vsc.Rows.Count == 0);
+
             if (addit)
             {
-                int row = lt.Add(lab, insertat);
+                int row = lt.Add(lab, insertat , vscrow.Index);        // row on the summary screen..  remember which row it came from
 
                 List<Font> fnt = new List<Font>();
                 List<Color> cols = new List<Color>();
@@ -196,7 +208,7 @@ namespace EDDiscovery2
                                             FontSel(vsc.Columns[2].DefaultCellStyle.Font,vsc.Font) ,
                                             FontSel(vsc.Columns[3].DefaultCellStyle.Font,vsc.Font) });
 
-                Color rowc = CSel(vsc.Rows[row].DefaultCellStyle.ForeColor, vsc.ForeColor);
+                Color rowc = CSel(vsc.Rows[vscrow.Index].DefaultCellStyle.ForeColor, vsc.ForeColor);
 
                 if (rowc.GetBrightness() < 0.15)       // override if its too dark..
                     rowc = Color.White;
@@ -204,16 +216,15 @@ namespace EDDiscovery2
                 cols.AddRange(new Color[] { rowc, rowc, rowc, rowc });
 
                 FormatRow(row, fnt, cols);
-
             }
             else
             {
-                lt.Refresh(lab, insertat + vscrow.Index);
+                lt.Refresh(lab, vscrow.Index);      // refresh this one with rowid= index
                 //                Console.WriteLine("Refresh " + vscrow.Index + " " + (string)vscrow.Cells[1].Value);
             }
         }
 
-        private void FormatRow(int row, List<Font> fnt, List<Color> cols)
+        private void FormatRow(int row, List<Font> fnt, List<Color> cols)       // row on screen..
         {
             List<int> tabsadj = new List<int>();
             for (int i = 0; i < tabstops.Count; i++)
@@ -367,9 +378,11 @@ namespace EDDiscovery2
         List<ControlRowEntry> entries = new List<ControlRowEntry>();
         Control parent;
 
-        int maxvertical;
-        int toppos;
-        int vspacing;
+        private int maxvertical;
+        private int toppos;
+        private int vspacing;
+
+        public int Count { get { return entries.Count; } }
 
         public ControlTable(Control p, int m , int topp , int vspace)
         {
@@ -391,7 +404,7 @@ namespace EDDiscovery2
                 entries[row].SetFormat(f, clist, tabstops);
         }
 
-        public int Add(List<string> text , int insertpos )      // return row that was added..
+        public int Add(List<string> text , int insertpos , int rowid )      // return row that was added..
         {
             if (Full)
             {
@@ -405,12 +418,12 @@ namespace EDDiscovery2
             if (insertpos >= entries.Count)
             {
                 insertpos = entries.Count;
-                entries.Add(new ControlRowEntry(text, toppos + insertpos*vspacing, vspacing, parent));
+                entries.Add(new ControlRowEntry(rowid, text, toppos + insertpos*vspacing, vspacing, parent));
                 return insertpos;
             }
             else
             {
-                entries.Insert(insertpos, new ControlRowEntry(text, toppos + insertpos*vspacing, vspacing, parent));
+                entries.Insert(insertpos, new ControlRowEntry(rowid, text, toppos + insertpos*vspacing, vspacing, parent));
                 return insertpos;
             }
         }
@@ -423,11 +436,15 @@ namespace EDDiscovery2
             entries.RemoveAt(pos);
         }
 
-        public void Refresh(List<string> text , int index )
+        public void Refresh(List<string> text , int rowid )
         {
-            if ( index < entries.Count )
+            foreach( ControlRowEntry cre in entries )
             {
-                entries[index].Refresh(text);
+                if ( cre.RowId == rowid )
+                {
+                    cre.Refresh(text);
+                    break;
+                }
             }
         }
 
@@ -447,9 +464,11 @@ namespace EDDiscovery2
     {
         private List<Control> items;
         private Control parent;
+        public int RowId { get; }      // row id of creator..
 
-        public ControlRowEntry(List<string> text, int vpos, int vsize , Control p )
+        public ControlRowEntry(int id , List<string> text, int vpos, int vsize , Control p )
         {
+            RowId = id;
             parent = p;
 
             items = new List<Control>();
