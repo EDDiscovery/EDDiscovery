@@ -51,9 +51,9 @@ namespace EDDiscovery2
             this.TransparencyKey = transparentkey;
 
             if ( buttons )
-                tabstops.AddRange(new int[] { 4, 50 , 100, 250, 300, 600 });    // button, time, sys, dist, note, end
+                tabstops.AddRange(new int[] { 4, 50 , 100, 250, 310, 600 });    // button, time, sys, dist, note, end
             else
-                tabstops.AddRange(new int[] { 4, 54, 204, 254, 600 });  // time, sys, dist, note, end
+                tabstops.AddRange(new int[] { 4, 54, 204, 264, 600 });  // time, sys, dist, note, end
         }
 
         public void SetGripperColour(Color grip)
@@ -108,10 +108,8 @@ namespace EDDiscovery2
                     List<string> lab = new List<string>();
 
                     if (ButtonsOn)
-                    {
-                        lab.Add("-");
-                    }
-
+                        lab.Add("");
+              
                     SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(vscl);
 
                     if (cs != null)
@@ -310,8 +308,6 @@ namespace EDDiscovery2
             panel_grip.Visible = false;
             autofade.Stop();
             this.BackColor = transparentkey;
-            this.TransparencyKey = transparentkey;
-            this.Opacity = 1;
         }
 
         private void panel_grip_MouseDown(object sender, MouseEventArgs e)
@@ -337,10 +333,7 @@ namespace EDDiscovery2
         {
             autofade.Stop();
             panel_grip.Visible = true;
-            this.BackColor = Color.FromArgb(255, 10, 10, 10);
-            this.TransparencyKey = Color.Transparent;
-            this.Opacity = 0.75;
-
+            this.BackColor = Color.FromArgb(255, 40, 40, 40);
             //Console.WriteLine(Environment.TickCount + " enter" + sender.ToString());
         }
 
@@ -351,11 +344,6 @@ namespace EDDiscovery2
                 //Console.WriteLine(Environment.TickCount + " leave " + sender.ToString());
                 autofade.Start();
             }
-            else
-            {
-             //   Console.WriteLine(Environment.TickCount + " rejected leave " + sender.ToString());
-            }
-
         }
 
         public void EDSM_Click(object sender, EventArgs e)
@@ -510,6 +498,17 @@ namespace EDDiscovery2
             {
                 items[i].Font = fnt[i];
                 items[i].ForeColor = cl[i];
+
+                if (items[i] is ExtendedControls.DrawnPanel)
+                {
+                    ExtendedControls.DrawnPanel dp = items[i] as ExtendedControls.DrawnPanel;
+                    dp.MouseOverColor = ButtonExt.Multiply(cl[i], 1.3F);
+                    dp.MouseSelectedColor = ButtonExt.Multiply(cl[i], 1.5F);
+                    dp.BackColor = Color.Black;
+                }
+                else
+                    items[i].BackColor = Color.Transparent;
+
                 items[i].Location = new Point(tabstops[i], items[i].Location.Y);
                 items[i].Size = new Size(tabstops[i+1] - tabstops[i] - 4, items[i].Size.Height);
                 items[i].Show();

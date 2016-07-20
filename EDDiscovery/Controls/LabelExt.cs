@@ -23,6 +23,14 @@ namespace ExtendedControls
                 {
                     Graphics mpg = Graphics.FromImage(mp);
 
+                    if (this.BackColor != Color.Transparent)
+                    {
+                        using (Brush b = new SolidBrush(this.BackColor))
+                        {
+                            mpg.FillRectangle(b, new Rectangle(0, 0, (int)sz.Width, (int)sz.Height));
+                        }
+                    }
+
                     mpg.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
                     using (Brush b = new SolidBrush(this.ForeColor))
