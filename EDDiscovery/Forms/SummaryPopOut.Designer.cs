@@ -54,7 +54,7 @@
             this.labelExt_NoSystems.AutoSize = true;
             this.labelExt_NoSystems.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelExt_NoSystems.ForeColor = System.Drawing.Color.White;
-            this.labelExt_NoSystems.Location = new System.Drawing.Point(54, 30);
+            this.labelExt_NoSystems.Location = new System.Drawing.Point(48, 30);
             this.labelExt_NoSystems.Name = "labelExt_NoSystems";
             this.labelExt_NoSystems.Size = new System.Drawing.Size(153, 20);
             this.labelExt_NoSystems.TabIndex = 18;
