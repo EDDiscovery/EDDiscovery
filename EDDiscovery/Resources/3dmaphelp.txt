@@ -28,6 +28,9 @@ Toolbar (from left):
 	>	Go to next travelled system
 	Marker	Go to latest travelled system
 	>A	Turn on/off Automatically jump to current system when travelling
+	Home	Center on home system
+	!	Center on selected system in the travel history
+	Target	Center on selected target system
 
 	Lines	Turn on/off lines between travelled systems
 	Star	Select what stars to display
@@ -47,8 +50,6 @@ Toolbar (from left):
 	
 	Star Entry	Entry box to find specific star (hit return to center)
 	Centre	Alternatively, hit this to center what is in the star entry box
-	Home	Center on home system
-	!	Center on selected system in the travel history
 	Yellow Dot	Show current centered system 
 	Orange Dot	Show selected system (by left mouse click).  
 		Double click to make it centered system. 

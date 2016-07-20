@@ -914,11 +914,14 @@ namespace EDDiscovery
                 SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(visitedSystems);
                 if ( cs != null )
                     textBoxTargetDist.Text = SystemClass.Distance(cs, x, y, z).ToString("0.00");
+
+                toolTipEddb.SetToolTip(textBoxTarget, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
             }
             else
             {
                 textBoxTarget.Text = "Set target by 3D map";
                 textBoxTargetDist.Text = "";
+                toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target");
             }
 
             if (summaryPopOut != null)

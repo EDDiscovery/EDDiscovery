@@ -67,6 +67,7 @@ namespace EDDiscovery2
         private Vector3 _cameraActionRotation = Vector3.Zero;
         private float _cameraFov = (float)(Math.PI / 2.0f);
         private float _cameraSlewProgress = 1.0f;
+        private Vector3 _cameraSlewPosition;
 
         private KeyboardActions _kbdActions = new KeyboardActions();
         private long _oldTickCount = DateTime.Now.Ticks / 10000;
@@ -968,7 +969,7 @@ namespace EDDiscovery2
                 GenerateDataSetsSelectedSystems();
 
                 if (moveto)
-                    StartCameraSlew();
+                    StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z));
 
                 glControl.Invalidate();
 
@@ -1391,8 +1392,9 @@ namespace EDDiscovery2
             UpdateDataSetsDueToZoom();
         }
 
-        private void StartCameraSlew()
+        private void StartCameraSlew(Vector3 pos)
         {
+            _cameraSlewPosition = pos;
             _oldTickCount = Environment.TickCount;
             _ticks = 0;
             _cameraSlewProgress = 0.0f;
@@ -1409,10 +1411,11 @@ namespace EDDiscovery2
             {
                 _cameraActionMovement = Vector3.Zero;
                 var newprogress = _cameraSlewProgress + _ticks / (CameraSlewTime * 1000);
-                var totvector = new Vector3((float)(_centerSystem.x - _cameraPos.X), (float)(-_centerSystem.y - _cameraPos.Y), (float)(_centerSystem.z - _cameraPos.Z));
+                var totvector = new Vector3((float)(_cameraSlewPosition.X - _cameraPos.X), (float)(-_cameraSlewPosition.Y - _cameraPos.Y), (float)(_cameraSlewPosition.Z - _cameraPos.Z));
+
                 if (newprogress >= 1.0f)
                 {
-                    _cameraPos = new Vector3((float)_centerSystem.x, (float)(-_centerSystem.y), (float)_centerSystem.z);
+                    _cameraPos = new Vector3(_cameraSlewPosition.X,-_cameraSlewPosition.Y, _cameraSlewPosition.Z);
                 }
                 else
                 {
@@ -1575,6 +1578,34 @@ namespace EDDiscovery2
                 MessageBox.Show("No travel history is available");
         }
 
+        private void buttonHome_Click(object sender, EventArgs e)
+        {
+            SetCenterSystemTo(_homeSystem, true);
+        }
+
+        private void buttonHistory_Click(object sender, EventArgs e)
+        {
+            if (_historySelection == null)
+                MessageBox.Show("No travel history is available");
+            else
+                SetCenterSystemTo(_historySelection, true);
+        }
+
+        private void toolStripButtonTarget_Click(object sender, EventArgs e)
+        {
+            string name;
+            double x, y, z;
+
+            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            {
+                StartCameraSlew(new Vector3((float)x, (float)y, (float)z));
+            }
+            else
+            {
+                MessageBox.Show("No target designated, create a bookmark or region mark, or use a Note mark, right click on it and set it as the target");
+            }
+        }
+        
         private void toolStripButtonGoForward_Click(object sender, EventArgs e)
         {
             if (_visitedSystems != null)
@@ -1695,19 +1726,6 @@ namespace EDDiscovery2
             }
         }
         
-        private void buttonHome_Click(object sender, EventArgs e)
-        {
-            SetCenterSystemTo(_homeSystem,true);
-        }
-
-        private void buttonHistory_Click(object sender, EventArgs e)
-        {
-            if (_historySelection == null)
-                MessageBox.Show("No travel history is available");
-            else
-                SetCenterSystemTo(_historySelection,true);
-        }
-
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
