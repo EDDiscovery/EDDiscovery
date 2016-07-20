@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SummaryPopOut));
             this.panel_grip = new ExtendedControls.DrawnPanel();
+            this.labelExt_NoSystems = new ExtendedControls.LabelExt();
             this.SuspendLayout();
             // 
             // panel_grip
@@ -48,12 +49,24 @@
             this.panel_grip.TabIndex = 17;
             this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
             // 
+            // labelExt_NoSystems
+            // 
+            this.labelExt_NoSystems.AutoSize = true;
+            this.labelExt_NoSystems.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelExt_NoSystems.ForeColor = System.Drawing.Color.White;
+            this.labelExt_NoSystems.Location = new System.Drawing.Point(54, 30);
+            this.labelExt_NoSystems.Name = "labelExt_NoSystems";
+            this.labelExt_NoSystems.Size = new System.Drawing.Size(153, 20);
+            this.labelExt_NoSystems.TabIndex = 18;
+            this.labelExt_NoSystems.Text = "No Systems to show";
+            // 
             // SummaryPopOut
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(600, 268);
+            this.Controls.Add(this.labelExt_NoSystems);
             this.Controls.Add(this.panel_grip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -64,10 +77,12 @@
             this.Load += new System.EventHandler(this.SummaryPopOut_Load);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.SummaryPopOut_Layout);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
         private ExtendedControls.DrawnPanel panel_grip;
+        private ExtendedControls.LabelExt labelExt_NoSystems;
     }
 }
