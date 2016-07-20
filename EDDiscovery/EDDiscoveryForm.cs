@@ -445,52 +445,58 @@ namespace EDDiscovery
 
                 downloadMapsThread.Join();
 
-                SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
-
-                Console.WriteLine("Systems Loaded");
-
-                Invoke((MethodInvoker)delegate
+                if (!PendingClose)
                 {
-                    routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
-                    routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
-                    settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
+                    SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
 
-                    imageHandler1.StartWatcher();
-                    routeControl1.EnableRouteTab(); // now we have systems, we can update this..
+                    Console.WriteLine("Systems Loaded");
 
-                    routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                    travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(routeControl1.NewPosition);
-                    travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
-                    travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
-
-                    //long tickc = Environment.TickCount;
-                    LogLine("Reading travel history");
-                    travelHistoryControl1.RefreshHistory();
-                    //LogLine("Time " + (Environment.TickCount-tickc) );
-
-                    travelHistoryControl1.netlog.StartMonitor(this);
-
-                    if (EliteDangerous.CheckStationLogging())
+                    Invoke((MethodInvoker)delegate
                     {
-                        panelInfo.Visible = false;
+                        routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
+                        routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
+                        settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
+
+                        imageHandler1.StartWatcher();
+                        routeControl1.EnableRouteTab(); // now we have systems, we can update this..
+
+                        routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+                        travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(routeControl1.NewPosition);
+                        travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
+                        travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
+
+                        //long tickc = Environment.TickCount;
+                        LogLine("Reading travel history");
+                        travelHistoryControl1.RefreshHistory();
+                        //LogLine("Time " + (Environment.TickCount-tickc) );
+
+                        travelHistoryControl1.netlog.StartMonitor(this);
+
+                        if (EliteDangerous.CheckStationLogging())
+                        {
+                            panelInfo.Visible = false;
+                        }
+
+                        CheckForNewInstaller();
+                    });
+
+                    if (!PendingClose)
+                    {
+                        long totalsystems = SystemClass.GetTotalSystems();
+                        LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+
+                        AsyncPerformSync();                              // perform any async synchronisations
+
+                        if (performeddbsync || performedsmsync)
+                        {
+                            string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
+
+                            MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
+                                            "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
+                                            "Please continue running ED Discovery until refresh is complete.",
+                                            "WARNING - Synchronisation to " + databases);
+                        }
                     }
-
-                    CheckForNewInstaller();
-                });
-
-                long totalsystems = SystemClass.GetTotalSystems();
-                LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
-
-                AsyncPerformSync();                              // perform any async synchronisations
-
-                if (performeddbsync || performedsmsync)
-                {
-                    string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
-
-                    MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
-                                    "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.",
-                                    "WARNING - Synchronisation to " + databases);
                 }
             }
             catch (Exception ex)
