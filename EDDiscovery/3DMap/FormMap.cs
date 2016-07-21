@@ -284,6 +284,16 @@ namespace EDDiscovery2
             }
         }
 
+        public void UpdateBookmarks()
+        {
+            if (_starnames != null)         // if null, we are not up and running
+            {
+                GenerateDataSetsBookmarks();
+                GenerateDataSetsNotedSystems();
+                glControl.Invalidate();
+            }
+        }
+
         private void FormMap_Load(object sender, EventArgs e)
         {
             var top = SQLiteDBClass.GetSettingInt("Map3DFormTop", -1);
@@ -641,7 +651,6 @@ namespace EDDiscovery2
 
                 builder.Build();
                 _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
-
                 builder = null;
             }
         }
@@ -1258,18 +1267,6 @@ namespace EDDiscovery2
             foreach (var dataset in _datasets_visitedsystems)
                 dataset.DrawAll(glControl);
 
-            if (_datasets_notedsystems != null)
-            {
-                foreach (var dataset in _datasets_notedsystems)                     // needs to be in order of background to foreground objects
-                    dataset.DrawAll(glControl);
-            }
-
-            if (_datasets_bookedmarkedsystems != null)
-            {
-                foreach (var dataset in _datasets_bookedmarkedsystems)                     // needs to be in order of background to foreground objects
-                    dataset.DrawAll(glControl);
-            }
-
             if (_starnames != null)
             {
                 foreach (var sys in _starnames)
@@ -1311,6 +1308,18 @@ namespace EDDiscovery2
 
             foreach (var dataset in _datasets_selectedsystems)
                 dataset.DrawAll(glControl);
+
+            if (_datasets_notedsystems != null)
+            {
+                foreach (var dataset in _datasets_notedsystems)                     // needs to be in order of background to foreground objects
+                    dataset.DrawAll(glControl);
+            }
+
+            if (_datasets_bookedmarkedsystems != null)
+            {
+                foreach (var dataset in _datasets_bookedmarkedsystems)                     // needs to be in order of background to foreground objects
+                    dataset.DrawAll(glControl);
+            }
 
         }
 
@@ -2279,7 +2288,7 @@ namespace EDDiscovery2
             return false;
         }
 
-        private double GetBookmarkSize() { return Math.Min(Math.Max(20, 100.0 / _zoom), 500); }
+        private double GetBookmarkSize() { return Math.Min(Math.Max(2, 100.0 / _zoom), 1000); }
 
         Matrix4d GetBookMarkOutline(double x, double y, double z , double bksize)
         {

@@ -457,6 +457,7 @@ namespace EDDiscovery
                     {
                         routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                         routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
+                        travelHistoryControl1.textBoxTarget.AutoCompleteCustomSource = SystemNames;
                         settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
 
                         imageHandler1.StartWatcher();
