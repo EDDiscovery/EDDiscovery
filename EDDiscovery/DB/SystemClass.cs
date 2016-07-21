@@ -1122,6 +1122,8 @@ namespace EDDiscovery.DB
                         SystemClass edsmidmatch = null;
                         bool multimatch = false;
                         Dictionary<long, SystemClass> matches;
+                        bool hastravcoords = vsc.HasTravelCoordinates &&
+                            (vsc.Name.ToLower() == "sol" || vsc.X != 0 || vsc.Y != 0 || vsc.Z != 0);
 
                         if (systemsByVscId.ContainsKey(vsc.id))
                         {
@@ -1143,7 +1145,7 @@ namespace EDDiscovery.DB
                             }
                         }
 
-                        if (vsc.HasTravelCoordinates)
+                        if (hastravcoords)
                         {
                             posmatches = matches.Values.Where(s => s.x >= vsc.X - 0.125 && s.x <= vsc.X + 0.125 && s.y >= vsc.X - 0.125 && s.y <= vsc.Y + 0.125 && s.z >= vsc.Z - 0.125 && s.z <= vsc.Z + 0.125).ToList();
                             if (posmatches.Count >= 1)
@@ -1182,17 +1184,17 @@ namespace EDDiscovery.DB
                             SystemClass sys = edsmidmatch;
                             vsc.curSystem = sys;
 
-                            if (sys.SearchName == vsc_searchname && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // name and position matches
+                            if (sys.SearchName == vsc_searchname && hastravcoords && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // name and position matches
                             {
                                 vsc.NameStatus = "Exact match";
                                 continue; // Continue to next system
                             }
-                            else if (sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // position matches
+                            else if (hastravcoords && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // position matches
                             {
                                 vsc.NameStatus = "Name differs";
                                 continue; // Continue to next system
                             }
-                            else if (!vsc.HasTravelCoordinates || !sys.HasCoordinate) // no coordinates available
+                            else if (!hastravcoords || !sys.HasCoordinate) // no coordinates available
                             {
                                 if (sys.SearchName == vsc_searchname) // name matches
                                 {
