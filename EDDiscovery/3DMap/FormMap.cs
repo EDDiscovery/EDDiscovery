@@ -1950,11 +1950,10 @@ namespace EDDiscovery2
                             if ((frm.IsTarget && targetid != newcls.id) || (!frm.IsTarget && targetid == newcls.id)) // changed..
                             {
                                 if (frm.IsTarget)
-                                    TargetClass.SetTargetBookmark(regionmarker ? newcls.Heading : newcls.StarName, newcls.id, newcls.x, newcls.y, newcls.z);
+                                    TargetClass.SetTargetBookmark(regionmarker ? ("RM:" + newcls.Heading) : newcls.StarName, newcls.id, newcls.x, newcls.y, newcls.z);
                                 else
                                     TargetClass.ClearTarget();
-
-
+                                
                                 GenerateDataSetsBookmarks();
                                 GenerateDataSetsNotedSystems();
                                 glControl.Invalidate();
