@@ -469,6 +469,7 @@ namespace EDDiscovery2
                     edsm.Image = DrawnPanel.ImageType.Text;
                     edsm.ImageText = "EDSM";
                     edsm.Size = new Size(100, vsize);
+                    edsm.MarginSize = -1;       // 0 is auto calc, -1 is zero
                     edsm.Location = new Point(0, vpos);
                     parent.Controls.Add(edsm);
                     items.Add(edsm);
@@ -505,12 +506,16 @@ namespace EDDiscovery2
                     dp.MouseOverColor = ButtonExt.Multiply(cl[i], 1.3F);
                     dp.MouseSelectedColor = ButtonExt.Multiply(cl[i], 1.5F);
                     dp.BackColor = Color.Black;
+                    items[i].Location = new Point(tabstops[i], items[i].Location.Y+3);
+                    items[i].Size = new Size(tabstops[i + 1] - tabstops[i] - 4, items[i].Size.Height - 6);
                 }
                 else
+                {
                     items[i].BackColor = Color.Transparent;
+                    items[i].Location = new Point(tabstops[i], items[i].Location.Y);
+                    items[i].Size = new Size(tabstops[i + 1] - tabstops[i] - 4, items[i].Size.Height - 4);
+                }
 
-                items[i].Location = new Point(tabstops[i], items[i].Location.Y);
-                items[i].Size = new Size(tabstops[i+1] - tabstops[i] - 4, items[i].Size.Height);
                 items[i].Show();
             }
         }

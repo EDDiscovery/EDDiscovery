@@ -18,7 +18,7 @@ namespace ExtendedControls
         public string ImageText { get; set; } = null;       // for Text Type
 
         public ImageType Image { get; set; } = ImageType.Close;
-        public int MarginSize { get; set; } = 4;                    // margin around icon
+        public int MarginSize { get; set; } = 4;                    // margin around icon, 0 =auto, -1 = zero
 
         #region Public Functions
         public void Captured()                                     // if doing the move capture stuff on this panel, call this
@@ -36,7 +36,7 @@ namespace ExtendedControls
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            int msize = (MarginSize > 0) ? MarginSize : ClientRectangle.Height / 6;
+            int msize = (MarginSize==-1) ? 0 : ((MarginSize > 0) ? MarginSize : ClientRectangle.Height / 6);
             Color pc = (Enabled) ? ((mousedown||mousecapture)?MouseSelectedColor: ((mouseover)?MouseOverColor : this.ForeColor)) : Multiply(this.ForeColor, 0.5F);
             //Console.WriteLine("Enabled" + Enabled + " Mouse over " + mouseover + " mouse down " + mousedown);
 
@@ -110,16 +110,14 @@ namespace ExtendedControls
                                 // given the available height, scale the font up if its bigger than the current font height.
                 using (Font fnt = new Font(this.Font.Name, (float)(this.Font.SizeInPoints*scale), this.Font.Style))
                 {
-                    Brush bbck = new SolidBrush(pc);
-                    Rectangle area = new Rectangle(leftmarginpx, topmarginpx, ClientRectangle.Width - 2 * msize, ClientRectangle.Height - 2 * msize);
-                    e.Graphics.FillRectangle(bbck, area);
-                    bbck.Dispose();
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;     //MUST turn it off to get a sharp rect
 
+                    using (Brush bbck = new SolidBrush(pc))
+                        e.Graphics.FillRectangle(bbck, new Rectangle(leftmarginpx, topmarginpx, ClientRectangle.Width - 2 * msize, ClientRectangle.Height - 2 * msize));
+
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                     using (Brush textb = new SolidBrush(this.BackColor))
-                    {
-                        Rectangle rect = ClientRectangle;
                         e.Graphics.DrawString(this.ImageText, fnt, textb, new Point(leftmarginpx, topmarginpx));
-                    }
                 }
             }
             else if (Image == ImageType.Move)
