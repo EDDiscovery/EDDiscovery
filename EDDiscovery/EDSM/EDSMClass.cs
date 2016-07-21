@@ -415,7 +415,7 @@ namespace EDDiscovery2.EDSM
 
         public bool ShowSystemInEDSM(string sysName, long? id_edsm = null)
         {
-            string url = GetUrlToEDSMSystem(sysName);
+            string url = GetUrlToEDSMSystem(sysName, id_edsm);
             if (string.IsNullOrEmpty(url))
             {
                 return false;
