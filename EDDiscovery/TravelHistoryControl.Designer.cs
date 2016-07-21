@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -561,16 +561,17 @@
             // 
             // textBoxTarget
             // 
+            this.textBoxTarget.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBoxTarget.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBoxTarget.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTarget.BorderColorScaling = 0.5F;
             this.textBoxTarget.Location = new System.Drawing.Point(47, 180);
             this.textBoxTarget.Name = "textBoxTarget";
-            this.textBoxTarget.ReadOnly = true;
             this.textBoxTarget.Size = new System.Drawing.Size(129, 20);
             this.textBoxTarget.TabIndex = 15;
             this.textBoxTarget.TabStop = false;
-            this.toolTipEddb.SetToolTip(this.textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and " +
-        "then tick on Set Target");
+            this.toolTipEddb.SetToolTip(this.textBoxTarget, "Sets the target");
+            this.textBoxTarget.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTarget_KeyUp);
             // 
             // textBoxSystem
             // 
@@ -1041,8 +1042,8 @@
             // 
             // mapColour
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle2;
             this.mapColour.HeaderText = "Map";
             this.mapColour.MinimumWidth = 40;
             this.mapColour.Name = "mapColour";
@@ -1171,7 +1172,7 @@
         private ExtendedControls.DrawnPanel buttonEDSM;
         private System.Windows.Forms.Label label3;
         private ExtendedControls.TextBoxBorder textBoxTargetDist;
-        private ExtendedControls.TextBoxBorder textBoxTarget;
+        public ExtendedControls.TextBoxBorder textBoxTarget;
         private ExtendedControls.ButtonExt buttonExtSummaryPopOut;
     }
 }

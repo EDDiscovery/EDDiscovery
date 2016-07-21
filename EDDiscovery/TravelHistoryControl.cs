@@ -899,6 +899,66 @@ namespace EDDiscovery
             return false;
         }
 
+        private void textBoxTarget_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string sn = textBoxTarget.Text;
+                SystemClass sc = SystemClass.GetSystem(sn);
+                VisitedSystemsClass vsc = visitedSystems.Find(x => x.Name.Equals(sn, StringComparison.InvariantCultureIgnoreCase));
+                string msgboxtext = null;
+
+                if ( (sc != null && sc.HasCoordinate) || ( vsc != null && vsc.HasTravelCoordinates))
+                {
+                    if (sc == null)
+                        sc = new SystemClass(vsc.Name, vsc.X, vsc.Y, vsc.Z);            // make a double for the rest of the code..
+
+                    SystemNoteClass nc = SystemNoteClass.GetSystemNoteClass(sn);        // has it got a note?
+
+                    if (nc != null)
+                    {
+                        TargetClass.SetTargetNotedSystem(sc.name, nc.id, sc.x, sc.y, sc.z);
+                        msgboxtext = "Target set on system with note " + sc.name;
+                    }
+                    else
+                    {
+                        BookmarkClass bk = BookmarkClass.FindBookmarkOnSystem(textBoxTarget.Text);    // has it been bookmarked?
+
+                        if (bk != null)
+                        {
+                            TargetClass.SetTargetBookmark(sc.name, bk.id, bk.x, bk.y, bk.z);
+                            msgboxtext = "Target set on booked marked system " + sc.name;
+                        }
+                        else
+                        {
+                            if (MessageBox.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                            {
+                                BookmarkClass newbk = new BookmarkClass();
+                                newbk.StarName = sn;
+                                newbk.x = sc.x;
+                                newbk.y = sc.y;
+                                newbk.z = sc.z;
+                                newbk.Time = DateTime.Now;
+                                newbk.Note = "";
+                                newbk.Add();
+                                TargetClass.SetTargetBookmark(sc.name, newbk.id, newbk.x, newbk.y, newbk.z);
+                            }
+                        }
+                    }
+
+                }
+                else
+                    msgboxtext = "Unknown system or system without co-ordinates";
+
+                RefreshTargetInfo();
+                if (_discoveryForm.Map != null)
+                    _discoveryForm.Map.UpdateBookmarks();
+
+                if ( msgboxtext != null)
+                    MessageBox.Show(msgboxtext,"Create a target", MessageBoxButtons.OK);
+            }
+        }
+
         #region Target System
 
         public void RefreshTargetInfo()
@@ -919,9 +979,9 @@ namespace EDDiscovery
             }
             else
             {
-                textBoxTarget.Text = "Set target by 3D map";
+                textBoxTarget.Text = "Set target";
                 textBoxTargetDist.Text = "";
-                toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target");
+                toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
             }
 
             if (summaryPopOut != null)
@@ -1293,7 +1353,6 @@ namespace EDDiscovery
         }
 
         #endregion
-
     }
 
 }

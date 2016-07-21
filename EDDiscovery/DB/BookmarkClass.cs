@@ -124,6 +124,12 @@ namespace EDDiscovery2.DB
 
         public static List<BookmarkClass> bookmarks = new List<BookmarkClass>();
 
+        public static BookmarkClass FindBookmarkOnSystem(string name)
+        {
+            BookmarkClass bk = bookmarks.Find(x => x.StarName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return bk;
+        }
+
         public static bool GetAllBookmarks()
         {
             try
