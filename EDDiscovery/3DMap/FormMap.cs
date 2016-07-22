@@ -54,7 +54,9 @@ namespace EDDiscovery2
         private SystemClassStarNames _centerSystem;
         private SystemClassStarNames _homeSystem;
 
-        private SystemClassStarNames _clickedSystem;
+        private SystemClassStarNames _clickedSystem;        // left clicked on a system/bookmark system/noted system
+        private Vector3 _clickedposition;                   // left clicked on a position
+
         private SystemClassStarNames _historySelection;
         private bool _loaded = false;
 
@@ -1848,7 +1850,7 @@ namespace EDDiscovery2
             {
                 _clickedSystem = cursystem;
 
-                if (_clickedSystem != null)
+                if (_clickedSystem != null)         // will be set for systems clicked, bookmarks or noted systems
                 {
                     labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
 
@@ -1868,6 +1870,8 @@ namespace EDDiscovery2
                     viewOnEDSMToolStripMenuItem.Enabled = true;
                     System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
                 }
+                else if (curbookmark != null)                                   // else just remember the position for later.
+                    _clickedposition = new Vector3((float)curbookmark.x, (float)curbookmark.y, (float)curbookmark.z);
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)                    // right clicks are about bookmarks.
@@ -1990,6 +1994,10 @@ namespace EDDiscovery2
             {
                 SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
                 travelHistoryControl.SetTravelHistoryPosition(_clickedSystem.name);
+            }
+            else if ( _clickedposition != null )
+            {
+                StartCameraSlew(_clickedposition);
             }
         }
 
