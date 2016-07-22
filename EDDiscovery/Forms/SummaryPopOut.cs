@@ -34,10 +34,10 @@ namespace EDDiscovery2
         private List<int> tabstops = new List<int>();
         private Font butfont = new Font("Microsoft Sans Serif", 8.25F);
         private int statictoplines = 0;
+        private bool buttons;
+        private bool noteafterxyz;
 
-        public bool ButtonsOn { get { return tabstops.Count > 5; } }
-
-        public SummaryPopOut( bool buttons)
+        public SummaryPopOut( bool b , bool n )
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             InitializeComponent();
@@ -50,10 +50,23 @@ namespace EDDiscovery2
             this.BackColor = transparentkey;
             this.TransparencyKey = transparentkey;
 
-            if ( buttons )
-                tabstops.AddRange(new int[] { 4, 50 , 100, 250, 310, 600 });    // button, time, sys, dist, note, end
+            buttons = b;
+            noteafterxyz = n;
+
+            if (buttons)
+                tabstops.AddRange(new int[] { 4, 44 });             // button, time
             else
-                tabstops.AddRange(new int[] { 4, 54, 204, 264, 600 });  // time, sys, dist, note, end
+                tabstops.AddRange(new int[] { 4 });                 // time
+
+            int lastpos = tabstops[tabstops.Count - 1];
+
+            tabstops.AddRange(new int[] { lastpos + 50, lastpos + 200 });    // dist, sys
+            lastpos = tabstops[tabstops.Count - 1];
+
+            if ( noteafterxyz )
+                tabstops.AddRange(new int[] { lastpos + 60, lastpos + 110 , lastpos+160, lastpos+210, 1000 });    // x,y,z,note,end
+            else
+                tabstops.AddRange(new int[] { lastpos + 60, lastpos + 210, lastpos+260, lastpos+310, 1000 });    // note,x,y,z,end
         }
 
         public void SetGripperColour(Color grip)
@@ -107,7 +120,7 @@ namespace EDDiscovery2
                 {
                     List<string> lab = new List<string>();
 
-                    if (ButtonsOn)
+                    if (buttons)
                         lab.Add("");
               
                     SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(vscl);
@@ -124,7 +137,7 @@ namespace EDDiscovery2
                         List<Font> fnt = new List<Font>();
                         List<Color> cols = new List<Color>();
 
-                        if (ButtonsOn)
+                        if (buttons)
                         {
                             fnt.Add(butfont);
                             cols.Add(panel_grip.ForeColor);
@@ -178,13 +191,21 @@ namespace EDDiscovery2
 
             List<string> lab = new List<string>();
 
-            if (ButtonsOn)
+            if (buttons)
                 lab.Add("!!<EDSMBUT:" + (string)vscrow.Cells[1].Value);
 
             lab.AddRange(new string[] { ((DateTime)vscrow.Cells[0].Value).ToString("HH:mm.ss") ,
                                               (string)vscrow.Cells[1].Value,
-                                                (string)vscrow.Cells[2].Value,
-                                                (string)vscrow.Cells[3].Value });
+                                                (string)vscrow.Cells[2].Value });
+
+            VisitedSystemsClass vscentry = (VisitedSystemsClass)vscrow.Cells[EDDiscovery.TravelHistoryControl.TravelHistoryColumns.SystemName].Tag;
+
+            if (!noteafterxyz)
+                lab.Add((string)vscrow.Cells[3].Value);
+            if ( vscentry!= null)       // double check
+                lab.AddRange(new string[] { vscentry.X.ToString("0.00"), vscentry.Y.ToString("0.00"), vscentry.Z.ToString("0.00") });
+            if (noteafterxyz)
+                lab.Add((string)vscrow.Cells[3].Value);
 
             labelExt_NoSystems.Visible = (vsc.Rows.Count == 0);
 
@@ -195,23 +216,26 @@ namespace EDDiscovery2
                 List<Font> fnt = new List<Font>();
                 List<Color> cols = new List<Color>();
 
-                if (ButtonsOn)
+                if (buttons)
                 {
                     fnt.Add(butfont);
                     cols.Add(panel_grip.ForeColor);
                 }
 
-                fnt.AddRange(new Font[] { FontSel(vsc.Columns[0].DefaultCellStyle.Font,vsc.Font) ,
-                                            FontSel(vsc.Columns[1].DefaultCellStyle.Font,vsc.Font) ,
-                                            FontSel(vsc.Columns[2].DefaultCellStyle.Font,vsc.Font) ,
-                                            FontSel(vsc.Columns[3].DefaultCellStyle.Font,vsc.Font) });
-
+                fnt.AddRange(new Font[] {   FontSel(vsc.Columns[0].DefaultCellStyle.Font,vsc.Font) ,        // time
+                                            FontSel(vsc.Columns[1].DefaultCellStyle.Font,vsc.Font) ,        // system
+                                            FontSel(vsc.Columns[2].DefaultCellStyle.Font,vsc.Font) ,        // dist
+                                            FontSel(vsc.Columns[ (noteafterxyz) ? 0 : 3].DefaultCellStyle.Font,vsc.Font) ,        // note or x
+                                            FontSel(vsc.Columns[0].DefaultCellStyle.Font,vsc.Font),         // xyz
+                                            FontSel(vsc.Columns[0].DefaultCellStyle.Font,vsc.Font),         // xyz
+                                            FontSel(vsc.Columns[ (noteafterxyz) ? 3 : 0].DefaultCellStyle.Font,vsc.Font) });     //z
+                
                 Color rowc = CSel(vsc.Rows[vscrow.Index].DefaultCellStyle.ForeColor, vsc.ForeColor);
 
                 if (rowc.GetBrightness() < 0.15)       // override if its too dark..
                     rowc = Color.White;
 
-                cols.AddRange(new Color[] { rowc, rowc, rowc, rowc });
+                cols.AddRange(new Color[] { rowc, rowc, rowc, rowc, rowc, rowc, rowc });
 
                 FormatRow(row, fnt, cols);
             }
