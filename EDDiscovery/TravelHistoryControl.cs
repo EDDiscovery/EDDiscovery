@@ -174,6 +174,7 @@ namespace EDDiscovery
 
             RedrawSummary();
             RefreshTargetInfo();
+            UpdateDependentsWithSelection();
         }
 
         private void GetVisitedSystems()
@@ -467,6 +468,7 @@ namespace EDDiscovery
         {
             DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
             RedrawSummary();
+            UpdateDependentsWithSelection();
         }
 
         public void buttonMap_Click(object sender, EventArgs e)
@@ -510,7 +512,7 @@ namespace EDDiscovery
                 VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag);
 
                 ShowSystemInformation(currentsys);
-                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
+                UpdateDependentsWithSelection();
 
                 if (e.ColumnIndex == TravelHistoryColumns.Note)
                 {
@@ -521,13 +523,24 @@ namespace EDDiscovery
             }
         }
 
+        private void UpdateDependentsWithSelection()
+        {
+            int rowi = dataGridViewTravel.CurrentCell.RowIndex;
+            if (rowi>=0)
+            {
+                VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[rowi].Cells[TravelHistoryColumns.SystemName].Tag);
+                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
+                _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.Name);
+            }
+        }
+
         private void dataGridViewTravel_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag);
                 ShowSystemInformation(currentsys);
-                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
+                UpdateDependentsWithSelection();
             }
         }
 
@@ -733,8 +746,9 @@ namespace EDDiscovery
             if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
             {
                 dataGridViewTravel.ClearSelection();
-                dataGridViewTravel.Rows[0].Cells[0].Selected = true; // This won't raise the CellClick handler, which updates the rest of the form
-                dataGridViewTravel_CellClick(dataGridViewTravel, new DataGridViewCellEventArgs(0, 0));
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                ShowSystemInformation(item);
+                UpdateDependentsWithSelection();
             }
         }
 
@@ -817,6 +831,7 @@ namespace EDDiscovery
         {
             FilterGridView();
             RedrawSummary();
+            UpdateDependentsWithSelection();
         }
 
         private void FilterGridView()
