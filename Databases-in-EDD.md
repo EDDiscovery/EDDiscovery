@@ -80,11 +80,11 @@ User notes created by UI.  Name is used to find the system so may occur across E
 ```
 CREATE TABLE Systems (
   id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE ,
-  name TEXT NOT NULL COLLATE NOCASE ,
+  name TEXT NOT NULL COLLATE NOCASE ,   ; NOTE THE NOCASE! Case insensitive search
   x FLOAT,
   y FLOAT,
   z FLOAT,
-  cr INTEGER, ; Unknown field
+  cr INTEGER, ; Unknown field use
   commandercreate TEXT,
   createdate DATETIME,
   commanderupdate TEXT,
