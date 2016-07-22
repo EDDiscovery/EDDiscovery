@@ -110,6 +110,7 @@ namespace ExtendedControls
                                 // given the available height, scale the font up if its bigger than the current font height.
                 using (Font fnt = new Font(this.Font.Name, (float)(this.Font.SizeInPoints*scale), this.Font.Style))
                 {
+                    size = e.Graphics.MeasureString(this.ImageText, fnt);
                     e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;     //MUST turn it off to get a sharp rect
 
                     using (Brush bbck = new SolidBrush(pc))
@@ -117,7 +118,7 @@ namespace ExtendedControls
 
                     e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                     using (Brush textb = new SolidBrush(this.BackColor))
-                        e.Graphics.DrawString(this.ImageText, fnt, textb, new Point(leftmarginpx, topmarginpx));
+                        e.Graphics.DrawString(this.ImageText, fnt, textb, new Point(centrehorzpx-(int)(size.Width/2), topmarginpx));
                 }
             }
             else if (Image == ImageType.Move)

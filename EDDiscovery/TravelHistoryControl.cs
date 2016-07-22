@@ -1008,14 +1008,17 @@ namespace EDDiscovery
         #region Summary Pop out
 
         public bool IsSummaryPopOutOn {  get { return summaryPopOut != null; } }
+        private int summaryformatmode = -1;      //five state, 0..3 options, -1 = off
         public bool ToggleSummaryPopOut()
         {
-            if (summaryPopOut == null || summaryPopOut.ButtonsOn )
+            summaryformatmode++;
+
+            if (summaryPopOut == null || summaryformatmode < 4 )
             {
                 if ( summaryPopOut != null )
                     summaryPopOut.Close();
 
-                summaryPopOut = new SummaryPopOut( summaryPopOut == null );
+                summaryPopOut = new SummaryPopOut( (summaryformatmode & 1)!=0, (summaryformatmode & 2)!=0);
                 RedrawSummary();
                 summaryPopOut.Show();
             }
@@ -1023,6 +1026,7 @@ namespace EDDiscovery
             { 
                 summaryPopOut.Close();
                 summaryPopOut = null;
+                summaryformatmode = -1;
             }
 
             return (summaryPopOut != null);     // on screen?
