@@ -84,14 +84,17 @@ CREATE TABLE Systems (
   x FLOAT,
   y FLOAT,
   z FLOAT,
-  cr INTEGER,
+  cr INTEGER, ; Unknown field
   commandercreate TEXT,
   createdate DATETIME,
   commanderupdate TEXT,
   updatedate DATETIME,
   status INTEGER,
   population INTEGER ,
-  Note TEXT,
+
+  Note TEXT,  ; NOT the note shown on screen, not in use in program currently.
+
+; EDDB INFO
   id_eddb Integer,
   faction TEXT,
   government_id Integer,
@@ -103,7 +106,8 @@ CREATE TABLE Systems (
   needs_permit Integer,
   FirstDiscovery BOOL,
   versiondate DATETIME,
-  id_edsm Integer
+
+  id_edsm Integer ; EDSM Key used to link to EDSM and keep systems in sync
 )
 CREATE INDEX SystemsIndex ON Systems (name ASC)
 CREATE INDEX Systems_EDDB_ID_Index ON Systems (id_eddb ASC)
@@ -131,7 +135,7 @@ id_eddb records the ID used during the EDDB sync, but is not used for data match
 
 id_edsm is used for matching against the EDSM JSON file and update.  It is also used for hidden system removal. For the EDDB sync, the EDDB data contains the EDSM ID and thus this id_edsm is used to match the EDDB data to the EDSM DB entry.
 
-FirstDiscovery use is TBD.
+FirstDiscovery is not in use
 
 ```
 CREATE TABLE TravelLogUnit(
