@@ -125,13 +125,13 @@ namespace EDDiscovery
 
             if (datapath == null)
             {
-                AppendText(richTextBox_History, "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
+                AppendText(richTextBox_History, "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, _discoveryform.theme.TextBlockHighlightColor);
                 return null;
             }
 
             if (!Directory.Exists(datapath))   // if logfiles directory is not found
             {
-                AppendText(richTextBox_History, "Netlog directory is not present!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, Color.Red);
+                AppendText(richTextBox_History, "Netlog directory is not present!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, _discoveryform.theme.TextBlockHighlightColor);
                 return null;
             }
 
@@ -247,7 +247,7 @@ namespace EDDiscovery
 
                         lu.Size = (int)fi.Length;
                         lu.Update();
-                        AppendText(richTextBox_History, fi.Name + " " + nr.ToString() + " added to local database." + Environment.NewLine, Color.Black);
+                        AppendText(richTextBox_History, fi.Name + " " + nr.ToString() + " added to local database." + Environment.NewLine, _discoveryform.theme.TextBlockColor);
                     }
                 }
 
