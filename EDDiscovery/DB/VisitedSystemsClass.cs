@@ -501,6 +501,20 @@ namespace EDDiscovery2.DB
                 }
             }
         }
+
+        public static SystemClass GetSystemClassFirstPosition(List<VisitedSystemsClass> visitedSystems)     // last pos system
+        {
+            if (visitedSystems != null)
+            {
+                IEnumerable<ISystem> slist = (from systems in visitedSystems orderby systems.Time descending select systems.curSystem);
+                ISystem sel = slist.First(s => s.HasCoordinate);
+
+                if (sel != null)
+                    return (SystemClass)sel;
+            }
+
+            return null;
+        }
     }
 }
 

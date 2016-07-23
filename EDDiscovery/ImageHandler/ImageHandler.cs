@@ -136,8 +136,8 @@ namespace EDDiscovery2.ImageHandler
                 if (!Directory.Exists(textBoxOutputDir.Text))
                     Directory.CreateDirectory(textBoxOutputDir.Text);
 
-                //sometimes the picture doesn't load into the picture box so waiting 1 sec in case this due to the file not being closed quick enough in ED
-                System.Threading.Thread.Sleep(1000);
+                //sometimes the picture doesn't load into the picture box so waiting in case this due to the file not being closed quick enough in ED
+                System.Threading.Thread.Sleep(1500);
 
                 int formatindex=0;
                 bool hires=false;
@@ -258,7 +258,7 @@ namespace EDDiscovery2.ImageHandler
                 System.Diagnostics.Trace.WriteLine("Exception watcher: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
 
-                MessageBox.Show("Exception in imageConvert:" + ex.Message);
+                MessageBox.Show("Error in executing image conversion, try another screenshot. (Exception " + ex.Message + ")");
             }
         }
                                                             // thread safe - no picking up of dialog data.

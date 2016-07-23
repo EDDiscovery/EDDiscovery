@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,10 +69,23 @@
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxY = new ExtendedControls.TextBoxBorder();
             this.textBoxX = new ExtendedControls.TextBoxBorder();
+            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.textBoxTargetDist = new ExtendedControls.TextBoxBorder();
+            this.textBoxTarget = new ExtendedControls.TextBoxBorder();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.labelCMDR = new System.Windows.Forms.Label();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
+            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.button_RefreshHistory = new ExtendedControls.ButtonExt();
+            this.checkBoxEDSMSyncFrom = new ExtendedControls.CheckBoxCustom();
+            this.buttonMap2D = new ExtendedControls.ButtonExt();
+            this.checkBoxEDSMSyncTo = new ExtendedControls.CheckBoxCustom();
+            this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
+            this.buttonExtSummaryPopOut = new ExtendedControls.ButtonExt();
+            this.buttonMap = new ExtendedControls.ButtonExt();
+            this.buttonSync = new ExtendedControls.ButtonExt();
             this.panelRight = new System.Windows.Forms.Panel();
             this.panel_bottomright = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
@@ -84,13 +97,6 @@
             this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_topright = new System.Windows.Forms.Panel();
-            this.button_RefreshHistory = new ExtendedControls.ButtonExt();
-            this.checkBoxEDSMSyncFrom = new ExtendedControls.CheckBoxCustom();
-            this.buttonMap2D = new ExtendedControls.ButtonExt();
-            this.checkBoxEDSMSyncTo = new ExtendedControls.CheckBoxCustom();
-            this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
-            this.buttonMap = new ExtendedControls.ButtonExt();
-            this.buttonSync = new ExtendedControls.ButtonExt();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
@@ -260,12 +266,15 @@
             this.panel_system.Controls.Add(this.label5);
             this.panel_system.Controls.Add(this.textBoxY);
             this.panel_system.Controls.Add(this.textBoxX);
+            this.panel_system.Controls.Add(this.label3);
             this.panel_system.Controls.Add(this.label4);
+            this.panel_system.Controls.Add(this.textBoxTargetDist);
+            this.panel_system.Controls.Add(this.textBoxTarget);
             this.panel_system.Controls.Add(this.textBoxSystem);
             this.panel_system.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_system.Location = new System.Drawing.Point(0, 100);
             this.panel_system.Name = "panel_system";
-            this.panel_system.Size = new System.Drawing.Size(297, 184);
+            this.panel_system.Size = new System.Drawing.Size(297, 208);
             this.panel_system.TabIndex = 6;
             // 
             // buttonEDSM
@@ -280,6 +289,7 @@
             this.buttonEDSM.Name = "buttonEDSM";
             this.buttonEDSM.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSM.TabIndex = 23;
+            this.toolTipEddb.SetToolTip(this.buttonEDSM, "Click to show system on EDSM");
             this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
             // 
             // label14
@@ -302,6 +312,7 @@
             this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
             this.textBoxSolDist.TabIndex = 42;
             this.textBoxSolDist.TabStop = false;
+            this.toolTipEddb.SetToolTip(this.textBoxSolDist, "Distance to home planet");
             // 
             // buttonRoss
             // 
@@ -529,6 +540,15 @@
             this.textBoxX.TabIndex = 17;
             this.textBoxX.TabStop = false;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 183);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "Target";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -537,6 +557,32 @@
             this.label4.Size = new System.Drawing.Size(41, 13);
             this.label4.TabIndex = 16;
             this.label4.Text = "System";
+            // 
+            // textBoxTargetDist
+            // 
+            this.textBoxTargetDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTargetDist.BorderColorScaling = 0.5F;
+            this.textBoxTargetDist.Location = new System.Drawing.Point(186, 180);
+            this.textBoxTargetDist.Name = "textBoxTargetDist";
+            this.textBoxTargetDist.ReadOnly = true;
+            this.textBoxTargetDist.Size = new System.Drawing.Size(62, 20);
+            this.textBoxTargetDist.TabIndex = 15;
+            this.textBoxTargetDist.TabStop = false;
+            this.toolTipEddb.SetToolTip(this.textBoxTargetDist, "Distance to target");
+            // 
+            // textBoxTarget
+            // 
+            this.textBoxTarget.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBoxTarget.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxTarget.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTarget.BorderColorScaling = 0.5F;
+            this.textBoxTarget.Location = new System.Drawing.Point(47, 180);
+            this.textBoxTarget.Name = "textBoxTarget";
+            this.textBoxTarget.Size = new System.Drawing.Size(129, 20);
+            this.textBoxTarget.TabIndex = 15;
+            this.textBoxTarget.TabStop = false;
+            this.toolTipEddb.SetToolTip(this.textBoxTarget, "Sets the target");
+            this.textBoxTarget.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTarget_KeyUp);
             // 
             // textBoxSystem
             // 
@@ -559,6 +605,178 @@
             this.labelCMDR.TabIndex = 17;
             this.labelCMDR.Text = "Cmdr";
             // 
+            // textBoxFilter
+            // 
+            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFilter.BorderColorScaling = 0.5F;
+            this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
+            this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
+            this.textBoxFilter.TabIndex = 1;
+            this.toolTipEddb.SetToolTip(this.textBoxFilter, "Enter text to filter travel history on text");
+            this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
+            // 
+            // comboBoxHistoryWindow
+            // 
+            this.comboBoxHistoryWindow.ArrowWidth = 1;
+            this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
+            this.comboBoxHistoryWindow.DataSource = null;
+            this.comboBoxHistoryWindow.DisplayMember = null;
+            this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxHistoryWindow.DropDownHeight = 200;
+            this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxHistoryWindow.ItemHeight = 20;
+            this.comboBoxHistoryWindow.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxHistoryWindow.Items")));
+            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
+            this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
+            this.comboBoxHistoryWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxHistoryWindow.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxHistoryWindow.ScrollBarWidth = 16;
+            this.comboBoxHistoryWindow.SelectedIndex = -1;
+            this.comboBoxHistoryWindow.SelectedItem = null;
+            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
+            this.comboBoxHistoryWindow.TabIndex = 0;
+            this.toolTipEddb.SetToolTip(this.comboBoxHistoryWindow, "Select the limit of age for travel history entries to show");
+            this.comboBoxHistoryWindow.ValueMember = null;
+            this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // button_RefreshHistory
+            // 
+            this.button_RefreshHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_RefreshHistory.BorderColorScaling = 1.25F;
+            this.button_RefreshHistory.ButtonColorScaling = 0.5F;
+            this.button_RefreshHistory.ButtonDisabledScaling = 0.5F;
+            this.button_RefreshHistory.Location = new System.Drawing.Point(6, 6);
+            this.button_RefreshHistory.Name = "button_RefreshHistory";
+            this.button_RefreshHistory.Size = new System.Drawing.Size(65, 23);
+            this.button_RefreshHistory.TabIndex = 2;
+            this.button_RefreshHistory.Text = "Refresh";
+            this.toolTipEddb.SetToolTip(this.button_RefreshHistory, "Perform an EDSM synchronisation then refresh the list");
+            this.button_RefreshHistory.UseVisualStyleBackColor = true;
+            this.button_RefreshHistory.Click += new System.EventHandler(this.button_RefreshHistory_Click);
+            // 
+            // checkBoxEDSMSyncFrom
+            // 
+            this.checkBoxEDSMSyncFrom.AutoSize = true;
+            this.checkBoxEDSMSyncFrom.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEDSMSyncFrom.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSMSyncFrom.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSMSyncFrom.FontNerfReduction = 0.5F;
+            this.checkBoxEDSMSyncFrom.Location = new System.Drawing.Point(214, 51);
+            this.checkBoxEDSMSyncFrom.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSMSyncFrom.Name = "checkBoxEDSMSyncFrom";
+            this.checkBoxEDSMSyncFrom.Size = new System.Drawing.Size(83, 17);
+            this.checkBoxEDSMSyncFrom.TabIndex = 22;
+            this.checkBoxEDSMSyncFrom.Text = "From EDSM";
+            this.checkBoxEDSMSyncFrom.TickBoxReductionSize = 10;
+            this.toolTipEddb.SetToolTip(this.checkBoxEDSMSyncFrom, "Receive data from EDSM");
+            this.checkBoxEDSMSyncFrom.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMSyncFrom.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncFrom_CheckedChanged);
+            // 
+            // buttonMap2D
+            // 
+            this.buttonMap2D.BorderColorScaling = 1.25F;
+            this.buttonMap2D.ButtonColorScaling = 0.5F;
+            this.buttonMap2D.ButtonDisabledScaling = 0.5F;
+            this.buttonMap2D.Location = new System.Drawing.Point(6, 37);
+            this.buttonMap2D.Name = "buttonMap2D";
+            this.buttonMap2D.Size = new System.Drawing.Size(65, 23);
+            this.buttonMap2D.TabIndex = 3;
+            this.buttonMap2D.Text = "2D map";
+            this.toolTipEddb.SetToolTip(this.buttonMap2D, "Open the 2D Map");
+            this.buttonMap2D.UseVisualStyleBackColor = true;
+            this.buttonMap2D.Click += new System.EventHandler(this.button2DMap_Click);
+            // 
+            // checkBoxEDSMSyncTo
+            // 
+            this.checkBoxEDSMSyncTo.AutoSize = true;
+            this.checkBoxEDSMSyncTo.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEDSMSyncTo.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSMSyncTo.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSMSyncTo.FontNerfReduction = 0.5F;
+            this.checkBoxEDSMSyncTo.Location = new System.Drawing.Point(214, 32);
+            this.checkBoxEDSMSyncTo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSMSyncTo.Name = "checkBoxEDSMSyncTo";
+            this.checkBoxEDSMSyncTo.Size = new System.Drawing.Size(73, 17);
+            this.checkBoxEDSMSyncTo.TabIndex = 21;
+            this.checkBoxEDSMSyncTo.Text = "To EDSM";
+            this.checkBoxEDSMSyncTo.TickBoxReductionSize = 10;
+            this.toolTipEddb.SetToolTip(this.checkBoxEDSMSyncTo, "Send data to EDSM");
+            this.checkBoxEDSMSyncTo.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMSyncTo.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncTo_CheckedChanged);
+            // 
+            // comboBoxCommander
+            // 
+            this.comboBoxCommander.ArrowWidth = 1;
+            this.comboBoxCommander.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxCommander.ButtonColorScaling = 0.5F;
+            this.comboBoxCommander.DataSource = null;
+            this.comboBoxCommander.DisplayMember = null;
+            this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCommander.DropDownHeight = 200;
+            this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCommander.ItemHeight = 20;
+            this.comboBoxCommander.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxCommander.Items")));
+            this.comboBoxCommander.Location = new System.Drawing.Point(114, 6);
+            this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCommander.Name = "comboBoxCommander";
+            this.comboBoxCommander.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCommander.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCommander.ScrollBarWidth = 16;
+            this.comboBoxCommander.SelectedIndex = -1;
+            this.comboBoxCommander.SelectedItem = null;
+            this.comboBoxCommander.Size = new System.Drawing.Size(173, 23);
+            this.comboBoxCommander.TabIndex = 0;
+            this.toolTipEddb.SetToolTip(this.comboBoxCommander, "Select your commander. Use Settings page to configure and add additional commande" +
+        "rs");
+            this.comboBoxCommander.ValueMember = null;
+            this.comboBoxCommander.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxCommander_SelectedIndexChanged);
+            // 
+            // buttonExtSummaryPopOut
+            // 
+            this.buttonExtSummaryPopOut.BorderColorScaling = 1.25F;
+            this.buttonExtSummaryPopOut.ButtonColorScaling = 0.5F;
+            this.buttonExtSummaryPopOut.ButtonDisabledScaling = 0.5F;
+            this.buttonExtSummaryPopOut.Location = new System.Drawing.Point(77, 71);
+            this.buttonExtSummaryPopOut.Name = "buttonExtSummaryPopOut";
+            this.buttonExtSummaryPopOut.Size = new System.Drawing.Size(65, 23);
+            this.buttonExtSummaryPopOut.TabIndex = 4;
+            this.buttonExtSummaryPopOut.Text = "S-Panel";
+            this.toolTipEddb.SetToolTip(this.buttonExtSummaryPopOut, "Turn on/off/toggle buttons on the Status Panel Pop Out. Drag this popout over you" +
+        "r Elite Dangerous window.");
+            this.buttonExtSummaryPopOut.UseVisualStyleBackColor = true;
+            this.buttonExtSummaryPopOut.Click += new System.EventHandler(this.buttonExtSummaryPopOut_Click);
+            // 
+            // buttonMap
+            // 
+            this.buttonMap.BorderColorScaling = 1.25F;
+            this.buttonMap.ButtonColorScaling = 0.5F;
+            this.buttonMap.ButtonDisabledScaling = 0.5F;
+            this.buttonMap.Location = new System.Drawing.Point(6, 71);
+            this.buttonMap.Name = "buttonMap";
+            this.buttonMap.Size = new System.Drawing.Size(65, 23);
+            this.buttonMap.TabIndex = 4;
+            this.buttonMap.Text = "3D map";
+            this.toolTipEddb.SetToolTip(this.buttonMap, "Open the 3D Map");
+            this.buttonMap.UseVisualStyleBackColor = true;
+            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
+            // 
+            // buttonSync
+            // 
+            this.buttonSync.BorderColorScaling = 1.25F;
+            this.buttonSync.ButtonColorScaling = 0.5F;
+            this.buttonSync.ButtonDisabledScaling = 0.5F;
+            this.buttonSync.Location = new System.Drawing.Point(116, 37);
+            this.buttonSync.Name = "buttonSync";
+            this.buttonSync.Size = new System.Drawing.Size(92, 23);
+            this.buttonSync.TabIndex = 4;
+            this.buttonSync.Text = "EDSM Sync";
+            this.toolTipEddb.SetToolTip(this.buttonSync, "Send history to your EDSM account (make sure the EDSM ID is set in settings)");
+            this.buttonSync.UseVisualStyleBackColor = true;
+            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
+            // 
             // panelRight
             // 
             this.panelRight.Controls.Add(this.panel_bottomright);
@@ -575,9 +793,9 @@
             this.panel_bottomright.Controls.Add(this.dataViewScrollerPanel2);
             this.panel_bottomright.Controls.Add(this.labelclosests);
             this.panel_bottomright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_bottomright.Location = new System.Drawing.Point(0, 284);
+            this.panel_bottomright.Location = new System.Drawing.Point(0, 308);
             this.panel_bottomright.Name = "panel_bottomright";
-            this.panel_bottomright.Size = new System.Drawing.Size(297, 366);
+            this.panel_bottomright.Size = new System.Drawing.Size(297, 342);
             this.panel_bottomright.TabIndex = 25;
             // 
             // dataViewScrollerPanel2
@@ -589,7 +807,7 @@
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 13);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(297, 353);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(297, 329);
             this.dataViewScrollerPanel2.TabIndex = 24;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -611,7 +829,7 @@
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 332);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 308);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -638,7 +856,7 @@
             this.dataGridViewNearest.Name = "dataGridViewNearest";
             this.dataGridViewNearest.RowHeadersVisible = false;
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(277, 353);
+            this.dataGridViewNearest.Size = new System.Drawing.Size(277, 329);
             this.dataGridViewNearest.TabIndex = 23;
             // 
             // Col1
@@ -682,6 +900,7 @@
             this.panel_topright.Controls.Add(this.checkBoxEDSMSyncTo);
             this.panel_topright.Controls.Add(this.comboBoxCommander);
             this.panel_topright.Controls.Add(this.labelCMDR);
+            this.panel_topright.Controls.Add(this.buttonExtSummaryPopOut);
             this.panel_topright.Controls.Add(this.buttonMap);
             this.panel_topright.Controls.Add(this.buttonSync);
             this.panel_topright.Dock = System.Windows.Forms.DockStyle.Top;
@@ -689,118 +908,6 @@
             this.panel_topright.Name = "panel_topright";
             this.panel_topright.Size = new System.Drawing.Size(297, 100);
             this.panel_topright.TabIndex = 26;
-            // 
-            // button_RefreshHistory
-            // 
-            this.button_RefreshHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_RefreshHistory.BorderColorScaling = 1.25F;
-            this.button_RefreshHistory.ButtonColorScaling = 0.5F;
-            this.button_RefreshHistory.ButtonDisabledScaling = 0.5F;
-            this.button_RefreshHistory.Location = new System.Drawing.Point(6, 4);
-            this.button_RefreshHistory.Name = "button_RefreshHistory";
-            this.button_RefreshHistory.Size = new System.Drawing.Size(65, 23);
-            this.button_RefreshHistory.TabIndex = 2;
-            this.button_RefreshHistory.Text = "Refresh";
-            this.button_RefreshHistory.UseVisualStyleBackColor = true;
-            this.button_RefreshHistory.Click += new System.EventHandler(this.button_RefreshHistory_Click);
-            // 
-            // checkBoxEDSMSyncFrom
-            // 
-            this.checkBoxEDSMSyncFrom.AutoSize = true;
-            this.checkBoxEDSMSyncFrom.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxEDSMSyncFrom.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSMSyncFrom.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSMSyncFrom.FontNerfReduction = 0.5F;
-            this.checkBoxEDSMSyncFrom.Location = new System.Drawing.Point(214, 51);
-            this.checkBoxEDSMSyncFrom.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSMSyncFrom.Name = "checkBoxEDSMSyncFrom";
-            this.checkBoxEDSMSyncFrom.Size = new System.Drawing.Size(83, 17);
-            this.checkBoxEDSMSyncFrom.TabIndex = 22;
-            this.checkBoxEDSMSyncFrom.Text = "From EDSM";
-            this.checkBoxEDSMSyncFrom.TickBoxReductionSize = 10;
-            this.checkBoxEDSMSyncFrom.UseVisualStyleBackColor = true;
-            this.checkBoxEDSMSyncFrom.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncFrom_CheckedChanged);
-            // 
-            // buttonMap2D
-            // 
-            this.buttonMap2D.BorderColorScaling = 1.25F;
-            this.buttonMap2D.ButtonColorScaling = 0.5F;
-            this.buttonMap2D.ButtonDisabledScaling = 0.5F;
-            this.buttonMap2D.Location = new System.Drawing.Point(6, 32);
-            this.buttonMap2D.Name = "buttonMap2D";
-            this.buttonMap2D.Size = new System.Drawing.Size(65, 23);
-            this.buttonMap2D.TabIndex = 3;
-            this.buttonMap2D.Text = "2D map";
-            this.buttonMap2D.UseVisualStyleBackColor = true;
-            this.buttonMap2D.Click += new System.EventHandler(this.button2DMap_Click);
-            // 
-            // checkBoxEDSMSyncTo
-            // 
-            this.checkBoxEDSMSyncTo.AutoSize = true;
-            this.checkBoxEDSMSyncTo.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxEDSMSyncTo.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSMSyncTo.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSMSyncTo.FontNerfReduction = 0.5F;
-            this.checkBoxEDSMSyncTo.Location = new System.Drawing.Point(214, 32);
-            this.checkBoxEDSMSyncTo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSMSyncTo.Name = "checkBoxEDSMSyncTo";
-            this.checkBoxEDSMSyncTo.Size = new System.Drawing.Size(73, 17);
-            this.checkBoxEDSMSyncTo.TabIndex = 21;
-            this.checkBoxEDSMSyncTo.Text = "To EDSM";
-            this.checkBoxEDSMSyncTo.TickBoxReductionSize = 10;
-            this.checkBoxEDSMSyncTo.UseVisualStyleBackColor = true;
-            this.checkBoxEDSMSyncTo.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncTo_CheckedChanged);
-            // 
-            // comboBoxCommander
-            // 
-            this.comboBoxCommander.ArrowWidth = 1;
-            this.comboBoxCommander.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxCommander.ButtonColorScaling = 0.5F;
-            this.comboBoxCommander.DataSource = null;
-            this.comboBoxCommander.DisplayMember = null;
-            this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCommander.DropDownHeight = 200;
-            this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCommander.ItemHeight = 20;
-            this.comboBoxCommander.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxCommander.Items")));
-            this.comboBoxCommander.Location = new System.Drawing.Point(114, 6);
-            this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCommander.Name = "comboBoxCommander";
-            this.comboBoxCommander.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCommander.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCommander.ScrollBarWidth = 16;
-            this.comboBoxCommander.SelectedIndex = -1;
-            this.comboBoxCommander.SelectedItem = null;
-            this.comboBoxCommander.Size = new System.Drawing.Size(173, 23);
-            this.comboBoxCommander.TabIndex = 0;
-            this.comboBoxCommander.ValueMember = null;
-            this.comboBoxCommander.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxCommander_SelectedIndexChanged);
-            // 
-            // buttonMap
-            // 
-            this.buttonMap.BorderColorScaling = 1.25F;
-            this.buttonMap.ButtonColorScaling = 0.5F;
-            this.buttonMap.ButtonDisabledScaling = 0.5F;
-            this.buttonMap.Location = new System.Drawing.Point(6, 61);
-            this.buttonMap.Name = "buttonMap";
-            this.buttonMap.Size = new System.Drawing.Size(65, 23);
-            this.buttonMap.TabIndex = 4;
-            this.buttonMap.Text = "3D map";
-            this.buttonMap.UseVisualStyleBackColor = true;
-            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
-            // 
-            // buttonSync
-            // 
-            this.buttonSync.BorderColorScaling = 1.25F;
-            this.buttonSync.ButtonColorScaling = 0.5F;
-            this.buttonSync.ButtonDisabledScaling = 0.5F;
-            this.buttonSync.Location = new System.Drawing.Point(116, 37);
-            this.buttonSync.Name = "buttonSync";
-            this.buttonSync.Size = new System.Drawing.Size(92, 23);
-            this.buttonSync.TabIndex = 4;
-            this.buttonSync.Text = "EDSM Sync";
-            this.buttonSync.UseVisualStyleBackColor = true;
-            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
             // label1
             // 
@@ -923,41 +1030,6 @@
             this.TopPanel.Name = "TopPanel";
             this.TopPanel.Size = new System.Drawing.Size(594, 32);
             this.TopPanel.TabIndex = 26;
-            // 
-            // textBoxFilter
-            // 
-            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxFilter.BorderColorScaling = 0.5F;
-            this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
-            this.textBoxFilter.Name = "textBoxFilter";
-            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
-            this.textBoxFilter.TabIndex = 1;
-            this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
-            // 
-            // comboBoxHistoryWindow
-            // 
-            this.comboBoxHistoryWindow.ArrowWidth = 1;
-            this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
-            this.comboBoxHistoryWindow.DataSource = null;
-            this.comboBoxHistoryWindow.DisplayMember = null;
-            this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxHistoryWindow.DropDownHeight = 200;
-            this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxHistoryWindow.ItemHeight = 20;
-            this.comboBoxHistoryWindow.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxHistoryWindow.Items")));
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
-            this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
-            this.comboBoxHistoryWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.ScrollBarWidth = 16;
-            this.comboBoxHistoryWindow.SelectedIndex = -1;
-            this.comboBoxHistoryWindow.SelectedItem = null;
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
-            this.comboBoxHistoryWindow.TabIndex = 0;
-            this.comboBoxHistoryWindow.ValueMember = null;
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // ColumnTime
             // 
@@ -1106,6 +1178,10 @@
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterDistanceToPreviousStarToolStripMenuItem;
         private ExtendedControls.DrawnPanel buttonEDSM;
+        private System.Windows.Forms.Label label3;
+        private ExtendedControls.TextBoxBorder textBoxTargetDist;
+        public ExtendedControls.TextBoxBorder textBoxTarget;
+        private ExtendedControls.ButtonExt buttonExtSummaryPopOut;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;

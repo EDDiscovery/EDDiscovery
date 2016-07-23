@@ -198,21 +198,19 @@ namespace EDDiscovery
             Tools.TextBox_Numeric_KeyPress(sender, e);
         }
 
-        internal void NewPosition(object source)
+        private void textBoxCurrent_DoubleClick(object sender, EventArgs e)
         {
-            string name = travelhistorycontrol1.netlog.visitedSystems.Last().Name;
-            Invoke((MethodInvoker)delegate
+            if (textBoxCurrent.Text != "")
             {
-                textBoxCurrent.Text = name;
-            });
-        }
-
-         private void textBoxCurrent_DoubleClick(object sender, EventArgs e)
-        {
-            if ( textBoxCurrent.Text != "" )
+                SelectFromMaster(false);                              // enable system box
                 textBox_From.Text = textBoxCurrent.Text;
+            }
         }
 
+        public void UpdateHistorySystem(string str)
+        {
+            textBoxCurrent.Text = str;
+        }
 
         private void AppendText(string msg)
         {

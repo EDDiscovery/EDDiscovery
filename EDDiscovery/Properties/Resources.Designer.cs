@@ -83,6 +83,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bookmarktarget {
+            get {
+                object obj = ResourceManager.GetObject("bookmarktarget", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap bookmarkyellow {
             get {
                 object obj = ResourceManager.GetObject("bookmarkyellow", resourceCulture);

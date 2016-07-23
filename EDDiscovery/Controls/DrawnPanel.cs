@@ -13,12 +13,12 @@ namespace ExtendedControls
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
 
-        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross , Text };
+        public enum ImageType { Close, Minimize, Gripper, EDDB, Ross, Text, Move };
 
         public string ImageText { get; set; } = null;       // for Text Type
 
         public ImageType Image { get; set; } = ImageType.Close;
-        public int MarginSize { get; set; } = 4;                    // margin around icon
+        public int MarginSize { get; set; } = 4;                    // margin around icon, 0 =auto, -1 = zero
 
         #region Public Functions
         public void Captured()                                     // if doing the move capture stuff on this panel, call this
@@ -27,6 +27,8 @@ namespace ExtendedControls
             Invalidate();
         }
 
+        public bool IsCaptured { get { return mousecapture; } }
+
         #endregion
         
         #region Implementation
@@ -34,7 +36,7 @@ namespace ExtendedControls
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            int msize = (MarginSize > 0) ? MarginSize : ClientRectangle.Height / 6;
+            int msize = (MarginSize==-1) ? 0 : ((MarginSize > 0) ? MarginSize : ClientRectangle.Height / 6);
             Color pc = (Enabled) ? ((mousedown||mousecapture)?MouseSelectedColor: ((mouseover)?MouseOverColor : this.ForeColor)) : Multiply(this.ForeColor, 0.5F);
             //Console.WriteLine("Enabled" + Enabled + " Mouse over " + mouseover + " mouse down " + mousedown);
 
@@ -44,7 +46,8 @@ namespace ExtendedControls
 
             int rightpx = ClientRectangle.Width - 1;
             int bottompx = ClientRectangle.Height - 1;
-            int centrehorzpx = (ClientRectangle.Width-1) / 2;
+            int centrehorzpx = (ClientRectangle.Width - 1) / 2;
+            int centrevertpx = (ClientRectangle.Height - 1) / 2;
 
             int leftmarginpx = msize;
             int rightmarginpx = rightpx - msize;
@@ -107,17 +110,34 @@ namespace ExtendedControls
                                 // given the available height, scale the font up if its bigger than the current font height.
                 using (Font fnt = new Font(this.Font.Name, (float)(this.Font.SizeInPoints*scale), this.Font.Style))
                 {
-                    Brush bbck = new SolidBrush(pc);
-                    Rectangle area = new Rectangle(leftmarginpx, topmarginpx, ClientRectangle.Width - 2 * msize, ClientRectangle.Height - 2 * msize);
-                    e.Graphics.FillRectangle(bbck, area);
-                    bbck.Dispose();
+                    size = e.Graphics.MeasureString(this.ImageText, fnt);
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;     //MUST turn it off to get a sharp rect
 
+                    using (Brush bbck = new SolidBrush(pc))
+                        e.Graphics.FillRectangle(bbck, new Rectangle(leftmarginpx, topmarginpx, ClientRectangle.Width - 2 * msize, ClientRectangle.Height - 2 * msize));
+
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                     using (Brush textb = new SolidBrush(this.BackColor))
-                    {
-                        Rectangle rect = ClientRectangle;
-                        e.Graphics.DrawString(this.ImageText, fnt, textb, new Point(leftmarginpx, topmarginpx));
-                    }
+                        e.Graphics.DrawString(this.ImageText, fnt, textb, new Point(centrehorzpx-(int)(size.Width/2), topmarginpx));
                 }
+            }
+            else if (Image == ImageType.Move)
+            {
+                centrehorzpx++;
+                centrevertpx++;
+
+                int o = ClientRectangle.Width/8;
+                e.Graphics.DrawLine(p2, new Point(centrehorzpx, bottompx), new Point(centrehorzpx, topmarginpx));
+                e.Graphics.DrawLine(p1, new Point(centrehorzpx - o, bottompx - o), new Point(centrehorzpx, bottompx));
+                e.Graphics.DrawLine(p1, new Point(centrehorzpx + o, bottompx - o), new Point(centrehorzpx, bottompx));
+                e.Graphics.DrawLine(p1, new Point(centrehorzpx - o, topmarginpx + o), new Point(centrehorzpx, topmarginpx));
+                e.Graphics.DrawLine(p1, new Point(centrehorzpx + o, topmarginpx + o), new Point(centrehorzpx, topmarginpx));
+
+                e.Graphics.DrawLine(p2, new Point(leftmarginpx, centrevertpx), new Point(rightmarginpx, centrevertpx));
+                e.Graphics.DrawLine(p1, new Point(leftmarginpx + o, centrevertpx - o), new Point(leftmarginpx, centrevertpx));
+                e.Graphics.DrawLine(p1, new Point(leftmarginpx + o, centrevertpx + o), new Point(leftmarginpx, centrevertpx));
+                e.Graphics.DrawLine(p1, new Point(rightmarginpx - o, centrevertpx - o), new Point(rightmarginpx, centrevertpx));
+                e.Graphics.DrawLine(p1, new Point(rightmarginpx - o, centrevertpx + o), new Point(rightmarginpx, centrevertpx));
             }
 
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
@@ -138,7 +158,7 @@ namespace ExtendedControls
 
         protected override void OnMouseLeave(EventArgs eventargs)
         {
-            base.OnMouseEnter(eventargs);
+            base.OnMouseLeave(eventargs);
             mouseover = false;
             mousedown = false;   
             //Console.WriteLine("DP ML");
@@ -155,7 +175,7 @@ namespace ExtendedControls
 
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            base.OnMouseDown(mevent);
+            base.OnMouseUp(mevent);
             mousedown = false;
             //Console.WriteLine("DP MU");
             Invalidate();

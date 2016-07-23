@@ -106,7 +106,8 @@ namespace EDDiscovery2
             EDDConfig.Instance.NetLogDirAutoMode = radioButton_Auto.Checked;
             EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
             SQLiteDBClass.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
-            SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.Parse(textBoxDefaultZoom.Text));
+            double zoom = 1;
+            SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.TryParse(textBoxDefaultZoom.Text, out zoom) ? zoom : 1.0);
             SQLiteDBClass.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
 
             EDDiscoveryForm.EDDConfig.UseDistances = checkBox_Distances.Checked;
@@ -126,14 +127,10 @@ namespace EDDiscovery2
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var value = textBoxDefaultZoom.Text.Trim();
-            double parseout;
-            if (Double.TryParse(value, out parseout))
+            double parseout = 0;
+            if (!Double.TryParse(value, out parseout) || parseout < 0.01 || parseout > 50.0 )
             {
-                e.Cancel = (parseout < 0.01 || parseout > 50.0);
-            }
-            else
-            {
-                e.Cancel = true;
+                textBoxDefaultZoom.Text = "1";
             }
         }
 
