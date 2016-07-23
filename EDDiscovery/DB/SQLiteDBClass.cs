@@ -13,53 +13,6 @@ using System.Threading;
 
 namespace EDDiscovery.DB
 {
-    public static class SQLiteDBExtensions
-    {
-        public static void AddParameterWithValue(this DbCommand cmd, string name, object val)
-        {
-            var par = cmd.CreateParameter();
-            par.ParameterName = name;
-            par.Value = val;
-            cmd.Parameters.Add(par);
-        }
-
-        public static void AddParameter(this DbCommand cmd, string name, DbType type)
-        {
-            var par = cmd.CreateParameter();
-            par.ParameterName = name;
-            par.DbType = type;
-            cmd.Parameters.Add(par);
-        }
-
-        public static void SetParameterValue(this DbCommand cmd, string name, object val)
-        {
-            cmd.Parameters[name].Value = val;
-        }
-
-        public static DbDataAdapter CreateDataAdapter(this DbCommand cmd)
-        {
-            DbDataAdapter da = SQLiteDBClass.DbFactory.CreateDataAdapter();
-            da.SelectCommand = cmd;
-            return da;
-        }
-
-        public static DbCommand CreateCommand(this DbConnection conn, string query)
-        {
-            DbCommand cmd = conn.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandTimeout = 30;
-            cmd.CommandText = query;
-            return cmd;
-        }
-
-        public static DbCommand CreateCommand(this DbConnection conn, string query, DbTransaction transaction)
-        {
-            DbCommand cmd = conn.CreateCommand(query);
-            cmd.Transaction = transaction;
-            return cmd;
-        }
-    }
-
     // This class uses a monitor to ensure only one can be
     // active at any one time
     public class SQLiteTxnLockED : IDisposable
@@ -366,50 +319,21 @@ namespace EDDiscovery.DB
     }
 
 
-    public class SQLiteDBClass
+    public static class SQLiteDBClass
     {
-        private static DbProviderFactory _factory;
-        public static DbProviderFactory DbFactory
-        {
-            get
-            {
-                if (_factory == null)
-                {
-                    _factory = new SQLiteFactory();
-                }
-                return _factory;
-            }
-        }
-
-        public static DbConnection CreateCN()
-        {
-            lock (lockDBInit)                                           // one at a time chaps
-            {
-                if (_db == null)                                        // first one to ask for a connection sets the db up
-                {
-                    _db = new SQLiteDBClass();
-                    _db.InitializeDatabase();
-                }
-            }
-
-            DbConnection cn = DbFactory.CreateConnection();
-            cn.ConnectionString = _db.constring;
-            return cn;
-        }
-
-        private static SQLiteDBClass _db = null;                            // one db class for everyone
+        #region Private properties / fields
         private static Object lockDBInit = new Object();                    // lock to sequence construction
-        private string constring;                                           // connection string to use..
-        SQLiteConnectionED m_SQLiteConnectionED;                            // only used by class constructor
+        private static string constring;                                           // connection string to use..
+        private static DbProviderFactory DbFactory;
+        #endregion
 
-        private SQLiteDBClass()         // non static class functions in here are only used by the construction
-        {                               // so this is private to make sure you don't try and initialise a DB anywhere..
-        }
-
-        private void InitializeDatabase()
+        #region Database Initialization
+        private static void InitializeDatabase()
         {
             string dbfile = GetSQLiteDBFile();
             constring = "Data Source=" + dbfile + ";Pooling=true;";
+            DbFactory = GetSqliteProviderFactory();
+
             try
             {
                 bool fileexist = File.Exists(dbfile);
@@ -417,12 +341,12 @@ namespace EDDiscovery.DB
                 if (!fileexist)                                         // no file, create it
                     SQLiteConnection.CreateFile(dbfile);
 
-                using (m_SQLiteConnectionED = new SQLiteConnectionED(new SQLiteConnection(constring)))
+                using (var conn = new SQLiteConnectionED())
                 {
                     if (!fileexist)                                       // first time, create the register
-                        ExecuteQuery("CREATE TABLE Register (ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , \"ValueInt\" INTEGER, \"ValueDouble\" DOUBLE, \"ValueString\" TEXT, \"ValueBlob\" BLOB)");
+                        ExecuteQuery(conn, "CREATE TABLE Register (ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , \"ValueInt\" INTEGER, \"ValueDouble\" DOUBLE, \"ValueString\" TEXT, \"ValueBlob\" BLOB)");
 
-                    UpgradeDB();                                            // upgrade it
+                    UpgradeDB(conn);                                            // upgrade it
                 }
             }
             catch (Exception ex)
@@ -431,75 +355,75 @@ namespace EDDiscovery.DB
             }
         }
 
-        private void ExecuteQuery(string query)
+        private static void ExecuteQuery(SQLiteConnectionED conn, string query)
         {
-            using (DbCommand command = m_SQLiteConnectionED.CreateCommand(query))
+            using (DbCommand command = conn.CreateCommand(query))
                 command.ExecuteNonQuery();
         }
 
-        private string GetSQLiteDBFile()
+        private static string GetSQLiteDBFile()
         {
             return Path.Combine(Tools.GetAppDataDirectory(), "EDDiscovery.sqlite");
         }
 
-        private bool UpgradeDB()
+        private static bool UpgradeDB(SQLiteConnectionED conn)
         {
             int dbver;
             try
             {
-                dbver = GetSettingInt("DBVer", 1, m_SQLiteConnectionED);        // use the constring one, as don't want to go back into ConnectionString code
+                dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
                 if (dbver < 2)
-                    UpgradeDB2();
+                    UpgradeDB2(conn);
 
                 if (dbver < 3)
-                    UpgradeDB3();
+                    UpgradeDB3(conn);
 
                 if (dbver < 4)
-                    UpgradeDB4();
+                    UpgradeDB4(conn);
 
                 if (dbver < 5)
-                    UpgradeDB5();
+                    UpgradeDB5(conn);
 
                 if (dbver < 6)
-                    UpgradeDB6();
+                    UpgradeDB6(conn);
 
                 if (dbver < 7)
-                    UpgradeDB7();
+                    UpgradeDB7(conn);
 
                 if (dbver < 8)
-                    UpgradeDB8();
+                    UpgradeDB8(conn);
 
                 if (dbver < 9)
-                    UpgradeDB9();
+                    UpgradeDB9(conn);
 
                 if (dbver < 10)
-                    UpgradeDB10();
+                    UpgradeDB10(conn);
 
                 if (dbver < 11)
-                    UpgradeDB11();
+                    UpgradeDB11(conn);
 
                 if (dbver < 12)
-                    UpgradeDB12();
+                    UpgradeDB12(conn);
 
                 // 15 remove due to conflict between 2 branches...
 
                 if (dbver < 14)
-                    UpgradeDB14();
+                    UpgradeDB14(conn);
 
                 if (dbver < 15)
-                    UpgradeDB15();
+                    UpgradeDB15(conn);
 
                 if (dbver < 16)
-                    UpgradeDB16();
+                    UpgradeDB16(conn);
 
                 if (dbver < 17)
-                    UpgradeDB17();
+                    UpgradeDB17(conn);
 
                 if (dbver < 18)
-                    UpgradeDB18();
+                    UpgradeDB18(conn);
 
                 if (dbver < 19)
-                    UpgradeDB19();
+                    UpgradeDB19(conn);
 
                 return true;
             }
@@ -511,7 +435,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private void PerformUpgrade(int newVersion, bool catchErrors, bool backupDbFile, string[] queries, Action doAfterQueries = null)
+        private static void PerformUpgrade(SQLiteConnectionED conn, int newVersion, bool catchErrors, bool backupDbFile, string[] queries, Action doAfterQueries = null)
         {
             if (backupDbFile)
             {
@@ -532,7 +456,7 @@ namespace EDDiscovery.DB
             {
                 foreach (var query in queries)
                 {
-                    ExecuteQuery(query);
+                    ExecuteQuery(conn, query);
                 }
             }
             catch (Exception ex)
@@ -547,10 +471,10 @@ namespace EDDiscovery.DB
 
             doAfterQueries?.Invoke();
 
-            PutSettingInt("DBVer", newVersion, m_SQLiteConnectionED);
+            PutSettingInt("DBVer", newVersion, conn);
         }
 
-        private void UpgradeDB2()
+        private static void UpgradeDB2(SQLiteConnectionED conn)
         {
             string query = "CREATE TABLE Systems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , name TEXT NOT NULL COLLATE NOCASE , x FLOAT, y FLOAT, z FLOAT, cr INTEGER, commandercreate TEXT, createdate DATETIME, commanderupdate TEXT, updatedate DATETIME, status INTEGER, population INTEGER )";
             string query2 = "CREATE  INDEX main.SystemsIndex ON Systems (name ASC)";
@@ -561,31 +485,30 @@ namespace EDDiscovery.DB
             string query7 = "CREATE TABLE Stations (station_id INTEGER PRIMARY KEY  NOT NULL ,system_id INTEGER REFERENCES Systems(id), name TEXT NOT NULL ,blackmarket BOOL DEFAULT (null) ,max_landing_pad_size INTEGER,distance_to_star INTEGER,type TEXT,faction TEXT,shipyard BOOL,outfitting BOOL, commodities_market BOOL)";
             string query8 = "CREATE  INDEX stationIndex ON Stations (system_id ASC)";
 
-            PerformUpgrade(2, false, false, new[] { query, query2, query3, query4, query5, query6, query7, query8 });
+            PerformUpgrade(conn, 2, false, false, new[] { query, query2, query3, query4, query5, query6, query7, query8 });
         }
 
-        private void UpgradeDB3()
+        private static void UpgradeDB3(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN Note TEXT";
-            PerformUpgrade(3, false, false, new[] { query1 });
+            PerformUpgrade(conn, 3, false, false, new[] { query1 });
         }
 
-        private void UpgradeDB4()
+        private static void UpgradeDB4(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN Note TEXT";
-            PerformUpgrade(4, true, true, new[] { query1 }, () =>
-            {  });
+            PerformUpgrade(conn, 4, true, true, new[] { query1 });
         }
 
-        private void UpgradeDB5()
+        private static void UpgradeDB5(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Unit TEXT";
             string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Commander Integer";
             string query4 = "CREATE INDEX VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)";
-            PerformUpgrade(5, true, true, new[] {query1, query3, query4});
+            PerformUpgrade(conn, 5, true, true, new[] {query1, query3, query4});
         }
 
-        private void UpgradeDB6()
+        private static void UpgradeDB6(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_eddb Integer";
             string query2 = "ALTER TABLE Systems ADD COLUMN faction TEXT";
@@ -609,57 +532,57 @@ namespace EDDiscovery.DB
             string query16 = "CREATE INDEX StationsIndex_system_ID  ON Stations (system_id ASC)";
             string query17 = "CREATE INDEX StationsIndex_system_Name  ON Stations (Name ASC)";
 
-            PerformUpgrade(6, true, true, new[] {
+            PerformUpgrade(conn, 6, true, true, new[] {
                 query1, query2, query4, query5, query6, query7, query8, query9, query10,
                 query11, query12, query13, query14, query15, query16, query17 });
         }
 
 
-        private void UpgradeDB7()
+        private static void UpgradeDB7(SQLiteConnectionED conn)
         {
             string query1 = "DROP TABLE VisitedSystems";
             string query2 = "CREATE TABLE VisitedSystems(id INTEGER PRIMARY KEY  NOT NULL, Name TEXT NOT NULL, Time DATETIME NOT NULL, Unit Text, Commander Integer, Source Integer, edsm_sync BOOL DEFAULT (null))";
             string query3 = "CREATE TABLE TravelLogUnit(id INTEGER PRIMARY KEY  NOT NULL, type INTEGER NOT NULL, name TEXT NOT NULL, size INTEGER, path TEXT)";
-            PerformUpgrade(7, true, true, new[] { query1, query2, query3 });
+            PerformUpgrade(conn, 7, true, true, new[] { query1, query2, query3 });
         }
 
-        private void UpgradeDB8()
+        private static void UpgradeDB8(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Map_colour INTEGER DEFAULT (-65536)";
-            PerformUpgrade(8, true, true, new[] { query1 });
+            PerformUpgrade(conn, 8, true, true, new[] { query1 });
         }
 
-        private void UpgradeDB9()
+        private static void UpgradeDB9(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE Objects (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , SystemName TEXT NOT NULL , ObjectName TEXT NOT NULL , ObjectType INTEGER NOT NULL , ArrivalPoint Float, Gravity FLOAT, Atmosphere Integer, Vulcanism Integer, Terrain INTEGER, Carbon BOOL, Iron BOOL, Nickel BOOL, Phosphorus BOOL, Sulphur BOOL, Arsenic BOOL, Chromium BOOL, Germanium BOOL, Manganese BOOL, Selenium BOOL NOT NULL , Vanadium BOOL, Zinc BOOL, Zirconium BOOL, Cadmium BOOL, Mercury BOOL, Molybdenum BOOL, Niobium BOOL, Tin BOOL, Tungsten BOOL, Antimony BOOL, Polonium BOOL, Ruthenium BOOL, Technetium BOOL, Tellurium BOOL, Yttrium BOOL, Commander  Text, UpdateTime DATETIME, Status INTEGER )";
-            PerformUpgrade(9, true, true, new[] { query1 });
+            PerformUpgrade(conn, 9, true, true, new[] { query1 });
         }
 
-        private void UpgradeDB10()
+        private static void UpgradeDB10(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE wanted_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, systemname TEXT UNIQUE NOT NULL)";
-            PerformUpgrade(10, true, true, new[] { query1 });
+            PerformUpgrade(conn, 10, true, true, new[] { query1 });
         }
 
-        private void UpgradeDB11()
+        private static void UpgradeDB11(SQLiteConnectionED conn)
         {
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
             string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
             string query3 = "ALTER TABLE Objects ADD COLUMN terraform Integer";
             string query4 = "ALTER TABLE VisitedSystems ADD COLUMN Status BOOL";
-            PerformUpgrade(11, true, true, new[] { query1, query2, query3, query4 });
+            PerformUpgrade(conn, 11, true, true, new[] { query1, query2, query3, query4 });
         }
 
-        private void UpgradeDB12()
+        private static void UpgradeDB12(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE routes_expeditions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT UNIQUE NOT NULL, start DATETIME, end DATETIME)";
             string query2 = "CREATE TABLE route_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, routeid INTEGER NOT NULL, systemname TEXT NOT NULL)";
-            PerformUpgrade(12, true, true, new[] { query1, query2 });
+            PerformUpgrade(conn, 12, true, true, new[] { query1, query2 });
         }
 
 
-        private bool UpgradeDB14()
+        private static bool UpgradeDB14(SQLiteConnectionED conn)
         {
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN X double";
@@ -667,26 +590,26 @@ namespace EDDiscovery.DB
             string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Z double";
             string dbfile = GetSQLiteDBFile();
 
-            PerformUpgrade(14, true, true, new[] { query1, query2, query3 });
+            PerformUpgrade(conn, 14, true, true, new[] { query1, query2, query3 });
             return true;
         }
 
-        private void UpgradeDB15()
+        private static void UpgradeDB15(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN versiondate DATETIME";
             string query2 = "UPDATE Systems SET versiondate = datetime('now')";
             string query3 = "CREATE INDEX IDX_Systems_versiondate ON Systems (versiondate ASC)";
 
-            PerformUpgrade(15, true, true, new[] { query1, query2, query3 });
+            PerformUpgrade(conn, 15, true, true, new[] { query1, query2, query3 });
         }
 
-        private void UpgradeDB16()
+        private static void UpgradeDB16(SQLiteConnectionED conn)
         {
             string query = "CREATE TABLE Bookmarks (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , StarName TEXT, x double NOT NULL, y double NOT NULL, z double NOT NULL, Time DATETIME NOT NULL, Heading TEXT, Note TEXT NOT Null )";
-            PerformUpgrade(16, true, true, new[] { query });
+            PerformUpgrade(conn, 16, true, true, new[] { query });
         }
 
-        private void UpgradeDB17()
+        private static void UpgradeDB17(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_edsm Integer";
             string query2 = "CREATE INDEX Systems_EDSM_ID_Index ON Systems (id_edsm ASC)";
@@ -695,32 +618,127 @@ namespace EDDiscovery.DB
             string query5 = "CREATE INDEX Distances_EDSM_ID_Index ON Distances (id_edsm ASC)";
             string query6 = "Update VisitedSystems set x=null, y=null, z=null where x=0 and y=0 and z=0 and name!=\"Sol\"";
 
-            PerformUpgrade(17, true, true, new[] { query1,query2,query3,query4,query5,query6 }, () =>
+            PerformUpgrade(conn, 17, true, true, new[] { query1,query2,query3,query4,query5,query6 }, () =>
             {
-                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", m_SQLiteConnectionED);        // force EDSM sync..
-                PutSettingString("EDDBSystemsTime", "0", m_SQLiteConnectionED);                               // force EDDB
-                PutSettingString("EDSCLastDist", "2010-01-01 00:00:00", m_SQLiteConnectionED);                // force distances
+                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
+                PutSettingString("EDDBSystemsTime", "0", conn);                               // force EDDB
+                PutSettingString("EDSCLastDist", "2010-01-01 00:00:00", conn);                // force distances
             });
         }
 
-        private void UpgradeDB18()
+        private static void UpgradeDB18(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN id_edsm_assigned Integer";
             string query2 = "CREATE INDEX VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)";
             string query3 = "CREATE INDEX VisitedSystems_position ON VisitedSystems (X, Y, Z)";
             string query4 = "CREATE INDEX Systems_position ON Systems (X, Y, Z)";
 
-            PerformUpgrade(18, true, true, new[] { query1, query2, query3, query4 });
+            PerformUpgrade(conn, 18, true, true, new[] { query1, query2, query3, query4 });
         }
 
-        private void UpgradeDB19()
+        private static void UpgradeDB19(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE SystemAliases (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT, id_edsm INTEGER, id_edsm_mergedto INTEGER)";
             string query2 = "CREATE INDEX SystemAliases_name ON SystemAliases (name)";
             string query3 = "CREATE UNIQUE INDEX SystemAliases_id_edsm ON SystemAliases (id_edsm)";
             string query4 = "CREATE INDEX SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)";
 
-            PerformUpgrade(19, true, true, new[] { query1, query2, query3, query4 });
+            PerformUpgrade(conn, 19, true, true, new[] { query1, query2, query3, query4 });
+        }
+
+        private static DbProviderFactory GetSqliteProviderFactory()
+        {
+            if (WindowsSqliteProviderWorks())
+            {
+                return GetWindowsSqliteProviderFactory();
+            }
+
+            var factory = GetMonoSqliteProviderFactory();
+
+            if (DbFactoryWorks(factory))
+            {
+                return factory;
+            }
+
+            throw new InvalidOperationException("Unable to get a working Sqlite driver");
+        }
+
+        private static bool WindowsSqliteProviderWorks()
+        {
+            try
+            {
+                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
+                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool DbFactoryWorks(DbProviderFactory factory)
+        {
+            if (factory != null)
+            {
+                try
+                {
+                    using (var conn = factory.CreateConnection())
+                    {
+                        conn.ConnectionString = constring;
+                        conn.Open();
+                        return true;
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
+        }
+
+        private static DbProviderFactory GetMonoSqliteProviderFactory()
+        {
+            try
+            {
+                var asm = System.Reflection.Assembly.LoadWithPartialName("Mono.Data.Sqlite");
+                var factorytype = asm.GetType("Mono.Data.Sqlite.SqliteFactory");
+                return (DbProviderFactory)factorytype.GetConstructor(new Type[0]).Invoke(new object[0]);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static DbProviderFactory GetWindowsSqliteProviderFactory()
+        {
+            try
+            {
+                return new System.Data.SQLite.SQLiteFactory();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        #endregion
+
+        #region Database access
+        public static DbConnection CreateCN()
+        {
+            lock (lockDBInit)                                           // one at a time chaps
+            {
+                if (DbFactory == null)                                        // first one to ask for a connection sets the db up
+                {
+                    InitializeDatabase();
+                }
+            }
+
+            DbConnection cn = DbFactory.CreateConnection();
+            cn.ConnectionString = constring;
+            return cn;
         }
 
         ///----------------------------
@@ -773,7 +791,55 @@ namespace EDDiscovery.DB
                 throw;
             }
         }
+        #endregion
 
+        #region Extension Methods
+        public static void AddParameterWithValue(this DbCommand cmd, string name, object val)
+        {
+            var par = cmd.CreateParameter();
+            par.ParameterName = name;
+            par.Value = val;
+            cmd.Parameters.Add(par);
+        }
+
+        public static void AddParameter(this DbCommand cmd, string name, DbType type)
+        {
+            var par = cmd.CreateParameter();
+            par.ParameterName = name;
+            par.DbType = type;
+            cmd.Parameters.Add(par);
+        }
+
+        public static void SetParameterValue(this DbCommand cmd, string name, object val)
+        {
+            cmd.Parameters[name].Value = val;
+        }
+
+        public static DbDataAdapter CreateDataAdapter(this DbCommand cmd)
+        {
+            DbDataAdapter da = DbFactory.CreateDataAdapter();
+            da.SelectCommand = cmd;
+            return da;
+        }
+
+        public static DbCommand CreateCommand(this DbConnection conn, string query)
+        {
+            DbCommand cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandTimeout = 30;
+            cmd.CommandText = query;
+            return cmd;
+        }
+
+        public static DbCommand CreateCommand(this DbConnection conn, string query, DbTransaction transaction)
+        {
+            DbCommand cmd = conn.CreateCommand(query);
+            cmd.Transaction = transaction;
+            return cmd;
+        }
+        #endregion
+
+        #region Settings
         ///----------------------------
         /// STATIC functions for discrete values
 
@@ -1115,6 +1181,6 @@ namespace EDDiscovery.DB
                 return false;
             }
         }
-
+        #endregion
     }
 }
