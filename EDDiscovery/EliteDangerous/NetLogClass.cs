@@ -251,7 +251,7 @@ namespace EDDiscovery
                     }
                 }
 
-                ReloadMonitor();
+                RestartMonitor();
 
                 NoEvents = false;
             }
@@ -405,7 +405,10 @@ namespace EDDiscovery
         {
             Exit = true;
             NewLogEvent.Set();
-            ThreadNetLog.Join();
+            if (ThreadNetLog != null && ThreadNetLog.ThreadState == ThreadState.Running)
+            {
+                ThreadNetLog.Join();
+            }
         }
 
         public void ReloadMonitor()
@@ -427,6 +430,15 @@ namespace EDDiscovery
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                     }
                 }
+            }
+        }
+
+        public void RestartMonitor()
+        {
+            StopMonitor();
+            if (_discoveryform != null)
+            {
+                StartMonitor(_discoveryform);
             }
         }
 
@@ -563,7 +575,7 @@ namespace EDDiscovery
 
         private void EDDConfig_NetLogDirChanged()
         {
-            ReloadMonitor();
+            RestartMonitor();
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
