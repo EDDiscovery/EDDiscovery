@@ -412,7 +412,86 @@ namespace EDDiscovery
 
         private void TravelHistoryControl_Load(object sender, EventArgs e)
         {
-           dataGridViewTravel.MakeDoubleBuffered();
+            dataGridViewTravel.MakeDoubleBuffered();
+        }
+
+        public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
+        {
+            ignorewidthchange = true;
+            if (SQLiteDBClass.keyExists("TravelControlDGVCol1"))        // if stored values, set back to what they were..
+            {
+                for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
+                {
+                    int w = SQLiteDBClass.GetSettingInt("TravelControlDGVCol" + ((i + 1).ToString()), -1);
+                    if (w > 10)        // in case something is up (min 10 pixels)
+                        dataGridViewTravel.Columns[i].Width = w;
+                }
+            }
+
+            FillDGVOut();
+            ignorewidthchange = false;
+        }
+
+        public void SaveSettings()     // called by form when closing
+        {
+            for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
+                SQLiteDBClass.PutSettingInt("TravelControlDGVCol" + ((i + 1).ToString()), dataGridViewTravel.Columns[i].Width);
+        }
+
+        void FillDGVOut()
+        {
+            int twidth = dataGridViewTravel.RowHeadersWidth;        // get how many pixels we are using..
+            for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
+                twidth += dataGridViewTravel.Columns[i].Width;
+
+            int delta = dataGridViewTravel.Width - twidth;
+
+            if (delta < 0)        // not enough space
+            {
+                Collapse(ref delta, 3);         // pick columns on preference list to shrink
+                Collapse(ref delta, 2);
+                Collapse(ref delta, 0);
+                Collapse(ref delta, 1);
+            }
+            else
+                dataGridViewTravel.Columns[3].Width += delta;   // note is used to fill out columns
+        }
+
+        void Collapse(ref int delta, int col)
+        {
+            if (delta < 0)
+            {
+                int colsaving = dataGridViewTravel.Columns[col].Width - dataGridViewTravel.Columns[col].MinimumWidth;
+
+                if (-delta <= colsaving)       // if can save 30 from col3, and delta is -20, 20<=30, do it.
+                {
+                    dataGridViewTravel.Columns[col].Width += delta;
+                    delta = 0;
+                }
+                else
+                {
+                    delta += colsaving;
+                    dataGridViewTravel.Columns[col].Width = dataGridViewTravel.Columns[col].MinimumWidth;
+                }
+            }
+        }
+
+        private void TravelHistoryControl_Resize(object sender, EventArgs e)
+        {
+            ignorewidthchange = true;
+            FillDGVOut();
+            ignorewidthchange = false;
+        }
+
+        bool ignorewidthchange = false;
+        private void dataGridViewTravel_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            if (!ignorewidthchange)
+            {
+                ignorewidthchange = true;
+                FillDGVOut();       // scale out so its filled..
+                ignorewidthchange = false;
+            }
         }
 
         public void LoadCommandersListBox()
