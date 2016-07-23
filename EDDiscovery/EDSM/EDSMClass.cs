@@ -167,7 +167,7 @@ namespace EDDiscovery2.EDSM
                 return null;
         }
         
-        internal long GetNewSystems()
+        internal long GetNewSystems(EDDiscoveryForm discoveryform)
         {
             string lstsyst;
 
@@ -193,7 +193,7 @@ namespace EDDiscovery2.EDSM
             string json = RequestSystems(lstsyst);
 
             string date = "2010-01-01 00:00:00";
-            long updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date , false);
+            long updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date , false , discoveryform);
             SQLiteDBClass.PutSettingString("EDSMLastSystems", date);
 
             return updates;
