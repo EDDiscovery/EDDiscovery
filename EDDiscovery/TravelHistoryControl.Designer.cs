@@ -627,7 +627,6 @@
             this.comboBoxHistoryWindow.DropDownHeight = 200;
             this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxHistoryWindow.ItemHeight = 20;
-            this.comboBoxHistoryWindow.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxHistoryWindow.Items")));
             this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
             this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
@@ -640,7 +639,7 @@
             this.comboBoxHistoryWindow.TabIndex = 0;
             this.toolTipEddb.SetToolTip(this.comboBoxHistoryWindow, "Select the limit of age for travel history entries to show");
             this.comboBoxHistoryWindow.ValueMember = null;
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // button_RefreshHistory
             // 
@@ -718,7 +717,6 @@
             this.comboBoxCommander.DropDownHeight = 200;
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCommander.ItemHeight = 20;
-            this.comboBoxCommander.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxCommander.Items")));
             this.comboBoxCommander.Location = new System.Drawing.Point(114, 6);
             this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCommander.Name = "comboBoxCommander";
@@ -732,7 +730,7 @@
             this.toolTipEddb.SetToolTip(this.comboBoxCommander, "Select your commander. Use Settings page to configure and add additional commande" +
         "rs");
             this.comboBoxCommander.ValueMember = null;
-            this.comboBoxCommander.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxCommander_SelectedIndexChanged);
+            this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
             // 
             // buttonExtSummaryPopOut
             // 
