@@ -309,12 +309,18 @@ namespace EDDiscovery
 
                 do
                 {
+                    if (closestname == "!!!!!!CLOSE!!!!!")
+                        return;
+
                     vsc = cursys;
 
                     while (closestsystem_queue.TryTake(out nextsys))    // try and empty the queue in case multiple ones are there
                     {
                         //Console.WriteLine("Chuck " + closestname);
                         vsc = nextsys;
+
+                        if (closestname == "!!!!!!CLOSE!!!!!")
+                            return;
                     }
 
                     ISystem lastSystem = vsc.curSystem;
@@ -366,6 +372,14 @@ namespace EDDiscovery
             }
         }
 
+        public void CloseClosestSystemThread()
+        {
+            if (closestthread != null && closestthread.IsAlive)
+            {
+                closestsystem_queue.Add("!!!!!!CLOSE!!!!!");
+                closestthread.Join();
+            }
+        }
 
         public VisitedSystemsClass CurrentSystemSelected
         {
