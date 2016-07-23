@@ -98,14 +98,14 @@
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.TopPanel = new System.Windows.Forms.Panel();
+            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TopPanel = new System.Windows.Forms.Panel();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -908,52 +908,9 @@
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
             this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellContentDoubleClick);
             this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
+            this.dataGridViewTravel.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewTravel_ColumnWidthChanged);
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
             this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.MinimumWidth = 150;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 150;
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.MinimumWidth = 200;
-            this.ColumnSystem.Name = "ColumnSystem";
-            this.ColumnSystem.ReadOnly = true;
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.MinimumWidth = 70;
-            this.ColumnDistance.Name = "ColumnDistance";
-            this.ColumnDistance.ReadOnly = true;
-            this.ColumnDistance.Width = 70;
-            // 
-            // ColumnNote
-            // 
-            this.ColumnNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnNote.FillWeight = 150F;
-            this.ColumnNote.HeaderText = "Note";
-            this.ColumnNote.MinimumWidth = 100;
-            this.ColumnNote.Name = "ColumnNote";
-            this.ColumnNote.ReadOnly = true;
-            // 
-            // mapColour
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
-            this.mapColour.HeaderText = "Map";
-            this.mapColour.MinimumWidth = 40;
-            this.mapColour.Name = "mapColour";
-            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
-            this.mapColour.Width = 40;
             // 
             // TopPanel
             // 
@@ -1002,6 +959,50 @@
             this.comboBoxHistoryWindow.ValueMember = null;
             this.comboBoxHistoryWindow.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.MinimumWidth = 100;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.Width = 140;
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.MinimumWidth = 100;
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.ReadOnly = true;
+            this.ColumnSystem.Width = 150;
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.MinimumWidth = 50;
+            this.ColumnDistance.Name = "ColumnDistance";
+            this.ColumnDistance.ReadOnly = true;
+            this.ColumnDistance.Width = 70;
+            // 
+            // ColumnNote
+            // 
+            this.ColumnNote.FillWeight = 150F;
+            this.ColumnNote.HeaderText = "Note";
+            this.ColumnNote.MinimumWidth = 10;
+            this.ColumnNote.Name = "ColumnNote";
+            this.ColumnNote.ReadOnly = true;
+            this.ColumnNote.Width = 137;
+            // 
+            // mapColour
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.mapColour.DefaultCellStyle = dataGridViewCellStyle1;
+            this.mapColour.HeaderText = "Map";
+            this.mapColour.MinimumWidth = 40;
+            this.mapColour.Name = "mapColour";
+            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
+            this.mapColour.Width = 40;
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1012,6 +1013,7 @@
             this.Name = "TravelHistoryControl";
             this.Size = new System.Drawing.Size(891, 650);
             this.Load += new System.EventHandler(this.TravelHistoryControl_Load);
+            this.Resize += new System.EventHandler(this.TravelHistoryControl_Resize);
             this.historyContextMenu.ResumeLayout(false);
             this.panel_system.ResumeLayout(false);
             this.panel_system.PerformLayout();
@@ -1089,11 +1091,6 @@
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private System.Windows.Forms.Panel TopPanel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
         private System.Windows.Forms.Panel panel_bottomright;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
@@ -1109,6 +1106,11 @@
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterDistanceToPreviousStarToolStripMenuItem;
         private ExtendedControls.DrawnPanel buttonEDSM;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
+        private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
         private System.Windows.Forms.ToolStripMenuItem selectCorrectSystemToolStripMenuItem;
     }
 }

@@ -244,7 +244,10 @@ namespace EDDiscovery
                 this.CreateParams.X = this.Left;
                 this.CreateParams.Y = this.Top;
                 this.StartPosition = FormStartPosition.Manual;
+
             }
+
+            travelHistoryControl1.LoadLayoutSettings();
         }
 
         private void CheckIfEliteDangerousIsRunning()
@@ -779,6 +782,7 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingInt("FormLeft", this.Left);
             routeControl1.SaveSettings();
             theme.SaveSettings(null);
+            travelHistoryControl1.SaveSettings();
 
             SQLiteDBClass.PutSettingBool("EDSMSyncTo", travelHistoryControl1.checkBoxEDSMSyncTo.Checked);
             SQLiteDBClass.PutSettingBool("EDSMSyncFrom", travelHistoryControl1.checkBoxEDSMSyncFrom.Checked);
