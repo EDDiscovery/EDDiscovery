@@ -696,6 +696,45 @@ namespace EDDiscovery.DB
             return sys;
         }
 
+        public static List<SystemClass> GetSystemsByName(string name, SQLiteConnectionED cn = null)
+        {
+            List<SystemClass> systems = new List<SystemClass>();
+            bool closeit = false;
+
+            try
+            {
+                if (cn == null)
+                {
+                    closeit = true;
+                    cn = new SQLiteConnectionED();
+                }
+
+                using (DbCommand cmd = cn.CreateCommand("select * from Systems where name = @name"))
+                {
+                    cmd.AddParameterWithValue("name", name);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                            systems.Add(new SystemClass(reader));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                if (closeit && cn != null)
+                {
+                    cn.Dispose();
+                }
+            }
+
+            return systems;
+        }
+
         public static SystemClass GetSystem(long id, SQLiteConnectionED cn = null, SystemIDType idtype = SystemIDType.id )      // using an id
         {
             SystemClass sys = null;
@@ -798,18 +837,29 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static void GetSystemSqDistancesFrom(SortedList<double, string> distlist, double x, double y, double z, int maxitems, bool removezerodiststar)
+        public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar, double maxdist = 200)
         {
             try
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select name,x,y,z from Systems Order By (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) Limit @max"))
+                    using (DbCommand cmd = cn.CreateCommand(
+                        "SELECT * " +
+                        "FROM Systems " +
+                        "WHERE x >= @xv - @maxdist " +
+                        "AND x <= @xv + @maxdist " +
+                        "AND y >= @yv - @maxdist " +
+                        "AND y <= @yv + @maxdist " +
+                        "AND z >= @zv - @maxdist " +
+                        "AND z <= @zv + @maxdist " +
+                        "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
+                        "LIMIT @max"))
                     {
                         cmd.AddParameterWithValue("xv", x);
                         cmd.AddParameterWithValue("yv", y);
                         cmd.AddParameterWithValue("zv", z);
                         cmd.AddParameterWithValue("max", maxitems+1);     // 1 more, because if we are on a star, that will be returned
+                        cmd.AddParameterWithValue("maxdist", maxdist);
 
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
@@ -825,7 +875,7 @@ namespace EDDiscovery.DB
 
                                     double dist = dx * dx + dy * dy + dz * dz;
                                     if (dist > 0.001 || !removezerodiststar)
-                                        distlist.Add(dist, name);
+                                        distlist.Add(dist, new SystemClass(reader));
                                 }
                             }
                         }
@@ -839,11 +889,11 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static SystemClass FindNearestSystem(double x, double y, double z, bool removezerodiststar = false)
+        public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000)
         {
-            SortedList<double, string> distlist = new SortedList<double, string>();
-            GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar);
-            return (distlist.Count > 0) ? GetSystem(distlist.First().Value) : null;
+            SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
+            GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar, maxdist);
+            return distlist.Select(v => v.Value).FirstOrDefault();
         }
 
         public const int metric_nearestwaypoint = 0;     // easiest way to synchronise metric selection..
@@ -950,22 +1000,269 @@ namespace EDDiscovery.DB
         {
             try
             {
+                // Indexed sets of systems
+                Dictionary<long, List<SystemClass>> systemsByVscId = new Dictionary<long, List<SystemClass>>();
+                Dictionary<long, List<SystemClass>> systemsAliasesByVscId = new Dictionary<long, List<SystemClass>>();
+                Dictionary<string, List<SystemClass>> systemsByName = new Dictionary<string, List<SystemClass>>();
+                Dictionary<long, SystemClass> systemsByEdsmId = new Dictionary<long, SystemClass>();
+
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    DbCommand cmd = cn.CreateCommand("select * from Systems where name = @name limit 1");
-
-                    foreach (VisitedSystemsClass vsc in visitedSystems)
+                    // Check that the SystemAliases table is not empty
+                    using (DbCommand cmd = cn.CreateCommand("SELECT COUNT(id) FROM SystemAliases"))
                     {
-                        if (vsc.curSystem == null)                                              // if not set before, look it up
-                        {
-                            cmd.Parameters.Clear();
-                            cmd.AddParameterWithValue("name", vsc.Name);
+                        long nrows = (long)cmd.ExecuteScalar();
 
-                            using (DbDataReader reader = cmd.ExecuteReader())
+                        if (nrows == 0)
+                        {
+                            Console.WriteLine("Populating system aliases table");
+                            RemoveHiddenSystems();
+                        }
+                    }
+
+                    // Retrieve systems matching on name, position or EDSM ID.
+                    // Having the database filter the systems is much quicker
+                    // than having to sift through all of the systems
+                    // ourselves.
+                    using (DbCommand cmd = cn.CreateCommand(
+                        "SELECT DISTINCT vsc.id AS vscid, a.id AS aliasid, s.* " +
+                        "FROM VisitedSystems vsc " +
+                        "LEFT JOIN SystemAliases a " +
+                        "ON a.Name = vsc.Name " +
+                        "OR a.id_edsm = vsc.id_edsm_assigned " +
+                        "LEFT JOIN Systems s " +
+                        "ON s.Name = vsc.Name " +
+                        "OR s.id_edsm = vsc.id_edsm_assigned " +
+                        "OR (s.X >= vsc.X - 0.125 AND s.X <= vsc.X + 0.125 AND s.Y >= vsc.Y - 0.125 AND s.Y <= vsc.Y + 0.125 AND s.Z >= vsc.Z - 0.125 AND s.Z <= vsc.Z + 0.125) " +
+                        "OR s.id_edsm = a.id_edsm_mergedto " +
+                        "WHERE s.id IS NOT NULL " +
+                        "ORDER BY s.id ASC"))
+                    {
+                        using (DbDataReader reader = cmd.ExecuteReader())
+                        {
+                            long lastid = -1;
+                            SystemClass sys = null;
+
+                            while (reader.Read())
                             {
-                                if (reader.Read())
-                                    vsc.curSystem = new SystemClass(reader);
+                                string name = ((string)reader["name"]).ToLower();
+                                long id_edsm = 0;
+                                long id = (long)reader["id"];
+                                long vscid = (long)reader["vscid"];
+                                bool isalias = false;
+
+                                if (reader["aliasid"] != DBNull.Value)
+                                {
+                                    isalias = true;
+                                }
+
+                                if (id != lastid)
+                                {
+                                    sys = new SystemClass(reader);
+
+                                    // Get name match
+                                    if (!systemsByName.ContainsKey(name))
+                                    {
+                                        systemsByName[name] = new List<SystemClass>();
+                                    }
+
+                                    systemsByName[name].Add(sys);
+
+                                    // Get EDSM ID match
+                                    if (reader["id_edsm"] != System.DBNull.Value)
+                                    {
+                                        id_edsm = (long)reader["id_edsm"];
+
+                                        if (sys == null)
+                                        {
+                                            sys = new SystemClass(reader);
+                                        }
+
+                                        systemsByEdsmId[id_edsm] = sys;
+                                    }
+
+                                    lastid = id;
+                                }
+
+                                // Get VSC ID match
+                                if (isalias)
+                                {
+                                    if (!systemsAliasesByVscId.ContainsKey(vscid))
+                                    {
+                                        systemsAliasesByVscId[vscid] = new List<SystemClass>();
+                                    }
+
+                                    systemsAliasesByVscId[vscid].Add(sys);
+                                }
+                                else
+                                {
+                                    if (!systemsByVscId.ContainsKey(vscid))
+                                    {
+                                        systemsByVscId[vscid] = new List<SystemClass>();
+                                    }
+
+                                    systemsByVscId[vscid].Add(sys);
+                                }
                             }
+                        }
+                    }
+                }
+
+                // Now that we have gathered the matching systems
+                // we determine what and how well they match
+                foreach (VisitedSystemsClass vsc in visitedSystems)
+                {
+                    string vsc_searchname = vsc.Name.ToLower();
+
+                    if (vsc.curSystem == null)                                              // if not set before, look it up
+                    {
+                        List<SystemClass> posmatches = null;
+                        List<SystemClass> nameposmatches = null;
+                        List<SystemClass> namematches = null;
+                        SystemClass edsmidmatch = null;
+                        bool multimatch = false;
+                        Dictionary<long, SystemClass> matches;
+                        bool hastravcoords = vsc.HasTravelCoordinates &&
+                            (vsc.Name.ToLower() == "sol" || vsc.X != 0 || vsc.Y != 0 || vsc.Z != 0);
+
+                        if (systemsByVscId.ContainsKey(vsc.id))
+                        {
+                            matches = systemsByVscId[vsc.id].ToDictionary(s => s.id);
+                        }
+                        else
+                        {
+                            matches = new Dictionary<long, SystemClass>();
+                        }
+
+                        if (vsc.id_edsm_assigned != null && vsc.id_edsm_assigned != 0)
+                        {
+                            long id_edsm = (long)vsc.id_edsm_assigned;
+
+                            if (systemsByEdsmId.ContainsKey(id_edsm) && systemsByEdsmId[id_edsm] != null)
+                            {
+                                edsmidmatch = systemsByEdsmId[id_edsm];
+                                matches[edsmidmatch.id] = edsmidmatch;
+                            }
+                        }
+
+                        if (hastravcoords)
+                        {
+                            posmatches = matches.Values.Where(s => s.x >= vsc.X - 0.125 && s.x <= vsc.X + 0.125 && s.y >= vsc.X - 0.125 && s.y <= vsc.Y + 0.125 && s.z >= vsc.Z - 0.125 && s.z <= vsc.Z + 0.125).ToList();
+                            if (posmatches.Count >= 1)
+                            {
+                                nameposmatches = posmatches.Where(s => s.SearchName == vsc_searchname).ToList();
+
+                                foreach (var sys in posmatches)
+                                {
+                                    matches[sys.id] = sys;
+                                }
+                            }
+                        }
+
+                        if (systemsByName.ContainsKey(vsc_searchname) && systemsByName[vsc_searchname].Count >= 1)
+                        {
+                            namematches = systemsByName[vsc_searchname];
+
+                            foreach (var sys in namematches)
+                            {
+                                matches[sys.id] = sys;
+                            }
+                        }
+
+                        if (systemsAliasesByVscId.ContainsKey(vsc.id))
+                        {
+                            foreach (var alt in systemsAliasesByVscId[vsc.id])
+                            {
+                                matches[alt.id] = alt;
+                            }
+                        }
+
+                        vsc.alternatives = matches.Values.Select(s => (ISystem)s).ToList();
+
+                        if (edsmidmatch != null)
+                        {
+                            SystemClass sys = edsmidmatch;
+                            vsc.curSystem = sys;
+
+                            if (sys.SearchName == vsc_searchname && hastravcoords && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // name and position matches
+                            {
+                                vsc.NameStatus = "Exact match";
+                                continue; // Continue to next system
+                            }
+                            else if (hastravcoords && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // position matches
+                            {
+                                vsc.NameStatus = "Name differs";
+                                continue; // Continue to next system
+                            }
+                            else if (!hastravcoords || !sys.HasCoordinate) // no coordinates available
+                            {
+                                if (sys.SearchName == vsc_searchname) // name matches
+                                {
+                                    if (!sys.HasCoordinate)
+                                    {
+                                        vsc.NameStatus = "System has no known coordinates";
+                                    }
+                                    else
+                                    {
+                                        vsc.NameStatus = "Travel log entry has no coordinates";
+                                    }
+
+                                    vsc.curSystem = sys;
+                                    continue; // Continue to next system
+                                }
+                                else if (!vsc.HasTravelCoordinates)
+                                {
+                                    vsc.NameStatus = "Name differs";
+                                }
+                            }
+                        }
+
+                        if (nameposmatches != null)
+                        {
+                            if (nameposmatches.Count == 1)
+                            {
+                                // Both name and position matches
+                                vsc.curSystem = nameposmatches[0];
+                                vsc.NameStatus = "Exact match";
+                                continue; // Continue to next system
+                            }
+                            else if (posmatches.Count == 1)
+                            {
+                                var sys = posmatches[0];
+
+                                // Position matches
+                                vsc.curSystem = sys;
+                                vsc.NameStatus = $"System {sys.name} found at location";
+                                continue; // Continue to next system
+                            }
+                            else
+                            {
+                                multimatch = true;
+                            }
+                        }
+
+                        if (namematches != null)
+                        {
+                            if (namematches.Count == 1)
+                            {
+                                // One system name matched
+                                vsc.curSystem = namematches[0];
+                                vsc.NameStatus = "Name matched";
+                                continue;
+                            }
+                            else if (namematches.Count > 1)
+                            {
+                                multimatch = true;
+                            }
+                        }
+
+                        if (multimatch)
+                        {
+                            vsc.NameStatus = "Multiple system matches found";
+                        }
+                        else
+                        {
+                            vsc.NameStatus = "System not found";
                         }
                     }
                 }
@@ -1125,6 +1422,16 @@ namespace EDDiscovery.DB
             return toupdate.Count + newsystems.Count;
         }
 
+        public static void RemoveHiddenSystems()
+        {
+            EDDiscovery2.EDSM.EDSMClass edsm = new EDDiscovery2.EDSM.EDSMClass();
+
+            string strhiddensystems = edsm.GetHiddenSystems();
+
+            if (strhiddensystems != null && strhiddensystems.Length >= 6)
+                RemoveHiddenSystems(strhiddensystems);
+        }
+
         public static void RemoveHiddenSystems(string json)
         {
             JsonTextReader jr = new JsonTextReader(new StringReader(json));
@@ -1139,12 +1446,31 @@ namespace EDDiscovery.DB
                         JObject jo = JObject.Load(jr);
 
                         long edsmid = (long)jo["id"];
+                        string name = (string)jo["system"];
+                        string action = (string)jo["action"];
+                        long mergedto = 0;
+
+                        if (jo["mergedTo"] != null)
+                        {
+                            mergedto = (long)jo["mergedTo"];
+                        }
 
                         SystemClass cs = GetSystem(edsmid, null, SystemIDType.id_edsm);   // test before delete..
                         if (cs != null)
                         {
                             Console.Write("Remove " + edsmid);
                             Delete(edsmid, cn2, null, SystemIDType.id_edsm);             // and wack!
+                        }
+
+                        if (mergedto > 0)
+                        {
+                            using (DbCommand cmd = cn2.CreateCommand("INSERT OR IGNORE INTO SystemAliases (name, id_edsm, id_edsm_mergedto) VALUES (@name, @id_edsm, @id_edsm_mergedto)"))
+                            {
+                                cmd.AddParameterWithValue("@name", name);
+                                cmd.AddParameterWithValue("@id_edsm", edsmid);
+                                cmd.AddParameterWithValue("@id_edsm_mergedto", mergedto);
+                                cmd.ExecuteNonQuery();
+                            }
                         }
                     }
                 }

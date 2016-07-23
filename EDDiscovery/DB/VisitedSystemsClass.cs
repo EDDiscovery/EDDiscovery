@@ -15,6 +15,16 @@ namespace EDDiscovery2.DB
         public ISystem prevSystem;
         public ISystem lastKnownSystem;
         public string strDistance;
+        public string NameStatus;
+        public List<ISystem> alternatives;
+
+        public bool IsAmbiguous
+        {
+            get
+            {
+                return alternatives != null && (alternatives.Count > 1 || (curSystem == null && alternatives.Count >= 1));
+            }
+        }
 
         public VisitedSystemsClass()
         {
@@ -46,6 +56,11 @@ namespace EDDiscovery2.DB
                 Y = (double)dr["Y"];
                 Z = (double)dr["Z"];
             }
+
+            if (dr["id_edsm_assigned"] != System.DBNull.Value)
+            {
+                id_edsm_assigned = (long)dr["id_edsm_assigned"];
+            }
         }
 
         public bool HasTravelCoordinates
@@ -67,7 +82,7 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionED cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z, id_edsm_assigned) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z, @id_edsm_assigned)"))
             {
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@time", Time);
@@ -79,6 +94,7 @@ namespace EDDiscovery2.DB
                 cmd.AddParameterWithValue("@x", X);
                 cmd.AddParameterWithValue("@y", Y);
                 cmd.AddParameterWithValue("@z", Z);
+                cmd.AddParameterWithValue("@id_edsm_assigned", id_edsm_assigned);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -100,7 +116,7 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionED cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour, X=@x, Y=@y, Z=@z  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour, X=@x, Y=@y, Z=@z, id_edsm_assigned=@id_edsm_assigned where ID=@id"))
             {
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@Name", Name);
@@ -113,6 +129,7 @@ namespace EDDiscovery2.DB
                 cmd.AddParameterWithValue("@x", X);
                 cmd.AddParameterWithValue("@y", Y);
                 cmd.AddParameterWithValue("@z", Z);
+                cmd.AddParameterWithValue("@id_edsm_assigned", id_edsm_assigned);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 return true;
@@ -329,13 +346,15 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static void CalculateSqDistances(List<VisitedSystemsClass> vs, SortedList<double,string> distlist , double x, double y, double z, int maxitems , bool removezerodiststar )
+        public static void CalculateSqDistances(List<VisitedSystemsClass> vs, SortedList<double,ISystem> distlist , double x, double y, double z, int maxitems , bool removezerodiststar )
         {
             double dist;
             double dx, dy, dz;
+            Dictionary<long, ISystem> systems = distlist.Values.ToDictionary(s => s.id);
+
             foreach (VisitedSystemsClass pos in vs)
             {
-                if (pos.HasTravelCoordinates && distlist.IndexOfValue(pos.Name) == -1)   // if co-ords, and not in list already..
+                if (pos.HasTravelCoordinates && pos.curSystem != null && !systems.ContainsKey(pos.curSystem.id))   // if co-ords, and not in list already..
                 {
                     dx = (pos.X - x);
                     dy = (pos.Y - y);
@@ -345,10 +364,10 @@ namespace EDDiscovery2.DB
                     if (dist > 0.001 || !removezerodiststar)
                     {
                         if (distlist.Count < maxitems)          // if less than max, add..
-                            distlist.Add(dist, pos.Name);
+                            distlist.Add(dist, pos.curSystem);
                         else if (dist < distlist.Last().Key)   // if last entry (which must be the biggest) is greater than dist..
                         {
-                            distlist.Add(dist, pos.Name);           // add in
+                            distlist.Add(dist, pos.curSystem);           // add in
                             distlist.RemoveAt(maxitems);        // remove last..
                         }
                     }
