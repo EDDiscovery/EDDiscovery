@@ -20,9 +20,7 @@ namespace ExtendedControls
         public event EventHandler SelectedIndexChanged;
 
         public int SelectedIndex { get { return _listcontrol.SelectedIndex; } set { _listcontrol.SelectedIndex = value; } }
-        public Color SelectionBackColor { get { return _listcontrol.SelectionBackColor; } set { _listcontrol.SelectionBackColor = value; } }
-        public override Color ForeColor { get { return base.ForeColor; } set { base.ForeColor = value; _listcontrol.ForeColor = value; } }
-        public override Color BackColor { get { return base.BackColor; } set { base.BackColor = value; _listcontrol.BackColor = value; } }
+        public Color SelectionBackColor { get { return _listcontrol.SelectionBackColor; } set { _listcontrol.SelectionBackColor = value; this.BackColor = value; } }
         public List<string> Items { get { return _listcontrol.Items; } set { _listcontrol.Items = value; } }
         public Color BorderColor { get { return _listcontrol.BorderColor; } set { _listcontrol.BorderColor = value; } }
         public Color ScrollBarColor { get { return _listcontrol.ScrollBarColor; } set { _listcontrol.ScrollBarColor = value; } }
@@ -42,6 +40,8 @@ namespace ExtendedControls
             this._listcontrol.Dock = DockStyle.Fill;
             this._listcontrol.Visible = true;
             this._listcontrol.SelectedIndexChanged += _listcontrol_SelectedIndexChanged;
+            this._listcontrol.Margin = new Padding(0);
+            this.Padding = new Padding(0);
             this.Controls.Add(this._listcontrol);
         }
 
@@ -428,6 +428,7 @@ namespace ExtendedControls
 
             _cbdropdown.SelectionBackColor = this.DropDownBackgroundColor;
             _cbdropdown.ForeColor = this.ForeColor;
+            _cbdropdown.BackColor = this.BorderColor;
             _cbdropdown.BorderColor = this.BorderColor;
             _cbdropdown.Items = this.Items.ToList();
             _cbdropdown.ItemHeight = this.ItemHeight;
