@@ -183,8 +183,9 @@ namespace EDDiscovery
 
                 NoEvents = true;
 
-                foreach (FileInfo fi in allFiles)
+                for (int i = 0; i < allFiles.Length; i++)
                 {
+                    FileInfo fi = allFiles[i];
                     TravelLogUnit lu = null;
                     bool parsefile = true;
 
@@ -197,7 +198,7 @@ namespace EDDiscovery
 
                     if (lu != null)
                     {
-                        if (lu.Size == fi.Length)  // File is already in DB:
+                        if (lu.Size == fi.Length && fi.Length != 0 && i < allFiles.Length - 1)  // File is already in DB:
                             parsefile = false;
                     }
                     else
@@ -255,8 +256,6 @@ namespace EDDiscovery
                         AppendText(richTextBox_History, fi.Name + " " + nr.ToString() + " added to local database." + Environment.NewLine, _discoveryform.theme.TextBlockColor);
                     }
                 }
-
-                RestartMonitor();
 
                 NoEvents = false;
             }
@@ -396,6 +395,7 @@ namespace EDDiscovery
 
         public bool StartMonitor()
         {
+            Exit = false;
             ThreadNetLog = new System.Threading.Thread(new System.Threading.ThreadStart(NetLogMain));
             ThreadNetLog.Name = "Net log";
             ThreadNetLog.Start();
@@ -439,8 +439,17 @@ namespace EDDiscovery
 
         public void RestartMonitor()
         {
-            StopMonitor();
-            StartMonitor();
+            if (!Exit)
+            {
+                NewLogEvent.Set();
+                if (ThreadNetLog != null && ThreadNetLog.ThreadState == ThreadState.Running)
+                {
+                    ThreadNetLog.Join();
+                }
+                ThreadNetLog = new System.Threading.Thread(new System.Threading.ThreadStart(NetLogMain));
+                ThreadNetLog.Name = "Net log";
+                ThreadNetLog.Start();
+            }
         }
 
         private void NetLogMain()               // THREAD watching the files..

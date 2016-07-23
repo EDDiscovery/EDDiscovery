@@ -186,7 +186,6 @@ namespace EDDiscovery
         {                                                       // for backwards compatibility, don't store RGB value.
             if (activecommander >= 0)
             {
-                netlog.StopMonitor();
                 visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
                 netlog.RestartMonitor();
             }
