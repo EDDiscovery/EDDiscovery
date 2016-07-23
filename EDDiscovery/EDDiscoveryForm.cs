@@ -425,7 +425,7 @@ namespace EDDiscovery
                     else
                     {
                         LogLine("Checking for new EDSM systems (may take a few moments).");
-                        long updates = edsm.GetNewSystems();
+                        long updates = edsm.GetNewSystems(this);
                         LogLine("EDSM updated " + updates + " systems.");
                     }
                 }
@@ -521,7 +521,7 @@ namespace EDDiscovery
             bool firstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
             bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
 
-            if (performedsmsync)
+            if (performedsmsync )
             {
                 string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
                 DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
@@ -530,37 +530,42 @@ namespace EDDiscovery
                 {
                     EDSMClass edsm = new EDSMClass();
 
-                    LogLine("Get hidden systems and remove from EDSM.");
+                    LogLine("Get hidden systems from EDSM and remove from database");
 
                     SystemClass.RemoveHiddenSystems();
 
                     if (PendingClose)
                         return;
 
- 
-                    LogLine("Get systems from EDSM.");
+                    LogLine("Download systems file from EDSM.");
 
                     bool newfile = false;
                     string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
-                    EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile);
-
-                    if (PendingClose)
-                        return;
 
                     long updates = 0;
 
-                    if (newfile || firstrun)
+                    if ( EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile) )
                     {
+                        if (PendingClose)
+                            return;
+
                         LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
 
                         string rwsysfiletime = "2014-01-01 00:00:00";
-                        updates = SystemClass.ParseEDSMUpdateSystemsFile(edsmsystems, ref rwsysfiletime, true);
+                        updates = SystemClass.ParseEDSMUpdateSystemsFile(edsmsystems, ref rwsysfiletime, true, this);
+
+                        if (PendingClose)       // abort, without saving time, to make it do it again
+                            return;
 
                         SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
                     }
+                    else
+                    {
+                        LogLine("Failed to download EDSM system file from server, will check next time");
+                    }
 
                     LogLine("Now checking for recent EDSM systems.");
-                    updates += edsm.GetNewSystems();
+                    updates += edsm.GetNewSystems(this);
 
                     LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
 
