@@ -68,6 +68,7 @@ namespace EDDiscovery
             EDSMSyncFrom = SQLiteDBClass.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
             checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
+            comboBoxHistoryWindow.Enabled = false;
             comboBoxHistoryWindow.DataSource = new[]
             {
                 TravelHistoryFilter.FromHours(6),
@@ -86,6 +87,8 @@ namespace EDDiscovery
             comboBoxHistoryWindow.DisplayMember = nameof(TravelHistoryFilter.Label);
 
             comboBoxHistoryWindow.SelectedIndex = SQLiteDBClass.GetSettingInt("EDUIHistory", DefaultTravelHistoryFilterIndex);
+            comboBoxHistoryWindow.Enabled = true;
+
             LoadCommandersListBox();
 
             closestthread = new Thread(CalculateClosestSystems) { Name = "Closest Calc", IsBackground = true };
@@ -119,7 +122,7 @@ namespace EDDiscovery
         {
             LogText("Check for new EDSM systems." + Environment.NewLine);
             EDSMClass edsm = new EDSMClass();
-            edsm.GetNewSystems();
+            edsm.GetNewSystems(_discoveryForm);
             LogText("EDSM System check complete." + Environment.NewLine);
         }
 

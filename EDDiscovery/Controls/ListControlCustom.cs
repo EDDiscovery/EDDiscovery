@@ -51,7 +51,7 @@ namespace ExtendedControls
 
         private void CalculateLayout()
         { 
-            int bordersize = 0;
+            bordersize = 0;
 
             if (FlatStyle != FlatStyle.System && BorderColor != Color.Transparent)
                 bordersize = 2;
@@ -95,7 +95,6 @@ namespace ExtendedControls
         {
             if (Items != null && itemslayoutestimatedon != Items.Count())  // item count changed, rework it out.
                 CalculateLayout();
-
             if (firstindex < 0)                                           // if invalid (at start)
             {
                 if (SelectedIndex == -1 || Items == null)                  // screen out null..
@@ -119,7 +118,11 @@ namespace ExtendedControls
             if (FlatStyle != FlatStyle.System || !ComboBoxRenderer.IsSupported)
             {
                 Pen p = new Pen(this.BorderColor);
-                e.Graphics.DrawRectangle(p, borderrect);
+                for (int i = 0; i < bordersize; i++)
+                {
+                    var brect = new Rectangle(borderrect.Left + i, borderrect.Top + i, borderrect.Width - i * 2, borderrect.Height - i * 2);
+                    e.Graphics.DrawRectangle(p, borderrect);
+                }
                 p.Dispose();
 
                 Brush backb;
@@ -247,6 +250,11 @@ namespace ExtendedControls
                 GoUpOne();
         }
 
+        public void Repaint()
+        {
+            this.Invalidate(true);
+        }
+
         private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
         public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
 
@@ -254,6 +262,7 @@ namespace ExtendedControls
 
         private VScrollBarCustom vScrollBar;
         private Rectangle borderrect, mainarea;
+        private int bordersize;
         private int itemslayoutestimatedon = -1;
         private int displayableitems = -1;
         private int firstindex = -1;

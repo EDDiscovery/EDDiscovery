@@ -437,7 +437,7 @@
             this.comboBoxFileNameFormat.Size = new System.Drawing.Size(218, 21);
             this.comboBoxFileNameFormat.TabIndex = 7;
             this.comboBoxFileNameFormat.ValueMember = null;
-            this.comboBoxFileNameFormat.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxFileNameFormat_SelectedIndexChanged);
+            this.comboBoxFileNameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileNameFormat_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -519,7 +519,7 @@
             this.comboBoxScanFor.Size = new System.Drawing.Size(113, 21);
             this.comboBoxScanFor.TabIndex = 5;
             this.comboBoxScanFor.ValueMember = null;
-            this.comboBoxScanFor.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxScanFor_SelectedIndexChanged);
+            this.comboBoxScanFor.SelectedIndexChanged += new System.EventHandler(this.comboBoxScanFor_SelectedIndexChanged);
             // 
             // comboBoxFormat
             // 
@@ -544,7 +544,7 @@
             this.comboBoxFormat.Size = new System.Drawing.Size(113, 21);
             this.comboBoxFormat.TabIndex = 5;
             this.comboBoxFormat.ValueMember = null;
-            this.comboBoxFormat.SelectedIndexChanged += new ExtendedControls.ComboBoxCustom.OnSelectedIndexChanged(this.comboBoxFormat_SelectedIndexChanged);
+            this.comboBoxFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFormat_SelectedIndexChanged);
             // 
             // label10
             // 
