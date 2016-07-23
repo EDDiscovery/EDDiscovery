@@ -102,17 +102,14 @@ namespace EDDiscovery2
 
     public class EliteDangerous
     {
-        static public string EDFileName;
-        static public string EDLaunchFileName;
         static public string EDDirectory;
-        //static public string EDVersion;
         static public bool EDRunning = false;
-        static public bool EDLaunchRunning = false;
-        static public bool Beta = false;
         static public bool checkedfordefaultfolder = false;
 
         static public bool CheckED()
         {
+            string EDFileName = null;
+
             try
             {
                 Process[] processes32 = Process.GetProcessesByName("EliteDangerous32");
@@ -146,30 +143,27 @@ namespace EDDiscovery2
                     try
                     {
                         int id = processes[0].Id;
-                        processFilename = GetMainModuleFilepath(id);
-                        EDFileName = processFilename;
-                        //processFilename = processes[0].MainModule.FileName;
+                        processFilename = GetMainModuleFilepath(id);        // may return null if id not found (seen this)
+
+                        if (processFilename != null)
+                            EDFileName = processFilename;
                     }
                     catch (Win32Exception)
                     {
                     }
 
-                    EDDirectory = Path.GetDirectoryName(EDFileName);
-                    if (EDDirectory != null)
+                    if (EDFileName != null)                                 // if found..
                     {
-                        if (EDDirectory.Contains("PUBLIC_TEST_SERVER")) // BETA
+                        string newfolder = Path.GetDirectoryName(EDFileName);
+
+                        if ( newfolder != null && !newfolder.Equals(EDDirectory) )
                         {
-                            SQLiteDBClass.PutSettingString("EDDirectoryBeta", EDDirectory);
-                            Beta = true;
-                        }
-                        else
-                        {
-                            Beta = false;
+                            EDDirectory = newfolder;
                             SQLiteDBClass.PutSettingString("EDDirectory", EDDirectory);
                         }
-                    }
 
-                    EDRunning = true;
+                        EDRunning = true;
+                    }
                 }
 
                 return EDRunning;
@@ -183,15 +177,22 @@ namespace EDDiscovery2
         private static  string GetMainModuleFilepath(int processId)
         {
             string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
+
             using (var searcher = new ManagementObjectSearcher(wmiQueryString))
             {
-                using (var results = searcher.Get())
+                if (searcher != null)           // seen it return null
                 {
-                    foreach (ManagementObject mo in results)
+                    using (var results = searcher.Get())
                     {
-                        if (mo != null)
+                        if (results != null)
                         {
-                            return (string)mo["ExecutablePath"];
+                            foreach (ManagementObject mo in results)
+                            {
+                                if (mo != null)
+                                {
+                                    return (string)mo["ExecutablePath"];
+                                }
+                            }
                         }
                     }
                 }
