@@ -1282,27 +1282,28 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids)
+        public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids , EDDiscoveryForm discoveryform)
         {
             JsonTextReader jr = new JsonTextReader(new StringReader(json));
-            return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids);
+            return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids,discoveryform);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date , bool removenonedsmids)
+        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date , bool removenonedsmids , EDDiscoveryForm discoveryform)
         {
             StreamReader sr = new StreamReader(filename);         // read directly from file..
             JsonTextReader jr = new JsonTextReader(sr);
-            return ParseEDSMUpdateSystemsReader(jr, ref date,removenonedsmids);
+            return ParseEDSMUpdateSystemsReader(jr, ref date,removenonedsmids,discoveryform);
         }
 
  
-        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids)
+        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform)
         {
             List<SystemClass> toupdate = new List<SystemClass>();
             List<SystemClass> newsystems = new List<SystemClass>();
             DateTime maxdate = DateTime.Parse(date, new CultureInfo("sv-SE"));
 
             bool emptydatabase = SystemClass.GetTotalSystems() == 0;            // if empty database, we can skip the lookup
+
 
             using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db
             {
@@ -1312,6 +1313,7 @@ namespace EDDiscovery.DB
                 try
                 {
                     int lasttc = Environment.TickCount;
+                    int formtickcount = Environment.TickCount;
 
                     while (jr.Read())
                     {
@@ -1329,6 +1331,15 @@ namespace EDDiscovery.DB
                                 Console.WriteLine("EDSM Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newsys " + newsystems.Count + " update " + toupdate.Count());
                                 lasttc = Environment.TickCount;
                             }
+
+                            if ( Environment.TickCount - formtickcount > 5000 )
+                            {
+                                discoveryform.LogLine("Updating from EDSM, received " + c + " systems, updated " + (newsystems.Count + toupdate.Count));
+                                formtickcount = Environment.TickCount;
+                            }
+
+                            if (discoveryform.PendingClose)         // pending close, abandon
+                                return 0;
 
                             if (system.HasCoordinate)
                             {
@@ -1413,6 +1424,9 @@ namespace EDDiscovery.DB
                             Console.WriteLine("{0}: EDSM Store Count: {1}", DateTime.UtcNow, count);
                             transaction.Commit();
                         }
+
+                        if (discoveryform.PendingClose)         // pending close, abandon
+                            return 0;
                     }
                 }
 

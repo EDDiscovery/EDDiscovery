@@ -119,7 +119,7 @@ namespace EDDiscovery
         {
             LogText("Check for new EDSM systems." + Environment.NewLine);
             EDSMClass edsm = new EDSMClass();
-            edsm.GetNewSystems();
+            edsm.GetNewSystems(_discoveryForm);
             LogText("EDSM System check complete." + Environment.NewLine);
         }
 
