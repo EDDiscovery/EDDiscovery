@@ -507,10 +507,14 @@ namespace EDDiscovery2.DB
             if (visitedSystems != null)
             {
                 IEnumerable<ISystem> slist = (from systems in visitedSystems orderby systems.Time descending select systems.curSystem);
-                ISystem sel = slist.First(s => s.HasCoordinate);
 
-                if (sel != null)
-                    return (SystemClass)sel;
+                if (slist != null && slist.Any() )
+                {
+                    ISystem sel = slist.First(s => s.HasCoordinate);
+
+                    if (sel != null)
+                        return (SystemClass)sel;
+                }
             }
 
             return null;

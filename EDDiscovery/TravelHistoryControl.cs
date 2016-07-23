@@ -46,7 +46,7 @@ namespace EDDiscovery
         internal bool EDSMSyncTo = true;
         internal bool EDSMSyncFrom = true;
 
-        public NetLogClass netlog = new NetLogClass();
+        public NetLogClass netlog;
         private VisitedSystemsClass currentSysPos = null;
 
         SummaryPopOut summaryPopOut = null;
@@ -62,6 +62,7 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
+            netlog = new NetLogClass(_discoveryForm);
             sync = new EDSMSync(_discoveryForm);
             defaultMapColour = EDDConfig.Instance.DefaultMapColour;
             EDSMSyncTo = SQLiteDBClass.GetSettingBool("EDSMSyncTo", true);
@@ -612,12 +613,15 @@ namespace EDDiscovery
 
         private void UpdateDependentsWithSelection()
         {
-            int rowi = dataGridViewTravel.CurrentCell.RowIndex;
-            if (rowi>=0)
+            if (dataGridViewTravel.CurrentCell != null)
             {
-                VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[rowi].Cells[TravelHistoryColumns.SystemName].Tag);
-                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
-                _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.Name);
+                int rowi = dataGridViewTravel.CurrentCell.RowIndex;
+                if (rowi >= 0)
+                {
+                    VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[rowi].Cells[TravelHistoryColumns.SystemName].Tag);
+                    _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
+                    _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.Name);
+                }
             }
         }
 
