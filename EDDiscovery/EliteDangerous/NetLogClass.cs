@@ -36,8 +36,13 @@ namespace EDDiscovery
         AutoResetEvent NewLogEvent = new AutoResetEvent(false);
         ConcurrentQueue<NetLogFileInfo> NetLogFileQueue = new ConcurrentQueue<NetLogFileInfo>();
         public event NetLogEventHandler OnNewPosition;
-
+        private EDDiscoveryForm _discoveryform;
         public List<TravelLogUnit> tlUnits;
+
+        public NetLogClass(EDDiscoveryForm ed )
+        {
+            _discoveryform = ed;
+        }
 
         public string GetNetLogPath()
         {
@@ -388,15 +393,12 @@ namespace EDDiscovery
             Application.DoEvents();
         }
 
-        private EDDiscoveryForm _discoveryform;
 
-        public bool StartMonitor(EDDiscoveryForm ed)
+        public bool StartMonitor()
         {
-            _discoveryform = ed;
             ThreadNetLog = new System.Threading.Thread(new System.Threading.ThreadStart(NetLogMain));
             ThreadNetLog.Name = "Net log";
             ThreadNetLog.Start();
-
             return true;
         }
 
@@ -410,8 +412,7 @@ namespace EDDiscovery
                 ThreadNetLog.Join();
             }
        
-                ThreadNetLog = null;
-            
+            ThreadNetLog = null;
         }
 
         public void ReloadMonitor()
@@ -439,10 +440,7 @@ namespace EDDiscovery
         public void RestartMonitor()
         {
             StopMonitor();
-            if (_discoveryform != null)
-            {
-                StartMonitor(_discoveryform);
-            }
+            StartMonitor();
         }
 
         private void NetLogMain()               // THREAD watching the files..
