@@ -495,6 +495,12 @@ namespace EDDiscovery.DB
                 if (dbver < 17)
                     UpgradeDB17();
 
+                if (dbver < 18)
+                    UpgradeDB18();
+
+                if (dbver < 19)
+                    UpgradeDB19();
+
                 return true;
             }
             catch (Exception ex)
@@ -697,6 +703,25 @@ namespace EDDiscovery.DB
             });
         }
 
+        private void UpgradeDB18()
+        {
+            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN id_edsm_assigned Integer";
+            string query2 = "CREATE INDEX VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)";
+            string query3 = "CREATE INDEX VisitedSystems_position ON VisitedSystems (X, Y, Z)";
+            string query4 = "CREATE INDEX Systems_position ON Systems (X, Y, Z)";
+
+            PerformUpgrade(18, true, true, new[] { query1, query2, query3, query4 });
+        }
+
+        private void UpgradeDB19()
+        {
+            string query1 = "CREATE TABLE SystemAliases (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT, id_edsm INTEGER, id_edsm_mergedto INTEGER)";
+            string query2 = "CREATE INDEX SystemAliases_name ON SystemAliases (name)";
+            string query3 = "CREATE UNIQUE INDEX SystemAliases_id_edsm ON SystemAliases (id_edsm)";
+            string query4 = "CREATE INDEX SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)";
+
+            PerformUpgrade(19, true, true, new[] { query1, query2, query3, query4 });
+        }
 
         ///----------------------------
         /// STATIC code helpers for other DB classes

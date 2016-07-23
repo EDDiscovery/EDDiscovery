@@ -190,6 +190,11 @@ namespace EDDiscovery
             object[] rowobj = { item.Time, item.Name, item.strDistance, SystemNoteClass.GetSystemNoteOrEmpty(item.curSystem.name), "█" };
             int rownr;
 
+            if (item.curSystem != null && item.curSystem.name.ToLower() != item.Name.ToLower())
+            {
+                rowobj[1] = $"{item.Name} ({item.curSystem.name})";
+            }
+
             if (insert)
             {
                 dataGridViewTravel.Rows.Insert(0, rowobj);
@@ -264,7 +269,7 @@ namespace EDDiscovery
             textBoxState.Text = EnumStringFormat(syspos.curSystem.state.ToString());
             richTextBoxNote.Text = EnumStringFormat(SystemNoteClass.GetSystemNoteOrEmpty(syspos.Name));
 
-            closestsystem_queue.Add(syspos.Name);
+            closestsystem_queue.Add(syspos);
         }
 
         private string EnumStringFormat(string str)
@@ -287,43 +292,38 @@ namespace EDDiscovery
         }
 
         Thread closestthread;
-        BlockingCollection<string> closestsystem_queue = new BlockingCollection<string>();
-        SortedList<double, string> closestsystemlist = new SortedList<double, string>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
+        BlockingCollection<VisitedSystemsClass> closestsystem_queue = new BlockingCollection<VisitedSystemsClass>();
+        SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
 
         private void CalculateClosestSystems()
         {
-            string closestname;
+            VisitedSystemsClass vsc;
 
             while ( true )
             {
-                closestname = closestsystem_queue.Take();           // block until got one..
+                VisitedSystemsClass nextsys = null;
+                VisitedSystemsClass cursys = null;
+                cursys = closestsystem_queue.Take();           // block until got one..
 
-                string namecalc="!";                    // need to keep the name as TryTake empties the string
                 closestsystemlist.Clear();
 
                 do
                 {
-                    string nextname;
-                    while (closestsystem_queue.TryTake(out nextname))    // try and empty the queue in case multiple ones are there
+                    vsc = cursys;
+
+                    while (closestsystem_queue.TryTake(out nextsys))    // try and empty the queue in case multiple ones are there
                     {
                         //Console.WriteLine("Chuck " + closestname);
-                        closestname = nextname;
+                        vsc = nextsys;
                     }
 
-                    SystemClass lastSystem = SystemClass.GetSystem(closestname);
+                    ISystem lastSystem = vsc.curSystem;
 
                     double x, y, z;
 
                     if (lastSystem == null)
                     {
-                        VisitedSystemsClass vsc = null;
-
-                        Invoke((MethodInvoker)delegate      // being paranoid about threads..
-                        {
-                            vsc = visitedSystems.Find(q => q.Name.Equals(closestname));
-                        });
-
-                        if (vsc == null || !vsc.HasTravelCoordinates) // if not found, or no co-ord
+                        if (!vsc.HasTravelCoordinates) // if not found, or no co-ord
                             break;
 
                         x = vsc.X;
@@ -337,17 +337,15 @@ namespace EDDiscovery
                         z = lastSystem.z;
                     }
 
-
-                    SystemClass.GetSystemSqDistancesFrom(closestsystemlist, x, y, z, 50, true);
+                    SystemClass.GetSystemSqDistancesFrom(closestsystemlist, x, y, z, 50, true, 1000);
 
                     Invoke((MethodInvoker)delegate      // being paranoid about threads..
                     {
                         VisitedSystemsClass.CalculateSqDistances(visitedSystems, closestsystemlist, x, y, z, 50, true);
                     });
 
-                    namecalc = closestname;
-
-                } while (closestsystem_queue.TryTake(out closestname));     // if there is another one there, just re-run (slow down doggy!)
+                    cursys = vsc;
+                } while (closestsystem_queue.TryTake(out vsc));     // if there is another one there, just re-run (slow down doggy!)
 
                 Invoke((MethodInvoker)delegate
                 {
@@ -356,11 +354,12 @@ namespace EDDiscovery
 
                     if (closestsystemlist.Count() > 0)
                     {
-                        labelclosests.Text = "Closest systems from " + namecalc;
-                        foreach (KeyValuePair<double, string> tvp in closestsystemlist)
+                        labelclosests.Text = "Closest systems from " + cursys.Name;
+                        foreach (KeyValuePair<double, ISystem> tvp in closestsystemlist)
                         {
-                            object[] rowobj = { tvp.Value, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
-                            dataGridViewNearest.Rows.Add(rowobj);
+                            object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
+                            int rowindex = dataGridViewNearest.Rows.Add(rowobj);
+                            dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
                         }
                     }
                 });
@@ -770,8 +769,14 @@ namespace EDDiscovery
             {
                 if (!String.IsNullOrEmpty(currentSysPos.curSystem.name))
                 {
+                    long? id_edsm = currentSysPos.curSystem.id_edsm;
+                    if (id_edsm == 0)
+                    {
+                        id_edsm = null;
+                    }
+
                     EDSMClass edsm = new EDSMClass();
-                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name);
+                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.curSystem.name, id_edsm);
 
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         Process.Start(url);
@@ -904,9 +909,9 @@ namespace EDDiscovery
                                                                         .OrderBy(cell => cell.Index);
 
             this.Cursor = Cursors.WaitCursor;
-            string sysName = selectedRows.First<DataGridViewRow>().Cells[ClosestSystemsColumns.SystemName].Value.ToString();
+            ISystem system = (ISystem)selectedRows.First<DataGridViewRow>().Tag;
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysName))
+            if (!edsm.ShowSystemInEDSM(system.name, system.id_edsm))
                 LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
@@ -1140,8 +1145,14 @@ namespace EDDiscovery
         {
             this.Cursor = Cursors.WaitCursor;
             EDSMClass edsm = new EDSMClass();
+            long? id_edsm = rightclicksystem.curSystem?.id_edsm;
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
+            if (id_edsm == 0)
+            {
+                id_edsm = null;
+            }
+
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
                 LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
@@ -1189,8 +1200,21 @@ namespace EDDiscovery
 
         }
 
+        private void selectCorrectSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Forms.AssignTravelLogSystemForm form = new Forms.AssignTravelLogSystemForm(this, rightclicksystem))
+            {
+                DialogResult result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    rightclicksystem.id_edsm_assigned = form.AssignedEdsmId;
+                    rightclicksystem.curSystem = form.AssignedSystem;
+                    rightclicksystem.Update();
+                    RefreshHistory();
+                }
+            }
+        }
+
         #endregion
-
     }
-
 }

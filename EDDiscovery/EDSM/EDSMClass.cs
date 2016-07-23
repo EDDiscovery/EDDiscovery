@@ -413,9 +413,9 @@ namespace EDDiscovery2.EDSM
 
         }
 
-        public bool ShowSystemInEDSM(string sysName)
+        public bool ShowSystemInEDSM(string sysName, long? id_edsm = null)
         {
-            string url = GetUrlToEDSMSystem(sysName);
+            string url = GetUrlToEDSMSystem(sysName, id_edsm);
             if (string.IsNullOrEmpty(url))
             {
                 return false;
@@ -427,17 +427,26 @@ namespace EDDiscovery2.EDSM
             return true;
         }
 
-        public string GetUrlToEDSMSystem(string sysName)
+        public string GetUrlToEDSMSystem(string sysName, long? id_edsm = null)
         {
+            string sysID;
             string encodedSys = HttpUtility.UrlEncode(sysName);
-            string query = "system?sysname=" + encodedSys + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&showId=1";
-            var response = RequestGet("api-v1/" + query);
-            var json = response.Body;
-            if (json == null || json.ToString() == "[]")
-                return "";
 
-            JObject msg = JObject.Parse(json);
-            string sysID = msg["id"].Value<string>();
+            if (id_edsm != null)
+            {
+                sysID = id_edsm.ToString();
+            }
+            else
+            {
+                string query = "system?sysname=" + encodedSys + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&showId=1";
+                var response = RequestGet("api-v1/" + query);
+                var json = response.Body;
+                if (json == null || json.ToString() == "[]")
+                    return "";
+
+                JObject msg = JObject.Parse(json);
+                sysID = msg["id"].Value<string>();
+            }
 
             string url = "https://www.edsm.net/show-system/index/id/" + sysID + "/name/" + encodedSys;
             return url;
