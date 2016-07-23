@@ -73,7 +73,8 @@ namespace EDDiscovery2
             { "MapColour_TrilatSuggestedReference", () => System.Drawing.Color.DarkOrange.ToArgb() },
             { "MapColour_PlannedRoute", () => System.Drawing.Color.Green.ToArgb() },
             { "MapColour_NamedStar", () => System.Drawing.Color.Yellow.ToArgb() },
-            { "MapColour_NamedStarUnpop", () => System.Drawing.Color.FromArgb(255,192,192,0).ToArgb() }
+            { "MapColour_NamedStarUnpop", () => System.Drawing.Color.FromArgb(255,192,192,0).ToArgb() },
+            { "UseTheme", () => true }
         };
 
         private Dictionary<string, Action> onchange = new Dictionary<string, Action>
@@ -202,6 +203,7 @@ namespace EDDiscovery2
         public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
         public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
+        public bool UseTheme { get { return GetSettingBool("UseTheme"); } set { PutSettingBool("UseTheme", value); } }
 
         public event Action NetLogDirChanged { add { onchange["Netlogdir"] += value; } remove { onchange["Netlogdir"] -= value; } }
         public event Action NetLogDirAutoModeChanged { add { onchange["NetlogDirAutoMode"] += value; } remove { onchange["NetlogDirAutoMode"] -= value; } }
