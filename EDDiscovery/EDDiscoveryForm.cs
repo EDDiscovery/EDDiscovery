@@ -882,7 +882,7 @@ namespace EDDiscovery
 
         private void eDDiscoveryHomepageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("http://eddiscovery.astronet.se/");
+            Process.Start("https://github.com/EDDiscovery/EDDiscovery/wiki");
         }
 
         private void openEliteDangerousDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
