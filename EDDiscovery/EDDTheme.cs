@@ -760,6 +760,31 @@ namespace EDDiscovery2
 
                 MyDgv.Font = fnt;
             }
+            else if (myControl is ListControlCustom)
+            {
+                ListControlCustom MyDgv = (ListControlCustom)myControl;
+                MyDgv.ForeColor = currentsettings.colors[Settings.CI.button_text];
+
+                if (currentsettings.buttonstyle.Equals(ButtonStyles[0]))
+                {
+                    MyDgv.FlatStyle = FlatStyle.System;
+                }
+                else
+                {
+                    MyDgv.BackColor = currentsettings.colors[Settings.CI.button_back];
+                    MyDgv.BorderColor = currentsettings.colors[Settings.CI.button_border];
+                    MyDgv.ScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
+                    MyDgv.ScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
+
+                    if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                        MyDgv.FlatStyle = FlatStyle.Flat;
+                    else
+                        MyDgv.FlatStyle = FlatStyle.Popup;
+                }
+
+                myControl.Font = fnt;
+                MyDgv.Repaint();            // force a repaint as the individual settings do not by design.
+            }
             else if (myControl is ComboBoxCustom)
             {
                 ComboBoxCustom MyDgv = (ComboBoxCustom)myControl;

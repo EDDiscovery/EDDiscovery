@@ -30,13 +30,13 @@ namespace ExtendedControls
         public int ScrollBarWidth { get { return ComboBox.ScrollBarWidth; } set { ComboBox.ScrollBarWidth = value; } }
         public int ItemHeight { get { return ComboBox.ItemHeight; } set { ComboBox.ItemHeight = value; } }
         public int SelectedIndex { get { return ComboBox.SelectedIndex; } set { ComboBox.SelectedIndex = value; } }
-        public List<string> Items { get { return ComboBox.Items; } set { ComboBox.Items = value; } }
+        public ComboBoxCustom.ObjectCollection Items { get { return ComboBox.Items; } set { ComboBox.Items = value; } }
         public object DataSource { get { return ComboBox.DataSource; } set { ComboBox.DataSource = value; } }
         public string DisplayMember { get { return ComboBox.DisplayMember; } set { ComboBox.DisplayMember = value; } }
         public string ValueMember { get { return ComboBox.ValueMember; } set { ComboBox.ValueMember = value; } }
         public object SelectedItem { get { return ComboBox.SelectedItem; } set { ComboBox.SelectedItem = value; } }
         public object SelectedValue { get { return ComboBox.SelectedValue; } }
 
-        public event ComboBoxCustom.OnSelectedIndexChanged SelectedIndexChanged { add { ComboBox.SelectedIndexChanged += value; } remove { ComboBox.SelectedIndexChanged -= value; } }
+        public event EventHandler SelectedIndexChanged { add { ComboBox.SelectedIndexChanged += value; } remove { ComboBox.SelectedIndexChanged -= value; } }
     }
 }
