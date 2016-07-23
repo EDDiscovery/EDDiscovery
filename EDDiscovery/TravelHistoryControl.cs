@@ -19,6 +19,7 @@ namespace EDDiscovery
     public partial class TravelHistoryControl : UserControl
     {
         private const int MaximumJumpRange = 45; // max jump range is ~42Ly
+        private bool ShutdownEDD = false;
 
         public class TravelHistoryColumns
         {
@@ -309,17 +310,18 @@ namespace EDDiscovery
 
                 do
                 {
-                    if (closestname == "!!!!!!CLOSE!!!!!")
-                        return;
-
                     vsc = cursys;
+
+
+                    if (ShutdownEDD)
+                        return;
 
                     while (closestsystem_queue.TryTake(out nextsys))    // try and empty the queue in case multiple ones are there
                     {
                         //Console.WriteLine("Chuck " + closestname);
                         vsc = nextsys;
 
-                        if (closestname == "!!!!!!CLOSE!!!!!")
+                        if (ShutdownEDD)
                             return;
                     }
 
@@ -376,8 +378,10 @@ namespace EDDiscovery
         {
             if (closestthread != null && closestthread.IsAlive)
             {
-                closestsystem_queue.Add("!!!!!!CLOSE!!!!!");
+                ShutdownEDD = true;
+                closestsystem_queue.Add(currentSysPos);
                 closestthread.Join();
+
             }
         }
 
