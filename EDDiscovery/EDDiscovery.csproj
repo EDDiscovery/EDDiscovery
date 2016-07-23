@@ -172,7 +172,11 @@
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
+    <Compile Include="Controls\LabelExt.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
@@ -203,6 +207,12 @@
     </Compile>
     <Compile Include="Forms\InfoForm.Designer.cs">
       <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SummaryPopOut.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SummaryPopOut.Designer.cs">
+      <DependentUpon>SummaryPopOut.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Controls\ButtonExt.cs">
@@ -425,6 +435,7 @@
     <None Include="Resources\bookmarkgreen.png" />
     <None Include="Resources\3dmaphelp.txt" />
     <None Include="Resources\bookmarkyellow.png" />
+    <None Include="Resources\bookmarktarget.png" />
     <Content Include="Resources\imgCheck.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
@@ -469,6 +480,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SummaryPopOut.resx">
+      <DependentUpon>SummaryPopOut.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThemeEditor.resx">
       <DependentUpon>ThemeEditor.cs</DependentUpon>

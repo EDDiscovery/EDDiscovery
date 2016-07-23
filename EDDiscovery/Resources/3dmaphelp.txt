@@ -17,7 +17,7 @@ Keyboard:
 Mouse:
 	Move Mouse	Over star to get its information in a popup.
 	Left Button	Select star (either star or bookmark associated with a star)
-	Right Button	Update or add bookmark, or find information on region mark.
+	Right Button	Add or Update a bookmark, update a region mark, or show information on a note mark.
 	Double Click Left	Center on selected star
 	Left Hold	Pitch up/down
 	Right Hold	Go up/down (Y)
@@ -28,21 +28,28 @@ Toolbar (from left):
 	>	Go to next travelled system
 	Marker	Go to latest travelled system
 	>A	Turn on/off Automatically jump to current system when travelling
+	Home	Center on home system
+	!	Center on selected system in the travel history
+	Target	Center on selected target system
+
 	Lines	Turn on/off lines between travelled systems
 	Star	Select what stars to display
-	Star (n)	Turn on/off star naming (seen only when zoom >= 1)
+	Star(n)	Turn on/off star naming (seen only when zoom >= 1)
+	Bookmarks	Turn on/off bookmarks, notemarks or add a new region mark.
 	Grid	Turn on/off coarse grid
 	Fine Grid	Turn on/off fine grid
 	10,21	Turn on/off grid coordinates
+	
 	Perspective mode	Turn on/off perspective mode.  Perspective mode allows you to fly through the galaxy anywhere.
 	Elite Movement	Turn on/off Elite movement - keep Y the same as you travel. Useful in perspective mode only.
+	
 	Galaxy	Display galaxy maps
 	Filter	Filter travel by expedition dates
+	
 	?	This help
+	
 	Star Entry	Entry box to find specific star (hit return to center)
 	Centre	Alternatively, hit this to center what is in the star entry box
-	Home	Center on home system
-	!	Center on selected system in the travel history
 	Yellow Dot	Show current centered system 
 	Orange Dot	Show selected system (by left mouse click).  
 		Double click to make it centered system. 

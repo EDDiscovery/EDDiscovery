@@ -25,7 +25,7 @@ namespace EDDiscovery2
         public bool noWindowReposition { get; set; } = false;                       // set externally
         public TravelHistoryControl travelHistoryControl { get; set; } = null;      // set externally
 
-        const int HELP_VERSION = 1;         // increment this to force help onto the screen of users first time.
+        const int HELP_VERSION = 2;         // increment this to force help onto the screen of users first time.
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
@@ -54,7 +54,9 @@ namespace EDDiscovery2
         private SystemClassStarNames _centerSystem;
         private SystemClassStarNames _homeSystem;
 
-        private SystemClassStarNames _clickedSystem;
+        private SystemClassStarNames _clickedSystem;        // left clicked on a system/bookmark system/noted system
+        private Vector3 _clickedposition;                   // left clicked on a position
+
         private SystemClassStarNames _historySelection;
         private bool _loaded = false;
 
@@ -67,6 +69,7 @@ namespace EDDiscovery2
         private Vector3 _cameraActionRotation = Vector3.Zero;
         private float _cameraFov = (float)(Math.PI / 2.0f);
         private float _cameraSlewProgress = 1.0f;
+        private Vector3 _cameraSlewPosition;
 
         private KeyboardActions _kbdActions = new KeyboardActions();
         private long _oldTickCount = DateTime.Now.Ticks / 10000;
@@ -278,6 +281,16 @@ namespace EDDiscovery2
         {
             if (_starnames != null)         // if null, we are not up and running
             {
+                GenerateDataSetsNotedSystems();
+                glControl.Invalidate();
+            }
+        }
+
+        public void UpdateBookmarks()
+        {
+            if (_starnames != null)         // if null, we are not up and running
+            {
+                GenerateDataSetsBookmarks();
                 GenerateDataSetsNotedSystems();
                 glControl.Invalidate();
             }
@@ -633,13 +646,13 @@ namespace EDDiscovery2
             {
                 Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
                 Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
+                Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
                 Debug.Assert(mapstar != null && mapregion != null);
 
                 DatasetBuilder builder = CreateBuilder();
 
                 builder.Build();
-                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
-
+                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
                 builder = null;
             }
         }
@@ -652,12 +665,13 @@ namespace EDDiscovery2
             if (showNoteMarksToolStripMenuItem.Checked)
             {
                 Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
+                Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
                 Debug.Assert(map != null);
 
                 DatasetBuilder builder = CreateBuilder();
 
                 builder.Build();
-                _datasets_notedsystems = builder.AddNotedBookmarks(map, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
+                _datasets_notedsystems = builder.AddNotedBookmarks(map, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
 
                 builder = null;
             }
@@ -966,7 +980,7 @@ namespace EDDiscovery2
                 GenerateDataSetsSelectedSystems();
 
                 if (moveto)
-                    StartCameraSlew();
+                    StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z));
 
                 glControl.Invalidate();
 
@@ -1255,18 +1269,6 @@ namespace EDDiscovery2
             foreach (var dataset in _datasets_visitedsystems)
                 dataset.DrawAll(glControl);
 
-            if (_datasets_notedsystems != null)
-            {
-                foreach (var dataset in _datasets_notedsystems)                     // needs to be in order of background to foreground objects
-                    dataset.DrawAll(glControl);
-            }
-
-            if (_datasets_bookedmarkedsystems != null)
-            {
-                foreach (var dataset in _datasets_bookedmarkedsystems)                     // needs to be in order of background to foreground objects
-                    dataset.DrawAll(glControl);
-            }
-
             if (_starnames != null)
             {
                 foreach (var sys in _starnames)
@@ -1308,6 +1310,18 @@ namespace EDDiscovery2
 
             foreach (var dataset in _datasets_selectedsystems)
                 dataset.DrawAll(glControl);
+
+            if (_datasets_notedsystems != null)
+            {
+                foreach (var dataset in _datasets_notedsystems)                     // needs to be in order of background to foreground objects
+                    dataset.DrawAll(glControl);
+            }
+
+            if (_datasets_bookedmarkedsystems != null)
+            {
+                foreach (var dataset in _datasets_bookedmarkedsystems)                     // needs to be in order of background to foreground objects
+                    dataset.DrawAll(glControl);
+            }
 
         }
 
@@ -1389,8 +1403,9 @@ namespace EDDiscovery2
             UpdateDataSetsDueToZoom();
         }
 
-        private void StartCameraSlew()
+        private void StartCameraSlew(Vector3 pos)
         {
+            _cameraSlewPosition = pos;
             _oldTickCount = Environment.TickCount;
             _ticks = 0;
             _cameraSlewProgress = 0.0f;
@@ -1407,10 +1422,11 @@ namespace EDDiscovery2
             {
                 _cameraActionMovement = Vector3.Zero;
                 var newprogress = _cameraSlewProgress + _ticks / (CameraSlewTime * 1000);
-                var totvector = new Vector3((float)(_centerSystem.x - _cameraPos.X), (float)(-_centerSystem.y - _cameraPos.Y), (float)(_centerSystem.z - _cameraPos.Z));
+                var totvector = new Vector3((float)(_cameraSlewPosition.X - _cameraPos.X), (float)(-_cameraSlewPosition.Y - _cameraPos.Y), (float)(_cameraSlewPosition.Z - _cameraPos.Z));
+
                 if (newprogress >= 1.0f)
                 {
-                    _cameraPos = new Vector3((float)_centerSystem.x, (float)(-_centerSystem.y), (float)_centerSystem.z);
+                    _cameraPos = new Vector3(_cameraSlewPosition.X,-_cameraSlewPosition.Y, _cameraSlewPosition.Z);
                 }
                 else
                 {
@@ -1573,6 +1589,34 @@ namespace EDDiscovery2
                 MessageBox.Show("No travel history is available");
         }
 
+        private void buttonHome_Click(object sender, EventArgs e)
+        {
+            SetCenterSystemTo(_homeSystem, true);
+        }
+
+        private void buttonHistory_Click(object sender, EventArgs e)
+        {
+            if (_historySelection == null)
+                MessageBox.Show("No travel history is available");
+            else
+                SetCenterSystemTo(_historySelection, true);
+        }
+
+        private void toolStripButtonTarget_Click(object sender, EventArgs e)
+        {
+            string name;
+            double x, y, z;
+
+            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            {
+                StartCameraSlew(new Vector3((float)x, (float)y, (float)z));
+            }
+            else
+            {
+                MessageBox.Show("No target designated, create a bookmark or region mark, or use a Note mark, right click on it and set it as the target");
+            }
+        }
+        
         private void toolStripButtonGoForward_Click(object sender, EventArgs e)
         {
             if (_visitedSystems != null)
@@ -1693,19 +1737,6 @@ namespace EDDiscovery2
             }
         }
         
-        private void buttonHome_Click(object sender, EventArgs e)
-        {
-            SetCenterSystemTo(_homeSystem,true);
-        }
-
-        private void buttonHistory_Click(object sender, EventArgs e)
-        {
-            if (_historySelection == null)
-                MessageBox.Show("No travel history is available");
-            else
-                SetCenterSystemTo(_historySelection,true);
-        }
-
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
@@ -1819,7 +1850,7 @@ namespace EDDiscovery2
             {
                 _clickedSystem = cursystem;
 
-                if (_clickedSystem != null)
+                if (_clickedSystem != null)         // will be set for systems clicked, bookmarks or noted systems
                 {
                     labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
 
@@ -1839,6 +1870,8 @@ namespace EDDiscovery2
                     viewOnEDSMToolStripMenuItem.Enabled = true;
                     System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
                 }
+                else if (curbookmark != null)                                   // else just remember the position for later.
+                    _clickedposition = new Vector3((float)curbookmark.x, (float)curbookmark.y, (float)curbookmark.z);
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)                    // right clicks are about bookmarks.
@@ -1852,14 +1885,32 @@ namespace EDDiscovery2
 
                     if (notedsystem && bkmark == null)              // note on a system
                     {
+                        long targetid = TargetClass.GetTargetNotedSystem();      // who is the target of a noted system (0=none)
+                        long noteid = SystemNoteClass.GetSystemNoteClass(cursystem.name).id;
+
                         frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
-                        frm.SystemInfo(cursystem.name, note);       // note may be passed in null
+                        frm.SystemInfo(cursystem.name, note,noteid == targetid);       // note may be passed in null
                         frm.ShowDialog();
+
+                        if ((frm.IsTarget && targetid != noteid) || (!frm.IsTarget && targetid == noteid)) // changed..
+                        {
+                            if (frm.IsTarget)
+                                TargetClass.SetTargetNotedSystem(cursystem.name, noteid, cursystem.x, cursystem.y, cursystem.z);
+                            else
+                                TargetClass.ClearTarget();
+
+                            GenerateDataSetsBookmarks();
+                            GenerateDataSetsNotedSystems();
+                            glControl.Invalidate();
+                            travelHistoryControl.RefreshTargetInfo();
+                        }
                     }
                     else
                     {
                         bool regionmarker = false;
                         DateTime tme;
+
+                        long targetid = TargetClass.GetTargetBookmark();      // who is the target of a bookmark (0=none)
 
                         if (bkmark == null)                         // new bookmark
                         {
@@ -1872,7 +1923,7 @@ namespace EDDiscovery2
                             frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
                             regionmarker = bkmark.isRegion;
                             tme = bkmark.Time;
-                            frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker);
+                            frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker , targetid == bkmark.id );
                         }
 
                         DialogResult res = frm.ShowDialog();
@@ -1899,9 +1950,31 @@ namespace EDDiscovery2
                             }
                             else
                                 newcls.Add();
+
+                            if ((frm.IsTarget && targetid != newcls.id) || (!frm.IsTarget && targetid == newcls.id)) // changed..
+                            {
+                                if (frm.IsTarget)
+                                    TargetClass.SetTargetBookmark(regionmarker ? ("RM:" + newcls.Heading) : newcls.StarName, newcls.id, newcls.x, newcls.y, newcls.z);
+                                else
+                                    TargetClass.ClearTarget();
+                                
+                                GenerateDataSetsBookmarks();
+                                GenerateDataSetsNotedSystems();
+                                glControl.Invalidate();
+                                travelHistoryControl.RefreshTargetInfo();
+                            }
                         }
                         else if (res == DialogResult.Abort && bkmark != null)
                         {
+                            if (targetid == bkmark.id)
+                            {
+                                TargetClass.ClearTarget();
+                                GenerateDataSetsBookmarks();
+                                GenerateDataSetsNotedSystems();
+                                glControl.Invalidate();
+                                travelHistoryControl.RefreshTargetInfo();
+                            }
+
                             bkmark.Delete();
                         }
                     }
@@ -1921,6 +1994,10 @@ namespace EDDiscovery2
             {
                 SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
                 travelHistoryControl.SetTravelHistoryPosition(_clickedSystem.name);
+            }
+            else if ( _clickedposition != null )
+            {
+                StartCameraSlew(_clickedposition);
             }
         }
 
@@ -2218,7 +2295,7 @@ namespace EDDiscovery2
             return false;
         }
 
-        private double GetBookmarkSize() { return Math.Min(Math.Max(20, 100.0 / _zoom), 500); }
+        private double GetBookmarkSize() { return Math.Min(Math.Max(2, 100.0 / _zoom), 1000); }
 
         Matrix4d GetBookMarkOutline(double x, double y, double z , double bksize)
         {

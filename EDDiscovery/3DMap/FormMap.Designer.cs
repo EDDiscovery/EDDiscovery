@@ -46,6 +46,9 @@ namespace EDDiscovery2
             this.toolStripButtonGoForward = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLastKnownPosition = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAutoForward = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonHome = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonHistory = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonTarget = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDrawLines = new System.Windows.Forms.ToolStripButton();
             this.toolStripDropDownButtonFilterStars = new System.Windows.Forms.ToolStripDropDownButton();
@@ -71,8 +74,6 @@ namespace EDDiscovery2
             this.toolStripButtonHelp = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.buttonHistory = new System.Windows.Forms.Button();
-            this.buttonHome = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
             this.dotSystemCoords = new System.Windows.Forms.PictureBox();
@@ -130,7 +131,7 @@ namespace EDDiscovery2
             // 
             // buttonCenter
             // 
-            this.buttonCenter.Location = new System.Drawing.Point(134, 7);
+            this.buttonCenter.Location = new System.Drawing.Point(137, 7);
             this.buttonCenter.Name = "buttonCenter";
             this.buttonCenter.Size = new System.Drawing.Size(47, 23);
             this.buttonCenter.TabIndex = 17;
@@ -143,7 +144,7 @@ namespace EDDiscovery2
             // labelSystemCoords
             // 
             this.labelSystemCoords.AutoSize = true;
-            this.labelSystemCoords.Location = new System.Drawing.Point(260, 3);
+            this.labelSystemCoords.Location = new System.Drawing.Point(211, 3);
             this.labelSystemCoords.Name = "labelSystemCoords";
             this.labelSystemCoords.Size = new System.Drawing.Size(57, 13);
             this.labelSystemCoords.TabIndex = 18;
@@ -160,6 +161,9 @@ namespace EDDiscovery2
             this.toolStripButtonGoForward,
             this.toolStripButtonLastKnownPosition,
             this.toolStripButtonAutoForward,
+            this.toolStripButtonHome,
+            this.toolStripButtonHistory,
+            this.toolStripButtonTarget,
             this.toolStripSeparator5,
             this.toolStripButtonDrawLines,
             this.toolStripDropDownButtonFilterStars,
@@ -226,6 +230,39 @@ namespace EDDiscovery2
             this.toolStripButtonAutoForward.Text = "Go Forward Automatically on Jump";
             this.toolStripButtonAutoForward.Click += new System.EventHandler(this.toolStripButtonAutoForward_Click);
             // 
+            // toolStripButtonHome
+            // 
+            this.toolStripButtonHome.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonHome.Image = global::EDDiscovery.Properties.Resources.Homeicon;
+            this.toolStripButtonHome.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonHome.Name = "toolStripButtonHome";
+            this.toolStripButtonHome.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonHome.Text = "toolStripButton1";
+            this.toolStripButtonHome.ToolTipText = "Go to Home System";
+            this.toolStripButtonHome.Click += new System.EventHandler(this.buttonHome_Click);
+            // 
+            // toolStripButtonHistory
+            // 
+            this.toolStripButtonHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonHistory.Image = global::EDDiscovery.Properties.Resources.Travelicon;
+            this.toolStripButtonHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonHistory.Name = "toolStripButtonHistory";
+            this.toolStripButtonHistory.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonHistory.Text = "toolStripButton2";
+            this.toolStripButtonHistory.ToolTipText = "Go to system selected in travelled history window";
+            this.toolStripButtonHistory.Click += new System.EventHandler(this.buttonHistory_Click);
+            // 
+            // toolStripButtonTarget
+            // 
+            this.toolStripButtonTarget.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonTarget.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonTarget.Image")));
+            this.toolStripButtonTarget.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonTarget.Name = "toolStripButtonTarget";
+            this.toolStripButtonTarget.Size = new System.Drawing.Size(23, 37);
+            this.toolStripButtonTarget.Text = "toolStripButton1";
+            this.toolStripButtonTarget.ToolTipText = "Go to target designator";
+            this.toolStripButtonTarget.Click += new System.EventHandler(this.toolStripButtonTarget_Click);
+            // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
@@ -259,7 +296,7 @@ namespace EDDiscovery2
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(145, 6);
             // 
             // showStarstoolStripMenuItem
             // 
@@ -268,7 +305,7 @@ namespace EDDiscovery2
             this.showStarstoolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showStarstoolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showStarstoolStripMenuItem.Image")));
             this.showStarstoolStripMenuItem.Name = "showStarstoolStripMenuItem";
-            this.showStarstoolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showStarstoolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.showStarstoolStripMenuItem.Text = "Show All Stars";
             this.showStarstoolStripMenuItem.ToolTipText = "Show all stars";
             this.showStarstoolStripMenuItem.Click += new System.EventHandler(this.showStarstoolStripMenuItem_Click);
@@ -280,7 +317,7 @@ namespace EDDiscovery2
             this.showStationsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showStationsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showStationsToolStripMenuItem.Image")));
             this.showStationsToolStripMenuItem.Name = "showStationsToolStripMenuItem";
-            this.showStationsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showStationsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.showStationsToolStripMenuItem.Text = "Show Stations";
             this.showStationsToolStripMenuItem.ToolTipText = "Show Stations";
             this.showStationsToolStripMenuItem.Click += new System.EventHandler(this.showStationsToolStripMenuItem_Click);
@@ -465,33 +502,11 @@ namespace EDDiscovery2
             this.statusLabel.Size = new System.Drawing.Size(35, 17);
             this.statusLabel.Text = "x=0.0";
             // 
-            // buttonHistory
-            // 
-            this.buttonHistory.Image = global::EDDiscovery.Properties.Resources.Travelicon;
-            this.buttonHistory.Location = new System.Drawing.Point(215, 7);
-            this.buttonHistory.Name = "buttonHistory";
-            this.buttonHistory.Size = new System.Drawing.Size(22, 23);
-            this.buttonHistory.TabIndex = 23;
-            this.toolTip1.SetToolTip(this.buttonHistory, "Centre map on selected system from travel history");
-            this.buttonHistory.UseVisualStyleBackColor = true;
-            this.buttonHistory.Click += new System.EventHandler(this.buttonHistory_Click);
-            // 
-            // buttonHome
-            // 
-            this.buttonHome.Image = global::EDDiscovery.Properties.Resources.Homeicon;
-            this.buttonHome.Location = new System.Drawing.Point(187, 7);
-            this.buttonHome.Name = "buttonHome";
-            this.buttonHome.Size = new System.Drawing.Size(22, 23);
-            this.buttonHome.TabIndex = 22;
-            this.toolTip1.SetToolTip(this.buttonHome, "Centre map on home system");
-            this.buttonHome.UseVisualStyleBackColor = true;
-            this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
-            // 
             // dotSelectedSystemCoords
             // 
             this.dotSelectedSystemCoords.Image = global::EDDiscovery.Properties.Resources.OrangeDot;
             this.dotSelectedSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.OrangeDot;
-            this.dotSelectedSystemCoords.Location = new System.Drawing.Point(242, 22);
+            this.dotSelectedSystemCoords.Location = new System.Drawing.Point(193, 22);
             this.dotSelectedSystemCoords.Name = "dotSelectedSystemCoords";
             this.dotSelectedSystemCoords.Size = new System.Drawing.Size(12, 12);
             this.dotSelectedSystemCoords.TabIndex = 26;
@@ -503,7 +518,7 @@ namespace EDDiscovery2
             // 
             this.dotSystemCoords.Image = global::EDDiscovery.Properties.Resources.YellowDot;
             this.dotSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.YellowDot;
-            this.dotSystemCoords.Location = new System.Drawing.Point(242, 4);
+            this.dotSystemCoords.Location = new System.Drawing.Point(193, 4);
             this.dotSystemCoords.Name = "dotSystemCoords";
             this.dotSystemCoords.Size = new System.Drawing.Size(12, 12);
             this.dotSystemCoords.TabIndex = 25;
@@ -514,7 +529,7 @@ namespace EDDiscovery2
             // labelClickedSystemCoords
             // 
             this.labelClickedSystemCoords.AutoSize = true;
-            this.labelClickedSystemCoords.Location = new System.Drawing.Point(260, 22);
+            this.labelClickedSystemCoords.Location = new System.Drawing.Point(211, 22);
             this.labelClickedSystemCoords.Name = "labelClickedSystemCoords";
             this.labelClickedSystemCoords.Size = new System.Drawing.Size(57, 13);
             this.labelClickedSystemCoords.TabIndex = 24;
@@ -576,11 +591,9 @@ namespace EDDiscovery2
             this.panelRight.Controls.Add(this.buttonCenter);
             this.panelRight.Controls.Add(this.labelSystemCoords);
             this.panelRight.Controls.Add(this.dotSystemCoords);
-            this.panelRight.Controls.Add(this.buttonHome);
-            this.panelRight.Controls.Add(this.buttonHistory);
-            this.panelRight.Location = new System.Drawing.Point(528, 0);
+            this.panelRight.Location = new System.Drawing.Point(608, 0);
             this.panelRight.Name = "panelRight";
-            this.panelRight.Size = new System.Drawing.Size(586, 40);
+            this.panelRight.Size = new System.Drawing.Size(506, 40);
             this.panelRight.TabIndex = 27;
             // 
             // FormMap
@@ -628,8 +641,6 @@ namespace EDDiscovery2
         private ToolStripButton toolStripButtonGrid;
         private StatusStrip statusStrip;
         private ToolStripStatusLabel statusLabel;
-        private Button buttonHome;
-        private Button buttonHistory;
         private ToolTip toolTip1;
         private ToolStripButton toolStripButtonPerspective;
         private Label labelClickedSystemCoords;
@@ -666,5 +677,8 @@ namespace EDDiscovery2
         private ToolStripButton toolStripButtonAutoForward;
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripButton toolStripButtonHelp;
+        private ToolStripButton toolStripButtonHome;
+        private ToolStripButton toolStripButtonHistory;
+        private ToolStripButton toolStripButtonTarget;
     }
     }

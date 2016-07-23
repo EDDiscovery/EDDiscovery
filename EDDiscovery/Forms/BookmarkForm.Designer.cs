@@ -48,6 +48,7 @@
             this.labelTravelNote = new System.Windows.Forms.Label();
             this.labelTravelNoteEdit = new System.Windows.Forms.Label();
             this.textBoxTravelNote = new System.Windows.Forms.TextBox();
+            this.checkBoxTarget = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -71,7 +72,7 @@
             // labelBookmarkNotes
             // 
             this.labelBookmarkNotes.AutoSize = true;
-            this.labelBookmarkNotes.Location = new System.Drawing.Point(13, 113);
+            this.labelBookmarkNotes.Location = new System.Drawing.Point(13, 147);
             this.labelBookmarkNotes.Name = "labelBookmarkNotes";
             this.labelBookmarkNotes.Size = new System.Drawing.Size(86, 13);
             this.labelBookmarkNotes.TabIndex = 0;
@@ -88,7 +89,7 @@
             // 
             // textBoxNotes
             // 
-            this.textBoxNotes.Location = new System.Drawing.Point(116, 113);
+            this.textBoxNotes.Location = new System.Drawing.Point(116, 147);
             this.textBoxNotes.Multiline = true;
             this.textBoxNotes.Name = "textBoxNotes";
             this.textBoxNotes.Size = new System.Drawing.Size(246, 115);
@@ -167,7 +168,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(290, 327);
+            this.buttonOK.Location = new System.Drawing.Point(290, 360);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 1;
@@ -177,7 +178,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(209, 327);
+            this.buttonCancel.Location = new System.Drawing.Point(209, 361);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -187,7 +188,7 @@
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(17, 327);
+            this.buttonDelete.Location = new System.Drawing.Point(17, 361);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
             this.buttonDelete.TabIndex = 9;
@@ -198,7 +199,7 @@
             // labelTravelNote
             // 
             this.labelTravelNote.AutoSize = true;
-            this.labelTravelNote.Location = new System.Drawing.Point(13, 246);
+            this.labelTravelNote.Location = new System.Drawing.Point(13, 280);
             this.labelTravelNote.Name = "labelTravelNote";
             this.labelTravelNote.Size = new System.Drawing.Size(98, 13);
             this.labelTravelNote.TabIndex = 0;
@@ -206,7 +207,7 @@
             // 
             // labelTravelNoteEdit
             // 
-            this.labelTravelNoteEdit.Location = new System.Drawing.Point(13, 271);
+            this.labelTravelNoteEdit.Location = new System.Drawing.Point(13, 305);
             this.labelTravelNoteEdit.Name = "labelTravelNoteEdit";
             this.labelTravelNoteEdit.Size = new System.Drawing.Size(79, 38);
             this.labelTravelNoteEdit.TabIndex = 0;
@@ -214,18 +215,29 @@
             // 
             // textBoxTravelNote
             // 
-            this.textBoxTravelNote.Location = new System.Drawing.Point(116, 246);
+            this.textBoxTravelNote.Location = new System.Drawing.Point(116, 280);
             this.textBoxTravelNote.Multiline = true;
             this.textBoxTravelNote.Name = "textBoxTravelNote";
             this.textBoxTravelNote.ReadOnly = true;
             this.textBoxTravelNote.Size = new System.Drawing.Size(246, 63);
             this.textBoxTravelNote.TabIndex = 8;
             // 
+            // checkBoxTarget
+            // 
+            this.checkBoxTarget.AutoSize = true;
+            this.checkBoxTarget.Location = new System.Drawing.Point(275, 112);
+            this.checkBoxTarget.Name = "checkBoxTarget";
+            this.checkBoxTarget.Size = new System.Drawing.Size(87, 17);
+            this.checkBoxTarget.TabIndex = 10;
+            this.checkBoxTarget.Text = "Make Target";
+            this.checkBoxTarget.UseVisualStyleBackColor = true;
+            // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(380, 364);
+            this.ClientSize = new System.Drawing.Size(380, 396);
+            this.Controls.Add(this.checkBoxTarget);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -275,5 +287,6 @@
         private System.Windows.Forms.Label labelTravelNote;
         private System.Windows.Forms.Label labelTravelNoteEdit;
         private System.Windows.Forms.TextBox textBoxTravelNote;
+        private System.Windows.Forms.CheckBox checkBoxTarget;
     }
 }

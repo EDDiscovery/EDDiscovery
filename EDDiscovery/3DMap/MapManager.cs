@@ -58,6 +58,11 @@ namespace EDDiscovery2._3DMap
             _formMap.UpdateNote();
         }
 
+        public void UpdateBookmarks()
+        {
+            _formMap.UpdateBookmarks();
+        }
+
         public void Show()
         {
             _formMap.TopMost = EDDiscoveryForm.EDDConfig.KeepOnTop;

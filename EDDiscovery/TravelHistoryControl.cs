@@ -49,6 +49,7 @@ namespace EDDiscovery
         public NetLogClass netlog = new NetLogClass();
         private VisitedSystemsClass currentSysPos = null;
 
+        SummaryPopOut summaryPopOut = null;
 
         private int activecommander = 0;
         List<EDCommander> commanders = null;
@@ -171,6 +172,10 @@ namespace EDDiscovery
 
             if (textBoxFilter.TextLength>0)
                 FilterGridView();
+
+            RedrawSummary();
+            RefreshTargetInfo();
+            UpdateDependentsWithSelection();
         }
 
         private void GetVisitedSystems()
@@ -202,6 +207,7 @@ namespace EDDiscovery
             {
                 dataGridViewTravel.Rows.Insert(0, rowobj);
                 rownr = 0;
+                Console.WriteLine("Added " + item.Name);
             }
             else
             {
@@ -391,7 +397,8 @@ namespace EDDiscovery
         {
             get
             {
-                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null) return null;
+                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null)
+                    return null;
                 return ((VisitedSystemsClass)dataGridViewTravel.CurrentRow.Cells[TravelHistoryColumns.SystemName].Tag);
             }
         }
@@ -544,6 +551,8 @@ namespace EDDiscovery
         private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
+            RedrawSummary();
+            UpdateDependentsWithSelection();
         }
 
         public void buttonMap_Click(object sender, EventArgs e)
@@ -587,7 +596,7 @@ namespace EDDiscovery
                 VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag);
 
                 ShowSystemInformation(currentsys);
-                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
+                UpdateDependentsWithSelection();
 
                 if (e.ColumnIndex == TravelHistoryColumns.Note)
                 {
@@ -598,13 +607,24 @@ namespace EDDiscovery
             }
         }
 
+        private void UpdateDependentsWithSelection()
+        {
+            int rowi = dataGridViewTravel.CurrentCell.RowIndex;
+            if (rowi>=0)
+            {
+                VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[rowi].Cells[TravelHistoryColumns.SystemName].Tag);
+                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
+                _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.Name);
+            }
+        }
+
         private void dataGridViewTravel_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 VisitedSystemsClass currentsys = (VisitedSystemsClass)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.SystemName].Tag);
                 ShowSystemInformation(currentsys);
-                _discoveryForm.Map.UpdateHistorySystem(currentsys.Name);
+                UpdateDependentsWithSelection();
             }
         }
 
@@ -662,6 +682,7 @@ namespace EDDiscovery
                         edsm.SetComment(sn);
 
                     _discoveryForm.Map.UpdateNote();
+                    RefreshSummaryRow(dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index]);    // tell it this row was changed
                 }
 
             }
@@ -797,16 +818,21 @@ namespace EDDiscovery
             }
 
             AddNewHistoryRow(true, item);
+
             StoreSystemNote();
 
-            _discoveryForm.Map.UpdateVisited(visitedSystems);      // update map
+            _discoveryForm.Map.UpdateVisited(visitedSystems);           // update map
 
+            RefreshSummaryRow(dataGridViewTravel.Rows[0], true);         //Tell the summary new row has been added
+            RefreshTargetInfo();                                        // tell the target system its changed the latest system
+            
             // Move focus to new row
             if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
             {
                 dataGridViewTravel.ClearSelection();
-                dataGridViewTravel.Rows[0].Cells[0].Selected = true; // This won't raise the CellClick handler, which updates the rest of the form
-                dataGridViewTravel_CellClick(dataGridViewTravel, new DataGridViewCellEventArgs(0, 0));
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                ShowSystemInformation(item);
+                UpdateDependentsWithSelection();
             }
         }
 
@@ -894,6 +920,8 @@ namespace EDDiscovery
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
         {
             FilterGridView();
+            RedrawSummary();
+            UpdateDependentsWithSelection();
         }
 
         private void FilterGridView()
@@ -958,8 +986,7 @@ namespace EDDiscovery
             frm.Show();
             this.Cursor = Cursors.Default;
         }
-
-
+        
         public bool SetTravelHistoryPosition(string sysname)
         {
             foreach (DataGridViewRow item in dataGridViewTravel.Rows)
@@ -976,6 +1003,147 @@ namespace EDDiscovery
 
             return false;
         }
+
+        private void textBoxTarget_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string sn = textBoxTarget.Text;
+                SystemClass sc = SystemClass.GetSystem(sn);
+                VisitedSystemsClass vsc = visitedSystems.Find(x => x.Name.Equals(sn, StringComparison.InvariantCultureIgnoreCase));
+                string msgboxtext = null;
+
+                if ( (sc != null && sc.HasCoordinate) || ( vsc != null && vsc.HasTravelCoordinates))
+                {
+                    if (sc == null)
+                        sc = new SystemClass(vsc.Name, vsc.X, vsc.Y, vsc.Z);            // make a double for the rest of the code..
+
+                    SystemNoteClass nc = SystemNoteClass.GetSystemNoteClass(sn);        // has it got a note?
+
+                    if (nc != null)
+                    {
+                        TargetClass.SetTargetNotedSystem(sc.name, nc.id, sc.x, sc.y, sc.z);
+                        msgboxtext = "Target set on system with note " + sc.name;
+                    }
+                    else
+                    {
+                        BookmarkClass bk = BookmarkClass.FindBookmarkOnSystem(textBoxTarget.Text);    // has it been bookmarked?
+
+                        if (bk != null)
+                        {
+                            TargetClass.SetTargetBookmark(sc.name, bk.id, bk.x, bk.y, bk.z);
+                            msgboxtext = "Target set on booked marked system " + sc.name;
+                        }
+                        else
+                        {
+                            if (MessageBox.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                            {
+                                BookmarkClass newbk = new BookmarkClass();
+                                newbk.StarName = sn;
+                                newbk.x = sc.x;
+                                newbk.y = sc.y;
+                                newbk.z = sc.z;
+                                newbk.Time = DateTime.Now;
+                                newbk.Note = "";
+                                newbk.Add();
+                                TargetClass.SetTargetBookmark(sc.name, newbk.id, newbk.x, newbk.y, newbk.z);
+                            }
+                        }
+                    }
+
+                }
+                else
+                    msgboxtext = "Unknown system or system without co-ordinates";
+
+                RefreshTargetInfo();
+                if (_discoveryForm.Map != null)
+                    _discoveryForm.Map.UpdateBookmarks();
+
+                if ( msgboxtext != null)
+                    MessageBox.Show(msgboxtext,"Create a target", MessageBoxButtons.OK);
+            }
+        }
+
+        #region Target System
+
+        public void RefreshTargetInfo()
+        {
+            string name;
+            double x, y, z;
+
+            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            {
+                textBoxTarget.Text = name;
+                textBoxTargetDist.Text = "No Pos";
+
+                SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(visitedSystems);
+                if ( cs != null )
+                    textBoxTargetDist.Text = SystemClass.Distance(cs, x, y, z).ToString("0.00");
+
+                toolTipEddb.SetToolTip(textBoxTarget, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
+            }
+            else
+            {
+                textBoxTarget.Text = "Set target";
+                textBoxTargetDist.Text = "";
+                toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
+            }
+
+            if (summaryPopOut != null)
+                summaryPopOut.RefreshTarget(dataGridViewTravel,visitedSystems);
+        }
+
+        #endregion 
+
+        #region Summary Pop out
+
+        public bool IsSummaryPopOutOn {  get { return summaryPopOut != null; } }
+        private int summaryformatmode = -1;      //five state, 0..3 options, -1 = off
+        public bool ToggleSummaryPopOut()
+        {
+            summaryformatmode++;
+
+            if (summaryPopOut == null || summaryformatmode < 4 )
+            {
+                if ( summaryPopOut != null )
+                    summaryPopOut.Close();
+
+                summaryPopOut = new SummaryPopOut( (summaryformatmode & 1)!=0, (summaryformatmode & 2)!=0);
+                RedrawSummary();
+                summaryPopOut.Show();
+            }
+            else
+            { 
+                summaryPopOut.Close();
+                summaryPopOut = null;
+                summaryformatmode = -1;
+            }
+
+            return (summaryPopOut != null);     // on screen?
+        }
+
+        public void RedrawSummary()
+        {
+            if (summaryPopOut != null)
+            {
+                summaryPopOut.SetGripperColour(_discoveryForm.theme.LabelColor);
+                summaryPopOut.ResetForm(dataGridViewTravel);
+                summaryPopOut.RefreshTarget(dataGridViewTravel, visitedSystems);
+            }
+        }
+
+        public void RefreshSummaryRow(DataGridViewRow row , bool add = false )
+        {
+            if (summaryPopOut != null)
+                summaryPopOut.RefreshRow(dataGridViewTravel, row, add);
+        }
+
+        private void buttonExtSummaryPopOut_Click(object sender, EventArgs e)
+        {
+            ToggleSummaryPopOut();
+        }
+
+        #endregion
 
         #region ClosestSystemRightClick
 

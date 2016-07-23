@@ -51,6 +51,7 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get; private set; }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
+        public RouteControl RouteControl { get { return routeControl1;  } }
         public List<VisitedSystemsClass> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
 
         public bool option_nowindowreposition { get; set;  }  = false;                             // Cmd line options
@@ -294,11 +295,13 @@ namespace EDDiscovery
 
             if (refreshhistory)
                 travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
+
+            TravelControl.RedrawSummary();
         }
 
-#endregion
+        #endregion
 
-#region Information Downloads
+        #region Information Downloads
 
         public void DownloadMaps()          // ASYNC process
         {
@@ -361,7 +364,6 @@ namespace EDDiscovery
 
         private bool DownloadMapFile(string file)
         {
-            EDDBClass eddb = new EDDBClass();
             bool newfile = false;
             if (EDDBClass.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(Tools.GetAppDataDirectory(), "Maps", file), out newfile))
             {
@@ -385,9 +387,7 @@ namespace EDDiscovery
             catch (Exception ex)
             {
                 LogLine("Exception in DeleteMapFile:" + ex.Message);
-
             }
-
         }
 
         bool performedsmsync = false;
@@ -458,13 +458,13 @@ namespace EDDiscovery
                     {
                         routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                         routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
+                        travelHistoryControl1.textBoxTarget.AutoCompleteCustomSource = SystemNames;
                         settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
 
                         imageHandler1.StartWatcher();
                         routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
                         routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                        travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(routeControl1.NewPosition);
                         travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
                         travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
 
