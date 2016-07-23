@@ -441,11 +441,13 @@ namespace EDDiscovery
         {
             if (!Exit)
             {
+                Exit = true;
                 NewLogEvent.Set();
                 if (ThreadNetLog != null && ThreadNetLog.ThreadState == ThreadState.Running)
                 {
                     ThreadNetLog.Join();
                 }
+                Exit = false;
                 ThreadNetLog = new System.Threading.Thread(new System.Threading.ThreadStart(NetLogMain));
                 ThreadNetLog.Name = "Net log";
                 ThreadNetLog.Start();
