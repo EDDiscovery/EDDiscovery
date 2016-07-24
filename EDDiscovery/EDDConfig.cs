@@ -320,20 +320,26 @@ namespace EDDiscovery2
             string apikey =  SQLiteDBClass.GetSettingString("EDSMApiKey", "");
             string commanderName =  SQLiteDBClass.GetSettingString("CommanderName", "");
 
-           
-           
 
-            EDCommander cmdr = new EDCommander(0, SQLiteDBClass.GetSettingString("EDCommanderName0", commanderName),  SQLiteDBClass.GetSettingString("EDCommanderApiKey0", apikey));
-            cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath0", null);
-            listCommanders.Add(cmdr);
+            EDCommander cmdr = null;
 
+            if (!SQLiteDBClass.GetSettingBool("EDCommanderDeleted0", false))
+            {
+                cmdr = new EDCommander(0, SQLiteDBClass.GetSettingString("EDCommanderName0", commanderName), SQLiteDBClass.GetSettingString("EDCommanderApiKey0", apikey));
+                cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath0", null);
+                listCommanders.Add(cmdr);
+            }
 
             for (int ii = 1; ii < 100; ii++)
             {
-                cmdr = new EDCommander(ii, SQLiteDBClass.GetSettingString("EDCommanderName"+ii.ToString(), ""), SQLiteDBClass.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
-                cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
-                if (!cmdr.Name.Equals(""))
-                    listCommanders.Add(cmdr);
+                bool deleted = SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + ii.ToString(), false);
+                if (!deleted)
+                {
+                    cmdr = new EDCommander(ii, SQLiteDBClass.GetSettingString("EDCommanderName" + ii.ToString(), ""), SQLiteDBClass.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
+                    cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
+                    if (!cmdr.Name.Equals(""))
+                        listCommanders.Add(cmdr);
+                }
             }
 
         }
@@ -353,12 +359,34 @@ namespace EDDiscovery2
         internal EDCommander GetNewCommander()
         {
             int maxnr = 0;
-            foreach (EDCommander cmdr in listCommanders)
+            foreach (EDCommander _cmdr in listCommanders)
             {
-                maxnr = Math.Max(cmdr.Nr, maxnr);
+                maxnr = Math.Max(_cmdr.Nr, maxnr);
             }
 
-            return new EDCommander(maxnr+1, "CMDR "+(maxnr + 1).ToString(), "");
+            maxnr++;
+
+            if (SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + maxnr.ToString(), false))
+            {
+                SQLiteDBClass.PutSettingBool("EDCommanderDeleted" + maxnr.ToString(), false);
+            }
+
+            var cmdr = new EDCommander(maxnr, "CMDR "+maxnr.ToString(), "");
+
+            listCommanders.Add(cmdr);
+
+            SQLiteDBClass.PutSettingString("EDCommanderName" + cmdr.Nr.ToString(), cmdr.Name);
+            SQLiteDBClass.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);
+            SQLiteDBClass.PutSettingString("EDCommanderNetLogPath" + cmdr.Nr.ToString(), cmdr.NetLogPath);
+
+            return cmdr;
+        }
+
+        public void DeleteCommander(EDCommander cmdr)
+        {
+            SQLiteDBClass.PutSettingBool("EDCommanderDeleted" + cmdr.Nr.ToString(), true);
+
+            LoadCommanders();
         }
     }
 }

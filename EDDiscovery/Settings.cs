@@ -196,7 +196,6 @@ namespace EDDiscovery2
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
             EDCommander cmdr = EDDiscoveryForm.EDDConfig.GetNewCommander();
-            EDDiscoveryForm.EDDConfig.listCommanders.Add(cmdr);
             dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;   // can't solve it, TBD
             dataGridViewCommanders.Update();
@@ -330,6 +329,36 @@ namespace EDDiscovery2
             {
                 _discoveryForm.RequestDistanceSync();
                 MessageBox.Show("Requesting updated distances from EDSM, please wait");
+            }
+        }
+
+        private void btnDeleteCommander_Click(object sender, EventArgs e)
+        {
+            var cells = dataGridViewCommanders.SelectedCells;
+
+            HashSet<int> rowindexes = new HashSet<int>();
+
+            foreach (var cell in cells.OfType<DataGridViewCell>())
+            {
+                if (!rowindexes.Contains(cell.RowIndex))
+                {
+                    rowindexes.Add(cell.RowIndex);
+                }
+            }
+
+            if (rowindexes.Count == 1)
+            {
+                var row = dataGridViewCommanders.Rows[rowindexes.Single()].DataBoundItem as EDCommander;
+                var result = MessageBox.Show("Do you wish to delete commander " + row.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (result == DialogResult.Yes)
+                {
+                    EDDConfig.Instance.DeleteCommander(row);
+                    dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
+                    dataGridViewCommanders.DataSource = EDDConfig.Instance.listCommanders;   // can't solve it, TBD
+                    dataGridViewCommanders.Update();
+                    _discoveryForm.TravelControl.LoadCommandersListBox();
+
+                }
             }
         }
     }
