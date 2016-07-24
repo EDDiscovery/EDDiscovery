@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TravelHistoryControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,12 +102,12 @@
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
-            this.TopPanel = new System.Windows.Forms.Panel();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TopPanel = new System.Windows.Forms.Panel();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -137,7 +135,7 @@
             this.enterDistanceToPreviousStarToolStripMenuItem,
             this.selectCorrectSystemToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(233, 202);
+            this.historyContextMenu.Size = new System.Drawing.Size(233, 180);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -620,11 +618,12 @@
             this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
             this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
             this.comboBoxHistoryWindow.DataSource = null;
-            this.comboBoxHistoryWindow.DisplayMember = null;
+            this.comboBoxHistoryWindow.DisplayMember = "";
             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxHistoryWindow.DropDownHeight = 200;
+            this.comboBoxHistoryWindow.DropDownWidth = 94;
             this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxHistoryWindow.ItemHeight = 20;
+            this.comboBoxHistoryWindow.ItemHeight = 13;
             this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
             this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
@@ -633,10 +632,11 @@
             this.comboBoxHistoryWindow.ScrollBarWidth = 16;
             this.comboBoxHistoryWindow.SelectedIndex = -1;
             this.comboBoxHistoryWindow.SelectedItem = null;
+            this.comboBoxHistoryWindow.SelectedValue = null;
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
             this.comboBoxHistoryWindow.TabIndex = 0;
             this.toolTipEddb.SetToolTip(this.comboBoxHistoryWindow, "Select the limit of age for travel history entries to show");
-            this.comboBoxHistoryWindow.ValueMember = null;
+            this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // button_RefreshHistory
@@ -710,11 +710,12 @@
             this.comboBoxCommander.BorderColor = System.Drawing.Color.Red;
             this.comboBoxCommander.ButtonColorScaling = 0.5F;
             this.comboBoxCommander.DataSource = null;
-            this.comboBoxCommander.DisplayMember = null;
+            this.comboBoxCommander.DisplayMember = "";
             this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCommander.DropDownHeight = 200;
+            this.comboBoxCommander.DropDownWidth = 173;
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCommander.ItemHeight = 20;
+            this.comboBoxCommander.ItemHeight = 13;
             this.comboBoxCommander.Location = new System.Drawing.Point(114, 6);
             this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCommander.Name = "comboBoxCommander";
@@ -723,11 +724,12 @@
             this.comboBoxCommander.ScrollBarWidth = 16;
             this.comboBoxCommander.SelectedIndex = -1;
             this.comboBoxCommander.SelectedItem = null;
+            this.comboBoxCommander.SelectedValue = null;
             this.comboBoxCommander.Size = new System.Drawing.Size(173, 23);
             this.comboBoxCommander.TabIndex = 0;
             this.toolTipEddb.SetToolTip(this.comboBoxCommander, "Select your commander. Use Settings page to configure and add additional commande" +
         "rs");
-            this.comboBoxCommander.ValueMember = null;
+            this.comboBoxCommander.ValueMember = "";
             this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
             // 
             // buttonExtSummaryPopOut
@@ -739,9 +741,9 @@
             this.buttonExtSummaryPopOut.Name = "buttonExtSummaryPopOut";
             this.buttonExtSummaryPopOut.Size = new System.Drawing.Size(65, 23);
             this.buttonExtSummaryPopOut.TabIndex = 4;
-            this.buttonExtSummaryPopOut.Text = "S-Panel";
-            this.toolTipEddb.SetToolTip(this.buttonExtSummaryPopOut, "Turn on/off/toggle buttons on the Status Panel Pop Out. Drag this popout over you" +
-        "r Elite Dangerous window.");
+            this.buttonExtSummaryPopOut.Text = "S-Panel>";
+            this.toolTipEddb.SetToolTip(this.buttonExtSummaryPopOut, "Turn on and toggle through various Status Panel Pop Out formats. Drag this popout" +
+        " over your Elite Dangerous window.");
             this.buttonExtSummaryPopOut.UseVisualStyleBackColor = true;
             this.buttonExtSummaryPopOut.Click += new System.EventHandler(this.buttonExtSummaryPopOut_Click);
             // 
@@ -1015,18 +1017,6 @@
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
             this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
             // 
-            // TopPanel
-            // 
-            this.TopPanel.Controls.Add(this.textBoxFilter);
-            this.TopPanel.Controls.Add(this.label1);
-            this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
-            this.TopPanel.Controls.Add(this.label2);
-            this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TopPanel.Location = new System.Drawing.Point(0, 0);
-            this.TopPanel.Name = "TopPanel";
-            this.TopPanel.Size = new System.Drawing.Size(594, 32);
-            this.TopPanel.TabIndex = 26;
-            // 
             // ColumnTime
             // 
             this.ColumnTime.HeaderText = "Time";
@@ -1068,6 +1058,18 @@
             this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
             this.mapColour.Width = 40;
+            // 
+            // TopPanel
+            // 
+            this.TopPanel.Controls.Add(this.textBoxFilter);
+            this.TopPanel.Controls.Add(this.label1);
+            this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
+            this.TopPanel.Controls.Add(this.label2);
+            this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.TopPanel.Location = new System.Drawing.Point(0, 0);
+            this.TopPanel.Name = "TopPanel";
+            this.TopPanel.Size = new System.Drawing.Size(594, 32);
+            this.TopPanel.TabIndex = 26;
             // 
             // TravelHistoryControl
             // 
