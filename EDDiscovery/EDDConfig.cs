@@ -1,6 +1,7 @@
 ﻿using EDDiscovery.DB;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -54,7 +55,7 @@ namespace EDDiscovery2
         private bool _orderrowsinverted = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
-        public List<EDCommander> listCommanders;
+        public BindingList<EDCommander> listCommanders;
         private int currentCmdrID=0;
         private Dictionary<string, object> settings = new Dictionary<string, object>();
         private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
@@ -312,7 +313,7 @@ namespace EDDiscovery2
         private void LoadCommanders()
         {
             if (listCommanders == null)
-                listCommanders = new List<EDCommander>();
+                listCommanders = new BindingList<EDCommander>();
 
             listCommanders.Clear();
 
@@ -344,7 +345,7 @@ namespace EDDiscovery2
 
         }
 
-        public void StoreCommanders(List<EDCommander> dictcmdr)
+        public void StoreCommanders(IEnumerable<EDCommander> dictcmdr)
         {
             foreach (EDCommander cmdr in dictcmdr)
             {
@@ -378,6 +379,8 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingString("EDCommanderName" + cmdr.Nr.ToString(), cmdr.Name);
             SQLiteDBClass.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);
             SQLiteDBClass.PutSettingString("EDCommanderNetLogPath" + cmdr.Nr.ToString(), cmdr.NetLogPath);
+
+            LoadCommanders();
 
             return cmdr;
         }

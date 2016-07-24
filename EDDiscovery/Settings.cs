@@ -127,7 +127,7 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
             EDDiscoveryForm.EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
 
-            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            BindingList<EDCommander> edcommanders = (BindingList<EDCommander>)dataGridViewCommanders.DataSource;
             EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
             dataGridViewCommanders.DataSource = null;
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
@@ -196,7 +196,7 @@ namespace EDDiscovery2
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
             EDCommander cmdr = EDDiscoveryForm.EDDConfig.GetNewCommander();
-            dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
+            //dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;   // can't solve it, TBD
             dataGridViewCommanders.Update();
             _discoveryForm.TravelControl.LoadCommandersListBox();
@@ -204,7 +204,7 @@ namespace EDDiscovery2
 
         private void dataGridViewCommanders_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            BindingList<EDCommander> edcommanders = (BindingList<EDCommander>)dataGridViewCommanders.DataSource;
             EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
             _discoveryForm.TravelControl.LoadCommandersListBox();
         }
@@ -353,7 +353,7 @@ namespace EDDiscovery2
                 if (result == DialogResult.Yes)
                 {
                     EDDConfig.Instance.DeleteCommander(row);
-                    dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
+                    //dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
                     dataGridViewCommanders.DataSource = EDDConfig.Instance.listCommanders;   // can't solve it, TBD
                     dataGridViewCommanders.Update();
                     _discoveryForm.TravelControl.LoadCommandersListBox();
