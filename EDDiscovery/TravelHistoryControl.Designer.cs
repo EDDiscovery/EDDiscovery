@@ -105,8 +105,6 @@
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
             this.TopPanel = new System.Windows.Forms.Panel();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
