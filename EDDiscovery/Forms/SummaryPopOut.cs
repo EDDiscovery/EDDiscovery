@@ -64,9 +64,9 @@ namespace EDDiscovery2
             lastpos = tabstops[tabstops.Count - 1];
 
             if ( noteafterxyz )
-                tabstops.AddRange(new int[] { lastpos + 60, lastpos + 110 , lastpos+160, lastpos+210, 1000 });    // x,y,z,note,end
+                tabstops.AddRange(new int[] { lastpos + 60, lastpos + 120 , lastpos+170, lastpos+230, 1200 });    // x,y,z,note,end
             else
-                tabstops.AddRange(new int[] { lastpos + 60, lastpos + 210, lastpos+260, lastpos+310, 1000 });    // note,x,y,z,end
+                tabstops.AddRange(new int[] { lastpos + 60, lastpos + 210, lastpos+270, lastpos+320, 1000 });    // note,x,y,z,end
         }
 
         public void SetGripperColour(Color grip)
