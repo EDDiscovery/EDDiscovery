@@ -65,6 +65,7 @@
             this.textBoxNetLogDir = new ExtendedControls.TextBoxBorder();
             this.radioButton_Manual = new ExtendedControls.RadioButtonCustom();
             this.radioButton_Auto = new ExtendedControls.RadioButtonCustom();
+            this.btnDeleteCommander = new ExtendedControls.ButtonExt();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -398,6 +399,7 @@
             this.groupBox4.BackColorScaling = 0.5F;
             this.groupBox4.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox4.BorderColorScaling = 0.5F;
+            this.groupBox4.Controls.Add(this.btnDeleteCommander);
             this.groupBox4.Controls.Add(this.buttonAddCommander);
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.dataGridViewCommanders);
@@ -569,6 +571,19 @@
             this.radioButton_Auto.UseVisualStyleBackColor = true;
             this.radioButton_Auto.CheckedChanged += new System.EventHandler(this.radioButton_Auto_CheckedChanged);
             // 
+            // btnDeleteCommander
+            // 
+            this.btnDeleteCommander.BorderColorScaling = 1.25F;
+            this.btnDeleteCommander.ButtonColorScaling = 0.5F;
+            this.btnDeleteCommander.ButtonDisabledScaling = 0.5F;
+            this.btnDeleteCommander.Location = new System.Drawing.Point(680, 16);
+            this.btnDeleteCommander.Name = "btnDeleteCommander";
+            this.btnDeleteCommander.Size = new System.Drawing.Size(121, 23);
+            this.btnDeleteCommander.TabIndex = 3;
+            this.btnDeleteCommander.Text = "Delete Commander";
+            this.btnDeleteCommander.UseVisualStyleBackColor = true;
+            this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -632,5 +647,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
+        private ExtendedControls.ButtonExt btnDeleteCommander;
     }
 }

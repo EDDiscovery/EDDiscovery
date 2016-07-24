@@ -1,6 +1,7 @@
 ﻿using EDDiscovery.DB;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -54,7 +55,7 @@ namespace EDDiscovery2
         private bool _orderrowsinverted = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
-        public List<EDCommander> listCommanders;
+        public BindingList<EDCommander> listCommanders;
         private int currentCmdrID=0;
         private Dictionary<string, object> settings = new Dictionary<string, object>();
         private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
@@ -312,7 +313,7 @@ namespace EDDiscovery2
         private void LoadCommanders()
         {
             if (listCommanders == null)
-                listCommanders = new List<EDCommander>();
+                listCommanders = new BindingList<EDCommander>();
 
             listCommanders.Clear();
 
@@ -320,25 +321,31 @@ namespace EDDiscovery2
             string apikey =  SQLiteDBClass.GetSettingString("EDSMApiKey", "");
             string commanderName =  SQLiteDBClass.GetSettingString("CommanderName", "");
 
-           
-           
 
-            EDCommander cmdr = new EDCommander(0, SQLiteDBClass.GetSettingString("EDCommanderName0", commanderName),  SQLiteDBClass.GetSettingString("EDCommanderApiKey0", apikey));
-            cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath0", null);
-            listCommanders.Add(cmdr);
+            EDCommander cmdr = null;
 
+            if (!SQLiteDBClass.GetSettingBool("EDCommanderDeleted0", false))
+            {
+                cmdr = new EDCommander(0, SQLiteDBClass.GetSettingString("EDCommanderName0", commanderName), SQLiteDBClass.GetSettingString("EDCommanderApiKey0", apikey));
+                cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath0", null);
+                listCommanders.Add(cmdr);
+            }
 
             for (int ii = 1; ii < 100; ii++)
             {
-                cmdr = new EDCommander(ii, SQLiteDBClass.GetSettingString("EDCommanderName"+ii.ToString(), ""), SQLiteDBClass.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
-                cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
-                if (!cmdr.Name.Equals(""))
-                    listCommanders.Add(cmdr);
+                bool deleted = SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + ii.ToString(), false);
+                if (!deleted)
+                {
+                    cmdr = new EDCommander(ii, SQLiteDBClass.GetSettingString("EDCommanderName" + ii.ToString(), ""), SQLiteDBClass.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
+                    cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
+                    if (!cmdr.Name.Equals(""))
+                        listCommanders.Add(cmdr);
+                }
             }
 
         }
 
-        public void StoreCommanders(List<EDCommander> dictcmdr)
+        public void StoreCommanders(IEnumerable<EDCommander> dictcmdr)
         {
             foreach (EDCommander cmdr in dictcmdr)
             {
@@ -353,12 +360,36 @@ namespace EDDiscovery2
         internal EDCommander GetNewCommander()
         {
             int maxnr = 0;
-            foreach (EDCommander cmdr in listCommanders)
+            foreach (EDCommander _cmdr in listCommanders)
             {
-                maxnr = Math.Max(cmdr.Nr, maxnr);
+                maxnr = Math.Max(_cmdr.Nr, maxnr);
             }
 
-            return new EDCommander(maxnr+1, "CMDR "+(maxnr + 1).ToString(), "");
+            maxnr++;
+
+            if (SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + maxnr.ToString(), false))
+            {
+                SQLiteDBClass.PutSettingBool("EDCommanderDeleted" + maxnr.ToString(), false);
+            }
+
+            var cmdr = new EDCommander(maxnr, "CMDR "+maxnr.ToString(), "");
+
+            listCommanders.Add(cmdr);
+
+            SQLiteDBClass.PutSettingString("EDCommanderName" + cmdr.Nr.ToString(), cmdr.Name);
+            SQLiteDBClass.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);
+            SQLiteDBClass.PutSettingString("EDCommanderNetLogPath" + cmdr.Nr.ToString(), cmdr.NetLogPath);
+
+            LoadCommanders();
+
+            return cmdr;
+        }
+
+        public void DeleteCommander(EDCommander cmdr)
+        {
+            SQLiteDBClass.PutSettingBool("EDCommanderDeleted" + cmdr.Nr.ToString(), true);
+
+            LoadCommanders();
         }
     }
 }
