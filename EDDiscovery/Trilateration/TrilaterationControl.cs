@@ -980,7 +980,7 @@ namespace EDDiscovery
             if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = LastKnownSystem;
             var map = _discoveryForm.Map;
 
-            map.Prepare(centerSystem.name, _discoveryForm.settings.MapHomeSystem, centerSystem.name,
+            map.Prepare(centerSystem, _discoveryForm.settings.MapHomeSystem, centerSystem,
                         _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames,_discoveryForm.VisitedSystems);
 
             map.SetReferenceSystems(CurrentReferenceSystems.ToList());
