@@ -114,6 +114,7 @@ namespace EDDiscovery
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
 
+            ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
             theme.RestoreSettings();                                    // theme, remember your saved settings
 
@@ -295,11 +296,7 @@ namespace EDDiscovery
 
         public void ApplyTheme(bool refreshhistory)
         {
-            if (settings.ThemeName != "None")
-                ToolStripManager.Renderer = theme.toolstripRenderer;
-            else
-                ToolStripManager.Renderer = new ToolStripProfessionalRenderer();
-
+            ToolStripManager.Renderer = theme.toolstripRenderer;
             this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
             //panel_grip.Visible = !theme.WindowsFrame;
             panel_close.Visible = !theme.WindowsFrame;
@@ -311,8 +308,7 @@ namespace EDDiscovery
 
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
-            if (settings.ThemeName != "None")
-                theme.ApplyColors(this);
+            theme.ApplyColors(this);
 
             if (refreshhistory)
                 travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
