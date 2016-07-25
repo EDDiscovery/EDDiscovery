@@ -136,9 +136,6 @@ namespace EDDiscovery2.ImageHandler
                 if (!Directory.Exists(textBoxOutputDir.Text))
                     Directory.CreateDirectory(textBoxOutputDir.Text);
 
-                //sometimes the picture doesn't load into the picture box so waiting in case this due to the file not being closed quick enough in ED
-                System.Threading.Thread.Sleep(1500);
-
                 int formatindex=0;
                 bool hires=false;
                 bool cropimage = false;
@@ -177,7 +174,23 @@ namespace EDDiscovery2.ImageHandler
                     index++;
                 } while (File.Exists(store_name));          // if name exists, pick another
 
-                //var bmp = System.Drawing.Bitmap.FromFile(e.FullPath);
+                FileStream testfile = null;
+
+                for (int tries = 20; tries-- > 0;)          // wait 10 seconds and then try it anyway.. first time ED converts I've seen 2+ seconds.
+                {
+                    System.Threading.Thread.Sleep(500);     // every 500ms see if we can read the file, if we can, go, else wait..
+                    try
+                    {
+                        //Console.WriteLine("Trying " + inputfile);
+                        testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.None);        // throws if can't open
+                        //Console.WriteLine("Worked " + inputfile);
+                        testfile.Close();
+                        break;
+                    }
+                    catch
+                    { }
+                }
+
                 System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(inputfile);
                 System.Drawing.Bitmap croppedbmp = null;
 
