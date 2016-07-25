@@ -440,7 +440,7 @@ namespace EDDiscovery2
         {
             Dictionary<string, Func<DateTime>> starttimes = new Dictionary<string, Func<DateTime>>()
             {
-                { "All", () => (_visitedSystems == null ? new[] { DateTime.Now } : _visitedSystems.Select(s => s.Time)).Union(new[] { DateTime.Now }).OrderBy(s => s).FirstOrDefault() },
+                { "All", () => new DateTime(2010, 1, 1, 0, 0, 0) },
                 { "Last Week", () => DateTime.Now.AddDays(-7) },
                 { "Last Month", () => DateTime.Now.AddMonths(-1) },
                 { "Last Year", () => DateTime.Now.AddYears(-1) }
