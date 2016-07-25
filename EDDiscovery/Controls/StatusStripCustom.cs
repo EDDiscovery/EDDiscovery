@@ -20,10 +20,26 @@ namespace ExtendedControls
         {
             base.WndProc(ref m);
 
-            if (m.Msg == WM_NCHITTEST && (int)m.Result == HT_BOTTOMRIGHT)
+            if (m.Msg == WM_NCHITTEST)
             {
-                // Tell the system to test the parent
-                m.Result = (IntPtr)HT_TRANSPARENT;
+                if ((int)m.Result == HT_BOTTOMRIGHT)
+                {
+                    // Tell the system to test the parent
+                    m.Result = (IntPtr)HT_TRANSPARENT;
+                }
+                else if ((int)m.Result == HT_CLIENT)
+                {
+                    // Work around the implementation returning HT_CLIENT instead of HT_BOTTOMRIGHT
+                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                    int y = unchecked((short)((uint)m.LParam >> 16));
+                    Point p = PointToClient(new Point(x, y));
+
+                    if (p.X >= this.ClientSize.Width - this.ClientSize.Height)
+                    {
+                        // Tell the system to test the parent
+                        m.Result = (IntPtr)HT_TRANSPARENT;
+                    }
+                }
             }
         }
     }
