@@ -519,6 +519,9 @@
             this.statusStrip1.Size = new System.Drawing.Size(993, 22);
             this.statusStrip1.TabIndex = 22;
             this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.SizingGrip = true;
+            this.statusStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
+            this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             // 
             // EDDiscoveryForm
             // 
