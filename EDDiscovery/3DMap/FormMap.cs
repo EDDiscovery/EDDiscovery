@@ -1332,7 +1332,7 @@ namespace EDDiscovery2
             else
                 statusLabel.Text = "Use W, A, S, D keys with the mouse. ";
 
-            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00}", _cameraPos.X, _cameraPos.Y, _cameraPos.Z, _zoom);
+            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00}", _cameraPos.X, -(_cameraPos.Y), _cameraPos.Z, _zoom);
 #if DEBUG
             statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
 #endif
@@ -1714,7 +1714,7 @@ namespace EDDiscovery2
         private void newRegionBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BookmarkForm frm = new BookmarkForm();
-            frm.InitialisePos(_cameraPos.X, _cameraPos.Y, _cameraPos.Z);
+            frm.InitialisePos(_cameraPos.X, -(_cameraPos.Y), _cameraPos.Z);
             DateTime tme = DateTime.Now;
             frm.RegionBookmark(tme.ToString());
             DialogResult res = frm.ShowDialog();
