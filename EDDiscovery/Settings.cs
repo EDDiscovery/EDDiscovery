@@ -22,7 +22,6 @@ namespace EDDiscovery2
         public float MapZoom { get { return float.Parse(textBoxDefaultZoom.Text); } }
         public bool MapCentreOnSelection { get { return radioButtonHistorySelection.Checked; } }
         public bool OrderRowsInverted {  get { return checkBoxOrderRowsInverted.Checked; } }
-        public string ThemeName { get { return comboBoxTheme.Items[comboBoxTheme.SelectedIndex]; } }
 
         public Settings()
         {
@@ -39,25 +38,16 @@ namespace EDDiscovery2
 
         void SetEntryThemeComboBox()
         {
-            if (EDDConfig.Instance.UseTheme)
-            {
-                int i = _discoveryForm.theme.GetIndexOfCurrentTheme();
-                if (i == -1)
-                    comboBoxTheme.SelectedItem = "Custom";
-                else
-                    comboBoxTheme.SelectedIndex = i + 1;
-            }
+            int i = _discoveryForm.theme.GetIndexOfCurrentTheme();
+            if (i == -1)
+                comboBoxTheme.SelectedItem = "Custom";
             else
-            {
-                comboBoxTheme.SelectedItem = "None";
-            }
+                comboBoxTheme.SelectedIndex = i;
         }
 
         private void ResetThemeList()
         {
-            comboBoxTheme.Items.Clear();
-            comboBoxTheme.Items.Add("None");
-            comboBoxTheme.Items.AddRange(_discoveryForm.theme.GetThemeList());
+            comboBoxTheme.Items = _discoveryForm.theme.GetThemeList();
             comboBoxTheme.Items.Add("Custom");
         }
 
@@ -225,38 +215,27 @@ namespace EDDiscovery2
 
         private void comboBoxTheme_SelectedIndexChanged(object sender, EventArgs e) // theme selected..
         {
-            string themename = this.ThemeName;
+            string themename = comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString();
 
-            if (ThemeName == "None")
+            string fontwanted = null;                                               // don't check custom, only a stored theme..
+            if (!themename.Equals("Custom") && !_discoveryForm.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
-                EDDConfig.Instance.UseTheme = false;
-                _discoveryForm.theme.SetThemeByName("Windows Default");
-                _discoveryForm.ApplyTheme(true);
-                MessageBox.Show("You will need to restart the application for this setting to take effect", "Restart to apply no theme", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                EDDConfig.Instance.UseTheme = true;
-                string fontwanted = null;                                               // don't check custom, only a stored theme..
-                if (!themename.Equals("Custom") && !_discoveryForm.theme.IsFontAvailableInTheme(themename, out fontwanted))
-                {
-                    DialogResult res = MessageBox.Show("The font used by this theme is not available on your system" + Environment.NewLine +
-                          "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
-                          "Install this font and you can use this scheme." + Environment.NewLine +
-                          "EuroCaps font is available www.edassets.org.",
-                          "Warning", MessageBoxButtons.OK);
+                DialogResult res = MessageBox.Show("The font used by this theme is not available on your system" + Environment.NewLine +
+                      "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
+                      "Install this font and you can use this scheme." + Environment.NewLine +
+                      "EuroCaps font is available www.edassets.org.",
+                      "Warning", MessageBoxButtons.OK);
 
-                    _discoveryForm.theme.SetCustom();                              // go to custom theme whatever
-                    SetEntryThemeComboBox();
-                    return;
-                }
-
-                if (!_discoveryForm.theme.SetThemeByName(themename))
-                    _discoveryForm.theme.SetCustom();                                   // go to custom theme..
-
+                _discoveryForm.theme.SetCustom();                              // go to custom theme whatever
                 SetEntryThemeComboBox();
-                _discoveryForm.ApplyTheme(true);
+                return;
             }
+
+            if (!_discoveryForm.theme.SetThemeByName(themename))
+                _discoveryForm.theme.SetCustom();                                   // go to custom theme..
+
+            SetEntryThemeComboBox();
+            _discoveryForm.ApplyTheme(true);
         }
 
         private void buttonSaveTheme_Click(object sender, EventArgs e)
