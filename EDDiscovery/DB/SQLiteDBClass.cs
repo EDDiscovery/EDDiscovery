@@ -702,7 +702,10 @@ namespace EDDiscovery.DB
         {
             try
             {
+                // Disable CS0618 warning for LoadWithPartialName
+                #pragma warning disable CS0618
                 var asm = System.Reflection.Assembly.LoadWithPartialName("Mono.Data.Sqlite");
+                #pragma warning restore CS0618
                 var factorytype = asm.GetType("Mono.Data.Sqlite.SqliteFactory");
                 return (DbProviderFactory)factorytype.GetConstructor(new Type[0]).Invoke(new object[0]);
             }
