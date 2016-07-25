@@ -48,7 +48,6 @@ namespace ExtendedControls
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-
             DropDown(this, e);
         }
 
@@ -61,7 +60,6 @@ namespace ExtendedControls
         protected override void OnDeactivate(EventArgs e)
         {
             base.OnDeactivate(e);
-
             this.Close();
         }
 
@@ -265,6 +263,13 @@ namespace ExtendedControls
             this.Controls.Add(this._cbsystem);
         }
 
+        private void _cbdropdown_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int selectedindex = _cbdropdown.SelectedIndex;
+            _cbdropdown.Close();
+            _cbsystem.SelectedIndex = selectedindex;
+        }
+
         private void _cbsystem_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.Text = _cbsystem.Text;
@@ -445,11 +450,6 @@ namespace ExtendedControls
             _cbdropdown.Show();
         }
 
-        private void _cbdropdown_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _cbsystem.SelectedIndex = _cbdropdown.SelectedIndex;
-        }
-
         private void _cbdropdown_DropDownClosed(object sender, EventArgs e)
         {
             if (_cbdropdown != null)
@@ -459,7 +459,6 @@ namespace ExtendedControls
             }
 
             isActivated = false;
-            this.Invalidate(true);
         }
 
         private void _cbdropdown_DropDown(object sender, EventArgs e)
