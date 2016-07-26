@@ -1,4 +1,5 @@
 ﻿using EDDiscovery.DB;
+using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -145,7 +146,7 @@ namespace EDDiscovery2.DB
             try
             {
                 Regex pattern;
-                int hour=0, min=0, sec=0;
+                int hour = 0, min = 0, sec = 0;
 
                 /* MKW: Use regular expressions to parse the log; much more readable and robust.
                  * Example log entry:
@@ -213,7 +214,7 @@ namespace EDDiscovery2.DB
                     {
                         System.Diagnostics.Trace.WriteLine("System parse error 1:" + line);
                     }
-                    
+
                 }
                 else
                 {
@@ -346,7 +347,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static void CalculateSqDistances(List<VisitedSystemsClass> vs, SortedList<double,ISystem> distlist , double x, double y, double z, int maxitems , bool removezerodiststar )
+        public static void CalculateSqDistances(List<VisitedSystemsClass> vs, SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar)
         {
             double dist;
             double dx, dy, dz;
@@ -374,10 +375,10 @@ namespace EDDiscovery2.DB
                 }
             }
         }
-        
+
         // centresysname is a default one
 
-        public static string FindNextVisitedSystem(List<VisitedSystemsClass> _visitedSystems, string sysname, int dir , string centresysname )
+        public static string FindNextVisitedSystem(List<VisitedSystemsClass> _visitedSystems, string sysname, int dir, string centresysname)
         {
             int index = _visitedSystems.FindIndex(x => x.Name.Equals(sysname));
 
@@ -420,13 +421,13 @@ namespace EDDiscovery2.DB
         public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb)          // oldest system is lowest index
         {
             SystemClass.FillVisitedSystems(visitedSystems);                 // first try and populate with SystemClass info
-            
+
             foreach (VisitedSystemsClass vsc in visitedSystems)
             {
                 if (vsc.curSystem == null)                                  // if no systemclass info, make a dummy
                 {
                     vsc.curSystem = new SystemClass(vsc.Name);
-//TBD vsc.HasTravelCoordinates
+                    //TBD vsc.HasTravelCoordinates
                     if (vsc.HasTravelCoordinates)
                     {
                         vsc.curSystem.x = vsc.X;
@@ -441,9 +442,9 @@ namespace EDDiscovery2.DB
             DistanceClass.FillVisitedSystems(visitedSystems, usedistancedb);    // finally fill in the distances, indicating if can use db or not
         }
 
-        public static void UpdateVisitedSystemsEntries(VisitedSystemsClass item, VisitedSystemsClass item2 , bool usedistancedb)           // this is a split in two version with the same code of AddHistoryRow..
+        public static void UpdateVisitedSystemsEntries(VisitedSystemsClass item, VisitedSystemsClass item2, bool usedistancedb)           // this is a split in two version with the same code of AddHistoryRow..
         {
-            SystemClass sys1 = SystemClass.GetSystem(item.Name);            
+            SystemClass sys1 = SystemClass.GetSystem(item.Name);
             if (sys1 == null)
             {
                 sys1 = new SystemClass(item.Name);
@@ -481,7 +482,7 @@ namespace EDDiscovery2.DB
             string diststr = "";
             if (sys2 != null)
             {
-                double dist = usedistancedb ? SystemClass.DistanceIncludeDB(sys1,sys2) : SystemClass.Distance(sys1, sys2);
+                double dist = usedistancedb ? SystemClass.DistanceIncludeDB(sys1, sys2) : SystemClass.Distance(sys1, sys2);
                 if (dist > 0)
                     diststr = dist.ToString("0.00");
             }
@@ -508,7 +509,7 @@ namespace EDDiscovery2.DB
             {
                 IEnumerable<ISystem> slist = (from systems in visitedSystems orderby systems.Time descending select systems.curSystem);
 
-                if (slist != null && slist.Any() )
+                if (slist != null && slist.Any())
                 {
                     ISystem sel = slist.First(s => s.HasCoordinate);
 
@@ -518,6 +519,21 @@ namespace EDDiscovery2.DB
             }
 
             return null;
+        }
+
+        public static double Distance(VisitedSystemsClass s1, double x, double y, double z)
+        {
+            if (s1 != null && s1.HasTravelCoordinates)
+                return Math.Sqrt((s1.X - x) * (s1.X - x) + (s1.Y - y) * (s1.Y - y) + (s1.Z - z) * (s1.Z - z));
+            else if (s1.curSystem.HasCoordinate)
+                return Math.Sqrt((s1.curSystem.x - x) * (s1.curSystem.x - x) + (s1.curSystem.y - y) * (s1.curSystem.y - y) + (s1.curSystem.z - z) * (s1.curSystem.z - z));
+            else
+                return -1;
+        }
+
+        public static double Distance(VisitedSystemsClass s1, Point3D p)
+        {
+            return Distance(s1, p.X, p.Y, p.Z);
         }
     }
 }

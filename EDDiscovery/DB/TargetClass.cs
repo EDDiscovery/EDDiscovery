@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMK.LightGeometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,6 +56,14 @@ namespace EDDiscovery.DB
             y = SQLiteDBClass.GetSettingDouble("TargetPositionY", double.NaN);
             z = SQLiteDBClass.GetSettingDouble("TargetPositionZ", double.NaN);
             return tt != TargetType.None;
+        }
+
+        public static bool GetTargetPosition(out string name, out Point3D t)
+        {
+            double x, y, z;
+            bool ret = GetTargetPosition(out name, out x, out y, out z);
+            t = new Point3D(x, y, z);
+            return ret;
         }
     }
 }
