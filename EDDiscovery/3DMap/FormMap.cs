@@ -133,9 +133,29 @@ namespace EDDiscovery2
             InitializeComponent();
         }
 
+        public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
+                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+        {
+            Prepare(new SystemClassStarNames(historysel), homesys, new SystemClassStarNames(centersys), zoom, sysname, visited);
+        }
+
+        public void Prepare(VisitedSystemsClass historysel, string homesys, ISystem centersys, float zoom,
+                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+        {
+            Prepare(new SystemClassStarNames(historysel), homesys, new SystemClassStarNames(centersys), zoom, sysname, visited);
+        }
+
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
+            Prepare(FindSystem(historysel), homesys, FindSystem(centersys), zoom, sysname, visited);
+        }
+
+        public void Prepare(SystemClassStarNames historysel, string homesys, SystemClassStarNames centersys, float zoom,
+                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+        {
+            _historySelection = historysel;
+            _centerSystem = centersys;
             _visitedSystems = visited;
 
             if (_starnames == null)                                     // only on first call
@@ -178,12 +198,9 @@ namespace EDDiscovery2
             _starname_curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
 
             _systemNames = sysname;
-            _centerSystem = FindSystem(centersys);
 
             if (_centerSystem == null)
                 _centerSystem = FindSystem("Sol");
-
-            _historySelection = FindSystem(historysel);
 
             _homeSystem = FindSystem(homesys);
             if (_homeSystem == null)
@@ -269,6 +286,28 @@ namespace EDDiscovery2
             if (_starnames != null)         // if null, we are not up and running
             {
                 SystemClassStarNames newhist = FindSystem(historysel);
+
+                if (newhist != null)
+                {
+                    _historySelection = newhist;        // only override if found in starmap (meaning it has co-ords)
+                }
+            }
+        }
+
+        public void UpdateHistorySystem(VisitedSystemsClass historysel)
+        {
+            if (_starnames != null)         // if null, we are not up and running
+            {
+                SystemClassStarNames newhist = null;
+
+                if (historysel.HasTravelCoordinates)
+                {
+                    newhist = new SystemClassStarNames(historysel);
+                }
+                else if (historysel.curSystem != null)
+                {
+                    newhist = new SystemClassStarNames(historysel.curSystem);
+                }
 
                 if (newhist != null)
                 {
@@ -961,6 +1000,34 @@ namespace EDDiscovery2
                 labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _centerSystem.name, _centerSystem.x.ToString("0.00"), _centerSystem.y.ToString("0.00"), _centerSystem.z.ToString("0.00"));
             else
                 labelSystemCoords.Text = "No centre system";
+        }
+
+        public bool SetCenterSystemTo(VisitedSystemsClass system, bool moveto)
+        {
+            if (_starnames != null)
+            {
+                SystemClassStarNames sys = null;
+
+                if (system.HasTravelCoordinates)
+                {
+                    sys = new SystemClassStarNames(system);
+                }
+                else if (system.curSystem != null)
+                {
+                    sys = new SystemClassStarNames(system.curSystem);
+                }
+
+                if (sys != null)
+                {
+                    return SetCenterSystemTo(new SystemClassStarNames(system), moveto);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+                return false;
         }
 
         public bool SetCenterSystemTo(string name, bool moveto)
