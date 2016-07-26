@@ -490,8 +490,6 @@ namespace EDDiscovery
                         travelHistoryControl1.RefreshHistory();
                         //LogLine("Time " + (Environment.TickCount-tickc) );
 
-                        travelHistoryControl1.netlog.StartMonitor();
-
                         if (EliteDangerous.CheckStationLogging())
                         {
                             panelInfo.Visible = false;

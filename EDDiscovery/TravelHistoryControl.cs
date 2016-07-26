@@ -152,12 +152,21 @@ namespace EDDiscovery
         public void RefreshHistory()
         {
             if (visitedSystems == null || visitedSystems.Count == 0)
-                GetVisitedSystems();
+            {
+                if (activecommander >= 0)
+                {
+                    netlog.StopMonitor();
+                    visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
+                    netlog.StartMonitor();
+                }
+                else
+                {
+                    visitedSystems = VisitedSystemsClass.GetAll(activecommander);
+                }
+            }
 
             if (visitedSystems == null)
                 return;
-
-            VisitedSystemsClass.UpdateSys(visitedSystems, EDDiscoveryForm.EDDConfig.UseDistances);
 
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
@@ -182,20 +191,6 @@ namespace EDDiscovery
             UpdateDependentsWithSelection();
         }
 
-        private void GetVisitedSystems()
-        {                                                       // for backwards compatibility, don't store RGB value.
-            if (activecommander >= 0)
-            {
-                visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
-                netlog.RestartMonitor();
-            }
-            else
-            {
-                visitedSystems = VisitedSystemsClass.GetAll(activecommander);
-            }
-        }
-
-
         private void AddNewHistoryRow(bool insert, VisitedSystemsClass item)            // second part of add history row, adds item to view.
         {
             object[] rowobj = { item.Time, item.Name, item.strDistance, SystemNoteClass.GetSystemNoteOrEmpty(item.curSystem.name), "█" };
@@ -210,7 +205,7 @@ namespace EDDiscovery
             {
                 dataGridViewTravel.Rows.Insert(0, rowobj);
                 rownr = 0;
-                Console.WriteLine("Added " + item.Name);
+                Console.WriteLine("THC Added " + item.Name);
             }
             else
             {
@@ -771,15 +766,13 @@ namespace EDDiscovery
         }
 
 
-        internal void NewPosition(object source)            // Called from netlog thread beware.
+        internal void NewPosition(object source, int nr)            // Called from netlog thread beware.
         {
             try
             {
-                string name = netlog.visitedSystems.Last().Name;
                 Invoke((MethodInvoker)delegate
                 {
-                    UpdateNewPosition(name);
-
+                    UpdateNewPosition(nr);
                 });
             }
             catch (Exception ex)
@@ -789,19 +782,10 @@ namespace EDDiscovery
             }
         }
 
-        private void UpdateNewPosition(string name)         // in UI Thread..
+        private void UpdateNewPosition(int nr)         // in UI Thread..
         {
-            var result = visitedSystems.OrderByDescending(a => a.Time).ToList<VisitedSystemsClass>();
-            
-            VisitedSystemsClass item = result[0];
-            VisitedSystemsClass item2;
-
-            if (result.Count > 1)
-                item2 = result[1];
-            else
-                item2 = null;
-
-            VisitedSystemsClass.UpdateVisitedSystemsEntries(item, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
+            VisitedSystemsClass item = visitedSystems[nr];
+            string name = item.Name;
 
             LogText("Arrived at system ");
             if ( item.HasTravelCoordinates == false && ( item.curSystem == null || item.curSystem.HasCoordinate == false) )
@@ -812,7 +796,7 @@ namespace EDDiscovery
             int count = GetVisitsCount(name);
 
             LogText(", Visit No. " + count.ToString() + Environment.NewLine);
-            System.Diagnostics.Trace.WriteLine("Arrived at system: " + name + " " + count.ToString() + ":th visit.");
+            System.Diagnostics.Trace.WriteLine("Entry " + nr + " Arrived at system: " + name + " " + count.ToString() + ":th visit.");
 
             if (checkBoxEDSMSyncTo.Checked == true)
             {
