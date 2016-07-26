@@ -447,7 +447,13 @@ namespace ExtendedControls
             _cbdropdown.DropDownClosed += _cbdropdown_DropDownClosed;
             _cbdropdown.SelectedIndexChanged += _cbdropdown_SelectedIndexChanged;
 
-            _cbdropdown.Show();
+            Control parent = this.Parent;
+            while (parent != null && !(parent is Form))
+            {
+                parent = parent.Parent;
+            }
+
+            _cbdropdown.Show(parent);
         }
 
         private void _cbdropdown_DropDownClosed(object sender, EventArgs e)
