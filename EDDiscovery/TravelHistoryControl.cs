@@ -584,9 +584,8 @@ namespace EDDiscovery
 
             this.Cursor = Cursors.WaitCursor;
 
-            string selname = (selectedSys != null && selectedSys.curSystem.HasCoordinate) ? selectedSys.Name : textBoxSystem.Text.Trim();
-            map.Prepare(selname, _discoveryForm.settings.MapHomeSystem,
-                        _discoveryForm.settings.MapCentreOnSelection ? selname : _discoveryForm.settings.MapHomeSystem,
+            map.Prepare(selectedSys, _discoveryForm.settings.MapHomeSystem,
+                        _discoveryForm.settings.MapCentreOnSelection ? selectedSys?.curSystem : SystemClass.GetSystem(_discoveryForm.settings.MapHomeSystem),
                         _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames, visitedSystems);
             map.Show();
             this.Cursor = Cursors.Default;
@@ -1239,7 +1238,7 @@ namespace EDDiscovery
 
             if (_discoveryForm.Map.Is3DMapsRunning)             // double check here! for paranoia.
             {
-                if (_discoveryForm.Map.MoveToSystem(rightclicksystem.Name))
+                if (_discoveryForm.Map.MoveToSystem(rightclicksystem))
                     _discoveryForm.Map.Show();
             }
         }

@@ -21,7 +21,19 @@ namespace EDDiscovery2._3DMap
         }
 
         public bool Is3DMapsRunning { get { return _formMap.Is3DMapsRunning; } }
-        
+
+        public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
+                            AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+        {
+            _formMap.Prepare(historysel, homesys, centersys, zoom, sysname, visited);
+        }
+
+        public void Prepare(VisitedSystemsClass historysel, string homesys, ISystem centersys, float zoom,
+                            AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+        {
+            _formMap.Prepare(historysel, homesys, centersys, zoom, sysname, visited);
+        }
+
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
                             AutoCompleteStringCollection sysname , List<VisitedSystemsClass> visited )
         {
@@ -46,6 +58,16 @@ namespace EDDiscovery2._3DMap
         public void UpdateHistorySystem(string historysel)
         {
             _formMap.UpdateHistorySystem(historysel);
+        }
+
+        public void UpdateHistorySystem(VisitedSystemsClass historysel)
+        {
+            _formMap.UpdateHistorySystem(historysel);
+        }
+
+        public bool MoveToSystem(VisitedSystemsClass system)
+        {
+            return _formMap.SetCenterSystemTo(system, true);
         }
 
         public bool MoveToSystem(string sysname)
