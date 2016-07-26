@@ -1104,17 +1104,12 @@ namespace EDDiscovery
         #region Summary Pop out
 
         public bool IsSummaryPopOutOn {  get { return summaryPopOut != null; } }
-        private int summaryformatmode = -1;      //five state, 0..3 options, -1 = off
         public bool ToggleSummaryPopOut()
         {
-            summaryformatmode++;
-
-            if (summaryPopOut == null || summaryformatmode < 4 )
+            if (summaryPopOut == null )
             {
-                if ( summaryPopOut != null )
-                    summaryPopOut.Close();
-
-                summaryPopOut = new SummaryPopOut( (summaryformatmode & 1)!=0, (summaryformatmode & 2)!=0);
+                summaryPopOut = new SummaryPopOut();
+                summaryPopOut.RequiresRefresh += SummaryRefreshRequested;
                 RedrawSummary();
                 summaryPopOut.Show();
             }
@@ -1122,7 +1117,6 @@ namespace EDDiscovery
             { 
                 summaryPopOut.Close();
                 summaryPopOut = null;
-                summaryformatmode = -1;
             }
 
             return (summaryPopOut != null);     // on screen?
@@ -1136,6 +1130,11 @@ namespace EDDiscovery
                 summaryPopOut.ResetForm(dataGridViewTravel);
                 summaryPopOut.RefreshTarget(dataGridViewTravel, visitedSystems);
             }
+        }
+
+        public void SummaryRefreshRequested(Object o, EventArgs e)
+        {
+            RedrawSummary();
         }
 
         public void RefreshSummaryRow(DataGridViewRow row , bool add = false )

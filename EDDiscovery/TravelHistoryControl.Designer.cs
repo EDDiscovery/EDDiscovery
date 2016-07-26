@@ -741,9 +741,9 @@
             this.buttonExtSummaryPopOut.Name = "buttonExtSummaryPopOut";
             this.buttonExtSummaryPopOut.Size = new System.Drawing.Size(65, 23);
             this.buttonExtSummaryPopOut.TabIndex = 4;
-            this.buttonExtSummaryPopOut.Text = "S-Panel>";
-            this.toolTipEddb.SetToolTip(this.buttonExtSummaryPopOut, "Turn on and toggle through various Status Panel Pop Out formats. Drag this popout" +
-        " over your Elite Dangerous window.");
+            this.buttonExtSummaryPopOut.Text = "S-Panel";
+            this.toolTipEddb.SetToolTip(this.buttonExtSummaryPopOut, "Turn on and off the Status Panel Pop Out. Right click on it to set its format. Dr" +
+        "ag this popout over your Elite Dangerous window");
             this.buttonExtSummaryPopOut.UseVisualStyleBackColor = true;
             this.buttonExtSummaryPopOut.Click += new System.EventHandler(this.buttonExtSummaryPopOut_Click);
             // 
