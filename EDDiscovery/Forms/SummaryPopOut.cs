@@ -1,6 +1,7 @@
 ﻿using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
+using EMK.LightGeometry;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -31,13 +32,27 @@ namespace EDDiscovery2
         private Color transparentkey = Color.Red;
         private Timer autofade = new Timer();
         private ControlTable lt;
-        private List<int> tabstops = new List<int>();
         private Font butfont = new Font("Microsoft Sans Serif", 8.25F);
         private int statictoplines = 0;
-        private bool buttons;
-        private bool noteafterxyz;
+        private double tabscalar = 1.0;
 
-        public SummaryPopOut( bool b , bool n )
+        public event EventHandler RequiresRefresh;
+
+        [Flags]
+        enum Configuration
+        {
+            showTargetLine = 1,
+            showEDSMButton = 2,
+            showTime = 4,
+            showDistance = 8,
+            showNotes = 16,
+            showXYZ = 32,
+            showDistancePerStar = 64,
+        };
+
+        Configuration config = (Configuration)( Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showTime | Configuration.showDistance | Configuration.showNotes | Configuration.showXYZ | Configuration.showDistancePerStar);
+
+        public SummaryPopOut()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             InitializeComponent();
@@ -45,28 +60,21 @@ namespace EDDiscovery2
             autofade.Interval = 500;
             autofade.Tick += FadeOut;
             TopMost = true;
-            lt = new ControlTable(this, 30, 8, 20);
             UpdateEventsOnControls(this);
             this.BackColor = transparentkey;
             this.TransparencyKey = transparentkey;
+            this.ContextMenuStrip = contextMenuStripConfig;
 
-            buttons = b;
-            noteafterxyz = n;
-
-            if (buttons)
-                tabstops.AddRange(new int[] { 4, 44 });             // button, time
-            else
-                tabstops.AddRange(new int[] { 4 });                 // time
-
-            int lastpos = tabstops[tabstops.Count - 1];
-
-            tabstops.AddRange(new int[] { lastpos + 50, lastpos + 200 });    // dist, sys
-            lastpos = tabstops[tabstops.Count - 1];
-
-            if ( noteafterxyz )
-                tabstops.AddRange(new int[] { lastpos + 60, lastpos + 120 , lastpos+170, lastpos+230, 1200 });    // x,y,z,note,end
-            else
-                tabstops.AddRange(new int[] { lastpos + 60, lastpos + 210, lastpos+270, lastpos+320, 1000 });    // note,x,y,z,end
+            config = (Configuration)SQLiteDBClass.GetSettingInt("SummaryPanelOptions", (int)config);
+            toolStripMenuItemTargetLine.Checked = (config & Configuration.showTargetLine) != 0;
+            EDSMButtonToolStripMenuItem.Checked = (config & Configuration.showEDSMButton) != 0;
+            showTargetToolStripMenuItem.Checked = (config & Configuration.showDistancePerStar) != 0;
+            showNotesToolStripMenuItem.Checked = (config & Configuration.showNotes) != 0;
+            showXYZToolStripMenuItem.Checked = (config & Configuration.showXYZ) != 0;
+            showDistanceToolStripMenuItem.Checked = (config & Configuration.showDistance) != 0;
+            toolStripComboBoxOrder.Enabled = false; // indicate its a program change
+            toolStripComboBoxOrder.SelectedIndex = SQLiteDBClass.GetSettingInt("SummaryPanelLayout", 0);
+            toolStripComboBoxOrder.Enabled = true;
         }
 
         public void SetGripperColour(Color grip)
@@ -84,175 +92,177 @@ namespace EDDiscovery2
             this.BackColor = transparentkey;
             this.TransparencyKey = transparentkey;
         }
-
+        
         public void ResetForm(DataGridView vsc)
         {
+            SuspendLayout();
+
+            ControlTable ltold = lt;
+
+            lt = new ControlTable(this, 30, 8, 20);
+            statictoplines = 0;
+
+            tabscalar = (double)FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font).SizeInPoints / 8.25;
+
             if (vsc != null)
             {
-                SuspendLayout();
-                lt.Dispose();
-                statictoplines = 0;
+                Point3D tpos;
+                string name;
+                TargetClass.GetTargetPosition(out name, out tpos);  // tpos.? is NAN if no target
 
                 for (int i = 0; i < vsc.Rows.Count; i++)
                 {
-                    UpdateRow(vsc, vsc.Rows[i], true, 200000);     // insert at end, give it a large number
+                    UpdateRow(vsc, vsc.Rows[i], true, 200000 , tpos);     // insert at end, give it a large number
                     if (lt.Full)
                         break;
                 }
-
-                labelExt_NoSystems.Visible = (lt.Count == statictoplines);
-                ResumeLayout();
             }
+
+            labelExt_NoSystems.Visible = (lt.Count == statictoplines);
+
             UpdateEventsOnControls(this);
+
+            if (ltold != null)
+            {
+                ltold.Dispose();
+                ltold = null;
+            }
+
+            ResumeLayout();
         }
+
 
         public void RefreshTarget(DataGridView vsc, List<VisitedSystemsClass> vscl)
         {
-            if (vsc != null)
+            SuspendLayout();
+
+            string name;
+            double x, y, z;
+            bool targetpresent = TargetClass.GetTargetPosition(out name, out x, out y, out z);
+
+            if (vsc != null && targetpresent && ( config & Configuration.showTargetLine) != 0 )
             {
-                SuspendLayout();
+                SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(vscl);
+                string dist = (cs != null) ? SystemClass.Distance(cs, x, y, z).ToString("0.00") : "Unknown";
 
-                string name;
-                double x, y, z;
-                bool targetpresent = TargetClass.GetTargetPosition(out name, out x, out y, out z);
+                List<ControlEntryProperties> cep = new List<ControlEntryProperties>();
+                int pos = 4 + (((config & Configuration.showEDSMButton)!=0) ? (int)(40*tabscalar) : 0);
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[1].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, panel_grip.ForeColor, "Target:"));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), ref pos, 150 * tabscalar, panel_grip.ForeColor, name));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, panel_grip.ForeColor, dist));
 
-                if (targetpresent)
+                if (statictoplines == 0)
                 {
-                    List<string> lab = new List<string>();
-
-                    if (buttons)
-                        lab.Add("");
-              
-                    SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(vscl);
-
-                    if (cs != null)
-                        lab.AddRange(new string[] { "Target", name, SystemClass.Distance(cs, x, y, z).ToString("0.00"), "" });
-                    else
-                        lab.AddRange(new string[] { "Target", name, "Unknown", "" });
-
-                    if (statictoplines == 0)
-                    {
-                        int row = lt.Add(lab, 0, -1);       // insert at 0  with row id of -1
-
-                        List<Font> fnt = new List<Font>();
-                        List<Color> cols = new List<Color>();
-
-                        if (buttons)
-                        {
-                            fnt.Add(butfont);
-                            cols.Add(panel_grip.ForeColor);
-                        }
-
-                        cols.AddRange(new Color[] { panel_grip.ForeColor, panel_grip.ForeColor, panel_grip.ForeColor, panel_grip.ForeColor });
-
-                        fnt.AddRange(new Font[] { FontSel(vsc.Columns[1].DefaultCellStyle.Font,vsc.Font) ,
-                                                    FontSel(vsc.Columns[1].DefaultCellStyle.Font,vsc.Font) ,
-                                                    FontSel(vsc.Columns[2].DefaultCellStyle.Font,vsc.Font) ,
-                                                    FontSel(vsc.Columns[3].DefaultCellStyle.Font,vsc.Font) });
-                        FormatRow(0, fnt, cols);
-                        statictoplines = 1;
-                        UpdateEventsOnControls(this);
-                    }
-                    else
-                        lt.Refresh(lab, -1);     // just refresh data, with a row ID of -1
+                    int row = lt.Add(-1,cep, 0);       // insert with rowid -1, at 0
+                    lt.SetFormat(row, cep);
+                    statictoplines = 1;
+                    UpdateEventsOnControls(this);
                 }
                 else
-                {
-                    if (statictoplines == 1)
-                    {
-                        lt.RemoveAt(0);
-                        statictoplines = 0;
-                    }
-                }
-
-                labelExt_NoSystems.Visible = (lt.Count == statictoplines);
-                ResumeLayout();
+                    lt.RefreshTextAtID(-1,cep);     // just refresh data, with a row ID of -1
             }
+            else
+            {
+                if (statictoplines == 1)
+                {
+                    lt.RemoveAt(0);
+                    statictoplines = 0;
+                }
+            }
+
+            labelExt_NoSystems.Visible = (lt.Count == statictoplines);
+            ResumeLayout();
         }
-
-
+        
         private static Font FontSel(Font f, Font g) { return (f != null) ? f : g; }
         private static Color CSel(Color f, Color g) { return (f.A != 0) ? f : g; }
 
         public void RefreshRow(DataGridView vsc, DataGridViewRow vscrow, bool addattop = false )
         {
             SuspendLayout();
-            UpdateRow(vsc, vscrow, addattop , statictoplines );      // add= 0 , we do a refesh.  If all=true, we do an insert at top
+
+            Point3D tpos;
+            string name;
+            TargetClass.GetTargetPosition(out name, out tpos);  // tpos.? is NAN if no target
+
+            UpdateRow(vsc, vscrow, addattop , statictoplines , tpos );      // add= 0 , we do a refesh.  If all=true, we do an insert at top
             UpdateEventsOnControls(this);
             ResumeLayout();
         }
 
-        private void UpdateRow(DataGridView vsc, DataGridViewRow vscrow, bool addit , int insertat )
+        private void UpdateRow(DataGridView vsc, DataGridViewRow vscrow, bool addit, int insertat , Point3D tpos)
         {
             Debug.Assert(vscrow != null && vsc != null);
 
             if (!vscrow.Visible)            // may not be visible due to being turned off.. if so, reject.
                 return;
 
-            List<string> lab = new List<string>();
+            Color rowc = CSel(vsc.Rows[vscrow.Index].DefaultCellStyle.ForeColor, vsc.ForeColor);
+            if (rowc.GetBrightness() < 0.15)       // override if its too dark..
+                rowc = Color.White;
 
-            if (buttons)
-                lab.Add("!!<EDSMBUT:" + (string)vscrow.Cells[1].Value);
+            int pos = 4;
 
-            lab.AddRange(new string[] { ((DateTime)vscrow.Cells[0].Value).ToString("HH:mm.ss") ,
-                                              (string)vscrow.Cells[1].Value,
-                                                (string)vscrow.Cells[2].Value });
+            List<ControlEntryProperties> cep = new List<ControlEntryProperties>();
+
+            if ((config & Configuration.showEDSMButton) != 0)
+                cep.Add(new ControlEntryProperties(butfont, ref pos, 40 * tabscalar, panel_grip.ForeColor, "!!<EDSMBUT:" + (string)vscrow.Cells[1].Value));
+
+            if ((config & Configuration.showTime) != 0)
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, ((DateTime)vscrow.Cells[0].Value).ToString("HH:mm.ss")));
+
+            cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[1].DefaultCellStyle.Font, vsc.Font), ref pos, 150 * tabscalar, rowc, (string)vscrow.Cells[1].Value));
+
+            if ((config & Configuration.showDistance) != 0)
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), ref pos, 50 * tabscalar, rowc, (string)vscrow.Cells[2].Value));
+
+            if (toolStripComboBoxOrder.SelectedIndex == 0 && (config & Configuration.showNotes) != 0)
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), ref pos, 150 * tabscalar, rowc, (string)vscrow.Cells[3].Value));
 
             VisitedSystemsClass vscentry = (VisitedSystemsClass)vscrow.Cells[EDDiscovery.TravelHistoryControl.TravelHistoryColumns.SystemName].Tag;
 
-            if (!noteafterxyz)
-                lab.Add((string)vscrow.Cells[3].Value);
-            if ( vscentry!= null)       // double check
-                lab.AddRange(new string[] { vscentry.X.ToString("0.00"), vscentry.Y.ToString("0.00"), vscentry.Z.ToString("0.00") });
-            if (noteafterxyz)
-                lab.Add((string)vscrow.Cells[3].Value);
+            if (toolStripComboBoxOrder.SelectedIndex == 2 && (config & Configuration.showDistancePerStar) != 0)
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, DistToStar(vscentry, tpos)));
 
-            labelExt_NoSystems.Visible = (vsc.Rows.Count == 0);
+            if ((config & Configuration.showXYZ) != 0 && vscentry != null)
+            {
+                string xv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.z.ToString("0.00") : "-";
+                string yv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.y.ToString("0.00") : "-";
+                string zv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.z.ToString("0.00") : "-";
+
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, xv));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), ref pos, 50 * tabscalar, rowc, yv));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, zv));
+            }
+
+            if (toolStripComboBoxOrder.SelectedIndex > 0 && (config & Configuration.showNotes) != 0)
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), ref pos, 150 * tabscalar, rowc, (string)vscrow.Cells[3].Value));
+
+            if (toolStripComboBoxOrder.SelectedIndex < 2 && (config & Configuration.showDistancePerStar) != 0)
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, DistToStar(vscentry, tpos)));
 
             if (addit)
             {
-                int row = lt.Add(lab, insertat , vscrow.Index);        // row on the summary screen..  remember which row it came from
-
-                List<Font> fnt = new List<Font>();
-                List<Color> cols = new List<Color>();
-
-                if (buttons)
-                {
-                    fnt.Add(butfont);
-                    cols.Add(panel_grip.ForeColor);
-                }
-
-                fnt.AddRange(new Font[] {   FontSel(vsc.Columns[0].DefaultCellStyle.Font,vsc.Font) ,        // time
-                                            FontSel(vsc.Columns[1].DefaultCellStyle.Font,vsc.Font) ,        // system
-                                            FontSel(vsc.Columns[2].DefaultCellStyle.Font,vsc.Font) ,        // dist
-                                            FontSel(vsc.Columns[ (noteafterxyz) ? 0 : 3].DefaultCellStyle.Font,vsc.Font) ,        // note or x
-                                            FontSel(vsc.Columns[0].DefaultCellStyle.Font,vsc.Font),         // xyz
-                                            FontSel(vsc.Columns[0].DefaultCellStyle.Font,vsc.Font),         // xyz
-                                            FontSel(vsc.Columns[ (noteafterxyz) ? 3 : 0].DefaultCellStyle.Font,vsc.Font) });     //z
-                
-                Color rowc = CSel(vsc.Rows[vscrow.Index].DefaultCellStyle.ForeColor, vsc.ForeColor);
-
-                if (rowc.GetBrightness() < 0.15)       // override if its too dark..
-                    rowc = Color.White;
-
-                cols.AddRange(new Color[] { rowc, rowc, rowc, rowc, rowc, rowc, rowc });
-
-                FormatRow(row, fnt, cols);
+                int row = lt.Add(vscrow.Index,cep, insertat);        // row on the summary screen..  remember which row it came from
+                lt.SetFormat(row, cep);
             }
             else
             {
-                lt.Refresh(lab, vscrow.Index);      // refresh this one with rowid= index
-                //                Console.WriteLine("Refresh " + vscrow.Index + " " + (string)vscrow.Cells[1].Value);
+                lt.RefreshTextAtID(vscrow.Index,cep);      // refresh this one with rowid= index
             }
         }
 
-        private void FormatRow(int row, List<Font> fnt, List<Color> cols)       // row on screen..
+        private string DistToStar(VisitedSystemsClass vscentry, Point3D tpos)
         {
-            List<int> tabsadj = new List<int>();
-            for (int i = 0; i < tabstops.Count; i++)
-                tabsadj.Add((int)(tabstops[i] * (double)fnt[2].SizeInPoints / 8.25));
+            string res = "";
+            if (!double.IsNaN(tpos.X))
+            {
+                double dist = VisitedSystemsClass.Distance(vscentry, tpos);
+                if (dist >= 0)
+                    res = dist.ToString("0.00");
+            }
 
-            lt.SetFormat(row, fnt, cols, tabsadj);
+            return res;
         }
 
         private void SummaryPopOut_Load(object sender, EventArgs e)
@@ -291,6 +301,8 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingInt("PopOutFormHeight", this.Height);
             SQLiteDBClass.PutSettingInt("PopOutFormTop", this.Top);
             SQLiteDBClass.PutSettingInt("PopOutFormLeft", this.Left);
+            SQLiteDBClass.PutSettingInt("SummaryPanelOptions", (int)config);
+            SQLiteDBClass.PutSettingInt("SummaryPanelLayout", toolStripComboBoxOrder.SelectedIndex);
         }
 
         private void UpdateEventsOnControls(Control ctl)
@@ -314,6 +326,8 @@ namespace EDDiscovery2
                 ctl.MouseDown += MouseDownOnForm;
                 //Console.WriteLine("Hook Mouse down " + ctl.ToString() + " " + ctl.Name);
             }
+
+            ctl.Show();
 
             foreach (Control ctll in ctl.Controls)
             {
@@ -383,6 +397,62 @@ namespace EDDiscovery2
             else
                 MessageBox.Show("System " + dp.Name + " unknown to EDSM");
         }
+
+        private void targetLinetoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showTargetLine, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void EDSMButtonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showEDSMButton, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void toolStripMenuItemTime_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showTime, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void showDistanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showDistance, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void showNotesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showNotes, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void showXYZToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showXYZ, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void showTargetPerStarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showDistancePerStar, ((ToolStripMenuItem)sender).Checked);
+        }
+
+        private void toolStripComboBoxOrder_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ToolStripComboBox cbx = (ToolStripComboBox)sender;
+
+            if ( cbx.Enabled )
+                RequiresRefresh(this, null);
+
+            contextMenuStripConfig.Close();
+        }
+
+        void FlipConfig( Configuration item , bool ch)
+        {
+            if (ch)
+                config = (Configuration)((int)config | (int)item);
+            else
+                config = (Configuration)((int)config & ~(int)item);
+
+            RequiresRefresh(this, null);
+        }
+
     }
 
     public class ControlTable : IDisposable
@@ -404,19 +474,13 @@ namespace EDDiscovery2
             vspacing = vspace;
         }
 
-        public void SetFormat(List<Font> f, List<Color> clist, List<int> tabstops)
-        {
-            foreach (ControlRowEntry lre in entries)
-                lre.SetFormat(f, clist, tabstops);
-        }
-
-        public void SetFormat(int row, List<Font> f, List<Color> clist, List<int> tabstops)
+        public void SetFormat(int row, List<ControlEntryProperties> cep)
         {
             if ( row < entries.Count )
-                entries[row].SetFormat(f, clist, tabstops);
+                entries[row].SetFormat(cep);
         }
 
-        public int Add(List<string> text , int insertpos , int rowid )      // return row that was added..
+        public int Add(int rowid, List<ControlEntryProperties> cep, int insertpos )      // return row that was added..
         {
             if (Full)
             {
@@ -430,12 +494,12 @@ namespace EDDiscovery2
             if (insertpos >= entries.Count)
             {
                 insertpos = entries.Count;
-                entries.Add(new ControlRowEntry(rowid, text, toppos + insertpos*vspacing, vspacing, parent));
+                entries.Add(new ControlRowEntry(rowid, cep, toppos + insertpos*vspacing, vspacing, parent));
                 return insertpos;
             }
             else
             {
-                entries.Insert(insertpos, new ControlRowEntry(rowid, text, toppos + insertpos*vspacing, vspacing, parent));
+                entries.Insert(insertpos, new ControlRowEntry(rowid, cep, toppos + insertpos*vspacing, vspacing, parent));
                 return insertpos;
             }
         }
@@ -448,13 +512,13 @@ namespace EDDiscovery2
             entries.RemoveAt(pos);
         }
 
-        public void Refresh(List<string> text , int rowid )
+        public void RefreshTextAtID(int rowid, List<ControlEntryProperties> cep)
         {
             foreach( ControlRowEntry cre in entries )
             {
                 if ( cre.RowId == rowid )
                 {
-                    cre.Refresh(text);
+                    cre.RefreshText(cep);
                     break;
                 }
             }
@@ -478,18 +542,18 @@ namespace EDDiscovery2
         private Control parent;
         public int RowId { get; }      // row id of creator..
 
-        public ControlRowEntry(int id , List<string> text, int vpos, int vsize , Control p )
+        public ControlRowEntry(int id , List<ControlEntryProperties> cep, int vpos, int vsize , Control p )
         {
             RowId = id;
             parent = p;
 
             items = new List<Control>();
-            for (int i = 0; i < text.Count; i++)
+            for (int i = 0; i < cep.Count; i++)
             {
-                if (text[i].Length > 11 && text[i].Substring(0,11).Equals("!!<EDSMBUT:"))
+                if (cep[i].text.Length > 11 && cep[i].text.Substring(0,11).Equals("!!<EDSMBUT:"))
                 {
                     ExtendedControls.DrawnPanel edsm = new ExtendedControls.DrawnPanel();
-                    edsm.Name = text[i].Substring(11);
+                    edsm.Name = cep[i].text.Substring(11);
                     edsm.Image = DrawnPanel.ImageType.Text;
                     edsm.ImageText = "EDSM";
                     edsm.Size = new Size(100, vsize);
@@ -501,7 +565,7 @@ namespace EDDiscovery2
                 else
                 {
                     LabelExt lab = new ExtendedControls.LabelExt();
-                    lab.Text = text[i];
+                    lab.Text = cep[i].text;
                     lab.Location = new Point(0, vpos);
                     lab.AutoSize = false;
                     lab.Size = new Size(100, vsize);
@@ -511,36 +575,36 @@ namespace EDDiscovery2
             }
         }
 
-        public void Refresh(List<string> text)
+        public void RefreshText(List<ControlEntryProperties> cep)
         {
             for (int i = 0; i < items.Count; i++)
-                items[i].Text = text[i];
+                items[i].Text = cep[i].text;
         }
 
-        public void SetFormat(List<Font> fnt, List<Color> cl, List<int> tabstops )
+        public void SetFormat(List<ControlEntryProperties> cep)
         {
             for (int i = 0; i < items.Count; i++)
             {
-                items[i].Font = fnt[i];
-                items[i].ForeColor = cl[i];
+                items[i].Font = cep[i].font;
+                items[i].ForeColor = cep[i].colour;
+
+                int nexttabpos = (i < items.Count - 1) ? cep[i + 1].tabstop : 2000;
 
                 if (items[i] is ExtendedControls.DrawnPanel)
                 {
                     ExtendedControls.DrawnPanel dp = items[i] as ExtendedControls.DrawnPanel;
-                    dp.MouseOverColor = ButtonExt.Multiply(cl[i], 1.3F);
-                    dp.MouseSelectedColor = ButtonExt.Multiply(cl[i], 1.5F);
+                    dp.MouseOverColor = ButtonExt.Multiply(cep[i].colour, 1.3F);
+                    dp.MouseSelectedColor = ButtonExt.Multiply(cep[i].colour, 1.5F);
                     dp.BackColor = Color.Black;
-                    items[i].Location = new Point(tabstops[i], items[i].Location.Y+3);
-                    items[i].Size = new Size(tabstops[i + 1] - tabstops[i] - 4, items[i].Size.Height - 6);
+                    items[i].Location = new Point(cep[i].tabstop, items[i].Location.Y+3);
+                    items[i].Size = new Size(nexttabpos - cep[i].tabstop - 4, items[i].Size.Height - 6);
                 }
                 else
                 {
                     items[i].BackColor = Color.Transparent;
-                    items[i].Location = new Point(tabstops[i], items[i].Location.Y);
-                    items[i].Size = new Size(tabstops[i + 1] - tabstops[i] - 4, items[i].Size.Height - 4);
+                    items[i].Location = new Point(cep[i].tabstop, items[i].Location.Y);
+                    items[i].Size = new Size(nexttabpos - cep[i].tabstop - 4, items[i].Size.Height - 4);
                 }
-
-                items[i].Show();
             }
         }
 
@@ -562,6 +626,21 @@ namespace EDDiscovery2
             items = null;
         }
     }
+
+    public class ControlEntryProperties
+    {
+        public ControlEntryProperties(Font f, ref int pos , double width, Color c, string tx)
+        {
+            font = f; tabstop = pos; colour = c; text = tx;
+            pos += (int)width;
+        }
+
+        public Font font;
+        public int tabstop;
+        public Color colour;
+        public string text;
+    }
+
 }
 
 
