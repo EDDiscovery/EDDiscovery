@@ -21,11 +21,12 @@ namespace EDDiscovery
         public DateTime lastchanged;
         public long filePos, fileSize;
         public bool CQC;
-
     }
 
     public class NetLogClass
     {
+        public event NetLogEventHandler OnNewPosition;
+
         public List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
         Dictionary<string, NetLogFileInfo> netlogfiles = new Dictionary<string, NetLogFileInfo>();
         FileSystemWatcher m_Watcher;
@@ -34,8 +35,7 @@ namespace EDDiscovery
         bool NoEvents = false;
         object EventLogLock = new object();
         AutoResetEvent NewLogEvent = new AutoResetEvent(false);
-        ConcurrentQueue<NetLogFileInfo> NetLogFileQueue = new ConcurrentQueue<NetLogFileInfo>();
-        public event NetLogEventHandler OnNewPosition;
+        ConcurrentQueue<string> NetLogFileQueue = new ConcurrentQueue<string>();
         private EDDiscoveryForm _discoveryform;
         public List<TravelLogUnit> tlUnits;
 
@@ -161,6 +161,7 @@ namespace EDDiscovery
                 visitedSystems.Clear();
                 // Add systems in local DB.
                 if (vsSystemsList != null)
+                {
                     foreach (VisitedSystemsClass vs in vsSystemsList)
                     {
                         if (visitedSystems.Count == 0)
@@ -176,8 +177,8 @@ namespace EDDiscovery
                                 vs.Update();
                             }
                         }
-
                     }
+                }
 
                 FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.Name).ToArray();
 
@@ -211,13 +212,11 @@ namespace EDDiscovery
                         lu.Add();
                     }
 
-
                     if (parsefile)
                     {
                         int nr = 0;
                         List<VisitedSystemsClass> tempVisitedSystems = new List<VisitedSystemsClass>();
                         ParseFile(fi, tempVisitedSystems);
-
 
                         foreach (VisitedSystemsClass ps in tempVisitedSystems)
                         {
@@ -443,12 +442,10 @@ namespace EDDiscovery
                     {
                         m_Watcher.Path = logpath + Path.DirectorySeparatorChar;
                         m_Watcher.Filter = "netLog*.log";
-                        m_Watcher.IncludeSubdirectories = true;
-                        m_Watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite; // | NotifyFilters.Size;
-
+                        m_Watcher.IncludeSubdirectories = false;
+                        m_Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
                         m_Watcher.Changed += new FileSystemEventHandler(OnChanged);
                         m_Watcher.Created += new FileSystemEventHandler(OnChanged);
-                        m_Watcher.Deleted += new FileSystemEventHandler(OnChanged);
                         m_Watcher.EnableRaisingEvents = true;
                     }
                 }
@@ -483,15 +480,15 @@ namespace EDDiscovery
 
                         lock (EventLogLock)
                         {
-                            NetLogFileInfo nfi = null;
+                            string filename = null;
 
-                            if (NoEvents == false && NetLogFileQueue.TryDequeue(out nfi) )
+                            if (NoEvents == false && NetLogFileQueue.TryDequeue(out filename) )
                             {
-                                FileInfo fi = new FileInfo(nfi.FileName);
+                                FileInfo fi = new FileInfo(filename);
 
-                                Console.WriteLine("file " + nfi.FileName + " len " + fi.Length + " nfi" + nfi.fileSize + " pos " + nfi.filePos );
+                                Console.WriteLine("file " + filename + " len " + fi.Length );
 
-                                if (tlUnit == null || !tlUnit.Name.Equals(Path.GetFileName(nfi.FileName)))  // Create / find new travellog unit
+                                if (tlUnit == null || !tlUnit.Name.Equals(Path.GetFileName(filename)))  // Create / find new travellog unit
                                 {
                                     travelogUnits = TravelLogUnit.GetAll();
                                     // Check if we alreade have parse the file and stored in DB.
@@ -511,6 +508,7 @@ namespace EDDiscovery
                                 }
 
                                 int nrsystems = visitedSystems.Count;
+
                                 ParseFile(fi, visitedSystems);
 
                                 if (nrsystems < visitedSystems.Count) // Om vi har fler system
@@ -562,47 +560,13 @@ namespace EDDiscovery
         {
             string filename = e.FullPath;
 
-            try
-            {
-                m_Watcher.EnableRaisingEvents = false;
+            m_Watcher.EnableRaisingEvents = false;
 
-                if (e.ChangeType == WatcherChangeTypes.Created )
-                {
-                    System.Diagnostics.Trace.WriteLine("NEW FILE !!!" + filename);
-                }
-                else
-                {
-                    System.Diagnostics.Trace.WriteLine("A CHANGE has occured with " + filename);
-                }
+            System.Diagnostics.Trace.WriteLine("Log Watcher " + e.ChangeType + " " + filename);
+            NetLogFileQueue.Enqueue(filename);
+            NewLogEvent.Set();
 
-                FileInfo fi = new FileInfo(filename);
-                NetLogFileInfo newnfi;
-
-                if (netlogfiles.ContainsKey(fi.FullName))
-                {
-                    newnfi = netlogfiles[fi.FullName];
-                    Console.WriteLine("..existing file at " + newnfi.filePos);
-                }
-                else
-                {
-                    newnfi = new NetLogFileInfo();
-                    newnfi.FileName = fi.FullName;
-                    newnfi.lastchanged = File.GetLastWriteTimeUtc(newnfi.FileName);
-                    newnfi.filePos = 0;
-                    newnfi.fileSize = 0;
-                    newnfi.CQC = false;
-                }
-
-                NetLogFileQueue.Enqueue(newnfi);
-                NewLogEvent.Set();
-            }
-            finally
-            {
-                m_Watcher.EnableRaisingEvents = true;
-
-            }
+            m_Watcher.EnableRaisingEvents = true;
         }
-
-
     }
 }
