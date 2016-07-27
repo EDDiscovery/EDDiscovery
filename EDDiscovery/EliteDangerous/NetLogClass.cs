@@ -11,11 +11,16 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace EDDiscovery
 {
     public class NetLogFileReader
     {
+        // Header line regular expression
+        private static Regex netlogHeaderRe = new Regex(@"^(?<Localtime>\d\d-\d\d-\d\d-\d\d:\d\d) (?<Timezone>.*) [(](?<GMT>\d\d:\d\d) GMT[)]");
+
         // File buffer
         protected byte[] buffer;
         protected long fileptr;
@@ -27,9 +32,15 @@ namespace EDDiscovery
         // File Information
         public string FileName { get { return Path.Combine(TravelLogUnit.Path, TravelLogUnit.Name); } }
         public long filePos { get { return TravelLogUnit.Size; } }
-        public bool CQC { get; set; }
         public TravelLogUnit TravelLogUnit { get; protected set; }
+
+        // Close Quarters Combat
+        public bool CQC { get; set; }
+
+        // Time and timezone
         public DateTime LastLogTime { get; set; }
+        public TimeZoneInfo TimeZone { get; set; }
+        public TimeSpan TimeZoneOffset { get; set; }
 
         public NetLogFileReader(string filename)
         {
@@ -177,6 +188,75 @@ namespace EDDiscovery
             }
 
             vsc = null;
+            return false;
+        }
+
+        public bool ReadHeader()
+        {
+            string line = null;
+
+            // Try to read the first line of the log file
+            try
+            {
+                using (Stream stream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (TextReader reader = new StreamReader(stream))
+                    {
+                        line = reader.ReadLine();
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            // File may not have been written yet.
+            if (line == null)
+            {
+                return false;
+            }
+
+            // Extract the start time from the first line
+            Match match = netlogHeaderRe.Match(line);
+            if (match != null && match.Success)
+            {
+                string localtimestr = match.Groups["Localtime"].Value;
+                string timezonename = match.Groups["Timezone"].Value.Trim();
+                string gmtimestr = match.Groups["GMT"].Value;
+
+                DateTime localtime = DateTime.MinValue;
+                TimeSpan gmtime = TimeSpan.MinValue;
+                TimeZoneInfo tzi = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(t => t.DaylightName.Trim() == timezonename || t.StandardName.Trim() == timezonename);
+
+                if (DateTime.TryParseExact(localtimestr, "yy-MM-dd-HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out localtime) &&
+                    TimeSpan.TryParseExact(gmtimestr, "h\\:mm", CultureInfo.InvariantCulture, out gmtime))
+                {
+                    // Grab the timezone offset
+                    TimeSpan tzoffset = localtime.TimeOfDay - gmtime;
+
+                    if (tzi != null)
+                    {
+                        // Correct for wildly inaccurate values
+                        if (tzoffset > tzi.BaseUtcOffset + TimeSpan.FromHours(18))
+                        {
+                            tzoffset -= TimeSpan.FromHours(24);
+                        }
+                        else if (tzoffset < tzi.BaseUtcOffset - TimeSpan.FromHours(18))
+                        {
+                            tzoffset += TimeSpan.FromHours(24);
+                        }
+                    }
+
+                    // Set the start time, timezone info and timezone offset
+                    LastLogTime = localtime;
+                    TimeZone = tzi;
+                    TimeZoneOffset = tzoffset;
+                    TravelLogUnit.type = 1;
+                }
+
+                return true;
+            }
+
             return false;
         }
     }
@@ -445,16 +525,9 @@ namespace EDDiscovery
 
             long startpos = sr.filePos;
 
-            string line = null;
-            if (sr.filePos == 0)
+            if (sr.TimeZone == null)
             {
-                if (sr.ReadLine(out line))  // may be empty if we read it too fast.. don't worry, monitor will pick it up
-                {
-                    string str = "20" + line.Substring(0, 8) + " " + line.Substring(9, 5);
-
-                    sr.LastLogTime = DateTime.Parse(str);
-                }
-                else
+                if (!sr.ReadHeader())  // may be empty if we read it too fast.. don't worry, monitor will pick it up
                 {
                     System.Diagnostics.Trace.WriteLine("File was empty (for now) " + sr.FileName);
                     return sr;
