@@ -24,7 +24,7 @@ namespace EDDiscovery
 
     public class NetLogClass
     {
-        public delegate void NetLogEventHandler(object source, int entry);
+        public delegate void NetLogEventHandler(VisitedSystemsClass vsc);
 
         public event NetLogEventHandler OnNewPosition;          // called in foreground, no need for invoke
 
@@ -33,7 +33,7 @@ namespace EDDiscovery
         Dictionary<string, NetLogFileInfo> netlogfiles = new Dictionary<string, NetLogFileInfo>();
 
         FileSystemWatcher m_Watcher;
-        ConcurrentQueue<NetLogFileInfo> m_netLogFileQueue;
+        ConcurrentQueue<string> m_netLogFileQueue;
         System.Windows.Forms.Timer m_scantimer;
         List<TravelLogUnit> m_travelogUnits;
 
@@ -378,7 +378,7 @@ namespace EDDiscovery
 
                     if (Directory.Exists(logpath))
                     {
-                        m_netLogFileQueue = new ConcurrentQueue<NetLogFileInfo>();
+                        m_netLogFileQueue = new ConcurrentQueue<string>();
                         m_Watcher = new System.IO.FileSystemWatcher();
                         m_Watcher.Path = logpath + Path.DirectorySeparatorChar;
                         m_Watcher.Filter = "netLog*.log";
@@ -443,10 +443,19 @@ namespace EDDiscovery
             { 
                 EliteDangerous.CheckED();
 
+                string filename = null;
                 NetLogFileInfo nfi;
 
-                if (m_netLogFileQueue.TryDequeue(out nfi))      // if a new one queued, we swap to using it
+                if (m_netLogFileQueue.TryDequeue(out filename))      // if a new one queued, we swap to using it
+                {
+                    nfi = new NetLogFileInfo();      // just queue up a new object, this will be replaced in readdata by the right one
+                    nfi.FileName = filename;                        // so no need to find the right object.. just a way of getting it to trip
+                    nfi.lastchanged = File.GetLastWriteTimeUtc(nfi.FileName);
+                    nfi.filePos = 0;
+                    nfi.fileSize = 0;                               // both zero, when we get around to reading it real size will be picked up
+                    nfi.CQC = false;
                     lastnfi = nfi;                              // if MAY be empty note due to us picking it up before being written, in which case, we get it next tick around
+                }
                 else
                     nfi = lastnfi;                              // else use the last..
 
@@ -503,7 +512,7 @@ namespace EDDiscovery
                             // now the visiting class has been set up, now tell the display of these new systems
                             for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
                             {
-                                OnNewPosition(this, nr);    // add record nr to the list
+                                OnNewPosition(visitedSystems[nr]);    // add record nr to the list
                             }
                         }
                     }
@@ -519,21 +528,7 @@ namespace EDDiscovery
         private void OnNewFile(object sender, FileSystemEventArgs e)        // only picks up new files
         {                                                                   // and it can kick in before any data has had time to be written to it...
             string filename = e.FullPath;
-
-            m_Watcher.EnableRaisingEvents = false;
-
-            System.Diagnostics.Trace.WriteLine("Log Watcher " + e.ChangeType + " " + filename);
-
-            NetLogFileInfo nfi = new NetLogFileInfo();      // just queue up a new object, this will be replaced in readdata by the right one
-            nfi.FileName = filename;                        // so no need to find the right object.. just a way of getting it to trip
-            nfi.lastchanged = File.GetLastWriteTimeUtc(nfi.FileName);
-            nfi.filePos = 0;
-            nfi.fileSize = 0;                               // both zero, when we get around to reading it real size will be picked up
-            nfi.CQC = false;        
-
-            m_netLogFileQueue.Enqueue(nfi);       
-
-            m_Watcher.EnableRaisingEvents = true;
+            m_netLogFileQueue.Enqueue(filename);
         }
     }
 }
