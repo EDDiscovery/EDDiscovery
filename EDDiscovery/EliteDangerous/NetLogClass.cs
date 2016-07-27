@@ -14,6 +14,128 @@ using System.Diagnostics;
 
 namespace EDDiscovery
 {
+    public class NetLogFileReader
+    {
+        // File buffer
+        protected byte[] buffer;
+        protected long fileptr;
+        protected int bufferpos;
+        protected int bufferlen;
+
+        protected Stream stream;
+
+        // File Information
+        public string FileName { get { return Path.Combine(TravelLogUnit.Path, TravelLogUnit.Name); } }
+        public long filePos { get { return TravelLogUnit.Size; } }
+        public bool CQC { get; set; }
+        public TravelLogUnit TravelLogUnit { get; protected set; }
+
+        public NetLogFileReader(string filename)
+        {
+            FileInfo fi = new FileInfo(filename);
+
+            this.TravelLogUnit = new TravelLogUnit
+            {
+                Name = fi.Name,
+                Path = fi.DirectoryName,
+                Size = 0
+            };
+
+            this.stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        }
+
+        public NetLogFileReader(TravelLogUnit tlu)
+        {
+            this.TravelLogUnit = tlu;
+            this.stream = File.Open(Path.Combine(tlu.Path, tlu.Name), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        }
+
+        public bool ReadLine(out string line)
+        {
+            // Initialize buffer if not yet allocated
+            if (buffer == null)
+            {
+                buffer = new byte[16384];
+                bufferpos = 0;
+                bufferlen = 0;
+                fileptr = TravelLogUnit.Size;
+            }
+
+            // Loop while no end-of-line is found
+            while (true)
+            {
+                int endlinepos = -1;
+
+                // Only look for an end-of-line if not already at end of buffer
+                if (bufferpos < bufferlen)
+                {
+                    // Find the next end-of-line
+                    endlinepos = Array.IndexOf(buffer, (byte)'\n', bufferpos, bufferlen - bufferpos) - bufferpos;
+
+                    // End-of-line found
+                    if (endlinepos >= 0)
+                    {
+                        // Include the end-of-line in the line length
+                        int linelen = endlinepos + 1;
+
+                        // Trim any trailing carriage-return
+                        if (endlinepos > 0 && buffer[bufferpos + endlinepos - 1] == '\r')
+                        {
+                            endlinepos--;
+                        }
+
+                        // Return the trimmed string
+                        byte[] buf = new byte[endlinepos];
+                        Buffer.BlockCopy(buffer, bufferpos, buf, 0, endlinepos);
+                        bufferpos += linelen;
+                        TravelLogUnit.Size += linelen;
+                        line = new String(buf.Select(c => (char)c).ToArray());
+
+                        return true;
+                    }
+                }
+
+                // No end-of-line found
+                // Move remaining data to start of buffer
+                if (bufferpos != 0)
+                {
+                    Buffer.BlockCopy(buffer, bufferpos, buffer, 0, bufferlen - bufferpos);
+                    bufferlen -= bufferpos;
+                    bufferpos = 0;
+                }
+
+                // Expand the buffer if buffer is full
+                if (bufferlen == buffer.Length)
+                {
+                    Array.Resize(ref buffer, buffer.Length * 2);
+                }
+
+                // Read the data into the buffer
+                stream.Seek(fileptr, SeekOrigin.Begin);
+                int bytesread = stream.Read(buffer, bufferlen, buffer.Length - bufferlen);
+
+                // Return false if end-of-file is encountered
+                if (bytesread == 0)
+                {
+                    // Free the buffer if the buffer was also exhausted
+                    if (bufferpos == bufferlen)
+                    {
+                        buffer = null;
+                    }
+
+                    line = null;
+                    return false;
+                }
+
+                // Update the buffer length and next read pointer
+                bufferlen += bytesread;
+                fileptr += bytesread;
+
+                // No end-of-line encountered - try reading a line again
+            }
+        }
+    }
+
     public class NetLogFileInfo
     {
         public string FileName;
@@ -30,19 +152,20 @@ namespace EDDiscovery
 
         public List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
 
-        Dictionary<string, NetLogFileInfo> netlogfiles = new Dictionary<string, NetLogFileInfo>();
+        Dictionary<string, NetLogFileReader> netlogreaders = new Dictionary<string, NetLogFileReader>();
 
         FileSystemWatcher m_Watcher;
         ConcurrentQueue<string> m_netLogFileQueue;
         System.Windows.Forms.Timer m_scantimer;
-        List<TravelLogUnit> m_travelogUnits;
+        Dictionary<string, TravelLogUnit> m_travelogUnits;
 
         public List<TravelLogUnit> tlUnits;
 
-        NetLogFileInfo lastnfi = null;          // last one read..
+        NetLogFileReader lastnfi = null;          // last one read..
 
         public NetLogClass(EDDiscoveryForm ds)
         {
+            m_travelogUnits = TravelLogUnit.GetAll().ToDictionary(t => t.Name);
         }
 
         public string GetNetLogPath()
@@ -246,19 +369,28 @@ namespace EDDiscovery
             return visitedSystems;
         }
 
-        private NetLogFileInfo ParseFile(FileInfo fi, List<VisitedSystemsClass> visitedSystems)
+        private NetLogFileReader ParseFile(FileInfo fi, List<VisitedSystemsClass> visitedSystems)
         {
-            NetLogFileInfo ret = null;
+            NetLogFileReader ret = null;
 
             try
             {
-                using (Stream fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                NetLogFileReader reader;
+
+                if (netlogreaders.ContainsKey(fi.Name))
                 {
-                    using (StreamReader sr = new StreamReader(fs))
-                    {
-                        ret = ReadData(fi, visitedSystems, sr);
-                    }
+                    reader = netlogreaders[fi.Name];
                 }
+                else if (m_travelogUnits.ContainsKey(fi.Name))
+                {
+                    reader = new NetLogFileReader(m_travelogUnits[fi.Name]);
+                }
+                else
+                {
+                    reader = new NetLogFileReader(fi.FullName);
+                }
+
+                ret = ReadData(reader, visitedSystems);
             }
             catch (Exception ex)
             {
@@ -269,49 +401,37 @@ namespace EDDiscovery
             return ret;
         }
         // returns info on what its read..
-        private NetLogFileInfo ReadData(FileInfo fi, List<VisitedSystemsClass> visitedSystems, StreamReader sr)
+        private NetLogFileReader ReadData(NetLogFileReader sr, List<VisitedSystemsClass> visitedSystems)
         {
+
             DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
 
-            NetLogFileInfo nfi = null;
-            bool CQC = false;
+            long startpos = sr.filePos;
 
-            string FirstLine = sr.ReadLine();                  // read first line from file, may be null if file has not been written to yet
-
-            if (netlogfiles.ContainsKey(fi.FullName))
+            string line = null;
+            if (sr.ReadLine(out line))  // may be empty if we read it too fast.. don't worry, monitor will pick it up
             {
-                nfi = netlogfiles[fi.FullName];
-                sr.BaseStream.Position = nfi.filePos;
-                sr.DiscardBufferedData();
-                CQC = nfi.CQC;
-            }
-
-            long startpos = sr.BaseStream.Position;
-
-            if (FirstLine != null)  // may be empty if we read it too fast.. don't worry, monitor will pick it up
-            {
-                string str = "20" + FirstLine.Substring(0, 8) + " " + FirstLine.Substring(9, 5);
+                string str = "20" + line.Substring(0, 8) + " " + line.Substring(9, 5);
 
                 DateTime filetime = DateTime.Now.AddDays(-500);
                 filetime = DateTime.Parse(str);
 
-                string line;
-                while ((line = sr.ReadLine()) != null)
+                while (sr.ReadLine(out line))
                 {
                     if (line.Contains("[PG] [Notification] Left a playlist lobby"))
-                        CQC = false;
+                        sr.CQC = false;
 
                     if (line.Contains("[PG] Destroying playlist lobby."))
-                        CQC = false;
+                        sr.CQC = false;
 
                     if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
-                        CQC = true;
+                        sr.CQC = true;
                     if (line.Contains("[PG] Created playlist lobby"))
-                        CQC = true;
+                        sr.CQC = true;
                     if (line.Contains("[PG] Found matchmaking lobby object"))
-                        CQC = true;
+                        sr.CQC = true;
 
-                    if (line.Contains(" System:") && CQC == false)
+                    if (line.Contains(" System:") && sr.CQC == false)
                     {
                         //Console.WriteLine(" RD:" + line );
                         if (line.Contains("ProvingGround"))
@@ -349,23 +469,12 @@ namespace EDDiscovery
             }
             else
             {
-                System.Diagnostics.Trace.WriteLine("File was empty (for now) " + fi.FullName);
+                System.Diagnostics.Trace.WriteLine("File was empty (for now) " + sr.FileName);
             }
 
-            if (nfi == null)
-                nfi = new NetLogFileInfo();
+            Console.WriteLine("Parse ReadData " + sr.FileName + " from " + startpos + " to " + sr.filePos);
 
-            nfi.FileName = fi.FullName;
-            nfi.lastchanged = File.GetLastWriteTimeUtc(nfi.FileName);
-            nfi.filePos = sr.BaseStream.Position;
-            nfi.fileSize = fi.Length;
-            nfi.CQC = CQC;
-
-            Console.WriteLine("Parse ReadData " + fi.FullName + " from " + startpos + " to " + nfi.filePos);
-
-            netlogfiles[nfi.FileName] = nfi;
-
-            return nfi;
+            return sr;
         }
 
         public void StartMonitor()
@@ -390,7 +499,6 @@ namespace EDDiscovery
 
                         EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
 
-                        m_travelogUnits = TravelLogUnit.GetAll();
                         m_scantimer = new System.Windows.Forms.Timer();
                         m_scantimer.Interval = 2000;
                         m_scantimer.Tick += ScanTick;
@@ -420,7 +528,6 @@ namespace EDDiscovery
                 m_Watcher.Dispose();
                 m_Watcher = null;
                 m_netLogFileQueue = null;
-                m_travelogUnits = null;
 
                 Console.WriteLine("Stop Monitor");
             }
@@ -444,49 +551,24 @@ namespace EDDiscovery
                 EliteDangerous.CheckED();
 
                 string filename = null;
-                NetLogFileInfo nfi;
+                NetLogFileReader nfi = null;
 
+                int nrsystems = visitedSystems.Count;
                 if (m_netLogFileQueue.TryDequeue(out filename))      // if a new one queued, we swap to using it
                 {
-                    nfi = new NetLogFileInfo();      // just queue up a new object, this will be replaced in readdata by the right one
-                    nfi.FileName = filename;                        // so no need to find the right object.. just a way of getting it to trip
-                    nfi.lastchanged = File.GetLastWriteTimeUtc(nfi.FileName);
-                    nfi.filePos = 0;
-                    nfi.fileSize = 0;                               // both zero, when we get around to reading it real size will be picked up
-                    nfi.CQC = false;
-                    lastnfi = nfi;                              // if MAY be empty note due to us picking it up before being written, in which case, we get it next tick around
+                    nfi = ParseFile(new FileInfo(filename), visitedSystems);
+                    lastnfi = nfi;
                 }
-                else
-                    nfi = lastnfi;                              // else use the last..
-
-                if (nfi != null)                                // if we have a last.
+                else if (lastnfi != null)
                 {
-                    FileInfo fi = new FileInfo(nfi.FileName);
+                    nfi = ReadData(lastnfi, visitedSystems);                              // else use the last..
+                }
 
                     //Console.WriteLine("File pos " + nfi.filePos +" vs " +fi.Length);
 
-                    if (nfi.filePos < fi.Length)        // if we have no written to the end
-                    {                                   // find it in list..
                         //Console.WriteLine("Reading file " + nfi.FileName + " from " + nfi.filePos + " to " + fi.Length);
 
-                        TravelLogUnit tlUnit = (from c in m_travelogUnits where c.Name == fi.Name select c).FirstOrDefault<TravelLogUnit>();
-
-                        if (tlUnit == null)            // if not in list, make one and add..
-                        {
-                            tlUnit = new TravelLogUnit();
-                            tlUnit.Name = fi.Name;
-                            tlUnit.Path = Path.GetDirectoryName(fi.FullName);
-                            tlUnit.Size = 0;  // Add real size after data is in DB //;(int)fi.Length;
-                            tlUnit.type = 1;
-                            tlUnit.Add();
-                            m_travelogUnits.Add(tlUnit);
-                            Console.WriteLine("New travellog unit " + tlUnit.id);
-                        }
-
-                        int nrsystems = visitedSystems.Count;
                         //Console.WriteLine("Parsing file in foreground " + fi.FullName);
-
-                        lastnfi = ParseFile(fi, visitedSystems);        // read file, return updated info..
 
                         if (nrsystems < visitedSystems.Count) // Om vi har fler system
                         {
@@ -495,10 +577,10 @@ namespace EDDiscovery
                             for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
                             {
                                 VisitedSystemsClass dbsys = visitedSystems[nr];
-                                dbsys.Source = tlUnit.id;
+                                dbsys.Source = nfi.TravelLogUnit.id;
                                 dbsys.EDSM_sync = false;
                                 dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
-                                dbsys.Unit = fi.Name;
+                                dbsys.Unit = nfi.TravelLogUnit.Name;
                                 dbsys.Commander = EDDConfig.Instance.CurrentCmdrID;
                                 dbsys.Add();
 
@@ -514,8 +596,6 @@ namespace EDDiscovery
                             {
                                 OnNewPosition(visitedSystems[nr]);    // add record nr to the list
                             }
-                        }
-                    }
                 }
             }
             catch (Exception ex)
