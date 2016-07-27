@@ -155,9 +155,12 @@ namespace EDDiscovery
             {
                 if (activecommander >= 0)
                 {
-                    netlog.StopMonitor();
-                    visitedSystems = netlog.ParseFiles(richTextBox_History, defaultMapColour);
-                    netlog.StartMonitor();
+                    string errmsg;
+                    visitedSystems = netlog.ParseFiles(out errmsg, defaultMapColour);   // Parse files stop monitor..
+                    if (errmsg != null)
+                        LogTextHighlight(errmsg + Environment.NewLine);
+
+                    netlog.StartMonitor();          // so restart it..
                 }
                 else
                 {
@@ -765,64 +768,57 @@ namespace EDDiscovery
             });
         }
 
-
-        internal void NewPosition(object source, int nr)            // Called from netlog thread beware.
+        public void NewPosition(object source , int nr)         // in UI Thread..
         {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
             try
             {
-                Invoke((MethodInvoker)delegate
+                VisitedSystemsClass item = visitedSystems[nr];
+                string name = item.Name;
+
+                LogText("Arrived at system ");
+                if (item.HasTravelCoordinates == false && (item.curSystem == null || item.curSystem.HasCoordinate == false))
+                    LogTextHighlight(name);
+                else
+                    LogText(name);
+
+                int count = GetVisitsCount(name);
+
+                LogText(", Visit No. " + count.ToString() + Environment.NewLine);
+                System.Diagnostics.Trace.WriteLine("Entry " + nr + " Arrived at system: " + name + " " + count.ToString() + ":th visit.");
+
+                if (checkBoxEDSMSyncTo.Checked == true)
                 {
-                    UpdateNewPosition(nr);
-                });
+                    EDSMClass edsm = new EDSMClass();
+                    edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
+                    edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
+
+                    Task taskEDSM = Task.Factory.StartNew(() => EDSMSync.SendTravelLog(edsm, item, null));
+                }
+
+                AddNewHistoryRow(true, item);
+
+                StoreSystemNote();
+
+                _discoveryForm.Map.UpdateVisited(visitedSystems);           // update map
+
+                RefreshSummaryRow(dataGridViewTravel.Rows[0], true);         //Tell the summary new row has been added
+                RefreshTargetInfo();                                        // tell the target system its changed the latest system
+
+                // Move focus to new row
+                if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
+                {
+                    dataGridViewTravel.ClearSelection();
+                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                    ShowSystemInformation(item);
+                    UpdateDependentsWithSelection();
+                }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception NewPosition: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-        }
-
-        private void UpdateNewPosition(int nr)         // in UI Thread..
-        {
-            VisitedSystemsClass item = visitedSystems[nr];
-            string name = item.Name;
-
-            LogText("Arrived at system ");
-            if ( item.HasTravelCoordinates == false && ( item.curSystem == null || item.curSystem.HasCoordinate == false) )
-                LogTextHighlight(name);
-            else
-                LogText(name);
-
-            int count = GetVisitsCount(name);
-
-            LogText(", Visit No. " + count.ToString() + Environment.NewLine);
-            System.Diagnostics.Trace.WriteLine("Entry " + nr + " Arrived at system: " + name + " " + count.ToString() + ":th visit.");
-
-            if (checkBoxEDSMSyncTo.Checked == true)
-            {
-                EDSMClass edsm = new EDSMClass();
-                edsm.apiKey = EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
-                edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-
-                Task taskEDSM = Task.Factory.StartNew(() => EDSMSync.SendTravelLog(edsm, item, null));
-            }
-
-            AddNewHistoryRow(true, item);
-
-            StoreSystemNote();
-
-            _discoveryForm.Map.UpdateVisited(visitedSystems);           // update map
-
-            RefreshSummaryRow(dataGridViewTravel.Rows[0], true);         //Tell the summary new row has been added
-            RefreshTargetInfo();                                        // tell the target system its changed the latest system
-            
-            // Move focus to new row
-            if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)
-            {
-                dataGridViewTravel.ClearSelection();
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
-                ShowSystemInformation(item);
-                UpdateDependentsWithSelection();
             }
         }
 
