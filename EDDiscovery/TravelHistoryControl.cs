@@ -766,13 +766,12 @@ namespace EDDiscovery
             });
         }
 
-        public void NewPosition(object source , int nr)         // in UI Thread..
+        public void NewPosition(VisitedSystemsClass item)         // in UI Thread..
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
             try
             {
-                VisitedSystemsClass item = visitedSystems[nr];
                 string name = item.Name;
 
                 LogText("Arrived at system ");
@@ -784,7 +783,7 @@ namespace EDDiscovery
                 int count = GetVisitsCount(name);
 
                 LogText(", Visit No. " + count.ToString() + Environment.NewLine);
-                System.Diagnostics.Trace.WriteLine("Entry " + nr + " Arrived at system: " + name + " " + count.ToString() + ":th visit.");
+                System.Diagnostics.Trace.WriteLine("Arrived at system: " + name + " " + count.ToString() + ":th visit.");
 
                 if (checkBoxEDSMSyncTo.Checked == true)
                 {
