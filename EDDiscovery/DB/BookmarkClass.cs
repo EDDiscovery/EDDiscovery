@@ -126,7 +126,8 @@ namespace EDDiscovery2.DB
 
         public static BookmarkClass FindBookmarkOnSystem(string name)
         {
-            BookmarkClass bk = bookmarks.Find(x => x.StarName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            // star name may be null if its a region mark
+            BookmarkClass bk = bookmarks.Find(x => x.StarName != null && x.StarName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
             return bk;
         }
 

@@ -56,7 +56,6 @@ namespace EDDiscovery2
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             InitializeComponent();
-            panel_grip.Visible = false;
             autofade.Interval = 500;
             autofade.Tick += FadeOut;
             TopMost = true;
@@ -75,6 +74,7 @@ namespace EDDiscovery2
             toolStripComboBoxOrder.Enabled = false; // indicate its a program change
             toolStripComboBoxOrder.SelectedIndex = SQLiteDBClass.GetSettingInt("SummaryPanelLayout", 0);
             toolStripComboBoxOrder.Enabled = true;
+            panel_grip.Visible = false;
         }
 
         public void SetGripperColour(Color grip)
@@ -327,7 +327,8 @@ namespace EDDiscovery2
                 //Console.WriteLine("Hook Mouse down " + ctl.ToString() + " " + ctl.Name);
             }
 
-            ctl.Show();
+            if ( ctl.Visible )
+                ctl.Show();
 
             foreach (Control ctll in ctl.Controls)
             {
