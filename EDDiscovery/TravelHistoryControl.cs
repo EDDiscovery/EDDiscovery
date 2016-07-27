@@ -208,7 +208,6 @@ namespace EDDiscovery
             {
                 dataGridViewTravel.Rows.Insert(0, rowobj);
                 rownr = 0;
-                Console.WriteLine("THC Added " + item.Name);
             }
             else
             {

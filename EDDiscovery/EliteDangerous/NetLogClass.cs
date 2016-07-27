@@ -340,7 +340,7 @@ namespace EDDiscovery
                             if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
                             {
                                 visitedSystems.Add(ps);
-                                Console.WriteLine("Add System " + ps.Name);
+                                //Console.WriteLine("Add System " + ps.Name);
                             }
                         }
 
@@ -482,13 +482,13 @@ namespace EDDiscovery
                                 _discoveryform.Invoke((MethodInvoker)delegate       // since we are modifying visited systems, and its used by the foreground all the time, do it in the foreground..
                                 {
                                     int nrsystems = visitedSystems.Count;
-                                    Console.WriteLine("Parsing file in foreground " + fi.FullName);
+                                    //Console.WriteLine("Parsing file in foreground " + fi.FullName);
 
                                     lastnfi = ParseFile(fi, visitedSystems);        // read file, return updated info..
 
                                     if (nrsystems < visitedSystems.Count) // Om vi har fler system
                                     {
-                                        Console.WriteLine("Parsing changed system count, from " + nrsystems + " to " + visitedSystems.Count + " from tlunit " + tlUnit.id);
+                                        //Console.WriteLine("Parsing changed system count, from " + nrsystems + " to " + visitedSystems.Count + " from tlunit " + tlUnit.id);
 
                                         for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
                                         {
