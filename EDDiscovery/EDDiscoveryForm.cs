@@ -482,7 +482,7 @@ namespace EDDiscovery
                         routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
                         routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                        travelHistoryControl1.netlog.OnNewPosition += new NetLogEventHandler(travelHistoryControl1.NewPosition);
+                        travelHistoryControl1.netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(travelHistoryControl1.NewPosition);
                         travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
 
                         //long tickc = Environment.TickCount;

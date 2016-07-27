@@ -13,8 +13,6 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public delegate void NetLogEventHandler(object source, int entry);
-
     public class NetLogFileInfo
     {
         public string FileName;
@@ -25,23 +23,26 @@ namespace EDDiscovery
 
     public class NetLogClass
     {
-        public event NetLogEventHandler OnNewPosition;
+        public delegate void NetLogEventHandler(object source, int entry);
+
+        public event NetLogEventHandler OnNewPosition;          // called in foreground, no need for invoke
 
         public List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
         Dictionary<string, NetLogFileInfo> netlogfiles = new Dictionary<string, NetLogFileInfo>();
         FileSystemWatcher m_Watcher;
         Thread ThreadNetLog;
         bool Exit = false;
-        bool NoEvents = false;
-        object EventLogLock = new object();
         AutoResetEvent NewLogEvent = new AutoResetEvent(false);
-        ConcurrentQueue<string> NetLogFileQueue = new ConcurrentQueue<string>();
-        private EDDiscoveryForm _discoveryform;
+        ConcurrentQueue<NetLogFileInfo> NetLogFileQueue = new ConcurrentQueue<NetLogFileInfo>();
         public List<TravelLogUnit> tlUnits;
 
-        public NetLogClass(EDDiscoveryForm ed )
+        NetLogFileInfo lastnfi = null;          // last one read..
+
+        EDDiscoveryForm _discoveryform;         // need this to do an Invoke on it
+
+        public NetLogClass(EDDiscoveryForm ds )
         {
-            _discoveryform = ed;
+            _discoveryform = ds;
         }
 
         public string GetNetLogPath()
@@ -83,7 +84,6 @@ namespace EDDiscovery
                     DateTime newtime = new DateTime(2000, 10, 10);
                     FileInfo newfi = null;
 
-
                     foreach (FileInfo fi in allFiles)
                     {
                         if (fi.CreationTimeUtc > newtime)
@@ -119,24 +119,26 @@ namespace EDDiscovery
             }
         }
 
-        // called during start up and if refresh history is pressed..
+        // called during start up and if refresh history is pressed..  foreground call
 
-        public List<VisitedSystemsClass> ParseFiles(ExtendedControls.RichTextBoxScroll richTextBox_History, int defaultMapColour)
+        public List<VisitedSystemsClass> ParseFiles(out string error, int defaultMapColour)
         {
-            string datapath;
+            StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+
+            error = null;
             DirectoryInfo dirInfo;
 
-            datapath = GetNetLogPath();
+            string datapath = GetNetLogPath();
 
-            if (datapath == null)
+            if (datapath == null )
             {
-                AppendText(richTextBox_History, "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, _discoveryform.theme.TextBlockHighlightColor);
+                error = "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab";
                 return null;
             }
 
             if (!Directory.Exists(datapath))   // if logfiles directory is not found
             {
-                AppendText(richTextBox_History, "Netlog directory is not present!" + Environment.NewLine + "Specify location in settings tab" + Environment.NewLine, _discoveryform.theme.TextBlockHighlightColor);
+                error = "Netlog directory is not present!" + Environment.NewLine + "Specify location in settings tab";
                 return null;
             }
 
@@ -146,117 +148,97 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                AppendText(richTextBox_History, "Could not create Directory info: " + ex.Message + Environment.NewLine, Color.Red);
+                error = "Could not create Directory info: " + ex.Message;
                 return null;
             }
-
-            // Get TravelLogUnits;
 
             tlUnits =  TravelLogUnit.GetAll();
 
             List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(EDDConfig.Instance.CurrentCmdrID);
 
-            lock (EventLogLock)
+            visitedSystems.Clear();
+
+            if (vsSystemsList != null)
             {
-                visitedSystems.Clear();
-                // Add systems in local DB.
-                if (vsSystemsList != null)
+                foreach (VisitedSystemsClass vs in vsSystemsList)
                 {
-                    foreach (VisitedSystemsClass vs in vsSystemsList)
-                    {
-                        if (visitedSystems.Count == 0)
-                            visitedSystems.Add(vs);
-                        else if (!visitedSystems.Last<VisitedSystemsClass>().Name.Equals(vs.Name))  // Avoid duplicate if times exist in same system from different files.
-                            visitedSystems.Add(vs);
-                        else
-                        {
-                            VisitedSystemsClass vs2 = (VisitedSystemsClass)visitedSystems.Last<VisitedSystemsClass>();
-                            if (vs2.id != vs.id)
-                            {
-                                vs.Commander = -2; // Move to dupe user
-                                vs.Update();
-                            }
-                        }
-                    }
-                }
-
-                FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.Name).ToArray();
-
-                NoEvents = true;
-
-                for (int i = 0; i < allFiles.Length; i++)
-                {
-                    FileInfo fi = allFiles[i];
-                    TravelLogUnit lu = null;
-                    bool parsefile = true;
-
-                    if (fi.Name.Equals("netLog.1510280152.01.log"))
-                        parsefile = true;
-
-                    // Check if we alreade have parse the file and stored in DB.
-                    if (tlUnits != null)
-                        lu = (from c in tlUnits where c.Name == fi.Name select c).FirstOrDefault<TravelLogUnit>();
-
-                    if (lu != null)
-                    {
-                        if (lu.Size == fi.Length && fi.Length != 0 && i < allFiles.Length - 1)  // File is already in DB:
-                            parsefile = false;
-                    }
+                    if (visitedSystems.Count == 0)
+                        visitedSystems.Add(vs);
+                    else if (!visitedSystems.Last<VisitedSystemsClass>().Name.Equals(vs.Name))  // Avoid duplicate if times exist in same system from different files.
+                        visitedSystems.Add(vs);
                     else
                     {
-                        lu = new TravelLogUnit();
-                        lu.Name = fi.Name;
-                        lu.Path = Path.GetDirectoryName(fi.FullName);
-                        lu.Size = 0;  // Add real size after data is in DB //;(int)fi.Length;
-                        lu.type = 1;
-                        lu.Add();
-                    }
-
-                    if (parsefile)
-                    {
-                        int nr = 0;
-                        List<VisitedSystemsClass> tempVisitedSystems = new List<VisitedSystemsClass>();
-                        ParseFile(fi, tempVisitedSystems);
-
-                        foreach (VisitedSystemsClass ps in tempVisitedSystems)
+                        VisitedSystemsClass vs2 = (VisitedSystemsClass)visitedSystems.Last<VisitedSystemsClass>();
+                        if (vs2.id != vs.id)
                         {
-                            VisitedSystemsClass ps2;
-                            ps2 = (from c in visitedSystems where c.Name == ps.Name && c.Time == ps.Time select c).FirstOrDefault<VisitedSystemsClass>();
-                            if (ps2 == null)
-                            {
-                                //VisitedSystemsClass dbsys = new VisitedSystemsClass();
-
-                                ps.Source = lu.id;
-                                ps.EDSM_sync = false;
-                                ps.Unit = fi.Name;
-                                ps.MapColour = defaultMapColour;
-                                ps.Commander = EDDConfig.Instance.CurrentCmdrID;
-
-                                //if (!lu.Beta)  // dont store  history in DB for beta (YET)
-                                {
-                                    VisitedSystemsClass last = VisitedSystemsClass.GetLast();
-
-                                    if (last == null || !last.Name.Equals(ps.Name))  // If same name as last system. Dont Add.  otherwise we get a duplet with last from logfile before with different time.
-                                    {
-                                        if (!VisitedSystemsClass.Exist(ps.Name, ps.Time))
-                                        {
-                                            ps.Add();
-                                            visitedSystems.Add(ps);
-                                            nr++;
-                                        }
-                                    }
-                                }
-
-                            }
+                            vs.Commander = -2; // Move to dupe user
+                            vs.Update();
                         }
-
-                        lu.Size = (int)fi.Length;
-                        lu.Update();
-                        AppendText(richTextBox_History, fi.Name + " " + nr.ToString() + " added to local database." + Environment.NewLine, _discoveryform.theme.TextBlockColor);
                     }
                 }
+            }
+                                                                                // order by file write time so we end up on the last one written
+            FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.LastWriteTime).ToArray();
 
-                NoEvents = false;
+            for (int i = 0; i < allFiles.Length; i++)
+            {
+                FileInfo fi = allFiles[i];
+                TravelLogUnit lu = null;
+                bool parsefile = true;
+
+                // Check if we alreade have parse the file and stored in DB.
+                if (tlUnits != null)
+                    lu = (from c in tlUnits where c.Name == fi.Name select c).FirstOrDefault<TravelLogUnit>();
+
+                if (lu != null)
+                {
+                    if (lu.Size == fi.Length && fi.Length != 0 && i < allFiles.Length - 1)  // File is already in DB, and NOT the last one
+                        parsefile = false;
+                }
+                else
+                {
+                    lu = new TravelLogUnit();
+                    lu.Name = fi.Name;
+                    lu.Path = Path.GetDirectoryName(fi.FullName);
+                    lu.Size = 0;  // Add real size after data is in DB //;(int)fi.Length;
+                    lu.type = 1;
+                    lu.Add();
+                }
+
+                if (parsefile)
+                {
+                    List<VisitedSystemsClass> tempVisitedSystems = new List<VisitedSystemsClass>();
+
+                    lastnfi = ParseFile(fi, tempVisitedSystems);      // we always end up scanning the whole thing since we don't have netlogfiles on first go..
+
+                    foreach (VisitedSystemsClass ps in tempVisitedSystems)
+                    {
+                        VisitedSystemsClass ps2 = (from c in visitedSystems where c.Name == ps.Name && c.Time == ps.Time select c).FirstOrDefault<VisitedSystemsClass>();
+
+                        if (ps2 == null)
+                        {
+                            ps.Source = lu.id;
+                            ps.EDSM_sync = false;
+                            ps.Unit = fi.Name;
+                            ps.MapColour = defaultMapColour;
+                            ps.Commander = EDDConfig.Instance.CurrentCmdrID;
+
+                            VisitedSystemsClass last = VisitedSystemsClass.GetLast();
+
+                            if (last == null || !last.Name.Equals(ps.Name))  // If same name as last system. Dont Add.  otherwise we get a duplet with last from logfile before with different time.
+                            {
+                                if (!VisitedSystemsClass.Exist(ps.Name, ps.Time))
+                                {
+                                    ps.Add();
+                                    visitedSystems.Add(ps);
+                                }
+                            }
+                        }
+                    }
+
+                    lu.Size = (int)fi.Length;
+                    lu.Update();
+                }
             }
 
             // update the VSC with data from the db
@@ -264,17 +246,17 @@ namespace EDDiscovery
             return visitedSystems;
         }
 
-
-        private int ParseFile(FileInfo fi, List<VisitedSystemsClass> visitedSystems)
+        private NetLogFileInfo ParseFile(FileInfo fi, List<VisitedSystemsClass> visitedSystems)
         {
-            int count = 0, nrsystems=visitedSystems.Count;
+            NetLogFileInfo ret = null;
+
             try
             {
                 using (Stream fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (StreamReader sr = new StreamReader(fs))
                     {
-                        count = ReadData(fi, visitedSystems, count, sr);
+                        ret = ReadData(fi, visitedSystems, sr);
                     }
                 }
             }
@@ -282,13 +264,12 @@ namespace EDDiscovery
             {
                 System.Diagnostics.Trace.WriteLine("Parse File exception: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                return 0;
             }
 
-            return count;
+            return ret;
         }
-
-        private int ReadData(FileInfo fi, List<VisitedSystemsClass> visitedSystems, int count, StreamReader sr)
+                                                            // returns info on what its read..
+        private NetLogFileInfo ReadData(FileInfo fi, List<VisitedSystemsClass> visitedSystems, StreamReader sr) 
         {
             DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
 
@@ -303,8 +284,9 @@ namespace EDDiscovery
                 sr.BaseStream.Position = nfi.filePos;
                 sr.DiscardBufferedData();
                 CQC = nfi.CQC;
-                Console.WriteLine("Move pos on " + fi.FullName + " to " + nfi.filePos);
             }
+
+            long startpos = sr.BaseStream.Position;
 
             if (FirstLine != null)  // may be empty if we read it too fast.. don't worry, monitor will pick it up
             {
@@ -313,7 +295,6 @@ namespace EDDiscovery
                 DateTime filetime = DateTime.Now.AddDays(-500);
                 filetime = DateTime.Parse(str);
 
-                long curpos = sr.BaseStream.Position;
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
@@ -332,7 +313,7 @@ namespace EDDiscovery
 
                     if (line.Contains(" System:") && CQC == false)
                     {
-                        Console.WriteLine("..at " + curpos + " Read " + line );
+                        //Console.WriteLine(" RD:" + line );
                         if (line.Contains("ProvingGround"))
                             continue;
 
@@ -351,7 +332,7 @@ namespace EDDiscovery
                             {
                                 if (visitedSystems[visitedSystems.Count - 1].Name.Equals(ps.Name))
                                 {
-                                    Console.WriteLine("Repeat " + ps.Name);
+                                    //Console.WriteLine("Repeat " + ps.Name);
                                     continue;
                                 }
                             }
@@ -359,14 +340,11 @@ namespace EDDiscovery
                             if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
                             {
                                 visitedSystems.Add(ps);
-                                Console.WriteLine("..  Add " + ps.Name);
-                                count++;
+                                Console.WriteLine("Add System " + ps.Name);
                             }
                         }
 
                     }
-
-                    curpos = sr.BaseStream.Position;
                 }
             }
             else
@@ -383,16 +361,11 @@ namespace EDDiscovery
             nfi.fileSize = fi.Length;
             nfi.CQC = CQC;
 
-            Console.WriteLine(" Finished " + fi.FullName + " at " + nfi.filePos);
+            Console.WriteLine("Parse ReadData " + fi.FullName + " from " + startpos + " to " + nfi.filePos);
 
             netlogfiles[nfi.FileName] = nfi;
-            return count;
-        }
 
-        private void AppendText(ExtendedControls.RichTextBoxScroll box, string text, Color color)
-        {
-            box.AppendText(text, color);
-            Application.DoEvents();
+            return nfi;
         }
 
         public void StartMonitor()
@@ -412,9 +385,9 @@ namespace EDDiscovery
         {
             if (ThreadNetLog != null)
             {
+                Console.WriteLine("Netthread stop Monitor");
                 Exit = true;
                 NewLogEvent.Set();
-                Console.WriteLine("Netthread stop Monitor");
                 ThreadNetLog.Join();
                 ThreadNetLog = null;
             }
@@ -443,9 +416,9 @@ namespace EDDiscovery
                         m_Watcher.Path = logpath + Path.DirectorySeparatorChar;
                         m_Watcher.Filter = "netLog*.log";
                         m_Watcher.IncludeSubdirectories = false;
-                        m_Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
-                        m_Watcher.Changed += new FileSystemEventHandler(OnChanged);
-                        m_Watcher.Created += new FileSystemEventHandler(OnChanged);
+                        m_Watcher.NotifyFilter = NotifyFilters.FileName;
+                        m_Watcher.Changed += new FileSystemEventHandler(OnNewFile);
+                        m_Watcher.Created += new FileSystemEventHandler(OnNewFile);
                         m_Watcher.EnableRaisingEvents = true;
                     }
                 }
@@ -459,10 +432,7 @@ namespace EDDiscovery
 
                 EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
 
-                List<TravelLogUnit> travelogUnits;
-                // Get TravelLogUnits;
-                travelogUnits = null;
-                TravelLogUnit tlUnit = null;
+                List<TravelLogUnit> travelogUnits = TravelLogUnit.GetAll(); 
 
                 while (!Exit)
                 {
@@ -478,70 +448,72 @@ namespace EDDiscovery
 
                         EliteDangerous.CheckED();
 
-                        lock (EventLogLock)
+                        NetLogFileInfo nfi;
+
+                        if (NetLogFileQueue.TryDequeue(out nfi))        // if a new one queued, we swap to using it
+                            lastnfi = nfi;                              // if MAY be empty note due to us picking it up before being written, in which case, we get it next tick around
+                        else
+                            nfi = lastnfi;                              // else use the last..
+
+                        if (nfi != null)                                // if we have a last.
                         {
-                            string filename = null;
+                            FileInfo fi = new FileInfo(nfi.FileName);
 
-                            if (NoEvents == false && NetLogFileQueue.TryDequeue(out filename) )
-                            {
-                                FileInfo fi = new FileInfo(filename);
+                            //Console.WriteLine("File pos " + nfi.filePos +" vs " +fi.Length);
 
-                                Console.WriteLine("file " + filename + " len " + fi.Length );
+                            if (nfi.filePos < fi.Length)        // if we have no written to the end
+                            {                                   // find it in list..
+                                //Console.WriteLine("Reading file " + nfi.FileName + " from " + nfi.filePos + " to " + fi.Length);
 
-                                if (tlUnit == null || !tlUnit.Name.Equals(Path.GetFileName(filename)))  // Create / find new travellog unit
+                                TravelLogUnit tlUnit = (from c in travelogUnits where c.Name == fi.Name select c).FirstOrDefault<TravelLogUnit>();
+
+                                if (tlUnit == null )            // if not in list, make one and add..
                                 {
-                                    travelogUnits = TravelLogUnit.GetAll();
-                                    // Check if we alreade have parse the file and stored in DB.
-                                    if (tlUnit == null)
-                                        tlUnit = (from c in travelogUnits where c.Name == fi.Name select c).FirstOrDefault<TravelLogUnit>();
-
-                                    if (tlUnit == null)
-                                    {
-                                        tlUnit = new TravelLogUnit();
-                                        tlUnit.Name = fi.Name;
-                                        tlUnit.Path = Path.GetDirectoryName(fi.FullName);
-                                        tlUnit.Size = 0;  // Add real size after data is in DB //;(int)fi.Length;
-                                        tlUnit.type = 1;
-                                        tlUnit.Add();
-                                        travelogUnits.Add(tlUnit);
-                                    }
+                                    tlUnit = new TravelLogUnit();
+                                    tlUnit.Name = fi.Name;
+                                    tlUnit.Path = Path.GetDirectoryName(fi.FullName);
+                                    tlUnit.Size = 0;  // Add real size after data is in DB //;(int)fi.Length;
+                                    tlUnit.type = 1;
+                                    tlUnit.Add();
+                                    travelogUnits.Add(tlUnit);
+                                    Console.WriteLine("New travellog unit " + tlUnit.id);
                                 }
 
-                                int nrsystems = visitedSystems.Count;
-
-                                ParseFile(fi, visitedSystems);
-
-                                if (nrsystems < visitedSystems.Count) // Om vi har fler system
+                                _discoveryform.Invoke((MethodInvoker)delegate       // since we are modifying visited systems, and its used by the foreground all the time, do it in the foreground..
                                 {
-                                    Console.WriteLine("Parsing changed system count, from " + nrsystems + " to " + visitedSystems.Count);
+                                    int nrsystems = visitedSystems.Count;
+                                    Console.WriteLine("Parsing file in foreground " + fi.FullName);
 
-                                    for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
+                                    lastnfi = ParseFile(fi, visitedSystems);        // read file, return updated info..
+
+                                    if (nrsystems < visitedSystems.Count) // Om vi har fler system
                                     {
-                                        VisitedSystemsClass dbsys = visitedSystems[nr];
-                                        dbsys.Source = tlUnit.id;
-                                        dbsys.EDSM_sync = false;
-                                        dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
-                                        dbsys.Unit = fi.Name;
-                                        dbsys.Commander = EDDConfig.Instance.CurrentCmdrID;
-                                        dbsys.Add();
+                                        Console.WriteLine("Parsing changed system count, from " + nrsystems + " to " + visitedSystems.Count + " from tlunit " + tlUnit.id);
 
-                                        // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..
+                                        for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
+                                        {
+                                            VisitedSystemsClass dbsys = visitedSystems[nr];
+                                            dbsys.Source = tlUnit.id;
+                                            dbsys.EDSM_sync = false;
+                                            dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
+                                            dbsys.Unit = fi.Name;
+                                            dbsys.Commander = EDDConfig.Instance.CurrentCmdrID;
+                                            dbsys.Add();
 
-                                        VisitedSystemsClass item = visitedSystems[nr];
-                                        VisitedSystemsClass item2 = (nr > 0) ? visitedSystems[nr - 1] : null;
-                                        VisitedSystemsClass.UpdateVisitedSystemsEntries(item, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
+                                            // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..
+
+                                            VisitedSystemsClass item = visitedSystems[nr];
+                                            VisitedSystemsClass item2 = (nr > 0) ? visitedSystems[nr - 1] : null;
+                                            VisitedSystemsClass.UpdateVisitedSystemsEntries(item, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
+                                        }
+
+                                        // now the visiting class has been set up, now tell the display of these new systems
+                                        for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
+                                        {
+                                            OnNewPosition(this, nr);    // add record nr to the list
+                                        }
                                     }
-
-                                    // now the visiting class has been set up, now tell the display of these new systems
-                                    for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
-                                    {
-                                        OnNewPosition(this, nr);    // add record nr to the list
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("No systems added");
-                                }
+                                });
                             }
                         }
                     }
@@ -556,15 +528,23 @@ namespace EDDiscovery
             m_Watcher = null;
         }
 
-        private void OnChanged(object sender, FileSystemEventArgs e)
-        {
+        private void OnNewFile(object sender, FileSystemEventArgs e)        // only picks up new files
+        {                                                                   // and it can kick in before any data has had time to be written to it...
             string filename = e.FullPath;
 
             m_Watcher.EnableRaisingEvents = false;
 
             System.Diagnostics.Trace.WriteLine("Log Watcher " + e.ChangeType + " " + filename);
-            NetLogFileQueue.Enqueue(filename);
-            NewLogEvent.Set();
+
+            NetLogFileInfo nfi = new NetLogFileInfo();      // just queue up a new object, this will be replaced in readdata by the right one
+            nfi.FileName = filename;                        // so no need to find the right object.. just a way of getting it to trip
+            nfi.lastchanged = File.GetLastWriteTimeUtc(nfi.FileName);
+            nfi.filePos = 0;
+            nfi.fileSize = 0;                               // both zero, when we get around to reading it real size will be picked up
+            nfi.CQC = false;        
+
+            NetLogFileQueue.Enqueue(nfi);       
+            NewLogEvent.Set();      
 
             m_Watcher.EnableRaisingEvents = true;
         }
