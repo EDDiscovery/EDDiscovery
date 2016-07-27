@@ -206,9 +206,6 @@ namespace EDDiscovery2.EDSM
 
                 if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
                 {
-                    if (msgnum == 100)
-                        System.Diagnostics.Trace.WriteLine("New");
-
                     system.EDSM_sync = true;
                     system.Update();
                     return true;
