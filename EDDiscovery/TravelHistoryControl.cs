@@ -581,8 +581,10 @@ namespace EDDiscovery
 
             this.Cursor = Cursors.WaitCursor;
 
+            string HomeSystem = _discoveryForm.settings.MapHomeSystem;
+
             map.Prepare(selectedSys, _discoveryForm.settings.MapHomeSystem,
-                        _discoveryForm.settings.MapCentreOnSelection ? selectedSys?.curSystem : SystemClass.GetSystem(_discoveryForm.settings.MapHomeSystem),
+                        _discoveryForm.settings.MapCentreOnSelection ? selectedSys?.curSystem : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
                         _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames, visitedSystems);
             map.Show();
             this.Cursor = Cursors.Default;
