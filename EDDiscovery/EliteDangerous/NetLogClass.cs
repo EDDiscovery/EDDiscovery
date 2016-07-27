@@ -29,6 +29,7 @@ namespace EDDiscovery
         public long filePos { get { return TravelLogUnit.Size; } }
         public bool CQC { get; set; }
         public TravelLogUnit TravelLogUnit { get; protected set; }
+        public DateTime LastLogTime { get; set; }
 
         public NetLogFileReader(string filename)
         {
@@ -409,67 +410,70 @@ namespace EDDiscovery
             long startpos = sr.filePos;
 
             string line = null;
-            if (sr.ReadLine(out line))  // may be empty if we read it too fast.. don't worry, monitor will pick it up
+            if (sr.filePos == 0)
             {
-                string str = "20" + line.Substring(0, 8) + " " + line.Substring(9, 5);
-
-                DateTime filetime = DateTime.Now.AddDays(-500);
-                filetime = DateTime.Parse(str);
-
-                while (sr.ReadLine(out line))
+                if (sr.ReadLine(out line))  // may be empty if we read it too fast.. don't worry, monitor will pick it up
                 {
-                    if (line.Contains("[PG] [Notification] Left a playlist lobby"))
-                        sr.CQC = false;
+                    string str = "20" + line.Substring(0, 8) + " " + line.Substring(9, 5);
 
-                    if (line.Contains("[PG] Destroying playlist lobby."))
-                        sr.CQC = false;
+                    sr.LastLogTime = DateTime.Parse(str);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLine("File was empty (for now) " + sr.FileName);
+                    return sr;
+                }
+            }
 
-                    if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
-                        sr.CQC = true;
-                    if (line.Contains("[PG] Created playlist lobby"))
-                        sr.CQC = true;
-                    if (line.Contains("[PG] Found matchmaking lobby object"))
-                        sr.CQC = true;
+            while (sr.ReadLine(out line))
+            {
+                if (line.Contains("[PG] [Notification] Left a playlist lobby"))
+                    sr.CQC = false;
 
-                    if (line.Contains(" System:") && sr.CQC == false)
-                    {
-                        //Console.WriteLine(" RD:" + line );
-                        if (line.Contains("ProvingGround"))
+                if (line.Contains("[PG] Destroying playlist lobby."))
+                    sr.CQC = false;
+
+                if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
+                    sr.CQC = true;
+                if (line.Contains("[PG] Created playlist lobby"))
+                    sr.CQC = true;
+                if (line.Contains("[PG] Found matchmaking lobby object"))
+                    sr.CQC = true;
+
+                if (line.Contains(" System:") && sr.CQC == false)
+                {
+                    //Console.WriteLine(" RD:" + line );
+                    if (line.Contains("ProvingGround"))
+                        continue;
+
+                    VisitedSystemsClass ps = VisitedSystemsClass.Parse(sr.LastLogTime, line);
+                    if (ps != null)
+                    {   // Remove some training systems
+                        if (ps.Name.Equals("Training"))
                             continue;
+                        if (ps.Name.Equals("Destination"))
+                            continue;
+                        if (ps.Name.Equals("Altiris"))
+                            continue;
+                        sr.LastLogTime = ps.Time;
 
-                        VisitedSystemsClass ps = VisitedSystemsClass.Parse(filetime, line);
-                        if (ps != null)
-                        {   // Remove some training systems
-                            if (ps.Name.Equals("Training"))
-                                continue;
-                            if (ps.Name.Equals("Destination"))
-                                continue;
-                            if (ps.Name.Equals("Altiris"))
-                                continue;
-                            filetime = ps.Time;
-
-                            if (visitedSystems.Count > 0)
+                        if (visitedSystems.Count > 0)
+                        {
+                            if (visitedSystems[visitedSystems.Count - 1].Name.Equals(ps.Name))
                             {
-                                if (visitedSystems[visitedSystems.Count - 1].Name.Equals(ps.Name))
-                                {
-                                    //Console.WriteLine("Repeat " + ps.Name);
-                                    continue;
-                                }
-                            }
-
-                            if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
-                            {
-                                visitedSystems.Add(ps);
-                                //Console.WriteLine("Add System " + ps.Name);
+                                //Console.WriteLine("Repeat " + ps.Name);
+                                continue;
                             }
                         }
 
+                        if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
+                        {
+                            visitedSystems.Add(ps);
+                            //Console.WriteLine("Add System " + ps.Name);
+                        }
                     }
+
                 }
-            }
-            else
-            {
-                System.Diagnostics.Trace.WriteLine("File was empty (for now) " + sr.FileName);
             }
 
             Console.WriteLine("Parse ReadData " + sr.FileName + " from " + startpos + " to " + sr.filePos);
