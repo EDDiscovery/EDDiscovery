@@ -24,7 +24,7 @@ namespace EDDiscovery
 
     public class NetLogClass
     {
-        public delegate void NetLogEventHandler(object source, int entry);
+        public delegate void NetLogEventHandler(VisitedSystemsClass vsc);
 
         public event NetLogEventHandler OnNewPosition;          // called in foreground, no need for invoke
 
@@ -503,7 +503,7 @@ namespace EDDiscovery
                             // now the visiting class has been set up, now tell the display of these new systems
                             for (int nr = nrsystems; nr < visitedSystems.Count; nr++)  // Lägg till nya i locala databaslogen
                             {
-                                OnNewPosition(this, nr);    // add record nr to the list
+                                OnNewPosition(visitedSystems[nr]);    // add record nr to the list
                             }
                         }
                     }
