@@ -135,14 +135,50 @@ namespace EDDiscovery
                 // No end-of-line encountered - try reading a line again
             }
         }
-    }
 
-    public class NetLogFileInfo
-    {
-        public string FileName;
-        public DateTime lastchanged;
-        public long filePos, fileSize;
-        public bool CQC;
+        public bool ReadNetLogSystem(out VisitedSystemsClass vsc)
+        {
+            string line;
+            while (this.ReadLine(out line))
+            {
+                if (line.Contains("[PG] [Notification] Left a playlist lobby"))
+                    this.CQC = false;
+
+                if (line.Contains("[PG] Destroying playlist lobby."))
+                    this.CQC = false;
+
+                if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
+                    this.CQC = true;
+                if (line.Contains("[PG] Created playlist lobby"))
+                    this.CQC = true;
+                if (line.Contains("[PG] Found matchmaking lobby object"))
+                    this.CQC = true;
+
+                if (line.Contains(" System:") && this.CQC == false)
+                {
+                    //Console.WriteLine(" RD:" + line );
+                    if (line.Contains("ProvingGround"))
+                        continue;
+
+                    VisitedSystemsClass ps = VisitedSystemsClass.Parse(this.LastLogTime, line);
+                    if (ps != null)
+                    {   // Remove some training systems
+                        if (ps.Name.Equals("Training"))
+                            continue;
+                        if (ps.Name.Equals("Destination"))
+                            continue;
+                        if (ps.Name.Equals("Altiris"))
+                            continue;
+                        this.LastLogTime = ps.Time;
+                        vsc = ps;
+                        return true;
+                    }
+                }
+            }
+
+            vsc = null;
+            return false;
+        }
     }
 
     public class NetLogClass
@@ -425,54 +461,22 @@ namespace EDDiscovery
                 }
             }
 
-            while (sr.ReadLine(out line))
+            VisitedSystemsClass ps;
+            while (sr.ReadNetLogSystem(out ps))
             {
-                if (line.Contains("[PG] [Notification] Left a playlist lobby"))
-                    sr.CQC = false;
-
-                if (line.Contains("[PG] Destroying playlist lobby."))
-                    sr.CQC = false;
-
-                if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
-                    sr.CQC = true;
-                if (line.Contains("[PG] Created playlist lobby"))
-                    sr.CQC = true;
-                if (line.Contains("[PG] Found matchmaking lobby object"))
-                    sr.CQC = true;
-
-                if (line.Contains(" System:") && sr.CQC == false)
+                if (visitedSystems.Count > 0)
                 {
-                    //Console.WriteLine(" RD:" + line );
-                    if (line.Contains("ProvingGround"))
+                    if (visitedSystems[visitedSystems.Count - 1].Name.Equals(ps.Name))
+                    {
+                        //Console.WriteLine("Repeat " + ps.Name);
                         continue;
-
-                    VisitedSystemsClass ps = VisitedSystemsClass.Parse(sr.LastLogTime, line);
-                    if (ps != null)
-                    {   // Remove some training systems
-                        if (ps.Name.Equals("Training"))
-                            continue;
-                        if (ps.Name.Equals("Destination"))
-                            continue;
-                        if (ps.Name.Equals("Altiris"))
-                            continue;
-                        sr.LastLogTime = ps.Time;
-
-                        if (visitedSystems.Count > 0)
-                        {
-                            if (visitedSystems[visitedSystems.Count - 1].Name.Equals(ps.Name))
-                            {
-                                //Console.WriteLine("Repeat " + ps.Name);
-                                continue;
-                            }
-                        }
-
-                        if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
-                        {
-                            visitedSystems.Add(ps);
-                            //Console.WriteLine("Add System " + ps.Name);
-                        }
                     }
+                }
 
+                if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
+                {
+                    visitedSystems.Add(ps);
+                    //Console.WriteLine("Add System " + ps.Name);
                 }
             }
 
