@@ -226,7 +226,7 @@ namespace EDDiscovery2
 
             if ((config & Configuration.showXYZ) != 0 && vscentry != null)
             {
-                string xv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.z.ToString("0.00") : "-";
+                string xv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.x.ToString("0.00") : "-";
                 string yv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.y.ToString("0.00") : "-";
                 string zv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.z.ToString("0.00") : "-";
 
