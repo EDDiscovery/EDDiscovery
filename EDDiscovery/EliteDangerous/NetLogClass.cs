@@ -169,7 +169,7 @@ namespace EDDiscovery
 
         public NetLogClass(EDDiscoveryForm ds)
         {
-            m_travelogUnits = TravelLogUnit.GetAll().ToDictionary(t => t.Name);
+            m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
         }
 
         public string GetNetLogPath()
