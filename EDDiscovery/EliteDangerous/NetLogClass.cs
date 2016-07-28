@@ -333,9 +333,7 @@ namespace EDDiscovery
                 {
                     List<VisitedSystemsClass> tempVisitedSystems = new List<VisitedSystemsClass>();
 
-                    ReadData(lastnfi, tempVisitedSystems);      // we always end up scanning the whole thing since we don't have netlogfiles on first go..
-
-                    foreach (VisitedSystemsClass ps in tempVisitedSystems)
+                    foreach (VisitedSystemsClass ps in ReadData(lastnfi))
                     {
                         Tuple<string, DateTime> nameAndTime = new Tuple<string, DateTime>(ps.Name, ps.Time);
 
@@ -387,24 +385,7 @@ namespace EDDiscovery
             return reader;
         }
 
-        private NetLogFileReader ParseFile(FileInfo fi, List<VisitedSystemsClass> visitedSystems)
-        {
-            NetLogFileReader ret = null;
-
-            try
-            {
-                ret = ReadData(OpenFileReader(fi), visitedSystems);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Parse File exception: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-
-            return ret;
-        }
-        // returns info on what its read..
-        private NetLogFileReader ReadData(NetLogFileReader sr, List<VisitedSystemsClass> visitedSystems)
+        private IEnumerable<VisitedSystemsClass> ReadData(NetLogFileReader sr)
         {
             long startpos = sr.filePos;
 
@@ -413,7 +394,7 @@ namespace EDDiscovery
                 if (!sr.ReadHeader())  // may be empty if we read it too fast.. don't worry, monitor will pick it up
                 {
                     System.Diagnostics.Trace.WriteLine("File was empty (for now) " + sr.FileName);
-                    return sr;
+                    yield break;
                 }
             }
 
@@ -431,14 +412,11 @@ namespace EDDiscovery
 
                 if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
                 {
-                    visitedSystems.Add(ps);
-                    //Console.WriteLine("Add System " + ps.Name);
+                    yield return ps;
                 }
             }
 
             Console.WriteLine("Parse ReadData " + sr.FileName + " from " + startpos + " to " + sr.filePos);
-
-            return sr;
         }
 
         public void StartMonitor()
@@ -532,33 +510,20 @@ namespace EDDiscovery
                         lastnfi.TravelLogUnit.Add();
                     }
 
-                    VisitedSystemsClass dbsys;
-                    while (lastnfi.ReadNetLogSystem(out dbsys))
+                    foreach(VisitedSystemsClass dbsys in ReadData(lastnfi))
                     {
-                        if (visitedSystems.Count > 0)
-                        {
-                            if (visitedSystems[visitedSystems.Count - 1].Name.Equals(dbsys.Name))
-                            {
-                                //Console.WriteLine("Repeat " + ps.Name);
-                                continue;
-                            }
-                        }
+                        dbsys.EDSM_sync = false;
+                        dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
+                        dbsys.Commander = EDDConfig.Instance.CurrentCmdrID;
+                        dbsys.Add();
 
-                        if (dbsys.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
-                        {
-                            dbsys.EDSM_sync = false;
-                            dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
-                            dbsys.Commander = EDDConfig.Instance.CurrentCmdrID;
-                            dbsys.Add();
+                        // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..
 
-                            // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..
-
-                            VisitedSystemsClass item2 = visitedSystems.LastOrDefault();
-                            VisitedSystemsClass.UpdateVisitedSystemsEntries(dbsys, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
-                            visitedSystems.Add(dbsys);
-                            OnNewPosition(dbsys);
-                            lastnfi.TravelLogUnit.Update();
-                        }
+                        VisitedSystemsClass item2 = visitedSystems.LastOrDefault();
+                        VisitedSystemsClass.UpdateVisitedSystemsEntries(dbsys, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
+                        visitedSystems.Add(dbsys);
+                        OnNewPosition(dbsys);
+                        lastnfi.TravelLogUnit.Update();
                     }
                 }
             }
