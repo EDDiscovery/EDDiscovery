@@ -305,8 +305,6 @@ namespace EDDiscovery
             // order by file write time so we end up on the last one written
             FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.LastWriteTime).ToArray();
 
-            Dictionary<Tuple<string, DateTime>, VisitedSystemsClass> vscByNameAndTime = visitedSystems.ToDictionary(s => new Tuple<string, DateTime>(s.Name, s.Time));
-
             for (int i = 0; i < allFiles.Length; i++)
             {
                 FileInfo fi = allFiles[i];
@@ -331,28 +329,16 @@ namespace EDDiscovery
 
                 if (lastnfi.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
                 {
-                    List<VisitedSystemsClass> tempVisitedSystems = new List<VisitedSystemsClass>();
-
                     foreach (VisitedSystemsClass ps in ReadData(lastnfi))
                     {
-                        Tuple<string, DateTime> nameAndTime = new Tuple<string, DateTime>(ps.Name, ps.Time);
-
-                        if (!vscByNameAndTime.ContainsKey(nameAndTime))
+                        if (!VisitedSystemsClass.Exist(ps.Name, ps.Time))
                         {
                             ps.EDSM_sync = false;
                             ps.MapColour = defaultMapColour;
                             ps.Commander = EDDConfig.Instance.CurrentCmdrID;
 
-                            VisitedSystemsClass last = visitedSystems.LastOrDefault(s => s.Time <= ps.Time);
-
-                            if (last == null || !last.Name.Equals(ps.Name))  // If same name as last system. Dont Add.  otherwise we get a duplet with last from logfile before with different time.
-                            {
-                                if (!VisitedSystemsClass.Exist(ps.Name, ps.Time))
-                                {
-                                    ps.Add();
-                                    visitedSystems.Add(ps);
-                                }
-                            }
+                            ps.Add();
+                            visitedSystems.Add(ps);
                         }
                     }
 
@@ -401,19 +387,11 @@ namespace EDDiscovery
             VisitedSystemsClass ps;
             while (sr.ReadNetLogSystem(out ps))
             {
-                if (visitedSystems.Count > 0)
-                {
-                    if (visitedSystems[visitedSystems.Count - 1].Name.Equals(ps.Name))
-                    {
-                        //Console.WriteLine("Repeat " + ps.Name);
-                        continue;
-                    }
-                }
+                if (ps.Name.Equals(VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time).Name, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
 
                 if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
-                {
                     yield return ps;
-                }
             }
 
             Console.WriteLine("Parse ReadData " + sr.FileName + " from " + startpos + " to " + sr.filePos);
