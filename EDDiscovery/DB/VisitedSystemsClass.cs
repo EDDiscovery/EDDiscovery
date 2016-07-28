@@ -64,6 +64,36 @@ namespace EDDiscovery2.DB
             }
         }
 
+        public VisitedSystemsClass(DbDataReader reader)
+        {
+            id = (long)reader["id"];
+            Name = (string)reader["Name"];
+            Time = (DateTime)reader["Time"];
+            Commander = (int)(long)reader["Commander"];
+            Source = (long)reader["Source"];
+            Unit = (string)reader["Unit"];
+            EDSM_sync = (bool)reader["edsm_sync"];
+            MapColour = (int)(long)reader["Map_colour"];
+
+            if (reader["X"] == DBNull.Value)
+            {
+                X = double.NaN;
+                Y = double.NaN;
+                Z = double.NaN;
+            }
+            else
+            {
+                X = (double)reader["X"];
+                Y = (double)reader["Y"];
+                Z = (double)reader["Z"];
+            }
+
+            if (reader["id_edsm_assigned"] != DBNull.Value)
+            {
+                id_edsm_assigned = (long)reader["id_edsm_assigned"];
+            }
+        }
+
         public bool HasTravelCoordinates
         {
             get
@@ -331,6 +361,27 @@ namespace EDDiscovery2.DB
                     return sys;
                 }
             }
+        }
+
+        public static VisitedSystemsClass GetLast(int cmdrid, DateTime before)
+        {
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM VisitedSystems WHERE Commander = @commander AND Time < @before ORDER BY Time DESC LIMIT 1"))
+                {
+                    cmd.AddParameterWithValue("@commander", cmdrid);
+                    cmd.AddParameterWithValue("@before", before);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new VisitedSystemsClass(reader);
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
         internal static bool Exist(string name, DateTime time)
