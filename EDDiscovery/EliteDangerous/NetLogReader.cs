@@ -25,7 +25,7 @@ namespace EDDiscovery
         public NetLogFileReader(string filename) : base(filename) { }
         public NetLogFileReader(TravelLogUnit tlu) : base(tlu) { }
 
-        protected void ParseTime(string time)
+        protected bool ParseTime(string time)
         {
             TimeSpan logtime;
             TimeSpan lasttime = LastLogTime.TimeOfDay;
@@ -52,16 +52,22 @@ namespace EDDiscovery
                     }
 
                     LastLogTime += timedelta;
+
+                    return true;
                 }
             }
+
+            return false;
         }
 
-        protected void ParseLineTime(string line)
+        protected bool ParseLineTime(string line)
         {
             if (line[0] == '{' && line[3] == ':' && line[6] == ':' && line[9] == '}' && line[10] == ' ')
             {
-                ParseTime(line.Substring(1, 8));
+                return ParseTime(line.Substring(1, 8));
             }
+
+            return false;
         }
 
         public bool ReadNetLogSystem(out VisitedSystemsClass vsc)
@@ -84,13 +90,14 @@ namespace EDDiscovery
                 if (line.Contains("[PG] Found matchmaking lobby object"))
                     this.CQC = true;
 
-                if (line.Contains(" System:") && this.CQC == false)
+                int offset = line.IndexOf("} System:") - 9;
+                if (offset >= 0 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
                 {
                     //Console.WriteLine(" RD:" + line );
                     if (line.Contains("ProvingGround"))
                         continue;
 
-                    VisitedSystemsClass ps = VisitedSystemsClass.Parse(this.LastLogTime, line);
+                    VisitedSystemsClass ps = VisitedSystemsClass.Parse(this.LastLogTime, line.Substring(offset));
                     if (ps != null)
                     {   // Remove some training systems
                         if (ps.Name.Equals("Training"))
@@ -99,7 +106,6 @@ namespace EDDiscovery
                             continue;
                         if (ps.Name.Equals("Altiris"))
                             continue;
-                        this.LastLogTime = ps.Time;
                         ps.Source = TravelLogUnit.id;
                         ps.Unit = TravelLogUnit.Name;
                         vsc = ps;
