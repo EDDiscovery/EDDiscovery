@@ -62,7 +62,7 @@ namespace EDDiscovery
 
         protected bool ParseLineTime(string line)
         {
-            if (line[0] == '{' && line[3] == ':' && line[6] == ':' && line[9] == '}' && line[10] == ' ')
+            if (line.Length > 11 && line[0] == '{' && line[3] == ':' && line[6] == ':' && line[9] == '}' && line[10] == ' ')
             {
                 return ParseTime(line.Substring(1, 8));
             }
@@ -194,7 +194,7 @@ namespace EDDiscovery
                     this.CQC = true;
 
                 int offset = line.IndexOf("} System:") - 8;
-                if (offset >= 0 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
+                if (offset >= 1 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
                 {
                     //Console.WriteLine(" RD:" + line );
                     if (line.Contains("ProvingGround"))
