@@ -1,56 +1,39 @@
-using EDDiscovery.DB;
-using EDDiscovery2;
+﻿using EDDiscovery2;
 using EDDiscovery2.DB;
 using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Drawing;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Globalization;
+using System.Windows.Forms;
 
-namespace EDDiscovery
+namespace EDDiscovery.EliteDangerous
 {
-    public class NetLogFileReader : LogReaderBase
+    public class EDJournalReader : LogReaderBase
     {
-        // Header line regular expression
-        private static Regex netlogHeaderRe = new Regex(@"^(?<Localtime>\d\d-\d\d-\d\d-\d\d:\d\d) (?<Timezone>.*) [(](?<GMT>\d\d:\d\d) GMT[)]");
 
-        // Close Quarters Combat
-        public bool CQC { get; set; }
 
-        // Time and timezone
+        public EDJournalReader(string filename) : base(filename) { }
+        public EDJournalReader(TravelLogUnit tlu) : base(tlu) { }
+
+
         public DateTime LastLogTime { get; set; }
+               
         public TimeZoneInfo TimeZone { get; set; }
         public TimeSpan TimeZoneOffset { get; set; }
 
-        public NetLogFileReader(string filename) : base(filename) { }
-        public NetLogFileReader(TravelLogUnit tlu) : base(tlu) { }
-
-        public bool ReadNetLogSystem(out VisitedSystemsClass vsc)
+        public bool ReadJournalLog(out JournalEvent vsc)
         {
             string line;
             while (this.ReadLine(out line))
             {
-                if (line.Contains("[PG] [Notification] Left a playlist lobby"))
-                    this.CQC = false;
+                
 
-                if (line.Contains("[PG] Destroying playlist lobby."))
-                    this.CQC = false;
-
-                if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
-                    this.CQC = true;
-                if (line.Contains("[PG] Created playlist lobby"))
-                    this.CQC = true;
-                if (line.Contains("[PG] Found matchmaking lobby object"))
-                    this.CQC = true;
-
-                if (line.Contains(" System:") && this.CQC == false)
+                if (line.Contains(" System:") )
                 {
                     //Console.WriteLine(" RD:" + line );
                     if (line.Contains("ProvingGround"))
@@ -68,7 +51,7 @@ namespace EDDiscovery
                         this.LastLogTime = ps.Time;
                         ps.Source = TravelLogUnit.id;
                         ps.Unit = TravelLogUnit.Name;
-                        vsc = ps;
+                        vsc = null;
                         return true;
                     }
                 }
@@ -104,8 +87,9 @@ namespace EDDiscovery
             }
 
             // Extract the start time from the first line
-            Match match = netlogHeaderRe.Match(line);
-            if (match != null && match.Success)
+            //Match match = netlogHeaderRe.Match(line);
+            //if (match != null && match.Success)
+            /*
             {
                 string localtimestr = match.Groups["Localtime"].Value;
                 string timezonename = match.Groups["Timezone"].Value.Trim();
@@ -138,17 +122,21 @@ namespace EDDiscovery
                     LastLogTime = localtime;
                     TimeZone = tzi;
                     TimeZoneOffset = tzoffset;
-                    TravelLogUnit.type = 1;
+                    TravelLogUnit.type = 3;
                 }
-
+                
                 return true;
             }
-
+            */
             return false;
         }
+        
     }
 
-    public class NetLogClass
+
+
+
+    public class EDJournalClass
     {
         public delegate void NetLogEventHandler(VisitedSystemsClass vsc);
 
@@ -167,9 +155,9 @@ namespace EDDiscovery
 
         DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
 
-        public NetLogClass(EDDiscoveryForm ds)
+        public EDJournalClass(EDDiscoveryForm ds)
         {
-            m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
+            m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
         }
 
         public string GetNetLogPath()
@@ -488,7 +476,7 @@ namespace EDDiscovery
                         lastnfi.TravelLogUnit.Add();
                     }
 
-                    foreach(VisitedSystemsClass dbsys in ReadData(lastnfi))
+                    foreach (VisitedSystemsClass dbsys in ReadData(lastnfi))
                     {
                         dbsys.EDSM_sync = false;
                         dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
@@ -518,4 +506,9 @@ namespace EDDiscovery
             m_netLogFileQueue.Enqueue(filename);
         }
     }
+
+
+
+
+
 }

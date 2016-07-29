@@ -46,7 +46,7 @@ namespace EDDiscovery2
 
                 if (setLog == DialogResult.Yes)
                 {
-                    var appconfig = Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml");
+                    var appconfig = Path.Combine(EliteDangerousClass.EDDirectory, "AppConfig.xml");
 
                     //Make backup
                     File.Copy(appconfig, appconfig + ".bak", true);
@@ -87,7 +87,7 @@ namespace EDDiscovery2
             AppConfig locAppConfig;
 
             DialogResult MBResult = DialogResult.Ignore;
-            string configFile = Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml");
+            string configFile = Path.Combine(EliteDangerousClass.EDDirectory, "AppConfig.xml");
             XmlSerializer serializer;
 
             do
@@ -136,7 +136,7 @@ namespace EDDiscovery2
         private readonly FileSystemWatcher _appdataWatcher = new FileSystemWatcher();
         void WatcherAppDataSettings()
         {
-            _appdataWatcher.Path = EliteDangerous.EDDirectory;
+            _appdataWatcher.Path = EliteDangerousClass.EDDirectory;
             _appdataWatcher.Filter = "AppConfig.xml";
             _appdataWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _appdataWatcher.Changed += AppData_Changed;
