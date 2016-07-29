@@ -97,7 +97,7 @@ namespace EDDiscovery
                     if (line.Contains("ProvingGround"))
                         continue;
 
-                    VisitedSystemsClass ps = VisitedSystemsClass.Parse(this.LastLogTime, line.Substring(offset));
+                    VisitedSystemsClass ps = VisitedSystemsClass.Parse(this.LastLogTime, line.Substring(offset + 11));
                     if (ps != null)
                     {   // Remove some training systems
                         if (ps.Name.Equals("Training"))

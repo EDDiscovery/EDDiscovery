@@ -169,14 +169,13 @@ namespace EDDiscovery2.DB
 
 
 
-        static public VisitedSystemsClass Parse(DateTime lasttime, string line)
+        static public VisitedSystemsClass Parse(DateTime time, string line)
         {
             VisitedSystemsClass sp = new VisitedSystemsClass();
 
             try
             {
                 Regex pattern;
-                int hour = 0, min = 0, sec = 0;
 
                 /* MKW: Use regular expressions to parse the log; much more readable and robust.
                  * Example log entry:
@@ -206,21 +205,16 @@ namespace EDDiscovery2.DB
                     string rgexpstr;
 
                     if (line.Contains("Body:"))
-                        rgexpstr = "{(?<Hour>\\d+):(?<Minute>\\d+):(?<Second>\\d+)} System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly Body:(?<Body>\\d+) RelPos:\\((?<RelPos>.*?)\\)km( +(?<TravelMode>\\w+))?";
+                        rgexpstr = "System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly Body:(?<Body>\\d+) RelPos:\\((?<RelPos>.*?)\\)km( +(?<TravelMode>\\w+))?";
                     else
-                        rgexpstr = "{(?<Hour>\\d+):(?<Minute>\\d+):(?<Second>\\d+)} System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly( +(?<TravelMode>\\w+))?";
+                        rgexpstr = "System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly( +(?<TravelMode>\\w+))?";
 
                     pattern = new Regex(rgexpstr);
-
 
                     Match match = pattern.Match(line);
 
                     if (match != null && match.Success)
                     {
-                        hour = int.Parse(match.Groups["Hour"].Value);
-                        min = int.Parse(match.Groups["Minute"].Value);
-                        sec = int.Parse(match.Groups["Second"].Value);
-
                         //sp.Nr = int.Parse(match.Groups["Body"].Value);
                         sp.Name = match.Groups["SystemName"].Value;
                         string pos = match.Groups["Pos"].Value;
@@ -248,15 +242,11 @@ namespace EDDiscovery2.DB
                 }
                 else
                 {
-                    pattern = new Regex(@"{(?<Hour>\d+):(?<Minute>\d+):(?<Second>\d+)} System:\d+\((?<SystemName>.*?)\) Body:(?<Body>\d+) Pos:\(.*?\)( (?<TravelMode>\w+))?");
+                    pattern = new Regex(@"System:\d+\((?<SystemName>.*?)\) Body:(?<Body>\d+) Pos:\(.*?\)( (?<TravelMode>\w+))?");
                     Match match = pattern.Match(line);
 
                     if (match != null && match.Success)
                     {
-                        hour = int.Parse(match.Groups["Hour"].Value);
-                        min = int.Parse(match.Groups["Minute"].Value);
-                        sec = int.Parse(match.Groups["Second"].Value);
-
                         //sp.Nr = int.Parse(match.Groups["Body"].Value);
                         sp.Name = match.Groups["SystemName"].Value;
                         sp.X = Double.NaN;
@@ -268,20 +258,9 @@ namespace EDDiscovery2.DB
                         System.Diagnostics.Trace.WriteLine("System parse error 2:" + line);
                     }
                 }
-                if (hour >= lasttime.Hour)
-                {
-                    sp.Time = new DateTime(lasttime.Year, lasttime.Month, lasttime.Day, hour, min, sec);
-                }
-                else
-                {
-                    DateTime tomorrow = lasttime.AddDays(1);
-                    sp.Time = new DateTime(tomorrow.Year, tomorrow.Month, tomorrow.Day, hour, min, sec);
-                }
 
-                if (sp.Time.Subtract(lasttime).TotalHours < -4)
-                {
-                    sp.Time = sp.Time.AddDays(1);
-                }
+                sp.Time = time;
+
                 return sp;
             }
             catch
