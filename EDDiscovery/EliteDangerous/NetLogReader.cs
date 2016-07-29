@@ -62,7 +62,7 @@ namespace EDDiscovery
 
         protected bool ParseLineTime(string line)
         {
-            if (line[0] == '{' && line[3] == ':' && line[6] == ':' && line[9] == '}' && line[10] == ' ')
+            if (line.Length > 11 && line[0] == '{' && line[3] == ':' && line[6] == ':' && line[9] == '}' && line[10] == ' ')
             {
                 return ParseTime(line.Substring(1, 8));
             }
@@ -138,6 +138,7 @@ namespace EDDiscovery
                     else
                     {
                         System.Diagnostics.Trace.WriteLine("System parse error 1:" + line);
+                        return false;
                     }
 
                 }
@@ -157,6 +158,7 @@ namespace EDDiscovery
                     else
                     {
                         System.Diagnostics.Trace.WriteLine("System parse error 2:" + line);
+                        return false;
                     }
                 }
 
@@ -191,15 +193,15 @@ namespace EDDiscovery
                 if (line.Contains("[PG] Found matchmaking lobby object"))
                     this.CQC = true;
 
-                int offset = line.IndexOf("} System:") - 9;
-                if (offset >= 0 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
+                int offset = line.IndexOf("} System:") - 8;
+                if (offset >= 1 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
                 {
                     //Console.WriteLine(" RD:" + line );
                     if (line.Contains("ProvingGround"))
                         continue;
 
                     VisitedSystemsClass ps;
-                    if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 11), out ps))
+                    if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 10), out ps))
                     {   // Remove some training systems
                         if (ps.Name.Equals("Training"))
                             continue;
