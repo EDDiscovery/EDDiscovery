@@ -255,7 +255,8 @@ namespace EDDiscovery
             VisitedSystemsClass ps;
             while (sr.ReadNetLogSystem(out ps))
             {
-                if (ps.Name.Equals(VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time).Name, StringComparison.InvariantCultureIgnoreCase))
+                VisitedSystemsClass last = VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time);
+                if (last != null && ps.Name.Equals(last.Name, StringComparison.InvariantCultureIgnoreCase))
                     continue;
 
                 if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
@@ -332,11 +333,16 @@ namespace EDDiscovery
 
         private void ScanTick(object sender, EventArgs e)
         {
+            var timer = sender as System.Windows.Forms.Timer;
+
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
             try
-            { 
-                EliteDangerous.CheckED();
+            {
+                if (EDDConfig.Instance.NetLogDirAutoMode)
+                {
+                    EliteDangerous.CheckED();
+                }
 
                 string filename = null;
                 NetLogFileReader nfi = null;
@@ -370,6 +376,11 @@ namespace EDDiscovery
                         visitedSystems.Add(dbsys);
                         OnNewPosition(dbsys);
                         lastnfi.TravelLogUnit.Update();
+
+                        if (!timer.Enabled)
+                        {
+                            break;
+                        }
                     }
                 }
             }
