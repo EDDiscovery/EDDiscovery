@@ -151,6 +151,8 @@ namespace EDDiscovery
 
         public void RefreshHistory()
         {
+
+
             if (visitedSystems == null || visitedSystems.Count == 0)
             {
                 if (activecommander >= 0)
@@ -165,6 +167,7 @@ namespace EDDiscovery
                 else
                 {
                     visitedSystems = VisitedSystemsClass.GetAll(activecommander);
+                    VisitedSystemsClass.UpdateSys(visitedSystems, EDDConfig.Instance.UseDistances);
                 }
             }
 
