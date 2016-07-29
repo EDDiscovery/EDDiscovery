@@ -255,7 +255,8 @@ namespace EDDiscovery
             VisitedSystemsClass ps;
             while (sr.ReadNetLogSystem(out ps))
             {
-                if (ps.Name.Equals(VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time).Name, StringComparison.InvariantCultureIgnoreCase))
+                VisitedSystemsClass last = VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time);
+                if (last != null && ps.Name.Equals(last.Name, StringComparison.InvariantCultureIgnoreCase))
                     continue;
 
                 if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
