@@ -332,6 +332,8 @@ namespace EDDiscovery
 
         private void ScanTick(object sender, EventArgs e)
         {
+            var timer = sender as System.Windows.Forms.Timer;
+
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
             try
@@ -373,6 +375,11 @@ namespace EDDiscovery
                         visitedSystems.Add(dbsys);
                         OnNewPosition(dbsys);
                         lastnfi.TravelLogUnit.Update();
+
+                        if (!timer.Enabled)
+                        {
+                            break;
+                        }
                     }
                 }
             }
