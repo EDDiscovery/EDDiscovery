@@ -185,6 +185,7 @@
     <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
+    <Compile Include="EliteDangerous\NetLogReader.cs" />
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
       <SubType>Form</SubType>
     </Compile>
