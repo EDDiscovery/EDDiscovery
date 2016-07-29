@@ -335,8 +335,11 @@ namespace EDDiscovery
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
             try
-            { 
-                EliteDangerous.CheckED();
+            {
+                if (EDDConfig.Instance.NetLogDirAutoMode)
+                {
+                    EliteDangerous.CheckED();
+                }
 
                 string filename = null;
                 NetLogFileReader nfi = null;
