@@ -28,7 +28,7 @@ namespace EDDiscovery
         protected bool ParseTime(string time)
         {
             TimeSpan logtime;
-            TimeSpan lasttime = LastLogTime.TimeOfDay;
+            TimeSpan lasttime = (LastLogTime + TimeZoneOffset).TimeOfDay;
             if (TimeSpan.TryParseExact(time, "h\\:mm\\:ss", CultureInfo.InvariantCulture, out logtime))
             {
                 if (logtime.TotalHours >= 0 && logtime.TotalHours < 24)
@@ -70,7 +70,7 @@ namespace EDDiscovery
             return false;
         }
 
-        protected bool ParseVisitedSystem(DateTime time, string line, out VisitedSystemsClass sp)
+        protected bool ParseVisitedSystem(DateTime time, TimeSpan tzoffset, string line, out VisitedSystemsClass sp)
         {
             sp = new VisitedSystemsClass();
 
@@ -160,7 +160,7 @@ namespace EDDiscovery
                     }
                 }
 
-                sp.Time = time;
+                sp.Time = time + tzoffset;
 
                 return true;
             }
@@ -199,7 +199,7 @@ namespace EDDiscovery
                         continue;
 
                     VisitedSystemsClass ps;
-                    if (ParseVisitedSystem(this.LastLogTime, line.Substring(offset + 11), out ps))
+                    if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 11), out ps))
                     {   // Remove some training systems
                         if (ps.Name.Equals("Training"))
                             continue;
@@ -276,7 +276,7 @@ namespace EDDiscovery
                     }
 
                     // Set the start time, timezone info and timezone offset
-                    LastLogTime = localtime;
+                    LastLogTime = localtime - tzoffset;
                     TimeZone = tzi;
                     TimeZoneOffset = tzoffset;
                     TravelLogUnit.type = 1;
