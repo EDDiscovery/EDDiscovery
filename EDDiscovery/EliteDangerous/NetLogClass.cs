@@ -229,7 +229,9 @@ namespace EDDiscovery
             }
             else if (m_travelogUnits.ContainsKey(fi.Name))
             {
-                reader = new NetLogFileReader(m_travelogUnits[fi.Name]);
+                var tlu = m_travelogUnits[fi.Name];
+                tlu.Path = fi.DirectoryName;
+                reader = new NetLogFileReader(tlu);
             }
             else
             {
