@@ -25,11 +25,52 @@ namespace EDDiscovery
         public NetLogFileReader(string filename) : base(filename) { }
         public NetLogFileReader(TravelLogUnit tlu) : base(tlu) { }
 
+        protected void ParseTime(string time)
+        {
+            TimeSpan logtime;
+            TimeSpan lasttime = LastLogTime.TimeOfDay;
+            if (TimeSpan.TryParseExact(time, "h\\:mm\\:ss", CultureInfo.InvariantCulture, out logtime))
+            {
+                if (logtime.TotalHours >= 0 && logtime.TotalHours < 24)
+                {
+                    TimeSpan timedelta = logtime - lasttime;
+                    if (timedelta < TimeSpan.FromHours(-4))
+                    {
+                        // Midnight crossing - add 1 day
+                        timedelta += TimeSpan.FromHours(24);
+                    }
+                    else if (timedelta < TimeSpan.Zero)
+                    {
+                        // Computer time jumped backwards - decrease timezone offset
+                        TimeZoneOffset += timedelta;
+                    }
+                    else if (timedelta > TimeSpan.FromHours(20))
+                    {
+                        // Computer time jumped backwards - decrease timezone offset
+                        timedelta -= TimeSpan.FromHours(24);
+                        TimeZoneOffset += timedelta;
+                    }
+
+                    LastLogTime += timedelta;
+                }
+            }
+        }
+
+        protected void ParseLineTime(string line)
+        {
+            if (line[0] == '{' && line[3] == ':' && line[6] == ':' && line[9] == '}' && line[10] == ' ')
+            {
+                ParseTime(line.Substring(1, 8));
+            }
+        }
+
         public bool ReadNetLogSystem(out VisitedSystemsClass vsc)
         {
             string line;
             while (this.ReadLine(out line))
             {
+                ParseLineTime(line);
+
                 if (line.Contains("[PG] [Notification] Left a playlist lobby"))
                     this.CQC = false;
 
