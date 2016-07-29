@@ -107,7 +107,7 @@ namespace EDDiscovery
                 RefreshHistory();
                 LogText("Refresh Complete." + Environment.NewLine);
 
-                EliteDangerous.CheckED();
+                EliteDangerousClass.CheckED();
             }
             catch (Exception ex)
             {

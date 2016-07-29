@@ -166,7 +166,7 @@ namespace EDDiscovery
         {
             try
             {
-                EliteDangerous.CheckED();
+                EliteDangerousClass.CheckED();
                 EDDConfig.Update();
                 RepositionForm();
                 InitFormControls();
@@ -269,7 +269,7 @@ namespace EDDiscovery
 
         private void CheckIfEliteDangerousIsRunning()
         {
-            if (EliteDangerous.EDRunning)
+            if (EliteDangerousClass.EDRunning)
             {
                 LogLine("EliteDangerous is running.");
             }
@@ -281,10 +281,10 @@ namespace EDDiscovery
 
         private void CheckIfVerboseLoggingIsTurnedOn()
         {
-            if (!EliteDangerous.CheckStationLogging())
+            if (!EliteDangerousClass.CheckStationLogging())
             {
                 LogLineHighlight("Elite Dangerous is not logging system names!!! ");
-                LogLine("Add VerboseLogging =\"1\" to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remember to restart Elite!");
+                LogLine("Add VerboseLogging =\"1\" to <Network  section in File: " + Path.Combine(EliteDangerousClass.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remember to restart Elite!");
                 labelPanelText.Text = "Elite Dangerous is not logging system names!";
                 panelInfo.BackColor = Color.Salmon;
             }
@@ -490,7 +490,7 @@ namespace EDDiscovery
                         travelHistoryControl1.RefreshHistory();
                         //LogLine("Time " + (Environment.TickCount-tickc) );
 
-                        if (EliteDangerous.CheckStationLogging())
+                        if (EliteDangerousClass.CheckStationLogging())
                         {
                             panelInfo.Visible = false;
                         }
@@ -909,8 +909,8 @@ namespace EDDiscovery
         {
             try
             {
-                if (EliteDangerous.EDDirectory != null && !EliteDangerous.EDDirectory.Equals(""))
-                    Process.Start(EliteDangerous.EDDirectory);
+                if (EliteDangerousClass.EDDirectory != null && !EliteDangerousClass.EDDirectory.Equals(""))
+                    Process.Start(EliteDangerousClass.EDDirectory);
 
             }
             catch (Exception ex)

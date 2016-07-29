@@ -161,13 +161,13 @@ namespace EDDiscovery.DB
                     if (jo["population"].Type == JTokenType.Integer)
                         population = jo["population"].Value<long>();
 
-                    government = EliteDangerous.Government2ID(jo["government"]);
-                    allegiance = EliteDangerous.Allegiance2ID(jo["allegiance"]);
+                    government = EliteDangerousClass.Government2ID(jo["government"]);
+                    allegiance = EliteDangerousClass.Allegiance2ID(jo["allegiance"]);
 
-                    state = EliteDangerous.EDState2ID(jo["state"]);
-                    security = EliteDangerous.EDSecurity2ID(jo["security"]);
+                    state = EliteDangerousClass.EDState2ID(jo["state"]);
+                    security = EliteDangerousClass.EDSecurity2ID(jo["security"]);
 
-                    primary_economy = EliteDangerous.EDEconomy2ID(jo["primary_economy"]);
+                    primary_economy = EliteDangerousClass.EDEconomy2ID(jo["primary_economy"]);
 
                     if (jo["needs_permit"].Type == JTokenType.Integer)
                         needs_permit = jo["needs_permit"].Value<int>();

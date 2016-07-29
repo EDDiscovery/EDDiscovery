@@ -64,12 +64,12 @@ namespace EDDiscovery2.DB
 
                 faction = jo["faction"].Value<string>();
 
-                government = EliteDangerous.Government2ID(jo["government"]);
-                allegiance = EliteDangerous.Allegiance2ID(jo["allegiance"]);
+                government = EliteDangerousClass.Government2ID(jo["government"]);
+                allegiance = EliteDangerousClass.Allegiance2ID(jo["allegiance"]);
 
-                state = EliteDangerous.EDState2ID(jo["state"]);
+                state = EliteDangerousClass.EDState2ID(jo["state"]);
 
-                stationtype = EliteDangerous.EDStationType2ID(jo["type"]);
+                stationtype = EliteDangerousClass.EDStationType2ID(jo["type"]);
 
                 if (jo["has_blackmarket"].Type == JTokenType.Integer)
                     has_blackmarket = jo["has_blackmarket"].Value<int>();
@@ -106,10 +106,10 @@ namespace EDDiscovery2.DB
                 else
                     has_shipyard = -1;
 
-                economies = EliteDangerous.EDEconomies2ID((JArray)jo["economies"]);
-                import_commodities = EliteDangerous.EDCommodities2ID((JArray)jo["import_commodities"]);
-                export_commodities = EliteDangerous.EDCommodities2ID((JArray)jo["export_commodities"]);
-                prohibited_commodities = EliteDangerous.EDCommodities2ID((JArray)jo["prohibited_commodities"]);
+                economies = EliteDangerousClass.EDEconomies2ID((JArray)jo["economies"]);
+                import_commodities = EliteDangerousClass.EDCommodities2ID((JArray)jo["import_commodities"]);
+                export_commodities = EliteDangerousClass.EDCommodities2ID((JArray)jo["export_commodities"]);
+                prohibited_commodities = EliteDangerousClass.EDCommodities2ID((JArray)jo["prohibited_commodities"]);
                 eddb_updated_at = jo["updated_at"].Value<int>();
 
             }
