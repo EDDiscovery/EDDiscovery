@@ -138,6 +138,7 @@ namespace EDDiscovery
                     else
                     {
                         System.Diagnostics.Trace.WriteLine("System parse error 1:" + line);
+                        return false;
                     }
 
                 }
@@ -157,6 +158,7 @@ namespace EDDiscovery
                     else
                     {
                         System.Diagnostics.Trace.WriteLine("System parse error 2:" + line);
+                        return false;
                     }
                 }
 
@@ -191,7 +193,7 @@ namespace EDDiscovery
                 if (line.Contains("[PG] Found matchmaking lobby object"))
                     this.CQC = true;
 
-                int offset = line.IndexOf("} System:") - 9;
+                int offset = line.IndexOf("} System:") - 8;
                 if (offset >= 0 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
                 {
                     //Console.WriteLine(" RD:" + line );
@@ -199,7 +201,7 @@ namespace EDDiscovery
                         continue;
 
                     VisitedSystemsClass ps;
-                    if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 11), out ps))
+                    if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 10), out ps))
                     {   // Remove some training systems
                         if (ps.Name.Equals("Training"))
                             continue;
