@@ -167,7 +167,10 @@ User notes created by UI.
 Linked to journal entries by the `JournalEntryId` column
 Linked to system by the `SystemEdsmId` column (may be Null if no EDSM star)
 
-RJP - linked to journal ID fine, presume always a FSDJump entry, we should state.  Why link to EDSM? just for ease?
+RJP Q: linked to journal ID fine, presume always a FSDJump entry, we should state.  Why link to EDSM? just for ease?
+
+A: System notes from EDSM are not linked to any one travel entry, but are instead linked to a system.
+We can rename this to simply `Notes`, and have it be a general purpose note store.  Notes on systems would be linked by EDSM ID and/or the FSDJump / Location journal entry on which it was entered.  Notes on journal entries would not be linked to any system, but conversely would also not be uploaded to EDSM.
 
 Migrated from the [`EDDiscovery.SystemNote`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systemnote) table
 
