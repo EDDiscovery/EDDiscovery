@@ -5,7 +5,7 @@ This database contains user settings, journal entries, saved routes, etc.
 ## Register
 ```
 CREATE TABLE Register (
-  ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , 
+  ID TEXT PRIMARY KEY NOT NULL, 
   "ValueInt" INTEGER, 
   "ValueDouble" DOUBLE, 
   "ValueString" TEXT, 
