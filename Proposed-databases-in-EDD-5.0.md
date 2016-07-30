@@ -13,6 +13,8 @@ CREATE TABLE Register (
 )
 ```
 
+Migrated from [EDDiscovery.register](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#register) table
+
 ## Commanders
 ```
 CREATE TABLE Commanders (
@@ -22,6 +24,8 @@ CREATE TABLE Commanders (
   EDSMApiKey TEXT
 )
 ```
+
+Migrated from `EDCommander*` settings in register table
 
 ## Journals
 ```
@@ -36,6 +40,8 @@ CREATE TABLE Journals (
 CREATE INDEX Journal_Name ON Journals (Name)
 CREATE INDEX Journal_Commander ON Journals (CommanderId)
 ```
+
+Migrated from [`EDDiscovery.TravelLogUnit`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#travellogunit) table
 
 Type:
 * `NetLog`: travel log is a netlog
@@ -59,6 +65,8 @@ CREATE INDEX JournalEntry_EventTime ON JournalEntries (EventTime)
 CREATE INDEX JournalEntry_CommanderId ON JournalEntries (CommanderId)
 ```
 
+This table contains entries from the journal or converted entries from the pre-2.2 netlogs.
+
 ## JournalProperties
 ```
 CREATE TABLE JournalProperties (
@@ -77,6 +85,8 @@ CREATE INDEX JournalProperty_PropertyName ON JournalProperties (PropertyName)
 CREATE INDEX JournalProperty_Coords ON JournalProperties (CoordZ, CoordX, CoordY)
 ```
 
+This table contains data from the journal entries.
+
 ## SavedRoutes
 ```
 CREATE TABLE SavedRoutes (
@@ -86,6 +96,8 @@ CREATE TABLE SavedRoutes (
   End DATETIME
 )
 ```
+
+Migrated from the [`EDDiscovery.routes_expeditions`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#route_expeditions) table
 
 ## SavedRouteEntries
 ```
@@ -98,6 +110,8 @@ CREATE TABLE SavedRouteEntries (
 )
 ```
 
+Migrated from the [`EDDiscovery.route_systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#route_systems) table
+
 ## WantedSystems
 ```
 CREATE TABLE WantedSystems (
@@ -107,6 +121,8 @@ CREATE TABLE WantedSystems (
 )
 CREATE INDEX WantedSystem_EdsmId ON WantedSystems (SystemEdsmId)
 ```
+
+Migrated from the [`EDDiscovery.wanted_systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#wanted_systems) table
 
 ## SystemNotes
 ```
@@ -127,6 +143,8 @@ User notes created by UI.
 Linked to journal entries by the `JournalEntryId` column
 Linked to system by the `SystemEdsmId` column
 
+Migrated from the [`EDDiscovery.SystemNote`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systemnote) table
+
 ## Bookmarks
 ```
 CREATE TABLE Bookmarks (
@@ -141,6 +159,8 @@ CREATE TABLE Bookmarks (
   Note TEXT
 )
 ```
+
+Migrated from the `EDDiscovery.Bookmarks` table
 
 # EDDSystems
 
@@ -162,6 +182,8 @@ CREATE INDEX System_EdsmId ON System (SystemEdsmId)
 CREATE INDEX System_Coords ON System (Z, X, Y)
 ```
 
+Migrated from the [`EDDiscovery.Systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systems) table
+
 ## SystemAliases
 ```
 CREATE TABLE SystemAliases (
@@ -173,6 +195,8 @@ CREATE TABLE SystemAliases (
 CREATE INDEX SystemAlias_EdsmId ON SystemAliases (EdsmId)
 CREATE INDEX SystemAlias_MergedTo ON SystemAliases (MergedToEdsmId)
 ```
+
+Migrated from the `EDDiscovery.SystemAliases` table
 
 ## EddbSystems
 ```
@@ -196,3 +220,5 @@ CREATE TABLE EddbSystems (
 CREATE INDEX EddbSystem_SystemId ON EddbSystems (SystemId)
 CREATE INDEX EddbSystem_SystemEddbId ON EddbSystems (SystemEddbId)
 ```
+
+Migrated from the [`EDDiscovery.Systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systems) table
