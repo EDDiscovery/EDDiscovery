@@ -67,10 +67,16 @@ CREATE INDEX JournalEntry_CommanderId ON JournalEntries (CommanderId)
 
 This table contains entries from the journal or converted entries from the pre-2.2 netlogs.
 
-TBD: Robby we read in this to an memory array? Do we expand out the properties of these into the memory array? For instance, the FSDJump entry, do we have x/y/z name as the decoded FSD entry in the class?  Do we have to parse it every time we need it (a lot) or do we parse one and extract data..
+TBD: Q Robby: we read in this to an memory array? Do we expand out the properties of these into the memory array? For instance, the FSDJump entry, do we have x/y/z name as the decoded FSD entry in the class?  Do we have to parse it every time we need it (a lot) or do we parse one and extract data..
 
-Secondly, how is it assigned to an EDSM Star. We have to match on name+XYZ.  Without name and XYZ exposed in the record we can't do that with a JOIN ON.. like your doing at the moment.  Where do we keep the EDSM ID? Are we going to bury it in the JSON string (I would not, i think the string should be as is frontier provide it).  Are we using the JournalProperties for a FSD jump to do the match..
+A: The properties that we want to index on or join on, such as X/Y/Z, get processed and inserted into `JournalProperties`
 
+Q: Secondly, how is it assigned to an EDSM Star. We have to match on name+XYZ.  Without name and XYZ exposed in the record we can't do that with a JOIN ON.. like your doing at the moment.  Where do we keep the EDSM ID? Are we going to bury it in the JSON string (I would not, i think the string should be as is frontier provide it).  Are we using the JournalProperties for a FSD jump to do the match..
+
+A: 
+* X/Y/Z would be stored in the `StarPos` JournalProperties entry linked to the `FSDJump` or `Location` entry.
+* The EDSM ID can be stored in an `EDSM-ID` JournalProperties entry.
+* Joining should be not be appreciably slower matching on the X/Y/Z values where `JournalProperties.PropertyName='StarPos'` than it is with the X/Y/Z values stored directly on the `JournalEntry`.
 
 ## JournalProperties
 ```
@@ -92,7 +98,19 @@ CREATE INDEX JournalProperty_Coords ON JournalProperties (CoordZ, CoordX, CoordY
 
 This table contains data from the journal entries.
 
-TBD Robby you need to describe what some of these fields mean. (propertyArrayIndex).  Are you proposing to one time on journal entry decode the JSON and make an array of these.. are we doing it for every entry? (thats lots of data considering we will probably only use a few entries at the start)..
+* `PropertyName`: The name of the key in the journal entry JSON
+* `SubPropertyName`: Used for `Materials` or `Killers` properties
+* `PropertyArrayIndex`: Used for array properties such as `Killers` or `Discovered`
+* `ValueNumber`: The numeric value of the property
+* `ValueString`: The string value of the property
+* `CoordX`: X coordinate (used by `StarPos`)
+* `CoordY`: Y coordinate (used by `StarPos`)
+* `CoordZ`: Z coordinate (used by `StarPos`)
+
+Q: Robby: you need to describe what some of these fields mean. (propertyArrayIndex).  Are you proposing to one time on journal entry decode the JSON and make an array of these.. are we doing it for every entry? (thats lots of data considering we will probably only use a few entries at the start)..
+
+A: We only need to store values for properties we want to index on or join on (such as StarPos, SystemName, EDSM ID, etc.)
+
 ## SavedRoutes
 ```
 CREATE TABLE SavedRoutes (
