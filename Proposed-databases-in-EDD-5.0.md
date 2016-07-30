@@ -6,10 +6,10 @@ This database contains user settings, journal entries, saved routes, etc.
 ```
 CREATE TABLE Register (
   ID TEXT PRIMARY KEY NOT NULL, 
-  "ValueInt" INTEGER, 
-  "ValueDouble" DOUBLE, 
-  "ValueString" TEXT, 
-  "ValueBlob" BLOB
+  ValueInt INTEGER, 
+  ValueDouble DOUBLE, 
+  ValueString TEXT, 
+  ValueBlob BLOB
 )
 ```
 
