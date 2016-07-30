@@ -33,6 +33,8 @@ CREATE TABLE Journal (
   Path TEXT COLLATE NOCASE,
   Size INTEGER
 )
+CREATE INDEX Journal_Name ON Journal (Name)
+CREATE INDEX Journal_Commander ON Journal (CommanderId)
 ```
 
 Type:
@@ -51,6 +53,10 @@ CREATE TABLE JournalEntry (
   CommanderId INTEGER NOT NULL REFERENCES Commander (Id),
   Synced INTEGER
 )
+CREATE INDEX JournalEntry_JournalId ON JournalEntry (JournalId)
+CREATE INDEX JournalEntry_EventType ON JournalEntry (EventType)
+CREATE INDEX JournalEntry_EventTime ON JournalEntry (EventTime)
+CREATE INDEX JournalEntry_CommanderId ON JournalEntry (CommanderId)
 ```
 
 ## JournalProperty
@@ -67,6 +73,8 @@ CREATE TABLE JournalProperty (
   CoordY DOUBLE,
   CoordZ DOUBLE
 )
+CREATE INDEX JournalProperty_PropertyName ON JournalProperty (PropertyName)
+CREATE INDEX JournalProperty_Coords ON JournalProperty (CoordZ, CoordX, CoordY)
 ```
 
 ## SavedRoute
@@ -96,6 +104,7 @@ CREATE TABLE WantedSystem (
   SystemName TEXT NOT NULL COLLATE NOCASE,
   SystemEdsmId INTEGER
 )
+CREATE INDEX WantedSystem_EdsmId ON WantedSystem (SystemEdsmId)
 ```
 
 ## SystemNote
@@ -134,6 +143,7 @@ CREATE TABLE System (
 )
 CREATE INDEX System_Name ON System (Name)
 CREATE INDEX System_EdsmId ON System (SystemEdsmId)
+CREATE INDEX System_Coords ON System (Z, X, Y)
 ```
 
 ## EddbSystem
@@ -155,4 +165,6 @@ CREATE TABLE EddbSystem (
   Population INTEGER,
   LastUpdated DATETIME
 )
+CREATE INDEX EddbSystem_SystemId ON EddbSystem (SystemId)
+CREATE INDEX EddbSystem_SystemEddbId ON EddbSystem (SystemEddbId)
 ```
