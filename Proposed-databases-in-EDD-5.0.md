@@ -122,11 +122,14 @@ CREATE TABLE JournalFSDJumps (
   Y DOUBLE,
   Z DOUBLE
 )
+CREATE INDEX JournalFSDJumps_Coords ON JournalFSDJumps (Z,X,Y)
+CREATE INDEX JournalFSDJumps_Name ON JournalFSDJumps (Name)
+CREATE INDEX JournalFSDJumps_EdsmId ON JournalFSDJumps (SystemEdsmId)
 ```
 
 Used for fast system matching
 
-Migrated from [`EDDUser.JournalFSDJumps`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#visitedsystems)
+Migrated from [`EDDiscovery.VisitedSystems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#visitedsystems)
 
 ## SavedRoutes
 ```
