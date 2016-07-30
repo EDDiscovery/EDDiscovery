@@ -137,6 +137,8 @@ id_edsm is used for matching against the EDSM JSON file and update.  It is also 
 
 FirstDiscovery is not in use
 
+
+# TravelLogUnit
 ```
 CREATE TABLE TravelLogUnit(
   id INTEGER PRIMARY KEY  NOT NULL,
