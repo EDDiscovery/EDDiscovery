@@ -41,7 +41,7 @@ CREATE INDEX Journal_Name ON Journals (Name)
 CREATE INDEX Journal_Commander ON Journals (CommanderId)
 ```
 
-Migrated from [`EDDiscovery.TravelLogUnit`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#travellogunit) table
+Migrated from [`EDDiscovery.TravelLogUnit`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#travellogunit) table.
 
 Type:
 * `NetLog`: travel log is a netlog
@@ -55,7 +55,7 @@ CREATE TABLE JournalEntries (
   JournalId INTEGER NOT NULL REFERENCES Journals (Id),
   EventType TEXT NOT NULL,
   EventTime DATETIME NOT NULL,
-  EventData TEXT,
+  EventData TEXT, # JSON String of complete line
   CommanderId INTEGER NOT NULL REFERENCES Commanders (Id),
   Synced INTEGER
 )
@@ -66,6 +66,11 @@ CREATE INDEX JournalEntry_CommanderId ON JournalEntries (CommanderId)
 ```
 
 This table contains entries from the journal or converted entries from the pre-2.2 netlogs.
+
+TBD: Robby we read in this to an memory array? Do we expand out the properties of these into the memory array? For instance, the FSDJump entry, do we have x/y/z name as the decoded FSD entry in the class?  Do we have to parse it every time we need it (a lot) or do we parse one and extract data..
+
+Secondly, how is it assigned to an EDSM Star. We have to match on name+XYZ.  Without name and XYZ exposed in the record we can't do that with a JOIN ON.. like your doing at the moment.  Where do we keep the EDSM ID? Are we going to bury it in the JSON string (I would not, i think the string should be as is frontier provide it).  Are we using the JournalProperties for a FSD jump to do the match..
+
 
 ## JournalProperties
 ```
@@ -87,6 +92,7 @@ CREATE INDEX JournalProperty_Coords ON JournalProperties (CoordZ, CoordX, CoordY
 
 This table contains data from the journal entries.
 
+TBD Robby you need to describe what some of these fields mean. (propertyArrayIndex).  Are you proposing to one time on journal entry decode the JSON and make an array of these.. are we doing it for every entry? (thats lots of data considering we will probably only use a few entries at the start)..
 ## SavedRoutes
 ```
 CREATE TABLE SavedRoutes (
@@ -141,7 +147,9 @@ CREATE INDEX SystemNote_JournalEntryId ON SystemNotes (JournalEntryId)
 
 User notes created by UI.
 Linked to journal entries by the `JournalEntryId` column
-Linked to system by the `SystemEdsmId` column
+Linked to system by the `SystemEdsmId` column (may be Null if no EDSM star)
+
+RJP - linked to journal ID fine, presume always a FSDJump entry, we should state.  Why link to EDSM? just for ease?
 
 Migrated from the [`EDDiscovery.SystemNote`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systemnote) table
 
@@ -159,12 +167,17 @@ CREATE TABLE Bookmarks (
   Note TEXT
 )
 ```
+Linked to system by the `SystemEdsmId` column (may be Null if no EDSM star)
+StarName = null then Heading is set, region mark
+StarName != null then heading is null, bookmark
 
-Migrated from the `EDDiscovery.Bookmarks` table
+Migrated from the `EDDiscovery.Bookmarks` table. 
 
 # EDDSystems
 
-Contains data downloaded from EDSM, EDDB, etc.
+Contains data downloaded from EDSM only TBD Robby Edit.
+
+TBD Robby - change to EDSM systems..?
 
 ## Systems
 ```
@@ -220,5 +233,6 @@ CREATE TABLE EddbSystems (
 CREATE INDEX EddbSystem_SystemId ON EddbSystems (SystemId)
 CREATE INDEX EddbSystem_SystemEddbId ON EddbSystems (SystemEddbId)
 ```
+Linked to a EDSM system entry by SystemId.
 
 Migrated from the [`EDDiscovery.Systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systems) table
