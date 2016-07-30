@@ -124,7 +124,7 @@ Contains data downloaded from EDSM, EDDB, etc.
 ```
 CREATE TABLE System (
   Id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-  SystemEdsmId INTEGER,
+  SystemEdsmId INTEGER NOT NULL UNIQUE,
   Name TEXT NOT NULL COLLATE NOCASE,
   LastUpdated DATETIME,
   X DOUBLE,
@@ -140,7 +140,7 @@ CREATE INDEX System_EdsmId ON System (SystemEdsmId)
 CREATE TABLE EddbSystem (
   Id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
   SystemId INTEGER NOT NULL REFERENCES System (Id),
-  SystemEddbId INTEGER NOT NULL,
+  SystemEddbId INTEGER NOT NULL UNIQUE,
   Faction TEXT,
   Government TEXT,
   Allegiance TEXT,
