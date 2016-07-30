@@ -198,6 +198,8 @@ Migrated from the `EDDiscovery.Bookmarks` table.
 
 Contains data downloaded from EDSM only TBD Robby Edit.
 
+klightspeed: If we are only wanting EDSM data, then do we not want the `EddbSystem` table below?
+
 TBD Robby - change to EDSM systems..?
 
 ## Systems
