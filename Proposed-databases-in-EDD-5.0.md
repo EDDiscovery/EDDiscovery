@@ -111,6 +111,23 @@ Q: Robby: you need to describe what some of these fields mean. (propertyArrayInd
 
 A: We only need to store values for properties we want to index on or join on (such as StarPos, SystemName, EDSM ID, etc.)
 
+## JournalFSDJumps
+```
+CREATE TABLE JournalFSDJumps (
+  Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  JournalEntryId INTEGER NOT NULL REFERENCES JournalEntry (Id),
+  SystemEdsmId INTEGER,
+  Name TEXT NOT NULL,
+  X DOUBLE,
+  Y DOUBLE,
+  Z DOUBLE
+)
+```
+
+Used for fast system matching
+
+Migrated from [`EDDUser.JournalFSDJumps`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#visitedsystems)
+
 ## SavedRoutes
 ```
 CREATE TABLE SavedRoutes (
