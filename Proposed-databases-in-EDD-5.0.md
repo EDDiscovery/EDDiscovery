@@ -13,24 +13,6 @@ CREATE TABLE Register (
 )
 ```
 
-## SystemNote
-```
-CREATE TABLE SystemNote (
-  id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, 
-  SystemName TEXT NOT NULL COLLATE NOCASE,
-  SystemEdsmId INTEGER,
-  JournalEntryId INTEGER REFERENCES JournalEntry (Id),
-  Time DATETIME NOT NULL, 
-  Note TEXT
-)
-CREATE INDEX SystemNote_SystemName ON SystemNote (SystemName)
-CREATE INDEX SystemNote_JournalEntryId ON SystemNote (JournalEntryId)
-```
-
-User notes created by UI.
-Linked to journal entries by the `JournalEntryId` column
-Linked to system by the `SystemEdsmId` column
-
 ## Commander
 ```
 CREATE TABLE Commander (
@@ -115,6 +97,25 @@ CREATE TABLE WantedSystem (
   SystemEdsmId INTEGER
 )
 ```
+
+## SystemNote
+```
+CREATE TABLE SystemNote (
+  id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, 
+  SystemName TEXT NOT NULL COLLATE NOCASE,
+  SystemEdsmId INTEGER,
+  JournalEntryId INTEGER REFERENCES JournalEntry (Id),
+  Time DATETIME NOT NULL, 
+  Note TEXT
+)
+CREATE INDEX SystemNote_SystemName ON SystemNote (SystemName)
+CREATE INDEX SystemNote_EdsmId ON SystemNote (SystemEdsmId)
+CREATE INDEX SystemNote_JournalEntryId ON SystemNote (JournalEntryId)
+```
+
+User notes created by UI.
+Linked to journal entries by the `JournalEntryId` column
+Linked to system by the `SystemEdsmId` column
 
 # EDDSystems
 
