@@ -204,7 +204,7 @@ TBD Robby - change to EDSM systems..?
 
 ## Systems
 ```
-CREATE TABLE Systems (
+CREATE TABLE EdsmSystems (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   SystemEdsmId INTEGER NOT NULL UNIQUE,
   Name TEXT NOT NULL COLLATE NOCASE,
@@ -213,9 +213,9 @@ CREATE TABLE Systems (
   Y DOUBLE,
   Z DOUBLE
 )
-CREATE INDEX System_Name ON System (Name)
-CREATE INDEX System_EdsmId ON System (SystemEdsmId)
-CREATE INDEX System_Coords ON System (Z, X, Y)
+CREATE INDEX EdsmSystem_Name ON EdsmSystems (Name)
+CREATE INDEX EdsmSystem_EdsmId ON EdsmSystems (SystemEdsmId)
+CREATE INDEX EdsmSystem_Coords ON EdsmSystems (Z, X, Y)
 ```
 
 Migrated from the [`EDDiscovery.Systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systems) table
@@ -238,7 +238,7 @@ Migrated from the `EDDiscovery.SystemAliases` table
 ```
 CREATE TABLE EddbSystems (
   Id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-  SystemId INTEGER NOT NULL REFERENCES Systems (Id),
+  SystemEdsmId INTEGER NOT NULL REFERENCES EdsmSystems (SystemEdsmId),
   SystemEddbId INTEGER NOT NULL UNIQUE,
   Faction TEXT,
   Government TEXT,
@@ -253,9 +253,9 @@ CREATE TABLE EddbSystems (
   Population INTEGER,
   LastUpdated DATETIME
 )
-CREATE INDEX EddbSystem_SystemId ON EddbSystems (SystemId)
+CREATE INDEX EddbSystem_SystemEdsmId ON EddbSystems (SystemEdsmId)
 CREATE INDEX EddbSystem_SystemEddbId ON EddbSystems (SystemEddbId)
 ```
-Linked to a EDSM system entry by SystemId.
+Linked to a EDSM system entry by SystemEdsmId.
 
 Migrated from the [`EDDiscovery.Systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systems) table
