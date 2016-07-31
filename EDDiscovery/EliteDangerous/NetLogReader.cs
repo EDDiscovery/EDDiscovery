@@ -194,18 +194,21 @@ namespace EDDiscovery
             {
                 ParseLineTime(line);
 
-                if (line.Contains("[PG] [Notification] Left a playlist lobby"))
-                    this.CQC = false;
+                if (line.Contains("[PG]"))
+                {
+                    if (line.Contains("[PG] [Notification] Left a playlist lobby"))
+                        this.CQC = false;
 
-                if (line.Contains("[PG] Destroying playlist lobby."))
-                    this.CQC = false;
+                    if (line.Contains("[PG] Destroying playlist lobby."))
+                        this.CQC = false;
 
-                if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
-                    this.CQC = true;
-                if (line.Contains("[PG] Created playlist lobby"))
-                    this.CQC = true;
-                if (line.Contains("[PG] Found matchmaking lobby object"))
-                    this.CQC = true;
+                    if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
+                        this.CQC = true;
+                    if (line.Contains("[PG] Created playlist lobby"))
+                        this.CQC = true;
+                    if (line.Contains("[PG] Found matchmaking lobby object"))
+                        this.CQC = true;
+                }
 
                 int offset = line.IndexOf("} System:") - 8;
                 if (offset >= 1 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
