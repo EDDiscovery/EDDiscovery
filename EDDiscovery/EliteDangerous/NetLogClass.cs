@@ -343,7 +343,7 @@ namespace EDDiscovery
             {
                 if (EDDConfig.Instance.NetLogDirAutoMode)
                 {
-                    EliteDangerous.CheckED();
+                    EliteDangerousClass.CheckED();
                 }
 
                 string filename = null;

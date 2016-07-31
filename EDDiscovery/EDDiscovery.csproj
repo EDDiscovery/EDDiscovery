@@ -184,8 +184,14 @@
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
-    <Compile Include="EliteDangerous\EDJournal.cs" />
-    <Compile Include="EliteDangerous\JournalEvent.cs" />
+    <Compile Include="EliteDangerous\EDJournalClass.cs" />
+    <Compile Include="EliteDangerous\EDJournalReader.cs" />
+    <Compile Include="EliteDangerous\JournalEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalUnhandled.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalUnknown.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
@@ -252,7 +258,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ComboBoxCustom.cs">
-      <SubType>Component</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\ListControlCustom.cs">
       <SubType>Component</SubType>
