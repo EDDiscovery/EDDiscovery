@@ -27,7 +27,6 @@ namespace EDDiscovery
         FileSystemWatcher m_Watcher;
         ConcurrentQueue<string> m_netLogFileQueue;
         System.Windows.Forms.Timer m_scantimer;
-        Dictionary<string, TravelLogUnit> m_travelogUnits;
 
         NetLogFileReader lastnfi = null;          // last one read..
 
@@ -35,7 +34,6 @@ namespace EDDiscovery
 
         public NetLogClass(EDDiscoveryForm ds)
         {
-            m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
         }
 
         public string GetNetLogPath()
@@ -148,6 +146,7 @@ namespace EDDiscovery
             List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(EDDConfig.Instance.CurrentCmdrID);
 
             List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
+            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
 
             if (vsSystemsList != null)
             {
@@ -220,14 +219,14 @@ namespace EDDiscovery
         private NetLogFileReader OpenFileReader(FileInfo fi)
         {
             NetLogFileReader reader;
+            TravelLogUnit tlu;
 
             if (netlogreaders.ContainsKey(fi.Name))
             {
                 reader = netlogreaders[fi.Name];
             }
-            else if (m_travelogUnits.ContainsKey(fi.Name))
+            else if (TravelLogUnit.TryGet(fi.Name, out tlu))
             {
-                var tlu = m_travelogUnits[fi.Name];
                 tlu.Path = fi.DirectoryName;
                 reader = new NetLogFileReader(tlu);
                 netlogreaders[fi.Name] = reader;
@@ -235,7 +234,6 @@ namespace EDDiscovery
             else
             {
                 reader = new NetLogFileReader(fi.FullName);
-                m_travelogUnits[fi.Name] = reader.TravelLogUnit;
                 netlogreaders[fi.Name] = reader;
             }
 
@@ -357,15 +355,18 @@ namespace EDDiscovery
                 }
                 else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
                 {
-                    string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories).OrderBy(s => Path.GetFileName(s).ToLower()).ToArray();
+                    HashSet<string> travellogs = new HashSet<string>(TravelLogUnit.GetAllNames());
+                    string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories)
+                                                  .Select(s => new { name = Path.GetFileName(s), fullname = s })
+                                                  .Where(s => !travellogs.Contains(s.name))
+                                                  .OrderBy(s => s.name)
+                                                  .Select(s => s.fullname)
+                                                  .ToArray();
                     foreach (var name in filenames)
                     {
-                        if (!m_travelogUnits.ContainsKey(Path.GetFileName(name)))
-                        {
-                            nfi = OpenFileReader(new FileInfo(name));
-                            lastnfi = nfi;
-                            break;
-                        }
+                        nfi = OpenFileReader(new FileInfo(name));
+                        lastnfi = nfi;
+                        break;
                     }
                 }
 
