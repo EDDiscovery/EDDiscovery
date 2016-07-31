@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using EDDiscovery2.DB;
 using System.IO;
+using EDDiscovery2;
 
 namespace EDDiscovery
 {
@@ -13,6 +14,12 @@ namespace EDDiscovery
     {
         // Header line regular expression
         private static Regex netlogHeaderRe = new Regex(@"^(?<Localtime>\d\d-\d\d-\d\d-\d\d:\d\d) (?<Timezone>.*) [(](?<GMT>\d\d:\d\d) GMT[)]");
+
+        // Public release date of Elite: Dangerous
+        DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
+
+        // Cached list of previous travel log entries
+        protected List<VisitedSystemsClass> systems;
 
         // Close Quarters Combat
         public bool CQC { get; set; }
@@ -22,8 +29,15 @@ namespace EDDiscovery
         public TimeZoneInfo TimeZone { get; set; }
         public TimeSpan TimeZoneOffset { get; set; }
 
-        public NetLogFileReader(string filename) : base(filename) { }
-        public NetLogFileReader(TravelLogUnit tlu) : base(tlu) { }
+        public NetLogFileReader(string filename) : base(filename)
+        {
+            systems = new List<VisitedSystemsClass>();
+        }
+
+        public NetLogFileReader(TravelLogUnit tlu) : base(tlu)
+        {
+            systems = VisitedSystemsClass.GetAll(tlu);
+        }
 
         protected bool ParseTime(string time)
         {
@@ -288,6 +302,48 @@ namespace EDDiscovery
             }
 
             return false;
+        }
+
+        public IEnumerable<VisitedSystemsClass> ReadSystems()
+        {
+            VisitedSystemsClass last = null;
+            long startpos = filePos;
+
+            if (TimeZone == null)
+            {
+                if (!ReadHeader())  // may be empty if we read it too fast.. don't worry, monitor will pick it up
+                {
+                    System.Diagnostics.Trace.WriteLine("File was empty (for now) " + FileName);
+                    yield break;
+                }
+            }
+
+            VisitedSystemsClass ps;
+            while (ReadNetLogSystem(out ps))
+            {
+                if (last == null)
+                {
+                    if (systems.Count == 0)
+                    {
+                        last = VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time);
+                    }
+                    else
+                    {
+                        last = systems[systems.Count - 1];
+                    }
+                }
+
+                if (last != null && ps.Name.Equals(last.Name, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
+                if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
+                {
+                    systems.Add(ps);
+                    yield return ps;
+                }
+            }
+
+            Console.WriteLine("Parse ReadData " + FileName + " from " + startpos + " to " + filePos);
         }
     }
 }

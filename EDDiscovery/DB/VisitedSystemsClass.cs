@@ -222,6 +222,26 @@ namespace EDDiscovery2.DB
             }
         }
 
+        public static List<VisitedSystemsClass> GetAll(TravelLogUnit tlu)
+        {
+            List<VisitedSystemsClass> vsc = new List<VisitedSystemsClass>();
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM VisitedSystems WHERE Source = @source ORDER BY Time ASC"))
+                {
+                    cmd.AddParameterWithValue("@source", tlu.id);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            vsc.Add(new VisitedSystemsClass(reader));
+                        }
+                    }
+                }
+            }
+            return vsc;
+        }
+
         static public VisitedSystemsClass GetLast()
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
