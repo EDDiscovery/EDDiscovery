@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Data.Common;
 
 namespace EDDiscovery
 {
@@ -169,44 +170,49 @@ namespace EDDiscovery
             // order by file write time so we end up on the last one written
             FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.LastWriteTime).ToArray();
 
-            for (int i = 0; i < allFiles.Length; i++)
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
             {
-                FileInfo fi = allFiles[i];
-
-                lastnfi = OpenFileReader(fi);
-
-                if (lastnfi.TimeZone == null)
+                for (int i = 0; i < allFiles.Length; i++)
                 {
-                    lastnfi.ReadHeader();
-                }
+                    FileInfo fi = allFiles[i];
 
-                if (!m_travelogUnits.ContainsKey(lastnfi.TravelLogUnit.Name))
-                {
-                    m_travelogUnits[lastnfi.TravelLogUnit.Name] = lastnfi.TravelLogUnit;
-                    lastnfi.TravelLogUnit.Add();
-                }
+                    lastnfi = OpenFileReader(fi);
 
-                if (!netlogreaders.ContainsKey(lastnfi.TravelLogUnit.Name))
-                {
-                    netlogreaders[lastnfi.TravelLogUnit.Name] = lastnfi;
-                }
-
-                if (lastnfi.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
-                {
-                    foreach (VisitedSystemsClass ps in lastnfi.ReadSystems())
+                    if (lastnfi.TimeZone == null)
                     {
-                        if (!VisitedSystemsClass.Exist(ps.Name, ps.Time))
-                        {
-                            ps.EDSM_sync = false;
-                            ps.MapColour = defaultMapColour;
-                            ps.Commander = EDDConfig.Instance.CurrentCmdrID;
-
-                            ps.Add();
-                            visitedSystems.Add(ps);
-                        }
+                        lastnfi.ReadHeader();
                     }
 
-                    lastnfi.TravelLogUnit.Update();
+                    if (!m_travelogUnits.ContainsKey(lastnfi.TravelLogUnit.Name))
+                    {
+                        m_travelogUnits[lastnfi.TravelLogUnit.Name] = lastnfi.TravelLogUnit;
+                        lastnfi.TravelLogUnit.Add();
+                    }
+
+                    if (!netlogreaders.ContainsKey(lastnfi.TravelLogUnit.Name))
+                    {
+                        netlogreaders[lastnfi.TravelLogUnit.Name] = lastnfi;
+                    }
+
+                    if (lastnfi.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
+                    {
+                        using (DbTransaction tn = cn.BeginTransaction())
+                        {
+                            foreach (VisitedSystemsClass ps in lastnfi.ReadSystems())
+                            {
+                                ps.EDSM_sync = false;
+                                ps.MapColour = defaultMapColour;
+                                ps.Commander = EDDConfig.Instance.CurrentCmdrID;
+
+                                ps.Add(cn, tn);
+                                visitedSystems.Add(ps);
+                            }
+
+                            lastnfi.TravelLogUnit.Update(cn, tn);
+
+                            tn.Commit();
+                        }
+                    }
                 }
             }
 
