@@ -74,9 +74,10 @@ A: The properties that we want to index on or join on, such as X/Y/Z, get proces
 Q: Secondly, how is it assigned to an EDSM Star. We have to match on name+XYZ.  Without name and XYZ exposed in the record we can't do that with a JOIN ON.. like your doing at the moment.  Where do we keep the EDSM ID? Are we going to bury it in the JSON string (I would not, i think the string should be as is frontier provide it).  Are we using the JournalProperties for a FSD jump to do the match..
 
 A: 
-* X/Y/Z would be stored in the `StarPos` JournalProperties entry linked to the `FSDJump` or `Location` entry.
-* The EDSM ID can be stored in an `EDSM-ID` JournalProperties entry.
-* Joining should be not be appreciably slower matching on the X/Y/Z values where `JournalProperties.PropertyName='StarPos'` than it is with the X/Y/Z values stored directly on the `JournalEntry`.
+* ~~X/Y/Z would be stored in the `StarPos` JournalProperties entry linked to the `FSDJump` or `Location` entry.~~
+* ~~The EDSM ID can be stored in an `EDSM-ID` JournalProperties entry.~~
+* ~~Joining should be not be appreciably slower matching on the X/Y/Z values where `JournalProperties.PropertyName='StarPos'` than it is with the X/Y/Z values stored directly on the `JournalEntry`.~~
+I have added a JournalFSDJumps table below.
 
 ## JournalProperties
 ```
