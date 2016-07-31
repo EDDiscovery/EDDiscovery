@@ -22,8 +22,6 @@ namespace EDDiscovery
 
         public event NetLogEventHandler OnNewPosition;          // called in foreground, no need for invoke
 
-        public List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
-
         Dictionary<string, NetLogFileReader> netlogreaders = new Dictionary<string, NetLogFileReader>();
 
         FileSystemWatcher m_Watcher;
@@ -149,7 +147,7 @@ namespace EDDiscovery
 
             List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(EDDConfig.Instance.CurrentCmdrID);
 
-            visitedSystems.Clear();
+            List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
 
             if (vsSystemsList != null)
             {
@@ -352,7 +350,6 @@ namespace EDDiscovery
                 string filename = null;
                 NetLogFileReader nfi = null;
 
-                int nrsystems = visitedSystems.Count;
                 if (m_netLogFileQueue.TryDequeue(out filename))      // if a new one queued, we swap to using it
                 {
                     nfi = OpenFileReader(new FileInfo(filename));
@@ -389,9 +386,8 @@ namespace EDDiscovery
 
                         // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..
 
-                        VisitedSystemsClass item2 = visitedSystems.LastOrDefault();
+                        VisitedSystemsClass item2 = VisitedSystemsClass.GetLast(dbsys.Commander, dbsys.Time);
                         VisitedSystemsClass.UpdateVisitedSystemsEntries(dbsys, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
-                        visitedSystems.Add(dbsys);
                         OnNewPosition(dbsys);
                         lastnfi.TravelLogUnit.Update();
 
