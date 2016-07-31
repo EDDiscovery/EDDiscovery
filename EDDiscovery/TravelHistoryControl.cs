@@ -774,6 +774,7 @@ namespace EDDiscovery
         public void NewPosition(VisitedSystemsClass item)         // in UI Thread..
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+            visitedSystems.Add(item);
 
             try
             {
