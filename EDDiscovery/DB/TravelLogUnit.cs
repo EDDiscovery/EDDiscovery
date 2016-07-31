@@ -94,9 +94,9 @@ namespace EDDiscovery2.DB
             }
         }
 
-        private bool Update(SQLiteConnectionED cn)
+        public bool Update(SQLiteConnectionED cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id", tn))
             {
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@Name", Name);
