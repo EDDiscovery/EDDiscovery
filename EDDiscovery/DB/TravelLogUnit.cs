@@ -32,6 +32,15 @@ namespace EDDiscovery2.DB
 
         }
 
+        public TravelLogUnit(DbDataReader dr)
+        {
+            id = (long)dr["id"];
+            Name = (string)dr["Name"];
+            type = (int)(long)dr["type"];
+            Size = (int)(long)dr["size"];
+            Path = (string)dr["Path"];
+        }
+
         public bool Beta
         {
             get
@@ -122,6 +131,51 @@ namespace EDDiscovery2.DB
                     return list;
                 }
             }
+        }
+
+        public static List<string> GetAllNames()
+        {
+            List<string> names = new List<string>();
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT DISTINCT Name FROM TravelLogUnit"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            names.Add((string)reader["Name"]);
+                        }
+                    }
+                }
+            }
+            return names;
+        }
+
+        public static TravelLogUnit Get(string name)
+        {
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Name = @name ORDER BY Id DESC"))
+                {
+                    cmd.AddParameterWithValue("@name", name);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new TravelLogUnit(reader);
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static bool TryGet(string name, out TravelLogUnit tlu)
+        {
+            tlu = Get(name);
+            return tlu != null;
         }
     }
 }
