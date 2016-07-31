@@ -30,7 +30,6 @@ namespace EDDiscovery
 
         NetLogFileReader lastnfi = null;          // last one read..
 
-        DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
 
         public NetLogClass(EDDiscoveryForm ds)
         {
@@ -194,7 +193,7 @@ namespace EDDiscovery
 
                 if (lastnfi.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
                 {
-                    foreach (VisitedSystemsClass ps in ReadData(lastnfi))
+                    foreach (VisitedSystemsClass ps in lastnfi.ReadSystems())
                     {
                         if (!VisitedSystemsClass.Exist(ps.Name, ps.Time))
                         {
@@ -238,33 +237,6 @@ namespace EDDiscovery
             }
 
             return reader;
-        }
-
-        private IEnumerable<VisitedSystemsClass> ReadData(NetLogFileReader sr)
-        {
-            long startpos = sr.filePos;
-
-            if (sr.TimeZone == null)
-            {
-                if (!sr.ReadHeader())  // may be empty if we read it too fast.. don't worry, monitor will pick it up
-                {
-                    System.Diagnostics.Trace.WriteLine("File was empty (for now) " + sr.FileName);
-                    yield break;
-                }
-            }
-
-            VisitedSystemsClass ps;
-            while (sr.ReadNetLogSystem(out ps))
-            {
-                VisitedSystemsClass last = VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time);
-                if (last != null && ps.Name.Equals(last.Name, StringComparison.InvariantCultureIgnoreCase))
-                    continue;
-
-                if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
-                    yield return ps;
-            }
-
-            Console.WriteLine("Parse ReadData " + sr.FileName + " from " + startpos + " to " + sr.filePos);
         }
 
         public void StartMonitor()
@@ -378,7 +350,7 @@ namespace EDDiscovery
                         lastnfi.TravelLogUnit.Add();
                     }
 
-                    foreach(VisitedSystemsClass dbsys in ReadData(lastnfi))
+                    foreach(VisitedSystemsClass dbsys in lastnfi.ReadSystems())
                     {
                         dbsys.EDSM_sync = false;
                         dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
