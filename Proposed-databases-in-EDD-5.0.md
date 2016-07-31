@@ -77,7 +77,8 @@ A:
 * ~~X/Y/Z would be stored in the `StarPos` JournalProperties entry linked to the `FSDJump` or `Location` entry.~~
 * ~~The EDSM ID can be stored in an `EDSM-ID` JournalProperties entry.~~
 * ~~Joining should be not be appreciably slower matching on the X/Y/Z values where `JournalProperties.PropertyName='StarPos'` than it is with the X/Y/Z values stored directly on the `JournalEntry`.~~
-I have added a JournalFSDJumps table below.
+
+A JournalFSDJumps table has been added below, as joining using JournalProperties is between 2 and 4 times slower than joining directly on a table.
 
 ## JournalProperties
 ```
