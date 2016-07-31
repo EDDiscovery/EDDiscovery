@@ -232,10 +232,13 @@ namespace EDDiscovery
                 var tlu = m_travelogUnits[fi.Name];
                 tlu.Path = fi.DirectoryName;
                 reader = new NetLogFileReader(tlu);
+                netlogreaders[fi.Name] = reader;
             }
             else
             {
                 reader = new NetLogFileReader(fi.FullName);
+                m_travelogUnits[fi.Name] = reader.TravelLogUnit;
+                netlogreaders[fi.Name] = reader;
             }
 
             return reader;
@@ -354,6 +357,19 @@ namespace EDDiscovery
                 {
                     nfi = OpenFileReader(new FileInfo(filename));
                     lastnfi = nfi;
+                }
+                else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
+                {
+                    string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories).OrderBy(s => Path.GetFileName(s).ToLower()).ToArray();
+                    foreach (var name in filenames)
+                    {
+                        if (!m_travelogUnits.ContainsKey(Path.GetFileName(name)))
+                        {
+                            nfi = OpenFileReader(new FileInfo(name));
+                            lastnfi = nfi;
+                            break;
+                        }
+                    }
                 }
 
                 if (lastnfi != null)
