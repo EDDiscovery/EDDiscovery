@@ -260,13 +260,8 @@ It contains the following tables:
 
 EDSM data is stored in the Systems table. EDDB data is stored in the PopulatedSystems table.
 
-
-The Systems and PopulatedSystems tables can be combined at runtime using the following command (which can theoretically be made into a view):
-```sql
-SELECT *
-FROM Systems edsm
-LEFT JOIN PopulatedSystems eddb ON eddb.SystemEdsmId = edsm.SystemEdsmId
-```
+It also contains the following view:
+* [`SystemsView`](#systemsview): Combination of Systems and PopulatedSystems
 
 ## Systems
 ```sql
@@ -277,7 +272,7 @@ CREATE TABLE Systems (
   LastUpdated DATETIME,
   X DOUBLE,
   Y DOUBLE,
-  Z DOUBLE
+  Z DOUBLE,
   GridId INTEGER NOT NULL
 )
 CREATE INDEX EdsmSystem_Name ON EdsmSystems (Name)
@@ -327,3 +322,35 @@ CREATE INDEX EddbSystem_SystemEddbId ON EddbSystems (SystemEddbId)
 Linked to a EDSM system entry by SystemEdsmId.
 
 Re-imported from EDDB dump
+
+## SystemsView
+```sql
+CREATE VIEW SystemsView
+SELECT 
+  s.Id AS SystemId, 
+  p.Id AS PopulatedSystemId,
+  s.SystemEdsmId,
+  s.LastUpdated AS EdsmLastUpdated,
+  s.Name,
+  s.X,
+  s.Y,
+  s.Z,
+  s.GridId,
+  p.SystemEddbId,
+  p.LastUpdated AS EddbLastUpdated,
+  p.Faction,
+  p.Government,
+  p.Allegiance,
+  p.Power,
+  p.PowerState,
+  p.PrimaryEconomy,
+  p.Security,
+  p.State,
+  p.SimbadRef,
+  p.NeedsPermit,
+  p.Population
+FROM Systems edsm
+LEFT JOIN PopulatedSystems eddb ON eddb.SystemEdsmId = edsm.SystemEdsmId
+```
+
+Combination of Systems and PopulatedSystems into a single view
