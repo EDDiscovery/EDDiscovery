@@ -81,7 +81,7 @@ namespace EDDiscovery
                         Buffer.BlockCopy(buffer, bufferpos, buf, 0, endlinepos);
                         bufferpos += linelen;
                         TravelLogUnit.Size += linelen;
-                        line = new String(buf.Select(c => (char)c).ToArray());
+                        line = System.Text.Encoding.UTF8.GetString(buf);
 
                         return true;
                     }
