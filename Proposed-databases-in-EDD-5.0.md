@@ -78,48 +78,37 @@ CREATE TABLE JournalProperties (
   JournalEntryId INTEGER NOT NULL REFERENCES JournalEntries (Id),
   PropertyName TEXT NOT NULL,
   SubPropertyName TEXT,
-  PropertyArrayIndex INTEGER,
-  ValueNumber DOUBLE,
-  ValueString TEXT,
-  CoordX DOUBLE,
-  CoordY DOUBLE,
-  CoordZ DOUBLE
+  Value VARIANT
 )
+CREATE INDEX JournalProperty_JournalEntryId ON JournalProperties (JournalEntryId)
 CREATE INDEX JournalProperty_PropertyName ON JournalProperties (PropertyName)
-CREATE INDEX JournalProperty_Coords ON JournalProperties (CoordZ, CoordX, CoordY)
 ```
 
 This table contains data from the journal entries, for entries we want to process, display or join on.
 
 * `PropertyName`: The name of the key in the journal entry JSON
-* `SubPropertyName`: Used for `Materials` or `Killers` properties
-* `PropertyArrayIndex`: Used for array properties such as `Killers` or `Discovered`
-* `ValueNumber`: The numeric value of the property, null if a string property.
-* `ValueString`: The string value of the property, null if a numeric property.
+* `SubPropertyName`: Used for properties that are objects (e.g. `Materials`) or arrays of objects (e.g. `Killers`)
+* `Value`: The value of the property (or sub-property when the property is an object or array of objects)
 
-RJP Q. Still want these? Considering we have jump table.
-
-* `CoordX`: X coordinate (used by `StarPos`) of the system were were in when this event happened
-* `CoordY`: Y coordinate (used by `StarPos`)
-* `CoordZ`: Z coordinate (used by `StarPos`)
-
-## JournalFSDJumps
+## JournalTravelEntries
 ```sql
-CREATE TABLE JournalFSDJumps (
+CREATE TABLE JournalTravelEntries (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   JournalEntryId INTEGER NOT NULL REFERENCES JournalEntry (Id),
   SystemEdsmId INTEGER,
+  IsFSDJump BOOL,
   Name TEXT NOT NULL,
   X DOUBLE,
   Y DOUBLE,
   Z DOUBLE
 )
-CREATE INDEX JournalFSDJumps_Coords ON JournalFSDJumps (Z,X,Y)
-CREATE INDEX JournalFSDJumps_Name ON JournalFSDJumps (Name)
-CREATE INDEX JournalFSDJumps_EdsmId ON JournalFSDJumps (SystemEdsmId)
+CREATE INDEX JournalTravelEntry_EntryId ON JournalTravelEntries (JournalEntryId)
+CREATE INDEX JournalTravelEntry_Coords ON JournalTravelEntries (Z,X,Y)
+CREATE INDEX JournalTravelEntry_Name ON JournalTravelEntries (Name)
+CREATE INDEX JournalTravelEntry_EdsmId ON JournalTravelEntries (SystemEdsmId)
 ```
 
-Used for fast system matching.  When a FSDJump is found in the journal, an entry in this table is created.
+Used for fast system matching.  When a FSDJump is found or the Location system changes in the journal, an entry in this table is created.
 
 SystemEdsmId may be null if no matching EDSM system exists.
 
@@ -146,6 +135,7 @@ CREATE TABLE SavedRouteEntries (
   SystemEdsmId INTEGER,
   Ordinal INTEGER
 )
+CREATE INDEX SavedRouteEntry_RouteId ON SavedRouteEntries (RouteId)
 ```
 
 Migrated from the [`EDDiscovery.route_systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#route_systems) table
@@ -157,6 +147,7 @@ CREATE TABLE WantedSystems (
   SystemName TEXT NOT NULL COLLATE NOCASE,
   SystemEdsmId INTEGER
 )
+CREATE INDEX WantedSystem_Name ON WantedSystems (SystemName)
 CREATE INDEX WantedSystem_EdsmId ON WantedSystems (SystemEdsmId)
 ```
 
@@ -178,7 +169,7 @@ CREATE INDEX SystemNote_JournalEntryId ON SystemNotes (JournalEntryId)
 ```
 
 User notes created by UI.
-Linked to journal entries by the `JournalEntryId` column.  May be null.  If set, its a note on a journal entry. SystemEdsmID will be null, SystemName will be null if the journal entry is not a FSDJump, else its the star name in the FSDJump.
+Linked to journal entries by the `JournalEntryId` column.  May be null.  If set, its a note on a journal entry. SystemEdsmID will be null, SystemName will be null if the journal entry is not a FSDJump or Location, else its the star name in the FSDJump or Location.
 
 Linked to EDSM system by the `SystemEdsmId` column. May be null.  If set, its a note on a star.  SystemName will be set, JournalEntryId will be null
 
