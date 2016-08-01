@@ -54,10 +54,10 @@ CREATE TABLE Commanders (
 Migrated from `EDCommander*` settings in register table
 ```sql
 INSERT INTO EDDUser.Commanders
-SELECT n.Num AS Id, n.Name, p.LogPath, k.ApiKey AS EDSMApiKey
-FROM (SELECT SUBSTR(ID,16) + 0 AS Num, ValueString AS Name FROM Register WHERE ID LIKE 'EDCommanderName%') AS n
-JOIN (SELECT SUBSTR(ID,22) + 0 AS Num, ValueString AS LogPath FROM Register WHERE ID LIKE 'EDCommanderNetLogPath%') AS p ON p.Num = n.Num
-JOIN (SELECT SUBSTR(ID,18) + 0 AS Num, ValueString AS ApiKey FROM Register WHERE ID LIKE 'EDCommanderApiKey%') AS k ON k.Num = n.Num
+SELECT n.Num AS Id, n.Name, p.LogPath, k.EDSMApiKey
+FROM (SELECT SUBSTR(ID,16) + 0 AS Num, ValueString AS Name FROM EDDiscovery.Register WHERE ID LIKE 'EDCommanderName%') AS n
+JOIN (SELECT SUBSTR(ID,22) + 0 AS Num, ValueString AS LogPath FROM EDDiscovery.Register WHERE ID LIKE 'EDCommanderNetLogPath%') AS p ON p.Num = n.Num
+JOIN (SELECT SUBSTR(ID,18) + 0 AS Num, ValueString AS EDSMApiKey FROM EDDiscovery.Register WHERE ID LIKE 'EDCommanderApiKey%') AS k ON k.Num = n.Num
 ```
 
 ## Journals
@@ -191,6 +191,9 @@ CREATE TABLE SavedRoutes (
 ```
 
 Migrated from the [`EDDiscovery.routes_expeditions`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#route_expeditions) table
+```sql
+INSERT INTO EDDUser.SavedRoutes SELECT * FROM EDDiscovery.routes_expeditions
+```
 
 ## SavedRouteEntries
 ```sql
@@ -205,6 +208,10 @@ CREATE INDEX SavedRouteEntry_RouteId ON SavedRouteEntries (RouteId)
 ```
 
 Migrated from the [`EDDiscovery.route_systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#route_systems) table
+```sql
+INSERT INTO EDDUser.SavedRouteEntries (Id, RouteId, SystemName)
+SELECT * FROM route_systems
+```
 
 ## WantedSystems
 ```sql
@@ -218,6 +225,11 @@ CREATE INDEX WantedSystem_EdsmId ON WantedSystems (SystemEdsmId)
 ```
 
 Migrated from the [`EDDiscovery.wanted_systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#wanted_systems) table
+
+```sql
+INSERT INTO EDDUser.WantedSystems (Id, SystemName)
+SELECT * FROM EDDiscovery.wanted_systems
+```
 
 ## SystemNotes
 ```sql
@@ -239,6 +251,11 @@ Linked to EDSM system by the `SystemEdsmId` column.  SystemEdsmId may be null if
 If SystemEdsmId is null, then system is linked using SystemName.
 
 Migrated from the [`EDDiscovery.SystemNote`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systemnote) table
+
+```sql
+INSERT INTO EDDUser.SystemNotes (Id, SystemName, Time, Note)
+SELECT Id, Name AS SystemName, Time, Note FROM EDDiscovery.SystemNote
+```
 
 ## JournalNotes
 ```sql
