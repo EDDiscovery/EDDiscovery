@@ -766,7 +766,10 @@ namespace EDDiscovery
         {
             Invoke((MethodInvoker)delegate
             {
-                visitedSystems.Clear();
+                if( visitedSystems != null)
+                {
+                    visitedSystems.Clear();
+                }
                 RefreshHistory();
             });
         }
