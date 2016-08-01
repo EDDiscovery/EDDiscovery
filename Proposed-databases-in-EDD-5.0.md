@@ -308,7 +308,7 @@ CREATE TABLE Systems (
   X DOUBLE,
   Y DOUBLE,
   Z DOUBLE,
-  GridId INTEGER NOT NULL
+  GridId INTEGER NOT NULL,
   RandomId INTEGET NOT NULL
 )
 CREATE INDEX EdsmSystem_Name ON Systems (Name)
