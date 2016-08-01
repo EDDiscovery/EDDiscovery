@@ -22,6 +22,8 @@ It contains the following tables:
 * [`JournalNotes`](#journalnotes): Player notes on journal entries
 * [`Bookmarks`](#bookmarks): Bookmarked systems or regions
 * [`StellarBodies`](#stellarbodies): Stellar bodies (stars, planets) that have been scanned
+* [`StellarBodyStarDetails`](#stellarbodystardetails): Star details
+* [`StellarBodyPlanetMoonDetails`](#stellarbodyplanetmoondetails): Planet / moon details
 * [`StellarBodyMaterials`](#stellarbodymaterials): Material concentrations on stellar bodies
 
 ## Register
