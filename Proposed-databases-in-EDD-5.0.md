@@ -57,8 +57,9 @@ CREATE TABLE JournalEntries (
   EventTime DATETIME NOT NULL,
   EventData TEXT, -- JSON String of complete line
   CommanderId INTEGER NOT NULL REFERENCES Commanders (Id),
-  Synced INTEGER
+  Synced INTEGER,
 )
+
 CREATE INDEX JournalEntry_JournalId ON JournalEntries (JournalId)
 CREATE INDEX JournalEntry_EventType ON JournalEntries (EventType)
 CREATE INDEX JournalEntry_EventTime ON JournalEntries (EventTime)
@@ -70,7 +71,6 @@ This table contains entries from the journal or converted entries from the pre-2
 All events we want to understand, at journal entry, their parameters are decoded and stored into `JournalProperties` table. Only certain journal entries are to be initially decoded and expanded and stored.
 
 Additionally, FSDjumps get expanded into JournalFSDJumps table AND Journal Properties.  The reason for the second table is dB lookup speed.
-
 
 ## JournalProperties
 ```sql
@@ -129,19 +129,17 @@ DGV grid will have : Time, Type, Text, Distance, Notes, MapColour.
 Class VisitedSystemsClass
 {
 int journalentry; // which journal entry is this associated with, must be set
-int journaltravelentry; // to go to the JournalTravelEntries for looking up X,Y,Z etc.
 
-Systems system;  // or null if not a FSDJump entry.. if edsm system, its a copy of the db row from Systems table.  it's not an edsm system, its a in-memory class only with id=0,Name=name,X/Y/Z populated from the journal entry.
+Systems system;  // as the journal is read, on each location/fsd jump change, then we pick up the System information relevant.  We then populate the jump entry, and all subsequent entries, with the same information until another jump occurs. To pick up the information, we look to see if an system exists in the Systems table by EDSMID.  If so, this is a copy of the db row from the Systems table.  if EDSMID is not set, this is in memory representation of the system using info from the journal entry; id=0,Name=name,X/Y/Z populated from the journal entry.
 
-PopulatedSystems  eddbinfo; // class representation of PopulatedSystems.. holds eddb info, or null if non there.
+PopulatedSystems  eddbinfo; // if EDSMID is set on journal entry, and EDDB has the edsm id, then this is the inmemory class representation of row of the PopulatedSystems db. Null if non there.
+
 DateTime Time;
 
 string type;  // for the type column, type of entry.. "Jump", "Dock", "Undock", "Land", "Take off" etc.
 string text;  // for the text column.  For "Jump" it would be system name, for "Dock" maybe the space station name (can we get that)
 }
 ```
-
-Rather than copying the data in here, just have direct indexes?  we could put the data in here for speed.. not sure.
 
 ## SavedRoutes
 ```sql
