@@ -130,16 +130,18 @@ Class VisitedSystemsClass
 {
 int journalentry; // which journal entry is this associated with, must be set
 
-Systems system;  // as the journal is read, on each location/fsd jump change, then we pick up the System information relevant.  We then populate the jump entry, and all subsequent entries, with the same information until another jump occurs. To pick up the information, we look to see if an system exists in the Systems table by EDSMID.  If so, this is a copy of the db row from the Systems table.  if EDSMID is not set, this is in memory representation of the system using info from the journal entry; id=0,Name=name,X/Y/Z populated from the journal entry.
-
-PopulatedSystems  eddbinfo; // if EDSMID is set on journal entry, and EDDB has the edsm id, then this is the inmemory class representation of row of the PopulatedSystems db. Null if non there.
-
+Systems system; // always not null.
+PopulatedSystems  eddbinfo;
 DateTime Time;
 
 string type;  // for the type column, type of entry.. "Jump", "Dock", "Undock", "Land", "Take off" etc.
 string text;  // for the text column.  For "Jump" it would be system name, for "Dock" maybe the space station name (can we get that)
 }
 ```
+
+As the journal is read, ignoring entries not matching the commander, then on each location/fsd jump change, then we pick up the System information relevant.  We then populate the jump entry, and all subsequent entries, with the same information until another jump occurs. To pick up the information, we look to see if an system exists in the Systems table by EDSMID.  If so, this is a copy of the db row from the Systems table.  if EDSMID is not set, this is in memory representation of the system using info from the journal entry; id=0,Name=name,X/Y/Z populated from the journal entry.
+
+if EDSMID is available for the journal entry, and EDDB has the edsm id, then this is the inmemory class representation of row of the PopulatedSystems db. Null if non there.
 
 ## SavedRoutes
 ```sql
