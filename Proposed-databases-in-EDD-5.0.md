@@ -284,10 +284,13 @@ CREATE TABLE Systems (
   Y DOUBLE,
   Z DOUBLE,
   GridId INTEGER NOT NULL
+  RandomId INTEGET NOT NULL
 )
-CREATE INDEX EdsmSystem_Name ON EdsmSystems (Name)
-CREATE INDEX EdsmSystem_EdsmId ON EdsmSystems (SystemEdsmId)
-CREATE INDEX EdsmSystem_Coords ON EdsmSystems (Z, X, Y)
+CREATE INDEX EdsmSystem_Name ON Systems (Name)
+CREATE INDEX EdsmSystem_EdsmId ON Systems (SystemEdsmId)
+CREATE INDEX EdsmSystem_Coords ON Systems (Z, X, Y)
+CREATE INDEX EdsmSystem_GridId on Systems (GridId)
+CREATE INDEX EdsmSystem_RandomId on Systems (RandomId)
 ```
 
 Re-imported from EDSM dump.  Grid ID is used for new 3dmap star painting system.
