@@ -67,9 +67,10 @@ CREATE INDEX JournalEntry_CommanderId ON JournalEntries (CommanderId)
 
 This table contains entries from the journal or converted entries from the pre-2.2 netlogs.
 
-The properties that we want to index on or join on, or display, get processed and inserted into `JournalProperties`. Only certain journal entries are to be initially decoded and expanded and stored.
+All events we want to understand, at journal entry, their parameters are decoded and stored into `JournalProperties` table. Only certain journal entries are to be initially decoded and expanded and stored.
 
-FSDjumps get expanded into JournalFSDJumps table AND Journal Properties.  The reason for the second table is dB lookup speed.
+Additionally, FSDjumps get expanded into JournalFSDJumps table AND Journal Properties.  The reason for the second table is dB lookup speed.
+
 
 ## JournalProperties
 ```sql
@@ -100,7 +101,8 @@ CREATE TABLE JournalTravelEntries (
   Name TEXT NOT NULL,
   X DOUBLE,
   Y DOUBLE,
-  Z DOUBLE
+  Z DOUBLE,
+  MapColour INTEGER NOT NULL,
 )
 CREATE INDEX JournalTravelEntry_EntryId ON JournalTravelEntries (JournalEntryId)
 CREATE INDEX JournalTravelEntry_Coords ON JournalTravelEntries (Z,X,Y)
@@ -111,8 +113,33 @@ CREATE INDEX JournalTravelEntry_EdsmId ON JournalTravelEntries (SystemEdsmId)
 Used for fast system matching.  When a FSDJump is found or the Location system changes in the journal, an entry in this table is created.
 
 SystemEdsmId may be null if no matching EDSM system exists.
+IsFSDJump shows thats its an explicit FSD Jump.
+X Y Z may be null for pre 2.1 systems
+MapColour is the current colour assigned for map display at the point of jump.
 
 Migrated from [`EDDiscovery.VisitedSystems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#visitedsystems)
+
+## IN Memory representation
+
+The VisitedSystemsClass is repurposed for holding the data for travelling, keyed on the CommanderID, for display on the data view travel grid.  Journal class has a function for filling in this array (FillVisitedSystem(cmdr id))
+
+DGV grid will have : Time, Type, Text, Distance, Notes, MapColour.  
+
+```C#
+Class VisitedSystemsClass
+{
+int? edsmid; // edsm id or null if its not an edsm system
+int? eddbid; // have we an eddb entry for this system?
+int journalentry; // which journal entry is this associated with, must be set
+string type;  // type of entry.. "Jump", "Dock", "Undock", "Land", "Take off" etc.
+string text;  // additional text.  For "Jump" it would be system name, for "Dock" maybe the space station name (can we get that)
+DateTime Time;
+string Name;
+double X
+double Y
+double Z
+}
+```
 
 ## SavedRoutes
 ```sql
