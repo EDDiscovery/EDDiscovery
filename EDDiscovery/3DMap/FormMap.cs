@@ -135,13 +135,17 @@ namespace EDDiscovery2
         public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
-            Prepare(new SystemClassStarNames(historysel), homesys, new SystemClassStarNames(centersys), zoom, sysname, visited);
+            SystemClassStarNames hs = historysel != null ? new SystemClassStarNames(historysel) : null;
+            SystemClassStarNames cs = centersys != null ? new SystemClassStarNames(centersys) : null;
+            Prepare(hs, homesys, cs, zoom, sysname, visited);
         }
 
         public void Prepare(VisitedSystemsClass historysel, string homesys, ISystem centersys, float zoom,
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
-            Prepare(new SystemClassStarNames(historysel), homesys, new SystemClassStarNames(centersys), zoom, sysname, visited);
+            SystemClassStarNames hs = historysel != null ? new SystemClassStarNames(historysel) : null;
+            SystemClassStarNames cs = centersys != null ? new SystemClassStarNames(centersys) : null;
+            Prepare(hs, homesys, cs, zoom, sysname, visited);
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
