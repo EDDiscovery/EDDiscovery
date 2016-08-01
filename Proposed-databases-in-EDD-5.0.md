@@ -251,7 +251,7 @@ Migrated from the `EDDiscovery.Bookmarks` table.
 
 # EDDSystems database
 
-A database (`EDDSystems.sqlite`), containing the system data sourced from EDSM and EDDB.
+This database (`EDDSystems.sqlite`) contains the system data sourced from EDSM and EDDB.
 
 It contains the following tables:
 * [`Systems`](#systems): System data imported from EDSM
