@@ -232,7 +232,7 @@ Migrated from the `EDDiscovery.Bookmarks` table.
 
 # EDDSystems database
 
-A database (`EDDSystems.sqlite`), containing the System table and the Populated table.
+A database (`EDDSystems.sqlite`), containing the system data sourced from EDSM and EDDB.
 
 EDSM data is stored in the Systems table. EDDB data is stored in the PopulatedSystems table.
 
