@@ -229,15 +229,15 @@ If SystemEdsmId is null, then system is linked using SystemName.
 
 Migrated from the [`EDDiscovery.SystemNote`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systemnote) table
 
-## JournalNote
+## JournalNotes
 ```sql
-CREATE TABLE JournalNote (
+CREATE TABLE JournalNotes (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
   JournalEntryId INTEGER NOT NULL REFERENCES JournalEntry (Id),
   Time DATETIME NOT NULL, 
   Note TEXT
 )
-CREATE INDEX SystemNote_JournalEntryId ON Notes (JournalEntryId)
+CREATE INDEX SystemNote_JournalEntryId ON JournalNotes (JournalEntryId)
 ```
 
 Linked to journal entries by the `JournalEntryId` column.
