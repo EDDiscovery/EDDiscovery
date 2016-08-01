@@ -1,6 +1,6 @@
 # EDDUser database
 
-This database contains user settings, journal entries, saved routes, etc.
+This database (`EDDUser.sqlite`) contains user settings, journal entries, saved routes, etc.
 
 ## Register
 ```sql
@@ -230,13 +230,13 @@ StarName != null then heading is null, bookmark
 
 Migrated from the `EDDiscovery.Bookmarks` table. 
 
-# View EDDSystems
+# EDDSystems database
 
-A view, combining the System table and the Populated table.
+A database (`EDDSystems.sqlite`), containing the System table and the Populated table.
 
 EDSM data is stored in the Systems table. EDDB data is stored in the PopulatedSystems table.
 
-The view is composed of:
+The Systems and PopulatedSystems tables can be combined at runtime using the following command (which can theoretically be made into a view):
 ```sql
 SELECT *
 FROM Systems edsm
