@@ -128,13 +128,16 @@ DGV grid will have : Time, Type, Text, Distance, Notes, MapColour.
 ```C#
 Class VisitedSystemsClass
 {
-int? edsmid; // edsm id or null if its not an edsm system, used for the edsm button
-int? eddbid; // have we an eddb entry for this system?  Used for the eddb button and for populating the other travel page entries.
 int journalentry; // which journal entry is this associated with, must be set
 int journaltravelentry; // to go to the JournalTravelEntries for looking up X,Y,Z etc.
+
+Systems system;  // or null if not a FSDJump entry.. if edsm system, its a copy of the db row from Systems table.  it's not an edsm system, its a in-memory class only with id=0,Name=name,X/Y/Z populated from the journal entry.
+
+PopulatedSystems  eddbinfo; // class representation of PopulatedSystems.. holds eddb info, or null if non there.
 DateTime Time;
-string type;  // type of entry.. "Jump", "Dock", "Undock", "Land", "Take off" etc.
-string text;  // additional text.  For "Jump" it would be system name, for "Dock" maybe the space station name (can we get that)
+
+string type;  // for the type column, type of entry.. "Jump", "Dock", "Undock", "Land", "Take off" etc.
+string text;  // for the text column.  For "Jump" it would be system name, for "Dock" maybe the space station name (can we get that)
 }
 ```
 
