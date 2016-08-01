@@ -239,8 +239,8 @@ EDSM data is stored in the Systems table. EDDB data is stored in the PopulatedSy
 The view is composed of:
 ```sql
 SELECT *
-FROM EdsmSystems edsm
-LEFT JOIN EddbSystems eddb ON eddb.SystemEdsmId = edsm.SystemEdsmId
+FROM Systems edsm
+LEFT JOIN PopulatedSystems eddb ON eddb.SystemEdsmId = edsm.SystemEdsmId
 ```
 
 ## Systems
