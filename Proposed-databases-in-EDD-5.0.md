@@ -293,7 +293,7 @@ CREATE INDEX EdsmSystem_GridId on Systems (GridId)
 CREATE INDEX EdsmSystem_RandomId on Systems (RandomId)
 ```
 
-Re-imported from EDSM dump.  Grid ID is used for new 3dmap star painting system.
+Re-imported from EDSM dump.  Grid ID and RandomID are used for new 3dmap star painting system.  Grid ID is assigned based on x/z position, RandomID is 0 to 99 inclusive.
 
 ## SystemAliases
 ```sql
