@@ -251,6 +251,12 @@ namespace EDDiscovery.DB
 
             o = dr["needs_permit"];
             needs_permit = o == DBNull.Value ? 0 : (int)((long)o);
+
+            o = dr["gridid"];
+            gridid = o == DBNull.Value ? 0 : (int)((long)o);
+
+            o = dr["randomid"];
+            randomid = o == DBNull.Value ? 0 : (int)((long)o);
         }
 
         public SystemClass(DbDataReader dr)         // read from a SQLite reader after a query
@@ -322,6 +328,12 @@ namespace EDDiscovery.DB
 
             o = dr["needs_permit"];
             needs_permit = o == DBNull.Value ? 0 : (int)((long)o);
+
+            o = dr["gridid"];
+            gridid = o == DBNull.Value ? 0 : (int)((long)o);
+
+            o = dr["randomid"];
+            randomid = o == DBNull.Value ? 0 : (int)((long)o);
         }
 
 
@@ -374,7 +386,7 @@ namespace EDDiscovery.DB
 
         public bool Store(SQLiteConnectionED cn, DbTransaction transaction)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id, security, eddb_updated_at, state, needs_permit, versiondate, id_edsm) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit, datetime('now'),@id_edsm)", transaction))
+            using (DbCommand cmd = cn.CreateCommand("Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id, security, eddb_updated_at, state, needs_permit, versiondate, id_edsm, gridid, randomid) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit, datetime('now'),@id_edsm,@gridid,@randomid)", transaction))
             {
                 if (SystemNote == null)
                     SystemNote = "";
@@ -404,10 +416,12 @@ namespace EDDiscovery.DB
                     cmd.AddParameterWithValue("@needs_permit", needs_permit);
                     cmd.AddParameterWithValue("@Note", SystemNote);
                     cmd.AddParameterWithValue("@id_edsm", id_edsm);
+                    cmd.AddParameterWithValue("@gridid", gridid);
+                    cmd.AddParameterWithValue("@randomid", randomid);
                 }
                 else
                 {       // override the cmd.
-                    cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, versiondate,id_edsm) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, datetime('now'),@id_edsm)";
+                    cmd.CommandText = "Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, versiondate,id_edsm,gridid,randomid) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, datetime('now'),@id_edsm,@gridid,@randomid)";
                     cmd.AddParameterWithValue("@name", name);
                     cmd.AddParameterWithValue("@x", x);
                     cmd.AddParameterWithValue("@y", y);
@@ -420,6 +434,8 @@ namespace EDDiscovery.DB
                     cmd.AddParameterWithValue("@Status", (int)status);
                     cmd.AddParameterWithValue("@Note", SystemNote);
                     cmd.AddParameterWithValue("@id_edsm", id_edsm);
+                    cmd.AddParameterWithValue("@gridid", gridid);
+                    cmd.AddParameterWithValue("@randomid", randomid);
                 }
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
@@ -429,7 +445,7 @@ namespace EDDiscovery.DB
 
         public bool Update(SQLiteConnectionED cn, long id, DbTransaction transaction)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit, versiondate=datetime('now'), id_edsm=@id_edsm where ID=@id",  transaction))
+            using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit, versiondate=datetime('now'), id_edsm=@id_edsm, gridid=@gridid, randomid=@randomid where ID=@id",  transaction))
             {
                 cmd.AddParameterWithValue("@id", id);
                 cmd.AddParameterWithValue("@name", name);
@@ -458,6 +474,8 @@ namespace EDDiscovery.DB
                 cmd.AddParameterWithValue("@needs_permit", needs_permit);
 
                 cmd.AddParameterWithValue("@id_edsm", id_edsm);
+                cmd.AddParameterWithValue("@gridid", gridid);
+                cmd.AddParameterWithValue("@randomid", randomid);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 return true;
@@ -466,13 +484,15 @@ namespace EDDiscovery.DB
 
         public bool UpdateEDSM(SQLiteConnectionED cn, long id, DbTransaction transaction)     // only altering fields EDSM sets..
         {
-            using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, versiondate=datetime('now') where ID=@id",  transaction))
+            using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, versiondate=datetime('now'), gridid=@gridid, randomid=@randomid where ID=@id",  transaction))
             {
                 cmd.AddParameterWithValue("@id", id);
                 cmd.AddParameterWithValue("@name", name);
                 cmd.AddParameterWithValue("@x", x);
                 cmd.AddParameterWithValue("@y", y);
                 cmd.AddParameterWithValue("@z", z);
+                cmd.AddParameterWithValue("@gridid", gridid);
+                cmd.AddParameterWithValue("@randomid", randomid);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 return true;
             }
@@ -1310,10 +1330,13 @@ namespace EDDiscovery.DB
                 int c = 0;
                 DbCommand cmd = cn.CreateCommand("select * from Systems where id_edsm = @id_edsm limit 1");
 
+                int[] histogramsystems = new int[50000];
+
                 try
                 {
                     int lasttc = Environment.TickCount;
                     int formtickcount = Environment.TickCount;
+                    Random rnd = new Random();
 
                     while (jr.Read())
                     {
@@ -1330,6 +1353,7 @@ namespace EDDiscovery.DB
                             {
                                 Console.WriteLine("EDSM Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newsys " + newsystems.Count + " update " + toupdate.Count());
                                 lasttc = Environment.TickCount;
+                                break;
                             }
 
                             if ( Environment.TickCount - formtickcount > 5000 )
@@ -1346,6 +1370,9 @@ namespace EDDiscovery.DB
                                 if (emptydatabase)      // if no database, just add immediately
                                 {
                                     //Console.WriteLine("Empty database Add new system " + system.name);
+                                    system.gridid = GridId.Id(system.x, system.z);
+                                    system.randomid = rnd.Next(0, 99);
+                                    histogramsystems[system.gridid]++;
                                     newsystems.Add(system);
                                 }
                                 else
@@ -1366,6 +1393,11 @@ namespace EDDiscovery.DB
                                                 dbsys.z = system.z;
                                                 dbsys.name = system.name;
 
+                                                dbsys.gridid = GridId.Id(system.x, system.z);
+                                                dbsys.randomid = rnd.Next(0, 99);
+
+                                                histogramsystems[dbsys.gridid]++;
+
                                                 //Console.WriteLine("Update " + dbsys.id + " due to pos or case " + dbsys.name);
                                                 toupdate.Add(dbsys);
                                             }
@@ -1373,6 +1405,8 @@ namespace EDDiscovery.DB
                                         else                                                                  // not in database..
                                         {
                                             //Console.WriteLine("Add new system " + system.name);
+                                            system.gridid = GridId.Id(system.x, system.z);
+                                            system.randomid = rnd.Next(0, 99);
                                             newsystems.Add(system);
                                         }
                                     }
@@ -1390,7 +1424,15 @@ namespace EDDiscovery.DB
                 {
                     if (cmd != null) cmd.Dispose();
                 }
+
+                for (int id = 0; id < histogramsystems.Length; id++ )
+                {
+                    if ( histogramsystems[id] != 0 )
+                        Console.WriteLine("Id " + id + " count " + histogramsystems[id]);
+                }
+
             }
+
 
             using (SQLiteConnectionED cn2 = new SQLiteConnectionED())  // open the db
             {
@@ -1622,6 +1664,92 @@ namespace EDDiscovery.DB
 
             return toupdate.Count();
         }
-
     }
+
+    public class GridId
+    {
+        public const int gridxrange = 24;
+        static private int[] compresstablex = { 0,0,0,0,0, 0,0,0,0,0,                    // 0   -40
+                                              1,1,1,1,1, 2,2,2,2,2,                     // 10   -30,    -25
+                                              3,3,3,3,3, 4,4,4,4,4,                     // 20   -20,    -15
+                                              5,5,6,6,7, 7,8,9,10,11,                   // 30   -10,-8,-6,..
+                                              12,13,14,15,16, 16,17,17,18,18,           // 40 centre
+                                              19,19,19,19,19, 20,20,20,20,20,           // 50
+                                              21,21,21,21,21, 22,22,22,22,22,           // 60
+                                              23,23,23,23,23, 23,23,23,23,23,           // 70
+                                              23                                        // 80  +40
+                                            };
+        public const int gridzrange = 29;
+        static private int[] compresstablez = { 0,0,0,0,0, 1,1,1,2,2,                    // 0  -20.5
+                                              3,3,4,4,5, 6,7,8,9,10,                    // 10  -10
+                                              11,12,13,14,15, 16,16,17,17,18,           // 20 Sol
+                                              19,19,19,19,19, 20,20,20,20,20,           // 30   +10
+                                              21,21,21,21,21, 22,22,22,22,22,           // 40 centre +20
+                                              23,23,23,23,23, 24,24,24,24,24,           // 50 +30
+                                              25,25,25,25,25, 26,26,26,26,26,           // 60 +40
+                                              27,27,27,27,27, 28,28,28,28,28,           // 70 +50
+                                              28,28,28,28,28, 28,28,28,28,28,           // 80 +60
+                                              28                                        // 90 +70
+                                            };
+
+        public static int Id(double x, double z)
+        {
+            x = Math.Min(Math.Max(x + 40500.0, 0), 80000);
+            z = Math.Min(Math.Max(z + 20500.0, 0), 90000);
+            x /= 1000;
+            z /= 1000;
+            return compresstablex[(int)x] + 100 * compresstablez[(int)z];
+        }
+
+        public static int IdFromComponents(int x, int z)
+        {
+            return x + 100 * z;
+        }
+
+        public static bool XZ(int id, out double x, out double z)
+        {
+            x = 0; z = 0;
+            if (id >= 0)
+            {
+                int xid = (id % 100);
+                int zid = (id / 100);
+
+                if (xid < gridxrange && zid < gridzrange)
+                {
+                    for (int i = 0; i < compresstablex.Length; i++)
+                    {
+                        if (compresstablex[i] == xid)
+                        {
+                            double startx = i * 1000 - 40500.0;
+
+                            while (i < compresstablex.Length && compresstablex[i] == xid)
+                                i++;
+
+                            x = (((i * 1000) - 40500.0) + startx) / 2.0;
+                            break;
+                        }
+                    }
+
+                    for (int i = 0; i < compresstablez.Length; i++)
+                    {
+                        if (compresstablez[i] == zid)
+                        {
+                            double startz = i * 1000 - 20500.0;
+
+                            while (i < compresstablez.Length && compresstablez[i] == zid)
+                                i++;
+
+                            z = (((i * 1000) - 20500.0) + startz) / 2.0;
+                            break;
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
 }

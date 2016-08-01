@@ -33,9 +33,6 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_coarsegridlines;
         private List<IData3DSet> _datasets_gridlinecoords;
         private List<IData3DSet> _datasets_maps;
-        private List<IData3DSet> _datasets_zeropopstars;
-        private List<IData3DSet> _datasets_popstarscoloured;
-        private List<IData3DSet> _datasets_popstarsuncoloured;
         private List<IData3DSet> _datasets_poi;
         private List<IData3DSet> _datasets_selectedsystems;
         private List<IData3DSet> _datasets_visitedsystems;
@@ -47,8 +44,10 @@ namespace EDDiscovery2
         private const double ZoomFact = 1.2589254117941672104239541063958;
         private const double CameraSlewTime = 1.0;
 
-        List<SystemClassStarNames> _starnames = null;    // star list combines data base and travelled h
-        Dictionary<string, SystemClassStarNames> _starnamelookup; // and a dictionary to above since its so slow to do a search
+        StarGrids _stargrids;
+
+        //        List<SystemClassStarNames> _starnames = null;    // star list combines data base and travelled h
+        //        Dictionary<string, SystemClassStarNames> _starnamelookup; // and a dictionary to above since its so slow to do a search
 
         private AutoCompleteStringCollection _systemNames;
         private SystemClassStarNames _centerSystem;
@@ -122,7 +121,7 @@ namespace EDDiscovery2
 
         private bool _isActivated = false;
 
-        public bool Is3DMapsRunning { get { return _starnames != null;  } }
+        public bool Is3DMapsRunning { get { return _stargrids != null;  } }
 
         #endregion
 
@@ -158,14 +157,8 @@ namespace EDDiscovery2
             _centerSystem = centersys;
             _visitedSystems = visited;
 
-            if (_starnames == null)                                     // only on first call
-            {
-                _starnames = new List<SystemClassStarNames>();          // recreate every time in case changed..
-                _starnamelookup = new Dictionary<string, SystemClassStarNames>(StringComparer.CurrentCultureIgnoreCase); // case invariant sorted dic.
 
-                SystemClass.GetSystemNamesList(_starnames, _starnamelookup);
-            }
-
+#if false
             if (_visitedSystems != null)              // note if list is empty on first run seeing this
             {
                 foreach (VisitedSystemsClass vsc in _visitedSystems)
@@ -183,6 +176,9 @@ namespace EDDiscovery2
                     }
                 }
             }
+#endif
+            _stargrids = new StarGrids();
+            _stargrids.Initialise();                             // bring up the class..
 
             string fontname = "MS Sans Serif";                  // calculate once for bitmap 
             _starnamebitmapfnt = new Font(fontname, 20F);
@@ -250,7 +246,8 @@ namespace EDDiscovery2
 
         public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
         {
-            if (_starnames != null && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
+#if false
+            if (Is3DMapsRunning && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
             {
                 _visitedSystems = visited;
 
@@ -277,13 +274,13 @@ namespace EDDiscovery2
                     if ( vs != null )
                         SetCenterSystemTo(vs.Name, true);
                 }
-
             }
+#endif
         }
 
         public void UpdateHistorySystem(string historysel)
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 SystemClassStarNames newhist = FindSystem(historysel);
 
@@ -296,7 +293,7 @@ namespace EDDiscovery2
 
         public void UpdateHistorySystem(VisitedSystemsClass historysel)
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 SystemClassStarNames newhist = null;
 
@@ -318,7 +315,7 @@ namespace EDDiscovery2
 
         public void UpdateNote()
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 GenerateDataSetsNotedSystems();
                 glControl.Invalidate();
@@ -327,7 +324,7 @@ namespace EDDiscovery2
 
         public void UpdateBookmarks()
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 GenerateDataSetsBookmarks();
                 GenerateDataSetsNotedSystems();
@@ -356,7 +353,6 @@ namespace EDDiscovery2
 
             GenerateDataSets();
             GenerateDataSetsMaps();
-            GenerateDataSetsStars();
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
 
@@ -619,22 +615,6 @@ namespace EDDiscovery2
             UpdateDataSetsDueToZoom();
         }
 
-        private void GenerateDataSetsStars()         // Called during Load, and if we ever add systems..
-        {
-            DatasetBuilder builder = CreateBuilder();
-
-            builder.Build();
-            _datasets_zeropopstars = builder.AddStars(true, true);
-
-            builder.Build();
-            _datasets_popstarscoloured = builder.AddStars(false, false);
-
-            builder.Build();
-            _datasets_popstarsuncoloured = builder.AddStars(false, true);
-
-            builder = null;
-        }
-
         private void UpdateDataSetsDueToZoom()
         {
             DatasetBuilder builder = new DatasetBuilder();
@@ -739,7 +719,6 @@ namespace EDDiscovery2
             {
                 CenterSystem = CreateSystemClass(_centerSystem),
                 SelectedSystem = CreateSystemClass(_clickedSystem),
-                StarList = _starnames,
 
                 VisitedSystems = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null,
 
@@ -818,6 +797,7 @@ namespace EDDiscovery2
 
         private void NamedStars() // background thread.. run after timer tick
         {
+#if false
             try // just in case someone tears us down..
             {
                 int lylimit = (int)(_starlimitly / _zoom);
@@ -933,6 +913,7 @@ namespace EDDiscovery2
                 });
             }
             catch { }
+#endif
         }
 
 
@@ -949,6 +930,7 @@ namespace EDDiscovery2
 
         private void RemoveAllNamedStars()
         {
+#if false
             bool changed = false;
             foreach (var sys in _starnames)                             // dispose all
             {
@@ -963,6 +945,7 @@ namespace EDDiscovery2
                 glControl.Invalidate();
 
             _starname_curstars_zoom = ZoomOff;
+#endif
         }
 
         private List<FGEImage> GetSelectedMaps()
@@ -1004,7 +987,7 @@ namespace EDDiscovery2
 
         public bool SetCenterSystemTo(VisitedSystemsClass system, bool moveto)
         {
-            if (_starnames != null)
+            if (Is3DMapsRunning)
             {
                 SystemClassStarNames sys = null;
 
@@ -1032,7 +1015,7 @@ namespace EDDiscovery2
 
         public bool SetCenterSystemTo(string name, bool moveto)
         {
-            if (_starnames != null)                         // if null, we are not up and running
+            if (Is3DMapsRunning)                         // if null, we are not up and running
                 return SetCenterSystemTo(FindSystem(name), moveto);
             else
                 return false;
@@ -1310,24 +1293,9 @@ namespace EDDiscovery2
 
             if (showStarstoolStripMenuItem.Checked)
             {
-                foreach (var dataset in _datasets_zeropopstars)
-                    dataset.DrawAll(glControl);
-
-                if (showStationsToolStripMenuItem.Checked)
-                {
-                    foreach (var dataset in _datasets_popstarscoloured)
-                        dataset.DrawAll(glControl);
-                }
-                else
-                {
-                    foreach (var dataset in _datasets_popstarsuncoloured)
-                        dataset.DrawAll(glControl);
-                }
             }
             else if (showStationsToolStripMenuItem.Checked)
             {
-                foreach (var dataset in _datasets_popstarscoloured)
-                    dataset.DrawAll(glControl);
             }
 
             foreach (var dataset in _datasets_poi)
@@ -1336,6 +1304,7 @@ namespace EDDiscovery2
             foreach (var dataset in _datasets_visitedsystems)
                 dataset.DrawAll(glControl);
 
+#if false
             if (_starnames != null)
             {
                 foreach (var sys in _starnames)
@@ -1374,7 +1343,7 @@ namespace EDDiscovery2
                         sys.painttexture.Draw(glControl);
                 }
             }
-
+#endif
             foreach (var dataset in _datasets_selectedsystems)
                 dataset.DrawAll(glControl);
 
@@ -2465,6 +2434,7 @@ namespace EDDiscovery2
 
             SystemClassStarNames cursys = null;
             cursysdistz = double.MaxValue;
+#if false
 
             Matrix4d resmat = GetResMat();
 
@@ -2490,7 +2460,7 @@ namespace EDDiscovery2
                     }
                 }
             }
-
+#endif
             return cursys;
         }
 
@@ -2508,8 +2478,8 @@ namespace EDDiscovery2
 
                 if (curbookmark != null)
                 {
-                    if (curbookmark.StarName != null && _starnamelookup.ContainsKey(curbookmark.StarName))  // if associated with system
-                        cursystem = _starnamelookup[curbookmark.StarName];
+//TBD                    if (curbookmark.StarName != null && _starnamelookup.ContainsKey(curbookmark.StarName))  // if associated with system
+//                       cursystem = _starnamelookup[curbookmark.StarName];
 
                     return;
                 }
@@ -2522,11 +2492,11 @@ namespace EDDiscovery2
 
                 if (sysc != null)                                                  // noted found..
                 {
-                    if (_starnamelookup.ContainsKey(sysc.name))                         // if can find it.. lookup
-                    {
-                        cursystem = _starnamelookup[sysc.name];
-                        notedsystem = true;
-                    }
+//TBD                    if (_starnamelookup.ContainsKey(sysc.name))                         // if can find it.. lookup
+//                    {
+//                        cursystem = _starnamelookup[sysc.name];
+//                        notedsystem = true;
+//                    }
 
                     return;
                 }
@@ -2569,7 +2539,9 @@ namespace EDDiscovery2
 
         SystemClassStarNames FindSystem(string name)            // nice wrapper for this
         {
-            return _starnamelookup.ContainsKey(name) ? _starnamelookup[name] : null;
+// TBD
+            return null;
+            //return _starnamelookup.ContainsKey(name) ? _starnamelookup[name] : null;
         }
 
 #endregion
