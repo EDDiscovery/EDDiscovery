@@ -296,6 +296,11 @@ StarName != null then heading is null, bookmark
 
 Migrated from the `EDDiscovery.Bookmarks` table. 
 
+```sql
+INSERT INTO EDDUser.Bookmarks (Id, StarName, X, Y, Z, Time, Heading, Note)
+SELECT * FROM EDDiscovery.Bookmarks
+```
+
 ## StellarBodies
 ```sql
 CREATE TABLE StellarBodies (
