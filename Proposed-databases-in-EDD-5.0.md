@@ -1,6 +1,6 @@
 # Overview
 
-In EDDiscovery 5.0, it is proposed that we split the database into two databases - an [`EDDUser` database](#EDDUser_database) containing the user settings, journal entries, saved routes, bookmarks, notes, etc, and an [`EDDSystems` database](#EDDSystems_database) containing data imported from EDSM and EDDB.
+In EDDiscovery 5.0, it is proposed that we split the database into two databases - an [`EDDUser` database](#edduser-database) containing the user settings, journal entries, saved routes, bookmarks, notes, etc, and an [`EDDSystems` database](#eddsystems-database) containing data imported from EDSM and EDDB.
 
 # EDDUser database
 
