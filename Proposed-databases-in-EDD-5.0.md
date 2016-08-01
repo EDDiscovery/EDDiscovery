@@ -121,7 +121,9 @@ Migrated from [`EDDiscovery.VisitedSystems`](https://github.com/EDDiscovery/EDDi
 
 ## IN Memory representation for the data grid travel view
 
-The VisitedSystemsClass is repurposed for holding the data for this tab, keyed on the CommanderID, for display on the data view travel grid.  Journal class has a function for filling in this array (FillVisitedSystem(cmdr id)).  It goes thru the journal, in time order, and picks out interesting events to populate this list.
+The EventList Class (replacing VisitedSystemsClass) holds, for the purposes of the travel history page DGV display, and the 3dmap etc, Events which the commander has performed.
+
+It is keyed on the CommanderID. The journal class has a function for filling in this array (FillVisitedSystem(cmdr id)).  It goes thru the journal, in time order, and picks out interesting events to populate this list.
 
 DGV grid will have : Time, Type, Text, Distance, Notes, Icons.  
 
