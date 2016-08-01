@@ -67,14 +67,9 @@ CREATE INDEX JournalEntry_CommanderId ON JournalEntries (CommanderId)
 
 This table contains entries from the journal or converted entries from the pre-2.2 netlogs.
 
-The properties that we want to index on or join on, or display, such as FSDJump X/Y/Z, get processed and inserted into `JournalProperties`. Only certain journal entries are to be initially decoded and expanded and stored.
+The properties that we want to index on or join on, or display, get processed and inserted into `JournalProperties`. Only certain journal entries are to be initially decoded and expanded and stored.
 
-For example: 
-* ~~X/Y/Z would be stored in the `StarPos` JournalProperties entry linked to the `FSDJump` or `Location` entry.~~
-* ~~The EDSM ID can be stored in an `EDSM-ID` JournalProperties entry.~~
-* ~~Joining should be not be appreciably slower matching on the X/Y/Z values where `JournalProperties.PropertyName='StarPos'` than it is with the X/Y/Z values stored directly on the `JournalEntry`.~~
-
-A JournalFSDJumps table has been added below, as joining using JournalProperties is between 2 and 4 times slower than joining directly on a table.
+FSDjumps get expanded into JournalFSDJumps table AND Journal Properties.  The reason for the second table is dB lookup speed.
 
 ## JournalProperties
 ```
@@ -94,20 +89,19 @@ CREATE INDEX JournalProperty_PropertyName ON JournalProperties (PropertyName)
 CREATE INDEX JournalProperty_Coords ON JournalProperties (CoordZ, CoordX, CoordY)
 ```
 
-This table contains data from the journal entries.
+This table contains data from the journal entries, for entries we want to process, display or join on.
 
 * `PropertyName`: The name of the key in the journal entry JSON
 * `SubPropertyName`: Used for `Materials` or `Killers` properties
 * `PropertyArrayIndex`: Used for array properties such as `Killers` or `Discovered`
-* `ValueNumber`: The numeric value of the property
-* `ValueString`: The string value of the property
-* `CoordX`: X coordinate (used by `StarPos`)
+* `ValueNumber`: The numeric value of the property, null if a string property.
+* `ValueString`: The string value of the property, null if a numeric property.
+
+RJP Q. Still want these? Considering we have jump table.
+
+* `CoordX`: X coordinate (used by `StarPos`) of the system were were in when this event happened
 * `CoordY`: Y coordinate (used by `StarPos`)
 * `CoordZ`: Z coordinate (used by `StarPos`)
-
-Q: Robby: you need to describe what some of these fields mean. (propertyArrayIndex).  Are you proposing to one time on journal entry decode the JSON and make an array of these.. are we doing it for every entry? (thats lots of data considering we will probably only use a few entries at the start)..
-
-A: We only need to store values for properties we want to index on or join on (such as StarPos, SystemName, EDSM ID, etc.)
 
 ## JournalFSDJumps
 ```
@@ -125,7 +119,9 @@ CREATE INDEX JournalFSDJumps_Name ON JournalFSDJumps (Name)
 CREATE INDEX JournalFSDJumps_EdsmId ON JournalFSDJumps (SystemEdsmId)
 ```
 
-Used for fast system matching
+Used for fast system matching.  When a FSDJump is found in the journal, an entry in this table is created.
+
+SystemEdsmId may be null if no matching EDSM system exists.
 
 Migrated from [`EDDiscovery.VisitedSystems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#visitedsystems)
 
@@ -166,11 +162,11 @@ CREATE INDEX WantedSystem_EdsmId ON WantedSystems (SystemEdsmId)
 
 Migrated from the [`EDDiscovery.wanted_systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#wanted_systems) table
 
-## SystemNotes
+## Notes
 ```
-CREATE TABLE SystemNotes (
+CREATE TABLE Notes (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-  SystemName TEXT NOT NULL COLLATE NOCASE,
+  SystemName TEXT COLLATE NOCASE,
   SystemEdsmId INTEGER,
   JournalEntryId INTEGER REFERENCES JournalEntry (Id),
   Time DATETIME NOT NULL, 
@@ -182,13 +178,11 @@ CREATE INDEX SystemNote_JournalEntryId ON SystemNotes (JournalEntryId)
 ```
 
 User notes created by UI.
-Linked to journal entries by the `JournalEntryId` column
-Linked to system by the `SystemEdsmId` column (may be Null if no EDSM star)
+Linked to journal entries by the `JournalEntryId` column.  May be null.  If set, its a note on a journal entry. SystemEdsmID will be null, SystemName will be null if the journal entry is not a FSDJump, else its the star name in the FSDJump.
 
-RJP Q: linked to journal ID fine, presume always a FSDJump entry, we should state.  Why link to EDSM? just for ease?
+Linked to EDSM system by the `SystemEdsmId` column. May be null.  If set, its a note on a star.  SystemName will be set, JournalEntryId will be null
 
-A: System notes from EDSM are not linked to any one travel entry, but are instead linked to a system.
-We can rename this to simply `Notes`, and have it be a general purpose note store.  Notes on systems would be linked by EDSM ID and/or the FSDJump / Location journal entry on which it was entered.  Notes on journal entries would not be linked to any system, but conversely would also not be uploaded to EDSM.
+One of either JournalEntryId or SystemEdsmId must be non null.
 
 Migrated from the [`EDDiscovery.SystemNote`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systemnote) table
 
@@ -196,12 +190,12 @@ Migrated from the [`EDDiscovery.SystemNote`](https://github.com/EDDiscovery/EDDi
 ```
 CREATE TABLE Bookmarks (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  StarName TEXT,
   SystemEdsmId INTEGER,
   X DOUBLE,
   Y DOUBLE,
   Z DOUBLE,
   Time DATETIME,
+  StarName TEXT,
   Heading TEXT,
   Note TEXT
 )
@@ -217,8 +211,7 @@ Migrated from the `EDDiscovery.Bookmarks` table.
 Contains data downloaded from EDSM only TBD Robby Edit.
 
 klightspeed: If we are only wanting EDSM data, then do we not want the `EddbSystem` table below?
-
-TBD Robby - change to EDSM systems..?
+RJP A. We need eddb data.  We can either put it a properties of the EDSMsystems (as we do now) or we can have a different table, as in here.
 
 ## Systems
 ```
@@ -236,7 +229,9 @@ CREATE INDEX EdsmSystem_EdsmId ON EdsmSystems (SystemEdsmId)
 CREATE INDEX EdsmSystem_Coords ON EdsmSystems (Z, X, Y)
 ```
 
-Migrated from the [`EDDiscovery.Systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systems) table
+Not migrated - redownloaded when we change.  
+
+RJP: Delete Migrated from the [`EDDiscovery.Systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systems) table
 
 ## SystemAliases
 ```
@@ -274,6 +269,7 @@ CREATE TABLE EddbSystems (
 CREATE INDEX EddbSystem_SystemEdsmId ON EddbSystems (SystemEdsmId)
 CREATE INDEX EddbSystem_SystemEddbId ON EddbSystems (SystemEddbId)
 ```
+
 Linked to a EDSM system entry by SystemEdsmId.
 
-Migrated from the [`EDDiscovery.Systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systems) table
+Not migrated - redownloaded when we change.  
