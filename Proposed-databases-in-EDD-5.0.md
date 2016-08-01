@@ -3,7 +3,7 @@
 This database contains user settings, journal entries, saved routes, etc.
 
 ## Register
-```
+```sql
 CREATE TABLE Register (
   ID TEXT NOT NULL PRIMARY KEY, 
   ValueInt INTEGER, 
@@ -16,7 +16,7 @@ CREATE TABLE Register (
 Migrated from [EDDiscovery.register](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#register) table
 
 ## Commanders
-```
+```sql
 CREATE TABLE Commanders (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   Name TEXT NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE Commanders (
 Migrated from `EDCommander*` settings in register table
 
 ## Journals
-```
+```sql
 CREATE TABLE Journals (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   Type TEXT NOT NULL,
@@ -49,13 +49,13 @@ Type:
 * `Journal`: travel log is a E:D 2.2 journal
 
 ## JournalEntries
-```
+```sql
 CREATE TABLE JournalEntries (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   JournalId INTEGER NOT NULL REFERENCES Journals (Id),
   EventType TEXT NOT NULL,
   EventTime DATETIME NOT NULL,
-  EventData TEXT, # JSON String of complete line
+  EventData TEXT, -- JSON String of complete line
   CommanderId INTEGER NOT NULL REFERENCES Commanders (Id),
   Synced INTEGER
 )
@@ -72,7 +72,7 @@ The properties that we want to index on or join on, or display, get processed an
 FSDjumps get expanded into JournalFSDJumps table AND Journal Properties.  The reason for the second table is dB lookup speed.
 
 ## JournalProperties
-```
+```sql
 CREATE TABLE JournalProperties (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   JournalEntryId INTEGER NOT NULL REFERENCES JournalEntries (Id),
@@ -104,7 +104,7 @@ RJP Q. Still want these? Considering we have jump table.
 * `CoordZ`: Z coordinate (used by `StarPos`)
 
 ## JournalFSDJumps
-```
+```sql
 CREATE TABLE JournalFSDJumps (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   JournalEntryId INTEGER NOT NULL REFERENCES JournalEntry (Id),
@@ -126,7 +126,7 @@ SystemEdsmId may be null if no matching EDSM system exists.
 Migrated from [`EDDiscovery.VisitedSystems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#visitedsystems)
 
 ## SavedRoutes
-```
+```sql
 CREATE TABLE SavedRoutes (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   Name TEXT NOT NULL UNIQUE,
@@ -138,7 +138,7 @@ CREATE TABLE SavedRoutes (
 Migrated from the [`EDDiscovery.routes_expeditions`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#route_expeditions) table
 
 ## SavedRouteEntries
-```
+```sql
 CREATE TABLE SavedRouteEntries (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   RouteId INTEGER NOT NULL REFERENCES SavedRoutes (Id),
@@ -151,7 +151,7 @@ CREATE TABLE SavedRouteEntries (
 Migrated from the [`EDDiscovery.route_systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#route_systems) table
 
 ## WantedSystems
-```
+```sql
 CREATE TABLE WantedSystems (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   SystemName TEXT NOT NULL COLLATE NOCASE,
@@ -163,7 +163,7 @@ CREATE INDEX WantedSystem_EdsmId ON WantedSystems (SystemEdsmId)
 Migrated from the [`EDDiscovery.wanted_systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#wanted_systems) table
 
 ## Notes
-```
+```sql
 CREATE TABLE Notes (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
   SystemName TEXT COLLATE NOCASE,
@@ -187,7 +187,7 @@ One of either JournalEntryId or SystemEdsmId must be non null.
 Migrated from the [`EDDiscovery.SystemNote`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systemnote) table
 
 ## Bookmarks
-```
+```sql
 CREATE TABLE Bookmarks (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   SystemEdsmId INTEGER,
@@ -208,14 +208,22 @@ Migrated from the `EDDiscovery.Bookmarks` table.
 
 # EDDSystems
 
-Contains data downloaded from EDSM only TBD Robby Edit.
+Contains system data imported from EDSM and EDDB
 
-klightspeed: If we are only wanting EDSM data, then do we not want the `EddbSystem` table below?
-RJP A. We need eddb data.  We can either put it a properties of the EDSMsystems (as we do now) or we can have a different table, as in here.
+EDSM data is stored in the EdsmSystems table.
+
+EDDB data is stored in the EddbSystems table.
+
+Tables can be combined at runtime using
+```sql
+SELECT *
+FROM EdsmSystems edsm
+LEFT JOIN EddbSystems eddb ON eddb.SystemEdsmId = edsm.SystemEdsmId
+```
 
 ## Systems
-```
-CREATE TABLE EdsmSystems (
+```sql
+CREATE TABLE Systems (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   SystemEdsmId INTEGER NOT NULL UNIQUE,
   Name TEXT NOT NULL COLLATE NOCASE,
@@ -229,12 +237,10 @@ CREATE INDEX EdsmSystem_EdsmId ON EdsmSystems (SystemEdsmId)
 CREATE INDEX EdsmSystem_Coords ON EdsmSystems (Z, X, Y)
 ```
 
-Not migrated - redownloaded when we change.  
-
-RJP: Delete Migrated from the [`EDDiscovery.Systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systems) table
+Re-imported from EDSM dump
 
 ## SystemAliases
-```
+```sql
 CREATE TABLE SystemAliases (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   Name TEXT NOT NULL,
@@ -245,13 +251,13 @@ CREATE INDEX SystemAlias_EdsmId ON SystemAliases (EdsmId)
 CREATE INDEX SystemAlias_MergedTo ON SystemAliases (MergedToEdsmId)
 ```
 
-Migrated from the `EDDiscovery.SystemAliases` table
+Re-imported from EDSM hidden-systems JSON
 
-## EddbSystems
-```
-CREATE TABLE EddbSystems (
+## PopulatedSystems
+```sql
+CREATE TABLE PopulatedSystems (
   Id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-  SystemEdsmId INTEGER NOT NULL REFERENCES EdsmSystems (SystemEdsmId),
+  SystemEdsmId INTEGER NOT NULL UNIQUE REFERENCES EdsmSystems (SystemEdsmId),
   SystemEddbId INTEGER NOT NULL UNIQUE,
   Faction TEXT,
   Government TEXT,
@@ -272,4 +278,4 @@ CREATE INDEX EddbSystem_SystemEddbId ON EddbSystems (SystemEddbId)
 
 Linked to a EDSM system entry by SystemEdsmId.
 
-Not migrated - redownloaded when we change.  
+Re-imported from EDDB dump
