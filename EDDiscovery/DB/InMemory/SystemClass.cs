@@ -31,7 +31,10 @@ namespace EDDiscovery2.DB.InMemory
         public EDEconomy primary_economy { get; set; }
         public int needs_permit { get; set; }
         public int eddb_updated_at { get; set; }
-        
+
+        public int gridid { get; set; }
+        public int randomid { get; set; }
+
         public bool HasCoordinate
         {
             get
