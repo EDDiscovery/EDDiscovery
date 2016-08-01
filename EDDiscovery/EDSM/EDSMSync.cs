@@ -120,7 +120,8 @@ namespace EDDiscovery2.EDSM
                     // Check for new systems from EDSM
                     foreach (var system in log)
                     {
-                        VisitedSystemsClass ps2 = (from c in mainForm.VisitedSystems where c.Name == system.Name && c.Time.Ticks == system.Time.Ticks select c).FirstOrDefault<VisitedSystemsClass>();
+                        VisitedSystemsClass ps2 = mainForm?.VisitedSystems == null ? null : 
+                            (from c in mainForm.VisitedSystems where c.Name == system.Name && c.Time.Ticks == system.Time.Ticks select c).FirstOrDefault<VisitedSystemsClass>();
                         if (ps2 == null)  // Add to local DB...
                         {
                             if (tlu == null) // If we dontt have a travellogunit yet then create it. 
