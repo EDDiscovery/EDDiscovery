@@ -119,27 +119,26 @@ MapColour is the current colour assigned for map display at the point of jump.
 
 Migrated from [`EDDiscovery.VisitedSystems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#visitedsystems)
 
-## IN Memory representation
+## IN Memory representation for the data grid travel view
 
-The VisitedSystemsClass is repurposed for holding the data for travelling, keyed on the CommanderID, for display on the data view travel grid.  Journal class has a function for filling in this array (FillVisitedSystem(cmdr id))
+The VisitedSystemsClass is repurposed for holding the data for this tab, keyed on the CommanderID, for display on the data view travel grid.  Journal class has a function for filling in this array (FillVisitedSystem(cmdr id)).  It goes thru the journal, in time order, and picks out interesting events to populate this list.
 
 DGV grid will have : Time, Type, Text, Distance, Notes, MapColour.  
 
 ```C#
 Class VisitedSystemsClass
 {
-int? edsmid; // edsm id or null if its not an edsm system
-int? eddbid; // have we an eddb entry for this system?
+int? edsmid; // edsm id or null if its not an edsm system, used for the edsm button
+int? eddbid; // have we an eddb entry for this system?  Used for the eddb button and for populating the other travel page entries.
 int journalentry; // which journal entry is this associated with, must be set
+int journaltravelentry; // to go to the JournalTravelEntries for looking up X,Y,Z etc.
+DateTime Time;
 string type;  // type of entry.. "Jump", "Dock", "Undock", "Land", "Take off" etc.
 string text;  // additional text.  For "Jump" it would be system name, for "Dock" maybe the space station name (can we get that)
-DateTime Time;
-string Name;
-double X
-double Y
-double Z
 }
 ```
+
+Rather than copying the data in here, just have direct indexes?  we could put the data in here for speed.. not sure.
 
 ## SavedRoutes
 ```sql
