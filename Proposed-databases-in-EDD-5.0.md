@@ -20,6 +20,8 @@ It contains the following tables:
 * [`WantedSystems`](#wantedsystems): Systems the player has set as wanted / favourite
 * [`Notes`](#notes): Player notes on systems and journal entries
 * [`Bookmarks`](#bookmarks): Bookmarked systems or regions
+* [`StellarBodies`](#stellarbodies): Stellar bodies (stars, planets) that have been scanned
+* [`StellarBodyMaterials`](#stellarbodymaterials): Material concentrations on stellar bodies
 
 ## Register
 ```sql
@@ -258,6 +260,28 @@ StarName = null then Heading is set, region mark
 StarName != null then heading is null, bookmark
 
 Migrated from the `EDDiscovery.Bookmarks` table. 
+
+## StellarBodies
+```sql
+CREATE TABLE StellarBodies (
+  Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  BodyName TEXT NOT NULL
+)
+```
+
+Filled by scans of stellar bodies.
+
+## StellarBodyMaterials
+```sql
+CREATE TABLE StellarBodyMaterials (
+  Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  StellarBodyId INTEGER NOT NULL REFERENCES StellarBodies (Id),
+  MaterialName TEXT NOT NULL,
+  Concentration DOUBLE
+)
+```
+
+Filled by scans of stellar bodies
 
 # EDDSystems database
 
