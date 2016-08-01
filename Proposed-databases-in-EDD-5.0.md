@@ -67,13 +67,9 @@ CREATE INDEX JournalEntry_CommanderId ON JournalEntries (CommanderId)
 
 This table contains entries from the journal or converted entries from the pre-2.2 netlogs.
 
-TBD: Q Robby: we read in this to an memory array? Do we expand out the properties of these into the memory array? For instance, the FSDJump entry, do we have x/y/z name as the decoded FSD entry in the class?  Do we have to parse it every time we need it (a lot) or do we parse one and extract data..
+The properties that we want to index on or join on, or display, such as FSDJump X/Y/Z, get processed and inserted into `JournalProperties`. Only certain journal entries are to be initially decoded and expanded and stored.
 
-A: The properties that we want to index on or join on, such as X/Y/Z, get processed and inserted into `JournalProperties`
-
-Q: Secondly, how is it assigned to an EDSM Star. We have to match on name+XYZ.  Without name and XYZ exposed in the record we can't do that with a JOIN ON.. like your doing at the moment.  Where do we keep the EDSM ID? Are we going to bury it in the JSON string (I would not, i think the string should be as is frontier provide it).  Are we using the JournalProperties for a FSD jump to do the match..
-
-A: 
+For example: 
 * ~~X/Y/Z would be stored in the `StarPos` JournalProperties entry linked to the `FSDJump` or `Location` entry.~~
 * ~~The EDSM ID can be stored in an `EDSM-ID` JournalProperties entry.~~
 * ~~Joining should be not be appreciably slower matching on the X/Y/Z values where `JournalProperties.PropertyName='StarPos'` than it is with the X/Y/Z values stored directly on the `JournalEntry`.~~
