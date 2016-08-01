@@ -201,9 +201,9 @@ Migrated from the `EDDiscovery.Bookmarks` table.
 
 Contains system data imported from EDSM and EDDB
 
-EDSM data is stored in the EdsmSystems table.
+EDSM data is stored in the Systems table.
 
-EDDB data is stored in the EddbSystems table.
+EDDB data is stored in the PopulatedSystems table.
 
 Tables can be combined at runtime using
 ```sql
