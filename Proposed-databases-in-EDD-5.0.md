@@ -119,16 +119,16 @@ MapColour is the current colour assigned for map display at the point of jump.
 
 Migrated from [`EDDiscovery.VisitedSystems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#visitedsystems)
 
-## IN Memory representation for the data grid travel view
+## In Memory representation of Journal Entries
 
-The EventList Class (replacing VisitedSystemsClass) holds, for the purposes of the travel history page DGV display, and the 3dmap etc, Events which the commander has performed.
+The Event Class (replacing VisitedSystemsClass) holds, for the purposes of the travel history page DGV display, and the 3dmap etc, Events which the commander has performed.
 
-It is keyed on the CommanderID. The journal class has a function for filling in this array (FillVisitedSystem(cmdr id)).  It goes thru the journal, in time order, and picks out interesting events to populate this list.
+It is keyed on the CommanderID. The journal class has a function for filling in this array (FillVisitedSystem(cmdr id)).  It goes thru the journal, in time order, and picks out interesting events to populate a List<EventClass>.
 
 DGV grid will have : Time, Type, Text, Distance, Notes, Icons.  
 
 ```C#
-Class VisitedSystemsClass
+Class EventClass
 {
 int journalentry; // which journal entry is this associated with, must be set
 
@@ -141,7 +141,7 @@ string text;  // for the text column.  For "Jump" it would be system name, for "
 }
 ```
 
-As the journal is read, ignoring entries not matching the commander, then on each location/fsd jump change, then we pick up the System information relevant.  We then populate the jump entry, and all subsequent entries, with the same information until another jump occurs. To pick up the information, we look to see if an system exists in the Systems table by EDSMID.  If so, this is a copy of the db row from the Systems table.  if EDSMID is not set, this is in memory representation of the system using info from the journal entry; id=0,Name=name,X/Y/Z populated from the journal entry.
+As the journal is read, ignoring entries not matching the commander, then on each location/fsd jump change, then we pick up the System information relevant.  We then populate the jump entry, and all subsequent entries, with the same information until another jump occurs. To pick up the information, we look to see if an system exists in the Systems table by EDSMID (using the JournalTravelEntries.SystemEdsmId).  If so, this is a copy of the db row from the Systems table.  if EDSMID is not set, this is in memory representation of the system using info from the journal entry; id=0,Name=name,X/Y/Z populated from the journal entry.
 
 if EDSMID is available for the journal entry, and EDDB has the edsm id, then this is the inmemory class representation of row of the PopulatedSystems db. Null if non there.
 
@@ -230,15 +230,13 @@ StarName != null then heading is null, bookmark
 
 Migrated from the `EDDiscovery.Bookmarks` table. 
 
-# EDDSystems
+# View EDDSystems
 
-Contains system data imported from EDSM and EDDB
+A view, combining the System table and the Populated table.
 
-EDSM data is stored in the Systems table.
+EDSM data is stored in the Systems table. EDDB data is stored in the PopulatedSystems table.
 
-EDDB data is stored in the PopulatedSystems table.
-
-Tables can be combined at runtime using
+The view is composed of:
 ```sql
 SELECT *
 FROM EdsmSystems edsm
