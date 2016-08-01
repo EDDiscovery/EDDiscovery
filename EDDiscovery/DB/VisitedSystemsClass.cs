@@ -111,9 +111,9 @@ namespace EDDiscovery2.DB
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        public bool Add(SQLiteConnectionED cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z, id_edsm_assigned) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z, @id_edsm_assigned)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z, id_edsm_assigned) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z, @id_edsm_assigned)", tn))
             {
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@time", Time);
@@ -220,6 +220,26 @@ namespace EDDiscovery2.DB
                     return list;
                 }
             }
+        }
+
+        public static List<VisitedSystemsClass> GetAll(TravelLogUnit tlu)
+        {
+            List<VisitedSystemsClass> vsc = new List<VisitedSystemsClass>();
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM VisitedSystems WHERE Source = @source ORDER BY Time ASC"))
+                {
+                    cmd.AddParameterWithValue("@source", tlu.id);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            vsc.Add(new VisitedSystemsClass(reader));
+                        }
+                    }
+                }
+            }
+            return vsc;
         }
 
         static public VisitedSystemsClass GetLast()
