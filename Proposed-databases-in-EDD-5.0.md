@@ -18,7 +18,8 @@ It contains the following tables:
 * [`SavedRoutes`](#savedroutes): Saved route / expedition info
 * [`SavedRouteEntries`](#savedrouteentries): Entries in saved routes / expeditions
 * [`WantedSystems`](#wantedsystems): Systems the player has set as wanted / favourite
-* [`Notes`](#notes): Player notes on systems and journal entries
+* [`SystemNotes`](#systemnotes): Player notes on systems
+* [`JournalNotes`](#journalnotes): Player notes on journal entries
 * [`Bookmarks`](#bookmarks): Bookmarked systems or regions
 * [`StellarBodies`](#stellarbodies): Stellar bodies (stars, planets) that have been scanned
 * [`StellarBodyMaterials`](#stellarbodymaterials): Material concentrations on stellar bodies
