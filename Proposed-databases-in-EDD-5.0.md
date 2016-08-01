@@ -123,7 +123,7 @@ Migrated from [`EDDiscovery.VisitedSystems`](https://github.com/EDDiscovery/EDDi
 
 The VisitedSystemsClass is repurposed for holding the data for this tab, keyed on the CommanderID, for display on the data view travel grid.  Journal class has a function for filling in this array (FillVisitedSystem(cmdr id)).  It goes thru the journal, in time order, and picks out interesting events to populate this list.
 
-DGV grid will have : Time, Type, Text, Distance, Notes, MapColour.  
+DGV grid will have : Time, Type, Text, Distance, Notes, Icons.  
 
 ```C#
 Class VisitedSystemsClass
@@ -142,6 +142,8 @@ string text;  // for the text column.  For "Jump" it would be system name, for "
 As the journal is read, ignoring entries not matching the commander, then on each location/fsd jump change, then we pick up the System information relevant.  We then populate the jump entry, and all subsequent entries, with the same information until another jump occurs. To pick up the information, we look to see if an system exists in the Systems table by EDSMID.  If so, this is a copy of the db row from the Systems table.  if EDSMID is not set, this is in memory representation of the system using info from the journal entry; id=0,Name=name,X/Y/Z populated from the journal entry.
 
 if EDSMID is available for the journal entry, and EDDB has the edsm id, then this is the inmemory class representation of row of the PopulatedSystems db. Null if non there.
+
+Icons holds map colour, and also probably a EDSM first discovered flag, etc.
 
 ## SavedRoutes
 ```sql
