@@ -9,17 +9,17 @@ In EDDiscovery 5.0, it is proposed that we split the database into two databases
 This database (`EDDUser.sqlite`) contains user settings, journal entries, saved routes, etc.
 
 It contains the following tables:
-* [`Register`](#Register): user settings
-* [`Commanders`](#Commanders): commander name, logpath and API key
-* [`Journals`](#Journals): Journal file info
-* [`JournalEntries`](#JournalEntries): Journal entry data
-* [`JournalProperties`](#JournalProperties): Exported properties from journal entry data
-* [`JournalTravelEntries`](#JournalTravelEntries): Travel log
-* [`SavedRoutes`](#SavedRoutes): Saved route / expedition info
-* [`SavedRouteEntries`](#SavedRouteEntries): Entries in saved routes / expeditions
-* [`WantedSystems`](#WantedSystems): Systems the player has set as wanted / favourite
-* [`Notes`](#Notes): Player notes on systems and journal entries
-* [`Bookmarks`](#Bookmarks): Bookmarked systems or regions
+* [`Register`](#register): user settings
+* [`Commanders`](#commanders): commander name, logpath and API key
+* [`Journals`](#journals): Journal file info
+* [`JournalEntries`](#journalentries): Journal entry data
+* [`JournalProperties`](#journalproperties): Exported properties from journal entry data
+* [`JournalTravelEntries`](#journaltravelentries): Travel log
+* [`SavedRoutes`](#savedroutes): Saved route / expedition info
+* [`SavedRouteEntries`](#savedrouteentries): Entries in saved routes / expeditions
+* [`WantedSystems`](#wantedsystems): Systems the player has set as wanted / favourite
+* [`Notes`](#notes): Player notes on systems and journal entries
+* [`Bookmarks`](#bookmarks): Bookmarked systems or regions
 
 ## Register
 ```sql
@@ -254,9 +254,9 @@ Migrated from the `EDDiscovery.Bookmarks` table.
 A database (`EDDSystems.sqlite`), containing the system data sourced from EDSM and EDDB.
 
 It contains the following tables:
-* [`Systems`](#Systems): System data imported from EDSM
-* [`SystemAliases`](#SystemAliases): Systems that have been renamed or hidden in EDSM
-* [`PopulatedSystems`](#PopulatedSystems): Data on populated systems imported from EDDB
+* [`Systems`](#systems): System data imported from EDSM
+* [`SystemAliases`](#systemaliases): Systems that have been renamed or hidden in EDSM
+* [`PopulatedSystems`](#populatedsystems): Data on populated systems imported from EDDB
 
 EDSM data is stored in the Systems table. EDDB data is stored in the PopulatedSystems table.
 
