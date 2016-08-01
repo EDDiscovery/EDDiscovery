@@ -205,29 +205,39 @@ CREATE INDEX WantedSystem_EdsmId ON WantedSystems (SystemEdsmId)
 
 Migrated from the [`EDDiscovery.wanted_systems`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#wanted_systems) table
 
-## Notes
+## SystemNotes
 ```sql
-CREATE TABLE Notes (
+CREATE TABLE SystemNotes (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-  SystemName TEXT COLLATE NOCASE,
+  SystemName TEXT NOT NULL COLLATE NOCASE,
   SystemEdsmId INTEGER,
-  JournalEntryId INTEGER REFERENCES JournalEntry (Id),
   Time DATETIME NOT NULL, 
   Note TEXT
 )
 CREATE INDEX SystemNote_SystemName ON SystemNotes (SystemName)
 CREATE INDEX SystemNote_EdsmId ON SystemNotes (SystemEdsmId)
-CREATE INDEX SystemNote_JournalEntryId ON SystemNotes (JournalEntryId)
 ```
 
-User notes created by UI.
-Linked to journal entries by the `JournalEntryId` column.  May be null.  If set, its a note on a journal entry. SystemEdsmID will be null, SystemName will be null if the journal entry is not a FSDJump or Location, else its the star name in the FSDJump or Location.
+User system notes created by UI.
 
-Linked to EDSM system by the `SystemEdsmId` column. May be null.  If set, its a note on a star.  SystemName will be set, JournalEntryId will be null
+Linked to EDSM system by the `SystemEdsmId` column.  SystemEdsmId may be null if system does not yet exist in EDSM.
 
-One of either JournalEntryId or SystemEdsmId must be non null.
+If SystemEdsmId is null, then system is linked using SystemName.
 
 Migrated from the [`EDDiscovery.SystemNote`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#systemnote) table
+
+## JournalNote
+```sql
+CREATE TABLE JournalNote (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+  JournalEntryId INTEGER NOT NULL REFERENCES JournalEntry (Id),
+  Time DATETIME NOT NULL, 
+  Note TEXT
+)
+CREATE INDEX SystemNote_JournalEntryId ON Notes (JournalEntryId)
+```
+
+Linked to journal entries by the `JournalEntryId` column.
 
 ## Bookmarks
 ```sql
