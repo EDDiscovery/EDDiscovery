@@ -22,17 +22,6 @@ namespace EDDiscovery2._3DMap
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
-        public ISystem CenterSystem { get; set; } = new SystemClass();
-        public ISystem SelectedSystem { get; set; } = new SystemClass();
-        public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
-        public List<VisitedSystemsClass> VisitedSystems { get; set; }
-        public List<ISystem> PlannedRoute { get; set; } = new List<ISystem>();
-
-        public bool DrawLines { get; set; } = false;
-        public bool UseImage { get; set; } = false;
-
-        public FGEImage[] Images { get; set; } = null;
-
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
         public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
 
@@ -40,40 +29,34 @@ namespace EDDiscovery2._3DMap
 
         public DatasetBuilder()
         {
-        }
-
-        public void Build()
-        {
             _datasets = new List<IData3DSet>();
         }
 
-        public List<IData3DSet> BuildMaps()
+        public List<IData3DSet> BuildMaps(ref List<FGEImage> images)
         {
-            _datasets = new List<IData3DSet>();
-            AddMapImages();
+            AddMapImages(ref images);
             return _datasets;
         }
 
-        public List<IData3DSet> BuildVisitedSystems()
+        public List<IData3DSet> BuildVisitedSystems( bool drawlines, ISystem centersystem , List<VisitedSystemsClass> VisitedSystems,
+                                                     List<SystemClass> refsys, List<SystemClass> planned )
         {
-            _datasets = new List<IData3DSet>();
-            AddVisitedSystemsInformation();
-            AddRoutePlannerInfoToDataset();
-            AddTrilaterationInfoToDataset();
+            AddVisitedSystemsInformation(drawlines,VisitedSystems);
+            AddRoutePlannerInfoToDataset(planned);
+            AddTrilaterationInfoToDataset(centersystem,refsys);
             return _datasets;
         }
 
-        public List<IData3DSet> BuildSelected()
+        public List<IData3DSet> BuildSelected(ISystem centresystem, ISystem selectedsystem)
         {
-            _datasets = new List<IData3DSet>();
-            AddSelectedSystemToDataset();
-            AddCenterPointToDataset();
+            AddSelectedSystemToDataset(selectedsystem);
+            AddCenterPointToDataset(centresystem);
             return _datasets;
         }
 
-        private void AddMapImages()
+        private void AddMapImages(ref List<FGEImage> Images )
         {
-            if (UseImage && Images != null && Images.Length != 0)
+            if ( Images != null && Images.Count != 0 )
             {
                 var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("mapimage", Color.White, 1.0f);
                 foreach (var img in Images)
@@ -147,7 +130,7 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, double widthly, double heightly , bool vert )
+        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, double widthly, double heightly , bool vert, List<VisitedSystemsClass> VisitedSystems)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
@@ -371,7 +354,7 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        private void AddVisitedSystemsInformation()
+        private void AddVisitedSystemsInformation( bool DrawLines , List<VisitedSystemsClass> VisitedSystems )
         {
             if (VisitedSystems != null && VisitedSystems.Any())
             {
@@ -423,8 +406,8 @@ namespace EDDiscovery2._3DMap
 
         // Planned change: Centered system will be marked but won't be "center" of the galaxy
         // dataset anymore. The origin will stay at Sol.
-        private void AddCenterPointToDataset()
-        {
+        private void AddCenterPointToDataset(ISystem CenterSystem)
+    {
             var dataset = Data3DSetClass<PointData>.Create("Center", MapColours.CentredSystem, 5.0f);
 
             //GL.Enable(EnableCap.ProgramPointSize);
@@ -432,8 +415,8 @@ namespace EDDiscovery2._3DMap
             _datasets.Add(dataset);
         }
 
-        private void AddSelectedSystemToDataset()
-        {
+        private void AddSelectedSystemToDataset(ISystem SelectedSystem)
+    {
             if (SelectedSystem != null)
             {
                 var dataset = Data3DSetClass<PointData>.Create("Selected", MapColours.SelectedSystem, 8.0f);
@@ -455,7 +438,7 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        private void AddTrilaterationInfoToDataset()
+        private void AddTrilaterationInfoToDataset(ISystem CenterSystem, List<SystemClass> ReferenceSystems)
         {
             if (ReferenceSystems != null && ReferenceSystems.Any())
             {
@@ -490,7 +473,7 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        private void AddRoutePlannerInfoToDataset()
+        private void AddRoutePlannerInfoToDataset(List<SystemClass> PlannedRoute)
         {
             if (PlannedRoute != null && PlannedRoute.Any())
             {
