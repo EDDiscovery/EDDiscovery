@@ -3,6 +3,7 @@ using EDDiscovery2.DB;
 using EMK.LightGeometry;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -535,29 +536,40 @@ namespace EDDiscovery.DB
             return dist;
         }
 
-        public static void GetSystemNamesList(List<SystemClassStarNames> snlist , Dictionary<string, SystemClassStarNames> dict )
+        public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
+        public static int GetSystemVector(int gridid, ref Vector3d[] vertices ,SystemAskType ask , int percentage )
         {
+            int numvertices = 0;
+            vertices = null;
+
             try
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select id,name,x,y,z,population from Systems"))
+                    using (DbCommand cmd = cn.CreateCommand("select id,x,y,z from Systems where gridid=@gridid"))
                     {
+                        cmd.AddParameterWithValue("gridid", gridid);
+
+                        if (ask == SystemAskType.PopulatedStars)
+                            cmd.CommandText += " and population<>0";
+                        else if (ask == SystemAskType.UnPopulatedStars)
+                            cmd.CommandText += " and (population=0 or population is null)";
+
+                        if (percentage < 100)
+                            cmd.CommandText += " and randomid<" + percentage;
+
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                string name = (string)reader["name"];
-                                long population = (System.DBNull.Value == reader["population"]) ? 0 : ((long)reader["population"]);
-
                                 if (System.DBNull.Value != reader["x"])
                                 {
-                                    SystemClassStarNames sys = new SystemClassStarNames(name, (double)reader["x"], (double)reader["y"], (double)reader["z"], population, (long)reader["id"]);
+                                    if (vertices == null)
+                                        vertices = new Vector3d[1024];
+                                    else if (numvertices == vertices.Length)
+                                        Array.Resize(ref vertices, vertices.Length + 8192);
 
-                                    if (!dict.ContainsKey(sys.name))    // protect against crap ups in the star list having duplicate names
-                                        dict.Add(sys.name, sys);
-
-                                    snlist.Add(sys);
+                                    vertices[numvertices++] = new Vector3d((double)reader["x"], (double)reader["y"], (double)reader["z"]);
                                 }
                             }
                         }
@@ -569,6 +581,8 @@ namespace EDDiscovery.DB
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
+
+            return numvertices;
         }
 
         public static void GetSystemNames(ref AutoCompleteStringCollection asc)
@@ -1324,6 +1338,7 @@ namespace EDDiscovery.DB
 
             bool emptydatabase = SystemClass.GetTotalSystems() == 0;            // if empty database, we can skip the lookup
 
+            int formtickcount = Environment.TickCount;
 
             using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db
             {
@@ -1335,7 +1350,6 @@ namespace EDDiscovery.DB
                 try
                 {
                     int lasttc = Environment.TickCount;
-                    int formtickcount = Environment.TickCount;
                     Random rnd = new Random();
 
                     while (jr.Read())
@@ -1353,7 +1367,6 @@ namespace EDDiscovery.DB
                             {
                                 Console.WriteLine("EDSM Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newsys " + newsystems.Count + " update " + toupdate.Count());
                                 lasttc = Environment.TickCount;
-                                break;
                             }
 
                             if ( Environment.TickCount - formtickcount > 5000 )
@@ -1465,6 +1478,13 @@ namespace EDDiscovery.DB
 
                             Console.WriteLine("{0}: EDSM Store Count: {1}", DateTime.UtcNow, count);
                             transaction.Commit();
+
+                            if (Environment.TickCount - formtickcount > 5000)
+                            {
+                                discoveryform.LogLine("Storing into database from EDSM, stored " + count );
+                                formtickcount = Environment.TickCount;
+                            }
+
                         }
 
                         if (discoveryform.PendingClose)         // pending close, abandon
@@ -1668,34 +1688,34 @@ namespace EDDiscovery.DB
 
     public class GridId
     {
-        public const int gridxrange = 24;
-        static private int[] compresstablex = { 0,0,0,0,0, 0,0,0,0,0,                    // 0   -40
-                                              1,1,1,1,1, 2,2,2,2,2,                     // 10   -30,    -25
-                                              3,3,3,3,3, 4,4,4,4,4,                     // 20   -20,    -15
-                                              5,5,6,6,7, 7,8,9,10,11,                   // 30   -10,-8,-6,..
-                                              12,13,14,15,16, 16,17,17,18,18,           // 40 centre
-                                              19,19,19,19,19, 20,20,20,20,20,           // 50
-                                              21,21,21,21,21, 22,22,22,22,22,           // 60
-                                              23,23,23,23,23, 23,23,23,23,23,           // 70
-                                              23                                        // 80  +40
+        public const int gridxrange = 20;
+        static private int[] compresstablex = {
+                                                0,1,1,1,1, 2,2,2,2,2,                   // 0   -20
+                                                3,3,4,4,5, 5,6,7,8,9,                   // 10   -10,-8,-6,..
+                                                10,11,12,13,14, 14,15,15,16,16,         // 20 centre
+                                                17,17,17,17,17, 18,18,18,18,18,         // 30   +10
+                                                19                                      // 40   +20
                                             };
-        public const int gridzrange = 29;
-        static private int[] compresstablez = { 0,0,0,0,0, 1,1,1,2,2,                    // 0  -20.5
-                                              3,3,4,4,5, 6,7,8,9,10,                    // 10  -10
-                                              11,12,13,14,15, 16,16,17,17,18,           // 20 Sol
-                                              19,19,19,19,19, 20,20,20,20,20,           // 30   +10
-                                              21,21,21,21,21, 22,22,22,22,22,           // 40 centre +20
-                                              23,23,23,23,23, 24,24,24,24,24,           // 50 +30
-                                              25,25,25,25,25, 26,26,26,26,26,           // 60 +40
-                                              27,27,27,27,27, 28,28,28,28,28,           // 70 +50
-                                              28,28,28,28,28, 28,28,28,28,28,           // 80 +60
-                                              28                                        // 90 +70
+        public const int gridzrange = 26;
+        static private int[] compresstablez = {
+                                                0,1,1,2,2,      3,4,5,6,7,              // 0  -10
+                                                8,9,10,11,12,   12,13,13,14,14,         // 10 Sol 0
+                                                15,15,15,15,15, 16,16,16,16,16,         // 20   +10
+                                                17,17,17,17,17, 18,18,18,18,18,         // 30 centre +20
+                                                19,19,19,19,19, 20,20,20,20,20,         // 40 +30
+                                                21,21,21,21,21, 22,22,22,22,22,         // 50 +40    
+                                                23,23,23,23,23, 24,24,24,24,24,         // 60 +50
+                                                25,                                     // 70 +60
                                             };
+        public const int xleft = -20500;
+        public const int xright = 20000;
+        public const int zbot = -10500;
+        public const int ztop = 60000;
 
         public static int Id(double x, double z)
         {
-            x = Math.Min(Math.Max(x + 40500.0, 0), 80000);
-            z = Math.Min(Math.Max(z + 20500.0, 0), 90000);
+            x = Math.Min(Math.Max(x - xleft, 0), xright - xleft);
+            z = Math.Min(Math.Max(z - zbot, 0), ztop - zbot);
             x /= 1000;
             z /= 1000;
             return compresstablex[(int)x] + 100 * compresstablez[(int)z];
@@ -1720,12 +1740,12 @@ namespace EDDiscovery.DB
                     {
                         if (compresstablex[i] == xid)
                         {
-                            double startx = i * 1000 - 40500.0;
+                            double startx = i * 1000 + xleft;
 
                             while (i < compresstablex.Length && compresstablex[i] == xid)
                                 i++;
 
-                            x = (((i * 1000) - 40500.0) + startx) / 2.0;
+                            x = (((i * 1000) + xleft) + startx) / 2.0;
                             break;
                         }
                     }
@@ -1734,12 +1754,12 @@ namespace EDDiscovery.DB
                     {
                         if (compresstablez[i] == zid)
                         {
-                            double startz = i * 1000 - 20500.0;
+                            double startz = i * 1000 + zbot;
 
                             while (i < compresstablez.Length && compresstablez[i] == zid)
                                 i++;
 
-                            z = (((i * 1000) - 20500.0) + startz) / 2.0;
+                            z = (((i * 1000) + zbot) + startz) / 2.0;
                             break;
                         }
                     }
@@ -1751,5 +1771,4 @@ namespace EDDiscovery.DB
             return false;
         }
     }
-
 }

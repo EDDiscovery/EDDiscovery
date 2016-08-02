@@ -24,7 +24,6 @@ namespace EDDiscovery2._3DMap
 
         public ISystem CenterSystem { get; set; } = new SystemClass();
         public ISystem SelectedSystem { get; set; } = new SystemClass();
-        public List<SystemClassStarNames> StarList { get; set; }
         public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
         public List<VisitedSystemsClass> VisitedSystems { get; set; }
         public List<ISystem> PlannedRoute { get; set; } = new List<ISystem>();
@@ -371,25 +370,6 @@ namespace EDDiscovery2._3DMap
                 _datasets.Add(newgrid);
             }
         }
-
-        public List<IData3DSet> AddStars(bool unpopulated, bool useunpopcolor)
-        {
-            if (StarList != null)
-            {
-                var datasetS = Data3DSetClass<PointData>.Create("stars", (unpopulated || useunpopcolor) ? MapColours.SystemDefault : MapColours.StationSystem , 1.0f);
-
-                foreach (SystemClassStarNames si in StarList)
-                {
-                    if ( (si.population == 0) == unpopulated )          // if zero population, and unpopulated is true, add.  If non zero pop, and unpolated is false, add
-                        datasetS.Add(new PointData(si.x, si.y, si.z));
-                }
-
-                _datasets.Add(datasetS);
-            }
-
-            return _datasets;
-        }
-
 
         private void AddVisitedSystemsInformation()
         {
