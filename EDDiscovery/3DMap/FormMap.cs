@@ -50,13 +50,13 @@ namespace EDDiscovery2
         //        Dictionary<string, SystemClassStarNames> _starnamelookup; // and a dictionary to above since its so slow to do a search
 
         private AutoCompleteStringCollection _systemNames;
-        private SystemClassStarNames _centerSystem;
-        private SystemClassStarNames _homeSystem;
+        private ISystem _centerSystem;
+        private ISystem _homeSystem;
 
-        private SystemClassStarNames _clickedSystem;        // left clicked on a system/bookmark system/noted system
+        private ISystem _clickedSystem;        // left clicked on a system/bookmark system/noted system
         private Vector3 _clickedposition;                   // left clicked on a position
 
-        private SystemClassStarNames _historySelection;
+        private ISystem _historySelection;
         private bool _loaded = false;
 
         private float _zoom = 1.0f;
@@ -132,57 +132,33 @@ namespace EDDiscovery2
             InitializeComponent();
         }
 
-        public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
-                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
-        {
-            SystemClassStarNames hs = historysel != null ? new SystemClassStarNames(historysel) : null;
-            SystemClassStarNames cs = centersys != null ? new SystemClassStarNames(centersys) : null;
-            Prepare(hs, homesys, cs, zoom, sysname, visited);
-        }
-
         public void Prepare(VisitedSystemsClass historysel, string homesys, ISystem centersys, float zoom,
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
-            SystemClassStarNames hs = historysel != null ? new SystemClassStarNames(historysel) : null;
-            SystemClassStarNames cs = centersys != null ? new SystemClassStarNames(centersys) : null;
-            Prepare(hs, homesys, cs, zoom, sysname, visited);
+            _visitedSystems = visited;
+            ISystem h = FindSystem(historysel.Name);
+            Prepare(h, homesys, centersys, zoom, sysname, visited);
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
+            _visitedSystems = visited;
             Prepare(FindSystem(historysel), homesys, FindSystem(centersys), zoom, sysname, visited);
         }
 
-        public void Prepare(SystemClassStarNames historysel, string homesys, SystemClassStarNames centersys, float zoom,
+        public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
+            _visitedSystems = visited;
             _historySelection = historysel;
             _centerSystem = centersys;
-            _visitedSystems = visited;
 
-
-#if false
-            if (_visitedSystems != null)              // note if list is empty on first run seeing this
+            if (_stargrids == null)
             {
-                foreach (VisitedSystemsClass vsc in _visitedSystems)
-                {
-                    if (vsc.HasTravelCoordinates)
-                    {
-                        if (!_starnamelookup.ContainsKey(vsc.Name))    // if not in dictionary, add
-                        {
-                            //Debug.Assert(_starnames.Find(x => x.name.Equals(vsc.Name)) == null); // double check
-//                            Console.WriteLine("Added visited system " + vsc.Name);
-                            SystemClassStarNames scs = new SystemClassStarNames(vsc);
-                            _starnames.Add(scs);
-                            _starnamelookup.Add(scs.name, scs);
-                        }
-                    }
-                }
+                _stargrids = new StarGrids();
+                _stargrids.Initialise();                        // bring up the class..
             }
-#endif
-            _stargrids = new StarGrids();
-            _stargrids.Initialise();                             // bring up the class..
 
             string fontname = "MS Sans Serif";                  // calculate once for bitmap 
             _starnamebitmapfnt = new Font(fontname, 20F);
@@ -200,11 +176,21 @@ namespace EDDiscovery2
             _systemNames = sysname;
 
             if (_centerSystem == null)
+            {
                 _centerSystem = FindSystem("Sol");
+
+                if (_centerSystem == null)
+                    _centerSystem = new SystemClass("Sol", 0, 0, 0);
+            }
 
             _homeSystem = FindSystem(homesys);
             if (_homeSystem == null)
+            {
                 _homeSystem = FindSystem("Sol");
+
+                if (_homeSystem == null)
+                    _homeSystem = new SystemClass("Sol", 0, 0, 0);
+            }
 
             _defaultZoom = zoom;
 
@@ -230,8 +216,7 @@ namespace EDDiscovery2
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
 
-            GenerateDataSetsVisitedSystems();           // recreate 
-
+            _stargrids.FillVisitedSystems(_visitedSystems);     // to ensure its updated
         }
 
         public void SetPlannedRoute(List<SystemClass> plannedr)
@@ -250,23 +235,9 @@ namespace EDDiscovery2
 
         public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
         {
-#if false
             if (Is3DMapsRunning && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
             {
-                _visitedSystems = visited;
-
-                foreach (VisitedSystemsClass vsc in _visitedSystems)
-                {
-                    if (vsc.HasTravelCoordinates && !_starnamelookup.ContainsKey(vsc.Name))    // if coords and not in dictionary, add
-                    {
-                        Console.WriteLine("3dMap Added new visited system " + vsc.Name);
-                        SystemClassStarNames scs = new SystemClassStarNames(vsc);
-                        _starnames.Add(scs);
-                        _starnamelookup.Add(scs.name, scs);
-                    }
-                }
-
-                GenerateDataSetsStars();                            // update the star list..
+                _stargrids.FillVisitedSystems(_visitedSystems);          // update visited systems, will be displayed on next update of star grids
                 GenerateDataSetsVisitedSystems();
                 RecalcStarNames();
                 glControl.Invalidate();
@@ -279,14 +250,13 @@ namespace EDDiscovery2
                         SetCenterSystemTo(vs.Name, true);
                 }
             }
-#endif
         }
 
         public void UpdateHistorySystem(string historysel)
         {
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
-                SystemClassStarNames newhist = FindSystem(historysel);
+                ISystem newhist = FindSystem(historysel);
 
                 if (newhist != null)
                 {
@@ -299,16 +269,7 @@ namespace EDDiscovery2
         {
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
-                SystemClassStarNames newhist = null;
-
-                if (historysel.HasTravelCoordinates)
-                {
-                    newhist = new SystemClassStarNames(historysel);
-                }
-                else if (historysel.curSystem != null)
-                {
-                    newhist = new SystemClassStarNames(historysel.curSystem);
-                }
+                ISystem newhist = historysel.curSystem;
 
                 if (newhist != null)
                 {
@@ -721,8 +682,8 @@ namespace EDDiscovery2
 
             DatasetBuilder builder = new DatasetBuilder()
             {
-                CenterSystem = CreateSystemClass(_centerSystem),
-                SelectedSystem = CreateSystemClass(_clickedSystem),
+                CenterSystem = _centerSystem,
+                SelectedSystem = _clickedSystem,
 
                 VisitedSystems = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null,
 
@@ -993,20 +954,11 @@ namespace EDDiscovery2
         {
             if (Is3DMapsRunning)
             {
-                SystemClassStarNames sys = null;
-
-                if (system.HasTravelCoordinates)
-                {
-                    sys = new SystemClassStarNames(system);
-                }
-                else if (system.curSystem != null)
-                {
-                    sys = new SystemClassStarNames(system.curSystem);
-                }
+                ISystem sys = system.curSystem;
 
                 if (sys != null)
                 {
-                    return SetCenterSystemTo(new SystemClassStarNames(system), moveto);
+                    return SetCenterSystemTo(sys, moveto);
                 }
                 else
                 {
@@ -1025,7 +977,7 @@ namespace EDDiscovery2
                 return false;
         }
 
-        private bool SetCenterSystemTo(SystemClassStarNames sys, bool moveto)        
+        private bool SetCenterSystemTo(ISystem sys, bool moveto)        
         {
             if (sys != null)
             {
@@ -1295,13 +1247,8 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            if (showStarstoolStripMenuItem.Checked)
-            {
-            }
-            else if (showStationsToolStripMenuItem.Checked)
-            {
-            }
-
+             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+            
             foreach (var dataset in _datasets_poi)
                 dataset.DrawAll(glControl);
 
@@ -1396,6 +1343,7 @@ namespace EDDiscovery2
                 _oldTickCount = DateTime.Now.Ticks / 10000;
             }
 
+            _stargrids.Update(_cameraPos.X, _cameraPos.Z, glControl);
             HandleInputs();
             DoCameraSlew();
             UpdateCamera();
@@ -1607,7 +1555,7 @@ namespace EDDiscovery2
 
         private void buttonCenter_Click(object sender, EventArgs e)
         {
-            SystemClassStarNames sys = FindSystem(textboxFrom.Text);
+            ISystem sys = FindSystem(textboxFrom.Text);
 
             if (sys != null)
             {
@@ -1877,7 +1825,7 @@ namespace EDDiscovery2
             // region bookmark. cursystem = null, curbookmark != null, notedsystem = false
             // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
 
-            SystemClassStarNames cursystem = null;      
+            ISystem cursystem = null;      
             BookmarkClass curbookmark = null;           
             bool notedsystem = false;                   
 
@@ -2187,8 +2135,9 @@ namespace EDDiscovery2
         void MouseHoverTick(object sender, EventArgs e)
         {
             _mousehovertick.Stop();
+            return;
 
-            SystemClassStarNames hoversystem = null;
+            ISystem hoversystem = null;
             BookmarkClass curbookmark = null;
             bool notedsystem = false;
             GetMouseOverItem(_mouseHover.X, _mouseHover.Y, out hoversystem, out curbookmark, out notedsystem);
@@ -2427,48 +2376,40 @@ namespace EDDiscovery2
 
             return cursys;
         }
-        
-        private SystemClassStarNames GetMouseOverSystem(int x, int y , out double cursysdistz )
+
+        private ISystem GetMouseOverSystem(int x, int y, out double cursysdistz)
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double w2 = glControl.Width / 2.0;
-            double h2 = glControl.Height / 2.0;
-
-            SystemClassStarNames cursys = null;
-            cursysdistz = double.MaxValue;
-#if false
-
             Matrix4d resmat = GetResMat();
 
-            bool showallstars = showStarstoolStripMenuItem.Checked;
-            bool showstations = showStationsToolStripMenuItem.Checked;
+            Vector3d? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, resmat, _znear, _zoom, glControl.Width / 2.0, glControl.Height / 2.0);
 
-            foreach (var sys in _starnames)
+            ISystem f = null;
+
+            if (posofsystem != null)
             {
-                Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
-                Vector4d sysloc = Vector4d.Transform(syspos, resmat);
+                f = SystemClass.FindNearestSystem(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z, false, 0.1);
 
-                if (sysloc.Z > _znear)
+                if (f == null && _visitedSystems != null)
                 {
-                    Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
-                    double sysdist = Math.Sqrt(syssloc.X * syssloc.X + syssloc.Y * syssloc.Y);
-                    if (sysdist < 7.0 && (sysdist + Math.Abs(sysloc.Z * _zoom)) < cursysdistz)
-                    {
-                        if (showallstars || (sys.population != 0 && showstations))
-                        {
-                            cursys = sys;
-                            cursysdistz = sysdist + Math.Abs(sysloc.Z * _zoom);
-                        }
-                    }
+                    VisitedSystemsClass vsc = VisitedSystemsClass.FindByPos(_visitedSystems, new EMK.LightGeometry.Point3D(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
+
+                    if (vsc != null)
+                        return vsc.curSystem;
                 }
             }
-#endif
-            return cursys;
+
+            return f;
         }
 
-        private void GetMouseOverItem(int x, int y, out SystemClassStarNames cursystem,  // can return both, if a system bookmark is clicked..
+        // system = cursystem!=null, curbookmark = null, notedsystem = false
+        // bookmark on system, cursystem!=null, curbookmark != null, notedsystem = false
+        // region bookmark. cursystem = null, curbookmark != null, notedsystem = false
+        // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
+
+        private void GetMouseOverItem(int x, int y, out ISystem cursystem,  // can return both, if a system bookmark is clicked..
                                                     out BookmarkClass curbookmark , out bool notedsystem )
         {
             cursystem = null;
@@ -2482,8 +2423,8 @@ namespace EDDiscovery2
 
                 if (curbookmark != null)
                 {
-//TBD                    if (curbookmark.StarName != null && _starnamelookup.ContainsKey(curbookmark.StarName))  // if associated with system
-//                       cursystem = _starnamelookup[curbookmark.StarName];
+                    if ( curbookmark.StarName != null )            // if starname set, see if we can find it
+                        cursystem = FindSystem(curbookmark.StarName);       // find, either in visited system, or in db
 
                     return;
                 }
@@ -2492,16 +2433,11 @@ namespace EDDiscovery2
             if (_datasets_notedsystems != null)
             {
                 double curdistnoted;
-                SystemClass sysc = GetMouseOverNotedSystem(x, y, out curdistnoted);
+                cursystem = GetMouseOverNotedSystem(x, y, out curdistnoted);
 
-                if (sysc != null)                                                  // noted found..
-                {
-//TBD                    if (_starnamelookup.ContainsKey(sysc.name))                         // if can find it.. lookup
-//                    {
-//                        cursystem = _starnamelookup[sysc.name];
-//                        notedsystem = true;
-//                    }
-
+                if ( cursystem != null )
+                { 
+                    notedsystem = true;
                     return;
                 }
             }
@@ -2528,24 +2464,18 @@ namespace EDDiscovery2
             }
         }
 
-        SystemClass CreateSystemClass(SystemClassStarNames sn)
+        ISystem FindSystem(string name)            // nice wrapper for this
         {
-            if (sn == null)
-                return null;
+            if (_visitedSystems != null)
+            {
+                VisitedSystemsClass sys = _visitedSystems.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-            SystemClass cs = new SystemClass();
-            cs.name = sn.name;
-            cs.x = sn.x;
-            cs.y = sn.y;
-            cs.z = sn.z;
-            return cs;
-        }
+                if (sys != null)
+                    return sys.curSystem;
+            }
 
-        SystemClassStarNames FindSystem(string name)            // nice wrapper for this
-        {
-// TBD
-            return null;
-            //return _starnamelookup.ContainsKey(name) ? _starnamelookup[name] : null;
+            ISystem isys = SystemClass.GetSystem(name);
+            return isys;
         }
 
 #endregion
@@ -2553,11 +2483,11 @@ namespace EDDiscovery2
     }
 
 
-    public class SystemClassStarNames    // holds star data.. used as its kept up to date with visited systems and has extra info
+    public class SystemClassStarNamesX    // holds star data.. used as its kept up to date with visited systems and has extra info
     {
-        public SystemClassStarNames() { }
+        public SystemClassStarNamesX() { }
 
-        public SystemClassStarNames(ISystem other)
+        public SystemClassStarNamesX(ISystem other)
         {
             id = other.id;
             name = other.name;
@@ -2568,7 +2498,7 @@ namespace EDDiscovery2
             candisposepainttexture = false;
         }
 
-        public SystemClassStarNames(string n, double xv, double yv, double zv, long p , long idx )
+        public SystemClassStarNamesX(string n, double xv, double yv, double zv, long p , long idx )
         {
             id = idx;
             name = n;
@@ -2579,7 +2509,7 @@ namespace EDDiscovery2
             candisposepainttexture = false;
         }
 
-        public SystemClassStarNames(VisitedSystemsClass other)
+        public SystemClassStarNamesX(VisitedSystemsClass other)
         {
             id = 0;
             name = other.Name;
