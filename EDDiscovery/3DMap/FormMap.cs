@@ -89,7 +89,7 @@ namespace EDDiscovery2
         int _starnamemaxly = 25;
         Font _starnamebitmapfnt;
         int _starnamebitmapwidth, _starnamebitmapheight;
-        ConcurrentDictionary<Vector3d , StarNames> _starnames;
+        Dictionary<Vector3d , StarNames> _starnames;
 
         System.Threading.Thread nsThread;
         Timer _starnametimer = new Timer();
@@ -160,7 +160,7 @@ namespace EDDiscovery2
             {
                 _stargrids = new StarGrids();
                 _stargrids.Initialise();                        // bring up the class..
-                _starnames = new ConcurrentDictionary<Vector3d, StarNames>();
+                _starnames = new Dictionary<Vector3d, StarNames>();
             }
 
             string fontname = "MS Sans Serif";                  // calculate once for bitmap 
@@ -709,6 +709,7 @@ namespace EDDiscovery2
             else if (_starname_curstars_zoom > ZoomOff)                         // let tick continue.. will tick again.
             {
                 RemoveAllNamedStars();
+                GC.Collect();
             }
         }
 
@@ -791,7 +792,10 @@ namespace EDDiscovery2
                             if (sc != null)     // if can't be resolved, ignore
                             {
                                 sys = new StarNames(sc);
-                                _starnames.GetOrAdd(pos, sys);
+                                lock(_starnames)
+                                {                                    
+                                    _starnames.Add(pos, sys);               // need to lock over add..
+                                }
                                 draw = true;
                                 painted++;
                             }
@@ -1200,8 +1204,28 @@ namespace EDDiscovery2
             foreach (var dataset in _datasets_visitedsystems)
                 dataset.DrawAll(glControl);
 
-            if (_starnames != null)
+            lock(_starnames)
             {
+                if ( _starnames.Count>10000)
+                {
+                    List<Vector3d> cleanuplist = new List<Vector3d>();
+
+                    foreach (Vector3d key in _starnames.Keys)
+                    {
+                        StarNames sys = _starnames[key];
+
+                        if (sys.painttexture == null)             // if not painting
+                            cleanuplist.Add(key);                 // add to clean up
+                    }
+
+                    Console.WriteLine("Clean up star names from " + _starnames.Count + " to " + (_starnames.Count - cleanuplist.Count));
+
+                    foreach (Vector3d key in cleanuplist)
+                        _starnames.Remove(key);
+
+                    GC.Collect();
+                }
+
                 foreach (StarNames sys in _starnames.Values)
                 {
                     if (sys.candisposepainttexture)             // flag is controlled by thread.. don't clear here..
@@ -1567,6 +1591,13 @@ namespace EDDiscovery2
 
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
         {
+            //TBD
+
+            GC.Collect();
+            Console.WriteLine("GC");
+
+#if false
+
             if (_visitedSystems != null)
             {
                 VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
@@ -1578,6 +1609,7 @@ namespace EDDiscovery2
             }
             else
                 MessageBox.Show("No travel history is available");
+#endif        
         }
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
@@ -2430,7 +2462,7 @@ namespace EDDiscovery2
             return SystemClass.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);
         }
 
-        #endregion
+#endregion
 
     }
 
