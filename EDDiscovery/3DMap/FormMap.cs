@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using OpenTK.Input;
 using System.Drawing.Drawing2D;
 using System.Resources;
+using System.Collections.Concurrent;
 
 namespace EDDiscovery2
 {
@@ -88,6 +89,7 @@ namespace EDDiscovery2
         int _starnamemaxly = 25;
         Font _starnamebitmapfnt;
         int _starnamebitmapwidth, _starnamebitmapheight;
+        ConcurrentDictionary<Vector3d , StarNames> _starnames;
 
         System.Threading.Thread nsThread;
         Timer _starnametimer = new Timer();
@@ -158,6 +160,7 @@ namespace EDDiscovery2
             {
                 _stargrids = new StarGrids();
                 _stargrids.Initialise();                        // bring up the class..
+                _starnames = new ConcurrentDictionary<Vector3d, StarNames>();
             }
 
             string fontname = "MS Sans Serif";                  // calculate once for bitmap 
@@ -561,21 +564,17 @@ namespace EDDiscovery2
 
         private void GenerateDataSets()         // Called ONCE only during Load.. fixed data.
         {
-            DatasetBuilder builder = CreateBuilder();
+            DatasetBuilder builder1 = new DatasetBuilder();
+            _datasets_coarsegridlines = builder1.AddCoarseGridLines();
 
-            builder.Build();    // need a new one each time.
-            _datasets_coarsegridlines = builder.AddCoarseGridLines();
+            DatasetBuilder builder2 = new DatasetBuilder();
+            _datasets_finegridlines = builder2.AddFineGridLines();
 
-            builder.Build();
-            _datasets_finegridlines = builder.AddFineGridLines();
+            DatasetBuilder builder3 = new DatasetBuilder();
+            _datasets_gridlinecoords = builder3.AddGridCoords();
 
-            builder.Build();
-            _datasets_gridlinecoords = builder.AddGridCoords();
-
-            builder.Build();
-            _datasets_poi = builder.AddPOIsToDataset();
-
-            builder = null;
+            DatasetBuilder builder4 = new DatasetBuilder();
+            _datasets_poi = builder4.AddPOIsToDataset();
 
             UpdateDataSetsDueToZoom();
         }
@@ -588,7 +587,6 @@ namespace EDDiscovery2
 
             if (toolStripButtonCoords.Checked)
                 builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
-            builder = null;
 
             GenerateDataSetsBookmarks();
             GenerateDataSetsNotedSystems();
@@ -598,27 +596,25 @@ namespace EDDiscovery2
         {
             //Console.WriteLine("STARS Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_maps);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_maps = builder.BuildMaps();
-            builder = null;
+            DatasetBuilder builder = new DatasetBuilder();
+            _datasets_maps = builder.BuildMaps(ref selectedmaps);
         }
 
         private void GenerateDataSetsVisitedSystems()
         {
             //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_visitedsystems);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_visitedsystems = builder.BuildVisitedSystems();
-            builder = null;
+            DatasetBuilder builder = new DatasetBuilder();
+            _datasets_visitedsystems = builder.BuildVisitedSystems(toolStripButtonDrawLines.Checked, _centerSystem, _visitedSystems,
+                                                                    _referenceSystems, _plannedRoute);
         }
 
         private void GenerateDataSetsSelectedSystems()
         {
             //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_selectedsystems);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_selectedsystems = builder.BuildSelected();
-            builder = null;
+            DatasetBuilder builder = new DatasetBuilder();
+            _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem);
         }
 
         private void GenerateDataSetsBookmarks()         // Called during Load, and if we ever add systems..
@@ -633,11 +629,8 @@ namespace EDDiscovery2
                 Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
                 Debug.Assert(mapstar != null && mapregion != null);
 
-                DatasetBuilder builder = CreateBuilder();
-
-                builder.Build();
+                DatasetBuilder builder = new DatasetBuilder();
                 _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
-                builder = null;
             }
         }
 
@@ -652,12 +645,8 @@ namespace EDDiscovery2
                 Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
                 Debug.Assert(map != null);
 
-                DatasetBuilder builder = CreateBuilder();
-
-                builder.Build();
-                _datasets_notedsystems = builder.AddNotedBookmarks(map, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
-
-                builder = null;
+                DatasetBuilder builder = new DatasetBuilder();
+                _datasets_notedsystems = builder.AddNotedBookmarks(map, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked , _visitedSystems );
             }
         }
 
@@ -674,34 +663,6 @@ namespace EDDiscovery2
                     }
                 }
             }
-        }
-
-        private DatasetBuilder CreateBuilder()
-        {
-            selectedmaps = GetSelectedMaps();
-
-            DatasetBuilder builder = new DatasetBuilder()
-            {
-                CenterSystem = _centerSystem,
-                SelectedSystem = _clickedSystem,
-
-                VisitedSystems = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null,
-
-                Images = selectedmaps.ToArray(),
-
-                DrawLines = toolStripButtonDrawLines.Checked,
-                UseImage = selectedmaps.Count != 0
-            };
-            if (_referenceSystems != null)
-            {
-                builder.ReferenceSystems = _referenceSystems.ConvertAll(system => (ISystem)system);
-            }
-            if (_plannedRoute != null)
-            {
-                builder.PlannedRoute = _plannedRoute.ConvertAll(system => (ISystem)system);
-            }
-
-            return builder;
         }
 
         private void NameStars(object sender, EventArgs e) // tick.. way it works is a tick occurs, timer off, thread runs, thread calls 
@@ -762,7 +723,6 @@ namespace EDDiscovery2
 
         private void NamedStars() // background thread.. run after timer tick
         {
-#if false
             try // just in case someone tears us down..
             {
                 int lylimit = (int)(_starlimitly / _zoom);
@@ -770,42 +730,15 @@ namespace EDDiscovery2
                 //Console.Write("Repaint " + _starname_repaintall + " Stars " + _starlimitly + " within " + lylimit + "  ");
                 int sqlylimit = lylimit*lylimit;                 // in squared distance limit from viewpoint
 
-                double w2 = glControl.Width / 2.0;
-                double h2 = glControl.Height / 2.0;
-
                 Vector3 modcampos = _cameraPos;
                 modcampos.Y = -modcampos.Y;
 
-                SortedDictionary<float, int> inviewlist = new SortedDictionary<float, int>(new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
+                StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_starname_resmat, _znear, glControl.Width, glControl.Height, sqlylimit, modcampos);
 
-                int indexno = 0;
-                foreach (SystemClassStarNames sys in _starnames)          // we consider all stars..
-                {
-                    Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
-                    Vector4d sysloc = Vector4d.Transform(syspos, _starname_resmat);
+                SortedDictionary<float, Vector3d> inviewlist = new SortedDictionary<float, Vector3d>(new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
 
-                    bool inviewport = false;
-                    float sqdist = 0F;
-                    int margin = -150;                                                  // allow them to drop off screen slightly and still consider..
+                _stargrids.GetSystemsInView(ref inviewlist, 2000.0, ti);            // consider all grids under 2k from current pos.
 
-                    if (sysloc.Z > _znear)
-                    {                                                           // pixel position on screen..
-                        Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
-
-                        if ((syssloc.X >= margin && syssloc.X <= glControl.Width - margin) && (syssloc.Y >= margin && syssloc.Y <= glControl.Height - margin))
-                        {
-                            sqdist = ((float)sys.x - modcampos.X) * ((float)sys.x - modcampos.X) + ((float)sys.y - modcampos.Y) * ((float)sys.y - modcampos.Y) + ((float)sys.z - modcampos.Z) * ((float)sys.z - modcampos.Z);
-                            inviewport = sqdist <= sqlylimit;
-                        }
-                    }
-
-                    if (inviewport)
-                        inviewlist.Add(sqdist, indexno);                        // we add the star to the appropriate list
-                    else
-                        sys.candisposepainttexture = true;                      // don't care, you can get rid of it in the foreground thread.
-
-                    indexno++;
-                }
 
                 float textoffset = 0.35F;
                 float textwidthly = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _zoom, _starnameminly)) + textoffset;
@@ -821,7 +754,7 @@ namespace EDDiscovery2
                     else
                         textheightly = -textheightly;
                 }
-                else if ( !_starname_camera_paint_lookforward)
+                else if (!_starname_camera_paint_lookforward)
                 {
                     textheightly = -textheightly;
                     textoffset = -textoffset;
@@ -831,46 +764,61 @@ namespace EDDiscovery2
                 float starsize = Math.Min(Math.Max(_zoom / 5F, 2.0F), 20F);     // Normal stars are at 1F.
                 //Console.WriteLine("Text " + _starnamesizely + " text " + textwidthly.ToString("0.0") + "," + textheightly.ToString("0.0") + " star size " + starsize.ToString("0.0"));
 
-                int paintedtextures = 0;            // only worry about ones in viewport, ones outside will be disposed of soon..
+                foreach (StarNames s in _starnames.Values)              // all items not processed
+                    s.todispose = true;                                 // only items remaining will clear this
+
                 int limit = 1000;                   // max number of stars to show..
+                int painted = 0;
 
-                foreach (int index in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    SystemClassStarNames sys = _starnames[index];
-
-                    bool draw = false;
-                    // BE CAREFUL modifying anything about painttexture/newtexture.. its been designed so it does not need a lock.
-                    if (sys.painttexture != null)                   // race, but no problem, does not matter if we make a mistake..
-                    {                                               // because we only test this, never modify it.. and if we miss it, so what, next pass will get it
-                        paintedtextures++;
-
-                        if (paintedtextures > limit)                // too many, dispose this one.  and since we do it in order, closest will be kept.
-                            sys.candisposepainttexture = true;
-                        else if ( _starname_repaintall )            // repaint all
-                            draw = true;
-                    }
-                    else
+                    foreach (Vector3d pos in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                     {
-                        if (paintedtextures < limit)                // not painted, if we can paint more, do it..
+                        StarNames sys = null;
+                        bool draw = false;
+
+                        if (_starnames.ContainsKey(pos))                   // if already there..
                         {
-                            draw = true;
-                            paintedtextures++;
+                            sys = _starnames[pos];
+                            sys.todispose = false;
+                            draw = _starname_repaintall;                    // forced redraw here..
+                            painted++;
+                        }
+                        else if (painted < limit)
+                        {
+                            ISystem sc = FindSystem(pos, cn);               // with the open connection, find this star..
+
+                            if (sc != null)     // if can't be resolved, ignore
+                            {
+                                sys = new StarNames(sc);
+                                _starnames.GetOrAdd(pos, sys);
+                                draw = true;
+                                painted++;
+                            }
+                        }
+                        else
+                        {
+                            break;      // no point doing any more..  Either the closest ones have been found, or a new one was painted
+                        }
+
+                        if (draw)
+                        {
+                            Bitmap map = DatasetBuilder.DrawString(sys.name, _starnamebitmapfnt, _starnamebitmapwidth, _starnamebitmapheight, Color.Orange);
+
+                            sys.newtexture = TexturedQuadData.FromBitmapHorz(map,
+                                             new PointF((float)sys.x + textoffset, (float)sys.z - textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z - textheightly / 2),
+                                             new PointF((float)sys.x + textoffset, (float)sys.z + textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z + textheightly / 2), (float)sys.y);
+
+                            sys.newstar = new PointData(sys.x, sys.y, sys.z, starsize, (sys.population != 0) ? MapColours.NamedStar : MapColours.NamedStarUnpopulated);
                         }
                     }
-
-                    if (draw)
-                    {
-                        Bitmap map = DatasetBuilder.DrawString(sys.name, _starnamebitmapfnt, _starnamebitmapwidth, _starnamebitmapheight, Color.Orange);
-
-                        sys.newtexture = TexturedQuadData.FromBitmapHorz(map,
-                                         new PointF((float)sys.x + textoffset, (float)sys.z - textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z - textheightly / 2),
-                                         new PointF((float)sys.x + textoffset, (float)sys.z + textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z + textheightly / 2), (float)sys.y);
-
-                        sys.newstar = new PointData(sys.x, sys.y, sys.z, starsize, (sys.population != 0) ? MapColours.NamedStar : MapColours.NamedStarUnpopulated);
-
-                        sys.candisposepainttexture = false;         // order important.  set so to keep
-                    }
                 }
+
+                foreach (StarNames s in _starnames.Values)              // only items above will remain.
+                    s.candisposepainttexture = s.todispose;             // copy flag over, causes foreground to start removing them
+
+               // TBD how to stop memory creeping away..
+
 
                 Invoke((MethodInvoker)delegate              // kick the UI thread to process.
                 {
@@ -878,7 +826,6 @@ namespace EDDiscovery2
                 });
             }
             catch { }
-#endif
         }
 
 
@@ -895,9 +842,8 @@ namespace EDDiscovery2
 
         private void RemoveAllNamedStars()
         {
-#if false
             bool changed = false;
-            foreach (var sys in _starnames)                             // dispose all
+            foreach (StarNames sys in _starnames.Values)                             // dispose all
             {
                 if (sys.painttexture != null)
                 {
@@ -910,7 +856,6 @@ namespace EDDiscovery2
                 glControl.Invalidate();
 
             _starname_curstars_zoom = ZoomOff;
-#endif
         }
 
         private List<FGEImage> GetSelectedMaps()
@@ -1255,10 +1200,9 @@ namespace EDDiscovery2
             foreach (var dataset in _datasets_visitedsystems)
                 dataset.DrawAll(glControl);
 
-#if false
             if (_starnames != null)
             {
-                foreach (var sys in _starnames)
+                foreach (StarNames sys in _starnames.Values)
                 {
                     if (sys.candisposepainttexture)             // flag is controlled by thread.. don't clear here..
                     {
@@ -1294,7 +1238,7 @@ namespace EDDiscovery2
                         sys.painttexture.Draw(glControl);
                 }
             }
-#endif
+
             foreach (var dataset in _datasets_selectedsystems)
                 dataset.DrawAll(glControl);
 
@@ -1719,9 +1663,14 @@ namespace EDDiscovery2
                 newcls.Note = frm.Notes;
                 newcls.Add();
 
+                if (frm.IsTarget)          // asked for targetchanged..
+                {
+                    TargetClass.SetTargetBookmark("RM:" + newcls.Heading, newcls.id, newcls.x, newcls.y, newcls.z);
+                    travelHistoryControl.RefreshTargetInfo();
+                }
+
                 GenerateDataSetsBookmarks();
                 glControl.Invalidate();
-
             }
         }
         
@@ -2382,24 +2331,14 @@ namespace EDDiscovery2
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            Matrix4d resmat = GetResMat();
+            StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(GetResMat(), _znear, glControl.Width, glControl.Height, _zoom);
 
-            Vector3d? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, resmat, _znear, _zoom, glControl.Width / 2.0, glControl.Height / 2.0);
+            Vector3d? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti );
 
             ISystem f = null;
 
             if (posofsystem != null)
-            {
-                f = SystemClass.FindNearestSystem(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z, false, 0.1);
-
-                if (f == null && _visitedSystems != null)
-                {
-                    VisitedSystemsClass vsc = VisitedSystemsClass.FindByPos(_visitedSystems, new EMK.LightGeometry.Point3D(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
-
-                    if (vsc != null)
-                        return vsc.curSystem;
-                }
-            }
+                f = FindSystem(new Vector3d(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
 
             return f;
         }
@@ -2464,7 +2403,7 @@ namespace EDDiscovery2
             }
         }
 
-        ISystem FindSystem(string name)            // nice wrapper for this
+        ISystem FindSystem(string name, SQLiteConnectionED cn = null)    // nice wrapper for this
         {
             if (_visitedSystems != null)
             {
@@ -2474,20 +2413,33 @@ namespace EDDiscovery2
                     return sys.curSystem;
             }
 
-            ISystem isys = SystemClass.GetSystem(name);
+            ISystem isys = SystemClass.GetSystem(name,cn);
             return isys;
         }
 
-#endregion
+        ISystem FindSystem(Vector3d pos, SQLiteConnectionED cn = null )
+        {
+            if (_visitedSystems != null)
+            {
+                VisitedSystemsClass vsc = VisitedSystemsClass.FindByPos(_visitedSystems, new EMK.LightGeometry.Point3D(pos.X, pos.Y, pos.Z), 0.1);
+
+                if (vsc != null)
+                    return vsc.curSystem;
+            }
+
+            return SystemClass.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);
+        }
+
+        #endregion
 
     }
 
 
-    public class SystemClassStarNamesX    // holds star data.. used as its kept up to date with visited systems and has extra info
+    public class StarNames    // Holds stars which have been named..
     {
-        public SystemClassStarNamesX() { }
+        public StarNames() { }
 
-        public SystemClassStarNamesX(ISystem other)
+        public StarNames(ISystem other)
         {
             id = other.id;
             name = other.name;
@@ -2496,28 +2448,7 @@ namespace EDDiscovery2
             newtexture = null; newstar = null;
             painttexture = null; paintstar = null;
             candisposepainttexture = false;
-        }
-
-        public SystemClassStarNamesX(string n, double xv, double yv, double zv, long p , long idx )
-        {
-            id = idx;
-            name = n;
-            x = xv; y = yv; z = zv;
-            population = p;
-            newtexture = null; newstar = null;
-            painttexture = null; paintstar = null;
-            candisposepainttexture = false;
-        }
-
-        public SystemClassStarNamesX(VisitedSystemsClass other)
-        {
-            id = 0;
-            name = other.Name;
-            x = other.X; y = other.Y; z = other.Z;
-            population = 0;
-            newtexture = null; newstar = null;
-            painttexture = null; paintstar = null;
-            candisposepainttexture = false;
+            todispose = false;
         }
 
         public long id { get; set; }                             // EDDB ID, or 0 if not known
@@ -2525,12 +2456,14 @@ namespace EDDiscovery2
         public double x { get; set; }
         public double y { get; set; }
         public double z { get; set; }
-        public long population { get; set;}
+        public long population { get; set; }
         public TexturedQuadData newtexture { get; set; }
         public PointData newstar { get; set; }                  // purposely drawing it like this, one at a time, due to sync issues between foreground/thread
         public TexturedQuadData painttexture { get; set; }
         public PointData paintstar { get; set; }                // instead of doing a array paint.
+
         public bool candisposepainttexture { get; set; }
+        public bool todispose {get;set; }
     };
 
 }

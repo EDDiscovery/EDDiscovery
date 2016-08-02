@@ -20,7 +20,7 @@ namespace EDDiscovery.DB
     {
         Unknown = 0,
         EDSC = 1,
-        RedWizzard =2,
+        RedWizzard = 2,
         EDDiscovery = 3,
         EDDB = 4,
         Inhumierer = 5,
@@ -446,7 +446,7 @@ namespace EDDiscovery.DB
 
         public bool Update(SQLiteConnectionED cn, long id, DbTransaction transaction)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit, versiondate=datetime('now'), id_edsm=@id_edsm, gridid=@gridid, randomid=@randomid where ID=@id",  transaction))
+            using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit, versiondate=datetime('now'), id_edsm=@id_edsm, gridid=@gridid, randomid=@randomid where ID=@id", transaction))
             {
                 cmd.AddParameterWithValue("@id", id);
                 cmd.AddParameterWithValue("@name", name);
@@ -485,7 +485,7 @@ namespace EDDiscovery.DB
 
         public bool UpdateEDSM(SQLiteConnectionED cn, long id, DbTransaction transaction)     // only altering fields EDSM sets..
         {
-            using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, versiondate=datetime('now'), gridid=@gridid, randomid=@randomid where ID=@id",  transaction))
+            using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, versiondate=datetime('now'), gridid=@gridid, randomid=@randomid where ID=@id", transaction))
             {
                 cmd.AddParameterWithValue("@id", id);
                 cmd.AddParameterWithValue("@name", name);
@@ -503,7 +503,7 @@ namespace EDDiscovery.DB
 
         public static bool Delete(long id, SQLiteConnectionED cn = null, DbTransaction transaction = null, SystemIDType idtype = SystemIDType.id)
         {
-            using (DbCommand cmd = cn.CreateCommand("Delete from Systems where " + idtype.ToString() + "=@id",  transaction))
+            using (DbCommand cmd = cn.CreateCommand("Delete from Systems where " + idtype.ToString() + "=@id", transaction))
             {
                 cmd.AddParameterWithValue("@id", id);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
@@ -522,7 +522,7 @@ namespace EDDiscovery.DB
 
         public static double Distance(EDDiscovery2.DB.ISystem s1, double x, double y, double z)
         {
-            if (s1 != null && s1.HasCoordinate )
+            if (s1 != null && s1.HasCoordinate)
                 return Math.Sqrt((s1.x - x) * (s1.x - x) + (s1.y - y) * (s1.y - y) + (s1.z - z) * (s1.z - z));
             else
                 return -1;
@@ -537,7 +537,7 @@ namespace EDDiscovery.DB
         }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
-        public static int GetSystemVector(int gridid, ref Vector3d[] vertices ,SystemAskType ask , int percentage )
+        public static int GetSystemVector(int gridid, ref Vector3d[] vertices, SystemAskType ask, int percentage)
         {
             int numvertices = 0;
             vertices = null;
@@ -641,7 +641,7 @@ namespace EDDiscovery.DB
         }
 
         public delegate void StarCallBack(SystemClass sys);
-        public static void ProcessStars(StarCallBack cb )  // return star positions..
+        public static void ProcessStars(StarCallBack cb)  // return star positions..
         {
             try
             {
@@ -699,7 +699,7 @@ namespace EDDiscovery.DB
             return dict;
         }
 
-        public static SystemClass GetSystem(string name, SQLiteConnectionED cn = null )      // with an open database, case insensitive
+        public static SystemClass GetSystem(string name, SQLiteConnectionED cn = null)      // with an open database, case insensitive
         {
             SystemClass sys = null;
             bool closeit = false;
@@ -777,7 +777,7 @@ namespace EDDiscovery.DB
             return systems;
         }
 
-        public static SystemClass GetSystem(long id, SQLiteConnectionED cn = null, SystemIDType idtype = SystemIDType.id )      // using an id
+        public static SystemClass GetSystem(long id, SQLiteConnectionED cn = null, SystemIDType idtype = SystemIDType.id)      // using an id
         {
             SystemClass sys = null;
             bool closeit = false;
@@ -879,46 +879,52 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar, double maxdist = 200)
+        public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar, 
+                                                    double maxdist = 200 , SQLiteConnectionED cn = null)
         {
+            bool closeit = false;
+
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                if (cn == null)
                 {
-                    using (DbCommand cmd = cn.CreateCommand(
-                        "SELECT * " +
-                        "FROM Systems " +
-                        "WHERE x >= @xv - @maxdist " +
-                        "AND x <= @xv + @maxdist " +
-                        "AND y >= @yv - @maxdist " +
-                        "AND y <= @yv + @maxdist " +
-                        "AND z >= @zv - @maxdist " +
-                        "AND z <= @zv + @maxdist " +
-                        "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
-                        "LIMIT @max"))
+                    closeit = true;
+                    cn = new SQLiteConnectionED();
+                }
+
+                using (DbCommand cmd = cn.CreateCommand(
+                    "SELECT * " +
+                    "FROM Systems " +
+                    "WHERE x >= @xv - @maxdist " +
+                    "AND x <= @xv + @maxdist " +
+                    "AND y >= @yv - @maxdist " +
+                    "AND y <= @yv + @maxdist " +
+                    "AND z >= @zv - @maxdist " +
+                    "AND z <= @zv + @maxdist " +
+                    "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
+                    "LIMIT @max"))
+                {
+                    cmd.AddParameterWithValue("xv", x);
+                    cmd.AddParameterWithValue("yv", y);
+                    cmd.AddParameterWithValue("zv", z);
+                    cmd.AddParameterWithValue("max", maxitems + 1);     // 1 more, because if we are on a star, that will be returned
+                    cmd.AddParameterWithValue("maxdist", maxdist);
+
+                    using (DbDataReader reader = cmd.ExecuteReader())
                     {
-                        cmd.AddParameterWithValue("xv", x);
-                        cmd.AddParameterWithValue("yv", y);
-                        cmd.AddParameterWithValue("zv", z);
-                        cmd.AddParameterWithValue("max", maxitems+1);     // 1 more, because if we are on a star, that will be returned
-                        cmd.AddParameterWithValue("maxdist", maxdist);
-
-                        using (DbDataReader reader = cmd.ExecuteReader())
+                        while (reader.Read() && distlist.Count < maxitems)           // already sorted, and already limited to max items
                         {
-                            while (reader.Read() && distlist.Count < maxitems)           // already sorted, and already limited to max items
+                            string name = ((string)reader["name"]);
+
+                            if (System.DBNull.Value != reader["x"])                 // paranoid check for null
                             {
-                                string name = ((string)reader["name"]);
+                                double dx = (double)reader["x"] - x;
+                                double dy = (double)reader["y"] - y;
+                                double dz = (double)reader["z"] - z;
 
-                                if (System.DBNull.Value != reader["x"])                 // paranoid check for null
-                                {
-                                    double dx = (double)reader["x"] - x;
-                                    double dy = (double)reader["y"] - y;
-                                    double dz = (double)reader["z"] - z;
-
-                                    double dist = dx * dx + dy * dy + dz * dz;
-                                    if (dist > 0.001 || !removezerodiststar)
-                                        distlist.Add(dist, new SystemClass(reader));
-                                }
+                                double dist = dx * dx + dy * dy + dz * dz;
+                                if (dist > 0.001 || !removezerodiststar)
+                                    distlist.Add(dist, new SystemClass(reader));
                             }
                         }
                     }
@@ -929,12 +935,19 @@ namespace EDDiscovery.DB
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
+            finally
+            {
+                if (closeit && cn != null)
+                {
+                    cn.Dispose();
+                }
+            }
         }
 
-        public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000)
+        public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000, SQLiteConnectionED cn = null)
         {
             SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
-            GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar, maxdist);
+            GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar, maxdist,cn);
             return distlist.Select(v => v.Value).FirstOrDefault();
         }
 
@@ -946,7 +959,7 @@ namespace EDDiscovery.DB
         public const int metric_waypointdev2 = 5;
 
         public static SystemClass GetSystemNearestTo(Point3D curpos, Point3D wantedpos, double maxfromcurpos, double maxfromwanted,
-                                    int routemethod )
+                                    int routemethod)
         {
             SystemClass nearestsystem = null;
 
@@ -957,7 +970,7 @@ namespace EDDiscovery.DB
                     string sqlquery = "select id,name, x, y, z from Systems " +
                                       "where (x-@xw)*(x-@xw)+(y-@yw)*(y-@yw)+(z-@zw)*(z-@zw)<=@maxfromwanted AND " +
                                       "(x-@xc)*(x-@xc)+(y-@yc)*(y-@yc)+(z-@zc)*(z-@zc)<=@maxfromcurrent";
-                    
+
                     using (DbCommand cmd = cn.CreateCommand(sqlquery))
                     {
                         cmd.AddParameterWithValue("xw", wantedpos.X);
@@ -1316,20 +1329,20 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids , EDDiscoveryForm discoveryform)
+        public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform)
         {
             JsonTextReader jr = new JsonTextReader(new StringReader(json));
-            return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids,discoveryform);
+            return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date , bool removenonedsmids , EDDiscoveryForm discoveryform)
+        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform)
         {
             StreamReader sr = new StreamReader(filename);         // read directly from file..
             JsonTextReader jr = new JsonTextReader(sr);
-            return ParseEDSMUpdateSystemsReader(jr, ref date,removenonedsmids,discoveryform);
+            return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform);
         }
 
- 
+
         private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform)
         {
             List<SystemClass> toupdate = new List<SystemClass>();
@@ -1369,7 +1382,7 @@ namespace EDDiscovery.DB
                                 lasttc = Environment.TickCount;
                             }
 
-                            if ( Environment.TickCount - formtickcount > 5000 )
+                            if (Environment.TickCount - formtickcount > 5000)
                             {
                                 discoveryform.LogLine("Updating from EDSM, received " + c + " systems, updated " + (newsystems.Count + toupdate.Count));
                                 formtickcount = Environment.TickCount;
@@ -1438,9 +1451,9 @@ namespace EDDiscovery.DB
                     if (cmd != null) cmd.Dispose();
                 }
 
-                for (int id = 0; id < histogramsystems.Length; id++ )
+                for (int id = 0; id < histogramsystems.Length; id++)
                 {
-                    if ( histogramsystems[id] != 0 )
+                    if (histogramsystems[id] != 0)
                         Console.WriteLine("Id " + id + " count " + histogramsystems[id]);
                 }
 
@@ -1481,7 +1494,7 @@ namespace EDDiscovery.DB
 
                             if (Environment.TickCount - formtickcount > 5000)
                             {
-                                discoveryform.LogLine("Storing into database from EDSM, stored " + count );
+                                discoveryform.LogLine("Storing into database from EDSM, stored " + count);
                                 formtickcount = Environment.TickCount;
                             }
 
@@ -1609,7 +1622,7 @@ namespace EDDiscovery.DB
                                 {
                                     if (reader1.Read())                                     // its there.. check its got the right stuff in it.
                                     {
-                                        SystemClass dbsys = new SystemClass(reader1);       
+                                        SystemClass dbsys = new SystemClass(reader1);
 
                                         if (dbsys.eddb_updated_at != system.eddb_updated_at || dbsys.population != system.population)
                                         {
@@ -1629,7 +1642,7 @@ namespace EDDiscovery.DB
                                     }
                                     else
                                     {
-//                                        Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " Not found");
+                                        //                                        Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " Not found");
                                     }
                                 }
                             }
@@ -1640,7 +1653,7 @@ namespace EDDiscovery.DB
 
                             if (++c % 10000 == 0)
                             {
-                                Console.WriteLine("EDDB Count " + c + " Delta " + (Environment.TickCount - lasttc) + " info "  + hasinfo + " update " + toupdate.Count());
+                                Console.WriteLine("EDDB Count " + c + " Delta " + (Environment.TickCount - lasttc) + " info " + hasinfo + " update " + toupdate.Count());
                                 lasttc = Environment.TickCount;
                             }
                         }

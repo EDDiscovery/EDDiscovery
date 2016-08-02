@@ -82,37 +82,57 @@ namespace EDDiscovery2
             return total;
         }
 
-        public Vector3d? FindPoint(int x, int y, ref double cursysdistz, Matrix4d resmat, float znear, float zoom, double vwidth, double vheight)
+        public class TransFormInfo
         {
-            if (array1displayed)
-                return FindPoint(array1, array1vertices, x, y, ref cursysdistz, resmat, znear, zoom, vwidth, vheight);
-            else
-                return FindPoint(array2, array2vertices, x, y, ref cursysdistz, resmat, znear, zoom, vwidth, vheight);
+            public TransFormInfo(Matrix4d r, float z, int dw, int dh, float zm)
+            { resmat = r; znear = z; dwidth = dw; dheight = dh; zoom = zm; }
+
+            public TransFormInfo(Matrix4d r, float z, int dw, int dh, double sq, Vector3 cm)
+            { resmat = r; znear = z; dwidth = dw; dheight = dh; sqlylimit = sq; campos = cm; }
+
+            public Matrix4d resmat;
+            public float znear;
+            public int dwidth;
+            public int dheight;
+
+            public float zoom;      // Find Point only
+            public double sqlylimit;      //  GetSystemInView only
+            public Vector3 campos;//  GetSystemInView only
         }
 
-        public Vector3d? FindPoint(Vector3d[] vert, int total , int x, int y, ref double cursysdistz, Matrix4d resmat, float znear, float zoom, double vwidth, double vheight)
+        public Vector3d? FindPoint(int x, int y, ref double cursysdistz, TransFormInfo ti )
+        {
+            if (array1displayed)
+                return FindPoint(ref array1, array1vertices, x, y, ref cursysdistz, ti);
+            else
+                return FindPoint(ref array2, array2vertices, x, y, ref cursysdistz, ti);
+        }
+
+        public Vector3d? FindPoint(ref Vector3d[] vert, int total , int x, int y, ref double cursysdistz, TransFormInfo ti)
         { 
             Vector3d? ret = null;
+            double w2 = (double)ti.dwidth / 2.0;
+            double h2 = (double)ti.dheight / 2.0;
 
-            for( int i = 0; i < total; i++)
+            for ( int i = 0; i < total; i++)
             {
                 Vector3d v = vert[i];
 
                 Vector4d syspos = new Vector4d(v.X, v.Y, v.Z, 1.0);
-                Vector4d sysloc = Vector4d.Transform(syspos, resmat);
+                Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
 
-                if (sysloc.Z > znear)
+                if (sysloc.Z > ti.znear)
                 {
-                    Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * vwidth - x, ((sysloc.Y / sysloc.W) + 1.0) * vheight - y);
+                    Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
                     double sysdistsq = syssloc.X * syssloc.X + syssloc.Y * syssloc.Y;
 
                     if (sysdistsq < 7.0 * 7.0)
                     {
                         double sysdist = Math.Sqrt(sysdistsq);
 
-                        if ((sysdist + Math.Abs(sysloc.Z * zoom)) < cursysdistz)
+                        if ((sysdist + Math.Abs(sysloc.Z * ti.zoom)) < cursysdistz)
                         {
-                            cursysdistz = sysdist + Math.Abs(sysloc.Z * zoom);
+                            cursysdistz = sysdist + Math.Abs(sysloc.Z * ti.zoom);
                             ret = new Vector3d(v.X, v.Y, v.Z);
                         }
                     }
@@ -120,6 +140,43 @@ namespace EDDiscovery2
             }
 
             return ret;
+        }
+
+        public void GetSystemsInView(ref SortedDictionary<float, Vector3d> list , TransFormInfo ti)
+        {
+            if (array1displayed)
+                GetSystemsInView(ref array1, array1vertices, ref list, ti);
+            else
+                GetSystemsInView(ref array2, array2vertices, ref list, ti);
+        }
+
+        public void GetSystemsInView(ref Vector3d[] vert, int total, ref SortedDictionary<float, Vector3d> list , TransFormInfo ti )
+        {
+            int margin = -150;
+            float sqdist = 0F;
+            double w2 = (double)ti.dwidth / 2.0;
+            double h2 = (double)ti.dheight / 2.0;
+
+            for (int i = 0; i < total; i++)
+            {
+                Vector3d v = vert[i];
+
+                Vector4d syspos = new Vector4d(v.X, v.Y, v.Z, 1.0);
+                Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
+
+                if (sysloc.Z > ti.znear)
+                {
+                    Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
+
+                    if ((syssloc.X >= margin && syssloc.X <= ti.dwidth - margin) && (syssloc.Y >= margin && syssloc.Y <= ti.dheight - margin))
+                    {
+                        sqdist = ((float)v.X - ti.campos.X) * ((float)v.X - ti.campos.X) + ((float)v.Y - ti.campos.Y) * ((float)v.Y - ti.campos.Y) + ((float)v.Z - ti.campos.Z) * ((float)v.Z - ti.campos.Z);
+
+                        if (sqdist <= ti.sqlylimit)
+                            list.Add(sqdist, v);
+                    }
+                }
+            }
         }
 
         public void Dispose()           // throw away any previous buffer..
@@ -317,7 +374,7 @@ namespace EDDiscovery2
             }
         }
 
-        public int GetPercentage(double dist)
+        public int GetPercentage(double dist)   // TBD
         {
             if (dist < 10000)
                 return 100;
@@ -326,9 +383,9 @@ namespace EDDiscovery2
             return 10;
         }
 
-#endregion
+        #endregion
 
-#region Compute
+        #region Compute
 
         void ComputeThread()
         {
@@ -341,7 +398,7 @@ namespace EDDiscovery2
 
                 grd.FillFromDB();
 
-                Console.WriteLine("Computed " + grd.Id.ToString("0000") + "  total " + grd.CountJustMade.ToString("00000") + " at " + grd.X + " , " + grd.Z + " % " + grd.Percentage);
+                //Console.WriteLine("Computed " + grd.Id.ToString("0000") + "  total " + grd.CountJustMade.ToString("000000") + " at " + grd.X + " , " + grd.Z + " % " + grd.Percentage);
                 computed.Add(grd);
             }
         }
@@ -371,19 +428,31 @@ namespace EDDiscovery2
 
 #region misc
 
-        public Vector3d? FindOverSystem(int x, int y, out double cursysdistz, Matrix4d resmat , float znear , float zoom , double vwidth , double vheight )
+        public Vector3d? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti )
         {
             cursysdistz = double.MaxValue;
             Vector3d? ret = null;
 
             foreach (StarGrid grd in grids)
             {
-                Vector3d? cur = grd.FindPoint(x, y, ref cursysdistz, resmat, znear, zoom, vwidth, vheight);
+                Vector3d? cur = grd.FindPoint(x, y, ref cursysdistz, ti);
                 if (cur != null)        // if found one, better than cursysdistz, use it
                     ret = cur;
             }
 
             return ret;
+        }
+
+        public void GetSystemsInView(ref SortedDictionary<float, Vector3d> list, double gridlylimit , StarGrid.TransFormInfo ti)
+        {
+            foreach (StarGrid grd in grids)                 // either we are inside the grid, or close to the centre of another grid..
+            {
+                if (grd.Id==GridId.Id(ti.campos.X,ti.campos.Z) || grd.DistanceFrom(ti.campos.X, ti.campos.Z) < gridlylimit)                         // only consider grids which are nearer than this..
+                {
+                    grd.GetSystemsInView(ref list,ti);
+                    //Console.WriteLine("Check grid " + grd.X + "," + grd.Z);
+                }
+            }
         }
 
 
