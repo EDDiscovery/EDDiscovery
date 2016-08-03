@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
-
+using System.Threading;
 
 namespace EDDiscovery2
 {
@@ -22,7 +22,6 @@ namespace EDDiscovery2
         public SystemClass.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
-        public bool Working { get; set; }
 
         bool array1displayed;
         private Vector3d[] array1;            // the star points
@@ -268,17 +267,23 @@ namespace EDDiscovery2
     public class StarGrids
     {
 #region Vars
-        private BlockingCollection<StarGrid> tocompute = new BlockingCollection<StarGrid>();
         private BlockingCollection<StarGrid> computed = new BlockingCollection<StarGrid>();
         private List<StarGrid> grids = new List<StarGrid>();        // unpopulated grid stars
         private StarGrid populatedgrid;
         private StarGrid visitedsystemsgrid;
         private System.Threading.Thread computeThread;
         private bool computeExit = false;
+        private EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
+        private double curx = 0, curz = 0;
 
-#endregion
+        private int midpercentage = 80;
+        private double middistance = 20000;
+        private int farpercentage = 50;
+        private double fardistance = 40000;
 
-#region Initialise
+        #endregion
+
+        #region Initialise
 
         public void Initialise()
         {
@@ -308,21 +313,36 @@ namespace EDDiscovery2
 
             Console.WriteLine("Total grids " + grids.Count);
 
-            computeThread = new System.Threading.Thread(ComputeThread) { Name = "Fill stars", IsBackground = true };
-            computeThread.Start();
+
+            long total = SystemClass.GetTotalSystems();
+            Console.WriteLine("Database Stars " + total);
+
+            total = Math.Min(total, 10000000);                  // scaling limit at 10mil
+            long offset = (total - 1000000) / 100000;           // scale down slowly.. experimental!
+            midpercentage -= (int)(offset / 2);
+            farpercentage -= (int)(offset / 3);
         }
 
-        public void ShutDown()
+        public void Start()
         {
-            if (computeThread.IsAlive)
+            if (computeThread == null)
+            {
+                computeThread = new System.Threading.Thread(ComputeThread) { Name = "Fill stars", IsBackground = true };
+                computeThread.Start();
+            }
+        }
+
+        public void Stop()
+        {
+            if (computeThread!=null && computeThread.IsAlive)
             {
                 computeExit = true;
-                tocompute.Add(null);                                 // add to the compute list.. null is a marker saying shut down
+                ewh.Set();              // wake it up!
                 computeThread.Join();
+                computeThread = null;
+                computeExit = false;
+                Console.WriteLine("Terminated 3dmap Compute");
             }
-
-            foreach (StarGrid grd in grids)
-                grd.Dispose();
         }
 
         public void FillVisitedSystems(List<VisitedSystemsClass> cls)
@@ -334,72 +354,100 @@ namespace EDDiscovery2
             }
         }
 
+        public int GetPercentage(double dist)   // TBD
+        {
+            if (dist < middistance)
+                return 100;
+            else if (dist < fardistance)
+                return midpercentage;
+            else
+                return farpercentage;
+        }
+
         #endregion
 
         #region Update
 
-        public void Update(double xp, double zp, GLControl gl )            // Foreground UI thread
+
+        public void Update(double xp, double zp, GLControl gl)            // Foreground UI thread
         {
+            StarGrid grd = null;
+            bool displayed = false;
+            while (computed.TryTake(out grd))               // remove from the computed queue and mark done
             {
-                StarGrid grd = null;
-                while (computed.TryTake(out grd))               // remove from the computed queue and mark done
-                {
-                    grd.Working = false;
-                    grd.Display(gl);                            // swap to using this one..
-                }
+                grd.Display(gl);                            // swap to using this one..
+                displayed = true;
             }
 
-            SortedList<double, StarGrid> toupdate = new SortedList<double, StarGrid>(new DuplicateKeyComparer<double>());     // we sort in distance order
-
-            foreach (StarGrid gcheck in grids)
+            if (displayed)
             {
-                if (gcheck.Working == false && gcheck.Id >= 0)         // if not in the tocompute queue.. and not a special grid
-                {
-                    double dist = gcheck.DistanceFrom(xp, zp);
-                    int percentage = GetPercentage(dist);
-
-                    if (gcheck.Percentage != percentage)                // if different, compute.  Initially percentage will be zero so make it compute
-                    {
-                        gcheck.Percentage = percentage;
-                        toupdate.Add(dist, gcheck);                     // add to sorted list
-                    }
-                }
+                Console.WriteLine("Total stars displayed " + CountStars());
             }
 
-            foreach (StarGrid gsubmit in toupdate.Values)              // and we submit to the queue in distance order, so we build outwards
-            {
-                gsubmit.Working = true;                                 // working..
-                tocompute.Add(gsubmit);                                 // add to the compute list..
-                //Console.WriteLine("Compute " + gsubmit.Id + " at " + gsubmit.X + " , " + gsubmit.Z + " %" + gsubmit.Percentage);
-            }
+            curx = xp;
+            curz = zp;
+
+            ewh.Set();                                                      // tick thread again to consider..
         }
-
-        public int GetPercentage(double dist)   // TBD
-        {
-            if (dist < 10000)
-                return 100;
-            if (dist < 30000)
-                return 50;
-            return 10;
-        }
-
-        #endregion
-
-        #region Compute
 
         void ComputeThread()
         {
+            Console.WriteLine("Start COMPUTE");
+
             while (true)
             {
-                StarGrid grd = tocompute.Take();
+                ewh.WaitOne();
 
-                if (grd == null || computeExit == true)
-                    break;
+                while (true)
+                {
+                    if (computeExit)
+                        return;
 
-                grd.FillFromDB();
+                    double mindist = double.MaxValue;
+                    double maxdist = 0;
+                    StarGrid selmin = null;
+                    StarGrid selmax = null;
 
-                //Console.WriteLine("Computed " + grd.Id.ToString("0000") + "  total " + grd.CountJustMade.ToString("000000") + " at " + grd.X + " , " + grd.Z + " % " + grd.Percentage);
-                computed.Add(grd);
+                    foreach (StarGrid gcheck in grids)
+                    {
+                        if (gcheck.Id >= 0 )                                     // if not a special grid
+                        {
+                            double dist = gcheck.DistanceFrom(curx, curz);
+                            int percentage = GetPercentage(dist);
+
+                            if (percentage>gcheck.Percentage )                // if increase, it has priority..
+                            {
+                                if (dist < mindist)                             // if best.. pick
+                                {
+                                    mindist = dist;
+                                    selmin = gcheck;
+                                }
+                            }
+                            else if (selmin == null && percentage<gcheck.Percentage )   // if not selected a min one, pick the further one to decrease
+                            {
+                                if (dist > maxdist)         
+                                {
+                                    maxdist = dist;
+                                    selmax = gcheck;
+                                }
+                            }
+                        }
+                    }
+
+                    if (selmin == null)
+                        selmin = selmax;
+
+                    if (selmin != null)
+                    {
+                        int prevpercent = selmin.Percentage;
+                        selmin.Percentage = GetPercentage(selmin.DistanceFrom(curx, curz));
+                        selmin.FillFromDB();
+                        Console.WriteLine("Computed " + selmin.Id.ToString("0000") + "  total " + selmin.CountJustMade.ToString("000000") + " at " + selmin.X + " , " + selmin.Z + " % " + prevpercent + "->" + selmin.Percentage);
+                        computed.Add(selmin);
+                    }
+                    else
+                        break;              // nothing to do, wait for kick
+                }
             }
         }
 
@@ -465,7 +513,15 @@ namespace EDDiscovery2
             }
         }
 
-#endregion
+        private int CountStars()
+        {
+            int t = 0;
+            foreach (StarGrid grd in grids)                 // either we are inside the grid, or close to the centre of another grid..
+                t += grd.Count;
+            return t;
+        }
+
+        #endregion
     }
 
 
