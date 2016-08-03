@@ -444,7 +444,7 @@ namespace EDDiscovery
                 else
                 {
                     LogLine("Checking for new EDSM systems (may take a few moments).");
-                    long updates = edsm.GetNewSystems(this);
+                    long updates = edsm.GetNewSystems(() => false, (p,s) => { });
                     LogLine("EDSM updated " + updates + " systems.");
                 }
             }
@@ -603,7 +603,7 @@ namespace EDDiscovery
                     LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
 
                     string rwsysfiletime = "2014-01-01 00:00:00";
-                    updates = SystemClass.ParseEDSMUpdateSystemsFile(edsmsystems, ref rwsysfiletime, true, this);
+                    updates = SystemClass.ParseEDSMUpdateSystemsFile(edsmsystems, ref rwsysfiletime, true, cancelRequested, reportProgress);
 
                     if (cancelRequested())       // abort, without saving time, to make it do it again
                         return false;
@@ -616,7 +616,7 @@ namespace EDDiscovery
                 }
 
                 LogLine("Now checking for recent EDSM systems.");
-                updates += edsm.GetNewSystems(this);
+                updates += edsm.GetNewSystems(cancelRequested, reportProgress);
 
                 LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
 
