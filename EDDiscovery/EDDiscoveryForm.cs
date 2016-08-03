@@ -312,7 +312,7 @@ namespace EDDiscovery
             theme.ApplyColors(this);
 
             if (refreshhistory)
-                travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
+                travelHistoryControl1.RefreshHistoryAsync();             // so we repaint this with correct colours.
 
             TravelControl.RedrawSummary();
         }
@@ -495,7 +495,7 @@ namespace EDDiscovery
 
                         //long tickc = Environment.TickCount;
                         LogLine("Reading travel history");
-                        travelHistoryControl1.RefreshHistory();
+                        travelHistoryControl1.RefreshHistoryAsync();
                         //LogLine("Time " + (Environment.TickCount-tickc) );
 
                         if (EliteDangerous.CheckStationLogging())
@@ -746,7 +746,7 @@ namespace EDDiscovery
         private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             travelHistoryControl1.HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
-            travelHistoryControl1.RefreshHistory();
+            travelHistoryControl1.RefreshHistoryAsync();
         }
 
         private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)

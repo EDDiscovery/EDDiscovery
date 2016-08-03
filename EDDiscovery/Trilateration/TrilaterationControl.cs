@@ -864,7 +864,7 @@ namespace EDDiscovery
                     //Visible = false;
                     UnfreezeTrilaterationUI();
                        travelHistoryControl.TriggerEDSMRefresh(); // TODO we might eventually avoid this by further parsing EDSC response
-                    travelHistoryControl.RefreshHistory();
+                    travelHistoryControl.RefreshHistoryAsync();
                        checkForUnknownSystemsNowKnown();
                    });
                 }
