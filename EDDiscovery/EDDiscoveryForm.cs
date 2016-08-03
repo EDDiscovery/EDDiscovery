@@ -541,7 +541,7 @@ namespace EDDiscovery
             {
                 var worker = (System.ComponentModel.BackgroundWorker)sender;
 
-                PerformSync(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
+                PerformFullSync(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
                 if (worker.CancellationPending)
                     e.Cancel = true;
             }
@@ -561,16 +561,11 @@ namespace EDDiscovery
 
         }
 
-        private void PerformSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
+        private bool PerformEDSMFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
-            bool refreshhistory = false;
-            bool firstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
-            bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
-
-            if (performedsmsync )
-            {
                 string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
                 DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
+                long updates = 0;
 
                 try
                 {
@@ -580,28 +575,26 @@ namespace EDDiscovery
 
                     SystemClass.RemoveHiddenSystems();
 
-                    if (PendingClose)
-                        return;
+                    if (cancelRequested())
+                        return false;
 
                     LogLine("Download systems file from EDSM.");
 
                     bool newfile = false;
                     string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
 
-                    long updates = 0;
-
-                    if ( EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile) )
+                    if (EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile))
                     {
-                        if (PendingClose)
-                            return;
+                        if (cancelRequested())
+                            return false;
 
                         LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
 
                         string rwsysfiletime = "2014-01-01 00:00:00";
                         updates = SystemClass.ParseEDSMUpdateSystemsFile(edsmsystems, ref rwsysfiletime, true, this);
 
-                        if (PendingClose)       // abort, without saving time, to make it do it again
-                            return;
+                        if (cancelRequested())       // abort, without saving time, to make it do it again
+                            return false;
 
                         SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
                     }
@@ -615,9 +608,6 @@ namespace EDDiscovery
 
                     LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
 
-                    if (updates > 0)
-                        refreshhistory = true;
-
                     performedsmsync = false;
                     GC.Collect();
                 }
@@ -625,10 +615,12 @@ namespace EDDiscovery
                 {
                     MessageBox.Show("GetAllEDSMSystems exception:" + ex.Message);
                 }
-            }
 
-            if ( performeddbsync )
-            {
+                return (updates > 0);
+        }
+
+        private void PerformEDDBFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
+        {
                 try
                 {
                     EDDBClass eddb = new EDDBClass();
@@ -637,7 +629,7 @@ namespace EDDiscovery
 
                     if (eddb.GetSystems())
                     {
-                        if (PendingClose)
+                        if (cancelRequested())
                             return;
 
                         LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
@@ -657,13 +649,14 @@ namespace EDDiscovery
                 {
                     MessageBox.Show("GetEDDBUpdate exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
                 }
-            }
+        }
 
-            if (EDDConfig.UseDistances)
-            {
+        private bool PerformDistanceFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
+        {
+                long numbertotal = 0;
+
                 try
                 {
-                    long numbertotal = 0;
                     string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                     EDSMClass edsm = new EDSMClass();
 
@@ -672,8 +665,8 @@ namespace EDDiscovery
                         LogLine("Downloading full EDSM distance data.");
                         string filename = edsm.GetEDSMDistances();
 
-                        if (PendingClose)
-                            return;
+                        if (cancelRequested())
+                            return false;
 
                         if (filename != null)
                         {
@@ -685,8 +678,8 @@ namespace EDDiscovery
                         }
                     }
 
-                    if (PendingClose)
-                        return;
+                    if (cancelRequested())
+                        return false;
 
                     LogLine("Updating distances with latest EDSM data.");
 
@@ -702,9 +695,6 @@ namespace EDDiscovery
                     LogLine("Local database updated with EDSM Distance data, " + numbertotal + " distances updated.");
                     SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
 
-                    if (numbertotal > 0)                          // if we've done something
-                        refreshhistory = true;
-
                     performedsmdistsync = false;
                     GC.Collect();
                 }
@@ -712,6 +702,29 @@ namespace EDDiscovery
                 {
                     MessageBox.Show("GetEDSMDistances exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
                 }
+
+                return (numbertotal != 0);
+        }
+
+        private void PerformFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
+        {
+            bool refreshhistory = false;
+            bool firstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
+            bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
+
+            if (performedsmsync )
+            {
+                refreshhistory |= PerformEDSMFullSync(cancelRequested, reportProgress);
+            }
+
+            if ( performeddbsync )
+            {
+                PerformEDDBFullSync(cancelRequested, reportProgress);
+            }
+
+            if (EDDConfig.UseDistances)
+            {
+                refreshhistory |= PerformDistanceFullSync(cancelRequested, reportProgress);
             }
             else
                 performedsmdistsync = false;
