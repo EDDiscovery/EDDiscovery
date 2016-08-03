@@ -1577,13 +1577,6 @@ namespace EDDiscovery2
 
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
         {
-            //TBD
-
-            GC.Collect();
-            Console.WriteLine("GC");
-
-#if false
-
             if (_visitedSystems != null)
             {
                 VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
@@ -1595,7 +1588,6 @@ namespace EDDiscovery2
             }
             else
                 MessageBox.Show("No travel history is available");
-#endif        
         }
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
@@ -2102,7 +2094,6 @@ namespace EDDiscovery2
         void MouseHoverTick(object sender, EventArgs e)
         {
             _mousehovertick.Stop();
-            return;
 
             ISystem hoversystem = null;
             BookmarkClass curbookmark = null;
