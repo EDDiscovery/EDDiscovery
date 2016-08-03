@@ -138,8 +138,7 @@ namespace EDDiscovery2
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
             _visitedSystems = visited;
-            ISystem h = FindSystem(historysel.Name);
-            Prepare(h, homesys, centersys, zoom, sysname, visited);
+            Prepare((historysel!= null) ? FindSystem(historysel.Name):null , homesys, centersys, zoom, sysname, visited);
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
@@ -150,12 +149,14 @@ namespace EDDiscovery2
         }
 
         public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
-                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+                            AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
             _visitedSystems = visited;
-            _historySelection = historysel;
-            _centerSystem = centersys;
 
+            _historySelection = SafeSystem(historysel);
+            _homeSystem = SafeSystem((homesys != null) ? FindSystem(homesys) : null);
+            _centerSystem = SafeSystem(centersys);
+            
             if (_stargrids == null)
             {
                 _stargrids = new StarGrids();
@@ -177,23 +178,6 @@ namespace EDDiscovery2
             _starname_curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
 
             _systemNames = sysname;
-
-            if (_centerSystem == null)
-            {
-                _centerSystem = FindSystem("Sol");
-
-                if (_centerSystem == null)
-                    _centerSystem = new SystemClass("Sol", 0, 0, 0);
-            }
-
-            _homeSystem = FindSystem(homesys);
-            if (_homeSystem == null)
-            {
-                _homeSystem = FindSystem("Sol");
-
-                if (_homeSystem == null)
-                    _homeSystem = new SystemClass("Sol", 0, 0, 0);
-            }
 
             _defaultZoom = zoom;
 
@@ -220,6 +204,7 @@ namespace EDDiscovery2
             textboxFrom.AutoCompleteCustomSource = _systemNames;
 
             _stargrids.FillVisitedSystems(_visitedSystems);     // to ensure its updated
+            _stargrids.Start();
         }
 
         public void SetPlannedRoute(List<SystemClass> plannedr)
@@ -347,7 +332,6 @@ namespace EDDiscovery2
             _isActivated = true;
             _timerRunning = false;      // this causes ApplicationIdle to kick the first invalidate off..
             glControl.Invalidate();
-
         }
 
         private void FormMap_Deactivate(object sender, EventArgs e)
@@ -367,6 +351,8 @@ namespace EDDiscovery2
                 SQLiteDBClass.PutSettingInt("Map3DFormLeft", this.Left);
                 //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
+
+            _stargrids.Stop();
 
             e.Cancel = true;
             this.Hide();
@@ -2462,7 +2448,20 @@ namespace EDDiscovery2
             return SystemClass.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);
         }
 
-#endregion
+        private ISystem SafeSystem(ISystem s)
+        {
+            if (s == null)
+            {
+                s = FindSystem("Sol");
+
+                if (s == null)
+                    s = new SystemClass("Sol", 0, 0, 0);
+            }
+
+            return s;
+        }
+
+        #endregion
 
     }
 
