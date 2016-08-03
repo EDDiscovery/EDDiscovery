@@ -77,6 +77,8 @@ namespace EDDiscovery
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
+        private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
+
         private bool CanSkipSlowUpdates()
         {
 #if DEBUG
@@ -191,7 +193,6 @@ namespace EDDiscovery
         }
 
         Thread checkSystemsThread;          // globals so we know if they are active..
-        Thread fullSyncThread;              // full sync is launched by check systems as it ends..
 
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
@@ -528,11 +529,39 @@ namespace EDDiscovery
 
         private void AsyncPerformSync()
         {
-            fullSyncThread = new Thread(PerformSync) { Name = "Downloading EDSM system", IsBackground = true };
-            fullSyncThread.Start();
+            if (!_syncWorker.IsBusy)
+            {
+                _syncWorker.RunWorkerAsync();
+            }
         }
 
-        private void PerformSync()           // big check.. done in a thread.
+        private void _syncWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                var worker = (System.ComponentModel.BackgroundWorker)sender;
+
+                PerformSync(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
+                if (worker.CancellationPending)
+                    e.Cancel = true;
+            }
+            finally
+            {
+                _syncWorkerCompletedEvent.Set();
+            }
+        }
+
+        private void _syncWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            ReportProgress(e.ProgressPercentage, (string)e.UserState);
+        }
+
+        private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        private void PerformSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
         {
             bool refreshhistory = false;
             bool firstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
@@ -840,6 +869,7 @@ namespace EDDiscovery
                 e.Cancel = true;
                 CancellationTokenSource.Cancel();
                 travelHistoryControl1.CancelHistoryRefresh();
+                _syncWorker.CancelAsync();
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
                 LogLineHighlight("Closing down, please wait..");
@@ -865,8 +895,8 @@ namespace EDDiscovery
                 checkSystemsThread.Join();         // wait..
 
             Console.WriteLine("Waiting for full sync to close");
-            if (fullSyncThread != null && fullSyncThread.IsAlive)
-                fullSyncThread.Join();
+            if (_syncWorker.IsBusy)
+                _syncWorkerCompletedEvent.WaitOne();
 
             Console.WriteLine("Stopping discrete threads");
             travelHistoryControl1.netlog.StopMonitor();
@@ -985,7 +1015,7 @@ namespace EDDiscovery
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (fullSyncThread != null && !fullSyncThread.IsAlive)      // we want it to have run, to completion, to allow another go..
+            if (!_syncWorker.IsBusy)      // we want it to have run, to completion, to allow another go..
             {
                 performeddbsync = true;
                 AsyncPerformSync();
@@ -996,7 +1026,7 @@ namespace EDDiscovery
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (fullSyncThread != null && !fullSyncThread.IsAlive)      // we want it to have run, to completion, to allow another go..
+            if (!_syncWorker.IsBusy)      // we want it to have run, to completion, to allow another go..
             {
                 performedsmsync = true;
                 AsyncPerformSync();
@@ -1009,7 +1039,7 @@ namespace EDDiscovery
         {
             if (!EDDConfig.UseDistances)
                 MessageBox.Show("EDSM Distances are turned off, please turn on first in settings");
-            else if (fullSyncThread != null && !fullSyncThread.IsAlive)      // we want it to have run, to completion, to allow another go..
+            else if (!_syncWorker.IsBusy)      // we want it to have run, to completion, to allow another go..
             {
                 performedsmdistsync = true;
                 AsyncPerformSync();
@@ -1209,8 +1239,6 @@ namespace EDDiscovery
                 }
             }
         }
-
 #endregion
-
     }
 }
