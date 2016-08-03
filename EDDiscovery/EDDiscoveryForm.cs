@@ -75,6 +75,8 @@ namespace EDDiscovery
 
         public GalacticMapping galacticMapping;
 
+        public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
+
         private bool CanSkipSlowUpdates()
         {
 #if DEBUG
@@ -761,6 +763,24 @@ namespace EDDiscovery
             }
         }
 
+        public void ReportProgress(int percentComplete, string message)
+        {
+            if (!PendingClose)
+            {
+                if (percentComplete >= 0)
+                {
+                    this.toolStripProgressBar1.Visible = true;
+                    this.toolStripProgressBar1.Value = percentComplete;
+                }
+                else
+                {
+                    this.toolStripProgressBar1.Visible = false;
+                }
+
+                this.toolStripStatusLabel1.Text = message;
+            }
+        }
+
 #endregion
 
 #region JSONandMisc
@@ -818,6 +838,8 @@ namespace EDDiscovery
             if (safeClose == null)                  // so a close is a request now, and it launches a thread which cleans up the system..
             {
                 e.Cancel = true;
+                CancellationTokenSource.Cancel();
+                travelHistoryControl1.CancelHistoryRefresh();
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
                 LogLineHighlight("Closing down, please wait..");

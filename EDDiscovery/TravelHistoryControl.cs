@@ -96,7 +96,6 @@ namespace EDDiscovery
             closestthread.Start();
         }
 
-
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
             visitedSystems = null;
@@ -151,29 +150,84 @@ namespace EDDiscovery
 
         public void RefreshHistory()
         {
-
-
             if (visitedSystems == null || visitedSystems.Count == 0)
             {
                 if (activecommander >= 0)
                 {
-                    string errmsg;
-                    visitedSystems = netlog.ParseFiles(out errmsg, defaultMapColour);   // Parse files stop monitor..
-                    if (errmsg != null)
-                        LogTextHighlight(errmsg + Environment.NewLine);
-
-                    netlog.StartMonitor();          // so restart it..
+                    if (!_refreshWorker.IsBusy)
+                    {
+                        button_RefreshHistory.Enabled = false;
+                        _refreshWorker.RunWorkerAsync();
+                    }
                 }
                 else
                 {
-                    visitedSystems = VisitedSystemsClass.GetAll(activecommander);
-                    VisitedSystemsClass.UpdateSys(visitedSystems, EDDConfig.Instance.UseDistances);
+                    RefreshHistory(VisitedSystemsClass.GetAll(activecommander));
                 }
             }
+        }
+
+        public void CancelHistoryRefresh()
+        {
+            _refreshWorker.CancelAsync();
+        }
+
+        private void RefreshHistoryWorker(object sender, DoWorkEventArgs e)
+        {
+            var worker = (BackgroundWorker)sender;
+
+            string errmsg;
+            netlog.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+
+            var vsclist = netlog.ParseFiles(out errmsg, defaultMapColour, () => worker.CancellationPending, (p,s) => worker.ReportProgress(p,s));   // Parse files stop monitor..
+
+            if (worker.CancellationPending)
+            {
+                e.Cancel = true;
+                e.Result = null;
+                return;
+            }
+
+            if (errmsg != null)
+            {
+                throw new InvalidOperationException(errmsg);
+            }
+
+            e.Result = vsclist;
+        }
+
+        private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                LogTextHighlight("History Refresh Error: " + e.Error.Message + Environment.NewLine);
+            }
+            else if (e.Result != null)
+            {
+                RefreshHistory((List<VisitedSystemsClass>)e.Result);
+            }
+            button_RefreshHistory.Enabled = true;
+
+            if (!e.Cancelled)
+            {
+                netlog.StartMonitor();
+            }
+        }
+
+        private void RefreshHistoryWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            string name = (string)e.UserState;
+            _discoveryForm.ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
+        }
+
+        private void RefreshHistory(List<VisitedSystemsClass> vsc)
+        {
+            visitedSystems = vsc;
 
             if (visitedSystems == null)
                 return;
 
+            VisitedSystemsClass.UpdateSys(visitedSystems, EDDConfig.Instance.UseDistances);
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
 
