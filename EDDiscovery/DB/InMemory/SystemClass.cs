@@ -4,20 +4,32 @@ namespace EDDiscovery2.DB.InMemory
 {
     // For when you need a minimal version and don't want to mess up the database. 
     // Useful for creation of test doubles
-    public class SystemClass : ISystem
+    public class SystemClassBase : ISystemBase
     {
         public long id { get; set; }
         public long id_edsm { get; set; }
         public string name { get; set; }
-        public string SearchName { get; set; }
         public double x { get; set; }
         public double y { get; set; }
         public double z { get; set; }
+        public DateTime UpdateDate { get; set; }
+
+        public bool HasCoordinate
+        {
+            get
+            {
+                return (!double.IsNaN(x));
+            }
+        }
+    }
+
+    public class SystemClass : SystemClassBase, ISystem
+    {
+        public string SearchName { get; set; }
         public int cr { get; set; }
         public string CommanderCreate { get; set; }
         public DateTime CreateDate { get; set; }
         public string CommanderUpdate { get; set; }
-        public DateTime UpdateDate { get; set; }
         public EDDiscovery.DB.SystemStatusEnum status { get; set; }
         public string SystemNote { get; set; }
 
@@ -32,14 +44,6 @@ namespace EDDiscovery2.DB.InMemory
         public int needs_permit { get; set; }
         public int eddb_updated_at { get; set; }
         
-        public bool HasCoordinate
-        {
-            get
-            {
-                return (!double.IsNaN(x));
-            }
-        }
-
         public bool HasEDDBInformation
         {
             get
