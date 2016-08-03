@@ -7,6 +7,7 @@ using System.Globalization;
 using EDDiscovery2.DB;
 using System.IO;
 using EDDiscovery2;
+using System.Threading;
 
 namespace EDDiscovery
 {
@@ -187,10 +188,13 @@ namespace EDDiscovery
             }
         }
 
-        public bool ReadNetLogSystem(out VisitedSystemsClass vsc)
+        public bool ReadNetLogSystem(out VisitedSystemsClass vsc, Func<bool> cancelRequested = null)
         {
+            if (cancelRequested == null)
+                cancelRequested = () => false;
+
             string line;
-            while (this.ReadLine(out line))
+            while (!cancelRequested() && this.ReadLine(out line))
             {
                 ParseLineTime(line);
 
@@ -307,8 +311,11 @@ namespace EDDiscovery
             return false;
         }
 
-        public IEnumerable<VisitedSystemsClass> ReadSystems()
+        public IEnumerable<VisitedSystemsClass> ReadSystems(Func<bool> cancelRequested = null)
         {
+            if (cancelRequested == null)
+                cancelRequested = () => false;
+
             VisitedSystemsClass last = null;
             long startpos = filePos;
 
@@ -322,7 +329,7 @@ namespace EDDiscovery
             }
 
             VisitedSystemsClass ps;
-            while (ReadNetLogSystem(out ps))
+            while (!cancelRequested() && ReadNetLogSystem(out ps, cancelRequested))
             {
                 if (last == null)
                 {

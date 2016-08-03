@@ -76,6 +76,8 @@
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -85,6 +87,7 @@
             this.tabPageRoute.SuspendLayout();
             this.tabPageRoutesExpeditions.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -514,6 +517,9 @@
             // 
             // statusStrip1
             //
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripProgressBar1,
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 722);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(993, 22);
@@ -522,6 +528,16 @@
             this.statusStrip1.SizingGrip = true;
             this.statusStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
             // EDDiscoveryForm
             // 
@@ -560,6 +576,8 @@
             this.tabPageRoute.ResumeLayout(false);
             this.tabPageRoutesExpeditions.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -613,6 +631,8 @@
         private System.Windows.Forms.ToolStripMenuItem debugBetaFixHiddenLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem synchroniseWithEDSMDistancesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 

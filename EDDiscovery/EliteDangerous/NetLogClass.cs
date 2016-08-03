@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -110,14 +111,11 @@ namespace EDDiscovery
             }
         }
 
-        // called during start up and if refresh history is pressed..  foreground call
+        // called during start up and if refresh history is pressed
 
-        public List<VisitedSystemsClass> ParseFiles(out string error, int defaultMapColour)
+        public List<VisitedSystemsClass> ParseFiles(out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress)
         {
-            StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-
             error = null;
-            DirectoryInfo dirInfo;
 
             string datapath = GetNetLogPath();
 
@@ -130,16 +128,6 @@ namespace EDDiscovery
             if (!Directory.Exists(datapath))   // if logfiles directory is not found
             {
                 error = "Netlog directory is not present!" + Environment.NewLine + "Specify location in settings tab";
-                return null;
-            }
-
-            try
-            {
-                dirInfo = new DirectoryInfo(datapath);
-            }
-            catch (Exception ex)
-            {
-                error = "Could not create Directory info: " + ex.Message;
                 return null;
             }
 
@@ -168,56 +156,71 @@ namespace EDDiscovery
                 }
             }
             // order by file write time so we end up on the last one written
-            FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.LastWriteTime).ToArray();
+            FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "netLog.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            List<NetLogFileReader> readersToUpdate = new List<NetLogFileReader>();
+
+            for (int i = 0; i < allFiles.Length; i++)
             {
-                for (int i = 0; i < allFiles.Length; i++)
+                FileInfo fi = allFiles[i];
+
+                var reader = OpenFileReader(fi);
+
+                if (reader.TimeZone == null)
                 {
-                    FileInfo fi = allFiles[i];
+                    reader.ReadHeader();
+                }
 
-                    lastnfi = OpenFileReader(fi);
+                if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
+                {
+                    m_travelogUnits[reader.TravelLogUnit.Name] = reader.TravelLogUnit;
+                    reader.TravelLogUnit.Add();
+                }
 
-                    if (lastnfi.TimeZone == null)
-                    {
-                        lastnfi.ReadHeader();
-                    }
+                if (!netlogreaders.ContainsKey(reader.TravelLogUnit.Name))
+                {
+                    netlogreaders[reader.TravelLogUnit.Name] = lastnfi;
+                }
 
-                    if (!m_travelogUnits.ContainsKey(lastnfi.TravelLogUnit.Name))
-                    {
-                        m_travelogUnits[lastnfi.TravelLogUnit.Name] = lastnfi.TravelLogUnit;
-                        lastnfi.TravelLogUnit.Add();
-                    }
-
-                    if (!netlogreaders.ContainsKey(lastnfi.TravelLogUnit.Name))
-                    {
-                        netlogreaders[lastnfi.TravelLogUnit.Name] = lastnfi;
-                    }
-
-                    if (lastnfi.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
-                    {
-                        using (DbTransaction tn = cn.BeginTransaction())
-                        {
-                            foreach (VisitedSystemsClass ps in lastnfi.ReadSystems())
-                            {
-                                ps.EDSM_sync = false;
-                                ps.MapColour = defaultMapColour;
-                                ps.Commander = EDDConfig.Instance.CurrentCmdrID;
-
-                                ps.Add(cn, tn);
-                                visitedSystems.Add(ps);
-                            }
-
-                            lastnfi.TravelLogUnit.Update(cn, tn);
-
-                            tn.Commit();
-                        }
-                    }
+                if (reader.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
+                {
+                    readersToUpdate.Add(reader);
                 }
             }
 
-            // update the VSC with data from the db
-            VisitedSystemsClass.UpdateSys(visitedSystems, EDDiscoveryForm.EDDConfig.UseDistances);
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            {
+                for (int i = 0; i < readersToUpdate.Count; i++)
+                {
+                    NetLogFileReader reader = readersToUpdate[i];
+                    updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+
+                    using (DbTransaction tn = cn.BeginTransaction())
+                    {
+                        foreach (VisitedSystemsClass ps in reader.ReadSystems(cancelRequested))
+                        {
+                            ps.EDSM_sync = false;
+                            ps.MapColour = defaultMapColour;
+                            ps.Commander = EDDConfig.Instance.CurrentCmdrID;
+
+                            ps.Add(cn, tn);
+                            visitedSystems.Add(ps);
+                        }
+
+                        reader.TravelLogUnit.Update(cn, tn);
+
+                        tn.Commit();
+                    }
+
+                    if (updateProgress != null)
+                    {
+                        updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+                    }
+
+                    lastnfi = reader;
+                }
+            }
+
             return visitedSystems;
         }
 
