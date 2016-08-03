@@ -723,17 +723,17 @@ namespace EDDiscovery
             syncwasfirstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
             bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
 
-            if (performedsmsync )
+            if (performedsmsync && !cancelRequested())
             {
                 performhistoryrefresh |= PerformEDSMFullSync(cancelRequested, reportProgress);
             }
 
-            if ( performeddbsync )
+            if (performeddbsync && !cancelRequested())
             {
                 PerformEDDBFullSync(cancelRequested, reportProgress);
             }
 
-            if (EDDConfig.UseDistances)
+            if (EDDConfig.UseDistances && !cancelRequested())
             {
                 performhistoryrefresh |= PerformDistanceFullSync(cancelRequested, reportProgress);
             }
