@@ -415,7 +415,7 @@ namespace EDDiscovery
         bool syncwasfirstrun = false;
         bool syncwaseddboredsm = false;
 
-        private void CheckSystems()  // ASYNC process, done via start up, must not be too slow.
+        private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
             CommanderName = EDDConfig.CurrentCommander.Name;
 
@@ -444,26 +444,30 @@ namespace EDDiscovery
                 else
                 {
                     LogLine("Checking for new EDSM systems (may take a few moments).");
-                    long updates = edsm.GetNewSystems(() => false, (p,s) => { });
+                    long updates = edsm.GetNewSystems(cancelRequested, reportProgress);
                     LogLine("EDSM updated " + updates + " systems.");
                 }
             }
 
-            SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
-            BookmarkClass.GetAllBookmarks();
-            galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
+            if (!cancelRequested())
+            {
 
-            LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
+                SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
+                BookmarkClass.GetAllBookmarks();
+                galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
 
-            string timestr = SQLiteDBClass.GetSettingString("EDDBSystemsTime", "0");
-            DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
-            if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
-                performeddbsync = true;
+                LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
-            string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
-            DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
-            if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
-                performedsmdistsync = true;
+                string timestr = SQLiteDBClass.GetSettingString("EDDBSystemsTime", "0");
+                DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
+                    performeddbsync = true;
+
+                string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
+                if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
+                    performedsmdistsync = true;
+            }
 
             downloadMapsThread.Join();
         }
@@ -528,7 +532,7 @@ namespace EDDiscovery
             {
                 var worker = (System.ComponentModel.BackgroundWorker)sender;
 
-                CheckSystems();
+                CheckSystems(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
 
                 if (worker.CancellationPending)
                     e.Cancel = true;
