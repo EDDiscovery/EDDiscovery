@@ -78,6 +78,7 @@ namespace EDDiscovery
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
         private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
+        private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
 
         private bool CanSkipSlowUpdates()
         {
@@ -192,12 +193,9 @@ namespace EDDiscovery
             }
         }
 
-        Thread checkSystemsThread;          // globals so we know if they are active..
-
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            checkSystemsThread = new Thread(CheckSystems) { Name = "Check Systems", IsBackground = true };
-            checkSystemsThread.Start();
+            _checkSystemsWorker.RunWorkerAsync();
         }
 
         private void CheckForNewInstaller()
@@ -416,8 +414,6 @@ namespace EDDiscovery
 
         private void CheckSystems()  // ASYNC process, done via start up, must not be too slow.
         {
-            try
-            {
                 CommanderName = EDDConfig.CurrentCommander.Name;
 
                 Thread downloadMapsThread;
@@ -467,15 +463,21 @@ namespace EDDiscovery
                     performedsmdistsync = true;
 
                 downloadMapsThread.Join();
+        }
 
-                if (!PendingClose)
-                {
+        private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                System.Windows.Forms.MessageBox.Show("Check Systems exception: " + e.Error.Message);
+                System.Windows.Forms.MessageBox.Show("Trace: " + e.Error.StackTrace);
+            }
+            else if (!e.Cancelled && !PendingClose)
+            {
                     SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
 
                     Console.WriteLine("Systems Loaded");
 
-                    Invoke((MethodInvoker)delegate
-                    {
                         routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                         routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
                         travelHistoryControl1.textBoxTarget.AutoCompleteCustomSource = SystemNames;
@@ -499,10 +501,7 @@ namespace EDDiscovery
                         }
 
                         CheckForNewInstaller();
-                    });
 
-                    if (!PendingClose)
-                    {
                         long totalsystems = SystemClass.GetTotalSystems();
                         LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
 
@@ -517,14 +516,29 @@ namespace EDDiscovery
                                             "Please continue running ED Discovery until refresh is complete.",
                                             "WARNING - Synchronisation to " + databases);
                         }
-                    }
-                }
             }
-            catch (Exception ex)
+        }
+
+        private void _checkSystemsWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
             {
-                System.Windows.Forms.MessageBox.Show("Check Systems exception: " + ex.Message);
-                System.Windows.Forms.MessageBox.Show("Trace: " + ex.StackTrace);
+                var worker = (System.ComponentModel.BackgroundWorker)sender;
+
+                CheckSystems();
+
+                if (worker.CancellationPending)
+                    e.Cancel = true;
             }
+            finally
+            {
+                _checkSystemsWorkerCompletedEvent.Set();
+            }
+        }
+
+        private void _checkSystemsWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            ReportProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
         private void AsyncPerformSync()
@@ -883,6 +897,7 @@ namespace EDDiscovery
                 CancellationTokenSource.Cancel();
                 travelHistoryControl1.CancelHistoryRefresh();
                 _syncWorker.CancelAsync();
+                _checkSystemsWorker.CancelAsync();
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
                 LogLineHighlight("Closing down, please wait..");
@@ -904,8 +919,8 @@ namespace EDDiscovery
         {
             Thread.Sleep(1000);
             Console.WriteLine("Waiting for check systems to close");
-            if (checkSystemsThread != null && checkSystemsThread.IsAlive)
-                checkSystemsThread.Join();         // wait..
+            if (_checkSystemsWorker.IsBusy)
+                _checkSystemsWorkerCompletedEvent.WaitOne();
 
             Console.WriteLine("Waiting for full sync to close");
             if (_syncWorker.IsBusy)
