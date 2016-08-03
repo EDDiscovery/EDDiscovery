@@ -1282,22 +1282,22 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids , EDDiscoveryForm discoveryform)
+        public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids , Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             using (JsonTextReader jr = new JsonTextReader(new StringReader(json)))
-                return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform);
+                return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, cancelRequested, reportProgress);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date , bool removenonedsmids , EDDiscoveryForm discoveryform)
+        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date , bool removenonedsmids , Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             using (StreamReader sr = new StreamReader(filename))         // read directly from file..
-                return ParseEDSMUpdateSystems(sr, ref date, removenonedsmids, discoveryform);
+                return ParseEDSMUpdateSystems(sr, ref date, removenonedsmids, cancelRequested, reportProgress);
         }
 
-        public static long ParseEDSMUpdateSystems(StreamReader reader, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform)
+        public static long ParseEDSMUpdateSystems(StreamReader reader, ref string date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             using (JsonTextReader jr = new JsonTextReader(reader))
-                return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform);
+                return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, cancelRequested, reportProgress);
         }
 
         private static Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> GetEdsmSystemsLite(SQLiteConnectionED cn)
@@ -1340,7 +1340,7 @@ namespace EDDiscovery.DB
             return systemsByEdsmId;
         }
 
-        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, SQLiteConnectionED cn)
+        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, SQLiteConnectionED cn, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             DateTime maxdate = DateTime.Parse(date, CultureInfo.InvariantCulture);
             Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = GetEdsmSystemsLite(cn);
@@ -1348,18 +1348,19 @@ namespace EDDiscovery.DB
             int updatecount = 0;
             int insertcount = 0;
 
-            while (true)
+            while (!cancelRequested())
             {
                 using (DbTransaction txn = cn.BeginTransaction())
                 {
                     using (DbCommand updatecmd = cn.CreateCommand("UPDATE Systems SET name=@name, x=@x, y=@y, z=@z, UpdateDate=@UpdateDate WHERE id_edsm=@id_edsm", txn))
                     {
-                        while (true)
+                        while (!cancelRequested())
                         {
                             if (!jr.Read())
                             {
                                 date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                                return count;
+                                txn.Commit();
+                                return updatecount + insertcount;
                             }
 
                             if (jr.TokenType == JsonToken.StartObject)
@@ -1405,8 +1406,10 @@ namespace EDDiscovery.DB
                                     }
                                 }
 
-                                if ((++count) % 10000 == 0)
+                                if ((++count) % 1000 == 0)
                                 {
+                                    reportProgress(-1, $"Syncing EDSM systems: {count} processed, {insertcount} new systems, {updatecount} updated systems");
+                                    txn.Commit();
                                     break;
                                 }
                             }
@@ -1414,13 +1417,15 @@ namespace EDDiscovery.DB
                     }
                 }
             }
+
+            return updatecount + insertcount;
         }
 
-        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform)
+        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db
             {
-                long count = DoParseEDSMUpdateSystemsReader(jr, ref date, cn);
+                long count = DoParseEDSMUpdateSystemsReader(jr, ref date, cn, cancelRequested, reportProgress);
 
                 if (removenonedsmids)                            // done on a full sync..
                 {
