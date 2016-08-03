@@ -1284,164 +1284,155 @@ namespace EDDiscovery.DB
 
         public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids , EDDiscoveryForm discoveryform)
         {
-            JsonTextReader jr = new JsonTextReader(new StringReader(json));
-            return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids,discoveryform);
+            using (JsonTextReader jr = new JsonTextReader(new StringReader(json)))
+                return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform);
         }
 
         public static long ParseEDSMUpdateSystemsFile(string filename, ref string date , bool removenonedsmids , EDDiscoveryForm discoveryform)
         {
-            StreamReader sr = new StreamReader(filename);         // read directly from file..
-            JsonTextReader jr = new JsonTextReader(sr);
-            return ParseEDSMUpdateSystemsReader(jr, ref date,removenonedsmids,discoveryform);
+            using (StreamReader sr = new StreamReader(filename))         // read directly from file..
+                return ParseEDSMUpdateSystems(sr, ref date, removenonedsmids, discoveryform);
         }
 
- 
-        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform)
+        public static long ParseEDSMUpdateSystems(StreamReader reader, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform)
         {
-            List<SystemClass> toupdate = new List<SystemClass>();
-            List<SystemClass> newsystems = new List<SystemClass>();
-            DateTime maxdate = DateTime.Parse(date, new CultureInfo("sv-SE"));
+            using (JsonTextReader jr = new JsonTextReader(reader))
+                return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform);
+        }
 
-            bool emptydatabase = SystemClass.GetTotalSystems() == 0;            // if empty database, we can skip the lookup
+        private static Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> GetEdsmSystemsLite(SQLiteConnectionED cn)
+        {
+            Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = new Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase>();
 
-
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db
+            using (DbCommand cmd = cn.CreateCommand("SELECT id, id_edsm, name, x, y, z, UpdateDate FROM Systems WHERE id_edsm IS NOT NULL"))
             {
-                int c = 0;
-                DbCommand cmd = cn.CreateCommand("select * from Systems where id_edsm = @id_edsm limit 1");
-
-                try
+                using (DbDataReader reader = cmd.ExecuteReader())
                 {
-                    int lasttc = Environment.TickCount;
-                    int formtickcount = Environment.TickCount;
-
-                    while (jr.Read())
+                    while (reader.Read())
                     {
-                        if (jr.TokenType == JsonToken.StartObject)
+                        EDDiscovery2.DB.InMemory.SystemClassBase sys = new EDDiscovery2.DB.InMemory.SystemClassBase
                         {
-                            JObject jo = JObject.Load(jr);
+                            id = (long)reader["id"],
+                            name = (string)reader["name"]
+                        };
 
-                            SystemClass system = new SystemClass(jo, EDDiscovery2.DB.SystemInfoSource.EDSM);
+                        string searchname = sys.name.ToLower();
 
-                            if (system.UpdateDate.Subtract(maxdate).TotalSeconds > 0)
-                                maxdate = system.UpdateDate;
-
-                            if (++c % 10000 == 0)
-                            {
-                                Console.WriteLine("EDSM Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newsys " + newsystems.Count + " update " + toupdate.Count());
-                                lasttc = Environment.TickCount;
-                            }
-
-                            if ( Environment.TickCount - formtickcount > 5000 )
-                            {
-                                discoveryform.LogLine("Updating from EDSM, received " + c + " systems, updated " + (newsystems.Count + toupdate.Count));
-                                formtickcount = Environment.TickCount;
-                            }
-
-                            if (discoveryform.PendingClose)         // pending close, abandon
-                                return 0;
-
-                            if (system.HasCoordinate)
-                            {
-                                if (emptydatabase)      // if no database, just add immediately
-                                {
-                                    //Console.WriteLine("Empty database Add new system " + system.name);
-                                    newsystems.Add(system);
-                                }
-                                else
-                                {
-                                    cmd.Parameters.Clear();
-                                    cmd.AddParameterWithValue("id_edsm", system.id_edsm);
-
-                                    using (DbDataReader reader1 = cmd.ExecuteReader())              // see if ESDM ID is there..
-                                    {
-                                        if (reader1.Read())                                          // its there..
-                                        {
-                                            SystemClass dbsys = new SystemClass(reader1);
-                                            // see if EDSM data changed..
-                                            if (!dbsys.name.Equals(system.name) || Math.Abs(dbsys.x - system.x) > 0.01 || Math.Abs(dbsys.y - system.y) > 0.01 || Math.Abs(dbsys.z - system.z) > 0.01)  // name or position changed
-                                            {
-                                                dbsys.x = system.x;
-                                                dbsys.y = system.y;
-                                                dbsys.z = system.z;
-                                                dbsys.name = system.name;
-
-                                                //Console.WriteLine("Update " + dbsys.id + " due to pos or case " + dbsys.name);
-                                                toupdate.Add(dbsys);
-                                            }
-                                        }
-                                        else                                                                  // not in database..
-                                        {
-                                            //Console.WriteLine("Add new system " + system.name);
-                                            newsystems.Add(system);
-                                        }
-                                    }
-                                }
-                            }
+                        if (System.DBNull.Value == reader["x"])
+                        {
+                            sys.x = double.NaN;
+                            sys.y = double.NaN;
+                            sys.z = double.NaN;
                         }
+                        else
+                        {
+                            sys.x = (double)reader["x"];
+                            sys.y = (double)reader["y"];
+                            sys.z = (double)reader["z"];
+                        }
+
+                        sys.id_edsm = (long)reader["id_edsm"];
+                        systemsByEdsmId[sys.id_edsm] = sys;
                     }
-                }
-                catch           // any errors abort
-                {
-                    MessageBox.Show("There is a problem using the EDSM systems file." + Environment.NewLine +
-                                    "Please perform a manual EDSM sync (see Admin menu) next time you run the program ", "ESDM Sync Error");
-                }
-                finally
-                {
-                    if (cmd != null) cmd.Dispose();
                 }
             }
 
-            using (SQLiteConnectionED cn2 = new SQLiteConnectionED())  // open the db
+            return systemsByEdsmId;
+        }
+
+        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, SQLiteConnectionED cn)
+        {
+            DateTime maxdate = DateTime.Parse(date, CultureInfo.InvariantCulture);
+            Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = GetEdsmSystemsLite(cn);
+            int count = 0;
+            int updatecount = 0;
+            int insertcount = 0;
+
+            while (true)
             {
-                if (toupdate.Count > 0)
+                using (DbTransaction txn = cn.BeginTransaction())
                 {
-                    using (DbTransaction transaction = cn2.BeginTransaction())
+                    using (DbCommand updatecmd = cn.CreateCommand("UPDATE Systems SET name=@name, x=@x, y=@y, z=@z, UpdateDate=@UpdateDate WHERE id_edsm=@id_edsm", txn))
                     {
-                        foreach (SystemClass sys in toupdate)
-                            sys.UpdateEDSM(cn2, sys.id, transaction);        // do an EDSM update of only name/x/y/z, not expected to be many at a time
-
-                        transaction.Commit();
-                    }
-                }
-
-                if (newsystems.Count > 0)
-                {
-                    int count = 0;
-
-                    while (count < newsystems.Count())
-                    {
-                        using (DbTransaction transaction = cn2.BeginTransaction())
+                        while (true)
                         {
-                            while (count < newsystems.Count())
+                            if (!jr.Read())
                             {
-                                newsystems[count].Store(cn2, transaction);
-
-                                if (++count % 10000 == 0)
-                                    break;
+                                date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                return count;
                             }
 
-                            Console.WriteLine("{0}: EDSM Store Count: {1}", DateTime.UtcNow, count);
-                            transaction.Commit();
-                        }
+                            if (jr.TokenType == JsonToken.StartObject)
+                            {
+                                JObject jo = JObject.Load(jr);
 
-                        if (discoveryform.PendingClose)         // pending close, abandon
-                            return 0;
+                                JObject coords = (JObject)jo["coords"];
+
+                                if (coords != null && (coords["x"].Type == JTokenType.Float || coords["x"].Type == JTokenType.Integer))
+                                {
+                                    double x = coords["x"].Value<double>();
+                                    double y = coords["y"].Value<double>();
+                                    double z = coords["z"].Value<double>();
+                                    long edsmid = jo["id"].Value<long>();
+                                    string name = jo["name"].Value<string>();
+                                    DateTime updatedate = jo["date"].Value<DateTime>();
+
+                                    if (updatedate > maxdate)
+                                        maxdate = updatedate;
+
+                                    if (systemsByEdsmId.ContainsKey(edsmid))
+                                    {
+                                        var dbsys = systemsByEdsmId[edsmid];
+                                        // see if EDSM data changed..
+                                        if (!dbsys.name.Equals(name) || Math.Abs(dbsys.x - x) > 0.01 || Math.Abs(dbsys.y - y) > 0.01 || Math.Abs(dbsys.z - z) > 0.01)  // name or position changed
+                                        {
+                                            updatecmd.Parameters.Clear();
+                                            updatecmd.AddParameterWithValue("@name", name);
+                                            updatecmd.AddParameterWithValue("@x", x);
+                                            updatecmd.AddParameterWithValue("@y", y);
+                                            updatecmd.AddParameterWithValue("@z", z);
+                                            updatecmd.AddParameterWithValue("@Updatedate", updatedate);
+                                            updatecmd.AddParameterWithValue("@id_edsm", edsmid);
+                                            updatecmd.ExecuteNonQuery();
+                                            updatecount++;
+                                        }
+                                    }
+                                    else                                                                  // not in database..
+                                    {
+                                        SystemClass sys = new SystemClass(jo, SystemInfoSource.EDSM);
+                                        sys.Store(cn, txn);
+                                        insertcount++;
+                                    }
+                                }
+
+                                if ((++count) % 10000 == 0)
+                                {
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
+            }
+        }
+
+        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform)
+        {
+            using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db
+            {
+                long count = DoParseEDSMUpdateSystemsReader(jr, ref date, cn);
 
                 if (removenonedsmids)                            // done on a full sync..
                 {
                     Console.WriteLine("Delete old ones");
-                    using (DbCommand cmddel = cn2.CreateCommand("Delete from Systems where id_edsm is null"))
+                    using (DbCommand cmddel = cn.CreateCommand("Delete from Systems where id_edsm is null"))
                     {
-                        SQLiteDBClass.SQLNonQueryText(cn2, cmddel);
+                        cmddel.ExecuteNonQuery();
                     }
                 }
-            }
 
-            date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-            return toupdate.Count + newsystems.Count;
+                return count;
+            }
         }
 
         public static void RemoveHiddenSystems()
