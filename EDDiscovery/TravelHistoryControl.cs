@@ -105,7 +105,7 @@ namespace EDDiscovery
             {
                 TriggerEDSMRefresh();
                 LogText("Refresh History." + Environment.NewLine);
-                RefreshHistory();
+                RefreshHistoryAsync();
             }
             catch (Exception ex)
             {
@@ -147,7 +147,7 @@ namespace EDDiscovery
             richTextBox_History.AppendText(text, color);
         }
 
-        public void RefreshHistory()
+        public void RefreshHistoryAsync()
         {
             if (visitedSystems == null || visitedSystems.Count == 0)
             {
@@ -592,7 +592,7 @@ namespace EDDiscovery
                     EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
                 if (visitedSystems != null)
                     visitedSystems.Clear();
-                RefreshHistory();
+                RefreshHistoryAsync();
                 if (_discoveryForm.Map != null)
                     _discoveryForm.Map.UpdateVisited(visitedSystems);
             }
@@ -602,7 +602,7 @@ namespace EDDiscovery
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (visitedSystems != null)
-                RefreshHistory();
+                RefreshHistoryAsync();
 
             SQLiteDBClass.PutSettingInt("EDUIHistory", comboBoxHistoryWindow.SelectedIndex);
         }
@@ -827,7 +827,7 @@ namespace EDDiscovery
                 {
                     visitedSystems.Clear();
                 }
-                RefreshHistory();
+                RefreshHistoryAsync();
             });
         }
 
@@ -1525,7 +1525,7 @@ namespace EDDiscovery
                     rightclicksystem.id_edsm_assigned = form.AssignedEdsmId;
                     rightclicksystem.curSystem = form.AssignedSystem;
                     rightclicksystem.Update();
-                    RefreshHistory();
+                    RefreshHistoryAsync();
                 }
             }
         }
