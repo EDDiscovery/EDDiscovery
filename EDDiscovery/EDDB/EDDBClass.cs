@@ -70,19 +70,17 @@ namespace EDDiscovery2.EDDB
             return DownloadFile(url, filename, out newfile);
         }
 
-        static public bool DownloadFile(string url, string filename, out bool newfile)
+        public static bool DownloadFile(string url, string filename, Action<bool, Stream> processor)
         {
-            var etagFilename = filename + ".etag";
-            var tmpFilename = filename + ".tmp";
-            var tmpEtagFilename = etagFilename + ".tmp";
-            newfile = false;
+            var etagFilename = filename == null ? null : filename + ".etag";
+            var tmpEtagFilename = filename == null ? null : etagFilename + ".tmp";
 
             HttpCom.WriteLog("DownloadFile", url);
-            var request = (HttpWebRequest) HttpWebRequest.Create(url);
+            var request = (HttpWebRequest)HttpWebRequest.Create(url);
             request.UserAgent = "EDDiscovery v" + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            
-            if (File.Exists(etagFilename))
+
+            if (filename != null && File.Exists(etagFilename))
             {
                 var etag = File.ReadAllText(etagFilename);
                 if (etag != "")
@@ -97,26 +95,19 @@ namespace EDDiscovery2.EDDB
 
             try
             {
-                var response = (HttpWebResponse)request.GetResponse();
-                HttpCom.WriteLog("Response", response.StatusCode.ToString());
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    HttpCom.WriteLog("Response", response.StatusCode.ToString());
 
-                File.WriteAllText(tmpEtagFilename, response.Headers[HttpResponseHeader.ETag]);
-                var destFileStream = File.Open(tmpFilename, FileMode.Create, FileAccess.Write);
-                response.GetResponseStream().CopyTo(destFileStream);
-
-                destFileStream.Close();
-                response.Close();
-
-                if (File.Exists(filename))
-                    File.Delete(filename);
-                if (File.Exists(etagFilename))
-                    File.Delete(etagFilename);
-
-                File.Move(tmpFilename, filename);
-                File.Move(tmpEtagFilename, etagFilename);
-
-                newfile = true;
-                return true;
+                    File.WriteAllText(tmpEtagFilename, response.Headers[HttpResponseHeader.ETag]);
+                    using (var httpStream = response.GetResponseStream())
+                    {
+                        processor(true, httpStream);
+                        File.Delete(etagFilename);
+                        File.Move(tmpEtagFilename, etagFilename);
+                        return true;
+                    }
+                }
             }
             catch (WebException ex)
             {
@@ -125,6 +116,10 @@ namespace EDDiscovery2.EDDB
                 {
                     System.Diagnostics.Trace.WriteLine("EDDB: " + filename + " up to date (etag).");
                     HttpCom.WriteLog(filename, "up to date (etag).");
+                    using (FileStream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        processor(false, stream);
+                    }
                     return true;
                 }
                 System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
@@ -141,6 +136,39 @@ namespace EDDiscovery2.EDDB
             }
         }
 
+        static public bool DownloadFile(string url, string filename, out bool newfile)
+        {
+            var tmpFilename = filename + ".tmp";
+            bool _newfile = false;
+            bool success = DownloadFile(url, filename, (n, s) =>
+            {
+                if (n)
+                {
+                    using (var destFileStream = File.Open(tmpFilename, FileMode.Create, FileAccess.Write))
+                    {
+                        s.CopyTo(destFileStream);
+                        _newfile = true;
+                    }
+                }
+            });
+
+            if (success)
+            {
+                newfile = _newfile;
+                if (newfile)
+                {
+                    File.Delete(filename);
+                    File.Move(tmpFilename, filename);
+                }
+
+                return true;
+            }
+            else
+            {
+                newfile = false;
+                return false;
+            }
+        }
 
         private string ReadJson(string filename)
         {
