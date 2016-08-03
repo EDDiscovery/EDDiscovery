@@ -53,7 +53,9 @@ namespace EDDiscovery
 
         private int activecommander = 0;
         List<EDCommander> commanders = null;
-        
+
+        public event EventHandler HistoryRefreshed;
+
         public TravelHistoryControl()
         {
             InitializeComponent();
@@ -104,9 +106,6 @@ namespace EDDiscovery
                 TriggerEDSMRefresh();
                 LogText("Refresh History." + Environment.NewLine);
                 RefreshHistory();
-                LogText("Refresh Complete." + Environment.NewLine);
-
-                EliteDangerous.CheckED();
             }
             catch (Exception ex)
             {
@@ -205,6 +204,10 @@ namespace EDDiscovery
             else if (e.Result != null)
             {
                 RefreshHistory((List<VisitedSystemsClass>)e.Result);
+                if (HistoryRefreshed != null)
+                    HistoryRefreshed(this, EventArgs.Empty);
+                _discoveryForm.ReportProgress(-1, "");
+                LogText("Refresh Complete." + Environment.NewLine);
             }
             button_RefreshHistory.Enabled = true;
 

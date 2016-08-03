@@ -411,6 +411,9 @@ namespace EDDiscovery
         bool performedsmsync = false;
         bool performeddbsync = false;
         bool performedsmdistsync = false;
+        bool performhistoryrefresh = false;
+        bool syncwasfirstrun = false;
+        bool syncwaseddboredsm = false;
 
         private void CheckSystems()  // ASYNC process, done via start up, must not be too slow.
         {
@@ -570,11 +573,6 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
-        private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-
-        }
-
         private bool PerformEDSMFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
                 string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
@@ -722,13 +720,12 @@ namespace EDDiscovery
 
         private void PerformFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
         {
-            bool refreshhistory = false;
-            bool firstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
+            syncwasfirstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
             bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
 
             if (performedsmsync )
             {
-                refreshhistory |= PerformEDSMFullSync(cancelRequested, reportProgress);
+                performhistoryrefresh |= PerformEDSMFullSync(cancelRequested, reportProgress);
             }
 
             if ( performeddbsync )
@@ -738,33 +735,30 @@ namespace EDDiscovery
 
             if (EDDConfig.UseDistances)
             {
-                refreshhistory |= PerformDistanceFullSync(cancelRequested, reportProgress);
+                performhistoryrefresh |= PerformDistanceFullSync(cancelRequested, reportProgress);
             }
             else
                 performedsmdistsync = false;
 
-            if ( refreshhistory )
+            syncwaseddboredsm = edsmoreddbsync;
+        }
+
+        private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            travelHistoryControl1.HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
+            travelHistoryControl1.RefreshHistory();
+        }
+
+        private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)
+        {
+            LogLine("Refreshing complete.");
+            if (syncwasfirstrun)
             {
-                try
-                {
-                    Invoke((MethodInvoker)delegate
-                    {
-                        LogLine("Refreshing history due changes in distances or star data.");
-                        travelHistoryControl1.RefreshHistory();
-                        LogLine("Refreshing complete.");
-
-                        if (firstrun)
-                        {
-                            MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
-                                            "Restart ED Discovery");
-                        }
-                        else if (edsmoreddbsync)
-                            MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
-
-                    });
-                }
-                catch { }
+                MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
+                                "Restart ED Discovery");
             }
+            else if (syncwaseddboredsm)
+                MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
         }
 
         internal void AsyncRefreshHistory()
