@@ -596,27 +596,23 @@ namespace EDDiscovery
 
                 LogLine("Download systems file from EDSM.");
 
-                bool newfile = false;
                 string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
 
-                if (EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile))
+                LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
+                bool success = EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, (n, s) =>
                 {
-                    if (cancelRequested())
-                        return false;
-
-                    LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
-
                     string rwsysfiletime = "2014-01-01 00:00:00";
-                    updates = SystemClass.ParseEDSMUpdateSystemsFile(edsmsystems, ref rwsysfiletime, true, cancelRequested, reportProgress);
+                    using (var reader = new StreamReader(s))
+                        updates = SystemClass.ParseEDSMUpdateSystems(reader, ref rwsysfiletime, true, cancelRequested, reportProgress);
+                    if (!cancelRequested())       // abort, without saving time, to make it do it again
+                        SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
 
-                    if (cancelRequested())       // abort, without saving time, to make it do it again
-                        return false;
+                });
 
-                    SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                }
-                else
+                if (!success)
                 {
                     LogLine("Failed to download EDSM system file from server, will check next time");
+                    return false;
                 }
 
                 LogLine("Now checking for recent EDSM systems.");
