@@ -311,16 +311,14 @@ namespace EDDiscovery2
             populatedgrid.dBAsk = SystemClass.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);                                       // add last, so displayed last, so overwrites anything else
 
-            Console.WriteLine("Total grids " + grids.Count);
-
-
             long total = SystemClass.GetTotalSystems();
-            Console.WriteLine("Database Stars " + total);
 
             total = Math.Min(total, 10000000);                  // scaling limit at 10mil
             long offset = (total - 1000000) / 100000;           // scale down slowly.. experimental!
             midpercentage -= (int)(offset / 2);
             farpercentage -= (int)(offset / 3);
+
+            Console.WriteLine("Grids " + grids.Count + "Database Stars " + total + " mid " + midpercentage + " far " + farpercentage);
         }
 
         public void Start()
@@ -341,7 +339,7 @@ namespace EDDiscovery2
                 computeThread.Join();
                 computeThread = null;
                 computeExit = false;
-                Console.WriteLine("Terminated 3dmap Compute");
+                //Console.WriteLine("Terminated 3dmap Compute");
             }
         }
 
@@ -381,7 +379,7 @@ namespace EDDiscovery2
 
             if (displayed)
             {
-                Console.WriteLine("Total stars displayed " + CountStars());
+                //Console.WriteLine("Total stars displayed " + CountStars());
             }
 
             curx = xp;
@@ -392,7 +390,7 @@ namespace EDDiscovery2
 
         void ComputeThread()
         {
-            Console.WriteLine("Start COMPUTE");
+            //Console.WriteLine("Start COMPUTE");
 
             while (true)
             {
@@ -442,7 +440,7 @@ namespace EDDiscovery2
                         int prevpercent = selmin.Percentage;
                         selmin.Percentage = GetPercentage(selmin.DistanceFrom(curx, curz));
                         selmin.FillFromDB();
-                        Console.WriteLine("Computed " + selmin.Id.ToString("0000") + "  total " + selmin.CountJustMade.ToString("000000") + " at " + selmin.X + " , " + selmin.Z + " % " + prevpercent + "->" + selmin.Percentage);
+                        //Console.WriteLine("Computed " + selmin.Id.ToString("0000") + "  total " + selmin.CountJustMade.ToString("000000") + " at " + selmin.X + " , " + selmin.Z + " % " + prevpercent + "->" + selmin.Percentage);
                         computed.Add(selmin);
                     }
                     else
