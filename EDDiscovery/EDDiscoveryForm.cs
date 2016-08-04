@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Configuration;
 using EDDiscovery.EDSM;
+using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
@@ -321,12 +322,14 @@ namespace EDDiscovery
 
         #region Information Downloads
 
-        public void DownloadMaps()          // ASYNC process
+        public Task<bool> DownloadMaps()          // ASYNC process
         {
             if (CanSkipSlowUpdates())
             {
                 LogLine("Skipping checking for new maps (DEBUG option).");
-                return;
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetResult(false);
+                return tcs.Task;
             }
 
             try
@@ -336,6 +339,37 @@ namespace EDDiscovery
 
                 LogLine("Checking for new EDDiscovery maps");
 
+                DeleteMapFile("DW4.png");
+                DeleteMapFile("SC-00.jpg");
+                return DownloadMapFiles(new[]
+                {
+                    "SC-01.jpg",
+                    "SC-02.jpg",
+                    "SC-03.jpg",
+                    "SC-04.jpg",
+                    "SC-L4.jpg",
+                    "SC-U4.jpg",
+                    "SC-00.png",
+                    "SC-00.json",
+                    "Galaxy_L.jpg",
+                    "Galaxy_L.json",
+                    "Galaxy_L_Grid.jpg",
+                    "Galaxy_L_Grid.json",
+                    "DW1.jpg",
+                    "DW1.json",
+                    "DW2.jpg",
+                    "DW2.json",
+                    "DW3.jpg",
+                    "DW3.json",
+                    "DW4.jpg",
+                    "DW4.json",
+                    "Formidine.png",
+                    "Formidine.json",
+                    "Formidine trans.png",
+                    "Formidine trans.json"
+                }, (s) => LogLine("Map check complete."));
+
+                /*
                 if (DownloadMapFile("SC-01.jpg"))  // If server down only try one.
                 {
                     DownloadMapFile("SC-02.jpg");
@@ -368,16 +402,40 @@ namespace EDDiscovery
                     DownloadMapFile("Formidine trans.png");
                     DownloadMapFile("Formidine trans.json");
                     
-                    DeleteMapFile("DW4.png");
-                    DeleteMapFile("SC-00.jpg");
                 }
-
-                LogLine("Map check complete.");
+                */
             }
             catch (Exception ex)
             {
                 MessageBox.Show("DownloadImages exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetException(ex);
+                return tcs.Task;
             }
+        }
+
+        private Task<bool> DownloadMapFiles(string[] files, Action<bool> callback)
+        {
+            List<Task<bool>> tasks = new List<Task<bool>>();
+
+            foreach (string file in files)
+            {
+                var task = EDDBClass.BeginDownloadFile(
+                    "http://eddiscovery.astronet.se/Maps/" + file,
+                    Path.Combine(Tools.GetAppDataDirectory(), "Maps", file),
+                    (n) =>
+                    {
+                        if (n) LogLine("Downloaded map: " + file);
+                    });
+                tasks.Add(task);
+            }
+
+            return Task<bool>.Factory.ContinueWhenAll<bool>(tasks.ToArray(), (ta) =>
+            {
+                bool success = ta.All(t => t.IsCompleted && t.Result);
+                callback(success);
+                return success;
+            });
         }
 
         private bool DownloadMapFile(string file)
@@ -419,9 +477,7 @@ namespace EDDiscovery
         {
             CommanderName = EDDConfig.CurrentCommander.Name;
 
-            Thread downloadMapsThread;
-            downloadMapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files", IsBackground = true };
-            downloadMapsThread.Start();
+            Task<bool> downloadMapsTask = DownloadMaps();
 
             EDSMClass edsm = new EDSMClass();
             string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
@@ -467,9 +523,9 @@ namespace EDDiscovery
                 DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
                 if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
                     performedsmdistsync = true;
-            }
 
-            downloadMapsThread.Join();
+                downloadMapsTask.Wait();
+            }
         }
 
         private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)

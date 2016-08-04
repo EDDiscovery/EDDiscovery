@@ -13,6 +13,8 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EDDiscovery2.EDDB
 {
@@ -156,13 +158,14 @@ namespace EDDiscovery2.EDDB
             });
         }
 
-        public static IAsyncResult BeginDownloadFile(string url, string filename, Action<bool, Stream> processor, Action<bool> callback)
+        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool, Stream> processor)
         {
             return ProcessDownload(url, filename, processor, (request, doProcess) =>
             {
-                return request.BeginGetResponse((ar) =>
+                return Task<bool>.Factory.FromAsync(request.BeginGetResponse, (ar) =>
                 {
-                    callback(doProcess(() => (HttpWebResponse)request.EndGetResponse(ar)));
+                    bool success = doProcess(() => (HttpWebResponse)request.EndGetResponse(ar));
+                    return success;
                 }, null);
             });
         }
@@ -175,7 +178,7 @@ namespace EDDiscovery2.EDDB
             });
         }
 
-        public static IAsyncResult BeginDownloadFile(string url, string filename, Action<bool, bool> callback)
+        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool> callback)
         {
             bool _newfile = false;
             return DoDownloadFile(url, filename, (u, f, processor) =>
@@ -184,9 +187,7 @@ namespace EDDiscovery2.EDDB
                 {
                     _newfile = n;
                     processor(n, s);
-                }, (s) =>
-                {
-                    callback(s, _newfile);
+                    callback(_newfile);
                 });
             });
         }
