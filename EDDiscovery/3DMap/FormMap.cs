@@ -40,7 +40,7 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_bookedmarkedsystems;
         private List<IData3DSet> _datasets_notedsystems;
 
-        private const double ZoomMax = 150;
+        private const double ZoomMax = 500;
         private const double ZoomMin = 0.01;
         private const double ZoomFact = 1.2589254117941672104239541063958;
         private const double CameraSlewTime = 1.0;
@@ -499,7 +499,7 @@ namespace EDDiscovery2
             {
                 Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
                 GL.LoadMatrix(ref perspective);
-                _znear = 1.0f;
+                _znear = 0.00000000000001f;     // very small positive value.. needed to be low so zoom=500 works.. may need revisiting
             }
             else
             {
