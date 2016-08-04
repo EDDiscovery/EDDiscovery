@@ -196,6 +196,7 @@ namespace EDDiscovery2
         {
             if (Is3DMapsRunning && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
             {
+                _visitedSystems = visited;
                 _stargrids.FillVisitedSystems(_visitedSystems);          // update visited systems, will be displayed on next update of star grids
                 GenerateDataSetsVisitedSystems();
                 _starnameslist.RecalcStarNames();
