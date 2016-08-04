@@ -322,7 +322,7 @@ namespace EDDiscovery
 
         #region Information Downloads
 
-        public Task<bool> DownloadMaps()          // ASYNC process
+        public Task<bool> DownloadMaps(Action<Action> registerCancelCallback)          // ASYNC process
         {
             if (CanSkipSlowUpdates())
             {
@@ -367,7 +367,9 @@ namespace EDDiscovery
                     "Formidine.json",
                     "Formidine trans.png",
                     "Formidine trans.json"
-                }, (s) => LogLine("Map check complete."));
+                }, 
+                (s) => LogLine("Map check complete."),
+                registerCancelCallback);
 
                 /*
                 if (DownloadMapFile("SC-01.jpg"))  // If server down only try one.
@@ -414,9 +416,10 @@ namespace EDDiscovery
             }
         }
 
-        private Task<bool> DownloadMapFiles(string[] files, Action<bool> callback)
+        private Task<bool> DownloadMapFiles(string[] files, Action<bool> callback, Action<Action> registerCancelCallback)
         {
             List<Task<bool>> tasks = new List<Task<bool>>();
+            List<Action> cancelCallbacks = new List<Action>();
 
             foreach (string file in files)
             {
@@ -426,9 +429,11 @@ namespace EDDiscovery
                     (n) =>
                     {
                         if (n) LogLine("Downloaded map: " + file);
-                    });
+                    }, cb => cancelCallbacks.Add(cb));
                 tasks.Add(task);
             }
+
+            registerCancelCallback(() => { foreach (var cb in cancelCallbacks) cb(); });
 
             return Task<bool>.Factory.ContinueWhenAll<bool>(tasks.ToArray(), (ta) =>
             {
@@ -477,7 +482,8 @@ namespace EDDiscovery
         {
             CommanderName = EDDConfig.CurrentCommander.Name;
 
-            Task<bool> downloadMapsTask = DownloadMaps();
+            Action cancelDownloadMaps = null;
+            Task<bool> downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
 
             EDSMClass edsm = new EDSMClass();
             string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
@@ -524,6 +530,11 @@ namespace EDDiscovery
                 if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
                     performedsmdistsync = true;
 
+                downloadMapsTask.Wait();
+            }
+            else
+            {
+                cancelDownloadMaps();
                 downloadMapsTask.Wait();
             }
         }
