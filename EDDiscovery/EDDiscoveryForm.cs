@@ -497,11 +497,6 @@ namespace EDDiscovery
                 travelHistoryControl1.netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(travelHistoryControl1.NewPosition);
                 travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
 
-                //long tickc = Environment.TickCount;
-                LogLine("Reading travel history");
-                travelHistoryControl1.RefreshHistoryAsync();
-                //LogLine("Time " + (Environment.TickCount-tickc) );
-
                 if (EliteDangerous.CheckStationLogging())
                 {
                     panelInfo.Visible = false;
@@ -509,19 +504,29 @@ namespace EDDiscovery
 
                 CheckForNewInstaller();
 
-                long totalsystems = SystemClass.GetTotalSystems();
-                LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
-
-                AsyncPerformSync();                              // perform any async synchronisations
-
-                if (performeddbsync || performedsmsync)
+                if (performedsmsync || performeddbsync || EDDConfig.UseDistances)
                 {
-                    string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
+                    AsyncPerformSync();                              // perform any async synchronisations
 
-                    MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
-                                    "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.",
-                                    "WARNING - Synchronisation to " + databases);
+                    if (performeddbsync || performedsmsync)
+                    {
+                        string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
+
+                        MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
+                                        "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
+                                        "Please continue running ED Discovery until refresh is complete.",
+                                        "WARNING - Synchronisation to " + databases);
+                    }
+                }
+                else
+                {
+                    long totalsystems = SystemClass.GetTotalSystems();
+                    LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+
+                    //long tickc = Environment.TickCount;
+                    LogLine("Reading travel history");
+                    travelHistoryControl1.RefreshHistoryAsync();
+                    //LogLine("Time " + (Environment.TickCount-tickc) );
                 }
             }
         }
@@ -745,6 +750,9 @@ namespace EDDiscovery
 
         private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
+            long totalsystems = SystemClass.GetTotalSystems();
+            LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+
             travelHistoryControl1.HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
             travelHistoryControl1.RefreshHistoryAsync();
         }
