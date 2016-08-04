@@ -759,6 +759,7 @@ namespace EDDiscovery
 
         private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)
         {
+            travelHistoryControl1.HistoryRefreshed -= TravelHistoryControl1_HistoryRefreshed;
             LogLine("Refreshing complete.");
             if (syncwasfirstrun)
             {
