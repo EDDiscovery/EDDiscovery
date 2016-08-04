@@ -72,6 +72,40 @@ namespace EDDiscovery2.EDDB
             return DownloadFile(url, filename, out newfile);
         }
 
+        private class FileCachedReadStream : Stream
+        {
+            private Stream innerStream;
+            private Stream fileStream;
+
+            public override bool CanRead { get { return innerStream.CanRead; } }
+            public override bool CanSeek { get { return false; } }
+            public override bool CanTimeout { get { return innerStream.CanTimeout; } }
+            public override bool CanWrite { get { return false; } }
+            public override long Length { get { return innerStream.Length; } }
+            public override long Position { get { return innerStream.Position; } set { throw new InvalidOperationException(); } }
+            public override int ReadTimeout { get { return innerStream.ReadTimeout; } }
+            public override int WriteTimeout { get { return innerStream.WriteTimeout; } }
+            public override long Seek(long offset, SeekOrigin origin) { throw new InvalidOperationException(); }
+            public override void Flush() { }
+            public override void SetLength(long value) { throw new InvalidOperationException(); }
+            public override void Write(byte[] buffer, int offset, int count) { throw new InvalidOperationException(); }
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                int length = innerStream.Read(buffer, offset, count);
+                if (length > 0)
+                {
+                    fileStream.Write(buffer, offset, length);
+                }
+                return length;
+            }
+
+            public FileCachedReadStream(Stream instream, Stream filestream)
+            {
+                innerStream = instream;
+                fileStream = filestream;
+            }
+        }
+
         private static T ProcessDownload<T>(string url, string filename, Action<bool, Stream> processor, Func<HttpWebRequest, Func<Func<HttpWebResponse>, bool>, T> doRequest)
         {
             var etagFilename = filename == null ? null : filename + ".etag";
@@ -141,7 +175,7 @@ namespace EDDiscovery2.EDDB
             });
         }
 
-        private static T DoDownloadFile<T>(string url, string filename, Func<string, string, Action<bool, Stream>, T> doDownload)
+        private static T DoDownloadFile<T>(string url, string filename, Action<bool, Stream> processor, Func<string, string, Action<bool, Stream>, T> doDownload)
         {
             var tmpFilename = filename + ".tmp";
             return doDownload(url, filename, (n, s) =>
@@ -150,10 +184,22 @@ namespace EDDiscovery2.EDDB
                 {
                     using (var destFileStream = File.Open(tmpFilename, FileMode.Create, FileAccess.Write))
                     {
-                        s.CopyTo(destFileStream);
+                        if (processor == null)
+                        {
+                            s.CopyTo(destFileStream);
+                        }
+                        else
+                        {
+                            var cacheStream = new FileCachedReadStream(s, destFileStream);
+                            processor(true, cacheStream);
+                        }
                     }
                     File.Delete(filename);
                     File.Move(tmpFilename, filename);
+                }
+                else if (processor != null)
+                {
+                    processor(false, s);
                 }
             });
         }
@@ -181,29 +227,29 @@ namespace EDDiscovery2.EDDB
             });
         }
 
-        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool> callback, Action<Action> registerCancelCallback)
+        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool> callback, Action<Action> registerCancelCallback, Action<bool, Stream> processor = null)
         {
             bool _newfile = false;
-            return DoDownloadFile(url, filename, (u, f, processor) =>
+            return DoDownloadFile(url, filename, processor, (u, f, p) =>
             {
                 return BeginDownloadFile(u, f, (n, s) =>
                 {
                     _newfile = n;
-                    processor(n, s);
+                    p(n, s);
                     callback(_newfile);
                 }, registerCancelCallback);
             });
         }
 
-        static public bool DownloadFile(string url, string filename, out bool newfile)
+        static public bool DownloadFile(string url, string filename, out bool newfile, Action<bool, Stream> processor = null)
         {
             bool _newfile = false;
-            bool success = DoDownloadFile(url, filename, (u, f, processor) =>
+            bool success = DoDownloadFile(url, filename, processor, (u, f, p) =>
             {
                 return DownloadFile(u, f, (n, s) =>
                 {
                     _newfile = n;
-                    processor(n, s);
+                    p(n, s);
                 });
             });
 

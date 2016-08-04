@@ -673,7 +673,8 @@ namespace EDDiscovery
                 string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
 
                 LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
-                bool success = EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, (n, s) =>
+                bool newfile;
+                bool success = EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
                 {
                     string rwsysfiletime = "2014-01-01 00:00:00";
                     using (var reader = new StreamReader(s))
