@@ -187,8 +187,7 @@ As the journal is read, ignoring entries not matching the commander, then on eac
 if EDSMID is available for the journal entry, and EDDB has the edsm id, then this is the inmemory class representation of row of the PopulatedSystems db. Null if non there.
 
 Icons holds map colour, and also probably a EDSM first discovered flag, etc.
-
-''' PDL
+```
 class Systems cursys = null
 class PopulatedSystems curinfo = null
 
@@ -217,8 +216,7 @@ for all journal entries, old to new
                 journalentry = journal entry id
                 system = cursys
                 eddbinfo = curinfo
-'''
-
+```
 
 
 
