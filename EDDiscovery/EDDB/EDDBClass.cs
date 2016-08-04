@@ -158,13 +158,16 @@ namespace EDDiscovery2.EDDB
             });
         }
 
-        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool, Stream> processor)
+        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool, Stream> processor, Action<Action> registerCancelCallback)
         {
+            bool completed = false;
             return ProcessDownload(url, filename, processor, (request, doProcess) =>
             {
+                registerCancelCallback(() => { if (!completed) request.Abort(); });
                 return Task<bool>.Factory.FromAsync(request.BeginGetResponse, (ar) =>
                 {
                     bool success = doProcess(() => (HttpWebResponse)request.EndGetResponse(ar));
+                    completed = true;
                     return success;
                 }, null);
             });
@@ -178,7 +181,7 @@ namespace EDDiscovery2.EDDB
             });
         }
 
-        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool> callback)
+        public static Task<bool> BeginDownloadFile(string url, string filename, Action<bool> callback, Action<Action> registerCancelCallback)
         {
             bool _newfile = false;
             return DoDownloadFile(url, filename, (u, f, processor) =>
@@ -188,7 +191,7 @@ namespace EDDiscovery2.EDDB
                     _newfile = n;
                     processor(n, s);
                     callback(_newfile);
-                });
+                }, registerCancelCallback);
             });
         }
 
