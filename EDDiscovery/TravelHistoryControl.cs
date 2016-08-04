@@ -195,6 +195,7 @@ namespace EDDiscovery
             RedrawSummary();
             RefreshTargetInfo();
             UpdateDependentsWithSelection();
+            _discoveryForm.Map.UpdateVisited(visitedSystems);           // update map
         }
 
         private void AddNewHistoryRow(bool insert, VisitedSystemsClass item)            // second part of add history row, adds item to view.
