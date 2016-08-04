@@ -172,6 +172,7 @@
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
     <Compile Include="3DMap\StarGrid.cs" />
+    <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\LabelExt.cs">
       <SubType>Component</SubType>
