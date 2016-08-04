@@ -53,9 +53,9 @@ namespace EDDiscovery2
         bool _starname_camera_paint_lookforward = false; // true, we are pointing +z ie towards saga* from sol
         float _starname_curstars_zoom = ZoomOff;    // and what zoom.. 
         const float ZoomOff = -1000000F;            // zoom off flag
-        int _starlimitly = 6000;                     // stars within this, div zoom.  F1/F2 adjusts this
+        int _starlimitly = 5000;                     // stars within this, div zoom.  F1/F2 adjusts this
         int _starnamesizely = 1200;                  // star name width, div zoom
-        int _starnameminly = 5;                      // ranging between
+        int _starnameminly = 2;                      // ranging between
         int _starnamemaxly = 80;
         Font _starnamebitmapfnt;
         int _starnamebitmapwidth, _starnamebitmapheight;
@@ -188,6 +188,7 @@ namespace EDDiscovery2
             try // just in case someone tears us down..
             {
                 int lylimit = (int)(_starlimitly / _zoom);
+                lylimit = Math.Max(lylimit, 20);
                 //Console.Write("Look down " + _starname_camera_paint_lookdown + " look forward " + _starname_camera_paint_lookforward);
                 //Console.Write("Repaint " + _starname_repaintall + " Stars " + _starlimitly + " within " + lylimit + "  ");
                 int sqlylimit = lylimit * lylimit;                 // in squared distance limit from viewpoint
@@ -223,7 +224,7 @@ namespace EDDiscovery2
                     textwidthly = -textwidthly;
                 }
 
-                float starsize = Math.Min(Math.Max(_zoom / 5F, 2.0F), 20F);     // Normal stars are at 1F.
+                float starsize = Math.Min(Math.Max(_zoom / 5F, 1.0F), 20F);     // Normal stars are at 1F.
                 //Console.WriteLine((Environment.TickCount % 10000) + "Text " + _starnamesizely + " text " + textwidthly.ToString("0.0") + "," + textheightly.ToString("0.0") + " star size " + starsize.ToString("0.0") + " Lylimit " + lylimit);
 
                 lock (deletelock)                                          // can't delete during update, can paint..
