@@ -171,7 +171,7 @@ DGV grid will have : Time, Type, Text, Distance, Notes, Icons.
 ```C#
 Class EventClass
 {
-int journalentry; // which journal entry is this associated with, must be set
+long journalentry; // which journal entry is this associated with, must be set
 
 Systems system; // always not null.
 PopulatedSystems  eddbinfo;
