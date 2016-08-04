@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace EDDiscovery2
 {
@@ -22,6 +23,7 @@ namespace EDDiscovery2
         public SystemClass.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
+        public bool Displayed = false;              // records if it was ever displayed
 
         bool array1displayed;
         private Vector3d[] array1;            // the star points
@@ -34,6 +36,8 @@ namespace EDDiscovery2
 
         protected int VtxVboID;
         protected GLControl GLContext;
+
+        Object lockdisplaydata = new Object();
 
         public StarGrid(int id, double x, double z, Color c, float s)
         {
@@ -49,7 +53,7 @@ namespace EDDiscovery2
         public double DistanceFrom(double x, double z)
         { return Math.Sqrt((x - X) * (x - X) + (z - Z) * (z - Z)); }
 
-        public void FillFromDB()
+        public void FillFromDB()        // does not affect the display object
         {
             if (array1displayed)
                 array2vertices = SystemClass.GetSystemVector(Id, ref array2, dBAsk, Percentage);
@@ -57,7 +61,7 @@ namespace EDDiscovery2
                 array1vertices = SystemClass.GetSystemVector(Id, ref array1, dBAsk, Percentage);
         }
 
-        public void FillFromVS(List<VisitedSystemsClass> cls)
+        public void FillFromVS(List<VisitedSystemsClass> cls) // does not affect the display object
         {
             if (array1displayed)
                 array2vertices = FillFromVS(ref array2, cls);
@@ -99,14 +103,16 @@ namespace EDDiscovery2
             public Vector3 campos;//  GetSystemInView only
         }
 
-        public Vector3d? FindPoint(int x, int y, ref double cursysdistz, TransFormInfo ti )
+        public Vector3d? FindPoint(int x, int y, ref double cursysdistz, TransFormInfo ti) // UI call .. operate on  display
         {
+            Debug.Assert(Application.MessageLoop);
+
             if (array1displayed)
                 return FindPoint(ref array1, array1vertices, x, y, ref cursysdistz, ti);
             else
                 return FindPoint(ref array2, array2vertices, x, y, ref cursysdistz, ti);
         }
-
+                                                                                            // operate on  display
         public Vector3d? FindPoint(ref Vector3d[] vert, int total , int x, int y, ref double cursysdistz, TransFormInfo ti)
         { 
             Vector3d? ret = null;
@@ -140,7 +146,7 @@ namespace EDDiscovery2
 
             return ret;
         }
-
+                                                                                // operate on  display - Called in a thread..
         public void GetSystemsInView(ref SortedDictionary<float, Vector3d> list , TransFormInfo ti)
         {
             if (array1displayed)
@@ -149,6 +155,7 @@ namespace EDDiscovery2
                 GetSystemsInView(ref array2, array2vertices, ref list, ti);
         }
 
+                                                                                // operate on  display - can be called BY A THREAD
         public void GetSystemsInView(ref Vector3d[] vert, int total, ref SortedDictionary<float, Vector3d> list , TransFormInfo ti )
         {
             int margin = -150;
@@ -156,23 +163,26 @@ namespace EDDiscovery2
             double w2 = (double)ti.dwidth / 2.0;
             double h2 = (double)ti.dheight / 2.0;
 
-            for (int i = 0; i < total; i++)
+            lock (lockdisplaydata)                                                  // must lock it..
             {
-                Vector3d v = vert[i];
-
-                Vector4d syspos = new Vector4d(v.X, v.Y, v.Z, 1.0);
-                Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
-
-                if (sysloc.Z > ti.znear)
+                for (int i = 0; i < total; i++)
                 {
-                    Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
+                    Vector3d v = vert[i];
 
-                    if ((syssloc.X >= margin && syssloc.X <= ti.dwidth - margin) && (syssloc.Y >= margin && syssloc.Y <= ti.dheight - margin))
+                    Vector4d syspos = new Vector4d(v.X, v.Y, v.Z, 1.0);
+                    Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
+
+                    if (sysloc.Z > ti.znear)
                     {
-                        sqdist = ((float)v.X - ti.campos.X) * ((float)v.X - ti.campos.X) + ((float)v.Y - ti.campos.Y) * ((float)v.Y - ti.campos.Y) + ((float)v.Z - ti.campos.Z) * ((float)v.Z - ti.campos.Z);
+                        Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
 
-                        if (sqdist <= ti.sqlylimit)
-                            list.Add(sqdist, v);
+                        if ((syssloc.X >= margin && syssloc.X <= ti.dwidth - margin) && (syssloc.Y >= margin && syssloc.Y <= ti.dheight - margin))
+                        {
+                            sqdist = ((float)v.X - ti.campos.X) * ((float)v.X - ti.campos.X) + ((float)v.Y - ti.campos.Y) * ((float)v.Y - ti.campos.Y) + ((float)v.Z - ti.campos.Z) * ((float)v.Z - ti.campos.Z);
+
+                            if (sqdist <= ti.sqlylimit)
+                                list.Add(sqdist, v);
+                        }
                     }
                 }
             }
@@ -202,43 +212,52 @@ namespace EDDiscovery2
             }
         }
 
-        public void Display(GLControl control)
+        public void Display(GLControl control)          // UI thread..
         {
-            array1displayed = !array1displayed;
+            Debug.Assert(Application.MessageLoop);
 
-            DeleteContext();
-
-            if ( array1displayed )
+            lock ( lockdisplaydata )                                        // not allowed to swap..
             {
-                if (array1vertices > 0)
+                Displayed = true;                                               // true if displayed
+
+                array1displayed = !array1displayed;
+
+                DeleteContext();
+
+                if (array1displayed)
                 {
-                    GL.GenBuffers(1, out VtxVboID);
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
-                    GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array1vertices * BlittableValueType.StrideOf(array1)), array1, BufferUsageHint.StaticDraw);
-                    GLContext = control;
-                }
+                    if (array1vertices > 0)
+                    {
+                        GL.GenBuffers(1, out VtxVboID);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
+                        GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array1vertices * BlittableValueType.StrideOf(array1)), array1, BufferUsageHint.StaticDraw);
+                        GLContext = control;
+                    }
 
-                array2 = null;
-                array2vertices = 0;
-            }
-            else
-            {
-                if (array2vertices > 0)
+                    array2 = null;
+                    array2vertices = 0;
+                }
+                else
                 {
-                    GL.GenBuffers(1, out VtxVboID);
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
+                    if (array2vertices > 0)
+                    {
+                        GL.GenBuffers(1, out VtxVboID);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
 
-                    GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array2vertices * BlittableValueType.StrideOf(array2)), array2, BufferUsageHint.StaticDraw);
-                    GLContext = control;
+                        GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array2vertices * BlittableValueType.StrideOf(array2)), array2, BufferUsageHint.StaticDraw);
+                        GLContext = control;
+                    }
+
+                    array1 = null;
+                    array1vertices = 0;
                 }
-
-                array1 = null;
-                array1vertices = 0;
             }
         }
 
-        public void Draw(GLControl control)
+        public void Draw(GLControl control)         // UI thread.
         {
+            Debug.Assert(Application.MessageLoop);
+
             if (GLContext != null)
             {
                 Debug.Assert(GLContext == control);
@@ -318,6 +337,9 @@ namespace EDDiscovery2
             midpercentage -= (int)(offset / 2);
             farpercentage -= (int)(offset / 3);
 
+            //midpercentage = 10;           // agressive debugging options
+            //farpercentage = 1;
+
             Console.WriteLine("Grids " + grids.Count + "Database Stars " + total + " mid " + midpercentage + " far " + farpercentage);
         }
 
@@ -352,7 +374,7 @@ namespace EDDiscovery2
             }
         }
 
-        public int GetPercentage(double dist)   // TBD
+        public int GetPercentage(double dist)  
         {
             if (dist < middistance)
                 return 100;
@@ -362,13 +384,27 @@ namespace EDDiscovery2
                 return farpercentage;
         }
 
-        #endregion
+        public bool IsDisplayed(double xp, double zp )
+        {
+            int gridid = GridId.Id(xp, zp);
 
-        #region Update
+            StarGrid grid = grids.Find(x => x.Id == gridid);
+
+            if (grid != null)
+                return grid.Displayed;
+            else
+                return false;
+        }
+
+#endregion
+
+#region Update
 
 
         public void Update(double xp, double zp, GLControl gl)            // Foreground UI thread
         {
+            Debug.Assert(Application.MessageLoop);
+
             StarGrid grd = null;
             bool displayed = false;
             while (computed.TryTake(out grd))               // remove from the computed queue and mark done
@@ -449,9 +485,9 @@ namespace EDDiscovery2
             }
         }
 
-        #endregion
+#endregion
 
-        #region Draw
+#region Draw
 
         public void DrawAll(GLControl control, bool showstars , bool showstations )
         {
@@ -474,8 +510,10 @@ namespace EDDiscovery2
 
 #region misc
 
-        public Vector3d? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti )
+        public Vector3d? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti ) // UI Call.
         {
+            Debug.Assert(Application.MessageLoop);
+
             cursysdistz = double.MaxValue;
             Vector3d? ret = null;
 
@@ -488,17 +526,21 @@ namespace EDDiscovery2
 
             return ret;
         }
-
+                                        // used by Starnames in a thread..
         public void GetSystemsInView(ref SortedDictionary<float, Vector3d> list, double gridlylimit , StarGrid.TransFormInfo ti)
         {
+            int idpos = GridId.Id(ti.campos.X, ti.campos.Z);
+
             foreach (StarGrid grd in grids)                 // either we are inside the grid, or close to the centre of another grid..
             {
-                if (grd.Id==GridId.Id(ti.campos.X,ti.campos.Z) || grd.DistanceFrom(ti.campos.X, ti.campos.Z) < gridlylimit)                         // only consider grids which are nearer than this..
+                if (grd.Id==idpos || grd.DistanceFrom(ti.campos.X, ti.campos.Z) < gridlylimit)                         // only consider grids which are nearer than this..
                 {
                     grd.GetSystemsInView(ref list,ti);
                     //Console.WriteLine("Check grid " + grd.X + "," + grd.Z);
                 }
             }
+
+            visitedsystemsgrid.GetSystemsInView(ref list, ti);          // this can be anywhere in space.. so must check
         }
 
 
@@ -519,7 +561,7 @@ namespace EDDiscovery2
             return t;
         }
 
-        #endregion
+#endregion
     }
 
 
