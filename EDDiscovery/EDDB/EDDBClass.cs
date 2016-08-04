@@ -70,7 +70,7 @@ namespace EDDiscovery2.EDDB
             return DownloadFile(url, filename, out newfile);
         }
 
-        public static bool DownloadFile(string url, string filename, Action<bool, Stream> processor)
+        private static T ProcessDownload<T>(string url, string filename, Action<bool, Stream> processor, Func<HttpWebRequest, Func<Func<HttpWebResponse>, bool>, T> doRequest)
         {
             var etagFilename = filename == null ? null : filename + ".etag";
             var tmpEtagFilename = filename == null ? null : etagFilename + ".tmp";
@@ -93,81 +93,118 @@ namespace EDDiscovery2.EDDB
                 }
             }
 
-            try
+            return doRequest(request, (getResponse) =>
             {
-                using (var response = (HttpWebResponse)request.GetResponse())
+                try
                 {
-                    HttpCom.WriteLog("Response", response.StatusCode.ToString());
-
-                    File.WriteAllText(tmpEtagFilename, response.Headers[HttpResponseHeader.ETag]);
-                    using (var httpStream = response.GetResponseStream())
+                    using (var response = getResponse())
                     {
-                        processor(true, httpStream);
-                        File.Delete(etagFilename);
-                        File.Move(tmpEtagFilename, etagFilename);
+                        HttpCom.WriteLog("Response", response.StatusCode.ToString());
+
+                        File.WriteAllText(tmpEtagFilename, response.Headers[HttpResponseHeader.ETag]);
+                        using (var httpStream = response.GetResponseStream())
+                        {
+                            processor(true, httpStream);
+                            File.Delete(etagFilename);
+                            File.Move(tmpEtagFilename, etagFilename);
+                            return true;
+                        }
+                    }
+                }
+                catch (WebException ex)
+                {
+                    var code = ((HttpWebResponse)ex.Response).StatusCode;
+                    if (code == HttpStatusCode.NotModified)
+                    {
+                        System.Diagnostics.Trace.WriteLine("EDDB: " + filename + " up to date (etag).");
+                        HttpCom.WriteLog(filename, "up to date (etag).");
+                        using (FileStream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        {
+                            processor(false, stream);
+                        }
                         return true;
                     }
+                    System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
+                    System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                    HttpCom.WriteLog("Exception", ex.Message);
+                    return false;
                 }
-            }
-            catch (WebException ex)
-            {
-                var code = ((HttpWebResponse)ex.Response).StatusCode;
-                if (code == HttpStatusCode.NotModified)
+                catch (Exception ex)
                 {
-                    System.Diagnostics.Trace.WriteLine("EDDB: " + filename + " up to date (etag).");
-                    HttpCom.WriteLog(filename, "up to date (etag).");
-                    using (FileStream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        processor(false, stream);
-                    }
-                    return true;
+                    System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
+                    System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                    HttpCom.WriteLog("DownloadFile Exception", ex.Message);
+                    return false;
                 }
-                System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                HttpCom.WriteLog("Exception", ex.Message);
-                return false;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                HttpCom.WriteLog("DownloadFile Exception", ex.Message);
-                return false;
-            }
+            });
         }
 
-        static public bool DownloadFile(string url, string filename, out bool newfile)
+        private static T DoDownloadFile<T>(string url, string filename, Func<string, string, Action<bool, Stream>, T> doDownload)
         {
             var tmpFilename = filename + ".tmp";
-            bool _newfile = false;
-            bool success = DownloadFile(url, filename, (n, s) =>
+            return doDownload(url, filename, (n, s) =>
             {
                 if (n)
                 {
                     using (var destFileStream = File.Open(tmpFilename, FileMode.Create, FileAccess.Write))
                     {
                         s.CopyTo(destFileStream);
-                        _newfile = true;
                     }
-                }
-            });
-
-            if (success)
-            {
-                newfile = _newfile;
-                if (newfile)
-                {
                     File.Delete(filename);
                     File.Move(tmpFilename, filename);
                 }
+            });
+        }
 
-                return true;
-            }
-            else
+        public static IAsyncResult BeginDownloadFile(string url, string filename, Action<bool, Stream> processor, Action<bool> callback)
+        {
+            return ProcessDownload(url, filename, processor, (request, doProcess) =>
             {
-                newfile = false;
-                return false;
-            }
+                return request.BeginGetResponse((ar) =>
+                {
+                    callback(doProcess(() => (HttpWebResponse)request.EndGetResponse(ar)));
+                }, null);
+            });
+        }
+
+        public static bool DownloadFile(string url, string filename, Action<bool, Stream> processor)
+        {
+            return ProcessDownload(url, filename, processor, (request, doProcess) =>
+            {
+                return doProcess(() => (HttpWebResponse)request.GetResponse());
+            });
+        }
+
+        public static IAsyncResult BeginDownloadFile(string url, string filename, Action<bool, bool> callback)
+        {
+            bool _newfile = false;
+            return DoDownloadFile(url, filename, (u, f, processor) =>
+            {
+                return BeginDownloadFile(u, f, (n, s) =>
+                {
+                    _newfile = n;
+                    processor(n, s);
+                }, (s) =>
+                {
+                    callback(s, _newfile);
+                });
+            });
+        }
+
+        static public bool DownloadFile(string url, string filename, out bool newfile)
+        {
+            bool _newfile = false;
+            bool success = DoDownloadFile(url, filename, (u, f, processor) =>
+            {
+                return DownloadFile(u, f, (n, s) =>
+                {
+                    _newfile = n;
+                    processor(n, s);
+                });
+            });
+
+            newfile = _newfile && success;
+            return success;
         }
 
         private string ReadJson(string filename)
