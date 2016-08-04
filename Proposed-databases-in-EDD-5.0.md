@@ -188,6 +188,40 @@ if EDSMID is available for the journal entry, and EDDB has the edsm id, then thi
 
 Icons holds map colour, and also probably a EDSM first discovered flag, etc.
 
+''' PDL
+class Systems cursys = null
+class PopulatedSystems curinfo = null
+
+for all journal entries, old to new
+    if cmdr id matches
+        if relevant event
+            if fsd event or location change
+            {
+                lookup entry in JournalTravelEntries
+
+                if edsmid
+                    cursys = db lookup from System table
+
+                    lookup in db PopulatedSystems edsm id
+                    if found
+                        curinfo = db entry
+                else
+                    cursys = in memory create of class System from info in the JournalTravelEntries
+                             using the x/y/z
+            }
+
+            create entry in EventLog:
+                type = event log name
+                text = relevant text
+
+                journalentry = journal entry id
+                system = cursys
+                eddbinfo = curinfo
+'''
+
+
+
+
 ## SavedRoutes
 ```sql
 CREATE TABLE SavedRoutes (
