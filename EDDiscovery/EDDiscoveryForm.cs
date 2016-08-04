@@ -480,6 +480,7 @@ namespace EDDiscovery
 
         private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
+            reportProgress(-1, "");
             CommanderName = EDDConfig.CurrentCommander.Name;
 
             Action cancelDownloadMaps = null;
@@ -541,6 +542,7 @@ namespace EDDiscovery
 
         private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
+            ReportProgress(-1, "");
             if (e.Error != null)
             {
                 System.Windows.Forms.MessageBox.Show("Check Systems exception: " + e.Error.Message);
@@ -792,6 +794,7 @@ namespace EDDiscovery
 
         private void PerformFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
         {
+            reportProgress(-1, "");
             syncwasfirstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
             bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
 
@@ -813,6 +816,7 @@ namespace EDDiscovery
                 performedsmdistsync = false;
 
             syncwaseddboredsm = edsmoreddbsync;
+            reportProgress(-1, "");
         }
 
         private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -826,6 +830,7 @@ namespace EDDiscovery
 
         private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)
         {
+            ReportProgress(-1, "");
             travelHistoryControl1.HistoryRefreshed -= TravelHistoryControl1_HistoryRefreshed;
             LogLine("Refreshing complete.");
             if (syncwasfirstrun)
