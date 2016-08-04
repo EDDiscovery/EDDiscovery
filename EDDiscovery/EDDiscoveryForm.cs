@@ -173,7 +173,6 @@ namespace EDDiscovery
                 settings.InitSettingsTab();
 
                 CheckIfEliteDangerousIsRunning();
-                CheckIfVerboseLoggingIsTurnedOn();
 
                 if (option_debugoptions)
                 {
@@ -276,17 +275,6 @@ namespace EDDiscovery
             else
             {
                 LogLine("EliteDangerous is not running.");
-            }
-        }
-
-        private void CheckIfVerboseLoggingIsTurnedOn()
-        {
-            if (!EliteDangerous.CheckStationLogging())
-            {
-                LogLineHighlight("Elite Dangerous is not logging system names!!! ");
-                LogLine("Add VerboseLogging =\"1\" to <Network  section in File: " + Path.Combine(EliteDangerous.EDDirectory, "AppConfig.xml") + " or AppConfigLocal.xml  Remember to restart Elite!");
-                labelPanelText.Text = "Elite Dangerous is not logging system names!";
-                panelInfo.BackColor = Color.Salmon;
             }
         }
 
@@ -490,10 +478,7 @@ namespace EDDiscovery
                         travelHistoryControl1.RefreshHistory();
                         //LogLine("Time " + (Environment.TickCount-tickc) );
 
-                        if (EliteDangerous.CheckStationLogging())
-                        {
-                            panelInfo.Visible = false;
-                        }
+                        panelInfo.Visible = false;
 
                         CheckForNewInstaller();
                     });
