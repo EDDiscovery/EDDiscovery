@@ -138,6 +138,7 @@ namespace EDDiscovery2.EDDB
                         HttpCom.WriteLog("Response", response.StatusCode.ToString());
 
                         File.WriteAllText(tmpEtagFilename, response.Headers[HttpResponseHeader.ETag]);
+                        File.SetLastWriteTimeUtc(tmpEtagFilename, response.LastModified.ToUniversalTime());
                         using (var httpStream = response.GetResponseStream())
                         {
                             processor(true, httpStream);
