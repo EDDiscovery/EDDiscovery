@@ -1,3 +1,5 @@
+# EDDSystems.PopulatedSystems table
+
 ```sql
 CREATE TABLE PopulatedSystems (
   Id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,

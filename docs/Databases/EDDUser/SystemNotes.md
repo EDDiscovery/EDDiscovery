@@ -1,3 +1,5 @@
+# EDDUser.SystemNotes table
+
 ```sql
 CREATE TABLE SystemNotes (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 

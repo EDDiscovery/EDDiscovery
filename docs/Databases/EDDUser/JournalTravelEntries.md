@@ -1,3 +1,5 @@
+# EDDUser.JournalTravelEntries table
+
 ```sql
 CREATE TABLE JournalTravelEntries (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,

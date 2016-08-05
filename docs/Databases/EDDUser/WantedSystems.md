@@ -1,3 +1,5 @@
+# EDDUser.WantedSystems table
+
 ```sql
 CREATE TABLE WantedSystems (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,

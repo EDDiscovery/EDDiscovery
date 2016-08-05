@@ -1,3 +1,5 @@
+# EDDUser.Bookmarks table
+
 ```sql
 CREATE TABLE Bookmarks (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
