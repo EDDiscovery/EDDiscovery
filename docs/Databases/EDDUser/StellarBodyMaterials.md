@@ -1,3 +1,5 @@
+# EDDUser.StellarBodyMaterials table
+
 ```sql
 CREATE TABLE StellarBodyMaterials (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,

@@ -1,3 +1,5 @@
+# EDDUser.Register table
+
 ```sql
 CREATE TABLE Register (
   ID TEXT NOT NULL PRIMARY KEY, 
