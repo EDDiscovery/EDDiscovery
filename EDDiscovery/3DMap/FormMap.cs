@@ -56,9 +56,9 @@ namespace EDDiscovery2
         private bool _loaded = false;
         private float _zoom = 1.0f;
 
-        private Vector3 _cameraPos = Vector3.Zero;
-        private Vector3 _cameraDir = Vector3.Zero;
-        private float _cameraFov = (float)(Math.PI / 2.0f);         // Camera, in radians, 180/2 = 90 degrees
+        private Vector3 _viewtargetpos = Vector3.Zero;          // point where we are viewing. Eye is offset from this by _cameraDir * 1000/_zoom. (prev _cameraPos)
+        private Vector3 _cameraDir = Vector3.Zero;              
+        private float _cameraFov = (float)(Math.PI / 2.0f);     // Camera, in radians, 180/2 = 90 degrees
 
         private const double ZoomMax = 300;
         private const double ZoomMin = 0.01;
@@ -476,43 +476,6 @@ namespace EDDiscovery2
 
 #endregion
 
-#region Viewport
-
-        /// <summary>
-        /// Setup the Viewport
-        /// </summary>
-        private void SetupViewport()
-        {
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-
-            int w = glControl.Width;
-            int h = glControl.Height;
-
-            if (w == 0 || h == 0) return;
-
-            if (toolStripButtonPerspective.Checked)
-            {                                                                   // Fov, perspective, znear, zfar
-                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
-                GL.LoadMatrix(ref perspective);
-                _znear = 1.0f;                                              
-            }
-            else
-            {
-                float orthoW = w * (_zoom + 1.0f);
-                float orthoH = h * (_zoom + 1.0f);
-
-                float orthoheight = 1000.0f * h / w;
-
-                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
-                _znear = -5000.0f;
-            }
-
-            GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
-        }
-
-#endregion
-
 #region Generate Data Sets
 
         private void GenerateDataSets()         // Called ONCE only during Load.. fixed data.
@@ -626,7 +589,7 @@ namespace EDDiscovery2
         {
             if (Visible && toolStripButtonStarNames.Checked && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
             {
-                if (_starnameslist.Update(_zoom, _cameraPos, _cameraDir, GetResMat(), _znear))       // if its kicked off the thread..
+                if (_starnameslist.Update(_zoom, _viewtargetpos, _cameraDir, GetResMat(), _znear))       // if its kicked off the thread..
                     _starnametimer.Stop();                                              // stop the timer.
             }
             else
@@ -672,7 +635,7 @@ namespace EDDiscovery2
         }
 #endregion
 
-#region Set Orientation
+#region Set Position
 
         private void SetCenterSystemLabel()
         {
@@ -878,9 +841,41 @@ namespace EDDiscovery2
                 UpdateDataSetsDueToZoom();
         }
 
-#endregion
+        #endregion
 
-#region Render
+        #region OpenGL Render and Viewport
+
+        private void SetupViewport()
+        {
+            GL.MatrixMode(MatrixMode.Projection);           // Select the project matrix for the following operations (current matrix)
+
+            int w = glControl.Width;
+            int h = glControl.Height;
+
+            if (w == 0 || h == 0) return;
+
+            if (toolStripButtonPerspective.Checked)
+            {                                                                   // Fov, perspective, znear, zfar
+                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
+                GL.LoadMatrix(ref perspective);             // replace projection matrix with this perspective matrix
+                _znear = 1.0f;
+            }
+            else
+            {
+                float orthoW = w * (_zoom + 1.0f);
+                float orthoH = h * (_zoom + 1.0f);
+
+                float orthoheight = 1000.0f * h / w;
+
+                GL.LoadIdentity();                              // set to 1/1/1/1.
+                
+                // multiply identity matrix with orth matrix, left/right vert clipping plane, bot/top horiz clippling planes, distance between near/far clipping planes
+                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
+                _znear = -5000.0f;
+            }
+
+            GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
+        }
 
         private void Render()
         {
@@ -889,61 +884,42 @@ namespace EDDiscovery2
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.MatrixMode(MatrixMode.Modelview);
+            GL.MatrixMode(MatrixMode.Modelview);            // select the current matrix to the model view
 
             if (toolStripButtonPerspective.Checked)
             {
-                CameraLookAt();
+                Vector3 target = _viewtargetpos;
+
+                Matrix4 transform = Matrix4.Identity;                   // identity nominal matrix, dir is in degrees
+                transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
+                transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
+                transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
+                                                                        // transform ends as the camera direction vector
+
+                // calculate where eye is, relative to target. its 1000/zoom, rotated by camera rotation
+                Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
+
+                // rotate the up vector (0,0,1) by the eye camera dir to get a vector upwards from the current camera dir
+                Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
+
+                Vector3 eye = _viewtargetpos + eyerel;              // eye is here, the target pos, plus the eye relative position
+                Matrix4 lookat = Matrix4.LookAt(eye, target, up);   // from eye, look at target, with up giving the rotation of the look
+                GL.LoadMatrix(ref lookat);                          // set the model view to this matrix.
             }
             else
             {
-                TransformWorldOrientatation();
-
-                TransformCamera();
+                GL.LoadIdentity();                  // model view matrix is 1/1/1/1.
+                GL.Rotate(-90.0, 1, 0, 0);          // Rotate the world - current matrix, rotated -90 degrees around the vector (1,0,0)
+                GL.Scale(_zoom, _zoom, _zoom);      // scale all the axis to zoom
+                GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);    // rotate the axis around the camera dir
+                GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
+                GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
+                GL.Translate(-_viewtargetpos.X, -_viewtargetpos.Y, -_viewtargetpos.Z);  // and translate the model view by the view target pos
             }
-            FlipYAxisOnWorld();
-            RenderGalaxy();
 
-            glControl.SwapBuffers();
-            UpdateStatus();
-        }
+            GL.Scale(1.0, -1.0, 1.0);               // Flip Y axis on world by inverting the model view matrix
 
-        private void TransformWorldOrientatation()
-        {
-            GL.LoadIdentity();
-            GL.Rotate(-90.0, 1, 0, 0);
-        }
-
-        private void TransformCamera()
-        {
-            GL.Scale(_zoom, _zoom, _zoom);
-            GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);
-            GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
-            GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
-            GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
-        }
-
-        private void CameraLookAt()
-        {
-            Vector3 target = _cameraPos;
-            Matrix4 transform = Matrix4.Identity;
-            transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
-            transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
-            transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
-            Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
-            Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
-            Vector3 eye = _cameraPos + eyerel;
-            Matrix4 lookat = Matrix4.LookAt(eye, target, up);
-            GL.LoadMatrix(ref lookat);
-        }
-
-        private void FlipYAxisOnWorld()
-        {
-            GL.Scale(1.0, -1.0, 1.0);
-        }
-
-        private void RenderGalaxy()
-        {
+            // Render galaxy
             GL.Enable(EnableCap.PointSmooth);
             GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
             GL.Enable(EnableCap.Blend);
@@ -952,6 +928,9 @@ namespace EDDiscovery2
             GL.PushMatrix();
             DrawStars();
             GL.PopMatrix();
+
+            glControl.SwapBuffers();
+            UpdateStatus();
         }
 
         private void DrawStars()
@@ -1014,7 +993,7 @@ namespace EDDiscovery2
             else
                 statusLabel.Text = "Use W, A, S, D keys with the mouse. ";
 
-            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00} FOV={4,-4:0}", _cameraPos.X, -(_cameraPos.Y), _cameraPos.Z, _zoom , _cameraFov/Math.PI*180);
+            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00} FOV={4,-4:0}", _viewtargetpos.X, -(_viewtargetpos.Y), _viewtargetpos.Z, _zoom , _cameraFov/Math.PI*180);
 #if DEBUG
             statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
 #endif
@@ -1038,7 +1017,7 @@ namespace EDDiscovery2
                 _oldTickCount = DateTime.Now.Ticks / 10000;
             }
 
-            _stargrids.Update(_cameraPos.X, _cameraPos.Z, glControl);
+            _stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, glControl);
             HandleInputs();
             DoCameraSlew();
             UpdateCamera();
@@ -1079,7 +1058,7 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
-            _cameraPos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
+            _viewtargetpos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
             _cameraDir = Vector3.Zero;
 
             _zoom = _defaultZoom;
@@ -1105,18 +1084,18 @@ namespace EDDiscovery2
             {
                 _cameraActionMovement = Vector3.Zero;
                 var newprogress = _cameraSlewProgress + _ticks / (CameraSlewTime * 1000);
-                var totvector = new Vector3((float)(_cameraSlewPosition.X - _cameraPos.X), (float)(-_cameraSlewPosition.Y - _cameraPos.Y), (float)(_cameraSlewPosition.Z - _cameraPos.Z));
+                var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(-_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
 
                 if (newprogress >= 1.0f)
                 {
-                    _cameraPos = new Vector3(_cameraSlewPosition.X,-_cameraSlewPosition.Y, _cameraSlewPosition.Z);
+                    _viewtargetpos = new Vector3(_cameraSlewPosition.X,-_cameraSlewPosition.Y, _cameraSlewPosition.Z);
                 }
                 else
                 {
                     var slewstart = Math.Sin((_cameraSlewProgress - 0.5) * Math.PI);
                     var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
                     var slewfact = (slewend - slewstart) / (1.0 - slewstart);
-                    _cameraPos += Vector3.Multiply(totvector, (float)slewfact);
+                    _viewtargetpos += Vector3.Multiply(totvector, (float)slewfact);
                 }
                 _cameraSlewProgress = (float)newprogress;
             }
@@ -1161,14 +1140,14 @@ namespace EDDiscovery2
             if (em)                                             // if in elite movement, Y is not affected
             {                                                   // by ASDW.
                 trans.Y = 0;                                    // no Y translation even if camera rotated the vector into Y components
-                _cameraPos += trans;
-                _cameraPos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
+                _viewtargetpos += trans;
+                _viewtargetpos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
             }
             else
-                _cameraPos += trans;
+                _viewtargetpos += trans;
 #if DEBUG
 //            if (istranslating)
-//                Console.WriteLine("   em " + em + " Camera now " + _cameraPos.X + "," + _cameraPos.Y + "," + _cameraPos.Z);
+//                Console.WriteLine("   em " + em + " Camera now " + _viewtargetpos.X + "," + _viewtargetpos.Y + "," + _viewtargetpos.Z);
 #endif
         }
 
@@ -1397,7 +1376,7 @@ namespace EDDiscovery2
         private void newRegionBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BookmarkForm frm = new BookmarkForm();
-            frm.InitialisePos(_cameraPos.X, -(_cameraPos.Y), _cameraPos.Z);
+            frm.InitialisePos(_viewtargetpos.X, -(_viewtargetpos.Y), _viewtargetpos.Z);
             DateTime tme = DateTime.Now;
             frm.RegionBookmark(tme.ToString());
             DialogResult res = frm.ShowDialog();
@@ -1738,8 +1717,8 @@ namespace EDDiscovery2
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                //_cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
-                _cameraPos.Y += -dy * (1.0f / _zoom) * 2.0f;
+                //_viewtargetpos.X += -dx * (1.0f /_zoom) * 2.0f;
+                _viewtargetpos.Y += -dy * (1.0f / _zoom) * 2.0f;
 
                 glControl.Invalidate();
             }
@@ -1758,8 +1737,8 @@ namespace EDDiscovery2
                 Vector3 translation = new Vector3(-dx * (1.0f / _zoom) * 2.0f, dy * (1.0f / _zoom) * 2.0f, 0.0f);
                 translation = Vector3.Transform(translation, transform);
 
-                _cameraPos.X += translation.X;
-                _cameraPos.Z += translation.Y;
+                _viewtargetpos.X += translation.X;
+                _viewtargetpos.Z += translation.Y;
 
                 glControl.Invalidate();
             }
