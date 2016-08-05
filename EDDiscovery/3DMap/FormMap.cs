@@ -558,7 +558,10 @@ namespace EDDiscovery2
             //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_visitedsystems);
             DatasetBuilder builder = new DatasetBuilder();
-            _datasets_visitedsystems = builder.BuildVisitedSystems(toolStripButtonDrawLines.Checked, _centerSystem, _visitedSystems,
+
+            List<VisitedSystemsClass> filtered = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null;
+
+            _datasets_visitedsystems = builder.BuildVisitedSystems(toolStripButtonDrawLines.Checked, _centerSystem, filtered,
                                                                     _referenceSystems, _plannedRoute);
         }
 
@@ -1011,7 +1014,7 @@ namespace EDDiscovery2
             else
                 statusLabel.Text = "Use W, A, S, D keys with the mouse. ";
 
-            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00}", _cameraPos.X, -(_cameraPos.Y), _cameraPos.Z, _zoom);
+            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00} FOV={4,-4:0}", _cameraPos.X, -(_cameraPos.Y), _cameraPos.Z, _zoom , _cameraFov/Math.PI*180);
 #if DEBUG
             statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
 #endif
@@ -1791,15 +1794,11 @@ namespace EDDiscovery2
 
             if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
             {
-                if (e.Delta > 0)
-                {
-                    _cameraFov *= (float)ZoomFact;
-                    if (_cameraFov >= Math.PI * 0.8)
-                    {
-                        _cameraFov = (float)(Math.PI * 0.8);
-                    }
-                }
                 if (e.Delta < 0)
+                {
+                    _cameraFov = (float)Math.Min(_cameraFov*ZoomFact, Math.PI * 0.8);
+                }
+                else if (e.Delta > 0)
                 {
                     _cameraFov /= (float)ZoomFact;
                 }
