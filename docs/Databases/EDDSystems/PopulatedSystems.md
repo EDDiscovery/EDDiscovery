@@ -25,3 +25,8 @@ CREATE INDEX PopulatedSystem_SystemEddbId ON PopulatedSystems (SystemEddbId)
 Linked to a EDSM system entry by SystemEdsmId.
 
 Re-imported from EDDB dump
+
+`LastUpdated` can be converted from `last_updated_at` using:
+```C#
+LastUpdated = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds((long)jo["last_updated_at"]);
+```
