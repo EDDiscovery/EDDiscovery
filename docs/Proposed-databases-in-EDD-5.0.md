@@ -1,0 +1,1 @@
+Moved to [v5-database-split-docs](https://github.com/EDDiscovery/EDDiscovery/blob/v5-database-split-docs/docs/Databases.md) branch
