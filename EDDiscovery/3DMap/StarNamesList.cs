@@ -4,6 +4,7 @@ using EDDiscovery2.DB;
 using OpenTK;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -87,7 +88,7 @@ namespace EDDiscovery2
             Bitmap text_bmp = new Bitmap(100, 30);
             using (Graphics g = Graphics.FromImage(text_bmp))
             {
-                SizeF sz = g.MeasureString("Blah blah EX22 LYXX2", _starnamebitmapfnt);
+                SizeF sz = g.MeasureString("Blah blahx EX222 LYXX2", _starnamebitmapfnt);
                 _starnamebitmapwidth = (int)sz.Width + 4;
                 _starnamebitmapheight = (int)sz.Height + 4;
             }
@@ -315,6 +316,8 @@ namespace EDDiscovery2
 
         public void Draw()
         {
+            //Stopwatch sw = new Stopwatch();  sw.Start();
+
             if (_starnames.Count > 10000)
             {
                 if (Monitor.TryEnter(deletelock))                 // if we can get in, we are not in the update above, so can clean
@@ -377,6 +380,8 @@ namespace EDDiscovery2
                         sys.painttexture.Draw(_glControl);
                 }
             }
+
+            //long e = sw.ElapsedMilliseconds; if (e > 1) Console.WriteLine("Elapsed " + e);
         }
 
     }

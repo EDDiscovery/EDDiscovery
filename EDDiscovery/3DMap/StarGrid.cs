@@ -510,18 +510,26 @@ namespace EDDiscovery2
 
 #region misc
 
-        public Vector3d? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti ) // UI Call.
+        public Vector3d? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti , 
+                                        bool showstars, bool showstations) // UI Call.
         {
             Debug.Assert(Application.MessageLoop);
 
             cursysdistz = double.MaxValue;
             Vector3d? ret = null;
 
-            foreach (StarGrid grd in grids)
+            if (showstars)                        // populated grid is in this list, so will be checked
             {
-                Vector3d? cur = grd.FindPoint(x, y, ref cursysdistz, ti);
-                if (cur != null)        // if found one, better than cursysdistz, use it
-                    ret = cur;
+                foreach (StarGrid grd in grids)
+                {
+                    Vector3d? cur = grd.FindPoint(x, y, ref cursysdistz, ti);
+                    if (cur != null)        // if found one, better than cursysdistz, use it
+                        ret = cur;
+                }
+            }
+            else if ( showstations )
+            {
+                ret = populatedgrid.FindPoint(x, y, ref cursysdistz, ti);
             }
 
             return ret;
