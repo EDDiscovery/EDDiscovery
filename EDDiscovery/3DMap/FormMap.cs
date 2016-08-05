@@ -26,7 +26,7 @@ namespace EDDiscovery2
         public bool noWindowReposition { get; set; } = false;                       // set externally
         public TravelHistoryControl travelHistoryControl { get; set; } = null;      // set externally
 
-        const int HELP_VERSION = 2;         // increment this to force help onto the screen of users first time.
+        const int HELP_VERSION = 3;         // increment this to force help onto the screen of users first time.
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
@@ -40,44 +40,40 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_bookedmarkedsystems;
         private List<IData3DSet> _datasets_notedsystems;
 
-        private const double ZoomMax = 500;
-        private const double ZoomMin = 0.01;
-        private const double ZoomFact = 1.2589254117941672104239541063958;
-        private const double CameraSlewTime = 1.0;
+        StarGrids _stargrids;                   // holds stars
 
-        StarGrids _stargrids;
-
-        //        List<SystemClassStarNames> _starnames = null;    // star list combines data base and travelled h
-        //        Dictionary<string, SystemClassStarNames> _starnamelookup; // and a dictionary to above since its so slow to do a search
+        StarNamesList _starnameslist;           // holds named stars
+        Timer _starnametimer = new Timer();
 
         private AutoCompleteStringCollection _systemNames;
+
         private ISystem _centerSystem;
         private ISystem _homeSystem;
-
-        private ISystem _clickedSystem;        // left clicked on a system/bookmark system/noted system
-        private Vector3 _clickedposition;                   // left clicked on a position
-
         private ISystem _historySelection;
-        private bool _loaded = false;
+        private ISystem _clickedSystem;         // left clicked on a system/bookmark system/noted system
+        private Vector3 _clickedposition;       // left clicked on a position
 
+        private bool _loaded = false;
         private float _zoom = 1.0f;
 
         private Vector3 _cameraPos = Vector3.Zero;
         private Vector3 _cameraDir = Vector3.Zero;
+        private float _cameraFov = (float)(Math.PI / 2.0f);         // Camera, in radians, 180/2 = 90 degrees
 
+        private const double ZoomMax = 300;
+        private const double ZoomMin = 0.01;
+        private const double ZoomFact = 1.2589254117941672104239541063958;
+        
         private Vector3 _cameraActionMovement = Vector3.Zero;
         private Vector3 _cameraActionRotation = Vector3.Zero;
-        private float _cameraFov = (float)(Math.PI / 2.0f);
-        private float _cameraSlewProgress = 1.0f;
+        private const double CameraSlewTime = 1.0;                  // Controls speed of slew
+        private float _cameraSlewProgress = 1.0f;                   // 0 -> 1 slew progress
         private Vector3 _cameraSlewPosition;
 
         private KeyboardActions _kbdActions = new KeyboardActions();
         private long _oldTickCount = DateTime.Now.Ticks / 10000;
         private int _ticks = 0;
-
-        StarNamesList _starnameslist;
-        Timer _starnametimer = new Timer();
-
+        
         private Point _mouseStartRotate;
         private Point _mouseStartTranslateXY;
         private Point _mouseStartTranslateXZ;
@@ -85,8 +81,7 @@ namespace EDDiscovery2
         private Point _mouseHover;
         Timer _mousehovertick = new Timer();
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
-
-
+        
         private float _defaultZoom;
         private List<SystemClass> _referenceSystems { get; set; }
         public List<VisitedSystemsClass> _visitedSystems { get; set; }
@@ -497,10 +492,10 @@ namespace EDDiscovery2
             if (w == 0 || h == 0) return;
 
             if (toolStripButtonPerspective.Checked)
-            {
+            {                                                                   // Fov, perspective, znear, zfar
                 Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
                 GL.LoadMatrix(ref perspective);
-                _znear = 0.00000000000001f;     // very small positive value.. needed to be low so zoom=500 works.. may need revisiting
+                _znear = 1.0f;                                              
             }
             else
             {
