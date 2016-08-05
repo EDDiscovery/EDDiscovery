@@ -66,7 +66,7 @@ namespace EDDiscovery2
         GLControl _glControl;
 
         float _zoom;
-        Vector3 _cameraPos;
+        Vector3 _viewtargetpos;
         float _znear;
 
         Object deletelock = new Object();           // locked during delete..
@@ -139,13 +139,13 @@ namespace EDDiscovery2
         public bool Update(float z, Vector3 c, Vector3 _cameraDir, Matrix4d resmat , float _zn)     // UI thread..
         {
             _zoom = z;
-            _cameraPos = c;
+            _viewtargetpos = c;
             _znear = _zn;
 
-            if (!_stargrids.IsDisplayed(_cameraPos.X, _cameraPos.Z))
+            if (!_stargrids.IsDisplayed(_viewtargetpos.X, _viewtargetpos.Z))
                 return false;                            // okay, if we have not got to the position of displaying this grid, just wait
 
-            Vector3 modcampos = _cameraPos;
+            Vector3 modcampos = _viewtargetpos;
             modcampos.Y = -modcampos.Y;
             bool lookdown = (_cameraDir.X < 90F);          // lookdown when X < 90
             bool lookforward = (_cameraDir.Y > -90F && _cameraDir.Y < 90F);  // forward looking
@@ -193,7 +193,7 @@ namespace EDDiscovery2
                 //Console.Write("Repaint " + _starname_repaintall + " Stars " + _starlimitly + " within " + lylimit + "  ");
                 int sqlylimit = lylimit * lylimit;                 // in squared distance limit from viewpoint
 
-                Vector3 modcampos = _cameraPos;
+                Vector3 modcampos = _viewtargetpos;
                 modcampos.Y = -modcampos.Y;
 
                 StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_starname_resmat, _znear, _glControl.Width, _glControl.Height, sqlylimit, modcampos);
