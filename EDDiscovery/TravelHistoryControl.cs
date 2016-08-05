@@ -561,7 +561,7 @@ namespace EDDiscovery
 
         public void buttonMap_Click(object sender, EventArgs e)
         {
-            if (_discoveryForm.SystemNames.Count == 0)
+            if (textBoxTarget.AutoCompleteCustomSource.Count == 0)         // wait till told system names is complete..
             {
                 MessageBox.Show("Systems have not been loaded yet or none were available at program start, please wait or restart", "No Systems Available", MessageBoxButtons.OK);
                 return;

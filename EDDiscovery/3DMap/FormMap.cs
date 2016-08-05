@@ -2058,7 +2058,7 @@ namespace EDDiscovery2
 
             StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(GetResMat(), _znear, glControl.Width, glControl.Height, _zoom);
 
-            Vector3d? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti );
+            Vector3d? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
 
             ISystem f = null;
 
