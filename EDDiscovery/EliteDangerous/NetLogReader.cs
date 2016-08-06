@@ -354,7 +354,8 @@ namespace EDDiscovery
                 }
             }
 
-            Console.WriteLine("Parse ReadData " + FileName + " from " + startpos + " to " + filePos);
+            if ( startpos != filePos )
+                Console.WriteLine("Parse ReadData " + FileName + " from " + startpos + " to " + filePos);
         }
     }
 }

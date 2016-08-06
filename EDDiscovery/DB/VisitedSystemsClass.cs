@@ -485,6 +485,20 @@ namespace EDDiscovery2.DB
         {
             return Distance(s1, p.X, p.Y, p.Z);
         }
+
+        public static VisitedSystemsClass FindByPos(List<VisitedSystemsClass> visitedSystems, Point3D p , double limit)     // go thru setting the lastknowsystem
+        {
+            if (visitedSystems != null)
+            {
+                VisitedSystemsClass vs = visitedSystems.FindLast(x => x.curSystem.HasCoordinate &&
+                                                Math.Abs(x.curSystem.x - p.X) < limit &&
+                                                Math.Abs(x.curSystem.y - p.Y) < limit &&
+                                                Math.Abs(x.curSystem.z - p.Z) < limit );
+                return vs;
+            }
+            else
+                return null;
+        }
     }
 }
 

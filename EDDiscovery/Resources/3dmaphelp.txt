@@ -22,6 +22,8 @@ Mouse:
 	Left Hold	Pitch up/down
 	Right Hold	Go up/down (Y)
 	Left+Right Hold	Move position
+	Wheel	Zoom in/out
+	Ctrl+Wheel	Change field of view
 
 Toolbar (from left):
 	<	Go to previous travelled system (or first system if not selected on a travelled system)
