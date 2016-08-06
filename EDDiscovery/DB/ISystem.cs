@@ -43,5 +43,7 @@ namespace EDDiscovery2.DB
         string CommanderUpdate { get; set; }
         EDDiscovery.DB.SystemStatusEnum status { get; set; }        // Who made this entry, where did the info come from?
         string SystemNote { get; set; }
+        int gridid { get; set; }
+        int randomid { get; set; }
     }
 }

@@ -495,7 +495,7 @@ namespace EDDiscovery
                 else
                 {
                     LogLine("Checking for new EDSM systems (may take a few moments).");
-                    long updates = edsm.GetNewSystems(cancelRequested, reportProgress);
+                    long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
                     LogLine("EDSM updated " + updates + " systems.");
                 }
             }
@@ -636,7 +636,7 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
-        private bool PerformEDSMFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
+        private bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
             DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
@@ -663,7 +663,7 @@ namespace EDDiscovery
                 {
                     string rwsysfiletime = "2014-01-01 00:00:00";
                     using (var reader = new StreamReader(s))
-                        updates = SystemClass.ParseEDSMUpdateSystems(reader, ref rwsysfiletime, true, cancelRequested, reportProgress);
+                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, true, discoveryform, cancelRequested, reportProgress);
                     if (!cancelRequested())       // abort, without saving time, to make it do it again
                         SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
 
@@ -676,7 +676,7 @@ namespace EDDiscovery
                 }
 
                 LogLine("Now checking for recent EDSM systems.");
-                updates += edsm.GetNewSystems(cancelRequested, reportProgress);
+                updates += edsm.GetNewSystems(this, cancelRequested, reportProgress);
 
                 LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
 
@@ -786,7 +786,7 @@ namespace EDDiscovery
 
             if (performedsmsync && !cancelRequested())
             {
-                performhistoryrefresh |= PerformEDSMFullSync(cancelRequested, reportProgress);
+                performhistoryrefresh |= PerformEDSMFullSync(this, cancelRequested, reportProgress);
             }
 
             if (performeddbsync && !cancelRequested())

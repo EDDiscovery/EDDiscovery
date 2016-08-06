@@ -139,8 +139,6 @@ namespace EDDiscovery2.EDSM
 
             string query = "api-v1/systems" + "?startdatetime=" + HttpUtility.UrlEncode(date) + "&coords=1&submitted=1&known=1&showId=1";
             var response = RequestGet(query);
-
-            var data = response.Body;
             return response.Body;
         }
 
@@ -150,7 +148,6 @@ namespace EDDiscovery2.EDSM
             query = "?showId=1 & submitted=1 & startdatetime=" + HttpUtility.UrlEncode(date);
 
             var response = RequestGet("api-v1/distances" + query );
-            var data = response.Body;
             return response.Body;
         }
 
@@ -167,7 +164,7 @@ namespace EDDiscovery2.EDSM
                 return null;
         }
         
-        internal long GetNewSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)
+        internal long GetNewSystems(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             string lstsyst;
 
@@ -192,9 +189,16 @@ namespace EDDiscovery2.EDSM
 
             string json = RequestSystems(lstsyst);
 
-            string date = "2010-01-01 00:00:00";
-            long updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date , false , cancelRequested, reportProgress);
-            SQLiteDBClass.PutSettingString("EDSMLastSystems", date);
+            long updates = 0;
+
+            if (json != null)       // bad download could cause this..
+            {
+                string date = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-02 00:00:00"); // Latest time from RW file.
+                updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date, false, discoveryform, cancelRequested, reportProgress);
+                SQLiteDBClass.PutSettingString("EDSMLastSystems", date);
+            }
+            else
+                discoveryform.LogLine("Download of EDSM systems from the server failed, will try next time program is run");
 
             return updates;
         }
