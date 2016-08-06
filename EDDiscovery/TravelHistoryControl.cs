@@ -195,6 +195,7 @@ namespace EDDiscovery
             RedrawSummary();
             RefreshTargetInfo();
             UpdateDependentsWithSelection();
+            _discoveryForm.Map.UpdateVisited(visitedSystems);           // update map
         }
 
         private void AddNewHistoryRow(bool insert, VisitedSystemsClass item)            // second part of add history row, adds item to view.
@@ -560,7 +561,7 @@ namespace EDDiscovery
 
         public void buttonMap_Click(object sender, EventArgs e)
         {
-            if (_discoveryForm.SystemNames.Count == 0)
+            if (textBoxTarget.AutoCompleteCustomSource.Count == 0)         // wait till told system names is complete..
             {
                 MessageBox.Show("Systems have not been loaded yet or none were available at program start, please wait or restart", "No Systems Available", MessageBoxButtons.OK);
                 return;
