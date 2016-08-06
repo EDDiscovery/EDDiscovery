@@ -1886,7 +1886,7 @@ namespace EDDiscovery2
                     info += Environment.NewLine + "Notes: " + note.Trim();
                 }
 
-                if (curbookmark != null && curbookmark.Note != null)
+                if (curbookmark != null && curbookmark.Note != null && curbookmark.Note.Trim().Length>0 )
                     info += Environment.NewLine + "Bookmark Notes: " + curbookmark.Note.Trim();
 
                 _mousehovertooltip = new System.Windows.Forms.ToolTip();
