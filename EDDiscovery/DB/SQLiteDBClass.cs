@@ -425,6 +425,9 @@ namespace EDDiscovery.DB
                 if (dbver < 19)
                     UpgradeDB19(conn);
 
+                if (dbver < 20)
+                    UpgradeDB20(conn);
+
                 return true;
             }
             catch (Exception ex)
@@ -644,6 +647,19 @@ namespace EDDiscovery.DB
             string query4 = "CREATE INDEX SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)";
 
             PerformUpgrade(conn, 19, true, true, new[] { query1, query2, query3, query4 });
+        }
+
+        private static void UpgradeDB20(SQLiteConnectionED conn)
+        {
+            string query1 = "ALTER TABLE Systems ADD COLUMN gridid Integer NOT NULL DEFAULT -1";
+            string query2 = "ALTER TABLE Systems ADD COLUMN randomid Integer NOT NULL DEFAULT -1";
+            string query3 = "CREATE INDEX SystemGridId ON Systems (gridid)";
+            string query4 = "CREATE INDEX SystemRandomId ON Systems (randomid)";
+
+            PerformUpgrade(conn, 20, true, true, new[] { query1, query2, query3, query4 }, () =>
+            {
+                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
+            });
         }
 
         private static DbProviderFactory GetSqliteProviderFactory()

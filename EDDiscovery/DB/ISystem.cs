@@ -24,6 +24,9 @@ namespace EDDiscovery2.DB
         EDDiscovery.DB.SystemStatusEnum status { get; set; }        // Who made this entry, where did the info come from?
         string SystemNote { get; set; }
 
+        int gridid { get; set; }
+        int randomid { get; set; }
+
         long id_eddb { get; set; }
         string faction { get; set; }
         long population { get; set; }
