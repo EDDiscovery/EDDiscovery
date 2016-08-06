@@ -350,6 +350,7 @@ namespace EDDiscovery
                 {
                     systems.Add(ps);
                     yield return ps;
+                    last = ps;
                 }
             }
 
