@@ -480,7 +480,6 @@ namespace EDDiscovery.DB
         private static void UpgradeDB2(SQLiteConnectionED conn)
         {
             string query = "CREATE TABLE Systems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , name TEXT NOT NULL COLLATE NOCASE , x FLOAT, y FLOAT, z FLOAT, cr INTEGER, commandercreate TEXT, createdate DATETIME, commanderupdate TEXT, updatedate DATETIME, status INTEGER, population INTEGER )";
-            string query2 = "CREATE  INDEX main.SystemsIndex ON Systems (name ASC)";
             string query3 = "CREATE TABLE Distances (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  UNIQUE , NameA TEXT NOT NULL , NameB TEXT NOT NULL , Dist FLOAT NOT NULL , CommanderCreate TEXT NOT NULL , CreateTime DATETIME NOT NULL , Status INTEGER NOT NULL )";
             string query4 = "CREATE TABLE SystemNote (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL )";
             string query5 = "CREATE INDEX DistanceName ON Distances (NameA ASC, NameB ASC)";
@@ -488,7 +487,7 @@ namespace EDDiscovery.DB
             string query7 = "CREATE TABLE Stations (station_id INTEGER PRIMARY KEY  NOT NULL ,system_id INTEGER REFERENCES Systems(id), name TEXT NOT NULL ,blackmarket BOOL DEFAULT (null) ,max_landing_pad_size INTEGER,distance_to_star INTEGER,type TEXT,faction TEXT,shipyard BOOL,outfitting BOOL, commodities_market BOOL)";
             string query8 = "CREATE  INDEX stationIndex ON Stations (system_id ASC)";
 
-            PerformUpgrade(conn, 2, false, false, new[] { query, query2, query3, query4, query5, query6, query7, query8 });
+            PerformUpgrade(conn, 2, false, false, new[] { query, query3, query4, query5, query6, query7, query8 });
         }
 
         private static void UpgradeDB3(SQLiteConnectionED conn)
@@ -601,9 +600,8 @@ namespace EDDiscovery.DB
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN versiondate DATETIME";
             string query2 = "UPDATE Systems SET versiondate = datetime('now')";
-            string query3 = "CREATE INDEX IDX_Systems_versiondate ON Systems (versiondate ASC)";
 
-            PerformUpgrade(conn, 15, true, true, new[] { query1, query2, query3 });
+            PerformUpgrade(conn, 15, true, true, new[] { query1, query2 });
         }
 
         private static void UpgradeDB16(SQLiteConnectionED conn)
@@ -615,13 +613,11 @@ namespace EDDiscovery.DB
         private static void UpgradeDB17(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_edsm Integer";
-            string query2 = "CREATE INDEX Systems_EDSM_ID_Index ON Systems (id_edsm ASC)";
-            string query3 = "CREATE INDEX Systems_EDDB_ID_Index ON Systems (id_eddb ASC)";
             string query4 = "ALTER TABLE Distances ADD COLUMN id_edsm Integer";
             string query5 = "CREATE INDEX Distances_EDSM_ID_Index ON Distances (id_edsm ASC)";
             string query6 = "Update VisitedSystems set x=null, y=null, z=null where x=0 and y=0 and z=0 and name!=\"Sol\"";
 
-            PerformUpgrade(conn, 17, true, true, new[] { query1,query2,query3,query4,query5,query6 }, () =>
+            PerformUpgrade(conn, 17, true, true, new[] { query1,query4,query5,query6 }, () =>
             {
                 PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
                 PutSettingString("EDDBSystemsTime", "0", conn);                               // force EDDB
@@ -634,9 +630,8 @@ namespace EDDiscovery.DB
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN id_edsm_assigned Integer";
             string query2 = "CREATE INDEX VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)";
             string query3 = "CREATE INDEX VisitedSystems_position ON VisitedSystems (X, Y, Z)";
-            string query4 = "CREATE INDEX Systems_position ON Systems (X, Y, Z)";
 
-            PerformUpgrade(conn, 18, true, true, new[] { query1, query2, query3, query4 });
+            PerformUpgrade(conn, 18, true, true, new[] { query1, query2, query3 });
         }
 
         private static void UpgradeDB19(SQLiteConnectionED conn)
@@ -653,13 +648,59 @@ namespace EDDiscovery.DB
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN gridid Integer NOT NULL DEFAULT -1";
             string query2 = "ALTER TABLE Systems ADD COLUMN randomid Integer NOT NULL DEFAULT -1";
-            string query3 = "CREATE INDEX SystemGridId ON Systems (gridid)";
-            string query4 = "CREATE INDEX SystemRandomId ON Systems (randomid)";
 
-            PerformUpgrade(conn, 20, true, true, new[] { query1, query2, query3, query4 }, () =>
+            PerformUpgrade(conn, 20, true, true, new[] { query1, query2 }, () =>
             {
                 PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
             });
+        }
+
+        public static void DropSystemsTableIndexes()
+        {
+            string[] queries = new[]
+            {
+                "DROP INDEX IF EXISTS SystemsIndex",
+                "DROP INDEX IF EXISTS Systems_EDSM_ID_Index",
+                "DROP INDEX IF EXISTS Systems_EDDB_ID_Index",
+                "DROP INDEX IF EXISTS IDX_Systems_versiondate",
+                "DROP INDEX IF EXISTS Systems_position",
+                "DROP INDEX IF EXISTS SystemGridId",
+                "DROP INDEX IF EXISTS SystemRandomId"
+            };
+            using (SQLiteConnectionED conn = new SQLiteConnectionED())
+            {
+                foreach (string query in queries)
+                {
+                    using (DbCommand cmd = conn.CreateCommand(query))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        public static void CreateSystemsTableIndexes()
+        {
+            string[] queries = new[]
+            {
+                "CREATE INDEX IF NOT EXISTS SystemsIndex ON Systems (name ASC)",
+                "CREATE INDEX IF NOT EXISTS Systems_EDSM_ID_Index ON Systems (id_edsm ASC)",
+                "CREATE INDEX IF NOT EXISTS Systems_EDDB_ID_Index ON Systems (id_eddb ASC)",
+                "CREATE INDEX IF NOT EXISTS IDX_Systems_versiondate ON Systems (versiondate ASC)",
+                "CREATE INDEX IF NOT EXISTS Systems_position ON Systems (X, Y, Z)",
+                "CREATE INDEX IF NOT EXISTS SystemGridId ON Systems (gridid)",
+                "CREATE INDEX IF NOT EXISTS SystemRandomId ON Systems (randomid)"
+            };
+            using (SQLiteConnectionED conn = new SQLiteConnectionED())
+            {
+                foreach (string query in queries)
+                {
+                    using (DbCommand cmd = conn.CreateCommand(query))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
         }
 
         private static DbProviderFactory GetSqliteProviderFactory()
@@ -757,6 +798,7 @@ namespace EDDiscovery.DB
 
             DbConnection cn = DbFactory.CreateConnection();
             cn.ConnectionString = constring;
+
             return cn;
         }
 

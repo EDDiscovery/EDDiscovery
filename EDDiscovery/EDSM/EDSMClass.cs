@@ -164,7 +164,7 @@ namespace EDDiscovery2.EDSM
                 return null;
         }
         
-        internal long GetNewSystems(EDDiscoveryForm discoveryform)
+        internal long GetNewSystems(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             string lstsyst;
 
@@ -194,7 +194,7 @@ namespace EDDiscovery2.EDSM
             if (json != null)       // bad download could cause this..
             {
                 string date = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-02 00:00:00"); // Latest time from RW file.
-                updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date, false, discoveryform);
+                updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date, false, discoveryform, cancelRequested, reportProgress);
                 SQLiteDBClass.PutSettingString("EDSMLastSystems", date);
             }
             else

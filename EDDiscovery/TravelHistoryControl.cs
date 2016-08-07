@@ -53,7 +53,9 @@ namespace EDDiscovery
 
         private int activecommander = 0;
         List<EDCommander> commanders = null;
-        
+
+        public event EventHandler HistoryRefreshed;
+
         public TravelHistoryControl()
         {
             InitializeComponent();
@@ -96,7 +98,6 @@ namespace EDDiscovery
             closestthread.Start();
         }
 
-
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
             visitedSystems = null;
@@ -104,10 +105,7 @@ namespace EDDiscovery
             {
                 TriggerEDSMRefresh();
                 LogText("Refresh History." + Environment.NewLine);
-                RefreshHistory();
-                LogText("Refresh Complete." + Environment.NewLine);
-
-                EliteDangerous.CheckED();
+                RefreshHistoryAsync();
             }
             catch (Exception ex)
             {
@@ -123,7 +121,7 @@ namespace EDDiscovery
         {
             LogText("Check for new EDSM systems." + Environment.NewLine);
             EDSMClass edsm = new EDSMClass();
-            edsm.GetNewSystems(_discoveryForm);
+            edsm.GetNewSystems(_discoveryForm, () => _discoveryForm.PendingClose, _discoveryForm.ReportProgress);
             LogText("EDSM System check complete." + Environment.NewLine);
         }
 
@@ -149,31 +147,90 @@ namespace EDDiscovery
             richTextBox_History.AppendText(text, color);
         }
 
-        public void RefreshHistory()
+        public void RefreshHistoryAsync()
         {
-
-
             if (visitedSystems == null || visitedSystems.Count == 0)
             {
                 if (activecommander >= 0)
                 {
-                    string errmsg;
-                    visitedSystems = netlog.ParseFiles(out errmsg, defaultMapColour);   // Parse files stop monitor..
-                    if (errmsg != null)
-                        LogTextHighlight(errmsg + Environment.NewLine);
-
-                    netlog.StartMonitor();          // so restart it..
+                    if (!_refreshWorker.IsBusy)
+                    {
+                        button_RefreshHistory.Enabled = false;
+                        _refreshWorker.RunWorkerAsync();
+                    }
                 }
                 else
                 {
-                    visitedSystems = VisitedSystemsClass.GetAll(activecommander);
-                    VisitedSystemsClass.UpdateSys(visitedSystems, EDDConfig.Instance.UseDistances);
+                    RefreshHistory(VisitedSystemsClass.GetAll(activecommander));
                 }
             }
+        }
+
+        public void CancelHistoryRefresh()
+        {
+            _refreshWorker.CancelAsync();
+        }
+
+        private void RefreshHistoryWorker(object sender, DoWorkEventArgs e)
+        {
+            var worker = (BackgroundWorker)sender;
+
+            string errmsg;
+            netlog.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+
+            var vsclist = netlog.ParseFiles(out errmsg, defaultMapColour, () => worker.CancellationPending, (p,s) => worker.ReportProgress(p,s));   // Parse files stop monitor..
+
+            if (worker.CancellationPending)
+            {
+                e.Cancel = true;
+                e.Result = null;
+                return;
+            }
+
+            if (errmsg != null)
+            {
+                throw new InvalidOperationException(errmsg);
+            }
+
+            e.Result = vsclist;
+        }
+
+        private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                LogTextHighlight("History Refresh Error: " + e.Error.Message + Environment.NewLine);
+            }
+            else if (e.Result != null)
+            {
+                RefreshHistory((List<VisitedSystemsClass>)e.Result);
+                if (HistoryRefreshed != null)
+                    HistoryRefreshed(this, EventArgs.Empty);
+                _discoveryForm.ReportProgress(-1, "");
+                LogText("Refresh Complete." + Environment.NewLine);
+            }
+            button_RefreshHistory.Enabled = true;
+
+            if (!e.Cancelled)
+            {
+                netlog.StartMonitor();
+            }
+        }
+
+        private void RefreshHistoryWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            string name = (string)e.UserState;
+            _discoveryForm.ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
+        }
+
+        private void RefreshHistory(List<VisitedSystemsClass> vsc)
+        {
+            visitedSystems = vsc;
 
             if (visitedSystems == null)
                 return;
 
+            VisitedSystemsClass.UpdateSys(visitedSystems, EDDConfig.Instance.UseDistances);
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
 
@@ -536,7 +593,7 @@ namespace EDDiscovery
                     EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
                 if (visitedSystems != null)
                     visitedSystems.Clear();
-                RefreshHistory();
+                RefreshHistoryAsync();
                 if (_discoveryForm.Map != null)
                     _discoveryForm.Map.UpdateVisited(visitedSystems);
             }
@@ -546,7 +603,7 @@ namespace EDDiscovery
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (visitedSystems != null)
-                RefreshHistory();
+                RefreshHistoryAsync();
 
             SQLiteDBClass.PutSettingInt("EDUIHistory", comboBoxHistoryWindow.SelectedIndex);
         }
@@ -771,7 +828,7 @@ namespace EDDiscovery
                 {
                     visitedSystems.Clear();
                 }
-                RefreshHistory();
+                RefreshHistoryAsync();
             });
         }
 
@@ -1469,7 +1526,7 @@ namespace EDDiscovery
                     rightclicksystem.id_edsm_assigned = form.AssignedEdsmId;
                     rightclicksystem.curSystem = form.AssignedSystem;
                     rightclicksystem.Update();
-                    RefreshHistory();
+                    RefreshHistoryAsync();
                 }
             }
         }
