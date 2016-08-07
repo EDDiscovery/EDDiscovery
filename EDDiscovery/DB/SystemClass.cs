@@ -1396,19 +1396,59 @@ namespace EDDiscovery.DB
             int insertcount = 0;
             Random rnd = new Random();
             int[] histogramsystems = new int[50000];
+            Stopwatch sw = Stopwatch.StartNew();
 
             while (!cancelRequested())
             {
                 using (DbTransaction txn = cn.BeginTransaction())
                 {
-                    using (DbCommand updatecmd = cn.CreateCommand("UPDATE Systems SET name=@name, x=@x, y=@y, z=@z, UpdateDate=@UpdateDate, gridid=@gridid, randomid=@randomid WHERE id_edsm=@id_edsm", txn))
+                    DbCommand updatecmd = null;
+                    DbCommand insertcmd = null;
+
+                    try
                     {
+                        updatecmd = cn.CreateCommand("UPDATE Systems SET name=@name, x=@x, y=@y, z=@z, UpdateDate=@UpdateDate, gridid=@gridid, randomid=@randomid WHERE id_edsm=@id_edsm", txn);
+                        updatecmd.AddParameter("@name", DbType.String);
+                        updatecmd.AddParameter("@x", DbType.Double);
+                        updatecmd.AddParameter("@y", DbType.Double);
+                        updatecmd.AddParameter("@z", DbType.Double);
+                        updatecmd.AddParameter("@UpdateDate", DbType.DateTime);
+                        updatecmd.AddParameter("@gridid", DbType.Int64);
+                        updatecmd.AddParameter("@randomid", DbType.Int64);
+                        updatecmd.AddParameter("@id_edsm", DbType.Int64);
+
+                        insertcmd = cn.CreateCommand(
+                            "INSERT INTO Systems " +
+                            "(name, x, y, z, CreateDate, UpdateDate, Status, versiondate, id_edsm, gridid, randomid, cr) VALUES " +
+                            "(@name, @x, @y, @z, @CreateDate, @UpdateDate, @Status, CURRENT_TIMESTAMP, @id_edsm, @gridid, @randomid, 0)",
+                            txn);
+                        insertcmd.AddParameter("@name", DbType.String);
+                        insertcmd.AddParameter("@x", DbType.Double);
+                        insertcmd.AddParameter("@y", DbType.Double);
+                        insertcmd.AddParameter("@z", DbType.Double);
+                        insertcmd.AddParameter("@CreateDate", DbType.DateTime);
+                        insertcmd.AddParameter("@UpdateDate", DbType.DateTime);
+                        insertcmd.AddParameter("@Status", DbType.Int64);
+                        insertcmd.AddParameter("@id_edsm", DbType.Int64);
+                        insertcmd.AddParameter("@gridid", DbType.Int64);
+                        insertcmd.AddParameter("@randomid", DbType.Int64);
+
                         while (!cancelRequested())
                         {
                             if (!jr.Read())
                             {
+                                reportProgress(-1, $"Syncing EDSM systems: {count} processed, {insertcount} new systems, {updatecount} updated systems");
                                 date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                                 txn.Commit();
+
+                                Console.WriteLine($"Import took {sw.ElapsedMilliseconds}ms");
+
+                                for (int id = 0; id < histogramsystems.Length; id++)
+                                {
+                                    if (histogramsystems[id] != 0)
+                                        Console.WriteLine("Id " + id + " count " + histogramsystems[id]);
+                                }
+
                                 return updatecount + insertcount;
                             }
 
@@ -1439,30 +1479,36 @@ namespace EDDiscovery.DB
                                         // see if EDSM data changed..
                                         if (!dbsys.name.Equals(name) || Math.Abs(dbsys.x - x) > 0.01 || Math.Abs(dbsys.y - y) > 0.01 || Math.Abs(dbsys.z - z) > 0.01)  // name or position changed
                                         {
-                                            updatecmd.Parameters.Clear();
-                                            updatecmd.AddParameterWithValue("@name", name);
-                                            updatecmd.AddParameterWithValue("@x", x);
-                                            updatecmd.AddParameterWithValue("@y", y);
-                                            updatecmd.AddParameterWithValue("@z", z);
-                                            updatecmd.AddParameterWithValue("@Updatedate", updatedate);
-                                            updatecmd.AddParameterWithValue("@gridid", gridid);
-                                            updatecmd.AddParameterWithValue("@randomid", randomid);
-                                            updatecmd.AddParameterWithValue("@id_edsm", edsmid);
+                                            updatecmd.Parameters["@name"].Value = name;
+                                            updatecmd.Parameters["@x"].Value = x;
+                                            updatecmd.Parameters["@y"].Value = y;
+                                            updatecmd.Parameters["@z"].Value = z;
+                                            updatecmd.Parameters["@UpdateDate"].Value = updatedate;
+                                            updatecmd.Parameters["@gridid"].Value = gridid;
+                                            updatecmd.Parameters["@randomid"].Value = randomid;
+                                            updatecmd.Parameters["@id_edsm"].Value = edsmid;
                                             updatecmd.ExecuteNonQuery();
                                             updatecount++;
                                         }
                                     }
                                     else                                                                  // not in database..
                                     {
-                                        SystemClass sys = new SystemClass(jo, SystemInfoSource.EDSM);
-                                        sys.gridid = gridid;
-                                        sys.randomid = randomid;
-                                        sys.Store(cn, txn);
+                                        insertcmd.Parameters["@name"].Value = name;
+                                        insertcmd.Parameters["@x"].Value = x;
+                                        insertcmd.Parameters["@y"].Value = y;
+                                        insertcmd.Parameters["@z"].Value = z;
+                                        insertcmd.Parameters["@CreateDate"].Value = updatedate;
+                                        insertcmd.Parameters["@UpdateDate"].Value = updatedate;
+                                        insertcmd.Parameters["@Status"].Value = (int)SystemStatusEnum.EDSC;
+                                        insertcmd.Parameters["@id_edsm"].Value = edsmid;
+                                        insertcmd.Parameters["@gridid"].Value = gridid;
+                                        insertcmd.Parameters["@randomid"].Value = randomid;
+                                        insertcmd.ExecuteNonQuery();
                                         insertcount++;
                                     }
                                 }
 
-                                if ((++count) % 1000 == 0)
+                                if ((++count) % 10000 == 0)
                                 {
                                     reportProgress(-1, $"Syncing EDSM systems: {count} processed, {insertcount} new systems, {updatecount} updated systems");
                                     txn.Commit();
@@ -1471,13 +1517,12 @@ namespace EDDiscovery.DB
                             }
                         }
                     }
+                    finally
+                    {
+                        if (updatecmd != null) updatecmd.Dispose();
+                        if (insertcmd != null) insertcmd.Dispose();
+                    }
                 }
-            }
-
-            for (int id = 0; id < histogramsystems.Length; id++)
-            {
-                if (histogramsystems[id] != 0)
-                    Console.WriteLine("Id " + id + " count " + histogramsystems[id]);
             }
 
             return updatecount + insertcount;
