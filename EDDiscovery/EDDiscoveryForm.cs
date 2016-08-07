@@ -135,7 +135,7 @@ namespace EDDiscovery
                 // Log trace events to the above file
                 System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(logname));
                 // Log first-chance exceptions to help diagnose errors
-                AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
+                Register_FirstChanceException_Handler();
                 // Log unhandled exceptions
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 // Log unhandled UI exceptions
@@ -203,6 +203,23 @@ namespace EDDiscovery
             }
 
             Environment.Exit(1);
+        }
+
+        // Mono does not implement AppDomain.CurrentDomain.FirstChanceException
+        private static void Register_FirstChanceException_Handler()
+        {
+            try
+            {
+                Type adtype = AppDomain.CurrentDomain.GetType();
+                EventInfo fcexevent = adtype.GetEvent("FirstChanceException");
+                if (fcexevent != null)
+                {
+                    fcexevent.AddEventHandler(AppDomain.CurrentDomain, new EventHandler<System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs>(CurrentDomain_FirstChanceException));
+                }
+            }
+            catch
+            {
+            }
         }
 
         // Log exceptions were they occur so we can try to  some
