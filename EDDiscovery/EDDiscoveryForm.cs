@@ -784,14 +784,21 @@ namespace EDDiscovery
             syncwasfirstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
             bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
 
-            if (performedsmsync && !cancelRequested())
+            if (performedsmsync || performeddbsync)
             {
-                performhistoryrefresh |= PerformEDSMFullSync(this, cancelRequested, reportProgress);
-            }
+                SQLiteDBClass.DropSystemsTableIndexes();
+                if (performedsmsync && !cancelRequested())
+                {
+                    performhistoryrefresh |= PerformEDSMFullSync(this, cancelRequested, reportProgress);
+                }
 
-            if (performeddbsync && !cancelRequested())
-            {
-                PerformEDDBFullSync(cancelRequested, reportProgress);
+                LogLine("Indexing systems table");
+                SQLiteDBClass.CreateSystemsTableIndexes();
+
+                if (performeddbsync && !cancelRequested())
+                {
+                    PerformEDDBFullSync(cancelRequested, reportProgress);
+                }
             }
 
             if (EDDConfig.UseDistances && !cancelRequested())
