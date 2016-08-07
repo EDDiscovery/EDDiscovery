@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -21,6 +22,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Configuration;
 using EDDiscovery.EDSM;
+using System.Threading.Tasks;
 using System.Text;
 
 namespace EDDiscovery
@@ -76,6 +78,13 @@ namespace EDDiscovery
 
         public GalacticMapping galacticMapping;
 
+        public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
+
+        private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
+        private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
+
+        Action cancelDownloadMaps = null;
+        Task<bool> downloadMapsTask = null;
         private string logname;
         private bool logsetupfailed;
 
@@ -271,13 +280,10 @@ namespace EDDiscovery
             }
         }
 
-        Thread checkSystemsThread;          // globals so we know if they are active..
-        Thread fullSyncThread;              // full sync is launched by check systems as it ends..
-
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            checkSystemsThread = new Thread(CheckSystems) { Name = "Check Systems", IsBackground = true };
-            checkSystemsThread.Start();
+            _checkSystemsWorker.RunWorkerAsync();
+            downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
         }
 
         private void CheckForNewInstaller()
@@ -383,7 +389,7 @@ namespace EDDiscovery
             theme.ApplyColors(this);
 
             if (refreshhistory)
-                travelHistoryControl1.RefreshHistory();             // so we repaint this with correct colours.
+                travelHistoryControl1.RefreshHistoryAsync();             // so we repaint this with correct colours.
 
             TravelControl.RedrawSummary();
         }
@@ -392,12 +398,14 @@ namespace EDDiscovery
 
         #region Information Downloads
 
-        public void DownloadMaps()          // ASYNC process
+        public Task<bool> DownloadMaps(Action<Action> registerCancelCallback)          // ASYNC process
         {
             if (CanSkipSlowUpdates())
             {
                 LogLine("Skipping checking for new maps (DEBUG option).");
-                return;
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetResult(false);
+                return tcs.Task;
             }
 
             try
@@ -407,6 +415,39 @@ namespace EDDiscovery
 
                 LogLine("Checking for new EDDiscovery maps");
 
+                DeleteMapFile("DW4.png");
+                DeleteMapFile("SC-00.jpg");
+                return DownloadMapFiles(new[]
+                {
+                    "SC-01.jpg",
+                    "SC-02.jpg",
+                    "SC-03.jpg",
+                    "SC-04.jpg",
+                    "SC-L4.jpg",
+                    "SC-U4.jpg",
+                    "SC-00.png",
+                    "SC-00.json",
+                    "Galaxy_L.jpg",
+                    "Galaxy_L.json",
+                    "Galaxy_L_Grid.jpg",
+                    "Galaxy_L_Grid.json",
+                    "DW1.jpg",
+                    "DW1.json",
+                    "DW2.jpg",
+                    "DW2.json",
+                    "DW3.jpg",
+                    "DW3.json",
+                    "DW4.jpg",
+                    "DW4.json",
+                    "Formidine.png",
+                    "Formidine.json",
+                    "Formidine trans.png",
+                    "Formidine trans.json"
+                }, 
+                (s) => LogLine("Map check complete."),
+                registerCancelCallback);
+
+                /*
                 if (DownloadMapFile("SC-01.jpg"))  // If server down only try one.
                 {
                     DownloadMapFile("SC-02.jpg");
@@ -439,16 +480,43 @@ namespace EDDiscovery
                     DownloadMapFile("Formidine trans.png");
                     DownloadMapFile("Formidine trans.json");
                     
-                    DeleteMapFile("DW4.png");
-                    DeleteMapFile("SC-00.jpg");
                 }
-
-                LogLine("Map check complete.");
+                */
             }
             catch (Exception ex)
             {
                 MessageBox.Show("DownloadImages exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetException(ex);
+                return tcs.Task;
             }
+        }
+
+        private Task<bool> DownloadMapFiles(string[] files, Action<bool> callback, Action<Action> registerCancelCallback)
+        {
+            List<Task<bool>> tasks = new List<Task<bool>>();
+            List<Action> cancelCallbacks = new List<Action>();
+
+            foreach (string file in files)
+            {
+                var task = EDDBClass.BeginDownloadFile(
+                    "http://eddiscovery.astronet.se/Maps/" + file,
+                    Path.Combine(Tools.GetAppDataDirectory(), "Maps", file),
+                    (n) =>
+                    {
+                        if (n) LogLine("Downloaded map: " + file);
+                    }, cb => cancelCallbacks.Add(cb));
+                tasks.Add(task);
+            }
+
+            registerCancelCallback(() => { foreach (var cb in cancelCallbacks) cb(); });
+
+            return Task<bool>.Factory.ContinueWhenAll<bool>(tasks.ToArray(), (ta) =>
+            {
+                bool success = ta.All(t => t.IsCompleted && t.Result);
+                callback(success);
+                return success;
+            });
         }
 
         private bool DownloadMapFile(string file)
@@ -482,42 +550,43 @@ namespace EDDiscovery
         bool performedsmsync = false;
         bool performeddbsync = false;
         bool performedsmdistsync = false;
+        bool performhistoryrefresh = false;
+        bool syncwasfirstrun = false;
+        bool syncwaseddboredsm = false;
 
-        private void CheckSystems()  // ASYNC process, done via start up, must not be too slow.
+        private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
-            try
+            reportProgress(-1, "");
+            CommanderName = EDDConfig.CurrentCommander.Name;
+
+            EDSMClass edsm = new EDSMClass();
+            string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+            DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
+
+            if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
             {
-                CommanderName = EDDConfig.CurrentCommander.Name;
+                performedsmsync = true;
 
-                Thread downloadMapsThread;
-                downloadMapsThread = new Thread(DownloadMaps) { Name = "Downloading map Files", IsBackground = true };
-                downloadMapsThread.Start();
-
-                EDSMClass edsm = new EDSMClass();
-                string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-                DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
-
-                if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
+                // Also update galactic mapping from EDSM (MOVED here for now since we don't use this yet..)
+                LogLine("Get galactic mapping from EDSM.");
+                galacticMapping.DownloadFromEDSM();
+            }
+            else
+            {
+                if (CanSkipSlowUpdates())
                 {
-                    performedsmsync = true;
-
-                    // Also update galactic mapping from EDSM (MOVED here for now since we don't use this yet..)
-                    LogLine("Get galactic mapping from EDSM.");
-                    galacticMapping.DownloadFromEDSM();
+                    LogLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
                 }
                 else
                 {
-                    if (CanSkipSlowUpdates())
-                    {
-                        LogLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
-                    }
-                    else
-                    {
-                        LogLine("Checking for new EDSM systems (may take a few moments).");
-                        long updates = edsm.GetNewSystems(this);
-                        LogLine("EDSM updated " + updates + " systems.");
-                    }
+                    LogLine("Checking for new EDSM systems (may take a few moments).");
+                    long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
+                    LogLine("EDSM updated " + updates + " systems.");
                 }
+            }
+
+            if (!cancelRequested())
+            {
 
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();
@@ -534,248 +603,328 @@ namespace EDDiscovery
                 DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
                 if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
                     performedsmdistsync = true;
+            }
+        }
 
-                downloadMapsThread.Join();
+        private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            ReportProgress(-1, "");
+            if (e.Error != null)
+            {
+                System.Windows.Forms.MessageBox.Show("Check Systems exception: " + e.Error.Message);
+                System.Windows.Forms.MessageBox.Show("Trace: " + e.Error.StackTrace);
+            }
+            else if (!e.Cancelled && !PendingClose)
+            {
+                SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
 
-                if (!PendingClose)
+                Console.WriteLine("Systems Loaded");
+
+                routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
+                routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
+                travelHistoryControl1.textBoxTarget.AutoCompleteCustomSource = SystemNames;
+                settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
+
+                imageHandler1.StartWatcher();
+                routeControl1.EnableRouteTab(); // now we have systems, we can update this..
+
+                routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+                travelHistoryControl1.netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(travelHistoryControl1.NewPosition);
+                travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
+
+                panelInfo.Visible = false;
+
+                CheckForNewInstaller();
+
+                if (performedsmsync || performeddbsync || EDDConfig.UseDistances)
                 {
-                    SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
+                    AsyncPerformSync();                              // perform any async synchronisations
 
-                    Console.WriteLine("Systems Loaded");
-
-                    Invoke((MethodInvoker)delegate
+                    if (performeddbsync || performedsmsync)
                     {
-                        routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
-                        routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
-                        travelHistoryControl1.textBoxTarget.AutoCompleteCustomSource = SystemNames;
-                        settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
+                        string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
 
-                        imageHandler1.StartWatcher();
-                        routeControl1.EnableRouteTab(); // now we have systems, we can update this..
-
-                        routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                        travelHistoryControl1.netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(travelHistoryControl1.NewPosition);
-                        travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
-
-                        //long tickc = Environment.TickCount;
-                        LogLine("Reading travel history");
-                        travelHistoryControl1.RefreshHistory();
-                        //LogLine("Time " + (Environment.TickCount-tickc) );
-
-                        panelInfo.Visible = false;
-
-                        CheckForNewInstaller();
-                    });
-
-                    if (!PendingClose)
-                    {
-                        long totalsystems = SystemClass.GetTotalSystems();
-                        LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
-
-                        AsyncPerformSync();                              // perform any async synchronisations
-
-                        if (performeddbsync || performedsmsync)
-                        {
-                            string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
-
-                            MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
-                                            "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
-                                            "Please continue running ED Discovery until refresh is complete.",
-                                            "WARNING - Synchronisation to " + databases);
-                        }
+                        MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
+                                        "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
+                                        "Please continue running ED Discovery until refresh is complete.",
+                                        "WARNING - Synchronisation to " + databases);
                     }
                 }
+                else
+                {
+                    long totalsystems = SystemClass.GetTotalSystems();
+                    LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+
+                    //long tickc = Environment.TickCount;
+                    LogLine("Reading travel history");
+                    travelHistoryControl1.RefreshHistoryAsync();
+                    //LogLine("Time " + (Environment.TickCount-tickc) );
+                }
             }
-            catch (Exception ex)
+        }
+
+        private void _checkSystemsWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
             {
-                System.Windows.Forms.MessageBox.Show("Check Systems exception: " + ex.Message);
-                System.Windows.Forms.MessageBox.Show("Trace: " + ex.StackTrace);
+                var worker = (System.ComponentModel.BackgroundWorker)sender;
+
+                CheckSystems(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
+
+                if (worker.CancellationPending)
+                    e.Cancel = true;
             }
+            finally
+            {
+                _checkSystemsWorkerCompletedEvent.Set();
+            }
+        }
+
+        private void _checkSystemsWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            ReportProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
         private void AsyncPerformSync()
         {
-            fullSyncThread = new Thread(PerformSync) { Name = "Downloading EDSM system", IsBackground = true };
-            fullSyncThread.Start();
+            if (!_syncWorker.IsBusy)
+            {
+                _syncWorker.RunWorkerAsync();
+            }
         }
 
-        private void PerformSync()           // big check.. done in a thread.
+        private void _syncWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            bool refreshhistory = false;
-            bool firstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
-            bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
-
-            if (performedsmsync )
+            try
             {
-                string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-                DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
+                var worker = (System.ComponentModel.BackgroundWorker)sender;
 
-                try
+                PerformFullSync(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
+                if (worker.CancellationPending)
+                    e.Cancel = true;
+            }
+            finally
+            {
+                _syncWorkerCompletedEvent.Set();
+            }
+        }
+
+        private void _syncWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            ReportProgress(e.ProgressPercentage, (string)e.UserState);
+        }
+
+        private bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        {
+            string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+            DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
+            long updates = 0;
+
+            try
+            {
+                EDSMClass edsm = new EDSMClass();
+
+                LogLine("Get hidden systems from EDSM and remove from database");
+
+                SystemClass.RemoveHiddenSystems();
+
+                if (cancelRequested())
+                    return false;
+
+                LogLine("Download systems file from EDSM.");
+
+                string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
+
+                LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
+                bool newfile;
+                bool success = EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
                 {
-                    EDSMClass edsm = new EDSMClass();
+                    string rwsysfiletime = "2014-01-01 00:00:00";
+                    using (var reader = new StreamReader(s))
+                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, true, discoveryform, cancelRequested, reportProgress);
+                    if (!cancelRequested())       // abort, without saving time, to make it do it again
+                        SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
 
-                    LogLine("Get hidden systems from EDSM and remove from database");
+                });
 
-                    SystemClass.RemoveHiddenSystems();
+                if (!success)
+                {
+                    LogLine("Failed to download EDSM system file from server, will check next time");
+                    return false;
+                }
 
-                    if (PendingClose)
+                LogLine("Now checking for recent EDSM systems.");
+                updates += edsm.GetNewSystems(this, cancelRequested, reportProgress);
+
+                LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
+
+                performedsmsync = false;
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("GetAllEDSMSystems exception:" + ex.Message);
+            }
+
+            return (updates > 0);
+        }
+
+        private void PerformEDDBFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
+        {
+            try
+            {
+                EDDBClass eddb = new EDDBClass();
+
+                LogLine("Get systems from EDDB.");
+
+                if (eddb.GetSystems())
+                {
+                    if (cancelRequested())
                         return;
 
-                    LogLine("Download systems file from EDSM.");
+                    LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
 
-                    bool newfile = false;
-                    string edsmsystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmsystems.json");
+                    long number = SystemClass.ParseEDDBUpdateSystems(eddb.SystemFileName);
 
-                    long updates = 0;
-
-                    if ( EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile) )
-                    {
-                        if (PendingClose)
-                            return;
-
-                        LogLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
-
-                        string rwsysfiletime = "2014-01-01 00:00:00";
-                        updates = SystemClass.ParseEDSMUpdateSystemsFile(edsmsystems, ref rwsysfiletime, true, this);
-
-                        if (PendingClose)       // abort, without saving time, to make it do it again
-                            return;
-
-                        SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                    }
-                    else
-                    {
-                        LogLine("Failed to download EDSM system file from server, will check next time");
-                    }
-
-                    LogLine("Now checking for recent EDSM systems.");
-                    updates += edsm.GetNewSystems(this);
-
-                    LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
-
-                    if (updates > 0)
-                        refreshhistory = true;
-
-                    performedsmsync = false;
-                    GC.Collect();
+                    LogLine("Local database updated with EDDB data, " + number + " systems updated");
+                    SQLiteDBClass.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
                 }
-                catch (Exception ex)
+                else
+                    LogLineHighlight("Failed to download EDDB Systems. Will try again next run.");
+
+                GC.Collect();
+                performeddbsync = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("GetEDDBUpdate exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
+            }
+        }
+
+        private bool PerformDistanceFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)
+        {
+            long numbertotal = 0;
+
+            try
+            {
+                string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                EDSMClass edsm = new EDSMClass();
+
+                if (performedsmdistsync)
                 {
-                    MessageBox.Show("GetAllEDSMSystems exception:" + ex.Message);
+                    LogLine("Downloading full EDSM distance data.");
+                    string filename = edsm.GetEDSMDistances();
+
+                    if (cancelRequested())
+                        return false;
+
+                    if (filename != null)
+                    {
+                        LogLine("Updating all distances with EDSM distance data.");
+                        long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist, true);
+                        numbertotal += numberx;
+                        SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
+                        LogLine("Local database updated with EDSM Distance data, " + numberx + " distances updated.");
+                    }
                 }
+
+                if (cancelRequested())
+                    return false;
+
+                LogLine("Updating distances with latest EDSM data.");
+
+                string json = edsm.RequestDistances(lstdist);
+                if (json == null)
+                    LogLine("No response from EDSM Distance server.");
+                else
+                {
+                    long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false);
+                    numbertotal += number;
+                }
+
+                LogLine("Local database updated with EDSM Distance data, " + numbertotal + " distances updated.");
+                SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
+
+                performedsmdistsync = false;
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("GetEDSMDistances exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
             }
 
-            if ( performeddbsync )
+            return (numbertotal != 0);
+        }
+
+        private void PerformFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
+        {
+            reportProgress(-1, "");
+            syncwasfirstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
+            bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
+
+            if (performedsmsync || performeddbsync)
             {
-                try
+                if (performedsmsync && !cancelRequested())
                 {
-                    EDDBClass eddb = new EDDBClass();
+                    // Drop indexes on Systems table
+                    SQLiteDBClass.DropSystemsTableIndexes();
 
-                    LogLine("Get systems from EDDB.");
-
-                    if (eddb.GetSystems())
+                    // Delete all old systems
+                    SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
+                    SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
+                    using (SQLiteConnectionED cn = new SQLiteConnectionED())
                     {
-                        if (PendingClose)
-                            return;
-
-                        LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
-
-                        long number = SystemClass.ParseEDDBUpdateSystems(eddb.SystemFileName);
-
-                        LogLine("Local database updated with EDDB data, " + number + " systems updated");
-                        SQLiteDBClass.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
-                    }
-                    else
-                        LogLineHighlight("Failed to download EDDB Systems. Will try again next run.");
-
-                    GC.Collect();
-                    performeddbsync = false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("GetEDDBUpdate exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
-                }
-            }
-
-            if (EDDConfig.UseDistances)
-            {
-                try
-                {
-                    long numbertotal = 0;
-                    string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
-                    EDSMClass edsm = new EDSMClass();
-
-                    if (performedsmdistsync)
-                    {
-                        LogLine("Downloading full EDSM distance data.");
-                        string filename = edsm.GetEDSMDistances();
-
-                        if (PendingClose)
-                            return;
-
-                        if (filename != null)
+                        using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems"))
                         {
-                            LogLine("Updating all distances with EDSM distance data.");
-                            long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist, true);
-                            numbertotal += numberx;
-                            SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
-                            LogLine("Local database updated with EDSM Distance data, " + numberx + " distances updated.");
+                            cmd.ExecuteNonQuery();
                         }
                     }
 
-                    if (PendingClose)
-                        return;
+                    // Download new systems
+                    performhistoryrefresh |= PerformEDSMFullSync(this, cancelRequested, reportProgress);
 
-                    LogLine("Updating distances with latest EDSM data.");
-
-                    string json = edsm.RequestDistances(lstdist);
-                    if (json == null)
-                        LogLine("No response from EDSM Distance server.");
-                    else
-                    {
-                        long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false);
-                        numbertotal += number;
-                    }
-
-                    LogLine("Local database updated with EDSM Distance data, " + numbertotal + " distances updated.");
-                    SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
-
-                    if (numbertotal > 0)                          // if we've done something
-                        refreshhistory = true;
-
-                    performedsmdistsync = false;
-                    GC.Collect();
+                    LogLine("Indexing systems table");
+                    SQLiteDBClass.CreateSystemsTableIndexes();
                 }
-                catch (Exception ex)
+
+                if (!cancelRequested())
                 {
-                    MessageBox.Show("GetEDSMDistances exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
+                    PerformEDDBFullSync(cancelRequested, reportProgress);
                 }
+            }
+
+            if (EDDConfig.UseDistances && !cancelRequested())
+            {
+                performhistoryrefresh |= PerformDistanceFullSync(cancelRequested, reportProgress);
             }
             else
                 performedsmdistsync = false;
 
-            if ( refreshhistory )
+            syncwaseddboredsm = edsmoreddbsync;
+            reportProgress(-1, "");
+        }
+
+        private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            long totalsystems = SystemClass.GetTotalSystems();
+            LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+
+            travelHistoryControl1.HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
+            travelHistoryControl1.RefreshHistoryAsync();
+        }
+
+        private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)
+        {
+            ReportProgress(-1, "");
+            travelHistoryControl1.HistoryRefreshed -= TravelHistoryControl1_HistoryRefreshed;
+            LogLine("Refreshing complete.");
+            if (syncwasfirstrun)
             {
-                try
-                {
-                    Invoke((MethodInvoker)delegate
-                    {
-                        LogLine("Refreshing history due changes in distances or star data.");
-                        travelHistoryControl1.RefreshHistory();
-                        LogLine("Refreshing complete.");
-
-                        if (firstrun)
-                        {
-                            MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
-                                            "Restart ED Discovery");
-                        }
-                        else if (edsmoreddbsync)
-                            MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
-
-                    });
-                }
-                catch { }
+                MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
+                                "Restart ED Discovery");
             }
+            else if (syncwaseddboredsm)
+                MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
         }
 
         internal void AsyncRefreshHistory()
@@ -827,6 +976,24 @@ namespace EDDiscovery
             }
             catch
             {
+            }
+        }
+
+        public void ReportProgress(int percentComplete, string message)
+        {
+            if (!PendingClose)
+            {
+                if (percentComplete >= 0)
+                {
+                    this.toolStripProgressBar1.Visible = true;
+                    this.toolStripProgressBar1.Value = percentComplete;
+                }
+                else
+                {
+                    this.toolStripProgressBar1.Visible = false;
+                }
+
+                this.toolStripStatusLabel1.Text = message;
             }
         }
 
@@ -887,6 +1054,14 @@ namespace EDDiscovery
             if (safeClose == null)                  // so a close is a request now, and it launches a thread which cleans up the system..
             {
                 e.Cancel = true;
+                CancellationTokenSource.Cancel();
+                travelHistoryControl1.CancelHistoryRefresh();
+                _syncWorker.CancelAsync();
+                _checkSystemsWorker.CancelAsync();
+                if (cancelDownloadMaps != null)
+                {
+                    cancelDownloadMaps();
+                }
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
                 LogLineHighlight("Closing down, please wait..");
@@ -908,12 +1083,12 @@ namespace EDDiscovery
         {
             Thread.Sleep(1000);
             Console.WriteLine("Waiting for check systems to close");
-            if (checkSystemsThread != null && checkSystemsThread.IsAlive)
-                checkSystemsThread.Join();         // wait..
+            if (_checkSystemsWorker.IsBusy)
+                _checkSystemsWorkerCompletedEvent.WaitOne();
 
             Console.WriteLine("Waiting for full sync to close");
-            if (fullSyncThread != null && fullSyncThread.IsAlive)
-                fullSyncThread.Join();
+            if (_syncWorker.IsBusy)
+                _syncWorkerCompletedEvent.WaitOne();
 
             Console.WriteLine("Stopping discrete threads");
             travelHistoryControl1.netlog.StopMonitor();
@@ -1032,7 +1207,7 @@ namespace EDDiscovery
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (fullSyncThread != null && !fullSyncThread.IsAlive)      // we want it to have run, to completion, to allow another go..
+            if (!_syncWorker.IsBusy)      // we want it to have run, to completion, to allow another go..
             {
                 performeddbsync = true;
                 AsyncPerformSync();
@@ -1043,7 +1218,7 @@ namespace EDDiscovery
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (fullSyncThread != null && !fullSyncThread.IsAlive)      // we want it to have run, to completion, to allow another go..
+            if (!_syncWorker.IsBusy)      // we want it to have run, to completion, to allow another go..
             {
                 performedsmsync = true;
                 AsyncPerformSync();
@@ -1056,7 +1231,7 @@ namespace EDDiscovery
         {
             if (!EDDConfig.UseDistances)
                 MessageBox.Show("EDSM Distances are turned off, please turn on first in settings");
-            else if (fullSyncThread != null && !fullSyncThread.IsAlive)      // we want it to have run, to completion, to allow another go..
+            else if (!_syncWorker.IsBusy)      // we want it to have run, to completion, to allow another go..
             {
                 performedsmdistsync = true;
                 AsyncPerformSync();
@@ -1256,8 +1431,6 @@ namespace EDDiscovery
                 }
             }
         }
-
 #endregion
-
     }
 }
