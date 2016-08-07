@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -786,16 +787,30 @@ namespace EDDiscovery
 
             if (performedsmsync || performeddbsync)
             {
-                SQLiteDBClass.DropSystemsTableIndexes();
                 if (performedsmsync && !cancelRequested())
                 {
+                    // Drop indexes on Systems table
+                    SQLiteDBClass.DropSystemsTableIndexes();
+
+                    // Delete all old systems
+                    SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
+                    SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
+                    using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                    {
+                        using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems"))
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Download new systems
                     performhistoryrefresh |= PerformEDSMFullSync(this, cancelRequested, reportProgress);
+
+                    LogLine("Indexing systems table");
+                    SQLiteDBClass.CreateSystemsTableIndexes();
                 }
 
-                LogLine("Indexing systems table");
-                SQLiteDBClass.CreateSystemsTableIndexes();
-
-                if (performeddbsync && !cancelRequested())
+                if (!cancelRequested())
                 {
                     PerformEDDBFullSync(cancelRequested, reportProgress);
                 }
