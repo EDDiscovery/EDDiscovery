@@ -23,6 +23,7 @@ using System.Runtime.InteropServices;
 using System.Configuration;
 using EDDiscovery.EDSM;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace EDDiscovery
 {
@@ -84,6 +85,8 @@ namespace EDDiscovery
 
         Action cancelDownloadMaps = null;
         Task<bool> downloadMapsTask = null;
+        private string logname;
+        private bool logsetupfailed;
 
         private bool CanSkipSlowUpdates()
         {
@@ -97,6 +100,15 @@ namespace EDDiscovery
         #endregion
 
         #region Initialisation
+
+        private class TraceLogWriter : TextWriter
+        {
+            public override Encoding Encoding { get { return Encoding.UTF8; } }
+            public override IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
+            public override void Write(string value) { Trace.Write(value); }
+            public override void WriteLine(string value) { Trace.WriteLine(value); }
+            public override void WriteLine() { Trace.WriteLine(""); }
+        }
 
         public EDDiscoveryForm()
         {
@@ -117,11 +129,27 @@ namespace EDDiscovery
                     Directory.CreateDirectory(logpath);
                 }
 
+                logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
+
+                System.Diagnostics.Trace.AutoFlush = true;
+                // Log trace events to the above file
+                System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(logname));
+                // Log first-chance exceptions to help diagnose errors
+                AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
+                // Log unhandled exceptions
+                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                // Log unhandled UI exceptions
+                Application.ThreadException += Application_ThreadException;
+                // Always direct unhandled exceptions to the above handler
+                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+                // Redirect console to trace
+                Console.SetOut(new TraceLogWriter());
             }
             catch (Exception ex)
             {
                 Trace.WriteLine($"Unable to create the folder '{logpath}'");
                 Trace.WriteLine($"Exception: {ex.Message}");
+                logsetupfailed = true;
             }
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
@@ -141,6 +169,61 @@ namespace EDDiscovery
             this.TopMost = EDDConfig.KeepOnTop;
 
             ApplyTheme(false);
+        }
+
+        // We can't prevent an unhandled exception from killing the application.
+        // See https://blog.codinghorror.com/improved-unhandled-exception-behavior-in-net-20/
+        // Log the exception info if we can, and ask the user to report it.
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Trace.WriteLine($"\n==== UNHANDLED EXCEPTION ====\n{e.ExceptionObject.ToString()}\n==== cut ====");
+                MessageBox.Show($"There was an unhandled exception.\nPlease report this at https://github.com/EDDiscovery/EDDiscovery/issues and attach {logname}\nException: {e.ExceptionObject.ToString()}\n\nThis application must now close", "Unhandled Exception");
+            }
+            catch
+            {
+            }
+
+            Environment.Exit(1);
+        }
+
+        // Handling a ThreadException leaves the application in an undefined state.
+        // See https://msdn.microsoft.com/en-us/library/system.windows.forms.application.threadexception(v=vs.100).aspx
+        // Log the exception, ask the user to report it, and exit.
+        private void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Trace.WriteLine($"\n==== UNHANDLED EXCEPTION ON {Thread.CurrentThread.Name} THREAD ====\n{e.Exception.ToString()}\n==== cut ====");
+                MessageBox.Show($"There was an unhandled exception.\nPlease report this at https://github.com/EDDiscovery/EDDiscovery/issues and attach {logname}\nException: {e.Exception.Message}\n{e.Exception.StackTrace}\n\nThis application must now close", "Unhandled Exception");
+            }
+            catch
+            {
+            }
+
+            Environment.Exit(1);
+        }
+
+        // Log exceptions were they occur so we can try to  some
+        // hard to debug issues.
+        private static void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+        {
+            // Ignore HTTP NotModified exceptions
+            if (e.Exception is System.Net.WebException)
+            {
+                var webex = (WebException)e.Exception;
+                if (webex.Response != null && webex.Response is HttpWebResponse)
+                {
+                    var resp = (HttpWebResponse)webex.Response;
+                    if (resp.StatusCode == HttpStatusCode.NotModified)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.ToString()}");
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
