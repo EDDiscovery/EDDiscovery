@@ -27,6 +27,8 @@ namespace EDDiscovery2._3DMap.Tests
     partial class TestInitializeAttribute : Attribute { }
 #endif
 
+// Disable this test for the moment
+#if false
     [TestFixture]
     [TestClass()]
     public class DatasetBuilderTests
@@ -188,4 +190,5 @@ namespace EDDiscovery2._3DMap.Tests
             Assert.AreEqual("Center", datasets[1].Name);
         }
     }
+#endif
 }
