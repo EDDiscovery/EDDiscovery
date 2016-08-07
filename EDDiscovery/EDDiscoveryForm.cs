@@ -644,10 +644,12 @@ namespace EDDiscovery
                     {
                         string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
 
+                        /*
                         MessageBox.Show("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine + Environment.NewLine +
                                         "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + Environment.NewLine +
                                         "Please continue running ED Discovery until refresh is complete.",
                                         "WARNING - Synchronisation to " + databases);
+                         */
                     }
                 }
                 else
@@ -918,6 +920,7 @@ namespace EDDiscovery
             ReportProgress(-1, "");
             travelHistoryControl1.HistoryRefreshed -= TravelHistoryControl1_HistoryRefreshed;
             LogLine("Refreshing complete.");
+            /*
             if (syncwasfirstrun)
             {
                 MessageBox.Show("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation " + Environment.NewLine,
@@ -925,6 +928,7 @@ namespace EDDiscovery
             }
             else if (syncwaseddboredsm)
                 MessageBox.Show("ESDM and/or EDDB update complete.", "Completed update");
+             */
         }
 
         internal void AsyncRefreshHistory()
