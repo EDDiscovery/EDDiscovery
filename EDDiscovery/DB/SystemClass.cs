@@ -1351,7 +1351,7 @@ namespace EDDiscovery.DB
         {
             Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = new Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase>();
 
-            using (DbCommand cmd = cn.CreateCommand("SELECT id, id_edsm, name, x, y, z, UpdateDate FROM Systems WHERE id_edsm IS NOT NULL"))
+            using (DbCommand cmd = cn.CreateCommand("SELECT id, id_edsm, name, x, y, z, UpdateDate, gridid, randomid FROM Systems WHERE id_edsm IS NOT NULL"))
             {
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
@@ -1380,6 +1380,8 @@ namespace EDDiscovery.DB
 
                         sys.id_edsm = (long)reader["id_edsm"];
                         systemsByEdsmId[sys.id_edsm] = sys;
+                        sys.gridid = reader["gridid"] == DBNull.Value ? 0 : (int)((long)reader["gridid"]);
+                        sys.randomid = reader["randomid"] == DBNull.Value ? 0 : (int)((long)reader["randomid"]);
                     }
                 }
             }
@@ -1477,7 +1479,11 @@ namespace EDDiscovery.DB
                                     {
                                         var dbsys = systemsByEdsmId[edsmid];
                                         // see if EDSM data changed..
-                                        if (!dbsys.name.Equals(name) || Math.Abs(dbsys.x - x) > 0.01 || Math.Abs(dbsys.y - y) > 0.01 || Math.Abs(dbsys.z - z) > 0.01)  // name or position changed
+                                        if (!dbsys.name.Equals(name) || 
+                                            Math.Abs(dbsys.x - x) > 0.01 || 
+                                            Math.Abs(dbsys.y - y) > 0.01 || 
+                                            Math.Abs(dbsys.z - z) > 0.01 ||
+                                            dbsys.gridid != gridid)  // name or position changed
                                         {
                                             updatecmd.Parameters["@name"].Value = name;
                                             updatecmd.Parameters["@x"].Value = x;

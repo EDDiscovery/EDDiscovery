@@ -13,6 +13,8 @@ namespace EDDiscovery2.DB.InMemory
         public double y { get; set; }
         public double z { get; set; }
         public DateTime UpdateDate { get; set; }
+        public int gridid { get; set; }
+        public int randomid { get; set; }
 
         public bool HasCoordinate
         {
@@ -43,9 +45,6 @@ namespace EDDiscovery2.DB.InMemory
         public EDEconomy primary_economy { get; set; }
         public int needs_permit { get; set; }
         public int eddb_updated_at { get; set; }
-
-        public int gridid { get; set; }
-        public int randomid { get; set; }
 
         public bool HasEDDBInformation
         {
