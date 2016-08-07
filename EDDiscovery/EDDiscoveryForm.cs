@@ -82,6 +82,9 @@ namespace EDDiscovery
         private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
         private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
 
+        Action cancelDownloadMaps = null;
+        Task<bool> downloadMapsTask = null;
+
         private bool CanSkipSlowUpdates()
         {
 #if DEBUG
@@ -197,6 +200,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
             _checkSystemsWorker.RunWorkerAsync();
+            downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
         }
 
         private void CheckForNewInstaller()
@@ -472,9 +476,6 @@ namespace EDDiscovery
             reportProgress(-1, "");
             CommanderName = EDDConfig.CurrentCommander.Name;
 
-            Action cancelDownloadMaps = null;
-            Task<bool> downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
-
             EDSMClass edsm = new EDSMClass();
             string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
             DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
@@ -519,13 +520,6 @@ namespace EDDiscovery
                 DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
                 if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
                     performedsmdistsync = true;
-
-                downloadMapsTask.Wait();
-            }
-            else
-            {
-                cancelDownloadMaps();
-                downloadMapsTask.Wait();
             }
         }
 
@@ -981,6 +975,10 @@ namespace EDDiscovery
                 travelHistoryControl1.CancelHistoryRefresh();
                 _syncWorker.CancelAsync();
                 _checkSystemsWorker.CancelAsync();
+                if (cancelDownloadMaps != null)
+                {
+                    cancelDownloadMaps();
+                }
                 labelPanelText.Text = "Closing, please wait!";
                 panelInfo.Visible = true;
                 LogLineHighlight("Closing down, please wait..");
