@@ -193,7 +193,7 @@ namespace EDDiscovery2.EDSM
             else
             {
                 // Get the most recent modify time returned from EDSM
-                lstsystdate = SystemClass.GetLastSystemModifiedTime();
+                lstsystdate = SystemClass.GetLastSystemModifiedTime() - TimeSpan.FromSeconds(1);
 
                 if (lstsystdate < gammadate)
                 {
