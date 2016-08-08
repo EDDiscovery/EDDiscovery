@@ -150,6 +150,9 @@ namespace EDDiscovery2.EDDB
                 }
                 catch (WebException ex)
                 {
+                    if ((HttpWebResponse)ex.Response == null)
+                        return false;
+
                     var code = ((HttpWebResponse)ex.Response).StatusCode;
                     if (code == HttpStatusCode.NotModified)
                     {
