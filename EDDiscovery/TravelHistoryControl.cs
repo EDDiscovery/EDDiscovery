@@ -197,22 +197,22 @@ namespace EDDiscovery
 
         private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Error != null)
-            {
-                LogTextHighlight("History Refresh Error: " + e.Error.Message + Environment.NewLine);
-            }
-            else if (e.Result != null)
-            {
-                RefreshHistory((List<VisitedSystemsClass>)e.Result);
-                if (HistoryRefreshed != null)
-                    HistoryRefreshed(this, EventArgs.Empty);
-                _discoveryForm.ReportProgress(-1, "");
-                LogText("Refresh Complete." + Environment.NewLine);
-            }
-            button_RefreshHistory.Enabled = true;
-
             if (!e.Cancelled)
             {
+                if (e.Error != null)
+                {
+                    LogTextHighlight("History Refresh Error: " + e.Error.Message + Environment.NewLine);
+                }
+                else if (e.Result != null)
+                {
+                    RefreshHistory((List<VisitedSystemsClass>)e.Result);
+                    if (HistoryRefreshed != null)
+                        HistoryRefreshed(this, EventArgs.Empty);
+                    _discoveryForm.ReportProgress(-1, "");
+                    LogText("Refresh Complete." + Environment.NewLine);
+                }
+                button_RefreshHistory.Enabled = true;
+
                 netlog.StartMonitor();
             }
         }
