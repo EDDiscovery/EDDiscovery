@@ -728,6 +728,20 @@ namespace EDDiscovery
 
             try
             {
+                // Drop indexes on Systems table
+                SQLiteDBClass.DropSystemsTableIndexes();
+
+                // Delete all old systems
+                SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
+                SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems"))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
                 EDSMClass edsm = new EDSMClass();
 
                 LogLine("Get hidden systems from EDSM and remove from database");
@@ -758,6 +772,9 @@ namespace EDDiscovery
                     LogLine("Failed to download EDSM system file from server, will check next time");
                     return false;
                 }
+
+                LogLine("Indexing systems table");
+                SQLiteDBClass.CreateSystemsTableIndexes();
 
                 LogLine("Now checking for recent EDSM systems.");
                 updates += edsm.GetNewSystems(this, cancelRequested, reportProgress);
@@ -872,25 +889,8 @@ namespace EDDiscovery
             {
                 if (performedsmsync && !cancelRequested())
                 {
-                    // Drop indexes on Systems table
-                    SQLiteDBClass.DropSystemsTableIndexes();
-
-                    // Delete all old systems
-                    SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
-                    SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
-                    using (SQLiteConnectionED cn = new SQLiteConnectionED())
-                    {
-                        using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems"))
-                        {
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-
                     // Download new systems
                     performhistoryrefresh |= PerformEDSMFullSync(this, cancelRequested, reportProgress);
-
-                    LogLine("Indexing systems table");
-                    SQLiteDBClass.CreateSystemsTableIndexes();
                 }
 
                 if (!cancelRequested())
