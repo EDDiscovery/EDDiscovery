@@ -870,6 +870,33 @@ namespace EDDiscovery.DB
             return lasttime;
         }
 
+        public static DateTime GetLastSystemModifiedTime()
+        {
+            DateTime lasttime = new DateTime(2010, 1, 1, 0, 0, 0);
+
+            try
+            {
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateDate FROM Systems ORDER BY UpdateDate DESC LIMIT 1"))
+                    {
+                        using (DbDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read() && System.DBNull.Value != reader["UpdateDate"])
+                                lasttime = DateTime.SpecifyKind((DateTime)reader["UpdateDate"], DateTimeKind.Utc);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+
+            return lasttime;
+        }
+
         public static void TouchSystem(SQLiteConnectionED cn, string systemName)
         {
             using (DbCommand cmd = cn.CreateCommand("update systems set versiondate=datetime('now') where name=@systemName"))
