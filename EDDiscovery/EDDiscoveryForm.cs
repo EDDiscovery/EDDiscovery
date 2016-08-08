@@ -140,8 +140,6 @@ namespace EDDiscovery
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 // Log unhandled UI exceptions
                 Application.ThreadException += Application_ThreadException;
-                // Always direct unhandled exceptions to the above handler
-                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
                 // Redirect console to trace
                 Console.SetOut(new TraceLogWriter());
             }

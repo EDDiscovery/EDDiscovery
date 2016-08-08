@@ -128,7 +128,21 @@ namespace EDDiscovery2.EDSM
             }
         }
 
-        
+        public string RequestSystems(DateTime startdate, DateTime enddate)
+        {
+            DateTime gammadate = new DateTime(2015, 5, 10, 0, 0, 0, DateTimeKind.Utc);
+            if (startdate < gammadate)
+            {
+                startdate = gammadate;
+            }
+
+            string query = "api-v1/systems" +
+                "?startdatetime=" + HttpUtility.UrlEncode(startdate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
+                "&enddatetime=" + HttpUtility.UrlEncode(enddate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
+                "&coords=1&submitted=1&known=1&showId=1";
+            var response = RequestGet(query);
+            return response.Body;
+        }
 
         public string RequestSystems(string date)
         {
@@ -168,37 +182,55 @@ namespace EDDiscovery2.EDSM
         {
             string lstsyst;
 
-            DateTime NewSystemTime;
+            DateTime lstsystdate;
+            // First system in EDSM is from 2015-05-01 00:39:40
+            DateTime gammadate = new DateTime(2015, 5, 1, 0, 0, 0, DateTimeKind.Utc);
 
             if (SystemClass.GetTotalSystems() == 0)
             {
-                lstsyst = "2010-01-01 00:00:00";
+                lstsystdate = gammadate;
             }
             else
             {
-                NewSystemTime = SystemClass.GetLastSystemEntryTime();
-                lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                lstsyst = SQLiteDBClass.GetSettingString("EDSMLastSystems", lstsyst);
-                DateTime lstsystdate;
+                // Get the most recent modify time returned from EDSM
+                lstsystdate = SystemClass.GetLastSystemModifiedTime() - TimeSpan.FromSeconds(1);
 
-                if (lstsyst.Equals("2010-01-01 00:00:00") || !DateTime.TryParseExact(lstsyst, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out lstsystdate))
-                    lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                if (lstsystdate < gammadate)
+                {
+                    lstsystdate = gammadate;
+                }
             }
 
-            Console.WriteLine("EDSM Check date" + lstsyst);
+            lstsyst = lstsystdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
-            string json = RequestSystems(lstsyst);
+            Console.WriteLine("EDSM Check date: " + lstsyst);
 
             long updates = 0;
 
-            if (json != null)       // bad download could cause this..
+            while (lstsystdate < DateTime.UtcNow)
             {
-                string date = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-02 00:00:00"); // Latest time from RW file.
-                updates = SystemClass.ParseEDSMUpdateSystemsString(json, ref date, false, discoveryform, cancelRequested, reportProgress);
-                SQLiteDBClass.PutSettingString("EDSMLastSystems", date);
+                DateTime enddate = lstsystdate + TimeSpan.FromHours(12);
+                if (enddate > DateTime.UtcNow)
+                {
+                    enddate = DateTime.UtcNow;
+                }
+
+                discoveryform.LogLine($"Downloading systems from {lstsystdate.ToLocalTime().ToString()} to {enddate.ToLocalTime().ToString()}");
+                reportProgress(-1, "Requesting systems from EDSM");
+                string json = RequestSystems(lstsystdate, enddate);
+
+                if (json == null)
+                {
+                    reportProgress(-1, "EDSM request failed");
+                    discoveryform.LogLine("Download of EDSM systems from the server failed, will try next time program is run");
+                    break;
+                }
+
+                updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, false, discoveryform, cancelRequested, reportProgress, false);
+                SQLiteDBClass.PutSettingString("EDSMLastSystems", lstsyst);
+                lstsystdate += TimeSpan.FromHours(12);
             }
-            else
-                discoveryform.LogLine("Download of EDSM systems from the server failed, will try next time program is run");
+            discoveryform.LogLine($"System download complete");
 
             return updates;
         }
