@@ -252,7 +252,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ComboBoxCustom.cs">
-      <SubType>Component</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\ListControlCustom.cs">
       <SubType>Component</SubType>
@@ -445,7 +445,16 @@
     <None Include="Resources\3dmaphelp.txt" />
     <None Include="Resources\bookmarkyellow.png" />
     <None Include="Resources\bookmarktarget.png" />
+    <None Include="Resources\Blackhole.PNG" />
+    <None Include="Resources\ExplorationHazard.png" />
+    <None Include="Resources\comet.PNG" />
     <Content Include="Resources\imgCheck.png" />
+    <None Include="Resources\pointofinterest.png" />
+    <None Include="Resources\nebula.PNG" />
+    <None Include="Resources\PlanetaryNebula.PNG" />
+    <None Include="Resources\pulsar.PNG" />
+    <None Include="Resources\starcluster.PNG" />
+    <None Include="Resources\stellaremnant.PNG" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

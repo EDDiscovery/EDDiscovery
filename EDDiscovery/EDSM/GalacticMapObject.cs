@@ -11,7 +11,6 @@ namespace EDDiscovery.EDSM
     {
         public int id;
         public string type;
-        public GalMapType Type;
         public string name;
         public string galMapSearch;
         public string galMapUrl;
@@ -19,6 +18,8 @@ namespace EDDiscovery.EDSM
         public List<PointData> points;
         public string description;
         public string descriptionhtml;
+
+        public GalMapType galMapType;
 
         public GalacticMapObject()
         {

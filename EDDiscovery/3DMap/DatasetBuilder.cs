@@ -12,6 +12,7 @@ using EDDiscovery2.Trilateration;
 using OpenTK;
 using System.Resources;
 using EDDiscovery.Properties;
+using EDDiscovery.EDSM;
 
 namespace EDDiscovery2._3DMap
 {
@@ -38,12 +39,12 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> BuildVisitedSystems( bool drawlines, ISystem centersystem , List<VisitedSystemsClass> VisitedSystems,
-                                                     List<SystemClass> refsys, List<SystemClass> planned )
+        public List<IData3DSet> BuildVisitedSystems(bool drawlines, ISystem centersystem, List<VisitedSystemsClass> VisitedSystems,
+                                                     List<SystemClass> refsys, List<SystemClass> planned)
         {
-            AddVisitedSystemsInformation(drawlines,VisitedSystems);
+            AddVisitedSystemsInformation(drawlines, VisitedSystems);
             AddRoutePlannerInfoToDataset(planned);
-            AddTrilaterationInfoToDataset(centersystem,refsys);
+            AddTrilaterationInfoToDataset(centersystem, refsys);
             return _datasets;
         }
 
@@ -54,9 +55,9 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        private void AddMapImages(ref List<FGEImage> Images )
+        private void AddMapImages(ref List<FGEImage> Images)
         {
-            if ( Images != null && Images.Count != 0 )
+            if (Images != null && Images.Count != 0)
             {
                 var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("mapimage", Color.White, 1.0f);
                 foreach (var img in Images)
@@ -130,7 +131,7 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, double widthly, double heightly , bool vert, List<VisitedSystemsClass> VisitedSystems)
+        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, double widthly, double heightly, bool vert, List<VisitedSystemsClass> VisitedSystems)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
             widthly /= 2;
@@ -176,6 +177,52 @@ namespace EDDiscovery2._3DMap
 
                             datasetbks.Add(newtexture);
                         }
+                    }
+                }
+            }
+
+            _datasets.Add(datasetbks);
+
+            return _datasets;
+        }
+
+        public List<IData3DSet> AddGalMapObjectsToDataset(double widthly, double heightly, bool vert)
+        {
+            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("galobj", Color.White, 1f);
+            widthly /= 2;
+            heightly /= 2;
+
+            if (EDDiscoveryForm.galacticMapping != null )
+            {
+                foreach( GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
+                {
+                    Bitmap touse = gmo.galMapType.image;
+                    PointData pd = (gmo.points.Count>0) ? gmo.points[0] : null;     // lets be paranoid
+
+                    if ( touse != null && pd != null )             // if it has an image (may not) and has a co-ord, may not.. 
+                    {
+                        TexturedQuadData newtexture;
+
+                        if (vert)
+                        {
+                            newtexture = TexturedQuadData.FromBitmapVert(touse,
+                                                     new PointF((float)(pd.x - widthly), (float)(pd.y + heightly)),
+                                                        new PointF((float)(pd.x + widthly), (float)(pd.y + heightly)),
+                                                     new PointF((float)(pd.x - widthly), (float)(pd.y - heightly)),
+                                                        new PointF((float)(pd.x + widthly), (float)(pd.y - heightly)),
+                                                     (float)pd.z);
+                        }
+                        else
+                        {
+                            newtexture = TexturedQuadData.FromBitmapHorz(touse,
+                                                      new PointF((float)(pd.x - widthly), (float)(pd.z + heightly)),
+                                                         new PointF((float)(pd.x + widthly), (float)(pd.z + heightly)),
+                                                      new PointF((float)(pd.x - widthly), (float)(pd.z+heightly)),
+                                                         new PointF((float)(pd.x + widthly), (float)(pd.z+heightly)),
+                                                      (float)pd.y);
+                        }
+
+                        datasetbks.Add(newtexture);
                     }
                 }
             }

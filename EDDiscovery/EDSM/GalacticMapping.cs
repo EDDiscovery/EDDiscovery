@@ -22,9 +22,7 @@ namespace EDDiscovery.EDSM
                 string url = "https://www.edsm.net/galactic-mapping/json-edd";
                 bool newfile;
 
-                EDDBClass.DownloadFile(url, GalacticMappingFile, out newfile);
-
-                return true;
+                return EDDBClass.DownloadFile(url, GalacticMappingFile, out newfile);
             }
             catch (Exception ex)
             {
@@ -50,10 +48,13 @@ namespace EDDiscovery.EDSM
                         GalacticMapObject galobject = new GalacticMapObject(jo);
 
                         if (dictGalMapTypes.ContainsKey(galobject.type))
-                            galobject.Type = dictGalMapTypes[galobject.type];
+                            galobject.galMapType = dictGalMapTypes[galobject.type];
+                        else
+                            galobject.galMapType = dictGalMapTypes["EDSMUnknown"];
 
                         galacticMapObjects.Add(galobject);
                     }
+
                     return true;
                 }
             }
