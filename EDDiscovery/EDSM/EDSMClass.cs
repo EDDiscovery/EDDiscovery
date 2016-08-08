@@ -182,7 +182,6 @@ namespace EDDiscovery2.EDSM
         {
             string lstsyst;
 
-            DateTime NewSystemTime;
             DateTime lstsystdate;
             // First system in EDSM is from 2015-05-01 00:39:40
             DateTime gammadate = new DateTime(2015, 5, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -194,20 +193,11 @@ namespace EDDiscovery2.EDSM
             else
             {
                 // Get the most recent modify time returned from EDSM
-                NewSystemTime = SystemClass.GetLastSystemModifiedTime();
-                lstsyst = NewSystemTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                lstsyst = SQLiteDBClass.GetSettingString("EDSMLastSystems", lstsyst);
+                lstsystdate = SystemClass.GetLastSystemModifiedTime();
 
-                if (!DateTime.TryParseExact(lstsyst, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out lstsystdate))
+                if (lstsystdate < gammadate)
                 {
-                    lstsystdate = NewSystemTime;
-                }
-                else if (lstsystdate < gammadate)
-                {
-                    if (NewSystemTime > gammadate)
-                        lstsystdate = NewSystemTime;
-                    else
-                        lstsystdate = gammadate;
+                    lstsystdate = gammadate;
                 }
             }
 
