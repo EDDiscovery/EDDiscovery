@@ -81,6 +81,7 @@ namespace EDDiscovery
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
         public bool SystemsUpdating { get; private set; } = true;
+        public object SystemsUpdatingLock { get; } = new object();
 
         private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
         private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
@@ -734,7 +735,11 @@ namespace EDDiscovery
 
             try
             {
-                SystemsUpdating = true;
+                lock (SystemsUpdatingLock)
+                {
+                    SystemsUpdating = true;
+                }
+
                 // Drop indexes on Systems table
                 SQLiteDBClass.DropSystemsTableIndexes();
 
