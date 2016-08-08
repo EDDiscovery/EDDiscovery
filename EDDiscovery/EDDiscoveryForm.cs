@@ -80,6 +80,8 @@ namespace EDDiscovery
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
+        public bool SystemsUpdating { get; private set; } = true;
+
         private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
         private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
 
@@ -563,6 +565,10 @@ namespace EDDiscovery
         private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
             reportProgress(-1, "");
+
+            LogLine("Indexing systems table");
+            SQLiteDBClass.CreateSystemsTableIndexes();
+
             CommanderName = EDDConfig.CurrentCommander.Name;
 
             EDSMClass edsm = new EDSMClass();
@@ -728,6 +734,7 @@ namespace EDDiscovery
 
             try
             {
+                SystemsUpdating = true;
                 // Drop indexes on Systems table
                 SQLiteDBClass.DropSystemsTableIndexes();
 
@@ -778,6 +785,8 @@ namespace EDDiscovery
 
                 LogLine("Now checking for recent EDSM systems.");
                 updates += edsm.GetNewSystems(this, cancelRequested, reportProgress);
+
+                SystemsUpdating = false;
 
                 LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
 
