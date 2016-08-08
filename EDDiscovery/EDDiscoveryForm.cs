@@ -243,15 +243,6 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
         {
-            /*
-            if (panel_grip.Visible)
-            {
-                panel_grip.Location = new Point(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height);
-                tabControl1.Size = new Size(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height - tabControl1.Location.Y);
-            }
-            else
-                tabControl1.Size = new Size(this.ClientSize.Width, this.ClientSize.Height - tabControl1.Location.Y);
-             */
         }
 
         private void ProcessCommandLineOptions()
@@ -619,6 +610,9 @@ namespace EDDiscovery
                 if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
                     performedsmdistsync = true;
             }
+
+            reportProgress(-1, "Creating name list of systems");
+            SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
         }
 
         private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -631,9 +625,7 @@ namespace EDDiscovery
             }
             else if (!e.Cancelled && !PendingClose)
             {
-                SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
-
-                Console.WriteLine("Systems Loaded");
+                Console.WriteLine("Systems Loaded");                    // in the worker thread they were, now in UI
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                 routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
@@ -659,7 +651,7 @@ namespace EDDiscovery
                     {
                         string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
 
-                        LogLine("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
+                        LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
                                         "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + 
                                         "Please continue running ED Discovery until refresh is complete.");
                     }
