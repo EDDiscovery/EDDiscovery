@@ -870,6 +870,33 @@ namespace EDDiscovery.DB
             return lasttime;
         }
 
+        public static DateTime GetLastSystemModifiedTime()
+        {
+            DateTime lasttime = new DateTime(2010, 1, 1, 0, 0, 0);
+
+            try
+            {
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateDate FROM Systems ORDER BY UpdateDate DESC LIMIT 1"))
+                    {
+                        using (DbDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read() && System.DBNull.Value != reader["UpdateDate"])
+                                lasttime = DateTime.SpecifyKind((DateTime)reader["UpdateDate"], DateTimeKind.Utc);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+
+            return lasttime;
+        }
+
         public static void TouchSystem(SQLiteConnectionED cn, string systemName)
         {
             using (DbCommand cmd = cn.CreateCommand("update systems set versiondate=datetime('now') where name=@systemName"))
@@ -1329,22 +1356,22 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        public static long ParseEDSMUpdateSystemsString(string json, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StringReader sr = new StringReader(json))
-                return ParseEDSMUpdateSystemsStream(sr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress);
+                return ParseEDSMUpdateSystemsStream(sr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        public static long ParseEDSMUpdateSystemsFile(string filename, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StreamReader sr = new StreamReader(filename))         // read directly from file..
-                return ParseEDSMUpdateSystemsStream(sr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress);
+                return ParseEDSMUpdateSystemsStream(sr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsStream(TextReader sr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        public static long ParseEDSMUpdateSystemsStream(TextReader sr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (JsonTextReader jr = new JsonTextReader(sr))
-                return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress);
+                return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
         }
 
         private static Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> GetEdsmSystemsLite(SQLiteConnectionED cn)
@@ -1389,10 +1416,10 @@ namespace EDDiscovery.DB
             return systemsByEdsmId;
         }
 
-        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, SQLiteConnectionED cn, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, SQLiteConnectionED cn, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             DateTime maxdate = DateTime.Parse(date, CultureInfo.InvariantCulture);
-            Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = GetEdsmSystemsLite(cn);
+            Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = useCache ? GetEdsmSystemsLite(cn) : new Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase>();
             int count = 0;
             int updatecount = 0;
             int insertcount = 0;
@@ -1406,6 +1433,7 @@ namespace EDDiscovery.DB
                 {
                     DbCommand updatecmd = null;
                     DbCommand insertcmd = null;
+                    DbCommand selectcmd = null;
 
                     try
                     {
@@ -1434,6 +1462,9 @@ namespace EDDiscovery.DB
                         insertcmd.AddParameter("@id_edsm", DbType.Int64);
                         insertcmd.AddParameter("@gridid", DbType.Int64);
                         insertcmd.AddParameter("@randomid", DbType.Int64);
+
+                        selectcmd = cn.CreateCommand("SELECT id, id_edsm, name, x, y, z, UpdateDate, gridid, randomid FROM Systems WHERE id_edsm = @id_edsm", txn);
+                        selectcmd.AddParameter("@id_edsm", DbType.Int64);
 
                         while (!cancelRequested())
                         {
@@ -1475,9 +1506,48 @@ namespace EDDiscovery.DB
                                     if (updatedate > maxdate)
                                         maxdate = updatedate;
 
-                                    if (systemsByEdsmId.ContainsKey(edsmid))
+                                    EDDiscovery2.DB.InMemory.SystemClassBase dbsys = null;
+
+                                    if (useCache && systemsByEdsmId.ContainsKey(edsmid))
+                                        dbsys = systemsByEdsmId[edsmid];
+
+                                    if (!useCache)
                                     {
-                                        var dbsys = systemsByEdsmId[edsmid];
+                                        selectcmd.Parameters["@id_edsm"].Value = edsmid;
+                                        using (DbDataReader reader = selectcmd.ExecuteReader())
+                                        {
+                                            if (reader.Read())
+                                            {
+                                                dbsys = new EDDiscovery2.DB.InMemory.SystemClassBase
+                                                {
+                                                    id = (long)reader["id"],
+                                                    name = (string)reader["name"]
+                                                };
+
+                                                string searchname = dbsys.name.ToLower();
+
+                                                if (System.DBNull.Value == reader["x"])
+                                                {
+                                                    dbsys.x = double.NaN;
+                                                    dbsys.y = double.NaN;
+                                                    dbsys.z = double.NaN;
+                                                }
+                                                else
+                                                {
+                                                    dbsys.x = (double)reader["x"];
+                                                    dbsys.y = (double)reader["y"];
+                                                    dbsys.z = (double)reader["z"];
+                                                }
+
+                                                dbsys.id_edsm = (long)reader["id_edsm"];
+                                                dbsys.gridid = reader["gridid"] == DBNull.Value ? 0 : (int)((long)reader["gridid"]);
+                                                dbsys.randomid = reader["randomid"] == DBNull.Value ? 0 : (int)((long)reader["randomid"]);
+                                            }
+                                        }
+                                    }
+
+                                    if (dbsys != null)
+                                    {
                                         // see if EDSM data changed..
                                         if (!dbsys.name.Equals(name) || 
                                             Math.Abs(dbsys.x - x) > 0.01 || 
@@ -1527,6 +1597,7 @@ namespace EDDiscovery.DB
                     {
                         if (updatecmd != null) updatecmd.Dispose();
                         if (insertcmd != null) insertcmd.Dispose();
+                        if (selectcmd != null) selectcmd.Dispose();
                     }
                 }
             }
@@ -1534,11 +1605,11 @@ namespace EDDiscovery.DB
             return updatecount + insertcount;
         }
 
-        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db
             {
-                long count = DoParseEDSMUpdateSystemsReader(jr, ref date, cn, discoveryform, cancelRequested, reportProgress);
+                long count = DoParseEDSMUpdateSystemsReader(jr, ref date, cn, discoveryform, cancelRequested, reportProgress, useCache);
 
                 if (removenonedsmids)                            // done on a full sync..
                 {
