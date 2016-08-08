@@ -16,6 +16,7 @@ using OpenTK.Input;
 using System.Drawing.Drawing2D;
 using System.Resources;
 using System.Collections.Concurrent;
+using EDDiscovery.EDSM;
 
 namespace EDDiscovery2
 {
@@ -39,6 +40,7 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_visitedsystems;
         private List<IData3DSet> _datasets_bookedmarkedsystems;
         private List<IData3DSet> _datasets_notedsystems;
+        private List<IData3DSet> _datasets_galmapobjects;
 
         StarGrids _stargrids;                   // holds stars
 
@@ -506,12 +508,22 @@ namespace EDDiscovery2
 
             GenerateDataSetsBookmarks();
             GenerateDataSetsNotedSystems();
+            GenerateDataSetsGalMapObjects();
+        }
+
+        private void GenerateDataSetsGalMapObjects()
+        {
+            DeleteDataset(ref _datasets_galmapobjects);
+            _datasets_galmapobjects = null;
+            DatasetBuilder builder = new DatasetBuilder();
+            _datasets_galmapobjects = builder.AddGalMapObjectsToDataset(GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
         }
 
         private void GenerateDataSetsMaps()
         {
             //Console.WriteLine("STARS Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_maps);
+            _datasets_maps = null;
             DatasetBuilder builder = new DatasetBuilder();
             _datasets_maps = builder.BuildMaps(ref selectedmaps);
         }
@@ -520,6 +532,8 @@ namespace EDDiscovery2
         {
             //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_visitedsystems);
+            _datasets_visitedsystems = null;
+
             DatasetBuilder builder = new DatasetBuilder();
 
             List<VisitedSystemsClass> filtered = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null;
@@ -532,6 +546,7 @@ namespace EDDiscovery2
         {
             //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_selectedsystems);
+            _datasets_selectedsystems = null;
             DatasetBuilder builder = new DatasetBuilder();
             _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem);
         }
@@ -549,7 +564,7 @@ namespace EDDiscovery2
                 Debug.Assert(mapstar != null && mapregion != null);
 
                 DatasetBuilder builder = new DatasetBuilder();
-                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
+                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
             }
         }
 
@@ -565,7 +580,7 @@ namespace EDDiscovery2
                 Debug.Assert(map != null);
 
                 DatasetBuilder builder = new DatasetBuilder();
-                _datasets_notedsystems = builder.AddNotedBookmarks(map, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked , _visitedSystems );
+                _datasets_notedsystems = builder.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , _visitedSystems );
             }
         }
 
@@ -959,7 +974,10 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+            foreach (var dataset in _datasets_galmapobjects)
+                dataset.DrawAll(glControl);
+
+            _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
             
             foreach (var dataset in _datasets_poi)
                 dataset.DrawAll(glControl);
@@ -1506,11 +1524,12 @@ namespace EDDiscovery2
 
             ISystem cursystem = null;      
             BookmarkClass curbookmark = null;           
-            bool notedsystem = false;                   
+            bool notedsystem = false;
+            GalacticMapObject gmo = null;             
 
             if (notmovedmouse)
             {
-                GetMouseOverItem(e.X, e.Y, out cursystem, out curbookmark, out notedsystem);
+                GetMouseOverItem(e.X, e.Y, out cursystem, out curbookmark, out notedsystem, out gmo);
             }
 
             if ( e.Button == System.Windows.Forms.MouseButtons.Left)            // left clicks associate with systems..
@@ -1539,6 +1558,8 @@ namespace EDDiscovery2
                 }
                 else if (curbookmark != null)                                   // else just remember the position for later.
                     _clickedposition = new Vector3((float)curbookmark.x, (float)curbookmark.y, (float)curbookmark.z);
+                else if ( gmo != null )
+                    _clickedposition = new Vector3((float)gmo.points[0].x, (float)gmo.points[0].y, (float)gmo.points[0].z);
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)                    // right clicks are about bookmarks.
@@ -1814,7 +1835,8 @@ namespace EDDiscovery2
             ISystem hoversystem = null;
             BookmarkClass curbookmark = null;
             bool notedsystem = false;
-            GetMouseOverItem(_mouseHover.X, _mouseHover.Y, out hoversystem, out curbookmark, out notedsystem);
+            GalacticMapObject gmo = null;
+            GetMouseOverItem(_mouseHover.X, _mouseHover.Y, out hoversystem, out curbookmark, out notedsystem, out gmo);
 
             string info = null, sysname = null;
             double xp = 0, yp = 0, zp = 0;
@@ -1858,8 +1880,16 @@ namespace EDDiscovery2
                 yp = curbookmark.y;
                 zp = curbookmark.z;
             }
-
-
+            else if ( gmo != null )
+            {
+                xp = gmo.points[0].x;
+                yp = gmo.points[0].y;
+                zp = gmo.points[0].z;
+                info = gmo.name + Environment.NewLine + gmo.galMapType.description + Environment.NewLine + Tools.WordWrap(gmo.description,60) + Environment.NewLine +
+                    string.Format("x:{0} y:{1} z:{2}", xp.ToString("0.00"), yp.ToString("0.00"), zp.ToString("0.00"));
+                sysname = "<<Never match string! to make the comparison fail";
+            }
+            
             if ( sysname != null )
             { 
                 if (!sysname.Equals(_centerSystem.name))
@@ -1895,6 +1925,7 @@ namespace EDDiscovery2
                 _mousehovertooltip.ReshowDelay = 0;
                 _mousehovertooltip.IsBalloon = true;
                 _mousehovertooltip.SetToolTip(glControl, info);
+   
             }
         }
 
@@ -1911,7 +1942,7 @@ namespace EDDiscovery2
             return Matrix4d.Mult(mview, proj);
         }
 
-        private bool GetPixel(Vector4d xyzw, Matrix4d resmat, ref Vector2d pixelpos, out double newcursysdistz)
+        private bool GetPixel(Vector4d xyzw, ref Matrix4d resmat, ref Vector2d pixelpos, out double newcursysdistz)
         {
             Vector4d sysloc = Vector4d.Transform(xyzw, resmat);
 
@@ -1930,17 +1961,16 @@ namespace EDDiscovery2
             return false;
         }
 
-        private bool IsWithinRectangle( Matrix4d area ,  int x, int y, out double newcursysdistz)
+        private bool IsWithinRectangle( Matrix4d area ,  int x, int y, out double newcursysdistz, ref Matrix4d resmat )
         {
             Vector2d ptopleft = new Vector2d(0, 0), pbottomright = new Vector2d(0, 0);
             Vector2d pbottomleft = new Vector2d(0, 0), ptopright = new Vector2d(0, 0);
             double ztopleft, zbottomright,zbottomleft,ztopright;
-            Matrix4d resmat = GetResMat();
 
-            if (GetPixel(area.Row0, resmat, ref ptopleft, out ztopleft) &&
-                    GetPixel(area.Row3, resmat, ref pbottomright, out zbottomright) &&
-                    GetPixel(area.Row1, resmat, ref ptopright, out ztopright) &&
-                    GetPixel(area.Row2, resmat, ref pbottomleft, out zbottomleft) )
+            if (GetPixel(area.Row0, ref resmat, ref ptopleft, out ztopleft) &&
+                    GetPixel(area.Row3, ref resmat, ref pbottomright, out zbottomright) &&
+                    GetPixel(area.Row1, ref resmat, ref ptopright, out ztopright) &&
+                    GetPixel(area.Row2, ref resmat, ref pbottomleft, out zbottomleft) )
             {
                 GraphicsPath p = new GraphicsPath();            // a moment of inspiration, use the graphics path for the polygon hit test!
                 p.AddLine(new PointF((float)ptopleft.X, (float)ptopleft.Y), new PointF((float)ptopright.X, (float)ptopright.Y));
@@ -1958,23 +1988,23 @@ namespace EDDiscovery2
             return false;
         }
 
-        private double GetBookmarkSize() { return Math.Min(Math.Max(2, 100.0 / _zoom), 1000); }
+        private double GetBitmapOnScreenSize() { return Math.Min(Math.Max(2, 100.0 / _zoom), 1000); }
 
-        Matrix4d GetBookMarkOutline(double x, double y, double z , double bksize)
+        Matrix4d GetBitmapOnScreenOutline(double x, double y, double z , double width , double htop, double hbot)       // always centered on x, can be offset in height differently
         {
             if (toolStripButtonPerspective.Checked)
             {
-                return new Matrix4d(new Vector4d(x - bksize / 2, y + bksize, z, 1),         // top left
-                                new Vector4d(x + bksize / 2, y + bksize, z, 1),         // top right
-                                new Vector4d(x - bksize / 2, y, z, 1),                  // bottom left
-                                new Vector4d(x + bksize / 2, y, z, 1));                 // bottom right
+                return new Matrix4d(new Vector4d(x - width / 2, y + htop, z, 1),        // top left
+                                new Vector4d(x + width / 2, y + htop, z, 1),            // top right
+                                new Vector4d(x - width / 2, y - hbot, z, 1),            // bottom left
+                                new Vector4d(x + width / 2, y - hbot, z, 1));           // bottom right
             }
             else
             {
-                return new Matrix4d(new Vector4d(x - bksize / 2, y, z + bksize, 1),         // top left
-                                new Vector4d(x + bksize / 2, y, z + bksize, 1),         // top right
-                                new Vector4d(x - bksize / 2, y, z, 1),                  // bottom left
-                                new Vector4d(x + bksize / 2, y, z, 1));                 // bottom right
+                return new Matrix4d(new Vector4d(x - width / 2, y, z + htop, 1),        // top left
+                                new Vector4d(x + width / 2, y, z + htop, 1),            // top right
+                                new Vector4d(x - width / 2, y, z - hbot, 1),            // bottom left
+                                new Vector4d(x + width / 2, y, z - hbot, 1));           // bottom right
             }
         }
 
@@ -1983,17 +2013,18 @@ namespace EDDiscovery2
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double bksize = GetBookmarkSize();
+            double bksize = GetBitmapOnScreenSize();
 
             BookmarkClass curbk = null;
             cursysdistz = double.MaxValue;
+            Matrix4d resmat = GetResMat();
 
             foreach (BookmarkClass bc in BookmarkClass.bookmarks)
             {
                 //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
 
                 double newcursysdistz;
-                if (IsWithinRectangle(GetBookMarkOutline(bc.x, bc.y, bc.z, bksize), x, y, out newcursysdistz))
+                if (IsWithinRectangle(GetBitmapOnScreenOutline(bc.x, bc.y, bc.z, bksize, bksize,0), x, y, out newcursysdistz, ref resmat))
                 {
                     if (newcursysdistz < cursysdistz)
                     {
@@ -2001,7 +2032,6 @@ namespace EDDiscovery2
                         curbk = bc;
                     }
                 }
-
             }
 
             return curbk;
@@ -2012,13 +2042,15 @@ namespace EDDiscovery2
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double bksize = GetBookmarkSize();
+            double bksize = GetBitmapOnScreenSize();
 
             SystemClass cursys = null;
             cursysdistz = double.MaxValue;
 
             if (_visitedSystems == null)
                 return null;
+
+            Matrix4d resmat = GetResMat();
 
             foreach (VisitedSystemsClass vs in _visitedSystems)
             {
@@ -2035,7 +2067,7 @@ namespace EDDiscovery2
                         double lz = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
 
                         double newcursysdistz;
-                        if (IsWithinRectangle(GetBookMarkOutline(lx,ly,lz, bksize), x, y, out newcursysdistz))
+                        if (IsWithinRectangle(GetBitmapOnScreenOutline(lx,ly,lz, bksize,bksize,0), x, y, out newcursysdistz,ref resmat))
                         { 
                             if (newcursysdistz < cursysdistz)
                             {
@@ -2049,6 +2081,43 @@ namespace EDDiscovery2
             }
 
             return cursys;
+        }
+
+        private GalacticMapObject GetMouseOverGalaxyObject(int x, int y, out double cursysdistz)
+        {
+            x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
+            y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
+
+            double bksize = GetBitmapOnScreenSize();
+            cursysdistz = double.MaxValue;
+            Matrix4d resmat = GetResMat();
+            GalacticMapObject curobj = null;
+
+            if (EDDiscoveryForm.galacticMapping != null)
+            {
+                foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
+                {
+                    Bitmap touse = gmo.galMapType.image;
+                    PointData pd = (gmo.points.Count > 0) ? gmo.points[0] : null;     // lets be paranoid
+
+                    if (touse != null && pd != null)             // if it has an image (may not) and has a co-ord, may not.. 
+                    {
+                        //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
+
+                        double newcursysdistz;
+                        if (IsWithinRectangle(GetBitmapOnScreenOutline(pd.x,pd.y,pd.z, bksize,bksize/2,bksize/2), x, y, out newcursysdistz, ref resmat))
+                        {
+                            if (newcursysdistz < cursysdistz)
+                            {
+                                cursysdistz = newcursysdistz;
+                                curobj = gmo;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return curobj;
         }
 
         private ISystem GetMouseOverSystem(int x, int y, out double cursysdistz)
@@ -2072,13 +2141,16 @@ namespace EDDiscovery2
         // bookmark on system, cursystem!=null, curbookmark != null, notedsystem = false
         // region bookmark. cursystem = null, curbookmark != null, notedsystem = false
         // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
+        // clicked on gal object, galmapobject !=null, cursystem=null,curbookmark=null,notedsystem = false
 
         private void GetMouseOverItem(int x, int y, out ISystem cursystem,  // can return both, if a system bookmark is clicked..
-                                                    out BookmarkClass curbookmark , out bool notedsystem )
+                                                    out BookmarkClass curbookmark, out bool notedsystem,
+                                                    out GalacticMapObject galobj)
         {
             cursystem = null;
             curbookmark = null;
             notedsystem = false;
+            galobj = null;
 
             if (_datasets_bookedmarkedsystems != null)              // only if bookedmarked is shown
             {
@@ -2105,6 +2177,11 @@ namespace EDDiscovery2
                     return;
                 }
             }
+
+            double curdistgalmap;
+            galobj = GetMouseOverGalaxyObject(x, y, out curdistgalmap);
+            if (galobj != null)
+                return;
 
             double curdistsystem;
             cursystem = GetMouseOverSystem(x, y, out curdistsystem);

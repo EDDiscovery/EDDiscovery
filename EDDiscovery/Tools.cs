@@ -176,6 +176,26 @@ namespace EDDiscovery
                    (token.Type == JTokenType.Null);
         }
 
+        static public string WordWrap(string input, int linelen )
+        {
+            String[] split = input.Split(new char[] { ' '});
 
+            string ans = "";
+            int l = 0;
+            for( int i = 0; i < split.Length; i++ )
+            {
+                ans += split[i];
+                l += split[i].Length;
+                if (l > linelen)
+                {
+                    ans += Environment.NewLine;
+                    l = 0;
+                }
+                else
+                    ans += " ";
+            }
+
+            return ans;
+        }
     }
 }
