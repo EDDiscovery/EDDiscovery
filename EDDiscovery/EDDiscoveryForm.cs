@@ -80,6 +80,9 @@ namespace EDDiscovery
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
+        public bool SystemsUpdating { get; private set; } = true;
+        public object SystemsUpdatingLock { get; } = new object();
+
         private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
         private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
 
@@ -243,15 +246,6 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
         {
-            /*
-            if (panel_grip.Visible)
-            {
-                panel_grip.Location = new Point(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height);
-                tabControl1.Size = new Size(this.ClientSize.Width - panel_grip.Size.Width, this.ClientSize.Height - panel_grip.Size.Height - tabControl1.Location.Y);
-            }
-            else
-                tabControl1.Size = new Size(this.ClientSize.Width, this.ClientSize.Height - tabControl1.Location.Y);
-             */
         }
 
         private void ProcessCommandLineOptions()
@@ -572,6 +566,10 @@ namespace EDDiscovery
         private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
             reportProgress(-1, "");
+
+            LogLine("Indexing systems table");
+            SQLiteDBClass.CreateSystemsTableIndexes();
+
             CommanderName = EDDConfig.CurrentCommander.Name;
 
             EDSMClass edsm = new EDSMClass();
@@ -619,6 +617,9 @@ namespace EDDiscovery
                 if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
                     performedsmdistsync = true;
             }
+
+            reportProgress(-1, "Creating name list of systems");
+            SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
         }
 
         private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -631,9 +632,7 @@ namespace EDDiscovery
             }
             else if (!e.Cancelled && !PendingClose)
             {
-                SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
-
-                Console.WriteLine("Systems Loaded");
+                Console.WriteLine("Systems Loaded");                    // in the worker thread they were, now in UI
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
                 routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
@@ -659,7 +658,7 @@ namespace EDDiscovery
                     {
                         string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
 
-                        LogLine("ED Discovery will now sycnronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
+                        LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
                                         "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + 
                                         "Please continue running ED Discovery until refresh is complete.");
                     }
@@ -736,6 +735,25 @@ namespace EDDiscovery
 
             try
             {
+                lock (SystemsUpdatingLock)
+                {
+                    SystemsUpdating = true;
+                }
+
+                // Drop indexes on Systems table
+                SQLiteDBClass.DropSystemsTableIndexes();
+
+                // Delete all old systems
+                SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
+                SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
+                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems"))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
                 EDSMClass edsm = new EDSMClass();
 
                 LogLine("Get hidden systems from EDSM and remove from database");
@@ -767,8 +785,13 @@ namespace EDDiscovery
                     return false;
                 }
 
+                LogLine("Indexing systems table");
+                SQLiteDBClass.CreateSystemsTableIndexes();
+
                 LogLine("Now checking for recent EDSM systems.");
                 updates += edsm.GetNewSystems(this, cancelRequested, reportProgress);
+
+                SystemsUpdating = false;
 
                 LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
 
@@ -880,25 +903,8 @@ namespace EDDiscovery
             {
                 if (performedsmsync && !cancelRequested())
                 {
-                    // Drop indexes on Systems table
-                    SQLiteDBClass.DropSystemsTableIndexes();
-
-                    // Delete all old systems
-                    SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
-                    SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
-                    using (SQLiteConnectionED cn = new SQLiteConnectionED())
-                    {
-                        using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems"))
-                        {
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-
                     // Download new systems
                     performhistoryrefresh |= PerformEDSMFullSync(this, cancelRequested, reportProgress);
-
-                    LogLine("Indexing systems table");
-                    SQLiteDBClass.CreateSystemsTableIndexes();
                 }
 
                 if (!cancelRequested())

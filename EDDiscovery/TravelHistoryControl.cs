@@ -230,7 +230,12 @@ namespace EDDiscovery
             if (visitedSystems == null)
                 return;
 
-            VisitedSystemsClass.UpdateSys(visitedSystems, EDDConfig.Instance.UseDistances);
+            // Prevent the indexes from being removed from under our feet
+            lock (_discoveryForm.SystemsUpdatingLock)
+            {
+                VisitedSystemsClass.UpdateSys(visitedSystems, EDDConfig.Instance.UseDistances, !_discoveryForm.SystemsUpdating);
+            }
+
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
 

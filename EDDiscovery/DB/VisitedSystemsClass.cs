@@ -368,9 +368,10 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb)          // oldest system is lowest index
+        public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb, bool matchsystems)          // oldest system is lowest index
         {
-            SystemClass.FillVisitedSystems(visitedSystems);                 // first try and populate with SystemClass info
+            if (matchsystems)
+                SystemClass.FillVisitedSystems(visitedSystems);                 // first try and populate with SystemClass info
 
             foreach (VisitedSystemsClass vsc in visitedSystems)
             {
