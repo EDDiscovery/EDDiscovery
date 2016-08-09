@@ -428,6 +428,8 @@ namespace EDDiscovery.DB
                 if (dbver < 20)
                     UpgradeDB20(conn);
 
+                CreateTableIndexes();
+
                 return true;
             }
             catch (Exception ex)
@@ -653,6 +655,37 @@ namespace EDDiscovery.DB
             {
                 PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
             });
+        }
+
+        private static void CreateTableIndexes()
+        {
+            string[] queries = new[]
+            {
+                "CREATE INDEX IF NOT EXISTS DistanceName ON Distances (NameA ASC, NameB ASC)",
+                "CREATE INDEX IF NOT EXISTS stationIndex ON Stations (system_id ASC)",
+                "CREATE INDEX IF NOT EXISTS VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)",
+                "CREATE INDEX IF NOT EXISTS station_commodities_index ON station_commodities (station_id ASC, commodity_id ASC, type ASC)",
+                "CREATE INDEX IF NOT EXISTS StationsIndex_ID  ON Stations (id ASC)",
+                "CREATE INDEX IF NOT EXISTS StationsIndex_system_ID  ON Stations (system_id ASC)",
+                "CREATE INDEX IF NOT EXISTS StationsIndex_system_Name  ON Stations (Name ASC)",
+                "CREATE INDEX IF NOT EXISTS Distances_EDSM_ID_Index ON Distances (id_edsm ASC)",
+                "CREATE INDEX IF NOT EXISTS VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)",
+                "CREATE INDEX IF NOT EXISTS VisitedSystems_position ON VisitedSystems (X, Y, Z)",
+                "CREATE INDEX IF NOT EXISTS SystemAliases_name ON SystemAliases (name)",
+                "CREATE UNIQUE INDEX IF NOT EXISTS SystemAliases_id_edsm ON SystemAliases (id_edsm)",
+                "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
+                "CREATE INDEX IF NOT EXISTS TravelLogUnits_Name ON TravelLogUnits (Name)"
+            };
+            using (SQLiteConnectionED conn = new SQLiteConnectionED())
+            {
+                foreach (string query in queries)
+                {
+                    using (DbCommand cmd = conn.CreateCommand(query))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
         }
 
         public static void DropSystemsTableIndexes()
