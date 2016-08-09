@@ -687,6 +687,7 @@ namespace EDDiscovery
         {
             if (!_syncWorker.IsBusy)
             {
+                edsmRefreshTimer.Enabled = false;
                 _syncWorker.RunWorkerAsync();
             }
         }
@@ -945,6 +946,14 @@ namespace EDDiscovery
             }
             else if (syncwaseddboredsm)
                 LogLine("ESDM and/or EDDB update complete.");
+
+            edsmRefreshTimer.Enabled = true;
+        }
+
+
+        private void edsmRefreshTimer_Tick(object sender, EventArgs e)
+        {
+            AsyncPerformSync();
         }
 
         internal void AsyncRefreshHistory()
@@ -1074,6 +1083,7 @@ namespace EDDiscovery
             if (safeClose == null)                  // so a close is a request now, and it launches a thread which cleans up the system..
             {
                 e.Cancel = true;
+                edsmRefreshTimer.Enabled = false;
                 CancellationTokenSource.Cancel();
                 travelHistoryControl1.CancelHistoryRefresh();
                 _syncWorker.CancelAsync();
