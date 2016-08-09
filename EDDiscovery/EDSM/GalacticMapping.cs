@@ -1,4 +1,5 @@
-﻿using EDDiscovery2.EDDB;
+﻿using EDDiscovery.DB;
+using EDDiscovery2.EDDB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,20 @@ namespace EDDiscovery.EDSM
     {
         readonly string GalacticMappingFile = Path.Combine(Tools.GetAppDataDirectory(), "galacticmapping.json");
 
-        public List<GalacticMapObject> galacticMapObjects;
-        public Dictionary<string , GalMapType > dictGalMapTypes;
+        public List<GalacticMapObject> galacticMapObjects = null;
+        public List<GalMapType> galacticMapTypes = null;
+
+        public GalacticMapping()
+        {
+            galacticMapTypes = GalMapType.GetTypes();          // we always have the types.
+            int sel = SQLiteDBClass.GetSettingInt("GalObjectsEnable", int.MaxValue);
+
+            foreach (GalMapType tp in galacticMapTypes)
+            {
+                tp.Enabled = (sel & 1) != 0;
+                sel >>= 1;
+            }
+        }
 
         public bool DownloadFromEDSM()
         {
@@ -34,7 +47,6 @@ namespace EDDiscovery.EDSM
         public bool ParseData()
         {
             galacticMapObjects = new List<GalacticMapObject>();
-            dictGalMapTypes = GalMapType.GetDictionary;
 
             try
             {
@@ -47,11 +59,15 @@ namespace EDDiscovery.EDSM
                     {
                         GalacticMapObject galobject = new GalacticMapObject(jo);
 
-                        if (dictGalMapTypes.ContainsKey(galobject.type))
-                            galobject.galMapType = dictGalMapTypes[galobject.type];
-                        else
-                            galobject.galMapType = dictGalMapTypes["EDSMUnknown"];
+                        GalMapType ty = galacticMapTypes.Find(x => x.Typeid.Equals(galobject.type));
 
+                        if (ty == null)
+                        {
+                            ty = galacticMapTypes[galacticMapTypes.Count - 1];      // last one is default..
+                            Console.WriteLine("Unknown Gal Map object " + galobject.type);
+                        }
+
+                        galobject.galMapType = ty;
                         galacticMapObjects.Add(galobject);
                     }
 
@@ -64,6 +80,45 @@ namespace EDDiscovery.EDSM
             }
 
             return false;
+        }
+
+        public void ToggleEnable(GalMapType tpsel = null)
+        {
+            int index = 0;
+            int sel = 0;
+
+            GalMapType tpon = galacticMapTypes.Find(x => x.Enabled==true);
+
+            foreach (GalMapType tp in galacticMapTypes)
+            {
+                if (tpsel == null)                              // if toggle all..
+                    tp.Enabled = (tpon == null);                // enabled if all are OFF, else disabled if any are on
+                else if (tpsel == tp)
+                    tp.Enabled = !tp.Enabled;
+
+                sel |= (tp.Enabled ? 1 : 0) << index;
+                index++;
+            }
+
+            SQLiteDBClass.PutSettingInt("GalObjectsEnable", sel);
+        }
+
+        public GalacticMapObject Find(string name, bool contains = false , bool disregardenable = false)
+        {
+            if ( galacticMapObjects != null )
+            {
+                foreach (GalacticMapObject gmo in galacticMapObjects)
+                {
+                    if ( gmo.name.Equals(name,StringComparison.InvariantCultureIgnoreCase) || (contains && gmo.name.IndexOf(name,StringComparison.InvariantCultureIgnoreCase)>=0))
+                    {
+                        if ( gmo.galMapType.Enabled || disregardenable )
+                            return gmo;
+                    }
+                }
+            }
+
+            return null;
+
         }
     }
 }
