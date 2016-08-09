@@ -42,7 +42,7 @@ namespace EDDiscovery
         public int defaultMapColour;
         public EDSMSync sync;
 
-        internal List<VisitedSystemsClass> visitedSystems;
+        internal List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
         internal bool EDSMSyncTo = true;
         internal bool EDSMSyncFrom = true;
 
@@ -100,7 +100,7 @@ namespace EDDiscovery
 
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
-            visitedSystems = null;
+            visitedSystems.Clear();
             try
             {
                 LogText("Refresh History." + Environment.NewLine);
