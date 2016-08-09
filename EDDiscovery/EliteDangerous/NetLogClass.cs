@@ -230,7 +230,7 @@ namespace EDDiscovery
             }
             else if (tlu_lookup != null && tlu_lookup.ContainsKey(fi.Name))
             {
-                tlu = tlu_lookup[fi.Name.ToLower()];
+                tlu = tlu_lookup[fi.Name];
                 tlu.Path = fi.DirectoryName;
                 reader = new NetLogFileReader(tlu);
                 netlogreaders[fi.Name] = reader;
