@@ -574,11 +574,19 @@ namespace EDDiscovery
 
             if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
             {
-                performedsmsync = true;
-
                 // Also update galactic mapping from EDSM (MOVED here for now since we don't use this yet..)
                 LogLine("Get galactic mapping from EDSM.");
                 galacticMapping.DownloadFromEDSM();
+
+                // Skip EDSM full update if update has been performed in last 4 days
+                if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTime()).TotalDays > 4)
+                {
+                    performedsmsync = true;
+                }
+                else
+                {
+                    SQLiteDBClass.PutSettingString("EDSMLastSystems", DateTime.Now.ToString());
+                }
             }
 
             if (!cancelRequested())
