@@ -865,6 +865,9 @@ namespace EDDiscovery
 
                 if (!cancelRequested())
                 {
+                    LogLine("Indexing systems table");
+                    SQLiteDBClass.CreateSystemsTableIndexes();
+
                     PerformEDDBFullSync(cancelRequested, reportProgress);
                 }
             }
