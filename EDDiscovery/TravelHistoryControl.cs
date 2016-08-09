@@ -103,7 +103,6 @@ namespace EDDiscovery
             visitedSystems = null;
             try
             {
-                TriggerEDSMRefresh();
                 LogText("Refresh History." + Environment.NewLine);
                 RefreshHistoryAsync();
             }
@@ -116,15 +115,6 @@ namespace EDDiscovery
                 LogTextHighlight(ex.StackTrace);
             }
         }
-
-        public void TriggerEDSMRefresh()
-        {
-            LogText("Check for new EDSM systems." + Environment.NewLine);
-            EDSMClass edsm = new EDSMClass();
-            edsm.GetNewSystems(_discoveryForm, () => _discoveryForm.PendingClose, _discoveryForm.ReportProgress);
-            LogText("EDSM System check complete." + Environment.NewLine);
-        }
-
 
         public void LogText(string text)
         {
