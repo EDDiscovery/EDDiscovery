@@ -674,7 +674,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS SystemAliases_name ON SystemAliases (name)",
                 "CREATE UNIQUE INDEX IF NOT EXISTS SystemAliases_id_edsm ON SystemAliases (id_edsm)",
                 "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
-                "CREATE INDEX IF NOT EXISTS TravelLogUnits_Name ON TravelLogUnits (Name)"
+                "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)"
             };
             using (SQLiteConnectionED conn = new SQLiteConnectionED())
             {
