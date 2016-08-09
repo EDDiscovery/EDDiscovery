@@ -239,7 +239,7 @@ namespace EDDiscovery2
         {
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
-                GenerateDataSetsNotedSystems();
+                GenerateDataSetsBNG();
                 glControl.Invalidate();
             }
         }
@@ -248,8 +248,7 @@ namespace EDDiscovery2
         {
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
-                GenerateDataSetsBookmarks();
-                GenerateDataSetsNotedSystems();
+                GenerateDataSetsBNG();
                 glControl.Invalidate();
             }
         }
@@ -506,17 +505,7 @@ namespace EDDiscovery2
             if (toolStripButtonCoords.Checked)
                 builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
 
-            GenerateDataSetsBookmarks();
-            GenerateDataSetsNotedSystems();
-            GenerateDataSetsGalMapObjects();
-        }
-
-        private void GenerateDataSetsGalMapObjects()
-        {
-            DeleteDataset(ref _datasets_galmapobjects);
-            _datasets_galmapobjects = null;
-            DatasetBuilder builder = new DatasetBuilder();
-            _datasets_galmapobjects = builder.AddGalMapObjectsToDataset(GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+            GenerateDataSetsBNG();
         }
 
         private void GenerateDataSetsMaps()
@@ -551,8 +540,10 @@ namespace EDDiscovery2
             _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem);
         }
 
-        private void GenerateDataSetsBookmarks()         // Called during Load, and if we ever add systems..
+        private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
         {
+            Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
+
             DeleteDataset(ref _datasets_bookedmarkedsystems);
             _datasets_bookedmarkedsystems = null;
 
@@ -560,30 +551,31 @@ namespace EDDiscovery2
             {
                 Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
                 Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
-                Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
+
                 Debug.Assert(mapstar != null && mapregion != null);
 
-                DatasetBuilder builder = new DatasetBuilder();
-                _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+                DatasetBuilder builder1 = new DatasetBuilder();
+                _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
             }
-        }
 
-        private void GenerateDataSetsNotedSystems()         // Called during Load, and if we ever add systems..
-        {
             DeleteDataset(ref _datasets_notedsystems);
             _datasets_notedsystems = null;
 
             if (showNoteMarksToolStripMenuItem.Checked)
             {
                 Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
-                Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
                 Debug.Assert(map != null);
 
-                DatasetBuilder builder = new DatasetBuilder();
-                _datasets_notedsystems = builder.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , _visitedSystems );
+                DatasetBuilder builder2 = new DatasetBuilder();
+                _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked, _visitedSystems);
             }
-        }
 
+            DeleteDataset(ref _datasets_galmapobjects);
+            _datasets_galmapobjects = null;
+            DatasetBuilder builder3= new DatasetBuilder();
+
+            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+        }
 
         private void DeleteDataset(ref List<IData3DSet> _datasets)
         {
@@ -1380,14 +1372,14 @@ namespace EDDiscovery2
         private void showNoteMarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
-            GenerateDataSetsNotedSystems();
+            GenerateDataSetsBNG();
             glControl.Invalidate();
         }
 
         private void showBookmarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
-            GenerateDataSetsBookmarks();
+            GenerateDataSetsBNG();
             glControl.Invalidate();
         }
 
@@ -1417,7 +1409,7 @@ namespace EDDiscovery2
                     travelHistoryControl.RefreshTargetInfo();
                 }
 
-                GenerateDataSetsBookmarks();
+                GenerateDataSetsBNG();
                 glControl.Invalidate();
             }
         }
@@ -1426,8 +1418,7 @@ namespace EDDiscovery2
         {
             SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
             SetupViewport();
-            GenerateDataSetsNotedSystems();
-            GenerateDataSetsBookmarks();
+            GenerateDataSetsBNG();
             glControl.Invalidate();
         }
 
@@ -1564,7 +1555,7 @@ namespace EDDiscovery2
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)                    // right clicks are about bookmarks.
             {
-                if (cursystem != null || curbookmark != null )      // if we have a system or a bookmark..
+                if (cursystem != null || curbookmark != null)      // if we have a system or a bookmark..
                 {                                                   // try and find the associated bookmark..
                     BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
                     string note = (cursystem != null) ? SystemNoteClass.GetSystemNote(cursystem.name) : null;   // may be null
@@ -1577,7 +1568,7 @@ namespace EDDiscovery2
                         long noteid = SystemNoteClass.GetSystemNoteClass(cursystem.name).id;
 
                         frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
-                        frm.SystemInfo(cursystem.name, note,noteid == targetid);       // note may be passed in null
+                        frm.NotedSystem(cursystem.name, note, noteid == targetid);       // note may be passed in null
                         frm.ShowDialog();
 
                         if ((frm.IsTarget && targetid != noteid) || (!frm.IsTarget && targetid == noteid)) // changed..
@@ -1587,8 +1578,7 @@ namespace EDDiscovery2
                             else
                                 TargetClass.ClearTarget();
 
-                            GenerateDataSetsBookmarks();
-                            GenerateDataSetsNotedSystems();
+                            GenerateDataSetsBNG();
                             glControl.Invalidate();
                             travelHistoryControl.RefreshTargetInfo();
                         }
@@ -1611,7 +1601,7 @@ namespace EDDiscovery2
                             frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
                             regionmarker = bkmark.isRegion;
                             tme = bkmark.Time;
-                            frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker , targetid == bkmark.id );
+                            frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker, targetid == bkmark.id);
                         }
 
                         DialogResult res = frm.ShowDialog();
@@ -1645,9 +1635,8 @@ namespace EDDiscovery2
                                     TargetClass.SetTargetBookmark(regionmarker ? ("RM:" + newcls.Heading) : newcls.StarName, newcls.id, newcls.x, newcls.y, newcls.z);
                                 else
                                     TargetClass.ClearTarget();
-                                
-                                GenerateDataSetsBookmarks();
-                                GenerateDataSetsNotedSystems();
+
+                                GenerateDataSetsBNG();
                                 glControl.Invalidate();
                                 travelHistoryControl.RefreshTargetInfo();
                             }
@@ -1657,8 +1646,6 @@ namespace EDDiscovery2
                             if (targetid == bkmark.id)
                             {
                                 TargetClass.ClearTarget();
-                                GenerateDataSetsBookmarks();
-                                GenerateDataSetsNotedSystems();
                                 glControl.Invalidate();
                                 travelHistoryControl.RefreshTargetInfo();
                             }
@@ -1667,8 +1654,34 @@ namespace EDDiscovery2
                         }
                     }
 
-                    GenerateDataSetsBookmarks();
+                    GenerateDataSetsBNG();      // in case target changed, do all..
                     glControl.Invalidate();
+                }
+                else if (gmo != null)
+                {
+                    long targetid = TargetClass.GetTargetGMO();      // who is the target of a bookmark (0=none)
+
+                    BookmarkForm frm = new BookmarkForm();
+
+                    frm.Name = gmo.name;
+                    frm.InitialisePos(gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
+                    frm.GMO(gmo.name, gmo.description, targetid == gmo.id);
+                    DialogResult res = frm.ShowDialog();
+
+                    if (res == DialogResult.OK)
+                    {
+                        if ((frm.IsTarget && targetid != gmo.id) || (!frm.IsTarget && targetid == gmo.id)) // changed..
+                        {
+                            if (frm.IsTarget)
+                                TargetClass.SetTargetGMO("G:" + gmo.name , gmo.id, gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
+                            else
+                                TargetClass.ClearTarget();
+
+                            GenerateDataSetsBNG();
+                            glControl.Invalidate();
+                            travelHistoryControl.RefreshTargetInfo();
+                        }
+                    }
                 }
 
                 //else if ( notmovedmouse )  if I ever get click at point working..
