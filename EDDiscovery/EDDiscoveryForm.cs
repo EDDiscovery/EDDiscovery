@@ -650,6 +650,18 @@ namespace EDDiscovery
 
                 CheckForNewInstaller();
 
+                LogLine("Reading travel history");
+                travelHistoryControl1.HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
+                travelHistoryControl1.RefreshHistoryAsync();
+            }
+        }
+
+        private void _travelHistoryControl1_InitialRefreshDone(object sender, EventArgs e)
+        {
+            travelHistoryControl1.HistoryRefreshed -= _travelHistoryControl1_InitialRefreshDone;
+
+            if (!PendingClose)
+            {
                 if (performedsmsync || performeddbsync || EDDConfig.UseDistances)
                 {
                     AsyncPerformSync();                              // perform any async synchronisations
@@ -667,11 +679,6 @@ namespace EDDiscovery
                 {
                     long totalsystems = SystemClass.GetTotalSystems();
                     LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
-
-                    //long tickc = Environment.TickCount;
-                    LogLine("Reading travel history");
-                    travelHistoryControl1.RefreshHistoryAsync();
-                    //LogLine("Time " + (Environment.TickCount-tickc) );
                 }
             }
         }
