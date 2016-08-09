@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EDDiscovery;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -30,7 +31,7 @@ namespace EDDiscovery2
             textBoxZ.Text = z.ToString("0.00");
         }
 
-        public void SystemInfo(string name, string note, bool target)
+        public void NotedSystem(string name, string note, bool target)
         {
             this.Text = "System Information";
             buttonCancel.Hide();
@@ -41,17 +42,20 @@ namespace EDDiscovery2
             labelBookmarkNotes.Hide();
             textBoxName.Text = name;
             textBoxTravelNote.Text = (note != null) ? note : "";
-            int delta = textBoxTravelNote.Location.Y - checkBoxTarget.Location.Y;
 
-            checkBoxTarget.Location = new Point(checkBoxTarget.Location.X, labelTimeMade.Location.Y );
+            int delta = textBoxTravelNote.Location.Y - checkBoxTarget.Location.Y;       // before we move it
 
-            buttonOK.Location = new Point(buttonOK.Location.X, buttonOK.Location.Y - delta);
-            labelTravelNote.Location = new Point(labelTravelNote.Location.X, labelTravelNote.Location.Y - delta);
-            labelTravelNoteEdit.Location = new Point(labelTravelNoteEdit.Location.X, labelTravelNoteEdit.Location.Y - delta);
-            textBoxTravelNote.Location = new Point(textBoxTravelNote.Location.X, textBoxTravelNote.Location.Y - delta);
+            checkBoxTarget.Location = new Point(checkBoxTarget.Location.X, labelTimeMade.Location.Y);
+            buttonEDSM.Location = new Point(buttonEDSM.Location.X, labelTimeMade.Location.Y);
+
+            ShiftLocationY(buttonOK, delta);
+            ShiftLocationY(labelTravelNote, delta);
+            ShiftLocationY(labelTravelNoteEdit, delta);
+            ShiftLocationY(textBoxTravelNote, delta);
             this.Height -= delta;
             checkBoxTarget.Checked = target;
         }
+
 
         public void RegionBookmark(string tme)
         {
@@ -65,24 +69,38 @@ namespace EDDiscovery2
             labelTravelNote.Hide();
             labelTravelNoteEdit.Hide();
             textBoxTravelNote.Hide();
+            buttonEDSM.Hide();
 
             int delta = buttonOK.Location.Y - labelTravelNote.Location.Y;
-            buttonOK.Location = new Point(buttonOK.Location.X, buttonOK.Location.Y - delta);
-            buttonCancel.Location = new Point(buttonCancel.Location.X, buttonCancel.Location.Y - delta);
+            ShiftLocationY(buttonOK, delta);
+            ShiftLocationY(buttonCancel, delta);
             this.Height -= delta;
             buttonOK.Enabled = ValidateData();
         }
 
-        public void Update(string name, string note, string bookmarknote, string tme, bool editheading , bool istarget )
+        public void Update(string name, string note, string bookmarknote, string tme, bool regionmark , bool istarget )
         {
             this.Text = "Update Bookmark";
             buttonOK.Text = "Update";
             textBoxName.Text = name;
-            textBoxName.ReadOnly = !editheading;
+            textBoxName.ReadOnly = !regionmark;
             textBoxNotes.Text = bookmarknote;
             textBoxTravelNote.Text = note;
             textBoxTime.Text = tme;
             checkBoxTarget.Checked = istarget;
+
+            if ( regionmark )
+            {
+                buttonEDSM.Hide();
+                labelTravelNote.Hide();
+                labelTravelNoteEdit.Hide();
+                textBoxTravelNote.Hide();
+                int delta = buttonOK.Location.Y - labelTravelNote.Location.Y;
+                ShiftLocationY(buttonOK, delta);
+                ShiftLocationY(buttonCancel, delta);
+                ShiftLocationY(buttonDelete, delta);
+                this.Height -= delta;
+            }
         }
 
         public void New(string name, string note, string tme)
@@ -92,6 +110,39 @@ namespace EDDiscovery2
             textBoxTravelNote.Text = note;
             textBoxTime.Text = tme;
             buttonDelete.Hide();
+        }
+
+        public void GMO(string name, string descr , bool istarget )
+        {
+            this.Text = "Galactic Mapping Object";
+            textBoxName.Text = name;
+            textBoxNotes.Text = Tools.WordWrap(descr,40);
+            textBoxNotes.SelectionStart = textBoxNotes.Text.Length;
+            textBoxNotes.SelectionLength = 0;
+            textBoxNotes.ReadOnly = true;
+            labelBookmarkNotes.Text = "Description";
+            buttonDelete.Hide();
+            textBoxTime.Hide();
+            labelTimeMade.Hide();
+            textBoxTravelNote.Hide();
+            labelTravelNote.Hide();
+            labelTravelNoteEdit.Hide();
+
+            checkBoxTarget.Checked = istarget;
+
+            int delta = buttonOK.Location.Y - labelTravelNote.Location.Y;
+            ShiftLocationY(buttonOK, delta);
+            ShiftLocationY(buttonCancel, delta);
+            this.Height -= delta;
+
+            delta = buttonEDSM.Location.Y - labelTimeMade.Location.Y;
+            ShiftLocationY(buttonEDSM, delta);
+            ShiftLocationY(checkBoxTarget, delta);
+            ShiftLocationY(labelBookmarkNotes, delta);
+            ShiftLocationY(textBoxNotes, delta);
+            ShiftLocationY(buttonOK, delta);
+            ShiftLocationY(buttonCancel, delta);
+            this.Height -= delta;
         }
 
 
@@ -123,5 +174,16 @@ namespace EDDiscovery2
             double xp, yp, zp;
             return (textBoxName.Text.Length > 0 && double.TryParse(textBoxX.Text, out xp) && double.TryParse(textBoxY.Text, out yp) && double.TryParse(textBoxZ.Text, out zp));
         }
+
+        private void buttonEDSM_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        void ShiftLocationY(Control c, int d)
+        {
+            c.Location = new Point(c.Location.X, c.Location.Y - d);
+        }
+
     }
 }

@@ -49,6 +49,7 @@
             this.labelTravelNoteEdit = new System.Windows.Forms.Label();
             this.textBoxTravelNote = new System.Windows.Forms.TextBox();
             this.checkBoxTarget = new System.Windows.Forms.CheckBox();
+            this.buttonEDSM = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -92,7 +93,8 @@
             this.textBoxNotes.Location = new System.Drawing.Point(116, 147);
             this.textBoxNotes.Multiline = true;
             this.textBoxNotes.Name = "textBoxNotes";
-            this.textBoxNotes.Size = new System.Drawing.Size(246, 115);
+            this.textBoxNotes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxNotes.Size = new System.Drawing.Size(336, 115);
             this.textBoxNotes.TabIndex = 0;
             // 
             // textBoxName
@@ -168,7 +170,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(290, 360);
+            this.buttonOK.Location = new System.Drawing.Point(377, 361);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 1;
@@ -178,7 +180,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(209, 361);
+            this.buttonCancel.Location = new System.Drawing.Point(275, 361);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -219,7 +221,7 @@
             this.textBoxTravelNote.Multiline = true;
             this.textBoxTravelNote.Name = "textBoxTravelNote";
             this.textBoxTravelNote.ReadOnly = true;
-            this.textBoxTravelNote.Size = new System.Drawing.Size(246, 63);
+            this.textBoxTravelNote.Size = new System.Drawing.Size(336, 63);
             this.textBoxTravelNote.TabIndex = 8;
             // 
             // checkBoxTarget
@@ -232,11 +234,22 @@
             this.checkBoxTarget.Text = "Make Target";
             this.checkBoxTarget.UseVisualStyleBackColor = true;
             // 
+            // buttonEDSM
+            // 
+            this.buttonEDSM.Location = new System.Drawing.Point(116, 106);
+            this.buttonEDSM.Name = "buttonEDSM";
+            this.buttonEDSM.Size = new System.Drawing.Size(75, 23);
+            this.buttonEDSM.TabIndex = 11;
+            this.buttonEDSM.Text = "EDSM";
+            this.buttonEDSM.UseVisualStyleBackColor = true;
+            this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
+            // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(380, 396);
+            this.ClientSize = new System.Drawing.Size(476, 400);
+            this.Controls.Add(this.buttonEDSM);
             this.Controls.Add(this.checkBoxTarget);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.buttonCancel);
@@ -288,5 +301,6 @@
         private System.Windows.Forms.Label labelTravelNoteEdit;
         private System.Windows.Forms.TextBox textBoxTravelNote;
         private System.Windows.Forms.CheckBox checkBoxTarget;
+        private System.Windows.Forms.Button buttonEDSM;
     }
 }
