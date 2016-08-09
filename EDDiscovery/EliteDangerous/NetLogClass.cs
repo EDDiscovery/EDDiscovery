@@ -164,7 +164,7 @@ namespace EDDiscovery
             {
                 FileInfo fi = allFiles[i];
 
-                var reader = OpenFileReader(fi);
+                var reader = OpenFileReader(fi, m_travelogUnits);
 
                 if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
                 {
@@ -219,7 +219,7 @@ namespace EDDiscovery
             return visitedSystems;
         }
 
-        private NetLogFileReader OpenFileReader(FileInfo fi)
+        private NetLogFileReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null)
         {
             NetLogFileReader reader;
             TravelLogUnit tlu;
@@ -227,6 +227,13 @@ namespace EDDiscovery
             if (netlogreaders.ContainsKey(fi.Name))
             {
                 reader = netlogreaders[fi.Name];
+            }
+            else if (tlu_lookup != null && tlu_lookup.ContainsKey(fi.Name))
+            {
+                tlu = tlu_lookup[fi.Name.ToLower()];
+                tlu.Path = fi.DirectoryName;
+                reader = new NetLogFileReader(tlu);
+                netlogreaders[fi.Name] = reader;
             }
             else if (TravelLogUnit.TryGet(fi.Name, out tlu))
             {
@@ -331,16 +338,16 @@ namespace EDDiscovery
                 }
                 else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
                 {
-                    HashSet<string> travellogs = new HashSet<string>(TravelLogUnit.GetAllNames());
+                    Dictionary<string, TravelLogUnit> travellogs = TravelLogUnit.GetAll().ToDictionary(t => t.Name);
                     string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories)
                                                   .Select(s => new { name = Path.GetFileName(s), fullname = s })
-                                                  .Where(s => !travellogs.Contains(s.name))
+                                                  .Where(s => !travellogs.ContainsKey(s.name))
                                                   .OrderBy(s => s.name)
                                                   .Select(s => s.fullname)
                                                   .ToArray();
                     foreach (var name in filenames)
                     {
-                        nfi = OpenFileReader(new FileInfo(name));
+                        nfi = OpenFileReader(new FileInfo(name), travellogs);
                         lastnfi = nfi;
                         break;
                     }
