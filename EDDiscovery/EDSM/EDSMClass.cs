@@ -227,7 +227,6 @@ namespace EDDiscovery2.EDSM
                 }
 
                 updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, false, discoveryform, cancelRequested, reportProgress, false);
-                SQLiteDBClass.PutSettingString("EDSMLastSystems", lstsyst);
                 lstsystdate += TimeSpan.FromHours(12);
             }
             discoveryform.LogLine($"System download complete");
