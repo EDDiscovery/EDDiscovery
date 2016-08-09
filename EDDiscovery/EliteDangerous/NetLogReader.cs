@@ -35,9 +35,16 @@ namespace EDDiscovery
             systems = new List<VisitedSystemsClass>();
         }
 
-        public NetLogFileReader(TravelLogUnit tlu) : base(tlu)
+        public NetLogFileReader(TravelLogUnit tlu, List<VisitedSystemsClass> vsclist = null) : base(tlu)
         {
-            systems = VisitedSystemsClass.GetAll(tlu);
+            if (vsclist != null)
+            {
+                systems = vsclist;
+            }
+            else
+            {
+                systems = VisitedSystemsClass.GetAll(tlu);
+            }
         }
 
         protected bool ParseTime(string time)
