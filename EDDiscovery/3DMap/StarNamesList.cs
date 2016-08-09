@@ -83,9 +83,9 @@ namespace EDDiscovery2
             _starnames = new Dictionary<Vector3d, StarNames>();
 
             string fontname = "MS Sans Serif";                  // calculate once for bitmap 
-            _starnamebitmapfnt = new Font(fontname, 20F);
+            _starnamebitmapfnt = new Font(fontname, 12F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
 
-            Bitmap text_bmp = new Bitmap(100, 30);
+            Bitmap text_bmp = new Bitmap(300, 30);
             using (Graphics g = Graphics.FromImage(text_bmp))
             {
                 SizeF sz = g.MeasureString("Blah blahx EX222 LYXX2", _starnamebitmapfnt);

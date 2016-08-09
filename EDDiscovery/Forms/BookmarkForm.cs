@@ -1,4 +1,5 @@
 ﻿using EDDiscovery;
+using EDDiscovery2.EDSM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +19,8 @@ namespace EDDiscovery2
         public string y { get { return textBoxY.Text; } }
         public string z { get { return textBoxZ.Text; } }
         public bool IsTarget { get { return checkBoxTarget.Checked;  } }
+
+        private string edsmurl = null;
 
         public BookmarkForm()
         {
@@ -54,6 +57,9 @@ namespace EDDiscovery2
             ShiftLocationY(textBoxTravelNote, delta);
             this.Height -= delta;
             checkBoxTarget.Checked = target;
+
+            var edsm = new EDSM.EDSMClass();
+            edsmurl = edsm.GetUrlToEDSMSystem(name);
         }
 
 
@@ -101,18 +107,25 @@ namespace EDDiscovery2
                 ShiftLocationY(buttonDelete, delta);
                 this.Height -= delta;
             }
+            else
+            {
+                var edsm = new EDSM.EDSMClass();
+                edsmurl = edsm.GetUrlToEDSMSystem(name);
+            }
         }
 
-        public void New(string name, string note, string tme)
+        public void NewSystemBookmark(string name, string note, string tme)
         {
-            this.Text = "New Bookmark";
+            this.Text = "New System Bookmark";
             textBoxName.Text = name;
             textBoxTravelNote.Text = note;
             textBoxTime.Text = tme;
             buttonDelete.Hide();
+            var edsm = new EDSM.EDSMClass();
+            edsmurl = edsm.GetUrlToEDSMSystem(name);
         }
 
-        public void GMO(string name, string descr , bool istarget )
+        public void GMO(string name, string descr , bool istarget , string url )
         {
             this.Text = "Galactic Mapping Object";
             textBoxName.Text = name;
@@ -143,6 +156,8 @@ namespace EDDiscovery2
             ShiftLocationY(buttonOK, delta);
             ShiftLocationY(buttonCancel, delta);
             this.Height -= delta;
+
+            edsmurl = url;
         }
 
 
@@ -177,7 +192,8 @@ namespace EDDiscovery2
 
         private void buttonEDSM_Click(object sender, EventArgs e)
         {
-
+            if ( edsmurl!=null )
+                System.Diagnostics.Process.Start(edsmurl);
         }
 
         void ShiftLocationY(Control c, int d)

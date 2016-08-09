@@ -59,13 +59,13 @@ namespace EDDiscovery2
         private float _zoom = 1.0f;
 
         private Vector3 _viewtargetpos = Vector3.Zero;          // point where we are viewing. Eye is offset from this by _cameraDir * 1000/_zoom. (prev _cameraPos)
-        private Vector3 _cameraDir = Vector3.Zero;              
+        private Vector3 _cameraDir = Vector3.Zero;
         private float _cameraFov = (float)(Math.PI / 2.0f);     // Camera, in radians, 180/2 = 90 degrees
 
         private const double ZoomMax = 300;
         private const double ZoomMin = 0.01;
         private const double ZoomFact = 1.2589254117941672104239541063958;
-        
+
         private Vector3 _cameraActionMovement = Vector3.Zero;
         private Vector3 _cameraActionRotation = Vector3.Zero;
         private const double CameraSlewTime = 1.0;                  // Controls speed of slew
@@ -75,7 +75,7 @@ namespace EDDiscovery2
         private KeyboardActions _kbdActions = new KeyboardActions();
         private long _oldTickCount = DateTime.Now.Ticks / 10000;
         private int _ticks = 0;
-        
+
         private Point _mouseStartRotate;
         private Point _mouseStartTranslateXY;
         private Point _mouseStartTranslateXZ;
@@ -83,7 +83,7 @@ namespace EDDiscovery2
         private Point _mouseHover;
         Timer _mousehovertick = new Timer();
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
-        
+
         private float _defaultZoom;
         private List<SystemClass> _referenceSystems { get; set; }
         public List<VisitedSystemsClass> _visitedSystems { get; set; }
@@ -104,11 +104,13 @@ namespace EDDiscovery2
 
         private bool _isActivated = false;
 
-        public bool Is3DMapsRunning { get { return _stargrids != null;  } }
+        public bool Is3DMapsRunning { get { return _stargrids != null; } }
 
         #endregion
 
         #region Initialisation
+
+        List<ToolStripMenuItem> galmaptsm = new List<ToolStripMenuItem>();
 
         public FormMap()
         {
@@ -119,7 +121,7 @@ namespace EDDiscovery2
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
             _visitedSystems = visited;
-            Prepare((historysel!= null) ? FindSystem(historysel.Name):null , homesys, centersys, zoom, sysname, visited);
+            Prepare((historysel != null) ? FindSystem(historysel.Name) : null, homesys, centersys, zoom, sysname, visited);
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
@@ -137,7 +139,7 @@ namespace EDDiscovery2
             _historySelection = SafeSystem(historysel);
             _homeSystem = SafeSystem((homesys != null) ? FindSystem(homesys) : null);
             _centerSystem = SafeSystem(centersys);
-            
+
             if (_stargrids == null)
             {
                 _stargrids = new StarGrids();
@@ -167,13 +169,42 @@ namespace EDDiscovery2
             toolStripButtonStarNames.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNames", true);
             showNoteMarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowNoteMarks", true);
             showBookmarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowBookmarks", true);
-            toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false );
+            toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false);
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
 
             _stargrids.FillVisitedSystems(_visitedSystems);     // to ensure its updated
             _stargrids.Start();
+
+            if (toolStripDropDownButtonGalObjects.DropDownItems.Count == 0)
+            {
+                Debug.Assert(EDDiscoveryForm.galacticMapping.galacticMapTypes != null);
+
+                foreach (GalMapType tp in EDDiscoveryForm.galacticMapping.galacticMapTypes)
+                {
+                    toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp));
+                }
+
+                toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton("Toggle All", null));
+            }
         }
+
+        public ToolStripMenuItem AddGalMapButton( string name, GalMapType tp)
+        {
+            ToolStripMenuItem tsmi = new ToolStripMenuItem();
+            tsmi.Text = name; 
+            tsmi.Size = new Size(195, 22);
+            tsmi.Tag = tp;
+            if (tp != null)
+            {
+                tsmi.CheckState = CheckState.Checked;
+                tsmi.CheckOnClick = true;
+                tsmi.Checked = tp.Enabled;
+            }
+            tsmi.Click += new System.EventHandler(this.showGalacticMapTypeMenuItem_Click);
+            return tsmi;
+        }
+
 
         public void SetPlannedRoute(List<SystemClass> plannedr)
         {
@@ -574,7 +605,8 @@ namespace EDDiscovery2
             _datasets_galmapobjects = null;
             DatasetBuilder builder3= new DatasetBuilder();
 
-            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+            int selected = SQLiteDBClass.GetSettingInt("Map3DGalObjects", int.MaxValue);
+            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , selected);
         }
 
         private void DeleteDataset(ref List<IData3DSet> _datasets)
@@ -966,8 +998,11 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            foreach (var dataset in _datasets_galmapobjects)
-                dataset.DrawAll(glControl);
+            if (_datasets_galmapobjects != null)
+            {
+                foreach (var dataset in _datasets_galmapobjects)
+                    dataset.DrawAll(glControl);
+            }
 
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
             
@@ -1240,6 +1275,7 @@ namespace EDDiscovery2
         private void buttonCenter_Click(object sender, EventArgs e)
         {
             ISystem sys = FindSystem(textboxFrom.Text);
+            GalacticMapObject gmo = null;
 
             if (sys != null)
             {
@@ -1247,7 +1283,18 @@ namespace EDDiscovery2
                 SetCenterSystemTo(sys, true);
             }
             else
-                MessageBox.Show("System " + textboxFrom.Text + " not found");
+            {
+                gmo = EDDiscoveryForm.galacticMapping.Find(textboxFrom.Text, true);
+
+                if (gmo != null)
+                {
+                    textboxFrom.Text = gmo.name;
+                    _clickedposition = new Vector3((float)gmo.points[0].x, (float)gmo.points[0].y, (float)gmo.points[0].z);
+                    StartCameraSlew(_clickedposition);
+                }
+                else
+                    MessageBox.Show("System or Object " + textboxFrom.Text + " not found");
+            }
         }
 
         private void toolStripButtonGoBackward_Click(object sender, EventArgs e)
@@ -1330,6 +1377,30 @@ namespace EDDiscovery2
         private void showStarstoolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
+            glControl.Invalidate();
+        }
+
+        private void showGalacticMapTypeMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tmsi = (ToolStripMenuItem)sender;
+            GalMapType tp = (GalMapType)tmsi.Tag;
+
+            if (tp == null )
+            {
+                EDDiscoveryForm.galacticMapping.ToggleEnable();
+
+                foreach (ToolStripMenuItem ti in toolStripDropDownButtonGalObjects.DropDownItems)
+                {
+                    if ( ti.Tag != null )
+                        ti.Checked = ((GalMapType)ti.Tag).Enabled;
+                }
+            }
+            else
+            {
+                EDDiscoveryForm.galacticMapping.ToggleEnable(tp);
+            }
+
+            GenerateDataSetsBNG();
             glControl.Invalidate();
         }
 
@@ -1594,7 +1665,7 @@ namespace EDDiscovery2
                         {
                             frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
                             tme = DateTime.Now;
-                            frm.New(cursystem.name, note, tme.ToString());
+                            frm.NewSystemBookmark(cursystem.name, note, tme.ToString());
                         }
                         else                                        // update bookmark
                         {
@@ -1665,7 +1736,7 @@ namespace EDDiscovery2
 
                     frm.Name = gmo.name;
                     frm.InitialisePos(gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
-                    frm.GMO(gmo.name, gmo.description, targetid == gmo.id);
+                    frm.GMO(gmo.name, gmo.description, targetid == gmo.id,gmo.galMapUrl);
                     DialogResult res = frm.ShowDialog();
 
                     if (res == DialogResult.OK)
@@ -1898,7 +1969,7 @@ namespace EDDiscovery2
                 xp = gmo.points[0].x;
                 yp = gmo.points[0].y;
                 zp = gmo.points[0].z;
-                info = gmo.name + Environment.NewLine + gmo.galMapType.description + Environment.NewLine + Tools.WordWrap(gmo.description,60) + Environment.NewLine +
+                info = gmo.name + Environment.NewLine + gmo.galMapType.Description + Environment.NewLine + Tools.WordWrap(gmo.description,60) + Environment.NewLine +
                     string.Format("x:{0} y:{1} z:{2}", xp.ToString("0.00"), yp.ToString("0.00"), zp.ToString("0.00"));
                 sysname = "<<Never match string! to make the comparison fail";
             }
@@ -2110,13 +2181,10 @@ namespace EDDiscovery2
             {
                 foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
                 {
-                    Bitmap touse = gmo.galMapType.image;
                     PointData pd = (gmo.points.Count > 0) ? gmo.points[0] : null;     // lets be paranoid
 
-                    if (touse != null && pd != null)             // if it has an image (may not) and has a co-ord, may not.. 
+                    if (gmo.galMapType.Enabled && pd != null)             // if it is Enabled and has a co-ord, may not.. 
                     {
-                        //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
-
                         double newcursysdistz;
                         if (IsWithinRectangle(GetBitmapOnScreenOutline(pd.x,pd.y,pd.z, bksize,bksize/2,bksize/2), x, y, out newcursysdistz, ref resmat))
                         {
