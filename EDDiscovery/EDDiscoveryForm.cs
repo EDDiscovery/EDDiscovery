@@ -567,12 +567,8 @@ namespace EDDiscovery
         {
             reportProgress(-1, "");
 
-            LogLine("Indexing systems table");
-            SQLiteDBClass.CreateSystemsTableIndexes();
-
             CommanderName = EDDConfig.CurrentCommander.Name;
 
-            EDSMClass edsm = new EDSMClass();
             string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
             DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
 
@@ -583,19 +579,6 @@ namespace EDDiscovery
                 // Also update galactic mapping from EDSM (MOVED here for now since we don't use this yet..)
                 LogLine("Get galactic mapping from EDSM.");
                 galacticMapping.DownloadFromEDSM();
-            }
-            else
-            {
-                if (CanSkipSlowUpdates())
-                {
-                    LogLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
-                }
-                else
-                {
-                    LogLine("Checking for new EDSM systems (may take a few moments).");
-                    long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
-                    LogLine("EDSM updated " + updates + " systems.");
-                }
             }
 
             if (!cancelRequested())
@@ -662,10 +645,10 @@ namespace EDDiscovery
 
             if (!PendingClose)
             {
+                AsyncPerformSync();                              // perform any async synchronisations
+
                 if (performedsmsync || performeddbsync || EDDConfig.UseDistances)
                 {
-                    AsyncPerformSync();                              // perform any async synchronisations
-
                     if (performeddbsync || performedsmsync)
                     {
                         string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
@@ -674,11 +657,6 @@ namespace EDDiscovery
                                         "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + 
                                         "Please continue running ED Discovery until refresh is complete.");
                     }
-                }
-                else
-                {
-                    long totalsystems = SystemClass.GetTotalSystems();
-                    LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
                 }
             }
         }
@@ -719,7 +697,7 @@ namespace EDDiscovery
             {
                 var worker = (System.ComponentModel.BackgroundWorker)sender;
 
-                PerformFullSync(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
+                PerformSync(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));
                 if (worker.CancellationPending)
                     e.Cancel = true;
             }
@@ -795,14 +773,6 @@ namespace EDDiscovery
                 // Stop if requested
                 if (cancelRequested())
                     return false;
-
-                LogLine("Indexing systems table");
-                SQLiteDBClass.CreateSystemsTableIndexes();
-
-                LogLine("Now checking for recent EDSM systems.");
-                updates += edsm.GetNewSystems(this, cancelRequested, reportProgress);
-
-                SystemsUpdating = false;
 
                 LogLine("Local database updated with EDSM data, " + updates + " systems updated.");
 
@@ -904,7 +874,7 @@ namespace EDDiscovery
             return (numbertotal != 0);
         }
 
-        private void PerformFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
+        private void PerformSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
         {
             reportProgress(-1, "");
             syncwasfirstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
@@ -930,6 +900,26 @@ namespace EDDiscovery
             }
             else
                 performedsmdistsync = false;
+
+            if (!cancelRequested())
+            {
+                LogLine("Indexing systems table");
+                SQLiteDBClass.CreateSystemsTableIndexes();
+
+                if (CanSkipSlowUpdates())
+                {
+                    LogLine("Skipping loading updates (DEBUG option). Need to turn this back on again? Look in the Settings tab.");
+                }
+                else
+                {
+                    LogLine("Checking for new EDSM systems (may take a few moments).");
+                    EDSMClass edsm = new EDSMClass();
+                    long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
+                    LogLine("EDSM updated " + updates + " systems.");
+                }
+
+                SystemsUpdating = false;
+            }
 
             syncwaseddboredsm = edsmoreddbsync;
             reportProgress(-1, "");
