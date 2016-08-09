@@ -88,6 +88,7 @@ namespace EDDiscovery
 
         Action cancelDownloadMaps = null;
         Task<bool> downloadMapsTask = null;
+        Task checkInstallerTask = null;
         private string logname;
         private bool logsetupfailed;
 
@@ -295,8 +296,9 @@ namespace EDDiscovery
             downloadMapsTask = DownloadMaps((cb) => cancelDownloadMaps = cb);
         }
 
-        private void CheckForNewInstaller()
+        private Task CheckForNewInstaller()
         {
+            return Task.Factory.StartNew(() =>
             {
                 EDDiscoveryServer eds = new EDDiscoveryServer();
 
@@ -316,11 +318,11 @@ namespace EDDiscovery
 
                     if (v1.CompareTo(v2) > 0) // Test if newver installer exists:
                     {
-                        LogLineHighlight("New EDDiscovery installer available " + "http://eddiscovery.astronet.se/release/" + newInstaller);
+                        this.BeginInvoke(new Action(() => LogLineHighlight("New EDDiscovery installer available " + "http://eddiscovery.astronet.se/release/" + newInstaller)));
                     }
 
                 }
-            }
+            });
         }
 
         private void InitFormControls()
@@ -639,11 +641,11 @@ namespace EDDiscovery
 
                 panelInfo.Visible = false;
 
-                CheckForNewInstaller();
-
                 LogLine("Reading travel history");
                 travelHistoryControl1.HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
                 travelHistoryControl1.RefreshHistoryAsync();
+
+                checkInstallerTask = CheckForNewInstaller();
             }
         }
 
