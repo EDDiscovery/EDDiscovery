@@ -1196,7 +1196,7 @@ namespace EDDiscovery.DB
                 {
                     string vsc_searchname = vsc.Name.ToLower();
 
-                    if (vsc.curSystem == null)                                              // if not set before, look it up
+                    if (vsc.curSystem == null || vsc.curSystem.id_edsm == 0)                                              // if not set before, look it up
                     {
                         List<SystemClass> posmatches = null;
                         List<SystemClass> nameposmatches = null;
