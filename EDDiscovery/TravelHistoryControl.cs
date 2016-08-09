@@ -139,20 +139,17 @@ namespace EDDiscovery
 
         public void RefreshHistoryAsync()
         {
-            if (visitedSystems == null || visitedSystems.Count == 0)
+            if (activecommander >= 0)
             {
-                if (activecommander >= 0)
+                if (!_refreshWorker.IsBusy)
                 {
-                    if (!_refreshWorker.IsBusy)
-                    {
-                        button_RefreshHistory.Enabled = false;
-                        _refreshWorker.RunWorkerAsync();
-                    }
+                    button_RefreshHistory.Enabled = false;
+                    _refreshWorker.RunWorkerAsync();
                 }
-                else
-                {
-                    RefreshHistory(VisitedSystemsClass.GetAll(activecommander));
-                }
+            }
+            else
+            {
+                RefreshHistory(VisitedSystemsClass.GetAll(activecommander));
             }
         }
 
