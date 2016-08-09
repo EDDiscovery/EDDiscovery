@@ -166,11 +166,6 @@ namespace EDDiscovery
 
                 var reader = OpenFileReader(fi);
 
-                if (reader.TimeZone == null)
-                {
-                    reader.ReadHeader();
-                }
-
                 if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
                 {
                     m_travelogUnits[reader.TravelLogUnit.Name] = reader.TravelLogUnit;
