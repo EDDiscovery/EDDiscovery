@@ -785,6 +785,10 @@ namespace EDDiscovery
                     return false;
                 }
 
+                // Stop if requested
+                if (cancelRequested())
+                    return false;
+
                 LogLine("Indexing systems table");
                 SQLiteDBClass.CreateSystemsTableIndexes();
 
