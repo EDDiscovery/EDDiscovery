@@ -457,42 +457,6 @@ namespace EDDiscovery
                 }, 
                 (s) => LogLine("Map check complete."),
                 registerCancelCallback);
-
-                /*
-                if (DownloadMapFile("SC-01.jpg"))  // If server down only try one.
-                {
-                    DownloadMapFile("SC-02.jpg");
-                    DownloadMapFile("SC-03.jpg");
-                    DownloadMapFile("SC-04.jpg");
-
-                    DownloadMapFile("SC-L4.jpg");
-                    DownloadMapFile("SC-U4.jpg");
-
-                    DownloadMapFile("SC-00.png");
-                    DownloadMapFile("SC-00.json");
-
-
-                    DownloadMapFile("Galaxy_L.jpg");
-                    DownloadMapFile("Galaxy_L.json");
-                    DownloadMapFile("Galaxy_L_Grid.jpg");
-                    DownloadMapFile("Galaxy_L_Grid.json");
-
-                    DownloadMapFile("DW1.jpg");
-                    DownloadMapFile("DW1.json");
-                    DownloadMapFile("DW2.jpg");
-                    DownloadMapFile("DW2.json");
-                    DownloadMapFile("DW3.jpg");
-                    DownloadMapFile("DW3.json");
-                    DownloadMapFile("DW4.jpg");
-                    DownloadMapFile("DW4.json");
-
-                    DownloadMapFile("Formidine.png");
-                    DownloadMapFile("Formidine.json");
-                    DownloadMapFile("Formidine trans.png");
-                    DownloadMapFile("Formidine trans.json");
-                    
-                }
-                */
             }
             catch (Exception ex)
             {
