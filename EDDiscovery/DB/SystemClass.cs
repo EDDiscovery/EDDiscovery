@@ -1812,7 +1812,7 @@ namespace EDDiscovery.DB
                                                 3,3,4,4,5, 5,6,7,8,9,                   // 10   -10,-8,-6,..
                                                 10,11,12,13,14, 14,15,15,16,16,         // 20 centre
                                                 17,17,17,17,17, 18,18,18,18,18,         // 30   +10
-                                                19                                      // 40   +20
+                                                19,19                                   // 40   +20
                                             };
         public const int gridzrange = 26;
         static private int[] compresstablez = {
@@ -1823,7 +1823,7 @@ namespace EDDiscovery.DB
                                                 19,19,19,19,19, 20,20,20,20,20,         // 40 +30
                                                 21,21,21,21,21, 22,22,22,22,22,         // 50 +40    
                                                 23,23,23,23,23, 24,24,24,24,24,         // 60 +50
-                                                25,                                     // 70 +60
+                                                25,25                                   // 70 +60
                                             };
         public const int xleft = -20500;
         public const int xright = 20000;
@@ -1832,10 +1832,10 @@ namespace EDDiscovery.DB
 
         public static int Id(double x, double z)
         {
-            x = Math.Min(Math.Max(x - xleft, 0), xright - xleft);
-            z = Math.Min(Math.Max(z - zbot, 0), ztop - zbot);
-            x /= 1000;
-            z /= 1000;
+            x = Math.Min(Math.Max(x - xleft, 0), xright - xleft);       // 40500
+            z = Math.Min(Math.Max(z - zbot, 0), ztop - zbot);           // 70500
+            x /= 1000;                                                  // 0-40.5 inc
+            z /= 1000;                                                  // 0-70.5 inc
             return compresstablex[(int)x] + 100 * compresstablez[(int)z];
         }
 

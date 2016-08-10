@@ -20,6 +20,7 @@ namespace EDDiscovery2._3DMap
     {
         private List<IData3DSet> _datasets;
         private static Dictionary<string, TexturedQuadData> _cachedTextures = new Dictionary<string, TexturedQuadData>();
+        private static Dictionary<string, Bitmap> _cachedBitmaps = new Dictionary<string, Bitmap>();
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
@@ -55,6 +56,7 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
+        
         private void AddMapImages(ref List<FGEImage> Images)
         {
             if (Images != null && Images.Count != 0)
@@ -196,18 +198,6 @@ namespace EDDiscovery2._3DMap
             {
                 long gmotarget = TargetClass.GetTargetGMO();
 
-                string fontname = "MS Sans Serif";                  // calculate once for bitmap 
-                Font fnt = new Font(fontname, 16F);
-
-                int textwidth = 0, textheight = 0;
-                Bitmap text_bmp = new Bitmap(500, 30);
-                using (Graphics g = Graphics.FromImage(text_bmp))
-                {
-                    SizeF sz = g.MeasureString("Athaip Wisteria Nebula Here", fnt);
-                    textwidth = (int)sz.Width + 4;
-                    textheight = (int)sz.Height + 4;
-                }
-
                 foreach ( GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
                 {
                     PointData pd = (gmo.points.Count>0) ? gmo.points[0] : null;     // lets be paranoid
@@ -240,15 +230,27 @@ namespace EDDiscovery2._3DMap
 
                         datasetbks.Add(newtexture);
 
-                        Bitmap map = DrawStringCentered(gmo.name, fnt, textwidth, textheight, Color.Orange);
+                        Bitmap map = null;
+
+                        if ( _cachedBitmaps.ContainsKey(gmo.name))      // cache them, they take a long time to compute..
+                        {
+                            map = _cachedBitmaps[gmo.name];
+                        }
+                        else
+                        {
+                            map = DrawString(gmo.name, Color.Orange);
+                            _cachedBitmaps.Add(gmo.name, map);
+                        }
+
+                        double wd = widthly / 5 * gmo.name.Length;
+                        double hd = widthly / 1;
 
                         if (vert)
                         {
-                            double wd = widthly / 5 * gmo.name.Length;
 
                             newtexture = TexturedQuadData.FromBitmapVert(map,
-                                                     new PointF((float)(pd.x - wd), (float)(pd.y - heightly - widthly)),
-                                                        new PointF((float)(pd.x + wd), (float)(pd.y - heightly- widthly)),
+                                                     new PointF((float)(pd.x - wd), (float)(pd.y - heightly - hd)),
+                                                        new PointF((float)(pd.x + wd), (float)(pd.y - heightly- hd)),
                                                      new PointF((float)(pd.x - wd), (float)(pd.y - heightly)),
                                                         new PointF((float)(pd.x + wd), (float)(pd.y - heightly)),
                                                      (float)pd.z);
@@ -256,10 +258,10 @@ namespace EDDiscovery2._3DMap
                         else
                         {
                             newtexture = TexturedQuadData.FromBitmapHorz(map,
+                                                      new PointF((float)(pd.x - widthly), (float)(pd.z - heightly - hd)),
+                                                         new PointF((float)(pd.x + widthly), (float)(pd.z - heightly - hd)),
                                                       new PointF((float)(pd.x - widthly), (float)(pd.z - heightly)),
                                                          new PointF((float)(pd.x + widthly), (float)(pd.z - heightly)),
-                                                      new PointF((float)(pd.x - widthly), (float)(pd.z - heightly - 50)),
-                                                         new PointF((float)(pd.x + widthly), (float)(pd.z - heightly -50)),
                                                       (float)pd.y);
                         }
 
@@ -610,32 +612,24 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        static public Bitmap DrawString(string str, Font fnt, int w, int h, Color textcolour)
+        static public Bitmap DrawString(string str, Color textcolour)
         {
-            Bitmap text_bmp = new Bitmap(w, h);
-            using (Graphics g = Graphics.FromImage(text_bmp))
+            Bitmap stringstarmeasurebitmap = new Bitmap(1, 1);
+            using (Graphics g = Graphics.FromImage(stringstarmeasurebitmap))
             {
-                using (Brush br = new SolidBrush(textcolour))
-                    g.DrawString(str, fnt, br, new Point(0, 0));
-            }
+                SizeF sz = g.MeasureString(str, stringstarfont);
 
-            return text_bmp;
+                Bitmap text_bmp = new Bitmap((int)sz.Width + 4, (int)sz.Height + 4);
+                using (Graphics h = Graphics.FromImage(text_bmp))
+                {
+                    using (Brush br = new SolidBrush(textcolour))
+                        h.DrawString(str, stringstarfont, br, new Point(0, 0));
+                }
+
+                return text_bmp;
+            }
         }
 
-        static public Bitmap DrawStringCentered(string str, Font fnt, int w, int h, Color textcolour)
-        {
-            StringFormat fmt = new StringFormat();
-            fmt.Alignment = StringAlignment.Center;
-
-            Bitmap text_bmp = new Bitmap(w, h);
-            using (Graphics g = Graphics.FromImage(text_bmp))
-            {
-                using (Brush br = new SolidBrush(textcolour))
-                    g.DrawString(str, fnt, br, new RectangleF(0, 0,text_bmp.Size.Width,text_bmp.Size.Height),fmt);
-            }
-
-            return text_bmp;
-        }
-
+        private static Font stringstarfont = new Font("MS Sans Serif", 12F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
     }
 }

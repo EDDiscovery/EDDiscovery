@@ -45,15 +45,17 @@ namespace EDDiscovery2
         StarGrids _stargrids;                   // holds stars
 
         StarNamesList _starnameslist;           // holds named stars
-        Timer _starnametimer = new Timer();
+        Timer _starnametimer = new Timer();     // kicks off star naming
 
         private AutoCompleteStringCollection _systemNames;
 
         private ISystem _centerSystem;
         private ISystem _homeSystem;
         private ISystem _historySelection;
+
         private ISystem _clickedSystem;         // left clicked on a system/bookmark system/noted system
-        private Vector3 _clickedposition;       // left clicked on a position
+        private Vector3 _clickedposition = new Vector3(float.NaN,float.NaN,float.NaN);       // left clicked on a position
+        private string _clickedurl;             // what url is associated..
 
         private bool _loaded = false;
         private float _zoom = 1.0f;
@@ -68,19 +70,22 @@ namespace EDDiscovery2
 
         private Vector3 _cameraActionMovement = Vector3.Zero;
         private Vector3 _cameraActionRotation = Vector3.Zero;
-        private const double CameraSlewTime = 1.0;                  // Controls speed of slew
-        private float _cameraSlewProgress = 1.0f;                   // 0 -> 1 slew progress
-        private Vector3 _cameraSlewPosition;
+
+        private float _cameraSlewProgress = 1.0f;               // 0 -> 1 slew progress
+        private float _cameraSlewTime;                          // how long to take to do the slew
+        private Vector3 _cameraSlewPosition;                    // where to slew to.
 
         private KeyboardActions _kbdActions = new KeyboardActions();
-        private long _oldTickCount = DateTime.Now.Ticks / 10000;
-        private int _ticks = 0;
+        private Stopwatch _updateinterval = new Stopwatch();
+        private long _lastmstick;
+        private int _msticks;
 
         private Point _mouseStartRotate;
         private Point _mouseStartTranslateXY;
         private Point _mouseStartTranslateXZ;
         private Point _mouseDownPos;
         private Point _mouseHover;
+
         Timer _mousehovertick = new Timer();
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
 
@@ -100,7 +105,6 @@ namespace EDDiscovery2
         private ToolStripControlHost endPickerHost;
 
         private float _znear;
-        private bool _timerRunning;
 
         private bool _isActivated = false;
 
@@ -182,7 +186,8 @@ namespace EDDiscovery2
 
                 foreach (GalMapType tp in EDDiscoveryForm.galacticMapping.galacticMapTypes)
                 {
-                    toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp));
+                    if ( tp.Group == GalMapType.GalMapGroup.Markers )       // only markers for now..
+                        toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp));
                 }
 
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton("Toggle All", null));
@@ -210,14 +215,14 @@ namespace EDDiscovery2
         {
             _plannedRoute = plannedr;
             GenerateDataSetsVisitedSystems();
-            glControl.Invalidate();
+            Repaint();
         }
 
         public void SetReferenceSystems(List<SystemClass> refsys)
         {
             _referenceSystems = refsys;
             GenerateDataSetsVisitedSystems();
-            glControl.Invalidate();
+            Repaint();
         }
 
         public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
@@ -228,7 +233,7 @@ namespace EDDiscovery2
                 _stargrids.FillVisitedSystems(_visitedSystems);          // update visited systems, will be displayed on next update of star grids
                 GenerateDataSetsVisitedSystems();
                 _starnameslist.RecalcStarNames();
-                glControl.Invalidate();
+                Repaint();
 
                 if (toolStripButtonAutoForward.Checked)             // auto forward?
                 {
@@ -271,7 +276,7 @@ namespace EDDiscovery2
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 GenerateDataSetsBNG();
-                glControl.Invalidate();
+                Repaint();
             }
         }
 
@@ -280,7 +285,7 @@ namespace EDDiscovery2
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 GenerateDataSetsBNG();
-                glControl.Invalidate();
+                Repaint();
             }
         }
 
@@ -329,14 +334,12 @@ namespace EDDiscovery2
         private void FormMap_Activated(object sender, EventArgs e)
         {
             _isActivated = true;
-            _timerRunning = false;      // this causes ApplicationIdle to kick the first invalidate off..
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void FormMap_Deactivate(object sender, EventArgs e)
         {
             _isActivated = false;
-            _timerRunning = true;
             UpdateTimer.Stop();
         }
 
@@ -364,15 +367,6 @@ namespace EDDiscovery2
             SetupViewport();
 
             _loaded = true;
-
-            Application.Idle += Application_Idle;
-            _timerRunning = false;              // timer is not running, app idle will kick it off..
-        }
-
-        private void Application_Idle(object sender, EventArgs e)
-        {
-            if (!_timerRunning)                 // used when keyboard or camera slew, and at first load..
-                glControl.Invalidate();
         }
 
         private void LoadMapImages()
@@ -529,6 +523,8 @@ namespace EDDiscovery2
 
         private void UpdateDataSetsDueToZoom()
         {
+            Stopwatch sw = new Stopwatch();
+
             DatasetBuilder builder = new DatasetBuilder();
             if (toolStripButtonFineGrid.Checked)
                 builder.UpdateGridZoom(ref _datasets_coarsegridlines, _zoom);
@@ -573,6 +569,9 @@ namespace EDDiscovery2
 
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
         {
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
             Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
 
             DeleteDataset(ref _datasets_bookedmarkedsystems);
@@ -589,6 +588,8 @@ namespace EDDiscovery2
                 _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
             }
 
+            long time1 = sw.ElapsedMilliseconds;
+
             DeleteDataset(ref _datasets_notedsystems);
             _datasets_notedsystems = null;
 
@@ -601,13 +602,20 @@ namespace EDDiscovery2
                 _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked, _visitedSystems);
             }
 
+            long time2 = sw.ElapsedMilliseconds;
             DeleteDataset(ref _datasets_galmapobjects);
             _datasets_galmapobjects = null;
             DatasetBuilder builder3= new DatasetBuilder();
 
             int selected = SQLiteDBClass.GetSettingInt("Map3DGalObjects", int.MaxValue);
             _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , selected);
+
+            long time3 = sw.ElapsedMilliseconds;
+
+            Console.WriteLine("Time " + time1 + " " + time2 + " " + time3);
         }
+
+
 
         private void DeleteDataset(ref List<IData3DSet> _datasets)
         {
@@ -635,7 +643,7 @@ namespace EDDiscovery2
             {
                 if (_starnameslist.RemoveAllNamedStars())
                 {
-                    glControl.Invalidate();
+                    Repaint();
                     GC.Collect();
                 }
             }
@@ -643,7 +651,7 @@ namespace EDDiscovery2
 
         public void ChangeNamedStars()                                  // for the star naming thread.. kick it off
         {
-            glControl.Invalidate();
+            Repaint();
             _starnametimer.Start();                                      // and do another tick..
         }
 
@@ -722,8 +730,6 @@ namespace EDDiscovery2
                 if (moveto)
                     StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z));
 
-                glControl.Invalidate();
-
                 return true;
             }
             else
@@ -797,7 +803,7 @@ namespace EDDiscovery2
         {
             _cameraActionRotation = Vector3.Zero;
 
-            var angle = (float)_ticks * 0.075f;
+            var angle = (float)_msticks * 0.075f;
             if (_kbdActions.YawLeft)
             {
                 _cameraActionRotation.Z = -angle;
@@ -829,7 +835,7 @@ namespace EDDiscovery2
         {
             _cameraActionMovement = Vector3.Zero;
             float zoomlimited = Math.Min(Math.Max(_zoom, 0.01F), 15.0F);
-            var distance = _ticks * (1.0f / zoomlimited);
+            var distance = _msticks * (1.0f / zoomlimited);
 
             if ((Control.ModifierKeys & Keys.Shift) != 0)
                 distance *= 2.0F;
@@ -864,7 +870,7 @@ namespace EDDiscovery2
         private void HandleZoomAdjustment()
         {
             float curzoom = _zoom;
-            var adjustment = 1.0f + ((float)_ticks * 0.01f);
+            var adjustment = 1.0f + ((float)_msticks * 0.01f);
             if (_kbdActions.ZoomIn)
             {
                 _zoom *= (float)adjustment;
@@ -880,9 +886,9 @@ namespace EDDiscovery2
                 UpdateDataSetsDueToZoom();
         }
 
-        #endregion
+#endregion
 
-        #region OpenGL Render and Viewport
+#region OpenGL Render and Viewport
 
         private void SetupViewport()
         {
@@ -1033,34 +1039,19 @@ namespace EDDiscovery2
 
         private void UpdateStatus()
         {
-            if (toolStripButtonPerspective.Checked)
-                statusLabel.Text = "Use W(fwd) S(back) A(lft) D(Rgt), R(up) F(dn) keys with the mouse. ";
-            else
-                statusLabel.Text = "Use W, A, S, D keys with the mouse. ";
-
-            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00} FOV={4,-4:0}", _viewtargetpos.X, -(_viewtargetpos.Y), _viewtargetpos.Z, _zoom , _cameraFov/Math.PI*180);
+            statusLabel.Text = string.Format("x:{0,-6:0} y:{1,-6:0} z:{2,-6:0} Zoom:{3,-4:0.00} FOV:{4,-4:0} Use ? for help", _viewtargetpos.X, -(_viewtargetpos.Y), _viewtargetpos.Z, _zoom , _cameraFov/Math.PI*180);
 #if DEBUG
             statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
 #endif
         }
 
-        private void CalculateTimeDelta()
-        {
-            var tickCount = DateTime.Now.Ticks / 10000;
-            _ticks = (int)(tickCount - _oldTickCount);
-            _oldTickCount = tickCount;
-        }
-
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
-            CalculateTimeDelta();
-            //Console.WriteLine("Paint at " + Environment.TickCount + " Delta " + _ticks);
+            long elapsed = _updateinterval.ElapsedMilliseconds;         // stopwatch provides precision timing on last paint time.
+            _msticks = (int)(elapsed - _lastmstick);
+            _lastmstick = elapsed;
 
-            if (!_kbdActions.Any() && (_cameraSlewProgress == 0.0f || _cameraSlewProgress >= 1.0f))
-            {
-                _ticks = 1;
-                _oldTickCount = DateTime.Now.Ticks / 10000;
-            }
+            Console.WriteLine((Environment.TickCount % 10000) + " Paint at " + _updateinterval.ElapsedMilliseconds + " Delta " + _msticks + " Slew "  + _cameraSlewProgress);
 
             _stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, glControl);
             HandleInputs();
@@ -1068,54 +1059,65 @@ namespace EDDiscovery2
             UpdateCamera();
             Render();
 
-            if (_kbdActions.Any() || _cameraSlewProgress < 1.0f)
+            if (_kbdActions.Any() || (_cameraSlewProgress < 1.0f))          // if we have any future work, start the kick timer..
             {
-                if (_timerRunning)                              // keyboard actions and camera slew rely on application idle to kick it.
-                {
-                    UpdateTimer.Stop();
-                    _timerRunning = false;
-                }
+                if ( !UpdateTimer.Enabled )                                 // start the timer
+                    UpdateTimer.Start();
             }
             else
             {
-                if (!_timerRunning )                            // restart timer
-                {
-                    UpdateTimer.Interval = 100;
-                    UpdateTimer.Start();
-                    _timerRunning = true;
-                }
-                else
-                {
-                    UpdateTimer.Stop();
-                    UpdateTimer.Start();
-                }
+                UpdateTimer.Stop();
+                _updateinterval.Stop();
+                _updateinterval.Reset();
+            //    Console.WriteLine((Environment.TickCount % 10000) + " No slew, no keyboard, stop tick");
             }
         }
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
-            glControl.Invalidate();                             // timer tick kicks paint..
+            glControl.Invalidate();             // and kick paint again
         }
 
-#endregion
+        private void Repaint()
+        {
+            if (!_updateinterval.IsRunning)         // if restarting..
+            {
+                _lastmstick = 0;
+                _updateinterval.Start();
+                Console.WriteLine((Environment.TickCount % 10000) + "Start interval timer");
+            }
 
-#region Camera Slew and Update
+            glControl.Invalidate();                 // and kick paint
+        }
+
+
+        #endregion
+
+        #region Camera Slew and Update
 
         private void ResetCamera()
         {
             _viewtargetpos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
             _cameraDir = Vector3.Zero;
-
             _zoom = _defaultZoom;
             UpdateDataSetsDueToZoom();
         }
 
-        private void StartCameraSlew(Vector3 pos)
+        private void StartCameraSlew(Vector3 pos)       // may pass a Nan Position - no action
         {
-            _cameraSlewPosition = pos;
-            _oldTickCount = Environment.TickCount;
-            _ticks = 0;
-            _cameraSlewProgress = 0.0f;
+            if (!float.IsNaN(pos.X))
+            {
+                double dist = Math.Sqrt((_viewtargetpos.X - pos.X) * (_viewtargetpos.X - pos.X) + (-_viewtargetpos.Y - pos.Y) * (-_viewtargetpos.Y - pos.Y) + (_viewtargetpos.Z - pos.Z) * (_viewtargetpos.Z - pos.Z));
+
+                if (dist >= 1)
+                {
+                    _cameraSlewPosition = pos;
+                    _cameraSlewProgress = 0.0f;
+                    _cameraSlewTime = (float)Math.Max(2.0, dist / 10000.0);            //10000 ly/sec, with a minimum slew
+                    Console.WriteLine("Slew " + dist + " in " + _cameraSlewTime);
+                    Repaint();
+                }
+            }
         }
 
         private void DoCameraSlew()
@@ -1128,7 +1130,7 @@ namespace EDDiscovery2
             if (_cameraSlewProgress < 1.0f)
             {
                 _cameraActionMovement = Vector3.Zero;
-                var newprogress = _cameraSlewProgress + _ticks / (CameraSlewTime * 1000);
+                var newprogress = _cameraSlewProgress + _msticks / (_cameraSlewTime * 1000);
                 var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(-_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
 
                 if (newprogress >= 1.0f)
@@ -1214,14 +1216,14 @@ namespace EDDiscovery2
         {
             endTime = endPicker.Value;
             GenerateDataSetsVisitedSystems();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void StartPicker_ValueChanged(object sender, EventArgs e)
         {
             startTime = startPicker.Value;
             GenerateDataSetsVisitedSystems();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void dropdownFilterHistory_Custom_Click(object sender, EventArgs e, ToolStripButton sel)
@@ -1245,7 +1247,7 @@ namespace EDDiscovery2
             startPicker.Value = startTime;
             endPicker.Value = endTime;
             GenerateDataSetsVisitedSystems();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc, Func<DateTime> endfunc)
@@ -1263,7 +1265,7 @@ namespace EDDiscovery2
             startPickerHost.Visible = false;
             endPickerHost.Visible = false;
             GenerateDataSetsVisitedSystems();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void textboxFrom_KeyUp(object sender, KeyEventArgs e)
@@ -1289,8 +1291,7 @@ namespace EDDiscovery2
                 if (gmo != null)
                 {
                     textboxFrom.Text = gmo.name;
-                    _clickedposition = new Vector3((float)gmo.points[0].x, (float)gmo.points[0].y, (float)gmo.points[0].z);
-                    StartCameraSlew(_clickedposition);
+                    StartCameraSlew(new Vector3((float)gmo.points[0].x, (float)gmo.points[0].y, (float)gmo.points[0].z));
                 }
                 else
                     MessageBox.Show("System or Object " + textboxFrom.Text + " not found");
@@ -1371,13 +1372,13 @@ namespace EDDiscovery2
         {
             SQLiteDBClass.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
             GenerateDataSetsVisitedSystems();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void showStarstoolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void showGalacticMapTypeMenuItem_Click(object sender, EventArgs e)
@@ -1401,33 +1402,33 @@ namespace EDDiscovery2
             }
 
             GenerateDataSetsBNG();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void showStationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void toolStripButtonGrid_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
             UpdateDataSetsDueToZoom();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void toolStripButtonCoords_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
             UpdateDataSetsDueToZoom();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
@@ -1444,14 +1445,14 @@ namespace EDDiscovery2
         {
             SQLiteDBClass.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
             GenerateDataSetsBNG();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void showBookmarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
             GenerateDataSetsBNG();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void newRegionBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1481,7 +1482,7 @@ namespace EDDiscovery2
                 }
 
                 GenerateDataSetsBNG();
-                glControl.Invalidate();
+                Repaint();
             }
         }
         
@@ -1490,7 +1491,7 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
             SetupViewport();
             GenerateDataSetsBNG();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void dotSystemCoords_Click(object sender, EventArgs e)
@@ -1500,7 +1501,10 @@ namespace EDDiscovery2
 
         private void dotSelectedSystemCoords_Click(object sender, EventArgs e)
         {
-            SetCenterSystemTo(_clickedSystem, true);
+            if (_clickedSystem!=null)
+                SetCenterSystemTo(_clickedSystem, true);
+            else 
+                StartCameraSlew(_clickedposition);      // if nan, will ignore..
         }
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -1513,14 +1517,13 @@ namespace EDDiscovery2
 
         private void glControl_KeyDown(object sender, KeyEventArgs e)
         {
-            if (_timerRunning)
-                glControl.Invalidate();
+            Repaint();
         }
 
         private void glControl_KeyUp(object sender, KeyEventArgs e)
         {
-            if (_timerRunning)
-                glControl.Invalidate();
+//            if (_timerRunning)
+//                Repaint();
         }
 
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
@@ -1528,21 +1531,18 @@ namespace EDDiscovery2
             ToolStripButton tsb = (ToolStripButton)sender;
             SQLiteDBClass.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
             GenerateDataSetsMaps();
-            glControl.Invalidate();
+            Repaint();
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_clickedSystem != null)
-            {
-                var edsm = new EDSM.EDSMClass();
-                edsm.ShowSystemInEDSM(_clickedSystem.name);
-            }
+            if (_clickedurl != null && _clickedurl.Length>0)
+                System.Diagnostics.Process.Start(_clickedurl);
         }
 
         private void labelClickedSystemCoords_Click(object sender, EventArgs e)
         {
-            if (_clickedSystem != null)
+            if (_clickedSystem != null || !float.IsNaN(_clickedposition.X))
             {
                 systemselectionMenuStrip.Show(labelClickedSystemCoords, 0, labelClickedSystemCoords.Height);
             }
@@ -1564,6 +1564,7 @@ namespace EDDiscovery2
             {
                 _mouseStartRotate.X = e.X;
                 _mouseStartRotate.Y = e.Y;
+                Console.WriteLine("Mouse start left");
             }
 
             if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
@@ -1577,7 +1578,10 @@ namespace EDDiscovery2
 
         private void glControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            bool notmovedmouse = Math.Abs(e.X - _mouseDownPos.X) + Math.Abs(e.Y - _mouseDownPos.Y) < 8;
+            bool notmovedmouse = Math.Abs(e.X - _mouseDownPos.X) + Math.Abs(e.Y - _mouseDownPos.Y) < 4;
+
+            if (!notmovedmouse)     // if we moved it, its not a stationary click, ignore
+                return;
 
             // system = cursystem!=null, curbookmark = null, notedsystem = false
             // bookmark on system, cursystem!=null, curbookmark != null, notedsystem = false
@@ -1589,39 +1593,53 @@ namespace EDDiscovery2
             bool notedsystem = false;
             GalacticMapObject gmo = null;             
 
-            if (notmovedmouse)
-            {
-                GetMouseOverItem(e.X, e.Y, out cursystem, out curbookmark, out notedsystem, out gmo);
-            }
+            GetMouseOverItem(e.X, e.Y, out cursystem, out curbookmark, out notedsystem, out gmo);
 
-            if ( e.Button == System.Windows.Forms.MouseButtons.Left)            // left clicks associate with systems..
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)            // left clicks associate with systems..
             {
-                _clickedSystem = cursystem;
+                _clickedSystem = cursystem;         // clicked system was found either by a bookmark looking up a name, or a position look up. best we can do.
+                _clickedposition.X = float.NaN;
+                _clickedurl = null;
+
+                string name = null;
 
                 if (_clickedSystem != null)         // will be set for systems clicked, bookmarks or noted systems
                 {
-                    labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _clickedSystem.name, _clickedSystem.x.ToString("0.00"), _clickedSystem.y.ToString("0.00"), _clickedSystem.z.ToString("0.00"));
+                    _clickedposition = new Vector3((float)_clickedSystem.x, (float)_clickedSystem.y, (float)_clickedSystem.z);
 
-                    SystemClass sysclass = (_clickedSystem.id != 0) ? SystemClass.GetSystem(_clickedSystem.id) : SystemClass.GetSystem(_clickedSystem.name);
+                    name = _clickedSystem.name;
 
-                    if (sysclass != null)
-                    {
-                        selectionAllegiance.Text = "Allegiance: " + sysclass.allegiance;
-                        selectionEconomy.Text = "Economy: " + sysclass.primary_economy;
-                        selectionGov.Text = "Gov: " + sysclass.government;
-                        selectionState.Text = "State: " + sysclass.state;
-                    }
-
-                    GenerateDataSetsSelectedSystems();
-                    glControl.Invalidate();
-
+                    var edsm = new EDSM.EDSMClass();
+                    _clickedurl = edsm.GetUrlToEDSMSystem(name);
                     viewOnEDSMToolStripMenuItem.Enabled = true;
+
                     System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
                 }
-                else if (curbookmark != null)                                   // else just remember the position for later.
+                else if (curbookmark != null)                                   // region bookmark..
+                {
                     _clickedposition = new Vector3((float)curbookmark.x, (float)curbookmark.y, (float)curbookmark.z);
-                else if ( gmo != null )
+
+                    name = (curbookmark.StarName != null) ? curbookmark.StarName : curbookmark.Heading;      // I know its only going to be a region bookmark, but heh
+
+                    viewOnEDSMToolStripMenuItem.Enabled = false;
+                }
+                else if (gmo != null)
+                {
                     _clickedposition = new Vector3((float)gmo.points[0].x, (float)gmo.points[0].y, (float)gmo.points[0].z);
+
+                    name = gmo.name;
+
+                    _clickedurl = gmo.galMapUrl;
+                    viewOnEDSMToolStripMenuItem.Enabled = true;
+                }
+
+                if (name != null)
+                    labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", name, _clickedposition.X.ToString("0.00"), _clickedposition.Y.ToString("0.00"), _clickedposition.Z.ToString("0.00"));
+                else
+                    labelClickedSystemCoords.Text = "None";
+
+                GenerateDataSetsSelectedSystems();
+                Repaint();
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)                    // right clicks are about bookmarks.
@@ -1650,7 +1668,7 @@ namespace EDDiscovery2
                                 TargetClass.ClearTarget();
 
                             GenerateDataSetsBNG();
-                            glControl.Invalidate();
+                            Repaint();
                             travelHistoryControl.RefreshTargetInfo();
                         }
                     }
@@ -1708,7 +1726,7 @@ namespace EDDiscovery2
                                     TargetClass.ClearTarget();
 
                                 GenerateDataSetsBNG();
-                                glControl.Invalidate();
+                                Repaint();
                                 travelHistoryControl.RefreshTargetInfo();
                             }
                         }
@@ -1717,7 +1735,7 @@ namespace EDDiscovery2
                             if (targetid == bkmark.id)
                             {
                                 TargetClass.ClearTarget();
-                                glControl.Invalidate();
+                                Repaint();
                                 travelHistoryControl.RefreshTargetInfo();
                             }
 
@@ -1726,7 +1744,7 @@ namespace EDDiscovery2
                     }
 
                     GenerateDataSetsBNG();      // in case target changed, do all..
-                    glControl.Invalidate();
+                    Repaint();
                 }
                 else if (gmo != null)
                 {
@@ -1736,7 +1754,7 @@ namespace EDDiscovery2
 
                     frm.Name = gmo.name;
                     frm.InitialisePos(gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
-                    frm.GMO(gmo.name, gmo.description, targetid == gmo.id,gmo.galMapUrl);
+                    frm.GMO(gmo.name, gmo.description, targetid == gmo.id, gmo.galMapUrl);
                     DialogResult res = frm.ShowDialog();
 
                     if (res == DialogResult.OK)
@@ -1749,54 +1767,32 @@ namespace EDDiscovery2
                                 TargetClass.ClearTarget();
 
                             GenerateDataSetsBNG();
-                            glControl.Invalidate();
+                            Repaint();
                             travelHistoryControl.RefreshTargetInfo();
                         }
                     }
                 }
-
-                //else if ( notmovedmouse )  if I ever get click at point working..
-                //  MessageBox.Show("Right click at " + e.X + "," + e.Y);
             }
         }
 
         private void glControl_DoubleClick(object sender, EventArgs e)
         {
-            if (_clickedSystem != null)
-            {
-                SetCenterSystemTo(_clickedSystem, true);            // no action if clicked system null
-                travelHistoryControl.SetTravelHistoryPosition(_clickedSystem.name);
-            }
-            else if ( _clickedposition != null )
-            {
-                StartCameraSlew(_clickedposition);
-            }
+            StartCameraSlew(_clickedposition);
         }
 
-        /// <summary>
-        /// The triangle will always move with the cursor. 
-        /// But is is not a problem to make it only if mousebutton pressed. 
-        /// And do some simple ath with old Translation and new translation.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void glControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            // TODO: Use OpenTK Input control, implement rotation where the camera locks onto the mouse, like with EDs map.
-            // This may be a good starting point to figuring it out:
-            // http://www.opentk.com/node/3738
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 _cameraSlewProgress = 1.0f;
-
+                Console.WriteLine("Mouse move left");
                 int dx = e.X - _mouseStartRotate.X;
                 int dy = e.Y - _mouseStartRotate.Y;
 
                 _mouseStartRotate.X = _mouseStartTranslateXZ.X = e.X;
                 _mouseStartRotate.Y = _mouseStartTranslateXZ.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
-
-
+                
                 _cameraDir.Y += (float)(dx / 4.0f);
                 _cameraDir.X += (float)(-dy / 4.0f);
 
@@ -1807,10 +1803,11 @@ namespace EDDiscovery2
                     _cameraDir.X = 180;
                 //SetupCursorXYZ();
 
-                glControl.Invalidate();
+                Repaint();
+
+                _mousehovertick.Stop();
             }
-            // TODO: Turn this into Up and Down along Y Axis, like real ED map 
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            else if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 _cameraSlewProgress = 1.0f;
 
@@ -1821,13 +1818,13 @@ namespace EDDiscovery2
                 _mouseStartTranslateXY.Y = _mouseStartTranslateXZ.Y = e.Y;
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
-
-                //_viewtargetpos.X += -dx * (1.0f /_zoom) * 2.0f;
                 _viewtargetpos.Y += -dy * (1.0f / _zoom) * 2.0f;
 
-                glControl.Invalidate();
+                Repaint();
+
+                _mousehovertick.Stop();
             }
-            if (e.Button == (System.Windows.Forms.MouseButtons.Left | System.Windows.Forms.MouseButtons.Right))
+            else if (e.Button == (System.Windows.Forms.MouseButtons.Left | System.Windows.Forms.MouseButtons.Right))
             {
                 _cameraSlewProgress = 1.0f;
 
@@ -1845,11 +1842,17 @@ namespace EDDiscovery2
                 _viewtargetpos.X += translation.X;
                 _viewtargetpos.Z += translation.Y;
 
-                glControl.Invalidate();
+                Repaint();
+
+                _mousehovertick.Stop();
             }
             else //
             {
-                if (_mousehovertooltip != null)
+                if (_cameraSlewProgress < 1.0F)       // slewing.. no hover tick
+                {
+                    _mousehovertick.Stop();
+                }
+                else if (_mousehovertooltip != null)
                 {
                     if (Math.Abs(e.X - _mouseHover.X) + Math.Abs(e.Y - _mouseHover.Y) > 8)
                     {
@@ -1904,17 +1907,18 @@ namespace EDDiscovery2
 
                 if ( curzoom != _zoom )
                     UpdateDataSetsDueToZoom();
-
-                //SetupCursorXYZ();
             }
 
             SetupViewport();
-            glControl.Invalidate();
+            Repaint();
         }
 
         void MouseHoverTick(object sender, EventArgs e)
         {
             _mousehovertick.Stop();
+
+            if (_cameraSlewProgress < 1.0F)       // slewing.. no hover tick
+                return;
 
             ISystem hoversystem = null;
             BookmarkClass curbookmark = null;
@@ -2183,7 +2187,7 @@ namespace EDDiscovery2
                 {
                     PointData pd = (gmo.points.Count > 0) ? gmo.points[0] : null;     // lets be paranoid
 
-                    if (gmo.galMapType.Enabled && pd != null)             // if it is Enabled and has a co-ord, may not.. 
+                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && pd != null)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
                     {
                         double newcursysdistz;
                         if (IsWithinRectangle(GetBitmapOnScreenOutline(pd.x,pd.y,pd.z, bksize,bksize/2,bksize/2), x, y, out newcursysdistz, ref resmat))
@@ -2326,7 +2330,7 @@ namespace EDDiscovery2
             return s;
         }
 
-        #endregion
+#endregion
 
     }
 
