@@ -415,7 +415,7 @@ namespace EDDiscovery2
             {
                 grd.Display(gl);                            // swap to using this one..
                 displayed = true;
-                //Console.WriteLine("Grid " + grd.Id + " computed " + grd.Count);
+                Console.WriteLine("Grid " + grd.Id + " computed " + grd.Count);
             }
 
             curx = xp;

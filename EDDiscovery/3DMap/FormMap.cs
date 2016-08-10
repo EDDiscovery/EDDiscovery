@@ -57,7 +57,6 @@ namespace EDDiscovery2
         private Vector3 _clickedposition = new Vector3(float.NaN,float.NaN,float.NaN);       // left clicked on a position
         private string _clickedurl;             // what url is associated..
 
-        private bool _loaded = false;
         private float _zoom = 1.0f;
 
         private Vector3 _viewtargetpos = Vector3.Zero;          // point where we are viewing. Eye is offset from this by _cameraDir * 1000/_zoom. (prev _cameraPos)
@@ -109,6 +108,8 @@ namespace EDDiscovery2
         private bool _isActivated = false;
 
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
+
+        Stopwatch debugpainttimer = new Stopwatch();
 
         public bool Is3DMapsRunning { get { return _stargrids != null; } }
 
@@ -369,14 +370,17 @@ namespace EDDiscovery2
             GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
 
             SetupViewport();
-
-            _loaded = true;
+            Repaint();
         }
 
         private void FormMap_Resize(object sender, EventArgs e)         // resizes changes glcontrol width/height, so needs a new viewport
         {
             SetupViewport();
             Repaint();
+        }
+
+        private void glControl_Resize(object sender, EventArgs e)
+        {
         }
 
         private void LoadMapImages()
@@ -500,14 +504,6 @@ namespace EDDiscovery2
             endPickerHost.Size = new Size(150, 20);
             toolStripShowAllStars.Items.Add(startPickerHost);
             toolStripShowAllStars.Items.Add(endPickerHost);
-        }
-
-        private void glControl_Resize(object sender, EventArgs e)
-        {
-            if (!_loaded)
-                return;
-
-            SetupViewport();
         }
 
 #endregion
@@ -937,9 +933,6 @@ namespace EDDiscovery2
 
         private void Render()
         {
-            if (!_loaded) // Play nice
-                return;
-
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);            // select the current matrix to the model view
@@ -999,19 +992,22 @@ namespace EDDiscovery2
             foreach (var dataset in _datasets_maps)                     // needs to be in order of background to foreground objects
                 dataset.DrawAll(glControl);
 
-            if (toolStripButtonFineGrid.Checked)
+            Debug.Assert(_datasets_finegridlines != null);
+            if (toolStripButtonFineGrid.Checked && _datasets_finegridlines == null )
             {
                 foreach (var dataset in _datasets_finegridlines)
                     dataset.DrawAll(glControl);
             }
 
-            if (toolStripButtonGrid.Checked)
+            Debug.Assert(_datasets_coarsegridlines != null);
+            if (toolStripButtonGrid.Checked && _datasets_coarsegridlines == null )
             {
                 foreach (var dataset in _datasets_coarsegridlines)
                     dataset.DrawAll(glControl);
             }
 
-            if (toolStripButtonCoords.Checked)
+            Debug.Assert(_datasets_gridlinecoords != null);
+            if (toolStripButtonCoords.Checked && _datasets_gridlinecoords == null )
             {
                 foreach (var dataset in _datasets_gridlinecoords)
                     dataset.DrawAll(glControl);
@@ -1019,29 +1015,44 @@ namespace EDDiscovery2
 
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
 
+            Debug.Assert(_datasets_galmapobjects != null);
             if (_datasets_galmapobjects != null)
             {
                 foreach (var dataset in _datasets_galmapobjects)
                     dataset.DrawAll(glControl);
             }
 
-            foreach (var dataset in _datasets_poi)
-                dataset.DrawAll(glControl);
+            Debug.Assert(_datasets_poi != null);
+            if (_datasets_poi != null)
+            {
+                foreach (var dataset in _datasets_poi)
+                    dataset.DrawAll(glControl);
+            }
 
-            foreach (var dataset in _datasets_visitedsystems)
-                dataset.DrawAll(glControl);
+            Debug.Assert(_datasets_visitedsystems != null);
+            if (_datasets_visitedsystems != null)
+            {
+                foreach (var dataset in _datasets_visitedsystems)
+                    dataset.DrawAll(glControl);
+            }
 
             _starnameslist.Draw();
 
-            foreach (var dataset in _datasets_selectedsystems)
-                dataset.DrawAll(glControl);
+            Debug.Assert(_datasets_selectedsystems != null);
+            if (_datasets_selectedsystems != null)
+            {
+                foreach (var dataset in _datasets_selectedsystems)
+                    dataset.DrawAll(glControl);
+            }
 
+            Debug.Assert(_datasets_notedsystems != null);
             if (_datasets_notedsystems != null)
             {
                 foreach (var dataset in _datasets_notedsystems)                     // needs to be in order of background to foreground objects
                     dataset.DrawAll(glControl);
             }
 
+            Debug.Assert(_datasets_bookedmarkedsystems != null);
             if (_datasets_bookedmarkedsystems != null)
             {
                 foreach (var dataset in _datasets_bookedmarkedsystems)                     // needs to be in order of background to foreground objects
@@ -1058,13 +1069,19 @@ namespace EDDiscovery2
 #endif
         }
 
+        long prevpstart = 0;
+        long prevpend= 0;
+
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
+            if (!debugpainttimer.IsRunning)
+                debugpainttimer.Start();
+
+            long pstart = debugpainttimer.ElapsedMilliseconds;
+
             long elapsed = _updateinterval.ElapsedMilliseconds;         // stopwatch provides precision timing on last paint time.
             _msticks = (int)(elapsed - _lastmstick);
             _lastmstick = elapsed;
-
-            Console.WriteLine((Environment.TickCount % 10000) + " Paint at " + _updateinterval.ElapsedMilliseconds + " Delta " + _msticks + " Slew "  + _cameraSlewProgress);
 
             HandleInputs();
             DoCameraSlew();
@@ -1081,13 +1098,24 @@ namespace EDDiscovery2
                 UpdateTimer.Stop();
                 _updateinterval.Stop();
                 _updateinterval.Reset();
-            //    Console.WriteLine((Environment.TickCount % 10000) + " No slew, no keyboard, stop tick");
             }
+
+            long pend = debugpainttimer.ElapsedMilliseconds;
+            long took = (pend - pstart);
+            long loop = (pstart-prevpstart);
+            long outside = (pstart-prevpend);
+
+            Console.WriteLine("{0} took {1} outside {2} loop {3} KB actions {4}",
+                                pstart % 10000, took, outside, loop , _kbdActions.Any());
+
+            prevpstart = pstart;
+            prevpend = pend;
         }
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
             glControl.Invalidate();             // and kick paint again
+            Console.WriteLine("Tick");
         }
 
         private void Repaint()
@@ -1096,8 +1124,10 @@ namespace EDDiscovery2
             {
                 _lastmstick = 0;
                 _updateinterval.Start();
-                Console.WriteLine((Environment.TickCount % 10000) + "Start interval timer");
+                //Console.WriteLine((Environment.TickCount % 10000) + "Start interval timer");
             }
+
+            Console.WriteLine("Repaint invalidate" + Tools.StackTrace(Environment.StackTrace,".Repaint()",1));
 
             glControl.Invalidate();                 // and kick paint
         }
@@ -1142,6 +1172,7 @@ namespace EDDiscovery2
             if (_cameraSlewProgress < 1.0f)
             {
                 _cameraActionMovement = Vector3.Zero;
+                Debug.Assert(_cameraSlewTime > 0);
                 var newprogress = _cameraSlewProgress + _msticks / (_cameraSlewTime * 1000);
                 var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(-_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
 
@@ -1153,6 +1184,7 @@ namespace EDDiscovery2
                 {
                     var slewstart = Math.Sin((_cameraSlewProgress - 0.5) * Math.PI);
                     var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
+                    Debug.Assert((1 - 0 - slewstart) != 0);
                     var slewfact = (slewend - slewstart) / (1.0 - slewstart);
                     _viewtargetpos += Vector3.Multiply(totvector, (float)slewfact);
                 }
@@ -1583,7 +1615,7 @@ namespace EDDiscovery2
             {
                 _mouseStartRotate.X = e.X;
                 _mouseStartRotate.Y = e.Y;
-                Console.WriteLine("Mouse start left");
+                //Console.WriteLine("Mouse start left");
             }
 
             if (e.Button.HasFlag(System.Windows.Forms.MouseButtons.Right))
@@ -1811,7 +1843,7 @@ namespace EDDiscovery2
                 if (_mouseStartRotate.X != int.MinValue) // on resize double click resize, we get a stray mousemove with left, so we need to make sure we actually had a down event
                 {
                     _cameraSlewProgress = 1.0f;
-                    Console.WriteLine("Mouse move left");
+                    //Console.WriteLine("Mouse move left");
                     int dx = e.X - _mouseStartRotate.X;
                     int dy = e.Y - _mouseStartRotate.Y;
 
