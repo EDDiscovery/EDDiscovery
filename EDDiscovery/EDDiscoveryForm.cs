@@ -895,6 +895,18 @@ namespace EDDiscovery
                     LogLine("Checking for new EDSM systems (may take a few moments).");
                     EDSMClass edsm = new EDSMClass();
                     long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
+
+                    // Delete systems without an EDSM ID
+                    if (!cancelRequested())
+                    {
+                        using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                        {
+                            using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems WHERE id_edsm IS NULL or id_edsm = 0"))
+                            {
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
                     LogLine("EDSM updated " + updates + " systems.");
                 }
 
