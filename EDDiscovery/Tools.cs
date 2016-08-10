@@ -204,5 +204,55 @@ namespace EDDiscovery
 
             return ans;
         }
+
+        static public string StackTrace(string trace, string enclosingfunc, int lines )
+        {
+            int offset = trace.IndexOf(enclosingfunc);
+
+            string ret = "";
+
+            if (offset != -1)
+            {
+                CutLine(ref trace, offset);
+
+                while (lines-- > 0)
+                {
+                    string l = CutLine(ref trace, 0);
+                    if (l != "")
+                    {
+                        if (ret != "")
+                            ret = ret + Environment.NewLine + l;
+                        else
+                            ret = l;
+                    }
+                    else
+                        break;
+                }
+            }
+            else
+                ret = trace;
+
+            return ret;
+        }
+
+        static public string CutLine( ref string trace, int offset )
+        {
+            int nloffset = trace.IndexOf(Environment.NewLine, offset);
+            string ret;
+            if ( nloffset != -1 )
+            {
+                ret = trace.Substring(offset, nloffset - offset);
+                trace = trace.Substring(nloffset);
+                if (trace.Length >= Environment.NewLine.Length)
+                    trace = trace.Substring(Environment.NewLine.Length);
+            }
+            else
+            {
+                ret = trace;
+                trace = "";
+            }
+
+            return ret;
+        }
     }
 }

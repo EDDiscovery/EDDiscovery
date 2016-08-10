@@ -480,9 +480,6 @@ namespace EDDiscovery2._3DMap
             {
                 VisitedSystemsClass.SetLastKnownSystemPosition(VisitedSystems);
 
-                // For some reason I am unable to fathom this errors during the session after DBUpgrade8
-                // colours just resolves to an object reference not set error, but after a restart it works fine
-                // Not going to waste any more time, a one time restart is hardly the worst workaround in the world...
                 IEnumerable<IGrouping<int, VisitedSystemsClass>> colours =
                     from VisitedSystemsClass sysPos in VisitedSystems 
                     group sysPos by sysPos.MapColour;
@@ -524,10 +521,8 @@ namespace EDDiscovery2._3DMap
         }
 
 
-        // Planned change: Centered system will be marked but won't be "center" of the galaxy
-        // dataset anymore. The origin will stay at Sol.
         private void AddCenterPointToDataset(ISystem CenterSystem)
-    {
+        {
             var dataset = Data3DSetClass<PointData>.Create("Center", MapColours.CentredSystem, 5.0f);
 
             //GL.Enable(EnableCap.ProgramPointSize);
@@ -536,7 +531,7 @@ namespace EDDiscovery2._3DMap
         }
 
         private void AddSelectedSystemToDataset(ISystem SelectedSystem)
-    {
+        {
             if (SelectedSystem != null)
             {
                 var dataset = Data3DSetClass<PointData>.Create("Selected", MapColours.SelectedSystem, 8.0f);
