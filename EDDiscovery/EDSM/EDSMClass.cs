@@ -209,6 +209,9 @@ namespace EDDiscovery2.EDSM
 
             while (lstsystdate < DateTime.UtcNow)
             {
+                if (cancelRequested())
+                    return updates;
+
                 DateTime enddate = lstsystdate + TimeSpan.FromHours(12);
                 if (enddate > DateTime.UtcNow)
                 {
