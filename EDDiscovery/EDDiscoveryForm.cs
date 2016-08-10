@@ -547,7 +547,8 @@ namespace EDDiscovery
                 galacticMapping.DownloadFromEDSM();
 
                 // Skip EDSM full update if update has been performed in last 4 days
-                if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTime()).TotalDays > 4)
+                if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTime()).TotalDays > 4 ||
+                    DateTime.UtcNow.Subtract(edsmdate).TotalDays > 28)
                 {
                     performedsmsync = true;
                 }
