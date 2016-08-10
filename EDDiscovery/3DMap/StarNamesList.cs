@@ -60,6 +60,8 @@ namespace EDDiscovery2
         int _starnamemaxly = 80;
         Dictionary<Vector3d, StarNames> _starnames;
 
+        static Font _starfont = new Font("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
+
         StarGrids _stargrids;
         FormMap _formmap;
         GLControl _glControl;
@@ -263,7 +265,7 @@ namespace EDDiscovery2
 
                             if (draw)
                             {
-                                Bitmap map = DatasetBuilder.DrawString(sys.name, Color.Orange);
+                                Bitmap map = DatasetBuilder.DrawString(sys.name, Color.Orange, _starfont);
 
                                 sys.newtexture = TexturedQuadData.FromBitmapHorz(map,
                                                  new PointF((float)sys.x + textoffset, (float)sys.z - textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z - textheightly / 2),
