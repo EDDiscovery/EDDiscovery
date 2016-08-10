@@ -345,7 +345,7 @@ namespace EDDiscovery
                 }
                 else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
                 {
-                    Dictionary<string, TravelLogUnit> travellogs = TravelLogUnit.GetAll().ToDictionary(t => t.Name);
+                    Dictionary<string, TravelLogUnit> travellogs = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
                     string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories)
                                                   .Select(s => new { name = Path.GetFileName(s), fullname = s })
                                                   .Where(s => !travellogs.ContainsKey(s.name))
