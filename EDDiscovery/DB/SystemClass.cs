@@ -887,7 +887,7 @@ namespace EDDiscovery.DB
                         }
                     }
 
-                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateDate FROM Systems WHERE id_edsm == 0 OR id_edsm IS NULL ORDER BY UpdateDate ASC LIMIT 1"))
+                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateDate FROM Systems WHERE id_edsm = 0 OR id_edsm IS NULL ORDER BY UpdateDate ASC LIMIT 1"))
                     {
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
