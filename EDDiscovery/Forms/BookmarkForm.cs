@@ -192,7 +192,7 @@ namespace EDDiscovery2
 
         private void buttonEDSM_Click(object sender, EventArgs e)
         {
-            if ( edsmurl!=null )
+            if (edsmurl != null)
                 System.Diagnostics.Process.Start(edsmurl);
         }
 
