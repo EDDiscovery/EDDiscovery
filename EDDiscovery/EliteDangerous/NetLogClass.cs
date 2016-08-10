@@ -29,6 +29,7 @@ namespace EDDiscovery
         FileSystemWatcher m_Watcher;
         ConcurrentQueue<string> m_netLogFileQueue;
         System.Windows.Forms.Timer m_scantimer;
+        System.ComponentModel.BackgroundWorker m_worker;
 
         NetLogFileReader lastnfi = null;          // last one read..
 
@@ -259,6 +260,8 @@ namespace EDDiscovery
 
         public void StartMonitor()
         {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
             if (m_Watcher == null)
             {
                 try
@@ -279,6 +282,11 @@ namespace EDDiscovery
 
                         EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
 
+                        m_worker = new System.ComponentModel.BackgroundWorker();
+                        m_worker.DoWork += ScanTickWorker;
+                        m_worker.RunWorkerCompleted += ScanTickDone;
+                        m_worker.WorkerSupportsCancellation = true;
+
                         m_scantimer = new System.Windows.Forms.Timer();
                         m_scantimer.Interval = 2000;
                         m_scantimer.Tick += ScanTick;
@@ -298,16 +306,25 @@ namespace EDDiscovery
 
         public void StopMonitor()
         {
+            if (m_scantimer != null)
+            {
+                m_scantimer.Stop();
+                m_scantimer = null;
+            }
+
+            if (m_worker != null)
+            {
+                m_worker.CancelAsync();
+                m_worker = null;
+            }
+
             if (m_Watcher != null)
             {
                 EDDConfig.Instance.NetLogDirChanged -= EDDConfig_NetLogDirChanged;
 
-                m_scantimer.Stop();
-                m_scantimer = null;
                 m_Watcher.EnableRaisingEvents = false;
                 m_Watcher.Dispose();
                 m_Watcher = null;
-                m_netLogFileQueue = null;
 
                 Console.WriteLine("Stop Monitor");
             }
@@ -322,11 +339,36 @@ namespace EDDiscovery
             }
         }
 
+        private void ScanTickDone(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            if (e.Error == null && !e.Cancelled)
+            {
+                List<VisitedSystemsClass> entries = (List<VisitedSystemsClass>)e.Result;
+
+                foreach (var ent in entries)
+                {
+                    OnNewPosition(ent);
+                }
+            }
+        }
+
         private void ScanTick(object sender, EventArgs e)
         {
-            var timer = sender as System.Windows.Forms.Timer;
-
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            if (!m_worker.IsBusy)
+            {
+                m_worker.RunWorkerAsync();
+            }
+        }
+
+        private void ScanTickWorker(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            var worker = sender as System.ComponentModel.BackgroundWorker;
+            var entries = new List<VisitedSystemsClass>();
+            e.Result = entries;
 
             try
             {
@@ -359,16 +401,20 @@ namespace EDDiscovery
                         break;
                     }
                 }
-
-                if (lastnfi != null)
+                else
                 {
-                    if (lastnfi.TimeZone == null)
+                    nfi = lastnfi;
+                }
+
+                if (nfi != null)
+                {
+                    if (nfi.TimeZone == null)
                     {
-                        lastnfi.ReadHeader();
-                        lastnfi.TravelLogUnit.Add();
+                        nfi.ReadHeader();
+                        nfi.TravelLogUnit.Add();
                     }
 
-                    foreach(VisitedSystemsClass dbsys in lastnfi.ReadSystems())
+                    foreach(VisitedSystemsClass dbsys in nfi.ReadSystems())
                     {
                         dbsys.EDSM_sync = false;
                         dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
@@ -379,20 +425,26 @@ namespace EDDiscovery
 
                         VisitedSystemsClass item2 = VisitedSystemsClass.GetLast(dbsys.Commander, dbsys.Time);
                         VisitedSystemsClass.UpdateVisitedSystemsEntries(dbsys, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
-                        OnNewPosition(dbsys);
-                        lastnfi.TravelLogUnit.Update();
+                        entries.Add(dbsys);
 
-                        if (!timer.Enabled)
+                        if (worker.CancellationPending)
                         {
                             break;
                         }
                     }
+                    nfi.TravelLogUnit.Update();
+                }
+
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Net tick exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                throw;
             }
         }
 
