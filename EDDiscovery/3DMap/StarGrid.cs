@@ -300,6 +300,9 @@ namespace EDDiscovery2
         private int farpercentage = 50;
         private double fardistance = 40000;
 
+        private Color starcolour = Color.FromArgb(255, 192, 192, 192);
+        private Color popcolour = Color.Blue;
+
         #endregion
 
         #region Initialise
@@ -314,7 +317,7 @@ namespace EDDiscovery2
                     double xp = 0, zp = 0;
                     bool ok = GridId.XZ(id, out xp, out zp);
                     Debug.Assert(ok);
-                    StarGrid grd = new StarGrid(id, xp, zp, Color.White, 1.0F);
+                    StarGrid grd = new StarGrid(id, xp, zp, starcolour, 1.0F);
                     if (xp == 0 && zp == 0)                                     // sol grid, unpopulated stars please
                         grd.dBAsk = SystemClass.SystemAskType.UnPopulatedStars;
 
@@ -326,7 +329,7 @@ namespace EDDiscovery2
             grids.Add(visitedsystemsgrid);
 
             int solid = GridId.Id(0, 0);
-            populatedgrid = new StarGrid(solid, 0, 0, Color.Blue, 1.0F);      // Duplicate grid id but asking for populated stars
+            populatedgrid = new StarGrid(solid, 0, 0, popcolour , 1.0F);      // Duplicate grid id but asking for populated stars
             populatedgrid.dBAsk = SystemClass.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);                                       // add last, so displayed last, so overwrites anything else
 
@@ -399,29 +402,28 @@ namespace EDDiscovery2
 #endregion
 
 #region Update
-
-
-        public void Update(double xp, double zp, GLControl gl)            // Foreground UI thread
+        
+        public bool Update(double xp, double zp, GLControl gl )            // Foreground UI thread, tells it if anything has changed..
         {
             Debug.Assert(Application.MessageLoop);
 
             StarGrid grd = null;
+
             bool displayed = false;
+
             while (computed.TryTake(out grd))               // remove from the computed queue and mark done
             {
                 grd.Display(gl);                            // swap to using this one..
                 displayed = true;
-            }
-
-            if (displayed)
-            {
-                //Console.WriteLine("Total stars displayed " + CountStars());
+                //Console.WriteLine("Grid " + grd.Id + " computed " + grd.Count);
             }
 
             curx = xp;
             curz = zp;
 
             ewh.Set();                                                      // tick thread again to consider..
+
+            return displayed;                                               // return if we updated anything..
         }
 
         void ComputeThread()
@@ -491,7 +493,7 @@ namespace EDDiscovery2
 
         public void DrawAll(GLControl control, bool showstars , bool showstations )
         {
-            populatedgrid.Color = (showstations) ? Color.Blue : Color.White;
+            populatedgrid.Color = (showstations) ? popcolour : starcolour;
 
             if (showstars)
             {

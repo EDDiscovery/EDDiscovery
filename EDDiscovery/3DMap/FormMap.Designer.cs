@@ -548,12 +548,12 @@ namespace EDDiscovery2
             this.systemselectionMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewOnEDSMToolStripMenuItem});
             this.systemselectionMenuStrip.Name = "systemselectionMenuStrip";
-            this.systemselectionMenuStrip.Size = new System.Drawing.Size(153, 48);
+            this.systemselectionMenuStrip.Size = new System.Drawing.Size(151, 26);
             // 
             // viewOnEDSMToolStripMenuItem
             // 
             this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
-            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             // 
@@ -594,6 +594,7 @@ namespace EDDiscovery2
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMap_FormClosing);
             this.Load += new System.EventHandler(this.FormMap_Load);
             this.Shown += new System.EventHandler(this.FormMap_Shown);
+            this.Resize += new System.EventHandler(this.FormMap_Resize);
             this.toolStripShowAllStars.ResumeLayout(false);
             this.toolStripShowAllStars.PerformLayout();
             this.statusStrip.ResumeLayout(false);

@@ -188,7 +188,9 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, double widthly, double heightly, bool vert , int selected)
+        static Font gmostarfont = new Font("MS Sans Serif", 20F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
+
+        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, double widthly, double heightly, bool vert , int selected , bool namethem)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("galobj", Color.White, 1f);
             widthly /= 2;
@@ -230,42 +232,46 @@ namespace EDDiscovery2._3DMap
 
                         datasetbks.Add(newtexture);
 
-                        Bitmap map = null;
 
-                        if ( _cachedBitmaps.ContainsKey(gmo.name))      // cache them, they take a long time to compute..
+                        if (namethem)
                         {
-                            map = _cachedBitmaps[gmo.name];
-                        }
-                        else
-                        {
-                            map = DrawString(gmo.name, Color.Orange);
-                            _cachedBitmaps.Add(gmo.name, map);
-                        }
+                            Bitmap map = null;
 
-                        double wd = widthly / 5 * gmo.name.Length;
-                        double hd = widthly / 1;
+                            if (_cachedBitmaps.ContainsKey(gmo.name))      // cache them, they take a long time to compute..
+                            {
+                                map = _cachedBitmaps[gmo.name];
+                            }
+                            else
+                            {
+                                map = DrawString(gmo.name, Color.Orange, gmostarfont);
+                                _cachedBitmaps.Add(gmo.name, map);
+                            }
 
-                        if (vert)
-                        {
+                            double wd = widthly / 5 * gmo.name.Length;
+                            double hd = widthly / 1.5;
 
-                            newtexture = TexturedQuadData.FromBitmapVert(map,
-                                                     new PointF((float)(pd.x - wd), (float)(pd.y - heightly - hd)),
-                                                        new PointF((float)(pd.x + wd), (float)(pd.y - heightly- hd)),
-                                                     new PointF((float)(pd.x - wd), (float)(pd.y - heightly)),
-                                                        new PointF((float)(pd.x + wd), (float)(pd.y - heightly)),
-                                                     (float)pd.z);
+                            if (vert)
+                            {
+
+                                newtexture = TexturedQuadData.FromBitmapVert(map,
+                                                         new PointF((float)(pd.x - wd), (float)(pd.y - heightly - hd)),
+                                                            new PointF((float)(pd.x + wd), (float)(pd.y - heightly - hd)),
+                                                         new PointF((float)(pd.x - wd), (float)(pd.y - heightly)),
+                                                            new PointF((float)(pd.x + wd), (float)(pd.y - heightly)),
+                                                         (float)pd.z);
+                            }
+                            else
+                            {
+                                newtexture = TexturedQuadData.FromBitmapHorz(map,
+                                                          new PointF((float)(pd.x - wd), (float)(pd.z - heightly - hd)),
+                                                             new PointF((float)(pd.x + wd), (float)(pd.z - heightly - hd)),
+                                                          new PointF((float)(pd.x - wd), (float)(pd.z - heightly)),
+                                                             new PointF((float)(pd.x + wd), (float)(pd.z - heightly)),
+                                                          (float)pd.y);
+                            }
+
+                            datasetbks.Add(newtexture);
                         }
-                        else
-                        {
-                            newtexture = TexturedQuadData.FromBitmapHorz(map,
-                                                      new PointF((float)(pd.x - widthly), (float)(pd.z - heightly - hd)),
-                                                         new PointF((float)(pd.x + widthly), (float)(pd.z - heightly - hd)),
-                                                      new PointF((float)(pd.x - widthly), (float)(pd.z - heightly)),
-                                                         new PointF((float)(pd.x + widthly), (float)(pd.z - heightly)),
-                                                      (float)pd.y);
-                        }
-
-                        datasetbks.Add(newtexture);
 
                         if ( gmo.id == gmotarget )
                         {
@@ -612,24 +618,24 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        static public Bitmap DrawString(string str, Color textcolour)
+        static public Bitmap DrawString(string str, Color textcolour, Font fnt)
         {
             Bitmap stringstarmeasurebitmap = new Bitmap(1, 1);
             using (Graphics g = Graphics.FromImage(stringstarmeasurebitmap))
             {
-                SizeF sz = g.MeasureString(str, stringstarfont);
+                SizeF sz = g.MeasureString(str, fnt);
 
                 Bitmap text_bmp = new Bitmap((int)sz.Width + 4, (int)sz.Height + 4);
                 using (Graphics h = Graphics.FromImage(text_bmp))
                 {
+                    h.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
                     using (Brush br = new SolidBrush(textcolour))
-                        h.DrawString(str, stringstarfont, br, new Point(0, 0));
+                        h.DrawString(str, fnt, br, new Point(0, 0));
+                    h.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
                 }
 
                 return text_bmp;
             }
         }
-
-        private static Font stringstarfont = new Font("MS Sans Serif", 12F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
     }
 }
