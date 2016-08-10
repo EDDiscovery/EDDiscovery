@@ -878,12 +878,28 @@ namespace EDDiscovery.DB
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateDate FROM Systems ORDER BY UpdateDate DESC LIMIT 1"))
+                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateDate FROM Systems WHERE id_edsm != 0 AND id_edsm IS NOT NULL ORDER BY UpdateDate DESC LIMIT 1"))
                     {
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read() && System.DBNull.Value != reader["UpdateDate"])
                                 lasttime = DateTime.SpecifyKind((DateTime)reader["UpdateDate"], DateTimeKind.Utc);
+                        }
+                    }
+
+                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateDate FROM Systems WHERE id_edsm == 0 OR id_edsm IS NULL ORDER BY UpdateDate ASC LIMIT 1"))
+                    {
+                        using (DbDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read() && System.DBNull.Value != reader["UpdateDate"])
+                            {
+                                DateTime firstnonedsmtime = DateTime.SpecifyKind((DateTime)reader["UpdateDate"], DateTimeKind.Utc);
+
+                                if (firstnonedsmtime < lasttime)
+                                {
+                                    lasttime = firstnonedsmtime;
+                                }
+                            }
                         }
                     }
                 }
