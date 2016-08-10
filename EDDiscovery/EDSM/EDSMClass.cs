@@ -209,6 +209,9 @@ namespace EDDiscovery2.EDSM
 
             while (lstsystdate < DateTime.UtcNow)
             {
+                if (cancelRequested())
+                    return updates;
+
                 DateTime enddate = lstsystdate + TimeSpan.FromHours(12);
                 if (enddate > DateTime.UtcNow)
                 {
@@ -227,7 +230,6 @@ namespace EDDiscovery2.EDSM
                 }
 
                 updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, false, discoveryform, cancelRequested, reportProgress, false);
-                SQLiteDBClass.PutSettingString("EDSMLastSystems", lstsyst);
                 lstsystdate += TimeSpan.FromHours(12);
             }
             discoveryform.LogLine($"System download complete");

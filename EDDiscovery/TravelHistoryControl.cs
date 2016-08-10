@@ -42,7 +42,7 @@ namespace EDDiscovery
         public int defaultMapColour;
         public EDSMSync sync;
 
-        internal List<VisitedSystemsClass> visitedSystems;
+        internal List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
         internal bool EDSMSyncTo = true;
         internal bool EDSMSyncFrom = true;
 
@@ -100,10 +100,9 @@ namespace EDDiscovery
 
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
-            visitedSystems = null;
+            visitedSystems.Clear();
             try
             {
-                TriggerEDSMRefresh();
                 LogText("Refresh History." + Environment.NewLine);
                 RefreshHistoryAsync();
             }
@@ -116,15 +115,6 @@ namespace EDDiscovery
                 LogTextHighlight(ex.StackTrace);
             }
         }
-
-        public void TriggerEDSMRefresh()
-        {
-            LogText("Check for new EDSM systems." + Environment.NewLine);
-            EDSMClass edsm = new EDSMClass();
-            edsm.GetNewSystems(_discoveryForm, () => _discoveryForm.PendingClose, _discoveryForm.ReportProgress);
-            LogText("EDSM System check complete." + Environment.NewLine);
-        }
-
 
         public void LogText(string text)
         {
@@ -149,20 +139,17 @@ namespace EDDiscovery
 
         public void RefreshHistoryAsync()
         {
-            if (visitedSystems == null || visitedSystems.Count == 0)
+            if (activecommander >= 0)
             {
-                if (activecommander >= 0)
+                if (!_refreshWorker.IsBusy)
                 {
-                    if (!_refreshWorker.IsBusy)
-                    {
-                        button_RefreshHistory.Enabled = false;
-                        _refreshWorker.RunWorkerAsync();
-                    }
+                    button_RefreshHistory.Enabled = false;
+                    _refreshWorker.RunWorkerAsync();
                 }
-                else
-                {
-                    RefreshHistory(VisitedSystemsClass.GetAll(activecommander));
-                }
+            }
+            else
+            {
+                RefreshHistory(VisitedSystemsClass.GetAll(activecommander));
             }
         }
 
@@ -206,14 +193,15 @@ namespace EDDiscovery
                 else if (e.Result != null)
                 {
                     RefreshHistory((List<VisitedSystemsClass>)e.Result);
-                    if (HistoryRefreshed != null)
-                        HistoryRefreshed(this, EventArgs.Empty);
                     _discoveryForm.ReportProgress(-1, "");
                     LogText("Refresh Complete." + Environment.NewLine);
                 }
                 button_RefreshHistory.Enabled = true;
 
                 netlog.StartMonitor();
+
+                if (HistoryRefreshed != null)
+                    HistoryRefreshed(this, EventArgs.Empty);
             }
         }
 

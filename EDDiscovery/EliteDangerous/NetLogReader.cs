@@ -35,9 +35,16 @@ namespace EDDiscovery
             systems = new List<VisitedSystemsClass>();
         }
 
-        public NetLogFileReader(TravelLogUnit tlu) : base(tlu)
+        public NetLogFileReader(TravelLogUnit tlu, List<VisitedSystemsClass> vsclist = null) : base(tlu)
         {
-            systems = VisitedSystemsClass.GetAll(tlu);
+            if (vsclist != null)
+            {
+                systems = vsclist;
+            }
+            else
+            {
+                systems = VisitedSystemsClass.GetAll(tlu);
+            }
         }
 
         protected bool ParseTime(string time)
@@ -188,53 +195,68 @@ namespace EDDiscovery
             }
         }
 
-        public bool ReadNetLogSystem(out VisitedSystemsClass vsc, Func<bool> cancelRequested = null)
+        public bool ReadNetLogSystem(out VisitedSystemsClass vsc, Func<bool> cancelRequested = null, Stream stream = null, bool ownstream = false)
         {
             if (cancelRequested == null)
                 cancelRequested = () => false;
 
             string line;
-            while (!cancelRequested() && this.ReadLine(out line))
+            try
             {
-                ParseLineTime(line);
-
-                if (line.Contains("[PG]"))
+                if (stream == null)
                 {
-                    if (line.Contains("[PG] [Notification] Left a playlist lobby"))
-                        this.CQC = false;
-
-                    if (line.Contains("[PG] Destroying playlist lobby."))
-                        this.CQC = false;
-
-                    if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
-                        this.CQC = true;
-                    if (line.Contains("[PG] Created playlist lobby"))
-                        this.CQC = true;
-                    if (line.Contains("[PG] Found matchmaking lobby object"))
-                        this.CQC = true;
+                    stream = File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    ownstream = true;
                 }
-
-                int offset = line.IndexOf("} System:") - 8;
-                if (offset >= 1 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
+                while (!cancelRequested() && this.ReadLine(out line, stream))
                 {
-                    //Console.WriteLine(" RD:" + line );
-                    if (line.Contains("ProvingGround"))
-                        continue;
+                    ParseLineTime(line);
 
-                    VisitedSystemsClass ps;
-                    if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 10), out ps))
-                    {   // Remove some training systems
-                        if (ps.Name.Equals("Training"))
-                            continue;
-                        if (ps.Name.Equals("Destination"))
-                            continue;
-                        if (ps.Name.Equals("Altiris"))
-                            continue;
-                        ps.Source = TravelLogUnit.id;
-                        ps.Unit = TravelLogUnit.Name;
-                        vsc = ps;
-                        return true;
+                    if (line.Contains("[PG]"))
+                    {
+                        if (line.Contains("[PG] [Notification] Left a playlist lobby"))
+                            this.CQC = false;
+
+                        if (line.Contains("[PG] Destroying playlist lobby."))
+                            this.CQC = false;
+
+                        if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
+                            this.CQC = true;
+                        if (line.Contains("[PG] Created playlist lobby"))
+                            this.CQC = true;
+                        if (line.Contains("[PG] Found matchmaking lobby object"))
+                            this.CQC = true;
                     }
+
+                    int offset = line.IndexOf("} System:") - 8;
+                    if (offset >= 1 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
+                    {
+                        //Console.WriteLine(" RD:" + line );
+                        if (line.Contains("ProvingGround"))
+                            continue;
+
+                        VisitedSystemsClass ps;
+                        if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 10), out ps))
+                        {   // Remove some training systems
+                            if (ps.Name.Equals("Training"))
+                                continue;
+                            if (ps.Name.Equals("Destination"))
+                                continue;
+                            if (ps.Name.Equals("Altiris"))
+                                continue;
+                            ps.Source = TravelLogUnit.id;
+                            ps.Unit = TravelLogUnit.Name;
+                            vsc = ps;
+                            return true;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (ownstream)
+                {
+                    stream.Dispose();
                 }
             }
 
@@ -329,28 +351,31 @@ namespace EDDiscovery
             }
 
             VisitedSystemsClass ps;
-            while (!cancelRequested() && ReadNetLogSystem(out ps, cancelRequested))
+            using (Stream stream = File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                if (last == null)
+                while (!cancelRequested() && ReadNetLogSystem(out ps, cancelRequested, stream))
                 {
-                    if (systems.Count == 0)
+                    if (last == null)
                     {
-                        last = VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time);
+                        if (systems.Count == 0)
+                        {
+                            last = VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time);
+                        }
+                        else
+                        {
+                            last = systems[systems.Count - 1];
+                        }
                     }
-                    else
+
+                    if (last != null && ps.Name.Equals(last.Name, StringComparison.InvariantCultureIgnoreCase))
+                        continue;
+
+                    if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
                     {
-                        last = systems[systems.Count - 1];
+                        systems.Add(ps);
+                        yield return ps;
+                        last = ps;
                     }
-                }
-
-                if (last != null && ps.Name.Equals(last.Name, StringComparison.InvariantCultureIgnoreCase))
-                    continue;
-
-                if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
-                {
-                    systems.Add(ps);
-                    yield return ps;
-                    last = ps;
                 }
             }
 
