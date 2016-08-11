@@ -462,7 +462,7 @@ namespace EDDiscovery2
 
             ewh.Set();                                                      // tick thread again to consider..
 
-
+#if false       // turned off for now.. don't like the effect.
             int getid = GridId.Id(curx, curz);                              // if extremely zoomed in, increase grid point size
             StarGrid grid = grids.Find(x => x.Id == getid);
             Debug.Assert(grid != null);
@@ -475,7 +475,7 @@ namespace EDDiscovery2
             visitedsystemsgrid.Size = zoomedgrid.Size;
             if (zoomedgrid.Id == populatedgrid.Id)
                 populatedgrid.Size = zoomedgrid.Size;
-
+#endif
             return displayed;                                               // return if we updated anything..
         }
 

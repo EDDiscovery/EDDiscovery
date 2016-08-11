@@ -579,37 +579,21 @@ namespace EDDiscovery2
 
             List<IData3DSet> oldbookmarks = _datasets_bookedmarkedsystems;
 
-            if (showBookmarksToolStripMenuItem.Checked)
-            {
-                Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
-                Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
+            Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
+            Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
 
-                Debug.Assert(mapstar != null && mapregion != null);
+            Debug.Assert(mapstar != null && mapregion != null);
 
-                DatasetBuilder builder1 = new DatasetBuilder();
-                _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
-            }
-            else
-            {
-                _datasets_bookedmarkedsystems = null;
-            }
-
+            DatasetBuilder builder1 = new DatasetBuilder();
+            _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
             DeleteDataset(ref oldbookmarks);
 
             List<IData3DSet> oldnotedsystems = _datasets_notedsystems;
-            if (showNoteMarksToolStripMenuItem.Checked)
-            {
-                Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
-                Debug.Assert(map != null);
+            Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
+            Debug.Assert(map != null);
 
-                DatasetBuilder builder2 = new DatasetBuilder();
-                _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked, _visitedSystems);
-            }
-            else
-            {
-                _datasets_notedsystems = null;
-            }
-
+            DatasetBuilder builder2 = new DatasetBuilder();
+            _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked, _visitedSystems);
             DeleteDataset(ref oldnotedsystems);
 
             DatasetBuilder builder3= new DatasetBuilder();
@@ -985,7 +969,7 @@ namespace EDDiscovery2
         {
             //long pstart = debugpainttimer.ElapsedMilliseconds;
 
-            // Take references on objects that could be replaced by the background
+            // Take references on objects that could be replaced by the background (?)
             List<IData3DSet> _datasets_galmapobjects = this._datasets_galmapobjects;
             List<IData3DSet> _datasets_notedsystems = this._datasets_notedsystems;
             List<IData3DSet> _datasets_bookmarkedsystems = this._datasets_bookedmarkedsystems;
@@ -1055,14 +1039,14 @@ namespace EDDiscovery2
             }
 
             Debug.Assert(_datasets_notedsystems != null);
-            if (_datasets_notedsystems != null)
+            if (_datasets_notedsystems != null && showNoteMarksToolStripMenuItem.Checked)
             {
                 foreach (var dataset in _datasets_notedsystems)                     // needs to be in order of background to foreground objects
                     dataset.DrawAll(glControl);
             }
 
             Debug.Assert(_datasets_bookedmarkedsystems != null);
-            if (_datasets_bookedmarkedsystems != null)
+            if (_datasets_bookedmarkedsystems != null && showBookmarksToolStripMenuItem.Checked)
             {
                 foreach (var dataset in _datasets_bookedmarkedsystems)                     // needs to be in order of background to foreground objects
                     dataset.DrawAll(glControl);
@@ -1168,7 +1152,7 @@ namespace EDDiscovery2
                     _cameraSlewPosition = pos;
                     _cameraSlewProgress = 0.0f;
                     _cameraSlewTime = (float)Math.Max(2.0, dist / 10000.0);            //10000 ly/sec, with a minimum slew
-                    Console.WriteLine("Slew " + dist + " in " + _cameraSlewTime);
+                    //Console.WriteLine("Slew " + dist + " in " + _cameraSlewTime);
                     Repaint();
                 }
             }
