@@ -618,7 +618,7 @@ namespace EDDiscovery2
 
             long time3 = sw.ElapsedMilliseconds;
 
-            Console.WriteLine("Time " + time1 + " " + time2 + " " + time3);
+            Console.WriteLine("{0} t {1},{2},{3}" , debugpainttimer.ElapsedMilliseconds % 10000, time1 ,time2 ,time3);
         }
 
 
@@ -986,6 +986,8 @@ namespace EDDiscovery2
 
         private void DrawStars()
         {
+            long pstart = debugpainttimer.ElapsedMilliseconds;
+
             if (_datasets_maps == null)     // happens during debug.. paint before form load
                 return;
 
@@ -1013,7 +1015,10 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
+            long p1 = debugpainttimer.ElapsedMilliseconds;
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+
+            long p2 = debugpainttimer.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_galmapobjects != null);
             if (_datasets_galmapobjects != null)
@@ -1021,6 +1026,8 @@ namespace EDDiscovery2
                 foreach (var dataset in _datasets_galmapobjects)
                     dataset.DrawAll(glControl);
             }
+
+            long p3 = debugpainttimer.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_poi != null);
             if (_datasets_poi != null)
@@ -1059,6 +1066,13 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
+            long p4 = debugpainttimer.ElapsedMilliseconds;
+            p4 -= p3;
+            p3 -= p2;
+            p2 -= p1;
+            p1 -= pstart;
+            Console.WriteLine("{0} Render {1},{2},{3},{4}", pstart % 10000, p1, p2, p3, p4);
+
         }
 
         private void UpdateStatus()
@@ -1071,6 +1085,7 @@ namespace EDDiscovery2
 
         long prevpstart = 0;
         long prevpend= 0;
+        string repaintreason = "";
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
@@ -1084,13 +1099,19 @@ namespace EDDiscovery2
             _lastmstick = elapsed;
 
             HandleInputs();
+            long pinput = debugpainttimer.ElapsedMilliseconds;
             DoCameraSlew();
+            long pslew = debugpainttimer.ElapsedMilliseconds;
             UpdateCamera();
+            long pcamera = debugpainttimer.ElapsedMilliseconds;
             Render();
+            long prender = debugpainttimer.ElapsedMilliseconds;
+
+            prender -= pcamera; pcamera -= pslew; pslew -= pinput; pinput -= pstart;
 
             if (_kbdActions.Any() || (_cameraSlewProgress < 1.0f))          // if we have any future work, start the kick timer..
             {
-                if ( !UpdateTimer.Enabled )                                 // start the timer
+                if (!UpdateTimer.Enabled)                                 // start the timer
                     UpdateTimer.Start();
             }
             else
@@ -1102,20 +1123,23 @@ namespace EDDiscovery2
 
             long pend = debugpainttimer.ElapsedMilliseconds;
             long took = (pend - pstart);
-            long loop = (pstart-prevpstart);
-            long outside = (pstart-prevpend);
+            long loop = (pstart - prevpstart);
+            long outside = (pstart - prevpend);
 
-            Console.WriteLine("{0} took {1} outside {2} loop {3} KB actions {4}",
-                                pstart % 10000, took, outside, loop , _kbdActions.Any());
-
+            Console.WriteLine("{0} took {1} outside {2} loop {3} FrameRate {4} KB actions {5} reason {6} i{7} s{8} c{9} r{10}",
+                                pstart % 10000, took, outside, loop, (loop > 0) ? (1000 / loop) : 0, _kbdActions.Any(), repaintreason.Length > 50 ? repaintreason.Substring(0, 50) : repaintreason,
+                                pinput, pslew, pcamera, prender  );
+                                
+                                 
             prevpstart = pstart;
             prevpend = pend;
+            repaintreason = "Unknown";
         }
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
+            repaintreason = "Timer Tick";
             glControl.Invalidate();             // and kick paint again
-            Console.WriteLine("Tick");
         }
 
         private void Repaint()
@@ -1127,11 +1151,12 @@ namespace EDDiscovery2
                 //Console.WriteLine((Environment.TickCount % 10000) + "Start interval timer");
             }
 
-            Console.WriteLine("Repaint invalidate" + Tools.StackTrace(Environment.StackTrace,".Repaint()",1));
+            repaintreason = Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1);
+
+            //            Console.WriteLine("Repaint invalidate" + Tools.StackTrace(Environment.StackTrace,".Repaint()",1));
 
             glControl.Invalidate();                 // and kick paint
         }
-
 
         #endregion
 
@@ -1568,14 +1593,16 @@ namespace EDDiscovery2
 
         private void glControl_KeyDown(object sender, KeyEventArgs e)
         {
-            Repaint();
+            if (!_updateinterval.IsRunning)         // if first keypress in sequence (rest is handled by timer)
+            {
+                Console.WriteLine("First key down");
+                Repaint();
+            }
         }
 
         private void glControl_KeyUp(object sender, KeyEventArgs e)
         {
             Console.WriteLine("Key up");
-//            if (_timerRunning)
-//                Repaint();
         }
 
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
@@ -1651,6 +1678,8 @@ namespace EDDiscovery2
             {
                 _mouseStartRotate = new Point(int.MinValue, int.MinValue);      // indicate finished .. we need to do this to make mousemove not respond to random stuff when resizing
 
+                bool iscurrentselected = _clickedSystem != null;                // have we got a currently selected system..
+
                 _clickedSystem = cursystem;         // clicked system was found either by a bookmark looking up a name, or a position look up. best we can do.
                 _clickedposition.X = float.NaN;
                 _clickedurl = null;
@@ -1668,6 +1697,9 @@ namespace EDDiscovery2
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 
                     System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
+
+                    GenerateDataSetsSelectedSystems();
+                    Repaint();
                 }
                 else if (curbookmark != null)                                   // region bookmark..
                 {
@@ -1687,13 +1719,18 @@ namespace EDDiscovery2
                     viewOnEDSMToolStripMenuItem.Enabled = true;
                 }
 
-                if (name != null)
+                if (name != null)       // this means we found something..
+                {
                     labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", name, _clickedposition.X.ToString("0.00"), _clickedposition.Y.ToString("0.00"), _clickedposition.Z.ToString("0.00"));
+                }
                 else
                     labelClickedSystemCoords.Text = "None";
 
-                GenerateDataSetsSelectedSystems();
-                Repaint();
+                if (_clickedSystem == null && iscurrentselected)        // if we deselected, but we had something
+                {
+                    GenerateDataSetsSelectedSystems();
+                    Repaint();
+                }
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)                    // right clicks are about bookmarks.

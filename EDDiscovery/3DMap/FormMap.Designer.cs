@@ -559,7 +559,7 @@ namespace EDDiscovery2
             // 
             // UpdateTimer
             // 
-            this.UpdateTimer.Interval = 50;
+            this.UpdateTimer.Interval = 25;
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
             // 
             // panelRight

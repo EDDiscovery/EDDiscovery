@@ -546,9 +546,8 @@ namespace EDDiscovery2._3DMap
         public Vector3d[] Vertices;
         public Vector4d[] Texcoords;
         public Bitmap Texture;
-
         public Color Color { get; set; }
-        public float Size { get; set; }
+        public float Size { get; set; }     // not used
         public PrimitiveType Type { get { return PrimitiveType.Quads; } }
 
         private int _texid;
@@ -604,6 +603,12 @@ namespace EDDiscovery2._3DMap
         public void Dispose()
         {
             FreeTexture(true);
+        }
+
+        public void UpdateVertices(Vector3d[] vertices, Vector4d[] texcoords)
+        {
+            this.Vertices = vertices;
+            this.Texcoords = texcoords;
         }
 
         public void FreeTexture(bool remove)
@@ -664,13 +669,13 @@ namespace EDDiscovery2._3DMap
 
         protected void CreateTexture()
         {
-            if (_texture != Texture ||
-                NumVertices != (Vertices == null ? 0 : 6) + _childTextures.Count * 6)
+                                                                    // if we changed the vertices or the texture, free..
+            if (_texture != Texture || NumVertices != (Vertices == null ? 0 : 6) + _childTextures.Count * 6)
             {
                 FreeTexture(false);
             }
 
-            if (_texid == 0)
+            if (_texid == 0)                                        // no texture, bind
             {
                 Bitmap bmp = Texture;
                 /*
