@@ -29,14 +29,17 @@ namespace EDDiscovery2
 
         bool array1displayed;
         private Vector3d[] array1;            // the star points
+        private int[] carray1;                // the star colours
         int array1vertices;
         private Vector3d[] array2;            // the star points
+        private int[] carray2;                // the star colours
         int array2vertices;
 
         public float Size { get; set; }
         public Color Color { get; set; }
 
         protected int VtxVboID;
+        protected int VtxColorVboId;
         protected GLControl GLContext;
 
         Object lockdisplaydata = new Object();
@@ -59,21 +62,22 @@ namespace EDDiscovery2
         public void FillFromDB()        // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = SystemClass.GetSystemVector(Id, ref array2, dBAsk, Percentage);
+                array2vertices = SystemClass.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage, this.Color);
             else
-                array1vertices = SystemClass.GetSystemVector(Id, ref array1, dBAsk, Percentage);
+                array1vertices = SystemClass.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage, this.Color);
         }
 
         public void FillFromVS(List<VisitedSystemsClass> cls) // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = FillFromVS(ref array2, cls);
+                array2vertices = FillFromVS(ref array2, ref carray2, cls, this.Color);
             else
-                array1vertices = FillFromVS(ref array1, cls);
+                array1vertices = FillFromVS(ref array1, ref carray1, cls, this.Color);
         }
 
-        private int FillFromVS( ref Vector3d[] array, List<VisitedSystemsClass> cls)
+        private int FillFromVS( ref Vector3d[] array, ref int[] carray, List<VisitedSystemsClass> cls, Color basecolour)
         {
+            carray = new int[cls.Count];
             array = new Vector3d[cls.Count];     // can't have any more than this 
             int total = 0;
 
@@ -81,6 +85,7 @@ namespace EDDiscovery2
             {                                                               // all vs stars which are not in edsm and have co-ords.
                 if (vs.curSystem != null && vs.curSystem.status != SystemStatusEnum.EDSC && vs.curSystem.HasCoordinate )
                 {
+                    carray[total] = basecolour.ToArgb();
                     array[total++] = new Vector3d(vs.curSystem.x, vs.curSystem.y, vs.curSystem.z);
                 }
             }
@@ -209,8 +214,10 @@ namespace EDDiscovery2
                 else
                 {
                     GL.DeleteBuffer(VtxVboID);
+                    GL.DeleteBuffer(VtxColorVboId);
                     GLContext = null;
                     VtxVboID = 0;
+                    VtxColorVboId = 0;
                 }
             }
         }
@@ -234,9 +241,14 @@ namespace EDDiscovery2
                         GL.GenBuffers(1, out VtxVboID);
                         GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
                         GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array1vertices * BlittableValueType.StrideOf(array1)), array1, BufferUsageHint.StaticDraw);
+
+                        GL.GenBuffers(1, out VtxColorVboId);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                        GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array1vertices * BlittableValueType.StrideOf(carray1)), carray1, BufferUsageHint.StaticDraw);
                         GLContext = control;
                     }
 
+                    carray2 = null;
                     array2 = null;
                     array2vertices = 0;
                 }
@@ -248,9 +260,14 @@ namespace EDDiscovery2
                         GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
 
                         GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array2vertices * BlittableValueType.StrideOf(array2)), array2, BufferUsageHint.StaticDraw);
+
+                        GL.GenBuffers(1, out VtxColorVboId);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                        GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array2vertices * BlittableValueType.StrideOf(carray2)), carray2, BufferUsageHint.StaticDraw);
                         GLContext = control;
                     }
 
+                    carray1 = null;
                     array1 = null;
                     array1vertices = 0;
                 }
@@ -273,13 +290,17 @@ namespace EDDiscovery2
                 else
                 {
                     int numpoints = (array1displayed) ? array1vertices : array2vertices;
+                    GL.EnableClientState(ArrayCap.ColorArray);
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
                     GL.EnableClientState(ArrayCap.VertexArray);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
                     GL.VertexPointer(3, VertexPointerType.Double, 0, 0);
                     GL.PointSize(Size);
-                    GL.Color3(Color);
+                    //GL.Color3(Color);
                     GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
                     GL.DisableClientState(ArrayCap.VertexArray);
+                    GL.DisableClientState(ArrayCap.ColorArray);
                     //Console.WriteLine("Draw " + Id + " " + numpoints);
                 }
             }
