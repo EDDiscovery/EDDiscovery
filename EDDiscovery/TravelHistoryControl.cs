@@ -184,7 +184,7 @@ namespace EDDiscovery
 
         private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (!e.Cancelled)
+            if (!e.Cancelled && !_discoveryForm.PendingClose)
             {
                 if (e.Error != null)
                 {
