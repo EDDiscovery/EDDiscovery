@@ -139,6 +139,11 @@ namespace EDDiscovery
 
         public void RefreshHistoryAsync()
         {
+            if (_discoveryForm.PendingClose)
+            {
+                return;
+            }
+
             if (activecommander >= 0)
             {
                 if (!_refreshWorker.IsBusy)
