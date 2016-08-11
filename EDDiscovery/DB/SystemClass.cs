@@ -537,7 +537,7 @@ namespace EDDiscovery.DB
         }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
-        public static int GetSystemVector(int gridid, ref Vector3d[] vertices, SystemAskType ask, int percentage)
+        public static int GetSystemVector(int gridid, ref Vector3d[] vertices, ref int[] colours, SystemAskType ask, int percentage, System.Drawing.Color basecolour)
         {
             int numvertices = 0;
             vertices = null;
@@ -546,7 +546,7 @@ namespace EDDiscovery.DB
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select id,x,y,z from Systems where gridid=@gridid"))
+                    using (DbCommand cmd = cn.CreateCommand("select id,x,y,z,randomid from Systems where gridid=@gridid"))
                     {
                         cmd.AddParameterWithValue("gridid", gridid);
 
@@ -565,10 +565,20 @@ namespace EDDiscovery.DB
                                 if (System.DBNull.Value != reader["x"])
                                 {
                                     if (vertices == null)
+                                    {
                                         vertices = new Vector3d[1024];
+                                        colours = new int[1024];
+                                    }
                                     else if (numvertices == vertices.Length)
+                                    {
                                         Array.Resize(ref vertices, vertices.Length + 8192);
+                                        Array.Resize(ref colours, colours.Length + 8192);
+                                    }
 
+                                    int r = 256 - (int)(long)reader["randomid"] / 2;
+
+                                    // RGBA byte order is expected
+                                    colours[numvertices] = BitConverter.ToInt32(new byte[] { (byte)(basecolour.R * r / 256), (byte)(basecolour.G * r / 256), (byte)(basecolour.B * r / 256), basecolour.A }, 0);
                                     vertices[numvertices++] = new Vector3d((double)reader["x"], (double)reader["y"], (double)reader["z"]);
                                 }
                             }
