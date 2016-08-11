@@ -524,13 +524,12 @@ namespace EDDiscovery2
             DatasetBuilder builder4 = new DatasetBuilder();
             _datasets_poi = builder4.AddPOIsToDataset();
 
+            GenerateDataSetsBNG();
             UpdateDataSetsDueToZoom();
         }
 
         private void UpdateDataSetsDueToZoom()
         {
-            Stopwatch sw = new Stopwatch();
-
             DatasetBuilder builder = new DatasetBuilder();
             if (toolStripButtonFineGrid.Checked)
                 builder.UpdateGridZoom(ref _datasets_coarsegridlines, _zoom);
@@ -538,12 +537,17 @@ namespace EDDiscovery2
             if (toolStripButtonCoords.Checked)
                 builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
 
-            GenerateDataSetsBNG();
+            builder.UpdateGalObjectsZoom(ref _datasets_galmapobjects, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+
+            if (showBookmarksToolStripMenuItem.Checked)
+                builder.UpdateBookmarksZoom(ref _datasets_bookedmarkedsystems, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+
+            if (showNoteMarksToolStripMenuItem.Checked)
+                builder.UpdateBookmarksZoom(ref _datasets_notedsystems, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
         }
 
         private void GenerateDataSetsMaps()
         {
-            //Console.WriteLine("STARS Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_maps);
             _datasets_maps = null;
             DatasetBuilder builder = new DatasetBuilder();
@@ -552,7 +556,6 @@ namespace EDDiscovery2
 
         private void GenerateDataSetsVisitedSystems()
         {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_visitedsystems);
             _datasets_visitedsystems = null;
 
@@ -566,7 +569,6 @@ namespace EDDiscovery2
 
         private void GenerateDataSetsSelectedSystems()
         {
-            //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_selectedsystems);
             _datasets_selectedsystems = null;
             DatasetBuilder builder = new DatasetBuilder();
@@ -575,9 +577,6 @@ namespace EDDiscovery2
 
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
         {
-            Stopwatch sw = new Stopwatch();
-
-            sw.Start();
             Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
 
             DeleteDataset(ref _datasets_bookedmarkedsystems);
@@ -594,8 +593,6 @@ namespace EDDiscovery2
                 _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
             }
 
-            long time1 = sw.ElapsedMilliseconds;
-
             DeleteDataset(ref _datasets_notedsystems);
             _datasets_notedsystems = null;
 
@@ -608,20 +605,13 @@ namespace EDDiscovery2
                 _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked, _visitedSystems);
             }
 
-            long time2 = sw.ElapsedMilliseconds;
             DeleteDataset(ref _datasets_galmapobjects);
             _datasets_galmapobjects = null;
             DatasetBuilder builder3= new DatasetBuilder();
 
             int selected = SQLiteDBClass.GetSettingInt("Map3DGalObjects", int.MaxValue);
             _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , selected , _toolstripToggleNamingButton.Checked);
-
-            long time3 = sw.ElapsedMilliseconds;
-
-            Console.WriteLine("{0} t {1},{2},{3}" , debugpainttimer.ElapsedMilliseconds % 10000, time1 ,time2 ,time3);
         }
-
-
 
         private void DeleteDataset(ref List<IData3DSet> _datasets)
         {
@@ -986,7 +976,7 @@ namespace EDDiscovery2
 
         private void DrawStars()
         {
-            long pstart = debugpainttimer.ElapsedMilliseconds;
+            //long pstart = debugpainttimer.ElapsedMilliseconds;
 
             if (_datasets_maps == null)     // happens during debug.. paint before form load
                 return;
@@ -1015,10 +1005,10 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            long p1 = debugpainttimer.ElapsedMilliseconds;
+            //long p1 = debugpainttimer.ElapsedMilliseconds;
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
 
-            long p2 = debugpainttimer.ElapsedMilliseconds;
+            //long p2 = debugpainttimer.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_galmapobjects != null);
             if (_datasets_galmapobjects != null)
@@ -1027,7 +1017,7 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            long p3 = debugpainttimer.ElapsedMilliseconds;
+            //long p3 = debugpainttimer.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_poi != null);
             if (_datasets_poi != null)
@@ -1066,13 +1056,7 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            long p4 = debugpainttimer.ElapsedMilliseconds;
-            p4 -= p3;
-            p3 -= p2;
-            p2 -= p1;
-            p1 -= pstart;
-            Console.WriteLine("{0} Render {1},{2},{3},{4}", pstart % 10000, p1, p2, p3, p4);
-
+            //long p4 = debugpainttimer.ElapsedMilliseconds; p4 -= p3; p3 -= p2;  p2 -= p1; p1 -= pstart; Console.WriteLine("{0} Render {1},{2},{3},{4}", pstart % 10000, p1, p2, p3, p4);
         }
 
         private void UpdateStatus()
