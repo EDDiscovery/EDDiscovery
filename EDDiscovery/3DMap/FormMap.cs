@@ -1573,6 +1573,7 @@ namespace EDDiscovery2
 
         private void glControl_KeyUp(object sender, KeyEventArgs e)
         {
+            Console.WriteLine("Key up");
 //            if (_timerRunning)
 //                Repaint();
         }
@@ -1663,7 +1664,7 @@ namespace EDDiscovery2
                     name = _clickedSystem.name;
 
                     var edsm = new EDSM.EDSMClass();
-                    _clickedurl = edsm.GetUrlToEDSMSystem(name);
+                    _clickedurl = edsm.GetUrlToEDSMSystem(name, _clickedSystem.id_edsm);
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 
                     System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
