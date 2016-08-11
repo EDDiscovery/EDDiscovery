@@ -328,6 +328,7 @@ namespace EDDiscovery2
         private bool computeExit = false;
         private EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
         private double curx = 0, curz = 0;
+        StarGrid zoomedgrid = null;
 
         private int midpercentage = 80;
         private double middistance = 20000;
@@ -359,7 +360,7 @@ namespace EDDiscovery2
                 }
             }
 
-            visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Transparent, 1.0F);    // grid ID -1 means it won't be filled by the Update task
+            visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Orange, 1.0F);    // grid ID -1 means it won't be filled by the Update task
             grids.Add(visitedsystemsgrid);
 
             int solid = GridId.Id(0, 0);
@@ -436,8 +437,9 @@ namespace EDDiscovery2
 #endregion
 
 #region Update
+
         
-        public bool Update(double xp, double zp, GLControl gl  )            // Foreground UI thread, tells it if anything has changed..
+        public bool Update(double xp, double zp, float zoom , GLControl gl  )            // Foreground UI thread, tells it if anything has changed..
         {
             Debug.Assert(Application.MessageLoop);
 
@@ -459,6 +461,20 @@ namespace EDDiscovery2
             curz = zp;
 
             ewh.Set();                                                      // tick thread again to consider..
+
+
+            int getid = GridId.Id(curx, curz);                              // if extremely zoomed in, increase grid point size
+            StarGrid grid = grids.Find(x => x.Id == getid);
+            Debug.Assert(grid != null);
+
+            if (zoomedgrid!=null&&zoomedgrid != grid)                       // changed, reset old
+                zoomedgrid.Size = 1;
+
+            zoomedgrid = grid;
+            zoomedgrid.Size = Math.Min(Math.Max(1F, zoom / 20), 3);         // zoom grid
+            visitedsystemsgrid.Size = zoomedgrid.Size;
+            if (zoomedgrid.Id == populatedgrid.Id)
+                populatedgrid.Size = zoomedgrid.Size;
 
             return displayed;                                               // return if we updated anything..
         }

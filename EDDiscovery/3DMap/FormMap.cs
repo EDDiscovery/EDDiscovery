@@ -637,7 +637,7 @@ namespace EDDiscovery2
         private void NameStars(object sender, EventArgs e) // tick.. way it works is a tick occurs, timer off, thread runs, thread calls 
                                                            // delegate, work done in UI, timer reticks.  KEEP it that way!
         {
-            if (_stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, glControl ))       // at intervals, inform star grids of position, and if it has
+            if (_stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, _zoom, glControl ))       // at intervals, inform star grids of position, and if it has
                 Repaint();      // new stuff to paint, repaint
 
             if (Visible && toolStripButtonStarNames.Checked && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
@@ -1079,15 +1079,12 @@ namespace EDDiscovery2
 #endif
         }
 
-        Stopwatch debugpainttimer = new Stopwatch();                // performance measurer, keep
-        long prevpstart = 0;
-        long prevpend= 0;
-        string repaintreason = "";
+        Stopwatch debugpainttimer = new Stopwatch(); 
+        //long prevpstart = 0; long prevpend= 0;  string repaintreason = "";
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
-            if (!debugpainttimer.IsRunning)
-                debugpainttimer.Start();
+            if (!debugpainttimer.IsRunning) debugpainttimer.Start();
 
             long pstart = debugpainttimer.ElapsedMilliseconds;
 
@@ -1128,7 +1125,7 @@ namespace EDDiscovery2
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
-            repaintreason = "Timer Tick";
+            //repaintreason = "Timer Tick";
             glControl.Invalidate();             // and kick paint again
         }
 
@@ -1141,7 +1138,7 @@ namespace EDDiscovery2
                 //Console.WriteLine((Environment.TickCount % 10000) + "Start interval timer");
             }
 
-            repaintreason = Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1);
+            //repaintreason = Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1);
 
             //            Console.WriteLine("Repaint invalidate" + Tools.StackTrace(Environment.StackTrace,".Repaint()",1));
 
