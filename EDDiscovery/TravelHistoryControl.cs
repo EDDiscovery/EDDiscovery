@@ -232,6 +232,10 @@ namespace EDDiscovery
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
 
+            // Don't start adding travel history if we're closing
+            if (_discoveryForm.PendingClose)
+                return;
+
             dataGridViewTravel.Rows.Clear();
 
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
