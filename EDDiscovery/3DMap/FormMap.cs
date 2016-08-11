@@ -109,8 +109,6 @@ namespace EDDiscovery2
 
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
 
-        Stopwatch debugpainttimer = new Stopwatch();
-
         public bool Is3DMapsRunning { get { return _stargrids != null; } }
 
         #endregion
@@ -1081,6 +1079,7 @@ namespace EDDiscovery2
 #endif
         }
 
+        Stopwatch debugpainttimer = new Stopwatch();                // performance measurer, keep
         long prevpstart = 0;
         long prevpend= 0;
         string repaintreason = "";
@@ -1119,19 +1118,12 @@ namespace EDDiscovery2
                 _updateinterval.Reset();
             }
 
-            long pend = debugpainttimer.ElapsedMilliseconds;
-            long took = (pend - pstart);
-            long loop = (pstart - prevpstart);
-            long outside = (pstart - prevpend);
-
-            Console.WriteLine("{0} took {1} outside {2} loop {3} FrameRate {4} KB actions {5} reason {6} i{7} s{8} c{9} r{10}",
-                                pstart % 10000, took, outside, loop, (loop > 0) ? (1000 / loop) : 0, _kbdActions.Any(), repaintreason.Length > 50 ? repaintreason.Substring(0, 50) : repaintreason,
-                                pinput, pslew, pcamera, prender  );
-                                
-                                 
-            prevpstart = pstart;
-            prevpend = pend;
-            repaintreason = "Unknown";
+//            long pend = debugpainttimer.ElapsedMilliseconds; long took = (pend - pstart); long loop = (pstart - prevpstart); long outside = (pstart - prevpend);
+//            Console.WriteLine("{0} took {1} outside {2} loop {3} FrameRate {4} KB actions {5} reason {6} i{7} s{8} c{9} r{10}",
+//                                pstart % 10000, took, outside, loop, (loop > 0) ? (1000 / loop) : 0, _kbdActions.Any(), repaintreason.Length > 50 ? repaintreason.Substring(0, 50) : repaintreason,
+//                                pinput, pslew, pcamera, prender  );
+//            prevpstart = pstart; prevpend = pend;  repaintreason = "Unknown";
+            
         }
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
@@ -1593,14 +1585,14 @@ namespace EDDiscovery2
         {
             if (!_updateinterval.IsRunning)         // if first keypress in sequence (rest is handled by timer)
             {
-                Console.WriteLine("First key down");
+                //Console.WriteLine("First key down");
                 Repaint();
             }
         }
 
         private void glControl_KeyUp(object sender, KeyEventArgs e)
         {
-            Console.WriteLine("Key up");
+            //Console.WriteLine("Key up");
         }
 
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
