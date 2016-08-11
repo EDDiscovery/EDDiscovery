@@ -28,10 +28,10 @@ namespace EDDiscovery2
         public bool Working = false;
 
         bool array1displayed;
-        private Vector3d[] array1;            // the star points
+        private Vector3[] array1;            // the star points
         private int[] carray1;                // the star colours
         int array1vertices;
-        private Vector3d[] array2;            // the star points
+        private Vector3[] array2;            // the star points
         private int[] carray2;                // the star colours
         int array2vertices;
 
@@ -62,9 +62,9 @@ namespace EDDiscovery2
         public void FillFromDB()        // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = SystemClass.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage, this.Color);
+                array2vertices = SystemClass.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage);
             else
-                array1vertices = SystemClass.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage, this.Color);
+                array1vertices = SystemClass.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage);
         }
 
         public void FillFromVS(List<VisitedSystemsClass> cls) // does not affect the display object
@@ -75,10 +75,10 @@ namespace EDDiscovery2
                 array1vertices = FillFromVS(ref array1, ref carray1, cls, this.Color);
         }
 
-        private int FillFromVS( ref Vector3d[] array, ref int[] carray, List<VisitedSystemsClass> cls, Color basecolour)
+        private int FillFromVS( ref Vector3[] array, ref int[] carray, List<VisitedSystemsClass> cls, Color basecolour)
         {
             carray = new int[cls.Count];
-            array = new Vector3d[cls.Count];     // can't have any more than this 
+            array = new Vector3[cls.Count];     // can't have any more than this 
             int total = 0;
 
             foreach (VisitedSystemsClass vs in cls)
@@ -86,7 +86,7 @@ namespace EDDiscovery2
                 if (vs.curSystem != null && vs.curSystem.status != SystemStatusEnum.EDSC && vs.curSystem.HasCoordinate )
                 {
                     carray[total] = basecolour.ToArgb();
-                    array[total++] = new Vector3d(vs.curSystem.x, vs.curSystem.y, vs.curSystem.z);
+                    array[total++] = new Vector3((float)vs.curSystem.x, (float)vs.curSystem.y, (float)vs.curSystem.z);
                 }
             }
 
@@ -121,7 +121,7 @@ namespace EDDiscovery2
                 return FindPoint(ref array2, array2vertices, x, y, ref cursysdistz, ti);
         }
                                                                                             // operate on  display
-        public Vector3d? FindPoint(ref Vector3d[] vert, int total , int x, int y, ref double cursysdistz, TransFormInfo ti)
+        public Vector3d? FindPoint(ref Vector3[] vert, int total , int x, int y, ref double cursysdistz, TransFormInfo ti)
         { 
             Vector3d? ret = null;
             double w2 = (double)ti.dwidth / 2.0;
@@ -129,7 +129,7 @@ namespace EDDiscovery2
 
             for ( int i = 0; i < total; i++)
             {
-                Vector3d v = vert[i];
+                Vector3 v = vert[i];
 
                 Vector4d syspos = new Vector4d(v.X, v.Y, v.Z, 1.0);
                 Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
@@ -164,7 +164,7 @@ namespace EDDiscovery2
         }
 
                                                                                 // operate on  display - can be called BY A THREAD
-        public void GetSystemsInView(ref Vector3d[] vert, int total, ref SortedDictionary<float, Vector3d> list , TransFormInfo ti )
+        public void GetSystemsInView(ref Vector3[] vert, int total, ref SortedDictionary<float, Vector3d> list , TransFormInfo ti )
         {
             int margin = -150;
             float sqdist = 0F;
@@ -175,7 +175,7 @@ namespace EDDiscovery2
             {
                 for (int i = 0; i < total; i++)
                 {
-                    Vector3d v = vert[i];
+                    Vector3 v = vert[i];
 
                     Vector4d syspos = new Vector4d(v.X, v.Y, v.Z, 1.0);
                     Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
@@ -189,7 +189,7 @@ namespace EDDiscovery2
                             sqdist = ((float)v.X - ti.campos.X) * ((float)v.X - ti.campos.X) + ((float)v.Y - ti.campos.Y) * ((float)v.Y - ti.campos.Y) + ((float)v.Z - ti.campos.Z) * ((float)v.Z - ti.campos.Z);
 
                             if (sqdist <= ti.sqlylimit)
-                                list.Add(sqdist, v);
+                                list.Add(sqdist, new Vector3d(v.X,v.Y,v.Z));
                         }
                     }
                 }
@@ -290,18 +290,28 @@ namespace EDDiscovery2
                 else
                 {
                     int numpoints = (array1displayed) ? array1vertices : array2vertices;
-                    GL.EnableClientState(ArrayCap.ColorArray);
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
-                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
+
                     GL.EnableClientState(ArrayCap.VertexArray);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
-                    GL.VertexPointer(3, VertexPointerType.Double, 0, 0);
+                    GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                     GL.PointSize(Size);
-                    //GL.Color3(Color);
-                    GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
+
+                    if (Color == Color.Transparent)
+                    {
+                        GL.EnableClientState(ArrayCap.ColorArray);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                        GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
+                        GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
+                        GL.DisableClientState(ArrayCap.ColorArray);
+                    }
+                    else
+                    {
+                        GL.Color3(Color);
+                        GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
+                    }
+
                     GL.DisableClientState(ArrayCap.VertexArray);
-                    GL.DisableClientState(ArrayCap.ColorArray);
-                    //Console.WriteLine("Draw " + Id + " " + numpoints);
+
                 }
             }
         }
@@ -325,12 +335,11 @@ namespace EDDiscovery2
         private double fardistance = 40000;
         private double MinRecalcDistance = 5000;            // only recalc a grid if we are more than this away from its prev calc pos
 
-        private Color starcolour = Color.FromArgb(255, 192, 192, 192);
         private Color popcolour = Color.Blue;
 
-        #endregion
+#endregion
 
-        #region Initialise
+#region Initialise
 
         public void Initialise()
         {
@@ -342,7 +351,7 @@ namespace EDDiscovery2
                     double xp = 0, zp = 0;
                     bool ok = GridId.XZ(id, out xp, out zp);
                     Debug.Assert(ok);
-                    StarGrid grd = new StarGrid(id, xp, zp, starcolour, 1.0F);
+                    StarGrid grd = new StarGrid(id, xp, zp, Color.Transparent, 1.0F);           //A=0 means use default colour array
                     if (xp == 0 && zp == 0)                                     // sol grid, unpopulated stars please
                         grd.dBAsk = SystemClass.SystemAskType.UnPopulatedStars;
 
@@ -350,11 +359,11 @@ namespace EDDiscovery2
                 }
             }
 
-            visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Orange, 1.0F);    // grid ID -1 means it won't be filled by the Update task
+            visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Transparent, 1.0F);    // grid ID -1 means it won't be filled by the Update task
             grids.Add(visitedsystemsgrid);
 
             int solid = GridId.Id(0, 0);
-            populatedgrid = new StarGrid(solid, 0, 0, popcolour , 1.0F);      // Duplicate grid id but asking for populated stars
+            populatedgrid = new StarGrid(solid, 0, 0, Color.Transparent , 1.0F);      // Duplicate grid id but asking for populated stars
             populatedgrid.dBAsk = SystemClass.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);                                       // add last, so displayed last, so overwrites anything else
 
@@ -523,7 +532,7 @@ namespace EDDiscovery2
 
                         Debug.Assert(!computed.Contains(selmin));
                         
-                        Console.WriteLine("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance, selmin.CountJustMade);
+                        //Console.WriteLine("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance, selmin.CountJustMade);
 
                         computed.Add(selmin);
                     }
@@ -539,7 +548,7 @@ namespace EDDiscovery2
 
         public void DrawAll(GLControl control, bool showstars , bool showstations )
         {
-            populatedgrid.Color = (showstations) ? popcolour : starcolour;
+            populatedgrid.Color = (showstations) ? popcolour : Color.Transparent;
 
             if (showstars)
             {

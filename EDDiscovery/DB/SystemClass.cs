@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -537,7 +538,8 @@ namespace EDDiscovery.DB
         }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
-        public static int GetSystemVector(int gridid, ref Vector3d[] vertices, ref int[] colours, SystemAskType ask, int percentage, System.Drawing.Color basecolour)
+        public static int GetSystemVector(int gridid, ref Vector3[] vertices, ref int[] colours, 
+                                            SystemAskType ask, int percentage )
         {
             int numvertices = 0;
             vertices = null;
@@ -566,7 +568,7 @@ namespace EDDiscovery.DB
                                 {
                                     if (vertices == null)
                                     {
-                                        vertices = new Vector3d[1024];
+                                        vertices = new Vector3[1024];
                                         colours = new int[1024];
                                     }
                                     else if (numvertices == vertices.Length)
@@ -575,11 +577,14 @@ namespace EDDiscovery.DB
                                         Array.Resize(ref colours, colours.Length + 8192);
                                     }
 
-                                    int r = 256 - (int)(long)reader["randomid"] / 2;
+                                    int r = (int)(long)reader["randomid"];
 
-                                    // RGBA byte order is expected
-                                    colours[numvertices] = BitConverter.ToInt32(new byte[] { (byte)(basecolour.R * r / 256), (byte)(basecolour.G * r / 256), (byte)(basecolour.B * r / 256), basecolour.A }, 0);
-                                    vertices[numvertices++] = new Vector3d((double)reader["x"], (double)reader["y"], (double)reader["z"]);
+                                    Color c = (r < 20) ? Color.Red : ((r < 40) ? Color.Orange : ((r<60) ?Color.Yellow : Color.White));
+
+                                    int fade= (r % 10) * 10;
+
+                                    colours[numvertices] = BitConverter.ToInt32(new byte[] { (byte)(c.R - fade), (byte)(c.G-fade), (byte)(c.B-fade), c.A }, 0);
+                                    vertices[numvertices++] = new Vector3((float)(double)reader["x"], (float)(double)reader["y"], (float)(double)reader["z"]);
                                 }
                             }
                         }
