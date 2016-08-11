@@ -139,6 +139,11 @@ namespace EDDiscovery
 
         public void RefreshHistoryAsync()
         {
+            if (_discoveryForm.PendingClose)
+            {
+                return;
+            }
+
             if (activecommander >= 0)
             {
                 if (!_refreshWorker.IsBusy)
@@ -184,7 +189,7 @@ namespace EDDiscovery
 
         private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (!e.Cancelled)
+            if (!e.Cancelled && !_discoveryForm.PendingClose)
             {
                 if (e.Error != null)
                 {
@@ -226,6 +231,10 @@ namespace EDDiscovery
 
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
             List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
+
+            // Don't start adding travel history if we're closing
+            if (_discoveryForm.PendingClose)
+                return;
 
             dataGridViewTravel.Rows.Clear();
 
