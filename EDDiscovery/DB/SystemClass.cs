@@ -584,6 +584,7 @@ namespace EDDiscovery.DB
 
                                     Vector3 pos = new Vector3((float)(double)reader["x"], (float)(double)reader["y"], (float)(double)reader["z"]);
 
+                                    int rand = (int)(long)reader["randomid"];
                                     Color basec = fixedc[rand&3];
                                     int fade = 100 - ((rand>>2)&7) * 8;
                                     byte red = (byte)(basec.R * fade / 100);
