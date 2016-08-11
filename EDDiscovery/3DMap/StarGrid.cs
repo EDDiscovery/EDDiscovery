@@ -20,6 +20,7 @@ namespace EDDiscovery2
         public double X { get; set; }
         public double Z { get; set; }
         public int Percentage { get; set; }          // foreground flags
+        public double CalculatedDistance { get; set; }  // foreground.. what distance did we calc on..
         public SystemClass.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
@@ -43,6 +44,7 @@ namespace EDDiscovery2
         {
             Id = id; X = x; Z = z;
             Percentage = 0;
+            CalculatedDistance = 10E6;        // some large value, but not too large so ABS takes us overrange
             Color = c;
             Size = s;
             array1vertices = 0;
@@ -299,6 +301,7 @@ namespace EDDiscovery2
         private double middistance = 20000;
         private int farpercentage = 50;
         private double fardistance = 40000;
+        private double MinRecalcDistance = 5000;            // only recalc a grid if we are more than this away from its prev calc pos
 
         private Color starcolour = Color.FromArgb(255, 192, 192, 192);
         private Color popcolour = Color.Blue;
@@ -403,7 +406,7 @@ namespace EDDiscovery2
 
 #region Update
         
-        public bool Update(double xp, double zp, GLControl gl )            // Foreground UI thread, tells it if anything has changed..
+        public bool Update(double xp, double zp, GLControl gl  )            // Foreground UI thread, tells it if anything has changed..
         {
             Debug.Assert(Application.MessageLoop);
 
@@ -415,7 +418,6 @@ namespace EDDiscovery2
             {
                 grd.Display(gl);                            // swap to using this one..
                 displayed = true;
-                Console.WriteLine("Grid " + grd.Id + " computed " + grd.Count);
             }
 
             curx = xp;
@@ -449,22 +451,28 @@ namespace EDDiscovery2
                         if (gcheck.Id >= 0 )                                     // if not a special grid
                         {
                             double dist = gcheck.DistanceFrom(curx, curz);
-                            int percentage = GetPercentage(dist);
 
-                            if (percentage>gcheck.Percentage )                // if increase, it has priority..
+                            if (Math.Abs(dist - gcheck.CalculatedDistance) > MinRecalcDistance) // if its too small a change, ignore.. histerisis
                             {
-                                if (dist < mindist)                             // if best.. pick
+                                int percentage = GetPercentage(dist);
+
+                                if (percentage > gcheck.Percentage)                // if increase, it has priority..
                                 {
-                                    mindist = dist;
-                                    selmin = gcheck;
+                                    if (dist < mindist)                             // if best.. pick
+                                    {
+                                        mindist = dist;
+                                        selmin = gcheck;
+                                        //Console.WriteLine("Select {0} incr perc {1} to {2} dist {3,8:0.0}", gcheck.Id, gcheck.Percentage, percentage, dist);
+                                    }
                                 }
-                            }
-                            else if (selmin == null && percentage<gcheck.Percentage )   // if not selected a min one, pick the further one to decrease
-                            {
-                                if (dist > maxdist)         
+                                else if (selmin == null && percentage < gcheck.Percentage)   // if not selected a min one, pick the further one to decrease
                                 {
-                                    maxdist = dist;
-                                    selmax = gcheck;
+                                    if (dist > maxdist)
+                                    {
+                                        maxdist = dist;
+                                        selmax = gcheck;
+                                        //Console.WriteLine("Select {0} decr perc {1} to {2} dist {3,8:0.0}", gcheck.Id, gcheck.Percentage, percentage, dist);
+                                    }
                                 }
                             }
                         }
@@ -476,9 +484,15 @@ namespace EDDiscovery2
                     if (selmin != null)
                     {
                         int prevpercent = selmin.Percentage;
-                        selmin.Percentage = GetPercentage(selmin.DistanceFrom(curx, curz));
+                        double prevdist = selmin.CalculatedDistance;
+
+                        selmin.CalculatedDistance = selmin.DistanceFrom(curx, curz);
+                        selmin.Percentage = GetPercentage(selmin.CalculatedDistance);
                         selmin.FillFromDB();
-                        //Console.WriteLine("Computed " + selmin.Id.ToString("0000") + "  total " + selmin.CountJustMade.ToString("000000") + " at " + selmin.X + " , " + selmin.Z + " % " + prevpercent + "->" + selmin.Percentage);
+
+                        Debug.Assert(Math.Abs(prevdist - selmin.CalculatedDistance) > MinRecalcDistance);
+                        //Console.WriteLine("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance , selmin.CountJustMade);
+
                         computed.Add(selmin);
                     }
                     else
