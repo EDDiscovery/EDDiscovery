@@ -227,7 +227,7 @@ namespace EDDiscovery
             TravelLogUnit tlu;
             List<VisitedSystemsClass> vsclist = null;
 
-            if (vsc_lookup.ContainsKey(fi.Name))
+            if (vsc_lookup != null && vsc_lookup.ContainsKey(fi.Name))
             {
                 vsclist = vsc_lookup[fi.Name];
             }
