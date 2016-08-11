@@ -25,6 +25,7 @@ namespace EDDiscovery2
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
         public bool Displayed = false;              // records if it was ever displayed
+        public bool Working = false;
 
         bool array1displayed;
         private Vector3d[] array1;            // the star points
@@ -414,11 +415,15 @@ namespace EDDiscovery2
 
             bool displayed = false;
 
-            while (computed.TryTake(out grd))               // remove from the computed queue and mark done
+            while (computed.TryTake(out grd))                               // remove from the computed queue and mark done
             {
-                grd.Display(gl);                            // swap to using this one..
+                grd.Display(gl);                                            // swap to using this one..
+                Thread.MemoryBarrier();                                     // finish above before clearing working
+                grd.Working = false;
                 displayed = true;
             }
+
+            Thread.MemoryBarrier();                                         // finish above 
 
             curx = xp;
             curz = zp;
@@ -448,7 +453,7 @@ namespace EDDiscovery2
 
                     foreach (StarGrid gcheck in grids)
                     {
-                        if (gcheck.Id >= 0 )                                     // if not a special grid
+                        if (gcheck.Id >= 0 && !gcheck.Working)                                     // if not a special grid
                         {
                             double dist = gcheck.DistanceFrom(curx, curz);
 
@@ -483,6 +488,7 @@ namespace EDDiscovery2
 
                     if (selmin != null)
                     {
+                        selmin.Working = true;                                          // stops another go by this thread, only cleared by UI when it has displayed
                         int prevpercent = selmin.Percentage;
                         double prevdist = selmin.CalculatedDistance;
 
@@ -490,8 +496,13 @@ namespace EDDiscovery2
                         selmin.Percentage = GetPercentage(selmin.CalculatedDistance);
                         selmin.FillFromDB();
 
+                        Thread.MemoryBarrier();                                         // finish above before trying to trigger another go..
+
                         Debug.Assert(Math.Abs(prevdist - selmin.CalculatedDistance) > MinRecalcDistance);
-                        //Console.WriteLine("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance , selmin.CountJustMade);
+
+                        Debug.Assert(!computed.Contains(selmin));
+                        
+                        Console.WriteLine("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance, selmin.CountJustMade);
 
                         computed.Add(selmin);
                     }
