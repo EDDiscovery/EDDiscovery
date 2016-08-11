@@ -543,6 +543,11 @@ namespace EDDiscovery.DB
         {
             int numvertices = 0;
             vertices = null;
+            Color[] fixedc = new Color[4];
+            fixedc[0] = Color.Red;
+            fixedc[1] = Color.Orange;
+            fixedc[2] = Color.Yellow;
+            fixedc[3] = Color.White;
 
             try
             {
@@ -577,14 +582,15 @@ namespace EDDiscovery.DB
                                         Array.Resize(ref colours, colours.Length + 8192);
                                     }
 
-                                    int r = (int)(long)reader["randomid"];
+                                    Vector3 pos = new Vector3((float)(double)reader["x"], (float)(double)reader["y"], (float)(double)reader["z"]);
 
-                                    Color c = (r < 20) ? Color.Red : ((r < 40) ? Color.Orange : ((r<60) ?Color.Yellow : Color.White));
-
-                                    int fade= (r % 10) * 10;
-
-                                    colours[numvertices] = BitConverter.ToInt32(new byte[] { (byte)(c.R - fade), (byte)(c.G-fade), (byte)(c.B-fade), c.A }, 0);
-                                    vertices[numvertices++] = new Vector3((float)(double)reader["x"], (float)(double)reader["y"], (float)(double)reader["z"]);
+                                    Color basec = fixedc[rand&3];
+                                    int fade = 100 - ((rand>>2)&7) * 8;
+                                    byte red = (byte)(basec.R * fade / 100);
+                                    byte green = (byte)(basec.G * fade / 100);
+                                    byte blue = (byte)(basec.B * fade / 100);
+                                    colours[numvertices] = BitConverter.ToInt32(new byte[] { red, green, blue, 255 }, 0);
+                                    vertices[numvertices++] = pos;
                                 }
                             }
                         }
