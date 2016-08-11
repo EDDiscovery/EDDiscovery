@@ -579,8 +579,7 @@ namespace EDDiscovery2
         {
             Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
 
-            DeleteDataset(ref _datasets_bookedmarkedsystems);
-            _datasets_bookedmarkedsystems = null;
+            List<IData3DSet> oldbookmarks = _datasets_bookedmarkedsystems;
 
             if (showBookmarksToolStripMenuItem.Checked)
             {
@@ -592,10 +591,14 @@ namespace EDDiscovery2
                 DatasetBuilder builder1 = new DatasetBuilder();
                 _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
             }
+            else
+            {
+                _datasets_bookedmarkedsystems = null;
+            }
 
-            DeleteDataset(ref _datasets_notedsystems);
-            _datasets_notedsystems = null;
+            DeleteDataset(ref oldbookmarks);
 
+            List<IData3DSet> oldnotedsystems = _datasets_notedsystems;
             if (showNoteMarksToolStripMenuItem.Checked)
             {
                 Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
@@ -604,13 +607,19 @@ namespace EDDiscovery2
                 DatasetBuilder builder2 = new DatasetBuilder();
                 _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked, _visitedSystems);
             }
+            else
+            {
+                _datasets_notedsystems = null;
+            }
 
-            DeleteDataset(ref _datasets_galmapobjects);
-            _datasets_galmapobjects = null;
+            DeleteDataset(ref oldnotedsystems);
+
             DatasetBuilder builder3= new DatasetBuilder();
 
             int selected = SQLiteDBClass.GetSettingInt("Map3DGalObjects", int.MaxValue);
+            List<IData3DSet> oldgalmaps = _datasets_galmapobjects;
             _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , selected , _toolstripToggleNamingButton.Checked);
+            DeleteDataset(ref oldgalmaps);
         }
 
         private void DeleteDataset(ref List<IData3DSet> _datasets)
@@ -978,6 +987,11 @@ namespace EDDiscovery2
         {
             //long pstart = debugpainttimer.ElapsedMilliseconds;
 
+            // Take references on objects that could be replaced by the background
+            List<IData3DSet> _datasets_galmapobjects = this._datasets_galmapobjects;
+            List<IData3DSet> _datasets_notedsystems = this._datasets_notedsystems;
+            List<IData3DSet> _datasets_bookmarkedsystems = this._datasets_bookedmarkedsystems;
+
             if (_datasets_maps == null)     // happens during debug.. paint before form load
                 return;
 
@@ -985,21 +999,21 @@ namespace EDDiscovery2
                 dataset.DrawAll(glControl);
 
             Debug.Assert(_datasets_finegridlines != null);
-            if (toolStripButtonFineGrid.Checked && _datasets_finegridlines == null )
+            if (toolStripButtonFineGrid.Checked && _datasets_finegridlines != null )
             {
                 foreach (var dataset in _datasets_finegridlines)
                     dataset.DrawAll(glControl);
             }
 
             Debug.Assert(_datasets_coarsegridlines != null);
-            if (toolStripButtonGrid.Checked && _datasets_coarsegridlines == null )
+            if (toolStripButtonGrid.Checked && _datasets_coarsegridlines != null )
             {
                 foreach (var dataset in _datasets_coarsegridlines)
                     dataset.DrawAll(glControl);
             }
 
             Debug.Assert(_datasets_gridlinecoords != null);
-            if (toolStripButtonCoords.Checked && _datasets_gridlinecoords == null )
+            if (toolStripButtonCoords.Checked && _datasets_gridlinecoords != null )
             {
                 foreach (var dataset in _datasets_gridlinecoords)
                     dataset.DrawAll(glControl);
