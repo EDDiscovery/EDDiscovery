@@ -343,7 +343,7 @@ namespace EDDiscovery2._3DMap
                     else if ( id == 1 )
                         tqd.UpdateVertices(GetGMONamePos(pd, widthly, heightly, vert, gmo.name.Length), other, vert);
                     else
-                        tqd.UpdateVertices(GetGMOTargetPos(pd, widthly, heightly, vert), other, vert);
+                        tqd.UpdateVertices(GetGMOTargetPos(pd, widthly, heightly, vert, 0.75), other, vert);
 
                 }
             }
