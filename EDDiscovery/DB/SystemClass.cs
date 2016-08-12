@@ -585,7 +585,7 @@ namespace EDDiscovery.DB
                                     Vector3 pos = new Vector3((float)(double)reader["x"], (float)(double)reader["y"], (float)(double)reader["z"]);
 
                                     int rand = (int)(long)reader["randomid"];
-                                    Color basec = fixedc[rand&3];
+                                    Color basec = fixedc[rand&3]; 
                                     int fade = 100 - ((rand>>2)&7) * 8;
                                     byte red = (byte)(basec.R * fade / 100);
                                     byte green = (byte)(basec.G * fade / 100);
@@ -594,6 +594,14 @@ namespace EDDiscovery.DB
                                     vertices[numvertices++] = pos;
                                 }
                             }
+                        }
+
+                        if (gridid == 810)    // BODGE do here, better once on here than every star for every grid..
+                        {                       // replace when we have a better naming system
+                            int solindex = Array.IndexOf(vertices, new Vector3(0, 0, 0));
+
+                            if (solindex >= 0)
+                                colours[solindex] = 0x00ffff;   //yellow
                         }
                     }
                 }

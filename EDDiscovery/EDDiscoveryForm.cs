@@ -89,8 +89,7 @@ namespace EDDiscovery
         Action cancelDownloadMaps = null;
         Task<bool> downloadMapsTask = null;
         Task checkInstallerTask = null;
-        private string logname;
-        private bool logsetupfailed;
+        private string logname = "";
 
         private bool CanSkipSlowUpdates()
         {
@@ -153,7 +152,6 @@ namespace EDDiscovery
             {
                 Trace.WriteLine($"Unable to create the folder '{logpath}'");
                 Trace.WriteLine($"Exception: {ex.Message}");
-                logsetupfailed = true;
             }
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
@@ -576,10 +574,11 @@ namespace EDDiscovery
                 DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
                 if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
                     performedsmdistsync = true;
-            }
 
-            reportProgress(-1, "Creating name list of systems");
-            SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
+                reportProgress(-1, "Creating name list of systems");
+                SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
+                galacticMapping.GetSystemNames(ref SystemNames);      // add on GMO names..
+            }
         }
 
         private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)

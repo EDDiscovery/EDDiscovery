@@ -19,8 +19,8 @@ namespace EDDiscovery.EDSM
         public GalacticMapping()
         {
             galacticMapTypes = GalMapType.GetTypes();          // we always have the types.
-            int sel = SQLiteDBClass.GetSettingInt("GalObjectsEnable", int.MaxValue);
 
+            int sel = SQLiteDBClass.GetSettingInt("GalObjectsEnable", int.MaxValue);
             foreach (GalMapType tp in galacticMapTypes)
             {
                 tp.Enabled = (sel & 1) != 0;
@@ -87,7 +87,7 @@ namespace EDDiscovery.EDSM
             int index = 0;
             int sel = 0;
 
-            GalMapType tpon = galacticMapTypes.Find(x => x.Enabled==true);
+            GalMapType tpon = galacticMapTypes.Find(x => x.Enabled==true);  // find if any are on
 
             foreach (GalMapType tp in galacticMapTypes)
             {
@@ -105,7 +105,7 @@ namespace EDDiscovery.EDSM
 
         public GalacticMapObject Find(string name, bool contains = false , bool disregardenable = false)
         {
-            if ( galacticMapObjects != null )
+            if (galacticMapObjects != null && name.Length>0)
             {
                 foreach (GalacticMapObject gmo in galacticMapObjects)
                 {
@@ -118,7 +118,18 @@ namespace EDDiscovery.EDSM
             }
 
             return null;
-
         }
+
+        public void GetSystemNames(ref System.Windows.Forms.AutoCompleteStringCollection asc)
+        {
+            if (galacticMapObjects != null)
+            {
+                foreach (GalacticMapObject gmo in galacticMapObjects)
+                {
+                    asc.Add(gmo.name);
+                }
+            }
+        }
+            
     }
 }

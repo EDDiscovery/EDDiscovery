@@ -111,7 +111,7 @@ namespace EDDiscovery2
             public Vector3 campos;//  GetSystemInView only
         }
 
-        public Vector3d? FindPoint(int x, int y, ref double cursysdistz, TransFormInfo ti) // UI call .. operate on  display
+        public Vector3? FindPoint(int x, int y, ref double cursysdistz, TransFormInfo ti) // UI call .. operate on  display
         {
             Debug.Assert(Application.MessageLoop);
 
@@ -121,9 +121,9 @@ namespace EDDiscovery2
                 return FindPoint(ref array2, array2vertices, x, y, ref cursysdistz, ti);
         }
                                                                                             // operate on  display
-        public Vector3d? FindPoint(ref Vector3[] vert, int total , int x, int y, ref double cursysdistz, TransFormInfo ti)
+        public Vector3? FindPoint(ref Vector3[] vert, int total , int x, int y, ref double cursysdistz, TransFormInfo ti)
         { 
-            Vector3d? ret = null;
+            Vector3? ret = null;
             double w2 = (double)ti.dwidth / 2.0;
             double h2 = (double)ti.dheight / 2.0;
 
@@ -146,7 +146,7 @@ namespace EDDiscovery2
                         if ((sysdist + Math.Abs(sysloc.Z * ti.zoom)) < cursysdistz)
                         {
                             cursysdistz = sysdist + Math.Abs(sysloc.Z * ti.zoom);
-                            ret = new Vector3d(v.X, v.Y, v.Z);
+                            ret = new Vector3(v.X, v.Y, v.Z);
                         }
                     }
                 }
@@ -154,17 +154,25 @@ namespace EDDiscovery2
 
             return ret;
         }
-                                                                                // operate on  display - Called in a thread..
-        public void GetSystemsInView(ref SortedDictionary<float, Vector3d> list , TransFormInfo ti)
+
+        public class InViewInfo
         {
-            if (array1displayed)
-                GetSystemsInView(ref array1, array1vertices, ref list, ti);
-            else
-                GetSystemsInView(ref array2, array2vertices, ref list, ti);
+            public InViewInfo(Vector3 pos, int c) { position = pos; colour = c; }
+            public Vector3 position;
+            public int colour;
         }
 
-                                                                                // operate on  display - can be called BY A THREAD
-        public void GetSystemsInView(ref Vector3[] vert, int total, ref SortedDictionary<float, Vector3d> list , TransFormInfo ti )
+        // operate on  display - Called in a thread..
+        public void GetSystemsInView(ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti)
+        {
+            if (array1displayed)
+                GetSystemsInView(ref array1, ref carray1, array1vertices, ref list, ti);
+            else
+                GetSystemsInView(ref array2, ref carray2, array2vertices, ref list, ti);
+        }
+
+        // operate on  display - can be called BY A THREAD
+        public void GetSystemsInView(ref Vector3[] vert, ref int[] cols , int total, ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti )
         {
             int margin = -150;
             float sqdist = 0F;
@@ -189,7 +197,7 @@ namespace EDDiscovery2
                             sqdist = ((float)v.X - ti.campos.X) * ((float)v.X - ti.campos.X) + ((float)v.Y - ti.campos.Y) * ((float)v.Y - ti.campos.Y) + ((float)v.Z - ti.campos.Z) * ((float)v.Z - ti.campos.Z);
 
                             if (sqdist <= ti.sqlylimit)
-                                list.Add(sqdist, new Vector3d(v.X,v.Y,v.Z));
+                                list.Add(sqdist, new InViewInfo( new Vector3(v.X,v.Y,v.Z),cols[i]));
                         }
                     }
                 }
@@ -328,7 +336,6 @@ namespace EDDiscovery2
         private bool computeExit = false;
         private EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
         private double curx = 0, curz = 0;
-        StarGrid zoomedgrid = null;
 
         private int midpercentage = 80;
         private double middistance = 20000;
@@ -583,19 +590,19 @@ namespace EDDiscovery2
 
 #region misc
 
-        public Vector3d? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti , 
+        public Vector3? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti , 
                                         bool showstars, bool showstations) // UI Call.
         {
             Debug.Assert(Application.MessageLoop);
 
             cursysdistz = double.MaxValue;
-            Vector3d? ret = null;
+            Vector3? ret = null;
 
             if (showstars)                        // populated grid is in this list, so will be checked
             {
                 foreach (StarGrid grd in grids)
                 {
-                    Vector3d? cur = grd.FindPoint(x, y, ref cursysdistz, ti);
+                    Vector3? cur = grd.FindPoint(x, y, ref cursysdistz, ti);
                     if (cur != null)        // if found one, better than cursysdistz, use it
                         ret = cur;
                 }
@@ -608,7 +615,7 @@ namespace EDDiscovery2
             return ret;
         }
                                         // used by Starnames in a thread..
-        public void GetSystemsInView(ref SortedDictionary<float, Vector3d> list, double gridlylimit , StarGrid.TransFormInfo ti)
+        public void GetSystemsInView(ref SortedDictionary<float, StarGrid.InViewInfo> list, double gridlylimit , StarGrid.TransFormInfo ti)
         {
             int idpos = GridId.Id(ti.campos.X, ti.campos.Z);
 
