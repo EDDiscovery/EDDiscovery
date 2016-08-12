@@ -8,7 +8,7 @@ namespace EDDiscovery.DB
 {
     class TargetClass
     {
-        public enum TargetType { Bookmark, Notemark, None };
+        public enum TargetType { Bookmark, Notemark, GMO, None };
 
         public static void SetTargetBookmark(string name, long id, double x, double y, double z)                                                 // set bookmark as ID
         {
@@ -30,6 +30,16 @@ namespace EDDiscovery.DB
             SQLiteDBClass.PutSettingDouble("TargetPositionZ", z);
         }
 
+        public static void SetTargetGMO(string name, long id, double x, double y, double z)                                                 // set bookmark as ID
+        {
+            SQLiteDBClass.PutSettingString("TargetPositionName", name);
+            SQLiteDBClass.PutSettingInt("TargetPositionType", (int)TargetType.GMO);
+            SQLiteDBClass.PutSettingInt("TargetPositionID", (int)id);
+            SQLiteDBClass.PutSettingDouble("TargetPositionX", x);
+            SQLiteDBClass.PutSettingDouble("TargetPositionY", y);
+            SQLiteDBClass.PutSettingDouble("TargetPositionZ", z);
+        }
+
         public static void ClearTarget()
         {
             SQLiteDBClass.PutSettingInt("TargetPositionType", (int)TargetType.None);
@@ -45,6 +55,12 @@ namespace EDDiscovery.DB
         {
             TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
             return (tt == TargetType.Notemark) ? SQLiteDBClass.GetSettingInt("TargetPositionID", 0) : 0;
+        }
+
+        public static long GetTargetGMO()               // 0 if not a GMO or not set.
+        {
+            TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
+            return (tt == TargetType.GMO) ? SQLiteDBClass.GetSettingInt("TargetPositionID", 0) : 0;
         }
 
         // true if target set with its name, x/y/z

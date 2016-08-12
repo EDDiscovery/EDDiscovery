@@ -58,9 +58,9 @@ namespace EDDiscovery2
         int _starnamesizely = 1200;                  // star name width, div zoom
         int _starnameminly = 2;                      // ranging between
         int _starnamemaxly = 80;
-        Font _starnamebitmapfnt;
-        int _starnamebitmapwidth, _starnamebitmapheight;
         Dictionary<Vector3d, StarNames> _starnames;
+
+        static Font _starfont = new Font("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
 
         StarGrids _stargrids;
         FormMap _formmap;
@@ -81,17 +81,6 @@ namespace EDDiscovery2
             _glControl = gl;
 
             _starnames = new Dictionary<Vector3d, StarNames>();
-
-            string fontname = "MS Sans Serif";                  // calculate once for bitmap 
-            _starnamebitmapfnt = new Font(fontname, 20F);
-
-            Bitmap text_bmp = new Bitmap(100, 30);
-            using (Graphics g = Graphics.FromImage(text_bmp))
-            {
-                SizeF sz = g.MeasureString("Blah blahx EX222 LYXX2", _starnamebitmapfnt);
-                _starnamebitmapwidth = (int)sz.Width + 4;
-                _starnamebitmapheight = (int)sz.Height + 4;
-            }
 
             _starname_curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
         }
@@ -276,7 +265,7 @@ namespace EDDiscovery2
 
                             if (draw)
                             {
-                                Bitmap map = DatasetBuilder.DrawString(sys.name, _starnamebitmapfnt, _starnamebitmapwidth, _starnamebitmapheight, Color.Orange);
+                                Bitmap map = DatasetBuilder.DrawString(sys.name, Color.Orange, _starfont);
 
                                 sys.newtexture = TexturedQuadData.FromBitmapHorz(map,
                                                  new PointF((float)sys.x + textoffset, (float)sys.z - textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z - textheightly / 2),
