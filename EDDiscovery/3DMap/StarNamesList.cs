@@ -56,10 +56,10 @@ namespace EDDiscovery2
         bool _starname_camera_paint_lookforward = false; // true, we are pointing +z ie towards saga* from sol
         float _starname_curstars_zoom = ZoomOff;    // and what zoom.. 
         const float ZoomOff = -1000000F;            // zoom off flag
-        int _starlimitly = 5000;                     // stars within this, div zoom.  F1/F2 adjusts this
-        int _starnamesizely = 1200;                  // star name width, div zoom
-        int _starnameminly = 2;                      // ranging between
-        int _starnamemaxly = 80;
+        int _starlimitly = 5000;                    // stars within this, div zoom.  F1/F2 adjusts this
+        float _starnamesizely = 40F;                // star name width, div zoom
+        float _starnameminly = 0.1F;                // ranging between per char
+        float _starnamemaxly = 0.5F;
         Dictionary<Vector3, StarNames> _starnames;
 
         static Font _starfont = new Font("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
@@ -196,29 +196,28 @@ namespace EDDiscovery2
 
                 _stargrids.GetSystemsInView(ref inviewlist, 2000.0, ti);            // consider all grids under 2k from current pos.
                 
-                float textoffset = 0.35F;
-                float textwidthly = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _zoom, _starnameminly)) + textoffset;
-                float textheightly = textwidthly / 10;
-
+                float textoffset = 0.20F;
+                float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _zoom, _starnameminly)); // per char
+                float textscalingh = textscalingw * 4;
                 if (!_starname_camera_paint_lookdown)         // flip bitmap to make it look at you..
                 {
                     if (!_starname_camera_paint_lookforward)
                     {
                         textoffset = -textoffset;
-                        textwidthly = -textwidthly;
+                        textscalingw = -textscalingw;
                     }
                     else
-                        textheightly = -textheightly;
+                        textscalingh = -textscalingh;
                 }
                 else if (!_starname_camera_paint_lookforward)
                 {
-                    textheightly = -textheightly;
+                    textscalingh = -textscalingh;
                     textoffset = -textoffset;
-                    textwidthly = -textwidthly;
+                    textscalingw = -textscalingw;
                 }
 
                 float starsize = Math.Min(Math.Max(_zoom / 10F, 1.0F), 20F);     // Normal stars are at 1F.
-                //Console.WriteLine((Environment.TickCount % 10000) + "Text " + _starnamesizely + " text " + textwidthly.ToString("0.0") + "," + textheightly.ToString("0.0") + " star size " + starsize.ToString("0.0") + " Lylimit " + lylimit);
+                //Console.WriteLine("Per char {0} h {1} sc {2}", textscalingw, textscalingh , starsize);
 
                 lock (deletelock)                                          // can't delete during update, can paint..
                 {
@@ -271,10 +270,13 @@ namespace EDDiscovery2
                                 if (_nameson)
                                 {
                                     Bitmap map = DatasetBuilder.DrawString(sys.name, Color.Orange, _starfont);
+                                    float farx = (float)(sys.x + textoffset + textscalingw * sys.name.Length);
 
                                     sys.newtexture = TexturedQuadData.FromBitmapHorz(map,
-                                                 new PointF((float)sys.x + textoffset, (float)sys.z - textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z - textheightly / 2),
-                                                 new PointF((float)sys.x + textoffset, (float)sys.z + textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z + textheightly / 2), (float)sys.y);
+                                                 new PointF((float)sys.x + textoffset, (float)sys.z - textscalingh / 2), 
+                                                 new PointF(farx, (float)sys.z - textscalingh / 2),
+                                                 new PointF((float)sys.x + textoffset, (float)sys.z + textscalingh / 2), 
+                                                 new PointF(farx, (float)sys.z + textscalingh / 2), (float)sys.y);
                                 }
 
                                 if (_discson)
