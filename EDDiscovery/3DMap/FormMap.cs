@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using OpenTK.Input;
 using System.Drawing.Drawing2D;
 using System.Resources;
+using System.Collections.Concurrent;
 
 namespace EDDiscovery2
 {
@@ -25,7 +26,7 @@ namespace EDDiscovery2
         public bool noWindowReposition { get; set; } = false;                       // set externally
         public TravelHistoryControl travelHistoryControl { get; set; } = null;      // set externally
 
-        const int HELP_VERSION = 2;         // increment this to force help onto the screen of users first time.
+        const int HELP_VERSION = 3;         // increment this to force help onto the screen of users first time.
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
@@ -33,66 +34,46 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_coarsegridlines;
         private List<IData3DSet> _datasets_gridlinecoords;
         private List<IData3DSet> _datasets_maps;
-        private List<IData3DSet> _datasets_zeropopstars;
-        private List<IData3DSet> _datasets_popstarscoloured;
-        private List<IData3DSet> _datasets_popstarsuncoloured;
         private List<IData3DSet> _datasets_poi;
         private List<IData3DSet> _datasets_selectedsystems;
         private List<IData3DSet> _datasets_visitedsystems;
         private List<IData3DSet> _datasets_bookedmarkedsystems;
         private List<IData3DSet> _datasets_notedsystems;
 
-        private const double ZoomMax = 150;
-        private const double ZoomMin = 0.01;
-        private const double ZoomFact = 1.2589254117941672104239541063958;
-        private const double CameraSlewTime = 1.0;
+        StarGrids _stargrids;                   // holds stars
 
-        List<SystemClassStarNames> _starnames = null;    // star list combines data base and travelled h
-        Dictionary<string, SystemClassStarNames> _starnamelookup; // and a dictionary to above since its so slow to do a search
+        StarNamesList _starnameslist;           // holds named stars
+        Timer _starnametimer = new Timer();
 
         private AutoCompleteStringCollection _systemNames;
-        private SystemClassStarNames _centerSystem;
-        private SystemClassStarNames _homeSystem;
 
-        private SystemClassStarNames _clickedSystem;        // left clicked on a system/bookmark system/noted system
-        private Vector3 _clickedposition;                   // left clicked on a position
+        private ISystem _centerSystem;
+        private ISystem _homeSystem;
+        private ISystem _historySelection;
+        private ISystem _clickedSystem;         // left clicked on a system/bookmark system/noted system
+        private Vector3 _clickedposition;       // left clicked on a position
 
-        private SystemClassStarNames _historySelection;
         private bool _loaded = false;
-
         private float _zoom = 1.0f;
 
-        private Vector3 _cameraPos = Vector3.Zero;
-        private Vector3 _cameraDir = Vector3.Zero;
+        private Vector3 _viewtargetpos = Vector3.Zero;          // point where we are viewing. Eye is offset from this by _cameraDir * 1000/_zoom. (prev _cameraPos)
+        private Vector3 _cameraDir = Vector3.Zero;              
+        private float _cameraFov = (float)(Math.PI / 2.0f);     // Camera, in radians, 180/2 = 90 degrees
 
+        private const double ZoomMax = 300;
+        private const double ZoomMin = 0.01;
+        private const double ZoomFact = 1.2589254117941672104239541063958;
+        
         private Vector3 _cameraActionMovement = Vector3.Zero;
         private Vector3 _cameraActionRotation = Vector3.Zero;
-        private float _cameraFov = (float)(Math.PI / 2.0f);
-        private float _cameraSlewProgress = 1.0f;
+        private const double CameraSlewTime = 1.0;                  // Controls speed of slew
+        private float _cameraSlewProgress = 1.0f;                   // 0 -> 1 slew progress
         private Vector3 _cameraSlewPosition;
 
         private KeyboardActions _kbdActions = new KeyboardActions();
         private long _oldTickCount = DateTime.Now.Ticks / 10000;
         private int _ticks = 0;
-
-        Matrix4d _starname_resmat;                  // to pass to thread..
-        bool _starname_repaintall;                  // to pass to thread..
-        Vector3 _starname_camera_lastpos;           // last estimated camera pos
-        Vector3 _starname_camera_lastdir;           // and direction..
-        bool _starname_camera_paint_lookdown = false; // true, we are above the stars
-        bool _starname_camera_paint_lookforward = false; // true, we are pointing +z ie towards saga* from sol
-        float _starname_curstars_zoom = ZoomOff;    // and what zoom.. 
-        const float ZoomOff = -1000000F;            // zoom off flag
-        int _starlimitly = 4500;                     // stars within this, div zoom.  F1/F2 adjusts this
-        int _starnamesizely = 800;                   // star name width, div zoom
-        int _starnameminly = 5;                      // ranging between
-        int _starnamemaxly = 25;
-        Font _starnamebitmapfnt;
-        int _starnamebitmapwidth, _starnamebitmapheight;
-
-        System.Threading.Thread nsThread;
-        Timer _starnametimer = new Timer();
-
+        
         private Point _mouseStartRotate;
         private Point _mouseStartTranslateXY;
         private Point _mouseStartTranslateXZ;
@@ -100,8 +81,7 @@ namespace EDDiscovery2
         private Point _mouseHover;
         Timer _mousehovertick = new Timer();
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
-
-
+        
         private float _defaultZoom;
         private List<SystemClass> _referenceSystems { get; set; }
         public List<VisitedSystemsClass> _visitedSystems { get; set; }
@@ -122,7 +102,7 @@ namespace EDDiscovery2
 
         private bool _isActivated = false;
 
-        public bool Is3DMapsRunning { get { return _starnames != null;  } }
+        public bool Is3DMapsRunning { get { return _stargrids != null;  } }
 
         #endregion
 
@@ -133,82 +113,37 @@ namespace EDDiscovery2
             InitializeComponent();
         }
 
-        public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
-                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
-        {
-            SystemClassStarNames hs = historysel != null ? new SystemClassStarNames(historysel) : null;
-            SystemClassStarNames cs = centersys != null ? new SystemClassStarNames(centersys) : null;
-            Prepare(hs, homesys, cs, zoom, sysname, visited);
-        }
-
         public void Prepare(VisitedSystemsClass historysel, string homesys, ISystem centersys, float zoom,
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
-            SystemClassStarNames hs = historysel != null ? new SystemClassStarNames(historysel) : null;
-            SystemClassStarNames cs = centersys != null ? new SystemClassStarNames(centersys) : null;
-            Prepare(hs, homesys, cs, zoom, sysname, visited);
+            _visitedSystems = visited;
+            Prepare((historysel!= null) ? FindSystem(historysel.Name):null , homesys, centersys, zoom, sysname, visited);
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
                                 AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
+            _visitedSystems = visited;
             Prepare(FindSystem(historysel), homesys, FindSystem(centersys), zoom, sysname, visited);
         }
 
-        public void Prepare(SystemClassStarNames historysel, string homesys, SystemClassStarNames centersys, float zoom,
-                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+        public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
+                            AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
         {
-            _historySelection = historysel;
-            _centerSystem = centersys;
             _visitedSystems = visited;
 
-            if (_starnames == null)                                     // only on first call
+            _historySelection = SafeSystem(historysel);
+            _homeSystem = SafeSystem((homesys != null) ? FindSystem(homesys) : null);
+            _centerSystem = SafeSystem(centersys);
+            
+            if (_stargrids == null)
             {
-                _starnames = new List<SystemClassStarNames>();          // recreate every time in case changed..
-                _starnamelookup = new Dictionary<string, SystemClassStarNames>(StringComparer.CurrentCultureIgnoreCase); // case invariant sorted dic.
-
-                SystemClass.GetSystemNamesList(_starnames, _starnamelookup);
+                _stargrids = new StarGrids();
+                _stargrids.Initialise();                        // bring up the class..
+                _starnameslist = new StarNamesList(_stargrids, this, glControl);
             }
-
-            if (_visitedSystems != null)              // note if list is empty on first run seeing this
-            {
-                foreach (VisitedSystemsClass vsc in _visitedSystems)
-                {
-                    if (vsc.HasTravelCoordinates)
-                    {
-                        if (!_starnamelookup.ContainsKey(vsc.Name))    // if not in dictionary, add
-                        {
-                            //Debug.Assert(_starnames.Find(x => x.name.Equals(vsc.Name)) == null); // double check
-//                            Console.WriteLine("Added visited system " + vsc.Name);
-                            SystemClassStarNames scs = new SystemClassStarNames(vsc);
-                            _starnames.Add(scs);
-                            _starnamelookup.Add(scs.name, scs);
-                        }
-                    }
-                }
-            }
-
-            string fontname = "MS Sans Serif";                  // calculate once for bitmap 
-            _starnamebitmapfnt = new Font(fontname, 20F);
-
-            Bitmap text_bmp = new Bitmap(100, 30);
-            using (Graphics g = Graphics.FromImage(text_bmp))
-            {
-                SizeF sz = g.MeasureString("Blah blah EX22 LYXX2", _starnamebitmapfnt);
-                _starnamebitmapwidth = (int)sz.Width + 4;
-                _starnamebitmapheight = (int)sz.Height + 4;
-            }
-
-            _starname_curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
 
             _systemNames = sysname;
-
-            if (_centerSystem == null)
-                _centerSystem = FindSystem("Sol");
-
-            _homeSystem = FindSystem(homesys);
-            if (_homeSystem == null)
-                _homeSystem = FindSystem("Sol");
 
             _defaultZoom = zoom;
 
@@ -234,8 +169,8 @@ namespace EDDiscovery2
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
 
-            GenerateDataSetsVisitedSystems();           // recreate 
-
+            _stargrids.FillVisitedSystems(_visitedSystems);     // to ensure its updated
+            _stargrids.Start();
         }
 
         public void SetPlannedRoute(List<SystemClass> plannedr)
@@ -254,24 +189,12 @@ namespace EDDiscovery2
 
         public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
         {
-            if (_starnames != null && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
+            if (Is3DMapsRunning && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
             {
                 _visitedSystems = visited;
-
-                foreach (VisitedSystemsClass vsc in _visitedSystems)
-                {
-                    if (vsc.HasTravelCoordinates && !_starnamelookup.ContainsKey(vsc.Name))    // if coords and not in dictionary, add
-                    {
-                        Console.WriteLine("3dMap Added new visited system " + vsc.Name);
-                        SystemClassStarNames scs = new SystemClassStarNames(vsc);
-                        _starnames.Add(scs);
-                        _starnamelookup.Add(scs.name, scs);
-                    }
-                }
-
-                GenerateDataSetsStars();                            // update the star list..
+                _stargrids.FillVisitedSystems(_visitedSystems);          // update visited systems, will be displayed on next update of star grids
                 GenerateDataSetsVisitedSystems();
-                RecalcStarNames();
+                _starnameslist.RecalcStarNames();
                 glControl.Invalidate();
 
                 if (toolStripButtonAutoForward.Checked)             // auto forward?
@@ -281,15 +204,14 @@ namespace EDDiscovery2
                     if ( vs != null )
                         SetCenterSystemTo(vs.Name, true);
                 }
-
             }
         }
 
         public void UpdateHistorySystem(string historysel)
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (Is3DMapsRunning)         // if null, we are not up and running
             {
-                SystemClassStarNames newhist = FindSystem(historysel);
+                ISystem newhist = FindSystem(historysel);
 
                 if (newhist != null)
                 {
@@ -300,18 +222,9 @@ namespace EDDiscovery2
 
         public void UpdateHistorySystem(VisitedSystemsClass historysel)
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (Is3DMapsRunning)         // if null, we are not up and running
             {
-                SystemClassStarNames newhist = null;
-
-                if (historysel.HasTravelCoordinates)
-                {
-                    newhist = new SystemClassStarNames(historysel);
-                }
-                else if (historysel.curSystem != null)
-                {
-                    newhist = new SystemClassStarNames(historysel.curSystem);
-                }
+                ISystem newhist = historysel.curSystem;
 
                 if (newhist != null)
                 {
@@ -322,7 +235,7 @@ namespace EDDiscovery2
 
         public void UpdateNote()
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 GenerateDataSetsNotedSystems();
                 glControl.Invalidate();
@@ -331,7 +244,7 @@ namespace EDDiscovery2
 
         public void UpdateBookmarks()
         {
-            if (_starnames != null)         // if null, we are not up and running
+            if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 GenerateDataSetsBookmarks();
                 GenerateDataSetsNotedSystems();
@@ -360,7 +273,6 @@ namespace EDDiscovery2
 
             GenerateDataSets();
             GenerateDataSetsMaps();
-            GenerateDataSetsStars();
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
 
@@ -387,7 +299,6 @@ namespace EDDiscovery2
             _isActivated = true;
             _timerRunning = false;      // this causes ApplicationIdle to kick the first invalidate off..
             glControl.Invalidate();
-
         }
 
         private void FormMap_Deactivate(object sender, EventArgs e)
@@ -407,6 +318,8 @@ namespace EDDiscovery2
                 SQLiteDBClass.PutSettingInt("Map3DFormLeft", this.Left);
                 //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
+
+            _stargrids.Stop();
 
             e.Cancel = true;
             this.Hide();
@@ -563,80 +476,23 @@ namespace EDDiscovery2
 
 #endregion
 
-#region Viewport
-
-        /// <summary>
-        /// Setup the Viewport
-        /// </summary>
-        private void SetupViewport()
-        {
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-
-            int w = glControl.Width;
-            int h = glControl.Height;
-
-            if (w == 0 || h == 0) return;
-
-            if (toolStripButtonPerspective.Checked)
-            {
-                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
-                GL.LoadMatrix(ref perspective);
-                _znear = 1.0f;
-            }
-            else
-            {
-                float orthoW = w * (_zoom + 1.0f);
-                float orthoH = h * (_zoom + 1.0f);
-
-                float orthoheight = 1000.0f * h / w;
-
-                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
-                _znear = -5000.0f;
-            }
-
-            GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
-        }
-
-#endregion
-
 #region Generate Data Sets
 
         private void GenerateDataSets()         // Called ONCE only during Load.. fixed data.
         {
-            DatasetBuilder builder = CreateBuilder();
+            DatasetBuilder builder1 = new DatasetBuilder();
+            _datasets_coarsegridlines = builder1.AddCoarseGridLines();
 
-            builder.Build();    // need a new one each time.
-            _datasets_coarsegridlines = builder.AddCoarseGridLines();
+            DatasetBuilder builder2 = new DatasetBuilder();
+            _datasets_finegridlines = builder2.AddFineGridLines();
 
-            builder.Build();
-            _datasets_finegridlines = builder.AddFineGridLines();
+            DatasetBuilder builder3 = new DatasetBuilder();
+            _datasets_gridlinecoords = builder3.AddGridCoords();
 
-            builder.Build();
-            _datasets_gridlinecoords = builder.AddGridCoords();
-
-            builder.Build();
-            _datasets_poi = builder.AddPOIsToDataset();
-
-            builder = null;
+            DatasetBuilder builder4 = new DatasetBuilder();
+            _datasets_poi = builder4.AddPOIsToDataset();
 
             UpdateDataSetsDueToZoom();
-        }
-
-        private void GenerateDataSetsStars()         // Called during Load, and if we ever add systems..
-        {
-            DatasetBuilder builder = CreateBuilder();
-
-            builder.Build();
-            _datasets_zeropopstars = builder.AddStars(true, true);
-
-            builder.Build();
-            _datasets_popstarscoloured = builder.AddStars(false, false);
-
-            builder.Build();
-            _datasets_popstarsuncoloured = builder.AddStars(false, true);
-
-            builder = null;
         }
 
         private void UpdateDataSetsDueToZoom()
@@ -647,7 +503,6 @@ namespace EDDiscovery2
 
             if (toolStripButtonCoords.Checked)
                 builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
-            builder = null;
 
             GenerateDataSetsBookmarks();
             GenerateDataSetsNotedSystems();
@@ -657,27 +512,28 @@ namespace EDDiscovery2
         {
             //Console.WriteLine("STARS Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_maps);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_maps = builder.BuildMaps();
-            builder = null;
+            DatasetBuilder builder = new DatasetBuilder();
+            _datasets_maps = builder.BuildMaps(ref selectedmaps);
         }
 
         private void GenerateDataSetsVisitedSystems()
         {
             //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_visitedsystems);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_visitedsystems = builder.BuildVisitedSystems();
-            builder = null;
+            DatasetBuilder builder = new DatasetBuilder();
+
+            List<VisitedSystemsClass> filtered = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null;
+
+            _datasets_visitedsystems = builder.BuildVisitedSystems(toolStripButtonDrawLines.Checked, _centerSystem, filtered,
+                                                                    _referenceSystems, _plannedRoute);
         }
 
         private void GenerateDataSetsSelectedSystems()
         {
             //Console.WriteLine("Data set due to " + Environment.StackTrace);
             DeleteDataset(ref _datasets_selectedsystems);
-            DatasetBuilder builder = CreateBuilder();
-            _datasets_selectedsystems = builder.BuildSelected();
-            builder = null;
+            DatasetBuilder builder = new DatasetBuilder();
+            _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem);
         }
 
         private void GenerateDataSetsBookmarks()         // Called during Load, and if we ever add systems..
@@ -692,11 +548,8 @@ namespace EDDiscovery2
                 Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
                 Debug.Assert(mapstar != null && mapregion != null);
 
-                DatasetBuilder builder = CreateBuilder();
-
-                builder.Build();
+                DatasetBuilder builder = new DatasetBuilder();
                 _datasets_bookedmarkedsystems = builder.AddStarBookmarks(mapstar, mapregion, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
-                builder = null;
             }
         }
 
@@ -711,12 +564,8 @@ namespace EDDiscovery2
                 Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
                 Debug.Assert(map != null);
 
-                DatasetBuilder builder = CreateBuilder();
-
-                builder.Build();
-                _datasets_notedsystems = builder.AddNotedBookmarks(map, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked);
-
-                builder = null;
+                DatasetBuilder builder = new DatasetBuilder();
+                _datasets_notedsystems = builder.AddNotedBookmarks(map, maptarget, GetBookmarkSize(), GetBookmarkSize(), toolStripButtonPerspective.Checked , _visitedSystems );
             }
         }
 
@@ -735,238 +584,28 @@ namespace EDDiscovery2
             }
         }
 
-        private DatasetBuilder CreateBuilder()
-        {
-            selectedmaps = GetSelectedMaps();
-
-            DatasetBuilder builder = new DatasetBuilder()
-            {
-                CenterSystem = CreateSystemClass(_centerSystem),
-                SelectedSystem = CreateSystemClass(_clickedSystem),
-                StarList = _starnames,
-
-                VisitedSystems = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null,
-
-                Images = selectedmaps.ToArray(),
-
-                DrawLines = toolStripButtonDrawLines.Checked,
-                UseImage = selectedmaps.Count != 0
-            };
-            if (_referenceSystems != null)
-            {
-                builder.ReferenceSystems = _referenceSystems.ConvertAll(system => (ISystem)system);
-            }
-            if (_plannedRoute != null)
-            {
-                builder.PlannedRoute = _plannedRoute.ConvertAll(system => (ISystem)system);
-            }
-
-            return builder;
-        }
-
         private void NameStars(object sender, EventArgs e) // tick.. way it works is a tick occurs, timer off, thread runs, thread calls 
                                                            // delegate, work done in UI, timer reticks.  KEEP it that way!
         {
             if (Visible && toolStripButtonStarNames.Checked && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
             {
-                Vector3 modcampos = _cameraPos;
-                modcampos.Y = -modcampos.Y;
-                bool lookdown = (_cameraDir.X < 90F);          // lookdown when X < 90
-                bool lookforward = (_cameraDir.Y > -90F && _cameraDir.Y < 90F);  // forward looking
-
-                if ( _cameraDir.Z <-90F || _cameraDir.Z>90F )       // this has the effect of turning our world up side down!
-                {
-                    lookdown = !lookdown;
-                    lookforward = !lookforward;
-                }                
-
-                bool repaintall = (lookdown != _starname_camera_paint_lookdown ) ||          // have we flipped?
-                                  (lookforward != _starname_camera_paint_lookforward ) ||
-                                   Math.Abs(_starname_curstars_zoom - _zoom) > 0.5F;          // if its worth doing a recalc..
-
-                if (Vector3.Subtract(_starname_camera_lastpos, modcampos).LengthSquared > 3 * 3 * 3 ||
-                    Vector3.Subtract(_starname_camera_lastdir, _cameraDir).LengthSquared > 1*1*1 ||
-                    repaintall )
-                {
-                    //Console.WriteLine("Rescan stars zoom " + _zoom);
-                    _starname_camera_lastpos = modcampos;
-                    _starname_camera_lastdir = _cameraDir;
-                    _starname_curstars_zoom = _zoom;
-                    _starname_camera_paint_lookdown = lookdown;
-                    _starname_camera_paint_lookforward = lookforward;
-
-                    _starname_resmat = GetResMat();
-                    _starname_repaintall = repaintall;          // pass to thread
-
-                    _starnametimer.Stop();                                      // wait till the thread finishes..
-
-                    //Console.WriteLine("Tick start thread");
-                    nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
-                    nsThread.Start();
-                }
+                if (_starnameslist.Update(_zoom, _viewtargetpos, _cameraDir, GetResMat(), _znear))       // if its kicked off the thread..
+                    _starnametimer.Stop();                                              // stop the timer.
             }
-            else if (_starname_curstars_zoom > ZoomOff)                         // let tick continue.. will tick again.
+            else
             {
-                RemoveAllNamedStars();
+                if (_starnameslist.RemoveAllNamedStars())
+                {
+                    glControl.Invalidate();
+                    GC.Collect();
+                }
             }
         }
 
-        public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
-        {
-            public int Compare(TKey x, TKey y)
-            {
-                int result = x.CompareTo(y);
-                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
-            }
-        }
-
-        private void NamedStars() // background thread.. run after timer tick
-        {
-            try // just in case someone tears us down..
-            {
-                int lylimit = (int)(_starlimitly / _zoom);
-                //Console.Write("Look down " + _starname_camera_paint_lookdown + " look forward " + _starname_camera_paint_lookforward);
-                //Console.Write("Repaint " + _starname_repaintall + " Stars " + _starlimitly + " within " + lylimit + "  ");
-                int sqlylimit = lylimit*lylimit;                 // in squared distance limit from viewpoint
-
-                double w2 = glControl.Width / 2.0;
-                double h2 = glControl.Height / 2.0;
-
-                Vector3 modcampos = _cameraPos;
-                modcampos.Y = -modcampos.Y;
-
-                SortedDictionary<float, int> inviewlist = new SortedDictionary<float, int>(new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
-
-                int indexno = 0;
-                foreach (SystemClassStarNames sys in _starnames)          // we consider all stars..
-                {
-                    Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
-                    Vector4d sysloc = Vector4d.Transform(syspos, _starname_resmat);
-
-                    bool inviewport = false;
-                    float sqdist = 0F;
-                    int margin = -150;                                                  // allow them to drop off screen slightly and still consider..
-
-                    if (sysloc.Z > _znear)
-                    {                                                           // pixel position on screen..
-                        Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
-
-                        if ((syssloc.X >= margin && syssloc.X <= glControl.Width - margin) && (syssloc.Y >= margin && syssloc.Y <= glControl.Height - margin))
-                        {
-                            sqdist = ((float)sys.x - modcampos.X) * ((float)sys.x - modcampos.X) + ((float)sys.y - modcampos.Y) * ((float)sys.y - modcampos.Y) + ((float)sys.z - modcampos.Z) * ((float)sys.z - modcampos.Z);
-                            inviewport = sqdist <= sqlylimit;
-                        }
-                    }
-
-                    if (inviewport)
-                        inviewlist.Add(sqdist, indexno);                        // we add the star to the appropriate list
-                    else
-                        sys.candisposepainttexture = true;                      // don't care, you can get rid of it in the foreground thread.
-
-                    indexno++;
-                }
-
-                float textoffset = 0.35F;
-                float textwidthly = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _zoom, _starnameminly)) + textoffset;
-                float textheightly = textwidthly / 10;
-
-                if (!_starname_camera_paint_lookdown)         // flip bitmap to make it look at you..
-                {
-                    if (!_starname_camera_paint_lookforward)
-                    {
-                        textoffset = -textoffset;
-                        textwidthly = -textwidthly;
-                    }
-                    else
-                        textheightly = -textheightly;
-                }
-                else if ( !_starname_camera_paint_lookforward)
-                {
-                    textheightly = -textheightly;
-                    textoffset = -textoffset;
-                    textwidthly = -textwidthly;
-                }
-
-                float starsize = Math.Min(Math.Max(_zoom / 5F, 2.0F), 20F);     // Normal stars are at 1F.
-                //Console.WriteLine("Text " + _starnamesizely + " text " + textwidthly.ToString("0.0") + "," + textheightly.ToString("0.0") + " star size " + starsize.ToString("0.0"));
-
-                int paintedtextures = 0;            // only worry about ones in viewport, ones outside will be disposed of soon..
-                int limit = 1000;                   // max number of stars to show..
-
-                foreach (int index in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
-                {
-                    SystemClassStarNames sys = _starnames[index];
-
-                    bool draw = false;
-                    // BE CAREFUL modifying anything about painttexture/newtexture.. its been designed so it does not need a lock.
-                    if (sys.painttexture != null)                   // race, but no problem, does not matter if we make a mistake..
-                    {                                               // because we only test this, never modify it.. and if we miss it, so what, next pass will get it
-                        paintedtextures++;
-
-                        if (paintedtextures > limit)                // too many, dispose this one.  and since we do it in order, closest will be kept.
-                            sys.candisposepainttexture = true;
-                        else if ( _starname_repaintall )            // repaint all
-                            draw = true;
-                    }
-                    else
-                    {
-                        if (paintedtextures < limit)                // not painted, if we can paint more, do it..
-                        {
-                            draw = true;
-                            paintedtextures++;
-                        }
-                    }
-
-                    if (draw)
-                    {
-                        Bitmap map = DatasetBuilder.DrawString(sys.name, _starnamebitmapfnt, _starnamebitmapwidth, _starnamebitmapheight, Color.Orange);
-
-                        sys.newtexture = TexturedQuadData.FromBitmapHorz(map,
-                                         new PointF((float)sys.x + textoffset, (float)sys.z - textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z - textheightly / 2),
-                                         new PointF((float)sys.x + textoffset, (float)sys.z + textheightly / 2), new PointF((float)sys.x + textwidthly, (float)sys.z + textheightly / 2), (float)sys.y);
-
-                        sys.newstar = new PointData(sys.x, sys.y, sys.z, starsize, (sys.population != 0) ? MapColours.NamedStar : MapColours.NamedStarUnpopulated);
-
-                        sys.candisposepainttexture = false;         // order important.  set so to keep
-                    }
-                }
-
-                Invoke((MethodInvoker)delegate              // kick the UI thread to process.
-                {
-                    ChangeNamedStars();
-                });
-            }
-            catch { }
-        }
-
-
-        void ChangeNamedStars()                                          // KICKED off after thread
+        public void ChangeNamedStars()                                  // for the star naming thread.. kick it off
         {
             glControl.Invalidate();
             _starnametimer.Start();                                      // and do another tick..
-        }
-
-        private void RecalcStarNames()                                  // force recalc..
-        {
-            _starname_curstars_zoom = ZoomOff;
-        }
-
-        private void RemoveAllNamedStars()
-        {
-            bool changed = false;
-            foreach (var sys in _starnames)                             // dispose all
-            {
-                if (sys.painttexture != null)
-                {
-                    sys.candisposepainttexture = true;
-                    changed = true;
-                }
-            }
-
-            if (changed)
-                glControl.Invalidate();
-
-            _starname_curstars_zoom = ZoomOff;
         }
 
         private List<FGEImage> GetSelectedMaps()
@@ -996,7 +635,7 @@ namespace EDDiscovery2
         }
 #endregion
 
-#region Set Orientation
+#region Set Position
 
         private void SetCenterSystemLabel()
         {
@@ -1008,22 +647,13 @@ namespace EDDiscovery2
 
         public bool SetCenterSystemTo(VisitedSystemsClass system, bool moveto)
         {
-            if (_starnames != null)
+            if (Is3DMapsRunning)
             {
-                SystemClassStarNames sys = null;
-
-                if (system.HasTravelCoordinates)
-                {
-                    sys = new SystemClassStarNames(system);
-                }
-                else if (system.curSystem != null)
-                {
-                    sys = new SystemClassStarNames(system.curSystem);
-                }
+                ISystem sys = system.curSystem;
 
                 if (sys != null)
                 {
-                    return SetCenterSystemTo(new SystemClassStarNames(system), moveto);
+                    return SetCenterSystemTo(sys, moveto);
                 }
                 else
                 {
@@ -1036,13 +666,13 @@ namespace EDDiscovery2
 
         public bool SetCenterSystemTo(string name, bool moveto)
         {
-            if (_starnames != null)                         // if null, we are not up and running
+            if (Is3DMapsRunning)                         // if null, we are not up and running
                 return SetCenterSystemTo(FindSystem(name), moveto);
             else
                 return false;
         }
 
-        private bool SetCenterSystemTo(SystemClassStarNames sys, bool moveto)        
+        private bool SetCenterSystemTo(ISystem sys, bool moveto)        
         {
             if (sys != null)
             {
@@ -1086,9 +716,10 @@ namespace EDDiscovery2
                 var state = OpenTK.Input.Keyboard.GetState();
 
                 if (state[Key.F1])
-                { _starlimitly += 500; RecalcStarNames(); }                              // more stars shown
+                    _starnameslist.IncreaseStarLimit();
+
                 if (state[Key.F2])
-                { if( _starlimitly>500) _starlimitly -= 500; RecalcStarNames(); }
+                    _starnameslist.DecreaseStarLimit();
 
                 _kbdActions.Left = (state[Key.Left] || state[Key.A]);
                 _kbdActions.Right = (state[Key.Right] || state[Key.D]);
@@ -1210,9 +841,41 @@ namespace EDDiscovery2
                 UpdateDataSetsDueToZoom();
         }
 
-#endregion
+        #endregion
 
-#region Render
+        #region OpenGL Render and Viewport
+
+        private void SetupViewport()
+        {
+            GL.MatrixMode(MatrixMode.Projection);           // Select the project matrix for the following operations (current matrix)
+
+            int w = glControl.Width;
+            int h = glControl.Height;
+
+            if (w == 0 || h == 0) return;
+
+            if (toolStripButtonPerspective.Checked)
+            {                                                                   // Fov, perspective, znear, zfar
+                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
+                GL.LoadMatrix(ref perspective);             // replace projection matrix with this perspective matrix
+                _znear = 1.0f;
+            }
+            else
+            {
+                float orthoW = w * (_zoom + 1.0f);
+                float orthoH = h * (_zoom + 1.0f);
+
+                float orthoheight = 1000.0f * h / w;
+
+                GL.LoadIdentity();                              // set to 1/1/1/1.
+                
+                // multiply identity matrix with orth matrix, left/right vert clipping plane, bot/top horiz clippling planes, distance between near/far clipping planes
+                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
+                _znear = -5000.0f;
+            }
+
+            GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
+        }
 
         private void Render()
         {
@@ -1221,61 +884,42 @@ namespace EDDiscovery2
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.MatrixMode(MatrixMode.Modelview);
+            GL.MatrixMode(MatrixMode.Modelview);            // select the current matrix to the model view
 
             if (toolStripButtonPerspective.Checked)
             {
-                CameraLookAt();
+                Vector3 target = _viewtargetpos;
+
+                Matrix4 transform = Matrix4.Identity;                   // identity nominal matrix, dir is in degrees
+                transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
+                transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
+                transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
+                                                                        // transform ends as the camera direction vector
+
+                // calculate where eye is, relative to target. its 1000/zoom, rotated by camera rotation
+                Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
+
+                // rotate the up vector (0,0,1) by the eye camera dir to get a vector upwards from the current camera dir
+                Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
+
+                Vector3 eye = _viewtargetpos + eyerel;              // eye is here, the target pos, plus the eye relative position
+                Matrix4 lookat = Matrix4.LookAt(eye, target, up);   // from eye, look at target, with up giving the rotation of the look
+                GL.LoadMatrix(ref lookat);                          // set the model view to this matrix.
             }
             else
             {
-                TransformWorldOrientatation();
-
-                TransformCamera();
+                GL.LoadIdentity();                  // model view matrix is 1/1/1/1.
+                GL.Rotate(-90.0, 1, 0, 0);          // Rotate the world - current matrix, rotated -90 degrees around the vector (1,0,0)
+                GL.Scale(_zoom, _zoom, _zoom);      // scale all the axis to zoom
+                GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);    // rotate the axis around the camera dir
+                GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
+                GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
+                GL.Translate(-_viewtargetpos.X, -_viewtargetpos.Y, -_viewtargetpos.Z);  // and translate the model view by the view target pos
             }
-            FlipYAxisOnWorld();
-            RenderGalaxy();
 
-            glControl.SwapBuffers();
-            UpdateStatus();
-        }
+            GL.Scale(1.0, -1.0, 1.0);               // Flip Y axis on world by inverting the model view matrix
 
-        private void TransformWorldOrientatation()
-        {
-            GL.LoadIdentity();
-            GL.Rotate(-90.0, 1, 0, 0);
-        }
-
-        private void TransformCamera()
-        {
-            GL.Scale(_zoom, _zoom, _zoom);
-            GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);
-            GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
-            GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
-            GL.Translate(-_cameraPos.X, -_cameraPos.Y, -_cameraPos.Z);
-        }
-
-        private void CameraLookAt()
-        {
-            Vector3 target = _cameraPos;
-            Matrix4 transform = Matrix4.Identity;
-            transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
-            transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
-            transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
-            Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
-            Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
-            Vector3 eye = _cameraPos + eyerel;
-            Matrix4 lookat = Matrix4.LookAt(eye, target, up);
-            GL.LoadMatrix(ref lookat);
-        }
-
-        private void FlipYAxisOnWorld()
-        {
-            GL.Scale(1.0, -1.0, 1.0);
-        }
-
-        private void RenderGalaxy()
-        {
+            // Render galaxy
             GL.Enable(EnableCap.PointSmooth);
             GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
             GL.Enable(EnableCap.Blend);
@@ -1284,6 +928,9 @@ namespace EDDiscovery2
             GL.PushMatrix();
             DrawStars();
             GL.PopMatrix();
+
+            glControl.SwapBuffers();
+            UpdateStatus();
         }
 
         private void DrawStars()
@@ -1312,72 +959,15 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            if (showStarstoolStripMenuItem.Checked)
-            {
-                foreach (var dataset in _datasets_zeropopstars)
-                    dataset.DrawAll(glControl);
-
-                if (showStationsToolStripMenuItem.Checked)
-                {
-                    foreach (var dataset in _datasets_popstarscoloured)
-                        dataset.DrawAll(glControl);
-                }
-                else
-                {
-                    foreach (var dataset in _datasets_popstarsuncoloured)
-                        dataset.DrawAll(glControl);
-                }
-            }
-            else if (showStationsToolStripMenuItem.Checked)
-            {
-                foreach (var dataset in _datasets_popstarscoloured)
-                    dataset.DrawAll(glControl);
-            }
-
+             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+            
             foreach (var dataset in _datasets_poi)
                 dataset.DrawAll(glControl);
 
             foreach (var dataset in _datasets_visitedsystems)
                 dataset.DrawAll(glControl);
 
-            if (_starnames != null)
-            {
-                foreach (var sys in _starnames)
-                {
-                    if (sys.candisposepainttexture)             // flag is controlled by thread.. don't clear here..
-                    {
-                        if (sys.painttexture != null)           // paint texture controlled by this foreground
-                        {
-                            sys.painttexture.Dispose();
-                            sys.painttexture = null;
-                        }
-                        if (sys.paintstar != null)              // star controlled by this foreground
-                        {
-                            sys.paintstar = null;
-                        }
-                    }
-
-                    if (sys.newtexture != null)            // new is controlled by thread..
-                    {
-                        if (sys.painttexture != null)
-                            sys.painttexture.Dispose();
-
-                        sys.painttexture = sys.newtexture;      // copy over and take another reference.. 
-                        sys.newtexture = null;
-                    }
-                    if (sys.newstar != null)              // same with newstar
-                    {
-                        sys.paintstar = sys.newstar;
-                        sys.newstar = null;
-                    }
-
-                    if (sys.paintstar != null)                  // if star disk, paint..
-                        sys.paintstar.Draw(glControl);
-
-                    if (sys.painttexture != null)           // being paranoid by treating these separately. Thread may finish painting one before the other.
-                        sys.painttexture.Draw(glControl);
-                }
-            }
+            _starnameslist.Draw();
 
             foreach (var dataset in _datasets_selectedsystems)
                 dataset.DrawAll(glControl);
@@ -1403,7 +993,7 @@ namespace EDDiscovery2
             else
                 statusLabel.Text = "Use W, A, S, D keys with the mouse. ";
 
-            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00}", _cameraPos.X, -(_cameraPos.Y), _cameraPos.Z, _zoom);
+            statusLabel.Text += string.Format("x={0,-6:0} y={1,-6:0} z={2,-6:0} Zoom={3,-4:0.00} FOV={4,-4:0}", _viewtargetpos.X, -(_viewtargetpos.Y), _viewtargetpos.Z, _zoom , _cameraFov/Math.PI*180);
 #if DEBUG
             statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
 #endif
@@ -1427,6 +1017,7 @@ namespace EDDiscovery2
                 _oldTickCount = DateTime.Now.Ticks / 10000;
             }
 
+            _stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, glControl);
             HandleInputs();
             DoCameraSlew();
             UpdateCamera();
@@ -1467,7 +1058,7 @@ namespace EDDiscovery2
 
         private void ResetCamera()
         {
-            _cameraPos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
+            _viewtargetpos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
             _cameraDir = Vector3.Zero;
 
             _zoom = _defaultZoom;
@@ -1493,18 +1084,18 @@ namespace EDDiscovery2
             {
                 _cameraActionMovement = Vector3.Zero;
                 var newprogress = _cameraSlewProgress + _ticks / (CameraSlewTime * 1000);
-                var totvector = new Vector3((float)(_cameraSlewPosition.X - _cameraPos.X), (float)(-_cameraSlewPosition.Y - _cameraPos.Y), (float)(_cameraSlewPosition.Z - _cameraPos.Z));
+                var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(-_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
 
                 if (newprogress >= 1.0f)
                 {
-                    _cameraPos = new Vector3(_cameraSlewPosition.X,-_cameraSlewPosition.Y, _cameraSlewPosition.Z);
+                    _viewtargetpos = new Vector3(_cameraSlewPosition.X,-_cameraSlewPosition.Y, _cameraSlewPosition.Z);
                 }
                 else
                 {
                     var slewstart = Math.Sin((_cameraSlewProgress - 0.5) * Math.PI);
                     var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
                     var slewfact = (slewend - slewstart) / (1.0 - slewstart);
-                    _cameraPos += Vector3.Multiply(totvector, (float)slewfact);
+                    _viewtargetpos += Vector3.Multiply(totvector, (float)slewfact);
                 }
                 _cameraSlewProgress = (float)newprogress;
             }
@@ -1549,14 +1140,14 @@ namespace EDDiscovery2
             if (em)                                             // if in elite movement, Y is not affected
             {                                                   // by ASDW.
                 trans.Y = 0;                                    // no Y translation even if camera rotated the vector into Y components
-                _cameraPos += trans;
-                _cameraPos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
+                _viewtargetpos += trans;
+                _viewtargetpos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
             }
             else
-                _cameraPos += trans;
+                _viewtargetpos += trans;
 #if DEBUG
 //            if (istranslating)
-//                Console.WriteLine("   em " + em + " Camera now " + _cameraPos.X + "," + _cameraPos.Y + "," + _cameraPos.Z);
+//                Console.WriteLine("   em " + em + " Camera now " + _viewtargetpos.X + "," + _viewtargetpos.Y + "," + _viewtargetpos.Z);
 #endif
         }
 
@@ -1638,7 +1229,7 @@ namespace EDDiscovery2
 
         private void buttonCenter_Click(object sender, EventArgs e)
         {
-            SystemClassStarNames sys = FindSystem(textboxFrom.Text);
+            ISystem sys = FindSystem(textboxFrom.Text);
 
             if (sys != null)
             {
@@ -1785,7 +1376,7 @@ namespace EDDiscovery2
         private void newRegionBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BookmarkForm frm = new BookmarkForm();
-            frm.InitialisePos(_cameraPos.X, -(_cameraPos.Y), _cameraPos.Z);
+            frm.InitialisePos(_viewtargetpos.X, -(_viewtargetpos.Y), _viewtargetpos.Z);
             DateTime tme = DateTime.Now;
             frm.RegionBookmark(tme.ToString());
             DialogResult res = frm.ShowDialog();
@@ -1802,9 +1393,14 @@ namespace EDDiscovery2
                 newcls.Note = frm.Notes;
                 newcls.Add();
 
+                if (frm.IsTarget)          // asked for targetchanged..
+                {
+                    TargetClass.SetTargetBookmark("RM:" + newcls.Heading, newcls.id, newcls.x, newcls.y, newcls.z);
+                    travelHistoryControl.RefreshTargetInfo();
+                }
+
                 GenerateDataSetsBookmarks();
                 glControl.Invalidate();
-
             }
         }
         
@@ -1908,7 +1504,7 @@ namespace EDDiscovery2
             // region bookmark. cursystem = null, curbookmark != null, notedsystem = false
             // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
 
-            SystemClassStarNames cursystem = null;      
+            ISystem cursystem = null;      
             BookmarkClass curbookmark = null;           
             bool notedsystem = false;                   
 
@@ -2121,8 +1717,8 @@ namespace EDDiscovery2
                 //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
 
-                //_cameraPos.X += -dx * (1.0f /_zoom) * 2.0f;
-                _cameraPos.Y += -dy * (1.0f / _zoom) * 2.0f;
+                //_viewtargetpos.X += -dx * (1.0f /_zoom) * 2.0f;
+                _viewtargetpos.Y += -dy * (1.0f / _zoom) * 2.0f;
 
                 glControl.Invalidate();
             }
@@ -2141,8 +1737,8 @@ namespace EDDiscovery2
                 Vector3 translation = new Vector3(-dx * (1.0f / _zoom) * 2.0f, dy * (1.0f / _zoom) * 2.0f, 0.0f);
                 translation = Vector3.Transform(translation, transform);
 
-                _cameraPos.X += translation.X;
-                _cameraPos.Z += translation.Y;
+                _viewtargetpos.X += translation.X;
+                _viewtargetpos.Z += translation.Y;
 
                 glControl.Invalidate();
             }
@@ -2177,15 +1773,11 @@ namespace EDDiscovery2
 
             if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
             {
-                if (e.Delta > 0)
-                {
-                    _cameraFov *= (float)ZoomFact;
-                    if (_cameraFov >= Math.PI * 0.8)
-                    {
-                        _cameraFov = (float)(Math.PI * 0.8);
-                    }
-                }
                 if (e.Delta < 0)
+                {
+                    _cameraFov = (float)Math.Min(_cameraFov*ZoomFact, Math.PI * 0.8);
+                }
+                else if (e.Delta > 0)
                 {
                     _cameraFov /= (float)ZoomFact;
                 }
@@ -2219,7 +1811,7 @@ namespace EDDiscovery2
         {
             _mousehovertick.Stop();
 
-            SystemClassStarNames hoversystem = null;
+            ISystem hoversystem = null;
             BookmarkClass curbookmark = null;
             bool notedsystem = false;
             GetMouseOverItem(_mouseHover.X, _mouseHover.Y, out hoversystem, out curbookmark, out notedsystem);
@@ -2294,7 +1886,7 @@ namespace EDDiscovery2
                     info += Environment.NewLine + "Notes: " + note.Trim();
                 }
 
-                if (curbookmark != null && curbookmark.Note != null)
+                if (curbookmark != null && curbookmark.Note != null && curbookmark.Note.Trim().Length>0 )
                     info += Environment.NewLine + "Bookmark Notes: " + curbookmark.Note.Trim();
 
                 _mousehovertooltip = new System.Windows.Forms.ToolTip();
@@ -2458,47 +2050,30 @@ namespace EDDiscovery2
 
             return cursys;
         }
-        
-        private SystemClassStarNames GetMouseOverSystem(int x, int y , out double cursysdistz )
+
+        private ISystem GetMouseOverSystem(int x, int y, out double cursysdistz)
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double w2 = glControl.Width / 2.0;
-            double h2 = glControl.Height / 2.0;
+            StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(GetResMat(), _znear, glControl.Width, glControl.Height, _zoom);
 
-            SystemClassStarNames cursys = null;
-            cursysdistz = double.MaxValue;
+            Vector3d? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
 
-            Matrix4d resmat = GetResMat();
+            ISystem f = null;
 
-            bool showallstars = showStarstoolStripMenuItem.Checked;
-            bool showstations = showStationsToolStripMenuItem.Checked;
+            if (posofsystem != null)
+                f = FindSystem(new Vector3d(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
 
-            foreach (var sys in _starnames)
-            {
-                Vector4d syspos = new Vector4d(sys.x, sys.y, sys.z, 1.0);
-                Vector4d sysloc = Vector4d.Transform(syspos, resmat);
-
-                if (sysloc.Z > _znear)
-                {
-                    Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
-                    double sysdist = Math.Sqrt(syssloc.X * syssloc.X + syssloc.Y * syssloc.Y);
-                    if (sysdist < 7.0 && (sysdist + Math.Abs(sysloc.Z * _zoom)) < cursysdistz)
-                    {
-                        if (showallstars || (sys.population != 0 && showstations))
-                        {
-                            cursys = sys;
-                            cursysdistz = sysdist + Math.Abs(sysloc.Z * _zoom);
-                        }
-                    }
-                }
-            }
-
-            return cursys;
+            return f;
         }
 
-        private void GetMouseOverItem(int x, int y, out SystemClassStarNames cursystem,  // can return both, if a system bookmark is clicked..
+        // system = cursystem!=null, curbookmark = null, notedsystem = false
+        // bookmark on system, cursystem!=null, curbookmark != null, notedsystem = false
+        // region bookmark. cursystem = null, curbookmark != null, notedsystem = false
+        // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
+
+        private void GetMouseOverItem(int x, int y, out ISystem cursystem,  // can return both, if a system bookmark is clicked..
                                                     out BookmarkClass curbookmark , out bool notedsystem )
         {
             cursystem = null;
@@ -2512,8 +2087,8 @@ namespace EDDiscovery2
 
                 if (curbookmark != null)
                 {
-                    if (curbookmark.StarName != null && _starnamelookup.ContainsKey(curbookmark.StarName))  // if associated with system
-                        cursystem = _starnamelookup[curbookmark.StarName];
+                    if ( curbookmark.StarName != null )            // if starname set, see if we can find it
+                        cursystem = FindSystem(curbookmark.StarName);       // find, either in visited system, or in db
 
                     return;
                 }
@@ -2522,16 +2097,11 @@ namespace EDDiscovery2
             if (_datasets_notedsystems != null)
             {
                 double curdistnoted;
-                SystemClass sysc = GetMouseOverNotedSystem(x, y, out curdistnoted);
+                cursystem = GetMouseOverNotedSystem(x, y, out curdistnoted);
 
-                if (sysc != null)                                                  // noted found..
-                {
-                    if (_starnamelookup.ContainsKey(sysc.name))                         // if can find it.. lookup
-                    {
-                        cursystem = _starnamelookup[sysc.name];
-                        notedsystem = true;
-                    }
-
+                if ( cursystem != null )
+                { 
+                    notedsystem = true;
                     return;
                 }
             }
@@ -2558,78 +2128,51 @@ namespace EDDiscovery2
             }
         }
 
-        SystemClass CreateSystemClass(SystemClassStarNames sn)
+        public ISystem FindSystem(string name, SQLiteConnectionED cn = null)    // nice wrapper for this
         {
-            if (sn == null)
-                return null;
+            if (_visitedSystems != null)
+            {
+                VisitedSystemsClass sys = _visitedSystems.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-            SystemClass cs = new SystemClass();
-            cs.name = sn.name;
-            cs.x = sn.x;
-            cs.y = sn.y;
-            cs.z = sn.z;
-            return cs;
+                if (sys != null)
+                    return sys.curSystem;
+            }
+
+            ISystem isys = SystemClass.GetSystem(name,cn);
+            return isys;
         }
 
-        SystemClassStarNames FindSystem(string name)            // nice wrapper for this
+        public ISystem FindSystem(Vector3d pos, SQLiteConnectionED cn = null )
         {
-            return _starnamelookup.ContainsKey(name) ? _starnamelookup[name] : null;
+            if (_visitedSystems != null)
+            {
+                VisitedSystemsClass vsc = VisitedSystemsClass.FindByPos(_visitedSystems, new EMK.LightGeometry.Point3D(pos.X, pos.Y, pos.Z), 0.1);
+
+                if (vsc != null)
+                    return vsc.curSystem;
+            }
+
+            return SystemClass.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);
         }
 
-#endregion
+        private ISystem SafeSystem(ISystem s)
+        {
+            if (s == null)
+            {
+                s = FindSystem("Sol");
+
+                if (s == null)
+                    s = new SystemClass("Sol", 0, 0, 0);
+            }
+
+            return s;
+        }
+
+        #endregion
 
     }
 
 
-    public class SystemClassStarNames    // holds star data.. used as its kept up to date with visited systems and has extra info
-    {
-        public SystemClassStarNames() { }
-
-        public SystemClassStarNames(ISystem other)
-        {
-            id = other.id;
-            name = other.name;
-            x = other.x; y = other.y; z = other.z;
-            population = other.population;
-            newtexture = null; newstar = null;
-            painttexture = null; paintstar = null;
-            candisposepainttexture = false;
-        }
-
-        public SystemClassStarNames(string n, double xv, double yv, double zv, long p , long idx )
-        {
-            id = idx;
-            name = n;
-            x = xv; y = yv; z = zv;
-            population = p;
-            newtexture = null; newstar = null;
-            painttexture = null; paintstar = null;
-            candisposepainttexture = false;
-        }
-
-        public SystemClassStarNames(VisitedSystemsClass other)
-        {
-            id = 0;
-            name = other.Name;
-            x = other.X; y = other.Y; z = other.Z;
-            population = 0;
-            newtexture = null; newstar = null;
-            painttexture = null; paintstar = null;
-            candisposepainttexture = false;
-        }
-
-        public long id { get; set; }                             // EDDB ID, or 0 if not known
-        public string name { get; set; }
-        public double x { get; set; }
-        public double y { get; set; }
-        public double z { get; set; }
-        public long population { get; set;}
-        public TexturedQuadData newtexture { get; set; }
-        public PointData newstar { get; set; }                  // purposely drawing it like this, one at a time, due to sync issues between foreground/thread
-        public TexturedQuadData painttexture { get; set; }
-        public PointData paintstar { get; set; }                // instead of doing a array paint.
-        public bool candisposepainttexture { get; set; }
-    };
 
 }
 
