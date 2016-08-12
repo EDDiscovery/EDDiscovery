@@ -46,21 +46,19 @@ namespace EDDiscovery2
 
     public class StarNamesList
     {
-        Matrix4d _starname_resmat;                  // to pass to thread..
-        bool _starname_repaintall;                  // to pass to thread..
+        Matrix4d _resmat;                  // to pass to thread..
+        bool _repaintall;                  // to pass to thread..
         bool _discson;                            // to pass to thread..
         bool _nameson;                            // to pass to thread..
-        Vector3 _starname_camera_lastpos;           // last estimated camera pos
-        Vector3 _starname_camera_lastdir;           // and direction..
-        bool _starname_camera_paint_lookdown = false; // true, we are above the stars
-        bool _starname_camera_paint_lookforward = false; // true, we are pointing +z ie towards saga* from sol
-        float _starname_curstars_zoom = ZoomOff;    // and what zoom.. 
+        float _curstars_zoom = ZoomOff;    // and what zoom.. 
         const float ZoomOff = -1000000F;            // zoom off flag
         int _starlimitly = 5000;                    // stars within this, div zoom.  F1/F2 adjusts this
         float _starnamesizely = 40F;                // star name width, div zoom
         float _starnameminly = 0.1F;                // ranging between per char
         float _starnamemaxly = 0.5F;
         Dictionary<Vector3, StarNames> _starnames;
+
+        CameraDirectionMovement lastcamera = new CameraDirectionMovement();
 
         static Font _starfont = new Font("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
 
@@ -84,14 +82,14 @@ namespace EDDiscovery2
 
             _starnames = new Dictionary<Vector3, StarNames>();
 
-            _starname_curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
+            _curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
         }
 
         public bool RemoveAllNamedStars()                               // indicate all no paint, pass back if changed anything.
         {
             bool changed = false;
 
-            if (_starname_curstars_zoom != ZoomOff)
+            if (_curstars_zoom != ZoomOff)
             {
                 foreach (StarNames sys in _starnames.Values)
                 {
@@ -102,7 +100,7 @@ namespace EDDiscovery2
                     }
                 }
 
-                _starname_curstars_zoom = ZoomOff;
+                _curstars_zoom = ZoomOff;
             }
 
             return changed;
@@ -110,7 +108,7 @@ namespace EDDiscovery2
 
         public void RecalcStarNames()                                  // force recalc..
         {
-            _starname_curstars_zoom = ZoomOff;
+            _curstars_zoom = ZoomOff;
         }
 
         public void IncreaseStarLimit()
@@ -128,6 +126,7 @@ namespace EDDiscovery2
             }
         }
 
+
         public bool Update(float z, Vector3 c, Vector3 _cameraDir, Matrix4d resmat , float _zn , bool names, bool discs )     // UI thread..
         {
             _zoom = z;
@@ -139,32 +138,15 @@ namespace EDDiscovery2
 
             Vector3 modcampos = _viewtargetpos;
             modcampos.Y = -modcampos.Y;
-            bool lookdown = (_cameraDir.X < 90F);          // lookdown when X < 90
-            bool lookforward = (_cameraDir.Y > -90F && _cameraDir.Y < 90F);  // forward looking
+            bool repaintall = lastcamera.Flipped(_cameraDir) ||  Math.Abs(_curstars_zoom - _zoom) > 0.5F;          // if its worth doing a recalc..
 
-            if (_cameraDir.Z < -90F || _cameraDir.Z > 90F)       // this has the effect of turning our world up side down!
+            if (lastcamera.MovedPos(modcampos) || lastcamera.MovedDir(_cameraDir) || repaintall )
             {
-                lookdown = !lookdown;
-                lookforward = !lookforward;
-            }
+                Console.WriteLine("Rescan stars zoom " + _zoom);
+                _curstars_zoom = _zoom;
 
-            bool repaintall = (lookdown != _starname_camera_paint_lookdown) ||          // have we flipped?
-                              (lookforward != _starname_camera_paint_lookforward) ||
-                               Math.Abs(_starname_curstars_zoom - _zoom) > 0.5F;          // if its worth doing a recalc..
-
-            if (Vector3.Subtract(_starname_camera_lastpos, modcampos).LengthSquared > 3 * 3 * 3 ||
-                Vector3.Subtract(_starname_camera_lastdir, _cameraDir).LengthSquared > 1 * 1 * 1 ||
-                repaintall)
-            {
-                //Console.WriteLine("Rescan stars zoom " + _zoom);
-                _starname_camera_lastpos = modcampos;
-                _starname_camera_lastdir = _cameraDir;
-                _starname_curstars_zoom = _zoom;
-                _starname_camera_paint_lookdown = lookdown;
-                _starname_camera_paint_lookforward = lookforward;
-
-                _starname_resmat = resmat;
-                _starname_repaintall = repaintall;          // pass to thread
+                _resmat = resmat;
+                _repaintall = repaintall;          // pass to thread
                 _nameson = names;
                 _discson = discs;
 
@@ -183,41 +165,25 @@ namespace EDDiscovery2
             {
                 int lylimit = (int)(_starlimitly / _zoom);
                 lylimit = Math.Max(lylimit, 20);
-                //Console.Write("Look down " + _starname_camera_paint_lookdown + " look forward " + _starname_camera_paint_lookforward);
-                //Console.Write("Repaint " + _starname_repaintall + " Stars " + _starlimitly + " within " + lylimit + "  ");
+                //Console.Write("Look down " + _camera_paint_lookdown + " look forward " + _camera_paint_lookforward);
+                //Console.Write("Repaint " + _repaintall + " Stars " + _starlimitly + " within " + lylimit + "  ");
                 int sqlylimit = lylimit * lylimit;                 // in squared distance limit from viewpoint
 
                 Vector3 modcampos = _viewtargetpos;
                 modcampos.Y = -modcampos.Y;
 
-                StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_starname_resmat, _znear, _glControl.Width, _glControl.Height, sqlylimit, modcampos);
+                StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_resmat, _znear, _glControl.Width, _glControl.Height, sqlylimit, modcampos);
 
                 SortedDictionary<float, StarGrid.InViewInfo> inviewlist = new SortedDictionary<float, StarGrid.InViewInfo>(new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
 
                 _stargrids.GetSystemsInView(ref inviewlist, 2000.0, ti);            // consider all grids under 2k from current pos.
                 
-                float textoffset = 0.20F;
                 float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _zoom, _starnameminly)); // per char
-                float textscalingh = textscalingw * 4;
-                if (!_starname_camera_paint_lookdown)         // flip bitmap to make it look at you..
-                {
-                    if (!_starname_camera_paint_lookforward)
-                    {
-                        textoffset = -textoffset;
-                        textscalingw = -textscalingw;
-                    }
-                    else
-                        textscalingh = -textscalingh;
-                }
-                else if (!_starname_camera_paint_lookforward)
-                {
-                    textscalingh = -textscalingh;
-                    textoffset = -textoffset;
-                    textscalingw = -textscalingw;
-                }
-
+                float textscalingh = textscalingw * 4 * (lastcamera.FlipY ? -1F : 1F);
+                textscalingw *= (lastcamera.FlipX ? -1F : 1F);
+                float textoffset = .20F * (lastcamera.FlipX ? -1F : 1F);
                 float starsize = Math.Min(Math.Max(_zoom / 10F, 1.0F), 20F);     // Normal stars are at 1F.
-                //Console.WriteLine("Per char {0} h {1} sc {2}", textscalingw, textscalingh , starsize);
+                //Console.WriteLine("Per char {0} h {1} sc {2}", textscalingw, textscalingh, starsize);
 
                 lock (deletelock)                                          // can't delete during update, can paint..
                 {
@@ -238,7 +204,7 @@ namespace EDDiscovery2
                             {
                                 sys = _starnames[inview.position];
                                 sys.todispose = false;                         // forced redraw due to change in orientation, or due to disposal
-                                draw = _starname_repaintall || (_nameson && sys.newstar == null) || (_discson && sys.newtexture == null);
+                                draw = _repaintall || (_nameson && sys.newstar == null) || (_discson && sys.newtexture == null);
                                 painted++;
                             }
                             else if (painted < limit)
@@ -272,11 +238,22 @@ namespace EDDiscovery2
                                     Bitmap map = DatasetBuilder.DrawString(sys.name, Color.Orange, _starfont);
                                     float farx = (float)(sys.x + textoffset + textscalingw * sys.name.Length);
 
-                                    sys.newtexture = TexturedQuadData.FromBitmapHorz(map,
-                                                 new PointF((float)sys.x + textoffset, (float)sys.z - textscalingh / 2), 
-                                                 new PointF(farx, (float)sys.z - textscalingh / 2),
-                                                 new PointF((float)sys.x + textoffset, (float)sys.z + textscalingh / 2), 
-                                                 new PointF(farx, (float)sys.z + textscalingh / 2), (float)sys.y);
+                                    if (lastcamera.FlipVert)
+                                    {
+                                        sys.newtexture = TexturedQuadData.FromBitmapVert(map,
+                                                    new PointF((float)sys.x + textoffset, (float)sys.y - textscalingh / 2),
+                                                    new PointF(farx, (float)sys.y - textscalingh / 2),
+                                                    new PointF((float)sys.x + textoffset, (float)sys.y + textscalingh / 2),
+                                                    new PointF(farx, (float)sys.y + textscalingh / 2), (float)sys.z);
+                                    }
+                                    else
+                                    {
+                                        sys.newtexture = TexturedQuadData.FromBitmapHorz(map,
+                                                   new PointF((float)sys.x + textoffset, (float)sys.z - textscalingh / 2),
+                                                   new PointF(farx, (float)sys.z - textscalingh / 2),
+                                                   new PointF((float)sys.x + textoffset, (float)sys.z + textscalingh / 2),
+                                                   new PointF(farx, (float)sys.z + textscalingh / 2), (float)sys.y);
+                                    }
                                 }
 
                                 if (_discson)
@@ -386,4 +363,70 @@ namespace EDDiscovery2
         }
 
     }
+
+    class CameraDirectionMovement           // keeps track of previous and works out how to present bitmaps
+    {
+        public bool FlipX = false;
+        public bool FlipY = false;
+        public bool FlipVert = false;
+        public Vector3 CameraPos;
+        public Vector3 CameraDir;
+
+        public bool Flipped( Vector3 cameraDir)
+        {
+            bool lookdown = (cameraDir.X < 90F);          // lookdown when X < 90
+            bool lookforward = (cameraDir.Y > -90F && cameraDir.Y < 90F);  // forward looking
+            bool lookmiddle = (cameraDir.X > 45 && cameraDir.X < 135); // middle on X
+            if (cameraDir.Z < -90F || cameraDir.Z > 90F)       // this has the effect of turning our world up side down!
+            {
+                lookdown = !lookdown;
+                lookforward = !lookforward;
+            }
+
+            bool flipx = false, flipy = false;
+            bool flipvert = lookmiddle;
+
+            if ( flipvert )
+            {
+                if (!lookforward)
+                    flipx = true;
+            }
+            else if (!lookdown)                          // flip bitmap to make it look at you..
+            {
+                if (!lookforward)
+                {
+                    flipx = true;
+                }
+                else
+                    flipy = true;
+            }
+            else if (!lookforward)
+            {
+                flipx = flipy = true;
+            }
+
+
+            bool change = flipx != FlipX || flipy != FlipY || flipvert | FlipVert;
+            FlipX = flipx;
+            FlipY = flipy;
+            FlipVert = flipvert;
+            return change;
+        }
+
+        public bool MovedDir(Vector3 cameraDir)
+        {
+            bool moved = Vector3.Subtract(CameraDir, cameraDir).LengthSquared > 1 * 1 * 1;
+            CameraDir = cameraDir;
+            return moved;
+        }
+
+        public bool MovedPos(Vector3 cameraPos)
+        {
+            bool moved = Vector3.Subtract(CameraPos, cameraPos).LengthSquared > 3 * 3 * 3;
+            CameraPos = cameraPos;
+            return moved;
+        }
+
+    }
+
 }
