@@ -12,13 +12,13 @@ SELECT
     ELSE
       pgsect.SectorName || 
       ' ' || 
-      CHAR(65 + (ProcgenGridRef % 26)) ||
-      CHAR(65 + ((ProcgenGridRef / 26) % 26)) ||
+      CHAR(65 + ((ProcgenGridRef >> 3) & 31)) ||
+      CHAR(65 + ((ProcgenGridRef >> 8) & 31)) ||
       '-' ||
-      CHAR(65 + ((ProcgenGridRef / (26 * 26)) % 26)) ||
+      CHAR(65 + ((ProcgenGridRef >> 13) & 31)) ||
       ' ' ||
       CHAR(104 - ProcgenStarClass) ||
-      CASE WHEN ProcgenGridRef >= (26 * 26 * 26) THEN CAST((ProcgenGridRef / (26 * 26 * 26)) AS TEXT) || '-' ELSE '' END ||
+      CASE WHEN (ProcgenGridRef >> 18) != 0 THEN (ProcgenGridRef >> 18) || '-' ELSE '' END ||
       CAST(ProcgenGridRefSequence AS TEXT)
   END AS Name
   s.X / 64.0 AS X,
@@ -38,14 +38,7 @@ SELECT
   p.SimbadRef,
   p.NeedsPermit,
   p.Population
-FROM (
-  SELECT
-    *,
-    ((ProcgenGridReference >> 3) & ((1 << ProcgenStarClass) - 1)) +
-    ((ProcgenGridReference >> (3 + ProcgenStarClass)) & ((1 << ProcgenStarClass) - 1)) * 128 +
-    ((ProcgenGridReference >> (3 + ProcgenStarClass * 2)) & ((1 << ProcgenStarClass) - 1)) * 16384 AS ProcgenGridRef
-  FROM (SELECT *, ProcgenGridReference & 7 AS ProcgenStarClass FROM Systems)
-) s
+FROM Systems s
 LEFT JOIN PopulatedSystems p ON p.SystemEdsmId = s.SystemEdsmId
 LEFT JOIN ProcgenSectors pgsect ON pgsect.Id = s.SectorId
 ```
