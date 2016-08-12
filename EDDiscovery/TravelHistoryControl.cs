@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using EDDiscovery.Controls;
 using System.Threading;
 using System.Collections.Concurrent;
+using EDDiscovery.EDSM;
 
 namespace EDDiscovery
 {
@@ -1065,7 +1066,7 @@ namespace EDDiscovery
                 VisitedSystemsClass vsc = visitedSystems.Find(x => x.Name.Equals(sn, StringComparison.InvariantCultureIgnoreCase));
                 string msgboxtext = null;
 
-                if ( (sc != null && sc.HasCoordinate) || ( vsc != null && vsc.HasTravelCoordinates))
+                if ((sc != null && sc.HasCoordinate) || (vsc != null && vsc.HasTravelCoordinates))
                 {
                     if (sc == null)
                         sc = new SystemClass(vsc.Name, vsc.X, vsc.Y, vsc.Z);            // make a double for the rest of the code..
@@ -1105,11 +1106,26 @@ namespace EDDiscovery
 
                 }
                 else
-                    msgboxtext = "Unknown system or system without co-ordinates";
+                {
+                    if (sn.Length > 2 && sn.Substring(0, 2).Equals("G:"))
+                        sn = sn.Substring(2, sn.Length - 2);
+
+                    GalacticMapObject gmo = EDDiscoveryForm.galacticMapping.Find(sn, true, true);    // ignore if its off, find any part of string, find if disabled
+
+                    if (gmo != null)
+                    {
+                        TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
+                        msgboxtext = "Target set on galaxy object " + gmo.name;
+                    }
+                    else
+                    {
+                        msgboxtext = "Unknown system, system is without co-ordinates or galaxy object not found";
+                    }
+                }
 
                 RefreshTargetInfo();
                 if (_discoveryForm.Map != null)
-                    _discoveryForm.Map.UpdateBookmarks();
+                    _discoveryForm.Map.UpdateBookmarksGMO(true);
 
                 if ( msgboxtext != null)
                     MessageBox.Show(msgboxtext,"Create a target", MessageBoxButtons.OK);

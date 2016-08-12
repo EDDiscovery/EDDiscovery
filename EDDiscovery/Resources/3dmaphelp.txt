@@ -35,9 +35,10 @@ Toolbar (from left):
 	Target	Center on selected target system
 
 	Lines	Turn on/off lines between travelled systems
-	Star	Select what stars to display
-	Star(n)	Turn on/off star naming (seen only when zoom >= 1)
+	Star	Select what stars to display, either none, all stars, all stars with stations marked in blue
+	Star(n)	Selecte to turn on or off star discs showing at high zoom levels, and/or star naming (seen only when zoom >= 1)
 	Bookmarks	Turn on/off bookmarks, notemarks or add a new region mark.
+	Map Objects	Turn on/off various galaxy map objects, and decide if to name them or not.
 	Grid	Turn on/off coarse grid
 	Fine Grid	Turn on/off fine grid
 	10,21	Turn on/off grid coordinates

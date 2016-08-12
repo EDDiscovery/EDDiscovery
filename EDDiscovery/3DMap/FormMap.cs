@@ -27,7 +27,7 @@ namespace EDDiscovery2
         public bool noWindowReposition { get; set; } = false;                       // set externally
         public TravelHistoryControl travelHistoryControl { get; set; } = null;      // set externally
 
-        const int HELP_VERSION = 3;         // increment this to force help onto the screen of users first time.
+        const int HELP_VERSION = 4;         // increment this to force help onto the screen of users first time.
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
@@ -35,7 +35,6 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_coarsegridlines;
         private List<IData3DSet> _datasets_gridlinecoords;
         private List<IData3DSet> _datasets_maps;
-        private List<IData3DSet> _datasets_poi;
         private List<IData3DSet> _datasets_selectedsystems;
         private List<IData3DSet> _datasets_visitedsystems;
         private List<IData3DSet> _datasets_bookedmarkedsystems;
@@ -54,7 +53,8 @@ namespace EDDiscovery2
         private ISystem _historySelection;
 
         private ISystem _clickedSystem;         // left clicked on a system/bookmark system/noted system
-        private Vector3 _clickedposition = new Vector3(float.NaN,float.NaN,float.NaN);       // left clicked on a position
+        private GalacticMapObject _clickedGMO;  // left clicked on a GMO
+        private Vector3 _clickedposition = new Vector3(float.NaN,float.NaN,float.NaN);       // above two also set this.. if its a RM, only this is set.
         private string _clickedurl;             // what url is associated..
 
         private float _zoom = 1.0f;
@@ -168,7 +168,8 @@ namespace EDDiscovery2
             toolStripButtonFineGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DFineGrid", true);
             toolStripButtonCoords.Checked = SQLiteDBClass.GetSettingBool("Map3DCoords", true);
             toolStripButtonEliteMovement.Checked = SQLiteDBClass.GetSettingBool("Map3DEliteMove", false);
-            toolStripButtonStarNames.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNames", true);
+            showNamesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DStarDiscs", true);
+            showDiscsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNaming", true);
             showNoteMarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowNoteMarks", true);
             showBookmarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowBookmarks", true);
             toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false);
@@ -240,7 +241,7 @@ namespace EDDiscovery2
                     VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
 
                     if ( vs != null )
-                        SetCenterSystemTo(vs.Name, true);
+                        SetCenterSystemTo(vs.Name);
                 }
             }
         }
@@ -280,11 +281,21 @@ namespace EDDiscovery2
             }
         }
 
-        public void UpdateBookmarks()
+        public void UpdateBookmarksGMO(bool gototarget )
         {
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 GenerateDataSetsBNG();
+
+                if (gototarget)
+                {
+                    string name;
+                    double x, y, z;
+
+                    if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+                        StartCameraSlew(new Vector3((float)x, (float)y, (float)z));
+                }
+
                 Repaint();
             }
         }
@@ -320,7 +331,7 @@ namespace EDDiscovery2
             _mousehovertick.Tick += new EventHandler(MouseHoverTick);
             _mousehovertick.Interval = 250;
 
-            SetCenterSystemTo(_centerSystem, true);             // move to this..
+            SetCenterSystemTo(_centerSystem);                   // move to this..
             ResetCamera();                                      // and set up camera
         }
 
@@ -519,9 +530,6 @@ namespace EDDiscovery2
             DatasetBuilder builder3 = new DatasetBuilder();
             _datasets_gridlinecoords = builder3.AddGridCoords();
 
-            DatasetBuilder builder4 = new DatasetBuilder();
-            _datasets_poi = builder4.AddPOIsToDataset();
-
             GenerateDataSetsBNG();
             UpdateDataSetsDueToZoom();
         }
@@ -542,6 +550,9 @@ namespace EDDiscovery2
 
             if (showNoteMarksToolStripMenuItem.Checked)
                 builder.UpdateBookmarksZoom(ref _datasets_notedsystems, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+
+            if (_clickedGMO != null)              // if GMO marked.
+                GenerateDataSetsSelectedSystems();          // as GMO marker is scaled
         }
 
         private void GenerateDataSetsMaps()
@@ -570,7 +581,7 @@ namespace EDDiscovery2
             DeleteDataset(ref _datasets_selectedsystems);
             _datasets_selectedsystems = null;
             DatasetBuilder builder = new DatasetBuilder();
-            _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem);
+            _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem,_clickedGMO, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
         }
 
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
@@ -598,10 +609,12 @@ namespace EDDiscovery2
 
             DatasetBuilder builder3= new DatasetBuilder();
 
-            int selected = SQLiteDBClass.GetSettingInt("Map3DGalObjects", int.MaxValue);
             List<IData3DSet> oldgalmaps = _datasets_galmapobjects;
-            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , selected , _toolstripToggleNamingButton.Checked);
+            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , _toolstripToggleNamingButton.Checked);
             DeleteDataset(ref oldgalmaps);
+
+            if (_clickedGMO != null)              // if GMO marked.
+                GenerateDataSetsSelectedSystems();          // as GMO marker is scaled and positioned so may need moving
         }
 
         private void DeleteDataset(ref List<IData3DSet> _datasets)
@@ -624,9 +637,12 @@ namespace EDDiscovery2
             if (_stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, _zoom, glControl ))       // at intervals, inform star grids of position, and if it has
                 Repaint();      // new stuff to paint, repaint
 
-            if (Visible && toolStripButtonStarNames.Checked && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
+            bool names = showNamesToolStripMenuItem.Checked;
+            bool discs = showDiscsToolStripMenuItem.Checked;
+
+            if (Visible && (names|discs) && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
             {
-                if (_starnameslist.Update(_zoom, _viewtargetpos, _cameraDir, GetResMat(), _znear))       // if its kicked off the thread..
+                if (_starnameslist.Update(_zoom, _viewtargetpos, _cameraDir, GetResMat(), _znear, names, discs))       // if its kicked off the thread..
                     _starnametimer.Stop();                                              // stop the timer.
             }
             else
@@ -682,7 +698,7 @@ namespace EDDiscovery2
                 labelSystemCoords.Text = "No centre system";
         }
 
-        public bool SetCenterSystemTo(VisitedSystemsClass system, bool moveto)
+        public bool SetCenterSystemTo(VisitedSystemsClass system)
         {
             if (Is3DMapsRunning)
             {
@@ -690,7 +706,7 @@ namespace EDDiscovery2
 
                 if (sys != null)
                 {
-                    return SetCenterSystemTo(sys, moveto);
+                    return SetCenterSystemTo(sys);
                 }
                 else
                 {
@@ -701,25 +717,22 @@ namespace EDDiscovery2
                 return false;
         }
 
-        public bool SetCenterSystemTo(string name, bool moveto)
+        public bool SetCenterSystemTo(string name)
         {
             if (Is3DMapsRunning)                         // if null, we are not up and running
-                return SetCenterSystemTo(FindSystem(name), moveto);
+                return SetCenterSystemTo(FindSystem(name));
             else
                 return false;
         }
 
-        private bool SetCenterSystemTo(ISystem sys, bool moveto)        
+        private bool SetCenterSystemTo(ISystem sys)        
         {
             if (sys != null)
             {
                 _centerSystem = sys;
                 SetCenterSystemLabel();
                 GenerateDataSetsSelectedSystems();
-
-                if (moveto)
-                    StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z));
-
+                StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z));
                 return true;
             }
             else
@@ -1014,13 +1027,6 @@ namespace EDDiscovery2
             }
 
             //long p3 = debugpainttimer.ElapsedMilliseconds;
-
-            Debug.Assert(_datasets_poi != null);
-            if (_datasets_poi != null)
-            {
-                foreach (var dataset in _datasets_poi)
-                    dataset.DrawAll(glControl);
-            }
 
             Debug.Assert(_datasets_visitedsystems != null);
             if (_datasets_visitedsystems != null)
@@ -1317,16 +1323,15 @@ namespace EDDiscovery2
         private void buttonCenter_Click(object sender, EventArgs e)
         {
             ISystem sys = FindSystem(textboxFrom.Text);
-            GalacticMapObject gmo = null;
 
             if (sys != null)
             {
                 textboxFrom.Text = sys.name;        // normalise name (user may have different 
-                SetCenterSystemTo(sys, true);
+                SetCenterSystemTo(sys);
             }
             else
             {
-                gmo = EDDiscoveryForm.galacticMapping.Find(textboxFrom.Text, true);
+                GalacticMapObject gmo = EDDiscoveryForm.galacticMapping.Find(textboxFrom.Text, true, true);    // ignore if its off, find any part of string, find if disabled
 
                 if (gmo != null)
                 {
@@ -1343,7 +1348,7 @@ namespace EDDiscovery2
             if (_visitedSystems != null)
             {
                 string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, -1, _centerSystem.name);
-                SetCenterSystemTo(name, true);
+                SetCenterSystemTo(name);
             }
             else
                 MessageBox.Show("No travel history is available");
@@ -1351,7 +1356,7 @@ namespace EDDiscovery2
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            SetCenterSystemTo(_homeSystem, true);
+            SetCenterSystemTo(_homeSystem);
         }
 
         private void buttonHistory_Click(object sender, EventArgs e)
@@ -1359,7 +1364,7 @@ namespace EDDiscovery2
             if (_historySelection == null)
                 MessageBox.Show("No travel history is available");
             else
-                SetCenterSystemTo(_historySelection, true);
+                SetCenterSystemTo(_historySelection);
         }
 
         private void toolStripButtonTarget_Click(object sender, EventArgs e)
@@ -1382,7 +1387,7 @@ namespace EDDiscovery2
             if (_visitedSystems != null)
             {
                 string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, 1, _centerSystem.name);
-                SetCenterSystemTo(name, true);
+                SetCenterSystemTo(name);
             }
             else
                 MessageBox.Show("No travel history is available");
@@ -1400,7 +1405,7 @@ namespace EDDiscovery2
                 VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
 
                 if (vs != null )
-                    SetCenterSystemTo(FindSystem(vs.Name), true);
+                    SetCenterSystemTo(FindSystem(vs.Name));
                 else
                     MessageBox.Show("No stars with defined co-ordinates available in travel history");
             }
@@ -1483,9 +1488,18 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
         }
 
-        private void toolStripButtonStarNames_Click(object sender, EventArgs e)
+        private void showDiscsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DStarNames", toolStripButtonStarNames.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DStarDiscs", showDiscsToolStripMenuItem.Checked);
+            _starnameslist.RemoveAllNamedStars();
+            Repaint();
+        }
+
+        private void showNamesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool("Map3DStarNaming", showNamesToolStripMenuItem.Checked);
+            _starnameslist.RemoveAllNamedStars();
+            Repaint();
         }
 
         private void showNoteMarksToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1543,13 +1557,13 @@ namespace EDDiscovery2
 
         private void dotSystemCoords_Click(object sender, EventArgs e)
         {
-            SetCenterSystemTo(_centerSystem, true);
+            SetCenterSystemTo(_centerSystem);
         }
 
         private void dotSelectedSystemCoords_Click(object sender, EventArgs e)
         {
             if (_clickedSystem!=null)
-                SetCenterSystemTo(_clickedSystem, true);
+                SetCenterSystemTo(_clickedSystem);
             else 
                 StartCameraSlew(_clickedposition);      // if nan, will ignore..
         }
@@ -1637,6 +1651,7 @@ namespace EDDiscovery2
             // bookmark on system, cursystem!=null, curbookmark != null, notedsystem = false
             // region bookmark. cursystem = null, curbookmark != null, notedsystem = false
             // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
+            // clicked on a gmo, gmo != null, rest null or false.
 
             ISystem cursystem = null;      
             BookmarkClass curbookmark = null;           
@@ -1649,8 +1664,9 @@ namespace EDDiscovery2
             {
                 _mouseStartRotate = new Point(int.MinValue, int.MinValue);      // indicate finished .. we need to do this to make mousemove not respond to random stuff when resizing
 
-                bool iscurrentselected = _clickedSystem != null;                // have we got a currently selected system..
+                bool isanyselected = _clickedSystem != null || _clickedGMO != null;                // have we got a currently selected object
 
+                _clickedGMO = gmo;
                 _clickedSystem = cursystem;         // clicked system was found either by a bookmark looking up a name, or a position look up. best we can do.
                 _clickedposition.X = float.NaN;
                 _clickedurl = null;
@@ -1668,9 +1684,6 @@ namespace EDDiscovery2
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 
                     System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
-
-                    GenerateDataSetsSelectedSystems();
-                    Repaint();
                 }
                 else if (curbookmark != null)                                   // region bookmark..
                 {
@@ -1691,13 +1704,11 @@ namespace EDDiscovery2
                 }
 
                 if (name != null)       // this means we found something..
-                {
                     labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", name, _clickedposition.X.ToString("0.00"), _clickedposition.Y.ToString("0.00"), _clickedposition.Z.ToString("0.00"));
-                }
                 else
                     labelClickedSystemCoords.Text = "None";
 
-                if (_clickedSystem == null && iscurrentselected)        // if we deselected, but we had something
+                if ( name != null || isanyselected)     // if we selected something, or something was selected
                 {
                     GenerateDataSetsSelectedSystems();
                     Repaint();
@@ -1827,7 +1838,7 @@ namespace EDDiscovery2
                         if ((frm.IsTarget && targetid != gmo.id) || (!frm.IsTarget && targetid == gmo.id)) // changed..
                         {
                             if (frm.IsTarget)
-                                TargetClass.SetTargetGMO("G:" + gmo.name , gmo.id, gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
+                                TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
                             else
                                 TargetClass.ClearTarget();
 
@@ -2286,12 +2297,12 @@ namespace EDDiscovery2
 
             StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(GetResMat(), _znear, glControl.Width, glControl.Height, _zoom);
 
-            Vector3d? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+            Vector3? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
 
             ISystem f = null;
 
             if (posofsystem != null)
-                f = FindSystem(new Vector3d(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
+                f = FindSystem(new Vector3(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
 
             return f;
         }
@@ -2378,7 +2389,7 @@ namespace EDDiscovery2
             return isys;
         }
 
-        public ISystem FindSystem(Vector3d pos, SQLiteConnectionED cn = null )
+        public ISystem FindSystem(Vector3 pos, SQLiteConnectionED cn = null )
         {
             if (_visitedSystems != null)
             {
