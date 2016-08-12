@@ -20,21 +20,26 @@ namespace EDDiscovery2
         public double X { get; set; }
         public double Z { get; set; }
         public int Percentage { get; set; }          // foreground flags
+        public double CalculatedDistance { get; set; }  // foreground.. what distance did we calc on..
         public SystemClass.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
         public bool Displayed = false;              // records if it was ever displayed
+        public bool Working = false;
 
         bool array1displayed;
-        private Vector3d[] array1;            // the star points
+        private Vector3[] array1;            // the star points
+        private int[] carray1;                // the star colours
         int array1vertices;
-        private Vector3d[] array2;            // the star points
+        private Vector3[] array2;            // the star points
+        private int[] carray2;                // the star colours
         int array2vertices;
 
         public float Size { get; set; }
         public Color Color { get; set; }
 
         protected int VtxVboID;
+        protected int VtxColorVboId;
         protected GLControl GLContext;
 
         Object lockdisplaydata = new Object();
@@ -43,6 +48,7 @@ namespace EDDiscovery2
         {
             Id = id; X = x; Z = z;
             Percentage = 0;
+            CalculatedDistance = 10E6;        // some large value, but not too large so ABS takes us overrange
             Color = c;
             Size = s;
             array1vertices = 0;
@@ -56,29 +62,31 @@ namespace EDDiscovery2
         public void FillFromDB()        // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = SystemClass.GetSystemVector(Id, ref array2, dBAsk, Percentage);
+                array2vertices = SystemClass.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage);
             else
-                array1vertices = SystemClass.GetSystemVector(Id, ref array1, dBAsk, Percentage);
+                array1vertices = SystemClass.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage);
         }
 
         public void FillFromVS(List<VisitedSystemsClass> cls) // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = FillFromVS(ref array2, cls);
+                array2vertices = FillFromVS(ref array2, ref carray2, cls, this.Color);
             else
-                array1vertices = FillFromVS(ref array1, cls);
+                array1vertices = FillFromVS(ref array1, ref carray1, cls, this.Color);
         }
 
-        private int FillFromVS( ref Vector3d[] array, List<VisitedSystemsClass> cls)
+        private int FillFromVS( ref Vector3[] array, ref int[] carray, List<VisitedSystemsClass> cls, Color basecolour)
         {
-            array = new Vector3d[cls.Count];     // can't have any more than this 
+            carray = new int[cls.Count];
+            array = new Vector3[cls.Count];     // can't have any more than this 
             int total = 0;
 
             foreach (VisitedSystemsClass vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
                 if (vs.curSystem != null && vs.curSystem.status != SystemStatusEnum.EDSC && vs.curSystem.HasCoordinate )
                 {
-                    array[total++] = new Vector3d(vs.curSystem.x, vs.curSystem.y, vs.curSystem.z);
+                    carray[total] = basecolour.ToArgb();
+                    array[total++] = new Vector3((float)vs.curSystem.x, (float)vs.curSystem.y, (float)vs.curSystem.z);
                 }
             }
 
@@ -113,7 +121,7 @@ namespace EDDiscovery2
                 return FindPoint(ref array2, array2vertices, x, y, ref cursysdistz, ti);
         }
                                                                                             // operate on  display
-        public Vector3d? FindPoint(ref Vector3d[] vert, int total , int x, int y, ref double cursysdistz, TransFormInfo ti)
+        public Vector3d? FindPoint(ref Vector3[] vert, int total , int x, int y, ref double cursysdistz, TransFormInfo ti)
         { 
             Vector3d? ret = null;
             double w2 = (double)ti.dwidth / 2.0;
@@ -121,7 +129,7 @@ namespace EDDiscovery2
 
             for ( int i = 0; i < total; i++)
             {
-                Vector3d v = vert[i];
+                Vector3 v = vert[i];
 
                 Vector4d syspos = new Vector4d(v.X, v.Y, v.Z, 1.0);
                 Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
@@ -156,7 +164,7 @@ namespace EDDiscovery2
         }
 
                                                                                 // operate on  display - can be called BY A THREAD
-        public void GetSystemsInView(ref Vector3d[] vert, int total, ref SortedDictionary<float, Vector3d> list , TransFormInfo ti )
+        public void GetSystemsInView(ref Vector3[] vert, int total, ref SortedDictionary<float, Vector3d> list , TransFormInfo ti )
         {
             int margin = -150;
             float sqdist = 0F;
@@ -167,7 +175,7 @@ namespace EDDiscovery2
             {
                 for (int i = 0; i < total; i++)
                 {
-                    Vector3d v = vert[i];
+                    Vector3 v = vert[i];
 
                     Vector4d syspos = new Vector4d(v.X, v.Y, v.Z, 1.0);
                     Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
@@ -181,7 +189,7 @@ namespace EDDiscovery2
                             sqdist = ((float)v.X - ti.campos.X) * ((float)v.X - ti.campos.X) + ((float)v.Y - ti.campos.Y) * ((float)v.Y - ti.campos.Y) + ((float)v.Z - ti.campos.Z) * ((float)v.Z - ti.campos.Z);
 
                             if (sqdist <= ti.sqlylimit)
-                                list.Add(sqdist, v);
+                                list.Add(sqdist, new Vector3d(v.X,v.Y,v.Z));
                         }
                     }
                 }
@@ -206,8 +214,10 @@ namespace EDDiscovery2
                 else
                 {
                     GL.DeleteBuffer(VtxVboID);
+                    GL.DeleteBuffer(VtxColorVboId);
                     GLContext = null;
                     VtxVboID = 0;
+                    VtxColorVboId = 0;
                 }
             }
         }
@@ -231,9 +241,14 @@ namespace EDDiscovery2
                         GL.GenBuffers(1, out VtxVboID);
                         GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
                         GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array1vertices * BlittableValueType.StrideOf(array1)), array1, BufferUsageHint.StaticDraw);
+
+                        GL.GenBuffers(1, out VtxColorVboId);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                        GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array1vertices * BlittableValueType.StrideOf(carray1)), carray1, BufferUsageHint.StaticDraw);
                         GLContext = control;
                     }
 
+                    carray2 = null;
                     array2 = null;
                     array2vertices = 0;
                 }
@@ -245,9 +260,14 @@ namespace EDDiscovery2
                         GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
 
                         GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array2vertices * BlittableValueType.StrideOf(array2)), array2, BufferUsageHint.StaticDraw);
+
+                        GL.GenBuffers(1, out VtxColorVboId);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                        GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(array2vertices * BlittableValueType.StrideOf(carray2)), carray2, BufferUsageHint.StaticDraw);
                         GLContext = control;
                     }
 
+                    carray1 = null;
                     array1 = null;
                     array1vertices = 0;
                 }
@@ -270,14 +290,28 @@ namespace EDDiscovery2
                 else
                 {
                     int numpoints = (array1displayed) ? array1vertices : array2vertices;
+
                     GL.EnableClientState(ArrayCap.VertexArray);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
-                    GL.VertexPointer(3, VertexPointerType.Double, 0, 0);
+                    GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                     GL.PointSize(Size);
-                    GL.Color3(Color);
-                    GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
+
+                    if (Color == Color.Transparent)
+                    {
+                        GL.EnableClientState(ArrayCap.ColorArray);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                        GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
+                        GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
+                        GL.DisableClientState(ArrayCap.ColorArray);
+                    }
+                    else
+                    {
+                        GL.Color3(Color);
+                        GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
+                    }
+
                     GL.DisableClientState(ArrayCap.VertexArray);
-                    //Console.WriteLine("Draw " + Id + " " + numpoints);
+
                 }
             }
         }
@@ -294,15 +328,19 @@ namespace EDDiscovery2
         private bool computeExit = false;
         private EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
         private double curx = 0, curz = 0;
+        StarGrid zoomedgrid = null;
 
         private int midpercentage = 80;
         private double middistance = 20000;
         private int farpercentage = 50;
         private double fardistance = 40000;
+        private double MinRecalcDistance = 5000;            // only recalc a grid if we are more than this away from its prev calc pos
 
-        #endregion
+        private Color popcolour = Color.Blue;
 
-        #region Initialise
+#endregion
+
+#region Initialise
 
         public void Initialise()
         {
@@ -314,7 +352,7 @@ namespace EDDiscovery2
                     double xp = 0, zp = 0;
                     bool ok = GridId.XZ(id, out xp, out zp);
                     Debug.Assert(ok);
-                    StarGrid grd = new StarGrid(id, xp, zp, Color.White, 1.0F);
+                    StarGrid grd = new StarGrid(id, xp, zp, Color.Transparent, 1.0F);           //A=0 means use default colour array
                     if (xp == 0 && zp == 0)                                     // sol grid, unpopulated stars please
                         grd.dBAsk = SystemClass.SystemAskType.UnPopulatedStars;
 
@@ -326,7 +364,7 @@ namespace EDDiscovery2
             grids.Add(visitedsystemsgrid);
 
             int solid = GridId.Id(0, 0);
-            populatedgrid = new StarGrid(solid, 0, 0, Color.Blue, 1.0F);      // Duplicate grid id but asking for populated stars
+            populatedgrid = new StarGrid(solid, 0, 0, Color.Transparent , 1.0F);      // Duplicate grid id but asking for populated stars
             populatedgrid.dBAsk = SystemClass.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);                                       // add last, so displayed last, so overwrites anything else
 
@@ -400,28 +438,45 @@ namespace EDDiscovery2
 
 #region Update
 
-
-        public void Update(double xp, double zp, GLControl gl)            // Foreground UI thread
+        
+        public bool Update(double xp, double zp, float zoom , GLControl gl  )            // Foreground UI thread, tells it if anything has changed..
         {
             Debug.Assert(Application.MessageLoop);
 
             StarGrid grd = null;
+
             bool displayed = false;
-            while (computed.TryTake(out grd))               // remove from the computed queue and mark done
+
+            while (computed.TryTake(out grd))                               // remove from the computed queue and mark done
             {
-                grd.Display(gl);                            // swap to using this one..
+                grd.Display(gl);                                            // swap to using this one..
+                Thread.MemoryBarrier();                                     // finish above before clearing working
+                grd.Working = false;
                 displayed = true;
             }
 
-            if (displayed)
-            {
-                //Console.WriteLine("Total stars displayed " + CountStars());
-            }
+            Thread.MemoryBarrier();                                         // finish above 
 
             curx = xp;
             curz = zp;
 
             ewh.Set();                                                      // tick thread again to consider..
+
+#if false       // turned off for now.. don't like the effect.
+            int getid = GridId.Id(curx, curz);                              // if extremely zoomed in, increase grid point size
+            StarGrid grid = grids.Find(x => x.Id == getid);
+            Debug.Assert(grid != null);
+
+            if (zoomedgrid!=null&&zoomedgrid != grid)                       // changed, reset old
+                zoomedgrid.Size = 1;
+
+            zoomedgrid = grid;
+            zoomedgrid.Size = Math.Min(Math.Max(1F, zoom / 20), 3);         // zoom grid
+            visitedsystemsgrid.Size = zoomedgrid.Size;
+            if (zoomedgrid.Id == populatedgrid.Id)
+                populatedgrid.Size = zoomedgrid.Size;
+#endif
+            return displayed;                                               // return if we updated anything..
         }
 
         void ComputeThread()
@@ -444,25 +499,31 @@ namespace EDDiscovery2
 
                     foreach (StarGrid gcheck in grids)
                     {
-                        if (gcheck.Id >= 0 )                                     // if not a special grid
+                        if (gcheck.Id >= 0 && !gcheck.Working)                                     // if not a special grid
                         {
                             double dist = gcheck.DistanceFrom(curx, curz);
-                            int percentage = GetPercentage(dist);
 
-                            if (percentage>gcheck.Percentage )                // if increase, it has priority..
+                            if (Math.Abs(dist - gcheck.CalculatedDistance) > MinRecalcDistance) // if its too small a change, ignore.. histerisis
                             {
-                                if (dist < mindist)                             // if best.. pick
+                                int percentage = GetPercentage(dist);
+
+                                if (percentage > gcheck.Percentage)                // if increase, it has priority..
                                 {
-                                    mindist = dist;
-                                    selmin = gcheck;
+                                    if (dist < mindist)                             // if best.. pick
+                                    {
+                                        mindist = dist;
+                                        selmin = gcheck;
+                                        //Console.WriteLine("Select {0} incr perc {1} to {2} dist {3,8:0.0}", gcheck.Id, gcheck.Percentage, percentage, dist);
+                                    }
                                 }
-                            }
-                            else if (selmin == null && percentage<gcheck.Percentage )   // if not selected a min one, pick the further one to decrease
-                            {
-                                if (dist > maxdist)         
+                                else if (selmin == null && percentage < gcheck.Percentage)   // if not selected a min one, pick the further one to decrease
                                 {
-                                    maxdist = dist;
-                                    selmax = gcheck;
+                                    if (dist > maxdist)
+                                    {
+                                        maxdist = dist;
+                                        selmax = gcheck;
+                                        //Console.WriteLine("Select {0} decr perc {1} to {2} dist {3,8:0.0}", gcheck.Id, gcheck.Percentage, percentage, dist);
+                                    }
                                 }
                             }
                         }
@@ -473,10 +534,22 @@ namespace EDDiscovery2
 
                     if (selmin != null)
                     {
+                        selmin.Working = true;                                          // stops another go by this thread, only cleared by UI when it has displayed
                         int prevpercent = selmin.Percentage;
-                        selmin.Percentage = GetPercentage(selmin.DistanceFrom(curx, curz));
+                        double prevdist = selmin.CalculatedDistance;
+
+                        selmin.CalculatedDistance = selmin.DistanceFrom(curx, curz);
+                        selmin.Percentage = GetPercentage(selmin.CalculatedDistance);
                         selmin.FillFromDB();
-                        //Console.WriteLine("Computed " + selmin.Id.ToString("0000") + "  total " + selmin.CountJustMade.ToString("000000") + " at " + selmin.X + " , " + selmin.Z + " % " + prevpercent + "->" + selmin.Percentage);
+
+                        Thread.MemoryBarrier();                                         // finish above before trying to trigger another go..
+
+                        Debug.Assert(Math.Abs(prevdist - selmin.CalculatedDistance) > MinRecalcDistance);
+
+                        Debug.Assert(!computed.Contains(selmin));
+                        
+                        //Console.WriteLine("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance, selmin.CountJustMade);
+
                         computed.Add(selmin);
                     }
                     else
@@ -491,7 +564,7 @@ namespace EDDiscovery2
 
         public void DrawAll(GLControl control, bool showstars , bool showstations )
         {
-            populatedgrid.Color = (showstations) ? Color.Blue : Color.White;
+            populatedgrid.Color = (showstations) ? popcolour : Color.Transparent;
 
             if (showstars)
             {

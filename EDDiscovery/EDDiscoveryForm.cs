@@ -76,7 +76,7 @@ namespace EDDiscovery
 
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
 
-        public GalacticMapping galacticMapping;
+        static public GalacticMapping galacticMapping;
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
