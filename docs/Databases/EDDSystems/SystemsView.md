@@ -10,15 +10,15 @@ SELECT
   CASE 
     WHEN s.Name IS NOT NULL THEN s.Name
     ELSE
-      pgsect.SectorName + 
-      ' ' + 
-      CHAR(65 + (ProcgenGridRef % 26)) +
-      CHAR(65 + ((ProcgenGridRef / 26) % 26)) +
-      '-' +
-      CHAR(65 + ((ProcgenGridRef / (26 * 26)) % 26)) +
-      ' ' +
-      CHAR(104 - ProcgenStarClass) +
-      CASE WHEN ProcgenGridRef >= (26 * 26 * 26) THEN CAST((ProcgenGridRef / (26 * 26 * 26)) AS TEXT) + '-' ELSE '' END +
+      pgsect.SectorName || 
+      ' ' || 
+      CHAR(65 + (ProcgenGridRef % 26)) ||
+      CHAR(65 + ((ProcgenGridRef / 26) % 26)) ||
+      '-' ||
+      CHAR(65 + ((ProcgenGridRef / (26 * 26)) % 26)) ||
+      ' ' ||
+      CHAR(104 - ProcgenStarClass) ||
+      CASE WHEN ProcgenGridRef >= (26 * 26 * 26) THEN CAST((ProcgenGridRef / (26 * 26 * 26)) AS TEXT) || '-' ELSE '' END ||
       CAST(ProcgenGridRefSequence AS TEXT)
   END AS Name
   s.X / 64.0 AS X,
