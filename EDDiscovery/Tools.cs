@@ -112,13 +112,20 @@ namespace EDDiscovery
         {
             try
             {
-                string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
+                if (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true")
+                {
+                    return Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Data");
+                }
+                else
+                {
+                    string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
 
-                if (!Directory.Exists(datapath))
-                    Directory.CreateDirectory(datapath);
+                    if (!Directory.Exists(datapath))
+                        Directory.CreateDirectory(datapath);
 
 
-                return datapath;
+                    return datapath;
+                }
             }
             catch (Exception ex)
             {

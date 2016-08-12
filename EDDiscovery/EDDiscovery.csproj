@@ -171,6 +171,8 @@
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
+    <Compile Include="3DMap\StarGrid.cs" />
+    <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\LabelExt.cs">
       <SubType>Component</SubType>
@@ -435,6 +437,7 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="App.Portable.config" />
     <None Include="Resources\YellowDot.png" />
     <None Include="Resources\OrangeDot.png" />
     <None Include="Resources\bookmarkbrightred.png" />
@@ -585,6 +588,40 @@
     <Folder Include="Maps\" />
     <Folder Include="SQLite\" />
   </ItemGroup>
+  <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <OutputFilename ParameterType="System.String" Required="true" />
+      <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.IO.Compression" />
+      <Using Namespace="System.IO.Compression" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        try
+        {
+          using (Stream zipStream = new FileStream(Path.GetFullPath(OutputFilename), FileMode.Create, FileAccess.Write))
+          using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+          {
+              foreach (ITaskItem fileItem in Files)
+              {
+                  string filename = fileItem.ItemSpec;
+                  string name = fileItem.GetMetadata("Name");
+                  if (String.IsNullOrEmpty(name)) name = Path.GetFileName(filename);
+                  using (Stream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                      using (Stream fileStreamInZip = archive.CreateEntry(name).Open())
+                          fileStream.CopyTo(fileStreamInZip);
+              }
+          }
+          return true;
+        }
+        catch (Exception ex)
+        {
+          Log.LogErrorFromException(ex);
+          return false;
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
@@ -601,7 +638,28 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild" Condition=" '$(OS)' != 'Unix' ">
+    <ItemGroup>
+      <ZipFiles Include="$(OutputPath)\EDDiscovery.exe" />
+      <ZipFiles Include="$(ProjectDir)\App.Portable.config">
+        <Name>EDDiscovery.exe.config</Name>
+      </ZipFiles>
+      <ZipFiles Include="$(OutputPath)\fround.js" />
+      <ZipFiles Include="$(OutputPath)\trilateration.js" />
+      <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />
+      <ZipFiles Include="$(OutputPath)\OpenTK.GLControl.dll" />
+      <ZipFiles Include="$(OutputPath)\OpenTK.dll" />
+      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.dll" />
+      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.Linq.dll" />
+      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.xml" />
+      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\x86\SQLite.Interop.dll">
+        <Name>x86\SQLite.Interop.dll</Name>
+      </ZipFiles>
+      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\x64\SQLite.Interop.dll">
+        <Name>x64\SQLite.Interop.dll</Name>
+      </ZipFiles>
+    </ItemGroup>
+    <Zip OutputFileName="$(OutputPath)\EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
+  </Target>
 </Project>

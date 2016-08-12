@@ -108,6 +108,7 @@
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopPanel = new System.Windows.Forms.Panel();
+            this._refreshWorker = new System.ComponentModel.BackgroundWorker();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -1071,6 +1072,14 @@
             this.TopPanel.Size = new System.Drawing.Size(594, 32);
             this.TopPanel.TabIndex = 26;
             // 
+            // _refreshWorker
+            // 
+            this._refreshWorker.WorkerReportsProgress = true;
+            this._refreshWorker.WorkerSupportsCancellation = true;
+            this._refreshWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RefreshHistoryWorker);
+            this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
+            this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1184,5 +1193,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
         private System.Windows.Forms.ToolStripMenuItem selectCorrectSystemToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker _refreshWorker;
     }
 }

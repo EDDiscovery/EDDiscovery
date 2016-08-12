@@ -55,7 +55,17 @@ namespace EDDiscovery2
         private bool _orderrowsinverted = false;
         private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
-        public BindingList<EDCommander> listCommanders;
+        private BindingList<EDCommander> _listCommanders = new BindingList<EDCommander>();
+        public BindingList<EDCommander> listCommanders
+        {
+            get
+            {
+                if (_listCommanders.Count == 0)
+                    Update();
+
+                return _listCommanders;
+            }
+        }
         private int currentCmdrID=0;
         private Dictionary<string, object> settings = new Dictionary<string, object>();
         private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
@@ -124,9 +134,6 @@ namespace EDDiscovery2
         {
             get
             {
-                if (listCommanders == null)
-                    Update();
-
                 if (currentCmdrID >= listCommanders.Count)
                     currentCmdrID = listCommanders.Count - 1;
 
@@ -293,8 +300,14 @@ namespace EDDiscovery2
                 _focusOnNewSystem = SQLiteDBClass.GetSettingBool("FocusOnNewSystem", false);
                 _keepOnTop = SQLiteDBClass.GetSettingBool("KeepOnTop", false);
                 LoadCommanders();
+
+                if (_listCommanders.Count == 0)
+                {
+                    GetNewCommander();
+                }
+
                 int activecommander = SQLiteDBClass.GetSettingInt("ActiveCommander", 0);
-                var cmdr = listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
+                var cmdr = _listCommanders.Select((c, i) => new { index = i, cmdr = c }).SingleOrDefault(a => a.cmdr.Nr == activecommander);
                 if (cmdr != null)
                 {
                     currentCmdrID = cmdr.index;
@@ -310,10 +323,7 @@ namespace EDDiscovery2
 
         private void LoadCommanders()
         {
-            if (listCommanders == null)
-                listCommanders = new BindingList<EDCommander>();
-
-            listCommanders.Clear();
+            _listCommanders.Clear();
 
             // Migrate old settigns.
             string apikey =  SQLiteDBClass.GetSettingString("EDSMApiKey", "");
@@ -326,7 +336,7 @@ namespace EDDiscovery2
             {
                 cmdr = new EDCommander(0, SQLiteDBClass.GetSettingString("EDCommanderName0", commanderName), SQLiteDBClass.GetSettingString("EDCommanderApiKey0", apikey));
                 cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath0", null);
-                listCommanders.Add(cmdr);
+                _listCommanders.Add(cmdr);
             }
 
             for (int ii = 1; ii < 100; ii++)
@@ -337,10 +347,9 @@ namespace EDDiscovery2
                     cmdr = new EDCommander(ii, SQLiteDBClass.GetSettingString("EDCommanderName" + ii.ToString(), ""), SQLiteDBClass.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
                     cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
                     if (!cmdr.Name.Equals(""))
-                        listCommanders.Add(cmdr);
+                        _listCommanders.Add(cmdr);
                 }
             }
-
         }
 
         public void StoreCommanders(IEnumerable<EDCommander> dictcmdr)
@@ -358,7 +367,7 @@ namespace EDDiscovery2
         internal EDCommander GetNewCommander()
         {
             int maxnr = 0;
-            foreach (EDCommander _cmdr in listCommanders)
+            foreach (EDCommander _cmdr in _listCommanders)
             {
                 maxnr = Math.Max(_cmdr.Nr, maxnr);
             }
@@ -372,7 +381,7 @@ namespace EDDiscovery2
 
             var cmdr = new EDCommander(maxnr, "CMDR "+maxnr.ToString(), "");
 
-            listCommanders.Add(cmdr);
+            _listCommanders.Add(cmdr);
 
             SQLiteDBClass.PutSettingString("EDCommanderName" + cmdr.Nr.ToString(), cmdr.Name);
             SQLiteDBClass.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);

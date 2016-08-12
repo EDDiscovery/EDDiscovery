@@ -368,9 +368,10 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb)          // oldest system is lowest index
+        public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb, bool matchsystems)          // oldest system is lowest index
         {
-            SystemClass.FillVisitedSystems(visitedSystems);                 // first try and populate with SystemClass info
+            if (matchsystems)
+                SystemClass.FillVisitedSystems(visitedSystems);                 // first try and populate with SystemClass info
 
             foreach (VisitedSystemsClass vsc in visitedSystems)
             {
@@ -484,6 +485,20 @@ namespace EDDiscovery2.DB
         public static double Distance(VisitedSystemsClass s1, Point3D p)
         {
             return Distance(s1, p.X, p.Y, p.Z);
+        }
+
+        public static VisitedSystemsClass FindByPos(List<VisitedSystemsClass> visitedSystems, Point3D p , double limit)     // go thru setting the lastknowsystem
+        {
+            if (visitedSystems != null)
+            {
+                VisitedSystemsClass vs = visitedSystems.FindLast(x => x.curSystem.HasCoordinate &&
+                                                Math.Abs(x.curSystem.x - p.X) < limit &&
+                                                Math.Abs(x.curSystem.y - p.Y) < limit &&
+                                                Math.Abs(x.curSystem.z - p.Z) < limit );
+                return vs;
+            }
+            else
+                return null;
         }
     }
 }
