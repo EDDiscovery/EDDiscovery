@@ -84,3 +84,19 @@ for all journal entries, old to new
                 system = cursys
                 eddbinfo = curinfo
 ```
+
+Match system DB query:
+```
+ExtractProcGen(name, out sectorname, out pgref, out pgseq)
+sectorid = db.scalar("SELECT Id FROM ProcgenSectors WHERE SectorName = @sectorname")
+system = db.query(
+         "SELECT * 
+          FROM Systems 
+          WHERE X >= (@x - @epsilon) * 64 AND X <= (@x + @epsilon) * 64 AND
+                Y >= (@y - @epsilon) * 64 AND Y <= (@y + @epsilon) * 64 AND
+                Z >= (@z - @epsilon) * 64 AND Z <= (@z + @epsilon) * 64 AND
+                (Name = @name OR (SectorId = @sectorid AND ProcgenGridReference = @pgref AND ProcgenGridRefSequence = @pgseq))");
+if (system):
+  edsmid = system.SystemEdsmId
+  populated = db.query("SELECT * FROM PopulatedSystems WHERE SystemEdsmId = @edsmid")
+```
