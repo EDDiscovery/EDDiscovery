@@ -29,4 +29,6 @@ For procgen systems: SectorId, GridReference and GridRefSequence are used to sto
 
 TBD: The grid reference will likely be compressed by allocating only as many bits as necessary for the star class - e.g. 21 bits (128x128x128) for class `a`, 12 bits (16x16x16) for class `d`, and 0 bits (1x1x1) for class `h`
 
+Alternatively, the grid reference could merely be a packed representation of the `AB-C d1-` portion of the star name, taking 4 bytes for a bit-packed representation or 5 bytes for a byte-packed representation. 
+
 The X, Y and Z coordinates are stored in 1/64ly (or 1/32ly) units from Sol, resulting in a 24-bit integer for all stars within the galaxy, and a 16-bit integer for stars within 512ly (or 1024ly) of Sol.
