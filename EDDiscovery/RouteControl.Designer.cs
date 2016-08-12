@@ -68,7 +68,6 @@
             this.comboBoxRoutingMetric.Enabled = false;
             this.comboBoxRoutingMetric.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxRoutingMetric.ItemHeight = 20;
-            this.comboBoxRoutingMetric.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxRoutingMetric.Items")));
             this.comboBoxRoutingMetric.Location = new System.Drawing.Point(326, 76);
             this.comboBoxRoutingMetric.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
