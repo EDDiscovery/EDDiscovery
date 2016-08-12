@@ -17,7 +17,7 @@ SELECT
       '-' ||
       CHAR(65 + ((ProcgenGridRef >> 13) & 31)) ||
       ' ' ||
-      CHAR(104 - ProcgenStarClass) ||
+      CHAR(97 + (ProcgenStarClass & 7)) ||
       CASE WHEN (ProcgenGridRef >> 18) != 0 THEN (ProcgenGridRef >> 18) || '-' ELSE '' END ||
       CAST(ProcgenGridRefSequence AS TEXT)
   END AS Name
