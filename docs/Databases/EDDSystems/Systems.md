@@ -25,7 +25,7 @@ CREATE INDEX System_RandomId on Systems (RandomId)
 
 Re-imported from EDSM dump.  Grid ID and RandomID are used for new 3dmap star painting system.  Grid ID is assigned based on x/z position, RandomID is 0 to 99 inclusive.
 
-For procgen systems: SectorId, GridReference and GridRefSequence are used to store the star name in a compact form.  See the [RV Sonnenkreis - Decoding Universal Cartographics](https://forums.frontier.co.uk/showthread.php/196297-RV-Sonnenkreis-Decoding-Universal-Cartographics) thread for details on decoding the `AB-C d1-0` name.  When SectorId, GridReference and GridRefSequence are stored, Name will be NULL.
+For procgen systems: SectorId, GridReference and GridRefSequence are used to store the star name in a compact form.  See the [RV Sonnenkreis - Decoding Universal Cartographics](https://forums.frontier.co.uk/showthread.php/196297-RV-Sonnenkreis-Decoding-Universal-Cartographics) thread for details on decoding the `AB-C d1-0` name.  SectorId, GridReference and GridRefSequence are used when Name is null, and are ignored when Name is not null.
 
 TBD: The grid reference will likely be compressed by allocating only as many bits as necessary for the star class - e.g. 21 bits (128x128x128) for class `a`, 12 bits (16x16x16) for class `d`, and 0 bits (1x1x1) for class `h`
 
