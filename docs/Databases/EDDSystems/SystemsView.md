@@ -12,13 +12,13 @@ SELECT
     ELSE
       pgsect.SectorName || 
       ' ' || 
-      CHAR(65 + ((ProcgenGridRef >> 3) & 31)) ||
-      CHAR(65 + ((ProcgenGridRef >> 8) & 31)) ||
+      CHAR(65 + ((ProcgenGridReference >> 3) & 31)) ||
+      CHAR(65 + ((ProcgenGridReference >> 8) & 31)) ||
       '-' ||
-      CHAR(65 + ((ProcgenGridRef >> 13) & 31)) ||
+      CHAR(65 + ((ProcgenGridReference >> 13) & 31)) ||
       ' ' ||
-      CHAR(97 + (ProcgenStarClass & 7)) ||
-      CASE WHEN (ProcgenGridRef >> 18) != 0 THEN (ProcgenGridRef >> 18) || '-' ELSE '' END ||
+      CHAR(97 + (ProcgenGridReference & 7)) ||
+      CASE WHEN (ProcgenGridReference >> 18) != 0 THEN (ProcgenGridReference >> 18) || '-' ELSE '' END ||
       CAST(ProcgenGridRefSequence AS TEXT)
   END AS Name
   s.X / 64.0 AS X,
