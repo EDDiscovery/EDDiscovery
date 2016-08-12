@@ -3,8 +3,8 @@
 ```sql
 CREATE TABLE PopulatedSystems (
   Id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-  SystemEdsmId INTEGER NOT NULL UNIQUE REFERENCES Systems (SystemEdsmId),
-  SystemEddbId INTEGER NOT NULL UNIQUE,
+  SystemEdsmId INTEGER NOT NULL REFERENCES Systems (SystemEdsmId),
+  SystemEddbId INTEGER NOT NULL,
   Faction TEXT,
   Government TEXT,
   Allegiance TEXT,
@@ -18,8 +18,8 @@ CREATE TABLE PopulatedSystems (
   Population INTEGER,
   LastUpdated DATETIME
 )
-CREATE INDEX PopulatedSystem_SystemEdsmId ON PopulatedSystems (SystemEdsmId)
-CREATE INDEX PopulatedSystem_SystemEddbId ON PopulatedSystems (SystemEddbId)
+CREATE UNIQUE INDEX PopulatedSystem_SystemEdsmId ON PopulatedSystems (SystemEdsmId)
+CREATE UNIQUE INDEX PopulatedSystem_SystemEddbId ON PopulatedSystems (SystemEddbId)
 ```
 
 Linked to a EDSM system entry by SystemEdsmId.
