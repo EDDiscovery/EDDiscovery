@@ -663,7 +663,7 @@ namespace EDDiscovery2
 
         bool _requestrepaint = false;
 
-        private void UpdateStars(object sender, EventArgs e) // tick.. tock.. every X ms.
+        private void UpdateStars(object sender, EventArgs e) // tick.. tock.. every X ms.  Drives everything now.
         {
             if (!Visible)
                 return;
@@ -690,7 +690,7 @@ namespace EDDiscovery2
 
             _lastcameranorm.Update(_cameraDir, _viewtargetpos, _zoom);
 
-            if (_lastcameranorm.CameraFlipped)
+            if (_lastcameranorm.CameraFlipped)                              // if we flip the camera around, flip some of the graphics
             {
                 UpdateDataSetsDueToFlip();
                 _requestrepaint = true;
@@ -723,7 +723,6 @@ namespace EDDiscovery2
                     {
                         //Console.WriteLine("Remove stars");
                         _requestrepaint = true;
-                        GC.Collect();
                     }
                 }
             }
@@ -731,7 +730,7 @@ namespace EDDiscovery2
             if (_requestrepaint)
             {
                 _requestrepaint = false;
-                glControl.Invalidate();                 // and kick paint
+                glControl.Invalidate();                 // and kick paint - not via the function ON purpose, so we can distinguish between this and others reasons
             }
         }
 
@@ -822,14 +821,14 @@ namespace EDDiscovery2
                 if (state[Key.F1])
                 {
                     _starnameslist.IncreaseStarLimit();
-                    _lastcameranorm.ForceZoomChanged();              // this will make it recalc..
+                    _lastcamerastarnames.ForceZoomChanged();              // this will make it recalc..
                 }
 
 
                 if (state[Key.F2])
                 {
                     _starnameslist.DecreaseStarLimit();
-                    _lastcameranorm.ForceZoomChanged();              // this will make it recalc..
+                    _lastcamerastarnames.ForceZoomChanged();              // this will make it recalc..
                 }
 
                 _kbdActions.Left = (state[Key.Left] || state[Key.A]);
@@ -990,6 +989,8 @@ namespace EDDiscovery2
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
+            //Stopwatch sw1 = new Stopwatch(); sw1.Start();
+
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);            // select the current matrix to the model view
@@ -1039,6 +1040,9 @@ namespace EDDiscovery2
 
             glControl.SwapBuffers();
             UpdateStatus();
+
+           // long elapsed = sw1.ElapsedMilliseconds;
+           // Console.WriteLine("{0} Time {1} {2}", Environment.TickCount, elapsed, (elapsed>50) ? "***********************":"");
         }
 
         private void DrawStars()
@@ -1098,7 +1102,11 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            _starnameslist.Draw();
+            if (_starnameslist.Draw())          // rang out of bandwidth, ask for another paint
+            {
+                _requestrepaint = true;
+                //Console.WriteLine("Ask for star paint");
+            }
 
             Debug.Assert(_datasets_selectedsystems != null);
             if (_datasets_selectedsystems != null)
@@ -1573,15 +1581,6 @@ namespace EDDiscovery2
             string text = EDDiscovery.Properties.Resources.maphelp3d;
             dl.Info("3D Map Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
             dl.Show();
-        }
-
-        private void glControl_KeyDown(object sender, KeyEventArgs e)
-        {
-        }
-
-        private void glControl_KeyUp(object sender, KeyEventArgs e)
-        {
-            //Console.WriteLine("Key up");
         }
 
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)

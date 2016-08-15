@@ -34,9 +34,11 @@ namespace EDDiscovery2
         public double y { get; set; }
         public double z { get; set; }
         public long population { get; set; }
-        public TexturedQuadData newtexture { get; set; }
+
+        public TexturedQuadData newtexture { get; set; }        // if a new texture is needed..
+        public TexturedQuadData painttexture { get; set; }      // currently painted one
+
         public PointData newstar { get; set; }                  // purposely drawing it like this, one at a time, due to sync issues between foreground/thread
-        public TexturedQuadData painttexture { get; set; }
         public PointData paintstar { get; set; }                // instead of doing a array paint.
 
         public bool inview { get; set; }
@@ -249,9 +251,9 @@ namespace EDDiscovery2
             }
         }
 
-        public void Draw()
+        public bool Draw()                                      // indicate if we ran out of time
         {
-            //Stopwatch sw = new Stopwatch();  sw.Start();
+            bool needmoreticks = false;
 
             if (_starnames.Count > 10000)
             {
@@ -285,16 +287,23 @@ namespace EDDiscovery2
 
             lock (_starnames)                                   // lock so they can't add anything while we draw
             {
-                //int painted = 0;
+                int updated = 0;
                 foreach (StarNames sys in _starnames.Values)
                 {
-                    if (sys.newtexture != null)            // new is controlled by thread..
+                    if (sys.newtexture != null)
                     {
-                        if (sys.painttexture != null)
-                            sys.painttexture.Dispose();
+                        if (updated < 200)                      // new is controlled by thread.. tested to seems okay to keep the ms for render low
+                        {
+                            if (sys.painttexture != null)
+                                sys.painttexture.Dispose();
 
-                        sys.painttexture = sys.newtexture;      // copy over and take another reference.. 
-                        sys.newtexture = null;
+                            sys.painttexture = sys.newtexture;      // copy over and take another reference.. 
+                            sys.newtexture = null;
+
+                            updated++;
+                        }
+                        else
+                            needmoreticks = true;
                     }
 
                     if (sys.newstar != null)              // same with newstar
@@ -304,14 +313,15 @@ namespace EDDiscovery2
                     }
 
                     if ( sys.inview )                       // in view, send it to the renderer
-                    { 
+                    {
                         if (sys.paintstar != null)                  // if star disk, paint..
+                        {
                             sys.paintstar.Draw(_glControl);
+                        }
 
                         if (sys.painttexture != null)           // being paranoid by treating these separately. Thread may finish painting one before the other.
                         {
                             sys.painttexture.Draw(_glControl);
-                            //painted++;
                         }
                     }
                 }
@@ -319,6 +329,7 @@ namespace EDDiscovery2
                 //Console.WriteLine("Painted {0} out of {1}", painted, _starnames.Count);
             }
 
+            return needmoreticks;
             //long e = sw.ElapsedMilliseconds; if (e > 1) Console.WriteLine("Elapsed " + e);
         }
         
