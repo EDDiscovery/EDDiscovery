@@ -37,72 +37,54 @@ namespace EDDiscovery2._3DMap
 
         #region MAPS
 
-        public List<IData3DSet> BuildMaps(ref List<FGEImage> images)
+       public List<IData3DSet> AddMapImages(FGEImage [] list)
         {
-            AddMapImages(ref images);
-            return _datasets;
-        }
-
-        private void AddMapImages(ref List<FGEImage> Images)
-        {
-            if (Images != null && Images.Count != 0)
+            if (list.Length > 0 )
             {
                 var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("mapimage", Color.White, 1.0f);
-                foreach (var img in Images)
+
+                for( int i = 0; i < list.Length; i++)
                 {
+                    FGEImage img = list[i];
+
                     if (_cachedTextures.ContainsKey(img.FileName))
                     {
                         datasetMapImg.Add(_cachedTextures[img.FileName]);
                     }
                     else
                     {
-                        var texture = TexturedQuadData.FromFGEImage(img);
+                        Bitmap bmp = (Bitmap)Bitmap.FromFile(img.FilePath);
+                                                                                    
+                        Vector3d centre = new Vector3d((img.TopLeft.X + img.BottomRight.X) / 2, 0, (img.TopRight.Y + img.BottomLeft.Y) / 2);
+                        float width = img.TopRight.X - img.BottomLeft.X;
+                        float height = img.TopLeft.Y - img.BottomRight.Y;           // its rectangular.. so does not really matter which left/right/top/bot you use
+
+                        var texture = TexturedQuadData.FromBitmap(bmp, centre, TexturedQuadData.NoRotation, width, height );
+
                         _cachedTextures[img.FileName] = texture;
                         datasetMapImg.Add(texture);
                     }
                 }
                 _datasets.Add(datasetMapImg);
             }
+
+            return _datasets;
         }
 
         #endregion
 
         #region Bookmarks
 
-
-        public PointF[] GetStarBookMarkPos(PointData bc, double widthly, double heightly, bool vert)
-        {
-            PointF[] pf = new PointF[4];
-
-            if (vert)
-            {
-                pf[0] = new PointF((float)(bc.x - widthly), (float)(bc.y + heightly));
-                pf[1] = new PointF((float)(bc.x + widthly), (float)(bc.y + heightly));
-                pf[2] = new PointF((float)(bc.x - widthly), (float)bc.y);
-                pf[3] = new PointF((float)(bc.x + widthly), (float)bc.y);
-            }
-            else
-            {
-                pf[0] = new PointF((float)(bc.x - widthly), (float)(bc.z + heightly));
-                pf[1] = new PointF((float)(bc.x + widthly), (float)(bc.z + heightly));
-                pf[2] = new PointF((float)(bc.x - widthly), (float)bc.z);
-                pf[3] = new PointF((float)(bc.x + widthly), (float)bc.z);
-            }
-
-            return pf;
-        }
-
-        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, Bitmap maptarget, double widthly, double heightly, bool vert)
+        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, Bitmap maptarget, float widthly, float heightly, Vector3 rotation )
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
-            widthly /= 2;
 
             long bookmarktarget = TargetClass.GetTargetBookmark();
 
             foreach (BookmarkClass bc in BookmarkClass.bookmarks)
             {
                 Bitmap touse = (bc.id == bookmarktarget) ? maptarget : ((bc.isRegion) ? mapregion : mapstar);
-                TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, GetStarBookMarkPos(new PointData(bc.x, bc.y, bc.z), widthly, heightly, vert), (vert) ? (float)bc.z : (float)bc.y, vert);
+                TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, new PointData(bc.x, bc.y, bc.z), rotation, widthly, heightly,  0, heightly / 2);
                 newtexture.Tag = bc;
                 newtexture.Tag2 = 0;        // bookmark
                 datasetbks.Add(newtexture);
@@ -113,10 +95,9 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, double widthly, double heightly, bool vert, List<VisitedSystemsClass> VisitedSystems)
+        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, float widthly, float heightly, Vector3 rotation, List<VisitedSystemsClass> VisitedSystems)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
-            widthly /= 2;
 
             long bookmarknoted = TargetClass.GetTargetNotedSystem();
 
@@ -135,7 +116,7 @@ namespace EDDiscovery2._3DMap
                             PointData pd = new PointData((vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x, (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y, (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z);
 
                             Bitmap touse = (notecs.id == bookmarknoted) ? maptarget : map;
-                            TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, GetStarBookMarkPos(pd, widthly, heightly, vert), (vert) ? (float)pd.z : (float)pd.y, vert);
+                            TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly, 0, heightly / 2);
                             newtexture.Tag = vs;
                             newtexture.Tag2 = 1;        // note mark
                             datasetbks.Add(newtexture);
@@ -149,12 +130,10 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public void UpdateBookmarksZoom(ref List<IData3DSet> _datasets, double widthly, double heightly, bool vert)
+        public void UpdateBookmarks(ref List<IData3DSet> _datasets, float widthly, float heightly, Vector3 rotation )
         {
             if (_datasets == null)
                 return;
-
-            widthly /= 2;
 
             foreach (IData3DSet dataset in _datasets)
             {
@@ -174,8 +153,7 @@ namespace EDDiscovery2._3DMap
                         pd = new PointData(bc.x, bc.y, bc.z);
                     }
 
-                    float other = (vert) ? (float)pd.z : (float)pd.y;
-                    tqd.UpdateVertices(GetStarBookMarkPos(pd, widthly, heightly, vert), other, vert);
+                    tqd.UpdateVertices(pd, rotation, widthly, heightly, 0, heightly / 2);
                 }
             }
         }
@@ -185,82 +163,14 @@ namespace EDDiscovery2._3DMap
         #region GMOs
 
         static Font gmostarfont = new Font("MS Sans Serif", 20F);       // font size really determines the nicenest of the image, not its size on screen..
+        float gmonameoff = -0.75F;      // bitmap is from +0.5 to -0.5.  
+        float gmotargetoff = 1F;
+        float gmoselonly = 0.75F;
+        float gmoseltarget = 1.75F;
 
-        public PointF[] GetGMOImagePos(PointData pd, double widthly, double heightly, bool vert)
-        {
-            PointF[] pf = new PointF[4];
-
-            if (vert)
-            {
-                pf[0] = (new PointF((float)(pd.x - widthly), (float)(pd.y + heightly)));
-                pf[1] = (new PointF((float)(pd.x + widthly), (float)(pd.y + heightly)));
-                pf[2] = (new PointF((float)(pd.x - widthly), (float)(pd.y - heightly)));
-                pf[3] = (new PointF((float)(pd.x + widthly), (float)(pd.y - heightly)));
-            }
-            else
-            {
-                pf[0] = (new PointF((float)(pd.x - widthly), (float)(pd.z + heightly)));
-                pf[1] = (new PointF((float)(pd.x + widthly), (float)(pd.z + heightly)));
-                pf[2] = (new PointF((float)(pd.x - widthly), (float)(pd.z - heightly)));
-                pf[3] = (new PointF((float)(pd.x + widthly), (float)(pd.z - heightly)));
-            }
-
-            return pf;
-        }
-
-        public PointF[] GetGMONamePos(PointData pd, double widthly, double heightly, bool vert , int strlen)
-        {
-            double wd = widthly / 5 * strlen;
-            double hd = widthly / 1.5;
-
-            PointF[] pf = new PointF[4];
-
-            if (vert)
-            {
-                pf[0] = new PointF((float)(pd.x - wd), (float)(pd.y - heightly - hd));
-                pf[1] = new PointF((float)(pd.x + wd), (float)(pd.y - heightly - hd));
-                pf[2] = new PointF((float)(pd.x - wd), (float)(pd.y - heightly));
-                pf[3] = new PointF((float)(pd.x + wd), (float)(pd.y - heightly));
-            }
-            else
-            {
-                pf[0] = new PointF((float)(pd.x - wd), (float)(pd.z - heightly - hd));
-                pf[1] = new PointF((float)(pd.x + wd), (float)(pd.z - heightly - hd));
-                pf[2] = new PointF((float)(pd.x - wd), (float)(pd.z - heightly));
-                pf[3] = new PointF((float)(pd.x + wd), (float)(pd.z - heightly));
-            }
-
-            return pf;
-        }
-
-        public PointF[] GetGMOTargetPos(PointData pd, double widthly, double heightly, bool vert, double hscale = 1, double offsetheightly = 0)
-        {
-            PointF[] pf = new PointF[4];
-            double baseh = offsetheightly + heightly;
-
-            if (vert)
-            {
-                pf[0] = new PointF((float)(pd.x - widthly / 2), (float)(pd.y + baseh + heightly*hscale ));
-                pf[1] = new PointF((float)(pd.x + widthly / 2), (float)(pd.y + baseh + heightly*hscale ));
-                pf[2] = new PointF((float)(pd.x - widthly / 2), (float)(pd.y + baseh));
-                pf[3] = new PointF((float)(pd.x + widthly / 2), (float)(pd.y + baseh));
-            }
-            else
-            {
-                pf[0] = new PointF((float)(pd.x - widthly / 2), (float)(pd.z + baseh + heightly*hscale ));
-                pf[1] = new PointF((float)(pd.x + widthly / 2), (float)(pd.z + baseh + heightly*hscale ));
-                pf[2] = new PointF((float)(pd.x - widthly / 2), (float)(pd.z + baseh));
-                pf[3] = new PointF((float)(pd.x + widthly / 2), (float)(pd.z + baseh));
-            }
-
-            return pf;
-        }
-
-        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, double widthly, double heightly, bool vert , bool namethem)
+        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, float widthly, float heightly, Vector3 rotation , bool namethem)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("galobj", Color.White, 1f);
-            widthly /= 2;
-            heightly /= 2;
 
             if (EDDiscoveryForm.galacticMapping != null )
             {
@@ -275,8 +185,7 @@ namespace EDDiscovery2._3DMap
                     {
                         Debug.Assert(touse != null);
 
-                        TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, GetGMOImagePos(pd, widthly, heightly, vert), (vert) ? (float)pd.z : (float)pd.y, vert);
-
+                        TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly);
                         newtexture.Tag = gmo;
                         newtexture.Tag2 = 0;
                         datasetbks.Add(newtexture);
@@ -295,7 +204,10 @@ namespace EDDiscovery2._3DMap
                                 _cachedBitmaps.Add(gmo.name, map);
                             }
 
-                            TexturedQuadData ntext = TexturedQuadData.FromBitmap(map, GetGMONamePos(pd, widthly, heightly, vert, gmo.name.Length), (vert) ? (float)pd.z : (float)pd.y, vert);
+                            TexturedQuadData ntext = TexturedQuadData.FromBitmap(map, pd, rotation, 
+                                                    (widthly / 10 * gmo.name.Length),
+                                                    (heightly / 3),
+                                                    0, heightly * gmonameoff);
                             ntext.Tag = gmo;
                             ntext.Tag2 = 1;
                             datasetbks.Add(ntext);
@@ -303,7 +215,7 @@ namespace EDDiscovery2._3DMap
 
                         if ( gmo.id == gmotarget )
                         {
-                            TexturedQuadData ntag = TexturedQuadData.FromBitmap(target, GetGMOTargetPos(pd, widthly, heightly, vert, 0.75), (vert) ? (float)pd.z : (float)pd.y, vert);
+                            TexturedQuadData ntag = TexturedQuadData.FromBitmap(target, pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
                             ntag.Tag = gmo;
                             ntag.Tag2 = 2;
                             datasetbks.Add(ntag);
@@ -317,13 +229,10 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public void UpdateGalObjectsZoom(ref List<IData3DSet> _datasets, double widthly, double heightly , bool vert )
+        public void UpdateGalObjects(ref List<IData3DSet> _datasets, float widthly, float heightly , Vector3 rotation )
         {
             if (_datasets == null)
                 return;
-
-            widthly /= 2;
-            heightly /= 2;
 
             foreach ( IData3DSet dataset in _datasets )
             {
@@ -335,16 +244,14 @@ namespace EDDiscovery2._3DMap
                     Debug.Assert(gmo != null);
                     PointData pd = (gmo.points.Count > 0) ? gmo.points[0] : null;     // lets be paranoid
                     Debug.Assert(pd!=null);
-                    float other = (vert) ? (float)pd.z : (float)pd.y;
 
                     int id = (int)tqd.Tag2;
                     if ( id == 0 )
-                        tqd.UpdateVertices(GetGMOImagePos(pd, widthly, heightly, vert), other, vert);
+                        tqd.UpdateVertices(pd, rotation, widthly,heightly);
                     else if ( id == 1 )
-                        tqd.UpdateVertices(GetGMONamePos(pd, widthly, heightly, vert, gmo.name.Length), other, vert);
+                        tqd.UpdateVertices(pd, rotation, (widthly / 10 * gmo.name.Length), (heightly / 3), 0, heightly * gmonameoff);
                     else
-                        tqd.UpdateVertices(GetGMOTargetPos(pd, widthly, heightly, vert, 0.75), other, vert);
-
+                        tqd.UpdateVertices(pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
                 }
             }
         }
@@ -394,12 +301,14 @@ namespace EDDiscovery2._3DMap
                         int tex_y = ((num / texwide) % texhigh) * bitmapheight;
                         int tex_n = num / (texwide * texhigh);
 
+                        //Console.WriteLine("num {0} tex_x {1} tex_y {2} txt_n {3}", num, tex_x, tex_y, tex_n);
+
                         DrawGridBitmap(basetexturesLOD1[tex_n].Texture, x, z, fnt, tex_x, tex_y);
-                        datasetMapImgLOD1.Add(basetexturesLOD1[tex_n].CreateSubTexture(
-                            new Point((int)x, (int)z), new Point((int)x + textwidthly, (int)z),
-                            new Point((int)x, (int)z + textheightly), new Point((int)x + textwidthly, (int)z + textheightly),
-                            new Point(tex_x, tex_y + bitmapheight), new Point(tex_x + bitmapwidth, tex_y + bitmapheight),
-                            new Point(tex_x, tex_y), new Point(tex_x + bitmapwidth, tex_y)));
+                        datasetMapImgLOD1.Add(basetexturesLOD1[tex_n].Horz(
+                            x, z,
+                            x + textwidthly, z + textheightly,
+                            tex_x, tex_y, tex_x + bitmapwidth, tex_y + bitmapheight
+                          ));
                     }
                 }
 
@@ -413,11 +322,11 @@ namespace EDDiscovery2._3DMap
                         int tex_n = num / (texwide * texhigh);
 
                         DrawGridBitmap(basetexturesLOD2[tex_n].Texture, x, z, fnt, tex_x, tex_y);
-                        datasetMapImgLOD2.Add(basetexturesLOD2[tex_n].CreateSubTexture(
-                            new Point((int)x, (int)z), new Point((int)x + textwidthly * 10, (int)z),
-                            new Point((int)x, (int)z + textheightly * 10), new Point((int)x + textwidthly * 10, (int)z + textheightly * 10),
-                            new Point(tex_x, tex_y + bitmapheight), new Point(tex_x + bitmapwidth, tex_y + bitmapheight),
-                            new Point(tex_x, tex_y), new Point(tex_x + bitmapwidth, tex_y)));
+                        datasetMapImgLOD2.Add(basetexturesLOD2[tex_n].Horz(
+                            x, z,
+                            x + textwidthly*10, z + textheightly*10,
+                            tex_x, tex_y, tex_x + bitmapwidth, tex_y + bitmapheight
+                        ));
                     }
                 }
 
@@ -548,7 +457,7 @@ namespace EDDiscovery2._3DMap
 
         private void AddVisitedSystemsInformation( bool DrawLines , List<VisitedSystemsClass> VisitedSystems )
         {
-            if (VisitedSystems != null && VisitedSystems.Any())
+            if (VisitedSystems != null && VisitedSystems.Any() && DrawLines )
             {
                 VisitedSystemsClass.SetLastKnownSystemPosition(VisitedSystems);
 
@@ -560,33 +469,27 @@ namespace EDDiscovery2._3DMap
                 {
                     foreach (IGrouping<int, VisitedSystemsClass> colour in colours)
                     {
-                        if (DrawLines)
+                        var datasetl = Data3DSetClass<LineData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                        foreach (VisitedSystemsClass sp in colour)
                         {
-                            var datasetl = Data3DSetClass<LineData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                            foreach (VisitedSystemsClass sp in colour)
+                            if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
                             {
-                                if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
-                                {
-                                    datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
-                                        sp.lastKnownSystem.x, sp.lastKnownSystem.y, sp.lastKnownSystem.z));
+                                datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
+                                    sp.lastKnownSystem.x, sp.lastKnownSystem.y, sp.lastKnownSystem.z));
 
-                                }
                             }
-                            _datasets.Add(datasetl);
                         }
-                        else
+                        _datasets.Add(datasetl);
+
+                        var datasetvs = Data3DSetClass<PointData>.Create("visitedstars" + colour.Key.ToString(), Color.Orange, 2.0f);
+                        foreach (VisitedSystemsClass sp in colour)
                         {
-                            var datasetvs = Data3DSetClass<PointData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                            foreach (VisitedSystemsClass sp in colour)
+                            if ( sp.curSystem != null && sp.curSystem.HasCoordinate)
                             {
-                                if ( sp.curSystem != null && sp.curSystem.HasCoordinate)
-                                {
-                                    datasetvs.Add(new PointData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z));
-                                }
+                                datasetvs.Add(new PointData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z));
                             }
-                            _datasets.Add(datasetvs);
                         }
-
+                        _datasets.Add(datasetvs);
                     }
                 }
             }
@@ -646,8 +549,10 @@ namespace EDDiscovery2._3DMap
 
         #region Systems
 
-        public List<IData3DSet> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo , double widthly, double heightly, bool vert)
+        public List<IData3DSet> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation )
         {
+            Bitmap selmark  = (Bitmap)EDDiscovery.Properties.Resources.selectedmarker;
+
             if (centersystem != null)
             {
                 var dataset = Data3DSetClass<PointData>.Create("Center", MapColours.CentredSystem, 5.0f);
@@ -657,9 +562,12 @@ namespace EDDiscovery2._3DMap
 
             if (selectedsystem != null)
             {
-                var dataset = Data3DSetClass<PointData>.Create("Selected", MapColours.SelectedSystem, 8.0f);
-                dataset.Add(new PointData(selectedsystem.x, selectedsystem.y, selectedsystem.z));
-                _datasets.Add(dataset);
+                var datasetbks = Data3DSetClass<TexturedQuadData>.Create("selstar", Color.White, 1f);
+
+                TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, new PointData(selectedsystem.x,selectedsystem.y,selectedsystem.z), rotation, widthly, heightly/2, 0, heightly/4+heightly/16);
+                newtexture.Tag = 0;
+                datasetbks.Add(newtexture);
+                _datasets.Add(datasetbks);
             }
 
             if ( selectedgmo != null )
@@ -669,22 +577,47 @@ namespace EDDiscovery2._3DMap
                 if (pd != null)
                 {
                     var datasetbks = Data3DSetClass<TexturedQuadData>.Create("selgmo", Color.White, 1f);
-                    widthly /= 2;
-                    heightly /= 2;
 
-                    Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.selectedmarker;
                     long gmotarget = TargetClass.GetTargetGMO();
 
-                    TexturedQuadData newtexture = TexturedQuadData.FromBitmap(map,
-                        GetGMOTargetPos(pd, widthly, heightly, vert, 0.5, (gmotarget == selectedgmo.id) ? heightly*0.75 : 0 ), 
-                        (vert) ? (float)pd.z : (float)pd.y, vert);
-
+                    float hoff = (gmotarget == selectedgmo.id) ? (heightly * gmoseltarget) : (heightly * gmoselonly);
+                    TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, pd, rotation, widthly, heightly / 2, 0, hoff);
+                    newtexture.Tag = 1;
                     datasetbks.Add(newtexture);
                     _datasets.Add(datasetbks);
                 }
             }
 
             return _datasets;
+        }
+
+        public void UpdateSelected(ref List<IData3DSet> _datasets, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation)
+        {
+            if (_datasets == null)
+                return;
+
+            foreach (IData3DSet dataset in _datasets)
+            {
+                if (dataset is TexturedQuadDataCollection)
+                {
+                    TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
+
+                    foreach (TexturedQuadData tqd in tqdc.BaseTextures)
+                    {
+                        int id = (int)tqd.Tag;
+
+                        if (id == 0)
+                            tqd.UpdateVertices(new PointData(selectedsystem.x, selectedsystem.y, selectedsystem.z), rotation, widthly, heightly / 2, 0, heightly / 4 + heightly / 16);
+                        else
+                        {
+                            long gmotarget = TargetClass.GetTargetGMO();
+                            float hoff = (gmotarget == selectedgmo.id) ? (heightly * gmoseltarget) : (heightly * gmoselonly);
+                            PointData pd = (selectedgmo.points.Count > 0) ? selectedgmo.points[0] : null;     // lets be paranoid
+                            tqd.UpdateVertices(pd, rotation, widthly, heightly / 2, 0, hoff);
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
