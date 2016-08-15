@@ -566,6 +566,8 @@ namespace EDDiscovery2
 
         private void UpdateDataSetsDueToFlip()
         {
+            //Stopwatch sw = new Stopwatch(); sw.Start();
+
             DatasetBuilder builder = new DatasetBuilder();
             builder.UpdateGalObjects(ref _datasets_galmapobjects, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
 
@@ -577,6 +579,8 @@ namespace EDDiscovery2
 
             if (_clickedGMO != null || _clickedSystem != null)              // if markers
                 builder.UpdateSelected(ref _datasets_selectedsystems, _clickedSystem, _clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+
+            //Console.WriteLine("Flip {0}", sw.ElapsedMilliseconds);
         }
 
         private void GenerateDataSetsMaps()
@@ -1181,6 +1185,7 @@ namespace EDDiscovery2
                     _cameraSlewProgress = 0.0f;
                     _cameraSlewTime = (float)Math.Max(2.0, dist / 10000.0);            //10000 ly/sec, with a minimum slew
                     //Console.WriteLine("Slew " + dist + " in " + _cameraSlewTime);
+                    KillHover();
                     Repaint();
                 }
             }
@@ -1955,75 +1960,37 @@ namespace EDDiscovery2
             }
             else //
             {
-                if (_cameraSlewProgress < 1.0F)       // slewing.. no hover tick
+                if (Math.Abs(e.X - _mouseHover.X) + Math.Abs(e.Y - _mouseHover.Y) > 8)
+                    KillHover();                                // we move we kill the hover.
+
+                                                                // no tool tip, not slewing, not ticking..
+                if (_mousehovertooltip == null && _cameraSlewProgress >= 1.0F && !_mousehovertick.Enabled)
                 {
-                    _mousehovertick.Stop();
-                }
-                else if (_mousehovertooltip != null)
-                {
-                    if (Math.Abs(e.X - _mouseHover.X) + Math.Abs(e.Y - _mouseHover.Y) > 8)
-                    {
-                        _mousehovertooltip.Dispose();
-                        _mousehovertooltip = null;
-                    }
-                }
-                else if (_mousehovertick.Enabled)
-                {
-                    if (Math.Abs(e.X - _mouseHover.X) + Math.Abs(e.Y - _mouseHover.Y) > 8)
-                    {
-                        _mousehovertick.Stop();
-                    }
-                }
-                else
-                {
+                    //Console.WriteLine("{0} Start tick", Environment.TickCount);
                     _mouseHover = e.Location;
                     _mousehovertick.Start();
                 }
             }
         }
 
-        private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        void KillHover()
         {
-            var kbdstate = OpenTK.Input.Keyboard.GetState();
-
-            if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+            if (_mousehovertooltip != null)                                 // kill the tool tip
             {
-                if (e.Delta < 0)
-                {
-                    _cameraFov = (float)Math.Min(_cameraFov*ZoomFact, Math.PI * 0.8);
-                }
-                else if (e.Delta > 0)
-                {
-                    _cameraFov /= (float)ZoomFact;
-                }
-            }
-            else
-            {
-                float curzoom = _zoom;
-
-                if (e.Delta > 0)
-                {
-                    _zoom *= (float)ZoomFact;
-                    if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
-                }
-                if (e.Delta < 0)
-                {
-                    _zoom /= (float)ZoomFact;
-                    if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
-                }
-
-                if ( curzoom != _zoom )
-                    UpdateDataSetsDueToZoom();
+                //Console.WriteLine("{0} kill tool tip move mouse", Environment.TickCount);
+                _mousehovertooltip.Dispose();
+                _mousehovertooltip = null;
             }
 
-            SetupViewport();
-            Repaint();
+            //Console.WriteLine("{0} kill hover", Environment.TickCount);
+            _mousehovertick.Stop();
         }
 
         void MouseHoverTick(object sender, EventArgs e)
         {
-            if (_cameraSlewProgress < 1.0F)       // slewing.. no hover tick
-                return;
+            _mousehovertick.Stop();
+
+            //Console.WriteLine("{0} Hover tick tripped slew {1}", Environment.TickCount, _cameraSlewProgress);
 
             ISystem hoversystem = null;
             BookmarkClass curbookmark = null;
@@ -2122,9 +2089,48 @@ namespace EDDiscovery2
             }
         }
 
-#endregion
+        private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            var kbdstate = OpenTK.Input.Keyboard.GetState();
 
-#region FindObjectsOnScreen
+            if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+            {
+                if (e.Delta < 0)
+                {
+                    _cameraFov = (float)Math.Min(_cameraFov * ZoomFact, Math.PI * 0.8);
+                }
+                else if (e.Delta > 0)
+                {
+                    _cameraFov /= (float)ZoomFact;
+                }
+            }
+            else
+            {
+                float curzoom = _zoom;
+
+                if (e.Delta > 0)
+                {
+                    _zoom *= (float)ZoomFact;
+                    if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
+                }
+                if (e.Delta < 0)
+                {
+                    _zoom /= (float)ZoomFact;
+                    if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
+                }
+
+                if (curzoom != _zoom)
+                    UpdateDataSetsDueToZoom();
+            }
+
+            SetupViewport();
+            Repaint();
+        }
+
+
+        #endregion
+
+        #region FindObjectsOnScreen
 
         Matrix4d GetResMat()
         {
