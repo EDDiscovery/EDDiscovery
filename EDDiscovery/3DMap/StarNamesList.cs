@@ -24,7 +24,7 @@ namespace EDDiscovery2
             population = other.population;
             newtexture = null; newstar = null;
             painttexture = null; paintstar = null;
-            candisposepainttexture = false;
+            inview = false;
             todispose = false;
         }
 
@@ -39,7 +39,7 @@ namespace EDDiscovery2
         public TexturedQuadData painttexture { get; set; }
         public PointData paintstar { get; set; }                // instead of doing a array paint.
 
-        public bool candisposepainttexture { get; set; }
+        public bool inview { get; set; }
         public bool todispose { get; set; }
     };
 
@@ -47,18 +47,17 @@ namespace EDDiscovery2
     public class StarNamesList
     {
         Matrix4d _resmat;                  // to pass to thread..
-        bool _repaintall;                  // to pass to thread..
+        bool _flippedorzoomed;                  // to pass to thread..
         bool _discson;                            // to pass to thread..
         bool _nameson;                            // to pass to thread..
-        float _curstars_zoom = ZoomOff;    // and what zoom.. 
-        const float ZoomOff = -1000000F;            // zoom off flag
+        float _znear;                            // to pass to thread..
+
         int _starlimitly = 5000;                    // stars within this, div zoom.  F1/F2 adjusts this
         float _starnamesizely = 40F;                // star name width, div zoom
         float _starnameminly = 0.1F;                // ranging between per char
         float _starnamemaxly = 0.5F;
-        Dictionary<Vector3, StarNames> _starnames;
 
-        CameraDirectionMovement lastcamera = new CameraDirectionMovement();
+        Dictionary<Vector3, StarNames> _starnames;
 
         static Font _starfont = new Font("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
 
@@ -66,110 +65,75 @@ namespace EDDiscovery2
         FormMap _formmap;
         GLControl _glControl;
 
-        float _zoom;
-        Vector3 _viewtargetpos;
-        float _znear;
-
         Object deletelock = new Object();           // locked during delete..
 
         System.Threading.Thread nsThread;
 
-        public StarNamesList( StarGrids sg, FormMap _fm , GLControl gl )
+        public StarNamesList(StarGrids sg, FormMap _fm, GLControl gl)
         {
             _stargrids = sg;
             _formmap = _fm;
             _glControl = gl;
 
             _starnames = new Dictionary<Vector3, StarNames>();
-
-            _curstars_zoom = ZoomOff;             // reset zoom to make it recalc the named stars..
         }
 
         public bool RemoveAllNamedStars()                               // indicate all no paint, pass back if changed anything.
         {
             bool changed = false;
 
-            if (_curstars_zoom != ZoomOff)
+            foreach (StarNames sys in _starnames.Values)
             {
-                foreach (StarNames sys in _starnames.Values)
+                if (sys.painttexture != null || sys.paintstar != null)
                 {
-                    if (sys.painttexture != null || sys.paintstar != null)
-                    {
-                        sys.candisposepainttexture = true;
-                        changed = true;
-                    }
+                    sys.inview = false;
+                    changed = true;
                 }
-
-                _curstars_zoom = ZoomOff;
             }
 
             return changed;
         }
 
-        public void RecalcStarNames()                                  // force recalc..
-        {
-            _curstars_zoom = ZoomOff;
-        }
-
         public void IncreaseStarLimit()
         {
             _starlimitly += 500;
-            RecalcStarNames();
         }
 
         public void DecreaseStarLimit()
         {
             if (_starlimitly > 500)
-            { 
+            {
                 _starlimitly -= 500;
-                RecalcStarNames();
             }
         }
 
+        CameraDirectionMovement _lastcamera;
 
-        public bool Update(float z, Vector3 c, Vector3 _cameraDir, Matrix4d resmat , float _zn , bool names, bool discs )     // UI thread..
+        public void Update(CameraDirectionMovement lastcamera, bool flippedorzoomed, Matrix4d resmat, float _zn, bool names, bool discs)     // UI thread..
         {
-            _zoom = z;
-            _viewtargetpos = c;
+            _lastcamera = lastcamera;
+            _resmat = resmat;
             _znear = _zn;
+            _nameson = names;
+            _discson = discs;
+            _flippedorzoomed = flippedorzoomed;
 
-            if (!_stargrids.IsDisplayed(_viewtargetpos.X, _viewtargetpos.Z))
-                return false;                            // okay, if we have not got to the position of displaying this grid, just wait
-
-            Vector3 modcampos = _viewtargetpos;
-            modcampos.Y = -modcampos.Y;
-            bool repaintall = lastcamera.Flipped(_cameraDir) ||  Math.Abs(_curstars_zoom - _zoom) > 0.5F;          // if its worth doing a recalc..
-
-            if (lastcamera.MovedPos(modcampos) || lastcamera.MovedDir(_cameraDir) || repaintall )
-            {
-                Console.WriteLine("Rescan stars zoom " + _zoom);
-                _curstars_zoom = _zoom;
-
-                _resmat = resmat;
-                _repaintall = repaintall;          // pass to thread
-                _nameson = names;
-                _discson = discs;
-
-                //Console.WriteLine("Tick start thread");
-                nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
-                nsThread.Start();
-                return true;
-            }
-            else
-                return false;
+            //Console.WriteLine("Tick start thread");
+            nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
+            nsThread.Start();
         }
 
         private void NamedStars() // background thread.. run after timer tick
         {
             try // just in case someone tears us down..
             {
-                int lylimit = (int)(_starlimitly / _zoom);
+                int lylimit = (int)(_starlimitly / _lastcamera.LastZoom);
                 lylimit = Math.Max(lylimit, 20);
                 //Console.Write("Look down " + _camera_paint_lookdown + " look forward " + _camera_paint_lookforward);
                 //Console.Write("Repaint " + _repaintall + " Stars " + _starlimitly + " within " + lylimit + "  ");
                 int sqlylimit = lylimit * lylimit;                 // in squared distance limit from viewpoint
 
-                Vector3 modcampos = _viewtargetpos;
+                Vector3 modcampos = _lastcamera.CameraPos;
                 modcampos.Y = -modcampos.Y;
 
                 StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_resmat, _znear, _glControl.Width, _glControl.Height, sqlylimit, modcampos);
@@ -177,13 +141,12 @@ namespace EDDiscovery2
                 SortedDictionary<float, StarGrid.InViewInfo> inviewlist = new SortedDictionary<float, StarGrid.InViewInfo>(new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
 
                 _stargrids.GetSystemsInView(ref inviewlist, 2000.0, ti);            // consider all grids under 2k from current pos.
-                
-                float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _zoom, _starnameminly)); // per char
-                float textscalingh = textscalingw * 4 * (lastcamera.FlipY ? -1F : 1F);
-                textscalingw *= (lastcamera.FlipX ? -1F : 1F);
-                float textoffset = .20F * (lastcamera.FlipX ? -1F : 1F);
-                float starsize = Math.Min(Math.Max(_zoom / 10F, 1.0F), 20F);     // Normal stars are at 1F.
-                //Console.WriteLine("Per char {0} h {1} sc {2}", textscalingw, textscalingh, starsize);
+
+                float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _lastcamera.LastZoom, _starnameminly)); // per char
+                float textscalingh = textscalingw * 4;
+                float textoffset = .20F;
+                float starsize = Math.Min(Math.Max(_lastcamera.LastZoom / 10F, 1.0F), 20F);     // Normal stars are at 1F.
+                //Console.WriteLine("Per char {0} h {1} sc {2} ", textscalingw, textscalingh, starsize);
 
                 lock (deletelock)                                          // can't delete during update, can paint..
                 {
@@ -204,7 +167,7 @@ namespace EDDiscovery2
                             {
                                 sys = _starnames[inview.position];
                                 sys.todispose = false;                         // forced redraw due to change in orientation, or due to disposal
-                                draw = _repaintall || (_nameson && sys.newstar == null) || (_discson && sys.newtexture == null);
+                                draw = _flippedorzoomed || (_nameson && sys.newstar == null) || (_discson && sys.newtexture == null);
                                 painted++;
                             }
                             else if (painted < limit)
@@ -235,25 +198,19 @@ namespace EDDiscovery2
                             {
                                 if (_nameson)
                                 {
-                                    Bitmap map = DatasetBuilder.DrawString(sys.name, Color.Orange, _starfont);
-                                    float farx = (float)(sys.x + textoffset + textscalingw * sys.name.Length);
+                                    float width = textscalingw * sys.name.Length;
 
-                                    if (lastcamera.FlipVert)
-                                    {
-                                        sys.newtexture = TexturedQuadData.FromBitmapVert(map,
-                                                    new PointF((float)sys.x + textoffset, (float)sys.y - textscalingh / 2),
-                                                    new PointF(farx, (float)sys.y - textscalingh / 2),
-                                                    new PointF((float)sys.x + textoffset, (float)sys.y + textscalingh / 2),
-                                                    new PointF(farx, (float)sys.y + textscalingh / 2), (float)sys.z);
-                                    }
+                                    Bitmap map;                     // now, delete is the only one who removed newtexture
+                                                                    // and we are protected against delete..
+                                    if (sys.newtexture == null)     // so see if newtexture is there
+                                        map = DatasetBuilder.DrawString(sys.name, Color.Orange, _starfont);
                                     else
-                                    {
-                                        sys.newtexture = TexturedQuadData.FromBitmapHorz(map,
-                                                   new PointF((float)sys.x + textoffset, (float)sys.z - textscalingh / 2),
-                                                   new PointF(farx, (float)sys.z - textscalingh / 2),
-                                                   new PointF((float)sys.x + textoffset, (float)sys.z + textscalingh / 2),
-                                                   new PointF(farx, (float)sys.z + textscalingh / 2), (float)sys.y);
-                                    }
+                                        map = sys.newtexture.Texture;
+
+                                    sys.newtexture = TexturedQuadData.FromBitmap(map,
+                                        new PointData(sys.x, sys.y, sys.z),
+                                        _lastcamera.Rotation,
+                                        width, textscalingh, textoffset + width / 2, 0);
                                 }
 
                                 if (_discson)
@@ -265,21 +222,22 @@ namespace EDDiscovery2
                     }
 
                     foreach (StarNames s in _starnames.Values)              // only items above will remain.
-                        s.candisposepainttexture = s.todispose;             // copy flag over, causes foreground to start removing them
+                        s.inview = !s.todispose;                          // copy flag over, causes foreground to start removing them
                 }
 
                 //Console.WriteLine("  " + (Environment.TickCount % 10000) + "Paint " + painted);
 
-                _formmap.Invoke((System.Windows.Forms.MethodInvoker)delegate              // kick the UI thread to process.
-                {
-                    _formmap.ChangeNamedStars();
-                });
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception watcher: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
+
+            _formmap.Invoke((System.Windows.Forms.MethodInvoker)delegate              // kick the UI thread to process.
+            {
+                _formmap.ChangeNamedStars();
+            });
         }
 
         public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
@@ -305,14 +263,20 @@ namespace EDDiscovery2
                     {
                         StarNames sys = _starnames[key];
 
-                        if (sys.painttexture == null && sys.paintstar == null )             // if not painting
+                        if (!sys.inview)                          // if not painting
                             cleanuplist.Add(key);                 // add to clean up
                     }
 
                     Console.WriteLine("Clean up star names from " + _starnames.Count + " to " + (_starnames.Count - cleanuplist.Count));
 
                     foreach (Vector3 key in cleanuplist)
+                    {
+                        StarNames sys = _starnames[key];
+                        if (sys.painttexture != null)
+                            sys.painttexture.Dispose();
+
                         _starnames.Remove(key);
+                    }
 
                     Monitor.Exit(deletelock);
                     GC.Collect();
@@ -321,21 +285,9 @@ namespace EDDiscovery2
 
             lock (_starnames)                                   // lock so they can't add anything while we draw
             {
+                //int painted = 0;
                 foreach (StarNames sys in _starnames.Values)
                 {
-                    if (sys.candisposepainttexture)             // flag is controlled by thread.. don't clear here..
-                    {
-                        if (sys.painttexture != null)           // paint texture controlled by this foreground
-                        {
-                            sys.painttexture.Dispose();
-                            sys.painttexture = null;
-                        }
-                        if (sys.paintstar != null)              // star controlled by this foreground
-                        {
-                            sys.paintstar = null;
-                        }
-                    }
-
                     if (sys.newtexture != null)            // new is controlled by thread..
                     {
                         if (sys.painttexture != null)
@@ -351,82 +303,64 @@ namespace EDDiscovery2
                         sys.newstar = null;
                     }
 
-                    if (sys.paintstar != null)                  // if star disk, paint..
-                        sys.paintstar.Draw(_glControl);
+                    if ( sys.inview )                       // in view, send it to the renderer
+                    { 
+                        if (sys.paintstar != null)                  // if star disk, paint..
+                            sys.paintstar.Draw(_glControl);
 
-                    if (sys.painttexture != null)           // being paranoid by treating these separately. Thread may finish painting one before the other.
-                        sys.painttexture.Draw(_glControl);
+                        if (sys.painttexture != null)           // being paranoid by treating these separately. Thread may finish painting one before the other.
+                        {
+                            sys.painttexture.Draw(_glControl);
+                            //painted++;
+                        }
+                    }
                 }
+
+                //Console.WriteLine("Painted {0} out of {1}", painted, _starnames.Count);
             }
 
             //long e = sw.ElapsedMilliseconds; if (e > 1) Console.WriteLine("Elapsed " + e);
         }
-
-    }
-
-    class CameraDirectionMovement           // keeps track of previous and works out how to present bitmaps
-    {
-        public bool FlipX = false;
-        public bool FlipY = false;
-        public bool FlipVert = false;
-        public Vector3 CameraPos;
-        public Vector3 CameraDir;
-
-        public bool Flipped( Vector3 cameraDir)
+        
+        public Vector3? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti)
         {
-            bool lookdown = (cameraDir.X < 90F);          // lookdown when X < 90
-            bool lookforward = (cameraDir.Y > -90F && cameraDir.Y < 90F);  // forward looking
-            bool lookmiddle = (cameraDir.X > 45 && cameraDir.X < 135); // middle on X
-            if (cameraDir.Z < -90F || cameraDir.Z > 90F)       // this has the effect of turning our world up side down!
-            {
-                lookdown = !lookdown;
-                lookforward = !lookforward;
-            }
+            cursysdistz = double.MaxValue;
+            Vector3? ret = null;
 
-            bool flipx = false, flipy = false;
-            bool flipvert = lookmiddle;
+            double w2 = (double)ti.dwidth / 2.0;
+            double h2 = (double)ti.dheight / 2.0;
 
-            if ( flipvert )
+            lock (_starnames)                                   // lock so they can't add anything while we draw
             {
-                if (!lookforward)
-                    flipx = true;
-            }
-            else if (!lookdown)                          // flip bitmap to make it look at you..
-            {
-                if (!lookforward)
+                foreach (StarNames sys in _starnames.Values)
                 {
-                    flipx = true;
+                    if (sys.paintstar != null)
+                    {
+                        Vector4d syspos = new Vector4d((float)sys.x, (float)sys.y, (float)sys.z, 1.0);
+                        Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
+
+                        if (sysloc.Z > ti.znear)
+                        {
+                            Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
+                            double sysdistsq = syssloc.X * syssloc.X + syssloc.Y * syssloc.Y;
+
+                            if (sysdistsq < 7.0 * 7.0)
+                            {
+                                double sysdist = Math.Sqrt(sysdistsq);
+
+                                if ((sysdist + Math.Abs(sysloc.Z * ti.zoom)) < cursysdistz)
+                                {
+                                    cursysdistz = sysdist + Math.Abs(sysloc.Z * ti.zoom);
+                                    ret = new Vector3((float)sys.x, (float)sys.y, (float)sys.z);
+                                }
+                            }
+                        }
+                    }
                 }
-                else
-                    flipy = true;
-            }
-            else if (!lookforward)
-            {
-                flipx = flipy = true;
             }
 
-
-            bool change = flipx != FlipX || flipy != FlipY || flipvert | FlipVert;
-            FlipX = flipx;
-            FlipY = flipy;
-            FlipVert = flipvert;
-            return change;
+            return ret;
         }
-
-        public bool MovedDir(Vector3 cameraDir)
-        {
-            bool moved = Vector3.Subtract(CameraDir, cameraDir).LengthSquared > 1 * 1 * 1;
-            CameraDir = cameraDir;
-            return moved;
-        }
-
-        public bool MovedPos(Vector3 cameraPos)
-        {
-            bool moved = Vector3.Subtract(CameraPos, cameraPos).LengthSquared > 3 * 3 * 3;
-            CameraPos = cameraPos;
-            return moved;
-        }
-
     }
 
 }

@@ -44,7 +44,10 @@ namespace EDDiscovery2
         StarGrids _stargrids;                   // holds stars
 
         StarNamesList _starnameslist;           // holds named stars
-        Timer _starnametimer = new Timer();     // kicks off star naming
+        Timer _starupdatetimer = new Timer();     // kicks off star naming
+        CameraDirectionMovement _lastcameranorm = new CameraDirectionMovement();
+        CameraDirectionMovement _lastcamerastarnames = new CameraDirectionMovement();
+        bool _starnamesbusy = false;
 
         private AutoCompleteStringCollection _systemNames;
 
@@ -94,7 +97,6 @@ namespace EDDiscovery2
         private List<SystemClass> _plannedRoute { get; set; }
 
         public List<FGEImage> fgeimages = new List<FGEImage>();
-        public List<FGEImage> selectedmaps = new List<FGEImage>();
 
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; }
@@ -233,7 +235,7 @@ namespace EDDiscovery2
                 _visitedSystems = visited;
                 _stargrids.FillVisitedSystems(_visitedSystems);          // update visited systems, will be displayed on next update of star grids
                 GenerateDataSetsVisitedSystems();
-                _starnameslist.RecalcStarNames();
+                _lastcameranorm.ForceZoomChanged();              // this will make it recalc..
                 Repaint();
 
                 if (toolStripButtonAutoForward.Checked)             // auto forward?
@@ -319,20 +321,27 @@ namespace EDDiscovery2
             SetCenterSystemLabel();
             labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
 
+            _viewtargetpos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
+            _cameraDir = Vector3.Zero;
+            _zoom = _defaultZoom;
+            _lastcameranorm.Update(_cameraDir, _viewtargetpos, _zoom); // set up here so ready for action.. below uses it.
+            _lastcameranorm.ForceZoomChanged();                      
+            _lastcamerastarnames.Update(_cameraDir, _viewtargetpos, _zoom); // set up here so ready for action.. below uses it.
+            _lastcamerastarnames.ForceZoomChanged();                    
+
             GenerateDataSets();
             GenerateDataSetsMaps();
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
 
-            _starnametimer.Interval = 100;
-            _starnametimer.Tick += new EventHandler(NameStars);
-            _starnametimer.Start();
+            _starupdatetimer.Interval = 50;
+            _starupdatetimer.Tick += new EventHandler(UpdateStars);
+            _starupdatetimer.Start();
 
             _mousehovertick.Tick += new EventHandler(MouseHoverTick);
             _mousehovertick.Interval = 250;
 
             SetCenterSystemTo(_centerSystem);                   // move to this..
-            ResetCamera();                                      // and set up camera
         }
 
         private void FormMap_Shown(object sender, EventArgs e)
@@ -543,24 +552,42 @@ namespace EDDiscovery2
             if (toolStripButtonCoords.Checked)
                 builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
 
-            builder.UpdateGalObjectsZoom(ref _datasets_galmapobjects, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+            builder.UpdateGalObjects(ref _datasets_galmapobjects, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
 
             if (showBookmarksToolStripMenuItem.Checked)
-                builder.UpdateBookmarksZoom(ref _datasets_bookedmarkedsystems, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+                builder.UpdateBookmarks(ref _datasets_bookedmarkedsystems, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
 
             if (showNoteMarksToolStripMenuItem.Checked)
-                builder.UpdateBookmarksZoom(ref _datasets_notedsystems, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+                builder.UpdateBookmarks(ref _datasets_notedsystems, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
 
-            if (_clickedGMO != null)              // if GMO marked.
-                GenerateDataSetsSelectedSystems();          // as GMO marker is scaled
+            if (_clickedGMO != null || _clickedSystem != null)              // if markers
+                builder.UpdateSelected(ref _datasets_selectedsystems, _clickedSystem, _clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+        }
+
+        private void UpdateDataSetsDueToFlip()
+        {
+            DatasetBuilder builder = new DatasetBuilder();
+            builder.UpdateGalObjects(ref _datasets_galmapobjects, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+
+            if (showBookmarksToolStripMenuItem.Checked)
+                builder.UpdateBookmarks(ref _datasets_bookedmarkedsystems, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+
+            if (showNoteMarksToolStripMenuItem.Checked)
+                builder.UpdateBookmarks(ref _datasets_notedsystems, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+
+            if (_clickedGMO != null || _clickedSystem != null)              // if markers
+                builder.UpdateSelected(ref _datasets_selectedsystems, _clickedSystem, _clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
         }
 
         private void GenerateDataSetsMaps()
         {
             DeleteDataset(ref _datasets_maps);
             _datasets_maps = null;
+
+            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
+
             DatasetBuilder builder = new DatasetBuilder();
-            _datasets_maps = builder.BuildMaps(ref selectedmaps);
+            _datasets_maps = builder.AddMapImages(_selected);
         }
 
         private void GenerateDataSetsVisitedSystems()
@@ -581,7 +608,7 @@ namespace EDDiscovery2
             DeleteDataset(ref _datasets_selectedsystems);
             _datasets_selectedsystems = null;
             DatasetBuilder builder = new DatasetBuilder();
-            _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem,_clickedGMO, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+            _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem,_clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
         }
 
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
@@ -596,7 +623,7 @@ namespace EDDiscovery2
             Debug.Assert(mapstar != null && mapregion != null);
 
             DatasetBuilder builder1 = new DatasetBuilder();
-            _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+            _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
             DeleteDataset(ref oldbookmarks);
 
             List<IData3DSet> oldnotedsystems = _datasets_notedsystems;
@@ -604,13 +631,13 @@ namespace EDDiscovery2
             Debug.Assert(map != null);
 
             DatasetBuilder builder2 = new DatasetBuilder();
-            _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked, _visitedSystems);
+            _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _visitedSystems);
             DeleteDataset(ref oldnotedsystems);
 
             DatasetBuilder builder3= new DatasetBuilder();
 
             List<IData3DSet> oldgalmaps = _datasets_galmapobjects;
-            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , _toolstripToggleNamingButton.Checked);
+            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation , _toolstripToggleNamingButton.Checked);
             DeleteDataset(ref oldgalmaps);
 
             if (_clickedGMO != null)              // if GMO marked.
@@ -631,64 +658,61 @@ namespace EDDiscovery2
             }
         }
 
-        private void NameStars(object sender, EventArgs e) // tick.. way it works is a tick occurs, timer off, thread runs, thread calls 
+
+        private void UpdateStars(object sender, EventArgs e) // tick.. way it works is a tick occurs, timer off, thread runs, thread calls 
                                                            // delegate, work done in UI, timer reticks.  KEEP it that way!
         {
+            if (!Visible)
+                return;
+
             if (_stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, _zoom, glControl ))       // at intervals, inform star grids of position, and if it has
                 Repaint();      // new stuff to paint, repaint
 
-            bool names = showNamesToolStripMenuItem.Checked;
-            bool discs = showDiscsToolStripMenuItem.Checked;
+            _lastcameranorm.Update(_cameraDir, _viewtargetpos, _zoom);
 
-            if (Visible && (names|discs) && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
+            if (_lastcameranorm.CameraFlipped)
+                UpdateDataSetsDueToFlip();
+
+            //Console.WriteLine("Tick m{0} d{1}", _lastcameranorm.CameraMoved , _lastcameranorm.CameraDirChanged);
+
+            if (!_starnamesbusy)
             {
-                if (_starnameslist.Update(_zoom, _viewtargetpos, _cameraDir, GetResMat(), _znear, names, discs))       // if its kicked off the thread..
-                    _starnametimer.Stop();                                              // stop the timer.
-            }
-            else
-            {
-                if (_starnameslist.RemoveAllNamedStars())
+                bool names = showNamesToolStripMenuItem.Checked;
+                bool discs = showDiscsToolStripMenuItem.Checked;
+
+                _lastcamerastarnames.Update(_cameraDir, _viewtargetpos, _zoom);
+
+                if ( (names | discs) && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
                 {
-                    Repaint();
-                    GC.Collect();
+                    bool flippedorzoom = _lastcamerastarnames.CameraFlipped || _lastcamerastarnames.CameraZoomed;
+                    bool movedorcameradirchanged = _lastcamerastarnames.CameraMoved || _lastcamerastarnames.CameraDirChanged;
+
+                    if (_stargrids.IsDisplayed(_viewtargetpos.X, _viewtargetpos.Z) && (flippedorzoom || movedorcameradirchanged))                              // if changed something
+                    {
+                        _starnamesbusy = true;
+                        _starnameslist.Update(_lastcamerastarnames, flippedorzoom, GetResMat(), _znear, names, discs);
+                    }
+                }
+                else
+                {
+                    if (_starnameslist.RemoveAllNamedStars())
+                    {
+                        Repaint();
+                        GC.Collect();
+                    }
                 }
             }
         }
 
-        public void ChangeNamedStars()                                  // for the star naming thread.. kick it off
+        public void ChangeNamedStars()                                  // star names finished.. repaint and mark not busy
         {
             Repaint();
-            _starnametimer.Start();                                      // and do another tick..
+            _starnamesbusy = false;
         }
 
-        private List<FGEImage> GetSelectedMaps()
-        {
-            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
-            HashSet<string> newselected = new HashSet<string>(_selected.Select(f => f.FileName));
-            HashSet<string> oldselected = new HashSet<string>(selectedmaps.Select(f => f.FileName));
-            List<FGEImage> selected = new List<FGEImage>();
+        #endregion
 
-            foreach (var sel in selectedmaps)
-            {
-                if (newselected.Contains(sel.FileName))
-                {
-                    selected.Add(sel);
-                }
-            }
-
-            foreach (var sel in _selected)
-            {
-                if (!oldselected.Contains(sel.FileName))
-                {
-                    selected.Add(sel);
-                }
-            }
-
-            return selected;
-        }
-#endregion
-
-#region Set Position
+        #region Set Position
 
         private void SetCenterSystemLabel()
         {
@@ -764,10 +788,17 @@ namespace EDDiscovery2
                 var state = OpenTK.Input.Keyboard.GetState();
 
                 if (state[Key.F1])
+                {
                     _starnameslist.IncreaseStarLimit();
+                    _lastcameranorm.ForceZoomChanged();              // this will make it recalc..
+                }
+
 
                 if (state[Key.F2])
+                {
                     _starnameslist.DecreaseStarLimit();
+                    _lastcameranorm.ForceZoomChanged();              // this will make it recalc..
+                }
 
                 _kbdActions.Left = (state[Key.Left] || state[Key.A]);
                 _kbdActions.Right = (state[Key.Right] || state[Key.D]);
@@ -1135,17 +1166,9 @@ namespace EDDiscovery2
             glControl.Invalidate();                 // and kick paint
         }
 
-        #endregion
+#endregion
 
-        #region Camera Slew and Update
-
-        private void ResetCamera()
-        {
-            _viewtargetpos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
-            _cameraDir = Vector3.Zero;
-            _zoom = _defaultZoom;
-            UpdateDataSetsDueToZoom();
-        }
+#region Camera Slew and Update
 
         private void StartCameraSlew(Vector3 pos)       // may pass a Nan Position - no action
         {
@@ -2000,6 +2023,8 @@ namespace EDDiscovery2
 
         void MouseHoverTick(object sender, EventArgs e)
         {
+
+            return;
             _mousehovertick.Stop();
 
             if (_cameraSlewProgress < 1.0F)       // slewing.. no hover tick
@@ -2141,10 +2166,12 @@ namespace EDDiscovery2
             double ztopleft, zbottomright,zbottomleft,ztopright;
 
             if (GetPixel(area.Row0, ref resmat, ref ptopleft, out ztopleft) &&
-                    GetPixel(area.Row3, ref resmat, ref pbottomright, out zbottomright) &&
-                    GetPixel(area.Row1, ref resmat, ref ptopright, out ztopright) &&
-                    GetPixel(area.Row2, ref resmat, ref pbottomleft, out zbottomleft) )
+                GetPixel(area.Row1, ref resmat, ref ptopright, out ztopright) &&
+                GetPixel(area.Row2, ref resmat, ref pbottomright, out zbottomright) && 
+                GetPixel(area.Row3, ref resmat, ref pbottomleft, out zbottomleft ) )
             {
+                //    Console.WriteLine("Row0 {0},{1}", ptopleft.X, ptopleft.Y); Console.WriteLine("Row1 {0},{1}", ptopright.X, ptopright.Y); Console.WriteLine("Row2 {0},{1}", pbottomright.X, pbottomright.Y); Console.WriteLine("Row3 {0},{1}", pbottomleft.X, pbottomleft.Y);  Console.WriteLine("x,y {0},{1} {2},{3}", x, y , x-pbottomleft.X, y-pbottomright.Y);
+
                 GraphicsPath p = new GraphicsPath();            // a moment of inspiration, use the graphics path for the polygon hit test!
                 p.AddLine(new PointF((float)ptopleft.X, (float)ptopleft.Y), new PointF((float)ptopright.X, (float)ptopright.Y));
                 p.AddLine(new PointF((float)pbottomright.X, (float)pbottomright.Y), new PointF((float)pbottomleft.X, (float)pbottomleft.Y));
@@ -2161,32 +2188,15 @@ namespace EDDiscovery2
             return false;
         }
 
-        private double GetBitmapOnScreenSize() { return Math.Min(Math.Max(2, 100.0 / _zoom), 1000); }
-
-        Matrix4d GetBitmapOnScreenOutline(double x, double y, double z , double width , double htop, double hbot)       // always centered on x, can be offset in height differently
-        {
-            if (toolStripButtonPerspective.Checked)
-            {
-                return new Matrix4d(new Vector4d(x - width / 2, y + htop, z, 1),        // top left
-                                new Vector4d(x + width / 2, y + htop, z, 1),            // top right
-                                new Vector4d(x - width / 2, y - hbot, z, 1),            // bottom left
-                                new Vector4d(x + width / 2, y - hbot, z, 1));           // bottom right
-            }
-            else
-            {
-                return new Matrix4d(new Vector4d(x - width / 2, y, z + htop, 1),        // top left
-                                new Vector4d(x + width / 2, y, z + htop, 1),            // top right
-                                new Vector4d(x - width / 2, y, z - hbot, 1),            // bottom left
-                                new Vector4d(x + width / 2, y, z - hbot, 1));           // bottom right
-            }
-        }
+        private float GetBitmapOnScreenSizeX() { return (float)Math.Min(Math.Max(2, 80.0 / _zoom), 1000); }
+        private float GetBitmapOnScreenSizeY() { return (float)Math.Min(Math.Max(2, 100.0 / _zoom), 1000); }
 
         private BookmarkClass GetMouseOverBookmark(int x, int y, out double cursysdistz)
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double bksize = GetBitmapOnScreenSize();
+            Vector3d[] rotvert = TexturedQuadData.GetVertices(new Vector3d(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
 
             BookmarkClass curbk = null;
             cursysdistz = double.MaxValue;
@@ -2196,8 +2206,17 @@ namespace EDDiscovery2
             {
                 //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
 
+                Matrix4d area = new Matrix4d(
+                    new Vector4d(rotvert[0].X + bc.x, rotvert[0].Y + bc.y, rotvert[0].Z + bc.z, 1),    // top left
+                    new Vector4d(rotvert[1].X + bc.x, rotvert[1].Y + bc.y, rotvert[1].Z + bc.z, 1),    
+                    new Vector4d(rotvert[2].X + bc.x, rotvert[2].Y + bc.y, rotvert[2].Z + bc.z, 1),    
+                    new Vector4d(rotvert[3].X + bc.x, rotvert[3].Y + bc.y, rotvert[3].Z + bc.z, 1)    // bot left
+                    );
+
+                //Console.WriteLine("{0},{1},{2}, {3},{4},{5} vs {6},{7}" , area.Row0.X , area.Row0.Y, area.Row0.Z, area.Row2.X, area.Row2.Y , area.Row2.Z , x,y);
+
                 double newcursysdistz;
-                if (IsWithinRectangle(GetBitmapOnScreenOutline(bc.x, bc.y, bc.z, bksize, bksize,0), x, y, out newcursysdistz, ref resmat))
+                if (IsWithinRectangle(area, x, y, out newcursysdistz, ref resmat))
                 {
                     if (newcursysdistz < cursysdistz)
                     {
@@ -2215,7 +2234,7 @@ namespace EDDiscovery2
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double bksize = GetBitmapOnScreenSize();
+            Vector3d[] rotvert = TexturedQuadData.GetVertices(new Vector3d(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
 
             SystemClass cursys = null;
             cursysdistz = double.MaxValue;
@@ -2239,8 +2258,15 @@ namespace EDDiscovery2
                         double ly = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
                         double lz = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
 
+                        Matrix4d area = new Matrix4d(
+                            new Vector4d(rotvert[0].X + lx, rotvert[0].Y + ly, rotvert[0].Z + lz, 1),    // top left
+                            new Vector4d(rotvert[1].X + lx, rotvert[1].Y + ly, rotvert[1].Z + lz, 1),
+                            new Vector4d(rotvert[2].X + lx, rotvert[2].Y + ly, rotvert[2].Z + lz, 1),
+                            new Vector4d(rotvert[3].X + lx, rotvert[3].Y + ly, rotvert[3].Z + lz, 1)    // bot left
+                            );
+
                         double newcursysdistz;
-                        if (IsWithinRectangle(GetBitmapOnScreenOutline(lx,ly,lz, bksize,bksize,0), x, y, out newcursysdistz,ref resmat))
+                        if (IsWithinRectangle(area, x, y, out newcursysdistz,ref resmat))
                         { 
                             if (newcursysdistz < cursysdistz)
                             {
@@ -2261,7 +2287,8 @@ namespace EDDiscovery2
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double bksize = GetBitmapOnScreenSize();
+            Vector3d[] rotvert = TexturedQuadData.GetVertices(new Vector3d(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY());
+
             cursysdistz = double.MaxValue;
             Matrix4d resmat = GetResMat();
             GalacticMapObject curobj = null;
@@ -2274,8 +2301,15 @@ namespace EDDiscovery2
 
                     if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && pd != null)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
                     {
+                        Matrix4d area = new Matrix4d(
+                            new Vector4d(rotvert[0].X + pd.x, rotvert[0].Y + pd.y, rotvert[0].Z + pd.z, 1),    // top left
+                            new Vector4d(rotvert[1].X + pd.x, rotvert[1].Y + pd.y, rotvert[1].Z + pd.z, 1),
+                            new Vector4d(rotvert[2].X + pd.x, rotvert[2].Y + pd.y, rotvert[2].Z + pd.z, 1),
+                            new Vector4d(rotvert[3].X + pd.x, rotvert[3].Y + pd.y, rotvert[3].Z + pd.z, 1)    // bot left
+                            );
+
                         double newcursysdistz;
-                        if (IsWithinRectangle(GetBitmapOnScreenOutline(pd.x,pd.y,pd.z, bksize,bksize/2,bksize/2), x, y, out newcursysdistz, ref resmat))
+                        if (IsWithinRectangle(area, x, y, out newcursysdistz, ref resmat))
                         {
                             if (newcursysdistz < cursysdistz)
                             {
@@ -2298,6 +2332,9 @@ namespace EDDiscovery2
             StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(GetResMat(), _znear, glControl.Width, glControl.Height, _zoom);
 
             Vector3? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+
+            if ( posofsystem == null )
+                posofsystem = _starnameslist.FindOverSystem(x, y, out cursysdistz, ti); // in case these are showing
 
             ISystem f = null;
 
@@ -2415,7 +2452,7 @@ namespace EDDiscovery2
             return s;
         }
 
-        #endregion
+#endregion
 
     }
 

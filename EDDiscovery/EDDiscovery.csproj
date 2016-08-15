@@ -167,6 +167,7 @@
     <Compile Include="2DMap\ImageViewer.Designer.cs">
       <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="3DMap\CameraDirectionMovement.cs" />
     <Compile Include="3DMap\Data3DSetClass.cs" />
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
@@ -440,14 +441,14 @@
     <None Include="App.Portable.config" />
     <None Include="Resources\YellowDot.png" />
     <None Include="Resources\OrangeDot.png" />
-    <None Include="Resources\bookmarkbrightred.png" />
-    <None Include="Resources\bookmarkgreen.png" />
     <None Include="Resources\3dmaphelp.txt" />
-    <None Include="Resources\bookmarkyellow.png" />
-    <None Include="Resources\bookmarktarget.png" />
     <None Include="Resources\comet.PNG" />
     <None Include="Resources\ExplorationHazard.png" />
     <None Include="Resources\Blackhole.PNG" />
+    <None Include="Resources\bookmarkbrightred.png" />
+    <None Include="Resources\bookmarkgreen.png" />
+    <None Include="Resources\bookmarktarget.png" />
+    <None Include="Resources\bookmarkyellow.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
