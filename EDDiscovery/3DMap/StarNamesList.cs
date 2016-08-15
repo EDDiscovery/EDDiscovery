@@ -22,8 +22,9 @@ namespace EDDiscovery2
             name = other.name;
             x = other.x; y = other.y; z = other.z;
             population = other.population;
-            newtexture = null; newstar = null;
-            painttexture = null; paintstar = null;
+            newnametexture = null; newstar = null;
+            nametexture = null; paintstar = null;
+            newnamevertices = null;
             inview = false;
             todispose = false;
         }
@@ -35,8 +36,10 @@ namespace EDDiscovery2
         public double z { get; set; }
         public long population { get; set; }
 
-        public TexturedQuadData newtexture { get; set; }        // if a new texture is needed..
-        public TexturedQuadData painttexture { get; set; }      // currently painted one
+        public TexturedQuadData newnametexture { get; set; }    // if a new texture is needed..
+        public TexturedQuadData nametexture { get; set; }       // currently painted one
+        public Vector3d[] newnamevertices;                      
+
 
         public PointData newstar { get; set; }                  // purposely drawing it like this, one at a time, due to sync issues between foreground/thread
         public PointData paintstar { get; set; }                // instead of doing a array paint.
@@ -169,7 +172,7 @@ namespace EDDiscovery2
                             {
                                 sys = _starnames[inview.position];
                                 sys.todispose = false;                         // forced redraw due to change in orientation, or due to disposal
-                                draw = _flippedorzoomed || (_nameson && sys.newstar == null) || (_discson && sys.newtexture == null);
+                                draw = _flippedorzoomed || (_nameson && sys.newstar == null) || (_discson && sys.nametexture == null);
                                 painted++;
                             }
                             else if (painted < limit)
@@ -204,15 +207,21 @@ namespace EDDiscovery2
 
                                     Bitmap map;                     // now, delete is the only one who removed newtexture
                                                                     // and we are protected against delete..
-                                    if (sys.newtexture == null)     // so see if newtexture is there
+                                    if (sys.nametexture == null)     // so see if newtexture is there
+                                    {
                                         map = DatasetBuilder.DrawString(sys.name, Color.Orange, _starfont);
+                                        sys.newnametexture = TexturedQuadData.FromBitmap(map,
+                                            new PointData(sys.x, sys.y, sys.z),
+                                            _lastcamera.Rotation,
+                                            width, textscalingh, textoffset + width / 2, 0);
+                                    }
                                     else
-                                        map = sys.newtexture.Texture;
+                                    {
+                                        sys.newnamevertices = TexturedQuadData.CalcVertices( new PointData(sys.x, sys.y, sys.z),
+                                                                                                _lastcamera.Rotation,
+                                                                        width, textscalingh, textoffset + width / 2, 0);
 
-                                    sys.newtexture = TexturedQuadData.FromBitmap(map,
-                                        new PointData(sys.x, sys.y, sys.z),
-                                        _lastcamera.Rotation,
-                                        width, textscalingh, textoffset + width / 2, 0);
+                                    }
                                 }
 
                                 if (_discson)
@@ -255,7 +264,7 @@ namespace EDDiscovery2
         {
             bool needmoreticks = false;
 
-            if (_starnames.Count > 10000)
+            if (_starnames.Count > 10000)                       // need to work on parceling this out later..
             {
                 if (Monitor.TryEnter(deletelock))                 // if we can get in, we are not in the update above, so can clean
                 {                                                  // its a lazy delete, no rush..
@@ -266,7 +275,9 @@ namespace EDDiscovery2
                         StarNames sys = _starnames[key];
 
                         if (!sys.inview)                          // if not painting
+                        {
                             cleanuplist.Add(key);                 // add to clean up
+                        }
                     }
 
                     Console.WriteLine("Clean up star names from " + _starnames.Count + " to " + (_starnames.Count - cleanuplist.Count));
@@ -274,8 +285,8 @@ namespace EDDiscovery2
                     foreach (Vector3 key in cleanuplist)
                     {
                         StarNames sys = _starnames[key];
-                        if (sys.painttexture != null)
-                            sys.painttexture.Dispose();
+                        if (sys.nametexture != null)
+                            sys.nametexture.Dispose();
 
                         _starnames.Remove(key);
                     }
@@ -288,22 +299,22 @@ namespace EDDiscovery2
             lock (_starnames)                                   // lock so they can't add anything while we draw
             {
                 int updated = 0;
+
                 foreach (StarNames sys in _starnames.Values)
                 {
-                    if (sys.newtexture != null)
+                    if (sys.newnametexture != null && updated++ < 250 )         //250 seems okay on my machine, around the 50ms mark
                     {
-                        if (updated < 200)                      // new is controlled by thread.. tested to seems okay to keep the ms for render low
-                        {
-                            if (sys.painttexture != null)
-                                sys.painttexture.Dispose();
+                        if (sys.nametexture != null)
+                            sys.nametexture.Dispose();
 
-                            sys.painttexture = sys.newtexture;      // copy over and take another reference.. 
-                            sys.newtexture = null;
+                        sys.nametexture = sys.newnametexture;      // copy over and take another reference.. 
+                        sys.newnametexture = null;
+                    }
 
-                            updated++;
-                        }
-                        else
-                            needmoreticks = true;
+                    if ( sys.newnamevertices != null && updated++ < 250 )
+                    {
+                        sys.nametexture.UpdateVertices(sys.newnamevertices);
+                        sys.newnamevertices = null;
                     }
 
                     if (sys.newstar != null)              // same with newstar
@@ -319,20 +330,19 @@ namespace EDDiscovery2
                             sys.paintstar.Draw(_glControl);
                         }
 
-                        if (sys.painttexture != null)           // being paranoid by treating these separately. Thread may finish painting one before the other.
+                        if (sys.nametexture != null)           // being paranoid by treating these separately. Thread may finish painting one before the other.
                         {
-                            sys.painttexture.Draw(_glControl);
+                            sys.nametexture.Draw(_glControl);
                         }
                     }
                 }
 
-                //Console.WriteLine("Painted {0} out of {1}", painted, _starnames.Count);
+                needmoreticks = (updated > 500);
             }
 
             return needmoreticks;
-            //long e = sw.ElapsedMilliseconds; if (e > 1) Console.WriteLine("Elapsed " + e);
         }
-        
+
         public Vector3? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti)
         {
             cursysdistz = double.MaxValue;
