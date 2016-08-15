@@ -912,8 +912,13 @@ namespace EDDiscovery2._3DMap
 
         public void UpdateVertices(PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            Vector3d[] vertices = GetVertices(new Vector3d(centre.x,centre.y,centre.z), rotationdeg , width, height,hoffset, voffset );
+            Vector3d[] vertices = GetVertices(new Vector3d(centre.x, centre.y, centre.z), rotationdeg, width, height, hoffset, voffset);
             UpdateVertices(vertices);
+        }
+
+        static public Vector3d[] CalcVertices(PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
+        {
+            return GetVertices(new Vector3d(centre.x, centre.y, centre.z), rotationdeg, width, height, hoffset, voffset);
         }
 
         public void UpdateVertices(Vector3d centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)

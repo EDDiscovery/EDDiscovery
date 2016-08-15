@@ -1041,14 +1041,12 @@ namespace EDDiscovery2
             glControl.SwapBuffers();
             UpdateStatus();
 
-           // long elapsed = sw1.ElapsedMilliseconds;
-           // Console.WriteLine("{0} Time {1} {2}", Environment.TickCount, elapsed, (elapsed>50) ? "***********************":"");
+            //long elapsed = sw1.ElapsedMilliseconds;
+            //Console.WriteLine("{0} Time {1} {2}", Environment.TickCount, elapsed, (elapsed>50) ? "***********************":"");
         }
 
         private void DrawStars()
         {
-            //long pstart = debugpainttimer.ElapsedMilliseconds;
-
             // Take references on objects that could be replaced by the background (?)
             List<IData3DSet> _datasets_galmapobjects = this._datasets_galmapobjects;
             List<IData3DSet> _datasets_notedsystems = this._datasets_notedsystems;
@@ -1081,10 +1079,7 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            //long p1 = debugpainttimer.ElapsedMilliseconds;
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
-
-            //long p2 = debugpainttimer.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_galmapobjects != null);
             if (_datasets_galmapobjects != null)
@@ -1092,8 +1087,6 @@ namespace EDDiscovery2
                 foreach (var dataset in _datasets_galmapobjects)
                     dataset.DrawAll(glControl);
             }
-
-            //long p3 = debugpainttimer.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_visitedsystems != null);
             if (_datasets_visitedsystems != null)
@@ -1128,8 +1121,6 @@ namespace EDDiscovery2
                 foreach (var dataset in _datasets_bookedmarkedsystems)                     // needs to be in order of background to foreground objects
                     dataset.DrawAll(glControl);
             }
-
-            //long p4 = debugpainttimer.ElapsedMilliseconds; p4 -= p3; p3 -= p2;  p2 -= p1; p1 -= pstart; Console.WriteLine("{0} Render {1},{2},{3},{4}", pstart % 10000, p1, p2, p3, p4);
         }
 
         private void UpdateStatus()
@@ -1142,9 +1133,8 @@ namespace EDDiscovery2
 
         private void Repaint()
         {
-            //repaintreason = ;
             glControl.Invalidate();                 // and kick paint
-            Console.WriteLine("MANUAL REPAINT!!!!!!!!!!!!! {0}" , Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1));
+            //Console.WriteLine("MANUAL REPAINT!!!!!!!!!!!!! {0}" , Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1));
         }
 
         #endregion
