@@ -659,8 +659,7 @@ namespace EDDiscovery2
         }
 
 
-        private void UpdateStars(object sender, EventArgs e) // tick.. way it works is a tick occurs, timer off, thread runs, thread calls 
-                                                           // delegate, work done in UI, timer reticks.  KEEP it that way!
+        private void UpdateStars(object sender, EventArgs e) // tick.. tock.. every X ms.
         {
             if (!Visible)
                 return;
@@ -675,7 +674,7 @@ namespace EDDiscovery2
 
             //Console.WriteLine("Tick m{0} d{1}", _lastcameranorm.CameraMoved , _lastcameranorm.CameraDirChanged);
 
-            if (!_starnamesbusy)
+            if (!_starnamesbusy)                            // flag indicates work is happening in the background
             {
                 bool names = showNamesToolStripMenuItem.Checked;
                 bool discs = showDiscsToolStripMenuItem.Checked;
@@ -2023,10 +2022,6 @@ namespace EDDiscovery2
 
         void MouseHoverTick(object sender, EventArgs e)
         {
-
-            return;
-            _mousehovertick.Stop();
-
             if (_cameraSlewProgress < 1.0F)       // slewing.. no hover tick
                 return;
 
