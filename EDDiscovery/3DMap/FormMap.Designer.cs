@@ -55,6 +55,9 @@ namespace EDDiscovery2
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.showStarstoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showStationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripDropDownButtonNameStars = new System.Windows.Forms.ToolStripDropDownButton();
+            this.showDiscsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButtonBookmarks = new System.Windows.Forms.ToolStripDropDownButton();
             this.showBookmarksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showNoteMarksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,11 +83,7 @@ namespace EDDiscovery2
             this.labelClickedSystemCoords = new System.Windows.Forms.Label();
             this.systemselectionMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.panelRight = new System.Windows.Forms.Panel();
-            this.toolStripDropDownButtonNameStars = new System.Windows.Forms.ToolStripDropDownButton();
-            this.showDiscsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripShowAllStars.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dotSelectedSystemCoords)).BeginInit();
@@ -322,6 +321,37 @@ namespace EDDiscovery2
             this.showStationsToolStripMenuItem.ToolTipText = "Show Stations";
             this.showStationsToolStripMenuItem.Click += new System.EventHandler(this.showStationsToolStripMenuItem_Click);
             // 
+            // toolStripDropDownButtonNameStars
+            // 
+            this.toolStripDropDownButtonNameStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButtonNameStars.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showDiscsToolStripMenuItem,
+            this.showNamesToolStripMenuItem});
+            this.toolStripDropDownButtonNameStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonNameStars.Image")));
+            this.toolStripDropDownButtonNameStars.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButtonNameStars.Name = "toolStripDropDownButtonNameStars";
+            this.toolStripDropDownButtonNameStars.Size = new System.Drawing.Size(29, 37);
+            this.toolStripDropDownButtonNameStars.Text = "toolStripDropDownButtonNameStars";
+            this.toolStripDropDownButtonNameStars.ToolTipText = "Configure discs and naming of stars";
+            // 
+            // showDiscsToolStripMenuItem
+            // 
+            this.showDiscsToolStripMenuItem.CheckOnClick = true;
+            this.showDiscsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showDiscsToolStripMenuItem.Image")));
+            this.showDiscsToolStripMenuItem.Name = "showDiscsToolStripMenuItem";
+            this.showDiscsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.showDiscsToolStripMenuItem.Text = "Show Discs";
+            this.showDiscsToolStripMenuItem.Click += new System.EventHandler(this.showDiscsToolStripMenuItem_Click);
+            // 
+            // showNamesToolStripMenuItem
+            // 
+            this.showNamesToolStripMenuItem.CheckOnClick = true;
+            this.showNamesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showNamesToolStripMenuItem.Image")));
+            this.showNamesToolStripMenuItem.Name = "showNamesToolStripMenuItem";
+            this.showNamesToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.showNamesToolStripMenuItem.Text = "Show Names";
+            this.showNamesToolStripMenuItem.Click += new System.EventHandler(this.showNamesToolStripMenuItem_Click);
+            // 
             // toolStripDropDownButtonBookmarks
             // 
             this.toolStripDropDownButtonBookmarks.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -465,7 +495,7 @@ namespace EDDiscovery2
             this.dropdownFilterDate.Image = ((System.Drawing.Image)(resources.GetObject("dropdownFilterDate.Image")));
             this.dropdownFilterDate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.dropdownFilterDate.Name = "dropdownFilterDate";
-            this.dropdownFilterDate.Size = new System.Drawing.Size(29, 20);
+            this.dropdownFilterDate.Size = new System.Drawing.Size(29, 37);
             this.dropdownFilterDate.Text = "Filter by Expedition or date";
             // 
             // toolStripSeparator6
@@ -547,11 +577,6 @@ namespace EDDiscovery2
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             // 
-            // UpdateTimer
-            // 
-            this.UpdateTimer.Interval = 25;
-            this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
-            // 
             // panelRight
             // 
             this.panelRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -565,37 +590,6 @@ namespace EDDiscovery2
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(506, 40);
             this.panelRight.TabIndex = 27;
-            // 
-            // toolStripDropDownButtonNameStars
-            // 
-            this.toolStripDropDownButtonNameStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButtonNameStars.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showDiscsToolStripMenuItem,
-            this.showNamesToolStripMenuItem});
-            this.toolStripDropDownButtonNameStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonNameStars.Image")));
-            this.toolStripDropDownButtonNameStars.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButtonNameStars.Name = "toolStripDropDownButtonNameStars";
-            this.toolStripDropDownButtonNameStars.Size = new System.Drawing.Size(29, 37);
-            this.toolStripDropDownButtonNameStars.Text = "toolStripDropDownButtonNameStars";
-            this.toolStripDropDownButtonNameStars.ToolTipText = "Configure discs and naming of stars";
-            // 
-            // showDiscsToolStripMenuItem
-            // 
-            this.showDiscsToolStripMenuItem.CheckOnClick = true;
-            this.showDiscsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showDiscsToolStripMenuItem.Image")));
-            this.showDiscsToolStripMenuItem.Name = "showDiscsToolStripMenuItem";
-            this.showDiscsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.showDiscsToolStripMenuItem.Text = "Show Discs";
-            this.showDiscsToolStripMenuItem.Click += new System.EventHandler(this.showDiscsToolStripMenuItem_Click);
-            // 
-            // showNamesToolStripMenuItem
-            // 
-            this.showNamesToolStripMenuItem.CheckOnClick = true;
-            this.showNamesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showNamesToolStripMenuItem.Image")));
-            this.showNamesToolStripMenuItem.Name = "showNamesToolStripMenuItem";
-            this.showNamesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.showNamesToolStripMenuItem.Text = "Show Names";
-            this.showNamesToolStripMenuItem.Click += new System.EventHandler(this.showNamesToolStripMenuItem_Click);
             // 
             // FormMap
             // 
@@ -648,7 +642,6 @@ namespace EDDiscovery2
         private Label labelClickedSystemCoords;
         private PictureBox dotSystemCoords;
         private PictureBox dotSelectedSystemCoords;
-        private Timer UpdateTimer;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripDropDownButton dropdownMapNames;
         private ToolStripDropDownButton dropdownFilterDate;

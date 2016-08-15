@@ -84,7 +84,7 @@ namespace EDDiscovery2
 
             foreach (StarNames sys in _starnames.Values)
             {
-                if (sys.painttexture != null || sys.paintstar != null)
+                if (sys.inview)
                 {
                     sys.inview = false;
                     changed = true;
