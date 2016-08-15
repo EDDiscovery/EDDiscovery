@@ -411,7 +411,8 @@ namespace EDDiscovery
                     if (nfi.TimeZone == null)
                     {
                         nfi.ReadHeader();
-                        nfi.TravelLogUnit.Add();
+                        if (nfi.TravelLogUnit.id == 0)
+                            nfi.TravelLogUnit.Add();
                     }
 
                     foreach(VisitedSystemsClass dbsys in nfi.ReadSystems())
