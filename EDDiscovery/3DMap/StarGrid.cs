@@ -163,16 +163,16 @@ namespace EDDiscovery2
         }
 
         // operate on  display - Called in a thread..
-        public void GetSystemsInView(ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti)
+        public void GetSystemsInView(ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti, int forcecol = 0)
         {
             if (array1displayed)
-                GetSystemsInView(ref array1, ref carray1, array1vertices, ref list, ti);
+                GetSystemsInView(ref array1, ref carray1, array1vertices, ref list, ti , forcecol);
             else
-                GetSystemsInView(ref array2, ref carray2, array2vertices, ref list, ti);
+                GetSystemsInView(ref array2, ref carray2, array2vertices, ref list, ti , forcecol);
         }
 
         // operate on  display - can be called BY A THREAD
-        public void GetSystemsInView(ref Vector3[] vert, ref int[] cols , int total, ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti )
+        public void GetSystemsInView(ref Vector3[] vert, ref int[] cols , int total, ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti , int forcecol )
         {
             int margin = -150;
             float sqdist = 0F;
@@ -197,7 +197,7 @@ namespace EDDiscovery2
                             sqdist = ((float)v.X - ti.campos.X) * ((float)v.X - ti.campos.X) + ((float)v.Y - ti.campos.Y) * ((float)v.Y - ti.campos.Y) + ((float)v.Z - ti.campos.Z) * ((float)v.Z - ti.campos.Z);
 
                             if (sqdist <= ti.sqlylimit)
-                                list.Add(sqdist, new InViewInfo( new Vector3(v.X,v.Y,v.Z),cols[i]));
+                                list.Add(sqdist, new InViewInfo( new Vector3(v.X,v.Y,v.Z),(forcecol!=0) ? forcecol : cols[i]));
                         }
                     }
                 }
@@ -327,7 +327,9 @@ namespace EDDiscovery2
 
     public class StarGrids
     {
-#region Vars
+        #region Vars
+        public bool ForceWhite { get; set; } = false;
+
         private BlockingCollection<StarGrid> computed = new BlockingCollection<StarGrid>();
         private List<StarGrid> grids = new List<StarGrid>();        // unpopulated grid stars
         private StarGrid populatedgrid;
@@ -469,20 +471,6 @@ namespace EDDiscovery2
 
             ewh.Set();                                                      // tick thread again to consider..
 
-#if false       // turned off for now.. don't like the effect.
-            int getid = GridId.Id(curx, curz);                              // if extremely zoomed in, increase grid point size
-            StarGrid grid = grids.Find(x => x.Id == getid);
-            Debug.Assert(grid != null);
-
-            if (zoomedgrid!=null&&zoomedgrid != grid)                       // changed, reset old
-                zoomedgrid.Size = 1;
-
-            zoomedgrid = grid;
-            zoomedgrid.Size = Math.Min(Math.Max(1F, zoom / 20), 3);         // zoom grid
-            visitedsystemsgrid.Size = zoomedgrid.Size;
-            if (zoomedgrid.Id == populatedgrid.Id)
-                populatedgrid.Size = zoomedgrid.Size;
-#endif
             return displayed;                                               // return if we updated anything..
         }
 
@@ -571,12 +559,18 @@ namespace EDDiscovery2
 
         public void DrawAll(GLControl control, bool showstars , bool showstations )
         {
-            populatedgrid.Color = (showstations) ? popcolour : Color.Transparent;
+            if (ForceWhite)
+                populatedgrid.Color = (showstations) ? popcolour : Color.FromArgb(255, 212, 212, 212);
+            else
+                populatedgrid.Color = (showstations) ? popcolour : Color.Transparent;
 
             if (showstars)
             {
                 foreach (StarGrid grd in grids)
                 {
+                    if (grd != populatedgrid && grd != visitedsystemsgrid)
+                        grd.Color = (ForceWhite) ? Color.FromArgb(255, 212, 212, 212) : Color.Transparent;
+
                     grd.Draw(control);              // populated grid is in this list, so will be drawn..
                 }
             }
@@ -623,7 +617,7 @@ namespace EDDiscovery2
             {
                 if (grd.Id==idpos || grd.DistanceFrom(ti.campos.X, ti.campos.Z) < gridlylimit)                         // only consider grids which are nearer than this..
                 {
-                    grd.GetSystemsInView(ref list,ti);
+                    grd.GetSystemsInView(ref list,ti, (ForceWhite) ? 0x00ffff : 0);
                     //Console.WriteLine("Check grid " + grd.X + "," + grd.Z);
                 }
             }

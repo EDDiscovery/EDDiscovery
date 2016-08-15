@@ -175,6 +175,8 @@ namespace EDDiscovery2
             showNoteMarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowNoteMarks", true);
             showBookmarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowBookmarks", true);
             toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false);
+            enableColoursToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonColours", true);
+            _stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
 
@@ -1454,6 +1456,14 @@ namespace EDDiscovery2
             Repaint();
         }
 
+        private void enableColoursToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool("Map3DButtonColours", enableColoursToolStripMenuItem.Checked);
+            _stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
+            _lastcamerastarnames.ForceZoomChanged();              // this will make it recalc..
+            Repaint();
+        }
+
         private void showStationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
@@ -2410,7 +2420,7 @@ namespace EDDiscovery2
             return s;
         }
 
-#endregion
+        #endregion
 
     }
 
