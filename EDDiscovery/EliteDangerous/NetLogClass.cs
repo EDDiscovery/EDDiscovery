@@ -387,16 +387,16 @@ namespace EDDiscovery
                 }
                 else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
                 {
-                    Dictionary<string, TravelLogUnit> travellogs = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
+                    HashSet<string> tlunames = new HashSet<string>(TravelLogUnit.GetAllNames());
                     string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories)
                                                   .Select(s => new { name = Path.GetFileName(s), fullname = s })
-                                                  .Where(s => !travellogs.ContainsKey(s.name))
+                                                  .Where(s => !tlunames.Contains(s.name))
                                                   .OrderBy(s => s.name)
                                                   .Select(s => s.fullname)
                                                   .ToArray();
                     foreach (var name in filenames)
                     {
-                        nfi = OpenFileReader(new FileInfo(name), travellogs);
+                        nfi = OpenFileReader(new FileInfo(name));
                         lastnfi = nfi;
                         break;
                     }
