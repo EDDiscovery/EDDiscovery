@@ -334,6 +334,9 @@ namespace EDDiscovery2
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
 
+            _updateinterval.Start();
+            _lastmstick = _updateinterval.ElapsedMilliseconds;
+
             _starupdatetimer.Interval = 50;
             _starupdatetimer.Tick += new EventHandler(UpdateStars);
             _starupdatetimer.Start();
@@ -363,7 +366,6 @@ namespace EDDiscovery2
         private void FormMap_Deactivate(object sender, EventArgs e)
         {
             _isActivated = false;
-            UpdateTimer.Stop();
         }
 
         private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
@@ -566,8 +568,6 @@ namespace EDDiscovery2
 
         private void UpdateDataSetsDueToFlip()
         {
-            //Stopwatch sw = new Stopwatch(); sw.Start();
-
             DatasetBuilder builder = new DatasetBuilder();
             builder.UpdateGalObjects(ref _datasets_galmapobjects, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
 
@@ -579,8 +579,7 @@ namespace EDDiscovery2
 
             if (_clickedGMO != null || _clickedSystem != null)              // if markers
                 builder.UpdateSelected(ref _datasets_selectedsystems, _clickedSystem, _clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
-
-            //Console.WriteLine("Flip {0}", sw.ElapsedMilliseconds);
+           
         }
 
         private void GenerateDataSetsMaps()
@@ -662,19 +661,41 @@ namespace EDDiscovery2
             }
         }
 
+        bool _requestrepaint = false;
 
         private void UpdateStars(object sender, EventArgs e) // tick.. tock.. every X ms.
         {
             if (!Visible)
                 return;
 
-            if (_stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, _zoom, glControl ))       // at intervals, inform star grids of position, and if it has
-                Repaint();      // new stuff to paint, repaint
+            long elapsed = _updateinterval.ElapsedMilliseconds;         // stopwatch provides precision timing on last paint time.
+            _msticks = (int)(elapsed - _lastmstick);
+            _lastmstick = elapsed;
+
+            HandleInputs();
+            DoCameraSlew();
+            UpdateCamera();
+
+            if (_kbdActions.Any() || (_cameraSlewProgress < 1.0f))          // if we have any future work, start the kick timer..
+            {
+                //Console.WriteLine("keyboard/slew ");
+                _requestrepaint = true;
+            }
+
+            if (_stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, _zoom, glControl))       // at intervals, inform star grids of position, and if it has
+            {
+                //Console.WriteLine("grids");
+                _requestrepaint = true;
+            }
 
             _lastcameranorm.Update(_cameraDir, _viewtargetpos, _zoom);
 
             if (_lastcameranorm.CameraFlipped)
+            {
                 UpdateDataSetsDueToFlip();
+                _requestrepaint = true;
+                //Console.WriteLine("flip ");
+            }
 
             //Console.WriteLine("Tick m{0} d{1}", _lastcameranorm.CameraMoved , _lastcameranorm.CameraDirChanged);
 
@@ -696,21 +717,29 @@ namespace EDDiscovery2
                         _starnameslist.Update(_lastcamerastarnames, flippedorzoom, GetResMat(), _znear, names, discs);
                     }
                 }
-                else
+                else 
                 {
                     if (_starnameslist.RemoveAllNamedStars())
                     {
-                        Repaint();
+                        //Console.WriteLine("Remove stars");
+                        _requestrepaint = true;
                         GC.Collect();
                     }
                 }
+            }
+
+            if (_requestrepaint)
+            {
+                _requestrepaint = false;
+                glControl.Invalidate();                 // and kick paint
             }
         }
 
         public void ChangeNamedStars()                                  // star names finished.. repaint and mark not busy
         {
-            Repaint();
+            _requestrepaint = true;
             _starnamesbusy = false;
+            //Console.WriteLine("name");
         }
 
         #endregion
@@ -959,7 +988,7 @@ namespace EDDiscovery2
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
 
-        private void Render()
+        private void glControl_Paint(object sender, PaintEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
@@ -1103,75 +1132,16 @@ namespace EDDiscovery2
 #endif
         }
 
-        Stopwatch debugpainttimer = new Stopwatch(); 
-        //long prevpstart = 0; long prevpend= 0;  string repaintreason = "";
-
-        private void glControl_Paint(object sender, PaintEventArgs e)
-        {
-            if (!debugpainttimer.IsRunning) debugpainttimer.Start();
-
-            long pstart = debugpainttimer.ElapsedMilliseconds;
-
-            long elapsed = _updateinterval.ElapsedMilliseconds;         // stopwatch provides precision timing on last paint time.
-            _msticks = (int)(elapsed - _lastmstick);
-            _lastmstick = elapsed;
-
-            HandleInputs();
-            long pinput = debugpainttimer.ElapsedMilliseconds;
-            DoCameraSlew();
-            long pslew = debugpainttimer.ElapsedMilliseconds;
-            UpdateCamera();
-            long pcamera = debugpainttimer.ElapsedMilliseconds;
-            Render();
-            long prender = debugpainttimer.ElapsedMilliseconds;
-
-            prender -= pcamera; pcamera -= pslew; pslew -= pinput; pinput -= pstart;
-
-            if (_kbdActions.Any() || (_cameraSlewProgress < 1.0f))          // if we have any future work, start the kick timer..
-            {
-                if (!UpdateTimer.Enabled)                                 // start the timer
-                    UpdateTimer.Start();
-            }
-            else
-            {
-                UpdateTimer.Stop();
-                _updateinterval.Stop();
-                _updateinterval.Reset();
-            }
-
-//            long pend = debugpainttimer.ElapsedMilliseconds; long took = (pend - pstart); long loop = (pstart - prevpstart); long outside = (pstart - prevpend);
-//            Console.WriteLine("{0} took {1} outside {2} loop {3} FrameRate {4} KB actions {5} reason {6} i{7} s{8} c{9} r{10}",
-//                                pstart % 10000, took, outside, loop, (loop > 0) ? (1000 / loop) : 0, _kbdActions.Any(), repaintreason.Length > 50 ? repaintreason.Substring(0, 50) : repaintreason,
-//                                pinput, pslew, pcamera, prender  );
-//            prevpstart = pstart; prevpend = pend;  repaintreason = "Unknown";
-            
-        }
-
-        private void UpdateTimer_Tick(object sender, EventArgs e)
-        {
-            //repaintreason = "Timer Tick";
-            glControl.Invalidate();             // and kick paint again
-        }
-
         private void Repaint()
         {
-            if (!_updateinterval.IsRunning)         // if restarting..
-            {
-                _lastmstick = 0;
-                _updateinterval.Start();
-                //Console.WriteLine((Environment.TickCount % 10000) + "Start interval timer");
-            }
-
-            //repaintreason = Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1);
-
-            //            Console.WriteLine("Repaint invalidate" + Tools.StackTrace(Environment.StackTrace,".Repaint()",1));
-
+            //repaintreason = ;
             glControl.Invalidate();                 // and kick paint
+            Console.WriteLine("MANUAL REPAINT!!!!!!!!!!!!! {0}" , Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1));
         }
 
-#endregion
+        #endregion
 
-#region Camera Slew and Update
+        #region Camera Slew and Update
 
         private void StartCameraSlew(Vector3 pos)       // may pass a Nan Position - no action
         {
@@ -1186,7 +1156,7 @@ namespace EDDiscovery2
                     _cameraSlewTime = (float)Math.Max(2.0, dist / 10000.0);            //10000 ly/sec, with a minimum slew
                     //Console.WriteLine("Slew " + dist + " in " + _cameraSlewTime);
                     KillHover();
-                    Repaint();
+                    _requestrepaint = true;
                 }
             }
         }
@@ -1217,6 +1187,8 @@ namespace EDDiscovery2
                     var slewfact = (slewend - slewstart) / (1.0 - slewstart);
                     _viewtargetpos += Vector3.Multiply(totvector, (float)slewfact);
                 }
+
+                _requestrepaint = true;
                 _cameraSlewProgress = (float)newprogress;
             }
         }
@@ -1605,11 +1577,6 @@ namespace EDDiscovery2
 
         private void glControl_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!_updateinterval.IsRunning)         // if first keypress in sequence (rest is handled by timer)
-            {
-                //Console.WriteLine("First key down");
-                Repaint();
-            }
         }
 
         private void glControl_KeyUp(object sender, KeyEventArgs e)
@@ -1738,7 +1705,7 @@ namespace EDDiscovery2
                 if ( name != null || isanyselected)     // if we selected something, or something was selected
                 {
                     GenerateDataSetsSelectedSystems();
-                    Repaint();
+                    _requestrepaint = true;
                 }
             }
 
@@ -1771,7 +1738,7 @@ namespace EDDiscovery2
                                 TargetClass.ClearTarget();
 
                             GenerateDataSetsBNG();
-                            Repaint();
+                            _requestrepaint = true;
                             travelHistoryControl.RefreshTargetInfo();
                         }
                     }
@@ -1829,7 +1796,7 @@ namespace EDDiscovery2
                                     TargetClass.ClearTarget();
 
                                 GenerateDataSetsBNG();
-                                Repaint();
+                                _requestrepaint = true;
                                 travelHistoryControl.RefreshTargetInfo();
                             }
                         }
@@ -1838,7 +1805,8 @@ namespace EDDiscovery2
                             if (targetid == bkmark.id)
                             {
                                 TargetClass.ClearTarget();
-                                Repaint();
+                                GenerateDataSetsBNG();
+                                _requestrepaint = true;
                                 travelHistoryControl.RefreshTargetInfo();
                             }
 
@@ -1847,7 +1815,7 @@ namespace EDDiscovery2
                     }
 
                     GenerateDataSetsBNG();      // in case target changed, do all..
-                    Repaint();
+                    _requestrepaint = true;
                 }
                 else if (gmo != null)
                 {
@@ -1870,7 +1838,7 @@ namespace EDDiscovery2
                                 TargetClass.ClearTarget();
 
                             GenerateDataSetsBNG();
-                            Repaint();
+                            _requestrepaint = true;
                             travelHistoryControl.RefreshTargetInfo();
                         }
                     }
@@ -1908,7 +1876,7 @@ namespace EDDiscovery2
                         _cameraDir.X = 180;
                     //SetupCursorXYZ();
 
-                    Repaint();
+                    _requestrepaint = true;
                 }
 
                 _mousehovertick.Stop();
@@ -1928,7 +1896,7 @@ namespace EDDiscovery2
 
                     _viewtargetpos.Y += -dy * (1.0f / _zoom) * 2.0f;
 
-                    Repaint();
+                    _requestrepaint = true;
                 }
 
                 _mousehovertick.Stop();
@@ -1953,7 +1921,7 @@ namespace EDDiscovery2
                     _viewtargetpos.X += translation.X;
                     _viewtargetpos.Z += translation.Y;
 
-                    Repaint();
+                    _requestrepaint = true;
                 }
 
                 _mousehovertick.Stop();
@@ -2124,13 +2092,13 @@ namespace EDDiscovery2
             }
 
             SetupViewport();
-            Repaint();
+            _requestrepaint = true;
         }
 
 
-        #endregion
+#endregion
 
-        #region FindObjectsOnScreen
+#region FindObjectsOnScreen
 
         Matrix4d GetResMat()
         {
