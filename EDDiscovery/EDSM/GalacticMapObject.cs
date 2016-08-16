@@ -11,7 +11,6 @@ namespace EDDiscovery.EDSM
     {
         public int id;
         public string type;
-        public GalMapType Type;
         public string name;
         public string galMapSearch;
         public string galMapUrl;
@@ -19,6 +18,8 @@ namespace EDDiscovery.EDSM
         public List<PointData> points;
         public string description;
         public string descriptionhtml;
+
+        public GalMapType galMapType;
 
         public GalacticMapObject()
         {
@@ -28,14 +29,14 @@ namespace EDDiscovery.EDSM
         public GalacticMapObject(JObject jo)
         {
             id = Tools.GetInt(jo["id"]);
-            type = Tools.GetString(jo["type"]);
-            name = Tools.GetString(jo["name"]);
-            galMapSearch = Tools.GetString(jo["galMapSearch"]);
-            galMapUrl = Tools.GetString(jo["galMapUrl"]);
-            color = Tools.GetString(jo["color"]);
-            description = Tools.GetString(jo["descriptionMardown"]);
-            descriptionhtml = Tools.GetString(jo["descriptionHtml"]);
-
+            type = Tools.GetStringOrDefault(jo["type"],"Not Set");
+            name = Tools.GetStringOrDefault(jo["name"],"No name set");
+            galMapSearch = Tools.GetStringOrDefault(jo["galMapSearch"],"");
+            galMapUrl = Tools.GetStringOrDefault(jo["galMapUrl"],"");
+            color = Tools.GetStringOrDefault(jo["color"],"Orange");
+            description = Tools.GetStringOrDefault(jo["descriptionMardown"],"No description");
+            descriptionhtml = Tools.GetStringOrDefault(jo["descriptionHtml"],"");
+            
             points = new List<PointData>();
 
             try

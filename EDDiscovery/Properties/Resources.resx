@@ -151,4 +151,34 @@
   <data name="bookmarktarget" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bookmarktarget.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="comet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\comet.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Blackhole" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Blackhole.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExplorationHazard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExplorationHazard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nebula" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\nebula.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PlanetaryNebula" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlanetaryNebula.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pointofinterest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pointofinterest.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pulsar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pulsar.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="starcluster" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\starcluster.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stellaremnant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\stellaremnant.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="selectedmarker" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\selectedmarker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -63,6 +63,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Blackhole {
+            get {
+                object obj = ResourceManager.GetObject("Blackhole", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap bookmarkbrightred {
             get {
                 object obj = ResourceManager.GetObject("bookmarkbrightred", resourceCulture);
@@ -96,6 +106,26 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap bookmarkyellow {
             get {
                 object obj = ResourceManager.GetObject("bookmarkyellow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap comet {
+            get {
+                object obj = ResourceManager.GetObject("comet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ExplorationHazard {
+            get {
+                object obj = ResourceManager.GetObject("ExplorationHazard", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -150,6 +180,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap nebula {
+            get {
+                object obj = ResourceManager.GetObject("nebula", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap OrangeDot {
             get {
                 object obj = ResourceManager.GetObject("OrangeDot", resourceCulture);
@@ -160,9 +200,69 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PlanetaryNebula {
+            get {
+                object obj = ResourceManager.GetObject("PlanetaryNebula", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pointofinterest {
+            get {
+                object obj = ResourceManager.GetObject("pointofinterest", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pulsar {
+            get {
+                object obj = ResourceManager.GetObject("pulsar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap save {
             get {
                 object obj = ResourceManager.GetObject("save", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap selectedmarker {
+            get {
+                object obj = ResourceManager.GetObject("selectedmarker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap starcluster {
+            get {
+                object obj = ResourceManager.GetObject("starcluster", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap stellaremnant {
+            get {
+                object obj = ResourceManager.GetObject("stellaremnant", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
