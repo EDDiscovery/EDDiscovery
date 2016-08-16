@@ -240,6 +240,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap selectedmarker {
+            get {
+                object obj = ResourceManager.GetObject("selectedmarker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap starcluster {
             get {
                 object obj = ResourceManager.GetObject("starcluster", resourceCulture);

@@ -27,7 +27,7 @@ namespace EDDiscovery2
         public bool noWindowReposition { get; set; } = false;                       // set externally
         public TravelHistoryControl travelHistoryControl { get; set; } = null;      // set externally
 
-        const int HELP_VERSION = 3;         // increment this to force help onto the screen of users first time.
+        const int HELP_VERSION = 4;         // increment this to force help onto the screen of users first time.
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
 
@@ -35,7 +35,6 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_coarsegridlines;
         private List<IData3DSet> _datasets_gridlinecoords;
         private List<IData3DSet> _datasets_maps;
-        private List<IData3DSet> _datasets_poi;
         private List<IData3DSet> _datasets_selectedsystems;
         private List<IData3DSet> _datasets_visitedsystems;
         private List<IData3DSet> _datasets_bookedmarkedsystems;
@@ -45,7 +44,10 @@ namespace EDDiscovery2
         StarGrids _stargrids;                   // holds stars
 
         StarNamesList _starnameslist;           // holds named stars
-        Timer _starnametimer = new Timer();     // kicks off star naming
+        Timer _starupdatetimer = new Timer();     // kicks off star naming
+        CameraDirectionMovement _lastcameranorm = new CameraDirectionMovement();
+        CameraDirectionMovement _lastcamerastarnames = new CameraDirectionMovement();
+        bool _starnamesbusy = false;
 
         private AutoCompleteStringCollection _systemNames;
 
@@ -54,7 +56,8 @@ namespace EDDiscovery2
         private ISystem _historySelection;
 
         private ISystem _clickedSystem;         // left clicked on a system/bookmark system/noted system
-        private Vector3 _clickedposition = new Vector3(float.NaN,float.NaN,float.NaN);       // left clicked on a position
+        private GalacticMapObject _clickedGMO;  // left clicked on a GMO
+        private Vector3 _clickedposition = new Vector3(float.NaN,float.NaN,float.NaN);       // above two also set this.. if its a RM, only this is set.
         private string _clickedurl;             // what url is associated..
 
         private float _zoom = 1.0f;
@@ -94,7 +97,6 @@ namespace EDDiscovery2
         private List<SystemClass> _plannedRoute { get; set; }
 
         public List<FGEImage> fgeimages = new List<FGEImage>();
-        public List<FGEImage> selectedmaps = new List<FGEImage>();
 
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; }
@@ -168,10 +170,13 @@ namespace EDDiscovery2
             toolStripButtonFineGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DFineGrid", true);
             toolStripButtonCoords.Checked = SQLiteDBClass.GetSettingBool("Map3DCoords", true);
             toolStripButtonEliteMovement.Checked = SQLiteDBClass.GetSettingBool("Map3DEliteMove", false);
-            toolStripButtonStarNames.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNames", true);
+            showNamesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNaming", true);
+            showDiscsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DStarDiscs", true);
             showNoteMarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowNoteMarks", true);
             showBookmarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowBookmarks", true);
             toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false);
+            enableColoursToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonColours", true);
+            _stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
 
             textboxFrom.AutoCompleteCustomSource = _systemNames;
 
@@ -232,7 +237,7 @@ namespace EDDiscovery2
                 _visitedSystems = visited;
                 _stargrids.FillVisitedSystems(_visitedSystems);          // update visited systems, will be displayed on next update of star grids
                 GenerateDataSetsVisitedSystems();
-                _starnameslist.RecalcStarNames();
+                _lastcameranorm.ForceZoomChanged();              // this will make it recalc..
                 Repaint();
 
                 if (toolStripButtonAutoForward.Checked)             // auto forward?
@@ -240,7 +245,7 @@ namespace EDDiscovery2
                     VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
 
                     if ( vs != null )
-                        SetCenterSystemTo(vs.Name, true);
+                        SetCenterSystemTo(vs.Name);
                 }
             }
         }
@@ -280,11 +285,21 @@ namespace EDDiscovery2
             }
         }
 
-        public void UpdateBookmarks()
+        public void UpdateBookmarksGMO(bool gototarget )
         {
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
                 GenerateDataSetsBNG();
+
+                if (gototarget)
+                {
+                    string name;
+                    double x, y, z;
+
+                    if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+                        StartCameraSlew(new Vector3((float)x, (float)y, (float)z));
+                }
+
                 Repaint();
             }
         }
@@ -308,20 +323,30 @@ namespace EDDiscovery2
             SetCenterSystemLabel();
             labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
 
+            _viewtargetpos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
+            _cameraDir = Vector3.Zero;
+            _zoom = _defaultZoom;
+            _lastcameranorm.Update(_cameraDir, _viewtargetpos, _zoom); // set up here so ready for action.. below uses it.
+            _lastcameranorm.ForceZoomChanged();                      
+            _lastcamerastarnames.Update(_cameraDir, _viewtargetpos, _zoom); // set up here so ready for action.. below uses it.
+            _lastcamerastarnames.ForceZoomChanged();                    
+
             GenerateDataSets();
             GenerateDataSetsMaps();
             GenerateDataSetsSelectedSystems();
             GenerateDataSetsVisitedSystems();
 
-            _starnametimer.Interval = 100;
-            _starnametimer.Tick += new EventHandler(NameStars);
-            _starnametimer.Start();
+            _updateinterval.Start();
+            _lastmstick = _updateinterval.ElapsedMilliseconds;
+
+            _starupdatetimer.Interval = 50;
+            _starupdatetimer.Tick += new EventHandler(UpdateStars);
+            _starupdatetimer.Start();
 
             _mousehovertick.Tick += new EventHandler(MouseHoverTick);
             _mousehovertick.Interval = 250;
 
-            SetCenterSystemTo(_centerSystem, true);             // move to this..
-            ResetCamera();                                      // and set up camera
+            SetCenterSystemTo(_centerSystem);                   // move to this..
         }
 
         private void FormMap_Shown(object sender, EventArgs e)
@@ -343,7 +368,6 @@ namespace EDDiscovery2
         private void FormMap_Deactivate(object sender, EventArgs e)
         {
             _isActivated = false;
-            UpdateTimer.Stop();
         }
 
         private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
@@ -519,9 +543,6 @@ namespace EDDiscovery2
             DatasetBuilder builder3 = new DatasetBuilder();
             _datasets_gridlinecoords = builder3.AddGridCoords();
 
-            DatasetBuilder builder4 = new DatasetBuilder();
-            _datasets_poi = builder4.AddPOIsToDataset();
-
             GenerateDataSetsBNG();
             UpdateDataSetsDueToZoom();
         }
@@ -535,21 +556,43 @@ namespace EDDiscovery2
             if (toolStripButtonCoords.Checked)
                 builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
 
-            builder.UpdateGalObjectsZoom(ref _datasets_galmapobjects, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+            builder.UpdateGalObjects(ref _datasets_galmapobjects, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
 
             if (showBookmarksToolStripMenuItem.Checked)
-                builder.UpdateBookmarksZoom(ref _datasets_bookedmarkedsystems, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+                builder.UpdateBookmarks(ref _datasets_bookedmarkedsystems, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
 
             if (showNoteMarksToolStripMenuItem.Checked)
-                builder.UpdateBookmarksZoom(ref _datasets_notedsystems, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+                builder.UpdateBookmarks(ref _datasets_notedsystems, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+
+            if (_clickedGMO != null || _clickedSystem != null)              // if markers
+                builder.UpdateSelected(ref _datasets_selectedsystems, _clickedSystem, _clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+        }
+
+        private void UpdateDataSetsDueToFlip()
+        {
+            DatasetBuilder builder = new DatasetBuilder();
+            builder.UpdateGalObjects(ref _datasets_galmapobjects, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+
+            if (showBookmarksToolStripMenuItem.Checked)
+                builder.UpdateBookmarks(ref _datasets_bookedmarkedsystems, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+
+            if (showNoteMarksToolStripMenuItem.Checked)
+                builder.UpdateBookmarks(ref _datasets_notedsystems, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+
+            if (_clickedGMO != null || _clickedSystem != null)              // if markers
+                builder.UpdateSelected(ref _datasets_selectedsystems, _clickedSystem, _clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+           
         }
 
         private void GenerateDataSetsMaps()
         {
             DeleteDataset(ref _datasets_maps);
             _datasets_maps = null;
+
+            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
+
             DatasetBuilder builder = new DatasetBuilder();
-            _datasets_maps = builder.BuildMaps(ref selectedmaps);
+            _datasets_maps = builder.AddMapImages(_selected);
         }
 
         private void GenerateDataSetsVisitedSystems()
@@ -570,7 +613,7 @@ namespace EDDiscovery2
             DeleteDataset(ref _datasets_selectedsystems);
             _datasets_selectedsystems = null;
             DatasetBuilder builder = new DatasetBuilder();
-            _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem);
+            _datasets_selectedsystems = builder.BuildSelected(_centerSystem,_clickedSystem,_clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
         }
 
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
@@ -585,7 +628,7 @@ namespace EDDiscovery2
             Debug.Assert(mapstar != null && mapregion != null);
 
             DatasetBuilder builder1 = new DatasetBuilder();
-            _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked);
+            _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
             DeleteDataset(ref oldbookmarks);
 
             List<IData3DSet> oldnotedsystems = _datasets_notedsystems;
@@ -593,15 +636,17 @@ namespace EDDiscovery2
             Debug.Assert(map != null);
 
             DatasetBuilder builder2 = new DatasetBuilder();
-            _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked, _visitedSystems);
+            _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _visitedSystems);
             DeleteDataset(ref oldnotedsystems);
 
             DatasetBuilder builder3= new DatasetBuilder();
 
-            int selected = SQLiteDBClass.GetSettingInt("Map3DGalObjects", int.MaxValue);
             List<IData3DSet> oldgalmaps = _datasets_galmapobjects;
-            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSize(), GetBitmapOnScreenSize(), toolStripButtonPerspective.Checked , selected , _toolstripToggleNamingButton.Checked);
+            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation , _toolstripToggleNamingButton.Checked);
             DeleteDataset(ref oldgalmaps);
+
+            if (_clickedGMO != null)              // if GMO marked.
+                GenerateDataSetsSelectedSystems();          // as GMO marker is scaled and positioned so may need moving
         }
 
         private void DeleteDataset(ref List<IData3DSet> _datasets)
@@ -618,61 +663,89 @@ namespace EDDiscovery2
             }
         }
 
-        private void NameStars(object sender, EventArgs e) // tick.. way it works is a tick occurs, timer off, thread runs, thread calls 
-                                                           // delegate, work done in UI, timer reticks.  KEEP it that way!
-        {
-            if (_stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, _zoom, glControl ))       // at intervals, inform star grids of position, and if it has
-                Repaint();      // new stuff to paint, repaint
+        bool _requestrepaint = false;
 
-            if (Visible && toolStripButtonStarNames.Checked && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
+        private void UpdateStars(object sender, EventArgs e) // tick.. tock.. every X ms.  Drives everything now.
+        {
+            if (!Visible)
+                return;
+
+            long elapsed = _updateinterval.ElapsedMilliseconds;         // stopwatch provides precision timing on last paint time.
+            _msticks = (int)(elapsed - _lastmstick);
+            _lastmstick = elapsed;
+
+            HandleInputs();
+            DoCameraSlew();
+            UpdateCamera();
+
+            if (_kbdActions.Any() || (_cameraSlewProgress < 1.0f))          // if we have any future work, start the kick timer..
             {
-                if (_starnameslist.Update(_zoom, _viewtargetpos, _cameraDir, GetResMat(), _znear))       // if its kicked off the thread..
-                    _starnametimer.Stop();                                              // stop the timer.
+                //Console.WriteLine("keyboard/slew ");
+                _requestrepaint = true;
             }
-            else
+
+            if (_stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, _zoom, glControl))       // at intervals, inform star grids of position, and if it has
             {
-                if (_starnameslist.RemoveAllNamedStars())
+                //Console.WriteLine("grids");
+                _requestrepaint = true;
+            }
+
+            _lastcameranorm.Update(_cameraDir, _viewtargetpos, _zoom);
+
+            if (_lastcameranorm.CameraFlipped)                              // if we flip the camera around, flip some of the graphics
+            {
+                UpdateDataSetsDueToFlip();
+                _requestrepaint = true;
+                //Console.WriteLine("flip ");
+            }
+
+            //Console.WriteLine("Tick m{0} d{1}", _lastcameranorm.CameraMoved , _lastcameranorm.CameraDirChanged);
+
+            if (!_starnamesbusy)                            // flag indicates work is happening in the background
+            {
+                bool names = showNamesToolStripMenuItem.Checked;
+                bool discs = showDiscsToolStripMenuItem.Checked;
+
+                _lastcamerastarnames.Update(_cameraDir, _viewtargetpos, _zoom);
+
+                if ( (names | discs) && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
                 {
-                    Repaint();
-                    GC.Collect();
+                    bool flippedorzoom = _lastcamerastarnames.CameraFlipped || _lastcamerastarnames.CameraZoomed;
+                    bool movedorcameradirchanged = _lastcamerastarnames.CameraMoved || _lastcamerastarnames.CameraDirChanged;
+
+                    if (_stargrids.IsDisplayed(_viewtargetpos.X, _viewtargetpos.Z) && (flippedorzoom || movedorcameradirchanged))                              // if changed something
+                    {
+                        _starnamesbusy = true;
+                        _starnameslist.Update(_lastcamerastarnames, flippedorzoom, GetResMat(), _znear, names, discs);
+                    }
                 }
+                else 
+                {
+                    if (_starnameslist.RemoveAllNamedStars())
+                    {
+                        //Console.WriteLine("Remove stars");
+                        _requestrepaint = true;
+                    }
+                }
+            }
+
+            if (_requestrepaint)
+            {
+                _requestrepaint = false;
+                glControl.Invalidate();                 // and kick paint - not via the function ON purpose, so we can distinguish between this and others reasons
             }
         }
 
-        public void ChangeNamedStars()                                  // for the star naming thread.. kick it off
+        public void ChangeNamedStars()                                  // star names finished.. repaint and mark not busy
         {
-            Repaint();
-            _starnametimer.Start();                                      // and do another tick..
+            _requestrepaint = true;
+            _starnamesbusy = false;
+            //Console.WriteLine("name");
         }
 
-        private List<FGEImage> GetSelectedMaps()
-        {
-            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
-            HashSet<string> newselected = new HashSet<string>(_selected.Select(f => f.FileName));
-            HashSet<string> oldselected = new HashSet<string>(selectedmaps.Select(f => f.FileName));
-            List<FGEImage> selected = new List<FGEImage>();
+        #endregion
 
-            foreach (var sel in selectedmaps)
-            {
-                if (newselected.Contains(sel.FileName))
-                {
-                    selected.Add(sel);
-                }
-            }
-
-            foreach (var sel in _selected)
-            {
-                if (!oldselected.Contains(sel.FileName))
-                {
-                    selected.Add(sel);
-                }
-            }
-
-            return selected;
-        }
-#endregion
-
-#region Set Position
+        #region Set Position
 
         private void SetCenterSystemLabel()
         {
@@ -682,7 +755,7 @@ namespace EDDiscovery2
                 labelSystemCoords.Text = "No centre system";
         }
 
-        public bool SetCenterSystemTo(VisitedSystemsClass system, bool moveto)
+        public bool SetCenterSystemTo(VisitedSystemsClass system)
         {
             if (Is3DMapsRunning)
             {
@@ -690,7 +763,7 @@ namespace EDDiscovery2
 
                 if (sys != null)
                 {
-                    return SetCenterSystemTo(sys, moveto);
+                    return SetCenterSystemTo(sys);
                 }
                 else
                 {
@@ -701,25 +774,22 @@ namespace EDDiscovery2
                 return false;
         }
 
-        public bool SetCenterSystemTo(string name, bool moveto)
+        public bool SetCenterSystemTo(string name)
         {
             if (Is3DMapsRunning)                         // if null, we are not up and running
-                return SetCenterSystemTo(FindSystem(name), moveto);
+                return SetCenterSystemTo(FindSystem(name));
             else
                 return false;
         }
 
-        private bool SetCenterSystemTo(ISystem sys, bool moveto)        
+        private bool SetCenterSystemTo(ISystem sys)        
         {
             if (sys != null)
             {
                 _centerSystem = sys;
                 SetCenterSystemLabel();
                 GenerateDataSetsSelectedSystems();
-
-                if (moveto)
-                    StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z));
-
+                StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z));
                 return true;
             }
             else
@@ -751,10 +821,17 @@ namespace EDDiscovery2
                 var state = OpenTK.Input.Keyboard.GetState();
 
                 if (state[Key.F1])
+                {
                     _starnameslist.IncreaseStarLimit();
+                    _lastcamerastarnames.ForceZoomChanged();              // this will make it recalc..
+                }
+
 
                 if (state[Key.F2])
+                {
                     _starnameslist.DecreaseStarLimit();
+                    _lastcamerastarnames.ForceZoomChanged();              // this will make it recalc..
+                }
 
                 _kbdActions.Left = (state[Key.Left] || state[Key.A]);
                 _kbdActions.Right = (state[Key.Right] || state[Key.D]);
@@ -912,8 +989,10 @@ namespace EDDiscovery2
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
 
-        private void Render()
+        private void glControl_Paint(object sender, PaintEventArgs e)
         {
+            //Stopwatch sw1 = new Stopwatch(); sw1.Start();
+
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.MatrixMode(MatrixMode.Modelview);            // select the current matrix to the model view
@@ -963,12 +1042,13 @@ namespace EDDiscovery2
 
             glControl.SwapBuffers();
             UpdateStatus();
+
+            //long elapsed = sw1.ElapsedMilliseconds;
+            //Console.WriteLine("{0} Time {1} {2}", Environment.TickCount, elapsed, (elapsed>50) ? "***********************":"");
         }
 
         private void DrawStars()
         {
-            //long pstart = debugpainttimer.ElapsedMilliseconds;
-
             // Take references on objects that could be replaced by the background (?)
             List<IData3DSet> _datasets_galmapobjects = this._datasets_galmapobjects;
             List<IData3DSet> _datasets_notedsystems = this._datasets_notedsystems;
@@ -1001,24 +1081,12 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            //long p1 = debugpainttimer.ElapsedMilliseconds;
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
-
-            //long p2 = debugpainttimer.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_galmapobjects != null);
             if (_datasets_galmapobjects != null)
             {
                 foreach (var dataset in _datasets_galmapobjects)
-                    dataset.DrawAll(glControl);
-            }
-
-            //long p3 = debugpainttimer.ElapsedMilliseconds;
-
-            Debug.Assert(_datasets_poi != null);
-            if (_datasets_poi != null)
-            {
-                foreach (var dataset in _datasets_poi)
                     dataset.DrawAll(glControl);
             }
 
@@ -1029,7 +1097,11 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            _starnameslist.Draw();
+            if (_starnameslist.Draw())          // rang out of bandwidth, ask for another paint
+            {
+                _requestrepaint = true;
+                //Console.WriteLine("Ask for star paint");
+            }
 
             Debug.Assert(_datasets_selectedsystems != null);
             if (_datasets_selectedsystems != null)
@@ -1051,8 +1123,6 @@ namespace EDDiscovery2
                 foreach (var dataset in _datasets_bookedmarkedsystems)                     // needs to be in order of background to foreground objects
                     dataset.DrawAll(glControl);
             }
-
-            //long p4 = debugpainttimer.ElapsedMilliseconds; p4 -= p3; p3 -= p2;  p2 -= p1; p1 -= pstart; Console.WriteLine("{0} Render {1},{2},{3},{4}", pstart % 10000, p1, p2, p3, p4);
         }
 
         private void UpdateStatus()
@@ -1063,83 +1133,15 @@ namespace EDDiscovery2
 #endif
         }
 
-        Stopwatch debugpainttimer = new Stopwatch(); 
-        //long prevpstart = 0; long prevpend= 0;  string repaintreason = "";
-
-        private void glControl_Paint(object sender, PaintEventArgs e)
-        {
-            if (!debugpainttimer.IsRunning) debugpainttimer.Start();
-
-            long pstart = debugpainttimer.ElapsedMilliseconds;
-
-            long elapsed = _updateinterval.ElapsedMilliseconds;         // stopwatch provides precision timing on last paint time.
-            _msticks = (int)(elapsed - _lastmstick);
-            _lastmstick = elapsed;
-
-            HandleInputs();
-            long pinput = debugpainttimer.ElapsedMilliseconds;
-            DoCameraSlew();
-            long pslew = debugpainttimer.ElapsedMilliseconds;
-            UpdateCamera();
-            long pcamera = debugpainttimer.ElapsedMilliseconds;
-            Render();
-            long prender = debugpainttimer.ElapsedMilliseconds;
-
-            prender -= pcamera; pcamera -= pslew; pslew -= pinput; pinput -= pstart;
-
-            if (_kbdActions.Any() || (_cameraSlewProgress < 1.0f))          // if we have any future work, start the kick timer..
-            {
-                if (!UpdateTimer.Enabled)                                 // start the timer
-                    UpdateTimer.Start();
-            }
-            else
-            {
-                UpdateTimer.Stop();
-                _updateinterval.Stop();
-                _updateinterval.Reset();
-            }
-
-//            long pend = debugpainttimer.ElapsedMilliseconds; long took = (pend - pstart); long loop = (pstart - prevpstart); long outside = (pstart - prevpend);
-//            Console.WriteLine("{0} took {1} outside {2} loop {3} FrameRate {4} KB actions {5} reason {6} i{7} s{8} c{9} r{10}",
-//                                pstart % 10000, took, outside, loop, (loop > 0) ? (1000 / loop) : 0, _kbdActions.Any(), repaintreason.Length > 50 ? repaintreason.Substring(0, 50) : repaintreason,
-//                                pinput, pslew, pcamera, prender  );
-//            prevpstart = pstart; prevpend = pend;  repaintreason = "Unknown";
-            
-        }
-
-        private void UpdateTimer_Tick(object sender, EventArgs e)
-        {
-            //repaintreason = "Timer Tick";
-            glControl.Invalidate();             // and kick paint again
-        }
-
         private void Repaint()
         {
-            if (!_updateinterval.IsRunning)         // if restarting..
-            {
-                _lastmstick = 0;
-                _updateinterval.Start();
-                //Console.WriteLine((Environment.TickCount % 10000) + "Start interval timer");
-            }
-
-            //repaintreason = Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1);
-
-            //            Console.WriteLine("Repaint invalidate" + Tools.StackTrace(Environment.StackTrace,".Repaint()",1));
-
             glControl.Invalidate();                 // and kick paint
+            //Console.WriteLine("MANUAL REPAINT!!!!!!!!!!!!! {0}" , Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1));
         }
 
         #endregion
 
         #region Camera Slew and Update
-
-        private void ResetCamera()
-        {
-            _viewtargetpos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
-            _cameraDir = Vector3.Zero;
-            _zoom = _defaultZoom;
-            UpdateDataSetsDueToZoom();
-        }
 
         private void StartCameraSlew(Vector3 pos)       // may pass a Nan Position - no action
         {
@@ -1153,7 +1155,8 @@ namespace EDDiscovery2
                     _cameraSlewProgress = 0.0f;
                     _cameraSlewTime = (float)Math.Max(2.0, dist / 10000.0);            //10000 ly/sec, with a minimum slew
                     //Console.WriteLine("Slew " + dist + " in " + _cameraSlewTime);
-                    Repaint();
+                    KillHover();
+                    _requestrepaint = true;
                 }
             }
         }
@@ -1184,6 +1187,8 @@ namespace EDDiscovery2
                     var slewfact = (slewend - slewstart) / (1.0 - slewstart);
                     _viewtargetpos += Vector3.Multiply(totvector, (float)slewfact);
                 }
+
+                _requestrepaint = true;
                 _cameraSlewProgress = (float)newprogress;
             }
         }
@@ -1317,16 +1322,15 @@ namespace EDDiscovery2
         private void buttonCenter_Click(object sender, EventArgs e)
         {
             ISystem sys = FindSystem(textboxFrom.Text);
-            GalacticMapObject gmo = null;
 
             if (sys != null)
             {
                 textboxFrom.Text = sys.name;        // normalise name (user may have different 
-                SetCenterSystemTo(sys, true);
+                SetCenterSystemTo(sys);
             }
             else
             {
-                gmo = EDDiscoveryForm.galacticMapping.Find(textboxFrom.Text, true);
+                GalacticMapObject gmo = EDDiscoveryForm.galacticMapping.Find(textboxFrom.Text, true, true);    // ignore if its off, find any part of string, find if disabled
 
                 if (gmo != null)
                 {
@@ -1343,7 +1347,7 @@ namespace EDDiscovery2
             if (_visitedSystems != null)
             {
                 string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, -1, _centerSystem.name);
-                SetCenterSystemTo(name, true);
+                SetCenterSystemTo(name);
             }
             else
                 MessageBox.Show("No travel history is available");
@@ -1351,7 +1355,7 @@ namespace EDDiscovery2
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            SetCenterSystemTo(_homeSystem, true);
+            SetCenterSystemTo(_homeSystem);
         }
 
         private void buttonHistory_Click(object sender, EventArgs e)
@@ -1359,7 +1363,7 @@ namespace EDDiscovery2
             if (_historySelection == null)
                 MessageBox.Show("No travel history is available");
             else
-                SetCenterSystemTo(_historySelection, true);
+                SetCenterSystemTo(_historySelection);
         }
 
         private void toolStripButtonTarget_Click(object sender, EventArgs e)
@@ -1382,7 +1386,7 @@ namespace EDDiscovery2
             if (_visitedSystems != null)
             {
                 string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, 1, _centerSystem.name);
-                SetCenterSystemTo(name, true);
+                SetCenterSystemTo(name);
             }
             else
                 MessageBox.Show("No travel history is available");
@@ -1400,7 +1404,7 @@ namespace EDDiscovery2
                 VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
 
                 if (vs != null )
-                    SetCenterSystemTo(FindSystem(vs.Name), true);
+                    SetCenterSystemTo(FindSystem(vs.Name));
                 else
                     MessageBox.Show("No stars with defined co-ordinates available in travel history");
             }
@@ -1452,6 +1456,14 @@ namespace EDDiscovery2
             Repaint();
         }
 
+        private void enableColoursToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool("Map3DButtonColours", enableColoursToolStripMenuItem.Checked);
+            _stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
+            _lastcamerastarnames.ForceZoomChanged();              // this will make it recalc..
+            Repaint();
+        }
+
         private void showStationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
@@ -1483,9 +1495,18 @@ namespace EDDiscovery2
             SQLiteDBClass.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
         }
 
-        private void toolStripButtonStarNames_Click(object sender, EventArgs e)
+        private void showDiscsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DStarNames", toolStripButtonStarNames.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DStarDiscs", showDiscsToolStripMenuItem.Checked);
+            _starnameslist.RemoveAllNamedStars();
+            Repaint();
+        }
+
+        private void showNamesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool("Map3DStarNaming", showNamesToolStripMenuItem.Checked);
+            _starnameslist.RemoveAllNamedStars();
+            Repaint();
         }
 
         private void showNoteMarksToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1543,13 +1564,13 @@ namespace EDDiscovery2
 
         private void dotSystemCoords_Click(object sender, EventArgs e)
         {
-            SetCenterSystemTo(_centerSystem, true);
+            SetCenterSystemTo(_centerSystem);
         }
 
         private void dotSelectedSystemCoords_Click(object sender, EventArgs e)
         {
             if (_clickedSystem!=null)
-                SetCenterSystemTo(_clickedSystem, true);
+                SetCenterSystemTo(_clickedSystem);
             else 
                 StartCameraSlew(_clickedposition);      // if nan, will ignore..
         }
@@ -1560,20 +1581,6 @@ namespace EDDiscovery2
             string text = EDDiscovery.Properties.Resources.maphelp3d;
             dl.Info("3D Map Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
             dl.Show();
-        }
-
-        private void glControl_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (!_updateinterval.IsRunning)         // if first keypress in sequence (rest is handled by timer)
-            {
-                //Console.WriteLine("First key down");
-                Repaint();
-            }
-        }
-
-        private void glControl_KeyUp(object sender, KeyEventArgs e)
-        {
-            //Console.WriteLine("Key up");
         }
 
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
@@ -1637,6 +1644,7 @@ namespace EDDiscovery2
             // bookmark on system, cursystem!=null, curbookmark != null, notedsystem = false
             // region bookmark. cursystem = null, curbookmark != null, notedsystem = false
             // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
+            // clicked on a gmo, gmo != null, rest null or false.
 
             ISystem cursystem = null;      
             BookmarkClass curbookmark = null;           
@@ -1649,8 +1657,9 @@ namespace EDDiscovery2
             {
                 _mouseStartRotate = new Point(int.MinValue, int.MinValue);      // indicate finished .. we need to do this to make mousemove not respond to random stuff when resizing
 
-                bool iscurrentselected = _clickedSystem != null;                // have we got a currently selected system..
+                bool isanyselected = _clickedSystem != null || _clickedGMO != null;                // have we got a currently selected object
 
+                _clickedGMO = gmo;
                 _clickedSystem = cursystem;         // clicked system was found either by a bookmark looking up a name, or a position look up. best we can do.
                 _clickedposition.X = float.NaN;
                 _clickedurl = null;
@@ -1668,9 +1677,6 @@ namespace EDDiscovery2
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 
                     System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
-
-                    GenerateDataSetsSelectedSystems();
-                    Repaint();
                 }
                 else if (curbookmark != null)                                   // region bookmark..
                 {
@@ -1691,16 +1697,14 @@ namespace EDDiscovery2
                 }
 
                 if (name != null)       // this means we found something..
-                {
                     labelClickedSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", name, _clickedposition.X.ToString("0.00"), _clickedposition.Y.ToString("0.00"), _clickedposition.Z.ToString("0.00"));
-                }
                 else
                     labelClickedSystemCoords.Text = "None";
 
-                if (_clickedSystem == null && iscurrentselected)        // if we deselected, but we had something
+                if ( name != null || isanyselected)     // if we selected something, or something was selected
                 {
                     GenerateDataSetsSelectedSystems();
-                    Repaint();
+                    _requestrepaint = true;
                 }
             }
 
@@ -1733,7 +1737,7 @@ namespace EDDiscovery2
                                 TargetClass.ClearTarget();
 
                             GenerateDataSetsBNG();
-                            Repaint();
+                            _requestrepaint = true;
                             travelHistoryControl.RefreshTargetInfo();
                         }
                     }
@@ -1791,7 +1795,7 @@ namespace EDDiscovery2
                                     TargetClass.ClearTarget();
 
                                 GenerateDataSetsBNG();
-                                Repaint();
+                                _requestrepaint = true;
                                 travelHistoryControl.RefreshTargetInfo();
                             }
                         }
@@ -1800,7 +1804,8 @@ namespace EDDiscovery2
                             if (targetid == bkmark.id)
                             {
                                 TargetClass.ClearTarget();
-                                Repaint();
+                                GenerateDataSetsBNG();
+                                _requestrepaint = true;
                                 travelHistoryControl.RefreshTargetInfo();
                             }
 
@@ -1809,7 +1814,7 @@ namespace EDDiscovery2
                     }
 
                     GenerateDataSetsBNG();      // in case target changed, do all..
-                    Repaint();
+                    _requestrepaint = true;
                 }
                 else if (gmo != null)
                 {
@@ -1827,12 +1832,12 @@ namespace EDDiscovery2
                         if ((frm.IsTarget && targetid != gmo.id) || (!frm.IsTarget && targetid == gmo.id)) // changed..
                         {
                             if (frm.IsTarget)
-                                TargetClass.SetTargetGMO("G:" + gmo.name , gmo.id, gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
+                                TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
                             else
                                 TargetClass.ClearTarget();
 
                             GenerateDataSetsBNG();
-                            Repaint();
+                            _requestrepaint = true;
                             travelHistoryControl.RefreshTargetInfo();
                         }
                     }
@@ -1870,7 +1875,7 @@ namespace EDDiscovery2
                         _cameraDir.X = 180;
                     //SetupCursorXYZ();
 
-                    Repaint();
+                    _requestrepaint = true;
                 }
 
                 _mousehovertick.Stop();
@@ -1890,7 +1895,7 @@ namespace EDDiscovery2
 
                     _viewtargetpos.Y += -dy * (1.0f / _zoom) * 2.0f;
 
-                    Repaint();
+                    _requestrepaint = true;
                 }
 
                 _mousehovertick.Stop();
@@ -1915,84 +1920,44 @@ namespace EDDiscovery2
                     _viewtargetpos.X += translation.X;
                     _viewtargetpos.Z += translation.Y;
 
-                    Repaint();
+                    _requestrepaint = true;
                 }
 
                 _mousehovertick.Stop();
             }
             else //
             {
-                if (_cameraSlewProgress < 1.0F)       // slewing.. no hover tick
+                if (Math.Abs(e.X - _mouseHover.X) + Math.Abs(e.Y - _mouseHover.Y) > 8)
+                    KillHover();                                // we move we kill the hover.
+
+                                                                // no tool tip, not slewing, not ticking..
+                if (_mousehovertooltip == null && _cameraSlewProgress >= 1.0F && !_mousehovertick.Enabled)
                 {
-                    _mousehovertick.Stop();
-                }
-                else if (_mousehovertooltip != null)
-                {
-                    if (Math.Abs(e.X - _mouseHover.X) + Math.Abs(e.Y - _mouseHover.Y) > 8)
-                    {
-                        _mousehovertooltip.Dispose();
-                        _mousehovertooltip = null;
-                    }
-                }
-                else if (_mousehovertick.Enabled)
-                {
-                    if (Math.Abs(e.X - _mouseHover.X) + Math.Abs(e.Y - _mouseHover.Y) > 8)
-                    {
-                        _mousehovertick.Stop();
-                    }
-                }
-                else
-                {
+                    //Console.WriteLine("{0} Start tick", Environment.TickCount);
                     _mouseHover = e.Location;
                     _mousehovertick.Start();
                 }
             }
         }
 
-        private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        void KillHover()
         {
-            var kbdstate = OpenTK.Input.Keyboard.GetState();
-
-            if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+            if (_mousehovertooltip != null)                                 // kill the tool tip
             {
-                if (e.Delta < 0)
-                {
-                    _cameraFov = (float)Math.Min(_cameraFov*ZoomFact, Math.PI * 0.8);
-                }
-                else if (e.Delta > 0)
-                {
-                    _cameraFov /= (float)ZoomFact;
-                }
-            }
-            else
-            {
-                float curzoom = _zoom;
-
-                if (e.Delta > 0)
-                {
-                    _zoom *= (float)ZoomFact;
-                    if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
-                }
-                if (e.Delta < 0)
-                {
-                    _zoom /= (float)ZoomFact;
-                    if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
-                }
-
-                if ( curzoom != _zoom )
-                    UpdateDataSetsDueToZoom();
+                //Console.WriteLine("{0} kill tool tip move mouse", Environment.TickCount);
+                _mousehovertooltip.Dispose();
+                _mousehovertooltip = null;
             }
 
-            SetupViewport();
-            Repaint();
+            //Console.WriteLine("{0} kill hover", Environment.TickCount);
+            _mousehovertick.Stop();
         }
 
         void MouseHoverTick(object sender, EventArgs e)
         {
             _mousehovertick.Stop();
 
-            if (_cameraSlewProgress < 1.0F)       // slewing.. no hover tick
-                return;
+            //Console.WriteLine("{0} Hover tick tripped slew {1}", Environment.TickCount, _cameraSlewProgress);
 
             ISystem hoversystem = null;
             BookmarkClass curbookmark = null;
@@ -2091,6 +2056,45 @@ namespace EDDiscovery2
             }
         }
 
+        private void glControl_OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            var kbdstate = OpenTK.Input.Keyboard.GetState();
+
+            if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+            {
+                if (e.Delta < 0)
+                {
+                    _cameraFov = (float)Math.Min(_cameraFov * ZoomFact, Math.PI * 0.8);
+                }
+                else if (e.Delta > 0)
+                {
+                    _cameraFov /= (float)ZoomFact;
+                }
+            }
+            else
+            {
+                float curzoom = _zoom;
+
+                if (e.Delta > 0)
+                {
+                    _zoom *= (float)ZoomFact;
+                    if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
+                }
+                if (e.Delta < 0)
+                {
+                    _zoom /= (float)ZoomFact;
+                    if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
+                }
+
+                if (curzoom != _zoom)
+                    UpdateDataSetsDueToZoom();
+            }
+
+            SetupViewport();
+            _requestrepaint = true;
+        }
+
+
 #endregion
 
 #region FindObjectsOnScreen
@@ -2130,10 +2134,12 @@ namespace EDDiscovery2
             double ztopleft, zbottomright,zbottomleft,ztopright;
 
             if (GetPixel(area.Row0, ref resmat, ref ptopleft, out ztopleft) &&
-                    GetPixel(area.Row3, ref resmat, ref pbottomright, out zbottomright) &&
-                    GetPixel(area.Row1, ref resmat, ref ptopright, out ztopright) &&
-                    GetPixel(area.Row2, ref resmat, ref pbottomleft, out zbottomleft) )
+                GetPixel(area.Row1, ref resmat, ref ptopright, out ztopright) &&
+                GetPixel(area.Row2, ref resmat, ref pbottomright, out zbottomright) && 
+                GetPixel(area.Row3, ref resmat, ref pbottomleft, out zbottomleft ) )
             {
+                //    Console.WriteLine("Row0 {0},{1}", ptopleft.X, ptopleft.Y); Console.WriteLine("Row1 {0},{1}", ptopright.X, ptopright.Y); Console.WriteLine("Row2 {0},{1}", pbottomright.X, pbottomright.Y); Console.WriteLine("Row3 {0},{1}", pbottomleft.X, pbottomleft.Y);  Console.WriteLine("x,y {0},{1} {2},{3}", x, y , x-pbottomleft.X, y-pbottomright.Y);
+
                 GraphicsPath p = new GraphicsPath();            // a moment of inspiration, use the graphics path for the polygon hit test!
                 p.AddLine(new PointF((float)ptopleft.X, (float)ptopleft.Y), new PointF((float)ptopright.X, (float)ptopright.Y));
                 p.AddLine(new PointF((float)pbottomright.X, (float)pbottomright.Y), new PointF((float)pbottomleft.X, (float)pbottomleft.Y));
@@ -2150,32 +2156,15 @@ namespace EDDiscovery2
             return false;
         }
 
-        private double GetBitmapOnScreenSize() { return Math.Min(Math.Max(2, 100.0 / _zoom), 1000); }
-
-        Matrix4d GetBitmapOnScreenOutline(double x, double y, double z , double width , double htop, double hbot)       // always centered on x, can be offset in height differently
-        {
-            if (toolStripButtonPerspective.Checked)
-            {
-                return new Matrix4d(new Vector4d(x - width / 2, y + htop, z, 1),        // top left
-                                new Vector4d(x + width / 2, y + htop, z, 1),            // top right
-                                new Vector4d(x - width / 2, y - hbot, z, 1),            // bottom left
-                                new Vector4d(x + width / 2, y - hbot, z, 1));           // bottom right
-            }
-            else
-            {
-                return new Matrix4d(new Vector4d(x - width / 2, y, z + htop, 1),        // top left
-                                new Vector4d(x + width / 2, y, z + htop, 1),            // top right
-                                new Vector4d(x - width / 2, y, z - hbot, 1),            // bottom left
-                                new Vector4d(x + width / 2, y, z - hbot, 1));           // bottom right
-            }
-        }
+        private float GetBitmapOnScreenSizeX() { return (float)Math.Min(Math.Max(2, 80.0 / _zoom), 1000); }
+        private float GetBitmapOnScreenSizeY() { return (float)Math.Min(Math.Max(2, 100.0 / _zoom), 1000); }
 
         private BookmarkClass GetMouseOverBookmark(int x, int y, out double cursysdistz)
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double bksize = GetBitmapOnScreenSize();
+            Vector3d[] rotvert = TexturedQuadData.GetVertices(new Vector3d(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
 
             BookmarkClass curbk = null;
             cursysdistz = double.MaxValue;
@@ -2185,8 +2174,17 @@ namespace EDDiscovery2
             {
                 //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
 
+                Matrix4d area = new Matrix4d(
+                    new Vector4d(rotvert[0].X + bc.x, rotvert[0].Y + bc.y, rotvert[0].Z + bc.z, 1),    // top left
+                    new Vector4d(rotvert[1].X + bc.x, rotvert[1].Y + bc.y, rotvert[1].Z + bc.z, 1),    
+                    new Vector4d(rotvert[2].X + bc.x, rotvert[2].Y + bc.y, rotvert[2].Z + bc.z, 1),    
+                    new Vector4d(rotvert[3].X + bc.x, rotvert[3].Y + bc.y, rotvert[3].Z + bc.z, 1)    // bot left
+                    );
+
+                //Console.WriteLine("{0},{1},{2}, {3},{4},{5} vs {6},{7}" , area.Row0.X , area.Row0.Y, area.Row0.Z, area.Row2.X, area.Row2.Y , area.Row2.Z , x,y);
+
                 double newcursysdistz;
-                if (IsWithinRectangle(GetBitmapOnScreenOutline(bc.x, bc.y, bc.z, bksize, bksize,0), x, y, out newcursysdistz, ref resmat))
+                if (IsWithinRectangle(area, x, y, out newcursysdistz, ref resmat))
                 {
                     if (newcursysdistz < cursysdistz)
                     {
@@ -2204,7 +2202,7 @@ namespace EDDiscovery2
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double bksize = GetBitmapOnScreenSize();
+            Vector3d[] rotvert = TexturedQuadData.GetVertices(new Vector3d(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
 
             SystemClass cursys = null;
             cursysdistz = double.MaxValue;
@@ -2228,8 +2226,15 @@ namespace EDDiscovery2
                         double ly = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
                         double lz = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
 
+                        Matrix4d area = new Matrix4d(
+                            new Vector4d(rotvert[0].X + lx, rotvert[0].Y + ly, rotvert[0].Z + lz, 1),    // top left
+                            new Vector4d(rotvert[1].X + lx, rotvert[1].Y + ly, rotvert[1].Z + lz, 1),
+                            new Vector4d(rotvert[2].X + lx, rotvert[2].Y + ly, rotvert[2].Z + lz, 1),
+                            new Vector4d(rotvert[3].X + lx, rotvert[3].Y + ly, rotvert[3].Z + lz, 1)    // bot left
+                            );
+
                         double newcursysdistz;
-                        if (IsWithinRectangle(GetBitmapOnScreenOutline(lx,ly,lz, bksize,bksize,0), x, y, out newcursysdistz,ref resmat))
+                        if (IsWithinRectangle(area, x, y, out newcursysdistz,ref resmat))
                         { 
                             if (newcursysdistz < cursysdistz)
                             {
@@ -2250,7 +2255,8 @@ namespace EDDiscovery2
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            double bksize = GetBitmapOnScreenSize();
+            Vector3d[] rotvert = TexturedQuadData.GetVertices(new Vector3d(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY());
+
             cursysdistz = double.MaxValue;
             Matrix4d resmat = GetResMat();
             GalacticMapObject curobj = null;
@@ -2263,8 +2269,15 @@ namespace EDDiscovery2
 
                     if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && pd != null)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
                     {
+                        Matrix4d area = new Matrix4d(
+                            new Vector4d(rotvert[0].X + pd.x, rotvert[0].Y + pd.y, rotvert[0].Z + pd.z, 1),    // top left
+                            new Vector4d(rotvert[1].X + pd.x, rotvert[1].Y + pd.y, rotvert[1].Z + pd.z, 1),
+                            new Vector4d(rotvert[2].X + pd.x, rotvert[2].Y + pd.y, rotvert[2].Z + pd.z, 1),
+                            new Vector4d(rotvert[3].X + pd.x, rotvert[3].Y + pd.y, rotvert[3].Z + pd.z, 1)    // bot left
+                            );
+
                         double newcursysdistz;
-                        if (IsWithinRectangle(GetBitmapOnScreenOutline(pd.x,pd.y,pd.z, bksize,bksize/2,bksize/2), x, y, out newcursysdistz, ref resmat))
+                        if (IsWithinRectangle(area, x, y, out newcursysdistz, ref resmat))
                         {
                             if (newcursysdistz < cursysdistz)
                             {
@@ -2286,12 +2299,15 @@ namespace EDDiscovery2
 
             StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(GetResMat(), _znear, glControl.Width, glControl.Height, _zoom);
 
-            Vector3d? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+            Vector3? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+
+            if ( posofsystem == null )
+                posofsystem = _starnameslist.FindOverSystem(x, y, out cursysdistz, ti); // in case these are showing
 
             ISystem f = null;
 
             if (posofsystem != null)
-                f = FindSystem(new Vector3d(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
+                f = FindSystem(new Vector3(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
 
             return f;
         }
@@ -2378,7 +2394,7 @@ namespace EDDiscovery2
             return isys;
         }
 
-        public ISystem FindSystem(Vector3d pos, SQLiteConnectionED cn = null )
+        public ISystem FindSystem(Vector3 pos, SQLiteConnectionED cn = null )
         {
             if (_visitedSystems != null)
             {
