@@ -302,19 +302,29 @@ namespace EDDiscovery2
 
                 foreach (StarNames sys in _starnames.Values)
                 {
-                    if (sys.newnametexture != null && updated++ < 250 )         //250 seems okay on my machine, around the 50ms mark
+                    if (sys.newnametexture != null )         //250 seems okay on my machine, around the 50ms mark
                     {
-                        if (sys.nametexture != null)
-                            sys.nametexture.Dispose();
+                        if (updated++ < 250)
+                        {
+                            if (sys.nametexture != null)
+                                sys.nametexture.Dispose();
 
-                        sys.nametexture = sys.newnametexture;      // copy over and take another reference.. 
-                        sys.newnametexture = null;
+                            sys.nametexture = sys.newnametexture;      // copy over and take another reference.. 
+                            sys.newnametexture = null;
+                        }
+                        else
+                            needmoreticks = true;
                     }
 
-                    if ( sys.newnamevertices != null && updated++ < 250 )
+                    if (sys.newnamevertices != null)
                     {
-                        sys.nametexture.UpdateVertices(sys.newnamevertices);
-                        sys.newnamevertices = null;
+                        if (updated++ < 250)
+                        {
+                            sys.nametexture.UpdateVertices(sys.newnamevertices);
+                            sys.newnamevertices = null;
+                        }
+                        else
+                            needmoreticks = true;
                     }
 
                     if (sys.newstar != null)              // same with newstar
@@ -336,10 +346,9 @@ namespace EDDiscovery2
                         }
                     }
                 }
-
-                needmoreticks = (updated > 500);
             }
 
+            //if (needmoreticks)   Console.WriteLine("More please");
             return needmoreticks;
         }
 
