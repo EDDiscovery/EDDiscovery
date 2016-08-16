@@ -28,7 +28,15 @@ namespace EDDiscovery2._3DMap
             this.z = z;
         }
 
-        public PointData(double x, double y, double z, float sz, Color c )
+        public PointData(double x, double y, double z, float sz)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.Size = sz;
+        }
+
+        public PointData(double x, double y, double z, float sz, Color c)
         {
             this.x = x;
             this.y = y;
@@ -733,7 +741,7 @@ namespace EDDiscovery2._3DMap
             {
                 if (_control.InvokeRequired)
                 {
-                    _control.Invoke(new Action<bool>(this.FreeVertices),false);
+                    _control.Invoke(new Action<bool>(this.FreeVertices), false);
                 }
                 else
                 {
@@ -751,7 +759,7 @@ namespace EDDiscovery2._3DMap
                 }
             }
         }
-       
+
 
         public void Draw(GLControl control)
         {
@@ -783,55 +791,57 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        protected static Vector3d[] GetVerticesHorz(FGEImage img,float y = 0)
-        {
-            return GetVerticesHorz(img.TopLeft, img.TopRight, img.BottomLeft, img.BottomRight, y);
-        }
+        // rotation (0,0,0) selects a bitmap lying flat on the y axis, looking up
+        // rotation (90,0,0) selected a vertical bitmap, upside down 
+        // rotation (-90,0,0) selected a vertical bitmap, upright
+        // rotation (0,90,0) flat spins the bitmap facing right
+        // rotation (0,0,90) spins the bitmap along its y axis, facing left.
 
-        protected static Vector3d[] GetVerticesHorz(PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
+        static public Vector3 NoRotation { get { return new Vector3(0, 0, 0); } }
+
+        // we rotate around the centre point. hoff/voff allows you to place the bitmap to the side
+        public static Vector3d[] GetVertices(Vector3d centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            return new Vector3d[]
+            Matrix4d rm = Matrix4d.Identity;
+            if (rotationdeg.X != 0)
+                rm *= Matrix4d.CreateRotationX((float)(rotationdeg.X * Math.PI / 180.0f));
+            if (rotationdeg.Y != 0)
+                rm *= Matrix4d.CreateRotationY((float)(rotationdeg.Y * Math.PI / 180.0f));
+            if (rotationdeg.Z != 0)
+                rm *= Matrix4d.CreateRotationZ((float)(rotationdeg.Z * Math.PI / 180.0f));
+
+            width /= 2;
+            height /= 2;
+
+            Vector3d[] points = new Vector3d[]      // bitmap is placed on map, centred if hoff,voff=0. 
             {
-                new Vector3d(topleft.X, y, topleft.Y),
-                new Vector3d(topright.X, y, topright.Y),
-                new Vector3d(bottomright.X, y, bottomright.Y),
-                new Vector3d(bottomleft.X, y, bottomleft.Y)
+                Vector3d.Transform(new Vector3d(-width + hoffset, 0, height + voffset), rm) + centre,           // top left, rotate and transform
+                Vector3d.Transform(new Vector3d(width + hoffset, 0, height + voffset), rm) + centre,            // top right
+                Vector3d.Transform(new Vector3d(width + hoffset, 0, -height + voffset), rm) + centre,           // bot right
+                Vector3d.Transform(new Vector3d(-width + hoffset, 0, -height + voffset), rm) + centre,          // bot left
             };
+
+            return points;
         }
 
-        protected static Vector3d[] GetVerticesVert(PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float z = 0)
-        {
-            return new Vector3d[]
-            {
-                new Vector3d(topleft.X, topleft.Y , z),
-                new Vector3d(topright.X, topright.Y , z),
-                new Vector3d(bottomright.X, bottomright.Y , z),
-                new Vector3d(bottomleft.X, bottomleft.Y , z)
-            };
-        }
-
-        protected static Vector4d[] GetTexCoords(FGEImage img, int width, int height)
-        {
-            return GetTexCoords(img.pxTopLeft, img.pxTopRight, img.pxBottomLeft, img.pxBottomRight, width, height);
-        }
-
-        protected static Vector4d[] GetTexCoords(Point pxTopLeft, Point pxTopRight, Point pxBottomLeft, Point pxBottomRight, int width, int height)
+        // Full version, left/bottom/right/top are pixel co-ords, width/height is size of bitmap. Allows a bit of the bitmap to be picked
+        protected static Vector4d[] GetTexCoords(float left, float bottom, float right, float top, int width, int height)
         {
             Vector4d[] texcoords = new Vector4d[]
             {
-                new Vector4d(pxTopLeft.X * 1.0 / width, pxTopLeft.Y * 1.0 / height, 0, 1),
-                new Vector4d(pxTopRight.X * 1.0 / width, pxTopRight.Y * 1.0 / height, 0, 1),
-                new Vector4d(pxBottomRight.X * 1.0 / width, pxBottomRight.Y * 1.0 / height, 0, 1),
-                new Vector4d(pxBottomLeft.X * 1.0 / width, pxBottomRight.Y * 1.0 / height, 0, 1)
+                new Vector4d(left * 1.0 / width, bottom * 1.0 / height, 0, 1),      // order botleft,botright,topright,topleft 
+                new Vector4d(right * 1.0 / width, bottom * 1.0 / height, 0, 1),     // paints bitmap correctly
+                new Vector4d(right * 1.0 / width, top * 1.0 / height, 0, 1),
+                new Vector4d(left * 1.0 / width, top * 1.0 / height, 0, 1)
             };
 
-            Vector2d a = new Vector2d(pxTopRight.X - pxBottomLeft.X, pxTopRight.Y - pxBottomLeft.Y);
-            Vector2d b = new Vector2d(pxTopLeft.X - pxBottomRight.X, pxTopLeft.Y - pxBottomRight.Y);
+            Vector2d a = new Vector2d(right - left, top - bottom);
+            Vector2d b = new Vector2d(left - right, top - bottom);
             double cross = a.X * b.Y - b.X * a.Y;
 
             if (cross != 0)
             {
-                Vector2d c = new Vector2d(pxBottomLeft.X - pxBottomRight.X, pxBottomLeft.Y - pxBottomRight.Y);
+                Vector2d c = new Vector2d(left - right, 0);
                 double qa = (a.X * c.Y - c.X * a.Y) / cross;
                 double qb = (b.X * c.Y - c.X * b.Y) / cross;
                 if (qa > 0 && qa < 1 && qb > 0 && qb < 1)
@@ -849,91 +859,91 @@ namespace EDDiscovery2._3DMap
             return texcoords;
         }
 
-        public static TexturedQuadData FromFGEImage(FGEImage img , float y = 0)
+        // Quicker version, whole of bitmap displayed
+        protected static Vector4d[] GetTexCoords(int width, int height)     // simpler version for a bitmap
         {
-            Bitmap bmp = (Bitmap)Bitmap.FromFile(img.FilePath);
-            Vector3d[] vertices = GetVerticesHorz(img,y);
-            Vector4d[] texcoords = GetTexCoords(img, bmp.Width, bmp.Height);
+            double h = (height * 1.0 - 1) / height;
+            double w = (width * 1.0 - 1) / width;
+
+            Vector4d[] texcoords = new Vector4d[]
+            {
+                new Vector4d(0, 0, 0, 1),       // this order paints the bitmaps generated by drawstring correctly on our upside down world!
+                new Vector4d(w, 0, 0, 1),
+                new Vector4d(w, h, 0, 1),
+                new Vector4d(0, h, 0, 1)
+            };
+
+            Vector2d a = new Vector2d(width-1, height-1);
+            Vector2d b = new Vector2d(-(width-1), height-1);
+            double cross = a.X * b.Y - b.X * a.Y;
+
+            if (cross != 0)
+            {
+                Vector2d c = new Vector2d(-(width-1), 0);
+                double qa = (a.X * c.Y - c.X * a.Y) / cross;
+                double qb = (b.X * c.Y - c.X * b.Y) / cross;
+                if (qa > 0 && qa < 1 && qb > 0 && qb < 1)
+                {
+                    texcoords = new Vector4d[]
+                    {
+                        texcoords[0] * qb,
+                        texcoords[1] * qa,
+                        texcoords[2] * (1 - qb),
+                        texcoords[3] * (1 - qa)
+                    };
+                }
+            }
+
+            return texcoords;
+        }
+
+        // whole versions
+        public static TexturedQuadData FromBitmap(Bitmap bmp, PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
+        {
+            return FromBitmap(bmp, new Vector3d(centre.x, centre.y , centre.z), rotationdeg, width, height, hoffset, voffset);
+        }
+
+        public static TexturedQuadData FromBitmap(Bitmap bmp, Vector3d centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
+        {
+            Vector4d[] texcoords = GetTexCoords(bmp.Width, bmp.Height);
+            Vector3d[] vertices = GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
             return new TexturedQuadData(vertices, texcoords, bmp);
         }
 
-        public static TexturedQuadData FromBitmap(Bitmap bmp, PointF[] points, float other, bool vert)
+        public void UpdateVertices(PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            Point pxTopLeft = new Point(0, bmp.Height - 1);
-            Point pxTopRight = new Point(bmp.Width - 1, bmp.Height - 1);
-            Point pxBottomLeft = new Point(0, 0);
-            Point pxBottomRight = new Point(bmp.Width - 1, 0);
-            Vector4d[] texcoords = GetTexCoords(pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight, bmp.Width, bmp.Height);
-
-            Vector3d[] vertices;
-            if (vert)
-                vertices = GetVerticesVert(points[0], points[1], points[2], points[3], other);   
-            else
-                vertices = GetVerticesHorz(points[0], points[1], points[2], points[3], other);   
-
-            return new TexturedQuadData(vertices, texcoords, bmp);
-        }
-
-        public void UpdateVertices(PointF[] points, float other, bool vert )
-        {
-            Vector3d[] vertices;
-            if (vert)
-                vertices = GetVerticesVert(points[0], points[1], points[2], points[3], other);
-            else
-                vertices = GetVerticesHorz(points[0], points[1], points[2], points[3], other); 
-
+            Vector3d[] vertices = GetVertices(new Vector3d(centre.x, centre.y, centre.z), rotationdeg, width, height, hoffset, voffset);
             UpdateVertices(vertices);
         }
 
-        public static TexturedQuadData FromBitmapHorz(Bitmap bmp, PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
+        static public Vector3d[] CalcVertices(PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            Point pxTopLeft = new Point(0, bmp.Height - 1);
-            Point pxTopRight = new Point(bmp.Width - 1, bmp.Height - 1);
-            Point pxBottomLeft = new Point(0, 0);
-            Point pxBottomRight = new Point(bmp.Width - 1, 0);
-            Vector3d[] vertices = GetVerticesHorz(topleft, topright, bottomleft, bottomright, y);
-            Vector4d[] texcoords = GetTexCoords(pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight, bmp.Width, bmp.Height);
-            return new TexturedQuadData(vertices, texcoords, bmp);
+            return GetVertices(new Vector3d(centre.x, centre.y, centre.z), rotationdeg, width, height, hoffset, voffset);
         }
 
-        public void UpdateVerticesHorz(PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
+        public void UpdateVertices(Vector3d centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            Vector3d[] vertices = GetVerticesHorz(topleft, topright, bottomleft, bottomright, y);
+            Vector3d[] vertices = GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
             UpdateVertices(vertices);
         }
 
-        public static TexturedQuadData FromBitmapVert(Bitmap bmp, PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float z = 0)
+        // lye flat at Y, pick a part of the bitmap to show.  Set texture yourself BEFORE calling this.
+        public TexturedQuadData Horz( float left,float bottom, float right, float top,
+                                      float pxleft, float pxbottom, float pxright, float pxtop,
+                                      float y = 0)
         {
-            Point pxTopLeft = new Point(0, bmp.Height - 1);
-            Point pxTopRight = new Point(bmp.Width - 1, bmp.Height - 1);
-            Point pxBottomLeft = new Point(0, 0);
-            Point pxBottomRight = new Point(bmp.Width - 1, 0);
-            Vector3d[] vertices = GetVerticesVert(topleft, topright, bottomleft, bottomright, z);   // flipping the order seems to make it work and be vertical
-            Vector4d[] texcoords = GetTexCoords(pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight, bmp.Width, bmp.Height);
-            return new TexturedQuadData(vertices, texcoords, bmp);
-        }
+            Vector3d[] vertices = new Vector3d[]
+            {
+                  new Vector3d(left, y, top),           // top left/topright/rightbottom/left/bottom as per other transform
+                  new Vector3d(right, y, top),
+                  new Vector3d(right, y, bottom),
+                  new Vector3d(left, y, bottom)
+            };
 
-        public void UpdateVerticesVert(PointF topleft, PointF topright, PointF bottomleft, PointF bottomright, float y = 0)
-        {
-            Vector3d[] vertices = GetVerticesVert(topleft, topright, bottomleft, bottomright, y);
-            UpdateVertices(vertices);
-        }
-
-        public TexturedQuadData CreateSubTexture(Point topleft, Point topright, Point bottomleft, Point bottomright, Point pxTopLeft, Point pxTopRight, Point pxBottomLeft, Point pxBottomRight, float y = 0)
-        {
-            FGEImage fge = new FGEImage("null");
-            fge.TopLeft = topleft;
-            fge.TopRight = topright;
-            fge.BottomLeft = bottomleft;
-            fge.BottomRight = bottomright;
-            fge.pxTopLeft = pxTopLeft;
-            fge.pxTopRight = pxTopRight;
-            fge.pxBottomLeft = pxBottomLeft;
-            fge.pxBottomRight = pxBottomRight;
-            Vector3d[] vertices = GetVerticesHorz(fge, y);
-            Vector4d[] texcoords = GetTexCoords(fge, Texture.Width, Texture.Height);
+            Vector4d[] texcoords = GetTexCoords(pxleft,pxbottom,pxright,pxtop, Texture.Width, Texture.Height);
             return new TexturedQuadData(vertices, texcoords, this);
         }
+
     }
 
     public class TexturedQuadDataCollection : Data3DSetClass<TexturedQuadData>, IDisposable
