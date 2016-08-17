@@ -132,19 +132,20 @@ namespace EDDiscovery
                     Directory.CreateDirectory(logpath);
                 }
 
-#if !DEBUG
-                logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
+                if (!Debugger.IsAttached)
+                {
+                    logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
 
-                System.Diagnostics.Trace.AutoFlush = true;
-                // Log trace events to the above file
-                System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(logname));
-                // Log unhandled exceptions
-                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-                // Log unhandled UI exceptions
-                Application.ThreadException += Application_ThreadException;
-                // Redirect console to trace
-                Console.SetOut(new TraceLogWriter());
-#endif
+                    System.Diagnostics.Trace.AutoFlush = true;
+                    // Log trace events to the above file
+                    System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(logname));
+                    // Log unhandled exceptions
+                    AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                    // Log unhandled UI exceptions
+                    Application.ThreadException += Application_ThreadException;
+                    // Redirect console to trace
+                    Console.SetOut(new TraceLogWriter());
+                }
                 // Log first-chance exceptions to help diagnose errors
                 Register_FirstChanceException_Handler();
             }
