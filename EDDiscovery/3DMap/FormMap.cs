@@ -40,14 +40,11 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_bookedmarkedsystems;
         private List<IData3DSet> _datasets_notedsystems;
         private List<IData3DSet> _datasets_galmapobjects;
+        private List<IData3DSet> _datasets_galmapregions;
 
         StarGrids _stargrids;                   // holds stars
 
         StarNamesList _starnameslist;           // holds named stars
-        Timer _starupdatetimer = new Timer();     // kicks off star naming
-        CameraDirectionMovement _lastcameranorm = new CameraDirectionMovement();
-        CameraDirectionMovement _lastcamerastarnames = new CameraDirectionMovement();
-        bool _starnamesbusy = false;
 
         private AutoCompleteStringCollection _systemNames;
 
@@ -78,9 +75,15 @@ namespace EDDiscovery2
         private Vector3 _cameraSlewPosition;                    // where to slew to.
 
         private KeyboardActions _kbdActions = new KeyboardActions();
-        private Stopwatch _updateinterval = new Stopwatch();
-        private long _lastmstick;
-        private int _msticks;
+
+        private Timer _systemtimer = new Timer();     // kicks off star naming
+        private bool _requestrepaint = false;                           // main system tick. Set to request repaint on next tick
+        private Stopwatch _updateinterval = new Stopwatch();    // to accurately measure interval between system ticks
+        private long _lastmstick;                           
+        private int _msticks;                                   // between updates
+        private CameraDirectionMovement _lastcameranorm = new CameraDirectionMovement();        // these track movements and zoom for most systems
+        private CameraDirectionMovement _lastcamerastarnames = new CameraDirectionMovement();   // and for star names, which may be delayed due to background busy
+        bool _starnamesbusy = false;                            // is the worker thread in operation
 
         private Point _mouseStartRotate = new Point(int.MinValue, int.MinValue);        // used to indicate not started for these using mousemove
         private Point _mouseStartTranslateXY = new Point(int.MinValue, int.MinValue);
@@ -92,6 +95,7 @@ namespace EDDiscovery2
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
 
         private float _defaultZoom;
+
         private List<SystemClass> _referenceSystems { get; set; }
         public List<VisitedSystemsClass> _visitedSystems { get; set; }
         private List<SystemClass> _plannedRoute { get; set; }
@@ -189,7 +193,7 @@ namespace EDDiscovery2
 
                 foreach (GalMapType tp in EDDiscoveryForm.galacticMapping.galacticMapTypes)
                 {
-                    if ( tp.Group == GalMapType.GalMapGroup.Markers )       // only markers for now..
+                    if ( tp.Group == GalMapType.GalMapGroup.Markers || tp.Group == GalMapType.GalMapGroup.Regions )       // only markers for now..
                         toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp,null));
                 }
 
@@ -339,9 +343,9 @@ namespace EDDiscovery2
             _updateinterval.Start();
             _lastmstick = _updateinterval.ElapsedMilliseconds;
 
-            _starupdatetimer.Interval = 50;
-            _starupdatetimer.Tick += new EventHandler(UpdateStars);
-            _starupdatetimer.Start();
+            _systemtimer.Interval = 50;
+            _systemtimer.Tick += new EventHandler(Update);
+            _systemtimer.Start();
 
             _mousehovertick.Tick += new EventHandler(MouseHoverTick);
             _mousehovertick.Interval = 250;
@@ -639,11 +643,17 @@ namespace EDDiscovery2
             _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _visitedSystems);
             DeleteDataset(ref oldnotedsystems);
 
-            DatasetBuilder builder3= new DatasetBuilder();
+            DatasetBuilder builder3 = new DatasetBuilder();
 
             List<IData3DSet> oldgalmaps = _datasets_galmapobjects;
-            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation , _toolstripToggleNamingButton.Checked);
+            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _toolstripToggleNamingButton.Checked);
             DeleteDataset(ref oldgalmaps);
+
+            DatasetBuilder builder4 = new DatasetBuilder();
+
+            List<IData3DSet> oldgalreg = _datasets_galmapregions;
+            _datasets_galmapregions = builder4.AddGalMapRegionsToDataset();
+            DeleteDataset(ref oldgalreg);
 
             if (_clickedGMO != null)              // if GMO marked.
                 GenerateDataSetsSelectedSystems();          // as GMO marker is scaled and positioned so may need moving
@@ -663,9 +673,7 @@ namespace EDDiscovery2
             }
         }
 
-        bool _requestrepaint = false;
-
-        private void UpdateStars(object sender, EventArgs e) // tick.. tock.. every X ms.  Drives everything now.
+        private void Update(object sender, EventArgs e)                 // tick.. tock.. every X ms.  Drives everything now.
         {
             if (!Visible)
                 return;
@@ -1060,11 +1068,17 @@ namespace EDDiscovery2
             foreach (var dataset in _datasets_maps)                     // needs to be in order of background to foreground objects
                 dataset.DrawAll(glControl);
 
+
             Debug.Assert(_datasets_finegridlines != null);
             if (toolStripButtonFineGrid.Checked && _datasets_finegridlines != null )
             {
                 foreach (var dataset in _datasets_finegridlines)
                     dataset.DrawAll(glControl);
+            }
+
+            if (_datasets_galmapregions != null)
+            {
+                _datasets_galmapregions[0].DrawAll(glControl);          // first one is the background grid area
             }
 
             Debug.Assert(_datasets_coarsegridlines != null);
@@ -1079,6 +1093,12 @@ namespace EDDiscovery2
             {
                 foreach (var dataset in _datasets_gridlinecoords)
                     dataset.DrawAll(glControl);
+            }
+
+            if (_datasets_galmapregions != null)
+            {
+                _datasets_galmapregions[1].DrawAll(glControl);          // next one is the outlines
+                _datasets_galmapregions[2].DrawAll(glControl);          // and the names
             }
 
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
@@ -1498,14 +1518,14 @@ namespace EDDiscovery2
         private void showDiscsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DStarDiscs", showDiscsToolStripMenuItem.Checked);
-            _starnameslist.RemoveAllNamedStars();
+            _lastcamerastarnames.ForceZoomChanged();        // and repaint
             Repaint();
         }
 
         private void showNamesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DStarNaming", showNamesToolStripMenuItem.Checked);
-            _starnameslist.RemoveAllNamedStars();
+            _lastcamerastarnames.ForceZoomChanged();        // and repaint
             Repaint();
         }
 
