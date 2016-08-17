@@ -957,10 +957,10 @@ namespace EDDiscovery
             LogLine("Refreshing complete.");
             if (syncwasfirstrun)
             {
-                LogLine("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation ");
+                LogLine("EDSM and EDDB update complete. Please restart ED Discovery to complete the synchronisation ");
             }
             else if (syncwaseddboredsm)
-                LogLine("ESDM and/or EDDB update complete.");
+                LogLine("EDSM and/or EDDB update complete.");
 
             edsmRefreshTimer.Enabled = true;
         }
