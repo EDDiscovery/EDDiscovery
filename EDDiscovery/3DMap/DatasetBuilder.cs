@@ -169,9 +169,7 @@ namespace EDDiscovery2._3DMap
         float gmoselonly = 0.75F;
         float gmoseltarget = 1.75F;
 
-        int FlipOffset(int i) { return ((i&1)==0) ? ((i+1) / 2) : (-(i+1)/2); }
-
-        public List<IData3DSet> AddGalMapRegionsToDataset()
+        public List<IData3DSet> AddGalMapRegionsToDataset( bool colourregions)
         {
             var polydataset = Data3DSetClass<Polygon>.Create("regpolys", Color.White, 1f);      // ORDER AND NUMBER v.Important
             var outlinedataset = Data3DSetClass<Polygon>.Create("reglines", Color.White, 1f);   // DrawStars picks them out in a particular order
@@ -182,22 +180,22 @@ namespace EDDiscovery2._3DMap
                 long gmotarget = TargetClass.GetTargetGMO();
 
                 int cindex = 0;
-
-                //for (int i = 0; i < 100; i++)
-                //  Console.WriteLine("{0} {1} {2}", i, FlipOffset(i % 10), FlipOffset(i / 10));
-
-                StreamWriter writer = new StreamWriter("C:\\code\\debug.txt");
-
                 foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
                 {
                     //&& gmo.name.Equals("Sagittarius Gap") )//&& gmo.name.Equals("Gemina Gap" ) )// && gmo.name.Equals("Cygnus" ) 
-                    //&& gmo.name.Equals("Angustia" ) )
-
-                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Regions )//&& gmo.name.Equals("The Formidine Rift") )
+                    //&& gmo.name.Equals("Angustia" ) )//&& gmo.name.Equals("The Formidine Rift") )
+                
+                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Regions )// && gmo.name.Equals("Cygnus"))
                     {
                         string name = gmo.name;
 
-                        Color[] array = new Color[] { Color.Red, Color.Green, Color.Blue, Color.Brown, Color.Crimson, Color.Coral, Color.Aqua, Color.Yellow, Color.Violet, Color.Sienna, Color.Silver, Color.Salmon, Color.Pink , Color.AntiqueWhite , Color.Beige , Color.DarkCyan , Color.DarkGray };
+                        Color[] array = new Color[] { Color.Red, Color.Green, Color.Blue,
+                                                    Color.Brown, Color.Crimson, Color.Coral,
+                                                    Color.Aqua, Color.Yellow, Color.Violet,
+                                                    Color.Sienna, Color.Silver, Color.Salmon,
+                                                    Color.Pink , Color.AntiqueWhite , Color.Beige ,
+                                                    Color.DarkCyan , Color.DarkGray , Color.ForestGreen , Color.LightSkyBlue ,
+                                                    Color.Lime , Color.Maroon, Color.Olive, Color.SteelBlue};
                         Color c = array[cindex++ % array.Length];
 
                         List<Vector2> polygonxz = new List<Vector2>();                              // needs it in x/z and in vector2's
@@ -205,99 +203,48 @@ namespace EDDiscovery2._3DMap
                             polygonxz.Add(new Vector2((float)pd.x, (float)pd.z));                   // can be concave and wound the wrong way..
 
                         Vector2 size, avg;
-                        Vector2 centre = PolygonTriangulator.Centre(polygonxz, out size, out avg);      // geographic centre (min x/z + max x/z/2)
+                        Vector2 centre = PolygonTriangulator.Centre(polygonxz, out size, out avg);  // default geographic centre (min x/z + max x/z/2) used in case poly triangulate fails (unlikely)
 
-                        Bitmap map3 = DrawString("O", Color.White, gmostarfont);
-                        TexturedQuadData ntext3 = TexturedQuadData.FromBitmap(map3, new PointData(centre.X, 0, centre.Y), TexturedQuadData.NoRotation,
-                                                1000, 200);
-                        datasetbks.Add(ntext3);
-
-
-                        List< List<Vector2> > polys = PolygonTriangulator.Triangulate(polygonxz, false);
-                        Console.WriteLine("Region {0} decomposed to {1} ", name, polys.Count);
+                        List<List<Vector2>> polys = PolygonTriangulator.Triangulate(polygonxz, false);
+                        //Console.WriteLine("Region {0} decomposed to {1} ", name, polys.Count);
 
                         Vector2 bestpos = centre;
-                        float xsize = 1000;
+                        Vector2 bestsize = new Vector2(250, 250 / 5);
 
                         if (polys.Count > 0)                                                      // just in case..
                         {
-                            float maxsize = float.MinValue;
+                            centre = PolygonTriangulator.Centroids(polys);                       // weighted mean of the centroids
+                            //Bitmap map3 = DrawString(String.Format("O{0}", cindex - 1), Color.White, gmostarfont); TexturedQuadData ntext3 = TexturedQuadData.FromBitmap(map3, new PointData(centre.X, 0, centre.Y), TexturedQuadData.NoRotation, 2000, 500); datasetbks.Add(ntext3);
+
                             float mindist = float.MaxValue;
-                            int polynum = 0;
 
                             foreach (List<Vector2> points in polys)
                             {
-                                Polygon p = new Polygon(points, 1, Color.FromArgb(128, c.R, c.G, c.B), true, false);
-                                polydataset.Add(p);
-
-                                Polygon p2 = new Polygon(points, 1, Color.FromArgb(255, 255, 255, 255), false, false);
-                                outlinedataset.Add(p2);
-
-                                Vector2 polycentrepos = PolygonTriangulator.Centroid(points);
-
-                                string polyx = "X" + polynum;
-                                Bitmap map2 = DrawString(polyx, Color.White, gmostarfont);
-                                TexturedQuadData ntext2 = TexturedQuadData.FromBitmap(map2, new PointData(polycentrepos.X, 0, polycentrepos.Y), TexturedQuadData.NoRotation,
-                                                        1000, 200);
-                                datasetbks.Add(ntext2);
-
-                                bool stop = false;
-                                for (int sizediv = 1; !stop && sizediv <= 16; sizediv++)
+                                if (colourregions)
                                 {
-                                    float trysize = 4000 / sizediv;
-
-                                    if (maxsize >= trysize * 2)                        // just going too small, just take what we have..
-                                        break;
-
-                                    writer.WriteLine(String.Format("  {0} Try text {1}", polynum, trysize));
-
-                                    bool foundoneatthissize = false;
-
-                                    for (int i = 0; i < 1000; i++)
-                                    {
-                                        Vector2 trypos = new Vector2(polycentrepos.X + FlipOffset(i/50) * 500, polycentrepos.Y + FlipOffset(i%50) * 500);
-
-                                        float textfromgeocentre = (trypos - centre).Length;
-                                        bool inside = PolygonTriangulator.InsidePolygon(points, trypos, trysize, trysize / 5);
-
-                                        string debugline = String.Format("  Poly {0} At {1} {2} try {3} dist {4} inside {5} step {6}", polynum, trypos.X, trypos.Y, trysize, textfromgeocentre, inside, i);
-                                        writer.WriteLine(debugline);
-
-                                        if (inside)
-                                        {
-                                            if (textfromgeocentre < mindist)
-                                            {
-                                                mindist = textfromgeocentre;
-                                                bestpos = trypos;
-                                                xsize = maxsize = trysize;
-                                                writer.WriteLine(String.Format("  {0} Best pos at {1} size {2} dist {3}", polynum, i, trysize , mindist));
-                                                foundoneatthissize = true;
-                                            }
-                                        }
-                                    }
-
-                                    if (foundoneatthissize)
-                                        break;
+                                    Polygon p = new Polygon(points, 1, Color.FromArgb(64, c.R, c.G, c.B), true, false);
+                                    polydataset.Add(p);
                                 }
 
-                                if (maxsize < 0)
-                                    writer.WriteLine(String.Format("  {0} Best pos FAILED", polynum));
+                                //Polygon p2 = new Polygon(points, 1, Color.FromArgb(255, 255, 255, 0), false, false);
+                                //outlinedataset.Add(p2);
 
-                                polynum++;
+                                //float area; Vector2 polycentrepos = PolygonTriangulator.Centroid(points,out area); Bitmap map2 = DrawString(String.Format("X") , Color.White, gmostarfont);  TexturedQuadData ntext2 = TexturedQuadData.FromBitmap(map2, new PointData(polycentrepos.X, 0, polycentrepos.Y), TexturedQuadData.NoRotation, 1000, 200); datasetbks.Add(ntext2);
+
+                                PolygonTriangulator.FitInsideConvexPoly(points, centre, new Vector2(3000, 3000 / 5), new Vector2(200, 200),
+                                                                        ref mindist, ref bestpos, ref bestsize, bestsize.X / 2);
                             }
                         }
 
-
                         Bitmap map = DrawString(gmo.name, Color.White, gmostarfont);
                         PointData bitmappos = new PointData(bestpos.X, 0, bestpos.Y);
-                        Console.WriteLine("  Draw at {0} {1} size {2}", bitmappos.x, bitmappos.y, xsize);
                         TexturedQuadData ntext = TexturedQuadData.FromBitmap(map, bitmappos, TexturedQuadData.NoRotation,
-                                                xsize, xsize / 5);
+                                                bestsize.X, bestsize.Y);
 
                         datasetbks.Add(ntext);
 
-                        //Polygon p2 = new Polygon(gmo.points, 1, Color.FromArgb(255, 128, 128, 128), false, false);
-                        //outlinedataset.Add(p2);
+                        Polygon outline = new Polygon(gmo.points, 1, Color.FromArgb(255, 128, 128, 128), false, false);
+                        outlinedataset.Add(outline);
                     }
                 }
             }

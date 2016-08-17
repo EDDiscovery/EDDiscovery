@@ -10,7 +10,7 @@ namespace EDDiscovery2._3DMap
     
     public class PolygonTriangulator
     {
-        // from https://gist.github.com/KvanTTT/3855122 fixed
+        // some of it is from https://gist.github.com/KvanTTT/3855122 but a lot of it has been added/changed
 
         static bool Intersect(List<Vector2> polygon, int vertex1Ind, int vertex2Ind, int vertex3Ind)        // is any points within the triangle v1-v2-v3
         {
@@ -35,7 +35,7 @@ namespace EDDiscovery2._3DMap
             return false;
         }
 
-        public static bool InsidePolygon(List<Vector2> polygon, Vector2 point)             // Polygon is winded clockwise and must be convex
+        public static bool InsidePolygon(List<Vector2> polygon, Vector2 point)             // Polygon is wound clockwise and must be convex
         {
             for (int i = 0; i < polygon.Count; i++)
             {
@@ -49,8 +49,8 @@ namespace EDDiscovery2._3DMap
 
             return true;
         }
-
-        public static bool InsidePolygon(List<Vector2> polygon, Vector2 centre, float width, float height)                     // Polygon is winded clockwise
+                                                                                            // Polygon is wound clockwise and convex
+        public static bool InsidePolygon(List<Vector2> polygon, Vector2 centre, float width, float height)                     
         {
             width /= 2;
             height /= 2;
@@ -60,9 +60,10 @@ namespace EDDiscovery2._3DMap
                     InsidePolygon(polygon, new Vector2(centre.X + width, centre.Y - height));
         }
 
-        public static Vector2 Centroid(List<Vector2> polygon )                               // Polygon is closed convex
+        public static Vector2 Centroid(List<Vector2> polygon , out float area )              // Polygon is convex
         {
-            float x = 0, y = 0,area=0;
+            float x = 0, y = 0;
+            area = 0;
             for( int i = 0; i < polygon.Count; i++ )
             {
                 int np = (i + 1) % polygon.Count;
@@ -80,7 +81,26 @@ namespace EDDiscovery2._3DMap
             return new Vector2(x, y);
         }
 
-        public static float PolygonArea2(List<Vector2> polygon)                               // twice the size of polygon. Sign indicates winding order (clockwise+)
+        static public Vector2 Centroids(List<List<Vector2>> polys)                          // Weighted average of convex polygons
+        {                                                                                   // finds mean centre.
+            Vector2 mean = new Vector2(0, 0);
+            float totalweight = 0;
+            foreach (List<Vector2> poly in polys)
+            {
+                float area;
+                Vector2 pos = Centroid(poly, out area);
+                pos *= area;
+                mean += pos;
+                totalweight += area;
+            }
+
+            if (totalweight > 0)
+                mean /= totalweight;
+
+            return mean;
+        }
+
+        public static float PolygonArea(List<Vector2> polygon)                               // Polygon area, and sign indicats winding. + means clockwise
         {
             float S = 0;
             if (polygon.Count >= 3)
@@ -90,7 +110,8 @@ namespace EDDiscovery2._3DMap
 
                 S += PMSquare((Vector2)polygon[polygon.Count - 1], (Vector2)polygon[0]);
             }
-            return S;
+
+            return S/2;
         }
 
         static float PMSquare(Vector2 p1, Vector2 p2)
@@ -108,7 +129,7 @@ namespace EDDiscovery2._3DMap
             var result = new List<List<Vector2>>();
             var tempPolygon = new List<Vector2>(Polygon);       // copy since we need to modify
 
-            if (PolygonArea2(tempPolygon) < 0)                  // make sure we wind in the same direction positive (clockwise)
+            if (PolygonArea(tempPolygon) < 0)                  // make sure we wind in the same direction positive (clockwise)
                 tempPolygon.Reverse();
 
             int begin_ind = 0;                                  // from point 0
@@ -133,16 +154,18 @@ namespace EDDiscovery2._3DMap
                 convPolygon.Add(tempPolygon[cur_ind]);
                 convPolygon.Add(tempPolygon[(begin_ind + 2) % N]);
 
-                if (triangulate == false)
+                if (triangulate == false)           // this goes thru and sees if we can find another part to add to the polygon
                 {
                     int begin_ind1 = cur_ind;
-                    while ((PMSquare(tempPolygon[cur_ind], tempPolygon[(cur_ind + 1) % N],
-                                    tempPolygon[(cur_ind + 2) % N]) > 0) && ((cur_ind + 2) % N != begin_ind))
+                    while ( PMSquare(tempPolygon[cur_ind], tempPolygon[(cur_ind + 1) % N],tempPolygon[(cur_ind + 2) % N]) > 0 && 
+                            (cur_ind + 2) % N != begin_ind )
                     {
-                        if ((Intersect(tempPolygon, begin_ind, (cur_ind + 1) % N, (cur_ind + 2) % N) == true) ||
-                            (PMSquare(tempPolygon[begin_ind], tempPolygon[(begin_ind + 1) % N],
-                                      tempPolygon[(cur_ind + 2) % N]) < 0))
+                        if (Intersect(tempPolygon, begin_ind, (cur_ind + 1) % N, (cur_ind + 2) % N) == true ||
+                                PMSquare(tempPolygon[begin_ind], tempPolygon[(begin_ind + 1) % N], tempPolygon[(cur_ind + 2) % N]) < 0
+                           )
+                        {
                             break;
+                        }
 
                         convPolygon.Add(tempPolygon[(cur_ind + 2) % N]);
                         cur_ind++;
@@ -165,14 +188,64 @@ namespace EDDiscovery2._3DMap
                 begin_ind++;
                 begin_ind %= N;
 
-                if ( PolygonArea2(convPolygon) != 0 )                 // algorithm can produce polygons in a straight line, reject them if they have no size (pos or neg)
+                if ( PolygonArea(convPolygon) != 0 )                 // algorithm can produce polygons in a straight line, reject them if they have no size (pos or neg)
                     result.Add(convPolygon);
             }
 
             return result;
         }
 
-        static public Vector2 Centre(List<Vector2> Polygon, out Vector2 size, out Vector2 avg)     
+        static private int FlipOffset(int i) { return ((i & 1) == 0) ? ((i + 1) / 2) : (-(i + 1) / 2); }    // used to search
+
+        // Polygon must be convex and clockwise, brute force but it works.
+        static public void FitInsideConvexPoly(List<Vector2> points, Vector2 comparepoint, Vector2 startsize, Vector2 offsets,
+                                                    ref float mindist, ref Vector2 bestpos , ref Vector2 bestsize, float minwidthallowed = 1 , float scaling = 0.9F)
+        {
+            Vector2 startpoint = comparepoint;
+
+            if (!InsidePolygon(points, startpoint))                   // if given a point outside the polygon, no point starting there, pick the centroid
+            {
+                float area;
+                startpoint = PolygonTriangulator.Centroid(points, out area);
+            }
+
+            while ( startsize.X > minwidthallowed )
+            {
+                Vector2 trysize = startsize;
+                startsize *= scaling;
+
+                bool foundoneatthissize = false;
+
+                for (int i = 0; i < 1000; i++)
+                {
+                    Vector2 trypos = new Vector2(startpoint.X + FlipOffset(i / 50) * offsets.X, startpoint.Y + FlipOffset(i % 50) * offsets.Y);
+                    bool inside = PolygonTriangulator.InsidePolygon(points, trypos, trysize.X , trysize.Y);
+
+                    float fromcompare = (trypos - comparepoint).Length;
+
+                    //string debugline = String.Format("  Poly {0} At {1} {2} try {3} dist {4} inside {5} step {6}", polynum, trypos.X, trypos.Y, trysize, textfromgeocentre, inside, i);
+                    //writer.WriteLine(debugline);
+
+                    if (inside)
+                    {
+                        if (fromcompare < mindist)
+                        {
+                            mindist = fromcompare;
+                            bestpos = trypos;
+                            bestsize = trysize;
+                            //writer.WriteLine(String.Format("  {0} Best pos at {1} size {2} dist {3}", polynum, i, trysize, mindist));
+                            foundoneatthissize = true;
+                        }
+                    }
+                }
+
+                if (foundoneatthissize)
+                    break;
+            }
+        }
+
+        // Polygon may be concave and wound either way
+        static public Vector2 Centre(List<Vector2> Polygon, out Vector2 size, out Vector2 avg)     // work out some stats.
         {
             float minx = float.MaxValue, maxx = float.MinValue;
             float miny = float.MaxValue, maxy = float.MinValue;
@@ -200,11 +273,12 @@ namespace EDDiscovery2._3DMap
             return new Vector2((maxx + minx) / 2, (maxy + miny) / 2);
         }
 
+        // KEEP for debug for now..
+#if false
 
         static public void Test()       
         {
             ///EDDiscovery2._3DMap.PolygonTriangulator.Test();
-
             if (true)
             {
                 List<Vector2> points = new List<Vector2>();
@@ -243,10 +317,8 @@ namespace EDDiscovery2._3DMap
                 }
             }
 
-
-
             Console.WriteLine("END");
-        }
+    }
 
         static int LineIntersect(Vector2 A1, Vector2 A2, Vector2 B1, Vector2 B2, ref Vector2 O)     // NOT USED
         {
@@ -312,6 +384,7 @@ namespace EDDiscovery2._3DMap
         }
 
 
+#endif
 
     }
 }

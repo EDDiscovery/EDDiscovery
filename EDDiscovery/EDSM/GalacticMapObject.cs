@@ -14,7 +14,7 @@ namespace EDDiscovery.EDSM
         public string name;
         public string galMapSearch;
         public string galMapUrl;
-        public string color;
+        public string colour;
         public List<PointData> points;
         public string description;
         public string descriptionhtml;
@@ -33,7 +33,7 @@ namespace EDDiscovery.EDSM
             name = Tools.GetStringOrDefault(jo["name"],"No name set");
             galMapSearch = Tools.GetStringOrDefault(jo["galMapSearch"],"");
             galMapUrl = Tools.GetStringOrDefault(jo["galMapUrl"],"");
-            color = Tools.GetStringOrDefault(jo["color"],"Orange");
+            colour = Tools.GetStringOrDefault(jo["color"],"Orange");
             description = Tools.GetStringOrDefault(jo["descriptionMardown"],"No description");
             descriptionhtml = Tools.GetStringOrDefault(jo["descriptionHtml"],"");
             

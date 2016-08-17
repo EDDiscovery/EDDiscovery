@@ -114,6 +114,7 @@ namespace EDDiscovery2
         private bool _isActivated = false;
 
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
+        private ToolStripMenuItem _toolstripToggleRegionColouringButton;     // for picking up this option quickly
 
         public bool Is3DMapsRunning { get { return _stargrids != null; } }
 
@@ -193,27 +194,36 @@ namespace EDDiscovery2
 
                 foreach (GalMapType tp in EDDiscoveryForm.galacticMapping.galacticMapTypes)
                 {
-                    if ( tp.Group == GalMapType.GalMapGroup.Markers || tp.Group == GalMapType.GalMapGroup.Regions )       // only markers for now..
-                        toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp,null));
+                    if (tp.Group == GalMapType.GalMapGroup.Markers || tp.Group == GalMapType.GalMapGroup.Regions)       // only markers for now..
+                    {
+                        toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp, tp.Enabled));
+                        if (tp.Group == GalMapType.GalMapGroup.Regions)
+                        {
+                            _toolstripToggleRegionColouringButton = AddGalMapButton("Toggle Region Colouring", 2, SQLiteDBClass.GetSettingBool("Map3DGMORegionColouring", true));
+                            toolStripDropDownButtonGalObjects.DropDownItems.Add(_toolstripToggleRegionColouringButton);
+                        }
+                    }
                 }
 
-                toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton("Toggle All", null,null));
-                _toolstripToggleNamingButton = AddGalMapButton("Toggle Naming", null, SQLiteDBClass.GetSettingBool("Map3DGMONaming", true));
+                toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton("Toggle All", 0, null));
+
+                _toolstripToggleNamingButton = AddGalMapButton("Toggle Star Naming", 1, SQLiteDBClass.GetSettingBool("Map3DGMONaming", true));
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(_toolstripToggleNamingButton);
             }
         }
-        
-        public ToolStripMenuItem AddGalMapButton( string name, GalMapType tp, bool? checkedanyway)
+
+
+        public ToolStripMenuItem AddGalMapButton( string name, Object tt, bool? checkedbut)
         {
             ToolStripMenuItem tsmi = new ToolStripMenuItem();
             tsmi.Text = name; 
             tsmi.Size = new Size(195, 22);
-            tsmi.Tag = tp;
-            if (tp != null || checkedanyway.HasValue)
+            tsmi.Tag = tt;
+            if (checkedbut.HasValue)
             {
                 tsmi.CheckState = CheckState.Checked;
                 tsmi.CheckOnClick = true;
-                tsmi.Checked = (tp!=null) ? tp.Enabled : checkedanyway.Value;
+                tsmi.Checked = checkedbut.Value;
             }
             tsmi.Click += new System.EventHandler(this.showGalacticMapTypeMenuItem_Click);
             return tsmi;
@@ -623,36 +633,30 @@ namespace EDDiscovery2
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
         {
             Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
-
-            List<IData3DSet> oldbookmarks = _datasets_bookedmarkedsystems;
-
             Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
             Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
-
+            Bitmap mapnotedbkmark = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
+            Debug.Assert(mapnotedbkmark != null && maptarget != null);
             Debug.Assert(mapstar != null && mapregion != null);
 
+            List<IData3DSet> oldbookmarks = _datasets_bookedmarkedsystems;
             DatasetBuilder builder1 = new DatasetBuilder();
             _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
             DeleteDataset(ref oldbookmarks);
 
             List<IData3DSet> oldnotedsystems = _datasets_notedsystems;
-            Bitmap map = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
-            Debug.Assert(map != null);
-
             DatasetBuilder builder2 = new DatasetBuilder();
-            _datasets_notedsystems = builder2.AddNotedBookmarks(map, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _visitedSystems);
+            _datasets_notedsystems = builder2.AddNotedBookmarks(mapnotedbkmark, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _visitedSystems);
             DeleteDataset(ref oldnotedsystems);
 
             DatasetBuilder builder3 = new DatasetBuilder();
-
             List<IData3DSet> oldgalmaps = _datasets_galmapobjects;
             _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _toolstripToggleNamingButton.Checked);
             DeleteDataset(ref oldgalmaps);
 
             DatasetBuilder builder4 = new DatasetBuilder();
-
             List<IData3DSet> oldgalreg = _datasets_galmapregions;
-            _datasets_galmapregions = builder4.AddGalMapRegionsToDataset();
+            _datasets_galmapregions = builder4.AddGalMapRegionsToDataset(_toolstripToggleRegionColouringButton.Checked);
             DeleteDataset(ref oldgalreg);
 
             if (_clickedGMO != null)              // if GMO marked.
@@ -1448,28 +1452,28 @@ namespace EDDiscovery2
         private void showGalacticMapTypeMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem tmsi = (ToolStripMenuItem)sender;
-            GalMapType tp = (GalMapType)tmsi.Tag;
 
-            if (tp == null )
+            if ( tmsi.Tag is int )
             {
-                if (tmsi.Text.Contains("Naming"))
-                {
+                int v = (int)tmsi.Tag;
+                if (v == 1)
                     SQLiteDBClass.PutSettingBool("Map3DGMONaming", tmsi.Checked);
-                }
+                else if (v == 2)
+                    SQLiteDBClass.PutSettingBool("Map3DGMORegionColouring", tmsi.Checked);
                 else
                 {
                     EDDiscoveryForm.galacticMapping.ToggleEnable();
 
                     foreach (ToolStripMenuItem ti in toolStripDropDownButtonGalObjects.DropDownItems)
                     {
-                        if (ti.Tag != null)
+                        if (ti.Tag is GalMapType )
                             ti.Checked = ((GalMapType)ti.Tag).Enabled;
                     }
                 }
             }
             else
             {
-                EDDiscoveryForm.galacticMapping.ToggleEnable(tp);
+                EDDiscoveryForm.galacticMapping.ToggleEnable((GalMapType)tmsi.Tag);
             }
 
             GenerateDataSetsBNG();
