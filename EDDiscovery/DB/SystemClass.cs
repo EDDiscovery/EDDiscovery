@@ -1464,7 +1464,13 @@ namespace EDDiscovery.DB
 
         private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, SQLiteConnectionED cn, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
-            DateTime maxdate = DateTime.Parse(date, CultureInfo.InvariantCulture);
+            DateTime maxdate;
+
+            if (!DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out maxdate))
+            {
+                maxdate = new DateTime(2010, 1, 1);
+            }
+
             Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = useCache ? GetEdsmSystemsLite(cn) : new Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase>();
             int count = 0;
             int updatecount = 0;
@@ -1517,7 +1523,7 @@ namespace EDDiscovery.DB
                             if (!jr.Read())
                             {
                                 reportProgress(-1, $"Syncing EDSM systems: {count} processed, {insertcount} new systems, {updatecount} updated systems");
-                                date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture );
                                 txn.Commit();
 
                                 Console.WriteLine($"Import took {sw.ElapsedMilliseconds}ms");
