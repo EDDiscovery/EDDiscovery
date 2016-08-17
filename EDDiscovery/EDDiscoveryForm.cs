@@ -247,6 +247,11 @@ namespace EDDiscovery
                     }
                 }
             }
+            // Ignore DLL Not Found exceptions from OpenTK
+            else if (e.Exception is DllNotFoundException && e.Exception.Source == "OpenTK")
+            {
+                return;
+            }
 
             System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.ToString()}");
         }
