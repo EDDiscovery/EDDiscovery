@@ -253,7 +253,9 @@ namespace EDDiscovery
                 return;
             }
 
-            System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.ToString()}");
+            var trace = new StackTrace(1, true);
+
+            System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.Message}\n{trace.ToString()}");
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
@@ -547,7 +549,12 @@ namespace EDDiscovery
             CommanderName = EDDConfig.CurrentCommander.Name;
 
             string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-            DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
+            DateTime edsmdate;
+
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
+            {
+                edsmdate = new DateTime(2000, 1, 1);
+            }
 
             if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
             {
@@ -563,7 +570,7 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    SQLiteDBClass.PutSettingString("EDSMLastSystems", DateTime.Now.ToString());
+                    SQLiteDBClass.PutSettingString("EDSMLastSystems", DateTime.Now.ToString(CultureInfo.InvariantCulture));
                 }
             }
 
@@ -703,7 +710,13 @@ namespace EDDiscovery
         private bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-            DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
+            DateTime edsmdate;
+
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
+            {
+                edsmdate = new DateTime(2000, 1, 1);
+            }
+
             long updates = 0;
 
             try
