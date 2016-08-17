@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -537,16 +538,22 @@ namespace EDDiscovery.DB
         }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
-        public static int GetSystemVector(int gridid, ref Vector3d[] vertices, SystemAskType ask, int percentage)
+        public static int GetSystemVector(int gridid, ref Vector3[] vertices, ref int[] colours, 
+                                            SystemAskType ask, int percentage )
         {
             int numvertices = 0;
             vertices = null;
+            Color[] fixedc = new Color[4];
+            fixedc[0] = Color.Red;
+            fixedc[1] = Color.Orange;
+            fixedc[2] = Color.Yellow;
+            fixedc[3] = Color.White;
 
             try
             {
                 using (SQLiteConnectionED cn = new SQLiteConnectionED())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select id,x,y,z from Systems where gridid=@gridid"))
+                    using (DbCommand cmd = cn.CreateCommand("select id,x,y,z,randomid from Systems where gridid=@gridid"))
                     {
                         cmd.AddParameterWithValue("gridid", gridid);
 
@@ -565,13 +572,36 @@ namespace EDDiscovery.DB
                                 if (System.DBNull.Value != reader["x"])
                                 {
                                     if (vertices == null)
-                                        vertices = new Vector3d[1024];
+                                    {
+                                        vertices = new Vector3[1024];
+                                        colours = new int[1024];
+                                    }
                                     else if (numvertices == vertices.Length)
+                                    {
                                         Array.Resize(ref vertices, vertices.Length + 8192);
+                                        Array.Resize(ref colours, colours.Length + 8192);
+                                    }
 
-                                    vertices[numvertices++] = new Vector3d((double)reader["x"], (double)reader["y"], (double)reader["z"]);
+                                    Vector3 pos = new Vector3((float)(double)reader["x"], (float)(double)reader["y"], (float)(double)reader["z"]);
+
+                                    int rand = (int)(long)reader["randomid"];
+                                    Color basec = fixedc[rand&3]; 
+                                    int fade = 100 - ((rand>>2)&7) * 8;
+                                    byte red = (byte)(basec.R * fade / 100);
+                                    byte green = (byte)(basec.G * fade / 100);
+                                    byte blue = (byte)(basec.B * fade / 100);
+                                    colours[numvertices] = BitConverter.ToInt32(new byte[] { red, green, blue, 255 }, 0);
+                                    vertices[numvertices++] = pos;
                                 }
                             }
+                        }
+
+                        if (gridid == 810)    // BODGE do here, better once on here than every star for every grid..
+                        {                       // replace when we have a better naming system
+                            int solindex = Array.IndexOf(vertices, new Vector3(0, 0, 0));
+
+                            if (solindex >= 0)
+                                colours[solindex] = 0x00ffff;   //yellow
                         }
                     }
                 }
@@ -1828,7 +1858,7 @@ namespace EDDiscovery.DB
                                                 3,3,4,4,5, 5,6,7,8,9,                   // 10   -10,-8,-6,..
                                                 10,11,12,13,14, 14,15,15,16,16,         // 20 centre
                                                 17,17,17,17,17, 18,18,18,18,18,         // 30   +10
-                                                19                                      // 40   +20
+                                                19,19                                   // 40   +20
                                             };
         public const int gridzrange = 26;
         static private int[] compresstablez = {
@@ -1839,7 +1869,7 @@ namespace EDDiscovery.DB
                                                 19,19,19,19,19, 20,20,20,20,20,         // 40 +30
                                                 21,21,21,21,21, 22,22,22,22,22,         // 50 +40    
                                                 23,23,23,23,23, 24,24,24,24,24,         // 60 +50
-                                                25,                                     // 70 +60
+                                                25,25                                   // 70 +60
                                             };
         public const int xleft = -20500;
         public const int xright = 20000;
@@ -1848,10 +1878,10 @@ namespace EDDiscovery.DB
 
         public static int Id(double x, double z)
         {
-            x = Math.Min(Math.Max(x - xleft, 0), xright - xleft);
-            z = Math.Min(Math.Max(z - zbot, 0), ztop - zbot);
-            x /= 1000;
-            z /= 1000;
+            x = Math.Min(Math.Max(x - xleft, 0), xright - xleft);       // 40500
+            z = Math.Min(Math.Max(z - zbot, 0), ztop - zbot);           // 70500
+            x /= 1000;                                                  // 0-40.5 inc
+            z /= 1000;                                                  // 0-70.5 inc
             return compresstablex[(int)x] + 100 * compresstablez[(int)z];
         }
 
