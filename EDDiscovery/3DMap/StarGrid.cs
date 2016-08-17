@@ -403,12 +403,13 @@ namespace EDDiscovery2
         {
             if (computeThread!=null && computeThread.IsAlive)
             {
+                Console.WriteLine("{0} Ask for compute exit", Environment.TickCount);
                 computeExit = true;
                 ewh.Set();              // wake it up!
                 computeThread.Join();
                 computeThread = null;
                 computeExit = false;
-                //Console.WriteLine("Terminated 3dmap Compute");
+                Console.WriteLine("{0} compute exit", Environment.TickCount);
             }
         }
 

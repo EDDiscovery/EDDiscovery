@@ -314,7 +314,6 @@ namespace EDDiscovery2._3DMap
             else
             {
                 GL.PointSize(Size);
-
                 GL.Begin(Type);
                 GL.Color3(Color);
                 GL.Vertex3(x1, y1, z1);
@@ -1052,10 +1051,112 @@ namespace EDDiscovery2._3DMap
             {
                 return new TexturedQuadDataCollection(name, color, pointsize) as Data3DSetClass<T>;
             }
+            else if (typeof(T) == typeof(Polygon))
+            {
+                return new PolygonCollection(name, color, pointsize) as Data3DSetClass<T>;
+            }
             else
             {
                 return new Data3DSetClass<T>(name, color, pointsize);
             }
+        }
+    }
+
+
+    public class Polygon : IDrawingPrimative
+    {
+        List<PointData> vertices;
+
+        public Polygon(List<PointData> points, float size, Color c, bool filled, bool usey)
+        {
+            vertices = points;
+            Size = size;
+            Color = c;
+            Filled = filled;
+            UseY = usey;
+        }
+
+        public Polygon(List<Vector2> points, float size, Color c, bool filled, bool usey)
+        {
+            vertices = new List<PointData>();
+            foreach (Vector2 f in points)
+                vertices.Add(new PointData(f.X, 0, f.Y));
+
+            Size = size;
+            Color = c;
+            Filled = filled;
+            UseY = usey;
+        }
+
+        public PrimitiveType Type { get { return PrimitiveType.Polygon; } }
+        public Color Color { get; set; }
+        public float Size { get; set; }
+        public bool Filled { get; set; }
+        public bool UseY { get; set; }
+
+        public void Draw(GLControl control)
+        {
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new Action<GLControl>(this.Draw), control);
+            }
+            else
+            {
+                if (Filled)
+                {
+                    GL.Begin(Type);
+                    GL.Color4(Color);
+                    foreach (PointData v in vertices)
+                        GL.Vertex3(v.x, UseY ? v.y : 0, v.z);
+                    GL.End();
+                }
+                else
+                {
+                    GL.Begin(PrimitiveType.LineLoop);
+                    GL.Color4(Color);
+                    foreach (PointData v in vertices)
+                        GL.Vertex3(v.x, UseY ? v.y : 0, v.z);
+                    GL.End();
+
+                }
+            }
+        }
+    }
+
+    public class PolygonCollection : Data3DSetClass<Polygon>, IDisposable
+    {
+        List<Polygon> polygons;
+
+        public PolygonCollection(string name, Color color, float pointsize)
+            : base(name, color, pointsize)
+        {
+            polygons = new List<Polygon>();
+        }
+
+        public override void Add(Polygon primative)
+        {
+            polygons.Add(primative);
+        }
+
+        public override void DrawAll(GLControl control)
+        {
+            if (!Visible) return;
+
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new Action<GLControl>(this.DrawAll), control);
+            }
+            else
+            {
+                foreach (Polygon primative in polygons)
+                {
+                    primative.Draw(control);
+                }
+            }
+        }
+
+        public void Dispose()
+        {
         }
     }
 
@@ -1064,4 +1165,5 @@ namespace EDDiscovery2._3DMap
         string Name { get; set; }
         void DrawAll(GLControl control);
     }
+
 }

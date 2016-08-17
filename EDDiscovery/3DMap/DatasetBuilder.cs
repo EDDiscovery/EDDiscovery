@@ -13,6 +13,7 @@ using OpenTK;
 using System.Resources;
 using EDDiscovery.Properties;
 using EDDiscovery.EDSM;
+using System.IO;
 
 namespace EDDiscovery2._3DMap
 {
@@ -168,57 +169,198 @@ namespace EDDiscovery2._3DMap
         float gmoselonly = 0.75F;
         float gmoseltarget = 1.75F;
 
-        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, float widthly, float heightly, Vector3 rotation , bool namethem)
+        int FlipOffset(int i) { return ((i&1)==0) ? ((i+1) / 2) : (-(i+1)/2); }
+
+        public List<IData3DSet> AddGalMapRegionsToDataset()
+        {
+            var polydataset = Data3DSetClass<Polygon>.Create("regpolys", Color.White, 1f);      // ORDER AND NUMBER v.Important
+            var outlinedataset = Data3DSetClass<Polygon>.Create("reglines", Color.White, 1f);   // DrawStars picks them out in a particular order
+            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("regtext", Color.White, 1f);
+
+            if (EDDiscoveryForm.galacticMapping != null)
+            {
+                long gmotarget = TargetClass.GetTargetGMO();
+
+                int cindex = 0;
+
+                //for (int i = 0; i < 100; i++)
+                //  Console.WriteLine("{0} {1} {2}", i, FlipOffset(i % 10), FlipOffset(i / 10));
+
+                StreamWriter writer = new StreamWriter("C:\\code\\debug.txt");
+
+                foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
+                {
+                    //&& gmo.name.Equals("Sagittarius Gap") )//&& gmo.name.Equals("Gemina Gap" ) )// && gmo.name.Equals("Cygnus" ) 
+                    //&& gmo.name.Equals("Angustia" ) )
+
+                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Regions )//&& gmo.name.Equals("The Formidine Rift") )
+                    {
+                        string name = gmo.name;
+
+                        Color[] array = new Color[] { Color.Red, Color.Green, Color.Blue, Color.Brown, Color.Crimson, Color.Coral, Color.Aqua, Color.Yellow, Color.Violet, Color.Sienna, Color.Silver, Color.Salmon, Color.Pink , Color.AntiqueWhite , Color.Beige , Color.DarkCyan , Color.DarkGray };
+                        Color c = array[cindex++ % array.Length];
+
+                        List<Vector2> polygonxz = new List<Vector2>();                              // needs it in x/z and in vector2's
+                        foreach( PointData pd in gmo.points )
+                            polygonxz.Add(new Vector2((float)pd.x, (float)pd.z));                   // can be concave and wound the wrong way..
+
+                        Vector2 size, avg;
+                        Vector2 centre = PolygonTriangulator.Centre(polygonxz, out size, out avg);      // geographic centre (min x/z + max x/z/2)
+
+                        Bitmap map3 = DrawString("O", Color.White, gmostarfont);
+                        TexturedQuadData ntext3 = TexturedQuadData.FromBitmap(map3, new PointData(centre.X, 0, centre.Y), TexturedQuadData.NoRotation,
+                                                1000, 200);
+                        datasetbks.Add(ntext3);
+
+
+                        List< List<Vector2> > polys = PolygonTriangulator.Triangulate(polygonxz, false);
+                        Console.WriteLine("Region {0} decomposed to {1} ", name, polys.Count);
+
+                        Vector2 bestpos = centre;
+                        float xsize = 1000;
+
+                        if (polys.Count > 0)                                                      // just in case..
+                        {
+                            float maxsize = float.MinValue;
+                            float mindist = float.MaxValue;
+                            int polynum = 0;
+
+                            foreach (List<Vector2> points in polys)
+                            {
+                                Polygon p = new Polygon(points, 1, Color.FromArgb(128, c.R, c.G, c.B), true, false);
+                                polydataset.Add(p);
+
+                                Polygon p2 = new Polygon(points, 1, Color.FromArgb(255, 255, 255, 255), false, false);
+                                outlinedataset.Add(p2);
+
+                                Vector2 polycentrepos = PolygonTriangulator.Centroid(points);
+
+                                string polyx = "X" + polynum;
+                                Bitmap map2 = DrawString(polyx, Color.White, gmostarfont);
+                                TexturedQuadData ntext2 = TexturedQuadData.FromBitmap(map2, new PointData(polycentrepos.X, 0, polycentrepos.Y), TexturedQuadData.NoRotation,
+                                                        1000, 200);
+                                datasetbks.Add(ntext2);
+
+                                bool stop = false;
+                                for (int sizediv = 1; !stop && sizediv <= 16; sizediv++)
+                                {
+                                    float trysize = 4000 / sizediv;
+
+                                    if (maxsize >= trysize * 2)                        // just going too small, just take what we have..
+                                        break;
+
+                                    writer.WriteLine(String.Format("  {0} Try text {1}", polynum, trysize));
+
+                                    bool foundoneatthissize = false;
+
+                                    for (int i = 0; i < 1000; i++)
+                                    {
+                                        Vector2 trypos = new Vector2(polycentrepos.X + FlipOffset(i/50) * 500, polycentrepos.Y + FlipOffset(i%50) * 500);
+
+                                        float textfromgeocentre = (trypos - centre).Length;
+                                        bool inside = PolygonTriangulator.InsidePolygon(points, trypos, trysize, trysize / 5);
+
+                                        string debugline = String.Format("  Poly {0} At {1} {2} try {3} dist {4} inside {5} step {6}", polynum, trypos.X, trypos.Y, trysize, textfromgeocentre, inside, i);
+                                        writer.WriteLine(debugline);
+
+                                        if (inside)
+                                        {
+                                            if (textfromgeocentre < mindist)
+                                            {
+                                                mindist = textfromgeocentre;
+                                                bestpos = trypos;
+                                                xsize = maxsize = trysize;
+                                                writer.WriteLine(String.Format("  {0} Best pos at {1} size {2} dist {3}", polynum, i, trysize , mindist));
+                                                foundoneatthissize = true;
+                                            }
+                                        }
+                                    }
+
+                                    if (foundoneatthissize)
+                                        break;
+                                }
+
+                                if (maxsize < 0)
+                                    writer.WriteLine(String.Format("  {0} Best pos FAILED", polynum));
+
+                                polynum++;
+                            }
+                        }
+
+
+                        Bitmap map = DrawString(gmo.name, Color.White, gmostarfont);
+                        PointData bitmappos = new PointData(bestpos.X, 0, bestpos.Y);
+                        Console.WriteLine("  Draw at {0} {1} size {2}", bitmappos.x, bitmappos.y, xsize);
+                        TexturedQuadData ntext = TexturedQuadData.FromBitmap(map, bitmappos, TexturedQuadData.NoRotation,
+                                                xsize, xsize / 5);
+
+                        datasetbks.Add(ntext);
+
+                        //Polygon p2 = new Polygon(gmo.points, 1, Color.FromArgb(255, 128, 128, 128), false, false);
+                        //outlinedataset.Add(p2);
+                    }
+                }
+            }
+
+            _datasets.Add(polydataset);
+            _datasets.Add(outlinedataset);
+            _datasets.Add(datasetbks);
+            return _datasets;
+        }
+
+        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("galobj", Color.White, 1f);
 
-            if (EDDiscoveryForm.galacticMapping != null )
+            if (EDDiscoveryForm.galacticMapping != null)
             {
                 long gmotarget = TargetClass.GetTargetGMO();
 
                 foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
                 {
-                    PointData pd = (gmo.points.Count > 0) ? gmo.points[0] : null;     // lets be paranoid
-                    Bitmap touse = gmo.galMapType.Image;                        // under our control, so must have it
-
-                    if (touse != null && pd != null && gmo.galMapType.Enabled )     // if it has an image (may not) and has a co-ord, may not.. 
+                    if (gmo.galMapType.Enabled)
                     {
-                        Debug.Assert(touse != null);
+                        Bitmap touse = gmo.galMapType.Image;                        // under our control, so must have it
 
-                        TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly);
-                        newtexture.Tag = gmo;
-                        newtexture.Tag2 = 0;
-                        datasetbks.Add(newtexture);
-
-                        if (namethem)
+                        if (touse != null && gmo.points.Count > 0)             // if it has an image its a point object , and has co-ord
                         {
-                            Bitmap map = null;
+                            PointData pd = gmo.points[0];
 
-                            if (_cachedBitmaps.ContainsKey(gmo.name))      // cache them, they take a long time to compute..
+                            TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly);
+                            newtexture.Tag = gmo;
+                            newtexture.Tag2 = 0;
+                            datasetbks.Add(newtexture);
+
+                            if (namethem)
                             {
-                                map = _cachedBitmaps[gmo.name];
+                                Bitmap map = null;
+
+                                if (_cachedBitmaps.ContainsKey(gmo.name))      // cache them, they take a long time to compute..
+                                {
+                                    map = _cachedBitmaps[gmo.name];
+                                }
+                                else
+                                {
+                                    map = DrawString(gmo.name, Color.Orange, gmostarfont);
+                                    _cachedBitmaps.Add(gmo.name, map);
+                                }
+
+                                TexturedQuadData ntext = TexturedQuadData.FromBitmap(map, pd, rotation,
+                                                        (widthly / 10 * gmo.name.Length),
+                                                        (heightly / 3),
+                                                        0, heightly * gmonameoff);
+                                ntext.Tag = gmo;
+                                ntext.Tag2 = 1;
+                                datasetbks.Add(ntext);
                             }
-                            else
+
+                            if (gmo.id == gmotarget)
                             {
-                                map = DrawString(gmo.name, Color.Orange, gmostarfont);
-                                _cachedBitmaps.Add(gmo.name, map);
+                                TexturedQuadData ntag = TexturedQuadData.FromBitmap(target, pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
+                                ntag.Tag = gmo;
+                                ntag.Tag2 = 2;
+                                datasetbks.Add(ntag);
                             }
-
-                            TexturedQuadData ntext = TexturedQuadData.FromBitmap(map, pd, rotation, 
-                                                    (widthly / 10 * gmo.name.Length),
-                                                    (heightly / 3),
-                                                    0, heightly * gmonameoff);
-                            ntext.Tag = gmo;
-                            ntext.Tag2 = 1;
-                            datasetbks.Add(ntext);
-                        }
-
-                        if ( gmo.id == gmotarget )
-                        {
-                            TexturedQuadData ntag = TexturedQuadData.FromBitmap(target, pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
-                            ntag.Tag = gmo;
-                            ntag.Tag2 = 2;
-                            datasetbks.Add(ntag);
                         }
                     }
                 }
@@ -236,22 +378,25 @@ namespace EDDiscovery2._3DMap
 
             foreach ( IData3DSet dataset in _datasets )
             {
-                TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
-
-                foreach(TexturedQuadData tqd in tqdc.BaseTextures )
+                if (dataset is TexturedQuadDataCollection)
                 {
-                    GalacticMapObject gmo = tqd.Tag as GalacticMapObject;
-                    Debug.Assert(gmo != null);
-                    PointData pd = (gmo.points.Count > 0) ? gmo.points[0] : null;     // lets be paranoid
-                    Debug.Assert(pd!=null);
+                    TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
 
-                    int id = (int)tqd.Tag2;
-                    if ( id == 0 )
-                        tqd.UpdateVertices(pd, rotation, widthly,heightly);
-                    else if ( id == 1 )
-                        tqd.UpdateVertices(pd, rotation, (widthly / 10 * gmo.name.Length), (heightly / 3), 0, heightly * gmonameoff);
-                    else
-                        tqd.UpdateVertices(pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
+                    foreach (TexturedQuadData tqd in tqdc.BaseTextures)
+                    {
+                        GalacticMapObject gmo = tqd.Tag as GalacticMapObject;
+                        Debug.Assert(gmo != null);
+                        PointData pd = (gmo.points.Count > 0) ? gmo.points[0] : null;     // lets be paranoid
+                        Debug.Assert(pd != null);
+
+                        int id = (int)tqd.Tag2;
+                        if (id == 0)
+                            tqd.UpdateVertices(pd, rotation, widthly, heightly);
+                        else if (id == 1)
+                            tqd.UpdateVertices(pd, rotation, (widthly / 10 * gmo.name.Length), (heightly / 3), 0, heightly * gmonameoff);
+                        else
+                            tqd.UpdateVertices(pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
+                    }
                 }
             }
         }
