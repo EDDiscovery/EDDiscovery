@@ -301,7 +301,7 @@ namespace EDDiscovery2.DB
         {
             double dist;
             double dx, dy, dz;
-            Dictionary<long, ISystem> systems = distlist.Values.ToDictionary(s => s.id);
+            Dictionary<long, ISystem> systems = distlist.Values.GroupBy(s => s.id).ToDictionary(g => g.Key, g => g.First());
 
             foreach (VisitedSystemsClass pos in vs)
             {
