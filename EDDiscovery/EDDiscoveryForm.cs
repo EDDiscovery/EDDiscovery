@@ -177,6 +177,11 @@ namespace EDDiscovery
         // We can't prevent an unhandled exception from killing the application.
         // See https://blog.codinghorror.com/improved-unhandled-exception-behavior-in-net-20/
         // Log the exception info if we can, and ask the user to report it.
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        [System.Runtime.ConstrainedExecution.ReliabilityContract(
+            System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState,
+            System.Runtime.ConstrainedExecution.Cer.Success)]
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             try
