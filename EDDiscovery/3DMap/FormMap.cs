@@ -74,6 +74,10 @@ namespace EDDiscovery2
         private float _cameraSlewTime;                          // how long to take to do the slew
         private Vector3 _cameraSlewPosition;                    // where to slew to.
 
+        private float _cameraDirSlewProgress = 1.0f;               // 0 -> 1 slew progress
+        private float _cameraDirSlewTime;                          // how long to take to do the slew
+        private Vector3 _cameraDirSlewPosition;                    // where to slew to.
+
         private KeyboardActions _kbdActions = new KeyboardActions();
 
         private Timer _systemtimer = new Timer();     // kicks off star naming
@@ -117,6 +121,8 @@ namespace EDDiscovery2
         private ToolStripMenuItem _toolstripToggleRegionColouringButton;     // for picking up this option quickly
 
         public bool Is3DMapsRunning { get { return _stargrids != null; } }
+
+        MapRecorder maprecorder = new MapRecorder();
 
         #endregion
 
@@ -311,7 +317,7 @@ namespace EDDiscovery2
                     double x, y, z;
 
                     if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
-                        StartCameraSlew(new Vector3((float)x, (float)y, (float)z));
+                        StartCameraSlew(new Vector3((float)x, (float)y, (float)z),-1F);
                 }
 
                 Repaint();
@@ -654,6 +660,7 @@ namespace EDDiscovery2
             _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _toolstripToggleNamingButton.Checked);
             DeleteDataset(ref oldgalmaps);
 
+
             DatasetBuilder builder4 = new DatasetBuilder();
             List<IData3DSet> oldgalreg = _datasets_galmapregions;
             _datasets_galmapregions = builder4.AddGalMapRegionsToDataset(_toolstripToggleRegionColouringButton.Checked);
@@ -690,7 +697,39 @@ namespace EDDiscovery2
             DoCameraSlew();
             UpdateCamera();
 
-            if (_kbdActions.Any() || (_cameraSlewProgress < 1.0f))          // if we have any future work, start the kick timer..
+            maprecorder.Record(_viewtargetpos, _cameraDir , _zoom);
+
+            if ( maprecorder.InPlayBack )
+            { 
+                Vector3 newpos, newdir;
+                float newzoom,timetopan,timetofly;
+                string message;
+                if (maprecorder.PlayBack(out newpos, out timetofly , out newdir, out timetopan, out newzoom,out message ))
+                {
+                    Console.WriteLine("{0} Playback {1} {2} {3} fly {4} pan {5} msg {6}", _updateinterval.ElapsedMilliseconds % 10000,
+                        newpos, newdir, newzoom, timetofly, timetopan, message);
+
+                    StartCameraSlewNI(newpos, (float)timetofly / 1000.0F);
+
+                    StartCameraPan(newdir, (float)timetopan / 1000.0F);
+
+                    if (newzoom != _zoom)
+                    {
+                        _zoom = newzoom;
+                        UpdateDataSetsDueToZoom();
+                    }
+
+                    _requestrepaint = true;
+                }
+
+                if ( !maprecorder.InPlayBack )  // dropped out of playback?
+                {
+                    toolStripDropDownRecord.Image = EDDiscovery.Properties.Resources.VideoRecorder;
+                }
+            }
+
+
+            if (_kbdActions.Any() || (_cameraSlewProgress < 1.0f || _cameraDirSlewProgress < 1.0F ))          // if we have any future work, start the kick timer..
             {
                 //Console.WriteLine("keyboard/slew ");
                 _requestrepaint = true;
@@ -710,8 +749,6 @@ namespace EDDiscovery2
                 _requestrepaint = true;
                 //Console.WriteLine("flip ");
             }
-
-            //Console.WriteLine("Tick m{0} d{1}", _lastcameranorm.CameraMoved , _lastcameranorm.CameraDirChanged);
 
             if (!_starnamesbusy)                            // flag indicates work is happening in the background
             {
@@ -743,6 +780,7 @@ namespace EDDiscovery2
 
             if (_requestrepaint)
             {
+                //Console.WriteLine("{0} {1} Tick m{2} d{3} key {4} {5} ", _updateinterval.ElapsedMilliseconds % 10000, _msticks, _lastcameranorm.CameraMoved, _lastcameranorm.CameraDirChanged, _kbdActions.Any(), (_msticks > 100) ? "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" : "");
                 _requestrepaint = false;
                 glControl.Invalidate();                 // and kick paint - not via the function ON purpose, so we can distinguish between this and others reasons
             }
@@ -801,7 +839,7 @@ namespace EDDiscovery2
                 _centerSystem = sys;
                 SetCenterSystemLabel();
                 GenerateDataSetsSelectedSystems();
-                StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z));
+                StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z),-1F);
                 return true;
             }
             else
@@ -838,11 +876,15 @@ namespace EDDiscovery2
                     _lastcamerastarnames.ForceZoomChanged();              // this will make it recalc..
                 }
 
-
                 if (state[Key.F2])
                 {
                     _starnameslist.DecreaseStarLimit();
                     _lastcamerastarnames.ForceZoomChanged();              // this will make it recalc..
+                }
+
+                if (state[Key.F5])
+                {
+                    maprecorder.RecordStepDialog(_viewtargetpos,_cameraDir,_zoom);
                 }
 
                 _kbdActions.Left = (state[Key.Left] || state[Key.A]);
@@ -1055,8 +1097,7 @@ namespace EDDiscovery2
             glControl.SwapBuffers();
             UpdateStatus();
 
-            //long elapsed = sw1.ElapsedMilliseconds;
-            //Console.WriteLine("{0} Time {1} {2}", Environment.TickCount, elapsed, (elapsed>50) ? "***********************":"");
+            //long elapsed = sw1.ElapsedMilliseconds;  Console.WriteLine("{0} Time {1} {2}", _updateinterval.ElapsedMilliseconds % 10000, elapsed, (elapsed>50) ? "***********************":"");
         }
 
         private void DrawStars()
@@ -1167,7 +1208,14 @@ namespace EDDiscovery2
 
         #region Camera Slew and Update
 
-        private void StartCameraSlew(Vector3 pos)       // may pass a Nan Position - no action
+        private void StartCameraSlew(Vector3 pos, float timeslewsec = 0)       // may pass a Nan Position - no action. Y is normal sense
+        {
+            Vector3 invviewpos = new Vector3(pos);
+            invviewpos.Y = -invviewpos.Y;
+            StartCameraSlewNI(invviewpos, timeslewsec);
+        }
+                                                                               // time <0 estimate, 0 instance >0 time
+        private void StartCameraSlewNI(Vector3 pos, float timeslewsec = 0)     // may pass a Nan Position - no action.  pos.Y is same sense as _viewtargetpos (i.e inverted)
         {
             if (!float.IsNaN(pos.X))
             {
@@ -1175,10 +1223,37 @@ namespace EDDiscovery2
 
                 if (dist >= 1)
                 {
-                    _cameraSlewPosition = pos;
-                    _cameraSlewProgress = 0.0f;
-                    _cameraSlewTime = (float)Math.Max(2.0, dist / 10000.0);            //10000 ly/sec, with a minimum slew
-                    //Console.WriteLine("Slew " + dist + " in " + _cameraSlewTime);
+                    if (timeslewsec == 0)
+                    {
+                        _viewtargetpos = pos;
+                    }
+                    else
+                    {
+                        _cameraSlewPosition = pos;
+                        _cameraSlewProgress = 0.0f;
+                        _cameraSlewTime = (timeslewsec < 0) ? ((float)Math.Max(2.0, dist / 10000.0)) : timeslewsec;            //10000 ly/sec, with a minimum slew
+                        Console.WriteLine("{0} Slew {1} in {2}", _updateinterval.ElapsedMilliseconds % 10000, dist, _cameraSlewTime);
+                        KillHover();
+                        _requestrepaint = true;
+                    }
+                }
+            }
+        }
+
+        private void StartCameraPan(Vector3 pos , float timeslewsec = 0)       // may pass a Nan Position - no action
+        {
+            if (!float.IsNaN(pos.X))
+            {
+                if (timeslewsec == 0)
+                {
+                    _cameraDir = pos;
+                }
+                else
+                {
+                    _cameraDirSlewPosition = pos;
+                    _cameraDirSlewProgress = 0.0f;
+                    _cameraDirSlewTime = (timeslewsec == 0) ? (1.0F) : timeslewsec;
+                    Console.WriteLine("{0} Pan in {1} target {2}", _updateinterval.ElapsedMilliseconds % 10000, _cameraSlewTime , _cameraDirSlewPosition);
                     KillHover();
                     _requestrepaint = true;
                 }
@@ -1190,6 +1265,7 @@ namespace EDDiscovery2
             if (_kbdActions.Any())
             {
                 _cameraSlewProgress = 1.0f;
+                _cameraDirSlewProgress = 1.0f;
             }
 
             if (_cameraSlewProgress < 1.0f)
@@ -1197,11 +1273,12 @@ namespace EDDiscovery2
                 _cameraActionMovement = Vector3.Zero;
                 Debug.Assert(_cameraSlewTime > 0);
                 var newprogress = _cameraSlewProgress + _msticks / (_cameraSlewTime * 1000);
-                var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(-_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
+                var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
 
                 if (newprogress >= 1.0f)
                 {
-                    _viewtargetpos = new Vector3(_cameraSlewPosition.X,-_cameraSlewPosition.Y, _cameraSlewPosition.Z);
+                    _viewtargetpos = new Vector3(_cameraSlewPosition.X,_cameraSlewPosition.Y, _cameraSlewPosition.Z);
+                    //Console.WriteLine("{0} Slew complete at {1} {2}" , _updateinterval.ElapsedMilliseconds % 10000,_viewtargetpos, _cameraSlewPosition);
                 }
                 else
                 {
@@ -1214,6 +1291,30 @@ namespace EDDiscovery2
 
                 _requestrepaint = true;
                 _cameraSlewProgress = (float)newprogress;
+            }
+
+            if (_cameraDirSlewProgress < 1.0f)
+            {
+                var newprogress = _cameraDirSlewProgress + _msticks / (_cameraDirSlewTime * 1000);
+                var totvector = new Vector3((float)(_cameraDirSlewPosition.X - _cameraDir.X), (float)(_cameraDirSlewPosition.Y - _cameraDir.Y), (float)(_cameraDirSlewPosition.Z - _cameraDir.Z));
+
+                if (newprogress >= 1.0f)
+                {
+                    _cameraDir = _cameraDirSlewPosition;
+                    //Console.WriteLine("{0} Pan complete", _updateinterval.ElapsedMilliseconds % 10000);
+                }
+                else
+                {
+                    var slewstart = Math.Sin((_cameraDirSlewProgress - 0.5) * Math.PI);
+                    var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
+                    Debug.Assert((1 - 0 - slewstart) != 0);
+                    var slewfact = (slewend - slewstart) / (1.0 - slewstart);
+                    _cameraDir += Vector3.Multiply(totvector, (float)slewfact);
+                    //Console.WriteLine("Vector {0} Dir {1} progress {2}", totvector, _cameraDir, newprogress);
+                }
+
+                _requestrepaint = true;
+                _cameraDirSlewProgress = (float)newprogress;
             }
         }
 
@@ -1277,9 +1378,46 @@ namespace EDDiscovery2
             return (float)(Math.PI * angle / 180.0);
         }
 
-#endregion
+        public static Vector3 AzEl(Vector3 curpos, Vector3 target)
+        {
+            Vector3 delta = Vector3.Subtract(target, curpos);
+            //Console.WriteLine("{0}->{1} d {2}", curpos, target, delta);
 
-#region User Controls
+            float radius = delta.Length;
+
+            if (radius < 0.1)
+                return new Vector3(180, 0,0);     // point forward, level
+
+            float inclination = (float)Math.Acos(delta.Y / radius);
+            float azimuth = (float)Math.Atan(delta.Z / delta.X);
+
+            inclination *= (float)(180 / Math.PI);
+            azimuth *= (float)(180 / Math.PI);
+
+            if (delta.X < 0)      // atan wraps -90 (south)->+90 (north), then -90 to +90 around the y axis, going anticlockwise
+                azimuth += 180;
+            azimuth += 90;        // adjust to 0 at bottom, 180 north, to 360
+
+            return new Vector3(inclination,azimuth, 0);   
+        }
+
+
+        private void CameraLookAt(Vector3 target, float time = 0)            // real world 
+        {
+            Vector3 upsidedown = new Vector3(target.X, -target.Y, target.Z);
+            CameraLookAtI(upsidedown,time);
+        }
+
+        private void CameraLookAtI(Vector3 target, float time = 0)            // target in same sense at _viewtargetpos
+        {
+            Vector3 camera = AzEl(_viewtargetpos, target);
+            camera.Y = 180 - camera.Y;      // adjust to this system
+            StartCameraPan(camera, time);
+        }
+
+        #endregion
+
+        #region User Controls
 
         private void EndPicker_ValueChanged(object sender, EventArgs e)
         {
@@ -1337,33 +1475,37 @@ namespace EDDiscovery2
             Repaint();
         }
 
-        private void textboxFrom_KeyUp(object sender, KeyEventArgs e)
+        private void buttonLookAt_Click(object sender, EventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-                buttonCenter_Click(sender, e);
+            CentreLook(false);
         }
 
         private void buttonCenter_Click(object sender, EventArgs e)
         {
-            ISystem sys = FindSystem(textboxFrom.Text);
+            CentreLook(true);
+        }
 
-            if (sys != null)
+        void CentreLook(bool moveto )
+        { 
+            ISystem sys;
+            GalacticMapObject gmo;
+            Vector3 loc;
+
+            string name = FindSystemOrGMO(textboxFrom.Text, out sys, out gmo, out loc);
+
+            if (name != null)
             {
-                textboxFrom.Text = sys.name;        // normalise name (user may have different 
-                SetCenterSystemTo(sys);
+                textboxFrom.Text = name;        // normalise name (user may have different 
+
+                if (sys != null && moveto)
+                    SetCenterSystemTo(sys);
+                else if (moveto)
+                    StartCameraSlew(loc,-1F);
+                else
+                    CameraLookAt(loc,2F);
             }
             else
-            {
-                GalacticMapObject gmo = EDDiscoveryForm.galacticMapping.Find(textboxFrom.Text, true, true);    // ignore if its off, find any part of string, find if disabled
-
-                if (gmo != null)
-                {
-                    textboxFrom.Text = gmo.name;
-                    StartCameraSlew(new Vector3((float)gmo.points[0].x, (float)gmo.points[0].y, (float)gmo.points[0].z));
-                }
-                else
-                    MessageBox.Show("System or Object " + textboxFrom.Text + " not found");
-            }
+                MessageBox.Show("System or Object " + textboxFrom.Text + " not found");
         }
 
         private void toolStripButtonGoBackward_Click(object sender, EventArgs e)
@@ -1397,7 +1539,7 @@ namespace EDDiscovery2
 
             if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
-                StartCameraSlew(new Vector3((float)x, (float)y, (float)z));
+                StartCameraSlew(new Vector3((float)x, (float)y, (float)z),-1F);
             }
             else
             {
@@ -1463,7 +1605,7 @@ namespace EDDiscovery2
                 else
                 {
                     EDDiscoveryForm.galacticMapping.ToggleEnable();
-
+                    
                     foreach (ToolStripMenuItem ti in toolStripDropDownButtonGalObjects.DropDownItems)
                     {
                         if (ti.Tag is GalMapType )
@@ -1596,7 +1738,7 @@ namespace EDDiscovery2
             if (_clickedSystem!=null)
                 SetCenterSystemTo(_clickedSystem);
             else 
-                StartCameraSlew(_clickedposition);      // if nan, will ignore..
+                StartCameraSlew(_clickedposition,-1F);      // if nan, will ignore..
         }
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -1629,13 +1771,89 @@ namespace EDDiscovery2
             }
         }
 
-#endregion
+        private void recordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            maprecorder.ToggleRecord(false);
+            toolStripDropDownRecord.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.RecordPressed : EDDiscovery.Properties.Resources.VideoRecorder;
+        }
 
-#region Mouse
+        private void recordStepF5ToStepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            maprecorder.ToggleRecord(true);
+            toolStripDropDownRecord.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.RecordPressed : EDDiscovery.Properties.Resources.VideoRecorder;
+        }
+
+        private void playbackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            maprecorder.TogglePlayBack();
+            toolStripDropDownRecord.Image = maprecorder.InPlayBack ? EDDiscovery.Properties.Resources.PlayNormal : EDDiscovery.Properties.Resources.VideoRecorder;
+        }
+
+        private void pauseRecordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            maprecorder.TogglePause();
+
+            if (maprecorder.Paused)
+                toolStripDropDownRecord.Image = (maprecorder.Recording) ? EDDiscovery.Properties.Resources.PauseNormalRed : EDDiscovery.Properties.Resources.pauseblue;
+            else if (maprecorder.Recording)
+                toolStripDropDownRecord.Image = EDDiscovery.Properties.Resources.RecordPressed;
+            else
+                toolStripDropDownRecord.Image = EDDiscovery.Properties.Resources.PlayNormal;
+        }
+
+        private void toolStripDropDownRecord_DropDownOpening(object sender, EventArgs e)
+        {
+            recordToolStripMenuItem.Text = maprecorder.Recording ? "Stop Recording (F5 to record a special step)" : "Start Recording";
+            recordToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+            recordToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingStep;
+
+            recordStepF5ToStepToolStripMenuItem.Text = maprecorder.Recording ? "Stop Recording (F5 to record a step)" : "Start Step Recording";
+            recordStepF5ToStepToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+            recordStepF5ToStepToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingNormal;
+
+            playbackToolStripMenuItem.Text = maprecorder.InPlayBack ? "Stop Playback" : "Start Playback";
+            playbackToolStripMenuItem.Image = maprecorder.InPlayBack ? EDDiscovery.Properties.Resources.StopNormalBlue : EDDiscovery.Properties.Resources.PlayNormal;
+            playbackToolStripMenuItem.Enabled = maprecorder.Entries && !maprecorder.Recording;
+
+            if (maprecorder.InPlayBack)
+            {
+                pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Restart Playback" : "Pause Playback";
+                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.pauseblue;
+            }
+            else if (maprecorder.Recording)
+            {
+                pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Restart Recording" : "Pause Recording";
+                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
+            }
+            else
+            {
+                pauseRecordToolStripMenuItem.Text = "Pause";
+                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
+            }
+
+            pauseRecordToolStripMenuItem.Enabled = maprecorder.Recording || maprecorder.InPlayBack;
+
+            saveToFileToolStripMenuItem.Enabled = maprecorder.Entries;
+        }
+
+        private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            maprecorder.SaveDialog();
+        }
+
+        private void LoadFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            maprecorder.LoadDialog();
+        }
+
+        #endregion
+
+        #region Mouse
 
         private void glControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             _cameraSlewProgress = 1.0f;
+            _cameraDirSlewProgress = 1.0f;
 
             _mouseDownPos.X = e.X;
             _mouseDownPos.Y = e.Y;
@@ -1871,7 +2089,7 @@ namespace EDDiscovery2
 
         private void glControl_DoubleClick(object sender, EventArgs e)
         {
-            StartCameraSlew(_clickedposition);
+            StartCameraSlew(_clickedposition,-1F);
         }
 
         private void glControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -1880,7 +2098,7 @@ namespace EDDiscovery2
             {
                 if (_mouseStartRotate.X != int.MinValue) // on resize double click resize, we get a stray mousemove with left, so we need to make sure we actually had a down event
                 {
-                    _cameraSlewProgress = 1.0f;
+                    _cameraDirSlewProgress = _cameraSlewProgress = 1.0f;
                     //Console.WriteLine("Mouse move left");
                     int dx = e.X - _mouseStartRotate.X;
                     int dy = e.Y - _mouseStartRotate.Y;
@@ -1908,7 +2126,7 @@ namespace EDDiscovery2
             {
                 if (_mouseStartTranslateXY.X != int.MinValue)
                 {
-                    _cameraSlewProgress = 1.0f;
+                    _cameraDirSlewProgress = _cameraSlewProgress = 1.0f;
 
                     int dx = e.X - _mouseStartTranslateXY.X;
                     int dy = e.Y - _mouseStartTranslateXY.Y;
@@ -1928,7 +2146,7 @@ namespace EDDiscovery2
             {
                 if (_mouseStartTranslateXZ.X != int.MinValue)
                 {
-                    _cameraSlewProgress = 1.0f;
+                    _cameraDirSlewProgress = _cameraSlewProgress = 1.0f;
 
                     int dx = e.X - _mouseStartTranslateXZ.X;
                     int dy = e.Y - _mouseStartTranslateXZ.Y;
@@ -1955,7 +2173,7 @@ namespace EDDiscovery2
                     KillHover();                                // we move we kill the hover.
 
                                                                 // no tool tip, not slewing, not ticking..
-                if (_mousehovertooltip == null && _cameraSlewProgress >= 1.0F && !_mousehovertick.Enabled)
+                if (_mousehovertooltip == null && _cameraSlewProgress >= 1.0F && _cameraDirSlewProgress >= 1.0F && !_mousehovertick.Enabled)
                 {
                     //Console.WriteLine("{0} Start tick", Environment.TickCount);
                     _mouseHover = e.Location;
@@ -2114,7 +2332,6 @@ namespace EDDiscovery2
                     UpdateDataSetsDueToZoom();
             }
 
-            SetupViewport();
             _requestrepaint = true;
         }
 
@@ -2442,6 +2659,29 @@ namespace EDDiscovery2
             }
 
             return s;
+        }
+
+        public string FindSystemOrGMO(string name, out ISystem sys, out GalacticMapObject gmo , out Vector3 loc )
+        {
+            gmo = null;
+            sys = FindSystem(textboxFrom.Text);
+            loc = new Vector3(0, 0, 0);
+
+            if (sys != null)
+            {
+                loc = new Vector3((float)sys.x, (float)sys.y, (float)sys.z);
+                return sys.name;
+            }
+
+            gmo = EDDiscoveryForm.galacticMapping.Find(textboxFrom.Text, true, true);    // ignore if its off, find any part of string, find if disabled
+
+            if ( gmo != null )
+            {
+                loc = new Vector3((float)gmo.points[0].x, (float)gmo.points[0].y, (float)gmo.points[0].z);
+                return gmo.name;
+            }
+
+            return null;
         }
 
         #endregion
