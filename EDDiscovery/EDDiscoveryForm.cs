@@ -132,19 +132,20 @@ namespace EDDiscovery
                     Directory.CreateDirectory(logpath);
                 }
 
-#if !DEBUG
-                logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
+                if (!Debugger.IsAttached)
+                {
+                    logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
 
-                System.Diagnostics.Trace.AutoFlush = true;
-                // Log trace events to the above file
-                System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(logname));
-                // Log unhandled exceptions
-                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-                // Log unhandled UI exceptions
-                Application.ThreadException += Application_ThreadException;
-                // Redirect console to trace
-                Console.SetOut(new TraceLogWriter());
-#endif
+                    System.Diagnostics.Trace.AutoFlush = true;
+                    // Log trace events to the above file
+                    System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(logname));
+                    // Log unhandled exceptions
+                    AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                    // Log unhandled UI exceptions
+                    Application.ThreadException += Application_ThreadException;
+                    // Redirect console to trace
+                    Console.SetOut(new TraceLogWriter());
+                }
                 // Log first-chance exceptions to help diagnose errors
                 Register_FirstChanceException_Handler();
             }
@@ -176,6 +177,11 @@ namespace EDDiscovery
         // We can't prevent an unhandled exception from killing the application.
         // See https://blog.codinghorror.com/improved-unhandled-exception-behavior-in-net-20/
         // Log the exception info if we can, and ask the user to report it.
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        [System.Runtime.ConstrainedExecution.ReliabilityContract(
+            System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState,
+            System.Runtime.ConstrainedExecution.Cer.Success)]
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             try
@@ -241,8 +247,15 @@ namespace EDDiscovery
                     }
                 }
             }
+            // Ignore DLL Not Found exceptions from OpenTK
+            else if (e.Exception is DllNotFoundException && e.Exception.Source == "OpenTK")
+            {
+                return;
+            }
 
-            System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.ToString()}");
+            var trace = new StackTrace(1, true);
+
+            System.Diagnostics.Trace.WriteLine($"First chance exception: {e.Exception.Message}\n{trace.ToString()}");
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
@@ -536,7 +549,12 @@ namespace EDDiscovery
             CommanderName = EDDConfig.CurrentCommander.Name;
 
             string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-            DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
+            DateTime edsmdate;
+
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
+            {
+                edsmdate = new DateTime(2000, 1, 1);
+            }
 
             if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
             {
@@ -552,7 +570,7 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    SQLiteDBClass.PutSettingString("EDSMLastSystems", DateTime.Now.ToString());
+                    SQLiteDBClass.PutSettingString("EDSMLastSystems", DateTime.Now.ToString(CultureInfo.InvariantCulture));
                 }
             }
 
@@ -692,7 +710,13 @@ namespace EDDiscovery
         private bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-            DateTime edsmdate = DateTime.Parse(rwsystime, new CultureInfo("sv-SE"));
+            DateTime edsmdate;
+
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
+            {
+                edsmdate = new DateTime(2000, 1, 1);
+            }
+
             long updates = 0;
 
             try
@@ -933,10 +957,10 @@ namespace EDDiscovery
             LogLine("Refreshing complete.");
             if (syncwasfirstrun)
             {
-                LogLine("ESDM and EDDB update complete. Please restart ED Discovery to complete the synchronisation ");
+                LogLine("EDSM and EDDB update complete. Please restart ED Discovery to complete the synchronisation ");
             }
             else if (syncwaseddboredsm)
-                LogLine("ESDM and/or EDDB update complete.");
+                LogLine("EDSM and/or EDDB update complete.");
 
             edsmRefreshTimer.Enabled = true;
         }
