@@ -19,3 +19,4 @@ It contains the following tables:
 * [`StellarBodyStarDetails`](EDDUser/StellarBodyStarDetails.md): Star details
 * [`StellarBodyPlanetMoonDetails`](EDDUser/StellarBodyPlanetMoonDetails.md): Planet / moon details
 * [`StellarBodyMaterials`](EDDUser/StellarBodyMaterials.md): Material concentrations on stellar bodies
+* WantedSystems
