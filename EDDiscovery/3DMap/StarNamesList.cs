@@ -335,12 +335,12 @@ namespace EDDiscovery2
 
                     if ( sys.inview )                       // in view, send it to the renderer
                     {
-                        if (sys.paintstar != null)                  // if star disk, paint..
+                        if (sys.paintstar != null && _discson )                  // if star disk, paint..
                         {
                             sys.paintstar.Draw(_glControl);
                         }
 
-                        if (sys.nametexture != null)           // being paranoid by treating these separately. Thread may finish painting one before the other.
+                        if (sys.nametexture != null && _nameson)           // being paranoid by treating these separately. Thread may finish painting one before the other.
                         {
                             sys.nametexture.Draw(_glControl);
                         }
