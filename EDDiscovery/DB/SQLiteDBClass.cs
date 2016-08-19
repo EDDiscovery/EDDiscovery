@@ -262,63 +262,6 @@ namespace EDDiscovery.DB
         EDDSystem = 4
     }
 
-    public class SQLiteConnectionED : IDisposable              // USE this for connections.. 
-    {
-        //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
-                                                                // causes the program to become unresponsive during big DB updates
-        private DbConnection _cn;
-
-        public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
-        {
-            // System.Threading.Monitor.Enter(monitor);
-            //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
-            _cn = SQLiteDBClass.CreateCN(maindb ?? SQLiteDBClass.DefaultMainDatabase, selector);
-        }
-
-        public DbCommand CreateCommand(string cmd, DbTransaction tn = null)
-        {
-            return new SQLiteCommandED(_cn.CreateCommand(cmd), tn);
-        }
-
-        public DbTransaction BeginTransaction(IsolationLevel isolevel)
-        {
-            // Take the transaction lock before beginning the
-            // transaction to avoid a deadlock
-            var txnlock = new SQLiteTxnLockED();
-            txnlock.Open();
-            return new SQLiteTransactionED(_cn.BeginTransaction(isolevel), txnlock);
-        }
-
-        public DbTransaction BeginTransaction()
-        {
-            // Take the transaction lock before beginning the
-            // transaction to avoid a deadlock
-            var txnlock = new SQLiteTxnLockED();
-            txnlock.Open();
-            return new SQLiteTransactionED(_cn.BeginTransaction(), txnlock);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        
-        // disposing: true if Dispose() was called, false
-        // if being finalized by the garbage collector
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_cn != null)
-                {
-                    _cn.Close();
-                    _cn.Dispose();
-                    _cn = null;
-                }
-            }
-        }
-    }
-
 
     public static partial class SQLiteDBClass
     {
@@ -328,37 +271,53 @@ namespace EDDiscovery.DB
         #endregion
 
         #region Transitional properties
-        public const bool UseV5Databases = false;
-        public static EDDSqlDbSelection DefaultMainDatabase { get { return UseV5Databases ? EDDSqlDbSelection.EDDUser : EDDSqlDbSelection.EDDiscovery; } }
-        public static EDDSqlDbSelection UserDatabase { get { return UseV5Databases ? EDDSqlDbSelection.EDDUser : EDDSqlDbSelection.EDDiscovery; } }
-        public static EDDSqlDbSelection SystemDatabase { get { return UseV5Databases ? EDDSqlDbSelection.EDDSystem : EDDSqlDbSelection.EDDiscovery; } }
+        public static bool UseV5Databases = false;
+        public static EDDSqlDbSelection DefaultMainDatabase { get { return  EDDSqlDbSelection.EDDiscovery; } }
+        public static EDDSqlDbSelection UserDatabase { get { return EDDSqlDbSelection.EDDUser; } }
+        public static EDDSqlDbSelection SystemDatabase { get { return EDDSqlDbSelection.EDDSystem;  } }
         #endregion
 
 
         #region Database Initialization
         private static void InitializeDatabase()
         {
-            string dbfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+            string dbv4file = GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+            string dbuserfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
+            string dbsystemsfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
             DbFactory = GetSqliteProviderFactory();
 
             try
             {
-                bool fileexist = File.Exists(dbfile);
+                bool fileexist = File.Exists(dbv4file);
+
+                SQLiteDBClass.UseV5Databases = File.Exists(dbuserfile);
 
                 if (!fileexist)                                         // no file, create it
-                    SQLiteConnection.CreateFile(dbfile);
+                    SQLiteConnection.CreateFile(dbv4file);
 
-#if false
-                UpdateSchema();
-#else
-                using (var conn = new SQLiteConnectionED(UserDatabase))
+                if (SQLiteDBClass.UseV5Databases == false)
                 {
-                    if (!fileexist)                                       // first time, create the register
-                        ExecuteQuery(conn, "CREATE TABLE Register (ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , \"ValueInt\" INTEGER, \"ValueDouble\" DOUBLE, \"ValueString\" TEXT, \"ValueBlob\" BLOB)");
+                    using (var conn = new SQLiteConnectionED(EDDSqlDbSelection.EDDiscovery))
+                    {
+                        if (!fileexist)                                       // first time, create the register
+                            ExecuteQuery(conn, "CREATE TABLE Register (ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , \"ValueInt\" INTEGER, \"ValueDouble\" DOUBLE, \"ValueString\" TEXT, \"ValueBlob\" BLOB)");
 
-                    UpgradeDB(conn);                                            // upgrade it
+                        UpgradeDB(conn);                                            // upgrade it
+                    }
                 }
-#endif
+
+                SplitDataBase();
+                using (var conn = new SQLiteConnectionED(EDDSqlDbSelection.EDDUser))
+                {
+                    UpgradeUserDB(conn);                                            // upgrade it
+                }
+
+                using (var conn = new SQLiteConnectionED(EDDSqlDbSelection.EDDSystem))
+                {
+                    UpgradeSystemsDB(conn);                                            // upgrade it
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -371,6 +330,68 @@ namespace EDDiscovery.DB
             using (DbCommand command = conn.CreateCommand(query))
                 command.ExecuteNonQuery();
         }
+
+
+        private static bool SplitDataBase()
+        {
+            string dbfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+            string dbuserfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
+            string dbsystemsfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
+
+            try
+            {
+                File.Copy(dbfile, dbuserfile);
+                File.Copy(dbfile, dbsystemsfile);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("SplitDatabase error: " + ex.Message);
+                MessageBox.Show(ex.StackTrace);
+                return false;
+            }
+            return true;
+        }
+
+        private static bool UpgradeUserDB(SQLiteConnectionED conn)
+        {
+            int dbver;
+            try
+            {
+                dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
+                if (dbver < 101)
+                    UpgradeUserDB101(conn);
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("UpgradeUserDB error: " + ex.Message);
+                MessageBox.Show(ex.StackTrace);
+                return false;
+            }
+        }
+
+        private static bool UpgradeSystemsDB(SQLiteConnectionED conn)
+        {
+            int dbver;
+            try
+            {
+                dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
+                if (dbver < 100)
+                    UpgradeSystemsDB101(conn);
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("UpgradeSystemsDB error: " + ex.Message);
+                MessageBox.Show(ex.StackTrace);
+                return false;
+            }
+        }
+
 
         private static bool UpgradeDB(SQLiteConnectionED conn)
         {
@@ -450,11 +471,11 @@ namespace EDDiscovery.DB
         {
             if (backupDbFile)
             {
-                string dbfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+                string dbfile = conn.DBFile;
 
                 try
                 {
-                    File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", $"EDDiscovery{newVersion - 1}.sqlite"));
+                    File.Copy(dbfile, dbfile.Replace(".sqlite", $"{newVersion - 1}.sqlite"));
                 }
                 catch (Exception ex)
                 {
@@ -663,6 +684,44 @@ namespace EDDiscovery.DB
             });
         }
 
+        
+
+
+        private static void UpgradeUserDB101(SQLiteConnectionED conn)
+        {
+            string query1 = "DROP TABLE IF EXISTS Systems";
+            string query2 = "DROP TABLE IF EXISTS SystemAliases";
+            string query3 = "DROP TABLE IF EXISTS Distances";
+            string query4 = "VACUUM";
+
+            PerformUpgrade(conn, 101, true,  false, new[] { query1, query2, query3, query4 }, () =>
+            {
+//                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
+            });
+        }
+
+
+        private static void UpgradeSystemsDB101(SQLiteConnectionED conn)
+        {
+            string query1 = "DROP TABLE IF EXISTS Bookmarks";
+            string query2 = "DROP TABLE IF EXISTS SystemNote";
+            string query3 = "DROP TABLE IF EXISTS TravelLogUnit";
+            string query4 = "DROP TABLE IF EXISTS VisitedSystems";
+            string query5 = "DROP TABLE IF EXISTS Route_Systems";
+            string query6 = "DROP TABLE IF EXISTS Routes_expedition";
+            string query7 = "VACUUM";
+
+
+            PerformUpgrade(conn, 101, true, false, new[] { query1, query2, query3, query4, query5, query6, query7 }, () =>
+            {
+                //                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
+            });
+        }
+
+
+
+
+
         private static void CreateTableIndexes()
         {
             string[] queries = new[]
@@ -855,7 +914,7 @@ namespace EDDiscovery.DB
             return cn;
         }
 
-        private static string GetSQLiteDBFile(EDDSqlDbSelection selector)
+        public static string GetSQLiteDBFile(EDDSqlDbSelection selector)
         {
             if (selector == EDDSqlDbSelection.None)
             {
