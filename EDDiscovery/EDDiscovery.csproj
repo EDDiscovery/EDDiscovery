@@ -168,6 +168,7 @@
       <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="3DMap\CameraDirectionMovement.cs" />
+    <Compile Include="3DMap\PositionDirection.cs" />
     <Compile Include="3DMap\MapRecorder.cs" />
     <Compile Include="3DMap\Polygon.cs" />
     <Compile Include="3DMap\Data3DSetClass.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="3DMap\KeyboardActions.cs" />
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
+    <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\LabelExt.cs">
       <SubType>Component</SubType>

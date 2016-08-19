@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EDDiscovery2
 {
-    public class CameraDirectionMovement           // keeps track of previous and works out how to present bitmaps
+    public class CameraDirectionMovementTracker       // keeps track of previous and works out how to present bitmaps
     {
         public Vector3 CameraPos;
         public Vector3 CameraDir;
