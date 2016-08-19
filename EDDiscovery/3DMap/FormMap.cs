@@ -1498,15 +1498,13 @@ namespace EDDiscovery2
         private void showDiscsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DStarDiscs", showDiscsToolStripMenuItem.Checked);
-            _starnameslist.RemoveAllNamedStars();
-            Repaint();
+            _lastcamerastarnames.ForceZoomChanged();
         }
 
         private void showNamesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DStarNaming", showNamesToolStripMenuItem.Checked);
-            _starnameslist.RemoveAllNamedStars();
-            Repaint();
+            _lastcamerastarnames.ForceZoomChanged();
         }
 
         private void showNoteMarksToolStripMenuItem_Click(object sender, EventArgs e)
