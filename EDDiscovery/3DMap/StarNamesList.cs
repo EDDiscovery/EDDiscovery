@@ -112,9 +112,9 @@ namespace EDDiscovery2
             }
         }
 
-        CameraDirectionMovement _lastcamera;
+        CameraDirectionMovementTracker _lastcamera;
 
-        public void Update(CameraDirectionMovement lastcamera, bool flippedorzoomed, Matrix4d resmat, float _zn, bool names, bool discs)     // UI thread..
+        public void Update(CameraDirectionMovementTracker lastcamera, bool flippedorzoomed, Matrix4d resmat, float _zn, bool names, bool discs)     // UI thread..
         {
             _lastcamera = lastcamera;
             _resmat = resmat;

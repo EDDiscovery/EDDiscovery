@@ -57,26 +57,8 @@ namespace EDDiscovery2
         private Vector3 _clickedposition = new Vector3(float.NaN,float.NaN,float.NaN);       // above two also set this.. if its a RM, only this is set.
         private string _clickedurl;             // what url is associated..
 
-        private float _zoom = 1.0f;
-
-        private Vector3 _viewtargetpos = Vector3.Zero;          // point where we are viewing. Eye is offset from this by _cameraDir * 1000/_zoom. (prev _cameraPos)
-        private Vector3 _cameraDir = Vector3.Zero;
-        private float _cameraFov = (float)(Math.PI / 2.0f);     // Camera, in radians, 180/2 = 90 degrees
-
-        private const double ZoomMax = 300;
-        private const double ZoomMin = 0.01;
-        private const double ZoomFact = 1.2589254117941672104239541063958;
-
-        private Vector3 _cameraActionMovement = Vector3.Zero;
-        private Vector3 _cameraActionRotation = Vector3.Zero;
-
-        private float _cameraSlewProgress = 1.0f;               // 0 -> 1 slew progress
-        private float _cameraSlewTime;                          // how long to take to do the slew
-        private Vector3 _cameraSlewPosition;                    // where to slew to.
-
-        private float _cameraDirSlewProgress = 1.0f;               // 0 -> 1 slew progress
-        private float _cameraDirSlewTime;                          // how long to take to do the slew
-        private Vector3 _cameraDirSlewPosition;                    // where to slew to.
+        private PositionDirection posdir = new PositionDirection();
+        private ZoomFov zoomfov = new ZoomFov();
 
         private KeyboardActions _kbdActions = new KeyboardActions();
 
@@ -85,8 +67,8 @@ namespace EDDiscovery2
         private Stopwatch _updateinterval = new Stopwatch();    // to accurately measure interval between system ticks
         private long _lastmstick;                           
         private int _msticks;                                   // between updates
-        private CameraDirectionMovement _lastcameranorm = new CameraDirectionMovement();        // these track movements and zoom for most systems
-        private CameraDirectionMovement _lastcamerastarnames = new CameraDirectionMovement();   // and for star names, which may be delayed due to background busy
+        private CameraDirectionMovementTracker _lastcameranorm = new CameraDirectionMovementTracker();        // these track movements and zoom for most systems
+        private CameraDirectionMovementTracker _lastcamerastarnames = new CameraDirectionMovementTracker();   // and for star names, which may be delayed due to background busy
         bool _starnamesbusy = false;                            // is the worker thread in operation
 
         private Point _mouseStartRotate = new Point(int.MinValue, int.MinValue);        // used to indicate not started for these using mousemove
@@ -97,8 +79,6 @@ namespace EDDiscovery2
 
         Timer _mousehovertick = new Timer();
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
-
-        private float _defaultZoom;
 
         private List<SystemClass> _referenceSystems { get; set; }
         public List<VisitedSystemsClass> _visitedSystems { get; set; }
@@ -113,9 +93,8 @@ namespace EDDiscovery2
         private ToolStripControlHost startPickerHost;
         private ToolStripControlHost endPickerHost;
 
-        private float _znear;
-
         private bool _isActivated = false;
+        private float _znear;
 
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
         private ToolStripMenuItem _toolstripToggleRegionColouringButton;     // for picking up this option quickly
@@ -167,7 +146,7 @@ namespace EDDiscovery2
 
             _systemNames = sysname;
 
-            _defaultZoom = zoom;
+            zoomfov.SetDefaultZoom(zoom);
 
             _referenceSystems = null;
             _plannedRoute = null;
@@ -317,7 +296,7 @@ namespace EDDiscovery2
                     double x, y, z;
 
                     if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
-                        StartCameraSlew(new Vector3((float)x, (float)y, (float)z),-1F);
+                        posdir.StartCameraSlew(new Vector3((float)x, (float)y, (float)z),-1F);
                 }
 
                 Repaint();
@@ -343,12 +322,12 @@ namespace EDDiscovery2
             SetCenterSystemLabel();
             labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
 
-            _viewtargetpos = new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z);
-            _cameraDir = Vector3.Zero;
-            _zoom = _defaultZoom;
-            _lastcameranorm.Update(_cameraDir, _viewtargetpos, _zoom); // set up here so ready for action.. below uses it.
+            posdir.SetCameraPos(new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z));
+
+            zoomfov.SetToDefault();
+            _lastcameranorm.Update(posdir.CameraDirection, posdir.PositionExternal, zoomfov.Zoom); // set up here so ready for action.. below uses it.
             _lastcameranorm.ForceZoomChanged();                      
-            _lastcamerastarnames.Update(_cameraDir, _viewtargetpos, _zoom); // set up here so ready for action.. below uses it.
+            _lastcamerastarnames.Update(posdir.CameraDirection, posdir.PositionExternal, zoomfov.Zoom); // set up here so ready for action.. below uses it.
             _lastcamerastarnames.ForceZoomChanged();                    
 
             GenerateDataSets();
@@ -367,6 +346,8 @@ namespace EDDiscovery2
             _mousehovertick.Interval = 250;
 
             SetCenterSystemTo(_centerSystem);                   // move to this..
+
+            SetViewPort();
         }
 
         private void FormMap_Shown(object sender, EventArgs e)
@@ -401,6 +382,24 @@ namespace EDDiscovery2
                 //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
 
+            SQLiteDBClass.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DButtonColours", enableColoursToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DStarDiscs", showDiscsToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DStarNaming", showNamesToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DGMONaming", _toolstripToggleNamingButton.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DGMORegionColouring", _toolstripToggleRegionColouringButton.Checked);
+            EDDiscoveryForm.galacticMapping.SaveSettings();
+
             _stargrids.Stop();
 
             e.Cancel = true;
@@ -410,19 +409,12 @@ namespace EDDiscovery2
         private void glControl_Load(object sender, EventArgs e)
         {
             GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
-
-            SetupViewport();
-            Repaint();
         }
 
         private void FormMap_Resize(object sender, EventArgs e)         // resizes changes glcontrol width/height, so needs a new viewport
         {
-            SetupViewport();
+            SetViewPort();
             Repaint();
-        }
-
-        private void glControl_Resize(object sender, EventArgs e)
-        {
         }
 
         private void LoadMapImages()
@@ -571,10 +563,10 @@ namespace EDDiscovery2
         {
             DatasetBuilder builder = new DatasetBuilder();
             if (toolStripButtonFineGrid.Checked)
-                builder.UpdateGridZoom(ref _datasets_coarsegridlines, _zoom);
+                builder.UpdateGridZoom(ref _datasets_coarsegridlines, zoomfov.Zoom);
 
             if (toolStripButtonCoords.Checked)
-                builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, _zoom);
+                builder.UpdateGridCoordZoom(ref _datasets_gridlinecoords, zoomfov.Zoom);
 
             builder.UpdateGalObjects(ref _datasets_galmapobjects, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
 
@@ -693,30 +685,51 @@ namespace EDDiscovery2
             _msticks = (int)(elapsed - _lastmstick);
             _lastmstick = elapsed;
 
-            HandleInputs();
-            DoCameraSlew();
-            UpdateCamera();
+            ReceiveKeyboardActions();
+            posdir.HandleTurningAdjustments(_kbdActions,_msticks);
+            posdir.HandleMovementAdjustments(_kbdActions,_msticks, zoomfov.Zoom);
 
-            maprecorder.Record(_viewtargetpos, _cameraDir , _zoom);
+            if ( zoomfov.HandleZoomAdjustmentKeys(_kbdActions, _msticks) )
+            {
+                UpdateDataSetsDueToZoom();
+                _requestrepaint = true;
+            }
+
+            if (_kbdActions.Any())
+                posdir.KillSlews();
+
+            if (posdir.DoCameraSlew(_msticks))
+                _requestrepaint = true;
+
+            if (zoomfov.DoZoom(_msticks))
+            {
+                UpdateDataSetsDueToZoom();
+                _requestrepaint = true;
+            }
+
+            posdir.UpdateCamera(toolStripButtonEliteMovement.Checked);
+
+            maprecorder.Record(posdir.PositionExternal, posdir.CameraDirection , zoomfov.Zoom);
 
             if ( maprecorder.InPlayBack )
             { 
                 Vector3 newpos, newdir;
-                float newzoom,timetopan,timetofly;
+                float newzoom;
+                long timetopan,timetofly,timetozoom;
                 string message;
-                if (maprecorder.PlayBack(out newpos, out timetofly , out newdir, out timetopan, out newzoom,out message ))
+                if (maprecorder.PlayBack(out newpos, out timetofly , out newdir, out timetopan, out newzoom, out timetozoom, out message ))
                 {
                     Console.WriteLine("{0} Playback {1} {2} {3} fly {4} pan {5} msg {6}", _updateinterval.ElapsedMilliseconds % 10000,
                         newpos, newdir, newzoom, timetofly, timetopan, message);
 
-                    StartCameraSlewNI(newpos, (float)timetofly / 1000.0F);
+                    posdir.StartCameraSlew(newpos, (float)timetofly / 1000.0F);
 
-                    StartCameraPan(newdir, (float)timetopan / 1000.0F);
+                    posdir.StartCameraPan(newdir, (float)timetopan / 1000.0F);
 
-                    if (newzoom != _zoom)
+                    if (newzoom != zoomfov.Zoom)
                     {
-                        _zoom = newzoom;
-                        UpdateDataSetsDueToZoom();
+                        if (zoomfov.SetZoom(newzoom, (float)timetozoom/ 1000.0F))
+                            UpdateDataSetsDueToZoom();
                     }
 
                     _requestrepaint = true;
@@ -728,20 +741,19 @@ namespace EDDiscovery2
                 }
             }
 
-
-            if (_kbdActions.Any() || (_cameraSlewProgress < 1.0f || _cameraDirSlewProgress < 1.0F ))          // if we have any future work, start the kick timer..
+            if (_kbdActions.Any() || posdir.InSlews )          // if we have any future work, start the kick timer..
             {
                 //Console.WriteLine("keyboard/slew ");
                 _requestrepaint = true;
             }
 
-            if (_stargrids.Update(_viewtargetpos.X, _viewtargetpos.Z, _zoom, glControl))       // at intervals, inform star grids of position, and if it has
+            if (_stargrids.Update(posdir.PositionExternal.X, posdir.PositionExternal.Z, zoomfov.Zoom, glControl))       // at intervals, inform star grids of position, and if it has
             {
                 //Console.WriteLine("grids");
                 _requestrepaint = true;
             }
 
-            _lastcameranorm.Update(_cameraDir, _viewtargetpos, _zoom);
+            _lastcameranorm.Update(posdir.CameraDirection, posdir.PositionExternal, zoomfov.Zoom);
 
             if (_lastcameranorm.CameraFlipped)                              // if we flip the camera around, flip some of the graphics
             {
@@ -755,14 +767,14 @@ namespace EDDiscovery2
                 bool names = showNamesToolStripMenuItem.Checked;
                 bool discs = showDiscsToolStripMenuItem.Checked;
 
-                _lastcamerastarnames.Update(_cameraDir, _viewtargetpos, _zoom);
+                _lastcamerastarnames.Update(posdir.CameraDirection, posdir.PositionExternal, zoomfov.Zoom);
 
-                if ( (names | discs) && _zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
+                if ( (names | discs) && zoomfov.Zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
                 {
                     bool flippedorzoom = _lastcamerastarnames.CameraFlipped || _lastcamerastarnames.CameraZoomed;
                     bool movedorcameradirchanged = _lastcamerastarnames.CameraMoved || _lastcamerastarnames.CameraDirChanged;
 
-                    if (_stargrids.IsDisplayed(_viewtargetpos.X, _viewtargetpos.Z) && (flippedorzoom || movedorcameradirchanged))                              // if changed something
+                    if (_stargrids.IsDisplayed(posdir.PositionExternal.X, posdir.PositionExternal.Z) && (flippedorzoom || movedorcameradirchanged))                              // if changed something
                     {
                         _starnamesbusy = true;
                         _starnameslist.Update(_lastcamerastarnames, flippedorzoom, GetResMat(), _znear, names, discs);
@@ -839,7 +851,7 @@ namespace EDDiscovery2
                 _centerSystem = sys;
                 SetCenterSystemLabel();
                 GenerateDataSetsSelectedSystems();
-                StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z),-1F);
+                posdir.StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z),-1F);
                 return true;
             }
             else
@@ -850,14 +862,6 @@ namespace EDDiscovery2
 #endregion
 
 #region Keyboard
-
-        private void HandleInputs()
-        {
-            ReceiveKeyboardActions();
-            HandleTurningAdjustments();
-            HandleMovementAdjustments();
-            HandleZoomAdjustment();
-        }
 
         private void ReceiveKeyboardActions()
         {
@@ -884,13 +888,13 @@ namespace EDDiscovery2
 
                 if (state[Key.F5])
                 {
-                    maprecorder.RecordStepDialog(_viewtargetpos,_cameraDir,_zoom);
+                    maprecorder.RecordStepDialog(posdir.PositionExternal, posdir.CameraDirection,zoomfov.Zoom);
                 }
 
                 _kbdActions.Left = (state[Key.Left] || state[Key.A]);
                 _kbdActions.Right = (state[Key.Right] || state[Key.D]);
 
-                if (toolStripButtonPerspective.Checked)
+                if (posdir.InPerspectiveMode)
                 {
                     _kbdActions.Up = (state[Key.PageUp] || state[Key.R]);
                     _kbdActions.Down = (state[Key.PageDown] || state[Key.F]);
@@ -920,170 +924,21 @@ namespace EDDiscovery2
             }
         }
 
-        private void HandleTurningAdjustments()
+        #endregion
+
+        #region OpenGL Render and Viewport
+
+        private void SetViewPort()
         {
-            _cameraActionRotation = Vector3.Zero;
-
-            var angle = (float)_msticks * 0.075f;
-            if (_kbdActions.YawLeft)
-            {
-                _cameraActionRotation.Z = -angle;
-            }
-            if (_kbdActions.YawRight)
-            {
-                _cameraActionRotation.Z = angle;
-            }
-            if (_kbdActions.Dive)
-            {
-                _cameraActionRotation.X = -angle;
-            }
-            if (_kbdActions.Pitch)
-            {
-                _cameraActionRotation.X = angle;
-            }
-            if (_kbdActions.RollLeft)
-            {
-                _cameraActionRotation.Y = -angle;
-            }
-            if (_kbdActions.RollRight)
-            {
-                _cameraActionRotation.Y = angle;
-            }
-
-        }
-
-        private void HandleMovementAdjustments()
-        {
-            _cameraActionMovement = Vector3.Zero;
-            float zoomlimited = Math.Min(Math.Max(_zoom, 0.01F), 15.0F);
-            var distance = _msticks * (1.0f / zoomlimited);
-
-            if ((Control.ModifierKeys & Keys.Shift) != 0)
-                distance *= 2.0F;
-
-            //Console.WriteLine("Distance " + distance + " zoom " + _zoom + " lzoom " + zoomlimited );
-            if (_kbdActions.Left)
-            {
-                _cameraActionMovement.X = -distance;
-            }
-            if (_kbdActions.Right)
-            {
-                _cameraActionMovement.X = distance;
-            }
-            if (_kbdActions.Forwards)
-            {
-                _cameraActionMovement.Y = distance;
-            }
-            if (_kbdActions.Backwards)
-            {
-                _cameraActionMovement.Y = -distance;
-            }
-            if (_kbdActions.Up)
-            {
-                _cameraActionMovement.Z = distance;
-            }
-            if (_kbdActions.Down)
-            {
-                _cameraActionMovement.Z = -distance;
-            }
-        }
-
-        private void HandleZoomAdjustment()
-        {
-            float curzoom = _zoom;
-            var adjustment = 1.0f + ((float)_msticks * 0.01f);
-            if (_kbdActions.ZoomIn)
-            {
-                _zoom *= (float)adjustment;
-                if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
-            }
-            if (_kbdActions.ZoomOut)
-            {
-                _zoom /= (float)adjustment;
-                if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
-            }
-
-            if (_zoom != curzoom)
-                UpdateDataSetsDueToZoom();
-        }
-
-#endregion
-
-#region OpenGL Render and Viewport
-
-        private void SetupViewport()
-        {
-            GL.MatrixMode(MatrixMode.Projection);           // Select the project matrix for the following operations (current matrix)
-
-            int w = glControl.Width;
-            int h = glControl.Height;
-
-            if (w == 0 || h == 0) return;
-
-            if (toolStripButtonPerspective.Checked)
-            {                                                                   // Fov, perspective, znear, zfar
-                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(_cameraFov, (float)w / h, 1.0f, 1000000.0f);
-                GL.LoadMatrix(ref perspective);             // replace projection matrix with this perspective matrix
-                _znear = 1.0f;
-            }
-            else
-            {
-                float orthoW = w * (_zoom + 1.0f);
-                float orthoH = h * (_zoom + 1.0f);
-
-                float orthoheight = 1000.0f * h / w;
-
-                GL.LoadIdentity();                              // set to 1/1/1/1.
-                
-                // multiply identity matrix with orth matrix, left/right vert clipping plane, bot/top horiz clippling planes, distance between near/far clipping planes
-                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
-                _znear = -5000.0f;
-            }
-
-            GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
+            posdir.SetViewport(toolStripButtonPerspective.Checked, zoomfov, glControl.Width, glControl.Height, out _znear);
         }
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
             //Stopwatch sw1 = new Stopwatch(); sw1.Start();
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            GL.MatrixMode(MatrixMode.Modelview);            // select the current matrix to the model view
-
-            if (toolStripButtonPerspective.Checked)
-            {
-                Vector3 target = _viewtargetpos;
-
-                Matrix4 transform = Matrix4.Identity;                   // identity nominal matrix, dir is in degrees
-                transform *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
-                transform *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
-                transform *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
-                                                                        // transform ends as the camera direction vector
-
-                // calculate where eye is, relative to target. its 1000/zoom, rotated by camera rotation
-                Vector3 eyerel = Vector3.Transform(new Vector3(0.0f, -1000.0f / _zoom, 0.0f), transform);
-
-                // rotate the up vector (0,0,1) by the eye camera dir to get a vector upwards from the current camera dir
-                Vector3 up = Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), transform);
-
-                Vector3 eye = _viewtargetpos + eyerel;              // eye is here, the target pos, plus the eye relative position
-                Matrix4 lookat = Matrix4.LookAt(eye, target, up);   // from eye, look at target, with up giving the rotation of the look
-                GL.LoadMatrix(ref lookat);                          // set the model view to this matrix.
-            }
-            else
-            {
-                GL.LoadIdentity();                  // model view matrix is 1/1/1/1.
-                GL.Rotate(-90.0, 1, 0, 0);          // Rotate the world - current matrix, rotated -90 degrees around the vector (1,0,0)
-                GL.Scale(_zoom, _zoom, _zoom);      // scale all the axis to zoom
-                GL.Rotate(_cameraDir.Z, 0.0, 0.0, -1.0);    // rotate the axis around the camera dir
-                GL.Rotate(_cameraDir.X, -1.0, 0.0, 0.0);
-                GL.Rotate(_cameraDir.Y, 0.0, -1.0, 0.0);
-                GL.Translate(-_viewtargetpos.X, -_viewtargetpos.Y, -_viewtargetpos.Z);  // and translate the model view by the view target pos
-            }
-
-            GL.Scale(1.0, -1.0, 1.0);               // Flip Y axis on world by inverting the model view matrix
-
+            
+            posdir.SetMatrix(zoomfov.Zoom);
+            
             // Render galaxy
             GL.Enable(EnableCap.PointSmooth);
             GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
@@ -1192,9 +1047,9 @@ namespace EDDiscovery2
 
         private void UpdateStatus()
         {
-            statusLabel.Text = string.Format("x:{0,-6:0} y:{1,-6:0} z:{2,-6:0} Zoom:{3,-4:0.00} FOV:{4,-4:0} Use ? for help", _viewtargetpos.X, -(_viewtargetpos.Y), _viewtargetpos.Z, _zoom , _cameraFov/Math.PI*180);
+            statusLabel.Text = string.Format("x:{0,-6:0} y:{1,-6:0} z:{2,-6:0} Zoom:{3,-4:0.00} FOV:{4,-4:0} Use ? for help", posdir.PositionExternal.X, posdir.PositionExternal.Y, posdir.PositionExternal.Z, zoomfov.Zoom , zoomfov.FovDeg);
 #if DEBUG
-            statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", _cameraDir.X, _cameraDir.Y, _cameraDir.Z);
+            statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", posdir.CameraDirection.X, posdir.CameraDirection.Y, posdir.CameraDirection.Z);
 #endif
         }
 
@@ -1202,217 +1057,6 @@ namespace EDDiscovery2
         {
             glControl.Invalidate();                 // and kick paint
             //Console.WriteLine("MANUAL REPAINT!!!!!!!!!!!!! {0}" , Tools.StackTrace(Environment.StackTrace, ".Repaint()", 1));
-        }
-
-        #endregion
-
-        #region Camera Slew and Update
-
-        private void StartCameraSlew(Vector3 pos, float timeslewsec = 0)       // may pass a Nan Position - no action. Y is normal sense
-        {
-            Vector3 invviewpos = new Vector3(pos);
-            invviewpos.Y = -invviewpos.Y;
-            StartCameraSlewNI(invviewpos, timeslewsec);
-        }
-                                                                               // time <0 estimate, 0 instance >0 time
-        private void StartCameraSlewNI(Vector3 pos, float timeslewsec = 0)     // may pass a Nan Position - no action.  pos.Y is same sense as _viewtargetpos (i.e inverted)
-        {
-            if (!float.IsNaN(pos.X))
-            {
-                double dist = Math.Sqrt((_viewtargetpos.X - pos.X) * (_viewtargetpos.X - pos.X) + (-_viewtargetpos.Y - pos.Y) * (-_viewtargetpos.Y - pos.Y) + (_viewtargetpos.Z - pos.Z) * (_viewtargetpos.Z - pos.Z));
-
-                if (dist >= 1)
-                {
-                    if (timeslewsec == 0)
-                    {
-                        _viewtargetpos = pos;
-                    }
-                    else
-                    {
-                        _cameraSlewPosition = pos;
-                        _cameraSlewProgress = 0.0f;
-                        _cameraSlewTime = (timeslewsec < 0) ? ((float)Math.Max(2.0, dist / 10000.0)) : timeslewsec;            //10000 ly/sec, with a minimum slew
-                        Console.WriteLine("{0} Slew {1} in {2}", _updateinterval.ElapsedMilliseconds % 10000, dist, _cameraSlewTime);
-                        KillHover();
-                        _requestrepaint = true;
-                    }
-                }
-            }
-        }
-
-        private void StartCameraPan(Vector3 pos , float timeslewsec = 0)       // may pass a Nan Position - no action
-        {
-            if (!float.IsNaN(pos.X))
-            {
-                if (timeslewsec == 0)
-                {
-                    _cameraDir = pos;
-                }
-                else
-                {
-                    _cameraDirSlewPosition = pos;
-                    _cameraDirSlewProgress = 0.0f;
-                    _cameraDirSlewTime = (timeslewsec == 0) ? (1.0F) : timeslewsec;
-                    Console.WriteLine("{0} Pan in {1} target {2}", _updateinterval.ElapsedMilliseconds % 10000, _cameraSlewTime , _cameraDirSlewPosition);
-                    KillHover();
-                    _requestrepaint = true;
-                }
-            }
-        }
-
-        private void DoCameraSlew()
-        {
-            if (_kbdActions.Any())
-            {
-                _cameraSlewProgress = 1.0f;
-                _cameraDirSlewProgress = 1.0f;
-            }
-
-            if (_cameraSlewProgress < 1.0f)
-            {
-                _cameraActionMovement = Vector3.Zero;
-                Debug.Assert(_cameraSlewTime > 0);
-                var newprogress = _cameraSlewProgress + _msticks / (_cameraSlewTime * 1000);
-                var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
-
-                if (newprogress >= 1.0f)
-                {
-                    _viewtargetpos = new Vector3(_cameraSlewPosition.X,_cameraSlewPosition.Y, _cameraSlewPosition.Z);
-                    //Console.WriteLine("{0} Slew complete at {1} {2}" , _updateinterval.ElapsedMilliseconds % 10000,_viewtargetpos, _cameraSlewPosition);
-                }
-                else
-                {
-                    var slewstart = Math.Sin((_cameraSlewProgress - 0.5) * Math.PI);
-                    var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
-                    Debug.Assert((1 - 0 - slewstart) != 0);
-                    var slewfact = (slewend - slewstart) / (1.0 - slewstart);
-                    _viewtargetpos += Vector3.Multiply(totvector, (float)slewfact);
-                }
-
-                _requestrepaint = true;
-                _cameraSlewProgress = (float)newprogress;
-            }
-
-            if (_cameraDirSlewProgress < 1.0f)
-            {
-                var newprogress = _cameraDirSlewProgress + _msticks / (_cameraDirSlewTime * 1000);
-                var totvector = new Vector3((float)(_cameraDirSlewPosition.X - _cameraDir.X), (float)(_cameraDirSlewPosition.Y - _cameraDir.Y), (float)(_cameraDirSlewPosition.Z - _cameraDir.Z));
-
-                if (newprogress >= 1.0f)
-                {
-                    _cameraDir = _cameraDirSlewPosition;
-                    //Console.WriteLine("{0} Pan complete", _updateinterval.ElapsedMilliseconds % 10000);
-                }
-                else
-                {
-                    var slewstart = Math.Sin((_cameraDirSlewProgress - 0.5) * Math.PI);
-                    var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
-                    Debug.Assert((1 - 0 - slewstart) != 0);
-                    var slewfact = (slewend - slewstart) / (1.0 - slewstart);
-                    _cameraDir += Vector3.Multiply(totvector, (float)slewfact);
-                    //Console.WriteLine("Vector {0} Dir {1} progress {2}", totvector, _cameraDir, newprogress);
-                }
-
-                _requestrepaint = true;
-                _cameraDirSlewProgress = (float)newprogress;
-            }
-        }
-
-        private void UpdateCamera()
-        {
-            _cameraDir.X = BoundedAngle(_cameraDir.X + _cameraActionRotation.X);
-            _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
-            _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);        // rotate camera by asked value
-
-            // Limit camera pitch
-            if (_cameraDir.X < 0 && _cameraDir.X > -90)
-                _cameraDir.X = 0;
-            if (_cameraDir.X > 180 || _cameraDir.X <= -90)
-                _cameraDir.X = 180;
-
-#if DEBUG
-            bool istranslating = (_cameraActionMovement.X != 0 || _cameraActionMovement.Y != 0 || _cameraActionMovement.Z != 0);
-//            if (istranslating)
-//                Console.WriteLine("move Camera " + _cameraActionMovement.X + "," + _cameraActionMovement.Y + "," + _cameraActionMovement.Z
-//                    + " point " + _cameraDir.X + "," + _cameraDir.Y + "," + _cameraDir.Z);
-#endif
-
-            var rotZ = Matrix4.CreateRotationZ(DegreesToRadians(_cameraDir.Z));
-            var rotX = Matrix4.CreateRotationX(DegreesToRadians(_cameraDir.X));
-            var rotY = Matrix4.CreateRotationY(DegreesToRadians(_cameraDir.Y));
-
-            bool em = toolStripButtonEliteMovement.Checked && toolStripButtonPerspective.Checked;     // elite movement
-
-            Vector3 requestedmove = new Vector3(_cameraActionMovement.X, _cameraActionMovement.Y, (em) ? 0 : _cameraActionMovement.Z);
-
-            var translation = Matrix4.CreateTranslation(requestedmove);
-            var cameramove = Matrix4.Identity;
-            cameramove *= translation;
-            cameramove *= rotZ;
-            cameramove *= rotX;
-            cameramove *= rotY;
-
-            Vector3 trans = cameramove.ExtractTranslation();
-
-            if (em)                                             // if in elite movement, Y is not affected
-            {                                                   // by ASDW.
-                trans.Y = 0;                                    // no Y translation even if camera rotated the vector into Y components
-                _viewtargetpos += trans;
-                _viewtargetpos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
-            }
-            else
-                _viewtargetpos += trans;
-#if DEBUG
-//            if (istranslating)
-//                Console.WriteLine("   em " + em + " Camera now " + _viewtargetpos.X + "," + _viewtargetpos.Y + "," + _viewtargetpos.Z);
-#endif
-        }
-
-        private float BoundedAngle(float angle)
-        {
-            return ((angle + 360 + 180) % 360) - 180;
-        }
-
-        private float DegreesToRadians(float angle)
-        {
-            return (float)(Math.PI * angle / 180.0);
-        }
-
-        public static Vector3 AzEl(Vector3 curpos, Vector3 target)
-        {
-            Vector3 delta = Vector3.Subtract(target, curpos);
-            //Console.WriteLine("{0}->{1} d {2}", curpos, target, delta);
-
-            float radius = delta.Length;
-
-            if (radius < 0.1)
-                return new Vector3(180, 0,0);     // point forward, level
-
-            float inclination = (float)Math.Acos(delta.Y / radius);
-            float azimuth = (float)Math.Atan(delta.Z / delta.X);
-
-            inclination *= (float)(180 / Math.PI);
-            azimuth *= (float)(180 / Math.PI);
-
-            if (delta.X < 0)      // atan wraps -90 (south)->+90 (north), then -90 to +90 around the y axis, going anticlockwise
-                azimuth += 180;
-            azimuth += 90;        // adjust to 0 at bottom, 180 north, to 360
-
-            return new Vector3(inclination,azimuth, 0);   
-        }
-
-
-        private void CameraLookAt(Vector3 target, float time = 0)            // real world 
-        {
-            Vector3 upsidedown = new Vector3(target.X, -target.Y, target.Z);
-            CameraLookAtI(upsidedown,time);
-        }
-
-        private void CameraLookAtI(Vector3 target, float time = 0)            // target in same sense at _viewtargetpos
-        {
-            Vector3 camera = AzEl(_viewtargetpos, target);
-            camera.Y = 180 - camera.Y;      // adjust to this system
-            StartCameraPan(camera, time);
         }
 
         #endregion
@@ -1500,9 +1144,9 @@ namespace EDDiscovery2
                 if (sys != null && moveto)
                     SetCenterSystemTo(sys);
                 else if (moveto)
-                    StartCameraSlew(loc,-1F);
+                    posdir.StartCameraSlew(loc,-1F);
                 else
-                    CameraLookAt(loc,2F);
+                    posdir.CameraLookAt(loc,zoomfov.Zoom, 2F);
             }
             else
                 MessageBox.Show("System or Object " + textboxFrom.Text + " not found");
@@ -1539,7 +1183,7 @@ namespace EDDiscovery2
 
             if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
-                StartCameraSlew(new Vector3((float)x, (float)y, (float)z),-1F);
+                posdir.StartCameraSlew(new Vector3((float)x, (float)y, (float)z),-1F);
             }
             else
             {
@@ -1560,7 +1204,6 @@ namespace EDDiscovery2
 
         private void toolStripButtonAutoForward_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
         }
 
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
@@ -1580,14 +1223,12 @@ namespace EDDiscovery2
 
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
             GenerateDataSetsVisitedSystems();
             Repaint();
         }
 
         private void showStarstoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
             Repaint();
         }
 
@@ -1598,11 +1239,7 @@ namespace EDDiscovery2
             if ( tmsi.Tag is int )
             {
                 int v = (int)tmsi.Tag;
-                if (v == 1)
-                    SQLiteDBClass.PutSettingBool("Map3DGMONaming", tmsi.Checked);
-                else if (v == 2)
-                    SQLiteDBClass.PutSettingBool("Map3DGMORegionColouring", tmsi.Checked);
-                else
+                if ( v == 0 )
                 {
                     EDDiscoveryForm.galacticMapping.ToggleEnable();
                     
@@ -1624,7 +1261,6 @@ namespace EDDiscovery2
 
         private void enableColoursToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DButtonColours", enableColoursToolStripMenuItem.Checked);
             _stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
             _lastcamerastarnames.ForceZoomChanged();              // this will make it recalc..
             Repaint();
@@ -1632,59 +1268,50 @@ namespace EDDiscovery2
 
         private void showStationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
             Repaint();
         }
 
         private void toolStripButtonGrid_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
             Repaint();
         }
 
         private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
             UpdateDataSetsDueToZoom();
             Repaint();
         }
 
         private void toolStripButtonCoords_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
             UpdateDataSetsDueToZoom();
             Repaint();
         }
 
         private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
         }
 
         private void showDiscsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DStarDiscs", showDiscsToolStripMenuItem.Checked);
             _lastcamerastarnames.ForceZoomChanged();        // and repaint
             Repaint();
         }
 
         private void showNamesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DStarNaming", showNamesToolStripMenuItem.Checked);
             _lastcamerastarnames.ForceZoomChanged();        // and repaint
             Repaint();
         }
 
         private void showNoteMarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
             GenerateDataSetsBNG();
             Repaint();
         }
 
         private void showBookmarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
             GenerateDataSetsBNG();
             Repaint();
         }
@@ -1692,7 +1319,7 @@ namespace EDDiscovery2
         private void newRegionBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BookmarkForm frm = new BookmarkForm();
-            frm.InitialisePos(_viewtargetpos.X, -(_viewtargetpos.Y), _viewtargetpos.Z);
+            frm.InitialisePos(posdir.PositionExternal.X, posdir.PositionExternal.Y, posdir.PositionExternal.Z);
             DateTime tme = DateTime.Now;
             frm.RegionBookmark(tme.ToString());
             DialogResult res = frm.ShowDialog();
@@ -1722,8 +1349,11 @@ namespace EDDiscovery2
         
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
-            SetupViewport();
+            if (!toolStripButtonPerspective.Checked)
+                posdir.SetCameraDir(new Vector3(0, 0, 0));
+
+            SetViewPort();
+
             GenerateDataSetsBNG();
             Repaint();
         }
@@ -1737,8 +1367,8 @@ namespace EDDiscovery2
         {
             if (_clickedSystem!=null)
                 SetCenterSystemTo(_clickedSystem);
-            else 
-                StartCameraSlew(_clickedposition,-1F);      // if nan, will ignore..
+            else
+                posdir.StartCameraSlew(_clickedposition,-1F);      // if nan, will ignore..
         }
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -1852,8 +1482,7 @@ namespace EDDiscovery2
 
         private void glControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            _cameraSlewProgress = 1.0f;
-            _cameraDirSlewProgress = 1.0f;
+            posdir.KillSlews();
 
             _mouseDownPos.X = e.X;
             _mouseDownPos.Y = e.Y;
@@ -2089,7 +1718,7 @@ namespace EDDiscovery2
 
         private void glControl_DoubleClick(object sender, EventArgs e)
         {
-            StartCameraSlew(_clickedposition,-1F);
+            posdir.StartCameraSlew(_clickedposition,-1F);
         }
 
         private void glControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -2098,7 +1727,7 @@ namespace EDDiscovery2
             {
                 if (_mouseStartRotate.X != int.MinValue) // on resize double click resize, we get a stray mousemove with left, so we need to make sure we actually had a down event
                 {
-                    _cameraDirSlewProgress = _cameraSlewProgress = 1.0f;
+                    posdir.KillSlews();
                     //Console.WriteLine("Mouse move left");
                     int dx = e.X - _mouseStartRotate.X;
                     int dy = e.Y - _mouseStartRotate.Y;
@@ -2107,16 +1736,7 @@ namespace EDDiscovery2
                     _mouseStartRotate.Y = _mouseStartTranslateXZ.Y = e.Y;
                     //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
-                    _cameraDir.Y += (float)(dx / 4.0f);
-                    _cameraDir.X += (float)(-dy / 4.0f);
-
-                    // Limit camera pitch
-                    if (_cameraDir.X < 0 && _cameraDir.X > -90)
-                        _cameraDir.X = 0;
-                    if (_cameraDir.X > 180 || _cameraDir.X <= -90)
-                        _cameraDir.X = 180;
-                    //SetupCursorXYZ();
-
+                    posdir.RotateCamera(new Vector3((float)(-dy / 4.0f), (float)(dx / 4.0f), 0));
                     _requestrepaint = true;
                 }
 
@@ -2126,7 +1746,7 @@ namespace EDDiscovery2
             {
                 if (_mouseStartTranslateXY.X != int.MinValue)
                 {
-                    _cameraDirSlewProgress = _cameraSlewProgress = 1.0f;
+                    posdir.KillSlews();
 
                     int dx = e.X - _mouseStartTranslateXY.X;
                     int dy = e.Y - _mouseStartTranslateXY.Y;
@@ -2135,8 +1755,7 @@ namespace EDDiscovery2
                     _mouseStartTranslateXY.Y = _mouseStartTranslateXZ.Y = e.Y;
                     //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
-                    _viewtargetpos.Y += -dy * (1.0f / _zoom) * 2.0f;
-
+                    posdir.MoveCamera(new Vector3(0, -dy * (1.0f / zoomfov.Zoom) * 2.0f, 0));
                     _requestrepaint = true;
                 }
 
@@ -2146,7 +1765,7 @@ namespace EDDiscovery2
             {
                 if (_mouseStartTranslateXZ.X != int.MinValue)
                 {
-                    _cameraDirSlewProgress = _cameraSlewProgress = 1.0f;
+                    posdir.KillSlews();
 
                     int dx = e.X - _mouseStartTranslateXZ.X;
                     int dy = e.Y - _mouseStartTranslateXZ.Y;
@@ -2155,13 +1774,11 @@ namespace EDDiscovery2
                     _mouseStartTranslateXZ.Y = _mouseStartRotate.Y = _mouseStartTranslateXY.Y = e.Y;
                     //System.Diagnostics.Trace.WriteLine("dx" + dx.ToString() + " dy " + dy.ToString() + " Button " + e.Button.ToString());
 
-                    Matrix4 transform = Matrix4.CreateRotationZ((float)(-_cameraDir.Y * Math.PI / 180.0f));
-                    Vector3 translation = new Vector3(-dx * (1.0f / _zoom) * 2.0f, dy * (1.0f / _zoom) * 2.0f, 0.0f);
+                    Matrix4 transform = Matrix4.CreateRotationZ((float)(-posdir.CameraDirection.Y * Math.PI / 180.0f));
+                    Vector3 translation = new Vector3(-dx * (1.0f / zoomfov.Zoom) * 2.0f, dy * (1.0f / zoomfov.Zoom) * 2.0f, 0.0f);
                     translation = Vector3.Transform(translation, transform);
 
-                    _viewtargetpos.X += translation.X;
-                    _viewtargetpos.Z += translation.Y;
-
+                    posdir.MoveCamera(new Vector3(translation.X,0, translation.Y));
                     _requestrepaint = true;
                 }
 
@@ -2173,7 +1790,7 @@ namespace EDDiscovery2
                     KillHover();                                // we move we kill the hover.
 
                                                                 // no tool tip, not slewing, not ticking..
-                if (_mousehovertooltip == null && _cameraSlewProgress >= 1.0F && _cameraDirSlewProgress >= 1.0F && !_mousehovertick.Enabled)
+                if (_mousehovertooltip == null && !posdir.InSlews && !_mousehovertick.Enabled)
                 {
                     //Console.WriteLine("{0} Start tick", Environment.TickCount);
                     _mouseHover = e.Location;
@@ -2302,37 +1919,25 @@ namespace EDDiscovery2
         {
             var kbdstate = OpenTK.Input.Keyboard.GetState();
 
-            if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
+            if (e.Delta != 0)
             {
-                if (e.Delta < 0)
+                if (kbdstate[Key.LControl] || kbdstate[Key.RControl])
                 {
-                    _cameraFov = (float)Math.Min(_cameraFov * ZoomFact, Math.PI * 0.8);
+                    if (zoomfov.ChangeFov(e.Delta < 0))
+                    {
+                        SetViewPort();
+                        _requestrepaint = true;
+                    }
                 }
-                else if (e.Delta > 0)
+                else
                 {
-                    _cameraFov /= (float)ZoomFact;
+                    if (zoomfov.ChangeZoom(e.Delta > 0))
+                    {
+                        UpdateDataSetsDueToZoom();
+                        _requestrepaint = true;
+                    }
                 }
             }
-            else
-            {
-                float curzoom = _zoom;
-
-                if (e.Delta > 0)
-                {
-                    _zoom *= (float)ZoomFact;
-                    if (_zoom > ZoomMax) _zoom = (float)ZoomMax;
-                }
-                if (e.Delta < 0)
-                {
-                    _zoom /= (float)ZoomFact;
-                    if (_zoom < ZoomMin) _zoom = (float)ZoomMin;
-                }
-
-                if (curzoom != _zoom)
-                    UpdateDataSetsDueToZoom();
-            }
-
-            _requestrepaint = true;
         }
 
 
@@ -2359,7 +1964,7 @@ namespace EDDiscovery2
             if (sysloc.Z > _znear)
             {
                 pixelpos = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
-                newcursysdistz = Math.Abs(sysloc.Z * _zoom);
+                newcursysdistz = Math.Abs(sysloc.Z * zoomfov.Zoom);
 
                 return true;
             }
@@ -2397,8 +2002,8 @@ namespace EDDiscovery2
             return false;
         }
 
-        private float GetBitmapOnScreenSizeX() { return (float)Math.Min(Math.Max(2, 80.0 / _zoom), 1000); }
-        private float GetBitmapOnScreenSizeY() { return (float)Math.Min(Math.Max(2, 100.0 / _zoom), 1000); }
+        private float GetBitmapOnScreenSizeX() { return (float)Math.Min(Math.Max(2, 80.0 / zoomfov.Zoom), 1000); }
+        private float GetBitmapOnScreenSizeY() { return (float)Math.Min(Math.Max(2, 100.0 / zoomfov.Zoom), 1000); }
 
         private BookmarkClass GetMouseOverBookmark(int x, int y, out double cursysdistz)
         {
@@ -2538,7 +2143,7 @@ namespace EDDiscovery2
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(GetResMat(), _znear, glControl.Width, glControl.Height, _zoom);
+            StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(GetResMat(), _znear, glControl.Width, glControl.Height, zoomfov.Zoom);
 
             Vector3? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
 

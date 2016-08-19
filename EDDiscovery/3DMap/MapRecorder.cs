@@ -185,12 +185,13 @@ namespace EDDiscovery2._3DMap
                 StopPlayBack();
         }
 
-        public bool PlayBack(out Vector3 newpos, out float newpostime, 
-                             out Vector3 newdir , out float newdirtime, 
-                             out float newzoom , out string message )
+        public bool PlayBack(out Vector3 newpos, out long newpostime, 
+                             out Vector3 newdir , out long newdirtime, 
+                             out float newzoom , out long newzoomtime,
+                             out string message )
         {
             newdir = newpos = new Vector3(0, 0, 0);
-            newpostime = newdirtime = 0;
+            newpostime = newdirtime = newzoomtime = 0;
             newzoom = 0;
             message = "";
 
@@ -212,6 +213,7 @@ namespace EDDiscovery2._3DMap
                         newdir = entries[playbackpos].dir;
                         newdirtime = entries[playbackpos].timetopan;
                         newzoom = entries[playbackpos].zoom;
+                        newzoomtime = entries[playbackpos].timetozoom;
                         message = entries[playbackpos].message;
 
                         playbackpos++;
