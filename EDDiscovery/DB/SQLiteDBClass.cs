@@ -353,7 +353,7 @@ namespace EDDiscovery.DB
             return true;
         }
 
-        private static bool UpgradeUserDB(SQLiteConnectionED conn)
+        private static bool UpgradeUserDB(SQLiteConnectionUser conn)
         {
             int dbver;
             try
@@ -373,7 +373,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private static bool UpgradeSystemsDB(SQLiteConnectionED conn)
+        private static bool UpgradeSystemsDB(SQLiteConnectionSystem conn)
         {
             int dbver;
             try
@@ -739,7 +739,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_position ON VisitedSystems (X, Y, Z)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)"
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
                 foreach (string query in queries)
                 {
@@ -760,7 +760,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
                 "CREATE INDEX IF NOT EXISTS Distances_EDSM_ID_Index ON Distances (id_edsm ASC)",
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionSystem())
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 foreach (string query in queries)
                 {
@@ -784,7 +784,7 @@ namespace EDDiscovery.DB
                 "DROP INDEX IF EXISTS SystemGridId",
                 "DROP INDEX IF EXISTS SystemRandomId"
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionSystem())
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 foreach (string query in queries)
                 {
@@ -808,7 +808,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS SystemGridId ON Systems (gridid)",
                 "CREATE INDEX IF NOT EXISTS SystemRandomId ON Systems (randomid)"
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionSystem())
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 foreach (string query in queries)
                 {

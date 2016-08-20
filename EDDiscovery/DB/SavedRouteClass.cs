@@ -72,14 +72,14 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);     // pass it an open connection since it does multiple SQLs
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        private bool Add(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into routes_expeditions (name, start, end) values (@name, @start, @end)"))
             {
@@ -113,14 +113,14 @@ namespace EDDiscovery.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = Update(cn);
                 return ret;
             }
         }
 
-        private bool Update(SQLiteConnectionED cn)
+        private bool Update(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("UPDATE routes_expeditions SET name=@name, start=@start, end=@end WHERE id=@id"))
             {
@@ -160,7 +160,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
                 {
                     using (DbCommand cmd1 = cn.CreateCommand("select * from routes_expeditions"))
                     {

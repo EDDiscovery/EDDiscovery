@@ -32,14 +32,14 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        private bool Add(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
             {
@@ -56,13 +56,13 @@ namespace EDDiscovery.DB
 
         public bool Delete()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return Delete(cn);
             }
         }
 
-        private bool Delete(SQLiteConnectionED cn)
+        private bool Delete(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM wanted_systems WHERE id = @id"))
             {
@@ -78,7 +78,7 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from wanted_systems"))
                     {
