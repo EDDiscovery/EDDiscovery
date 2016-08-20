@@ -59,7 +59,7 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);
                 return ret;
@@ -88,7 +88,7 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 return Update(cn);
             }
@@ -114,7 +114,7 @@ namespace EDDiscovery2.DB
         {
             List<TravelLogUnit> list = new List<TravelLogUnit>();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
                 {
@@ -136,7 +136,7 @@ namespace EDDiscovery2.DB
         public static List<string> GetAllNames()
         {
             List<string> names = new List<string>();
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT DISTINCT Name FROM TravelLogUnit"))
                 {
@@ -154,7 +154,7 @@ namespace EDDiscovery2.DB
 
         public static TravelLogUnit Get(string name)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Name = @name ORDER BY Id DESC"))
                 {

@@ -72,7 +72,7 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);     // pass it an open connection since it does multiple SQLs
                 return ret;
@@ -113,7 +113,7 @@ namespace EDDiscovery.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 bool ret = Update(cn);
                 return ret;
@@ -160,7 +160,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionED cn = new SQLiteConnectionUser())
                 {
                     using (DbCommand cmd1 = cn.CreateCommand("select * from routes_expeditions"))
                     {

@@ -36,7 +36,7 @@ namespace EDDiscovery.DB
         }
     }
 
-    public class SQLiteConnectionED : IDisposable              // USE this for connections.. 
+    public abstract class SQLiteConnectionED : IDisposable              // USE this for connections.. 
     {
         //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
         // causes the program to become unresponsive during big DB updates
