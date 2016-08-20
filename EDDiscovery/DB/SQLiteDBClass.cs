@@ -456,7 +456,8 @@ namespace EDDiscovery.DB
                 if (dbver < 20)
                     UpgradeDB20(conn);
 
-                CreateTableIndexes();
+                CreateUserDBTableIndexes();
+                CreateSystemDBTableIndexes();
 
                 return true;
             }
@@ -723,7 +724,7 @@ namespace EDDiscovery.DB
 
 
 
-        private static void CreateTableIndexes()
+        private static void CreateUserDBTableIndexes()
         {
             string[] queries = new[]
             {
@@ -734,15 +735,32 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS StationsIndex_ID  ON Stations (id ASC)",
                 "CREATE INDEX IF NOT EXISTS StationsIndex_system_ID  ON Stations (system_id ASC)",
                 "CREATE INDEX IF NOT EXISTS StationsIndex_system_Name  ON Stations (Name ASC)",
-                "CREATE INDEX IF NOT EXISTS Distances_EDSM_ID_Index ON Distances (id_edsm ASC)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_position ON VisitedSystems (X, Y, Z)",
-                "CREATE INDEX IF NOT EXISTS SystemAliases_name ON SystemAliases (name)",
-                "CREATE UNIQUE INDEX IF NOT EXISTS SystemAliases_id_edsm ON SystemAliases (id_edsm)",
-                "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)"
             };
             using (SQLiteConnectionED conn = new SQLiteConnectionUser())
+            {
+                foreach (string query in queries)
+                {
+                    using (DbCommand cmd = conn.CreateCommand(query))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        private static void CreateSystemDBTableIndexes()
+        {
+            string[] queries = new[]
+            {
+                "CREATE UNIQUE INDEX IF NOT EXISTS SystemAliases_id_edsm ON SystemAliases (id_edsm)",
+                "CREATE INDEX IF NOT EXISTS SystemAliases_name ON SystemAliases (name)",
+                "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
+                "CREATE INDEX IF NOT EXISTS Distances_EDSM_ID_Index ON Distances (id_edsm ASC)",
+            };
+            using (SQLiteConnectionED conn = new SQLiteConnectionSystem())
             {
                 foreach (string query in queries)
                 {
