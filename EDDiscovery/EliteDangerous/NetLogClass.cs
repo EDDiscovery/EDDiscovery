@@ -185,7 +185,7 @@ namespace EDDiscovery
                 }
             }
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 for (int i = 0; i < readersToUpdate.Count; i++)
                 {

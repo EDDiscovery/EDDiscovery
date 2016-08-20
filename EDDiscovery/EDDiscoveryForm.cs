@@ -732,7 +732,7 @@ namespace EDDiscovery
                 // Delete all old systems
                 SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
                 SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems"))
                     {
@@ -923,7 +923,7 @@ namespace EDDiscovery
                     // Delete systems without an EDSM ID
                     if (!cancelRequested())
                     {
-                        using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                        using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                         {
                             using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems WHERE id_edsm IS NULL or id_edsm = 0"))
                             {

@@ -17,19 +17,26 @@ namespace EDDiscovery.DB
 
     public class SQLiteConnectionUser : SQLiteConnectionED
     {
-        public SQLiteConnectionUser() : base(EDDSqlDbSelection.EDDUser)
+        public SQLiteConnectionUser() : base(SQLiteDBClass.UserDatabase)
         {
         }
     }
 
     public class SQLiteConnectionSystem : SQLiteConnectionED
     {
-        public SQLiteConnectionSystem() : base(EDDSqlDbSelection.EDDSystem)
+        public SQLiteConnectionSystem() : base(SQLiteDBClass.SystemDatabase)
         {
         }
     }
 
-    public class SQLiteConnectionED : IDisposable              // USE this for connections.. 
+    public class SQLiteConnectionCombined : SQLiteConnectionED
+    {
+        public SQLiteConnectionCombined() : base(EDDSqlDbSelection.None, EDDSqlDbSelection.EDDUser | EDDSqlDbSelection.EDDSystem)
+        {
+        }
+    }
+
+    public abstract class SQLiteConnectionED : IDisposable              // USE this for connections.. 
     {
         //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
         // causes the program to become unresponsive during big DB updates
