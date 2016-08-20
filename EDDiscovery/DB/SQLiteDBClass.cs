@@ -741,7 +741,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)"
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionED())
+            using (SQLiteConnectionED conn = new SQLiteConnectionUser())
             {
                 foreach (string query in queries)
                 {
@@ -765,7 +765,7 @@ namespace EDDiscovery.DB
                 "DROP INDEX IF EXISTS SystemGridId",
                 "DROP INDEX IF EXISTS SystemRandomId"
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionED())
+            using (SQLiteConnectionED conn = new SQLiteConnectionSystem())
             {
                 foreach (string query in queries)
                 {
@@ -789,7 +789,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS SystemGridId ON Systems (gridid)",
                 "CREATE INDEX IF NOT EXISTS SystemRandomId ON Systems (randomid)"
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionED())
+            using (SQLiteConnectionED conn = new SQLiteConnectionSystem())
             {
                 foreach (string query in queries)
                 {
