@@ -161,7 +161,7 @@ namespace EDDiscovery2
                     int limit = 1000;                   // max number of stars to show..
                     int painted = 0;
 
-                    using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                    using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                     {
                         foreach (StarGrid.InViewInfo inview in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                         {
