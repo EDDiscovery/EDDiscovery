@@ -108,6 +108,7 @@ namespace EDDiscovery2
         private float _znear;
 
         private bool _isActivated = false;
+        private bool _glControlLoaded = false;
 
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
 
@@ -393,10 +394,15 @@ namespace EDDiscovery2
 
             SetupViewport();
             Repaint();
+
+            _glControlLoaded = true;
         }
 
         private void FormMap_Resize(object sender, EventArgs e)         // resizes changes glcontrol width/height, so needs a new viewport
         {
+            if (!_glControlLoaded)
+                return;
+
             SetupViewport();
             Repaint();
         }
