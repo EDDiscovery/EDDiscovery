@@ -31,7 +31,7 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);
                 return ret;
@@ -60,7 +60,7 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 return Update(cn);
             }
@@ -88,7 +88,7 @@ namespace EDDiscovery2.DB
         {
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionED cn = new SQLiteConnectionUser())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from SystemNote"))
                     {

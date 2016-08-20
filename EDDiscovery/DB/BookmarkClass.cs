@@ -41,7 +41,7 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())      // open connection..
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())      // open connection..
             {
                 bool ret = Add(cn);
                 return ret;
@@ -74,7 +74,7 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 return Update(cn);
             }
@@ -104,7 +104,7 @@ namespace EDDiscovery2.DB
 
         public bool Delete()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
             {
                 return Delete(cn);
             }
@@ -135,7 +135,7 @@ namespace EDDiscovery2.DB
         {
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionED cn = new SQLiteConnectionUser())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
                     {
