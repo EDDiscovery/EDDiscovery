@@ -1128,12 +1128,6 @@ namespace EDDiscovery.DB
         {
             try
             {
-                // Indexed sets of systems
-                Dictionary<long, List<SystemClass>> systemsByVscId = new Dictionary<long, List<SystemClass>>();
-                Dictionary<long, List<SystemClass>> systemsAliasesByVscId = new Dictionary<long, List<SystemClass>>();
-                Dictionary<string, List<SystemClass>> systemsByName = new Dictionary<string, List<SystemClass>>();
-                Dictionary<long, SystemClass> systemsByEdsmId = new Dictionary<long, SystemClass>();
-
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     // Check that the SystemAliases table is not empty
@@ -1153,8 +1147,8 @@ namespace EDDiscovery.DB
                     // than having to sift through all of the systems
                     // ourselves.
                     using (DbCommand cmd = cn.CreateCommand(
-                        "SELECT DISTINCT vsc.id AS vscid, a.id AS aliasid, s.* " +
-                        "FROM VisitedSystems vsc " +
+                        "SELECT DISTINCT a.id AS aliasid, s.* " +
+                        "FROM (SELECT @X AS X, @Y AS Y, @Z AS Z, @Name AS Name, @id_edsm AS id_edsm_assigned) AS vsc " +
                         "LEFT JOIN SystemAliases a " +
                         "ON a.Name = vsc.Name " +
                         "OR a.id_edsm = vsc.id_edsm_assigned " +
@@ -1166,231 +1160,200 @@ namespace EDDiscovery.DB
                         "WHERE s.id IS NOT NULL " +
                         "ORDER BY s.id ASC"))
                     {
-                        using (DbDataReader reader = cmd.ExecuteReader())
+                        cmd.AddParameter("@X", DbType.Double);
+                        cmd.AddParameter("@Y", DbType.Double);
+                        cmd.AddParameter("@Z", DbType.Double);
+                        cmd.AddParameter("@Name", DbType.String);
+                        cmd.AddParameter("@id_edsm", DbType.Int64);
+
+                        // Now that we have gathered the matching systems
+                        // we determine what and how well they match
+                        foreach (VisitedSystemsClass vsc in visitedSystems)
                         {
-                            long lastid = -1;
-                            SystemClass sys = null;
+                            string vsc_searchname = vsc.Name.ToLower();
 
-                            while (reader.Read())
+                            if (vsc.curSystem == null || vsc.curSystem.id_edsm == 0)                                              // if not set before, look it up
                             {
-                                string name = ((string)reader["name"]).ToLower();
-                                long id_edsm = 0;
-                                long id = (long)reader["id"];
-                                long vscid = (long)reader["vscid"];
-                                bool isalias = false;
+                                Dictionary<long, SystemClass> matches = new Dictionary<long, SystemClass>();
+                                Dictionary<long, SystemClass> altmatches = new Dictionary<long, SystemClass>();
+                                List<SystemClass> namematches = new List<SystemClass>();
+                                SystemClass edsmidmatch = null;
 
-                                if (reader["aliasid"] != DBNull.Value)
+                                cmd.Parameters["@X"].Value = vsc.X;
+                                cmd.Parameters["@Y"].Value = vsc.Y;
+                                cmd.Parameters["@Z"].Value = vsc.Z;
+                                cmd.Parameters["@Name"].Value = vsc.Name;
+                                cmd.Parameters["@id_edsm"].Value = vsc.id_edsm_assigned;
+
+                                using (DbDataReader reader = cmd.ExecuteReader())
                                 {
-                                    isalias = true;
-                                }
+                                    long lastid = -1;
+                                    SystemClass sys = null;
 
-                                if (id != lastid)
-                                {
-                                    sys = new SystemClass(reader);
-
-                                    // Get name match
-                                    if (!systemsByName.ContainsKey(name))
+                                    while (reader.Read())
                                     {
-                                        systemsByName[name] = new List<SystemClass>();
-                                    }
+                                        string name = ((string)reader["name"]).ToLower();
+                                        long id = (long)reader["id"];
+                                        bool isalias = false;
 
-                                    systemsByName[name].Add(sys);
-
-                                    // Get EDSM ID match
-                                    if (reader["id_edsm"] != System.DBNull.Value)
-                                    {
-                                        id_edsm = (long)reader["id_edsm"];
-
-                                        if (sys == null)
+                                        if (reader["aliasid"] != DBNull.Value)
                                         {
-                                            sys = new SystemClass(reader);
+                                            isalias = true;
                                         }
 
-                                        systemsByEdsmId[id_edsm] = sys;
-                                    }
+                                        if (id != lastid)
+                                        {
+                                            sys = new SystemClass(reader);
 
-                                    lastid = id;
+                                            // Get name match
+                                            if (sys.name.ToLowerInvariant() == vsc.Name.ToLowerInvariant())
+                                            {
+                                                namematches.Add(sys);
+                                            }
+
+                                            // Get EDSM ID match
+                                            if (vsc.id_edsm_assigned != null && vsc.id_edsm_assigned != 0 && sys.id_edsm != 0 && sys.id_edsm == vsc.id_edsm_assigned)
+                                            {
+                                                edsmidmatch = sys;
+                                                matches[edsmidmatch.id] = edsmidmatch;
+                                            }
+
+                                            lastid = id;
+                                        }
+
+                                        // Get VSC ID match
+                                        if (isalias)
+                                        {
+                                            altmatches[sys.id] = sys;
+                                        }
+                                        else
+                                        {
+                                            matches[sys.id] = sys;
+                                        }
+                                    }
                                 }
 
-                                // Get VSC ID match
-                                if (isalias)
+                                List<SystemClass> posmatches = null;
+                                List<SystemClass> nameposmatches = null;
+                                bool multimatch = false;
+                                bool hastravcoords = vsc.HasTravelCoordinates &&
+                                    (vsc.Name.ToLower() == "sol" || vsc.X != 0 || vsc.Y != 0 || vsc.Z != 0);
+
+                                if (hastravcoords)
                                 {
-                                    if (!systemsAliasesByVscId.ContainsKey(vscid))
+                                    posmatches = matches.Values.Where(s => s.x >= vsc.X - 0.125 && s.x <= vsc.X + 0.125 && s.y >= vsc.X - 0.125 && s.y <= vsc.Y + 0.125 && s.z >= vsc.Z - 0.125 && s.z <= vsc.Z + 0.125).ToList();
+                                    if (posmatches.Count >= 1)
                                     {
-                                        systemsAliasesByVscId[vscid] = new List<SystemClass>();
+                                        nameposmatches = posmatches.Where(s => s.SearchName == vsc_searchname).ToList();
+
+                                        foreach (var sys in posmatches)
+                                        {
+                                            matches[sys.id] = sys;
+                                        }
                                     }
-
-                                    systemsAliasesByVscId[vscid].Add(sys);
                                 }
-                                else
-                                {
-                                    if (!systemsByVscId.ContainsKey(vscid))
-                                    {
-                                        systemsByVscId[vscid] = new List<SystemClass>();
-                                    }
 
-                                    systemsByVscId[vscid].Add(sys);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Now that we have gathered the matching systems
-                // we determine what and how well they match
-                foreach (VisitedSystemsClass vsc in visitedSystems)
-                {
-                    string vsc_searchname = vsc.Name.ToLower();
-
-                    if (vsc.curSystem == null || vsc.curSystem.id_edsm == 0)                                              // if not set before, look it up
-                    {
-                        List<SystemClass> posmatches = null;
-                        List<SystemClass> nameposmatches = null;
-                        List<SystemClass> namematches = null;
-                        SystemClass edsmidmatch = null;
-                        bool multimatch = false;
-                        Dictionary<long, SystemClass> matches;
-                        bool hastravcoords = vsc.HasTravelCoordinates &&
-                            (vsc.Name.ToLower() == "sol" || vsc.X != 0 || vsc.Y != 0 || vsc.Z != 0);
-
-                        if (systemsByVscId.ContainsKey(vsc.id))
-                        {
-                            matches = systemsByVscId[vsc.id].ToDictionary(s => s.id);
-                        }
-                        else
-                        {
-                            matches = new Dictionary<long, SystemClass>();
-                        }
-
-                        if (vsc.id_edsm_assigned != null && vsc.id_edsm_assigned != 0)
-                        {
-                            long id_edsm = (long)vsc.id_edsm_assigned;
-
-                            if (systemsByEdsmId.ContainsKey(id_edsm) && systemsByEdsmId[id_edsm] != null)
-                            {
-                                edsmidmatch = systemsByEdsmId[id_edsm];
-                                matches[edsmidmatch.id] = edsmidmatch;
-                            }
-                        }
-
-                        if (hastravcoords)
-                        {
-                            posmatches = matches.Values.Where(s => s.x >= vsc.X - 0.125 && s.x <= vsc.X + 0.125 && s.y >= vsc.X - 0.125 && s.y <= vsc.Y + 0.125 && s.z >= vsc.Z - 0.125 && s.z <= vsc.Z + 0.125).ToList();
-                            if (posmatches.Count >= 1)
-                            {
-                                nameposmatches = posmatches.Where(s => s.SearchName == vsc_searchname).ToList();
-
-                                foreach (var sys in posmatches)
+                                foreach (var sys in namematches)
                                 {
                                     matches[sys.id] = sys;
                                 }
-                            }
-                        }
 
-                        if (systemsByName.ContainsKey(vsc_searchname) && systemsByName[vsc_searchname].Count >= 1)
-                        {
-                            namematches = systemsByName[vsc_searchname];
-
-                            foreach (var sys in namematches)
-                            {
-                                matches[sys.id] = sys;
-                            }
-                        }
-
-                        if (systemsAliasesByVscId.ContainsKey(vsc.id))
-                        {
-                            foreach (var alt in systemsAliasesByVscId[vsc.id])
-                            {
-                                matches[alt.id] = alt;
-                            }
-                        }
-
-                        vsc.alternatives = matches.Values.Select(s => (ISystem)s).ToList();
-
-                        if (edsmidmatch != null)
-                        {
-                            SystemClass sys = edsmidmatch;
-                            vsc.curSystem = sys;
-
-                            if (sys.SearchName == vsc_searchname && hastravcoords && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // name and position matches
-                            {
-                                vsc.NameStatus = "Exact match";
-                                continue; // Continue to next system
-                            }
-                            else if (hastravcoords && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // position matches
-                            {
-                                vsc.NameStatus = "Name differs";
-                                continue; // Continue to next system
-                            }
-                            else if (!hastravcoords || !sys.HasCoordinate) // no coordinates available
-                            {
-                                if (sys.SearchName == vsc_searchname) // name matches
+                                if (altmatches.Count != 0)
                                 {
-                                    if (!sys.HasCoordinate)
+                                    foreach (var alt in altmatches.Values)
                                     {
-                                        vsc.NameStatus = "System has no known coordinates";
+                                        matches[alt.id] = alt;
+                                    }
+                                }
+
+                                vsc.alternatives = matches.Values.Select(s => (ISystem)s).ToList();
+
+                                if (edsmidmatch != null)
+                                {
+                                    SystemClass sys = edsmidmatch;
+                                    vsc.curSystem = sys;
+
+                                    if (sys.SearchName == vsc_searchname && hastravcoords && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // name and position matches
+                                    {
+                                        vsc.NameStatus = "Exact match";
+                                        continue; // Continue to next system
+                                    }
+                                    else if (hastravcoords && sys.x >= vsc.X - 0.125 && sys.x <= vsc.X + 0.125 && sys.y >= vsc.Y - 0.125 && sys.y <= vsc.Y + 0.125 && sys.z >= vsc.Z - 0.125 && sys.z <= vsc.Z + 0.125) // position matches
+                                    {
+                                        vsc.NameStatus = "Name differs";
+                                        continue; // Continue to next system
+                                    }
+                                    else if (!hastravcoords || !sys.HasCoordinate) // no coordinates available
+                                    {
+                                        if (sys.SearchName == vsc_searchname) // name matches
+                                        {
+                                            if (!sys.HasCoordinate)
+                                            {
+                                                vsc.NameStatus = "System has no known coordinates";
+                                            }
+                                            else
+                                            {
+                                                vsc.NameStatus = "Travel log entry has no coordinates";
+                                            }
+
+                                            vsc.curSystem = sys;
+                                            continue; // Continue to next system
+                                        }
+                                        else if (!vsc.HasTravelCoordinates)
+                                        {
+                                            vsc.NameStatus = "Name differs";
+                                        }
+                                    }
+                                }
+
+                                if (nameposmatches != null && nameposmatches.Count != 0)
+                                {
+                                    if (nameposmatches.Count == 1)
+                                    {
+                                        // Both name and position matches
+                                        vsc.curSystem = nameposmatches[0];
+                                        vsc.NameStatus = "Exact match";
+                                        continue; // Continue to next system
+                                    }
+                                    else if (posmatches.Count == 1)
+                                    {
+                                        var sys = posmatches[0];
+
+                                        // Position matches
+                                        vsc.curSystem = sys;
+                                        vsc.NameStatus = $"System {sys.name} found at location";
+                                        continue; // Continue to next system
                                     }
                                     else
                                     {
-                                        vsc.NameStatus = "Travel log entry has no coordinates";
+                                        multimatch = true;
                                     }
-
-                                    vsc.curSystem = sys;
-                                    continue; // Continue to next system
                                 }
-                                else if (!vsc.HasTravelCoordinates)
+
+                                if (namematches != null && namematches.Count != 0)
                                 {
-                                    vsc.NameStatus = "Name differs";
+                                    if (namematches.Count == 1)
+                                    {
+                                        // One system name matched
+                                        vsc.curSystem = namematches[0];
+                                        vsc.NameStatus = "Name matched";
+                                        continue;
+                                    }
+                                    else if (namematches.Count > 1)
+                                    {
+                                        multimatch = true;
+                                    }
+                                }
+
+                                if (multimatch)
+                                {
+                                    vsc.NameStatus = "Multiple system matches found";
+                                }
+                                else
+                                {
+                                    vsc.NameStatus = "System not found";
                                 }
                             }
-                        }
-
-                        if (nameposmatches != null)
-                        {
-                            if (nameposmatches.Count == 1)
-                            {
-                                // Both name and position matches
-                                vsc.curSystem = nameposmatches[0];
-                                vsc.NameStatus = "Exact match";
-                                continue; // Continue to next system
-                            }
-                            else if (posmatches.Count == 1)
-                            {
-                                var sys = posmatches[0];
-
-                                // Position matches
-                                vsc.curSystem = sys;
-                                vsc.NameStatus = $"System {sys.name} found at location";
-                                continue; // Continue to next system
-                            }
-                            else
-                            {
-                                multimatch = true;
-                            }
-                        }
-
-                        if (namematches != null)
-                        {
-                            if (namematches.Count == 1)
-                            {
-                                // One system name matched
-                                vsc.curSystem = namematches[0];
-                                vsc.NameStatus = "Name matched";
-                                continue;
-                            }
-                            else if (namematches.Count > 1)
-                            {
-                                multimatch = true;
-                            }
-                        }
-
-                        if (multimatch)
-                        {
-                            vsc.NameStatus = "Multiple system matches found";
-                        }
-                        else
-                        {
-                            vsc.NameStatus = "System not found";
                         }
                     }
                 }
