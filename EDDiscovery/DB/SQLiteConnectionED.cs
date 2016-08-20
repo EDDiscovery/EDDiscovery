@@ -17,14 +17,14 @@ namespace EDDiscovery.DB
 
     public class SQLiteConnectionUser : SQLiteConnectionED
     {
-        public SQLiteConnectionUser() : base(EDDSqlDbSelection.EDDUser)
+        public SQLiteConnectionUser() : base(SQLiteDBClass.UserDatabase)
         {
         }
     }
 
     public class SQLiteConnectionSystem : SQLiteConnectionED
     {
-        public SQLiteConnectionSystem() : base(EDDSqlDbSelection.EDDSystem)
+        public SQLiteConnectionSystem() : base(SQLiteDBClass.SystemDatabase)
         {
         }
     }
