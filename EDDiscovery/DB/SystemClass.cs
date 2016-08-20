@@ -341,7 +341,7 @@ namespace EDDiscovery.DB
 
         public static bool Delete(SystemStatusEnum source)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 using (DbCommand cmd = cn.CreateCommand("Delete from Systems where Status=@Status"))
                 {
@@ -386,7 +386,7 @@ namespace EDDiscovery.DB
         }
 
 
-        public bool Store(SQLiteConnectionED cn, DbTransaction transaction)
+        public bool Store(SQLiteConnectionSystem cn, DbTransaction transaction)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into Systems (name, x, y, z, cr, commandercreate, createdate, commanderupdate, updatedate, status, note, id_eddb, population, faction, government_id, allegiance_id, primary_economy_id, security, eddb_updated_at, state, needs_permit, versiondate, id_edsm, gridid, randomid) values (@name, @x, @y, @z, @cr, @commandercreate, @createdate, @commanderupdate, @updatedate, @status, @Note, @id_eddb, @population, @faction, @government_id, @allegiance_id, @primary_economy_id,  @security, @eddb_updated_at, @state, @needs_permit, datetime('now'),@id_edsm,@gridid,@randomid)", transaction))
             {
@@ -445,7 +445,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public bool Update(SQLiteConnectionED cn, long id, DbTransaction transaction)
+        public bool Update(SQLiteConnectionSystem cn, long id, DbTransaction transaction)
         {
             using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, cr=@cr, commandercreate=@commandercreate, createdate=@createdate, commanderupdate=@commanderupdate, updatedate=@updatedate, status=@status, note=@Note, id_eddb=@id_eddb, population=@population, faction=@faction, government_id=@government_id, allegiance_id=@allegiance_id, primary_economy_id=@primary_economy_id,  security=@security, eddb_updated_at=@eddb_updated_at, state=@state, needs_permit=@needs_permit, versiondate=datetime('now'), id_edsm=@id_edsm, gridid=@gridid, randomid=@randomid where ID=@id", transaction))
             {
@@ -484,7 +484,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public bool UpdateEDSM(SQLiteConnectionED cn, long id, DbTransaction transaction)     // only altering fields EDSM sets..
+        public bool UpdateEDSM(SQLiteConnectionSystem cn, long id, DbTransaction transaction)     // only altering fields EDSM sets..
         {
             using (DbCommand cmd = cn.CreateCommand("Update Systems set name=@name, x=@x, y=@y, z=@z, versiondate=datetime('now'), gridid=@gridid, randomid=@randomid where ID=@id", transaction))
             {
@@ -502,7 +502,7 @@ namespace EDDiscovery.DB
 
         public enum SystemIDType { id, id_edsm, id_eddb };       // which ID to match?
 
-        public static bool Delete(long id, SQLiteConnectionED cn = null, DbTransaction transaction = null, SystemIDType idtype = SystemIDType.id)
+        public static bool Delete(long id, SQLiteConnectionSystem cn = null, DbTransaction transaction = null, SystemIDType idtype = SystemIDType.id)
         {
             using (DbCommand cmd = cn.CreateCommand("Delete from Systems where " + idtype.ToString() + "=@id", transaction))
             {
@@ -551,7 +551,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select id,x,y,z,randomid from Systems where gridid=@gridid"))
                     {
@@ -619,7 +619,7 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select name from Systems"))
                     {
@@ -647,7 +647,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select x,y,z from Systems"))
                     {
@@ -675,7 +675,7 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from Systems"))
                     {
@@ -703,7 +703,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select name from Systems"))
                     {
@@ -729,7 +729,7 @@ namespace EDDiscovery.DB
             return dict;
         }
 
-        public static SystemClass GetSystem(string name, SQLiteConnectionED cn = null)      // with an open database, case insensitive
+        public static SystemClass GetSystem(string name, SQLiteConnectionSystem cn = null)      // with an open database, case insensitive
         {
             SystemClass sys = null;
             bool closeit = false;
@@ -768,7 +768,7 @@ namespace EDDiscovery.DB
             return sys;
         }
 
-        public static List<SystemClass> GetSystemsByName(string name, SQLiteConnectionED cn = null)
+        public static List<SystemClass> GetSystemsByName(string name, SQLiteConnectionSystem cn = null)
         {
             List<SystemClass> systems = new List<SystemClass>();
             bool closeit = false;
@@ -807,7 +807,7 @@ namespace EDDiscovery.DB
             return systems;
         }
 
-        public static SystemClass GetSystem(long id, SQLiteConnectionED cn = null, SystemIDType idtype = SystemIDType.id)      // using an id
+        public static SystemClass GetSystem(long id, SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id)      // using an id
         {
             SystemClass sys = null;
             bool closeit = false;
@@ -852,7 +852,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select Count(*) from Systems"))
                     {
@@ -879,7 +879,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select versiondate from Systems Order By versiondate DESC limit 1"))
                     {
@@ -906,7 +906,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("SELECT UpdateDate FROM Systems WHERE id_edsm != 0 AND id_edsm IS NOT NULL ORDER BY UpdateDate DESC LIMIT 1"))
                     {
@@ -943,7 +943,7 @@ namespace EDDiscovery.DB
             return lasttime;
         }
 
-        public static void TouchSystem(SQLiteConnectionED cn, string systemName)
+        public static void TouchSystem(SQLiteConnectionSystem cn, string systemName)
         {
             using (DbCommand cmd = cn.CreateCommand("update systems set versiondate=datetime('now') where name=@systemName"))
             {
@@ -953,7 +953,7 @@ namespace EDDiscovery.DB
         }
 
         public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar, 
-                                                    double maxdist = 200 , SQLiteConnectionED cn = null)
+                                                    double maxdist = 200 , SQLiteConnectionSystem cn = null)
         {
             bool closeit = false;
 
@@ -1017,7 +1017,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000, SQLiteConnectionED cn = null)
+        public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000, SQLiteConnectionSystem cn = null)
         {
             SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
             GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar, maxdist,cn);
@@ -1038,7 +1038,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     string sqlquery = "select id,name, x, y, z from Systems " +
                                       "where (x-@xw)*(x-@xw)+(y-@yw)*(y-@yw)+(z-@zw)*(z-@zw)<=@maxfromwanted AND " +
@@ -1134,7 +1134,7 @@ namespace EDDiscovery.DB
                 Dictionary<string, List<SystemClass>> systemsByName = new Dictionary<string, List<SystemClass>>();
                 Dictionary<long, SystemClass> systemsByEdsmId = new Dictionary<long, SystemClass>();
 
-                using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     // Check that the SystemAliases table is not empty
                     using (DbCommand cmd = cn.CreateCommand("SELECT COUNT(id) FROM SystemAliases"))
@@ -1420,7 +1420,7 @@ namespace EDDiscovery.DB
                 return ParseEDSMUpdateSystemsReader(jr, ref date, removenonedsmids, discoveryform, cancelRequested, reportProgress, useCache);
         }
 
-        private static Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> GetEdsmSystemsLite(SQLiteConnectionED cn)
+        private static Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> GetEdsmSystemsLite(SQLiteConnectionSystem cn)
         {
             Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase> systemsByEdsmId = new Dictionary<long, EDDiscovery2.DB.InMemory.SystemClassBase>();
 
@@ -1462,7 +1462,7 @@ namespace EDDiscovery.DB
             return systemsByEdsmId;
         }
 
-        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, SQLiteConnectionED cn, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, SQLiteConnectionSystem cn, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             DateTime maxdate;
 
@@ -1659,7 +1659,7 @@ namespace EDDiscovery.DB
 
         private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, bool removenonedsmids, EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionSystem())  // open the db
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())  // open the db
             {
                 long count = DoParseEDSMUpdateSystemsReader(jr, ref date, cn, discoveryform, cancelRequested, reportProgress, useCache);
 
@@ -1690,7 +1690,7 @@ namespace EDDiscovery.DB
         {
             JsonTextReader jr = new JsonTextReader(new StringReader(json));
 
-            using (SQLiteConnectionED cn2 = new SQLiteConnectionSystem())  // open the db
+            using (SQLiteConnectionSystem cn2 = new SQLiteConnectionSystem())  // open the db
             {
 
                 while (jr.Read())
@@ -1746,7 +1746,7 @@ namespace EDDiscovery.DB
 
             List<SystemClass> toupdate = new List<SystemClass>();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionSystem())  // open the db
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())  // open the db
             {
                 DbCommand cmd1 = null;
 
@@ -1827,7 +1827,7 @@ namespace EDDiscovery.DB
                 }
             }
 
-            using (SQLiteConnectionED cn2 = new SQLiteConnectionSystem())  // open the db
+            using (SQLiteConnectionSystem cn2 = new SQLiteConnectionSystem())  // open the db
             {
                 if (toupdate.Count > 0)
                 {

@@ -425,7 +425,7 @@ namespace EDDiscovery.DB
 
         private static void UpdateSchema()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionOld())
+            using (SQLiteConnectionOld cn = new SQLiteConnectionOld())
             {
                 UpdateDbSchema(cn, Schema.EDDiscovery);
 
@@ -452,12 +452,12 @@ namespace EDDiscovery.DB
                 }
             }
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionSystem())
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 UpdateDbSchema(cn, Schema.EDDSystem);
             }
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 UpdateDbSchema(cn, Schema.EDDUser);
             }

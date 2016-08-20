@@ -31,14 +31,14 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        private bool Add(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)"))
             {
@@ -60,13 +60,13 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnectionED cn)
+        private bool Update(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id"))
             {
@@ -88,7 +88,7 @@ namespace EDDiscovery2.DB
         {
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from SystemNote"))
                     {
