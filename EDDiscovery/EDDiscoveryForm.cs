@@ -629,6 +629,8 @@ namespace EDDiscovery
                 travelHistoryControl1.HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
                 travelHistoryControl1.RefreshHistoryAsync();
 
+                DeleteOldLogFiles();
+
                 checkInstallerTask = CheckForNewInstaller();
             }
         }
@@ -1041,9 +1043,46 @@ namespace EDDiscovery
             }
         }
 
-#endregion
 
-#region JSONandMisc
+        void DeleteOldLogFiles()
+        {
+            try
+            {
+                // Create a reference to the Log directory.
+                DirectoryInfo di = new DirectoryInfo(Path.Combine(Tools.GetAppDataDirectory(), "Log"));
+
+                Trace.WriteLine("Running logfile age check");
+                // Create an array representing the files in the current directory.
+                FileInfo[] fi = di.GetFiles("*.log");
+
+                System.Collections.IEnumerator myEnum = fi.GetEnumerator();
+
+                while (myEnum.MoveNext())
+                {
+                    FileInfo fiTemp = (FileInfo)(myEnum.Current);
+
+                    DateTime time = fiTemp.CreationTime;
+
+                    //Trace.WriteLine(String.Format("File {0}  time {1}", fiTemp.Name, __box(time)));
+
+                    TimeSpan maxage = new TimeSpan(30, 0, 0, 0);
+                    TimeSpan fileage = DateTime.Now - time;
+
+                    if (fileage > maxage)
+                    {
+                        Trace.WriteLine(String.Format("File {0} is older then maximum age. Removing file from Logs.", fiTemp.Name));
+                        fiTemp.Delete();
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        #endregion
+
+        #region JSONandMisc
         static public string LoadJsonFile(string filename)
         {
             string json = null;
