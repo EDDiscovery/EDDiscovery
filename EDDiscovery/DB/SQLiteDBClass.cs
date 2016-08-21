@@ -59,7 +59,7 @@ namespace EDDiscovery.DB
                         }
                         if (txnlock._owningThread == Thread.CurrentThread)
                         {
-                            StackTrace trace = new StackTrace(true);
+                            StackTrace trace = new StackTrace(1, true);
                             Trace.WriteLine(trace.ToString());
                         }
                     }
@@ -403,7 +403,7 @@ namespace EDDiscovery.DB
                 using (var txnlock = new SQLiteTxnLockED())
                 {
                     txnlock.Open();
-                    return new SQLiteDataReaderED(this, behavior, txnlock: txnlock);
+                    return new SQLiteDataReaderED(this.InnerCommand, behavior, txnlock: txnlock);
                 }
             }
         }
