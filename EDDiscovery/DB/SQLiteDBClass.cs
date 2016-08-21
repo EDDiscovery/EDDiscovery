@@ -18,9 +18,14 @@ namespace EDDiscovery.DB
     public class SQLiteTxnLockED : IDisposable
     {
         private static object _transactionLock = new object();
+        private static System.Threading.Timer _locktimer;
         private bool _locktaken = false;
         private static ConcurrentDictionary<Thread, bool> _waitingthreads = new ConcurrentDictionary<Thread, bool>();
         private Thread _owningThread;
+        public DbCommand _executingCommand;
+        public bool _commandExecuting = false;
+        private bool _isLongRunning = false;
+        private string _commandText = null;
 
         #region Constructor and Destructor
         public SQLiteTxnLockED()
@@ -34,6 +39,61 @@ namespace EDDiscovery.DB
         #endregion
 
         #region Opening and Disposal
+        private static void DebugLongRunningOperation(object state)
+        {
+            WeakReference weakref = state as WeakReference;
+
+            if (weakref != null)
+            {
+                SQLiteTxnLockED txnlock = weakref.Target as SQLiteTxnLockED;
+
+                if (txnlock != null)
+                {
+                    txnlock._isLongRunning = true;
+
+                    if (txnlock._commandExecuting)
+                    {
+                        if (txnlock._isLongRunning)
+                        {
+                            Trace.WriteLine($"The following command is taking a long time to execute:\n{txnlock._commandText}");
+                        }
+                        if (txnlock._owningThread == Thread.CurrentThread)
+                        {
+                            StackTrace trace = new StackTrace(true);
+                            Trace.WriteLine(trace.ToString());
+                        }
+                    }
+                    else
+                    {
+                        Trace.WriteLine($"The transaction lock has been held for a long time.");
+
+                        if (txnlock._commandText != null)
+                        {
+                            Trace.WriteLine($"Last command to execute:\n{txnlock._commandText}");
+                        }
+                    }
+                }
+            }
+        }
+
+        public void BeginCommand(DbCommand cmd)
+        {
+            this._executingCommand = cmd;
+            this._commandText = cmd.CommandText;
+            this._commandExecuting = true;
+
+            if (this._isLongRunning)
+            {
+                this._isLongRunning = false;
+                DebugLongRunningOperation(new WeakReference(this));
+            }
+        }
+
+        public void EndCommand()
+        {
+            this._commandExecuting = false;
+        }
+
         public void Open()
         {
             // Only take the lock once
@@ -55,6 +115,7 @@ namespace EDDiscovery.DB
                         Monitor.Enter(_transactionLock, ref _locktaken);
                         _owningThread = Thread.CurrentThread;
                         _waitingthreads[Thread.CurrentThread] = false;
+                        _locktimer = new System.Threading.Timer(DebugLongRunningOperation, new WeakReference(this), 2000, Timeout.Infinite);
                     }
                     // Retry the lock if we are interrupted by
                     // a leaked lock being finalized
@@ -116,6 +177,12 @@ namespace EDDiscovery.DB
 
                 _locktaken = false;
             }
+
+            if (_locktimer != null)
+            {
+                _locktimer.Dispose();
+                _locktimer = null;
+            }
         }
         #endregion
     }
@@ -143,6 +210,16 @@ namespace EDDiscovery.DB
         public override void Rollback() { InnerTransaction.Rollback(); }
         #endregion
 
+        public void BeginCommand(DbCommand cmd)
+        {
+            _transactionLock.BeginCommand(cmd);
+        }
+
+        public void EndCommand()
+        {
+            _transactionLock.EndCommand();
+        }
+
         // disposing: true if Dispose() was called, false
         // if being finalized by the garbage collector
         protected override void Dispose(bool disposing)
@@ -164,6 +241,117 @@ namespace EDDiscovery.DB
             }
 
             base.Dispose(disposing);
+        }
+    }
+
+    // This class wraps a DbDataReader so it can take the
+    // above transaction lock, and to work around SQLite
+    // not using a monitor or mutex when locking the
+    // database
+    public class SQLiteDataReaderED : DbDataReader
+    {
+        // This is the wrapped reader
+        protected DbDataReader InnerReader { get; set; }
+        protected DbCommand _command;
+        protected SQLiteTransactionED _transaction;
+        protected SQLiteTxnLockED _txnlock;
+
+        public SQLiteDataReaderED(DbCommand cmd, CommandBehavior behaviour, SQLiteTransactionED txn = null, SQLiteTxnLockED txnlock = null)
+        {
+            this._command = cmd;
+            this.InnerReader = cmd.ExecuteReader(behaviour);
+            this._transaction = txn;
+            this._txnlock = txnlock;
+        }
+
+        protected void BeginCommand()
+        {
+            if (_transaction != null)
+            {
+                _transaction.BeginCommand(_command);
+            }
+            else if (_txnlock != null)
+            {
+                _txnlock.BeginCommand(_command);
+            }
+        }
+
+        protected void EndCommand()
+        {
+            if (_transaction != null)
+            {
+                _transaction.EndCommand();
+            }
+            else if (_txnlock != null)
+            {
+                _txnlock.EndCommand();
+            }
+        }
+
+        #region Overridden methods and properties passed to inner command
+        public override int Depth { get { return InnerReader.Depth; } }
+        public override int FieldCount { get { return InnerReader.FieldCount; } }
+        public override bool HasRows { get { return InnerReader.HasRows; } }
+        public override bool IsClosed { get { return InnerReader.IsClosed; } }
+        public override int RecordsAffected { get { return InnerReader.RecordsAffected; } }
+        public override int VisibleFieldCount { get { return InnerReader.VisibleFieldCount; } }
+        public override object this[int ordinal] { get { return InnerReader[ordinal]; } }
+        public override object this[string name] { get { return InnerReader[name]; } }
+        public override bool GetBoolean(int ordinal) { return InnerReader.GetBoolean(ordinal); }
+        public override byte GetByte(int ordinal) { return InnerReader.GetByte(ordinal); }
+        public override char GetChar(int ordinal) { return InnerReader.GetChar(ordinal); }
+        public override string GetDataTypeName(int ordinal) { return InnerReader.GetDataTypeName(ordinal); }
+        public override DateTime GetDateTime(int ordinal) { return InnerReader.GetDateTime(ordinal); }
+        public override decimal GetDecimal(int ordinal) { return InnerReader.GetDecimal(ordinal); }
+        public override double GetDouble(int ordinal) { return InnerReader.GetDouble(ordinal); }
+        public override Type GetFieldType(int ordinal) { return InnerReader.GetFieldType(ordinal); }
+        public override float GetFloat(int ordinal) { return InnerReader.GetFloat(ordinal); }
+        public override Guid GetGuid(int ordinal) { return InnerReader.GetGuid(ordinal); }
+        public override short GetInt16(int ordinal) { return InnerReader.GetInt16(ordinal); }
+        public override int GetInt32(int ordinal) { return InnerReader.GetInt32(ordinal); }
+        public override long GetInt64(int ordinal) { return InnerReader.GetInt64(ordinal); }
+        public override string GetName(int ordinal) { return InnerReader.GetName(ordinal); }
+        public override string GetString(int ordinal) { return InnerReader.GetString(ordinal); }
+        public override object GetValue(int ordinal) { return InnerReader.GetValue(ordinal); }
+        public override bool IsDBNull(int ordinal) { return InnerReader.IsDBNull(ordinal); }
+        public override int GetOrdinal(string name) { return InnerReader.GetOrdinal(name); }
+        public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length) { return InnerReader.GetBytes(ordinal, dataOffset, buffer, bufferOffset, length); }
+        public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length) { return InnerReader.GetChars(ordinal, dataOffset, buffer, bufferOffset, length); }
+        public override int GetValues(object[] values) { return InnerReader.GetValues(values); }
+        public override DataTable GetSchemaTable() { return InnerReader.GetSchemaTable(); }
+        #endregion
+
+        public override System.Collections.IEnumerator GetEnumerator()
+        {
+            BeginCommand();
+            foreach (object val in InnerReader)
+            {
+                EndCommand();
+                yield return val;
+                BeginCommand();
+            }
+            EndCommand();
+        }
+
+        public override bool NextResult()
+        {
+            BeginCommand();
+            bool result = InnerReader.NextResult();
+            EndCommand();
+            return result;
+        }
+
+        public override bool Read()
+        {
+            BeginCommand();
+            bool result = InnerReader.Read();
+            EndCommand();
+            return result;
+        }
+
+        public override void Close()
+        {
+            InnerReader.Close();
         }
     }
 
@@ -198,18 +386,16 @@ namespace EDDiscovery.DB
         public override UpdateRowSource UpdatedRowSource { get { return InnerCommand.UpdatedRowSource; } set { InnerCommand.UpdatedRowSource = value; } }
 
         protected override DbParameter CreateDbParameter() { return InnerCommand.CreateParameter(); }
-        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) { return InnerCommand.ExecuteReader(behavior); }
         public override void Cancel() { InnerCommand.Cancel(); }
-        public override object ExecuteScalar() { return InnerCommand.ExecuteScalar(); }
         public override void Prepare() { InnerCommand.Prepare(); }
         #endregion
 
-        public override int ExecuteNonQuery()
+        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
             if (this._transaction != null)
             {
                 // The transaction should already have the transaction lock
-                return InnerCommand.ExecuteNonQuery();
+                return new SQLiteDataReaderED(this, behavior, txn: this._transaction);
             }
             else
             {
@@ -217,7 +403,55 @@ namespace EDDiscovery.DB
                 using (var txnlock = new SQLiteTxnLockED())
                 {
                     txnlock.Open();
-                    return InnerCommand.ExecuteNonQuery();
+                    return new SQLiteDataReaderED(this, behavior, txnlock: txnlock);
+                }
+            }
+        }
+
+        public override object ExecuteScalar()
+        {
+            if (this._transaction != null)
+            {
+                this._transaction.BeginCommand(this);
+                // The transaction should already have the transaction lock
+                object result = InnerCommand.ExecuteScalar();
+                this._transaction.EndCommand();
+                return result;
+            }
+            else
+            {
+                // Take the transaction lock for the duration of this command
+                using (var txnlock = new SQLiteTxnLockED())
+                {
+                    txnlock.Open();
+                    txnlock.BeginCommand(this);
+                    object result = InnerCommand.ExecuteScalar();
+                    txnlock.EndCommand();
+                    return result;
+                }
+            }
+        }
+
+        public override int ExecuteNonQuery()
+        {
+            if (this._transaction != null)
+            {
+                this._transaction.BeginCommand(this);
+                // The transaction should already have the transaction lock
+                int result = InnerCommand.ExecuteNonQuery();
+                this._transaction.EndCommand();
+                return result;
+            }
+            else
+            {
+                // Take the transaction lock for the duration of this command
+                using (var txnlock = new SQLiteTxnLockED())
+                {
+                    txnlock.Open();
+                    txnlock.BeginCommand(this);
+                    int result = InnerCommand.ExecuteNonQuery();
+                    txnlock.EndCommand();
+                    return result;
                 }
             }
         }
