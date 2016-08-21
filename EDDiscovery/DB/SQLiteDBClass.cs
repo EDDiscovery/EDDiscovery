@@ -198,11 +198,45 @@ namespace EDDiscovery.DB
         public override UpdateRowSource UpdatedRowSource { get { return InnerCommand.UpdatedRowSource; } set { InnerCommand.UpdatedRowSource = value; } }
 
         protected override DbParameter CreateDbParameter() { return InnerCommand.CreateParameter(); }
-        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) { return InnerCommand.ExecuteReader(behavior); }
         public override void Cancel() { InnerCommand.Cancel(); }
-        public override object ExecuteScalar() { return InnerCommand.ExecuteScalar(); }
         public override void Prepare() { InnerCommand.Prepare(); }
         #endregion
+
+        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
+        {
+            if (this._transaction != null)
+            {
+                // The transaction should already have the transaction lock
+                return InnerCommand.ExecuteReader(behavior);
+            }
+            else
+            {
+                // Take the transaction lock for the duration of this command
+                using (var txnlock = new SQLiteTxnLockED())
+                {
+                    txnlock.Open();
+                    return InnerCommand.ExecuteReader(behavior);
+                }
+            }
+        }
+
+        public override object ExecuteScalar()
+        {
+            if (this._transaction != null)
+            {
+                // The transaction should already have the transaction lock
+                return InnerCommand.ExecuteScalar();
+            }
+            else
+            {
+                // Take the transaction lock for the duration of this command
+                using (var txnlock = new SQLiteTxnLockED())
+                {
+                    txnlock.Open();
+                    return InnerCommand.ExecuteScalar();
+                }
+            }
+        }
 
         public override int ExecuteNonQuery()
         {
