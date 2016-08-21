@@ -395,7 +395,7 @@ namespace EDDiscovery.DB
             if (this._transaction != null)
             {
                 // The transaction should already have the transaction lock
-                return new SQLiteDataReaderED(this, behavior, txn: this._transaction);
+                return new SQLiteDataReaderED(this.InnerCommand, behavior, txn: this._transaction);
             }
             else
             {
