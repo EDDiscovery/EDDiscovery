@@ -29,10 +29,10 @@ namespace EDDiscovery2
 
         bool array1displayed;
         private Vector3[] array1;            // the star points
-        private int[] carray1;                // the star colours
+        private uint[] carray1;                // the star colours
         int array1vertices;
         private Vector3[] array2;            // the star points
-        private int[] carray2;                // the star colours
+        private uint[] carray2;                // the star colours
         int array2vertices;
 
         public float Size { get; set; }
@@ -75,18 +75,21 @@ namespace EDDiscovery2
                 array1vertices = FillFromVS(ref array1, ref carray1, cls, this.Color);
         }
 
-        private int FillFromVS( ref Vector3[] array, ref int[] carray, List<VisitedSystemsClass> cls, Color basecolour)
+        private int FillFromVS( ref Vector3[] array, ref uint[] carray, List<VisitedSystemsClass> cls, Color basecolour)
         {
-            carray = new int[cls.Count];
+            carray = new uint[cls.Count];
             array = new Vector3[cls.Count];     // can't have any more than this 
             int total = 0;
+
+            uint cx = BitConverter.ToUInt32(new byte[] { basecolour.R, basecolour.G, basecolour.B, basecolour.A }, 0);
 
             foreach (VisitedSystemsClass vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
                 if (vs.curSystem != null && vs.curSystem.status != SystemStatusEnum.EDSC && vs.curSystem.HasCoordinate )
                 {
-                    carray[total] = basecolour.ToArgb();
+                    carray[total] = cx;      // Visited systems grid does not use the carray as its overriden, but starnames does
                     array[total++] = new Vector3((float)vs.curSystem.x, (float)vs.curSystem.y, (float)vs.curSystem.z);
+                    //Console.WriteLine("Added {0} due to not being in star database", vs.Name);
                 }
             }
 
@@ -157,13 +160,15 @@ namespace EDDiscovery2
 
         public class InViewInfo
         {
-            public InViewInfo(Vector3 pos, int c) { position = pos; colour = c; }
+            public InViewInfo(Vector3 pos, uint c) { position = pos; colour = c; }
+            public Color AsColor { get { return Color.FromArgb((int)((colour >> 24) & 0xff), (int)(colour & 0xff), (int)((colour >> 8) & 0xff), (int)((colour >> 16) & 0xff)); } }
+
             public Vector3 position;
-            public int colour;
+            public uint colour;
         }
 
         // operate on  display - Called in a thread..
-        public void GetSystemsInView(ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti, int forcecol = 0)
+        public void GetSystemsInView(ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti, uint forcecol = 0)
         {
             if (array1displayed)
                 GetSystemsInView(ref array1, ref carray1, array1vertices, ref list, ti , forcecol);
@@ -172,7 +177,7 @@ namespace EDDiscovery2
         }
 
         // operate on  display - can be called BY A THREAD
-        public void GetSystemsInView(ref Vector3[] vert, ref int[] cols , int total, ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti , int forcecol )
+        public void GetSystemsInView(ref Vector3[] vert, ref uint[] cols , int total, ref SortedDictionary<float, InViewInfo> list , TransFormInfo ti , uint forcecol )
         {
             int margin = -150;
             float sqdist = 0F;
@@ -198,6 +203,11 @@ namespace EDDiscovery2
 
                             if (sqdist <= ti.sqlylimit)
                                 list.Add(sqdist, new InViewInfo( new Vector3(v.X,v.Y,v.Z),(forcecol!=0) ? forcecol : cols[i]));
+                            else
+                            {
+                                if ( Math.Abs(v.X) < 1 && Math.Abs(v.Y) < 1 )
+                                   Console.WriteLine("Star {0} vs {1} rej dist {2}", syspos, ti.campos , sqdist);
+                            }
                         }
                     }
                 }
@@ -314,7 +324,7 @@ namespace EDDiscovery2
                     }
                     else
                     {
-                        GL.Color3(Color);
+                        GL.Color4(Color);
                         GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
                     }
 
@@ -618,8 +628,8 @@ namespace EDDiscovery2
             {
                 if (grd.Id==idpos || grd.DistanceFrom(ti.campos.X, ti.campos.Z) < gridlylimit)                         // only consider grids which are nearer than this..
                 {
-                    grd.GetSystemsInView(ref list,ti, (ForceWhite) ? 0x00ffff : 0);
-                    //Console.WriteLine("Check grid " + grd.X + "," + grd.Z);
+                    grd.GetSystemsInView(ref list,ti, (ForceWhite) ? 0xff00ffff : 0);
+                    Console.WriteLine("Check grid {0} {1} gives {2}" ,grd.X,grd.Z,list.Count);
                 }
             }
 

@@ -9,17 +9,23 @@ namespace ExtendedControls
 {
     public class LabelExt : Label               // draws label using a bitmap - solves problems with aliasing over transparent backgrounds
     {
+        public bool CentreX = false;
+        public bool CentreY = false;
+
         public LabelExt()
         {
         }
 
         protected override void OnPaint(PaintEventArgs pe)
         {
-            SizeF sz = pe.Graphics.MeasureString(this.Text, this.Font);
+            SizeF sizef = pe.Graphics.MeasureString(this.Text, this.Font);
+            Size sz = new Size((int)(sizef.Width + 1), (int)(sizef.Height + 1));
+
+            Console.WriteLine("Label size {0}", sz);
 
             if (sz.Width != 0)
             {
-                using (Bitmap mp = new Bitmap((int)sz.Width, (int)sz.Height))   // bitmaps .. drawing directly does not work due to aliasing
+                using (Bitmap mp = new Bitmap(sz.Width, sz.Height))   // bitmaps .. drawing directly does not work due to aliasing
                 {
                     Graphics mpg = Graphics.FromImage(mp);
 
@@ -27,7 +33,7 @@ namespace ExtendedControls
                     {
                         using (Brush b = new SolidBrush(this.BackColor))
                         {
-                            mpg.FillRectangle(b, new Rectangle(0, 0, (int)sz.Width, (int)sz.Height));
+                            mpg.FillRectangle(b, ClientRectangle );
                         }
                     }
 
@@ -35,12 +41,23 @@ namespace ExtendedControls
 
                     using (Brush b = new SolidBrush(this.ForeColor))
                     {
-                        mpg.DrawString(this.Text, this.Font, b, new Point(0, 0));
+                        mpg.DrawString(this.Text, this.Font, b, new Point(0,0));
                     }
 
                     mpg.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
-                    pe.Graphics.DrawImageUnscaled(mp, 0, 0);
+                    if (CentreY || CentreX)
+                    {
+                        int x = (CentreX) ? (ClientRectangle.Width / 2 - sz.Width / 2) : 0;
+                        int y = (CentreY) ? (ClientRectangle.Height / 2 - sz.Height / 2) : 0;
+                        if (x < 0)
+                            x = 0;
+                        if (y < 0)
+                            y = 0;
+                        pe.Graphics.DrawImageUnscaled(mp, x, y);
+                    }
+                    else
+                        pe.Graphics.DrawImageUnscaled(mp, 0,0);
                 }
             }
         }

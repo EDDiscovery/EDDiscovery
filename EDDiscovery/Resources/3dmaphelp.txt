@@ -13,6 +13,7 @@ Keyboard:
 	Q or Keypad 7	Roll left
 	E or Keypad 9	Roll right
 	F1 F2	Increase or decrease the light year limit for displaying star names
+	F5	Record a manual step during video recording.  Applies in both normal and step recording
 
 Mouse:
 	Move Mouse	Over star to get its information in a popup.
@@ -49,13 +50,16 @@ Toolbar (from left):
 	
 	Galaxy	Display galaxy maps
 	Filter	Filter travel by expedition dates
+
+	Video Recorder	Record a flight, play back a flight, and save/load flights
 	
 	?	This help
 	
-	Star Entry	Entry box to find specific star (hit return to center)
-	Centre	Alternatively, hit this to center what is in the star entry box
+	Star/Object Entry	Entry box to find specific star or galaxy object
+	Centre	Press this to center what is in the star/object box
+	Eye	Press this to move the camera to look at what is in the star/object box
 	Yellow Dot	Show current centered system 
 	Orange Dot	Show selected system (by left mouse click).  
 		Double click to make it centered system. 
-		Right click for information and EDSM information (in a web browser tab).
+		Right click for choice to look up in EDSM (in a web browser tab).
 

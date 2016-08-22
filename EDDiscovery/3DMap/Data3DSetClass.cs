@@ -92,6 +92,7 @@ namespace EDDiscovery2._3DMap
                 {
                     GL.DeleteBuffer(VtxVboID);
                     GLContext = null;
+                    VtxVboID = 0;
                 }
             }
         }
@@ -348,6 +349,7 @@ namespace EDDiscovery2._3DMap
                 {
                     GL.DeleteBuffer(VtxVboID);
                     GLContext = null;
+                    VtxVboID = 0;
                 }
             }
         }
@@ -995,77 +997,10 @@ namespace EDDiscovery2._3DMap
         }
     }
 
-    public class Data3DSetClass<T> : IData3DSet where T : IDrawingPrimative
-    {
-        public string Name { get; set; }
-        public IList<T> Primatives { get; protected set; }
-        protected readonly Color color;
-        protected readonly float pointSize;
-
-        public bool Visible;
-
-        protected Data3DSetClass(string name, Color color, float pointsize)
-        {
-            Name = name;
-            this.color = color;
-            pointSize = pointsize;
-            Primatives = new List<T>();
-            Visible = true;
-        }
-
-        public virtual void Add(T primative)
-        {
-            primative.Color = color;
-            primative.Size = pointSize;
-            Primatives.Add(primative);
-        }
-
-        public virtual void DrawAll(GLControl control)
-        {
-            if (!Visible) return;
-
-            if (control.InvokeRequired)
-            {
-                control.Invoke(new Action<GLControl>(this.DrawAll), control);
-            }
-            else
-            {
-                foreach (var primative in Primatives)
-                {
-                    primative.Draw(control);
-                }
-            }
-        }
-
-        public static Data3DSetClass<T> Create(string name, Color color, float pointsize)
-        {
-            if (typeof(T) == typeof(PointData))
-            {
-                return new PointDataCollection(name, color, pointsize) as Data3DSetClass<T>;
-            }
-            else if (typeof(T) == typeof(LineData))
-            {
-                return new LineDataCollection(name, color, pointsize) as Data3DSetClass<T>;
-            }
-            else if (typeof(T) == typeof(TexturedQuadData))
-            {
-                return new TexturedQuadDataCollection(name, color, pointsize) as Data3DSetClass<T>;
-            }
-            else if (typeof(T) == typeof(Polygon))
-            {
-                return new PolygonCollection(name, color, pointsize) as Data3DSetClass<T>;
-            }
-            else
-            {
-                return new Data3DSetClass<T>(name, color, pointsize);
-            }
-        }
-    }
-
 
     public class Polygon : IDrawingPrimative
     {
-        List<PointData> vertices;
+        public List<PointData> vertices;
 
         public Polygon(List<PointData> points, float size, Color c, bool filled, bool usey)
         {
@@ -1123,22 +1058,149 @@ namespace EDDiscovery2._3DMap
         }
     }
 
-    public class PolygonCollection : Data3DSetClass<Polygon>, IDisposable
+    public class PolygonCollection : Data3DSetClass<Polygon>,  IDisposable      // can be either Filled or lines
     {
-        List<Polygon> polygons;
+        protected Vector3d[] Vertices;
+        private uint[] Colourarray;
+        protected int NumVertices;
 
-        public PolygonCollection(string name, Color color, float pointsize)
+        private bool Filled;
+
+        List<int> Polystart = new List<int>();
+        List<int> Polycount = new List<int>();
+
+        protected int VtxVboID;
+        protected int VtxColourVboId;
+        protected GLControl GLContext;
+
+        public PolygonCollection(string name, Color color, float pointsize, bool filled)
             : base(name, color, pointsize)
         {
-            polygons = new List<Polygon>();
+            Filled = filled;
+        }
+
+        public void Dispose()
+        {
+            if (GLContext != null)
+            {
+                if (GLContext.InvokeRequired)
+                {
+                    GLContext.Invoke(new Action(this.Dispose));
+                }
+                else
+                {
+                    GL.DeleteBuffer(VtxVboID);
+                    GL.DeleteBuffer(VtxColourVboId);
+                    VtxVboID = VtxColourVboId = 0;
+                    GLContext = null;
+                }
+            }
         }
 
         public override void Add(Polygon primative)
         {
-            polygons.Add(primative);
+            Dispose();
+
+            if (Vertices == null)
+            {
+                Vertices = new Vector3d[1024];
+                Colourarray = new uint[1024];
+            }
+            else if (NumVertices == Vertices.Length)
+            {
+                Array.Resize(ref Vertices, Vertices.Length * 2);
+                Array.Resize(ref Colourarray, Vertices.Length * 2);
+            }
+
+            Polystart.Add(NumVertices);                                             // store poly details
+            Polycount.Add(primative.vertices.Count);
+
+            uint cx = BitConverter.ToUInt32(new byte[] { primative.Color.R, primative.Color.G, primative.Color.B, primative.Color.A }, 0);
+
+            foreach (PointData p in primative.vertices)
+            {
+                Colourarray[NumVertices] = cx;     // need colour per vertex.. if not, it does not work, or you can mix colours
+                Vertices[NumVertices++] = new Vector3d(p.x, primative.UseY ? p.y : 0, p.z);
+            }
         }
 
         public override void DrawAll(GLControl control)
+        {
+            if (GLContext != null && GLContext != control)
+            {
+                Dispose();
+            }
+
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new Action<GLControl>(this.DrawAll), control);
+            }
+            else
+            {
+                if (VtxVboID == 0)                                              // shove vertexes into a buffer
+                {
+                    GL.GenBuffers(1, out VtxVboID);
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
+                    GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(Vertices)), Vertices, BufferUsageHint.StaticDraw);
+
+                    GL.GenBuffers(1, out VtxColourVboId);
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColourVboId);
+                    GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(Colourarray)), Colourarray, BufferUsageHint.StaticDraw);
+
+                    GLContext = control;
+                }
+
+                GL.EnableClientState(ArrayCap.VertexArray);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
+                GL.VertexPointer(3, VertexPointerType.Double, 0, 0);
+                GL.PointSize(pointSize);
+
+                GL.EnableClientState(ArrayCap.ColorArray);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColourVboId);
+                GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
+
+                GL.MultiDrawArrays((Filled) ? PrimitiveType.Polygon : PrimitiveType.LineLoop, Polystart.ToArray(), Polycount.ToArray(), Polystart.Count);
+
+                GL.DisableClientState(ArrayCap.ColorArray);
+                GL.DisableClientState(ArrayCap.VertexArray);
+            }
+        }
+
+    }
+
+
+    public interface IData3DSet
+    {
+        string Name { get; set; }
+        void DrawAll(GLControl control);
+    }
+
+    public class Data3DSetClass<T> : IData3DSet where T : IDrawingPrimative
+    {
+        public string Name { get; set; }
+        public IList<T> Primatives { get; protected set; }
+        protected readonly Color color;
+        protected readonly float pointSize;
+
+        public bool Visible;
+
+        protected Data3DSetClass(string name, Color color, float pointsize)
+        {
+            Name = name;
+            this.color = color;
+            pointSize = pointsize;
+            Primatives = new List<T>();
+            Visible = true;
+        }
+
+        public virtual void Add(T primative)
+        {
+            primative.Color = color;
+            primative.Size = pointSize;
+            Primatives.Add(primative);
+        }
+
+        public virtual void DrawAll(GLControl control)
         {
             if (!Visible) return;
 
@@ -1148,22 +1210,33 @@ namespace EDDiscovery2._3DMap
             }
             else
             {
-                foreach (Polygon primative in polygons)
+                foreach (var primative in Primatives)
                 {
                     primative.Draw(control);
                 }
             }
         }
 
-        public void Dispose()
+        public static Data3DSetClass<T> Create(string name, Color color, float pointsize)
         {
+            if (typeof(T) == typeof(PointData))
+            {
+                return new PointDataCollection(name, color, pointsize) as Data3DSetClass<T>;
+            }
+            else if (typeof(T) == typeof(LineData))
+            {
+                return new LineDataCollection(name, color, pointsize) as Data3DSetClass<T>;
+            }
+            else if (typeof(T) == typeof(TexturedQuadData))
+            {
+                return new TexturedQuadDataCollection(name, color, pointsize) as Data3DSetClass<T>;
+            }
+            else
+            {
+                return new Data3DSetClass<T>(name, color, pointsize);
+            }
         }
     }
 
-    public interface IData3DSet
-    {
-        string Name { get; set; }
-        void DrawAll(GLControl control);
-    }
 
 }

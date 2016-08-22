@@ -138,14 +138,16 @@ namespace EDDiscovery2
                 //Console.Write("Repaint " + _repaintall + " Stars " + _starlimitly + " within " + lylimit + "  ");
                 int sqlylimit = lylimit * lylimit;                 // in squared distance limit from viewpoint
 
-                Vector3 modcampos = _lastcamera.CameraPos;
-                modcampos.Y = -modcampos.Y;
-
-                StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_resmat, _znear, _glControl.Width, _glControl.Height, sqlylimit, modcampos);
+                StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_resmat, _znear, _glControl.Width, _glControl.Height, sqlylimit, _lastcamera.CameraPos);
 
                 SortedDictionary<float, StarGrid.InViewInfo> inviewlist = new SortedDictionary<float, StarGrid.InViewInfo>(new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
 
+                Console.WriteLine("Estimate at {0} len {1}", ti.campos, sqlylimit);
+
                 _stargrids.GetSystemsInView(ref inviewlist, 2000.0, ti);            // consider all grids under 2k from current pos.
+
+                Console.WriteLine("..Systems in view {0}", inviewlist.Count);
+            
 
                 float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _lastcamera.LastZoom, _starnameminly)); // per char
                 float textscalingh = textscalingw * 4;
@@ -165,6 +167,11 @@ namespace EDDiscovery2
                     {
                         foreach (StarGrid.InViewInfo inview in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                         {
+                            if (inview.position.X == 0 && inview.position.Y == 0)
+                            {
+                                Console.WriteLine("Sol");
+                            }
+
                             StarNames sys = null;
                             bool draw = false;
 
@@ -196,11 +203,17 @@ namespace EDDiscovery2
                             }
                             else
                             {
+                                Console.WriteLine("to many");
                                 break;      // no point doing any more..  Either the closest ones have been found, or a new one was painted
                             }
 
                             if (draw)
                             {
+                                if (inview.position.X == 0 && inview.position.Y == 0)
+                                {
+                                    Console.WriteLine("Draw Sol");
+                                }
+
                                 if (_nameson)
                                 {
                                     float width = textscalingw * sys.name.Length;
@@ -226,7 +239,7 @@ namespace EDDiscovery2
 
                                 if (_discson)
                                 {
-                                    sys.newstar = new PointData(sys.x, sys.y, sys.z, starsize, Color.FromArgb(255, inview.colour & 255, (inview.colour >> 8) & 255, (inview.colour >> 16) & 255));
+                                    sys.newstar = new PointData(sys.x, sys.y, sys.z, starsize, inview.AsColor);
                                 }
                             }
                         }
