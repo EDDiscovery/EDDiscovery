@@ -131,7 +131,7 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public void UpdateBookmarks(ref List<IData3DSet> _datasets, float widthly, float heightly, Vector3 rotation )
+        public void UpdateBookmarks(ref List<IData3DSet> _datasets, float widthly, float heightly, Vector3 rotation)
         {
             if (_datasets == null)
                 return;
@@ -171,8 +171,9 @@ namespace EDDiscovery2._3DMap
 
         public List<IData3DSet> AddGalMapRegionsToDataset( bool colourregions)
         {
-            var polydataset = Data3DSetClass<Polygon>.Create("regpolys", Color.White, 1f);      // ORDER AND NUMBER v.Important
-            var outlinedataset = Data3DSetClass<Polygon>.Create("reglines", Color.White, 1f);   // DrawStars picks them out in a particular order
+            //            var polydataset = Data3DSetClass<Polygon>.Create("regpolys", Color.White, 1f);      // ORDER AND NUMBER v.Important
+            var polydataset = new PolygonCollection("regpolys", Color.White, 1f, true);      // ORDER AND NUMBER v.Important
+            var outlinedataset = new PolygonCollection("reglines", Color.White, 1f , false);   // DrawStars picks them out in a particular order
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("regtext", Color.White, 1f);
 
             if (EDDiscoveryForm.galacticMapping != null)
@@ -182,10 +183,7 @@ namespace EDDiscovery2._3DMap
                 int cindex = 0;
                 foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
                 {
-                    //&& gmo.name.Equals("Sagittarius Gap") )//&& gmo.name.Equals("Gemina Gap" ) )// && gmo.name.Equals("Cygnus" ) 
-                    //&& gmo.name.Equals("Angustia" ) )//&& gmo.name.Equals("The Formidine Rift") )
-                
-                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Regions )// && gmo.name.Equals("Cygnus"))
+                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Regions )
                     {
                         string name = gmo.name;
 
@@ -220,12 +218,13 @@ namespace EDDiscovery2._3DMap
 
                             foreach (List<Vector2> points in polys)
                             {
-                                if (colourregions)
+                                if (colourregions )
                                 {
                                     Polygon p = new Polygon(points, 1, Color.FromArgb(64, c.R, c.G, c.B), true, false);
                                     polydataset.Add(p);
                                 }
 
+                                // add if you want to see the outlines of the convex polys - debug only
                                 //Polygon p2 = new Polygon(points, 1, Color.FromArgb(255, 255, 255, 0), false, false);
                                 //outlinedataset.Add(p2);
 
@@ -538,17 +537,17 @@ namespace EDDiscovery2._3DMap
 
         #region Routes
 
-        public List<IData3DSet> BuildVisitedSystems(bool drawlines, ISystem centersystem, List<VisitedSystemsClass> VisitedSystems,
-                                                     List<SystemClass> refsys, List<SystemClass> planned)
+        public List<IData3DSet> BuildVisitedSystems(bool drawlines, List<VisitedSystemsClass> VisitedSystems)
         {
             AddVisitedSystemsInformation(drawlines, VisitedSystems);
-            AddRoutePlannerInfoToDataset(planned);
-            AddTrilaterationInfoToDataset(centersystem, refsys);
             return _datasets;
         }
 
-        private void AddVisitedSystemsInformation( bool DrawLines , List<VisitedSystemsClass> VisitedSystems )
+        private void AddVisitedSystemsInformation(bool DrawLines, List<VisitedSystemsClass> VisitedSystems)
         {
+            // we used to draw the star points, but the star grids make sure all stars, visited systems or in the systems db are painted if selected
+            // so just the connecting lines
+
             if (VisitedSystems != null && VisitedSystems.Any() && DrawLines )
             {
                 VisitedSystemsClass.SetLastKnownSystemPosition(VisitedSystems);
@@ -561,7 +560,7 @@ namespace EDDiscovery2._3DMap
                 {
                     foreach (IGrouping<int, VisitedSystemsClass> colour in colours)
                     {
-                        var datasetl = Data3DSetClass<LineData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
+                        var datasetl = Data3DSetClass<LineData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 1.0f);
                         foreach (VisitedSystemsClass sp in colour)
                         {
                             if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
@@ -571,20 +570,18 @@ namespace EDDiscovery2._3DMap
 
                             }
                         }
-                        _datasets.Add(datasetl);
 
-                        var datasetvs = Data3DSetClass<PointData>.Create("visitedstars" + colour.Key.ToString(), Color.Orange, 2.0f);
-                        foreach (VisitedSystemsClass sp in colour)
-                        {
-                            if ( sp.curSystem != null && sp.curSystem.HasCoordinate)
-                            {
-                                datasetvs.Add(new PointData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z));
-                            }
-                        }
-                        _datasets.Add(datasetvs);
+                        _datasets.Add(datasetl);
                     }
                 }
             }
+        }
+
+        public List<IData3DSet> BuildRouteTri(ISystem centersystem,  List<SystemClass> refsys, List<SystemClass> planned)
+        {
+            AddRoutePlannerInfoToDataset(planned);
+            AddTrilaterationInfoToDataset(centersystem, refsys);
+            return _datasets;
         }
 
         private void AddTrilaterationInfoToDataset(ISystem CenterSystem, List<SystemClass> ReferenceSystems)
@@ -601,9 +598,6 @@ namespace EDDiscovery2._3DMap
 
                 var lineSet = Data3DSetClass<LineData>.Create("SuggestedReference", MapColours.TrilatSuggestedReference, 5.0f);
 
-
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
                 SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
 
                 for (int ii = 0; ii < 16; ii++)
@@ -612,12 +606,13 @@ namespace EDDiscovery2._3DMap
                     if (rsys == null) break;
                     var system = rsys.System;
                     references.AddReferenceStar(system);
-                    if (ReferenceSystems != null && ReferenceSystems.Any(s => s.name == system.name)) continue;
+                    if (ReferenceSystems != null && ReferenceSystems.Any(s => s.name == system.name))
+                        continue;
+
                     System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
                     lineSet.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, system.x, system.y, system.z));
                 }
-                sw.Stop();
-                System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
+
                 _datasets.Add(lineSet);
             }
         }
@@ -637,9 +632,9 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        #endregion
+#endregion
 
-        #region Systems
+#region Systems
 
         public List<IData3DSet> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation )
         {
@@ -712,9 +707,9 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        #endregion
+#endregion
 
-        #region Helpers
+#region Helpers
 
         static public Bitmap DrawString(string str, Color textcolour, Font fnt)
         {
@@ -736,6 +731,6 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        #endregion
+#endregion
     }
 }

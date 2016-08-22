@@ -15,8 +15,10 @@ namespace EDDiscovery2
         public long Elapsed = 0;
         public long Pan = 0;
         public long Fly = 0;
+        public long Zoom = 0;
         public long HoldHere = 0;
         public string Msg = "";
+        public long MsgTime = 0;
 
         public RecordStep()
         {
@@ -31,7 +33,9 @@ namespace EDDiscovery2
             textBoxDelta.Text = "100";
             textBoxPan.Text = "0";
             textBoxFly.Text = "0";
+            textBoxZoomTime.Text = "0";
             textBoxPauseHere.Text = "0";
+            textBoxMsgTime.Text = "3000";
             ValidateData();
         }
 
@@ -47,30 +51,13 @@ namespace EDDiscovery2
             Close();
         }
 
-        private void textBoxFly_TextChanged(object sender, EventArgs e)
-        {
-            buttonOK.Enabled = ValidateData();
-        }
-
-        private void textBoxPan_TextChanged(object sender, EventArgs e)
-        {
-            buttonOK.Enabled = ValidateData();
-        }
-
-        private void textBoxDelta_TextChanged(object sender, EventArgs e)
-        {
-            buttonOK.Enabled = ValidateData();
-        }
-
-        private void textBoxMessage_TextChanged(object sender, EventArgs e)
-        {
-            buttonOK.Enabled = ValidateData();
-        }
-
         private bool ValidateData()
         {
             Msg = textBoxMessage.Text;
-            bool okay = long.TryParse(textBoxDelta.Text, out Elapsed) && long.TryParse(textBoxPan.Text, out Pan) && long.TryParse(textBoxFly.Text, out Fly);
+            bool okay = long.TryParse(textBoxDelta.Text, out Elapsed) &&
+                        long.TryParse(textBoxPan.Text, out Pan) && long.TryParse(textBoxFly.Text, out Fly) &&
+                        long.TryParse(textBoxZoomTime.Text, out Zoom) &&
+                        long.TryParse(textBoxMsgTime.Text, out MsgTime);
 
             if ( okay )
             {
@@ -80,11 +67,20 @@ namespace EDDiscovery2
                 {
                     okay = long.TryParse(textBoxPauseHere.Text, out HoldHere);
                     if (okay && HoldHere == 0)
-                        HoldHere = (long)Math.Max(Pan, Fly);
+                    {
+                        HoldHere = (long)Math.Max(Math.Max(Pan, Fly), Zoom);
+                        if (HoldHere>0)
+                            HoldHere += 50;
+                    }
                 }
             }
 
             return okay;
+        }
+
+        private void textBox_TextChanged(object sender, EventArgs e)
+        {
+            buttonOK.Enabled = ValidateData();
         }
     }
 }

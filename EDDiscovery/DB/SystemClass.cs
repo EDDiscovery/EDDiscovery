@@ -538,7 +538,7 @@ namespace EDDiscovery.DB
         }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
-        public static int GetSystemVector(int gridid, ref Vector3[] vertices, ref int[] colours, 
+        public static int GetSystemVector(int gridid, ref Vector3[] vertices, ref uint[] colours, 
                                             SystemAskType ask, int percentage )
         {
             int numvertices = 0;
@@ -574,7 +574,7 @@ namespace EDDiscovery.DB
                                     if (vertices == null)
                                     {
                                         vertices = new Vector3[1024];
-                                        colours = new int[1024];
+                                        colours = new uint[1024];
                                     }
                                     else if (numvertices == vertices.Length)
                                     {
@@ -590,7 +590,7 @@ namespace EDDiscovery.DB
                                     byte red = (byte)(basec.R * fade / 100);
                                     byte green = (byte)(basec.G * fade / 100);
                                     byte blue = (byte)(basec.B * fade / 100);
-                                    colours[numvertices] = BitConverter.ToInt32(new byte[] { red, green, blue, 255 }, 0);
+                                    colours[numvertices] = BitConverter.ToUInt32(new byte[] { red, green, blue, 255 }, 0);
                                     vertices[numvertices++] = pos;
                                 }
                             }

@@ -75,9 +75,11 @@ namespace EDDiscovery2
             this.dropdownFilterDate = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonHelp = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownRecord = new System.Windows.Forms.ToolStripDropDownButton();
             this.recordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recordStepF5ToStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemClearRecording = new System.Windows.Forms.ToolStripMenuItem();
             this.pauseRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -173,6 +175,7 @@ namespace EDDiscovery2
             this.dropdownFilterDate,
             this.toolStripSeparator6,
             this.toolStripButtonHelp,
+            this.toolStripSeparator7,
             this.toolStripDropDownRecord});
             this.toolStripShowAllStars.Location = new System.Drawing.Point(0, 0);
             this.toolStripShowAllStars.Name = "toolStripShowAllStars";
@@ -270,7 +273,7 @@ namespace EDDiscovery2
             this.toolStripButtonDrawLines.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDrawLines.Name = "toolStripButtonDrawLines";
             this.toolStripButtonDrawLines.Size = new System.Drawing.Size(23, 37);
-            this.toolStripButtonDrawLines.Text = "Draw lines";
+            this.toolStripButtonDrawLines.Text = "Draw travel lines between visited systems with coordinates";
             this.toolStripButtonDrawLines.Click += new System.EventHandler(this.toolStripButtonDrawLines_Click);
             // 
             // toolStripDropDownButtonFilterStars
@@ -517,12 +520,18 @@ namespace EDDiscovery2
             this.toolStripButtonHelp.Text = "Help";
             this.toolStripButtonHelp.Click += new System.EventHandler(this.toolStripButtonHelp_Click);
             // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 40);
+            // 
             // toolStripDropDownRecord
             // 
             this.toolStripDropDownRecord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDropDownRecord.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.recordToolStripMenuItem,
             this.recordStepF5ToStepToolStripMenuItem,
+            this.toolStripMenuItemClearRecording,
             this.pauseRecordToolStripMenuItem,
             this.playbackToolStripMenuItem,
             this.saveToFileToolStripMenuItem,
@@ -551,6 +560,14 @@ namespace EDDiscovery2
             this.recordStepF5ToStepToolStripMenuItem.Text = "Record Step (F5 to step)";
             this.recordStepF5ToStepToolStripMenuItem.Click += new System.EventHandler(this.recordStepF5ToStepToolStripMenuItem_Click);
             // 
+            // toolStripMenuItemClearRecording
+            // 
+            this.toolStripMenuItemClearRecording.Image = global::EDDiscovery.Properties.Resources.StopNormalRed;
+            this.toolStripMenuItemClearRecording.Name = "toolStripMenuItemClearRecording";
+            this.toolStripMenuItemClearRecording.Size = new System.Drawing.Size(199, 22);
+            this.toolStripMenuItemClearRecording.Text = "Clear Recording";
+            this.toolStripMenuItemClearRecording.Click += new System.EventHandler(this.toolStripMenuItemClearRecording_Click);
+            // 
             // pauseRecordToolStripMenuItem
             // 
             this.pauseRecordToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.PauseNormalRed;
@@ -572,7 +589,7 @@ namespace EDDiscovery2
             this.saveToFileToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.floppy;
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
             this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.saveToFileToolStripMenuItem.Text = "Save to File";
+            this.saveToFileToolStripMenuItem.Text = "Save flight to file";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
             // LoadFileToolStripMenuItem
@@ -580,7 +597,7 @@ namespace EDDiscovery2
             this.LoadFileToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.floppy;
             this.LoadFileToolStripMenuItem.Name = "LoadFileToolStripMenuItem";
             this.LoadFileToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.LoadFileToolStripMenuItem.Text = "Load From File";
+            this.LoadFileToolStripMenuItem.Text = "Load flight from file";
             this.LoadFileToolStripMenuItem.Click += new System.EventHandler(this.LoadFileToolStripMenuItem_Click);
             // 
             // statusStrip
@@ -777,5 +794,7 @@ namespace EDDiscovery2
         private ToolStripMenuItem recordStepF5ToStepToolStripMenuItem;
         private Button buttonCenter;
         private Button buttonLookAt;
+        private ToolStripSeparator toolStripSeparator7;
+        private ToolStripMenuItem toolStripMenuItemClearRecording;
     }
     }

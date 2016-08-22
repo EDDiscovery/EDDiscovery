@@ -11,8 +11,10 @@ namespace EDDiscovery2._3DMap
 {
     class PositionDirection
     {
-        public Vector3 PositionExternal { get { Vector3 norm = new Vector3(_viewtargetpos); norm.Y = -norm.Y; return norm; } } // REAL world position of eye.
+        public Vector3 Position { get { Vector3 norm = new Vector3(_viewtargetpos); norm.Y = -norm.Y; return norm; } } // REAL world position of eye.  With no internal invert of Y.  Same as star positions
+
         public Vector3 CameraDirection { get { return _cameraDir; } }
+
         public bool InSlews { get { return (_cameraSlewProgress < 1.0f || _cameraDirSlewProgress < 1.0F); } }
         public bool InPerspectiveMode { get { return _perspectivemode; } }
 
@@ -22,31 +24,37 @@ namespace EDDiscovery2._3DMap
                                                                 // Y is upside down
         private Vector3 _cameraDir = Vector3.Zero;              // X = up/down, Y = rotate, Z = yaw, in degrees. 
 
-        private Vector3 _cameraActionMovement = Vector3.Zero;
-        private Vector3 _cameraActionRotation = Vector3.Zero;
-
         private float _cameraSlewProgress = 1.0f;               // 0 -> 1 slew progress
         private float _cameraSlewTime;                          // how long to take to do the slew
         private Vector3 _cameraSlewPosition;                    // where to slew to.
 
-        private float _cameraDirSlewProgress = 1.0f;               // 0 -> 1 slew progress
-        private float _cameraDirSlewTime;                          // how long to take to do the slew
-        private Vector3 _cameraDirSlewPosition;                    // where to slew to.
+        private float _cameraDirSlewProgress = 1.0f;            // 0 -> 1 slew progress
+        private float _cameraDirSlewTime;                       // how long to take to do the slew
+        private Vector3 _cameraDirSlewPosition;                 // where to slew to.
 
+        private Vector3 resmat;                                 // current resmat
 
-        public void StartCameraSlew(Vector3 pos, float timeslewsec = 0)       // may pass a Nan Position - no action. Y is normal sense
+        #region Position
+
+        public void SetCameraPos(Vector3 pos)
         {
-            Vector3 invviewpos = new Vector3(pos);
-            invviewpos.Y = -invviewpos.Y;
-            StartCameraSlewNI(invviewpos, timeslewsec);
+            _viewtargetpos = pos;
         }
-        
-        // time <0 estimate, 0 instance >0 time
-        private void StartCameraSlewNI(Vector3 pos, float timeslewsec = 0)     // may pass a Nan Position - no action.  pos.Y is same sense as _viewtargetpos (i.e inverted)
+
+        public void MoveCameraPos(Vector3 pos)
         {
-            if (!float.IsNaN(pos.X))
+            _viewtargetpos += pos;
+        }
+
+        // time <0 estimate, 0 instance >0 time
+        public void StartCameraSlew(Vector3 normpos, float timeslewsec = 0)       // may pass a Nan Position - no action. Y is normal sense
+        {
+            if (!float.IsNaN(normpos.X))
             {
-                double dist = Math.Sqrt((_viewtargetpos.X - pos.X) * (_viewtargetpos.X - pos.X) + (-_viewtargetpos.Y - pos.Y) * (-_viewtargetpos.Y - pos.Y) + (_viewtargetpos.Z - pos.Z) * (_viewtargetpos.Z - pos.Z));
+                Vector3 pos = new Vector3(normpos);
+                pos.Y = -pos.Y;     // invert to internal Y
+
+                double dist = Math.Sqrt((_viewtargetpos.X - pos.X) * (_viewtargetpos.X - pos.X) + (_viewtargetpos.Y - pos.Y) * (-_viewtargetpos.Y - pos.Y) + (_viewtargetpos.Z - pos.Z) * (_viewtargetpos.Z - pos.Z));
 
                 if (dist >= 1)
                 {
@@ -62,6 +70,27 @@ namespace EDDiscovery2._3DMap
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Camera Direction
+
+
+        public void SetCameraDir(Vector3 pos)
+        {
+            _cameraDir = pos;
+        }
+
+        public void RotateCameraDir(Vector3 rot)
+        {
+            _cameraDir += rot;
+
+            if (_cameraDir.X < 0 && _cameraDir.X > -90)
+                _cameraDir.X = 0;
+
+            if (_cameraDir.X > 180 || _cameraDir.X <= -90)
+                _cameraDir.X = 180;
         }
 
         public void StartCameraPan(Vector3 pos, float timeslewsec = 0)       // may pass a Nan Position - no action
@@ -81,6 +110,19 @@ namespace EDDiscovery2._3DMap
             }
         }
 
+        public void CameraLookAt(Vector3 normtarget, float _zoom, float time = 0)            // real world 
+        {
+            Vector3 target = new Vector3(normtarget.X, -normtarget.Y, normtarget.Z);
+
+            Vector3 eye = _viewtargetpos;
+            Vector3 camera = AzEl(eye, target);
+            camera.Y = 180 - camera.Y;      // adjust to this system
+            StartCameraPan(camera, time);
+        }
+
+        #endregion
+
+        #region Slews
 
         public void KillSlews()
         {
@@ -95,10 +137,9 @@ namespace EDDiscovery2._3DMap
 
             if (_cameraSlewProgress < 1.0f)
             {
-                _cameraActionMovement = Vector3.Zero;
+          //      _cameraActionMovement = Vector3.Zero;
                 Debug.Assert(_cameraSlewTime > 0);
                 var newprogress = _cameraSlewProgress + _msticks / (_cameraSlewTime * 1000);
-                var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
 
                 if (newprogress >= 1.0f)
                 {
@@ -111,6 +152,8 @@ namespace EDDiscovery2._3DMap
                     var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
                     Debug.Assert((1 - 0 - slewstart) != 0);
                     var slewfact = (slewend - slewstart) / (1.0 - slewstart);
+
+                    var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
                     _viewtargetpos += Vector3.Multiply(totvector, (float)slewfact);
                 }
 
@@ -121,7 +164,6 @@ namespace EDDiscovery2._3DMap
             if (_cameraDirSlewProgress < 1.0f)
             {
                 var newprogress = _cameraDirSlewProgress + _msticks / (_cameraDirSlewTime * 1000);
-                var totvector = new Vector3((float)(_cameraDirSlewPosition.X - _cameraDir.X), (float)(_cameraDirSlewPosition.Y - _cameraDir.Y), (float)(_cameraDirSlewPosition.Z - _cameraDir.Z));
 
                 if (newprogress >= 1.0f)
                 {
@@ -134,6 +176,8 @@ namespace EDDiscovery2._3DMap
                     var slewend = Math.Sin((newprogress - 0.5) * Math.PI);
                     Debug.Assert((1 - 0 - slewstart) != 0);
                     var slewfact = (slewend - slewstart) / (1.0 - slewstart);
+
+                    var totvector = new Vector3((float)(_cameraDirSlewPosition.X - _cameraDir.X), (float)(_cameraDirSlewPosition.Y - _cameraDir.Y), (float)(_cameraDirSlewPosition.Z - _cameraDir.Z));
                     _cameraDir += Vector3.Multiply(totvector, (float)slewfact);
                     //Console.WriteLine("Vector {0} Dir {1} progress {2}", totvector, _cameraDir, newprogress);
                 }
@@ -145,41 +189,62 @@ namespace EDDiscovery2._3DMap
             return repaint;
         }
 
-        public void HandleTurningAdjustments(KeyboardActions _kbdActions, int _msticks )
+        #endregion
+
+        #region Keys
+
+        public bool HandleTurningAdjustments(KeyboardActions _kbdActions, int _msticks )
         {
-            _cameraActionRotation = Vector3.Zero;
+            Vector3 _cameraActionRotation = Vector3.Zero;
 
             var angle = (float)_msticks * 0.075f;
-            if (_kbdActions.YawLeft)
+            if (_kbdActions.Action(KeyboardActions.ActionType.YawLeft))
             {
                 _cameraActionRotation.Z = -angle;
             }
-            if (_kbdActions.YawRight)
+            if (_kbdActions.Action(KeyboardActions.ActionType.YawRight))
             {
                 _cameraActionRotation.Z = angle;
             }
-            if (_kbdActions.Dive)
+            if (_kbdActions.Action(KeyboardActions.ActionType.Dive))
             {
                 _cameraActionRotation.X = -angle;
             }
-            if (_kbdActions.Pitch)
+            if (_kbdActions.Action(KeyboardActions.ActionType.Pitch))
             {
                 _cameraActionRotation.X = angle;
             }
-            if (_kbdActions.RollLeft)
+            if (_kbdActions.Action(KeyboardActions.ActionType.RollLeft))
             {
                 _cameraActionRotation.Y = -angle;
             }
-            if (_kbdActions.RollRight)
+            if (_kbdActions.Action(KeyboardActions.ActionType.RollRight))
             {
                 _cameraActionRotation.Y = angle;
             }
 
+            if (_cameraActionRotation.LengthSquared > 0)
+            {
+                _cameraDir.X = BoundedAngle(_cameraDir.X + _cameraActionRotation.X);
+                _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
+                _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);        // rotate camera by asked value
+
+                // Limit camera pitch
+                if (_cameraDir.X < 0 && _cameraDir.X > -90)
+                    _cameraDir.X = 0;
+                if (_cameraDir.X > 180 || _cameraDir.X <= -90)
+                    _cameraDir.X = 180;
+
+                return true;
+            }
+            else
+                return false;
         }
 
-        public void HandleMovementAdjustments(KeyboardActions _kbdActions, int _msticks, float _zoom)
+        public bool HandleMovementAdjustments(KeyboardActions _kbdActions, int _msticks, float _zoom, bool elitemovement)
         {
-            _cameraActionMovement = Vector3.Zero;
+            Vector3 _cameraActionMovement = Vector3.Zero;
+
             float zoomlimited = Math.Min(Math.Max(_zoom, 0.01F), 15.0F);
             var distance = _msticks * (1.0f / zoomlimited);
 
@@ -187,82 +252,69 @@ namespace EDDiscovery2._3DMap
                 distance *= 2.0F;
 
             //Console.WriteLine("Distance " + distance + " zoom " + _zoom + " lzoom " + zoomlimited );
-            if (_kbdActions.Left)
+            if (_kbdActions.Action(KeyboardActions.ActionType.Left))
             {
                 _cameraActionMovement.X = -distance;
             }
-            if (_kbdActions.Right)
+            if (_kbdActions.Action(KeyboardActions.ActionType.Right))
             {
                 _cameraActionMovement.X = distance;
             }
-            if (_kbdActions.Forwards)
+            if (_kbdActions.Action(KeyboardActions.ActionType.Forwards))
             {
                 _cameraActionMovement.Y = distance;
             }
-            if (_kbdActions.Backwards)
+            if (_kbdActions.Action(KeyboardActions.ActionType.Backwards))
             {
                 _cameraActionMovement.Y = -distance;
             }
-            if (_kbdActions.Up)
+            if (_kbdActions.Action(KeyboardActions.ActionType.Up))
             {
                 _cameraActionMovement.Z = distance;
             }
-            if (_kbdActions.Down)
+            if (_kbdActions.Action(KeyboardActions.ActionType.Down))
             {
                 _cameraActionMovement.Z = -distance;
             }
-        }
 
-        public void UpdateCamera(bool elitemovement )
-        {
-            if (!InPerspectiveMode)
-                elitemovement = false;
+            if (_cameraActionMovement.LengthSquared > 0)
+            {
+                if (!InPerspectiveMode)
+                    elitemovement = false;
 
-            _cameraDir.X = BoundedAngle(_cameraDir.X + _cameraActionRotation.X);
-            _cameraDir.Y = BoundedAngle(_cameraDir.Y + _cameraActionRotation.Y);
-            _cameraDir.Z = BoundedAngle(_cameraDir.Z + _cameraActionRotation.Z);        // rotate camera by asked value
+                var rotZ = Matrix4.CreateRotationZ(DegreesToRadians(_cameraDir.Z));
+                var rotX = Matrix4.CreateRotationX(DegreesToRadians(_cameraDir.X));
+                var rotY = Matrix4.CreateRotationY(DegreesToRadians(_cameraDir.Y));
 
-            // Limit camera pitch
-            if (_cameraDir.X < 0 && _cameraDir.X > -90)
-                _cameraDir.X = 0;
-            if (_cameraDir.X > 180 || _cameraDir.X <= -90)
-                _cameraDir.X = 180;
+                Vector3 requestedmove = new Vector3(_cameraActionMovement.X, _cameraActionMovement.Y, (elitemovement) ? 0 : _cameraActionMovement.Z);
 
-#if DEBUG
-            bool istranslating = (_cameraActionMovement.X != 0 || _cameraActionMovement.Y != 0 || _cameraActionMovement.Z != 0);
-            //            if (istranslating)
-            //                Console.WriteLine("move Camera " + _cameraActionMovement.X + "," + _cameraActionMovement.Y + "," + _cameraActionMovement.Z
-            //                    + " point " + _cameraDir.X + "," + _cameraDir.Y + "," + _cameraDir.Z);
-#endif
+                var translation = Matrix4.CreateTranslation(requestedmove);
+                var cameramove = Matrix4.Identity;
+                cameramove *= translation;
+                cameramove *= rotZ;
+                cameramove *= rotX;
+                cameramove *= rotY;
 
-            var rotZ = Matrix4.CreateRotationZ(DegreesToRadians(_cameraDir.Z));
-            var rotX = Matrix4.CreateRotationX(DegreesToRadians(_cameraDir.X));
-            var rotY = Matrix4.CreateRotationY(DegreesToRadians(_cameraDir.Y));
+                Vector3 trans = cameramove.ExtractTranslation();
 
-            Vector3 requestedmove = new Vector3(_cameraActionMovement.X, _cameraActionMovement.Y, (elitemovement) ? 0 : _cameraActionMovement.Z);
+                if (elitemovement)                                   // if in elite movement, Y is not affected
+                {                                                   // by ASDW.
+                    trans.Y = 0;                                    // no Y translation even if camera rotated the vector into Y components
+                    _viewtargetpos += trans;
+                    _viewtargetpos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
+                }
+                else
+                    _viewtargetpos += trans;
 
-            var translation = Matrix4.CreateTranslation(requestedmove);
-            var cameramove = Matrix4.Identity;
-            cameramove *= translation;
-            cameramove *= rotZ;
-            cameramove *= rotX;
-            cameramove *= rotY;
-
-            Vector3 trans = cameramove.ExtractTranslation();
-
-            if (elitemovement)                                   // if in elite movement, Y is not affected
-            {                                                   // by ASDW.
-                trans.Y = 0;                                    // no Y translation even if camera rotated the vector into Y components
-                _viewtargetpos += trans;
-                _viewtargetpos.Y -= _cameraActionMovement.Z;        // translation appears in Z axis due to way the camera rotation is set up
+                return true;
             }
             else
-                _viewtargetpos += trans;
-#if DEBUG
-            //            if (istranslating)
-            //                Console.WriteLine("   em " + em + " Camera now " + _viewtargetpos.X + "," + _viewtargetpos.Y + "," + _viewtargetpos.Z);
-#endif
+                return false;
         }
+
+        #endregion
+
+        #region Views
 
         public void CalculateEyePosition(float _zoom , out Vector3 eye, out Vector3 normal )
         {
@@ -283,7 +335,16 @@ namespace EDDiscovery2._3DMap
             eye = _viewtargetpos + eyerel;              // eye is here, the target pos, plus the eye relative position
         }
 
-        public void SetMatrix(float _zoom)
+        public Matrix4d GetResMat()
+        {
+            Matrix4d proj;
+            Matrix4d mview;
+            GL.GetDouble(GetPName.ProjectionMatrix, out proj);
+            GL.GetDouble(GetPName.ModelviewMatrix, out mview);
+            return Matrix4d.Mult(mview, proj);
+        }
+
+        public void SetModelMatrix(float _zoom)                 // called when we move or zoom
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Modelview);            // select the current matrix to the model view
@@ -309,78 +370,35 @@ namespace EDDiscovery2._3DMap
             GL.Scale(1.0, -1.0, 1.0);               // Flip Y axis on world by inverting the model view matrix
         }
 
-        public void SetViewport(bool pmode , ZoomFov zoomfov, int w, int h, out float _znear)
+        public void SetProjectionMatrix(bool pmode , float fov, int w, int h, out float _znear)
         {
+            Debug.Assert(w > 0 && h > 0);                   // if not, we have an issue we need to find
+
             _perspectivemode = pmode;
             _znear = 1;
-            if (w > 0 && h > 0)
-            {
-                GL.MatrixMode(MatrixMode.Projection);           // Select the project matrix for the following operations (current matrix)
+            GL.MatrixMode(MatrixMode.Projection);           // Select the project matrix for the following operations (current matrix)
 
-                if (InPerspectiveMode)
-                {                                                                   // Fov, perspective, znear, zfar
-                    Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(zoomfov.Fov, (float)w / h, 1.0f, 1000000.0f);
-                    GL.LoadMatrix(ref perspective);             // replace projection matrix with this perspective matrix
-                    _znear = 1.0f;
-                }
-                else
-                {
-                    float orthoW = w * (zoomfov.Zoom + 1.0f);
-                    float orthoH = h * (zoomfov.Zoom + 1.0f);
-
-                    float orthoheight = 1000.0f * h / w;
-
-                    GL.LoadIdentity();                              // set to 1/1/1/1.
-
-                    // multiply identity matrix with orth matrix, left/right vert clipping plane, bot/top horiz clippling planes, distance between near/far clipping planes
-                    GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
-                    _znear = -5000.0f;
-                }
-
-                GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
+            if (InPerspectiveMode)
+            {                                                                   // Fov, perspective, znear, zfar
+                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(fov, (float)w / h, 1.0f, 1000000.0f);
+                GL.LoadMatrix(ref perspective);             // replace projection matrix with this perspective matrix
+                _znear = 1.0f;
             }
+            else
+            {
+                float orthoheight = 1000.0f * h / w;
+
+                GL.LoadIdentity();                              // set to 1/1/1/1.
+
+                // multiply identity matrix with orth matrix, left/right vert clipping plane, bot/top horiz clippling planes, distance between near/far clipping planes
+                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
+                _znear = -5000.0f;
+            }
+
+            GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
 
-        public void RotateCamera( Vector3 rot )
-        {
-            _cameraDir += rot;
-
-            if (_cameraDir.X < 0 && _cameraDir.X > -90)
-                _cameraDir.X = 0;
-
-            if (_cameraDir.X > 180 || _cameraDir.X <= -90)
-                _cameraDir.X = 180;
-        }
-
-        public void SetCameraPos(Vector3 pos)
-        {
-            _viewtargetpos = pos;
-        }
-
-        public void MoveCamera(Vector3 pos)
-        {
-            _viewtargetpos += pos;
-        }
-
-        public void SetCameraDir(Vector3 pos)
-        {
-            _cameraDir = pos;
-        }
-
-        public void CameraLookAt(Vector3 target, float _zoom , float time = 0)            // real world 
-        {
-            Vector3 upsidedown = new Vector3(target.X, -target.Y, target.Z);
-            CameraLookAtI(upsidedown, _zoom, time);
-        }
-
-        private void CameraLookAtI(Vector3 target, float _zoom, float time = 0)            // target in same sense at _viewtargetpos
-        {
-            Vector3 eye = _viewtargetpos;
-            Vector3 camera = AzEl(eye, target);
-            camera.Y = 180 - camera.Y;      // adjust to this system
-            StartCameraPan(camera, time);
-        }
-        
+    
         private float BoundedAngle(float angle)
         {
             return ((angle + 360 + 180) % 360) - 180;
@@ -414,6 +432,7 @@ namespace EDDiscovery2._3DMap
             return new Vector3(inclination, azimuth, 0);
         }
 
+        #endregion
 
     }
 }
