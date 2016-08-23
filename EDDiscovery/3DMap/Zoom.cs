@@ -38,14 +38,13 @@ namespace EDDiscovery2._3DMap
             _zoom = _defaultZoom;
         }
 
-        public bool StartZoom( float z , float timetozoom = 0)        // return if zoom sizes needs updating now.
+        public void StartZoom( float z , float timetozoom = 0)        // return if zoom sizes needs updating now.
         {
             if (timetozoom == 0)
             {
                 _zoom = z;
-                return true;
             }
-            else
+            else if ( z != _zoom )
             {
                 _zoomprogress = 0;
                 _zoomtarget = z;
@@ -53,8 +52,6 @@ namespace EDDiscovery2._3DMap
                 _zoomstart = _zoomlastpaint = _zoom;
                 Console.WriteLine("Zoom {0} to {1} in {2}", _zoomstart, _zoomtarget, _zoomslewtime);
             }
-
-            return true;
         }
 
         public void KillSlew()
@@ -62,7 +59,7 @@ namespace EDDiscovery2._3DMap
             _zoomprogress = 1.0F;
         }
 
-        public bool DoZoomSlew(int _msticks )                           // do dynamic zoom adjustments..  true if a readjust zoom needed
+        public void DoZoomSlew(int _msticks )                           // do dynamic zoom adjustments..  true if a readjust zoom needed
         {
             if ( _zoomprogress < 1.0F )
             {
@@ -73,32 +70,16 @@ namespace EDDiscovery2._3DMap
                 if (_zoomprogress >= 1.0F)
                 {
                     _zoom = _zoomtarget;
-                    Console.WriteLine("Zoom over {0}", _zoom);
-                    return true;
                 }
                 else
                 {
                     _zoom = _zoomstart + _zoomprogress * (_zoomtarget - _zoomstart);
-
-                    if (_zoom / _zoomlastpaint < 0.9 || _zoom / _zoomlastpaint > 1.1)      // only repaint if 10% change in value.. stops it doing it micro zooms
-                    {
-                        Console.WriteLine("Zoom size {0} from {1} prog {2} {3}", _zoom, _zoomlastpaint, _zoomprogress, _zoom / _zoomlastpaint);
-                        _zoomlastpaint = _zoom;
-                        return true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Zoom NO size {0} from {1} prog {2} {3}", _zoom, _zoomlastpaint, _zoomprogress, _zoom / _zoomlastpaint);
-                    }
                 }
             }
-
-            return false;
         }
 
-        public bool HandleZoomAdjustmentKeys(KeyboardActions _kbdActions, int _msticks)
+        public void HandleZoomAdjustmentKeys(KeyboardActions _kbdActions, int _msticks)
         {
-            float curzoom = _zoom;
             var adjustment = 1.0f + ((float)_msticks * 0.01f);
 
             if (_kbdActions.Action(KeyboardActions.ActionType.ZoomIn))
@@ -120,11 +101,9 @@ namespace EDDiscovery2._3DMap
 
             if (_kbdActions.Action(KeyboardActions.ActionType.ZoomWide))
                 StartZoom(0.1F, 1.5F);
-
-            return _zoom != curzoom;
         }
 
-        public bool ChangeFov(bool direction)        // direction true is scale up FOV
+        public bool ChangeFov(bool direction)        // direction true is scale up FOV - need to tell it its changed
         {
             float curfov = _cameraFov;
 
@@ -136,10 +115,8 @@ namespace EDDiscovery2._3DMap
             return curfov != _cameraFov;
         }
 
-        public bool ChangeZoom(bool direction)        // direction true is scale up zoom
+        public void ChangeZoom(bool direction)        // direction true is scale up zoom
         {
-            float curzoom = _zoom;
-
             if (direction)
             {
                 _zoom *= (float)ZoomFact;
@@ -152,8 +129,6 @@ namespace EDDiscovery2._3DMap
                 if (_zoom < ZoomMin)
                     _zoom = (float)ZoomMin;
             }
-
-            return _zoom != curzoom;
         }
 
 

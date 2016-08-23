@@ -11,6 +11,7 @@ using System.Text;
 using OpenTK.Graphics.OpenGL;
 using System.Threading;
 using System.Windows.Forms;
+using EDDiscovery;
 
 namespace EDDiscovery2
 {
@@ -62,7 +63,7 @@ namespace EDDiscovery2
         public void FillFromDB()        // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = SystemClass.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage);
+                array2vertices = SystemClass.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage);       // MAY return array/carray is null
             else
                 array1vertices = SystemClass.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage);
         }
@@ -203,11 +204,6 @@ namespace EDDiscovery2
 
                             if (sqdist <= ti.sqlylimit)
                                 list.Add(sqdist, new InViewInfo( new Vector3(v.X,v.Y,v.Z),(forcecol!=0) ? forcecol : cols[i]));
-                            else
-                            {
-                                if ( Math.Abs(v.X) < 1 && Math.Abs(v.Y) < 1 )
-                                   Console.WriteLine("Star {0} vs {1} rej dist {2}", syspos, ti.campos , sqdist);
-                            }
                         }
                     }
                 }
@@ -218,7 +214,9 @@ namespace EDDiscovery2
         {
             DeleteContext();
             array1 = null;
+            carray1 = null;
             array2 = null;
+            carray2 = null;
         }
 
         public void DeleteContext()
@@ -309,27 +307,29 @@ namespace EDDiscovery2
                 {
                     int numpoints = (array1displayed) ? array1vertices : array2vertices;
 
-                    GL.EnableClientState(ArrayCap.VertexArray);
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
-                    GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
-                    GL.PointSize(Size);
-
-                    if (Color == Color.Transparent)
+                    if (numpoints > 0)
                     {
-                        GL.EnableClientState(ArrayCap.ColorArray);
-                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
-                        GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
-                        GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
-                        GL.DisableClientState(ArrayCap.ColorArray);
-                    }
-                    else
-                    {
-                        GL.Color4(Color);
-                        GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
-                    }
+                        GL.EnableClientState(ArrayCap.VertexArray);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
+                        GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
+                        GL.PointSize(Size);
 
-                    GL.DisableClientState(ArrayCap.VertexArray);
+                        if (Color == Color.Transparent)
+                        {
+                            GL.EnableClientState(ArrayCap.ColorArray);
+                            GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                            GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
+                            GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
+                            GL.DisableClientState(ArrayCap.ColorArray);
+                        }
+                        else
+                        {
+                            GL.Color4(Color);
+                            GL.DrawArrays(PrimitiveType.Points, 0, numpoints);
+                        }
 
+                        GL.DisableClientState(ArrayCap.VertexArray);
+                    }
                 }
             }
         }
@@ -553,8 +553,8 @@ namespace EDDiscovery2
                         Debug.Assert(Math.Abs(prevdist - selmin.CalculatedDistance) > MinRecalcDistance);
 
                         Debug.Assert(!computed.Contains(selmin));
-                        
-                        //Console.WriteLine("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance, selmin.CountJustMade);
+
+                        Tools.LogToFile(String.Format("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance, selmin.CountJustMade));
 
                         computed.Add(selmin);
                     }
@@ -629,7 +629,7 @@ namespace EDDiscovery2
                 if (grd.Id==idpos || grd.DistanceFrom(ti.campos.X, ti.campos.Z) < gridlylimit)                         // only consider grids which are nearer than this..
                 {
                     grd.GetSystemsInView(ref list,ti, (ForceWhite) ? 0xff00ffff : 0);
-                    Console.WriteLine("Check grid {0} {1} gives {2}" ,grd.X,grd.Z,list.Count);
+                    //Console.WriteLine("Check grid {0} {1} gives {2}" ,grd.X,grd.Z,list.Count);
                 }
             }
 

@@ -542,7 +542,10 @@ namespace EDDiscovery.DB
                                             SystemAskType ask, int percentage )
         {
             int numvertices = 0;
+
             vertices = null;
+            colours = null;
+
             Color[] fixedc = new Color[4];
             fixedc[0] = Color.Red;
             fixedc[1] = Color.Orange;
@@ -596,7 +599,7 @@ namespace EDDiscovery.DB
                             }
                         }
 
-                        if (gridid == 810)    // BODGE do here, better once on here than every star for every grid..
+                        if (gridid == 810 && vertices!=null)    // BODGE do here, better once on here than every star for every grid..
                         {                       // replace when we have a better naming system
                             int solindex = Array.IndexOf(vertices, new Vector3(0, 0, 0));
 
