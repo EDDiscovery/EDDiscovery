@@ -68,7 +68,8 @@ namespace EDDiscovery2
         private int _msticks;                                   // between updates
         private CameraDirectionMovementTracker _lastcameranorm = new CameraDirectionMovementTracker();        // these track movements and zoom for most systems
         private CameraDirectionMovementTracker _lastcamerastarnames = new CameraDirectionMovementTracker();   // and for star names, which may be delayed due to background busy
-        bool _starnamesbusy = false;                            // is the worker thread in operation
+        bool _starnamesbusy = false;                            // Are we in a compute cycle..
+        bool _starnamescomputed = false;                        // worker thread is over..
 
         private Point _mouseStartRotate = new Point(int.MinValue, int.MinValue);        // used to indicate not started for these using mousemove
         private Point _mouseStartTranslateXY = new Point(int.MinValue, int.MinValue);
@@ -553,7 +554,7 @@ namespace EDDiscovery2
                 _requestrepaint = true;
             }
 
-            if (!_starnamesbusy)                            // flag indicates work is happening in the background
+            if (!_starnamesbusy)                            // flag indicates we have not gone thru a complete estimate-draw cycle
             {
                 bool names = showNamesToolStripMenuItem.Checked;
                 bool discs = showDiscsToolStripMenuItem.Checked;
@@ -588,10 +589,10 @@ namespace EDDiscovery2
             }
         }
 
-        public void ChangeNamedStars()                                  // star names finished.. repaint and mark not busy
+        public void ChangeNamedStars()                  // background estimator finished.. repaint and indicate computed to foreground
         {
             _requestrepaint = true;
-            _starnamesbusy = false;
+            _starnamescomputed = true;
             //Console.WriteLine("name");
         }
 
@@ -629,6 +630,7 @@ namespace EDDiscovery2
         long lasttick = 0;
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
+#if DEBUG
             long curtime = _updateinterval.ElapsedMilliseconds;
             long timesince = curtime - lasttick;
             lasttick = curtime;
@@ -640,7 +642,7 @@ namespace EDDiscovery2
                 float newfps = 1000.0F / (float)timesince;
                 fps = (fps * 0.9F) + (newfps * 0.1F);
             }
-
+#endif
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Modelview);            // select the current matrix to the model view
 
@@ -661,7 +663,7 @@ namespace EDDiscovery2
 
 //            Console.WriteLine("{0} Paint since {1} took {2}", curtime % 10000, timesince, _updateinterval.ElapsedMilliseconds - curtime);
 
-            Tools.LogToFile(String.Format("{0} Paint since {1} took {2} {3}", curtime % 10000, timesince, _updateinterval.ElapsedMilliseconds - curtime , (timesince>49) ? "************************************":""));
+            Tools.LogToFile(String.Format("{0} Paint since {1} took {2} {3}", curtime % 10000, timesince, _updateinterval.ElapsedMilliseconds - curtime , (timesince>60) ? "************************************":""));
         }
 
         private void DrawStars()
@@ -735,7 +737,11 @@ namespace EDDiscovery2
             if (_starnameslist.Draw())          // rang out of bandwidth, ask for another paint
             {
                 _requestrepaint = true;         // DONT invalidate.. this makes this thing go around and around and the main tick never gets a look in
-                //Console.WriteLine("Ask for star paint");
+            }
+
+            if ( _starnamescomputed )            // done AFTER draw, so all stars from the queue between the foreground/background have been added to the master list   
+            {
+                _starnamescomputed = _starnamesbusy = false;             // okay, no longer busy, so we can do another estimate now..
             }
 
             Debug.Assert(_datasets_selectedsystems != null);

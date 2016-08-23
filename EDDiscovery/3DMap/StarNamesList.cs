@@ -4,6 +4,7 @@ using EDDiscovery2._3DMap;
 using EDDiscovery2.DB;
 using OpenTK;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -35,6 +36,7 @@ namespace EDDiscovery2
         public double x { get; set; }
         public double y { get; set; }
         public double z { get; set; }
+        public Vector3 Pos { get { return new Vector3((float)x, (float)y, (float)z);  } }
         public long population { get; set; }
 
         public TexturedQuadData newnametexture { get; set; }    // if a new texture is needed..
@@ -64,7 +66,8 @@ namespace EDDiscovery2
         float _starnamemaxly = 0.5F;
 
         Dictionary<Vector3, StarNames> _starnames;
-
+        ConcurrentQueue<StarNames> _starqueue;
+        
         static Font _starfont = new Font("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
 
         StarGrids _stargrids;
@@ -82,6 +85,7 @@ namespace EDDiscovery2
             _glControl = gl;
 
             _starnames = new Dictionary<Vector3, StarNames>();
+            _starqueue = new ConcurrentQueue<StarNames>();
         }
 
         public bool RemoveAllNamedStars()                               // indicate all no paint, pass back if changed anything.
@@ -185,10 +189,7 @@ namespace EDDiscovery2
                                 if (sc != null)     // if can't be resolved, ignore
                                 {
                                     sys = new StarNames(sc);
-                                    lock (_starnames)
-                                    {
-                                        _starnames.Add(inview.position, sys);               // need to lock over add.. in case display is working
-                                    }
+                                    _starqueue.Enqueue(sys);            // send to foreground for adding
                                     draw = true;
                                     painted++;
                                 }
@@ -267,6 +268,12 @@ namespace EDDiscovery2
         {
             bool needmoreticks = false;
 
+            StarNames sysq;
+            while( _starqueue.TryDequeue(out sysq))              // empty the queue of new stars
+            {
+                _starnames.Add(sysq.Pos, sysq);
+            }
+
             if (_starnames.Count > 10000)                       // need to work on parceling this out later..
             {
                 if (Monitor.TryEnter(deletelock))                 // if we can get in, we are not in the update above, so can clean
@@ -299,79 +306,76 @@ namespace EDDiscovery2
                 }
             }
 
-            lock (_starnames)                                   // lock so they can't add anything while we draw
+            int updated = 0;
+            int notupdated = 0;
+
+            Stopwatch sw1 = new Stopwatch(); sw1.Start();
+
+            foreach (StarNames sys in _starnames.Values)
             {
-                int updated = 0;
-                int notupdated = 0;
-
-                Stopwatch sw1 = new Stopwatch(); sw1.Start();
-
-                foreach (StarNames sys in _starnames.Values)
+                if (sys.newnametexture != null )         //250 seems okay on my machine, around the 50ms mark
                 {
-                    if (sys.newnametexture != null )         //250 seems okay on my machine, around the 50ms mark
+                    if (updated < 250)
                     {
-                        if (updated < 250)
-                        {
-                            if (sys.nametexture != null)
-                                sys.nametexture.Dispose();
+                        if (sys.nametexture != null)
+                            sys.nametexture.Dispose();
 
-                            sys.nametexture = sys.newnametexture;      // copy over and take another reference.. 
-                            sys.newnametexture = null;
-                            updated++;
-                        }
-                        else
-                        {
-                            if (!needmoreticks)
-                            {
-                                Tools.LogToFile(String.Format("starnamesdraw: Too many to textures"));
-                                needmoreticks = true;
-                            }
-
-                            notupdated++;
-                        }
+                        sys.nametexture = sys.newnametexture;      // copy over and take another reference.. 
+                        sys.newnametexture = null;
+                        updated++;
                     }
-
-                    if (sys.newnamevertices != null)
+                    else
                     {
-                        if (updated < 250)
+                        if (!needmoreticks)
                         {
-                            sys.nametexture.UpdateVertices(sys.newnamevertices);
-                            sys.newnamevertices = null;
-                            updated++;
-                        }
-                        else
-                        {
-                            if (!needmoreticks)
-                            {
-                                Tools.LogToFile(String.Format("starnamesdraw: Too many to vertices"));
-                                needmoreticks = true;
-                            }
-                            notupdated++;
-                        }
-                    }
-
-                    if (sys.newstar != null)              // same with newstar
-                    {
-                        sys.paintstar = sys.newstar;
-                        sys.newstar = null;
-                    }
-
-                    if ( sys.inview )                       // in view, send it to the renderer
-                    {
-                        if (sys.paintstar != null && _discson)                  // if star disk, paint..
-                        {
-                            sys.paintstar.Draw(_glControl);
+                            Tools.LogToFile(String.Format("starnamesdraw: Too many to textures"));
+                            needmoreticks = true;
                         }
 
-                        if (sys.nametexture != null && _nameson )           // being paranoid by treating these separately. Thread may finish painting one before the other.
-                        {
-                            sys.nametexture.Draw(_glControl);
-                        }
+                        notupdated++;
                     }
                 }
 
-                if (updated > 0 || notupdated>0) Tools.LogToFile(String.Format("starnamesdraw: {0} Updated {1} Not Updated {2}", sw1.ElapsedMilliseconds , updated, notupdated));
+                if (sys.newnamevertices != null)
+                {
+                    if (updated < 250)
+                    {
+                        sys.nametexture.UpdateVertices(sys.newnamevertices);
+                        sys.newnamevertices = null;
+                        updated++;
+                    }
+                    else
+                    {
+                        if (!needmoreticks)
+                        {
+                            Tools.LogToFile(String.Format("starnamesdraw: Too many to vertices"));
+                            needmoreticks = true;
+                        }
+                        notupdated++;
+                    }
+                }
+
+                if (sys.newstar != null)              // same with newstar
+                {
+                    sys.paintstar = sys.newstar;
+                    sys.newstar = null;
+                }
+
+                if ( sys.inview )                       // in view, send it to the renderer
+                {
+                    if (sys.paintstar != null && _discson)                  // if star disk, paint..
+                    {
+                        sys.paintstar.Draw(_glControl);
+                    }
+
+                    if (sys.nametexture != null && _nameson )           // being paranoid by treating these separately. Thread may finish painting one before the other.
+                    {
+                        sys.nametexture.Draw(_glControl);
+                    }
+                }
             }
+
+            if (updated > 0 || notupdated>0) Tools.LogToFile(String.Format("starnamesdraw: {0} Updated {1} Not Updated {2}", sw1.ElapsedMilliseconds , updated, notupdated));
 
             //if (needmoreticks)   Console.WriteLine("More please");
             return needmoreticks;

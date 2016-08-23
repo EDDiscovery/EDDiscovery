@@ -554,7 +554,7 @@ namespace EDDiscovery2
 
                         Debug.Assert(!computed.Contains(selmin));
 
-                        Tools.LogToFile(String.Format("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance, selmin.CountJustMade));
+                        //Tools.LogToFile(String.Format("Grid repaint {0} {1}%->{2}% dist {3,8:0.0}->{4,8:0.0} s{5}", selmin.Id, prevpercent, selmin.Percentage, prevdist, selmin.CalculatedDistance, selmin.CountJustMade));
 
                         computed.Add(selmin);
                     }
