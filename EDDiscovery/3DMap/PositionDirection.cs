@@ -335,15 +335,17 @@ namespace EDDiscovery2._3DMap
             }
             else
             {                                                               // replace open gl computation with our own.
-                Matrix4 scale = new Matrix4(new Vector4(_zoom, 0, 0, 0), new Vector4(0, _zoom, 0, 0), new Vector4(0, 0, _zoom, 0), new Vector4(0, 0, 0, 1));
+                Matrix4 scale = Matrix4.CreateScale(_zoom);
                 Matrix4 offset = Matrix4.CreateTranslation(-_viewtargetpos.X, -_viewtargetpos.Y, -_viewtargetpos.Z);
                 Matrix4 rotcam = Matrix4.Identity;
                 rotcam *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
-                rotcam *= Matrix4.CreateRotationY((float)(-_cameraDir.Y * Math.PI / 180.0f));
-                rotcam *= Matrix4.CreateRotationZ((float)(-_cameraDir.Z * Math.PI / 180.0f));
+                rotcam *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
+                rotcam *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
                 Matrix4 rotX = Matrix4.CreateRotationX((float)(-90.0F / 180.0F * Math.PI));
 
-                preinverted = offset * scale * rotcam * rotX;          // ORDER important. this took a while
+                preinverted = Matrix4.Mult(offset,scale);
+                preinverted = Matrix4.Mult(preinverted, rotcam);
+                preinverted = Matrix4.Mult(preinverted,rotX);
             }
 
             _modelmatrix = Matrix4.Mult(flipy, preinverted);    //ORDER VERY important this one took longer to work out the order! replaces GL.Scale(1.0, -1.0, 1.0);          

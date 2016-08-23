@@ -54,6 +54,8 @@ namespace EDDiscovery2
 
     public class StarNamesList
     {
+        public bool Busy { get { return _starnamesbusy; } }
+
         Matrix4d _resmat;                  // to pass to thread..
         bool _dirorzoomchange;                  // to pass to thread..
         bool _discson;                            // to pass to thread..
@@ -73,10 +75,14 @@ namespace EDDiscovery2
         StarGrids _stargrids;
         FormMap _formmap;
         GLControl _glControl;
+        CameraDirectionMovementTracker _lastcamera;
 
         Object deletelock = new Object();           // locked during delete..
 
         System.Threading.Thread nsThread;
+
+        bool _starnamesbusy = false;                            // Are we in a compute cycle..
+        bool _starnamescomputed = false;
 
         public StarNamesList(StarGrids sg, FormMap _fm, GLControl gl)
         {
@@ -117,10 +123,11 @@ namespace EDDiscovery2
             }
         }
 
-        CameraDirectionMovementTracker _lastcamera;
-
+                        // foreground
         public void Update(CameraDirectionMovementTracker lastcamera, bool dirorzoomchange, Matrix4d resmat, float _zn, bool names, bool discs)     // UI thread..
         {
+            _starnamesbusy = true;
+
             _lastcamera = lastcamera;
             _resmat = resmat;
             _znear = _zn;
@@ -190,6 +197,7 @@ namespace EDDiscovery2
                                 {
                                     sys = new StarNames(sc);
                                     _starqueue.Enqueue(sys);            // send to foreground for adding
+                                    //Tools.LogToFile(String.Format("starnamesest: push {0}", sys.Pos));
                                     draw = true;
                                     painted++;
                                 }
@@ -249,6 +257,8 @@ namespace EDDiscovery2
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
 
+            _starnamescomputed = true;
+
             _formmap.Invoke((System.Windows.Forms.MethodInvoker)delegate              // kick the UI thread to process.
             {
                 _formmap.ChangeNamedStars();
@@ -268,10 +278,16 @@ namespace EDDiscovery2
         {
             bool needmoreticks = false;
 
-            StarNames sysq;
-            while( _starqueue.TryDequeue(out sysq))              // empty the queue of new stars
+            if (_starnamescomputed)
             {
-                _starnames.Add(sysq.Pos, sysq);
+                StarNames sysq;
+                while (_starqueue.TryDequeue(out sysq))              // empty the queue of new stars
+                {
+                    //Tools.LogToFile(String.Format("starnamesext: {0}", sysq.Pos));
+                    _starnames.Add(sysq.Pos, sysq);
+                }
+
+                _starnamescomputed = _starnamesbusy = false;    // cycle is over..
             }
 
             if (_starnames.Count > 10000)                       // need to work on parceling this out later..
@@ -375,7 +391,7 @@ namespace EDDiscovery2
                 }
             }
 
-            if (updated > 0 || notupdated>0) Tools.LogToFile(String.Format("starnamesdraw: {0} Updated {1} Not Updated {2}", sw1.ElapsedMilliseconds , updated, notupdated));
+            if (updated > 0 || notupdated>0) Tools.LogToFile(String.Format("starnamesdraw: {0} Updated {1} Not Updated {2}", sw1.ElapsedMilliseconds, updated, notupdated));
 
             //if (needmoreticks)   Console.WriteLine("More please");
             return needmoreticks;

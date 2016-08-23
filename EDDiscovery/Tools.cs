@@ -268,6 +268,7 @@ namespace EDDiscovery
             }
 
             debugout.WriteLine((debugtimer.ElapsedMilliseconds%100000) + ":" + s);
+            debugout.Flush();
         }
     }
 }
