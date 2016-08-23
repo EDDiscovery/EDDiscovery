@@ -489,16 +489,55 @@ namespace EDDiscovery.DB
 
     public class SQLiteConnectionED : IDisposable              // USE this for connections.. 
     {
+        private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
+        public class SchemaLock : IDisposable
+        {
+            public SchemaLock()
+            {
+                if (_schemaLock.RecursiveReadCount != 0)
+                {
+                    throw new InvalidOperationException("Cannot take a schema lock while holding an open database connection");
+                }
+
+                _schemaLock.EnterWriteLock();
+            }
+
+            public void Dispose()
+            {
+                if (_schemaLock.IsWriteLockHeld)
+                {
+                    _schemaLock.ExitWriteLock();
+                }
+            }
+        }
+
         //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
-                                                                // causes the program to become unresponsive during big DB updates
+        // causes the program to become unresponsive during big DB updates
         private DbConnection _cn;
 
         public SQLiteConnectionED()
         {
-            // System.Threading.Monitor.Enter(monitor);
-            //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
-            _cn = SQLiteDBClass.CreateCN();
-            _cn.Open();
+            bool locktaken = false;
+            try
+            {
+                _schemaLock.EnterReadLock();
+                locktaken = true;
+
+                // System.Threading.Monitor.Enter(monitor);
+                //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
+                _cn = SQLiteDBClass.CreateCN();
+                _cn.Open();
+            }
+            catch
+            {
+                if (locktaken)
+                {
+                    _schemaLock.ExitReadLock();
+                }
+
+                throw;
+            }
         }
 
         public DbCommand CreateCommand(string cmd, DbTransaction tn = null)
@@ -541,14 +580,16 @@ namespace EDDiscovery.DB
                     _cn.Dispose();
                     _cn = null;
                 }
-            }
-        }
 
-        public SQLiteConnectionED(SQLiteConnection c )            // ONLY use by class below..
-        {
-            //System.Threading.Monitor.Enter(monitor);
-            _cn = c;
-            _cn.Open();
+                if (_schemaLock.IsReadLockHeld)
+                {
+                    _schemaLock.ExitReadLock();
+                }
+            }
+            else
+            {
+                Trace.WriteLine("Database connection leaked");
+            }
         }
     }
 
@@ -966,6 +1007,58 @@ namespace EDDiscovery.DB
                     {
                         cmd.ExecuteNonQuery();
                     }
+                }
+            }
+        }
+
+        public static void CreateTempSystemsTable()
+        {
+            using (var conn = new SQLiteConnectionED())
+            {
+                ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems_temp");
+                ExecuteQuery(conn,
+                    "CREATE TABLE Systems_temp (" +
+                        "id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , " +
+                        "name TEXT NOT NULL COLLATE NOCASE , " +
+                        "x FLOAT, " +
+                        "y FLOAT, " +
+                        "z FLOAT, " +
+                        "cr INTEGER, " +
+                        "commandercreate TEXT, " +
+                        "createdate DATETIME, " +
+                        "commanderupdate TEXT, " +
+                        "updatedate DATETIME, " +
+                        "status INTEGER, " +
+                        "population INTEGER , " +
+                        "Note TEXT, " +
+                        "id_eddb Integer, " +
+                        "faction TEXT, " +
+                        "government_id Integer, " +
+                        "allegiance_id Integer, " +
+                        "primary_economy_id Integer, " +
+                        "security Integer, " +
+                        "eddb_updated_at Integer, " +
+                        "state Integer, " +
+                        "needs_permit Integer, " +
+                        "FirstDiscovery BOOL, " +
+                        "versiondate DATETIME, " +
+                        "id_edsm Integer, " +
+                        "gridid Integer NOT NULL DEFAULT -1, " +
+                        "randomid Integer NOT NULL DEFAULT -1)");
+            }
+        }
+
+        public static void ReplaceSystemsTable()
+        {
+            using (var slock = new SQLiteConnectionED.SchemaLock())
+            {
+                using (var conn = new SQLiteConnectionED())
+                {
+                    DropSystemsTableIndexes();
+                    ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
+                    ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems");
+                    //ExecuteQuery(conn, "VACUUM");
+                    CreateSystemsTableIndexes();
                 }
             }
         }
