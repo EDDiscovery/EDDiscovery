@@ -95,6 +95,7 @@ namespace EDDiscovery2
 
         private bool _isActivated = false;
         private float _znear;
+        private bool _glControlLoaded = false;
 
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
         private ToolStripMenuItem _toolstripToggleRegionColouringButton;     // for picking up this option quickly
@@ -348,6 +349,7 @@ namespace EDDiscovery2
             SetCenterSystemTo(_centerSystem);                   // move to this..
 
             SetViewPort();
+            _glControlLoaded = true;
         }
 
         private void FormMap_Shown(object sender, EventArgs e)
@@ -413,6 +415,9 @@ namespace EDDiscovery2
 
         private void FormMap_Resize(object sender, EventArgs e)         // resizes changes glcontrol width/height, so needs a new viewport
         {
+            if (!_glControlLoaded)
+                return;
+
             SetViewPort();
             Repaint();
         }
