@@ -1,4 +1,5 @@
-﻿using EDDiscovery.DB;
+﻿using EDDiscovery;
+using EDDiscovery.DB;
 using EDDiscovery2._3DMap;
 using EDDiscovery2.DB;
 using OpenTK;
@@ -52,7 +53,7 @@ namespace EDDiscovery2
     public class StarNamesList
     {
         Matrix4d _resmat;                  // to pass to thread..
-        bool _flippedorzoomed;                  // to pass to thread..
+        bool _dirorzoomchange;                  // to pass to thread..
         bool _discson;                            // to pass to thread..
         bool _nameson;                            // to pass to thread..
         float _znear;                            // to pass to thread..
@@ -114,14 +115,14 @@ namespace EDDiscovery2
 
         CameraDirectionMovementTracker _lastcamera;
 
-        public void Update(CameraDirectionMovementTracker lastcamera, bool flippedorzoomed, Matrix4d resmat, float _zn, bool names, bool discs)     // UI thread..
+        public void Update(CameraDirectionMovementTracker lastcamera, bool dirorzoomchange, Matrix4d resmat, float _zn, bool names, bool discs)     // UI thread..
         {
             _lastcamera = lastcamera;
             _resmat = resmat;
             _znear = _zn;
             _nameson = names;
             _discson = discs;
-            _flippedorzoomed = flippedorzoomed;
+            _dirorzoomchange = dirorzoomchange;
 
             //Console.WriteLine("Tick start thread");
             nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
@@ -142,12 +143,12 @@ namespace EDDiscovery2
 
                 SortedDictionary<float, StarGrid.InViewInfo> inviewlist = new SortedDictionary<float, StarGrid.InViewInfo>(new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
 
-                Console.WriteLine("Estimate at {0} len {1}", ti.campos, sqlylimit);
+                Stopwatch sw1 = new Stopwatch();
+                sw1.Start();
+                Tools.LogToFile(String.Format("starnamesest Estimate at {0} len {1}", ti.campos, sqlylimit));
 
                 _stargrids.GetSystemsInView(ref inviewlist, 2000.0, ti);            // consider all grids under 2k from current pos.
-
-                Console.WriteLine("..Systems in view {0}", inviewlist.Count);
-            
+                Tools.LogToFile(String.Format("starnamesest {0} ..Systems in view {1}", sw1.ElapsedMilliseconds, inviewlist.Count));
 
                 float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _lastcamera.LastZoom, _starnameminly)); // per char
                 float textscalingh = textscalingw * 4;
@@ -167,11 +168,6 @@ namespace EDDiscovery2
                     {
                         foreach (StarGrid.InViewInfo inview in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                         {
-                            if (inview.position.X == 0 && inview.position.Y == 0)
-                            {
-                                Console.WriteLine("Sol");
-                            }
-
                             StarNames sys = null;
                             bool draw = false;
 
@@ -179,7 +175,7 @@ namespace EDDiscovery2
                             {
                                 sys = _starnames[inview.position];
                                 sys.todispose = false;                         // forced redraw due to change in orientation, or due to disposal
-                                draw = _flippedorzoomed || (_nameson && sys.newstar == null) || (_discson && sys.nametexture == null);
+                                draw = _dirorzoomchange || (_nameson && sys.newstar == null) || (_discson && sys.nametexture == null);
                                 painted++;
                             }
                             else if (painted < limit)
@@ -203,17 +199,11 @@ namespace EDDiscovery2
                             }
                             else
                             {
-                                Console.WriteLine("to many");
                                 break;      // no point doing any more..  Either the closest ones have been found, or a new one was painted
                             }
 
                             if (draw)
                             {
-                                if (inview.position.X == 0 && inview.position.Y == 0)
-                                {
-                                    Console.WriteLine("Draw Sol");
-                                }
-
                                 if (_nameson)
                                 {
                                     float width = textscalingw * sys.name.Length;
@@ -247,9 +237,9 @@ namespace EDDiscovery2
 
                     foreach (StarNames s in _starnames.Values)              // only items above will remain.
                         s.inview = !s.todispose;                          // copy flag over, causes foreground to start removing them
-                }
 
-                //Console.WriteLine("  " + (Environment.TickCount % 10000) + "Paint " + painted);
+                    Tools.LogToFile(String.Format("starnamesest added all delta {0} updated {1}", sw1.ElapsedMilliseconds, painted));
+                }
 
             }
             catch (Exception ex)
@@ -293,7 +283,7 @@ namespace EDDiscovery2
                         }
                     }
 
-                    Console.WriteLine("Clean up star names from " + _starnames.Count + " to " + (_starnames.Count - cleanuplist.Count));
+                    Tools.LogToFile(String.Format("starnames: Clean up star names from " + _starnames.Count + " to " + (_starnames.Count - cleanuplist.Count)));
 
                     foreach (Vector3 key in cleanuplist)
                     {
@@ -312,32 +302,52 @@ namespace EDDiscovery2
             lock (_starnames)                                   // lock so they can't add anything while we draw
             {
                 int updated = 0;
+                int notupdated = 0;
+
+                Stopwatch sw1 = new Stopwatch(); sw1.Start();
 
                 foreach (StarNames sys in _starnames.Values)
                 {
                     if (sys.newnametexture != null )         //250 seems okay on my machine, around the 50ms mark
                     {
-                        if (updated++ < 250)
+                        if (updated < 250)
                         {
                             if (sys.nametexture != null)
                                 sys.nametexture.Dispose();
 
                             sys.nametexture = sys.newnametexture;      // copy over and take another reference.. 
                             sys.newnametexture = null;
+                            updated++;
                         }
                         else
-                            needmoreticks = true;
+                        {
+                            if (!needmoreticks)
+                            {
+                                Tools.LogToFile(String.Format("starnamesdraw: Too many to textures"));
+                                needmoreticks = true;
+                            }
+
+                            notupdated++;
+                        }
                     }
 
                     if (sys.newnamevertices != null)
                     {
-                        if (updated++ < 250)
+                        if (updated < 250)
                         {
                             sys.nametexture.UpdateVertices(sys.newnamevertices);
                             sys.newnamevertices = null;
+                            updated++;
                         }
                         else
-                            needmoreticks = true;
+                        {
+                            if (!needmoreticks)
+                            {
+                                Tools.LogToFile(String.Format("starnamesdraw: Too many to vertices"));
+                                needmoreticks = true;
+                            }
+                            notupdated++;
+                        }
                     }
 
                     if (sys.newstar != null)              // same with newstar
@@ -359,6 +369,8 @@ namespace EDDiscovery2
                         }
                     }
                 }
+
+                if (updated > 0 || notupdated>0) Tools.LogToFile(String.Format("starnamesdraw: {0} Updated {1} Not Updated {2}", sw1.ElapsedMilliseconds , updated, notupdated));
             }
 
             //if (needmoreticks)   Console.WriteLine("More please");

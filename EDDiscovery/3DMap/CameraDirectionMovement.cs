@@ -14,14 +14,13 @@ namespace EDDiscovery2
 
         public Vector3 Rotation = new Vector3(0, 0, 0);
 
-        public bool CameraFlipped;
         public bool CameraDirChanged;
         public bool CameraMoved;
         public bool CameraZoomed;
 
         public void Update(Vector3 cameraDir, Vector3 cameraPos, float zoom)
         {
-            CameraDirChanged = Vector3.Subtract(CameraDir, cameraDir).LengthSquared > 1 * 1 * 1;
+            CameraDirChanged = Vector3.Subtract(CameraDir, cameraDir).LengthSquared > 1;
 
             if (CameraDirChanged)
             {
@@ -29,12 +28,12 @@ namespace EDDiscovery2
                 //Console.WriteLine("Dir {0},{1},{2}", CameraDir.X, CameraDir.Y, CameraDir.Z);
             }
 
-            CameraMoved = Vector3.Subtract(CameraPos, cameraPos).LengthSquared > 3 * 3 * 3;
+            CameraMoved = Vector3.Subtract(CameraPos, cameraPos).LengthSquared > 1;
 
             if ( CameraMoved )
                 CameraPos = cameraPos;
 
-            CameraZoomed = Math.Abs(LastZoom - zoom) > 0.5F;          // if its worth doing a recalc..
+            CameraZoomed = Math.Abs(LastZoom - zoom) > 0.01;
 
             if ( CameraZoomed )
                 LastZoom = zoom;
@@ -42,10 +41,6 @@ namespace EDDiscovery2
             Rotation = CameraDir;
             Rotation.X = -Rotation.X;       // invert to face
             Rotation.Z = 0;                 // no Z, not used much, and cause the other two axis to spin .. would need more work to understand
-            CameraFlipped = CameraDirChanged;
-
-            //TBD
-           // Rotation = new Vector3(0, 0, 0);
         }
 
         public void ForceZoomChanged()
