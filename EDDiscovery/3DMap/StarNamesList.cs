@@ -36,19 +36,27 @@ namespace EDDiscovery2
         public double x { get; set; }
         public double y { get; set; }
         public double z { get; set; }
-        public Vector3 Pos { get { return new Vector3((float)x, (float)y, (float)z);  } }
+        public Vector3 position { get { return new Vector3((float)x, (float)y, (float)z);  } }
         public long population { get; set; }
 
         public TexturedQuadData newnametexture { get; set; }    // if a new texture is needed..
         public TexturedQuadData nametexture { get; set; }       // currently painted one
         public Vector3d[] newnamevertices;                      
 
-
         public PointData newstar { get; set; }                  // purposely drawing it like this, one at a time, due to sync issues between foreground/thread
         public PointData paintstar { get; set; }                // instead of doing a array paint.
 
         public bool inview { get; set; }
         public bool todispose { get; set; }
+
+        public void Dispose()
+        {
+            if (newnametexture != null)
+                newnametexture.Dispose();
+
+            if (nametexture != null)
+                nametexture.Dispose();
+        }
     };
 
 
@@ -67,9 +75,10 @@ namespace EDDiscovery2
         float _starnameminly = 0.1F;                // ranging between per char
         float _starnamemaxly = 0.5F;
 
-        Dictionary<Vector3, StarNames> _starnames;
-        ConcurrentQueue<StarNames> _starqueue;
-        
+        Dictionary<Vector3, StarNames> _starnamesbackground;        // only used by background thread. 
+        List<StarNames> _starnamestoforeground;                     // transfer list between the back/fore
+        LinkedList<StarNames> _starnamesforeground;                 // Linked list since we remove entries in the middle at random
+
         static Font _starfont = new Font("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
 
         StarGrids _stargrids;
@@ -82,7 +91,6 @@ namespace EDDiscovery2
         System.Threading.Thread nsThread;
 
         bool _starnamesbusy = false;                            // Are we in a compute cycle..
-        bool _starnamescomputed = false;
 
         public StarNamesList(StarGrids sg, FormMap _fm, GLControl gl)
         {
@@ -90,24 +98,9 @@ namespace EDDiscovery2
             _formmap = _fm;
             _glControl = gl;
 
-            _starnames = new Dictionary<Vector3, StarNames>();
-            _starqueue = new ConcurrentQueue<StarNames>();
-        }
-
-        public bool RemoveAllNamedStars()                               // indicate all no paint, pass back if changed anything.
-        {
-            bool changed = false;
-
-            foreach (StarNames sys in _starnames.Values)
-            {
-                if (sys.inview)
-                {
-                    sys.inview = false;
-                    changed = true;
-                }
-            }
-
-            return changed;
+            _starnamesbackground = new Dictionary<Vector3, StarNames>();
+            _starnamestoforeground = new List<StarNames>();
+            _starnamesforeground = new LinkedList<StarNames>();
         }
 
         public void IncreaseStarLimit()
@@ -123,10 +116,36 @@ namespace EDDiscovery2
             }
         }
 
-                        // foreground
-        public void Update(CameraDirectionMovementTracker lastcamera, bool dirorzoomchange, Matrix4d resmat, float _zn, bool names, bool discs)     // UI thread..
+        public void Update(CameraDirectionMovementTracker lastcamera, bool dirorzoomchange, 
+                            Matrix4d resmat, float _zn, bool names, bool discs)     // FOREGROUND no thread
         {
-            _starnamesbusy = true;
+            _starnamesbusy = true;      // from update to Transfertoforeground we are busy
+
+            if (_starnamesforeground.Count > 10000)                       // if we have too many, clean up, to free memory
+            {
+                List<LinkedListNode<StarNames>> removelist = new List<LinkedListNode<StarNames>>();
+                LinkedListNode<StarNames> pos = _starnamesforeground.First;
+
+                while (pos != null)
+                {
+                    StarNames sys = pos.Value;
+                    if (!sys.inview)                          // if not painting
+                        removelist.Add(pos);
+                    pos = pos.Next;
+                }
+
+                Tools.LogToFile(String.Format("starnameupd Remove {0}", removelist.Count ));
+                Console.WriteLine("Remove {0}", removelist.Count);
+                
+                foreach (LinkedListNode<StarNames> rpos in removelist)
+                {
+                    StarNames sys = rpos.Value;
+                    sys.Dispose();
+
+                    _starnamesforeground.Remove(rpos);
+                    _starnamesbackground.Remove(sys.position);
+                }
+            }
 
             _lastcamera = lastcamera;
             _resmat = resmat;
@@ -135,12 +154,11 @@ namespace EDDiscovery2
             _discson = discs;
             _dirorzoomchange = dirorzoomchange;
 
-            //Console.WriteLine("Tick start thread");
             nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
             nsThread.Start();
         }
 
-        private void NamedStars() // background thread.. run after timer tick
+        private void NamedStars() // background thread.. run after Update.  Thread never deletes, only adds
         {
             try // just in case someone tears us down..
             {
@@ -159,7 +177,8 @@ namespace EDDiscovery2
                 Tools.LogToFile(String.Format("starnamesest Estimate at {0} len {1}", ti.campos, sqlylimit));
 
                 _stargrids.GetSystemsInView(ref inviewlist, 2000.0, ti);            // consider all grids under 2k from current pos.
-                Tools.LogToFile(String.Format("starnamesest {0} ..Systems in view {1}", sw1.ElapsedMilliseconds, inviewlist.Count));
+
+                Tools.LogToFile(String.Format("starnamesest Took {0} in view {1}", sw1.ElapsedMilliseconds, inviewlist.Count));
 
                 float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _lastcamera.LastZoom, _starnameminly)); // per char
                 float textscalingh = textscalingw * 4;
@@ -169,7 +188,7 @@ namespace EDDiscovery2
 
                 lock (deletelock)                                          // can't delete during update, can paint..
                 {
-                    foreach (StarNames s in _starnames.Values)              // all items not processed
+                    foreach (StarNames s in _starnamesbackground.Values)    // all items not processed
                         s.todispose = true;                                 // only items remaining will clear this
 
                     int limit = 1000;                   // max number of stars to show..
@@ -182,9 +201,9 @@ namespace EDDiscovery2
                             StarNames sys = null;
                             bool draw = false;
 
-                            if (_starnames.ContainsKey(inview.position))                   // if already there..
+                            if (_starnamesbackground.ContainsKey(inview.position))                   // if already there..
                             {
-                                sys = _starnames[inview.position];
+                                sys = _starnamesbackground[inview.position];
                                 sys.todispose = false;                         // forced redraw due to change in orientation, or due to disposal
                                 draw = _dirorzoomchange || (_nameson && sys.newstar == null) || (_discson && sys.nametexture == null);
                                 painted++;
@@ -196,7 +215,8 @@ namespace EDDiscovery2
                                 if (sc != null)     // if can't be resolved, ignore
                                 {
                                     sys = new StarNames(sc);
-                                    _starqueue.Enqueue(sys);            // send to foreground for adding
+                                    _starnamesbackground.Add(sys.position, sys); // add to our database
+                                    _starnamestoforeground.Add(sys);  // send to foreground for adding
                                     //Tools.LogToFile(String.Format("starnamesest: push {0}", sys.Pos));
                                     draw = true;
                                     painted++;
@@ -244,10 +264,10 @@ namespace EDDiscovery2
                         }
                     }
 
-                    foreach (StarNames s in _starnames.Values)              // only items above will remain.
+                    foreach (StarNames s in _starnamesbackground.Values)              // only items above will remain.
                         s.inview = !s.todispose;                          // copy flag over, causes foreground to start removing them
 
-                    Tools.LogToFile(String.Format("starnamesest added all delta {0} updated {1}", sw1.ElapsedMilliseconds, painted));
+                    Tools.LogToFile(String.Format("starnamesest added all delta {0} topaint {1}", sw1.ElapsedMilliseconds, painted));
                 }
 
             }
@@ -257,77 +277,53 @@ namespace EDDiscovery2
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
 
-            _starnamescomputed = true;
-
             _formmap.Invoke((System.Windows.Forms.MethodInvoker)delegate              // kick the UI thread to process.
             {
                 _formmap.ChangeNamedStars();
             });
         }
 
-        public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
+        public bool TransferToForeground()              // FOREGROUND no thread. Return if any new stuff 
         {
-            public int Compare(TKey x, TKey y)
-            {
-                int result = x.CompareTo(y);
-                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
-            }
+            bool ret = _starnamestoforeground.Count > 0;
+
+            foreach (StarNames sys in _starnamestoforeground)
+                _starnamesforeground.AddLast(sys);
+
+            _starnamestoforeground.Clear();
+
+            _starnamesbusy = false;                     // now not busy, another cycle may start..
+
+            return ret; 
         }
 
-        public bool Draw()                                      // indicate if we ran out of time
+        public bool HideAll()                           // FOREGROUND no thread
+        {
+            bool changed = false;
+
+            foreach (StarNames sys in _starnamestoforeground)
+            {
+                if (sys.inview)
+                {
+                    sys.inview = false;
+                    changed = true;
+                }
+            }
+
+            return changed;
+        }
+
+
+        public bool Draw()                              // FOREGROUND thread may be running.. so use only foreground object
         {
             bool needmoreticks = false;
-
-            if (_starnamescomputed)
-            {
-                StarNames sysq;
-                while (_starqueue.TryDequeue(out sysq))              // empty the queue of new stars
-                {
-                    //Tools.LogToFile(String.Format("starnamesext: {0}", sysq.Pos));
-                    _starnames.Add(sysq.Pos, sysq);
-                }
-
-                _starnamescomputed = _starnamesbusy = false;    // cycle is over..
-            }
-
-            if (_starnames.Count > 10000)                       // need to work on parceling this out later..
-            {
-                if (Monitor.TryEnter(deletelock))                 // if we can get in, we are not in the update above, so can clean
-                {                                                  // its a lazy delete, no rush..
-                    List<Vector3> cleanuplist = new List<Vector3>();
-
-                    foreach (Vector3 key in _starnames.Keys)
-                    {
-                        StarNames sys = _starnames[key];
-
-                        if (!sys.inview)                          // if not painting
-                        {
-                            cleanuplist.Add(key);                 // add to clean up
-                        }
-                    }
-
-                    Tools.LogToFile(String.Format("starnames: Clean up star names from " + _starnames.Count + " to " + (_starnames.Count - cleanuplist.Count)));
-
-                    foreach (Vector3 key in cleanuplist)
-                    {
-                        StarNames sys = _starnames[key];
-                        if (sys.nametexture != null)
-                            sys.nametexture.Dispose();
-
-                        _starnames.Remove(key);
-                    }
-
-                    Monitor.Exit(deletelock);
-                    GC.Collect();
-                }
-            }
 
             int updated = 0;
             int notupdated = 0;
 
             Stopwatch sw1 = new Stopwatch(); sw1.Start();
 
-            foreach (StarNames sys in _starnames.Values)
+            foreach (StarNames sys in _starnamesforeground )
             {
                 if (sys.newnametexture != null )         //250 seems okay on my machine, around the 50ms mark
                 {
@@ -397,7 +393,7 @@ namespace EDDiscovery2
             return needmoreticks;
         }
 
-        public Vector3? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti)
+        public Vector3? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti) // FOREGROUND thread may be running
         {
             cursysdistz = double.MaxValue;
             Vector3? ret = null;
@@ -405,29 +401,26 @@ namespace EDDiscovery2
             double w2 = (double)ti.dwidth / 2.0;
             double h2 = (double)ti.dheight / 2.0;
 
-            lock (_starnames)                                   // lock so they can't add anything while we draw
+            foreach (StarNames sys in _starnamesforeground)
             {
-                foreach (StarNames sys in _starnames.Values)
+                if (sys.paintstar != null)
                 {
-                    if (sys.paintstar != null)
+                    Vector4d syspos = new Vector4d((float)sys.x, (float)sys.y, (float)sys.z, 1.0);
+                    Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
+
+                    if (sysloc.Z > ti.znear)
                     {
-                        Vector4d syspos = new Vector4d((float)sys.x, (float)sys.y, (float)sys.z, 1.0);
-                        Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
+                        Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
+                        double sysdistsq = syssloc.X * syssloc.X + syssloc.Y * syssloc.Y;
 
-                        if (sysloc.Z > ti.znear)
+                        if (sysdistsq < 7.0 * 7.0)
                         {
-                            Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
-                            double sysdistsq = syssloc.X * syssloc.X + syssloc.Y * syssloc.Y;
+                            double sysdist = Math.Sqrt(sysdistsq);
 
-                            if (sysdistsq < 7.0 * 7.0)
+                            if ((sysdist + Math.Abs(sysloc.Z * ti.zoom)) < cursysdistz)
                             {
-                                double sysdist = Math.Sqrt(sysdistsq);
-
-                                if ((sysdist + Math.Abs(sysloc.Z * ti.zoom)) < cursysdistz)
-                                {
-                                    cursysdistz = sysdist + Math.Abs(sysloc.Z * ti.zoom);
-                                    ret = new Vector3((float)sys.x, (float)sys.y, (float)sys.z);
-                                }
+                                cursysdistz = sysdist + Math.Abs(sysloc.Z * ti.zoom);
+                                ret = new Vector3((float)sys.x, (float)sys.y, (float)sys.z);
                             }
                         }
                     }
@@ -436,6 +429,17 @@ namespace EDDiscovery2
 
             return ret;
         }
+
+
+        public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
+        {
+            public int Compare(TKey x, TKey y)
+            {
+                int result = x.CompareTo(y);
+                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
+            }
+        }
     }
 
 }
+
