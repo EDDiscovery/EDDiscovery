@@ -274,7 +274,8 @@ namespace EDDiscovery2._3DMap
         }
 
         // KEEP for debug for now..
-#if false
+
+        #if false
 
         static public void Test()       
         {
@@ -318,73 +319,8 @@ namespace EDDiscovery2._3DMap
             }
 
             Console.WriteLine("END");
-    }
-
-        static int LineIntersect(Vector2 A1, Vector2 A2, Vector2 B1, Vector2 B2, ref Vector2 O)     // NOT USED
-        {
-            float a1 = A2.Y - A1.Y;
-            float b1 = A1.X - A2.X;
-            float d1 = -a1 * A1.X - b1 * A1.Y;
-            float a2 = B2.Y - B1.Y;
-            float b2 = B1.X - B2.X;
-            float d2 = -a2 * B1.X - b2 * B1.Y;
-            float t = a2 * b1 - a1 * b2;
-
-            if (t == 0)
-                return -1;
-
-            O.Y = (a1 * d2 - a2 * d1) / t;
-            O.X = (b2 * d1 - b1 * d2) / t;
-
-            if (A1.X > A2.X)
-            {
-                if ((O.X < A2.X) || (O.X > A1.X))
-                    return 0;
-            }
-            else
-            {
-                if ((O.X < A1.X) || (O.X > A2.X))
-                    return 0;
-            }
-
-            if (A1.Y > A2.Y)
-            {
-                if ((O.Y < A2.Y) || (O.Y > A1.Y))
-                    return 0;
-            }
-            else
-            {
-                if ((O.Y < A1.Y) || (O.Y > A2.Y))
-                    return 0;
-            }
-
-            if (B1.X > B2.X)
-            {
-                if ((O.X < B2.X) || (O.X > B1.X))
-                    return 0;
-            }
-            else
-            {
-                if ((O.X < B1.X) || (O.X > B2.X))
-                    return 0;
-            }
-
-            if (B1.Y > B2.Y)
-            {
-                if ((O.Y < B2.Y) || (O.Y > B1.Y))
-                    return 0;
-            }
-            else
-            {
-                if ((O.Y < B1.Y) || (O.Y > B2.Y))
-                    return 0;
-            }
-
-            return 1;
         }
 
-
-#endif
-
+        #endif
     }
 }

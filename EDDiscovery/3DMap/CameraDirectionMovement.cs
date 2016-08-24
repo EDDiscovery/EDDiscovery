@@ -33,7 +33,7 @@ namespace EDDiscovery2
             if ( CameraMoved )
                 CameraPos = cameraPos;
 
-            CameraZoomed = Math.Abs(LastZoom - zoom) > 0.01;
+            CameraZoomed = Math.Abs(LastZoom - zoom) > 0.0000001;
 
             if ( CameraZoomed )
                 LastZoom = zoom;

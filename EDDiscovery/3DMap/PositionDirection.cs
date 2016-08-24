@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using OpenTK.Graphics.OpenGL;
 
 namespace EDDiscovery2._3DMap
 {
@@ -16,9 +15,9 @@ namespace EDDiscovery2._3DMap
         public Vector3 CameraDirection { get { return _cameraDir; } }
 
         public bool InSlews { get { return (_cameraSlewProgress < 1.0f || _cameraDirSlewProgress < 1.0F); } }
-        public bool InPerspectiveMode { get { return _perspectivemode; } }
-
-        public Matrix4 ModelMatrix { get { return _modelmatrix;  } }
+        public bool InPerspectiveMode { get { return _perspectivemode; } set { _perspectivemode = value; } }
+        public Matrix4 ModelMatrix { get { return _modelmatrix; } }
+        public Matrix4 ProjectionMatrix { get { return _projectionmatrix; } }
 
         private bool _perspectivemode = false;
 
@@ -366,37 +365,22 @@ namespace EDDiscovery2._3DMap
                 return resmatd;
             }
         }
-                
-        public void SetProjectionMatrix(bool pmode , float fov, int w, int h, out float _znear)
+
+        public void CalculateProjectionMatrix(float fov, int w, int h, out float _znear)
         {
-            Debug.Assert(w > 0 && h > 0);                   // if not, we have an issue we need to find
-
-            _perspectivemode = pmode;
-            _znear = 1;
-            GL.MatrixMode(MatrixMode.Projection);           // Select the project matrix for the following operations (current matrix)
-
             if (InPerspectiveMode)
             {                                                                   // Fov, perspective, znear, zfar
+                _znear = 1.0F;
                 _projectionmatrix = Matrix4.CreatePerspectiveFieldOfView(fov, (float)w / h, 1.0f, 1000000.0f);
-                GL.LoadMatrix(ref _projectionmatrix);             // replace projection matrix with this perspective matrix
-                _znear = 1.0f;
             }
             else
             {
-                float orthoheight = 1000.0f * h / w;
-
-                GL.LoadIdentity();                              // set to 1/1/1/1.
-
-                // multiply identity matrix with orth matrix, left/right vert clipping plane, bot/top horiz clippling planes, distance between near/far clipping planes
-                GL.Ortho(-1000.0f, 1000.0f, -orthoheight, orthoheight, -5000.0f, 5000.0f);
-                GL.GetFloat(GetPName.ProjectionMatrix, out _projectionmatrix);
                 _znear = -5000.0f;
+                float orthoheight = 1000.0f * h / w;
+                _projectionmatrix = Matrix4.CreateOrthographic(2000F, orthoheight * 2.0F, -5000.0F, 5000.0F);
             }
-
-            GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
         }
 
-    
         private float BoundedAngle(float angle)
         {
             return ((angle + 360 + 180) % 360) - 180;

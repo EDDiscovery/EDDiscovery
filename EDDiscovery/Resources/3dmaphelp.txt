@@ -6,6 +6,7 @@ Keyboard:
 	RF	Move up and down
 	+ or Z	Zoom in
 	- or X	Zoom out
+	1 to 9	Zoom in (1) to out (9) in increments
 	Keypad 4	Yaw left
 	Keypad 6	Yaw right
 	Keypad 8	Pitch up

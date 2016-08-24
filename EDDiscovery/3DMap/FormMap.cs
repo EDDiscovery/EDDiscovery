@@ -24,6 +24,8 @@ namespace EDDiscovery2
     {
         #region Variables
 
+        public bool Is3DMapsRunning { get { return _stargrids != null; } }
+
         public bool noWindowReposition { get; set; } = false;                       // set externally
         public TravelHistoryControl travelHistoryControl { get; set; } = null;      // set externally
 
@@ -44,12 +46,11 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_galmapregions;
 
         StarGrids _stargrids;                   // holds stars
-
         StarNamesList _starnameslist;           // holds named stars
 
-        private AutoCompleteStringCollection _systemNames;
+        private AutoCompleteStringCollection _systemNames;      // holds that awful auto complete list
 
-        private ISystem _centerSystem;
+        private ISystem _centerSystem;          // some systems remembered
         private ISystem _homeSystem;
         private ISystem _historySelection;
 
@@ -58,23 +59,26 @@ namespace EDDiscovery2
         private Vector3 _clickedposition = new Vector3(float.NaN,float.NaN,float.NaN);       // above two also set this.. if its a RM, only this is set.
         private string _clickedurl;             // what url is associated..
 
-        private PositionDirection posdir = new PositionDirection();
-        private ZoomFov zoomfov = new ZoomFov();
+        private PositionDirection posdir = new PositionDirection();     // position dir holders
+        private ZoomFov zoomfov = new ZoomFov();            // zoom fov holders
 
-        private Timer _systemtimer = new Timer();     // kicks off star naming
-        private bool _requestrepaint = false;                           // main system tick. Set to request repaint on next tick
-        private Stopwatch _updateinterval = new Stopwatch();    // to accurately measure interval between system ticks
-        private long _lastmstick;                           
-        private int _msticks;                                   // between updates
+        private Timer _systemtimer = new Timer();           // MAIN system tick controls most things
+        private bool _requestrepaint = false;               // set to request repaint on next tick
+        private Stopwatch _systemtickinterval = new Stopwatch();    // to accurately measure interval between system ticks
+        private long _lastsystemtickinterval = 0;                   // last update tick at previous update
+
         private CameraDirectionMovementTracker _lastcameranorm = new CameraDirectionMovementTracker();        // these track movements and zoom for most systems
         private CameraDirectionMovementTracker _lastcamerastarnames = new CameraDirectionMovementTracker();   // and for star names, which may be delayed due to background busy
+
+        private long _lastpainttick = 0;                    // FPS calculation
+        private float fps = 0;
 
         private Point _mouseStartRotate = new Point(int.MinValue, int.MinValue);        // used to indicate not started for these using mousemove
         private Point _mouseStartTranslateXY = new Point(int.MinValue, int.MinValue);
         private Point _mouseStartTranslateXZ = new Point(int.MinValue, int.MinValue);
         private Point _mouseDownPos;
 
-        private Point _mouseHover;
+        private Point _mouseHover;                          // Hover system, point, ticker, tooltip
         Timer _mousehovertick = new Timer();
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
 
@@ -96,17 +100,13 @@ namespace EDDiscovery2
 
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
         private ToolStripMenuItem _toolstripToggleRegionColouringButton;     // for picking up this option quickly
+        
+        MapRecorder maprecorder = new MapRecorder();        // the recorder 
+        TimedMessage mapmsg = null;                         // and msg
 
-        public bool Is3DMapsRunning { get { return _stargrids != null; } }
+        KeyboardActions _kbdActions = new KeyboardActions();        // needed to be held because it remembers key downs
 
-        MapRecorder maprecorder = new MapRecorder();
-        TimedMessage mapmsg = null;
-
-        KeyboardActions _kbdActions = new KeyboardActions();
-
-        private float fps = 0;
-
-        bool allowresizematrixchange = false;
+        bool _allowresizematrixchange = false;           // prevent resize causing matrix calc before paint
 
         #endregion
 
@@ -360,7 +360,7 @@ namespace EDDiscovery2
             }
 
             SetModelProjectionMatrix();
-            allowresizematrixchange = true;
+            _allowresizematrixchange = true;
             StartSystemTimer();
         }
 
@@ -368,18 +368,18 @@ namespace EDDiscovery2
         {
             if ( !_systemtimer.Enabled )
             {
-                _updateinterval.Stop();
-                _updateinterval.Start();
-                _lastmstick = _updateinterval.ElapsedMilliseconds;
+                _systemtickinterval.Stop();
+                _systemtickinterval.Start();
+                _lastsystemtickinterval = _systemtickinterval.ElapsedMilliseconds;
                 _systemtimer.Interval = 25;
-                _systemtimer.Tick += new EventHandler(Update);
+                _systemtimer.Tick += new EventHandler(SystemTick);
                 _systemtimer.Start();
             }
         }
 
         private void FormMap_Resize(object sender, EventArgs e)         // resizes changes glcontrol width/height, so needs a new viewport
         {
-            if (!allowresizematrixchange)
+            if (!_allowresizematrixchange)
             {
                 SetModelProjectionMatrix();
                 RequestRepaint();
@@ -403,7 +403,7 @@ namespace EDDiscovery2
             Console.WriteLine("{0} Close form" , Environment.TickCount);
 
             _systemtimer.Stop();
-            _updateinterval.Stop();
+            _systemtickinterval.Stop();
 
             if (Visible)
             {
@@ -442,25 +442,31 @@ namespace EDDiscovery2
             GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
         }
 
-        private void SetModelProjectionMatrix()
+        public void SetModelProjectionMatrix()
         {
-            posdir.SetProjectionMatrix(toolStripButtonPerspective.Checked, zoomfov.Fov, glControl.Width, glControl.Height, out _znear);
+            posdir.InPerspectiveMode = toolStripButtonPerspective.Checked;
+
+            posdir.CalculateProjectionMatrix(zoomfov.Fov, glControl.Width, glControl.Height, out _znear);
             posdir.CalculateModelMatrix(zoomfov.Zoom);
+
+            GL.MatrixMode(MatrixMode.Projection);           // Select the project matrix for the following operations (current matrix)
+            Matrix4 pm = posdir.ProjectionMatrix;
+            GL.LoadMatrix(ref pm);                          // replace projection matrix with this perspective matrix
+            GL.Viewport(0, 0, glControl.Width, glControl.Height);                        // Use all of the glControl painting area
         }
 
         #endregion
 
         #region Main Timer
 
-        private void Update(object sender, EventArgs e)                 // tick.. tock.. every X ms.  Drives everything now.
+        private void SystemTick(object sender, EventArgs e)                 // tick.. tock.. every X ms.  Drives everything now.
         {
-            //Console.WriteLine("Tick");
             if (!Visible)
                 return;
 
-            long elapsed = _updateinterval.ElapsedMilliseconds;         // stopwatch provides precision timing on last paint time.
-            _msticks = (int)(elapsed - _lastmstick);
-            _lastmstick = elapsed;
+            long elapsed = _systemtickinterval.ElapsedMilliseconds;         // stopwatch provides precision timing on last paint time.
+            int msticks = (int)(elapsed - _lastsystemtickinterval);
+            _lastsystemtickinterval = elapsed;
 
             if (_isActivated && glControl.Focused)                      // if we can accept keys
             {
@@ -471,18 +477,18 @@ namespace EDDiscovery2
                     posdir.KillSlews();                                 // no slewing now please
                     zoomfov.KillSlew();
 
-                    posdir.HandleTurningAdjustments(_kbdActions, _msticks);     // any turning?
+                    posdir.HandleTurningAdjustments(_kbdActions, msticks);     // any turning?
                                                                                 // any move?
-                    posdir.HandleMovementAdjustments(_kbdActions, _msticks, zoomfov.Zoom, toolStripButtonEliteMovement.Checked);
+                    posdir.HandleMovementAdjustments(_kbdActions, msticks, zoomfov.Zoom, toolStripButtonEliteMovement.Checked);
 
                     HandleSpecialKeys(_kbdActions);                     // special keys for us
 
-                    zoomfov.HandleZoomAdjustmentKeys(_kbdActions, _msticks);
+                    zoomfov.HandleZoomAdjustmentKeys(_kbdActions, msticks);
                 }
             }
 
-            posdir.DoCameraSlew(_msticks);
-            zoomfov.DoZoomSlew(_msticks);
+            posdir.DoCameraSlew(msticks);
+            zoomfov.DoZoomSlew();
 
             if (maprecorder.InPlayBack)
             {
@@ -492,7 +498,7 @@ namespace EDDiscovery2
                 string message;
                 if (maprecorder.PlayBack(out newpos, out timetofly, out newdir, out timetopan, out newzoom, out timetozoom, out message, out timetomsg))
                 {
-                    //Console.WriteLine("{0} Playback {1} {2} {3} fly {4} pan {5} msg {6}", _updateinterval.ElapsedMilliseconds % 10000,
+                    //Console.WriteLine("{0} Playback {1} {2} {3} fly {4} pan {5} msg {6}", _systemtickinterval.ElapsedMilliseconds % 10000,
                     //    newpos, newdir, newzoom, timetofly, timetopan, message);
 
                     posdir.StartCameraSlew(newpos, (float)timetofly / 1000.0F);
@@ -530,7 +536,8 @@ namespace EDDiscovery2
 
             _lastcameranorm.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom);
 
-            Tools.LogToFile(String.Format("Tick Dir {0} zoom {1} move {2}", _lastcameranorm.CameraDirChanged, _lastcameranorm.CameraZoomed, _lastcameranorm.CameraMoved));
+            //Console.WriteLine("Tick D/Z/M {0} {1} {2}", _lastcameranorm.CameraDirChanged, _lastcameranorm.CameraZoomed, _lastcameranorm.CameraMoved);
+            //Tools.LogToFile(String.Format("Tick D/Z/M {0} {1} {2}", _lastcameranorm.CameraDirChanged, _lastcameranorm.CameraZoomed, _lastcameranorm.CameraMoved));
 
             if (_lastcameranorm.CameraDirChanged || _lastcameranorm.CameraZoomed || _lastcameranorm.CameraMoved)
             {
@@ -579,7 +586,7 @@ namespace EDDiscovery2
 
             if (_requestrepaint)
             {
-                //Console.WriteLine("{0} {1} Tick m{2} d{3} key {4} {5} ", _updateinterval.ElapsedMilliseconds % 10000, _msticks, _lastcameranorm.CameraMoved, _lastcameranorm.CameraDirChanged, _kbdActions.Any(), (_msticks > 100) ? "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" : "");
+                //Console.WriteLine("{0} {1} Tick m{2} d{3} key {4} {5} ", _systemtickinterval.ElapsedMilliseconds % 10000, _msticks, _lastcameranorm.CameraMoved, _lastcameranorm.CameraDirChanged, _kbdActions.Any(), (_msticks > 100) ? "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" : "");
                 _requestrepaint = false;
                 glControl.Invalidate();                 // and kick paint - not via the function ON purpose, so we can distinguish between this and others reasons
             }
@@ -642,22 +649,18 @@ namespace EDDiscovery2
 
         #region OpenGL Render and Viewport
 
-        long lasttick = 0;
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
-#if DEBUG
-            long curtime = _updateinterval.ElapsedMilliseconds;
-            long timesince = curtime - lasttick;
-            lasttick = curtime;
+            long curtime = _systemtickinterval.ElapsedMilliseconds;
+            long timesince = curtime - _lastpainttick;
+            _lastpainttick = curtime;
 
-            if (timesince > 200)
-                fps = 0;
-            else
+            if (timesince > 0 && timesince < 100)                            // FPS calc - not less than 10hz. and check for silly 0
             {
                 float newfps = 1000.0F / (float)timesince;
                 fps = (fps * 0.9F) + (newfps * 0.1F);
             }
-#endif
+
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Modelview);            // select the current matrix to the model view
 
@@ -676,9 +679,9 @@ namespace EDDiscovery2
             glControl.SwapBuffers();
             UpdateStatus();
 
-//            Console.WriteLine("{0} Paint since {1} took {2}", curtime % 10000, timesince, _updateinterval.ElapsedMilliseconds - curtime);
+//            Console.WriteLine("{0} Paint since {1} took {2}", curtime % 10000, timesince, _systemtickinterval.ElapsedMilliseconds - curtime);
 
-            Tools.LogToFile(String.Format("{0} Paint since {1} took {2} {3}", curtime % 10000, timesince, _updateinterval.ElapsedMilliseconds - curtime , (timesince>60) ? "************************************":""));
+            //Tools.LogToFile(String.Format("{0} Paint since {1} took {2} {3}", curtime % 10000, timesince, _systemtickinterval.ElapsedMilliseconds - curtime , (timesince>60) ? "************************************":""));
         }
 
         private void DrawStars()
