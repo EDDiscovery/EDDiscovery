@@ -728,19 +728,9 @@ namespace EDDiscovery
                     SystemsUpdating = true;
                 }
 
-                // Drop indexes on Systems table
-                SQLiteDBClass.DropSystemsTableIndexes();
-
                 // Delete all old systems
                 SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
                 SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
-                {
-                    using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems"))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                }
 
                 EDSMClass edsm = new EDSMClass();
 
@@ -759,12 +749,19 @@ namespace EDDiscovery
                 bool newfile;
                 bool success = EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
                 {
+                    SQLiteDBClass.CreateTempSystemsTable();
+
                     string rwsysfiletime = "2014-01-01 00:00:00";
                     using (var reader = new StreamReader(s))
-                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, true, discoveryform, cancelRequested, reportProgress);
+                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, true, discoveryform, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
                     if (!cancelRequested())       // abort, without saving time, to make it do it again
+                    {
                         SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
-
+                        LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
+                        reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
+                        SQLiteDBClass.ReplaceSystemsTable();
+                        reportProgress(-1, "");
+                    }
                 });
 
                 if (!success)
