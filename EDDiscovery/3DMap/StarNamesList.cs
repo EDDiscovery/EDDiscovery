@@ -135,8 +135,8 @@ namespace EDDiscovery2
                     pos = pos.Next;
                 }
 
-                Tools.LogToFile(String.Format("starnameupd Remove {0}", removelist.Count ));
-                Console.WriteLine("Remove {0}", removelist.Count);
+                //Tools.LogToFile(String.Format("starnameupd Remove {0}", removelist.Count ));
+                //Console.WriteLine("Remove {0}", removelist.Count);
                 
                 foreach (LinkedListNode<StarNames> rpos in removelist)
                 {
@@ -166,21 +166,17 @@ namespace EDDiscovery2
             {
                 int lylimit = (int)(_starlimitly / _lastcamera.LastZoom);
                 lylimit = Math.Max(lylimit, 20);
-                //Console.Write("Look down " + _camera_paint_lookdown + " look forward " + _camera_paint_lookforward);
-                //Console.Write("Repaint " + _repaintall + " Stars " + _starlimitly + " within " + lylimit + "  ");
                 int sqlylimit = lylimit * lylimit;                 // in squared distance limit from viewpoint
 
                 StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_resmat, _znear, _glControl.Width, _glControl.Height, sqlylimit, _lastcamera.CameraPos);
 
                 SortedDictionary<float, StarGrid.InViewInfo> inviewlist = new SortedDictionary<float, StarGrid.InViewInfo>(new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
 
-                Stopwatch sw1 = new Stopwatch();
-                sw1.Start();
-                Tools.LogToFile(String.Format("starnamesest Estimate at {0} len {1}", ti.campos, sqlylimit));
+                //Stopwatch sw1 = new Stopwatch();sw1.Start(); Tools.LogToFile(String.Format("starnamesest Estimate at {0} len {1}", ti.campos, sqlylimit));
 
                 _stargrids.GetSystemsInView(ref inviewlist, 2000.0, ti);            // consider all grids under 2k from current pos.
 
-                Tools.LogToFile(String.Format("starnamesest Took {0} in view {1}", sw1.ElapsedMilliseconds, inviewlist.Count));
+                //Tools.LogToFile(String.Format("starnamesest Took {0} in view {1}", sw1.ElapsedMilliseconds, inviewlist.Count));
 
                 float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _lastcamera.LastZoom, _starnameminly)); // per char
                 float textscalingh = textscalingw * 4;
@@ -222,10 +218,6 @@ namespace EDDiscovery2
                                     //Tools.LogToFile(String.Format("starnamesest: push {0}", sys.Pos));
                                     draw = true;
                                     painted++;
-                                }
-                                else
-                                {
-                                    // Console.WriteLine("Failed to find " + pos.X + "," + pos.Y + "," + pos.Z);
                                 }
                             }
                             else
@@ -269,7 +261,7 @@ namespace EDDiscovery2
                     foreach (StarNames s in _starnamesbackground.Values)              // only items above will remain.
                         s.inview = !s.todispose;                          // copy flag over, causes foreground to start removing them
 
-                    Tools.LogToFile(String.Format("starnamesest added all delta {0} topaint {1}", sw1.ElapsedMilliseconds, painted));
+                    //Tools.LogToFile(String.Format("starnamesest added all delta {0} topaint {1}", sw1.ElapsedMilliseconds, painted));
                 }
 
             }
@@ -321,9 +313,6 @@ namespace EDDiscovery2
             bool needmoreticks = false;
 
             int updated = 0;
-            int notupdated = 0;
-
-            Stopwatch sw1 = new Stopwatch(); sw1.Start();
 
             foreach (StarNames sys in _starnamesforeground )
             {
@@ -340,13 +329,7 @@ namespace EDDiscovery2
                     }
                     else
                     {
-                        if (!needmoreticks)
-                        {
-                            Tools.LogToFile(String.Format("starnamesdraw: Too many to textures"));
-                            needmoreticks = true;
-                        }
-
-                        notupdated++;
+                        needmoreticks = true;
                     }
                 }
 
@@ -360,12 +343,7 @@ namespace EDDiscovery2
                     }
                     else
                     {
-                        if (!needmoreticks)
-                        {
-                            Tools.LogToFile(String.Format("starnamesdraw: Too many to vertices"));
-                            needmoreticks = true;
-                        }
-                        notupdated++;
+                        needmoreticks = true;
                     }
                 }
 
@@ -389,9 +367,8 @@ namespace EDDiscovery2
                 }
             }
 
-            if (updated > 0 || notupdated>0) Tools.LogToFile(String.Format("starnamesdraw: {0} Updated {1} Not Updated {2}", sw1.ElapsedMilliseconds, updated, notupdated));
+            //if (updated > 0) Tools.LogToFile(String.Format("starnamesdraw: {0} Updated {1} Not Updated {2}", sw1.ElapsedMilliseconds, updated, notupdated));
 
-            //if (needmoreticks)   Console.WriteLine("More please");
             return needmoreticks;
         }
 

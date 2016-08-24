@@ -148,7 +148,7 @@ namespace EDDiscovery2._3DMap
                     FlightEntry fe = new FlightEntry();
                     long curtime = timer.ElapsedMilliseconds;
                     RecordEntry(curtime, pos, d, z, curtime - lasttime, 0, 0, 0, "",0);
-                    Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
+                    //Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
                 }
             }
         }
@@ -183,12 +183,12 @@ namespace EDDiscovery2._3DMap
                 bool holding = (holdhere > 0);
 
                 RecordEntry(curtime, pos, d, z, etime, timetofly, timetopan, timetozoom, (holding) ? "" : msg , (holding) ? 0 : mtime );
-                Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
+                //Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
 
                 if ( holding )
                 {
                     RecordEntry(curtime, pos, d, z, holdhere, 0,0,0, msg, mtime);
-                    Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
+                    //Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
                 }
 
             }
