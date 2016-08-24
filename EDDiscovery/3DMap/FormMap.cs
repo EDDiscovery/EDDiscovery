@@ -553,7 +553,7 @@ namespace EDDiscovery2
                 _requestrepaint = true;
             }
 
-            if (!_starnameslist.Busy)                            // flag indicates we have not gone thru a complete estimate-draw cycle
+            if (!_starnameslist.Busy)                            // flag indicates background task is running..
             {
                 bool names = showNamesToolStripMenuItem.Checked;
                 bool discs = showDiscsToolStripMenuItem.Checked;
@@ -571,9 +571,8 @@ namespace EDDiscovery2
                 }
                 else
                 {
-                    if (_starnameslist.RemoveAllNamedStars())
+                    if (_starnameslist.HideAll())
                     {
-                        //Console.WriteLine("Remove stars");
                         _requestrepaint = true;
                     }
                 }
@@ -589,8 +588,8 @@ namespace EDDiscovery2
 
         public void ChangeNamedStars()                  // background estimator finished.. repaint and indicate computed to foreground
         {
-            _requestrepaint = true;
-            //Console.WriteLine("name");
+            if ( _starnameslist.TransferToForeground() )      // move the stars found to the foreground list..  if any, repaint
+                _requestrepaint = true;
         }
 
         private void RequestRepaint()       // ask if you've change objects
@@ -2031,8 +2030,6 @@ namespace EDDiscovery2
                 posofsystem = _starnameslist.FindOverSystem(x, y, out cursysdistz, ti); // in case these are showing
 
             ISystem f = null;
-
-//TBD try visited history list...
 
             if (posofsystem != null)
                 f = FindSystem(new Vector3(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
