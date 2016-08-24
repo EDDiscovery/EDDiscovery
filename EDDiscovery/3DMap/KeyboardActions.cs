@@ -26,16 +26,16 @@ namespace EDDiscovery2._3DMap
             ZoomOut,
             ZoomDefault,
             ZoomWide,
-            IncrStar,
-            DecrStar,
-            Record,
+            IncrStar,DecrStar,
+            Record, RecordStep, RecordNewStep, RecordPause, Playback
         };
 
         public bool Action(ActionType type ) { return actions.Contains(type); }
 
         private List<ActionType> actions = new List<ActionType>();
+        private List<ActionType> pressed = new List<ActionType>();
 
-        public void Reset()
+        public void Clear()
         {
             actions.Clear();
         }
@@ -45,23 +45,35 @@ namespace EDDiscovery2._3DMap
             return actions.Count > 0;
         }
 
-        public void Add(ActionType v, bool state)
+        public void Add(ActionType v, bool state, bool onkeydownonly = false)
         {
             if (state)
-                actions.Add(v);
+            {
+                if (!onkeydownonly || !pressed.Contains(v))     // if don't care about repeating, or not pressed
+                {
+                    actions.Add(v);
+                    pressed.Add(v);
+                }
+            }
+            else
+                pressed.Remove(v);                          // not pressed.
         }
 
         public void ReceiveKeyboardActions( bool perspective )
         {
-            Reset();
+            Clear();
 
             try
             {
                 var state = OpenTK.Input.Keyboard.GetState();
 
-                Add(ActionType.IncrStar, state[Key.F1] );
-                Add(ActionType.DecrStar, state[Key.F2] );
-                Add(ActionType.Record, state[Key.F5] );
+                Add(ActionType.IncrStar, state[Key.F1], true);          // certain keys are press down only once
+                Add(ActionType.DecrStar, state[Key.F2], true);
+                Add(ActionType.Record, state[Key.F5], true);
+                Add(ActionType.RecordStep, state[Key.F6], true);
+                Add(ActionType.RecordNewStep, state[Key.F7], true);
+                Add(ActionType.RecordPause, state[Key.F8], true);
+                Add(ActionType.Playback, state[Key.F9], true);
 
                 Add(ActionType.Left, state[Key.Left] || state[Key.A]);
                 Add(ActionType.Right, state[Key.Right] || state[Key.D]);

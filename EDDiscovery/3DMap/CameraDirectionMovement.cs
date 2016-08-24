@@ -20,7 +20,7 @@ namespace EDDiscovery2
 
         public void Update(Vector3 cameraDir, Vector3 cameraPos, float zoom)
         {
-            CameraDirChanged = Vector3.Subtract(CameraDir, cameraDir).LengthSquared > 1;
+            CameraDirChanged = Vector3.Subtract(CameraDir, cameraDir).LengthSquared >= 1;
 
             if (CameraDirChanged)
             {
@@ -28,7 +28,7 @@ namespace EDDiscovery2
                 //Console.WriteLine("Dir {0},{1},{2}", CameraDir.X, CameraDir.Y, CameraDir.Z);
             }
 
-            CameraMoved = Vector3.Subtract(CameraPos, cameraPos).LengthSquared > 1;
+            CameraMoved = Vector3.Subtract(CameraPos, cameraPos).LengthSquared >= 0.05; // small so you can see small slews
 
             if ( CameraMoved )
                 CameraPos = cameraPos;
