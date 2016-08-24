@@ -1054,6 +1054,58 @@ namespace EDDiscovery.DB
             }
         }
 
+        public static void CreateTempSystemsTable()
+        {
+            using (var conn = new SQLiteConnectionSystem())
+            {
+                ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems_temp");
+                ExecuteQuery(conn,
+                    "CREATE TABLE Systems_temp (" +
+                        "id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , " +
+                        "name TEXT NOT NULL COLLATE NOCASE , " +
+                        "x FLOAT, " +
+                        "y FLOAT, " +
+                        "z FLOAT, " +
+                        "cr INTEGER, " +
+                        "commandercreate TEXT, " +
+                        "createdate DATETIME, " +
+                        "commanderupdate TEXT, " +
+                        "updatedate DATETIME, " +
+                        "status INTEGER, " +
+                        "population INTEGER , " +
+                        "Note TEXT, " +
+                        "id_eddb Integer, " +
+                        "faction TEXT, " +
+                        "government_id Integer, " +
+                        "allegiance_id Integer, " +
+                        "primary_economy_id Integer, " +
+                        "security Integer, " +
+                        "eddb_updated_at Integer, " +
+                        "state Integer, " +
+                        "needs_permit Integer, " +
+                        "FirstDiscovery BOOL, " +
+                        "versiondate DATETIME, " +
+                        "id_edsm Integer, " +
+                        "gridid Integer NOT NULL DEFAULT -1, " +
+                        "randomid Integer NOT NULL DEFAULT -1)");
+            }
+        }
+
+        public static void ReplaceSystemsTable()
+        {
+            using (var slock = new SQLiteConnectionED.SchemaLock())
+            {
+                using (var conn = new SQLiteConnectionSystem())
+                {
+                    DropSystemsTableIndexes();
+                    ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
+                    ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems");
+                    ExecuteQuery(conn, "VACUUM");
+                    CreateSystemsTableIndexes();
+                }
+            }
+        }
+
         private static DbProviderFactory GetSqliteProviderFactory()
         {
             if (WindowsSqliteProviderWorks())
