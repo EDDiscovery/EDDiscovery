@@ -538,10 +538,12 @@ namespace EDDiscovery.DB
 
                         UpgradeDB(conn);                                            // upgrade it
                     }
+
+                    SplitDataBase();
+                    UseV5Databases = true;
+
                 }
 
-                SplitDataBase();
-                UseV5Databases = true;
                 using (var conn = new SQLiteConnectionUser())
                 {
                     UpgradeUserDB(conn);                                            // upgrade it
