@@ -1054,11 +1054,15 @@ namespace EDDiscovery.DB
             {
                 using (var conn = new SQLiteConnectionED())
                 {
-                    DropSystemsTableIndexes();
-                    ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
-                    ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems");
-                    //ExecuteQuery(conn, "VACUUM");
-                    CreateSystemsTableIndexes();
+                    using (var txn = conn.BeginTransaction())
+                    {
+                        DropSystemsTableIndexes();
+                        ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
+                        ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems");
+                        //ExecuteQuery(conn, "VACUUM");
+                        CreateSystemsTableIndexes();
+                        txn.Commit();
+                    }
                 }
             }
         }
