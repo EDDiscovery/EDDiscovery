@@ -78,9 +78,10 @@ namespace EDDiscovery2
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownRecord = new System.Windows.Forms.ToolStripDropDownButton();
             this.recordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.recordStepF5ToStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemClearRecording = new System.Windows.Forms.ToolStripMenuItem();
+            this.recordStepToStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newRecordStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pauseRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemClearRecording = new System.Windows.Forms.ToolStripMenuItem();
             this.playbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -530,9 +531,10 @@ namespace EDDiscovery2
             this.toolStripDropDownRecord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDropDownRecord.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.recordToolStripMenuItem,
-            this.recordStepF5ToStepToolStripMenuItem,
-            this.toolStripMenuItemClearRecording,
+            this.recordStepToStepToolStripMenuItem,
+            this.newRecordStepToolStripMenuItem,
             this.pauseRecordToolStripMenuItem,
+            this.toolStripMenuItemClearRecording,
             this.playbackToolStripMenuItem,
             this.saveToFileToolStripMenuItem,
             this.LoadFileToolStripMenuItem});
@@ -548,47 +550,55 @@ namespace EDDiscovery2
             // 
             this.recordToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.RecordPressed;
             this.recordToolStripMenuItem.Name = "recordToolStripMenuItem";
-            this.recordToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.recordToolStripMenuItem.Text = "Record";
+            this.recordToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.recordToolStripMenuItem.Text = "Record (F5)";
             this.recordToolStripMenuItem.Click += new System.EventHandler(this.recordToolStripMenuItem_Click);
             // 
-            // recordStepF5ToStepToolStripMenuItem
+            // recordStepToStepToolStripMenuItem
             // 
-            this.recordStepF5ToStepToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.RecordPressed;
-            this.recordStepF5ToStepToolStripMenuItem.Name = "recordStepF5ToStepToolStripMenuItem";
-            this.recordStepF5ToStepToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.recordStepF5ToStepToolStripMenuItem.Text = "Record Step (F5 to step)";
-            this.recordStepF5ToStepToolStripMenuItem.Click += new System.EventHandler(this.recordStepF5ToStepToolStripMenuItem_Click);
+            this.recordStepToStepToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.RecordPressed;
+            this.recordStepToStepToolStripMenuItem.Name = "recordStepToStepToolStripMenuItem";
+            this.recordStepToStepToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.recordStepToStepToolStripMenuItem.Text = "Record Step (F6)";
+            this.recordStepToStepToolStripMenuItem.Click += new System.EventHandler(this.recordStepToStepToolStripMenuItem_Click);
             // 
-            // toolStripMenuItemClearRecording
+            // newRecordStepToolStripMenuItem
             // 
-            this.toolStripMenuItemClearRecording.Image = global::EDDiscovery.Properties.Resources.StopNormalRed;
-            this.toolStripMenuItemClearRecording.Name = "toolStripMenuItemClearRecording";
-            this.toolStripMenuItemClearRecording.Size = new System.Drawing.Size(199, 22);
-            this.toolStripMenuItemClearRecording.Text = "Clear Recording";
-            this.toolStripMenuItemClearRecording.Click += new System.EventHandler(this.toolStripMenuItemClearRecording_Click);
+            this.newRecordStepToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.RecordPressed;
+            this.newRecordStepToolStripMenuItem.Name = "newRecordStepToolStripMenuItem";
+            this.newRecordStepToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.newRecordStepToolStripMenuItem.Text = "New Record Step (F7)";
+            this.newRecordStepToolStripMenuItem.Click += new System.EventHandler(this.newRecordStepToolStripMenuItem_Click);
             // 
             // pauseRecordToolStripMenuItem
             // 
             this.pauseRecordToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.PauseNormalRed;
             this.pauseRecordToolStripMenuItem.Name = "pauseRecordToolStripMenuItem";
-            this.pauseRecordToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.pauseRecordToolStripMenuItem.Text = "Pause Record";
+            this.pauseRecordToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.pauseRecordToolStripMenuItem.Text = "Pause Record (F8)";
             this.pauseRecordToolStripMenuItem.Click += new System.EventHandler(this.pauseRecordToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItemClearRecording
+            // 
+            this.toolStripMenuItemClearRecording.Image = global::EDDiscovery.Properties.Resources.StopNormalRed;
+            this.toolStripMenuItemClearRecording.Name = "toolStripMenuItemClearRecording";
+            this.toolStripMenuItemClearRecording.Size = new System.Drawing.Size(187, 22);
+            this.toolStripMenuItemClearRecording.Text = "Clear Recording";
+            this.toolStripMenuItemClearRecording.Click += new System.EventHandler(this.toolStripMenuItemClearRecording_Click);
             // 
             // playbackToolStripMenuItem
             // 
             this.playbackToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.PlayNormal;
             this.playbackToolStripMenuItem.Name = "playbackToolStripMenuItem";
-            this.playbackToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.playbackToolStripMenuItem.Text = "Playback";
+            this.playbackToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.playbackToolStripMenuItem.Text = "Playback (F9)";
             this.playbackToolStripMenuItem.Click += new System.EventHandler(this.playbackToolStripMenuItem_Click);
             // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.floppy;
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.saveToFileToolStripMenuItem.Text = "Save flight to file";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -596,7 +606,7 @@ namespace EDDiscovery2
             // 
             this.LoadFileToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.floppy;
             this.LoadFileToolStripMenuItem.Name = "LoadFileToolStripMenuItem";
-            this.LoadFileToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.LoadFileToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.LoadFileToolStripMenuItem.Text = "Load flight from file";
             this.LoadFileToolStripMenuItem.Click += new System.EventHandler(this.LoadFileToolStripMenuItem_Click);
             // 
@@ -791,10 +801,11 @@ namespace EDDiscovery2
         private ToolStripMenuItem saveToFileToolStripMenuItem;
         private ToolStripMenuItem LoadFileToolStripMenuItem;
         private ToolStripMenuItem pauseRecordToolStripMenuItem;
-        private ToolStripMenuItem recordStepF5ToStepToolStripMenuItem;
+        private ToolStripMenuItem recordStepToStepToolStripMenuItem;
         private Button buttonCenter;
         private Button buttonLookAt;
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripMenuItem toolStripMenuItemClearRecording;
+        private ToolStripMenuItem newRecordStepToolStripMenuItem;
     }
     }

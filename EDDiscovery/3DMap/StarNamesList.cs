@@ -64,11 +64,12 @@ namespace EDDiscovery2
     {
         public bool Busy { get { return _starnamesbusy; } }
 
-        Matrix4d _resmat;                  // to pass to thread..
-        bool _dirorzoomchange;                  // to pass to thread..
-        bool _discson;                            // to pass to thread..
-        bool _nameson;                            // to pass to thread..
-        float _znear;                            // to pass to thread..
+        Matrix4d _resmat;                           // to pass to thread..
+        bool _dirorzoomchange;                      // to pass to thread..
+        bool _discson;                              // to pass to thread..
+        bool _nameson;                              // to pass to thread..
+        float _znear;                               // to pass to thread..
+        Color _namecolour;                          // colour of names
 
         int _starlimitly = 5000;                    // stars within this, div zoom.  F1/F2 adjusts this
         float _starnamesizely = 40F;                // star name width, div zoom
@@ -77,7 +78,7 @@ namespace EDDiscovery2
 
         Dictionary<Vector3, StarNames> _starnamesbackground;        // only used by background thread. 
         List<StarNames> _starnamestoforeground;                     // transfer list between the back/fore
-        LinkedList<StarNames> _starnamesforeground;                 // Linked list since we remove entries in the middle at random
+        LinkedList<StarNames> _starnamesforeground;                 // foreground list, linked list since we remove entries in the middle at random
 
         static Font _starfont = new Font("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
 
@@ -117,7 +118,7 @@ namespace EDDiscovery2
         }
 
         public void Update(CameraDirectionMovementTracker lastcamera, bool dirorzoomchange, 
-                            Matrix4d resmat, float _zn, bool names, bool discs)     // FOREGROUND no thread
+                            Matrix4d resmat, float _zn, bool names, bool discs , Color namecolour)     // FOREGROUND no thread
         {
             _starnamesbusy = true;      // from update to Transfertoforeground we are busy
 
@@ -153,6 +154,7 @@ namespace EDDiscovery2
             _nameson = names;
             _discson = discs;
             _dirorzoomchange = dirorzoomchange;
+            _namecolour = namecolour;
 
             nsThread = new System.Threading.Thread(NamedStars) { Name = "Calculate Named Stars", IsBackground = true };
             nsThread.Start();
@@ -241,7 +243,7 @@ namespace EDDiscovery2
                                                                     // and we are protected against delete..
                                     if (sys.nametexture == null)     // so see if newtexture is there
                                     {
-                                        map = DatasetBuilder.DrawString(sys.name, Color.Orange, _starfont);
+                                        map = DatasetBuilder.DrawString(sys.name, _namecolour, _starfont);
                                         sys.newnametexture = TexturedQuadData.FromBitmap(map,
                                             new PointData(sys.x, sys.y, sys.z),
                                             _lastcamera.Rotation,

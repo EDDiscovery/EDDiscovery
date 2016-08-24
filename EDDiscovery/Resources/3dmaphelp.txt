@@ -13,7 +13,11 @@ Keyboard:
 	Q or Keypad 7	Roll left
 	E or Keypad 9	Roll right
 	F1 F2	Increase or decrease the light year limit for displaying star names
-	F5	Record a manual step during video recording.  Applies in both normal and step recording
+	F5	Start/Stop/Resume a recording
+	F6	Start/Stop/Resumt a step recording
+	F7	Record a manual step during video recording.  Applies in both normal and step recording.
+	F8	Pause/Un-Pause a recording
+	F9	Playback the current recording
 
 Mouse:
 	Move Mouse	Over star to get its information in a popup.

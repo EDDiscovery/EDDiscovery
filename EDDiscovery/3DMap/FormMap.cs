@@ -102,6 +102,8 @@ namespace EDDiscovery2
         MapRecorder maprecorder = new MapRecorder();
         TimedMessage mapmsg = null;
 
+        KeyboardActions _kbdActions = new KeyboardActions();
+
         private float fps = 0;
 
         bool allowresizematrixchange = false;
@@ -348,7 +350,7 @@ namespace EDDiscovery2
 
         private void FormMap_Shown(object sender, EventArgs e)
         {
-            Console.WriteLine("SHown");
+            Console.WriteLine("Shown");
             int helpno = SQLiteDBClass.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
 
             if (helpno != HELP_VERSION)
@@ -386,7 +388,6 @@ namespace EDDiscovery2
 
         private void FormMap_Activated(object sender, EventArgs e)
         {
-            Console.WriteLine("Activated");
             _isActivated = true;
             StartSystemTimer();                     // in case Close, then open, only get activated
             RequestRepaint();
@@ -394,7 +395,6 @@ namespace EDDiscovery2
 
         private void FormMap_Deactivate(object sender, EventArgs e)
         {
-            Console.WriteLine("DeActivated");
             _isActivated = false;
         }
 
@@ -440,7 +440,6 @@ namespace EDDiscovery2
         private void glControl_Load(object sender, EventArgs e)
         {
             GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
-            Console.WriteLine("GL load");
         }
 
         private void SetModelProjectionMatrix()
@@ -465,8 +464,6 @@ namespace EDDiscovery2
 
             if (_isActivated && glControl.Focused)                      // if we can accept keys
             {
-                KeyboardActions _kbdActions = new KeyboardActions();
-
                 _kbdActions.ReceiveKeyboardActions(posdir.InPerspectiveMode);       // ALL keyboard actions performed in this section.
 
                 if (_kbdActions.Any())                                  // if any actions..
@@ -495,8 +492,8 @@ namespace EDDiscovery2
                 string message;
                 if (maprecorder.PlayBack(out newpos, out timetofly, out newdir, out timetopan, out newzoom, out timetozoom, out message, out timetomsg))
                 {
-                    Console.WriteLine("{0} Playback {1} {2} {3} fly {4} pan {5} msg {6}", _updateinterval.ElapsedMilliseconds % 10000,
-                        newpos, newdir, newzoom, timetofly, timetopan, message);
+                    //Console.WriteLine("{0} Playback {1} {2} {3} fly {4} pan {5} msg {6}", _updateinterval.ElapsedMilliseconds % 10000,
+                    //    newpos, newdir, newzoom, timetofly, timetopan, message);
 
                     posdir.StartCameraSlew(newpos, (float)timetofly / 1000.0F);
 
@@ -539,6 +536,7 @@ namespace EDDiscovery2
             {
                 posdir.CalculateModelMatrix(zoomfov.Zoom);
                 _requestrepaint = true;
+                //Console.WriteLine("Repaint due to move/zoom/dir");
 
                 if (_lastcameranorm.CameraZoomed || _lastcameranorm.CameraDirChanged)
                 {
@@ -566,7 +564,8 @@ namespace EDDiscovery2
 
                     if (_stargrids.IsDisplayed(posdir.Position.X, posdir.Position.Z) && (dirorzoom || _lastcamerastarnames.CameraMoved))                              // if changed something
                     {
-                        _starnameslist.Update(_lastcamerastarnames, dirorzoom, posdir.GetResMatd, _znear, names, discs);
+                        _starnameslist.Update(_lastcamerastarnames, dirorzoom, posdir.GetResMatd, _znear, names, discs,
+                                enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange);
                     }
                 }
                 else
@@ -586,16 +585,16 @@ namespace EDDiscovery2
             }
         }
 
-        public void ChangeNamedStars()                  // background estimator finished.. repaint and indicate computed to foreground
+        public void ChangeNamedStars()                  // background estimator finished.. transfer to foreground and if new stars, repaint
         {
             if ( _starnameslist.TransferToForeground() )      // move the stars found to the foreground list..  if any, repaint
                 _requestrepaint = true;
         }
 
-        private void RequestRepaint()       // ask if you've change objects
+        private void RequestRepaint()                   // Call if any other system changed stuff .. 
         {
-            _requestrepaint = true;
-            _lastcameranorm.ForceZoomChanged();     // and make it reestimate zoom sizes on objects...
+            _requestrepaint = true;                     // repaint and
+            _lastcameranorm.ForceZoomChanged();         // make it reestimate zoom sizes on objects...
         }
 
         public void HandleSpecialKeys(KeyboardActions _kbdActions)
@@ -614,7 +613,27 @@ namespace EDDiscovery2
 
             if (_kbdActions.Action(KeyboardActions.ActionType.Record))
             {
+                maprecorder.ToggleRecord(false);
+                SetDropDownRecordImage();
+            }
+            if (_kbdActions.Action(KeyboardActions.ActionType.RecordStep))
+            {
+                maprecorder.ToggleRecord(true);
+                SetDropDownRecordImage();
+            }
+            if (_kbdActions.Action(KeyboardActions.ActionType.RecordNewStep))
+            {
                 maprecorder.RecordStepDialog(posdir.Position, posdir.CameraDirection, zoomfov.Zoom);
+            }
+            if (_kbdActions.Action(KeyboardActions.ActionType.RecordPause))
+            {
+                maprecorder.TogglePause();
+                SetDropDownRecordImage();
+            }
+            if (_kbdActions.Action(KeyboardActions.ActionType.Playback))
+            {
+                maprecorder.TogglePlayBack();
+                SetDropDownRecordImage();
             }
         }
 
@@ -1308,10 +1327,15 @@ namespace EDDiscovery2
             SetDropDownRecordImage();
         }
 
-        private void recordStepF5ToStepToolStripMenuItem_Click(object sender, EventArgs e)
+        private void recordStepToStepToolStripMenuItem_Click(object sender, EventArgs e)
         {
             maprecorder.ToggleRecord(true);
             SetDropDownRecordImage();
+        }
+
+        private void newRecordStepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            maprecorder.RecordStepDialog(posdir.Position, posdir.CameraDirection, zoomfov.Zoom);
         }
 
         private void toolStripMenuItemClearRecording_Click(object sender, EventArgs e)
@@ -1336,33 +1360,35 @@ namespace EDDiscovery2
 
         private void toolStripDropDownRecord_DropDownOpening(object sender, EventArgs e)
         {
-            recordToolStripMenuItem.Text = maprecorder.Recording ? "Stop Recording (F5 to record a special step)" : maprecorder.Entries ? "Restart Recording" : "Start Recording";
+            recordToolStripMenuItem.Text = maprecorder.Recording ? "Stop Recording (F5)" : maprecorder.Entries ? "Resume Recording (F5)" : "Start Recording (F5)";
             recordToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
             recordToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingStep;
 
-            recordStepF5ToStepToolStripMenuItem.Text = maprecorder.Recording ? "Stop Recording (F5 to record a step)" : maprecorder.Entries ? "Restart Step Recording" : "Start Step Recording";
-            recordStepF5ToStepToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
-            recordStepF5ToStepToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingNormal;
+            recordStepToStepToolStripMenuItem.Text = maprecorder.Recording ? "Stop Step Recording (F6)" : maprecorder.Entries ? "Resume Step Recording (F6)" : "Start Step Recording (F6)";
+            recordStepToStepToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+            recordStepToStepToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingNormal;
+
+            newRecordStepToolStripMenuItem.Enabled = maprecorder.Recording;
 
             toolStripMenuItemClearRecording.Enabled = maprecorder.Entries;
 
-            playbackToolStripMenuItem.Text = maprecorder.InPlayBack ? "Stop Playback" : "Start Playback";
+            playbackToolStripMenuItem.Text = maprecorder.InPlayBack ? "Stop Playback (F9)" : "Start Playback (F9)";
             playbackToolStripMenuItem.Image = maprecorder.InPlayBack ? EDDiscovery.Properties.Resources.StopNormalBlue : EDDiscovery.Properties.Resources.PlayNormal;
             playbackToolStripMenuItem.Enabled = maprecorder.Entries;
 
             if (maprecorder.InPlayBack)
             {
-                pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Restart Playback" : "Pause Playback";
+                pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Resume Playback (F8)" : "Pause Playback (F8)";
                 pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.pauseblue;
             }
             else if (maprecorder.Recording)
             {
-                pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Restart Recording" : "Pause Recording";
+                pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Resume Recording (F8)" : "Pause Recording (F8)";
                 pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
             }
             else
             {
-                pauseRecordToolStripMenuItem.Text = "Pause";
+                pauseRecordToolStripMenuItem.Text = "Pause (F8)";
                 pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
             }
 
@@ -2296,8 +2322,8 @@ namespace EDDiscovery2
             toolStripShowAllStars.Items.Add(endPickerHost);
         }
 
-        #endregion
 
+        #endregion
 
     }
 

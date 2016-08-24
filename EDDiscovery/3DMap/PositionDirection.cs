@@ -49,6 +49,7 @@ namespace EDDiscovery2._3DMap
             _viewtargetpos += pos;
         }
 
+
         // time <0 estimate, 0 instance >0 time
         public void StartCameraSlew(Vector3 normpos, float timeslewsec = 0)       // may pass a Nan Position - no action. Y is normal sense
         {
@@ -70,7 +71,8 @@ namespace EDDiscovery2._3DMap
                     {
                         _cameraSlewPosition = pos;
                         _cameraSlewProgress = 0.0f;
-                        _cameraSlewTime = (timeslewsec < 0) ? ((float)Math.Max(2.0, dist / 10000.0)) : timeslewsec;            //10000 ly/sec, with a minimum slew
+                        _cameraSlewTime = (timeslewsec < 0) ? ((float)Math.Max(1.0, dist / 10000.0)) : timeslewsec;            //10000 ly/sec, with a minimum slew
+                        //Console.WriteLine("Slew start to {0} in {1}",  _cameraSlewPosition , _cameraSlewTime);
                     }
                 }
             }
@@ -144,7 +146,7 @@ namespace EDDiscovery2._3DMap
                 if (newprogress >= 1.0f)
                 {
                     _viewtargetpos = new Vector3(_cameraSlewPosition.X, _cameraSlewPosition.Y, _cameraSlewPosition.Z);
-                    //Console.WriteLine("{0} Slew complete at {1} {2}" , _updateinterval.ElapsedMilliseconds % 10000,_viewtargetpos, _cameraSlewPosition);
+                    //Console.WriteLine("{0} Slew complete at {1} {2}", slewt.ElapsedMilliseconds % 10000, _viewtargetpos, _cameraSlewPosition);
                 }
                 else
                 {
@@ -155,7 +157,7 @@ namespace EDDiscovery2._3DMap
 
                     var totvector = new Vector3((float)(_cameraSlewPosition.X - _viewtargetpos.X), (float)(_cameraSlewPosition.Y - _viewtargetpos.Y), (float)(_cameraSlewPosition.Z - _viewtargetpos.Z));
                     _viewtargetpos += Vector3.Multiply(totvector, (float)slewfact);
-                    //Console.WriteLine("Slewed to {0}", _viewtargetpos);
+                    //Console.WriteLine("{0} Slew to {1}", slewt.ElapsedMilliseconds % 10000, _viewtargetpos);
                 }
 
                 _cameraSlewProgress = (float)newprogress;
@@ -168,7 +170,6 @@ namespace EDDiscovery2._3DMap
                 if (newprogress >= 1.0f)
                 {
                     _cameraDir = _cameraDirSlewPosition;
-                    //Console.WriteLine("{0} Pan complete", _updateinterval.ElapsedMilliseconds % 10000);
                 }
                 else
                 {
@@ -179,7 +180,6 @@ namespace EDDiscovery2._3DMap
 
                     var totvector = new Vector3((float)(_cameraDirSlewPosition.X - _cameraDir.X), (float)(_cameraDirSlewPosition.Y - _cameraDir.Y), (float)(_cameraDirSlewPosition.Z - _cameraDir.Z));
                     _cameraDir += Vector3.Multiply(totvector, (float)slewfact);
-                    //Console.WriteLine("Vector {0} Dir {1} progress {2}", totvector, _cameraDir, newprogress);
                 }
 
                 _cameraDirSlewProgress = (float)newprogress;
