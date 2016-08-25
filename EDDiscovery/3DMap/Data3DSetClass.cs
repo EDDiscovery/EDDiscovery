@@ -364,7 +364,7 @@ namespace EDDiscovery2._3DMap
             {
                 Vertices = new Vector3d[1024];
             }
-            else if (NumVertices == Vertices.Length)
+            else if (NumVertices+2 > Vertices.Length)
             {
                 Array.Resize(ref Vertices, Vertices.Length * 2);
             }
@@ -1004,16 +1004,14 @@ namespace EDDiscovery2._3DMap
     {
         public List<PointData> vertices;
 
-        public Polygon(List<PointData> points, float size, Color c, bool filled, bool usey)
+        public Polygon(List<PointData> points, float size, Color c)
         {
             vertices = points;
             Size = size;
             Color = c;
-            Filled = filled;
-            UseY = usey;
         }
 
-        public Polygon(List<Vector2> points, float size, Color c, bool filled, bool usey)
+        public Polygon(List<Vector2> points, float size, Color c)
         {
             vertices = new List<PointData>();
             foreach (Vector2 f in points)
@@ -1021,15 +1019,11 @@ namespace EDDiscovery2._3DMap
 
             Size = size;
             Color = c;
-            Filled = filled;
-            UseY = usey;
         }
 
         public PrimitiveType Type { get { return PrimitiveType.Polygon; } }
         public Color Color { get; set; }
         public float Size { get; set; }
-        public bool Filled { get; set; }
-        public bool UseY { get; set; }
 
         public void Draw(GLControl control)
         {
@@ -1039,34 +1033,22 @@ namespace EDDiscovery2._3DMap
             }
             else
             {
-                if (Filled)
-                {
-                    GL.Begin(Type);
-                    GL.Color4(Color);
-                    foreach (PointData v in vertices)
-                        GL.Vertex3(v.x, UseY ? v.y : 0, v.z);
-                    GL.End();
-                }
-                else
-                {
-                    GL.Begin(PrimitiveType.LineLoop);
-                    GL.Color4(Color);
-                    foreach (PointData v in vertices)
-                        GL.Vertex3(v.x, UseY ? v.y : 0, v.z);
-                    GL.End();
-
-                }
+                GL.Begin(Type);
+                GL.Color4(Color);
+                foreach (PointData v in vertices)
+                    GL.Vertex3(v.x, v.y, v.z);
+                GL.End();
             }
         }
     }
 
-    public class PolygonCollection : Data3DSetClass<Polygon>,  IDisposable      // can be either Filled or lines
+    public class PolygonCollection : Data3DSetClass<Polygon>,  IDisposable      // can be either Polygons, LineLoop, Triangles
     {
         protected Vector3d[] Vertices;
         private uint[] Colourarray;
         protected int NumVertices;
 
-        private bool Filled;
+        public OpenTK.Graphics.OpenGL.PrimitiveType Primative { get; set; }
 
         List<int> Polystart = new List<int>();
         List<int> Polycount = new List<int>();
@@ -1075,10 +1057,10 @@ namespace EDDiscovery2._3DMap
         protected int VtxColourVboId;
         protected GLControl GLContext;
 
-        public PolygonCollection(string name, Color color, float pointsize, bool filled)
+        public PolygonCollection(string name, Color color, float pointsize, OpenTK.Graphics.OpenGL.PrimitiveType ptype )
             : base(name, color, pointsize)
         {
-            Filled = filled;
+            Primative = ptype;
         }
 
         public void Dispose()
@@ -1101,6 +1083,8 @@ namespace EDDiscovery2._3DMap
 
         public override void Add(Polygon primative)
         {
+            Debug.Assert(Primative != PrimitiveType.Triangles || primative.vertices.Count == 3);
+
             Dispose();
 
             if (Vertices == null)
@@ -1108,7 +1092,7 @@ namespace EDDiscovery2._3DMap
                 Vertices = new Vector3d[1024];
                 Colourarray = new uint[1024];
             }
-            else if (NumVertices == Vertices.Length)
+            else if (NumVertices + primative.vertices.Count > Vertices.Length)
             {
                 Array.Resize(ref Vertices, Vertices.Length * 2);
                 Array.Resize(ref Colourarray, Vertices.Length * 2);
@@ -1122,7 +1106,7 @@ namespace EDDiscovery2._3DMap
             foreach (PointData p in primative.vertices)
             {
                 Colourarray[NumVertices] = cx;     // need colour per vertex.. if not, it does not work, or you can mix colours
-                Vertices[NumVertices++] = new Vector3d(p.x, primative.UseY ? p.y : 0, p.z);
+                Vertices[NumVertices++] = new Vector3d(p.x, p.y , p.z);
             }
         }
 
@@ -1150,6 +1134,7 @@ namespace EDDiscovery2._3DMap
                     GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(Colourarray)), Colourarray, BufferUsageHint.StaticDraw);
 
                     GLContext = control;
+                    Tools.LogToFile("Polygon throw");
                 }
 
                 GL.EnableClientState(ArrayCap.VertexArray);                     // MEASUREMENTS are showing this can for some reason take 40ms to draw.. at random times
@@ -1161,7 +1146,7 @@ namespace EDDiscovery2._3DMap
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColourVboId);
                 GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
 
-                GL.MultiDrawArrays((Filled) ? PrimitiveType.Polygon : PrimitiveType.LineLoop, Polystart.ToArray(), Polycount.ToArray(), Polystart.Count);
+                GL.MultiDrawArrays(Primative, Polystart.ToArray(), Polycount.ToArray(), Polystart.Count);
 
                 GL.DisableClientState(ArrayCap.ColorArray);
                 GL.DisableClientState(ArrayCap.VertexArray);

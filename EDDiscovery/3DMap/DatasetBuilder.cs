@@ -171,9 +171,8 @@ namespace EDDiscovery2._3DMap
 
         public List<IData3DSet> AddGalMapRegionsToDataset( bool colourregions)
         {
-            //            var polydataset = Data3DSetClass<Polygon>.Create("regpolys", Color.White, 1f);      // ORDER AND NUMBER v.Important
-            var polydataset = new PolygonCollection("regpolys", Color.White, 1f, true);      // ORDER AND NUMBER v.Important
-            var outlinedataset = new PolygonCollection("reglines", Color.White, 1f , false);   // DrawStars picks them out in a particular order
+            var polydataset = new PolygonCollection("regpolys", Color.White, 1f, OpenTK.Graphics.OpenGL.PrimitiveType.Triangles);      // ORDER AND NUMBER v.Important
+            var outlinedataset = new PolygonCollection("reglines", Color.White, 1f , OpenTK.Graphics.OpenGL.PrimitiveType.LineLoop);   // DrawStars picks them out in a particular order
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("regtext", Color.White, 1f);
 
             if (EDDiscoveryForm.galacticMapping != null)
@@ -202,8 +201,8 @@ namespace EDDiscovery2._3DMap
 
                         Vector2 size, avg;
                         Vector2 centre = PolygonTriangulator.Centre(polygonxz, out size, out avg);  // default geographic centre (min x/z + max x/z/2) used in case poly triangulate fails (unlikely)
-
-                        List<List<Vector2>> polys = PolygonTriangulator.Triangulate(polygonxz, false);
+ 
+                        List<List<Vector2>> polys = PolygonTriangulator.Triangulate(polygonxz, false);  // cut into convex polygons first - because we want the biggest possible area for naming purposes
                         //Console.WriteLine("Region {0} decomposed to {1} ", name, polys.Count);
 
                         Vector2 bestpos = centre;
@@ -213,20 +212,31 @@ namespace EDDiscovery2._3DMap
                         {
                             centre = PolygonTriangulator.Centroids(polys);                       // weighted mean of the centroids
                             //Bitmap map3 = DrawString(String.Format("O{0}", cindex - 1), Color.White, gmostarfont); TexturedQuadData ntext3 = TexturedQuadData.FromBitmap(map3, new PointData(centre.X, 0, centre.Y), TexturedQuadData.NoRotation, 2000, 500); datasetbks.Add(ntext3);
-
+                           
                             float mindist = float.MaxValue;
 
-                            foreach (List<Vector2> points in polys)
+                            foreach (List<Vector2> points in polys)                         // now for every poly
                             {
-                                if (colourregions )
+                                if (colourregions)
                                 {
-                                    Polygon p = new Polygon(points, 1, Color.FromArgb(64, c.R, c.G, c.B), true, false);
-                                    polydataset.Add(p);
-                                }
+                                    Color regcol = Color.FromArgb(64, c.R, c.G, c.B);
 
-                                // add if you want to see the outlines of the convex polys - debug only
-                                //Polygon p2 = new Polygon(points, 1, Color.FromArgb(255, 255, 255, 0), false, false);
-                                //outlinedataset.Add(p2);
+                                    if (points.Count == 3)                                    // already a triangle..
+                                    {
+                                        polydataset.Add(new Polygon(points, 1, regcol));
+                                        outlinedataset.Add(new Polygon(points, 1, Color.FromArgb(255, 255, 255, 0)));
+                                    }
+                                    else
+                                    {
+                                        List<List<Vector2>> polytri = PolygonTriangulator.Triangulate(points, true);    // cut into triangles not polygons
+
+                                        foreach (List<Vector2> pt in polytri)
+                                        {
+                                            polydataset.Add(new Polygon(pt, 1, regcol));
+                                            outlinedataset.Add(new Polygon(pt, 1, Color.FromArgb(255, 255, 255, 0)));
+                                        }
+                                    }
+                                }
 
                                 //float area; Vector2 polycentrepos = PolygonTriangulator.Centroid(points,out area); Bitmap map2 = DrawString(String.Format("X") , Color.White, gmostarfont);  TexturedQuadData ntext2 = TexturedQuadData.FromBitmap(map2, new PointData(polycentrepos.X, 0, polycentrepos.Y), TexturedQuadData.NoRotation, 1000, 200); datasetbks.Add(ntext2);
 
@@ -242,8 +252,7 @@ namespace EDDiscovery2._3DMap
 
                         datasetbks.Add(ntext);
 
-                        Polygon outline = new Polygon(gmo.points, 1, Color.FromArgb(255, 128, 128, 128), false, false);
-                        outlinedataset.Add(outline);
+                        outlinedataset.Add(new Polygon(polygonxz, 1, Color.FromArgb(255, 128, 128, 128)));
                     }
                 }
             }

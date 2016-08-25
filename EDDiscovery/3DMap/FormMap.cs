@@ -724,30 +724,30 @@ namespace EDDiscovery2
             List<IData3DSet> _datasets_bookmarkedsystems = this._datasets_bookedmarkedsystems;
 
             if (_datasets_maps == null)                     // happens during debug.. paint before form load
-                return;                                     // needs to be in order of background to foreground objects
+                return;                                     //  needs to be in order of background to foreground objects
 
-            //long t1 = _systemtickinterval.ElapsedMilliseconds;
+            long t1 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_finegridlines != null);
             if (toolStripButtonFineGrid.Checked && _datasets_finegridlines != null )
             {
-                foreach (var dataset in _datasets_finegridlines)        // these show thru the gal regions
+                foreach (var dataset in _datasets_finegridlines)      
                     dataset.DrawAll(glControl);
             }
 
-            //long t2 = _systemtickinterval.ElapsedMilliseconds;
+            long t2 = _systemtickinterval.ElapsedMilliseconds;
 
             if (_datasets_galmapregions != null)
             {
                 _datasets_galmapregions[0].DrawAll(glControl);          
             }
 
-            //long t3 = _systemtickinterval.ElapsedMilliseconds;
+            long t3 = _systemtickinterval.ElapsedMilliseconds;
 
             foreach (var dataset in _datasets_maps)                     
                 dataset.DrawAll(glControl);
 
-            //long t4 = _systemtickinterval.ElapsedMilliseconds;
+            long t4 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_coarsegridlines != null);
             if (toolStripButtonGrid.Checked && _datasets_coarsegridlines != null )
@@ -756,7 +756,7 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            //long t5 = _systemtickinterval.ElapsedMilliseconds;
+            long t5 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_gridlinecoords != null);
             if (toolStripButtonCoords.Checked && _datasets_gridlinecoords != null )
@@ -771,11 +771,11 @@ namespace EDDiscovery2
                 _datasets_galmapregions[2].DrawAll(glControl);          // and the names
             }
 
-            //long t6 = _systemtickinterval.ElapsedMilliseconds;
+            long t6 = _systemtickinterval.ElapsedMilliseconds;
 
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
 
-            //long t7 = _systemtickinterval.ElapsedMilliseconds;
+            long t7 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_galmapobjects != null);
             if (_datasets_galmapobjects != null)
@@ -798,16 +798,15 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            //long t8 = _systemtickinterval.ElapsedMilliseconds;
+            long t8 = _systemtickinterval.ElapsedMilliseconds;
 
             if (_starnameslist.Draw(!_gridsupdated))      // draw star names, pass if you can update the textures , pass back if it needs more work
             {
                 _requestrepaint = true;         // DONT invalidate.. this makes this thing go around and around and the main tick never gets a look in
             }
 
-            //long t9 = _systemtickinterval.ElapsedMilliseconds;
-
-
+            long t9 = _systemtickinterval.ElapsedMilliseconds;
+            
             Debug.Assert(_datasets_selectedsystems != null);
             if (_datasets_selectedsystems != null)
             {
@@ -829,8 +828,8 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            //long t10 = _systemtickinterval.ElapsedMilliseconds;
-            //Tools.LogToFile(String.Format("gridwork {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}", _gridsupdated, t2-t1,t3-t2,t4-t3,t5-t4,t6-t5,t7-t6,t8-t7,t9-t8,t10-t9));
+            long t10 = _systemtickinterval.ElapsedMilliseconds;
+            Tools.LogToFile(String.Format("gridwork {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}", _gridsupdated, t2-t1,t3-t2,t4-t3,t5-t4,t6-t5,t7-t6,t8-t7,t9-t8,t10-t9));
 
         }
 
