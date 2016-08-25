@@ -70,8 +70,11 @@ namespace EDDiscovery2
         private CameraDirectionMovementTracker _lastcameranorm = new CameraDirectionMovementTracker();        // these track movements and zoom for most systems
         private CameraDirectionMovementTracker _lastcamerastarnames = new CameraDirectionMovementTracker();   // and for star names, which may be delayed due to background busy
 
+        bool _gridsupdated = false;                         // Remembers if we doing a grid update, so the star naming can wait for a another tick
+
         private long _lastpainttick = 0;                    // FPS calculation
-        private float fps = 0;
+        private float _fps = 0;
+        private bool _fpson = false;
 
         private Point _mouseStartRotate = new Point(int.MinValue, int.MinValue);        // used to indicate not started for these using mousemove
         private Point _mouseStartTranslateXY = new Point(int.MinValue, int.MinValue);
@@ -217,14 +220,14 @@ namespace EDDiscovery2
         {
             _plannedRoute = plannedr;
             GenerateDataSetsRouteTri();
-            RequestRepaint();
+            RequestPaint();
         }
 
         public void SetReferenceSystems(List<SystemClass> refsys)
         {
             _referenceSystems = refsys;
             GenerateDataSetsRouteTri();
-            RequestRepaint();
+            RequestPaint();
         }
 
         public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
@@ -234,7 +237,7 @@ namespace EDDiscovery2
                 _visitedSystems = visited;
                 _stargrids.FillVisitedSystems(_visitedSystems);          // update visited systems, will be displayed on next update of star grids
                 GenerateDataSetsVisitedSystems();
-                RequestRepaint();
+                RequestPaint();
 
                 if (toolStripButtonAutoForward.Checked)             // auto forward?
                 {
@@ -276,8 +279,8 @@ namespace EDDiscovery2
         {
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
-                GenerateDataSetsBNG();
-                RequestRepaint();
+                GenerateDataSetsBNG();  // will create them at correct size
+                RequestPaint();
             }
         }
 
@@ -296,7 +299,7 @@ namespace EDDiscovery2
                         posdir.StartCameraSlew(new Vector3((float)x, (float)y, (float)z),-1F);
                 }
 
-                RequestRepaint();
+                RequestPaint();
             }
         }
 
@@ -332,9 +335,7 @@ namespace EDDiscovery2
 
             zoomfov.SetToDefault();
             _lastcameranorm.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom); // set up here so ready for action.. below uses it.
-            _lastcameranorm.ForceZoomChanged();                      
             _lastcamerastarnames.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom); // set up here so ready for action.. below uses it.
-            _lastcamerastarnames.ForceZoomChanged();                    
 
             GenerateDataSets();
             GenerateDataSetsMaps();
@@ -382,7 +383,7 @@ namespace EDDiscovery2
             if (!_allowresizematrixchange)
             {
                 SetModelProjectionMatrix();
-                RequestRepaint();
+                RequestPaint();
             }
         }
 
@@ -390,7 +391,7 @@ namespace EDDiscovery2
         {
             _isActivated = true;
             StartSystemTimer();                     // in case Close, then open, only get activated
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void FormMap_Deactivate(object sender, EventArgs e)
@@ -453,11 +454,14 @@ namespace EDDiscovery2
             Matrix4 pm = posdir.ProjectionMatrix;
             GL.LoadMatrix(ref pm);                          // replace projection matrix with this perspective matrix
             GL.Viewport(0, 0, glControl.Width, glControl.Height);                        // Use all of the glControl painting area
+
+            UpdateStatus();                                 // because FOV could have changed.. FOV causes a call to this
         }
 
         #endregion
 
         #region Main Timer
+
 
         private void SystemTick(object sender, EventArgs e)                 // tick.. tock.. every X ms.  Drives everything now.
         {
@@ -470,7 +474,7 @@ namespace EDDiscovery2
 
             if (_isActivated && glControl.Focused)                      // if we can accept keys
             {
-                _kbdActions.ReceiveKeyboardActions(posdir.InPerspectiveMode);       // ALL keyboard actions performed in this section.
+                _kbdActions.ReceiveKeyboardActions();                   // ALL keyboard actions performed in this section.
 
                 if (_kbdActions.Any())                                  // if any actions..
                 {
@@ -539,7 +543,7 @@ namespace EDDiscovery2
             //Console.WriteLine("Tick D/Z/M {0} {1} {2}", _lastcameranorm.CameraDirChanged, _lastcameranorm.CameraZoomed, _lastcameranorm.CameraMoved);
             //Tools.LogToFile(String.Format("Tick D/Z/M {0} {1} {2}", _lastcameranorm.CameraDirChanged, _lastcameranorm.CameraZoomed, _lastcameranorm.CameraMoved));
 
-            if (_lastcameranorm.CameraDirChanged || _lastcameranorm.CameraZoomed || _lastcameranorm.CameraMoved)
+            if (_lastcameranorm.AnythingChanged )
             {
                 posdir.CalculateModelMatrix(zoomfov.Zoom);
                 _requestrepaint = true;
@@ -551,14 +555,21 @@ namespace EDDiscovery2
                 }
 
                 KillHover();
+                UpdateStatus();
+            }
+            else
+            {
+                if ( _fpson )
+                    UpdateStatus();
             }
 
-            if (_stargrids.Update(posdir.Position.X, posdir.Position.Z, zoomfov.Zoom, glControl))       // at intervals, inform star grids of position, and if it has
+            _gridsupdated = _stargrids.Update(posdir.Position.X, posdir.Position.Z, zoomfov.Zoom, glControl);       // at intervals, inform star grids of position, and if it has
+
+            if ( _gridsupdated )                                        // if we did work.. repaint. do not do starname in same tick
             {
                 _requestrepaint = true;
             }
-
-            if (!_starnameslist.Busy)                            // flag indicates background task is running..
+            else if (!_starnameslist.Busy)                            // flag indicates background task is running..
             {
                 bool names = showNamesToolStripMenuItem.Checked;
                 bool discs = showDiscsToolStripMenuItem.Checked;
@@ -567,11 +578,9 @@ namespace EDDiscovery2
 
                 if ((names | discs) && zoomfov.Zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
                 {
-                    bool dirorzoom = _lastcamerastarnames.CameraDirChanged || _lastcamerastarnames.CameraZoomed;
-
-                    if (_stargrids.IsDisplayed(posdir.Position.X, posdir.Position.Z) && (dirorzoom || _lastcamerastarnames.CameraMoved))                              // if changed something
+                    if (_stargrids.IsDisplayed(posdir.Position.X, posdir.Position.Z) && _lastcamerastarnames.AnythingChanged )                              // if changed something
                     {
-                        _starnameslist.Update(_lastcamerastarnames, dirorzoom, posdir.GetResMatd, _znear, names, discs,
+                        _starnameslist.Update(_lastcamerastarnames, posdir.GetResMatd, _znear, names, discs,
                                 enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange);
                     }
                 }
@@ -586,9 +595,8 @@ namespace EDDiscovery2
 
             if (_requestrepaint)
             {
-                //Console.WriteLine("{0} {1} Tick m{2} d{3} key {4} {5} ", _systemtickinterval.ElapsedMilliseconds % 10000, _msticks, _lastcameranorm.CameraMoved, _lastcameranorm.CameraDirChanged, _kbdActions.Any(), (_msticks > 100) ? "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" : "");
                 _requestrepaint = false;
-                glControl.Invalidate();                 // and kick paint - not via the function ON purpose, so we can distinguish between this and others reasons
+                glControl.Invalidate();                 // and kick paint 
             }
         }
 
@@ -598,10 +606,14 @@ namespace EDDiscovery2
                 _requestrepaint = true;
         }
 
-        private void RequestRepaint()                   // Call if any other system changed stuff .. 
+        private void RequestPaint()                     // Call if any other system changed stuff .. 
         {
-            _requestrepaint = true;                     // repaint and
-            _lastcameranorm.ForceZoomChanged();         // make it reestimate zoom sizes on objects...
+            _requestrepaint = true;                     // repaint
+        }
+
+        private void RequestStarNameRecalc()                    // objects changed.. check size
+        {
+            _lastcamerastarnames.ForceMoveChange();             // make it reestimate the objects by indicating a move
         }
 
         public void HandleSpecialKeys(KeyboardActions _kbdActions)
@@ -609,13 +621,13 @@ namespace EDDiscovery2
             if (_kbdActions.Action(KeyboardActions.ActionType.IncrStar))
             {
                 _starnameslist.IncreaseStarLimit();
-                RequestRepaint();
+                RequestStarNameRecalc();
             }
 
             if (_kbdActions.Action(KeyboardActions.ActionType.DecrStar))
             {
                 _starnameslist.DecreaseStarLimit();
-                RequestRepaint();
+                RequestStarNameRecalc();
             }
 
             if (_kbdActions.Action(KeyboardActions.ActionType.Record))
@@ -642,8 +654,30 @@ namespace EDDiscovery2
                 maprecorder.TogglePlayBack();
                 SetDropDownRecordImage();
             }
+            if (_kbdActions.Action(KeyboardActions.ActionType.Help))
+            {
+                toolStripButtonHelp_Click(null, null);
+            }
+            if (_kbdActions.Action(KeyboardActions.ActionType.FPS))
+            {
+                _fpson = !_fpson;
+                UpdateStatus();
+            }
         }
 
+        private void UpdateStatus()
+        {
+            string txt;
+            
+            if ( _fpson )
+                txt = string.Format("x:{0,-6:0} y:{1,-6:0} z:{2,-6:0} Zoom:{3,-4:0.00} FOV:{4,-3:0} FPS:{5,-4:0.0} Use F1 for help", posdir.Position.X, posdir.Position.Y, posdir.Position.Z, zoomfov.Zoom, zoomfov.FovDeg, _fps);
+            else
+                txt = string.Format("x:{0,-6:0} y:{1,-6:0} z:{2,-6:0} Zoom:{3,-4:0.00} FOV:{4,-3:0} Use F1 for help", posdir.Position.X, posdir.Position.Y, posdir.Position.Z, zoomfov.Zoom, zoomfov.FovDeg);
+#if DEBUG
+            txt += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", posdir.CameraDirection.X, posdir.CameraDirection.Y, posdir.CameraDirection.Z);
+#endif
+            statusLabel.Text = txt;
+        }
 
         #endregion
 
@@ -658,7 +692,7 @@ namespace EDDiscovery2
             if (timesince > 0 && timesince < 100)                            // FPS calc - not less than 10hz. and check for silly 0
             {
                 float newfps = 1000.0F / (float)timesince;
-                fps = (fps * 0.9F) + (newfps * 0.1F);
+                _fps = (_fps * 0.9F) + (newfps * 0.1F);
             }
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -677,11 +711,9 @@ namespace EDDiscovery2
             GL.PopMatrix();
 
             glControl.SwapBuffers();
-            UpdateStatus();
 
-//            Console.WriteLine("{0} Paint since {1} took {2}", curtime % 10000, timesince, _systemtickinterval.ElapsedMilliseconds - curtime);
-
-            //Tools.LogToFile(String.Format("{0} Paint since {1} took {2} {3}", curtime % 10000, timesince, _systemtickinterval.ElapsedMilliseconds - curtime , (timesince>60) ? "************************************":""));
+            //            Console.WriteLine("{0} Paint since {1} took {2}", curtime % 10000, timesince, _systemtickinterval.ElapsedMilliseconds - curtime);
+            //Tools.LogToFile(String.Format("{0} Paint since {1} took {2} {3} {4}", curtime % 10000, timesince, _systemtickinterval.ElapsedMilliseconds - curtime, _fps, (timesince > 60) ? "************************************" : ""));
         }
 
         private void DrawStars()
@@ -694,6 +726,8 @@ namespace EDDiscovery2
             if (_datasets_maps == null)                     // happens during debug.. paint before form load
                 return;                                     // needs to be in order of background to foreground objects
 
+            //long t1 = _systemtickinterval.ElapsedMilliseconds;
+
             Debug.Assert(_datasets_finegridlines != null);
             if (toolStripButtonFineGrid.Checked && _datasets_finegridlines != null )
             {
@@ -701,13 +735,19 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
+            //long t2 = _systemtickinterval.ElapsedMilliseconds;
+
             if (_datasets_galmapregions != null)
             {
                 _datasets_galmapregions[0].DrawAll(glControl);          
             }
 
+            //long t3 = _systemtickinterval.ElapsedMilliseconds;
+
             foreach (var dataset in _datasets_maps)                     
                 dataset.DrawAll(glControl);
+
+            //long t4 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_coarsegridlines != null);
             if (toolStripButtonGrid.Checked && _datasets_coarsegridlines != null )
@@ -715,6 +755,8 @@ namespace EDDiscovery2
                 foreach (var dataset in _datasets_coarsegridlines)
                     dataset.DrawAll(glControl);
             }
+
+            //long t5 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_gridlinecoords != null);
             if (toolStripButtonCoords.Checked && _datasets_gridlinecoords != null )
@@ -729,7 +771,11 @@ namespace EDDiscovery2
                 _datasets_galmapregions[2].DrawAll(glControl);          // and the names
             }
 
+            //long t6 = _systemtickinterval.ElapsedMilliseconds;
+
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+
+            //long t7 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_galmapobjects != null);
             if (_datasets_galmapobjects != null)
@@ -752,10 +798,15 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            if (_starnameslist.Draw())          // rang out of bandwidth, ask for another paint
+            //long t8 = _systemtickinterval.ElapsedMilliseconds;
+
+            if (_starnameslist.Draw(!_gridsupdated))      // draw star names, pass if you can update the textures , pass back if it needs more work
             {
                 _requestrepaint = true;         // DONT invalidate.. this makes this thing go around and around and the main tick never gets a look in
             }
+
+            //long t9 = _systemtickinterval.ElapsedMilliseconds;
+
 
             Debug.Assert(_datasets_selectedsystems != null);
             if (_datasets_selectedsystems != null)
@@ -777,16 +828,11 @@ namespace EDDiscovery2
                 foreach (var dataset in _datasets_bookedmarkedsystems)                     // needs to be in order of background to foreground objects
                     dataset.DrawAll(glControl);
             }
-        }
 
-        private void UpdateStatus()
-        {
-            statusLabel.Text = string.Format("x:{0,-6:0} y:{1,-6:0} z:{2,-6:0} Zoom:{3,-4:0.00} FOV:{4,-4:0} Use ? for help", posdir.Position.X, posdir.Position.Y, posdir.Position.Z, zoomfov.Zoom , zoomfov.FovDeg);
-#if DEBUG
-            statusLabel.Text += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0} FPS {3,-6:0.0}", posdir.CameraDirection.X, posdir.CameraDirection.Y, posdir.CameraDirection.Z , fps);
-#endif
-        }
+            //long t10 = _systemtickinterval.ElapsedMilliseconds;
+            //Tools.LogToFile(String.Format("gridwork {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}", _gridsupdated, t2-t1,t3-t2,t4-t3,t5-t4,t6-t5,t7-t6,t8-t7,t9-t8,t10-t9));
 
+        }
 
         #endregion
 
@@ -986,14 +1032,14 @@ namespace EDDiscovery2
         {
             endTime = endPicker.Value;
             GenerateDataSetsVisitedSystems();
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void StartPicker_ValueChanged(object sender, EventArgs e)
         {
             startTime = startPicker.Value;
             GenerateDataSetsVisitedSystems();
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void dropdownFilterHistory_Custom_Click(object sender, EventArgs e, ToolStripButton sel)
@@ -1017,7 +1063,7 @@ namespace EDDiscovery2
             startPicker.Value = startTime;
             endPicker.Value = endTime;
             GenerateDataSetsVisitedSystems();
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc, Func<DateTime> endfunc)
@@ -1035,7 +1081,7 @@ namespace EDDiscovery2
             startPickerHost.Visible = false;
             endPickerHost.Visible = false;
             GenerateDataSetsVisitedSystems();
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void buttonLookAt_Click(object sender, EventArgs e)
@@ -1143,12 +1189,12 @@ namespace EDDiscovery2
         private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
         {
             GenerateDataSetsVisitedSystems();
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void showStarstoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void showGalacticMapTypeMenuItem_Click(object sender, EventArgs e)
@@ -1175,33 +1221,33 @@ namespace EDDiscovery2
             }
 
             GenerateDataSetsBNG();
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void enableColoursToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void showStationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void toolStripButtonGrid_Click(object sender, EventArgs e)
         {
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void toolStripButtonFineGrid_Click(object sender, EventArgs e)
         {
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void toolStripButtonCoords_Click(object sender, EventArgs e)
         {
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void toolStripButtonEliteMovement_Click(object sender, EventArgs e)
@@ -1210,24 +1256,24 @@ namespace EDDiscovery2
 
         private void showDiscsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestRepaint();
+            RequestStarNameRecalc();
         }
 
         private void showNamesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestRepaint();
+            RequestStarNameRecalc();
         }
 
         private void showNoteMarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GenerateDataSetsBNG();
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void showBookmarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GenerateDataSetsBNG();
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void newRegionBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1257,7 +1303,7 @@ namespace EDDiscovery2
                 }
 
                 GenerateDataSetsBNG();
-                RequestRepaint();
+                RequestPaint();
             }
         }
         
@@ -1268,7 +1314,7 @@ namespace EDDiscovery2
 
             SetModelProjectionMatrix();
 
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void dotSystemCoords_Click(object sender, EventArgs e)
@@ -1297,7 +1343,7 @@ namespace EDDiscovery2
             ToolStripButton tsb = (ToolStripButton)sender;
             SQLiteDBClass.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
             GenerateDataSetsMaps();
-            RequestRepaint();
+            RequestPaint();
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1509,7 +1555,7 @@ namespace EDDiscovery2
                 if ( name != null || isanyselected)     // if we selected something, or something was selected
                 {
                     GenerateDataSetsSelectedSystems();
-                    RequestRepaint();
+                    RequestPaint();
                 }
             }
 
@@ -1609,7 +1655,7 @@ namespace EDDiscovery2
 
                     travelHistoryControl.RefreshTargetInfo();       // because of all the ways it may have changed
                     GenerateDataSetsBNG();      // in case target changed, do all..
-                    RequestRepaint();
+                    RequestPaint();
                 }
                 else if (gmo != null)
                 {
@@ -1632,7 +1678,7 @@ namespace EDDiscovery2
                                 TargetClass.ClearTarget();
 
                             GenerateDataSetsBNG();
-                            RequestRepaint();
+                            RequestPaint();
                             travelHistoryControl.RefreshTargetInfo();
                         }
                     }
@@ -1847,7 +1893,7 @@ namespace EDDiscovery2
                     if (zoomfov.ChangeFov(e.Delta < 0))
                     {
                         SetModelProjectionMatrix();
-                        RequestRepaint();
+                        RequestPaint();
                     }
                 }
                 else

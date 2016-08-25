@@ -240,7 +240,7 @@ namespace EDDiscovery2._3DMap
             float zoomlimited = Math.Min(Math.Max(_zoom, 0.01F), 15.0F);
             var distance = _msticks * (1.0f / zoomlimited);
 
-            if ((Control.ModifierKeys & Keys.Shift) != 0)
+            if ( _kbdActions.Shift )
                 distance *= 2.0F;
 
             //Console.WriteLine("Distance " + distance + " zoom " + _zoom + " lzoom " + zoomlimited );
@@ -248,25 +248,35 @@ namespace EDDiscovery2._3DMap
             {
                 _cameraActionMovement.X = -distance;
             }
-            if (_kbdActions.Action(KeyboardActions.ActionType.Right))
+            else if (_kbdActions.Action(KeyboardActions.ActionType.Right))
             {
                 _cameraActionMovement.X = distance;
             }
-            if (_kbdActions.Action(KeyboardActions.ActionType.Forwards))
+
+            if (_kbdActions.Action(KeyboardActions.ActionType.PgUp))    // pgup/r
             {
-                _cameraActionMovement.Y = distance;
+                if (InPerspectiveMode)
+                    _cameraActionMovement.Z = distance;
             }
-            if (_kbdActions.Action(KeyboardActions.ActionType.Backwards))
+            else if (_kbdActions.Action(KeyboardActions.ActionType.PgDown) ) //pgdown/f
             {
-                _cameraActionMovement.Y = -distance;
+                if (InPerspectiveMode)
+                    _cameraActionMovement.Z = -distance;
             }
-            if (_kbdActions.Action(KeyboardActions.ActionType.Up))
+
+            if (_kbdActions.Action(KeyboardActions.ActionType.Up))          // w/UP
             {
-                _cameraActionMovement.Z = distance;
+                if (InPerspectiveMode)
+                    _cameraActionMovement.Y = distance;
+                else
+                    _cameraActionMovement.Z = distance;
             }
-            if (_kbdActions.Action(KeyboardActions.ActionType.Down))
+            else if (_kbdActions.Action(KeyboardActions.ActionType.Down))        // S/Down
             {
-                _cameraActionMovement.Z = -distance;
+                if (InPerspectiveMode)
+                    _cameraActionMovement.Y = -distance;
+                else
+                    _cameraActionMovement.Z = -distance;
             }
 
             if (_cameraActionMovement.LengthSquared > 0)

@@ -6,6 +6,8 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Collections;
+using EDDiscovery;
+using System.Diagnostics;
 
 namespace EDDiscovery2._3DMap
 {
@@ -1150,8 +1152,8 @@ namespace EDDiscovery2._3DMap
                     GLContext = control;
                 }
 
-                GL.EnableClientState(ArrayCap.VertexArray);
-                GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
+                GL.EnableClientState(ArrayCap.VertexArray);                     // MEASUREMENTS are showing this can for some reason take 40ms to draw.. at random times
+                GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);              // Maybe we should tesselate the polygons to triangles 
                 GL.VertexPointer(3, VertexPointerType.Double, 0, 0);
                 GL.PointSize(pointSize);
 
