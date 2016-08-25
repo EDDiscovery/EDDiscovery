@@ -8,8 +8,8 @@ namespace EDDiscovery2
 {
     public class CameraDirectionMovementTracker       // keeps track of previous and works out how to present bitmaps
     {
-        public Vector3 CameraPos;
-        public Vector3 CameraDir;
+        public Vector3 LastCameraPos;
+        public Vector3 LastCameraDir;
         public float LastZoom;
 
         public Vector3 Rotation = new Vector3(0, 0, 0);
@@ -17,35 +17,36 @@ namespace EDDiscovery2
         public bool CameraDirChanged;
         public bool CameraMoved;
         public bool CameraZoomed;
+        public bool AnythingChanged { get { return CameraDirChanged || CameraMoved || CameraZoomed; } }
 
         public void Update(Vector3 cameraDir, Vector3 cameraPos, float zoom)
         {
-            CameraDirChanged = Vector3.Subtract(CameraDir, cameraDir).LengthSquared >= 1;
+            CameraDirChanged = Vector3.Subtract(LastCameraDir, cameraDir).LengthSquared >= 1;
 
             if (CameraDirChanged)
             {
-                CameraDir = cameraDir;
+                LastCameraDir = cameraDir;
                 //Console.WriteLine("Dir {0},{1},{2}", CameraDir.X, CameraDir.Y, CameraDir.Z);
             }
 
-            CameraMoved = Vector3.Subtract(CameraPos, cameraPos).LengthSquared >= 0.05; // small so you can see small slews
+            CameraMoved = Vector3.Subtract(LastCameraPos, cameraPos).LengthSquared >= 0.05; // small so you can see small slews
 
             if ( CameraMoved )
-                CameraPos = cameraPos;
+                LastCameraPos = cameraPos;
 
             CameraZoomed = Math.Abs(LastZoom - zoom) > 0.0000001;
 
             if ( CameraZoomed )
                 LastZoom = zoom;
 
-            Rotation = CameraDir;
+            Rotation = LastCameraDir;
             Rotation.X = -Rotation.X;       // invert to face
             Rotation.Z = 0;                 // no Z, not used much, and cause the other two axis to spin .. would need more work to understand
         }
 
-        public void ForceZoomChanged()
+        public void ForceMoveChange()
         {
-            LastZoom = -1000000;
+            LastCameraPos = new Vector3(float.MinValue, 0, 0);
         }
     }
 
