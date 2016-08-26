@@ -334,8 +334,8 @@ namespace EDDiscovery2
             posdir.SetCameraPos(new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z));
 
             zoomfov.SetToDefault();
-            _lastcameranorm.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom); // set up here so ready for action.. below uses it.
-            _lastcamerastarnames.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom); // set up here so ready for action.. below uses it.
+            _lastcameranorm.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom,1.0F); // set up here so ready for action.. below uses it.
+            _lastcamerastarnames.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom,1.0F); // set up here so ready for action.. below uses it.
 
             GenerateDataSets();
             GenerateDataSetsMaps();
@@ -542,7 +542,7 @@ namespace EDDiscovery2
                 maprecorder.Record(posdir.Position, posdir.CameraDirection, zoomfov.Zoom);
             }
 
-            _lastcameranorm.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom);
+            _lastcameranorm.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom, 10.0F);       // Gross limit allows you not to repaint due to a small movement. I've set it to all the time for now, prefer the smoothness to the frame rate.
 
             //Console.WriteLine("Tick D/Z/M {0} {1} {2}", _lastcameranorm.CameraDirChanged, _lastcameranorm.CameraZoomed, _lastcameranorm.CameraMoved);
             //Tools.LogToFile(String.Format("Tick D/Z/M {0} {1} {2}", _lastcameranorm.CameraDirChanged, _lastcameranorm.CameraZoomed, _lastcameranorm.CameraMoved));
@@ -551,9 +551,13 @@ namespace EDDiscovery2
             {
                 posdir.CalculateModelMatrix(zoomfov.Zoom);
                 _requestrepaint = true;
-                //Console.WriteLine("Repaint due to move/zoom/dir");
 
-                if (_lastcameranorm.CameraZoomed || _lastcameranorm.CameraDirChanged)
+                if (_lastcameranorm.CameraZoomed)       // zoom always updates
+                {
+                    _lastcameranorm.SetGrossChanged();                  // make sure gross does not trip yet..     
+                    UpdateDataSetsDueToZoomOrFlip(_lastcameranorm.CameraZoomed);
+                }
+                else if (_lastcameranorm.CameraDirGrossChanged )
                 {
                     UpdateDataSetsDueToZoomOrFlip(_lastcameranorm.CameraZoomed);
                 }
@@ -578,10 +582,10 @@ namespace EDDiscovery2
                 bool names = showNamesToolStripMenuItem.Checked;
                 bool discs = showDiscsToolStripMenuItem.Checked;
 
-                _lastcamerastarnames.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom);
+                _lastcamerastarnames.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom,1.0F);
 
-                if ((names | discs) && zoomfov.Zoom >= 0.99)  // only when shown, and enabled, and with a good zoom
-                {
+                if ((names | discs) && zoomfov.Zoom >= 0.99)        // when shown, and with a good zoom
+                {                                                   // and stargrids, and we moved, or camera moved, or zoomed..
                     if (_stargrids.IsDisplayed(posdir.Position.X, posdir.Position.Z) && _lastcamerastarnames.AnythingChanged )                              // if changed something
                     {
                         _starnameslist.Update(_lastcamerastarnames, posdir.GetResMat, _znear, names, discs,

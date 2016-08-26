@@ -192,7 +192,7 @@ namespace EDDiscovery2
         {
             bool changed = false;
 
-            foreach (StarNames sys in _starnamestoforeground)
+            foreach (StarNames sys in _starnamesforeground)
             {
                 if (sys.inview)
                 {
