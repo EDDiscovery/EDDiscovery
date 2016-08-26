@@ -549,7 +549,6 @@ namespace EDDiscovery2
 
             if (_lastcameranorm.AnythingChanged )
             {
-                Console.WriteLine("Model!");
                 posdir.CalculateModelMatrix(zoomfov.Zoom);
                 _requestrepaint = true;
                 //Console.WriteLine("Repaint due to move/zoom/dir");
@@ -690,7 +689,6 @@ namespace EDDiscovery2
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
-            Console.WriteLine("Paint!");
             long curtime = _systemtickinterval.ElapsedMilliseconds;
             long timesince = curtime - _lastpainttick;
             _lastpainttick = curtime;
@@ -732,7 +730,7 @@ namespace EDDiscovery2
             if (_datasets_maps == null)                     // happens during debug.. paint before form load
                 return;                                     //  needs to be in order of background to foreground objects
 
-            long t1 = _systemtickinterval.ElapsedMilliseconds;
+            //long t1 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_finegridlines != null);
             if (toolStripButtonFineGrid.Checked && _datasets_finegridlines != null )
@@ -741,19 +739,19 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            long t2 = _systemtickinterval.ElapsedMilliseconds;
+            //long t2 = _systemtickinterval.ElapsedMilliseconds;
 
             if (_datasets_galmapregions != null)
             {
                 _datasets_galmapregions[0].DrawAll(glControl);          
             }
 
-            long t3 = _systemtickinterval.ElapsedMilliseconds;
+           // long t3 = _systemtickinterval.ElapsedMilliseconds;
 
             foreach (var dataset in _datasets_maps)                     
                 dataset.DrawAll(glControl);
 
-            long t4 = _systemtickinterval.ElapsedMilliseconds;
+            //long t4 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_coarsegridlines != null);
             if (toolStripButtonGrid.Checked && _datasets_coarsegridlines != null )
@@ -762,7 +760,7 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            long t5 = _systemtickinterval.ElapsedMilliseconds;
+            //long t5 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_gridlinecoords != null);
             if (toolStripButtonCoords.Checked && _datasets_gridlinecoords != null )
@@ -777,11 +775,11 @@ namespace EDDiscovery2
                 _datasets_galmapregions[2].DrawAll(glControl);          // and the names
             }
 
-            long t6 = _systemtickinterval.ElapsedMilliseconds;
+            //long t6 = _systemtickinterval.ElapsedMilliseconds;
 
             _stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
 
-            long t7 = _systemtickinterval.ElapsedMilliseconds;
+           // long t7 = _systemtickinterval.ElapsedMilliseconds;
 
             Debug.Assert(_datasets_galmapobjects != null);
             if (_datasets_galmapobjects != null)
@@ -804,14 +802,14 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            long t8 = _systemtickinterval.ElapsedMilliseconds;
+            //long t8 = _systemtickinterval.ElapsedMilliseconds;
 
-            if (_starnameslist.Draw(!_gridsupdated))      // draw star names, pass if you can update the textures , pass back if it needs more work
+            if (_starnameslist.Draw(!_gridsupdated, _lastcameranorm.LastZoom , _lastcameranorm.Rotation ))      // draw star names, pass if you can update the textures , pass back if it needs more work
             {
                 _requestrepaint = true;         // DONT invalidate.. this makes this thing go around and around and the main tick never gets a look in
             }
 
-            long t9 = _systemtickinterval.ElapsedMilliseconds;
+            //long t9 = _systemtickinterval.ElapsedMilliseconds;
             
             Debug.Assert(_datasets_selectedsystems != null);
             if (_datasets_selectedsystems != null)
@@ -834,8 +832,8 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            long t10 = _systemtickinterval.ElapsedMilliseconds;
-            Tools.LogToFile(String.Format("gridwork {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}", _gridsupdated, t2-t1,t3-t2,t4-t3,t5-t4,t6-t5,t7-t6,t8-t7,t9-t8,t10-t9));
+            //long t10 = _systemtickinterval.ElapsedMilliseconds;
+            //Tools.LogToFile(String.Format("gridwork {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}", _gridsupdated, t2-t1,t3-t2,t4-t3,t5-t4,t6-t5,t7-t6,t8-t7,t9-t8,t10-t9));
 
         }
 
@@ -947,7 +945,7 @@ namespace EDDiscovery2
 
             DatasetBuilder builder3 = new DatasetBuilder();
             List<IData3DSet> oldgalmaps = _datasets_galmapobjects;
-            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _toolstripToggleNamingButton.Checked);
+            _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _toolstripToggleNamingButton.Checked, enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange );
             DeleteDataset(ref oldgalmaps);
 
             DatasetBuilder builder4 = new DatasetBuilder();
@@ -1234,6 +1232,8 @@ namespace EDDiscovery2
         private void enableColoursToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
+            GenerateDataSetsBNG();          // because gmo's are coloured accordingly
+
             RequestPaint();
         }
 
@@ -1546,7 +1546,7 @@ namespace EDDiscovery2
                 }
                 else if (gmo != null)
                 {
-                    _clickedposition = new Vector3((float)gmo.points[0].x, (float)gmo.points[0].y, (float)gmo.points[0].z);
+                    _clickedposition = new Vector3((float)gmo.points[0].X, (float)gmo.points[0].Y, (float)gmo.points[0].Z);
 
                     name = gmo.name;
 
@@ -1671,7 +1671,7 @@ namespace EDDiscovery2
                     BookmarkForm frm = new BookmarkForm();
 
                     frm.Name = gmo.name;
-                    frm.InitialisePos(gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
+                    frm.InitialisePos(gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
                     frm.GMO(gmo.name, gmo.description, targetid == gmo.id, gmo.galMapUrl);
                     DialogResult res = frm.ShowDialog();
 
@@ -1680,7 +1680,7 @@ namespace EDDiscovery2
                         if ((frm.IsTarget && targetid != gmo.id) || (!frm.IsTarget && targetid == gmo.id)) // changed..
                         {
                             if (frm.IsTarget)
-                                TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
+                                TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
                             else
                                 TargetClass.ClearTarget();
 
@@ -1799,15 +1799,13 @@ namespace EDDiscovery2
             GetMouseOverItem(_mouseHover.X, _mouseHover.Y, out hoversystem, out curbookmark, out notedsystem, out gmo);
 
             string info = null, sysname = null;
-            double xp = 0, yp = 0, zp = 0;
+            Vector3d pos = new Vector3d(0,0,0);
 
             if (hoversystem != null)
             {
                 sysname = hoversystem.name;
                 info = hoversystem.name + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.x.ToString("0.00"), hoversystem.y.ToString("0.00"), hoversystem.z.ToString("0.00"));
-                xp = hoversystem.x;
-                yp = hoversystem.y;
-                zp = hoversystem.z;
+                pos = new Vector3d(hoversystem.x, hoversystem.y, hoversystem.z);
 
                 SystemClass sysclass = (hoversystem.id != 0) ? SystemClass.GetSystem(hoversystem.id) : SystemClass.GetSystem(hoversystem.name);
 
@@ -1836,17 +1834,13 @@ namespace EDDiscovery2
             {
                 info = curbookmark.Heading + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", curbookmark.x.ToString("0.00"), curbookmark.y.ToString("0.00"), curbookmark.z.ToString("0.00"));
                 sysname = "<<Never match string! to make the comparison fail";
-                xp = curbookmark.x;
-                yp = curbookmark.y;
-                zp = curbookmark.z;
+                pos = new Vector3d(curbookmark.x, curbookmark.y, curbookmark.z);
             }
             else if ( gmo != null )
             {
-                xp = gmo.points[0].x;
-                yp = gmo.points[0].y;
-                zp = gmo.points[0].z;
+                pos = new Vector3d(gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
                 info = gmo.name + Environment.NewLine + gmo.galMapType.Description + Environment.NewLine + Tools.WordWrap(gmo.description,60) + Environment.NewLine +
-                    string.Format("x:{0} y:{1} z:{2}", xp.ToString("0.00"), yp.ToString("0.00"), zp.ToString("0.00"));
+                    string.Format("x:{0} y:{1} z:{2}", pos.X.ToString("0.00"), pos.Y.ToString("0.00"), pos.Z.ToString("0.00"));
                 sysname = "<<Never match string! to make the comparison fail";
             }
             
@@ -1854,20 +1848,32 @@ namespace EDDiscovery2
             { 
                 if (!sysname.Equals(_centerSystem.name))
                 {
-                    double distcsn = Math.Sqrt((xp - _centerSystem.x) * (xp - _centerSystem.x) + (yp - _centerSystem.y) * (yp - _centerSystem.y) + (zp - _centerSystem.z) * (zp - _centerSystem.z));
-                    info += Environment.NewLine + "Distance from " + _centerSystem.name + ": " + distcsn.ToString("0.0");
+                    Vector3d cs = new Vector3d(_centerSystem.x, _centerSystem.y, _centerSystem.z);
+                    info += Environment.NewLine + "Distance from " + _centerSystem.name + ": " + (cs-pos).Length.ToString("0.0");
                 }
                 // if exists, history not hover, history not centre
                 if (_historySelection != null && !sysname.Equals(_historySelection.name) && !_historySelection.name.Equals(_centerSystem.name))
                 {
-                    double disthist = Math.Sqrt((xp - _historySelection.x) * (xp - _historySelection.x) + (yp - _historySelection.y) * (yp - _historySelection.y) + (zp - _historySelection.z) * (zp - _historySelection.z));
-                    info += Environment.NewLine + "Distance from " + _historySelection.name + ": " + disthist.ToString("0.0");
+                    Vector3d hs = new Vector3d(_historySelection.x, _historySelection.y, _historySelection.z);
+                    info += Environment.NewLine + "Distance from " + _historySelection.name + ": " + (hs-pos).Length.ToString("0.0");
                 }
                 // home not centre, home not history or history null
                 if (!_homeSystem.name.Equals(_centerSystem.name) && (_historySelection == null || !_historySelection.name.Equals(_homeSystem.name)))
                 {
-                    double disthome = Math.Sqrt((xp - _homeSystem.x) * (xp - _homeSystem.x) + (yp - _homeSystem.y) * (yp - _homeSystem.y) + (zp - _homeSystem.z) * (zp - _homeSystem.z));
-                    info += Environment.NewLine + "Distance from " + _homeSystem.name + ": " + disthome.ToString("0.0");
+                    double dist = ((new Vector3d(_homeSystem.x, _homeSystem.y, _homeSystem.z)) - pos).Length;
+                    info += Environment.NewLine + "Distance from " + _homeSystem.name + ": " + dist.ToString("0.0");
+                }
+
+                if (_clickedSystem != null && _clickedSystem != _centerSystem && _clickedSystem != _historySelection && _clickedSystem != _homeSystem && _clickedSystem!=hoversystem)
+                {
+                    double dist = ((new Vector3d(_clickedSystem.x, _clickedSystem.y, _clickedSystem.z)) - pos).Length;
+                    info += Environment.NewLine + "Distance from " + _clickedSystem.name + ": " + dist.ToString("0.0");
+                }
+
+                if (_clickedGMO != null && _clickedGMO != gmo )
+                {
+                    double dist = ((new Vector3d(_clickedGMO.points[0].X, _clickedGMO.points[0].Y, _clickedGMO.points[0].Z)) - pos).Length;
+                    info += Environment.NewLine + "Distance from " + _clickedGMO.name + ": " + dist.ToString("0.0");
                 }
 
                 string note = SystemNoteClass.GetSystemNote(sysname);   // may be null
@@ -1906,7 +1912,6 @@ namespace EDDiscovery2
                 else
                 {
                     zoomfov.ChangeZoom(e.Delta > 0);
-                    Console.WriteLine("Zoom! {0}" , zoomfov.Zoom);
                 }
             }
         }
@@ -2075,15 +2080,15 @@ namespace EDDiscovery2
             {
                 foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
                 {
-                    PointData pd = (gmo.points.Count > 0) ? gmo.points[0] : null;     // lets be paranoid
-
-                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && pd != null)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
+                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && gmo.points.Count > 0)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
                     {
+                        Vector3 pd = gmo.points[0];
+
                         Matrix4 area = new Matrix4(
-                            new Vector4(rotvert[0].X + pd.x, rotvert[0].Y + pd.y, rotvert[0].Z + pd.z, 1),    // top left
-                            new Vector4(rotvert[1].X + pd.x, rotvert[1].Y + pd.y, rotvert[1].Z + pd.z, 1),
-                            new Vector4(rotvert[2].X + pd.x, rotvert[2].Y + pd.y, rotvert[2].Z + pd.z, 1),
-                            new Vector4(rotvert[3].X + pd.x, rotvert[3].Y + pd.y, rotvert[3].Z + pd.z, 1)    // bot left
+                            new Vector4(rotvert[0].X + pd.X, rotvert[0].Y + pd.Y, rotvert[0].Z + pd.Z, 1),    // top left
+                            new Vector4(rotvert[1].X + pd.X, rotvert[1].Y + pd.Y, rotvert[1].Z + pd.Z, 1),
+                            new Vector4(rotvert[2].X + pd.X, rotvert[2].Y + pd.Y, rotvert[2].Z + pd.Z, 1),
+                            new Vector4(rotvert[3].X + pd.X, rotvert[3].Y + pd.Y, rotvert[3].Z + pd.Z, 1)    // bot left
                             );
 
                         float newcursysdistz;
@@ -2244,10 +2249,15 @@ namespace EDDiscovery2
 
             gmo = EDDiscoveryForm.galacticMapping.Find(textboxFrom.Text, true, true);    // ignore if its off, find any part of string, find if disabled
 
-            if ( gmo != null )
+            if (gmo != null)
             {
-                loc = new Vector3((float)gmo.points[0].x, (float)gmo.points[0].y, (float)gmo.points[0].z);
-                return gmo.name;
+                if (gmo.points.Count > 0)
+                {
+                    loc = gmo.points[0];
+                    return gmo.name;
+                }
+                else
+                    gmo = null;
             }
 
             return null;

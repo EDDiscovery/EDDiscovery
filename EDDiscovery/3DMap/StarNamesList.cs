@@ -24,11 +24,11 @@ namespace EDDiscovery2
             name = other.name;
             pos = posf;
             population = other.population;
-            nametexture = null;
-            paintstar = null;
 
+            nametexture = null;
             newnametexture = null;
-            newnamevertices = null;
+
+            paintstar = null;
             newstar = null;
 
             inview = false;
@@ -42,7 +42,6 @@ namespace EDDiscovery2
 
         public TexturedQuadData newnametexture { get; set; }    // if a new texture is needed..
         public TexturedQuadData nametexture { get; set; }       // currently painted one
-        public Vector3[] newnamevertices;                      
 
         public PointData newstar { get; set; }                  // purposely drawing it like this, one at a time, due to sync issues between foreground/thread
         public PointData paintstar { get; set; }                // instead of doing a array paint.
@@ -78,6 +77,7 @@ namespace EDDiscovery2
         float _starnamesizely = 40F;                // star name width, div zoom
         float _starnameminly = 0.1F;                // ranging between per char
         float _starnamemaxly = 0.5F;
+        float _startextoffset = 0.2F;               //ly
 
         Dictionary<Vector3, StarNames> _starnamesbackground;        // only used by background thread. 
         List<StarNames> _starnamestoforeground;                     // transfer list between the back/fore
@@ -227,10 +227,8 @@ namespace EDDiscovery2
                 //Tools.LogToFile(String.Format("starnamesest Took {0} in view {1}", sw1.ElapsedMilliseconds, inviewlist.Count));
 
                 float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _lastcamera.LastZoom, _starnameminly)); // per char
-                float textscalingh = textscalingw * 4;
-                float textoffset = .20F;
                 float starsize = Math.Min(Math.Max(_lastcamera.LastZoom / 10F, 1.0F), 20F);     // Normal stars are at 1F.
-                Console.WriteLine("Per char {0} h {1} sc {2} ", textscalingw, textscalingh, starsize);
+                //Console.WriteLine("Per char {0} h {1} sc {2} ", textscalingw, textscalingh, starsize);
 
                 foreach (StarNames s in _starnamesbackground.Values)    // all items not processed
                     s.updatedinview = false;                                 // only items remaining will clear this
@@ -254,7 +252,7 @@ namespace EDDiscovery2
                             sys.updatedinview = true;
 
                             draw = (_discson && sys.paintstar == null && sys.newstar == null) || 
-                                   (_nameson && ((sys.nametexture == null && sys.newnametexture == null) || sys.rotation != _lastcamera.Rotation || sys.zoom != _lastcamera.LastZoom));
+                                   (_nameson && ((sys.nametexture == null && sys.newnametexture == null) ));
                             
                             painted++;
                         }
@@ -287,23 +285,12 @@ namespace EDDiscovery2
                             {
                                 float width = textscalingw * sys.name.Length;
 
-                                Bitmap map;                     // now, delete is the only one who removed newtexture
-                                                                // and we are protected against delete..
-                                if (sys.nametexture == null)     // so see if newtexture is there
-                                {
-                                    map = DatasetBuilder.DrawString(sys.name, _namecolour, _starfont);
-                                    sys.newnametexture = TexturedQuadData.FromBitmap(map,
-                                        new PointData(sys.pos.X, sys.pos.Y, sys.pos.Z),
-                                        _lastcamera.Rotation,
-                                        width, textscalingh, textoffset + width / 2, 0);
+                                Bitmap map = DatasetBuilder.DrawString(sys.name, _namecolour, _starfont);
 
-                                }
-                                else
-                                {
-                                    sys.newnamevertices = TexturedQuadData.CalcVertices(sys.pos , 
-                                                                                       _lastcamera.Rotation,
-                                                                    width, textscalingh, textoffset + width / 2, 0);
-                                }
+                                sys.newnametexture = TexturedQuadData.FromBitmap(map,
+                                                        new PointData(sys.pos.X, sys.pos.Y, sys.pos.Z),
+                                                        _lastcamera.Rotation,
+                                                        width, textscalingw * 4.0F, _startextoffset + width / 2, 0);
 
                                 sys.rotation = _lastcamera.Rotation;            // remember when we were when we draw it
                                 sys.zoom = _lastcamera.LastZoom;
@@ -343,15 +330,19 @@ namespace EDDiscovery2
 
         #endregion
 
+
         #region Painting
 
-        public bool Draw( bool workallowed )                              // FOREGROUND thread may be running.. so use only foreground object
+        public bool Draw( bool workallowed , float lastzoom , Vector3 lastrot )                              // FOREGROUND thread may be running.. so use only foreground object
         {
+            float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / lastzoom, _starnameminly)); // per char - sync with above in background
+
             bool needmoreticks = false;
 
             int updated = 0;
+            //bool DEBUGscaled = false;
 
-            foreach (StarNames sys in _starnamesforeground )
+            foreach (StarNames sys in _starnamesforeground)
             {
                 if (sys.newnametexture != null )         
                 {
@@ -362,20 +353,6 @@ namespace EDDiscovery2
 
                         sys.nametexture = sys.newnametexture;      // copy over and take another reference.. 
                         sys.newnametexture = null;
-                        updated++;
-                    }
-                    else
-                    {
-                        needmoreticks = true;
-                    }
-                }
-
-                if (sys.newnamevertices != null)
-                {
-                    if (updated < limitperdraw && workallowed)
-                    {
-                        sys.nametexture.UpdateVertices(sys.newnamevertices);
-                        sys.newnamevertices = null;
                         updated++;
                     }
                     else
@@ -397,14 +374,23 @@ namespace EDDiscovery2
                         sys.paintstar.Draw(_glControl);
                     }
 
-                    if (sys.nametexture != null && _nameson )           // being paranoid by treating these separately. Thread may finish painting one before the other.
+                    if (sys.nametexture != null && _nameson )       
                     {
+                        if ( sys.zoom != lastzoom || sys.rotation != lastrot )  // if we have rotated since last vertex calc, either here or in background when created
+                        {
+                            float width = textscalingw * sys.name.Length;
+                            sys.nametexture.UpdateVertices( TexturedQuadData.CalcVertices(sys.pos, lastrot , width, textscalingw * 4.0F, _startextoffset + width / 2, 0));
+                            sys.zoom = lastzoom;
+                            sys.rotation = lastrot;
+                            //DEBUGscaled = true;
+                        }
+
                         sys.nametexture.Draw(_glControl);
                     }
                 }
             }
 
-            //if (updated > 0) Tools.LogToFile(String.Format("starnamesdraw: {0} Updated {1} Not Updated {2}", sw1.ElapsedMilliseconds, updated, notupdated));
+            //if ( DEBUGscaled || updated > 0)  Tools.LogToFile(String.Format("starnamesdraw: Updated {0} scaled {1}", updated, DEBUGscaled));
 
             return needmoreticks;
         }

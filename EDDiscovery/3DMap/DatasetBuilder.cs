@@ -196,8 +196,8 @@ namespace EDDiscovery2._3DMap
                         Color c = array[cindex++ % array.Length];
 
                         List<Vector2> polygonxz = new List<Vector2>();                              // needs it in x/z and in vector2's
-                        foreach( PointData pd in gmo.points )
-                            polygonxz.Add(new Vector2((float)pd.x, (float)pd.z));                   // can be concave and wound the wrong way..
+                        foreach( Vector3 pd in gmo.points )
+                            polygonxz.Add(new Vector2((float)pd.X, (float)pd.Z));                   // can be concave and wound the wrong way..
 
                         Vector2 size, avg;
                         Vector2 centre = PolygonTriangulator.Centre(polygonxz, out size, out avg);  // default geographic centre (min x/z + max x/z/2) used in case poly triangulate fails (unlikely)
@@ -263,7 +263,7 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem)
+        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem , Color textc)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("galobj", Color.White, 1f);
 
@@ -279,7 +279,7 @@ namespace EDDiscovery2._3DMap
 
                         if (touse != null && gmo.points.Count > 0)             // if it has an image its a point object , and has co-ord
                         {
-                            PointData pd = gmo.points[0];
+                            Vector3 pd = gmo.points[0];
 
                             TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly);
                             newtexture.Tag = gmo;
@@ -289,15 +289,16 @@ namespace EDDiscovery2._3DMap
                             if (namethem)
                             {
                                 Bitmap map = null;
+                                string cachename = gmo.name + textc.ToString();
 
-                                if (_cachedBitmaps.ContainsKey(gmo.name))      // cache them, they take a long time to compute..
+                                if (_cachedBitmaps.ContainsKey(cachename))      // cache them, they take a long time to compute..
                                 {
-                                    map = _cachedBitmaps[gmo.name];
+                                    map = _cachedBitmaps[cachename];
                                 }
                                 else
                                 {
-                                    map = DrawString(gmo.name, Color.Orange, gmostarfont);
-                                    _cachedBitmaps.Add(gmo.name, map);
+                                    map = DrawString(gmo.name, textc, gmostarfont);
+                                    _cachedBitmaps.Add(cachename, map);
                                 }
 
                                 TexturedQuadData ntext = TexturedQuadData.FromBitmap(map, pd, rotation,
@@ -341,16 +342,17 @@ namespace EDDiscovery2._3DMap
                     {
                         GalacticMapObject gmo = tqd.Tag as GalacticMapObject;
                         Debug.Assert(gmo != null);
-                        PointData pd = (gmo.points.Count > 0) ? gmo.points[0] : null;     // lets be paranoid
-                        Debug.Assert(pd != null);
 
-                        int id = (int)tqd.Tag2;
-                        if (id == 0)
-                            tqd.UpdateVertices(pd, rotation, widthly, heightly);
-                        else if (id == 1)
-                            tqd.UpdateVertices(pd, rotation, (widthly / 10 * gmo.name.Length), (heightly / 3), 0, heightly * gmonameoff);
-                        else
-                            tqd.UpdateVertices(pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
+                        if (gmo.points.Count > 0)       // paranoia since its an external data source
+                        {
+                            int id = (int)tqd.Tag2;
+                            if (id == 0)
+                                tqd.UpdateVertices(gmo.points[0], rotation, widthly, heightly);
+                            else if (id == 1)
+                                tqd.UpdateVertices(gmo.points[0], rotation, (widthly / 10 * gmo.name.Length), (heightly / 3), 0, heightly * gmonameoff);
+                            else
+                                tqd.UpdateVertices(gmo.points[0], rotation, widthly, heightly, 0, heightly * gmotargetoff);
+                        }
                     }
                 }
             }
@@ -668,16 +670,12 @@ namespace EDDiscovery2._3DMap
 
             if ( selectedgmo != null )
             {
-                PointData pd = (selectedgmo.points.Count > 0) ? selectedgmo.points[0] : null;     // lets be paranoid
-
-                if (pd != null)
+                if (selectedgmo.points.Count > 0)               // paranoia
                 {
                     var datasetbks = Data3DSetClass<TexturedQuadData>.Create("selgmo", Color.White, 1f);
-
                     long gmotarget = TargetClass.GetTargetGMO();
-
                     float hoff = (gmotarget == selectedgmo.id) ? (heightly * gmoseltarget) : (heightly * gmoselonly);
-                    TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, pd, rotation, widthly, heightly / 2, 0, hoff);
+                    TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, selectedgmo.points[0], rotation, widthly, heightly / 2, 0, hoff);
                     newtexture.Tag = 1;
                     datasetbks.Add(newtexture);
                     _datasets.Add(datasetbks);
@@ -704,12 +702,11 @@ namespace EDDiscovery2._3DMap
 
                         if (id == 0)
                             tqd.UpdateVertices(new PointData(selectedsystem.x, selectedsystem.y, selectedsystem.z), rotation, widthly, heightly / 2, 0, heightly / 4 + heightly / 16);
-                        else
+                        else if (selectedgmo.points.Count > 0)
                         {
                             long gmotarget = TargetClass.GetTargetGMO();
                             float hoff = (gmotarget == selectedgmo.id) ? (heightly * gmoseltarget) : (heightly * gmoselonly);
-                            PointData pd = (selectedgmo.points.Count > 0) ? selectedgmo.points[0] : null;     // lets be paranoid
-                            tqd.UpdateVertices(pd, rotation, widthly, heightly / 2, 0, hoff);
+                            tqd.UpdateVertices(selectedgmo.points[0], rotation, widthly, heightly / 2, 0, hoff);
                         }
                     }
                 }
