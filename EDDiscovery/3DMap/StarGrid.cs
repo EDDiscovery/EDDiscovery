@@ -397,7 +397,7 @@ namespace EDDiscovery2
             //midpercentage = 10;           // agressive debugging options
             //farpercentage = 1;
 
-            Console.WriteLine("Grids " + grids.Count + "Database Stars " + total + " mid " + midpercentage + " far " + farpercentage);
+            Console.WriteLine("Grids " + grids.Count + " Database Stars " + total + " mid " + midpercentage + " far " + farpercentage);
         }
 
         public void Start()
