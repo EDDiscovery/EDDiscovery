@@ -224,7 +224,7 @@ namespace EDDiscovery2._3DMap
                                     if (points.Count == 3)                                    // already a triangle..
                                     {
                                         polydataset.Add(new Polygon(points, 1, regcol));
-                                        outlinedataset.Add(new Polygon(points, 1, Color.FromArgb(255, 255, 255, 0)));
+                                        //outlinedataset.Add(new Polygon(points, 1, Color.FromArgb(255, 255, 255, 0))); //DEBUG
                                     }
                                     else
                                     {
@@ -233,7 +233,7 @@ namespace EDDiscovery2._3DMap
                                         foreach (List<Vector2> pt in polytri)
                                         {
                                             polydataset.Add(new Polygon(pt, 1, regcol));
-                                            outlinedataset.Add(new Polygon(pt, 1, Color.FromArgb(255, 255, 255, 0)));
+                                            // outlinedataset.Add(new Polygon(pt, 1, Color.FromArgb(255, 255, 255, 0))); // DEBUG
                                         }
                                     }
                                 }
