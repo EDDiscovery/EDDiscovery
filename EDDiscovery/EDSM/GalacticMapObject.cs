@@ -48,7 +48,7 @@ namespace EDDiscovery.EDSM
 
                     foreach (JArray ja in coords)
                     {
-                        double x, y, z;
+                        float x, y, z;
                         x = ja[0].Value<float>();
                         y = ja[1].Value<float>();
                         z = ja[2].Value<float>();
@@ -60,7 +60,7 @@ namespace EDDiscovery.EDSM
                 {
                     JArray plist = (JArray)jo["coordinates"];
 
-                    double x, y, z;
+                    float x, y, z;
                     x = plist[0].Value<float>();
                     y = plist[1].Value<float>();
                     z = plist[2].Value<float>();

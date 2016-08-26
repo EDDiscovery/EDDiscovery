@@ -18,7 +18,7 @@ namespace EDDiscovery2
     {
         public StarNames() { }
 
-        public StarNames(ISystem other , Vector3 posf)          // we can't use the position in other, as its in doubles, and we must be able to accurately match
+        public StarNames(ISystem other , Vector3 posf)          // we can't use the position in other, as its in doubles. and we must be able to accurately match
         {
             id = other.id;
             name = other.name;
@@ -42,7 +42,7 @@ namespace EDDiscovery2
 
         public TexturedQuadData newnametexture { get; set; }    // if a new texture is needed..
         public TexturedQuadData nametexture { get; set; }       // currently painted one
-        public Vector3d[] newnamevertices;                      
+        public Vector3[] newnamevertices;                      
 
         public PointData newstar { get; set; }                  // purposely drawing it like this, one at a time, due to sync issues between foreground/thread
         public PointData paintstar { get; set; }                // instead of doing a array paint.
@@ -68,7 +68,7 @@ namespace EDDiscovery2
     {
         public bool Busy { get { return _starnamesbusy; } }
 
-        Matrix4d _resmat;                           // to pass to thread..
+        Matrix4 _resmat;                            // to pass to thread..
         bool _discson;                              // to pass to thread..
         bool _nameson;                              // to pass to thread..
         float _znear;                               // to pass to thread..
@@ -134,7 +134,7 @@ namespace EDDiscovery2
 
         #region UI Functions
 
-        public void Update(CameraDirectionMovementTracker lastcamera, Matrix4d resmat, float _zn, bool names, bool discs , Color namecolour)     // FOREGROUND no thread
+        public void Update(CameraDirectionMovementTracker lastcamera, Matrix4 resmat, float _zn, bool names, bool discs , Color namecolour)     // FOREGROUND no thread
         {
             _starnamesbusy = true;      // from update to Transfertoforeground we are busy
 
@@ -222,7 +222,7 @@ namespace EDDiscovery2
 
                 //Stopwatch sw1 = new Stopwatch();sw1.Start(); Tools.LogToFile(String.Format("starnamesest Estimate at {0} len {1}", ti.campos, sqlylimit));
 
-                _stargrids.GetSystemsInView(ref inviewlist, 2000.0, ti);            // consider all grids under 2k from current pos.
+                _stargrids.GetSystemsInView(ref inviewlist, 2000.0F, ti);            // consider all grids under 2k from current pos.
 
                 //Tools.LogToFile(String.Format("starnamesest Took {0} in view {1}", sw1.ElapsedMilliseconds, inviewlist.Count));
 
@@ -230,7 +230,7 @@ namespace EDDiscovery2
                 float textscalingh = textscalingw * 4;
                 float textoffset = .20F;
                 float starsize = Math.Min(Math.Max(_lastcamera.LastZoom / 10F, 1.0F), 20F);     // Normal stars are at 1F.
-                //Console.WriteLine("Per char {0} h {1} sc {2} ", textscalingw, textscalingh, starsize);
+                Console.WriteLine("Per char {0} h {1} sc {2} ", textscalingw, textscalingh, starsize);
 
                 foreach (StarNames s in _starnamesbackground.Values)    // all items not processed
                     s.updatedinview = false;                                 // only items remaining will clear this
@@ -300,8 +300,8 @@ namespace EDDiscovery2
                                 }
                                 else
                                 {
-                                    sys.newnamevertices = TexturedQuadData.CalcVertices( new PointData(sys.pos.X, sys.pos.Y, sys.pos.Z),
-                                                                                            _lastcamera.Rotation,
+                                    sys.newnamevertices = TexturedQuadData.CalcVertices(sys.pos , 
+                                                                                       _lastcamera.Rotation,
                                                                     width, textscalingh, textoffset + width / 2, 0);
                                 }
 
@@ -413,33 +413,33 @@ namespace EDDiscovery2
 
         #region Finding in this name list
 
-        public Vector3? FindOverSystem(int x, int y, out double cursysdistz, StarGrid.TransFormInfo ti) // FOREGROUND thread may be running
+        public Vector3? FindOverSystem(int x, int y, out float cursysdistz, StarGrid.TransFormInfo ti) // FOREGROUND thread may be running
         {
-            cursysdistz = double.MaxValue;
+            cursysdistz = float.MaxValue;
             Vector3? ret = null;
 
-            double w2 = (double)ti.dwidth / 2.0;
-            double h2 = (double)ti.dheight / 2.0;
+            float w2 = (float)ti.dwidth / 2.0F;
+            float h2 = (float)ti.dheight / 2.0F;
 
             foreach (StarNames sys in _starnamesforeground)
             {
                 if (sys.paintstar != null)
                 {
-                    Vector4d syspos = new Vector4d((float)sys.pos.X, (float)sys.pos.Y, (float)sys.pos.Z, 1.0);
-                    Vector4d sysloc = Vector4d.Transform(syspos, ti.resmat);
+                    Vector4 syspos = new Vector4(sys.pos.X, sys.pos.Y, sys.pos.Z, 1.0F);
+                    Vector4 sysloc = Vector4.Transform(syspos, ti.resmat);
 
                     if (sysloc.Z > ti.znear)
                     {
-                        Vector2d syssloc = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0) * h2 - y);
-                        double sysdistsq = syssloc.X * syssloc.X + syssloc.Y * syssloc.Y;
+                        Vector2 syssloc = new Vector2(((sysloc.X / sysloc.W) + 1.0F) * w2 - x, ((sysloc.Y / sysloc.W) + 1.0F) * h2 - y);
+                        float sysdistsq = syssloc.X * syssloc.X + syssloc.Y * syssloc.Y;
 
                         if (sysdistsq < 7.0 * 7.0)
                         {
-                            double sysdist = Math.Sqrt(sysdistsq);
+                            float sysdist = (float)Math.Sqrt(sysdistsq);
 
                             if ((sysdist + Math.Abs(sysloc.Z * ti.zoom)) < cursysdistz)
                             {
-                                cursysdistz = sysdist + Math.Abs(sysloc.Z * ti.zoom);
+                                cursysdistz = sysdist + (float)Math.Abs(sysloc.Z * ti.zoom);
                                 ret = sys.pos;
                             }
                         }

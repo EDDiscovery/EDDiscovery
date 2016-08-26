@@ -347,6 +347,7 @@ namespace EDDiscovery2
             _mousehovertick.Interval = 250;
 
             SetCenterSystemTo(_centerSystem);                   // move to this..
+
         }
 
         private void FormMap_Shown(object sender, EventArgs e)
@@ -363,6 +364,8 @@ namespace EDDiscovery2
             SetModelProjectionMatrix();
             _allowresizematrixchange = true;
             StartSystemTimer();
+
+            glControl.Focus();
         }
 
         void StartSystemTimer()
@@ -392,6 +395,7 @@ namespace EDDiscovery2
             _isActivated = true;
             StartSystemTimer();                     // in case Close, then open, only get activated
             RequestPaint();
+            glControl.Focus();
         }
 
         private void FormMap_Deactivate(object sender, EventArgs e)
@@ -545,6 +549,7 @@ namespace EDDiscovery2
 
             if (_lastcameranorm.AnythingChanged )
             {
+                Console.WriteLine("Model!");
                 posdir.CalculateModelMatrix(zoomfov.Zoom);
                 _requestrepaint = true;
                 //Console.WriteLine("Repaint due to move/zoom/dir");
@@ -580,7 +585,7 @@ namespace EDDiscovery2
                 {
                     if (_stargrids.IsDisplayed(posdir.Position.X, posdir.Position.Z) && _lastcamerastarnames.AnythingChanged )                              // if changed something
                     {
-                        _starnameslist.Update(_lastcamerastarnames, posdir.GetResMatd, _znear, names, discs,
+                        _starnameslist.Update(_lastcamerastarnames, posdir.GetResMat, _znear, names, discs,
                                 enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange);
                     }
                 }
@@ -685,6 +690,7 @@ namespace EDDiscovery2
 
         private void glControl_Paint(object sender, PaintEventArgs e)
         {
+            Console.WriteLine("Paint!");
             long curtime = _systemtickinterval.ElapsedMilliseconds;
             long timesince = curtime - _lastpainttick;
             _lastpainttick = curtime;
@@ -1114,6 +1120,8 @@ namespace EDDiscovery2
             }
             else
                 MessageBox.Show("System or Object " + textboxFrom.Text + " not found");
+
+            glControl.Focus();
         }
 
         private void toolStripButtonGoBackward_Click(object sender, EventArgs e)
@@ -1898,6 +1906,7 @@ namespace EDDiscovery2
                 else
                 {
                     zoomfov.ChangeZoom(e.Delta > 0);
+                    Console.WriteLine("Zoom! {0}" , zoomfov.Zoom);
                 }
             }
         }
@@ -1907,17 +1916,17 @@ namespace EDDiscovery2
 
         #region FindObjectsOnScreen
 
-        private bool GetPixel(Vector4d xyzw, ref Matrix4d resmat, ref Vector2d pixelpos, out double newcursysdistz)
+        private bool GetPixel(Vector4 xyzw, ref Matrix4 resmat, ref Vector2 pixelpos, out float newcursysdistz)
         {
-            Vector4d sysloc = Vector4d.Transform(xyzw, resmat);
+            Vector4 sysloc = Vector4.Transform(xyzw, resmat);
 
-            double w2 = glControl.Width / 2.0;
-            double h2 = glControl.Height / 2.0;
+            float w2 = glControl.Width / 2.0F;
+            float h2 = glControl.Height / 2.0F;
 
             if (sysloc.Z > _znear)
             {
-                pixelpos = new Vector2d(((sysloc.X / sysloc.W) + 1.0) * w2, ((sysloc.Y / sysloc.W) + 1.0) * h2);
-                newcursysdistz = Math.Abs(sysloc.Z * zoomfov.Zoom);
+                pixelpos = new Vector2(((sysloc.X / sysloc.W) + 1.0F) * w2, ((sysloc.Y / sysloc.W) + 1.0F) * h2);
+                newcursysdistz = (float)Math.Abs(sysloc.Z * zoomfov.Zoom);
 
                 return true;
             }
@@ -1926,11 +1935,11 @@ namespace EDDiscovery2
             return false;
         }
 
-        private bool IsWithinRectangle( Matrix4d area ,  int x, int y, out double newcursysdistz, ref Matrix4d resmat )
+        private bool IsWithinRectangle( Matrix4 area ,  int x, int y, out float newcursysdistz, ref Matrix4 resmat )
         {
-            Vector2d ptopleft = new Vector2d(0, 0), pbottomright = new Vector2d(0, 0);
-            Vector2d pbottomleft = new Vector2d(0, 0), ptopright = new Vector2d(0, 0);
-            double ztopleft, zbottomright,zbottomleft,ztopright;
+            Vector2 ptopleft = new Vector2(0, 0), pbottomright = new Vector2(0, 0);
+            Vector2 pbottomleft = new Vector2(0, 0), ptopright = new Vector2(0, 0);
+            float ztopleft, zbottomright,zbottomleft,ztopright;
 
             if (GetPixel(area.Row0, ref resmat, ref ptopleft, out ztopleft) &&
                 GetPixel(area.Row1, ref resmat, ref ptopright, out ztopright) &&
@@ -1940,8 +1949,8 @@ namespace EDDiscovery2
                 //    Console.WriteLine("Row0 {0},{1}", ptopleft.X, ptopleft.Y); Console.WriteLine("Row1 {0},{1}", ptopright.X, ptopright.Y); Console.WriteLine("Row2 {0},{1}", pbottomright.X, pbottomright.Y); Console.WriteLine("Row3 {0},{1}", pbottomleft.X, pbottomleft.Y);  Console.WriteLine("x,y {0},{1} {2},{3}", x, y , x-pbottomleft.X, y-pbottomright.Y);
 
                 GraphicsPath p = new GraphicsPath();            // a moment of inspiration, use the graphics path for the polygon hit test!
-                p.AddLine(new PointF((float)ptopleft.X, (float)ptopleft.Y), new PointF((float)ptopright.X, (float)ptopright.Y));
-                p.AddLine(new PointF((float)pbottomright.X, (float)pbottomright.Y), new PointF((float)pbottomleft.X, (float)pbottomleft.Y));
+                p.AddLine(new PointF(ptopleft.X, ptopleft.Y), new PointF(ptopright.X, ptopright.Y));
+                p.AddLine(new PointF(pbottomright.X, pbottomright.Y), new PointF(pbottomleft.X, pbottomleft.Y));
                 p.CloseFigure();
 
                 if ( p.IsVisible( new PointF(x,y) ) )
@@ -1958,31 +1967,33 @@ namespace EDDiscovery2
         private float GetBitmapOnScreenSizeX() { return (float)Math.Min(Math.Max(2, 80.0 / zoomfov.Zoom), 1000); }
         private float GetBitmapOnScreenSizeY() { return (float)Math.Min(Math.Max(2, 100.0 / zoomfov.Zoom), 1000); }
 
-        private BookmarkClass GetMouseOverBookmark(int x, int y, out double cursysdistz)
+        private BookmarkClass GetMouseOverBookmark(int x, int y, out float cursysdistz)
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            Vector3d[] rotvert = TexturedQuadData.GetVertices(new Vector3d(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
+            Vector3[] rotvert = TexturedQuadData.GetVertices(new Vector3(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
 
             BookmarkClass curbk = null;
-            cursysdistz = double.MaxValue;
-            Matrix4d resmat = posdir.GetResMatd;
+            cursysdistz = float.MaxValue;
+            Matrix4 resmat = posdir.GetResMat;
 
             foreach (BookmarkClass bc in BookmarkClass.bookmarks)
             {
                 //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
 
-                Matrix4d area = new Matrix4d(
-                    new Vector4d(rotvert[0].X + bc.x, rotvert[0].Y + bc.y, rotvert[0].Z + bc.z, 1),    // top left
-                    new Vector4d(rotvert[1].X + bc.x, rotvert[1].Y + bc.y, rotvert[1].Z + bc.z, 1),    
-                    new Vector4d(rotvert[2].X + bc.x, rotvert[2].Y + bc.y, rotvert[2].Z + bc.z, 1),    
-                    new Vector4d(rotvert[3].X + bc.x, rotvert[3].Y + bc.y, rotvert[3].Z + bc.z, 1)    // bot left
+                Vector3 bp = new Vector3((float)bc.x, (float)bc.y, (float)bc.z);
+
+                Matrix4 area = new Matrix4(
+                    new Vector4(rotvert[0].X + bp.X, rotvert[0].Y + bp.Y, rotvert[0].Z + bp.Z, 1),    // top left
+                    new Vector4(rotvert[1].X + bp.X, rotvert[1].Y + bp.Y, rotvert[1].Z + bp.Z, 1),    
+                    new Vector4(rotvert[2].X + bp.X, rotvert[2].Y + bp.Y, rotvert[2].Z + bp.Z, 1),    
+                    new Vector4(rotvert[3].X + bp.X, rotvert[3].Y + bp.Y, rotvert[3].Z + bp.Z, 1)    // bot left
                     );
 
                 //Console.WriteLine("{0},{1},{2}, {3},{4},{5} vs {6},{7}" , area.Row0.X , area.Row0.Y, area.Row0.Z, area.Row2.X, area.Row2.Y , area.Row2.Z , x,y);
 
-                double newcursysdistz;
+                float newcursysdistz;
                 if (IsWithinRectangle(area, x, y, out newcursysdistz, ref resmat))
                 {
                     if (newcursysdistz < cursysdistz)
@@ -1996,20 +2007,20 @@ namespace EDDiscovery2
             return curbk;
         }
 
-        private SystemClass GetMouseOverNotedSystem(int x, int y, out double cursysdistz )
+        private SystemClass GetMouseOverNotedSystem(int x, int y, out float cursysdistz )
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            Vector3d[] rotvert = TexturedQuadData.GetVertices(new Vector3d(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
+            Vector3[] rotvert = TexturedQuadData.GetVertices(new Vector3(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
 
             SystemClass cursys = null;
-            cursysdistz = double.MaxValue;
+            cursysdistz = float.MaxValue;
 
             if (_visitedSystems == null)
                 return null;
 
-            Matrix4d resmat = posdir.GetResMatd;
+            Matrix4 resmat = posdir.GetResMat;
 
             foreach (VisitedSystemsClass vs in _visitedSystems)
             {
@@ -2021,18 +2032,18 @@ namespace EDDiscovery2
 
                     if (note.Length > 0)
                     {
-                        double lx = (vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x;
-                        double ly = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
-                        double lz = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
+                        float lx = (float)((vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x);
+                        float ly = (float)((vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y);
+                        float lz = (float)((vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z);
 
-                        Matrix4d area = new Matrix4d(
-                            new Vector4d(rotvert[0].X + lx, rotvert[0].Y + ly, rotvert[0].Z + lz, 1),    // top left
-                            new Vector4d(rotvert[1].X + lx, rotvert[1].Y + ly, rotvert[1].Z + lz, 1),
-                            new Vector4d(rotvert[2].X + lx, rotvert[2].Y + ly, rotvert[2].Z + lz, 1),
-                            new Vector4d(rotvert[3].X + lx, rotvert[3].Y + ly, rotvert[3].Z + lz, 1)    // bot left
+                        Matrix4 area = new Matrix4(
+                            new Vector4(rotvert[0].X + lx, rotvert[0].Y + ly, rotvert[0].Z + lz, 1),    // top left
+                            new Vector4(rotvert[1].X + lx, rotvert[1].Y + ly, rotvert[1].Z + lz, 1),
+                            new Vector4(rotvert[2].X + lx, rotvert[2].Y + ly, rotvert[2].Z + lz, 1),
+                            new Vector4(rotvert[3].X + lx, rotvert[3].Y + ly, rotvert[3].Z + lz, 1)    // bot left
                             );
 
-                        double newcursysdistz;
+                        float newcursysdistz;
                         if (IsWithinRectangle(area, x, y, out newcursysdistz,ref resmat))
                         { 
                             if (newcursysdistz < cursysdistz)
@@ -2049,15 +2060,15 @@ namespace EDDiscovery2
             return cursys;
         }
 
-        private GalacticMapObject GetMouseOverGalaxyObject(int x, int y, out double cursysdistz)
+        private GalacticMapObject GetMouseOverGalaxyObject(int x, int y, out float cursysdistz)
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            Vector3d[] rotvert = TexturedQuadData.GetVertices(new Vector3d(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY());
+            Vector3[] rotvert = TexturedQuadData.GetVertices(new Vector3(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY());
 
-            cursysdistz = double.MaxValue;
-            Matrix4d resmat = posdir.GetResMatd;
+            cursysdistz = float.MaxValue;
+            Matrix4 resmat = posdir.GetResMat;
             GalacticMapObject curobj = null;
 
             if (EDDiscoveryForm.galacticMapping != null)
@@ -2068,14 +2079,14 @@ namespace EDDiscovery2
 
                     if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && pd != null)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
                     {
-                        Matrix4d area = new Matrix4d(
-                            new Vector4d(rotvert[0].X + pd.x, rotvert[0].Y + pd.y, rotvert[0].Z + pd.z, 1),    // top left
-                            new Vector4d(rotvert[1].X + pd.x, rotvert[1].Y + pd.y, rotvert[1].Z + pd.z, 1),
-                            new Vector4d(rotvert[2].X + pd.x, rotvert[2].Y + pd.y, rotvert[2].Z + pd.z, 1),
-                            new Vector4d(rotvert[3].X + pd.x, rotvert[3].Y + pd.y, rotvert[3].Z + pd.z, 1)    // bot left
+                        Matrix4 area = new Matrix4(
+                            new Vector4(rotvert[0].X + pd.x, rotvert[0].Y + pd.y, rotvert[0].Z + pd.z, 1),    // top left
+                            new Vector4(rotvert[1].X + pd.x, rotvert[1].Y + pd.y, rotvert[1].Z + pd.z, 1),
+                            new Vector4(rotvert[2].X + pd.x, rotvert[2].Y + pd.y, rotvert[2].Z + pd.z, 1),
+                            new Vector4(rotvert[3].X + pd.x, rotvert[3].Y + pd.y, rotvert[3].Z + pd.z, 1)    // bot left
                             );
 
-                        double newcursysdistz;
+                        float newcursysdistz;
                         if (IsWithinRectangle(area, x, y, out newcursysdistz, ref resmat))
                         {
                             if (newcursysdistz < cursysdistz)
@@ -2091,12 +2102,12 @@ namespace EDDiscovery2
             return curobj;
         }
 
-        private ISystem GetMouseOverSystem(int x, int y, out double cursysdistz)
+        private ISystem GetMouseOverSystem(int x, int y, out float cursysdistz)
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
-            StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(posdir.GetResMatd, _znear, glControl.Width, glControl.Height, zoomfov.Zoom);
+            StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(posdir.GetResMat, _znear, glControl.Width, glControl.Height, zoomfov.Zoom);
 
             Vector3? posofsystem = _stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
 
@@ -2128,7 +2139,7 @@ namespace EDDiscovery2
 
             if (_datasets_bookedmarkedsystems != null)              // only if bookedmarked is shown
             {
-                double curdistbookmark;
+                float curdistbookmark;
                 curbookmark = GetMouseOverBookmark(x, y, out curdistbookmark);       
 
                 if (curbookmark != null)
@@ -2142,7 +2153,7 @@ namespace EDDiscovery2
 
             if (_datasets_notedsystems != null)
             {
-                double curdistnoted;
+                float curdistnoted;
                 cursystem = GetMouseOverNotedSystem(x, y, out curdistnoted);
 
                 if ( cursystem != null )
@@ -2152,12 +2163,12 @@ namespace EDDiscovery2
                 }
             }
 
-            double curdistgalmap;
+            float curdistgalmap;
             galobj = GetMouseOverGalaxyObject(x, y, out curdistgalmap);
             if (galobj != null)
                 return;
 
-            double curdistsystem;
+            float curdistsystem;
             cursystem = GetMouseOverSystem(x, y, out curdistsystem);
         }
 

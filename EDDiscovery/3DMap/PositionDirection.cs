@@ -360,19 +360,12 @@ namespace EDDiscovery2._3DMap
             _modelmatrix = Matrix4.Mult(flipy, preinverted);    //ORDER VERY important this one took longer to work out the order! replaces GL.Scale(1.0, -1.0, 1.0);          
         }
 
-        public Matrix4d GetResMatd      // because there are a lot of doubles in the code still.. and no direct 4d to 4 conversion in the stupid opentk
+        public Matrix4 GetResMat
         {
             get
             {
                 Matrix4 resmat = Matrix4.Mult(_modelmatrix, _projectionmatrix);
-
-                Matrix4d resmatd = new Matrix4d(
-                    new Vector4d(resmat.M11, resmat.M12, resmat.M13, resmat.M14),
-                    new Vector4d(resmat.M21, resmat.M22, resmat.M23, resmat.M24),
-                    new Vector4d(resmat.M31, resmat.M32, resmat.M33, resmat.M34),
-                    new Vector4d(resmat.M41, resmat.M42, resmat.M43, resmat.M44));
-
-                return resmatd;
+                return resmat;
             }
         }
 

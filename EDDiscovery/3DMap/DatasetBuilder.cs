@@ -56,7 +56,7 @@ namespace EDDiscovery2._3DMap
                     {
                         Bitmap bmp = (Bitmap)Bitmap.FromFile(img.FilePath);
                                                                                     
-                        Vector3d centre = new Vector3d((img.TopLeft.X + img.BottomRight.X) / 2, 0, (img.TopRight.Y + img.BottomLeft.Y) / 2);
+                        Vector3 centre = new Vector3((img.TopLeft.X + img.BottomRight.X) / 2, 0, (img.TopRight.Y + img.BottomLeft.Y) / 2);
                         float width = img.TopRight.X - img.BottomLeft.X;
                         float height = img.TopLeft.Y - img.BottomRight.Y;           // its rectangular.. so does not really matter which left/right/top/bot you use
 
@@ -499,9 +499,9 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public void UpdateGridZoom(ref List<IData3DSet> _datasets, double zoom)
+        public void UpdateGridZoom(ref List<IData3DSet> _datasets, float zoom)
         {
-            double LOD1fade = Math.Max(Math.Min((zoom / 0.1 - 1.0) / 5.0, 1.0), 0.5);
+            float LOD1fade = (float)Math.Max(Math.Min((zoom / 0.1 - 1.0) / 5.0, 1.0), 0.5);
 
             var gridLOD1 = _datasets.SingleOrDefault(s => s.Name == "gridLOD1");
             if (gridLOD1 != null)
@@ -523,9 +523,9 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public void UpdateGridCoordZoom(ref List<IData3DSet> _datasets, double zoom)
+        public void UpdateGridCoordZoom(ref List<IData3DSet> _datasets, float zoom)
         {
-            double LOD2fade = Math.Max(Math.Min((0.2 / zoom - 1.0) / 2.0, 1.0), 0.0);
+            float LOD2fade = (float)Math.Max(Math.Min((0.2 / zoom - 1.0) / 2.0, 1.0), 0.0);
 
             var gridLOD2 = _datasets.SingleOrDefault(s => s.Name == "text bitmap LOD2");
             if (gridLOD2 != null)

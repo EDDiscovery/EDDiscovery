@@ -1899,7 +1899,7 @@ namespace EDDiscovery.DB
             return x + 100 * z;
         }
 
-        public static bool XZ(int id, out double x, out double z)
+        public static bool XZ(int id, out float x, out float z)
         {
             x = 0; z = 0;
             if (id >= 0)
@@ -1918,7 +1918,7 @@ namespace EDDiscovery.DB
                             while (i < compresstablex.Length && compresstablex[i] == xid)
                                 i++;
 
-                            x = (((i * 1000) + xleft) + startx) / 2.0;
+                            x = (float)((((i * 1000) + xleft) + startx) / 2.0);
                             break;
                         }
                     }
@@ -1932,7 +1932,7 @@ namespace EDDiscovery.DB
                             while (i < compresstablez.Length && compresstablez[i] == zid)
                                 i++;
 
-                            z = (((i * 1000) + zbot) + startz) / 2.0;
+                            z = (float)((((i * 1000) + zbot) + startz) / 2.0);
                             break;
                         }
                     }

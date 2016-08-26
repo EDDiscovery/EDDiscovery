@@ -21,28 +21,43 @@ namespace EDDiscovery2._3DMap
 
     public class PointData : IDrawingPrimative
     {
-        public double x, y, z;
+        public Vector3 Pos;
+        public float x { get { return Pos.X; } }
+        public float y { get { return Pos.Y; } }
+        public float z { get { return Pos.Z; } }
 
-        public PointData(double x, double y, double z)
+        public PointData(Vector3 p)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            Pos = p;
         }
 
-        public PointData(double x, double y, double z, float sz)
+        public PointData(float x, float y, float z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            Pos.X = x;
+            Pos.Y = y;
+            Pos.Z = z;
+        }
+
+        public PointData(double x, double y, double z)      // BC
+        {
+            Pos.X = (float)x;
+            Pos.Y = (float)y;
+            Pos.Z = (float)z;
+        }
+
+        public PointData(float x, float y, float z, float sz)
+        {
+            Pos.X = x;
+            Pos.Y = y;
+            Pos.Z = z;
             this.Size = sz;
         }
 
-        public PointData(double x, double y, double z, float sz, Color c)
+        public PointData(float x, float y, float z, float sz, Color c)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            Pos.X = x;
+            Pos.Y = y;
+            Pos.Z = z;
             this.Size = sz;
             this.Color = c;
         }
@@ -63,7 +78,7 @@ namespace EDDiscovery2._3DMap
 
                 GL.Begin(Type);
                 GL.Color3(Color);
-                GL.Vertex3(x, y, z);
+                GL.Vertex3(Pos);
                 GL.End();
             }
         }
@@ -71,7 +86,7 @@ namespace EDDiscovery2._3DMap
 
     public class PointDataCollection : Data3DSetClass<PointData>, IList<PointData>, IDisposable
     {
-        protected Vector3d[] Vertices;
+        protected Vector3[] Vertices;
         protected int NumVertices;
         protected int VtxVboID;
         protected GLControl GLContext;
@@ -105,14 +120,14 @@ namespace EDDiscovery2._3DMap
 
             if (Vertices == null)
             {
-                Vertices = new Vector3d[1024];
+                Vertices = new Vector3[1024];
             }
             else if (NumVertices == Vertices.Length)
             {
                 Array.Resize(ref Vertices, Vertices.Length * 2);
             }
 
-            Vertices[NumVertices++] = new Vector3d(primative.x, primative.y, primative.z);
+            Vertices[NumVertices++] = primative.Pos;
         }
 
         public override void DrawAll(GLControl control)
@@ -139,7 +154,7 @@ namespace EDDiscovery2._3DMap
                 int vbosize = NumVertices;
                 GL.EnableClientState(ArrayCap.VertexArray);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
-                GL.VertexPointer(3, VertexPointerType.Double, 0, 0);
+                GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                 GL.PointSize(pointSize);
                 GL.Color3(color);
                 GL.DrawArrays(PrimitiveType.Points, 0, vbosize);
@@ -170,7 +185,7 @@ namespace EDDiscovery2._3DMap
             for (int i = 0; i < NumVertices; i++)
             {
                 var v = Vertices[i];
-                if (v.X == p.x && v.Y == p.y && v.Z == p.z)
+                if (v == p.Pos)
                 {
                     return i;
                 }
@@ -193,7 +208,7 @@ namespace EDDiscovery2._3DMap
             {
                 Vertices[i + 1] = Vertices[i];
             }
-            Vertices[index] = new Vector3d(point.x, point.y, point.z);
+            Vertices[index] = point.Pos;
         }
 
         public void RemoveAt(int index)
@@ -281,7 +296,7 @@ namespace EDDiscovery2._3DMap
                 else
                 {
                     Dispose();
-                    Vertices[index] = new Vector3d(value.x, value.y, value.z);
+                    Vertices[index] = value.Pos;
                 }
             }
         }
@@ -291,17 +306,25 @@ namespace EDDiscovery2._3DMap
 
     public class LineData : IDrawingPrimative
     {
-        public double x1, y1, z1;
-        public double x2, y2, z2;
+        public Vector3 p1;
+        public Vector3 p2;
 
-        public LineData(double x1, double y1, double z1, double x2, double y2, double z2)
+        public LineData(Vector3 a, Vector3 b)
         {
-            this.x1 = x1;
-            this.y1 = y1;
-            this.z1 = z1;
-            this.x2 = x2;
-            this.y2 = y2;
-            this.z2 = z2;
+            p1 = a;
+            p2 = b;
+        }
+
+        public LineData(float p1x, float p1y, float p1z, float p2x, float p2y, float p2z)
+        {
+            p1 = new Vector3(p1x, p1y, p1z);
+            p2 = new Vector3(p2x, p2y, p2z);
+        }
+
+        public LineData(double p1x, double p1y, double p1z, double p2x, double p2y, double p2z)         // BC
+        {
+            p1 = new Vector3((float)p1x, (float)p1y, (float)p1z);
+            p2 = new Vector3((float)p2x, (float)p2y, (float)p2z);
         }
 
         public PrimitiveType Type { get { return PrimitiveType.Lines; } }
@@ -319,8 +342,8 @@ namespace EDDiscovery2._3DMap
                 GL.PointSize(Size);
                 GL.Begin(Type);
                 GL.Color3(Color);
-                GL.Vertex3(x1, y1, z1);
-                GL.Vertex3(x2, y2, z2);
+                GL.Vertex3(p1);
+                GL.Vertex3(p2);
                 GL.End();
             }
         }
@@ -328,7 +351,7 @@ namespace EDDiscovery2._3DMap
 
     public class LineDataCollection : Data3DSetClass<LineData>, IList<LineData>, IDisposable
     {
-        protected Vector3d[] Vertices;
+        protected Vector3[] Vertices;
         protected int NumVertices;
         protected int VtxVboID;
         protected GLControl GLContext;
@@ -362,15 +385,15 @@ namespace EDDiscovery2._3DMap
 
             if (Vertices == null)
             {
-                Vertices = new Vector3d[1024];
+                Vertices = new Vector3[1024];
             }
             else if (NumVertices+2 > Vertices.Length)
             {
                 Array.Resize(ref Vertices, Vertices.Length * 2);
             }
 
-            Vertices[NumVertices++] = new Vector3d(primative.x1, primative.y1, primative.z1);
-            Vertices[NumVertices++] = new Vector3d(primative.x2, primative.y2, primative.z2);
+            Vertices[NumVertices++] = primative.p1;
+            Vertices[NumVertices++] = primative.p2;
         }
 
         public override void DrawAll(GLControl control)
@@ -396,7 +419,7 @@ namespace EDDiscovery2._3DMap
                 int vbosize = NumVertices;
                 GL.EnableClientState(ArrayCap.VertexArray);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
-                GL.VertexPointer(3, VertexPointerType.Double, 0, 0);
+                GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                 GL.PointSize(pointSize);
                 GL.Color3(color);
                 GL.DrawArrays(PrimitiveType.Lines, 0, vbosize);
@@ -430,7 +453,7 @@ namespace EDDiscovery2._3DMap
                 var v1 = Vertices[i * 2];
                 var v2 = Vertices[i * 2 + 1];
 
-                if (v1.X == l.x1 && v1.Y == l.y1 && v1.Z == l.z1 && v2.X == l.x2 && v2.Y == l.y2 && v2.Z == l.z2)
+                if (v1 == l.p1 && v2 == l.p2 )
                 {
                     return i;
                 }
@@ -448,13 +471,13 @@ namespace EDDiscovery2._3DMap
 
             Dispose();
 
-            this.Add(new LineData(0, 0, 0, 0, 0, 0));
+            this.Add(new LineData(new Vector3(0, 0, 0), new Vector3(0, 0, 0)));
             for (int i = NumVertices - 3; i >= index * 2; i--)
             {
                 Vertices[i + 2] = Vertices[i];
             }
-            Vertices[index * 2] = new Vector3d(line.x1, line.y1, line.z1);
-            Vertices[index * 2 + 1] = new Vector3d(line.x2, line.y2, line.z2);
+            Vertices[index * 2] = line.p1;
+            Vertices[index * 2 + 1] = line.p2;
         }
 
         public void RemoveAt(int index)
@@ -543,8 +566,8 @@ namespace EDDiscovery2._3DMap
                 else
                 {
                     Dispose();
-                    Vertices[index * 2] = new Vector3d(value.x1, value.y1, value.z1);
-                    Vertices[index * 2 + 1] = new Vector3d(value.x2, value.y2, value.z2);
+                    Vertices[index * 2] = value.p1;
+                    Vertices[index * 2 + 1] = value.p2;
                 }
             }
         }
@@ -554,8 +577,8 @@ namespace EDDiscovery2._3DMap
 
     public class TexturedQuadData : IDrawingPrimative
     {
-        public Vector3d[] Vertices;                 // as passed
-        public Vector4d[] Texcoords;
+        public Vector3[] Vertices;                 // as passed
+        public Vector4[] Texcoords;
         public Bitmap Texture;
         public Color Color { get; set; }
         public float Size { get; set; }     // not used
@@ -569,8 +592,8 @@ namespace EDDiscovery2._3DMap
         protected int NumVertices;                  // vertices
         protected int VtxVboID;
         protected int TexVboID;
-        protected Vector3d[] _vboVertices;
-        protected Vector4d[] _vboTexcoords;
+        protected Vector3[] _vboVertices;
+        protected Vector4[] _vboTexcoords;
 
         private GLControl _control;
 
@@ -593,7 +616,7 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public TexturedQuadData(Vector3d[] vertices, Vector4d[] texcoords, Bitmap texture)
+        public TexturedQuadData(Vector3[] vertices, Vector4[] texcoords, Bitmap texture)
         {
             this.Vertices = vertices;
             this.Texcoords = texcoords;
@@ -601,7 +624,7 @@ namespace EDDiscovery2._3DMap
             this.Color = Color.White;
         }
 
-        public TexturedQuadData(Vector3d[] vertices, Vector4d[] texcoords, TexturedQuadData texture)
+        public TexturedQuadData(Vector3[] vertices, Vector4[] texcoords, TexturedQuadData texture)
         {
             this.Vertices = vertices;
             this.Texcoords = texcoords;
@@ -622,7 +645,7 @@ namespace EDDiscovery2._3DMap
             FreeVertices(false);
         }
 
-        public void UpdateVertices(Vector3d[] vertices)
+        public void UpdateVertices(Vector3[] vertices)
         {
             this.Vertices = vertices;
             FreeVertices(false);
@@ -693,7 +716,7 @@ namespace EDDiscovery2._3DMap
 
                 if (_vboVertices == null)
                 {
-                    _vboVertices = new Vector3d[NumVertices * 2];
+                    _vboVertices = new Vector3[NumVertices * 2];
                 }
                 else if (NumVertices > _vboVertices.Length)
                 {
@@ -702,7 +725,7 @@ namespace EDDiscovery2._3DMap
 
                 if (_vboTexcoords == null)
                 {
-                    _vboTexcoords = new Vector4d[NumVertices * 2];
+                    _vboTexcoords = new Vector4[NumVertices * 2];
                 }
                 else if (NumVertices > _vboTexcoords.Length)
                 {
@@ -782,10 +805,10 @@ namespace EDDiscovery2._3DMap
                 GL.EnableClientState(ArrayCap.VertexArray);
                 GL.BindTexture(TextureTarget.Texture2D, _texid);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
-                GL.VertexPointer(3, VertexPointerType.Double, 0, 0);
+                GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                 GL.EnableClientState(ArrayCap.TextureCoordArray);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, TexVboID);
-                GL.TexCoordPointer(4, TexCoordPointerType.Double, 0, 0);
+                GL.TexCoordPointer(4, TexCoordPointerType.Float, 0, 0);
                 GL.Color4(Color);
                 GL.DrawArrays(PrimitiveType.Triangles, 0, vbosize);
                 GL.DisableClientState(ArrayCap.TextureCoordArray);
@@ -803,53 +826,53 @@ namespace EDDiscovery2._3DMap
         static public Vector3 NoRotation { get { return new Vector3(0, 0, 0); } }
 
         // we rotate around the centre point. hoff/voff allows you to place the bitmap to the side
-        public static Vector3d[] GetVertices(Vector3d centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
+        public static Vector3[] GetVertices(Vector3 centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            Matrix4d rm = Matrix4d.Identity;
+            Matrix4 rm = Matrix4.Identity;
             if (rotationdeg.X != 0)
-                rm *= Matrix4d.CreateRotationX((float)(rotationdeg.X * Math.PI / 180.0f));
+                rm *= Matrix4.CreateRotationX((float)(rotationdeg.X * Math.PI / 180.0f));
             if (rotationdeg.Y != 0)
-                rm *= Matrix4d.CreateRotationY((float)(rotationdeg.Y * Math.PI / 180.0f));
+                rm *= Matrix4.CreateRotationY((float)(rotationdeg.Y * Math.PI / 180.0f));
             if (rotationdeg.Z != 0)
-                rm *= Matrix4d.CreateRotationZ((float)(rotationdeg.Z * Math.PI / 180.0f));
+                rm *= Matrix4.CreateRotationZ((float)(rotationdeg.Z * Math.PI / 180.0f));
 
             width /= 2;
             height /= 2;
 
-            Vector3d[] points = new Vector3d[]      // bitmap is placed on map, centred if hoff,voff=0. 
+            Vector3[] points = new Vector3[]      // bitmap is placed on map, centred if hoff,voff=0. 
             {
-                Vector3d.Transform(new Vector3d(-width + hoffset, 0, height + voffset), rm) + centre,           // top left, rotate and transform
-                Vector3d.Transform(new Vector3d(width + hoffset, 0, height + voffset), rm) + centre,            // top right
-                Vector3d.Transform(new Vector3d(width + hoffset, 0, -height + voffset), rm) + centre,           // bot right
-                Vector3d.Transform(new Vector3d(-width + hoffset, 0, -height + voffset), rm) + centre,          // bot left
+                Vector3.Transform(new Vector3(-width + hoffset, 0, height + voffset), rm) + centre,           // top left, rotate and transform
+                Vector3.Transform(new Vector3(width + hoffset, 0, height + voffset), rm) + centre,            // top right
+                Vector3.Transform(new Vector3(width + hoffset, 0, -height + voffset), rm) + centre,           // bot right
+                Vector3.Transform(new Vector3(-width + hoffset, 0, -height + voffset), rm) + centre,          // bot left
             };
 
             return points;
         }
 
         // Full version, left/bottom/right/top are pixel co-ords, width/height is size of bitmap. Allows a bit of the bitmap to be picked
-        protected static Vector4d[] GetTexCoords(float left, float bottom, float right, float top, int width, int height)
+        protected static Vector4[] GetTexCoords(float left, float bottom, float right, float top, int width, int height)
         {
-            Vector4d[] texcoords = new Vector4d[]
+            Vector4[] texcoords = new Vector4[]
             {
-                new Vector4d(left * 1.0 / width, bottom * 1.0 / height, 0, 1),      // order botleft,botright,topright,topleft 
-                new Vector4d(right * 1.0 / width, bottom * 1.0 / height, 0, 1),     // paints bitmap correctly
-                new Vector4d(right * 1.0 / width, top * 1.0 / height, 0, 1),
-                new Vector4d(left * 1.0 / width, top * 1.0 / height, 0, 1)
+                new Vector4(left * 1.0F / width, bottom * 1.0F / height, 0, 1),      // order botleft,botright,topright,topleft 
+                new Vector4(right * 1.0F / width, bottom * 1.0F / height, 0, 1),     // paints bitmap correctly
+                new Vector4(right * 1.0F / width, top * 1.0F / height, 0, 1),
+                new Vector4(left * 1.0F / width, top * 1.0F / height, 0, 1)
             };
 
-            Vector2d a = new Vector2d(right - left, top - bottom);
-            Vector2d b = new Vector2d(left - right, top - bottom);
-            double cross = a.X * b.Y - b.X * a.Y;
+            Vector2 a = new Vector2(right - left, top - bottom);
+            Vector2 b = new Vector2(left - right, top - bottom);
+            float cross = a.X * b.Y - b.X * a.Y;
 
             if (cross != 0)
             {
-                Vector2d c = new Vector2d(left - right, 0);
-                double qa = (a.X * c.Y - c.X * a.Y) / cross;
-                double qb = (b.X * c.Y - c.X * b.Y) / cross;
+                Vector2 c = new Vector2(left - right, 0);
+                float qa = (a.X * c.Y - c.X * a.Y) / cross;
+                float qb = (b.X * c.Y - c.X * b.Y) / cross;
                 if (qa > 0 && qa < 1 && qb > 0 && qb < 1)
                 {
-                    texcoords = new Vector4d[]
+                    texcoords = new Vector4[]
                     {
                         texcoords[0] * qb,
                         texcoords[1] * qa,
@@ -863,31 +886,31 @@ namespace EDDiscovery2._3DMap
         }
 
         // Quicker version, whole of bitmap displayed
-        protected static Vector4d[] GetTexCoords(int width, int height)     // simpler version for a bitmap
+        protected static Vector4[] GetTexCoords(int width, int height)     // simpler version for a bitmap
         {
-            double h = (height * 1.0 - 1) / height;
-            double w = (width * 1.0 - 1) / width;
+            float h = (height * 1.0F - 1) / height;
+            float w = (width * 1.0F - 1) / width;
 
-            Vector4d[] texcoords = new Vector4d[]
+            Vector4[] texcoords = new Vector4[]
             {
-                new Vector4d(0, 0, 0, 1),       // this order paints the bitmaps generated by drawstring correctly on our upside down world!
-                new Vector4d(w, 0, 0, 1),
-                new Vector4d(w, h, 0, 1),
-                new Vector4d(0, h, 0, 1)
+                new Vector4(0, 0, 0, 1),       // this order paints the bitmaps generated by drawstring correctly on our upside down world!
+                new Vector4(w, 0, 0, 1),
+                new Vector4(w, h, 0, 1),
+                new Vector4(0, h, 0, 1)
             };
 
-            Vector2d a = new Vector2d(width-1, height-1);
-            Vector2d b = new Vector2d(-(width-1), height-1);
-            double cross = a.X * b.Y - b.X * a.Y;
+            Vector2 a = new Vector2(width-1, height-1);
+            Vector2 b = new Vector2(-(width-1), height-1);
+            float cross = a.X * b.Y - b.X * a.Y;
 
             if (cross != 0)
             {
-                Vector2d c = new Vector2d(-(width-1), 0);
-                double qa = (a.X * c.Y - c.X * a.Y) / cross;
-                double qb = (b.X * c.Y - c.X * b.Y) / cross;
+                Vector2 c = new Vector2(-(width-1), 0);
+                float qa = (a.X * c.Y - c.X * a.Y) / cross;
+                float qb = (b.X * c.Y - c.X * b.Y) / cross;
                 if (qa > 0 && qa < 1 && qb > 0 && qb < 1)
                 {
-                    texcoords = new Vector4d[]
+                    texcoords = new Vector4[]
                     {
                         texcoords[0] * qb,
                         texcoords[1] * qa,
@@ -903,30 +926,30 @@ namespace EDDiscovery2._3DMap
         // whole versions
         public static TexturedQuadData FromBitmap(Bitmap bmp, PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            return FromBitmap(bmp, new Vector3d(centre.x, centre.y , centre.z), rotationdeg, width, height, hoffset, voffset);
+            return FromBitmap(bmp, centre.Pos, rotationdeg, width, height, hoffset, voffset);
         }
 
-        public static TexturedQuadData FromBitmap(Bitmap bmp, Vector3d centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
+        public static TexturedQuadData FromBitmap(Bitmap bmp, Vector3 centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            Vector4d[] texcoords = GetTexCoords(bmp.Width, bmp.Height);
-            Vector3d[] vertices = GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
+            Vector4[] texcoords = GetTexCoords(bmp.Width, bmp.Height);
+            Vector3[] vertices = GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
             return new TexturedQuadData(vertices, texcoords, bmp);
         }
 
         public void UpdateVertices(PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            Vector3d[] vertices = GetVertices(new Vector3d(centre.x, centre.y, centre.z), rotationdeg, width, height, hoffset, voffset);
+            Vector3[] vertices = GetVertices(centre.Pos, rotationdeg, width, height, hoffset, voffset);
             UpdateVertices(vertices);
         }
 
-        static public Vector3d[] CalcVertices(PointData centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
+        static public Vector3[] CalcVertices(Vector3 centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            return GetVertices(new Vector3d(centre.x, centre.y, centre.z), rotationdeg, width, height, hoffset, voffset);
+            return GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
         }
 
-        public void UpdateVertices(Vector3d centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
+        public void UpdateVertices(Vector3 centre, Vector3 rotationdeg, float width, float height, float hoffset = 0, float voffset = 0)
         {
-            Vector3d[] vertices = GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
+            Vector3[] vertices = GetVertices(centre, rotationdeg, width, height, hoffset, voffset);
             UpdateVertices(vertices);
         }
 
@@ -935,15 +958,15 @@ namespace EDDiscovery2._3DMap
                                       float pxleft, float pxbottom, float pxright, float pxtop,
                                       float y = 0)
         {
-            Vector3d[] vertices = new Vector3d[]
+            Vector3[] vertices = new Vector3[]
             {
-                  new Vector3d(left, y, top),           // top left/topright/rightbottom/left/bottom as per other transform
-                  new Vector3d(right, y, top),
-                  new Vector3d(right, y, bottom),
-                  new Vector3d(left, y, bottom)
+                  new Vector3(left, y, top),           // top left/topright/rightbottom/left/bottom as per other transform
+                  new Vector3(right, y, top),
+                  new Vector3(right, y, bottom),
+                  new Vector3(left, y, bottom)
             };
 
-            Vector4d[] texcoords = GetTexCoords(pxleft,pxbottom,pxright,pxtop, Texture.Width, Texture.Height);
+            Vector4[] texcoords = GetTexCoords(pxleft,pxbottom,pxright,pxtop, Texture.Width, Texture.Height);
             return new TexturedQuadData(vertices, texcoords, this);
         }
 
@@ -1002,9 +1025,9 @@ namespace EDDiscovery2._3DMap
 
     public class Polygon : IDrawingPrimative
     {
-        public List<PointData> vertices;
+        public List<Vector3> vertices;
 
-        public Polygon(List<PointData> points, float size, Color c)
+        public Polygon(List<Vector3> points, float size, Color c)
         {
             vertices = points;
             Size = size;
@@ -1013,9 +1036,9 @@ namespace EDDiscovery2._3DMap
 
         public Polygon(List<Vector2> points, float size, Color c)
         {
-            vertices = new List<PointData>();
+            vertices = new List<Vector3>();
             foreach (Vector2 f in points)
-                vertices.Add(new PointData(f.X, 0, f.Y));
+                vertices.Add(new Vector3(f.X, 0, f.Y));
 
             Size = size;
             Color = c;
@@ -1035,8 +1058,8 @@ namespace EDDiscovery2._3DMap
             {
                 GL.Begin(Type);
                 GL.Color4(Color);
-                foreach (PointData v in vertices)
-                    GL.Vertex3(v.x, v.y, v.z);
+                foreach (Vector3 v in vertices)
+                    GL.Vertex3(v);
                 GL.End();
             }
         }
@@ -1044,7 +1067,7 @@ namespace EDDiscovery2._3DMap
 
     public class PolygonCollection : Data3DSetClass<Polygon>,  IDisposable      // can be either Polygons, LineLoop, Triangles
     {
-        protected Vector3d[] Vertices;
+        protected Vector3[] Vertices;
         private uint[] Colourarray;
         protected int NumVertices;
 
@@ -1089,7 +1112,7 @@ namespace EDDiscovery2._3DMap
 
             if (Vertices == null)
             {
-                Vertices = new Vector3d[1024];
+                Vertices = new Vector3[1024];
                 Colourarray = new uint[1024];
             }
             else if (NumVertices + primative.vertices.Count > Vertices.Length)
@@ -1103,10 +1126,10 @@ namespace EDDiscovery2._3DMap
 
             uint cx = BitConverter.ToUInt32(new byte[] { primative.Color.R, primative.Color.G, primative.Color.B, primative.Color.A }, 0);
 
-            foreach (PointData p in primative.vertices)
+            foreach (Vector3 p in primative.vertices)
             {
                 Colourarray[NumVertices] = cx;     // need colour per vertex.. if not, it does not work, or you can mix colours
-                Vertices[NumVertices++] = new Vector3d(p.x, p.y , p.z);
+                Vertices[NumVertices++] = p;
             }
         }
 
@@ -1134,12 +1157,11 @@ namespace EDDiscovery2._3DMap
                     GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(Colourarray)), Colourarray, BufferUsageHint.StaticDraw);
 
                     GLContext = control;
-                    Tools.LogToFile("Polygon throw");
                 }
 
                 GL.EnableClientState(ArrayCap.VertexArray);                     // MEASUREMENTS are showing this can for some reason take 40ms to draw.. at random times
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);              // Maybe we should tesselate the polygons to triangles 
-                GL.VertexPointer(3, VertexPointerType.Double, 0, 0);
+                GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                 GL.PointSize(pointSize);
 
                 GL.EnableClientState(ArrayCap.ColorArray);
