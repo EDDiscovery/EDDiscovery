@@ -586,12 +586,12 @@ namespace EDDiscovery2._3DMap
         public Object Tag { get; set; }     // optional tag 
         public Object Tag2 { get; set; }     // optional tag
 
-        private int _texid;                         // buffer for texture
         private Bitmap _texture;                    // and texture
 
         protected int NumVertices;                  // vertices
         protected int VtxVboID;
         protected int TexVboID;
+        protected int TextureVboID;                         // buffer for texture
         protected Vector3[] _vboVertices;
         protected Vector4[] _vboTexcoords;
 
@@ -642,22 +642,23 @@ namespace EDDiscovery2._3DMap
         public void Dispose()
         {
             FreeTexture(true);
-            FreeVertices(false);
+            FreeVerticesTri();
+            FreeVerticesTex();
         }
 
         public void UpdateVertices(Vector3[] vertices)
         {
             this.Vertices = vertices;
-            FreeVertices(false);
+            FreeVerticesTri();
         }
 
         protected void CreateTexture()
         {
-            if (_texid == 0)                                        // no texture, bind
+            if (TextureVboID == 0)                                        // no texture, bind
             {
                 Bitmap bmp = Texture;
-                GL.GenTextures(1, out _texid);
-                GL.BindTexture(TextureTarget.Texture2D, _texid);
+                GL.GenTextures(1, out TextureVboID);
+                GL.BindTexture(TextureTarget.Texture2D, TextureVboID);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                 System.Drawing.Imaging.BitmapData bmpdata = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -669,7 +670,7 @@ namespace EDDiscovery2._3DMap
 
         public void FreeTexture(bool remove)
         {
-            if (_control != null && _texid != 0)
+            if (_control != null && TextureVboID != 0)
             {
                 if (_control.InvokeRequired)
                 {
@@ -677,10 +678,10 @@ namespace EDDiscovery2._3DMap
                 }
                 else
                 {
-                    if (_texid != 0)
+                    if (TextureVboID != 0)
                     {
-                        GL.DeleteTexture(_texid);
-                        _texid = 0;
+                        GL.DeleteTexture(TextureVboID);
+                        TextureVboID = 0;
                     }
                 }
 
@@ -708,80 +709,90 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        protected void CreateVertices()
+        protected void CreateVerticesTri()
         {
-            if (VtxVboID == 0 || TexVboID == 0)
+            if (VtxVboID == 0)
             {
                 NumVertices = (Vertices == null ? 0 : 6) + _childTextures.Count * 6;
 
-                if (_vboVertices == null)
-                {
-                    _vboVertices = new Vector3[NumVertices * 2];
-                }
-                else if (NumVertices > _vboVertices.Length)
-                {
-                    Array.Resize(ref _vboVertices, NumVertices * 2);
-                }
-
-                if (_vboTexcoords == null)
-                {
-                    _vboTexcoords = new Vector4[NumVertices * 2];
-                }
-                else if (NumVertices > _vboTexcoords.Length)
-                {
-                    Array.Resize(ref _vboTexcoords, NumVertices * 2);
-                }
+                if (_vboVertices == null || _vboVertices.Length < NumVertices)
+                    _vboVertices = new Vector3[NumVertices];
 
                 foreach (var tex in (Vertices == null ? new TexturedQuadData[0] : new[] { this }).Concat(_childTextures).Select((t, i) => new { index = i, tex = t }))
                 {
                     int i = tex.index;
                     var t = tex.tex;
-                    _vboVertices[i * 6 + 0] = t.Vertices[0]; _vboTexcoords[i * 6 + 0] = t.Texcoords[0];
-                    _vboVertices[i * 6 + 1] = t.Vertices[1]; _vboTexcoords[i * 6 + 1] = t.Texcoords[1];
-                    _vboVertices[i * 6 + 2] = t.Vertices[2]; _vboTexcoords[i * 6 + 2] = t.Texcoords[2];
-                    _vboVertices[i * 6 + 3] = t.Vertices[0]; _vboTexcoords[i * 6 + 3] = t.Texcoords[0];
-                    _vboVertices[i * 6 + 4] = t.Vertices[2]; _vboTexcoords[i * 6 + 4] = t.Texcoords[2];
-                    _vboVertices[i * 6 + 5] = t.Vertices[3]; _vboTexcoords[i * 6 + 5] = t.Texcoords[3];
+                    _vboVertices[i * 6 + 0] = t.Vertices[0];
+                    _vboVertices[i * 6 + 1] = t.Vertices[1];
+                    _vboVertices[i * 6 + 2] = t.Vertices[2];
+                    _vboVertices[i * 6 + 3] = t.Vertices[0];
+                    _vboVertices[i * 6 + 4] = t.Vertices[2];
+                    _vboVertices[i * 6 + 5] = t.Vertices[3];
 
                 }
 
-                if (VtxVboID == 0)
-                {
-                    GL.GenBuffers(1, out VtxVboID);
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
-                    GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(_vboVertices)), _vboVertices, BufferUsageHint.StaticDraw);
-                }
+                GL.GenBuffers(1, out VtxVboID);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
+                GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(_vboVertices)), _vboVertices, BufferUsageHint.StaticDraw);
+            }
+        }
 
-                if (TexVboID == 0)
+        public void FreeVerticesTri()
+        {
+            if (_control != null && VtxVboID != 0 )
+            {
+                if (_control.InvokeRequired)
                 {
-                    GL.GenBuffers(1, out TexVboID);
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, TexVboID);
-                    GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(_vboTexcoords)), _vboTexcoords, BufferUsageHint.StaticDraw);
+                    _control.Invoke(new Action(this.FreeVerticesTri));
+                }
+                else
+                {
+                    GL.DeleteBuffer(VtxVboID);
+                    VtxVboID = 0;
                 }
             }
         }
 
-        public void FreeVertices(bool unused)
+
+        protected void CreateVerticesTex()
         {
-            if (_control != null && (VtxVboID != 0 || TexVboID != 0))
+            if (TexVboID == 0)
+            {
+                NumVertices = (Vertices == null ? 0 : 6) + _childTextures.Count * 6;
+
+                if (_vboTexcoords == null || _vboTexcoords.Length < NumVertices)
+                    _vboTexcoords = new Vector4[NumVertices];
+
+                foreach (var tex in (Vertices == null ? new TexturedQuadData[0] : new[] { this }).Concat(_childTextures).Select((t, i) => new { index = i, tex = t }))
+                {
+                    int i = tex.index;
+                    var t = tex.tex;
+                    _vboTexcoords[i * 6 + 0] = t.Texcoords[0];
+                    _vboTexcoords[i * 6 + 1] = t.Texcoords[1];
+                    _vboTexcoords[i * 6 + 2] = t.Texcoords[2];
+                    _vboTexcoords[i * 6 + 3] = t.Texcoords[0];
+                    _vboTexcoords[i * 6 + 4] = t.Texcoords[2];
+                    _vboTexcoords[i * 6 + 5] = t.Texcoords[3];
+                }
+
+                GL.GenBuffers(1, out TexVboID);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, TexVboID);
+                GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(_vboTexcoords)), _vboTexcoords, BufferUsageHint.StaticDraw);
+            }
+        }
+
+        public void FreeVerticesTex()
+        {
+            if (_control != null && TexVboID != 0)
             {
                 if (_control.InvokeRequired)
                 {
-                    _control.Invoke(new Action<bool>(this.FreeVertices), false);
+                    _control.Invoke(new Action(this.FreeVerticesTex));
                 }
                 else
                 {
-                    if (VtxVboID != 0)
-                    {
-                        GL.DeleteBuffer(VtxVboID);
-                        VtxVboID = 0;
-                    }
-
-                    if (TexVboID != 0)
-                    {
-                        GL.DeleteBuffer(TexVboID);
-                        TexVboID = 0;
-                    }
+                    GL.DeleteBuffer(TexVboID);
+                    TexVboID = 0;
                 }
             }
         }
@@ -797,13 +808,17 @@ namespace EDDiscovery2._3DMap
             {
                 _control = control;
 
-                CreateTexture();
-                CreateVertices();
+                if (TextureVboID == 0)                                  
+                    CreateTexture();
+                if (VtxVboID == 0)
+                    CreateVerticesTri();
+                if (TexVboID == 0)
+                    CreateVerticesTex();
 
                 int vbosize = NumVertices;
                 GL.Enable(EnableCap.Texture2D);
                 GL.EnableClientState(ArrayCap.VertexArray);
-                GL.BindTexture(TextureTarget.Texture2D, _texid);
+                GL.BindTexture(TextureTarget.Texture2D, TextureVboID);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
                 GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                 GL.EnableClientState(ArrayCap.TextureCoordArray);
