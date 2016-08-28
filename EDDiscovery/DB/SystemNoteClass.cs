@@ -38,7 +38,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        private bool Add(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)"))
             {
@@ -66,7 +66,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        private bool Update(SQLiteConnectionED cn)
+        private bool Update(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id"))
             {

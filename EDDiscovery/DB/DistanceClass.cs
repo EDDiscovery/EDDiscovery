@@ -130,7 +130,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Store(SQLiteConnectionED cn, DbTransaction tn = null)
+        private bool Store(SQLiteConnectionSystem cn, DbTransaction tn = null)
         {
             if (CommanderCreate == null)
                 CommanderCreate = "";
@@ -160,7 +160,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Update(SQLiteConnectionED cn, DbTransaction tn = null)
+        private bool Update(SQLiteConnectionSystem cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Update Distances  set NameA=@NameA, NameB=@NameB, Dist=@Dist, commandercreate=@commandercreate, CreateTime=@CreateTime, status=@status, id_edsm=@id_edsm  where ID=@id",tn))
             {
@@ -214,7 +214,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Delete(SQLiteConnectionED cn)
+        private bool Delete(SQLiteConnectionSystem cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Delete From  Distances where ID=@id"))
             {

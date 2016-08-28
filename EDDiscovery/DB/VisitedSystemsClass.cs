@@ -111,7 +111,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public bool Add(SQLiteConnectionED cn, DbTransaction tn = null)
+        public bool Add(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z, id_edsm_assigned) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z, @id_edsm_assigned)", tn))
             {

@@ -259,6 +259,48 @@ namespace EDDiscovery.DB
                     station_commodities_index = "station_commodities (station_id ASC, commodity_id ASC, type ASC)"
                 }
                 #endregion
+            },
+            EDDUser = new
+            {
+                #region Tables
+                Tables = new
+                {
+
+                },
+                #endregion
+                #region Unique Indexes
+                UniqueIndexes = new
+                {
+
+                },
+                #endregion
+                #region Indexes
+                Indexes = new
+                {
+
+                },
+                #endregion
+            },
+            EDDSystem = new
+            {
+                #region Tables
+                Tables = new
+                {
+
+                },
+                #endregion
+                #region Unique Indexes
+                UniqueIndexes = new
+                {
+
+                },
+                #endregion
+                #region Indexes
+                Indexes = new
+                {
+
+                },
+                #endregion
             }
         };
         #endregion
@@ -383,7 +425,7 @@ namespace EDDiscovery.DB
 
         private static void UpdateSchema()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionOld cn = new SQLiteConnectionOld())
             {
                 UpdateDbSchema(cn, Schema.EDDiscovery);
 
@@ -408,6 +450,16 @@ namespace EDDiscovery.DB
                 {
                     cmd.ExecuteNonQuery();
                 }
+            }
+
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+            {
+                UpdateDbSchema(cn, Schema.EDDSystem);
+            }
+
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                UpdateDbSchema(cn, Schema.EDDUser);
             }
         }
     }
