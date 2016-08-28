@@ -271,7 +271,6 @@ namespace EDDiscovery.DB
         #endregion
 
         #region Transitional properties
-        public static bool UseV5Databases = false;
         public static EDDSqlDbSelection DefaultMainDatabase { get { return  EDDSqlDbSelection.EDDiscovery; } }
         public static EDDSqlDbSelection UserDatabase { get { return EDDSqlDbSelection.EDDUser; } }
         public static EDDSqlDbSelection SystemDatabase { get { return EDDSqlDbSelection.EDDSystem;  } }
@@ -289,13 +288,14 @@ namespace EDDiscovery.DB
             try
             {
                 bool fileexist = File.Exists(dbv4file);
+                bool UseV5Databases;
 
-                SQLiteDBClass.UseV5Databases = File.Exists(dbuserfile);
+                UseV5Databases = File.Exists(dbuserfile);
 
-                if (!fileexist)                                         // no file, create it
+                if (!fileexist && UseV5Databases==false)                                         // no file, create it
                     SQLiteConnection.CreateFile(dbv4file);
 
-                if (SQLiteDBClass.UseV5Databases == false)
+                if (UseV5Databases == false)
                 {
                     using (var conn = new SQLiteConnectionED(EDDSqlDbSelection.EDDiscovery))
                     {
@@ -304,15 +304,17 @@ namespace EDDiscovery.DB
 
                         UpgradeDB(conn);                                            // upgrade it
                     }
+
+                    SplitDataBase();
                 }
 
-                SplitDataBase();
-                using (var conn = new SQLiteConnectionED(EDDSqlDbSelection.EDDUser))
+
+                using (var conn = new SQLiteConnectionUser())
                 {
                     UpgradeUserDB(conn);                                            // upgrade it
                 }
 
-                using (var conn = new SQLiteConnectionED(EDDSqlDbSelection.EDDSystem))
+                using (var conn = new SQLiteConnectionSystem())
                 {
                     UpgradeSystemsDB(conn);                                            // upgrade it
                 }
@@ -352,7 +354,7 @@ namespace EDDiscovery.DB
             return true;
         }
 
-        private static bool UpgradeUserDB(SQLiteConnectionED conn)
+        private static bool UpgradeUserDB(SQLiteConnectionUser conn)
         {
             int dbver;
             try
@@ -372,7 +374,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private static bool UpgradeSystemsDB(SQLiteConnectionED conn)
+        private static bool UpgradeSystemsDB(SQLiteConnectionSystem conn)
         {
             int dbver;
             try
