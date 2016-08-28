@@ -505,7 +505,6 @@ namespace EDDiscovery.DB
         #endregion
 
         #region Transitional properties
-        public static bool UseV5Databases = false;
         public static EDDSqlDbSelection DefaultMainDatabase { get { return  EDDSqlDbSelection.EDDiscovery; } }
         public static EDDSqlDbSelection UserDatabase { get { return EDDSqlDbSelection.EDDUser; } }
         public static EDDSqlDbSelection SystemDatabase { get { return EDDSqlDbSelection.EDDSystem;  } }
@@ -523,13 +522,14 @@ namespace EDDiscovery.DB
             try
             {
                 bool fileexist = File.Exists(dbv4file);
+                bool UseV5Databases;
 
-                SQLiteDBClass.UseV5Databases = File.Exists(dbuserfile);
+                UseV5Databases = File.Exists(dbuserfile);
 
-                if (!fileexist)                                         // no file, create it
+                if (!fileexist && UseV5Databases==false)                                         // no file, create it
                     SQLiteConnection.CreateFile(dbv4file);
 
-                if (SQLiteDBClass.UseV5Databases == false)
+                if (UseV5Databases == false)
                 {
                     using (var conn = new SQLiteConnectionOld())
                     {
@@ -540,8 +540,6 @@ namespace EDDiscovery.DB
                     }
 
                     SplitDataBase();
-                    UseV5Databases = true;
-
                 }
 
                 using (var conn = new SQLiteConnectionUser())
