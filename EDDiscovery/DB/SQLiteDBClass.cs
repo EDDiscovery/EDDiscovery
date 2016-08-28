@@ -857,7 +857,6 @@ namespace EDDiscovery.DB
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN X double";
             string query2 = "ALTER TABLE VisitedSystems ADD COLUMN Y double";
             string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Z double";
-            string dbfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
 
             PerformUpgrade(conn, 14, true, true, new[] { query1, query2, query3 });
             return true;
