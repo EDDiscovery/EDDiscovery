@@ -982,7 +982,6 @@ namespace EDDiscovery
             map.Prepare(centerSystem, _discoveryForm.settings.MapHomeSystem, centerSystem,
                         _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames,_discoveryForm.VisitedSystems);
 
-            map.SetReferenceSystems(CurrentReferenceSystems.ToList());
             map.Show();
         }
 
