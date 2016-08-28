@@ -183,7 +183,7 @@ namespace EDDiscovery2.ImageHandler
 
                 FileStream testfile = null;
 
-                for (int tries = 20; tries-- > 0;)          // wait 10 seconds and then try it anyway.. first time ED converts I've seen 2+ seconds.
+                for (int tries = 60; tries-- > 0;)          // wait 30 seconds and then try it anyway.. 32K hires shots take a while to write.
                 {
                     System.Threading.Thread.Sleep(500);     // every 500ms see if we can read the file, if we can, go, else wait..
                     try
