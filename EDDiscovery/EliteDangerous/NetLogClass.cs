@@ -185,7 +185,7 @@ namespace EDDiscovery
                 }
             }
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 for (int i = 0; i < readersToUpdate.Count; i++)
                 {
@@ -358,7 +358,7 @@ namespace EDDiscovery
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
-            if (!m_worker.IsBusy)
+            if (m_worker != null && !m_worker.IsBusy)
             {
                 m_worker.RunWorkerAsync();
             }
@@ -369,6 +369,8 @@ namespace EDDiscovery
             var worker = sender as System.ComponentModel.BackgroundWorker;
             var entries = new List<VisitedSystemsClass>();
             e.Result = entries;
+            int netlogpos = 0;
+            NetLogFileReader nfi = null;
 
             try
             {
@@ -378,7 +380,6 @@ namespace EDDiscovery
                 }
 
                 string filename = null;
-                NetLogFileReader nfi = null;
 
                 if (m_netLogFileQueue.TryDequeue(out filename))      // if a new one queued, we swap to using it
                 {
@@ -415,6 +416,8 @@ namespace EDDiscovery
                             nfi.TravelLogUnit.Add();
                     }
 
+                    netlogpos = nfi.TravelLogUnit.Size;
+
                     foreach(VisitedSystemsClass dbsys in nfi.ReadSystems())
                     {
                         dbsys.EDSM_sync = false;
@@ -443,6 +446,12 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
+                // Revert and re-read the failed entries
+                if (nfi != null && nfi.TravelLogUnit != null)
+                {
+                    nfi.TravelLogUnit.Size = netlogpos;
+                }
+
                 System.Diagnostics.Trace.WriteLine("Net tick exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 throw;
