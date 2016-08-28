@@ -505,7 +505,7 @@ namespace EDDiscovery.DB
         #endregion
 
         #region Transitional properties
-        public static EDDSqlDbSelection DefaultMainDatabase { get { return  EDDSqlDbSelection.EDDiscovery; } }
+        public static EDDSqlDbSelection DefaultMainDatabase { get { return  EDDSqlDbSelection.EDDUser; } }
         public static EDDSqlDbSelection UserDatabase { get { return EDDSqlDbSelection.EDDUser; } }
         public static EDDSqlDbSelection SystemDatabase { get { return EDDSqlDbSelection.EDDSystem;  } }
         #endregion
@@ -1378,7 +1378,7 @@ namespace EDDiscovery.DB
 
         static public bool keyExists(string sKey)                   
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return keyExists(sKey, cn);
             }
@@ -1406,7 +1406,7 @@ namespace EDDiscovery.DB
 
         static public int GetSettingInt(string key, int defaultvalue)     
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return GetSettingInt(key, defaultvalue, cn);
             }
@@ -1438,7 +1438,7 @@ namespace EDDiscovery.DB
 
         static public bool PutSettingInt(string key, int intvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = PutSettingInt(key, intvalue, cn);
                 return ret;
@@ -1481,7 +1481,7 @@ namespace EDDiscovery.DB
 
         static public double GetSettingDouble(string key, double defaultvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return GetSettingDouble(key, defaultvalue, cn);
             }
@@ -1513,7 +1513,7 @@ namespace EDDiscovery.DB
 
         static public bool PutSettingDouble(string key, double doublevalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = PutSettingDouble(key, doublevalue, cn);
                 return ret;
@@ -1556,7 +1556,7 @@ namespace EDDiscovery.DB
 
         static public bool GetSettingBool(string key, bool defaultvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return GetSettingBool(key, defaultvalue, cn);
             }
@@ -1592,7 +1592,7 @@ namespace EDDiscovery.DB
 
         static public bool PutSettingBool(string key, bool boolvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = PutSettingBool(key, boolvalue, cn);
                 return ret;
@@ -1640,7 +1640,7 @@ namespace EDDiscovery.DB
 
         static public string GetSettingString(string key, string defaultvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return GetSettingString(key, defaultvalue, cn);
             }
@@ -1674,7 +1674,7 @@ namespace EDDiscovery.DB
 
         static public bool PutSettingString(string key, string strvalue)        // public IF
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = PutSettingString(key, strvalue, cn);
                 return ret;
