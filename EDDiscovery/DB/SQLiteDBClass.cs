@@ -540,8 +540,6 @@ namespace EDDiscovery.DB
                     }
 
                     SplitDataBase();
-                    UseV5Databases = true;
-
                 }
 
                 using (var conn = new SQLiteConnectionUser())
