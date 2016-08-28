@@ -39,7 +39,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        private bool Add(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
             {
@@ -62,7 +62,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Delete(SQLiteConnectionED cn)
+        private bool Delete(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM wanted_systems WHERE id = @id"))
             {
