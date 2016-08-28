@@ -227,7 +227,7 @@ namespace EDDiscovery
             // Prevent the indexes from being removed from under our feet
             lock (_discoveryForm.SystemsUpdatingLock)
             {
-                VisitedSystemsClass.UpdateSys(visitedSystems, EDDConfig.Instance.UseDistances, !_discoveryForm.SystemsUpdating);
+                VisitedSystemsClass.UpdateSys(visitedSystems, true, !_discoveryForm.SystemsUpdating);   // always use db distances
             }
 
             var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
