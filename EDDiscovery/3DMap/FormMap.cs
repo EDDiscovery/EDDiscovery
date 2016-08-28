@@ -85,7 +85,6 @@ namespace EDDiscovery2
         Timer _mousehovertick = new Timer();
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
 
-        private List<SystemClass> _referenceSystems { get; set; }
         public List<VisitedSystemsClass> _visitedSystems { get; set; }
         private List<SystemClass> _plannedRoute { get; set; }
 
@@ -149,7 +148,6 @@ namespace EDDiscovery2
 
             zoomfov.SetDefaultZoom(zoom);
 
-            _referenceSystems = null;
             _plannedRoute = null;
 
             toolStripShowAllStars.Renderer = new MyRenderer();
@@ -219,13 +217,6 @@ namespace EDDiscovery2
         public void SetPlannedRoute(List<SystemClass> plannedr)
         {
             _plannedRoute = plannedr;
-            GenerateDataSetsRouteTri();
-            RequestPaint();
-        }
-
-        public void SetReferenceSystems(List<SystemClass> refsys)
-        {
-            _referenceSystems = refsys;
             GenerateDataSetsRouteTri();
             RequestPaint();
         }
@@ -917,7 +908,7 @@ namespace EDDiscovery2
 
             DatasetBuilder builder = new DatasetBuilder();
 
-            _datasets_routetri = builder.BuildRouteTri(_centerSystem, _referenceSystems, _plannedRoute);
+            _datasets_routetri = builder.BuildRouteTri(_centerSystem, _plannedRoute);
         }
 
         private void GenerateDataSetsSelectedSystems()

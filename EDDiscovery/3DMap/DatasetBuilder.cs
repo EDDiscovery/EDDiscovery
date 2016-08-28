@@ -588,44 +588,10 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public List<IData3DSet> BuildRouteTri(ISystem centersystem,  List<SystemClass> refsys, List<SystemClass> planned)
+        public List<IData3DSet> BuildRouteTri(ISystem centersystem, List<SystemClass> planned)
         {
             AddRoutePlannerInfoToDataset(planned);
-            AddTrilaterationInfoToDataset(centersystem, refsys);
             return _datasets;
-        }
-
-        private void AddTrilaterationInfoToDataset(ISystem CenterSystem, List<SystemClass> ReferenceSystems)
-        {
-            if (ReferenceSystems != null && ReferenceSystems.Any())
-            {
-                var referenceLines = Data3DSetClass<LineData>.Create("CurrentReference", MapColours.TrilatCurrentReference, 5.0f);
-                foreach (var refSystem in ReferenceSystems)
-                {
-                    referenceLines.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, refSystem.x, refSystem.y, refSystem.z));
-                }
-
-                _datasets.Add(referenceLines);
-
-                var lineSet = Data3DSetClass<LineData>.Create("SuggestedReference", MapColours.TrilatSuggestedReference, 5.0f);
-
-                SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
-
-                for (int ii = 0; ii < 16; ii++)
-                {
-                    var rsys = references.GetCandidate();
-                    if (rsys == null) break;
-                    var system = rsys.System;
-                    references.AddReferenceStar(system);
-                    if (ReferenceSystems != null && ReferenceSystems.Any(s => s.name == system.name))
-                        continue;
-
-                    System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
-                    lineSet.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, system.x, system.y, system.z));
-                }
-
-                _datasets.Add(lineSet);
-            }
         }
 
         private void AddRoutePlannerInfoToDataset(List<SystemClass> PlannedRoute)
