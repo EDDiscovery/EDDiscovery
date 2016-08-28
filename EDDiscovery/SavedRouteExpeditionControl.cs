@@ -600,7 +600,7 @@ namespace EDDiscovery
             if (data != null)
             {
                 var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
-                int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+                int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridViewRouteSystems.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
                 int insertRow = selectedRows.FirstOrDefault();
                 foreach (int index in selectedRows.Reverse())
                 {

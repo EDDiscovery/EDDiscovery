@@ -108,6 +108,7 @@ namespace EDDiscovery2
         private float _znear;
 
         private bool _isActivated = false;
+        private bool _glControlLoaded = false;
 
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
 
@@ -393,10 +394,15 @@ namespace EDDiscovery2
 
             SetupViewport();
             Repaint();
+
+            _glControlLoaded = true;
         }
 
         private void FormMap_Resize(object sender, EventArgs e)         // resizes changes glcontrol width/height, so needs a new viewport
         {
+            if (!_glControlLoaded)
+                return;
+
             SetupViewport();
             Repaint();
         }
@@ -1498,15 +1504,13 @@ namespace EDDiscovery2
         private void showDiscsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DStarDiscs", showDiscsToolStripMenuItem.Checked);
-            _starnameslist.RemoveAllNamedStars();
-            Repaint();
+            _lastcamerastarnames.ForceZoomChanged();
         }
 
         private void showNamesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool("Map3DStarNaming", showNamesToolStripMenuItem.Checked);
-            _starnameslist.RemoveAllNamedStars();
-            Repaint();
+            _lastcamerastarnames.ForceZoomChanged();
         }
 
         private void showNoteMarksToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2380,7 +2384,7 @@ namespace EDDiscovery2
             }
         }
 
-        public ISystem FindSystem(string name, SQLiteConnectionED cn = null)    // nice wrapper for this
+        public ISystem FindSystem(string name, SQLiteConnectionSystem cn = null)    // nice wrapper for this
         {
             if (_visitedSystems != null)
             {
@@ -2394,7 +2398,7 @@ namespace EDDiscovery2
             return isys;
         }
 
-        public ISystem FindSystem(Vector3 pos, SQLiteConnectionED cn = null )
+        public ISystem FindSystem(Vector3 pos, SQLiteConnectionSystem cn = null )
         {
             if (_visitedSystems != null)
             {

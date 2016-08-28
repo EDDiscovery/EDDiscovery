@@ -629,6 +629,8 @@ namespace EDDiscovery
                 travelHistoryControl1.HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
                 travelHistoryControl1.RefreshHistoryAsync();
 
+                DeleteOldLogFiles();
+
                 checkInstallerTask = CheckForNewInstaller();
             }
         }
@@ -726,19 +728,9 @@ namespace EDDiscovery
                     SystemsUpdating = true;
                 }
 
-                // Drop indexes on Systems table
-                SQLiteDBClass.DropSystemsTableIndexes();
-
                 // Delete all old systems
                 SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
                 SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
-                {
-                    using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems"))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                }
 
                 EDSMClass edsm = new EDSMClass();
 
@@ -757,12 +749,19 @@ namespace EDDiscovery
                 bool newfile;
                 bool success = EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
                 {
+                    SQLiteDBClass.CreateTempSystemsTable();
+
                     string rwsysfiletime = "2014-01-01 00:00:00";
                     using (var reader = new StreamReader(s))
-                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, true, discoveryform, cancelRequested, reportProgress);
+                        updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, true, discoveryform, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
                     if (!cancelRequested())       // abort, without saving time, to make it do it again
+                    {
                         SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
-
+                        LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
+                        reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
+                        SQLiteDBClass.ReplaceSystemsTable();
+                        reportProgress(-1, "");
+                    }
                 });
 
                 if (!success)
@@ -923,7 +922,7 @@ namespace EDDiscovery
                     // Delete systems without an EDSM ID
                     if (!cancelRequested())
                     {
-                        using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                        using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                         {
                             using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems WHERE id_edsm IS NULL or id_edsm = 0"))
                             {
@@ -1041,9 +1040,46 @@ namespace EDDiscovery
             }
         }
 
-#endregion
 
-#region JSONandMisc
+        void DeleteOldLogFiles()
+        {
+            try
+            {
+                // Create a reference to the Log directory.
+                DirectoryInfo di = new DirectoryInfo(Path.Combine(Tools.GetAppDataDirectory(), "Log"));
+
+                Trace.WriteLine("Running logfile age check");
+                // Create an array representing the files in the current directory.
+                FileInfo[] fi = di.GetFiles("*.log");
+
+                System.Collections.IEnumerator myEnum = fi.GetEnumerator();
+
+                while (myEnum.MoveNext())
+                {
+                    FileInfo fiTemp = (FileInfo)(myEnum.Current);
+
+                    DateTime time = fiTemp.CreationTime;
+
+                    //Trace.WriteLine(String.Format("File {0}  time {1}", fiTemp.Name, __box(time)));
+
+                    TimeSpan maxage = new TimeSpan(30, 0, 0, 0);
+                    TimeSpan fileage = DateTime.Now - time;
+
+                    if (fileage > maxage)
+                    {
+                        Trace.WriteLine(String.Format("File {0} is older then maximum age. Removing file from Logs.", fiTemp.Name));
+                        fiTemp.Delete();
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        #endregion
+
+        #region JSONandMisc
         static public string LoadJsonFile(string filename)
         {
             string json = null;

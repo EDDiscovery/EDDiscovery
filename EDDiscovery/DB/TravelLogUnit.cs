@@ -66,7 +66,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        private bool Add(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)"))
             {
@@ -94,7 +94,7 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public bool Update(SQLiteConnectionED cn, DbTransaction tn = null)
+        public bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id", tn))
             {
