@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery.DB;
-using EDDiscovery2;
-using ThreadState = System.Threading.ThreadState;
-using EDDiscovery2.Trilateration;
 using EDDiscovery2.EDSM;
 using EDDiscovery2.DB;
 
@@ -20,9 +14,6 @@ namespace EDDiscovery
     {
         private EDDiscoveryForm _discoveryForm;
         private ISystem TargetSystem;
-        private Thread trilaterationThread;
-        private Trilateration.Result lastTrilatelationResult;
-        private Dictionary<SystemClass, Trilateration.Entry> lastTrilatelationEntries;
         private Thread EDSMSubmissionThread;
         private EDSMClass edsm;
         private List<WantedSystemClass> wanted;
@@ -73,8 +64,6 @@ namespace EDDiscovery
 
             UnfreezeTrilaterationUI();
             dataGridViewDistances.Focus();
-
-            PopulateSuggestedSystems();
 
             dataGridViewClosestSystems.Rows.Clear();
             PopulateLocalWantedSystems();
@@ -276,25 +265,11 @@ namespace EDDiscovery
                     if (parsedDistance.HasValue)
                     {
                         dataGridViewDistances[1, e.RowIndex].Value = parsedDistance.Value.ToString("F2");
-                        // trigger trilateration calculation
-                        RunTrilateration();
                     }
                 }
             }
             /* skip to the next editable cell */
             skipReadOnlyCells = true;
-        }
-
-        private void RunTrilateration()
-        {
-            if (trilaterationThread != null)
-            {
-                if (trilaterationThread.ThreadState != ThreadState.Stopped)
-                    LogTextHighlight("Aborting previous trilateration attempt." + Environment.NewLine);
-                trilaterationThread.Abort();
-            }
-            trilaterationThread = new Thread(RunTrilaterationWorker) { Name = "Trilateration" };
-            trilaterationThread.Start();
         }
 
 
@@ -305,225 +280,7 @@ namespace EDDiscovery
                 return (dataGridViewDistances.Rows.OfType<DataGridViewRow>().Select(row => row.Cells[0].Tag)).OfType<SystemClass>();
             }
         }
-
-        private void RunTrilaterationWorker()
-        {
-            try
-            {
-                var systemsEntries = new Dictionary<SystemClass, Trilateration.Entry>();
-
-                for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
-                {
-                    var systemCell = dataGridViewDistances[0, i];
-                    var distanceCell = dataGridViewDistances[1, i];
-
-                    if (systemCell.Tag == null || distanceCell.Value == null)
-                    {
-                        continue;
-                    }
-
-                    var system = (SystemClass)systemCell.Tag;
-                    if (system != null && system.HasCoordinate)
-                    {
-                        var value = distanceCell.Value.ToString().Trim();
-                        var parsedDistance = DistanceParser.ParseInterstellarDistance(value);
-                        if (parsedDistance.HasValue)
-                        {
-                            var entry = new Trilateration.Entry(system.x, system.y, system.z, parsedDistance.Value);
-
-                            systemsEntries.Add(system, entry);
-                        }
-                    }
-                }
-
-                if (systemsEntries.Count < 3)
-                {
-                    return;
-                }
-
-                Invoke((MethodInvoker)delegate
-               {
-                   LogText("Starting trilateration..." + Environment.NewLine);
-                   SetTriStatus("Calculating…");
-               });
-
-                var trilateration = new Trilateration { Logger = Console.WriteLine };
-
-                foreach (var item in systemsEntries)
-                {
-                    trilateration.AddEntry(item.Value);
-                }
-
-                //var trilaterationResultCS = trilateration.RunCSharp();
-                var trilaterationAlgorithm = radioButtonAlgorithmJs.Checked
-                    ? Trilateration.Algorithm.RedWizzard_Emulated
-                    : Trilateration.Algorithm.RedWizzard_Native;
-
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                var trilaterationResult = trilateration.Run(trilaterationAlgorithm);
-
-                stopwatch.Stop();
-                var spentTimeString = (stopwatch.ElapsedMilliseconds / 1000.0).ToString("0.0000") + "ms";
-
-                lastTrilatelationResult = trilaterationResult;
-                lastTrilatelationEntries = systemsEntries;
-
-                if (trilaterationResult.State == Trilateration.ResultState.Exact)
-                {
-                    Invoke((MethodInvoker)delegate
-                   {
-                       SystemClass s1, s2, s3;
-
-                       s1 = SystemClass.GetSystem("Sol");
-                       s2 = SystemClass.GetSystem("Sagittarius A*");
-                       s3 = new SystemClass();
-
-                       s3.x = trilaterationResult.Coordinate.X;
-                       s3.y = trilaterationResult.Coordinate.Y;
-                       s3.z = trilaterationResult.Coordinate.Z;
-
-                       LogTextSuccess("Trilateration successful (" + spentTimeString + "), exact coordinates found." + Environment.NewLine);
-                       LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + " Sol: " + SystemClass.Distance(s1, s3).ToString("0.0") + " Sag A* " + SystemClass.Distance(s2, s3).ToString("0.0") + Environment.NewLine);
-                       SetTriStatusSuccess("Success, coordinates found!");
-                   });
-                }
-                else if (trilaterationResult.State == Trilateration.ResultState.NotExact || trilaterationResult.State == Trilateration.ResultState.MultipleSolutions)
-                {
-                    Invoke((MethodInvoker)delegate
-                   {
-                       LogTextHighlight("Trilateration not successful (" + spentTimeString + "), only approximate coordinates found." + Environment.NewLine);
-                       //LogText("x=" + trilaterationResult.Coordinate.X + ", y=" + trilaterationResult.Coordinate.Y + ", z=" + trilaterationResult.Coordinate.Z + Environment.NewLine);
-                       LogTextHighlight("Enter more distances." + Environment.NewLine);
-                       SetTriStatusError("Enter More Distances");
-                   });
-                }
-                else if (trilaterationResult.State == Trilateration.ResultState.NeedMoreDistances)
-                {
-                    Invoke((MethodInvoker)delegate
-                   {
-                       LogTextHighlight("Trilateration not successful (" + spentTimeString + "), coordinates not found." + Environment.NewLine);
-                       LogTextHighlight("Enter more distances." + Environment.NewLine);
-                       SetTriStatusError("Enter More Distances");
-                       ClearCalculatedDataGridViewDistancesRows();
-                   });
-                }
-
-
-                // update trilaterated coordinates
-                if (trilaterationResult.Coordinate != null)
-                {
-                    Invoke((MethodInvoker)delegate
-                   {
-                       textBoxCoordinateX.Text = trilaterationResult.Coordinate.X.ToString();
-                       textBoxCoordinateY.Text = trilaterationResult.Coordinate.Y.ToString();
-                       textBoxCoordinateZ.Text = trilaterationResult.Coordinate.Z.ToString();
-                       if (TargetSystem != null)
-                       {
-                           TargetSystem.x = trilaterationResult.Coordinate.X;
-                           TargetSystem.y = trilaterationResult.Coordinate.Y;
-                           TargetSystem.z = trilaterationResult.Coordinate.Z;
-                       }
-                       toolStripButtonMap.Enabled = (TargetSystem != null);
-
-                   });
-
-
-                    var suggestedSystems = GetListOfSuggestedSystems(trilaterationResult.Coordinate.X,
-                                                                     trilaterationResult.Coordinate.Y,
-                                                                     trilaterationResult.Coordinate.Z, 16);
-
-                    Invoke((MethodInvoker)(() => PopulateSuggestedSystems(suggestedSystems)));
-                }
-                else
-                {
-                    Invoke((MethodInvoker)delegate
-                   {
-                       textBoxCoordinateX.Text = "?";
-                       textBoxCoordinateY.Text = "?";
-                       textBoxCoordinateZ.Text = "?";
-                   });
-                }
-
-                //var hasInvalidDistances = false;
-
-                // update dataGrid with calculated distances and status
-                var entriesDistances = trilaterationResult.EntriesDistances;
-
-                for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
-                {
-                    var systemCell = dataGridViewDistances[0, i];
-                    var calculatedDistanceCell = dataGridViewDistances[2, i];
-                    var statusCell = dataGridViewDistances[3, i];
-
-                    var system = (SystemClass)systemCell.Tag;
-
-                    if (system == null)
-                    {
-                        continue;
-                    }
-
-                    if (system.HasCoordinate)
-                    {
-                        calculatedDistanceCell.Value = null;
-                        statusCell.Value = null;
-                    }
-                    if (entriesDistances == null || systemCell.Value == null || systemCell.Tag == null)
-                    {
-                        continue;
-                    }
-
-                    if (!systemsEntries.ContainsKey(system)) // calculated without this system, so skip the row
-                    {
-                        continue;
-                    }
-
-                    var systemEntry = systemsEntries[system];
-                    var calculatedDistance = entriesDistances[systemEntry];
-
-                    calculatedDistanceCell.Value = calculatedDistance.ToString();
-
-                    if (systemEntry.Distance == calculatedDistance)
-                    {
-                        statusCell.Value = "OK";
-                        statusCell.Style.ForeColor = _discoveryForm.theme.VisitedSystemColor;
-                    }
-                    else
-                    {
-                        statusCell.Value = "Wrong distance?";
-                        statusCell.Style.ForeColor = _discoveryForm.theme.NonVisitedSystemColor;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                this.BeginInvoke(new MethodInvoker(() =>
-                {
-                    LogTextHighlight("RunTrilateration Exception:" + ex.Message);
-                    LogText(ex.StackTrace);
-                }));
-
-            }
-        }
-
-        private static IEnumerable<SystemClass> GetListOfSuggestedSystems(double x, double y, double z, int count)
-        {
-            var references = new SuggestedReferences(x, y, z);
-            var suggestedSystems = new List<SystemClass>();
-            for (int ii = 0; ii < count; ii++)
-            {
-                var rsys = references.GetCandidate();
-                if (rsys == null) break;
-                var system = rsys.System;
-                references.AddReferenceStar(system);
-                System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name,
-                    rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
-                suggestedSystems.Add(system);
-            }
-            return suggestedSystems;
-        }
-
+        
         public void ClearDataGridViewDistancesRows()
         {
             try
@@ -565,76 +322,7 @@ namespace EDDiscovery
                 if (system != null && system.HasCoordinate) statusCell.Value = null;
             }
         }
-
-        //private void ClearDataGridViewClosestSystemsRows()
-        //{
-        //    dataGridViewClosestSystems.Rows.Clear();
-        //}
-
-        private void ClearDataGridViewSuggestedSystemsRows()
-        {
-            dataGridViewSuggestedSystems.Rows.Clear();
-        }
         
-        private void PopulateSuggestedSystems()
-        {
-            var lastKnown = LastKnownSystem;
-            if (lastKnown != null)
-            {
-                var suggestedSystems = GetListOfSuggestedSystems(lastKnown.x,
-                                                                 lastKnown.y,
-                                                                 lastKnown.z, 16);
-                PopulateSuggestedSystems(suggestedSystems);
-                return;
-            }
-
-            var suggestedSystemNames = new List<string>
-            {
-                "Sol", "Sadr", "Maia", "Polaris", "EZ Orionis",
-                "Kappa-2 Coronae Austrinae", "Eta Carinae", "HR 969", "UX Sculptoris"
-            };
-            PopulateSuggestedSystems(suggestedSystemNames);
-        }
-
-        private void PopulateSuggestedSystems(ICollection<string> suggestedSystems)
-        {
-            dataGridViewSuggestedSystems.Rows.Clear();
-
-            foreach (string name in _discoveryForm.SystemNames)
-            {
-                if (!suggestedSystems.Contains(name))
-                {
-                    SystemClass v = SystemClass.GetSystem(name);
-                    if (v != null)
-                        AddSuggestedSystem(v);
-                }
-            }
-        }
-
-        private void AddSuggestedSystem(SystemClass system)
-        {
-
-            for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
-            {
-                var systemCell = dataGridViewDistances[0, i];
-                if (systemCell.Value!=null)
-                    if (systemCell.Value.Equals(system.name))  // Dont add list thats already in distances. 
-                        return; 
-            }
-
-            var index = dataGridViewSuggestedSystems.Rows.Add(system.name + " (" + system.x.ToString("0.00") + "," + system.y.ToString("0.00") + "," + system.z.ToString("0.00") +")");
-            dataGridViewSuggestedSystems[0, index].Tag = system;
-        }
-
-        private void PopulateSuggestedSystems(IEnumerable<SystemClass> suggestedSystems)
-        {
-            dataGridViewSuggestedSystems.Rows.Clear();
-            foreach (var system in suggestedSystems)
-            {
-                AddSuggestedSystem(system);
-            }
-        }
-
         private void PopulateLocalWantedSystems()
         {
             wanted = WantedSystemClass.GetAllWantedSystems();
@@ -758,20 +446,6 @@ namespace EDDiscovery
                 LogText("Submitting system to EDSM, please wait..." + Environment.NewLine);
                 FreezeTrilaterationUI();
 
-                if (trilaterationThread != null)
-                {
-                    trilaterationThread.Join();
-                    trilaterationThread = null;
-                }
-
-                //// edge case - make sure distances were trilaterated OR the current system already has known coordinates
-                //if (lastTrilatelationResult == null && !CurrentSystem.HasCoordinate)
-                //{
-                //    LogText("EDSM submission aborted, local trilateration did not run properly." + Environment.NewLine, Color.Red);
-                //    UnfreezeTrilaterationUI();
-                //    return;
-                //}
-
                 EDSMSubmissionThread = new Thread(SubmitToEDSM) { Name = "EDSM Submission" };
                 EDSMSubmissionThread.Start();
             }
@@ -870,8 +544,6 @@ namespace EDDiscovery
                 else
                 {
                     Invoke((MethodInvoker)UnfreezeTrilaterationUI);
-                    lastTrilatelationResult = null;
-                    lastTrilatelationEntries = null;
                 }
 
             }
@@ -891,23 +563,15 @@ namespace EDDiscovery
             
             dataGridViewDistances.Enabled = false;
             dataGridViewClosestSystems.Enabled = false;
-            dataGridViewSuggestedSystems.Enabled = false;
         }
 
         private void UnfreezeTrilaterationUI()
         {
             dataGridViewDistances.Enabled = true;
             dataGridViewClosestSystems.Enabled = true;
-            dataGridViewSuggestedSystems.Enabled = true;
             Dock = DockStyle.Fill;
         }
-
-        private void radioButtonAlgorithm_CheckedChanged(object sender, EventArgs e)
-        {
-            // when algorithm is changed, we want to re-run trilateration
-            RunTrilateration();
-        }
-
+        
         private void SetTriStatus(string st)
         {
             textBox_status.ForeColor = _discoveryForm.theme.TextBlockColor;
@@ -946,18 +610,7 @@ namespace EDDiscovery
         {
             richTextBox_History.AppendText(text,color);
         }
-
-        private void dataGridViewSuggestedSystems_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex == -1)
-                return;
-
-            var system = (SystemClass)dataGridViewSuggestedSystems[0, e.RowIndex].Tag;
-            AddSystemToDataGridViewDistances(system);
-            dataGridViewSuggestedSystems.Rows.RemoveAt(e.RowIndex);
-            System.Windows.Forms.Clipboard.SetText(system.name); // copy to clipboard, speeds up search
-        }
-
+        
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
             if (_discoveryForm.SystemNames.Count == 0)
@@ -1045,7 +698,6 @@ namespace EDDiscovery
         private void toolStripButtonRemoveAll_Click(object sender, EventArgs e)
         {
             dataGridViewDistances.Rows.Clear();
-            PopulateSuggestedSystems();
         }
 
         private void toolStripButtonRemoveUnused_Click(object sender, EventArgs e)
@@ -1255,17 +907,6 @@ namespace EDDiscovery
 
             this.Cursor = Cursors.Default;
         }
-
-        private void splitContainerBottom_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-            if (!splitContainer1.LayoutChanging && splitContainerTop.SplitterDistance != splitContainerBottom.SplitterDistance)
-                splitContainerTop.SplitterDistance = splitContainerBottom.SplitterDistance;
-        }
-
-        private void splitContainerTop_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-            if (!splitContainer1.LayoutChanging && splitContainerBottom.SplitterDistance != splitContainerTop.SplitterDistance)
-                splitContainerBottom.SplitterDistance = splitContainerTop.SplitterDistance;
-        }
+        
     }
 }
