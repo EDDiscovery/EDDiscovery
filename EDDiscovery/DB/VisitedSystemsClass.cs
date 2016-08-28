@@ -104,7 +104,7 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);
                 return ret;
@@ -139,13 +139,13 @@ namespace EDDiscovery2.DB
 
         public new bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnectionED cn)
+        private bool Update(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour, X=@x, Y=@y, Z=@z, id_edsm_assigned=@id_edsm_assigned where ID=@id"))
             {
@@ -176,7 +176,7 @@ namespace EDDiscovery2.DB
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time "))
                 {
@@ -201,7 +201,7 @@ namespace EDDiscovery2.DB
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems where commander=@commander Order by Time "))
                 {
@@ -225,7 +225,7 @@ namespace EDDiscovery2.DB
         public static List<VisitedSystemsClass> GetAll(TravelLogUnit tlu)
         {
             List<VisitedSystemsClass> vsc = new List<VisitedSystemsClass>();
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM VisitedSystems WHERE Source = @source ORDER BY Time ASC"))
                 {
@@ -246,7 +246,7 @@ namespace EDDiscovery2.DB
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time DESC Limit 1"))
                 {
@@ -264,7 +264,7 @@ namespace EDDiscovery2.DB
 
         public static VisitedSystemsClass GetLast(int cmdrid, DateTime before)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM VisitedSystems WHERE Commander = @commander AND Time < @before ORDER BY Time DESC LIMIT 1"))
                 {
@@ -285,7 +285,7 @@ namespace EDDiscovery2.DB
 
         internal static bool Exist(string name, DateTime time)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems where name=@name and Time=@time  Order by Time DESC Limit 1"))
                 {
