@@ -32,7 +32,7 @@ namespace EDDiscovery.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);
                 return ret;
@@ -56,7 +56,7 @@ namespace EDDiscovery.DB
 
         public bool Delete()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return Delete(cn);
             }
@@ -78,7 +78,7 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from wanted_systems"))
                     {
