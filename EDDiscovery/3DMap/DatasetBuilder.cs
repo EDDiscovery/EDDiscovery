@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Diagnostics;
-using EDDiscovery2.Trilateration;
 using OpenTK;
 using System.Resources;
 using EDDiscovery.Properties;
