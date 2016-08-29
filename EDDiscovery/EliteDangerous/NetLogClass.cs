@@ -114,7 +114,7 @@ namespace EDDiscovery
 
         // called during start up and if refresh history is pressed
 
-        public List<VisitedSystemsClass> ParseFiles(out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress)
+        public List<VisitedSystemsClass> ParseFiles(out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
             error = null;
 
@@ -177,6 +177,12 @@ namespace EDDiscovery
                 if (!netlogreaders.ContainsKey(reader.TravelLogUnit.Name))
                 {
                     netlogreaders[reader.TravelLogUnit.Name] = lastnfi;
+                }
+
+                if (forceReload)
+                {
+                    // Force a reload of the travel log
+                    reader.TravelLogUnit.Size = 0;
                 }
 
                 if (reader.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one

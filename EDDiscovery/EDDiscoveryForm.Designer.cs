@@ -82,6 +82,7 @@
             this._syncWorker = new System.ComponentModel.BackgroundWorker();
             this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -564,6 +565,13 @@
             this.edsmRefreshTimer.Interval = 900000;
             this.edsmRefreshTimer.Tick += new System.EventHandler(this.edsmRefreshTimer_Tick);
             // 
+            // reloadAllLogsForCurrentCommanderToolStripMenuItem
+            // 
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Name = "reloadAllLogsForCurrentCommanderToolStripMenuItem";
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Size = new System.Drawing.Size(277, 22);
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Text = "Reload all logs for current commander";
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Click += new System.EventHandler(this.reloadAllLogsForCurrentCommanderToolStripMenuItem_Click);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -661,6 +669,7 @@
         private System.ComponentModel.BackgroundWorker _syncWorker;
         private System.ComponentModel.BackgroundWorker _checkSystemsWorker;
         private System.Windows.Forms.Timer edsmRefreshTimer;
+        private System.Windows.Forms.ToolStripMenuItem reloadAllLogsForCurrentCommanderToolStripMenuItem;
     }
 }
 

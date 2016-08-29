@@ -424,10 +424,6 @@
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
     <Compile Include="TravelHistoryFilter.cs" />
-    <Compile Include="Trilateration\ReferencesSector.cs" />
-    <Compile Include="Trilateration\ReferenceSystem.cs" />
-    <Compile Include="Trilateration\SuggestedReferences.cs" />
-    <Compile Include="Trilateration\Trilateration.cs" />
     <Compile Include="Trilateration\TrilaterationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
