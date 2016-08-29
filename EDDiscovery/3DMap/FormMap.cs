@@ -611,7 +611,7 @@ namespace EDDiscovery2
             List<VisitedSystemsClass> filtered = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null;
 
             _datasets_visitedsystems = builder.BuildVisitedSystems(toolStripButtonDrawLines.Checked, _centerSystem, filtered,
-                                                                    _referenceSystems, _plannedRoute);
+                                                                    _plannedRoute);
         }
 
         private void GenerateDataSetsSelectedSystems()
