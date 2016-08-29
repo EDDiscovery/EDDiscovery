@@ -1512,6 +1512,11 @@ namespace EDDiscovery
                 }
             }
         }
-#endregion
+
+        private void reloadAllLogsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            travelHistoryControl1.RefreshHistoryAsync(forceReload: true);
+        }
+        #endregion
     }
 }
