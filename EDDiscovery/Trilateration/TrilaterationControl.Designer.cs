@@ -43,6 +43,8 @@ namespace EDDiscovery
             this.labelCoordinateZ = new System.Windows.Forms.Label();
             this.panelImplementation = new System.Windows.Forms.Panel();
             this.labelAlgorithm = new System.Windows.Forms.Label();
+            this.radioButtonAlgorithmJs = new ExtendedControls.RadioButtonCustom();
+            this.radioButtonAlgorithmCsharp = new ExtendedControls.RadioButtonCustom();
             this.toolTipAlgorithm = new System.Windows.Forms.ToolTip(this.components);
             this.wantedContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeFromWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +57,12 @@ namespace EDDiscovery
             this.toolStripButtonRemoveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
             this.panel_controls = new System.Windows.Forms.Panel();
+            this.textBox_status = new ExtendedControls.TextBoxBorder();
             this.labelstpos = new System.Windows.Forms.Label();
+            this.textBoxSystemName = new ExtendedControls.TextBoxBorder();
+            this.textBoxCoordinateX = new ExtendedControls.TextBoxBorder();
+            this.textBoxCoordinateY = new ExtendedControls.TextBoxBorder();
+            this.textBoxCoordinateZ = new ExtendedControls.TextBoxBorder();
             this.splitContainerCustom1 = new ExtendedControls.SplitContainerCustom();
             this.splitContainerCustom2 = new ExtendedControls.SplitContainerCustom();
             this.dataViewScroller_Distances = new ExtendedControls.DataViewScrollerPanel();
@@ -71,13 +78,6 @@ namespace EDDiscovery
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textBox_status = new ExtendedControls.TextBoxBorder();
-            this.textBoxSystemName = new ExtendedControls.TextBoxBorder();
-            this.textBoxCoordinateX = new ExtendedControls.TextBoxBorder();
-            this.textBoxCoordinateY = new ExtendedControls.TextBoxBorder();
-            this.textBoxCoordinateZ = new ExtendedControls.TextBoxBorder();
-            this.radioButtonAlgorithmJs = new ExtendedControls.RadioButtonCustom();
-            this.radioButtonAlgorithmCsharp = new ExtendedControls.RadioButtonCustom();
             this.trilatContextMenu.SuspendLayout();
             this.panelImplementation.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
@@ -185,6 +185,42 @@ namespace EDDiscovery
             this.labelAlgorithm.TabIndex = 2;
             this.labelAlgorithm.Text = "Algorithm:";
             // 
+            // radioButtonAlgorithmJs
+            // 
+            this.radioButtonAlgorithmJs.AutoSize = true;
+            this.radioButtonAlgorithmJs.FontNerfReduction = 0.5F;
+            this.radioButtonAlgorithmJs.Location = new System.Drawing.Point(3, 27);
+            this.radioButtonAlgorithmJs.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.radioButtonAlgorithmJs.Name = "radioButtonAlgorithmJs";
+            this.radioButtonAlgorithmJs.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButtonAlgorithmJs.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButtonAlgorithmJs.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButtonAlgorithmJs.SelectedColorRing = System.Drawing.Color.Black;
+            this.radioButtonAlgorithmJs.Size = new System.Drawing.Size(37, 17);
+            this.radioButtonAlgorithmJs.TabIndex = 1;
+            this.radioButtonAlgorithmJs.Text = "JS";
+            this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmJs, "Original algoritthm from ed-systems, written in Javascript (slower)");
+            this.radioButtonAlgorithmJs.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonAlgorithmCsharp
+            // 
+            this.radioButtonAlgorithmCsharp.AutoSize = true;
+            this.radioButtonAlgorithmCsharp.Checked = true;
+            this.radioButtonAlgorithmCsharp.FontNerfReduction = 0.5F;
+            this.radioButtonAlgorithmCsharp.Location = new System.Drawing.Point(3, 44);
+            this.radioButtonAlgorithmCsharp.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.radioButtonAlgorithmCsharp.Name = "radioButtonAlgorithmCsharp";
+            this.radioButtonAlgorithmCsharp.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButtonAlgorithmCsharp.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButtonAlgorithmCsharp.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButtonAlgorithmCsharp.SelectedColorRing = System.Drawing.Color.Black;
+            this.radioButtonAlgorithmCsharp.Size = new System.Drawing.Size(39, 17);
+            this.radioButtonAlgorithmCsharp.TabIndex = 0;
+            this.radioButtonAlgorithmCsharp.TabStop = true;
+            this.radioButtonAlgorithmCsharp.Text = "C#";
+            this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmCsharp, "Algorithm from ed-systems rewritten to C# (fast, experimental)");
+            this.radioButtonAlgorithmCsharp.UseVisualStyleBackColor = true;
+            // 
             // wantedContextMenu
             // 
             this.wantedContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -218,7 +254,7 @@ namespace EDDiscovery
             this.toolStripButtonMap});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1030, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(924, 25);
             this.toolStrip1.TabIndex = 23;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -297,8 +333,19 @@ namespace EDDiscovery
             this.panel_controls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_controls.Location = new System.Drawing.Point(0, 25);
             this.panel_controls.Name = "panel_controls";
-            this.panel_controls.Size = new System.Drawing.Size(1030, 74);
+            this.panel_controls.Size = new System.Drawing.Size(924, 74);
             this.panel_controls.TabIndex = 24;
+            // 
+            // textBox_status
+            // 
+            this.textBox_status.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_status.BorderColorScaling = 0.5F;
+            this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox_status.Location = new System.Drawing.Point(102, 4);
+            this.textBox_status.Name = "textBox_status";
+            this.textBox_status.ReadOnly = true;
+            this.textBox_status.Size = new System.Drawing.Size(167, 13);
+            this.textBox_status.TabIndex = 21;
             // 
             // labelstpos
             // 
@@ -308,6 +355,53 @@ namespace EDDiscovery
             this.labelstpos.Size = new System.Drawing.Size(90, 19);
             this.labelstpos.TabIndex = 20;
             this.labelstpos.Text = "Current Status:";
+            // 
+            // textBoxSystemName
+            // 
+            this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSystemName.BorderColorScaling = 0.5F;
+            this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxSystemName.Location = new System.Drawing.Point(72, 25);
+            this.textBoxSystemName.Name = "textBoxSystemName";
+            this.textBoxSystemName.ReadOnly = true;
+            this.textBoxSystemName.Size = new System.Drawing.Size(178, 13);
+            this.textBoxSystemName.TabIndex = 1;
+            // 
+            // textBoxCoordinateX
+            // 
+            this.textBoxCoordinateX.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCoordinateX.BorderColorScaling = 0.5F;
+            this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 46);
+            this.textBoxCoordinateX.Name = "textBoxCoordinateX";
+            this.textBoxCoordinateX.ReadOnly = true;
+            this.textBoxCoordinateX.Size = new System.Drawing.Size(60, 20);
+            this.textBoxCoordinateX.TabIndex = 6;
+            this.textBoxCoordinateX.Text = "?";
+            this.textBoxCoordinateX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxCoordinateY
+            // 
+            this.textBoxCoordinateY.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCoordinateY.BorderColorScaling = 0.5F;
+            this.textBoxCoordinateY.Location = new System.Drawing.Point(245, 46);
+            this.textBoxCoordinateY.Name = "textBoxCoordinateY";
+            this.textBoxCoordinateY.ReadOnly = true;
+            this.textBoxCoordinateY.Size = new System.Drawing.Size(60, 20);
+            this.textBoxCoordinateY.TabIndex = 8;
+            this.textBoxCoordinateY.Text = "?";
+            this.textBoxCoordinateY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxCoordinateZ
+            // 
+            this.textBoxCoordinateZ.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCoordinateZ.BorderColorScaling = 0.5F;
+            this.textBoxCoordinateZ.Location = new System.Drawing.Point(325, 46);
+            this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
+            this.textBoxCoordinateZ.ReadOnly = true;
+            this.textBoxCoordinateZ.Size = new System.Drawing.Size(60, 20);
+            this.textBoxCoordinateZ.TabIndex = 10;
+            this.textBoxCoordinateZ.Text = "?";
+            this.textBoxCoordinateZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // splitContainerCustom1
             // 
@@ -324,8 +418,9 @@ namespace EDDiscovery
             // splitContainerCustom1.Panel2
             // 
             this.splitContainerCustom1.Panel2.Controls.Add(this.dataViewScroller_Wanted);
-            this.splitContainerCustom1.Size = new System.Drawing.Size(993, 449);
-            this.splitContainerCustom1.SplitterDistance = 541;
+            this.splitContainerCustom1.Panel2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 50);
+            this.splitContainerCustom1.Size = new System.Drawing.Size(892, 521);
+            this.splitContainerCustom1.SplitterDistance = 484;
             this.splitContainerCustom1.TabIndex = 25;
             // 
             // splitContainerCustom2
@@ -342,8 +437,9 @@ namespace EDDiscovery
             // splitContainerCustom2.Panel2
             // 
             this.splitContainerCustom2.Panel2.Controls.Add(this.richTextBox_History);
-            this.splitContainerCustom2.Size = new System.Drawing.Size(541, 449);
-            this.splitContainerCustom2.SplitterDistance = 276;
+            this.splitContainerCustom2.Panel2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 50);
+            this.splitContainerCustom2.Size = new System.Drawing.Size(484, 521);
+            this.splitContainerCustom2.SplitterDistance = 317;
             this.splitContainerCustom2.TabIndex = 0;
             // 
             // dataViewScroller_Distances
@@ -355,7 +451,7 @@ namespace EDDiscovery
             this.dataViewScroller_Distances.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Distances.Name = "dataViewScroller_Distances";
             this.dataViewScroller_Distances.ScrollBarWidth = 20;
-            this.dataViewScroller_Distances.Size = new System.Drawing.Size(541, 276);
+            this.dataViewScroller_Distances.Size = new System.Drawing.Size(484, 317);
             this.dataViewScroller_Distances.TabIndex = 0;
             this.dataViewScroller_Distances.VerticalScrollBarDockRight = true;
             // 
@@ -370,13 +466,13 @@ namespace EDDiscovery
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(521, 21);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(464, 21);
             this.vScrollBarCustom1.Maximum = 0;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 255);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 296);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -401,7 +497,7 @@ namespace EDDiscovery
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
             this.dataGridViewDistances.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewDistances.Size = new System.Drawing.Size(521, 276);
+            this.dataGridViewDistances.Size = new System.Drawing.Size(464, 317);
             this.dataGridViewDistances.TabIndex = 0;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
@@ -452,7 +548,7 @@ namespace EDDiscovery
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.ScrollBarWidth = 20;
             this.richTextBox_History.ShowLineCount = false;
-            this.richTextBox_History.Size = new System.Drawing.Size(541, 169);
+            this.richTextBox_History.Size = new System.Drawing.Size(484, 150);
             this.richTextBox_History.TabIndex = 0;
             // 
             // dataViewScroller_Wanted
@@ -464,7 +560,7 @@ namespace EDDiscovery
             this.dataViewScroller_Wanted.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Wanted.Name = "dataViewScroller_Wanted";
             this.dataViewScroller_Wanted.ScrollBarWidth = 20;
-            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(448, 449);
+            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(404, 471);
             this.dataViewScroller_Wanted.TabIndex = 0;
             this.dataViewScroller_Wanted.VerticalScrollBarDockRight = true;
             // 
@@ -479,13 +575,13 @@ namespace EDDiscovery
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(428, 21);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(384, 21);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 428);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 450);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 14;
@@ -523,7 +619,7 @@ namespace EDDiscovery
             this.dataGridViewClosestSystems.ReadOnly = true;
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
             this.dataGridViewClosestSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(428, 449);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(384, 471);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
@@ -541,100 +637,6 @@ namespace EDDiscovery
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
             // 
-            // textBox_status
-            // 
-            this.textBox_status.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_status.BorderColorScaling = 0.5F;
-            this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox_status.Location = new System.Drawing.Point(102, 4);
-            this.textBox_status.Name = "textBox_status";
-            this.textBox_status.ReadOnly = true;
-            this.textBox_status.Size = new System.Drawing.Size(167, 13);
-            this.textBox_status.TabIndex = 21;
-            // 
-            // textBoxSystemName
-            // 
-            this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSystemName.BorderColorScaling = 0.5F;
-            this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxSystemName.Location = new System.Drawing.Point(72, 25);
-            this.textBoxSystemName.Name = "textBoxSystemName";
-            this.textBoxSystemName.ReadOnly = true;
-            this.textBoxSystemName.Size = new System.Drawing.Size(178, 13);
-            this.textBoxSystemName.TabIndex = 1;
-            // 
-            // textBoxCoordinateX
-            // 
-            this.textBoxCoordinateX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCoordinateX.BorderColorScaling = 0.5F;
-            this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 46);
-            this.textBoxCoordinateX.Name = "textBoxCoordinateX";
-            this.textBoxCoordinateX.ReadOnly = true;
-            this.textBoxCoordinateX.Size = new System.Drawing.Size(60, 20);
-            this.textBoxCoordinateX.TabIndex = 6;
-            this.textBoxCoordinateX.Text = "?";
-            this.textBoxCoordinateX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // textBoxCoordinateY
-            // 
-            this.textBoxCoordinateY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCoordinateY.BorderColorScaling = 0.5F;
-            this.textBoxCoordinateY.Location = new System.Drawing.Point(245, 46);
-            this.textBoxCoordinateY.Name = "textBoxCoordinateY";
-            this.textBoxCoordinateY.ReadOnly = true;
-            this.textBoxCoordinateY.Size = new System.Drawing.Size(60, 20);
-            this.textBoxCoordinateY.TabIndex = 8;
-            this.textBoxCoordinateY.Text = "?";
-            this.textBoxCoordinateY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // textBoxCoordinateZ
-            // 
-            this.textBoxCoordinateZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCoordinateZ.BorderColorScaling = 0.5F;
-            this.textBoxCoordinateZ.Location = new System.Drawing.Point(325, 46);
-            this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
-            this.textBoxCoordinateZ.ReadOnly = true;
-            this.textBoxCoordinateZ.Size = new System.Drawing.Size(60, 20);
-            this.textBoxCoordinateZ.TabIndex = 10;
-            this.textBoxCoordinateZ.Text = "?";
-            this.textBoxCoordinateZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // radioButtonAlgorithmJs
-            // 
-            this.radioButtonAlgorithmJs.AutoSize = true;
-            this.radioButtonAlgorithmJs.FontNerfReduction = 0.5F;
-            this.radioButtonAlgorithmJs.Location = new System.Drawing.Point(3, 27);
-            this.radioButtonAlgorithmJs.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButtonAlgorithmJs.Name = "radioButtonAlgorithmJs";
-            this.radioButtonAlgorithmJs.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButtonAlgorithmJs.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButtonAlgorithmJs.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButtonAlgorithmJs.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButtonAlgorithmJs.Size = new System.Drawing.Size(37, 17);
-            this.radioButtonAlgorithmJs.TabIndex = 1;
-            this.radioButtonAlgorithmJs.Text = "JS";
-            this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmJs, "Original algoritthm from ed-systems, written in Javascript (slower)");
-            this.radioButtonAlgorithmJs.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonAlgorithmCsharp
-            // 
-            this.radioButtonAlgorithmCsharp.AutoSize = true;
-            this.radioButtonAlgorithmCsharp.Checked = true;
-            this.radioButtonAlgorithmCsharp.FontNerfReduction = 0.5F;
-            this.radioButtonAlgorithmCsharp.Location = new System.Drawing.Point(3, 44);
-            this.radioButtonAlgorithmCsharp.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButtonAlgorithmCsharp.Name = "radioButtonAlgorithmCsharp";
-            this.radioButtonAlgorithmCsharp.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButtonAlgorithmCsharp.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButtonAlgorithmCsharp.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButtonAlgorithmCsharp.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButtonAlgorithmCsharp.Size = new System.Drawing.Size(39, 17);
-            this.radioButtonAlgorithmCsharp.TabIndex = 0;
-            this.radioButtonAlgorithmCsharp.TabStop = true;
-            this.radioButtonAlgorithmCsharp.Text = "C#";
-            this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmCsharp, "Algorithm from ed-systems rewritten to C# (fast, experimental)");
-            this.radioButtonAlgorithmCsharp.UseVisualStyleBackColor = true;
-            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -643,7 +645,7 @@ namespace EDDiscovery
             this.Controls.Add(this.panel_controls);
             this.Controls.Add(this.toolStrip1);
             this.Name = "TrilaterationControl";
-            this.Size = new System.Drawing.Size(1030, 562);
+            this.Size = new System.Drawing.Size(924, 681);
             this.trilatContextMenu.ResumeLayout(false);
             this.panelImplementation.ResumeLayout(false);
             this.panelImplementation.PerformLayout();
