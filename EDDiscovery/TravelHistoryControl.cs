@@ -138,7 +138,12 @@ namespace EDDiscovery
             richTextBox_History.AppendText(text, color);
         }
 
-        public void RefreshHistoryAsync()
+        private class RefreshHistoryParameters
+        {
+            public bool ForceReload;
+        }
+
+        public void RefreshHistoryAsync(bool forceReload = false)
         {
             if (_discoveryForm.PendingClose)
             {
@@ -150,7 +155,7 @@ namespace EDDiscovery
                 if (!_refreshWorker.IsBusy)
                 {
                     button_RefreshHistory.Enabled = false;
-                    _refreshWorker.RunWorkerAsync();
+                    _refreshWorker.RunWorkerAsync(new RefreshHistoryParameters { ForceReload = forceReload });
                 }
             }
             else
@@ -167,11 +172,13 @@ namespace EDDiscovery
         private void RefreshHistoryWorker(object sender, DoWorkEventArgs e)
         {
             var worker = (BackgroundWorker)sender;
+            RefreshHistoryParameters param = e.Argument as RefreshHistoryParameters ?? new RefreshHistoryParameters();
+            bool forceReload = param.ForceReload;
 
             string errmsg;
             netlog.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
 
-            var vsclist = netlog.ParseFiles(out errmsg, defaultMapColour, () => worker.CancellationPending, (p,s) => worker.ReportProgress(p,s));   // Parse files stop monitor..
+            var vsclist = netlog.ParseFiles(out errmsg, defaultMapColour, () => worker.CancellationPending, (p,s) => worker.ReportProgress(p,s), forceReload);   // Parse files stop monitor..
 
             if (worker.CancellationPending)
             {

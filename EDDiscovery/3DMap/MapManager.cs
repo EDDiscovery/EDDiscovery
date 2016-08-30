@@ -45,11 +45,6 @@ namespace EDDiscovery2._3DMap
             _formMap.SetPlannedRoute(plannedr);
         }
 
-        public void SetReferenceSystems(List<SystemClass> trir)
-        {
-            _formMap.SetReferenceSystems(trir);
-        }
-
         public void UpdateVisited(List<VisitedSystemsClass> visited)
         {
             _formMap.UpdateVisitedSystems(visited);
