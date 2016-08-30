@@ -81,5 +81,17 @@ namespace EDDiscovery.DB
             t = new Point3D(x, y, z);
             return ret;
         }
+
+        public static string GetNameWithoutPrefix(string name)
+        {
+            int indexof = name.IndexOf(':');
+
+            if (indexof == -1)
+                return name;
+            else if (name.Length > indexof + 1)
+                return name.Substring(indexof + 1, name.Length - indexof - 1);
+            else
+                return "";
+        }
     }
 }

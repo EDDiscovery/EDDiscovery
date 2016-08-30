@@ -11,6 +11,7 @@ namespace ExtendedControls
     {
         public bool CentreX = false;
         public bool CentreY = false;
+        public Color TextBackColor = Color.Transparent;
 
         public LabelExt()
         {
@@ -21,19 +22,19 @@ namespace ExtendedControls
             SizeF sizef = pe.Graphics.MeasureString(this.Text, this.Font);
             Size sz = new Size((int)(sizef.Width + 1), (int)(sizef.Height + 1));
 
-            Console.WriteLine("Label size {0}", sz);
+            //Console.WriteLine("Label size {0}", sz);
 
-            if (sz.Width != 0)
+            if (sz.Width > 0 && sz.Height>0 && this.Text.Length>0)
             {
                 using (Bitmap mp = new Bitmap(sz.Width, sz.Height))   // bitmaps .. drawing directly does not work due to aliasing
                 {
                     Graphics mpg = Graphics.FromImage(mp);
 
-                    if (this.BackColor != Color.Transparent)
+                    if (this.TextBackColor != Color.Transparent)
                     {
-                        using (Brush b = new SolidBrush(this.BackColor))
+                        using (Brush b = new SolidBrush(this.TextBackColor))
                         {
-                            mpg.FillRectangle(b, ClientRectangle );
+                            mpg.FillRectangle(b, new Rectangle(0,0,sz.Width,sz.Height) );
                         }
                     }
 

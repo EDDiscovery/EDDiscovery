@@ -336,6 +336,7 @@ namespace EDDiscovery2
         public bool Draw( bool workallowed , float lastzoom , Vector3 lastrot )                              // FOREGROUND thread may be running.. so use only foreground object
         {
             float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / lastzoom, _starnameminly)); // per char - sync with above in background
+            float starsize = Math.Min(Math.Max(lastzoom / 10F, 1.0F), 20F);     // Normal stars are at 1F.
 
             bool needmoreticks = false;
 
@@ -369,14 +370,22 @@ namespace EDDiscovery2
 
                 if ( sys.inview )                       // in view, send it to the renderer
                 {
+                    bool zoomchanged = sys.zoom != lastzoom;
+
                     if (sys.paintstar != null && _discson)                  // if star disk, paint..
                     {
+                        if (zoomchanged)
+                        {
+                            sys.paintstar.Size = starsize;
+                            sys.zoom = lastzoom;
+                        }
+
                         sys.paintstar.Draw(_glControl);
                     }
 
                     if (sys.nametexture != null && _nameson )       
                     {
-                        if ( sys.zoom != lastzoom || sys.rotation != lastrot )  // if we have rotated since last vertex calc, either here or in background when created
+                        if ( zoomchanged || sys.rotation != lastrot)  // if we have rotated since last vertex calc, either here or in background when created
                         {
                             float width = textscalingw * sys.name.Length;
                             sys.nametexture.UpdateVertices( TexturedQuadData.CalcVertices(sys.pos, lastrot , width, textscalingw * 4.0F, _startextoffset + width / 2, 0));
