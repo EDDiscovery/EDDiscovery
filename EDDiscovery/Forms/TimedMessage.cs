@@ -27,6 +27,7 @@ namespace EDDiscovery2
                 labelMessage.Font = fnt;
 
             labelMessage.BackColor = msgback;
+            labelMessage.TextBackColor = msgback;
             labelMessage.ForeColor = msgfore;
             labelMessage.Text = msg;
             labelMessage.CentreX = labelMessage.CentreY = true;

@@ -48,6 +48,7 @@ namespace EDDiscovery2
             showNotes = 16,
             showXYZ = 32,
             showDistancePerStar = 64,
+            showBlackBoxAroundText = 128,
         };
 
         Configuration config = (Configuration)( Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showTime | Configuration.showDistance | Configuration.showNotes | Configuration.showXYZ | Configuration.showDistancePerStar);
@@ -71,6 +72,7 @@ namespace EDDiscovery2
             showNotesToolStripMenuItem.Checked = (config & Configuration.showNotes) != 0;
             showXYZToolStripMenuItem.Checked = (config & Configuration.showXYZ) != 0;
             showDistanceToolStripMenuItem.Checked = (config & Configuration.showDistance) != 0;
+            blackBoxAroundTextToolStripMenuItem.Checked = (config & Configuration.showBlackBoxAroundText) != 0;
             toolStripComboBoxOrder.Enabled = false; // indicate its a program change
             toolStripComboBoxOrder.SelectedIndex = SQLiteDBClass.GetSettingInt("SummaryPanelLayout", 0);
             toolStripComboBoxOrder.Enabled = true;
@@ -154,7 +156,7 @@ namespace EDDiscovery2
                 if (statictoplines == 0)
                 {
                     int row = lt.Add(-1,cep, 0);       // insert with rowid -1, at 0
-                    lt.SetFormat(row, cep);
+                    lt.SetFormat(row, cep, blackBoxAroundTextToolStripMenuItem.Checked);
                     statictoplines = 1;
                     UpdateEventsOnControls(this);
                 }
@@ -244,7 +246,7 @@ namespace EDDiscovery2
             if (addit)
             {
                 int row = lt.Add(vscrow.Index,cep, insertat);        // row on the summary screen..  remember which row it came from
-                lt.SetFormat(row, cep);
+                lt.SetFormat(row, cep , blackBoxAroundTextToolStripMenuItem.Checked);
             }
             else
             {
@@ -434,6 +436,11 @@ namespace EDDiscovery2
             FlipConfig(Configuration.showDistancePerStar, ((ToolStripMenuItem)sender).Checked);
         }
 
+        private void blackBoxAroundTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showBlackBoxAroundText, ((ToolStripMenuItem)sender).Checked);
+        }
+
         private void toolStripComboBoxOrder_SelectedIndexChanged(object sender, EventArgs e)
         {
             ToolStripComboBox cbx = (ToolStripComboBox)sender;
@@ -475,10 +482,10 @@ namespace EDDiscovery2
             vspacing = vspace;
         }
 
-        public void SetFormat(int row, List<ControlEntryProperties> cep)
+        public void SetFormat(int row, List<ControlEntryProperties> cep , bool blackbox)
         {
             if ( row < entries.Count )
-                entries[row].SetFormat(cep);
+                entries[row].SetFormat(cep, blackbox);
         }
 
         public int Add(int rowid, List<ControlEntryProperties> cep, int insertpos )      // return row that was added..
@@ -582,7 +589,7 @@ namespace EDDiscovery2
                 items[i].Text = cep[i].text;
         }
 
-        public void SetFormat(List<ControlEntryProperties> cep)
+        public void SetFormat(List<ControlEntryProperties> cep , bool blackbox)
         {
             for (int i = 0; i < items.Count; i++)
             {
@@ -602,9 +609,12 @@ namespace EDDiscovery2
                 }
                 else
                 {
-                    items[i].BackColor = Color.Transparent;
-                    items[i].Location = new Point(cep[i].tabstop, items[i].Location.Y);
-                    items[i].Size = new Size(nexttabpos - cep[i].tabstop - 4, items[i].Size.Height - 4);
+                    LabelExt le = items[i] as ExtendedControls.LabelExt;
+
+                    le.BackColor = Color.Transparent;
+                    le.TextBackColor = (blackbox) ? Color.Black : Color.Transparent;
+                    le.Location = new Point(cep[i].tabstop, items[i].Location.Y);
+                    le.Size = new Size(nexttabpos - cep[i].tabstop - 4, items[i].Size.Height - 4);
                 }
             }
         }
