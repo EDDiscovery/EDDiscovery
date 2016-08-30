@@ -319,6 +319,30 @@ namespace EDDiscovery
                             tzoffset += TimeSpan.FromHours(24);
                         }
                     }
+                    else
+                    {
+                        // No timezone specified - try to make the timezone offset make sense
+                        // Unfortunately anything east of Tonga (GMT+13) or west of Hawaii (GMT-10)
+                        // will be a day off.
+
+                        if (tzoffset <= TimeSpan.FromHours(-10.5))
+                        {
+                            tzoffset += TimeSpan.FromHours(24);
+                        }
+                        else if (tzoffset > TimeSpan.FromHours(13.5))
+                        {
+                            tzoffset -= TimeSpan.FromHours(24);
+                        }
+
+                        double tzhrs = tzoffset.TotalHours;
+                        bool tzneg = tzhrs < 0;
+                        if (tzneg) tzhrs = -tzhrs;
+                        int tzmins = (int)Math.Truncate(tzhrs * 60) % 60;
+                        tzhrs = Math.Truncate(tzhrs);
+
+                        string tzname = tzhrs == 0 ? "GMT" : $"GMT{(tzneg ? "-" : "+")}{tzhrs.ToString("00", CultureInfo.InvariantCulture)}{tzmins.ToString("00", CultureInfo.InvariantCulture)}";
+                        tzi = TimeZoneInfo.CreateCustomTimeZone(tzname, tzoffset, tzname, tzname);
+                    }
 
                     // Set the start time, timezone info and timezone offset
                     LastLogTime = localtime - tzoffset;
