@@ -16,7 +16,6 @@ namespace ExtendedControls
         private ListControlCustom _listcontrol;
 
         public event EventHandler DropDown;
-        public event EventHandler DropDownClosed;
         public event EventHandler SelectedIndexChanged;
 
         public int SelectedIndex { get { return _listcontrol.SelectedIndex; } set { _listcontrol.SelectedIndex = value; } }
@@ -61,12 +60,6 @@ namespace ExtendedControls
         {
             base.OnDeactivate(e);
             this.Close();
-        }
-
-        protected override void OnFormClosed(FormClosedEventArgs e)
-        {
-            base.OnFormClosed(e);
-            DropDownClosed(this, e);
         }
     }
 
@@ -267,6 +260,8 @@ namespace ExtendedControls
         {
             int selectedindex = _cbdropdown.SelectedIndex;
             _cbdropdown.Close();
+            isActivated = false;
+            this.Invalidate(true);
             _cbsystem.SelectedIndex = selectedindex;
         }
 
@@ -444,8 +439,8 @@ namespace ExtendedControls
             _cbdropdown.ScrollBarButtonColor = this.ScrollBarButtonColor;
 
             _cbdropdown.DropDown += _cbdropdown_DropDown;
-            _cbdropdown.DropDownClosed += _cbdropdown_DropDownClosed;
             _cbdropdown.SelectedIndexChanged += _cbdropdown_SelectedIndexChanged;
+            _cbdropdown.Deactivate += _cbdropdown_Deactivate;
 
             Control parent = this.Parent;
             while (parent != null && !(parent is Form))
@@ -456,15 +451,10 @@ namespace ExtendedControls
             _cbdropdown.Show(parent);
         }
 
-        private void _cbdropdown_DropDownClosed(object sender, EventArgs e)
+        private void _cbdropdown_Deactivate(object sender, EventArgs e)
         {
-            if (_cbdropdown != null)
-            {
-                _cbdropdown.Dispose();
-                _cbdropdown = null;
-            }
-
             isActivated = false;
+            this.Invalidate(true);
         }
 
         private void _cbdropdown_DropDown(object sender, EventArgs e)
