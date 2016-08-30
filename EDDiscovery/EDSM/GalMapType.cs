@@ -13,6 +13,7 @@ namespace EDDiscovery.EDSM
             Markers = 1,
             Routes,
             Regions,
+            Quadrants,
         }
 
         public string Typeid;
@@ -56,7 +57,7 @@ namespace EDDiscovery.EDSM
             type.Add(new GalMapType("minorRoute", "Minor Route", GalMapGroup.Routes, null, index++));
 
             type.Add(new GalMapType("region", "Region", GalMapGroup.Regions , null, index++));
-            type.Add(new GalMapType("regionQuadrants", "Galactic Quadrants", GalMapGroup.Regions , null, index++));
+            type.Add(new GalMapType("regionQuadrants", "Galactic Quadrants", GalMapGroup.Quadrants , null, index++));
 
             type.Add(new GalMapType("EDSMUnknown", "EDSM other POI type", GalMapGroup.Markers, EDDiscovery.Properties.Resources.pointofinterest, index++));
 
