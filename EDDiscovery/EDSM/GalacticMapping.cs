@@ -84,10 +84,7 @@ namespace EDDiscovery.EDSM
 
         public void ToggleEnable(GalMapType tpsel = null)
         {
-            int index = 0;
-            int sel = 0;
-
-            GalMapType tpon = galacticMapTypes.Find(x => x.Enabled==true);  // find if any are on
+            GalMapType tpon = galacticMapTypes.Find(x => x.Enabled == true);  // find if any are on
 
             foreach (GalMapType tp in galacticMapTypes)
             {
@@ -95,7 +92,16 @@ namespace EDDiscovery.EDSM
                     tp.Enabled = (tpon == null);                // enabled if all are OFF, else disabled if any are on
                 else if (tpsel == tp)
                     tp.Enabled = !tp.Enabled;
+            }
+        }
 
+        public void SaveSettings()
+        {
+            int index = 0;
+            int sel = 0;
+
+            foreach (GalMapType tp in galacticMapTypes)
+            {
                 sel |= (tp.Enabled ? 1 : 0) << index;
                 index++;
             }

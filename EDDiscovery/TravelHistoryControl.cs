@@ -1121,7 +1121,7 @@ namespace EDDiscovery
 
                     if (gmo != null)
                     {
-                        TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].x, gmo.points[0].y, gmo.points[0].z);
+                        TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
                         msgboxtext = "Target set on galaxy object " + gmo.name;
                     }
                     else
