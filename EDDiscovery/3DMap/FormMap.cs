@@ -374,7 +374,7 @@ namespace EDDiscovery2
 
         private void FormMap_Resize(object sender, EventArgs e)         // resizes changes glcontrol width/height, so needs a new viewport
         {
-            if (!_allowresizematrixchange)
+            if (_allowresizematrixchange)
             {
                 SetModelProjectionMatrix();
                 RequestPaint();
