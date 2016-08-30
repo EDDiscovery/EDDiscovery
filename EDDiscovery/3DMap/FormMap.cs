@@ -1973,8 +1973,8 @@ namespace EDDiscovery2
             return false;
         }
 
-        private float GetBitmapOnScreenSizeX() { return (float)Math.Min(Math.Max(2, 80.0 / zoomfov.Zoom), 1000); }
-        private float GetBitmapOnScreenSizeY() { return (float)Math.Min(Math.Max(2, 100.0 / zoomfov.Zoom), 1000); }
+        private float GetBitmapOnScreenSizeX() { return (float)Math.Min(Math.Max(7, 80.0 / zoomfov.Zoom), 400); }
+        private float GetBitmapOnScreenSizeY() { return (float)Math.Min(Math.Max(8, 100.0 / zoomfov.Zoom), 400); }
 
         private BookmarkClass GetMouseOverBookmark(int x, int y, out float cursysdistz)
         {
