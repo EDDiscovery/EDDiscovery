@@ -42,7 +42,9 @@ namespace EDDiscovery2
             if ( CameraMoved )
                 LastCameraPos = cameraPos;
 
-            CameraZoomed = Math.Abs(LastZoom - zoom) > 0.0000001;
+            float zoomfact = zoom / LastZoom;
+
+            CameraZoomed = (zoomfact >= 1.05 || zoomfact <= 0.95);     // prevent too small zoom causing a repaint
 
             if ( CameraZoomed )
                 LastZoom = zoom;

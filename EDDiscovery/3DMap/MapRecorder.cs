@@ -8,6 +8,8 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using System.Linq;
+using System.Drawing;
 
 namespace EDDiscovery2._3DMap
 {
@@ -21,17 +23,29 @@ namespace EDDiscovery2._3DMap
         //public bool Recorded { get { return record == false && entries != null; } }
         public bool Entries { get { return entries != null; } }
 
-        class FlightEntry
+        public class FlightEntry
         {
-            public long offsettime; 
-            public Vector3 pos;
-            public long timetofly;        //0 = imm
-            public Vector3 dir;
-            public long timetopan;        //0 = imm
-            public float zoom;
-            public long timetozoom;        // NOT YET IMPLEMENTED BUT MAY NEED IT
-            public string message;
-            public long messagetime;
+            public long offsettime;         // delta time ms, 0 = imm, -1 wait for all slews to stop.
+            public static long WaitForComplete { get { return -1; } }
+
+            public Vector3 pos;             // .x=nan no move
+            public long timetofly;          //0 = imm
+            public bool IsPosSet { get { return !float.IsNaN(pos.X); } }
+
+            public Vector3 dir;             // .x=nan no dir
+            public long timetopan;          //0 = imm
+            public bool IsDirSet { get { return !float.IsNaN(dir.X); } }
+
+            public float zoom;              // .x=nan no zoom
+            public long timetozoom;         //0 = imm
+            public bool IsZoomSet { get { return zoom>0; } }
+
+            public string message;          // null/empty no message
+            public long messagetime;        // 0 = 3s
+            public bool IsMessageSet { get { return message != null && message.Length > 0; } }
+
+            public static Vector3 NullVector { get { return new Vector3(float.NaN, 0, 0); } }
+            public static float NullZoom { get { return 0; } }
         }
 
         private List<FlightEntry> entries = null;
@@ -62,9 +76,9 @@ namespace EDDiscovery2._3DMap
             if (entries == null)
             {
                 entries = new List<FlightEntry>();
-                lastpos = new Vector3(0, 0, float.MaxValue);
-                lastdir = new Vector3(0, 0, float.MaxValue);
-                lastzoom = float.MaxValue;
+                lastpos = FlightEntry.NullVector;
+                lastdir = FlightEntry.NullVector;
+                lastzoom = FlightEntry.NullZoom;
             }
 
             record = true;
@@ -147,7 +161,16 @@ namespace EDDiscovery2._3DMap
                 {
                     FlightEntry fe = new FlightEntry();
                     long curtime = timer.ElapsedMilliseconds;
-                    RecordEntry(curtime, pos, d, z, curtime - lasttime, 0, 0, 0, "",0);
+
+                    RecordEntry(curtime,(pos != lastpos) ? pos : FlightEntry.NullVector, 
+                                        (d != lastdir) ? d : FlightEntry.NullVector, 
+                                        (z != lastzoom) ? z : FlightEntry.NullZoom , 
+                                        curtime - lasttime, 0, 0, 0, "",0);
+
+                    lastdir = d;
+                    lastpos = pos;
+                    lastzoom = z;
+
                     //Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
                 }
             }
@@ -166,73 +189,28 @@ namespace EDDiscovery2._3DMap
             fe.message = msg;
             fe.messagetime = mtime;
             entries.Add(fe);
-
             lasttime = curtime;                     // keep these up to date in case we are doing a normal record, or swap back to it
-            lastdir = d;
-            lastpos = pos;
-            lastzoom = z;
         }
 
         // can do this when paused or in any record mode.
-        public void RecordStep(Vector3 pos, Vector3 d, float z, long etime, long timetofly, long timetopan, long timetozoom, string msg, long mtime , long holdhere )
+        public void RecordStep(Vector3 pos, Vector3 d, float z, long etime, long timetofly, long timetopan, long timetozoom, 
+                            string msg, long mtime , bool waitcomplete, bool displaymessagewhencomplete )
         {
             if (record)
             {
                 long curtime = timer.ElapsedMilliseconds;
 
-                bool holding = (holdhere > 0);
+                RecordEntry(curtime, pos, d, z, etime, timetofly, timetopan, timetozoom,
+                            (displaymessagewhencomplete) ? "" : msg, (displaymessagewhencomplete) ? 0 : mtime);
 
-                RecordEntry(curtime, pos, d, z, etime, timetofly, timetopan, timetozoom, (holding) ? "" : msg , (holding) ? 0 : mtime );
-                //Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
-
-                if ( holding )
+                if ( waitcomplete )
                 {
-                    RecordEntry(curtime, pos, d, z, holdhere, 0,0,0, msg, mtime);
+                    RecordEntry(curtime, FlightEntry.NullVector, FlightEntry.NullVector, FlightEntry.NullZoom, FlightEntry.WaitForComplete, 0
+                                , 0, 0, (!displaymessagewhencomplete) ? "" : msg, (!displaymessagewhencomplete) ? 0 : mtime);
                     //Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
                 }
 
             }
-        }
-
-        public bool PlayBack(out Vector3 newpos, out long newpostime, 
-                             out Vector3 newdir , out long newdirtime, 
-                             out float newzoom , out long newzoomtime,
-                             out string message , out long newmessagetime )
-        {
-            newdir = newpos = new Vector3(0, 0, 0);
-            newpostime = newdirtime = newzoomtime = newmessagetime = 0;
-            newzoom = 0;
-            message = null;
-
-            if (!pause && playbackpos >= 0)
-            {
-                if (playbackpos == entries.Count)
-                    StopPlayBack();
-                else
-                {
-                    long targettime = lasttime + entries[playbackpos].offsettime;
-                    long ms = timer.ElapsedMilliseconds;
-
-                    if (ms >= targettime )
-                    {
-                        lasttime = targettime;
-
-                        newpos = entries[playbackpos].pos;
-                        newpostime = entries[playbackpos].timetofly;
-                        newdir = entries[playbackpos].dir;
-                        newdirtime = entries[playbackpos].timetopan;
-                        newzoom = entries[playbackpos].zoom;
-                        newzoomtime = entries[playbackpos].timetozoom;
-                        message = entries[playbackpos].message;
-                        newmessagetime = entries[playbackpos].messagetime;
-
-                        playbackpos++;
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         public void RecordStepDialog(Vector3 pos, Vector3 dir, float zoom)
@@ -243,9 +221,45 @@ namespace EDDiscovery2._3DMap
                 frm.Init(pos, dir, zoom);
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
-                    RecordStep(pos, dir, zoom, frm.Elapsed, frm.Fly, frm.Pan, frm.Zoom, frm.Msg, frm.Msg.Length>0 ? frm.MsgTime : 0, frm.HoldHere);
+                    RecordStep(frm.Pos, frm.Dir, frm.Zoom, frm.Elapsed, frm.FlyTime, frm.PanTime, frm.ZoomTime, frm.Msg, frm.MsgTime, frm.WaitForComplete, frm.DisplayMessageWhenComplete);
+                    //TBD       SaveToFile("C:\\code\\temp.flight");
                 }
             }
+        }
+
+        public bool PlayBack(out FlightEntry fe , bool inslews )
+        {
+            fe = null;
+
+            if (!pause && playbackpos >= 0)
+            {
+                if (playbackpos == entries.Count)
+                    StopPlayBack();
+                else
+                {
+                    long offsettime = entries[playbackpos].offsettime;
+                    long ms = timer.ElapsedMilliseconds;
+                    long targettime = offsettime + lasttime;
+
+                    if (offsettime == FlightEntry.WaitForComplete)                     // <0 means wait for slews
+                    {
+                        if ( !inslews )
+                        {
+                            lasttime = ms;
+                            fe = entries[playbackpos++];
+                            return true;
+                        }
+                    }
+                    else if ( ms >= targettime )
+                    {
+                        lasttime = targettime;
+                        fe = entries[playbackpos++];
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public void SaveDialog()
@@ -291,7 +305,48 @@ namespace EDDiscovery2._3DMap
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 if (!ReadFromFile(dlg.FileName))
-                    MessageBox.Show("Failed to load flight - check file path and file contents");
+                    MessageBox.Show("Failed to load flight " + dlg.FileName + ". Check file path and file contents");
+            }
+        }
+
+        public delegate void loadaction(Object sender, EventArgs e);
+
+        public void UpdateStoredVideosToolButton( ToolStripDropDownButton tsb , loadaction ab ,Bitmap image )
+        {
+            List<ToolStripMenuItem> removelist = new List<ToolStripMenuItem>();
+
+            foreach(ToolStripMenuItem tsmi in tsb.DropDownItems )
+            {
+                if (tsmi.Tag != null)
+                    removelist.Add(tsmi);
+            }
+
+            foreach (ToolStripMenuItem tsmi in removelist)
+            {
+                tsb.DropDownItems.Remove(tsmi);
+                tsmi.Dispose();
+            }
+
+            string flightdir =  Path.Combine(Tools.GetAppDataDirectory(), "Flights");
+            DirectoryInfo dirInfo = new DirectoryInfo(flightdir);
+
+            try
+            {
+                var sortedfiles = dirInfo.EnumerateFiles("*.flight", SearchOption.AllDirectories).OrderByDescending(x => x.LastWriteTime).Take(15).ToList();
+
+                foreach( FileInfo file in sortedfiles )
+                {
+                    ToolStripMenuItem tsmi = new ToolStripMenuItem();
+                    tsmi.Text = "Load "  + Path.GetFileNameWithoutExtension(file.FullName);
+                    tsmi.Size = new Size(195, 22);
+                    tsmi.Click += new System.EventHandler(ab);
+                    tsmi.Tag = file.FullName;
+                    tsmi.Image = image;
+                    tsb.DropDownItems.Add(tsmi);
+                }
+            }
+            catch
+            {
             }
         }
 
@@ -311,58 +366,51 @@ namespace EDDiscovery2._3DMap
                         jr.WriteRaw(",");
                         jr.WriteWhitespace(Environment.NewLine);
 
-                        Vector3 prevpos = new Vector3(0, 0, float.MaxValue);
-                        Vector3 prevdir = new Vector3(0, 0, float.MaxValue);
-                        float prevzoom = 0;
-
                         for (int i = 0; i < entries.Count; i++)
                         {
                             jr.WriteStartObject();
                             jr.WritePropertyName("T"); jr.WriteValue(entries[i].offsettime);
 
-                            if (prevpos != entries[i].pos)
+                            if (entries[i].IsPosSet)
                             {
                                 jr.WritePropertyName("Pos"); jr.WriteStartArray(); jr.WriteValue(entries[i].pos.X);
                                 jr.WriteValue(entries[i].pos.Y); jr.WriteValue(entries[i].pos.Z); jr.WriteEndArray();
-                                prevpos = entries[i].pos;
+
+                                if (entries[i].timetofly != 0)
+                                {
+                                    jr.WritePropertyName("FlyTime"); jr.WriteValue(entries[i].timetofly);
+                                }
                             }
 
-                            if (prevdir != entries[i].dir)
+                            if (entries[i].IsDirSet)
                             {
                                 jr.WritePropertyName("Dir"); jr.WriteStartArray(); jr.WriteValue(entries[i].dir.X);
                                 jr.WriteValue(entries[i].dir.Y); jr.WriteValue(entries[i].dir.Z); jr.WriteEndArray();
-                                prevdir = entries[i].dir;
+
+                                if (entries[i].timetopan != 0)
+                                {
+                                    jr.WritePropertyName("PanTime"); jr.WriteValue(entries[i].timetopan);
+                                }
                             }
 
-                            if (prevzoom != entries[i].zoom)
+                            if (entries[i].IsZoomSet)
                             {
                                 jr.WritePropertyName("Z"); jr.WriteValue(entries[i].zoom);
-                                prevzoom = entries[i].zoom;
+
+                                if (entries[i].timetozoom != 0)
+                                {
+                                    jr.WritePropertyName("ZTime"); jr.WriteValue(entries[i].timetozoom);
+                                }
                             }
 
-                            if (entries[i].timetofly != 0)
-                            {
-                                jr.WritePropertyName("FlyTime"); jr.WriteValue(entries[i].timetofly);
-                            }
-
-                            if (entries[i].timetopan != 0)
-                            {
-                                jr.WritePropertyName("PanTime"); jr.WriteValue(entries[i].timetopan);
-                            }
-
-                            if (entries[i].timetozoom != 0)
-                            {
-                                jr.WritePropertyName("ZTime"); jr.WriteValue(entries[i].timetozoom);
-                            }
-
-                            if (entries[i].message != null && entries[i].message.Length > 0)
+                            if ( entries[i].IsMessageSet )
                             {
                                 jr.WritePropertyName("Msg"); jr.WriteValue(entries[i].message);
-                            }
 
-                            if (entries[i].messagetime != 0)
-                            {
-                                jr.WritePropertyName("MsgTime"); jr.WriteValue(entries[i].messagetime);
+                                if (entries[i].messagetime != 0)
+                                {
+                                    jr.WritePropertyName("MsgTime"); jr.WriteValue(entries[i].messagetime);
+                                }
                             }
 
                             jr.WriteEndObject();
@@ -371,6 +419,7 @@ namespace EDDiscovery2._3DMap
                                 jr.WriteRaw(",");
                             jr.WriteWhitespace(Environment.NewLine);
                         }
+
                         jr.WriteRaw("]");
                     }
                 }
@@ -398,10 +447,6 @@ namespace EDDiscovery2._3DMap
                     {
                         bool first = true;
 
-                        Vector3 prevpos = new Vector3(0, 0, 0);
-                        Vector3 prevdir = new Vector3(0, 0, 0);
-                        float prevzoom = 0;
-
                         while (jr.Read())
                         {
                             if (jr.TokenType == JsonToken.StartObject)
@@ -422,33 +467,34 @@ namespace EDDiscovery2._3DMap
 
                                     if (ja != null)
                                     {
-                                        fe.pos.X = (float)ja[0];
-                                        fe.pos.Y = (float)ja[1];
-                                        fe.pos.Z = (float)ja[2];
-                                        prevpos = fe.pos;
+                                        fe.pos = new Vector3((float)ja[0], (float)ja[1], (float)ja[2]);
+                                        fe.timetofly = ReadLong(jo, "FlyTime", 0);
                                     }
                                     else
-                                        fe.pos = prevpos;
+                                        fe.pos = FlightEntry.NullVector;
 
                                     JArray jb = (JArray)jo["Dir"];
 
                                     if (jb != null)
                                     {
-                                        fe.dir.X = (float)jb[0];
-                                        fe.dir.Y = (float)jb[1];
-                                        fe.dir.Z = (float)jb[2];
-                                        prevdir = fe.dir;
+                                        fe.dir = new Vector3((float)jb[0], (float)jb[1], (float)jb[2]);
+                                        fe.timetopan = ReadLong(jo, "PanTime", 0);
                                     }
                                     else
-                                        fe.dir = prevdir;
+                                        fe.dir = FlightEntry.NullVector;
 
-                                    fe.zoom = prevzoom = ReadFloat(jo, "Z", prevzoom);
+                                    JToken jtmt = jo["Z"];
 
-                                    fe.timetofly = ReadLong(jo, "FlyTime", 0);
-                                    fe.timetopan = ReadLong(jo, "PanTime", 0);
-                                    fe.timetozoom = ReadLong(jo, "ZTime", 0);
-                                    fe.messagetime = ReadLong(jo, "MsgTime", 0);
+                                    if (jtmt != null)
+                                    {
+                                        fe.zoom = (float)jo["Z"];
+                                        fe.timetozoom = ReadLong(jo, "ZTime", 0);
+                                    }
+                                    else
+                                        fe.zoom = FlightEntry.NullZoom;
+
                                     fe.message = (string)jo["Msg"];
+                                    fe.messagetime = ReadLong(jo, "MsgTime", 0);
 
                                     newentries.Add(fe);
                                 }

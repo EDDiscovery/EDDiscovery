@@ -33,26 +33,29 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBoxLoc = new System.Windows.Forms.TextBox();
+            this.textBoxPos = new System.Windows.Forms.TextBox();
             this.textBoxDir = new System.Windows.Forms.TextBox();
             this.textBoxZoom = new System.Windows.Forms.TextBox();
-            this.textBoxFly = new System.Windows.Forms.TextBox();
-            this.textBoxPan = new System.Windows.Forms.TextBox();
-            this.textBoxDelta = new System.Windows.Forms.TextBox();
+            this.textBoxFlyTime = new System.Windows.Forms.TextBox();
+            this.textBoxPanTime = new System.Windows.Forms.TextBox();
+            this.textBoxWait = new System.Windows.Forms.TextBox();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.textBoxMessage = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBoxPauseHere = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.textBoxZoomTime = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.textBoxMsgTime = new System.Windows.Forms.TextBox();
+            this.checkBoxWaitForSlew = new System.Windows.Forms.CheckBox();
+            this.checkBoxPos = new System.Windows.Forms.CheckBox();
+            this.checkBoxPan = new System.Windows.Forms.CheckBox();
+            this.checkBoxChangeZoom = new System.Windows.Forms.CheckBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.checkBoxWaitComplete = new System.Windows.Forms.CheckBox();
+            this.checkBoxDisplayMessageWhenComplete = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -91,15 +94,6 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Time to take to change direction";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(25, 317);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(161, 13);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Delay before next action allowed";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -109,13 +103,13 @@
             this.label6.TabIndex = 0;
             this.label6.Text = "Zoom";
             // 
-            // textBoxLoc
+            // textBoxPos
             // 
-            this.textBoxLoc.Location = new System.Drawing.Point(196, 49);
-            this.textBoxLoc.Name = "textBoxLoc";
-            this.textBoxLoc.ReadOnly = true;
-            this.textBoxLoc.Size = new System.Drawing.Size(186, 20);
-            this.textBoxLoc.TabIndex = 1;
+            this.textBoxPos.Location = new System.Drawing.Point(196, 49);
+            this.textBoxPos.Name = "textBoxPos";
+            this.textBoxPos.ReadOnly = true;
+            this.textBoxPos.Size = new System.Drawing.Size(186, 20);
+            this.textBoxPos.TabIndex = 1;
             // 
             // textBoxDir
             // 
@@ -133,33 +127,33 @@
             this.textBoxZoom.Size = new System.Drawing.Size(100, 20);
             this.textBoxZoom.TabIndex = 1;
             // 
-            // textBoxFly
+            // textBoxFlyTime
             // 
-            this.textBoxFly.Location = new System.Drawing.Point(196, 76);
-            this.textBoxFly.Name = "textBoxFly";
-            this.textBoxFly.Size = new System.Drawing.Size(100, 20);
-            this.textBoxFly.TabIndex = 1;
-            this.textBoxFly.TextChanged += new System.EventHandler(this.textBox_TextChanged);
+            this.textBoxFlyTime.Location = new System.Drawing.Point(196, 76);
+            this.textBoxFlyTime.Name = "textBoxFlyTime";
+            this.textBoxFlyTime.Size = new System.Drawing.Size(100, 20);
+            this.textBoxFlyTime.TabIndex = 1;
+            this.textBoxFlyTime.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
-            // textBoxPan
+            // textBoxPanTime
             // 
-            this.textBoxPan.Location = new System.Drawing.Point(196, 142);
-            this.textBoxPan.Name = "textBoxPan";
-            this.textBoxPan.Size = new System.Drawing.Size(100, 20);
-            this.textBoxPan.TabIndex = 2;
-            this.textBoxPan.TextChanged += new System.EventHandler(this.textBox_TextChanged);
+            this.textBoxPanTime.Location = new System.Drawing.Point(196, 142);
+            this.textBoxPanTime.Name = "textBoxPanTime";
+            this.textBoxPanTime.Size = new System.Drawing.Size(100, 20);
+            this.textBoxPanTime.TabIndex = 2;
+            this.textBoxPanTime.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
-            // textBoxDelta
+            // textBoxWait
             // 
-            this.textBoxDelta.Location = new System.Drawing.Point(196, 12);
-            this.textBoxDelta.Name = "textBoxDelta";
-            this.textBoxDelta.Size = new System.Drawing.Size(100, 20);
-            this.textBoxDelta.TabIndex = 0;
-            this.textBoxDelta.TextChanged += new System.EventHandler(this.textBox_TextChanged);
+            this.textBoxWait.Location = new System.Drawing.Point(196, 12);
+            this.textBoxWait.Name = "textBoxWait";
+            this.textBoxWait.Size = new System.Drawing.Size(100, 20);
+            this.textBoxWait.TabIndex = 0;
+            this.textBoxWait.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(306, 403);
+            this.buttonOK.Location = new System.Drawing.Point(302, 391);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 5;
@@ -169,7 +163,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(210, 403);
+            this.buttonCancel.Location = new System.Drawing.Point(198, 391);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 6;
@@ -191,15 +185,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(132, 20);
             this.label7.TabIndex = 0;
-            this.label7.Text = "Message when arrived";
-            // 
-            // textBoxPauseHere
-            // 
-            this.textBoxPauseHere.Location = new System.Drawing.Point(195, 317);
-            this.textBoxPauseHere.Name = "textBoxPauseHere";
-            this.textBoxPauseHere.Size = new System.Drawing.Size(100, 20);
-            this.textBoxPauseHere.TabIndex = 4;
-            this.textBoxPauseHere.TextChanged += new System.EventHandler(this.textBox_TextChanged);
+            this.label7.Text = "Message to display";
             // 
             // label8
             // 
@@ -209,24 +195,6 @@
             this.label8.Size = new System.Drawing.Size(150, 13);
             this.label8.TabIndex = 0;
             this.label8.Text = "Wait for this time before action";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(25, 352);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(275, 13);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "0 means maximum of the change pos, dir and zoom times";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(24, 379);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(153, 13);
-            this.label10.TabIndex = 0;
-            this.label10.Text = "Empty means no minimum time.";
             // 
             // textBoxZoomTime
             // 
@@ -262,27 +230,105 @@
             this.textBoxMsgTime.TabIndex = 3;
             this.textBoxMsgTime.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
+            // checkBoxWaitForSlew
+            // 
+            this.checkBoxWaitForSlew.AutoSize = true;
+            this.checkBoxWaitForSlew.Location = new System.Drawing.Point(302, 15);
+            this.checkBoxWaitForSlew.Name = "checkBoxWaitForSlew";
+            this.checkBoxWaitForSlew.Size = new System.Drawing.Size(87, 17);
+            this.checkBoxWaitForSlew.TabIndex = 7;
+            this.checkBoxWaitForSlew.Text = "Wait for slew";
+            this.checkBoxWaitForSlew.UseVisualStyleBackColor = true;
+            this.checkBoxWaitForSlew.CheckedChanged += new System.EventHandler(this.checkBoxWaitForSlew_CheckedChanged);
+            // 
+            // checkBoxPos
+            // 
+            this.checkBoxPos.AutoSize = true;
+            this.checkBoxPos.Location = new System.Drawing.Point(302, 80);
+            this.checkBoxPos.Name = "checkBoxPos";
+            this.checkBoxPos.Size = new System.Drawing.Size(56, 17);
+            this.checkBoxPos.TabIndex = 7;
+            this.checkBoxPos.Text = "Go To";
+            this.checkBoxPos.UseVisualStyleBackColor = true;
+            this.checkBoxPos.CheckedChanged += new System.EventHandler(this.checkBoxGoTo_CheckedChanged);
+            // 
+            // checkBoxPan
+            // 
+            this.checkBoxPan.AutoSize = true;
+            this.checkBoxPan.Location = new System.Drawing.Point(302, 145);
+            this.checkBoxPan.Name = "checkBoxPan";
+            this.checkBoxPan.Size = new System.Drawing.Size(79, 17);
+            this.checkBoxPan.TabIndex = 7;
+            this.checkBoxPan.Text = "Change Dir";
+            this.checkBoxPan.UseVisualStyleBackColor = true;
+            this.checkBoxPan.CheckedChanged += new System.EventHandler(this.checkBoxChangeDir_CheckedChanged);
+            // 
+            // checkBoxChangeZoom
+            // 
+            this.checkBoxChangeZoom.AutoSize = true;
+            this.checkBoxChangeZoom.Location = new System.Drawing.Point(302, 211);
+            this.checkBoxChangeZoom.Name = "checkBoxChangeZoom";
+            this.checkBoxChangeZoom.Size = new System.Drawing.Size(93, 17);
+            this.checkBoxChangeZoom.TabIndex = 7;
+            this.checkBoxChangeZoom.Text = "Change Zoom";
+            this.checkBoxChangeZoom.UseVisualStyleBackColor = true;
+            this.checkBoxChangeZoom.CheckedChanged += new System.EventHandler(this.checkBoxChangeZoom_CheckedChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(303, 284);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(73, 13);
+            this.label13.TabIndex = 0;
+            this.label13.Text = "0=default time";
+            // 
+            // checkBoxWaitComplete
+            // 
+            this.checkBoxWaitComplete.AutoSize = true;
+            this.checkBoxWaitComplete.Location = new System.Drawing.Point(198, 317);
+            this.checkBoxWaitComplete.Name = "checkBoxWaitComplete";
+            this.checkBoxWaitComplete.Size = new System.Drawing.Size(158, 17);
+            this.checkBoxWaitComplete.TabIndex = 7;
+            this.checkBoxWaitComplete.Text = "Wait for actions to complete";
+            this.checkBoxWaitComplete.UseVisualStyleBackColor = true;
+            this.checkBoxWaitComplete.CheckedChanged += new System.EventHandler(this.checkBoxWaitForSlew_CheckedChanged);
+            // 
+            // checkBoxDisplayMessageWhenComplete
+            // 
+            this.checkBoxDisplayMessageWhenComplete.AutoSize = true;
+            this.checkBoxDisplayMessageWhenComplete.Location = new System.Drawing.Point(195, 349);
+            this.checkBoxDisplayMessageWhenComplete.Name = "checkBoxDisplayMessageWhenComplete";
+            this.checkBoxDisplayMessageWhenComplete.Size = new System.Drawing.Size(174, 17);
+            this.checkBoxDisplayMessageWhenComplete.TabIndex = 7;
+            this.checkBoxDisplayMessageWhenComplete.Text = "Display Message with complete";
+            this.checkBoxDisplayMessageWhenComplete.UseVisualStyleBackColor = true;
+            this.checkBoxDisplayMessageWhenComplete.CheckedChanged += new System.EventHandler(this.checkBoxWaitForSlew_CheckedChanged);
+            // 
             // RecordStep
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(412, 480);
+            this.ClientSize = new System.Drawing.Size(412, 426);
+            this.Controls.Add(this.checkBoxChangeZoom);
+            this.Controls.Add(this.checkBoxPan);
+            this.Controls.Add(this.checkBoxPos);
+            this.Controls.Add(this.checkBoxDisplayMessageWhenComplete);
+            this.Controls.Add(this.checkBoxWaitComplete);
+            this.Controls.Add(this.checkBoxWaitForSlew);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.textBoxMsgTime);
             this.Controls.Add(this.textBoxMessage);
-            this.Controls.Add(this.textBoxPauseHere);
-            this.Controls.Add(this.textBoxDelta);
+            this.Controls.Add(this.textBoxWait);
             this.Controls.Add(this.textBoxZoomTime);
-            this.Controls.Add(this.textBoxPan);
+            this.Controls.Add(this.textBoxPanTime);
             this.Controls.Add(this.textBoxZoom);
-            this.Controls.Add(this.textBoxFly);
+            this.Controls.Add(this.textBoxFlyTime);
             this.Controls.Add(this.textBoxDir);
-            this.Controls.Add(this.textBoxLoc);
+            this.Controls.Add(this.textBoxPos);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label13);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label3);
@@ -306,25 +352,28 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBoxLoc;
+        private System.Windows.Forms.TextBox textBoxPos;
         private System.Windows.Forms.TextBox textBoxDir;
         private System.Windows.Forms.TextBox textBoxZoom;
-        private System.Windows.Forms.TextBox textBoxFly;
-        private System.Windows.Forms.TextBox textBoxPan;
-        private System.Windows.Forms.TextBox textBoxDelta;
+        private System.Windows.Forms.TextBox textBoxFlyTime;
+        private System.Windows.Forms.TextBox textBoxPanTime;
+        private System.Windows.Forms.TextBox textBoxWait;
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.TextBox textBoxMessage;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBoxPauseHere;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBoxZoomTime;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBoxMsgTime;
+        private System.Windows.Forms.CheckBox checkBoxWaitForSlew;
+        private System.Windows.Forms.CheckBox checkBoxPos;
+        private System.Windows.Forms.CheckBox checkBoxPan;
+        private System.Windows.Forms.CheckBox checkBoxChangeZoom;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox checkBoxWaitComplete;
+        private System.Windows.Forms.CheckBox checkBoxDisplayMessageWhenComplete;
     }
 }
