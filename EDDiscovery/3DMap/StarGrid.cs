@@ -25,8 +25,10 @@ namespace EDDiscovery2
         public SystemClass.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
-        public bool Displayed = false;              // records if it was ever displayed
         public bool Working = false;
+
+        public int DisplayChecked = 0;            // set to display count when display checked..
+        public int DisplayCount = 0;              // increment when display changed each time..
 
         bool array1displayed;
         private Vector3[] array1;            // the star points
@@ -244,8 +246,6 @@ namespace EDDiscovery2
 
             lock ( lockdisplaydata )                                        // not allowed to swap..
             {
-                Displayed = true;                                               // true if displayed
-
                 array1displayed = !array1displayed;
 
                 DeleteContext();
@@ -287,6 +287,9 @@ namespace EDDiscovery2
                     array1 = null;
                     array1vertices = 0;
                 }
+
+                DisplayCount++;                                             // another swap
+                //Console.WriteLine("Fill grid {0} {1} with {2}", X, Z, Count);
             }
         }
 
@@ -382,10 +385,10 @@ namespace EDDiscovery2
             visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Orange, 1.0F);    // grid ID -1 means it won't be filled by the Update task
             grids.Add(visitedsystemsgrid);
 
-            int solid = GridId.Id(0, 0);
-            populatedgrid = new StarGrid(solid, 0, 0, Color.Transparent , 1.0F);      // Duplicate grid id but asking for populated stars
+            int solid = GridId.Id(0, 0);                                    
+            populatedgrid = new StarGrid(solid, 0, 0, Color.Transparent, 1.0F);      // Duplicate grid id but asking for populated stars
             populatedgrid.dBAsk = SystemClass.SystemAskType.PopulatedStars;
-            grids.Add(populatedgrid);                                       // add last, so displayed last, so overwrites anything else
+            grids.Add(populatedgrid);   // add last so shown last
 
             long total = SystemClass.GetTotalSystems();
 
@@ -442,16 +445,23 @@ namespace EDDiscovery2
                 return farpercentage;
         }
 
-        public bool IsDisplayed(float xp, float zp )
+        public bool IsDisplayChanged(float xp, float zp )       // has this grid changed in display count since last time checked?
         {
             int gridid = GridId.Id(xp, zp);
 
-            StarGrid grid = grids.Find(x => x.Id == gridid);
+            List<StarGrid> gridsatid = grids.Where(x => x.Id == gridid).ToList();           // SOL has two grids, populated and unpopulated, need to find both to check..
 
-            if (grid != null)
-                return grid.Displayed;
-            else
-                return false;
+            foreach( StarGrid grd in gridsatid )
+            {
+                if (grd.DisplayCount != grd.DisplayChecked)       // if display changed count since last check
+                {
+                    grd.DisplayChecked = grd.DisplayCount;
+                    //Console.WriteLine("Grid changed at {0} {1}, recheck" , xp ,zp );
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 #endregion
@@ -503,8 +513,9 @@ namespace EDDiscovery2
                     StarGrid selmin = null;
                     StarGrid selmax = null;
 
-                    foreach (StarGrid gcheck in grids)
+                    for( int i=grids.Count-1;i>=0;i--)              // go backwards thru the list, so the ones painted last gets considered first
                     {
+                        StarGrid gcheck = grids[i];
                         if (gcheck.Id >= 0 && !gcheck.Working)                                     // if not a special grid
                         {
                             float dist = gcheck.DistanceFrom(curx, curz);
@@ -629,7 +640,7 @@ namespace EDDiscovery2
                 if (grd.Id==idpos || grd.DistanceFrom(ti.campos.X, ti.campos.Z) < gridlylimit)                         // only consider grids which are nearer than this..
                 {
                     grd.GetSystemsInView(ref list,ti, (ForceWhite) ? 0xff00ffff : 0);
-                    //Console.WriteLine("Check grid {0} {1} gives {2}" ,grd.X,grd.Z,list.Count);
+                    //Console.WriteLine("Check grid {0} {1} c {2} gives {3}" ,grd.X,grd.Z,grd.DisplayCount , list.Count);
                 }
             }
 
