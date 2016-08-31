@@ -254,5 +254,21 @@ namespace EDDiscovery
 
             return ret;
         }
+
+        static StreamWriter debugout = null;
+        static Stopwatch debugtimer = null;
+
+        static public void LogToFile( string s )
+        {
+            if (debugout == null)
+            {
+                debugout = new StreamWriter(Path.Combine(Tools.GetAppDataDirectory(), "debuglog-" + DateTime.Now.ToString("yyyy-dd-MM-HH-mm-ss") + ".log"));
+                debugtimer = new Stopwatch();
+                debugtimer.Start();
+            }
+
+            debugout.WriteLine((debugtimer.ElapsedMilliseconds%100000) + ":" + s);
+            debugout.Flush();
+        }
     }
 }
