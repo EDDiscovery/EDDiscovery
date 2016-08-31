@@ -194,8 +194,9 @@ namespace EDDiscovery2
                 _toolstripToggleNamingButton = AddGalMapButton("Toggle Star Naming", 1, SQLiteDBClass.GetSettingBool("Map3DGMONaming", true));
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(_toolstripToggleNamingButton);
             }
-        }
 
+            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDiscovery.Properties.Resources.floppy);
+        }
 
         public ToolStripMenuItem AddGalMapButton( string name, Object tt, bool? checkedbut)
         {
@@ -212,7 +213,6 @@ namespace EDDiscovery2
             tsmi.Click += new System.EventHandler(this.showGalacticMapTypeMenuItem_Click);
             return tsmi;
         }
-
 
         public void SetPlannedRoute(List<SystemClass> plannedr)
         {
@@ -392,6 +392,7 @@ namespace EDDiscovery2
         private void FormMap_Deactivate(object sender, EventArgs e)
         {
             _isActivated = false;
+            VideoMessage();
         }
 
         private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
@@ -400,6 +401,7 @@ namespace EDDiscovery2
 
             _systemtimer.Stop();
             _systemtickinterval.Stop();
+            VideoMessage();
 
             if (Visible)
             {
@@ -491,38 +493,23 @@ namespace EDDiscovery2
 
             if (maprecorder.InPlayBack)
             {
-                Vector3 newpos, newdir;
-                float newzoom;
-                long timetopan, timetofly, timetozoom, timetomsg;
-                string message;
-                if (maprecorder.PlayBack(out newpos, out timetofly, out newdir, out timetopan, out newzoom, out timetozoom, out message, out timetomsg))
+                MapRecorder.FlightEntry fe;
+                if (maprecorder.PlayBack(out fe, posdir.InSlews || zoomfov.InSlew))
                 {
                     //Console.WriteLine("{0} Playback {1} {2} {3} fly {4} pan {5} msg {6}", _systemtickinterval.ElapsedMilliseconds % 10000,
                     //    newpos, newdir, newzoom, timetofly, timetopan, message);
 
-                    posdir.StartCameraSlew(newpos, (float)timetofly / 1000.0F);
+                    if ( fe.IsPosSet )
+                        posdir.StartCameraSlew(fe.pos, (float)fe.timetofly / 1000.0F);
 
-                    posdir.StartCameraPan(newdir, (float)timetopan / 1000.0F);
+                    if ( fe.IsDirSet )
+                        posdir.StartCameraPan(fe.dir, (float)fe.timetopan / 1000.0F);
 
-                    zoomfov.StartZoom(newzoom, (float)timetozoom / 1000.0F);
+                    if ( fe.IsZoomSet)
+                        zoomfov.StartZoom(fe.zoom, (float)fe.timetozoom / 1000.0F);
 
-                    if (message != null && message.Length > 0)
-                    {
-                        if (mapmsg != null)
-                        {
-                            mapmsg.Close();
-                            mapmsg = null;
-                        }
-
-                        if (timetomsg == 0)     // 0 default, use a sensible time
-                            timetomsg = 3000;
-
-                        mapmsg = new TimedMessage();
-                        mapmsg.Init("", message, (int)timetomsg, true, 0.9F, Color.Transparent, Color.White, new Font("MS Sans Serif", 20.0F));
-                        mapmsg.Position(this, 0, 0, -1, -20, 0, 0);
-                        mapmsg.Show();
-                        glControl.Focus();
-                    }
+                    if ( fe.IsMessageSet )
+                        VideoMessage( fe.message, ( fe.messagetime == 0 ) ? 3000 : (int)fe.messagetime );
                 }
 
                 if (!maprecorder.InPlayBack)  // dropped out of playback?
@@ -547,12 +534,12 @@ namespace EDDiscovery2
                 {
                     _lastcameranorm.SetGrossChanged();                  // make sure gross does not trip yet..     
                     UpdateDataSetsDueToZoomOrFlip(_lastcameranorm.CameraZoomed);
+                    //Console.WriteLine("{0}  ZOOM repaint" , _systemtickinterval.ElapsedMilliseconds);
                 }
                 else if (_lastcameranorm.CameraDirGrossChanged )
                 {
                     UpdateDataSetsDueToZoomOrFlip(_lastcameranorm.CameraZoomed);
                 }
-
                 KillHover();
                 UpdateStatus();
             }
@@ -573,12 +560,14 @@ namespace EDDiscovery2
                 bool names = showNamesToolStripMenuItem.Checked;
                 bool discs = showDiscsToolStripMenuItem.Checked;
 
-                _lastcamerastarnames.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom,1.0F);
-
-                if ((names | discs) && zoomfov.Zoom >= 0.99)        // when shown, and with a good zoom
-                {                                                   // and stargrids, and we moved, or camera moved, or zoomed..
-                    if (_stargrids.IsDisplayed(posdir.Position.X, posdir.Position.Z) && _lastcamerastarnames.AnythingChanged )                              // if changed something
+                if ((names | discs) && zoomfov.Zoom >= 0.99 )        // when shown, and with a good zoom, and something is there..
+                {                                                   
+                    _lastcamerastarnames.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom, 1.0F);
+                    
+                                                                     // if camera moved/zoomed/dir, or display recalculated in this grid                                              
+                    if (_lastcamerastarnames.AnythingChanged || _stargrids.IsDisplayChanged(posdir.Position.X, posdir.Position.Z))    
                     {
+                        //Console.WriteLine("{0} Check at {1}", _systemtickinterval.ElapsedMilliseconds, posdir.Position);
                         _starnameslist.Update(_lastcamerastarnames, posdir.GetResMat, _znear, names, discs,
                                 enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange);
                     }
@@ -589,6 +578,8 @@ namespace EDDiscovery2
                     {
                         _requestrepaint = true;
                     }
+
+                    _lastcamerastarnames.ForceMoveChange(); // next time we are on, reestimate immediately.
                 }
             }
 
@@ -676,6 +667,25 @@ namespace EDDiscovery2
             txt += string.Format("   Direction x={0,-6:0.0} y={1,-6:0.0} z={2,-6:0.0}", posdir.CameraDirection.X, posdir.CameraDirection.Y, posdir.CameraDirection.Z);
 #endif
             statusLabel.Text = txt;
+        }
+
+        void VideoMessage( string msg = null , int time = 0 )       // no paras, close it
+        {
+            if (mapmsg != null)
+            {
+                mapmsg.Close();
+                mapmsg = null;
+            }
+
+            if (msg != null && msg.Length > 0 && time > 0)
+            {
+                TimedMessage newmsg = new TimedMessage();
+                newmsg.Init("", msg, time, true, 0.9F, Color.Black, Color.White, new Font("MS Sans Serif", 20.0F));
+                newmsg.Position(this, 0, 0, -1, -20, 0, 0);         // careful, it triggers a deactivate.. which tries to close it
+                newmsg.Show();
+                mapmsg = newmsg;                                    // now we can set this.. if we did it above, we would end with a race condition on a null pointer of this object
+                glControl.Focus();
+            }
         }
 
         #endregion
@@ -1399,6 +1409,8 @@ namespace EDDiscovery2
 
         private void playbackToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            posdir.KillSlews();
+            zoomfov.KillSlew();
             maprecorder.TogglePlayBack();
             SetDropDownRecordImage();
         }
@@ -1451,11 +1463,22 @@ namespace EDDiscovery2
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             maprecorder.SaveDialog();
+            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDiscovery.Properties.Resources.floppy);
         }
 
         private void LoadFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             maprecorder.LoadDialog();
+        }
+
+        private void LoadVideo(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tmsi = sender as ToolStripMenuItem;
+            string file = (string)tmsi.Tag;
+            if ( !maprecorder.ReadFromFile(file) )
+            {
+                MessageBox.Show("Failed to load flight " + file + ". Check file path and file contents");
+            }
         }
 
         #endregion
