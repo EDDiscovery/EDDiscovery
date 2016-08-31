@@ -538,11 +538,14 @@ namespace EDDiscovery.DB
         }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
-        public static int GetSystemVector(int gridid, ref Vector3[] vertices, ref int[] colours, 
+        public static int GetSystemVector(int gridid, ref Vector3[] vertices, ref uint[] colours, 
                                             SystemAskType ask, int percentage )
         {
             int numvertices = 0;
+
             vertices = null;
+            colours = null;
+
             Color[] fixedc = new Color[4];
             fixedc[0] = Color.Red;
             fixedc[1] = Color.Orange;
@@ -574,7 +577,7 @@ namespace EDDiscovery.DB
                                     if (vertices == null)
                                     {
                                         vertices = new Vector3[1024];
-                                        colours = new int[1024];
+                                        colours = new uint[1024];
                                     }
                                     else if (numvertices == vertices.Length)
                                     {
@@ -590,13 +593,13 @@ namespace EDDiscovery.DB
                                     byte red = (byte)(basec.R * fade / 100);
                                     byte green = (byte)(basec.G * fade / 100);
                                     byte blue = (byte)(basec.B * fade / 100);
-                                    colours[numvertices] = BitConverter.ToInt32(new byte[] { red, green, blue, 255 }, 0);
+                                    colours[numvertices] = BitConverter.ToUInt32(new byte[] { red, green, blue, 255 }, 0);
                                     vertices[numvertices++] = pos;
                                 }
                             }
                         }
 
-                        if (gridid == 810)    // BODGE do here, better once on here than every star for every grid..
+                        if (gridid == 810 && vertices!=null)    // BODGE do here, better once on here than every star for every grid..
                         {                       // replace when we have a better naming system
                             int solindex = Array.IndexOf(vertices, new Vector3(0, 0, 0));
 
@@ -1863,7 +1866,7 @@ namespace EDDiscovery.DB
             return x + 100 * z;
         }
 
-        public static bool XZ(int id, out double x, out double z)
+        public static bool XZ(int id, out float x, out float z)
         {
             x = 0; z = 0;
             if (id >= 0)
@@ -1882,7 +1885,7 @@ namespace EDDiscovery.DB
                             while (i < compresstablex.Length && compresstablex[i] == xid)
                                 i++;
 
-                            x = (((i * 1000) + xleft) + startx) / 2.0;
+                            x = (float)((((i * 1000) + xleft) + startx) / 2.0);
                             break;
                         }
                     }
@@ -1896,7 +1899,7 @@ namespace EDDiscovery.DB
                             while (i < compresstablez.Length && compresstablez[i] == zid)
                                 i++;
 
-                            z = (((i * 1000) + zbot) + startz) / 2.0;
+                            z = (float)((((i * 1000) + zbot) + startz) / 2.0);
                             break;
                         }
                     }
