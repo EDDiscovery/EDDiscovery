@@ -53,7 +53,9 @@ namespace EDDiscovery2.ImageHandler
 
             try
             {
+                comboBoxScanFor.Enabled = false;    // to prevent the select change from actually doing any work here
                 comboBoxScanFor.SelectedIndex = SQLiteDBClass.GetSettingInt("comboBoxScanFor", 0);
+                comboBoxScanFor.Enabled = true;
             }
             catch { }
 
@@ -459,8 +461,11 @@ namespace EDDiscovery2.ImageHandler
 
         private void comboBoxScanFor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt("comboBoxScanFor", comboBoxScanFor.SelectedIndex);
-            StartWatcher();
+            if (comboBoxScanFor.Enabled)            // BUG: stop StarWatcher starting too soon
+            {
+                SQLiteDBClass.PutSettingInt("comboBoxScanFor", comboBoxScanFor.SelectedIndex);
+                StartWatcher();
+            }
         }
       
     }

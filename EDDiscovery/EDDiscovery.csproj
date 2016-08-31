@@ -168,12 +168,16 @@
       <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="3DMap\CameraDirectionMovement.cs" />
+    <Compile Include="3DMap\PositionDirection.cs" />
+    <Compile Include="3DMap\MapRecorder.cs" />
+    <Compile Include="3DMap\Polygon.cs" />
     <Compile Include="3DMap\Data3DSetClass.cs" />
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
+    <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\LabelExt.cs">
       <SubType>Component</SubType>
@@ -211,11 +215,23 @@
     <Compile Include="Forms\DistanceForm.Designer.cs">
       <DependentUpon>DistanceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\TimedMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TimedMessage.Designer.cs">
+      <DependentUpon>TimedMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\InfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\InfoForm.Designer.cs">
       <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RecordStep.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RecordStep.Designer.cs">
+      <DependentUpon>RecordStep.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SummaryPopOut.cs">
       <SubType>Form</SubType>
@@ -449,6 +465,9 @@
     <None Include="Resources\bookmarkgreen.png" />
     <None Include="Resources\bookmarktarget.png" />
     <None Include="Resources\bookmarkyellow.png" />
+    <None Include="Resources\floppy.png" />
+    <None Include="Resources\eye.png" />
+    <None Include="Resources\goto.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -457,6 +476,13 @@
     <None Include="Resources\starcluster.PNG" />
     <None Include="Resources\pointofinterest.png" />
     <None Include="Resources\selectedmarker.png" />
+    <None Include="Resources\PauseNormalRed.png" />
+    <None Include="Resources\RecordPressed.png" />
+    <None Include="Resources\StopNormalRed.png" />
+    <None Include="Resources\PlayNormal.png" />
+    <None Include="Resources\StopNormalBlue.png" />
+    <None Include="Resources\VideoRecorder.png" />
+    <None Include="Resources\pauseblue.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
@@ -495,11 +521,17 @@
     <EmbeddedResource Include="Forms\BookmarkForm.resx">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TimedMessage.resx">
+      <DependentUpon>TimedMessage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DistanceForm.resx">
       <DependentUpon>DistanceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RecordStep.resx">
+      <DependentUpon>RecordStep.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SummaryPopOut.resx">
       <DependentUpon>SummaryPopOut.cs</DependentUpon>
