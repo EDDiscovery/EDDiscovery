@@ -630,9 +630,9 @@ namespace EDDiscovery.DB
             }
         }
 
-        private static void ExecuteQuery(SQLiteConnectionED conn, string query)
+        private static void ExecuteQuery(SQLiteConnectionED conn, string query, DbTransaction txn = null)
         {
-            using (DbCommand command = conn.CreateCommand(query))
+            using (DbCommand command = conn.CreateCommand(query, txn))
                 command.ExecuteNonQuery();
         }
 
@@ -1054,15 +1054,15 @@ namespace EDDiscovery.DB
             {
                 using (var conn = new SQLiteConnectionED())
                 {
+                    DropSystemsTableIndexes();
                     using (var txn = conn.BeginTransaction())
                     {
-                        DropSystemsTableIndexes();
-                        ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
-                        ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems");
-                        //ExecuteQuery(conn, "VACUUM");
-                        CreateSystemsTableIndexes();
+                        ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems", txn);
+                        ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems", txn);
                         txn.Commit();
                     }
+                    //ExecuteQuery(conn, "VACUUM");
+                    CreateSystemsTableIndexes();
                 }
             }
         }
