@@ -78,9 +78,10 @@ namespace EDDiscovery2._3DMap
                 float newzoom = (float)(_zoom * _zoommultiplier);
                 bool stop = (_zoomtarget > _zoom) ? (newzoom >= _zoomtarget) : (newzoom <= _zoomtarget);
 
+                //Console.WriteLine("{0} Zoom {1} -> {2} m {3} t {4} stop {5}", _zoomtimer.ElapsedMilliseconds, _zoom , newzoom, _zoommultiplier, _zoomtarget, stop);
+
                 if (stop)
                 {
-                   // Console.WriteLine("{0} Zoom to {1} t {2} stop {3}", _zoomtimer.ElapsedMilliseconds, newzoom, _zoomtarget , stop);
                     _zoom = _zoomtarget;
                     _zoomtimer.Stop();
                 }
