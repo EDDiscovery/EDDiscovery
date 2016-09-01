@@ -80,9 +80,6 @@ namespace EDDiscovery
 
         public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
 
-        public bool SystemsUpdating { get; private set; } = true;
-        public object SystemsUpdatingLock { get; } = new object();
-
         private ManualResetEvent _syncWorkerCompletedEvent = new ManualResetEvent(false);
         private ManualResetEvent _checkSystemsWorkerCompletedEvent = new ManualResetEvent(false);
 
@@ -576,7 +573,7 @@ namespace EDDiscovery
 
             if (!cancelRequested())
             {
-
+                SQLiteDBClass.CreateSystemsTableIndexes();
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
@@ -723,11 +720,6 @@ namespace EDDiscovery
 
             try
             {
-                lock (SystemsUpdatingLock)
-                {
-                    SystemsUpdating = true;
-                }
-
                 // Delete all old systems
                 SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
                 SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
@@ -761,6 +753,10 @@ namespace EDDiscovery
                         reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
                         SQLiteDBClass.ReplaceSystemsTable();
                         reportProgress(-1, "");
+                    }
+                    else
+                    {
+                        throw new OperationCanceledException();
                     }
                 });
 
@@ -932,8 +928,6 @@ namespace EDDiscovery
                     }
                     LogLine("EDSM updated " + updates + " systems.");
                 }
-
-                SystemsUpdating = false;
             }
 
             syncwaseddboredsm = edsmoreddbsync;
