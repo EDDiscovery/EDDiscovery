@@ -762,6 +762,10 @@ namespace EDDiscovery
                         SQLiteDBClass.ReplaceSystemsTable();
                         reportProgress(-1, "");
                     }
+                    else
+                    {
+                        throw new OperationCanceledException();
+                    }
                 });
 
                 if (!success)
