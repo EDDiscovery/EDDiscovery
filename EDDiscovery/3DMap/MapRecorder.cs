@@ -277,6 +277,7 @@ namespace EDDiscovery2._3DMap
 
                 dlg.DefaultExt = "flight";
                 dlg.AddExtension = true;
+                dlg.Filter = "Flight files (*.flight)|*.flight|All files (*.*)|*.*";
 
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
@@ -301,6 +302,8 @@ namespace EDDiscovery2._3DMap
 
             dlg.DefaultExt = "flight";
             dlg.AddExtension = true;
+
+            dlg.Filter = "Flight files (*.flight)|*.flight|All files (*.*)|*.*";
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
