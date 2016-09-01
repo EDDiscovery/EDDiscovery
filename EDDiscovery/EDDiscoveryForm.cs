@@ -1481,15 +1481,16 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to reset all travelled history entries to the first commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show("Confirm you wish to reset all travelled history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
+                int cmdr = EDDConfig.CurrentCommander.Nr;
 
                 foreach (VisitedSystemsClass vs in vsall)
                 {
-                    if (vs.Commander != 0)
+                    if (vs.Commander != cmdr)
                     {
-                        vs.Commander = 0;
+                        vs.Commander = cmdr;
                         vs.Update();
                     }
                 }
@@ -1498,15 +1499,16 @@ namespace EDDiscovery
 
         private void debugBetaFixHiddenLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Confirm you wish to reset all hidden entries after 5th may 2016 to the first commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show("Confirm you wish to reset all hidden entries after 5th may 2016 to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
+                int cmdr = EDDConfig.CurrentCommander.Nr;
 
                 foreach (VisitedSystemsClass vs in vsall)
                 {
                     if (vs.Commander == -2 && vs.Time > new DateTime(2016, 5, 5))
                     {
-                        vs.Commander = 0;
+                        vs.Commander = cmdr;
                         vs.Update();
                     }
                 }
