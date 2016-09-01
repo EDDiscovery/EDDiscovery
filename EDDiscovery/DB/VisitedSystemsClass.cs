@@ -387,7 +387,8 @@ namespace EDDiscovery2.DB
                     }
                 }
 
-                vsc.strDistance = "";                                       // set empty, must have a string in there.
+                if (vsc.strDistance == null)
+                    vsc.strDistance = "";                                       // set empty, must have a string in there.
             }
 
             DistanceClass.FillVisitedSystems(visitedSystems, usedistancedb);    // finally fill in the distances, indicating if can use db or not
