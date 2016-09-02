@@ -167,9 +167,6 @@ namespace EDDiscovery2._3DMap
                                         (z != lastzoom) ? z : FlightEntry.NullZoom , 
                                         curtime - lasttime, 0, 0, 0, "",0);
 
-                    lastdir = d;
-                    lastpos = pos;
-                    lastzoom = z;
 
                     //Console.WriteLine("At {0} store {1} {2} {3}", entries[entries.Count - 1].offsettime, lastpos, lastdir, lastzoom);
                 }
@@ -190,6 +187,9 @@ namespace EDDiscovery2._3DMap
             fe.messagetime = mtime;
             entries.Add(fe);
             lasttime = curtime;                     // keep these up to date in case we are doing a normal record, or swap back to it
+            lastdir = d;
+            lastpos = pos;
+            lastzoom = z;
         }
 
         // can do this when paused or in any record mode.
