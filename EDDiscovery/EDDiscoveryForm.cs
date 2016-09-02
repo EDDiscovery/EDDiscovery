@@ -918,7 +918,7 @@ namespace EDDiscovery
                     // Delete systems without an EDSM ID
                     if (!cancelRequested())
                     {
-                        using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                        using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                         {
                             using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems WHERE id_edsm IS NULL or id_edsm = 0"))
                             {

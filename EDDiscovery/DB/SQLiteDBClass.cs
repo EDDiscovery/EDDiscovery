@@ -487,142 +487,72 @@ namespace EDDiscovery.DB
         }
     }
 
-    public class SQLiteConnectionED : IDisposable              // USE this for connections.. 
+    [Flags]
+    public enum EDDSqlDbSelection
     {
-        private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-
-        public class SchemaLock : IDisposable
-        {
-            public SchemaLock()
-            {
-                if (_schemaLock.RecursiveReadCount != 0)
-                {
-                    throw new InvalidOperationException("Cannot take a schema lock while holding an open database connection");
-                }
-
-                _schemaLock.EnterWriteLock();
-            }
-
-            public void Dispose()
-            {
-                if (_schemaLock.IsWriteLockHeld)
-                {
-                    _schemaLock.ExitWriteLock();
-                }
-            }
-        }
-
-        //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
-        // causes the program to become unresponsive during big DB updates
-        private DbConnection _cn;
-
-        public SQLiteConnectionED()
-        {
-            bool locktaken = false;
-            try
-            {
-                _schemaLock.EnterReadLock();
-                locktaken = true;
-
-                // System.Threading.Monitor.Enter(monitor);
-                //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
-                _cn = SQLiteDBClass.CreateCN();
-                _cn.Open();
-            }
-            catch
-            {
-                if (locktaken)
-                {
-                    _schemaLock.ExitReadLock();
-                }
-
-                throw;
-            }
-        }
-
-        public DbCommand CreateCommand(string cmd, DbTransaction tn = null)
-        {
-            return new SQLiteCommandED(_cn.CreateCommand(cmd), tn);
-        }
-
-        public DbTransaction BeginTransaction(IsolationLevel isolevel)
-        {
-            // Take the transaction lock before beginning the
-            // transaction to avoid a deadlock
-            var txnlock = new SQLiteTxnLockED();
-            txnlock.Open();
-            return new SQLiteTransactionED(_cn.BeginTransaction(isolevel), txnlock);
-        }
-
-        public DbTransaction BeginTransaction()
-        {
-            // Take the transaction lock before beginning the
-            // transaction to avoid a deadlock
-            var txnlock = new SQLiteTxnLockED();
-            txnlock.Open();
-            return new SQLiteTransactionED(_cn.BeginTransaction(), txnlock);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        
-        // disposing: true if Dispose() was called, false
-        // if being finalized by the garbage collector
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_cn != null)
-                {
-                    _cn.Close();
-                    _cn.Dispose();
-                    _cn = null;
-                }
-
-                if (_schemaLock.IsReadLockHeld)
-                {
-                    _schemaLock.ExitReadLock();
-                }
-            }
-            else
-            {
-                Trace.WriteLine("Database connection leaked");
-            }
-        }
+        None = 0,
+        EDDiscovery = 1,
+        EDDUser = 2,
+        EDDSystem = 4
     }
 
 
-    public static class SQLiteDBClass
+    public static partial class SQLiteDBClass
     {
         #region Private properties / fields
         private static Object lockDBInit = new Object();                    // lock to sequence construction
-        private static string constring;                                           // connection string to use..
         private static DbProviderFactory DbFactory;
         #endregion
+
+        #region Transitional properties
+        public static EDDSqlDbSelection DefaultMainDatabase { get { return  EDDSqlDbSelection.EDDUser; } }
+        public static EDDSqlDbSelection UserDatabase { get { return EDDSqlDbSelection.EDDUser; } }
+        public static EDDSqlDbSelection SystemDatabase { get { return EDDSqlDbSelection.EDDSystem;  } }
+        #endregion
+
 
         #region Database Initialization
         private static void InitializeDatabase()
         {
-            string dbfile = GetSQLiteDBFile();
-            constring = "Data Source=" + dbfile + ";Pooling=true;";
+            string dbv4file = GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+            string dbuserfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
+            string dbsystemsfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
             DbFactory = GetSqliteProviderFactory();
 
             try
             {
-                bool fileexist = File.Exists(dbfile);
+                bool fileexist = File.Exists(dbv4file);
+                bool UseV5Databases;
 
-                if (!fileexist)                                         // no file, create it
-                    SQLiteConnection.CreateFile(dbfile);
+                UseV5Databases = File.Exists(dbuserfile);
 
-                using (var conn = new SQLiteConnectionED())
+                if (!fileexist && UseV5Databases==false)                                         // no file, create it
+                    SQLiteConnection.CreateFile(dbv4file);
+
+                if (UseV5Databases == false)
                 {
-                    if (!fileexist)                                       // first time, create the register
-                        ExecuteQuery(conn, "CREATE TABLE Register (ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , \"ValueInt\" INTEGER, \"ValueDouble\" DOUBLE, \"ValueString\" TEXT, \"ValueBlob\" BLOB)");
+                    using (var conn = new SQLiteConnectionOld())
+                    {
+                        if (!fileexist)                                       // first time, create the register
+                            ExecuteQuery(conn, "CREATE TABLE Register (ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , \"ValueInt\" INTEGER, \"ValueDouble\" DOUBLE, \"ValueString\" TEXT, \"ValueBlob\" BLOB)");
 
-                    UpgradeDB(conn);                                            // upgrade it
+                        UpgradeDB(conn);                                            // upgrade it
+                    }
+
+                    SplitDataBase();
                 }
+
+                using (var conn = new SQLiteConnectionUser())
+                {
+                    UpgradeUserDB(conn);                                            // upgrade it
+                }
+
+                using (var conn = new SQLiteConnectionSystem())
+                {
+                    UpgradeSystemsDB(conn);                                            // upgrade it
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -630,16 +560,81 @@ namespace EDDiscovery.DB
             }
         }
 
+        private static void ExecuteQuery(SQLiteConnectionED conn, string query)
+        {
+            using (DbCommand command = conn.CreateCommand(query))
+                command.ExecuteNonQuery();
+        }
+
+
+        private static bool SplitDataBase()
+        {
+            string dbfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+            string dbuserfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
+            string dbsystemsfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
+
+            try
+            {
+                File.Copy(dbfile, dbuserfile);
+                File.Copy(dbfile, dbsystemsfile);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("SplitDatabase error: " + ex.Message);
+                MessageBox.Show(ex.StackTrace);
+                return false;
+            }
+            return true;
+        }
+
+        private static bool UpgradeUserDB(SQLiteConnectionUser conn)
+        {
+            int dbver;
+            try
+            {
+                dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
+                if (dbver < 101)
+                    UpgradeUserDB101(conn);
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("UpgradeUserDB error: " + ex.Message);
+                MessageBox.Show(ex.StackTrace);
+                return false;
+            }
+        }
+
+<<<<<<< HEAD
         private static void ExecuteQuery(SQLiteConnectionED conn, string query, DbTransaction txn = null)
         {
             using (DbCommand command = conn.CreateCommand(query, txn))
                 command.ExecuteNonQuery();
         }
-
-        private static string GetSQLiteDBFile()
+=======
+        private static bool UpgradeSystemsDB(SQLiteConnectionSystem conn)
         {
-            return Path.Combine(Tools.GetAppDataDirectory(), "EDDiscovery.sqlite");
+            int dbver;
+            try
+            {
+                dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
+                if (dbver < 100)
+                    UpgradeSystemsDB101(conn);
+>>>>>>> v5-database-split
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("UpgradeSystemsDB error: " + ex.Message);
+                MessageBox.Show(ex.StackTrace);
+                return false;
+            }
         }
+
 
         private static bool UpgradeDB(SQLiteConnectionED conn)
         {
@@ -703,7 +698,8 @@ namespace EDDiscovery.DB
                 if (dbver < 20)
                     UpgradeDB20(conn);
 
-                CreateTableIndexes();
+                CreateUserDBTableIndexes();
+                CreateSystemDBTableIndexes();
 
                 return true;
             }
@@ -719,11 +715,11 @@ namespace EDDiscovery.DB
         {
             if (backupDbFile)
             {
-                string dbfile = GetSQLiteDBFile();
+                string dbfile = conn.DBFile;
 
                 try
                 {
-                    File.Copy(dbfile, dbfile.Replace("EDDiscovery.sqlite", $"EDDiscovery{newVersion - 1}.sqlite"));
+                    File.Copy(dbfile, dbfile.Replace(".sqlite", $"{newVersion - 1}.sqlite"));
                 }
                 catch (Exception ex)
                 {
@@ -867,7 +863,6 @@ namespace EDDiscovery.DB
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN X double";
             string query2 = "ALTER TABLE VisitedSystems ADD COLUMN Y double";
             string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Z double";
-            string dbfile = GetSQLiteDBFile();
 
             PerformUpgrade(conn, 14, true, true, new[] { query1, query2, query3 });
             return true;
@@ -932,7 +927,45 @@ namespace EDDiscovery.DB
             });
         }
 
-        private static void CreateTableIndexes()
+        
+
+
+        private static void UpgradeUserDB101(SQLiteConnectionED conn)
+        {
+            string query1 = "DROP TABLE IF EXISTS Systems";
+            string query2 = "DROP TABLE IF EXISTS SystemAliases";
+            string query3 = "DROP TABLE IF EXISTS Distances";
+            string query4 = "VACUUM";
+
+            PerformUpgrade(conn, 101, true,  false, new[] { query1, query2, query3, query4 }, () =>
+            {
+//                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
+            });
+        }
+
+
+        private static void UpgradeSystemsDB101(SQLiteConnectionED conn)
+        {
+            string query1 = "DROP TABLE IF EXISTS Bookmarks";
+            string query2 = "DROP TABLE IF EXISTS SystemNote";
+            string query3 = "DROP TABLE IF EXISTS TravelLogUnit";
+            string query4 = "DROP TABLE IF EXISTS VisitedSystems";
+            string query5 = "DROP TABLE IF EXISTS Route_Systems";
+            string query6 = "DROP TABLE IF EXISTS Routes_expedition";
+            string query7 = "VACUUM";
+
+
+            PerformUpgrade(conn, 101, true, false, new[] { query1, query2, query3, query4, query5, query6, query7 }, () =>
+            {
+                //                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
+            });
+        }
+
+
+
+
+
+        private static void CreateUserDBTableIndexes()
         {
             string[] queries = new[]
             {
@@ -943,15 +976,32 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS StationsIndex_ID  ON Stations (id ASC)",
                 "CREATE INDEX IF NOT EXISTS StationsIndex_system_ID  ON Stations (system_id ASC)",
                 "CREATE INDEX IF NOT EXISTS StationsIndex_system_Name  ON Stations (Name ASC)",
-                "CREATE INDEX IF NOT EXISTS Distances_EDSM_ID_Index ON Distances (id_edsm ASC)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_position ON VisitedSystems (X, Y, Z)",
-                "CREATE INDEX IF NOT EXISTS SystemAliases_name ON SystemAliases (name)",
-                "CREATE UNIQUE INDEX IF NOT EXISTS SystemAliases_id_edsm ON SystemAliases (id_edsm)",
-                "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)"
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            {
+                foreach (string query in queries)
+                {
+                    using (DbCommand cmd = conn.CreateCommand(query))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        private static void CreateSystemDBTableIndexes()
+        {
+            string[] queries = new[]
+            {
+                "CREATE UNIQUE INDEX IF NOT EXISTS SystemAliases_id_edsm ON SystemAliases (id_edsm)",
+                "CREATE INDEX IF NOT EXISTS SystemAliases_name ON SystemAliases (name)",
+                "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
+                "CREATE INDEX IF NOT EXISTS Distances_EDSM_ID_Index ON Distances (id_edsm ASC)",
+            };
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 foreach (string query in queries)
                 {
@@ -975,7 +1025,7 @@ namespace EDDiscovery.DB
                 "DROP INDEX IF EXISTS SystemGridId",
                 "DROP INDEX IF EXISTS SystemRandomId"
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionED())
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 foreach (string query in queries)
                 {
@@ -999,7 +1049,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS SystemGridId ON Systems (gridid)",
                 "CREATE INDEX IF NOT EXISTS SystemRandomId ON Systems (randomid)"
             };
-            using (SQLiteConnectionED conn = new SQLiteConnectionED())
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 foreach (string query in queries)
                 {
@@ -1013,7 +1063,7 @@ namespace EDDiscovery.DB
 
         public static void CreateTempSystemsTable()
         {
-            using (var conn = new SQLiteConnectionED())
+            using (var conn = new SQLiteConnectionSystem())
             {
                 ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems_temp");
                 ExecuteQuery(conn,
@@ -1052,16 +1102,25 @@ namespace EDDiscovery.DB
         {
             using (var slock = new SQLiteConnectionED.SchemaLock())
             {
-                using (var conn = new SQLiteConnectionED())
+                using (var conn = new SQLiteConnectionSystem())
                 {
                     DropSystemsTableIndexes();
                     using (var txn = conn.BeginTransaction())
                     {
+<<<<<<< HEAD
                         ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems", txn);
                         ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems", txn);
                         txn.Commit();
                     }
                     //ExecuteQuery(conn, "VACUUM");
+=======
+                        DropSystemsTableIndexes();
+                        ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
+                        ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems");
+                        txn.Commit();
+                    }
+                    ExecuteQuery(conn, "VACUUM");
+>>>>>>> v5-database-split
                     CreateSystemsTableIndexes();
                 }
             }
@@ -1106,7 +1165,7 @@ namespace EDDiscovery.DB
                 {
                     using (var conn = factory.CreateConnection())
                     {
-                        conn.ConnectionString = constring;
+                        conn.ConnectionString = "Data Source=:memory:;Pooling=true;";
                         conn.Open();
                         return true;
                     }
@@ -1147,10 +1206,12 @@ namespace EDDiscovery.DB
                 return null;
             }
         }
+
+
         #endregion
 
         #region Database access
-        public static DbConnection CreateCN()
+        public static DbConnection CreateCN(EDDSqlDbSelection maindb, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
         {
             lock (lockDBInit)                                           // one at a time chaps
             {
@@ -1161,9 +1222,72 @@ namespace EDDiscovery.DB
             }
 
             DbConnection cn = DbFactory.CreateConnection();
-            cn.ConnectionString = constring;
+
+            // Use the database selected by maindb as the 'main' database
+            cn.ConnectionString = "Data Source=" + GetSQLiteDBFile(maindb) + ";Pooling=true;";
+            cn.Open();
+
+            // Attach any other requested databases under their appropriate names
+            foreach (var dbflag in new[] { EDDSqlDbSelection.EDDiscovery, EDDSqlDbSelection.EDDUser, EDDSqlDbSelection.EDDSystem })
+            {
+                if (selector.HasFlag(dbflag))
+                {
+                    AttachDatabase(cn, dbflag, dbflag.ToString());
+                }
+            }
 
             return cn;
+        }
+
+        public static string GetSQLiteDBFile(EDDSqlDbSelection selector)
+        {
+            if (selector == EDDSqlDbSelection.None)
+            {
+                // Use an in-memory database if no database is selected
+                return ":memory:";
+            }
+            if (selector.HasFlag(EDDSqlDbSelection.EDDUser))
+            {
+                // Get the EDDUser database path
+                return Path.Combine(Tools.GetAppDataDirectory(), "EDDUser.sqlite");
+            }
+            else if (selector.HasFlag(EDDSqlDbSelection.EDDSystem))
+            {
+                // Get the EDDSystem database path
+                return Path.Combine(Tools.GetAppDataDirectory(), "EDDSystem.sqlite");
+            }
+            else
+            {
+                // Get the old EDDiscovery database path
+                return Path.Combine(Tools.GetAppDataDirectory(), "EDDiscovery.sqlite");
+            }
+        }
+
+        private static void AttachDatabase(DbConnection conn, EDDSqlDbSelection dbflag, string name)
+        {
+            // Check if the connection is already connected to the selected database
+            using (DbCommand cmd = conn.CreateCommand("PRAGMA database_list"))
+            {
+                using (DbDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var dbname = reader["name"] as string;
+                        if (dbname == name)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // Attach to the selected database under the given schema name
+            using (DbCommand cmd = conn.CreateCommand("ATTACH DATABASE @dbfile AS @dbname"))
+            {
+                cmd.AddParameterWithValue("@dbfile", GetSQLiteDBFile(dbflag));
+                cmd.AddParameterWithValue("@dbname", name);
+                cmd.ExecuteNonQuery();
+            }
         }
 
         ///----------------------------
@@ -1270,7 +1394,7 @@ namespace EDDiscovery.DB
 
         static public bool keyExists(string sKey)                   
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return keyExists(sKey, cn);
             }
@@ -1298,7 +1422,7 @@ namespace EDDiscovery.DB
 
         static public int GetSettingInt(string key, int defaultvalue)     
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return GetSettingInt(key, defaultvalue, cn);
             }
@@ -1330,7 +1454,7 @@ namespace EDDiscovery.DB
 
         static public bool PutSettingInt(string key, int intvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = PutSettingInt(key, intvalue, cn);
                 return ret;
@@ -1373,7 +1497,7 @@ namespace EDDiscovery.DB
 
         static public double GetSettingDouble(string key, double defaultvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return GetSettingDouble(key, defaultvalue, cn);
             }
@@ -1405,7 +1529,7 @@ namespace EDDiscovery.DB
 
         static public bool PutSettingDouble(string key, double doublevalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = PutSettingDouble(key, doublevalue, cn);
                 return ret;
@@ -1448,7 +1572,7 @@ namespace EDDiscovery.DB
 
         static public bool GetSettingBool(string key, bool defaultvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return GetSettingBool(key, defaultvalue, cn);
             }
@@ -1484,7 +1608,7 @@ namespace EDDiscovery.DB
 
         static public bool PutSettingBool(string key, bool boolvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = PutSettingBool(key, boolvalue, cn);
                 return ret;
@@ -1532,7 +1656,7 @@ namespace EDDiscovery.DB
 
         static public string GetSettingString(string key, string defaultvalue)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return GetSettingString(key, defaultvalue, cn);
             }
@@ -1566,7 +1690,7 @@ namespace EDDiscovery.DB
 
         static public bool PutSettingString(string key, string strvalue)        // public IF
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = PutSettingString(key, strvalue, cn);
                 return ret;

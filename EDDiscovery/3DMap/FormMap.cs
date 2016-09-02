@@ -2213,7 +2213,7 @@ namespace EDDiscovery2
             }
         }
 
-        public ISystem FindSystem(string name, SQLiteConnectionED cn = null)    // nice wrapper for this
+        public ISystem FindSystem(string name, SQLiteConnectionSystem cn = null)    // nice wrapper for this
         {
             if (_visitedSystems != null)
             {
@@ -2227,7 +2227,7 @@ namespace EDDiscovery2
             return isys;
         }
 
-        public ISystem FindSystem(Vector3 pos, SQLiteConnectionED cn = null )
+        public ISystem FindSystem(Vector3 pos, SQLiteConnectionSystem cn = null )
         {
             if (_visitedSystems != null)
             {
