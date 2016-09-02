@@ -607,13 +607,6 @@ namespace EDDiscovery.DB
             }
         }
 
-<<<<<<< HEAD
-        private static void ExecuteQuery(SQLiteConnectionED conn, string query, DbTransaction txn = null)
-        {
-            using (DbCommand command = conn.CreateCommand(query, txn))
-                command.ExecuteNonQuery();
-        }
-=======
         private static bool UpgradeSystemsDB(SQLiteConnectionSystem conn)
         {
             int dbver;
@@ -622,8 +615,6 @@ namespace EDDiscovery.DB
                 dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
                 if (dbver < 100)
                     UpgradeSystemsDB101(conn);
->>>>>>> v5-database-split
-
 
                 return true;
             }
@@ -1106,21 +1097,13 @@ namespace EDDiscovery.DB
                 {
                     DropSystemsTableIndexes();
                     using (var txn = conn.BeginTransaction())
-                    {
-<<<<<<< HEAD
-                        ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems", txn);
-                        ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems", txn);
-                        txn.Commit();
-                    }
-                    //ExecuteQuery(conn, "VACUUM");
-=======
+                    { 
                         DropSystemsTableIndexes();
                         ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
                         ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems");
                         txn.Commit();
                     }
                     ExecuteQuery(conn, "VACUUM");
->>>>>>> v5-database-split
                     CreateSystemsTableIndexes();
                 }
             }
