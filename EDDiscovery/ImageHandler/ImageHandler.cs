@@ -66,6 +66,7 @@ namespace EDDiscovery2.ImageHandler
             textBoxOutputDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", OutputDirdefault);
             textBoxScreenshotsDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
 
+            checkBoxCopyClipboard.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerClipboard", false);
             checkBoxPreview.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerPreview", false);
             checkBoxCropImage.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerCropImage", false);      // fires the checked handler which sets the readonly mode of the controls
             numericUpDownTop.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropTop", 0);
@@ -152,6 +153,7 @@ namespace EDDiscovery2.ImageHandler
                 string extension = null;
                 bool cannotexecute = false;
                 string inputext = null;
+                bool copyclipboard = false;
 
                 Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
                 {                                                   // I've tested that this is required..      
@@ -167,6 +169,7 @@ namespace EDDiscovery2.ImageHandler
                     extension = "." + comboBoxFormat.Text;
                     inputext = comboBoxScanFor.Text.Substring(0, comboBoxScanFor.Text.IndexOf(" "));
                     cannotexecute = textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text) && comboBoxFormat.Text.Equals(inputext);
+                    copyclipboard = checkBoxCopyClipboard.Checked;
                 });
 
                 if ( cannotexecute )                                // cannot store BMPs into the Elite dangerous folder as it creates a circular condition
@@ -235,6 +238,14 @@ namespace EDDiscovery2.ImageHandler
                 }
                 else
                     croppedbmp = bmp;               // just copy reference..
+
+                if (copyclipboard)
+                {
+                    Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
+                    {                                                   // I've tested that this is required..    
+                        Clipboard.SetImage(croppedbmp);
+                    });
+                }
 
                 if (extension.Equals(".jpg"))
                 {
@@ -467,6 +478,10 @@ namespace EDDiscovery2.ImageHandler
                 StartWatcher();
             }
         }
-      
+
+        private void checkBoxCopyClipboard_CheckedChanged(object sender, EventArgs e)
+        {
+             SQLiteDBClass.PutSettingBool("ImageHandlerClipboard", checkBoxCopyClipboard.Checked);
+        }
     }
 }
