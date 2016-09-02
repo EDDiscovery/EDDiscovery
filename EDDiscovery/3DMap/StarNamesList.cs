@@ -239,7 +239,7 @@ namespace EDDiscovery2
 
                 //string res = "";  // used to view whats added/removed/draw..
 
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     foreach (StarGrid.InViewInfo inview in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                     {

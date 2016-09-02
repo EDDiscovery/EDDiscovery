@@ -183,6 +183,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="DB\SQLiteConnectionED.cs" />
+    <Compile Include="DB\SqLiteDBSchema.cs" />
+    <Compile Include="DB\SQLiteDBSystemClass.cs" />
+    <Compile Include="DB\SQLiteDBUserClass.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
