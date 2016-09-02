@@ -42,6 +42,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.checkBoxCropImage = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCopyClipboard = new ExtendedControls.CheckBoxCustom();
             this.checkBoxPreview = new ExtendedControls.CheckBoxCustom();
             this.groupBox_Controls = new ExtendedControls.GroupBoxCustom();
             this.checkBoxAutoConvert = new ExtendedControls.CheckBoxCustom();
@@ -105,6 +106,7 @@
             this.groupBox_Prevcontrols.Controls.Add(this.label10);
             this.groupBox_Prevcontrols.Controls.Add(this.groupBoxCropSettings);
             this.groupBox_Prevcontrols.Controls.Add(this.checkBoxCropImage);
+            this.groupBox_Prevcontrols.Controls.Add(this.checkBoxCopyClipboard);
             this.groupBox_Prevcontrols.Controls.Add(this.checkBoxPreview);
             this.groupBox_Prevcontrols.Dock = System.Windows.Forms.DockStyle.Left;
             this.groupBox_Prevcontrols.FillClientAreaWithAlternateColor = false;
@@ -139,7 +141,7 @@
             this.groupBoxCropSettings.Controls.Add(this.label6);
             this.groupBoxCropSettings.Controls.Add(this.label5);
             this.groupBoxCropSettings.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCropSettings.Location = new System.Drawing.Point(6, 65);
+            this.groupBoxCropSettings.Location = new System.Drawing.Point(6, 89);
             this.groupBoxCropSettings.Name = "groupBoxCropSettings";
             this.groupBoxCropSettings.Size = new System.Drawing.Size(126, 143);
             this.groupBoxCropSettings.TabIndex = 9;
@@ -263,7 +265,7 @@
             this.checkBoxCropImage.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCropImage.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCropImage.FontNerfReduction = 0.5F;
-            this.checkBoxCropImage.Location = new System.Drawing.Point(8, 19);
+            this.checkBoxCropImage.Location = new System.Drawing.Point(8, 65);
             this.checkBoxCropImage.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCropImage.Name = "checkBoxCropImage";
             this.checkBoxCropImage.Size = new System.Drawing.Size(80, 17);
@@ -273,6 +275,23 @@
             this.checkBoxCropImage.UseVisualStyleBackColor = true;
             this.checkBoxCropImage.CheckedChanged += new System.EventHandler(this.checkBoxCropImage_CheckedChanged);
             // 
+            // checkBoxCopyClipboard
+            // 
+            this.checkBoxCopyClipboard.AutoSize = true;
+            this.checkBoxCopyClipboard.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCopyClipboard.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCopyClipboard.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCopyClipboard.FontNerfReduction = 0.5F;
+            this.checkBoxCopyClipboard.Location = new System.Drawing.Point(8, 42);
+            this.checkBoxCopyClipboard.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCopyClipboard.Name = "checkBoxCopyClipboard";
+            this.checkBoxCopyClipboard.Size = new System.Drawing.Size(109, 17);
+            this.checkBoxCopyClipboard.TabIndex = 10;
+            this.checkBoxCopyClipboard.Text = "Copy to Clipboard";
+            this.checkBoxCopyClipboard.TickBoxReductionSize = 10;
+            this.checkBoxCopyClipboard.UseVisualStyleBackColor = true;
+            this.checkBoxCopyClipboard.CheckedChanged += new System.EventHandler(this.checkBoxCopyClipboard_CheckedChanged);
+            // 
             // checkBoxPreview
             // 
             this.checkBoxPreview.AutoSize = true;
@@ -280,7 +299,7 @@
             this.checkBoxPreview.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxPreview.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxPreview.FontNerfReduction = 0.5F;
-            this.checkBoxPreview.Location = new System.Drawing.Point(8, 42);
+            this.checkBoxPreview.Location = new System.Drawing.Point(8, 19);
             this.checkBoxPreview.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxPreview.Name = "checkBoxPreview";
             this.checkBoxPreview.Size = new System.Drawing.Size(64, 17);
@@ -614,5 +633,6 @@
         private System.Windows.Forms.Label label9;
         private ExtendedControls.ComboBoxCustom comboBoxScanFor;
         private System.Windows.Forms.Label label10;
+        private ExtendedControls.CheckBoxCustom checkBoxCopyClipboard;
     }
 }
