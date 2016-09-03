@@ -6,9 +6,9 @@ using System.Text;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    public class JournalFSDJump : JournalLocOrJump
+    public class JournalLocation : JournalLocOrJump
     {
-        public JournalFSDJump(JObject jo) : base(jo, JournalTypeEnum.FSDJump)
+        public JournalLocation(JObject jo) : base(jo, JournalTypeEnum.Location)
         {
         }
     }
