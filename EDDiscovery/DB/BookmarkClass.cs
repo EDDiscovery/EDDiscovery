@@ -41,14 +41,14 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())      // open connection..
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())      // open connection..
             {
                 bool ret = Add(cn);
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        private bool Add(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note) values (@sname, @xp, @yp, @zp, @time, @head, @note)"))
             {
@@ -74,13 +74,13 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnectionED cn)
+        private bool Update(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note  where ID=@id"))
             {
@@ -104,13 +104,13 @@ namespace EDDiscovery2.DB
 
         public bool Delete()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return Delete(cn);
             }
         }
 
-        private bool Delete(SQLiteConnectionED cn)
+        private bool Delete(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM Bookmarks WHERE id = @id"))
             {
@@ -135,7 +135,7 @@ namespace EDDiscovery2.DB
         {
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
                     {

@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using EDDiscovery2.DB;
 using System.IO;
+using EDDiscovery2;
+using System.Threading;
 
 namespace EDDiscovery
 {
@@ -13,6 +15,12 @@ namespace EDDiscovery
     {
         // Header line regular expression
         private static Regex netlogHeaderRe = new Regex(@"^(?<Localtime>\d\d-\d\d-\d\d-\d\d:\d\d) (?<Timezone>.*) [(](?<GMT>\d\d:\d\d) GMT[)]");
+
+        // Public release date of Elite: Dangerous
+        DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
+
+        // Cached list of previous travel log entries
+        protected List<VisitedSystemsClass> systems;
 
         // Close Quarters Combat
         public bool CQC { get; set; }
@@ -22,8 +30,22 @@ namespace EDDiscovery
         public TimeZoneInfo TimeZone { get; set; }
         public TimeSpan TimeZoneOffset { get; set; }
 
-        public NetLogFileReader(string filename) : base(filename) { }
-        public NetLogFileReader(TravelLogUnit tlu) : base(tlu) { }
+        public NetLogFileReader(string filename) : base(filename)
+        {
+            systems = new List<VisitedSystemsClass>();
+        }
+
+        public NetLogFileReader(TravelLogUnit tlu, List<VisitedSystemsClass> vsclist = null) : base(tlu)
+        {
+            if (vsclist != null)
+            {
+                systems = vsclist;
+            }
+            else
+            {
+                systems = VisitedSystemsClass.GetAll(tlu);
+            }
+        }
 
         protected bool ParseTime(string time)
         {
@@ -173,47 +195,68 @@ namespace EDDiscovery
             }
         }
 
-        public bool ReadNetLogSystem(out VisitedSystemsClass vsc)
+        public bool ReadNetLogSystem(out VisitedSystemsClass vsc, Func<bool> cancelRequested = null, Stream stream = null, bool ownstream = false)
         {
+            if (cancelRequested == null)
+                cancelRequested = () => false;
+
             string line;
-            while (this.ReadLine(out line))
+            try
             {
-                ParseLineTime(line);
-
-                if (line.Contains("[PG] [Notification] Left a playlist lobby"))
-                    this.CQC = false;
-
-                if (line.Contains("[PG] Destroying playlist lobby."))
-                    this.CQC = false;
-
-                if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
-                    this.CQC = true;
-                if (line.Contains("[PG] Created playlist lobby"))
-                    this.CQC = true;
-                if (line.Contains("[PG] Found matchmaking lobby object"))
-                    this.CQC = true;
-
-                int offset = line.IndexOf("} System:") - 8;
-                if (offset >= 1 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
+                if (stream == null)
                 {
-                    //Console.WriteLine(" RD:" + line );
-                    if (line.Contains("ProvingGround"))
-                        continue;
+                    stream = File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    ownstream = true;
+                }
+                while (!cancelRequested() && this.ReadLine(out line, stream))
+                {
+                    ParseLineTime(line);
 
-                    VisitedSystemsClass ps;
-                    if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 10), out ps))
-                    {   // Remove some training systems
-                        if (ps.Name.Equals("Training"))
-                            continue;
-                        if (ps.Name.Equals("Destination"))
-                            continue;
-                        if (ps.Name.Equals("Altiris"))
-                            continue;
-                        ps.Source = TravelLogUnit.id;
-                        ps.Unit = TravelLogUnit.Name;
-                        vsc = ps;
-                        return true;
+                    if (line.Contains("[PG]"))
+                    {
+                        if (line.Contains("[PG] [Notification] Left a playlist lobby"))
+                            this.CQC = false;
+
+                        if (line.Contains("[PG] Destroying playlist lobby."))
+                            this.CQC = false;
+
+                        if (line.Contains("[PG] [Notification] Joined a playlist lobby"))
+                            this.CQC = true;
+                        if (line.Contains("[PG] Created playlist lobby"))
+                            this.CQC = true;
+                        if (line.Contains("[PG] Found matchmaking lobby object"))
+                            this.CQC = true;
                     }
+
+                    int offset = line.IndexOf("} System:") - 8;
+                    if (offset >= 1 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
+                    {
+                        //Console.WriteLine(" RD:" + line );
+                        if (line.Contains("ProvingGround"))
+                            continue;
+
+                        VisitedSystemsClass ps;
+                        if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 10), out ps))
+                        {   // Remove some training systems
+                            if (ps.Name.Equals("Training"))
+                                continue;
+                            if (ps.Name.Equals("Destination"))
+                                continue;
+                            if (ps.Name.Equals("Altiris"))
+                                continue;
+                            ps.Source = TravelLogUnit.id;
+                            ps.Unit = TravelLogUnit.Name;
+                            vsc = ps;
+                            return true;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (ownstream)
+                {
+                    stream.Dispose();
                 }
             }
 
@@ -276,6 +319,30 @@ namespace EDDiscovery
                             tzoffset += TimeSpan.FromHours(24);
                         }
                     }
+                    else
+                    {
+                        // No timezone specified - try to make the timezone offset make sense
+                        // Unfortunately anything east of Tonga (GMT+13) or west of Hawaii (GMT-10)
+                        // will be a day off.
+
+                        if (tzoffset <= TimeSpan.FromHours(-10.5))
+                        {
+                            tzoffset += TimeSpan.FromHours(24);
+                        }
+                        else if (tzoffset > TimeSpan.FromHours(13.5))
+                        {
+                            tzoffset -= TimeSpan.FromHours(24);
+                        }
+
+                        double tzhrs = tzoffset.TotalHours;
+                        bool tzneg = tzhrs < 0;
+                        if (tzneg) tzhrs = -tzhrs;
+                        int tzmins = (int)Math.Truncate(tzhrs * 60) % 60;
+                        tzhrs = Math.Truncate(tzhrs);
+
+                        string tzname = tzhrs == 0 ? "GMT" : $"GMT{(tzneg ? "-" : "+")}{tzhrs.ToString("00", CultureInfo.InvariantCulture)}{tzmins.ToString("00", CultureInfo.InvariantCulture)}";
+                        tzi = TimeZoneInfo.CreateCustomTimeZone(tzname, tzoffset, tzname, tzname);
+                    }
 
                     // Set the start time, timezone info and timezone offset
                     LastLogTime = localtime - tzoffset;
@@ -288,6 +355,56 @@ namespace EDDiscovery
             }
 
             return false;
+        }
+
+        public IEnumerable<VisitedSystemsClass> ReadSystems(Func<bool> cancelRequested = null)
+        {
+            if (cancelRequested == null)
+                cancelRequested = () => false;
+
+            VisitedSystemsClass last = null;
+            long startpos = filePos;
+
+            if (TimeZone == null)
+            {
+                if (!ReadHeader())  // may be empty if we read it too fast.. don't worry, monitor will pick it up
+                {
+                    System.Diagnostics.Trace.WriteLine("File was empty (for now) " + FileName);
+                    yield break;
+                }
+            }
+
+            VisitedSystemsClass ps;
+            using (Stream stream = File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                while (!cancelRequested() && ReadNetLogSystem(out ps, cancelRequested, stream))
+                {
+                    if (last == null)
+                    {
+                        if (systems.Count == 0)
+                        {
+                            last = VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time);
+                        }
+                        else
+                        {
+                            last = systems[systems.Count - 1];
+                        }
+                    }
+
+                    if (last != null && ps.Name.Equals(last.Name, StringComparison.InvariantCultureIgnoreCase))
+                        continue;
+
+                    if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
+                    {
+                        systems.Add(ps);
+                        yield return ps;
+                        last = ps;
+                    }
+                }
+            }
+
+            if ( startpos != filePos )
+                Console.WriteLine("Parse ReadData " + FileName + " from " + startpos + " to " + filePos);
         }
     }
 }

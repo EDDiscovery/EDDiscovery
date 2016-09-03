@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Diagnostics;
-using EDDiscovery2.Trilateration;
 using OpenTK;
 using System.Resources;
 using EDDiscovery.Properties;
+using EDDiscovery.EDSM;
+using System.IO;
 
 namespace EDDiscovery2._3DMap
 {
@@ -19,20 +20,9 @@ namespace EDDiscovery2._3DMap
     {
         private List<IData3DSet> _datasets;
         private static Dictionary<string, TexturedQuadData> _cachedTextures = new Dictionary<string, TexturedQuadData>();
+        private static Dictionary<string, Bitmap> _cachedBitmaps = new Dictionary<string, Bitmap>();
 
         public EDDConfig.MapColoursClass MapColours { get; set; } = EDDConfig.Instance.MapColours;
-
-        public ISystem CenterSystem { get; set; } = new SystemClass();
-        public ISystem SelectedSystem { get; set; } = new SystemClass();
-        public List<SystemClassStarNames> StarList { get; set; }
-        public List<ISystem> ReferenceSystems { get; set; } = new List<ISystem>();
-        public List<VisitedSystemsClass> VisitedSystems { get; set; }
-        public List<ISystem> PlannedRoute { get; set; } = new List<ISystem>();
-
-        public bool DrawLines { get; set; } = false;
-        public bool UseImage { get; set; } = false;
-
-        public FGEImage[] Images { get; set; } = null;
 
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
         public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
@@ -41,105 +31,62 @@ namespace EDDiscovery2._3DMap
 
         public DatasetBuilder()
         {
-        }
-
-        public void Build()
-        {
             _datasets = new List<IData3DSet>();
         }
 
-        public List<IData3DSet> BuildMaps()
-        {
-            _datasets = new List<IData3DSet>();
-            AddMapImages();
-            return _datasets;
-        }
 
-        public List<IData3DSet> BuildVisitedSystems()
-        {
-            _datasets = new List<IData3DSet>();
-            AddVisitedSystemsInformation();
-            AddRoutePlannerInfoToDataset();
-            AddTrilaterationInfoToDataset();
-            return _datasets;
-        }
+        #region MAPS
 
-        public List<IData3DSet> BuildSelected()
+       public List<IData3DSet> AddMapImages(FGEImage [] list)
         {
-            _datasets = new List<IData3DSet>();
-            AddSelectedSystemToDataset();
-            AddCenterPointToDataset();
-            return _datasets;
-        }
-
-        private void AddMapImages()
-        {
-            if (UseImage && Images != null && Images.Length != 0)
+            if (list.Length > 0 )
             {
                 var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("mapimage", Color.White, 1.0f);
-                foreach (var img in Images)
+
+                for( int i = 0; i < list.Length; i++)
                 {
+                    FGEImage img = list[i];
+
                     if (_cachedTextures.ContainsKey(img.FileName))
                     {
                         datasetMapImg.Add(_cachedTextures[img.FileName]);
                     }
                     else
                     {
-                        var texture = TexturedQuadData.FromFGEImage(img);
+                        Bitmap bmp = (Bitmap)Bitmap.FromFile(img.FilePath);
+                                                                                    
+                        Vector3 centre = new Vector3((img.TopLeft.X + img.BottomRight.X) / 2, 0, (img.TopRight.Y + img.BottomLeft.Y) / 2);
+                        float width = img.TopRight.X - img.BottomLeft.X;
+                        float height = img.TopLeft.Y - img.BottomRight.Y;           // its rectangular.. so does not really matter which left/right/top/bot you use
+
+                        var texture = TexturedQuadData.FromBitmap(bmp, centre, TexturedQuadData.NoRotation, width, height );
+
                         _cachedTextures[img.FileName] = texture;
                         datasetMapImg.Add(texture);
                     }
                 }
                 _datasets.Add(datasetMapImg);
             }
+
+            return _datasets;
         }
 
-        private Bitmap DrawGridBitmap(Bitmap text_bmp, float x, float z, Font fnt, int px, int py)
-        {
-            using (Graphics g = Graphics.FromImage(text_bmp))
-            {
-                //using (Brush br = new SolidBrush(Color.Yellow))
-                // g.FillRectangle(br, 0, 0, text_bmp.Width, text_bmp.Height);
+        #endregion
 
-                using (Brush br = new SolidBrush(MapColours.CoarseGridLines))
-                    g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(px, py));
-            }
+        #region Bookmarks
 
-            return text_bmp;
-        }
-
-        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, Bitmap maptarget, double widthly, double heightly, bool vert)
+        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, Bitmap maptarget, float widthly, float heightly, Vector3 rotation )
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
-            widthly /= 2;
 
             long bookmarktarget = TargetClass.GetTargetBookmark();
 
             foreach (BookmarkClass bc in BookmarkClass.bookmarks)
             {
-                TexturedQuadData newtexture;
-
                 Bitmap touse = (bc.id == bookmarktarget) ? maptarget : ((bc.isRegion) ? mapregion : mapstar);
-
-                if (vert)
-                {
-                    newtexture = TexturedQuadData.FromBitmapVert(touse,
-                                             new PointF((float)(bc.x - widthly), (float)(bc.y + heightly)),
-                                                new PointF((float)(bc.x + widthly), (float)(bc.y + heightly)),
-                                             new PointF((float)(bc.x - widthly), (float)bc.y),
-                                                new PointF((float)(bc.x + widthly), (float)bc.y),
-                                             (float)bc.z);
-                }
-                else
-                {
-                    newtexture = TexturedQuadData.FromBitmapHorz(touse,
-                                              new PointF((float)(bc.x - widthly), (float)(bc.z + heightly)),
-                                                 new PointF((float)(bc.x + widthly), (float)(bc.z + heightly)),
-                                              new PointF((float)(bc.x - widthly), (float)bc.z),
-                                                 new PointF((float)(bc.x + widthly), (float)bc.z),
-                                              (float)bc.y);
-                }
-
+                TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, new PointData(bc.x, bc.y, bc.z), rotation, widthly, heightly,  0, heightly / 2);
+                newtexture.Tag = bc;
+                newtexture.Tag2 = 0;        // bookmark
                 datasetbks.Add(newtexture);
             }
 
@@ -148,10 +95,9 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, double widthly, double heightly , bool vert )
+        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, float widthly, float heightly, Vector3 rotation, List<VisitedSystemsClass> VisitedSystems)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
-            widthly /= 2;
 
             long bookmarknoted = TargetClass.GetTargetNotedSystem();
 
@@ -167,31 +113,12 @@ namespace EDDiscovery2._3DMap
 
                         if (note.Length > 0)
                         {
-                            double x = (vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x;
-                            double y = (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y;
-                            double z = (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z;
+                            PointData pd = new PointData((vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x, (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y, (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z);
 
-                            TexturedQuadData newtexture;
-
-                            if (vert)
-                            {
-                                newtexture = TexturedQuadData.FromBitmapVert((notecs.id == bookmarknoted) ? maptarget : map,
-                                                            new PointF((float)(x - widthly), (float)(y + heightly)),
-                                                            new PointF((float)(x + widthly), (float)(y + heightly)),
-                                                            new PointF((float)(x - widthly), (float)y),
-                                                            new PointF((float)(x + widthly), (float)y),
-                                                            (float)z);
-                            }
-                            else
-                            {
-                                newtexture = TexturedQuadData.FromBitmapHorz((notecs.id == bookmarknoted) ? maptarget : map,
-                                                                            new PointF((float)(x - widthly), (float)(z + heightly)),
-                                                                            new PointF((float)(x + widthly), (float)(z + heightly)),
-                                                                            new PointF((float)(x - widthly), (float)z),
-                                                                            new PointF((float)(x + widthly), (float)z),
-                                                                            (float)y);
-                            }
-
+                            Bitmap touse = (notecs.id == bookmarknoted) ? maptarget : map;
+                            TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly, 0, heightly / 2);
+                            newtexture.Tag = vs;
+                            newtexture.Tag2 = 1;        // note mark
                             datasetbks.Add(newtexture);
                         }
                     }
@@ -203,6 +130,237 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
+        public void UpdateBookmarks(ref List<IData3DSet> _datasets, float widthly, float heightly, Vector3 rotation)
+        {
+            if (_datasets == null)
+                return;
+
+            foreach (IData3DSet dataset in _datasets)
+            {
+                TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
+
+                foreach (TexturedQuadData tqd in tqdc.BaseTextures)
+                {
+                    PointData pd;
+                    if ( (int)tqd.Tag2 == 1)
+                    {
+                        VisitedSystemsClass vs = (VisitedSystemsClass)tqd.Tag;
+                        pd = new PointData((vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x, (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y, (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z);
+                    }
+                    else
+                    {
+                        BookmarkClass bc = (BookmarkClass)tqd.Tag;
+                        pd = new PointData(bc.x, bc.y, bc.z);
+                    }
+
+                    tqd.UpdateVertices(pd, rotation, widthly, heightly, 0, heightly / 2);
+                }
+            }
+        }
+
+        #endregion
+
+        #region GMOs
+
+        static Font gmostarfont = new Font("MS Sans Serif", 20F);       // font size really determines the nicenest of the image, not its size on screen..
+        float gmonameoff = -0.75F;      // bitmap is from +0.5 to -0.5.  
+        float gmotargetoff = 1F;
+        float gmoselonly = 0.75F;
+        float gmoseltarget = 1.75F;
+
+        public List<IData3DSet> AddGalMapRegionsToDataset( bool colourregions)
+        {
+            var polydataset = new PolygonCollection("regpolys", Color.White, 1f, OpenTK.Graphics.OpenGL.PrimitiveType.Triangles);      // ORDER AND NUMBER v.Important
+            var outlinedataset = new PolygonCollection("reglines", Color.White, 1f , OpenTK.Graphics.OpenGL.PrimitiveType.LineLoop);   // DrawStars picks them out in a particular order
+            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("regtext", Color.White, 1f);
+
+            if (EDDiscoveryForm.galacticMapping != null)
+            {
+                long gmotarget = TargetClass.GetTargetGMO();
+
+                int cindex = 0;
+                foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
+                {
+                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Regions )
+                    {
+                        string name = gmo.name;
+
+                        Color[] array = new Color[] { Color.Red, Color.Green, Color.Blue,
+                                                    Color.Brown, Color.Crimson, Color.Coral,
+                                                    Color.Aqua, Color.Yellow, Color.Violet,
+                                                    Color.Sienna, Color.Silver, Color.Salmon,
+                                                    Color.Pink , Color.AntiqueWhite , Color.Beige ,
+                                                    Color.DarkCyan , Color.DarkGray , Color.ForestGreen , Color.LightSkyBlue ,
+                                                    Color.Lime , Color.Maroon, Color.Olive, Color.SteelBlue};
+                        Color c = array[cindex++ % array.Length];
+
+                        List<Vector2> polygonxz = new List<Vector2>();                              // needs it in x/z and in vector2's
+                        foreach( Vector3 pd in gmo.points )
+                            polygonxz.Add(new Vector2((float)pd.X, (float)pd.Z));                   // can be concave and wound the wrong way..
+
+                        Vector2 size, avg;
+                        Vector2 centre = PolygonTriangulator.Centre(polygonxz, out size, out avg);  // default geographic centre (min x/z + max x/z/2) used in case poly triangulate fails (unlikely)
+ 
+                        List<List<Vector2>> polys = PolygonTriangulator.Triangulate(polygonxz, false);  // cut into convex polygons first - because we want the biggest possible area for naming purposes
+                        //Console.WriteLine("Region {0} decomposed to {1} ", name, polys.Count);
+
+                        Vector2 bestpos = centre;
+                        Vector2 bestsize = new Vector2(250, 250 / 5);
+
+                        if (polys.Count > 0)                                                      // just in case..
+                        {
+                            centre = PolygonTriangulator.Centroids(polys);                       // weighted mean of the centroids
+                            //Bitmap map3 = DrawString(String.Format("O{0}", cindex - 1), Color.White, gmostarfont); TexturedQuadData ntext3 = TexturedQuadData.FromBitmap(map3, new PointData(centre.X, 0, centre.Y), TexturedQuadData.NoRotation, 2000, 500); datasetbks.Add(ntext3);
+                           
+                            float mindist = float.MaxValue;
+
+                            foreach (List<Vector2> points in polys)                         // now for every poly
+                            {
+                                if (colourregions)
+                                {
+                                    Color regcol = Color.FromArgb(64, c.R, c.G, c.B);
+
+                                    if (points.Count == 3)                                    // already a triangle..
+                                    {
+                                        polydataset.Add(new Polygon(points, 1, regcol));
+                                        //outlinedataset.Add(new Polygon(points, 1, Color.FromArgb(255, 255, 255, 0))); //DEBUG
+                                    }
+                                    else
+                                    {
+                                        List<List<Vector2>> polytri = PolygonTriangulator.Triangulate(points, true);    // cut into triangles not polygons
+
+                                        foreach (List<Vector2> pt in polytri)
+                                        {
+                                            polydataset.Add(new Polygon(pt, 1, regcol));
+                                            // outlinedataset.Add(new Polygon(pt, 1, Color.FromArgb(255, 255, 255, 0))); // DEBUG
+                                        }
+                                    }
+                                }
+
+                                //float area; Vector2 polycentrepos = PolygonTriangulator.Centroid(points,out area); Bitmap map2 = DrawString(String.Format("X") , Color.White, gmostarfont);  TexturedQuadData ntext2 = TexturedQuadData.FromBitmap(map2, new PointData(polycentrepos.X, 0, polycentrepos.Y), TexturedQuadData.NoRotation, 1000, 200); datasetbks.Add(ntext2);
+
+                                PolygonTriangulator.FitInsideConvexPoly(points, centre, new Vector2(3000, 3000 / 5), new Vector2(200, 200),
+                                                                        ref mindist, ref bestpos, ref bestsize, bestsize.X / 2);
+                            }
+                        }
+
+                        Bitmap map = DrawString(gmo.name, Color.White, gmostarfont);
+                        PointData bitmappos = new PointData(bestpos.X, 0, bestpos.Y);
+                        TexturedQuadData ntext = TexturedQuadData.FromBitmap(map, bitmappos, TexturedQuadData.NoRotation,
+                                                bestsize.X, bestsize.Y);
+
+                        datasetbks.Add(ntext);
+
+                        outlinedataset.Add(new Polygon(polygonxz, 1, Color.FromArgb(255, 128, 128, 128)));
+                    }
+                }
+            }
+
+            _datasets.Add(polydataset);
+            _datasets.Add(outlinedataset);
+            _datasets.Add(datasetbks);
+            return _datasets;
+        }
+
+        public List<IData3DSet> AddGalMapObjectsToDataset(Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem , Color textc)
+        {
+            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("galobj", Color.White, 1f);
+
+            if (EDDiscoveryForm.galacticMapping != null)
+            {
+                long gmotarget = TargetClass.GetTargetGMO();
+
+                foreach (GalacticMapObject gmo in EDDiscoveryForm.galacticMapping.galacticMapObjects)
+                {
+                    if (gmo.galMapType.Enabled)
+                    {
+                        Bitmap touse = gmo.galMapType.Image;                        // under our control, so must have it
+
+                        if (touse != null && gmo.points.Count > 0)             // if it has an image its a point object , and has co-ord
+                        {
+                            Vector3 pd = gmo.points[0];
+
+                            TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly);
+                            newtexture.Tag = gmo;
+                            newtexture.Tag2 = 0;
+                            datasetbks.Add(newtexture);
+
+                            if (namethem)
+                            {
+                                Bitmap map = null;
+                                string cachename = gmo.name + textc.ToString();
+
+                                if (_cachedBitmaps.ContainsKey(cachename))      // cache them, they take a long time to compute..
+                                {
+                                    map = _cachedBitmaps[cachename];
+                                }
+                                else
+                                {
+                                    map = DrawString(gmo.name, textc, gmostarfont);
+                                    _cachedBitmaps.Add(cachename, map);
+                                }
+
+                                TexturedQuadData ntext = TexturedQuadData.FromBitmap(map, pd, rotation,
+                                                        (widthly / 10 * gmo.name.Length),
+                                                        (heightly / 3),
+                                                        0, heightly * gmonameoff);
+                                ntext.Tag = gmo;
+                                ntext.Tag2 = 1;
+                                datasetbks.Add(ntext);
+                            }
+
+                            if (gmo.id == gmotarget)
+                            {
+                                TexturedQuadData ntag = TexturedQuadData.FromBitmap(target, pd, rotation, widthly, heightly, 0, heightly * gmotargetoff);
+                                ntag.Tag = gmo;
+                                ntag.Tag2 = 2;
+                                datasetbks.Add(ntag);
+                            }
+                        }
+                    }
+                }
+            }
+
+            _datasets.Add(datasetbks);
+
+            return _datasets;
+        }
+
+        public void UpdateGalObjects(ref List<IData3DSet> _datasets, float widthly, float heightly , Vector3 rotation )
+        {
+            if (_datasets == null)
+                return;
+
+            foreach ( IData3DSet dataset in _datasets )
+            {
+                if (dataset is TexturedQuadDataCollection)
+                {
+                    TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
+
+                    foreach (TexturedQuadData tqd in tqdc.BaseTextures)
+                    {
+                        GalacticMapObject gmo = tqd.Tag as GalacticMapObject;
+                        Debug.Assert(gmo != null);
+
+                        if (gmo.points.Count > 0)       // paranoia since its an external data source
+                        {
+                            int id = (int)tqd.Tag2;
+                            if (id == 0)
+                                tqd.UpdateVertices(gmo.points[0], rotation, widthly, heightly);
+                            else if (id == 1)
+                                tqd.UpdateVertices(gmo.points[0], rotation, (widthly / 10 * gmo.name.Length), (heightly / 3), 0, heightly * gmonameoff);
+                            else
+                                tqd.UpdateVertices(gmo.points[0], rotation, widthly, heightly, 0, heightly * gmotargetoff);
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Grids
+
         public List<IData3DSet> AddGridCoords()
         {
             string fontname = "MS Sans Serif";
@@ -210,7 +368,7 @@ namespace EDDiscovery2._3DMap
                 Font fnt = new Font(fontname, 20F);
 
                 int bitmapwidth, bitmapheight;
-                Bitmap text_bmp = new Bitmap(100, 30);
+                Bitmap text_bmp = new Bitmap(300, 30);
                 using (Graphics g = Graphics.FromImage(text_bmp))
                 {
                     SizeF sz = g.MeasureString("-99999,-99999", fnt);
@@ -244,12 +402,14 @@ namespace EDDiscovery2._3DMap
                         int tex_y = ((num / texwide) % texhigh) * bitmapheight;
                         int tex_n = num / (texwide * texhigh);
 
+                        //Console.WriteLine("num {0} tex_x {1} tex_y {2} txt_n {3}", num, tex_x, tex_y, tex_n);
+
                         DrawGridBitmap(basetexturesLOD1[tex_n].Texture, x, z, fnt, tex_x, tex_y);
-                        datasetMapImgLOD1.Add(basetexturesLOD1[tex_n].CreateSubTexture(
-                            new Point((int)x, (int)z), new Point((int)x + textwidthly, (int)z),
-                            new Point((int)x, (int)z + textheightly), new Point((int)x + textwidthly, (int)z + textheightly),
-                            new Point(tex_x, tex_y + bitmapheight), new Point(tex_x + bitmapwidth, tex_y + bitmapheight),
-                            new Point(tex_x, tex_y), new Point(tex_x + bitmapwidth, tex_y)));
+                        datasetMapImgLOD1.Add(basetexturesLOD1[tex_n].Horz(
+                            x, z,
+                            x + textwidthly, z + textheightly,
+                            tex_x, tex_y, tex_x + bitmapwidth, tex_y + bitmapheight
+                          ));
                     }
                 }
 
@@ -263,11 +423,11 @@ namespace EDDiscovery2._3DMap
                         int tex_n = num / (texwide * texhigh);
 
                         DrawGridBitmap(basetexturesLOD2[tex_n].Texture, x, z, fnt, tex_x, tex_y);
-                        datasetMapImgLOD2.Add(basetexturesLOD2[tex_n].CreateSubTexture(
-                            new Point((int)x, (int)z), new Point((int)x + textwidthly * 10, (int)z),
-                            new Point((int)x, (int)z + textheightly * 10), new Point((int)x + textwidthly * 10, (int)z + textheightly * 10),
-                            new Point(tex_x, tex_y + bitmapheight), new Point(tex_x + bitmapwidth, tex_y + bitmapheight),
-                            new Point(tex_x, tex_y), new Point(tex_x + bitmapwidth, tex_y)));
+                        datasetMapImgLOD2.Add(basetexturesLOD2[tex_n].Horz(
+                            x, z,
+                            x + textwidthly*10, z + textheightly*10,
+                            tex_x, tex_y, tex_x + bitmapwidth, tex_y + bitmapheight
+                        ));
                     }
                 }
 
@@ -276,6 +436,17 @@ namespace EDDiscovery2._3DMap
             }
 
             return _datasets;
+        }
+
+        private Bitmap DrawGridBitmap(Bitmap text_bmp, float x, float z, Font fnt, int px, int py)
+        {
+            using (Graphics g = Graphics.FromImage(text_bmp))
+            {
+                using (Brush br = new SolidBrush(MapColours.CoarseGridLines))
+                    g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(px, py));
+            }
+
+            return text_bmp;
         }
 
         public List<IData3DSet> AddFineGridLines()
@@ -329,9 +500,9 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public void UpdateGridZoom(ref List<IData3DSet> _datasets, double zoom)
+        public void UpdateGridZoom(ref List<IData3DSet> _datasets, float zoom)
         {
-            double LOD1fade = Math.Max(Math.Min((zoom / 0.1 - 1.0) / 5.0, 1.0), 0.5);
+            float LOD1fade = (float)Math.Max(Math.Min((zoom / 0.1 - 1.0) / 5.0, 1.0), 0.5);
 
             var gridLOD1 = _datasets.SingleOrDefault(s => s.Name == "gridLOD1");
             if (gridLOD1 != null)
@@ -353,9 +524,9 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public void UpdateGridCoordZoom(ref List<IData3DSet> _datasets, double zoom)
+        public void UpdateGridCoordZoom(ref List<IData3DSet> _datasets, float zoom)
         {
-            double LOD2fade = Math.Max(Math.Min((0.2 / zoom - 1.0) / 2.0, 1.0), 0.0);
+            float LOD2fade = (float)Math.Max(Math.Min((0.2 / zoom - 1.0) / 2.0, 1.0), 0.0);
 
             var gridLOD2 = _datasets.SingleOrDefault(s => s.Name == "text bitmap LOD2");
             if (gridLOD2 != null)
@@ -372,34 +543,25 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        public List<IData3DSet> AddStars(bool unpopulated, bool useunpopcolor)
+        #endregion
+
+        #region Routes
+
+        public List<IData3DSet> BuildVisitedSystems(bool drawlines, List<VisitedSystemsClass> VisitedSystems)
         {
-            if (StarList != null)
-            {
-                var datasetS = Data3DSetClass<PointData>.Create("stars", (unpopulated || useunpopcolor) ? MapColours.SystemDefault : MapColours.StationSystem , 1.0f);
-
-                foreach (SystemClassStarNames si in StarList)
-                {
-                    if ( (si.population == 0) == unpopulated )          // if zero population, and unpopulated is true, add.  If non zero pop, and unpolated is false, add
-                        datasetS.Add(new PointData(si.x, si.y, si.z));
-                }
-
-                _datasets.Add(datasetS);
-            }
-
+            AddVisitedSystemsInformation(drawlines, VisitedSystems);
             return _datasets;
         }
 
-
-        private void AddVisitedSystemsInformation()
+        private void AddVisitedSystemsInformation(bool DrawLines, List<VisitedSystemsClass> VisitedSystems)
         {
-            if (VisitedSystems != null && VisitedSystems.Any())
+            // we used to draw the star points, but the star grids make sure all stars, visited systems or in the systems db are painted if selected
+            // so just the connecting lines
+
+            if (VisitedSystems != null && VisitedSystems.Any() && DrawLines )
             {
                 VisitedSystemsClass.SetLastKnownSystemPosition(VisitedSystems);
 
-                // For some reason I am unable to fathom this errors during the session after DBUpgrade8
-                // colours just resolves to an object reference not set error, but after a restart it works fine
-                // Not going to waste any more time, a one time restart is hardly the worst workaround in the world...
                 IEnumerable<IGrouping<int, VisitedSystemsClass>> colours =
                     from VisitedSystemsClass sysPos in VisitedSystems 
                     group sysPos by sysPos.MapColour;
@@ -408,109 +570,30 @@ namespace EDDiscovery2._3DMap
                 {
                     foreach (IGrouping<int, VisitedSystemsClass> colour in colours)
                     {
-                        if (DrawLines)
+                        var datasetl = Data3DSetClass<LineData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 1.0f);
+                        foreach (VisitedSystemsClass sp in colour)
                         {
-                            var datasetl = Data3DSetClass<LineData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                            foreach (VisitedSystemsClass sp in colour)
+                            if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
                             {
-                                if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
-                                {
-                                    datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
-                                        sp.lastKnownSystem.x, sp.lastKnownSystem.y, sp.lastKnownSystem.z));
+                                datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
+                                    sp.lastKnownSystem.x, sp.lastKnownSystem.y, sp.lastKnownSystem.z));
 
-                                }
                             }
-                            _datasets.Add(datasetl);
-                        }
-                        else
-                        {
-                            var datasetvs = Data3DSetClass<PointData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 2.0f);
-                            foreach (VisitedSystemsClass sp in colour)
-                            {
-                                if ( sp.curSystem != null && sp.curSystem.HasCoordinate)
-                                {
-                                    datasetvs.Add(new PointData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z));
-                                }
-                            }
-                            _datasets.Add(datasetvs);
                         }
 
+                        _datasets.Add(datasetl);
                     }
                 }
             }
         }
 
-
-        // Planned change: Centered system will be marked but won't be "center" of the galaxy
-        // dataset anymore. The origin will stay at Sol.
-        private void AddCenterPointToDataset()
+        public List<IData3DSet> BuildRouteTri(ISystem centersystem, List<SystemClass> planned)
         {
-            var dataset = Data3DSetClass<PointData>.Create("Center", MapColours.CentredSystem, 5.0f);
-
-            //GL.Enable(EnableCap.ProgramPointSize);
-            dataset.Add(new PointData(CenterSystem.x, CenterSystem.y, CenterSystem.z));
-            _datasets.Add(dataset);
-        }
-
-        private void AddSelectedSystemToDataset()
-        {
-            if (SelectedSystem != null)
-            {
-                var dataset = Data3DSetClass<PointData>.Create("Selected", MapColours.SelectedSystem, 8.0f);
-
-                //GL.Enable(EnableCap.ProgramPointSize);
-                dataset.Add(new PointData(SelectedSystem.x, SelectedSystem.y, SelectedSystem.z));
-                _datasets.Add(dataset);
-            }
-        }
-
-        public List<IData3DSet> AddPOIsToDataset()
-        {
-            var dataset = Data3DSetClass<PointData>.Create("Interest", MapColours.POISystem, 10.0f);
-            AddSystem("sol", dataset);
-            AddSystem("sagittarius a*", dataset);
-            AddSystem("CEECKIA ZQ-L C24-0", dataset);
-            AddSystem("Beagle Point", dataset);
-            _datasets.Add(dataset);
+            AddRoutePlannerInfoToDataset(planned);
             return _datasets;
         }
 
-        private void AddTrilaterationInfoToDataset()
-        {
-            if (ReferenceSystems != null && ReferenceSystems.Any())
-            {
-                var referenceLines = Data3DSetClass<LineData>.Create("CurrentReference", MapColours.TrilatCurrentReference, 5.0f);
-                foreach (var refSystem in ReferenceSystems)
-                {
-                    referenceLines.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, refSystem.x, refSystem.y, refSystem.z));
-                }
-
-                _datasets.Add(referenceLines);
-
-                var lineSet = Data3DSetClass<LineData>.Create("SuggestedReference", MapColours.TrilatSuggestedReference, 5.0f);
-
-
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                SuggestedReferences references = new SuggestedReferences(CenterSystem.x, CenterSystem.y, CenterSystem.z);
-
-                for (int ii = 0; ii < 16; ii++)
-                {
-                    var rsys = references.GetCandidate();
-                    if (rsys == null) break;
-                    var system = rsys.System;
-                    references.AddReferenceStar(system);
-                    if (ReferenceSystems != null && ReferenceSystems.Any(s => s.name == system.name)) continue;
-                    System.Diagnostics.Trace.WriteLine(string.Format("{0} Dist: {1} x:{2} y:{3} z:{4}", system.name, rsys.Distance.ToString("0.00"), system.x, system.y, system.z));
-                    lineSet.Add(new LineData(CenterSystem.x, CenterSystem.y, CenterSystem.z, system.x, system.y, system.z));
-                }
-                sw.Stop();
-                System.Diagnostics.Trace.WriteLine("Reference stars time " + sw.Elapsed.TotalSeconds.ToString("0.000s"));
-                _datasets.Add(lineSet);
-            }
-        }
-
-        private void AddRoutePlannerInfoToDataset()
+        private void AddRoutePlannerInfoToDataset(List<SystemClass> PlannedRoute)
         {
             if (PlannedRoute != null && PlannedRoute.Any())
             {
@@ -525,27 +608,100 @@ namespace EDDiscovery2._3DMap
             }
         }
 
-        private void AddSystem(string systemName, Data3DSetClass<PointData> dataset)
-        {
-            SystemClass system = SystemClass.GetSystem(systemName);
+#endregion
 
-            if (system != null && system.HasCoordinate)
+#region Systems
+
+        public List<IData3DSet> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation )
+        {
+            Bitmap selmark  = (Bitmap)EDDiscovery.Properties.Resources.selectedmarker;
+
+            if (centersystem != null)
             {
-                dataset.Add(new PointData(system.x, system.y, system.z));
+                var dataset = Data3DSetClass<PointData>.Create("Center", MapColours.CentredSystem, 5.0f);
+                dataset.Add(new PointData(centersystem.x, centersystem.y, centersystem.z));
+                _datasets.Add(dataset);
+            }
+
+            if (selectedsystem != null)
+            {
+                var datasetbks = Data3DSetClass<TexturedQuadData>.Create("selstar", Color.White, 1f);
+
+                TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, new PointData(selectedsystem.x,selectedsystem.y,selectedsystem.z), rotation, widthly, heightly/2, 0, heightly/4+heightly/16);
+                newtexture.Tag = 0;
+                datasetbks.Add(newtexture);
+                _datasets.Add(datasetbks);
+            }
+
+            if ( selectedgmo != null )
+            {
+                if (selectedgmo.points.Count > 0)               // paranoia
+                {
+                    var datasetbks = Data3DSetClass<TexturedQuadData>.Create("selgmo", Color.White, 1f);
+                    long gmotarget = TargetClass.GetTargetGMO();
+                    float hoff = (gmotarget == selectedgmo.id) ? (heightly * gmoseltarget) : (heightly * gmoselonly);
+                    TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, selectedgmo.points[0], rotation, widthly, heightly / 2, 0, hoff);
+                    newtexture.Tag = 1;
+                    datasetbks.Add(newtexture);
+                    _datasets.Add(datasetbks);
+                }
+            }
+
+            return _datasets;
+        }
+
+        public void UpdateSelected(ref List<IData3DSet> _datasets, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation)
+        {
+            if (_datasets == null)
+                return;
+
+            foreach (IData3DSet dataset in _datasets)
+            {
+                if (dataset is TexturedQuadDataCollection)
+                {
+                    TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
+
+                    foreach (TexturedQuadData tqd in tqdc.BaseTextures)
+                    {
+                        int id = (int)tqd.Tag;
+
+                        if (id == 0)
+                            tqd.UpdateVertices(new PointData(selectedsystem.x, selectedsystem.y, selectedsystem.z), rotation, widthly, heightly / 2, 0, heightly / 4 + heightly / 16);
+                        else if (selectedgmo.points.Count > 0)
+                        {
+                            long gmotarget = TargetClass.GetTargetGMO();
+                            float hoff = (gmotarget == selectedgmo.id) ? (heightly * gmoseltarget) : (heightly * gmoselonly);
+                            tqd.UpdateVertices(selectedgmo.points[0], rotation, widthly, heightly / 2, 0, hoff);
+                        }
+                    }
+                }
             }
         }
 
-        static public Bitmap DrawString(string str, Font fnt, int w, int h, Color textcolour)
-        {
-            Bitmap text_bmp = new Bitmap(w, h);
-            using (Graphics g = Graphics.FromImage(text_bmp))
-            {
-                using (Brush br = new SolidBrush(textcolour))
-                    g.DrawString(str, fnt, br, new Point(0, 0));
-            }
+#endregion
 
-            return text_bmp;
+#region Helpers
+
+        static public Bitmap DrawString(string str, Color textcolour, Font fnt)
+        {
+            Bitmap stringstarmeasurebitmap = new Bitmap(1, 1);
+            using (Graphics g = Graphics.FromImage(stringstarmeasurebitmap))
+            {
+                SizeF sz = g.MeasureString(str, fnt);
+
+                Bitmap text_bmp = new Bitmap((int)sz.Width + 4, (int)sz.Height + 4);
+                using (Graphics h = Graphics.FromImage(text_bmp))
+                {
+                    h.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+                    using (Brush br = new SolidBrush(textcolour))
+                        h.DrawString(str, fnt, br, new Point(0, 0));
+                    h.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+                }
+
+                return text_bmp;
+            }
         }
 
+#endregion
     }
 }
