@@ -19,6 +19,7 @@ namespace EDDiscovery.Forms
         {
             _thread = Thread.CurrentThread;
             InitializeComponent();
+            this.label_version.Text = "EDDiscovery " + System.Reflection.Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
         }
 
         [STAThread]
