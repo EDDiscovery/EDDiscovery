@@ -39,6 +39,7 @@ namespace EDDiscovery.Forms
             else
             {
                 this.Close();
+                Application.ExitThread();
             }
         }
 
