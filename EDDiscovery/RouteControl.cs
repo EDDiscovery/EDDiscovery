@@ -12,9 +12,11 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using EDDiscovery.DB;
+using EDDiscovery;
 using System.Threading;
 using EMK.LightGeometry;
 using EDDiscovery2.DB;
+using EDDiscovery.EDSM;
 
 namespace EDDiscovery
 {
@@ -24,6 +26,7 @@ namespace EDDiscovery
         private EDDiscoveryForm _discoveryForm;
         internal bool changesilence = false;
         private List<SystemClass> routeSystems;
+        string lastsys = null;
         
         // METRICs defined by systemclass GetSystemNearestTo function
         string[] metric_options = { "Nearest to Waypoint", "Minimum Deviation from Path",
@@ -198,19 +201,12 @@ namespace EDDiscovery
             Tools.TextBox_Numeric_KeyPress(sender, e);
         }
 
-        private void textBoxCurrent_DoubleClick(object sender, EventArgs e)
-        {
-            if (textBoxCurrent.Text != "")
-            {
-                SelectFromMaster(false);                              // enable system box
-                textBox_From.Text = textBoxCurrent.Text;
-            }
-        }
-
         public void UpdateHistorySystem(string str)
         {
-            textBoxCurrent.Text = str;
+            lastsys = str;
         }
+
+
 
         private void AppendText(string msg)
         {
@@ -327,7 +323,7 @@ namespace EDDiscovery
 
             if (textBox_From.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (SystemClass.GetSystem(SystemNameOnly(textBox_From.Text)) == null)
+                if (FindSystem(textBox_From.Text) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -337,7 +333,7 @@ namespace EDDiscovery
             }
             if (textBox_To.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (SystemClass.GetSystem(SystemNameOnly(textBox_To.Text)) == null)
+                if (FindSystem(textBox_To.Text) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -352,7 +348,7 @@ namespace EDDiscovery
             return readytocalc;
         }
 
-        // From..
+        ///////////////////////////////////////////////////////////////////////////// From..
 
         private void SelectFromMaster( bool coords )
         {
@@ -362,13 +358,38 @@ namespace EDDiscovery
             textBox_FromZ.ReadOnly = !coords;
         }
 
+        private ISystem FindSystem(string name)
+        {
+            EDDiscovery2.DB.ISystem ds1 = SystemClass.GetSystem(SystemNameOnly(name));
+
+            if ( ds1 == null )
+            {
+                VisitedSystemsClass vs = VisitedSystemsClass.FindByName(_discoveryForm.VisitedSystems, name);
+
+                if (vs != null && vs.HasTravelCoordinates)
+                    ds1 = vs.curSystem;
+                else
+                {
+                    GalacticMapObject gmo = EDDiscoveryForm.galacticMapping.Find(name, true, true);
+
+                    if ( gmo != null && gmo.points.Count>0 )
+                    {
+                        return new SystemClass(gmo.name, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);        // fudge it into a system
+                    }
+                }
+            }
+
+            return ds1;
+        }
+
+
         private void UpdateFrom(bool updatename)
         {
             changesilence = true;
 
             if (textBox_From.ReadOnly == false)                // if entering system name..
             {
-                EDDiscovery2.DB.ISystem ds1 = SystemClass.GetSystem(SystemNameOnly(textBox_From.Text));
+                EDDiscovery2.DB.ISystem ds1 = FindSystem(textBox_From.Text);
 
                 if (ds1 != null)
                 {
@@ -460,8 +481,31 @@ namespace EDDiscovery
                 fromupdatetimer.Start();
             }
         }
+        
+        private void buttonExtTravelFrom_Click(object sender, EventArgs e)
+        {
+            if (lastsys != null)
+            {
+                SelectFromMaster(false);                              // enable system box
+                textBox_From.Text = lastsys;
+                UpdateFrom(false);
+            }
+        }
 
-        // To..
+        private void buttonTargetFrom_Click(object sender, EventArgs e)
+        {
+            string name;
+            double x, y, z;
+
+            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            {
+                SelectFromMaster(false);                              // enable system box
+                textBox_From.Text = TargetClass.GetNameWithoutPrefix(name);
+                UpdateFrom(false);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////// To..
 
         private void SelectToMaster(bool coords)
         {
@@ -478,7 +522,7 @@ namespace EDDiscovery
 
             if (textBox_To.ReadOnly == false)                // if entering system name..
             {
-                EDDiscovery2.DB.ISystem ds1 = SystemClass.GetSystem(SystemNameOnly(textBox_To.Text));
+                EDDiscovery2.DB.ISystem ds1 = FindSystem(textBox_To.Text);
 
                 if (ds1 != null)
                 {
@@ -565,7 +609,7 @@ namespace EDDiscovery
 
         private void cmd3DMap_Click(object sender, EventArgs e)
         {
-            if (_discoveryForm.SystemNames.Count == 0)
+            if (textBox_From.AutoCompleteCustomSource.Count == 0)
             {
                 MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
                 return;
@@ -587,6 +631,29 @@ namespace EDDiscovery
             {
                 MessageBox.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
                 return;
+            }
+        }
+
+        private void buttonExtTravelTo_Click(object sender, EventArgs e)
+        {
+            if (lastsys != null)
+            {
+                SelectToMaster(false);                              // enable system box
+                textBox_To.Text = lastsys;
+                UpdateTo(false);
+            }
+        }
+
+        private void buttonTargetTo_Click(object sender, EventArgs e)
+        {
+            string name;
+            double x, y, z;
+
+            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            {
+                SelectToMaster(false);                              // enable system box
+                textBox_To.Text = TargetClass.GetNameWithoutPrefix(name);
+                UpdateTo(false);
             }
         }
     }

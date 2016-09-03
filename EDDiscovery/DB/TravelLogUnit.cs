@@ -32,6 +32,15 @@ namespace EDDiscovery2.DB
 
         }
 
+        public TravelLogUnit(DbDataReader dr)
+        {
+            id = (long)dr["id"];
+            Name = (string)dr["Name"];
+            type = (int)(long)dr["type"];
+            Size = (int)(long)dr["size"];
+            Path = (string)dr["Path"];
+        }
+
         public bool Beta
         {
             get
@@ -50,14 +59,14 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        private bool Add(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)"))
             {
@@ -79,15 +88,15 @@ namespace EDDiscovery2.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnectionED cn)
+        public bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id", tn))
             {
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@Name", Name);
@@ -105,7 +114,7 @@ namespace EDDiscovery2.DB
         {
             List<TravelLogUnit> list = new List<TravelLogUnit>();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
                 {
@@ -122,6 +131,51 @@ namespace EDDiscovery2.DB
                     return list;
                 }
             }
+        }
+
+        public static List<string> GetAllNames()
+        {
+            List<string> names = new List<string>();
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT DISTINCT Name FROM TravelLogUnit"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            names.Add((string)reader["Name"]);
+                        }
+                    }
+                }
+            }
+            return names;
+        }
+
+        public static TravelLogUnit Get(string name)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Name = @name ORDER BY Id DESC"))
+                {
+                    cmd.AddParameterWithValue("@name", name);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new TravelLogUnit(reader);
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static bool TryGet(string name, out TravelLogUnit tlu)
+        {
+            tlu = Get(name);
+            return tlu != null;
         }
     }
 }

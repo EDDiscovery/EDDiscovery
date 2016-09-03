@@ -9,10 +9,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Data.Common;
 
 namespace EDDiscovery
 {
@@ -22,22 +24,18 @@ namespace EDDiscovery
 
         public event NetLogEventHandler OnNewPosition;          // called in foreground, no need for invoke
 
-        public List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
-
         Dictionary<string, NetLogFileReader> netlogreaders = new Dictionary<string, NetLogFileReader>();
 
         FileSystemWatcher m_Watcher;
         ConcurrentQueue<string> m_netLogFileQueue;
         System.Windows.Forms.Timer m_scantimer;
-        Dictionary<string, TravelLogUnit> m_travelogUnits;
+        System.ComponentModel.BackgroundWorker m_worker;
 
         NetLogFileReader lastnfi = null;          // last one read..
 
-        DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
 
         public NetLogClass(EDDiscoveryForm ds)
         {
-            m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
         }
 
         public string GetNetLogPath()
@@ -114,14 +112,11 @@ namespace EDDiscovery
             }
         }
 
-        // called during start up and if refresh history is pressed..  foreground call
+        // called during start up and if refresh history is pressed
 
-        public List<VisitedSystemsClass> ParseFiles(out string error, int defaultMapColour)
+        public List<VisitedSystemsClass> ParseFiles(out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
-            StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-
             error = null;
-            DirectoryInfo dirInfo;
 
             string datapath = GetNetLogPath();
 
@@ -137,19 +132,11 @@ namespace EDDiscovery
                 return null;
             }
 
-            try
-            {
-                dirInfo = new DirectoryInfo(datapath);
-            }
-            catch (Exception ex)
-            {
-                error = "Could not create Directory info: " + ex.Message;
-                return null;
-            }
-
             List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(EDDConfig.Instance.CurrentCmdrID);
 
-            visitedSystems.Clear();
+            List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
+            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
+            Dictionary<string, List<VisitedSystemsClass>> vsc_lookup = VisitedSystemsClass.GetAll().GroupBy(v => v.Unit).ToDictionary(g => g.Key, g => g.ToList());
 
             if (vsSystemsList != null)
             {
@@ -171,105 +158,116 @@ namespace EDDiscovery
                 }
             }
             // order by file write time so we end up on the last one written
-            FileInfo[] allFiles = dirInfo.GetFiles("netLog.*.log", SearchOption.AllDirectories).OrderBy(p => p.LastWriteTime).ToArray();
+            FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "netLog.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+
+            List<NetLogFileReader> readersToUpdate = new List<NetLogFileReader>();
 
             for (int i = 0; i < allFiles.Length; i++)
             {
                 FileInfo fi = allFiles[i];
 
-                lastnfi = OpenFileReader(fi);
+                var reader = OpenFileReader(fi, m_travelogUnits, vsc_lookup);
 
-                if (lastnfi.TimeZone == null)
+                if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
                 {
-                    lastnfi.ReadHeader();
+                    m_travelogUnits[reader.TravelLogUnit.Name] = reader.TravelLogUnit;
+                    reader.TravelLogUnit.Add();
                 }
 
-                if (!m_travelogUnits.ContainsKey(lastnfi.TravelLogUnit.Name))
+                if (!netlogreaders.ContainsKey(reader.TravelLogUnit.Name))
                 {
-                    m_travelogUnits[lastnfi.TravelLogUnit.Name] = lastnfi.TravelLogUnit;
-                    lastnfi.TravelLogUnit.Add();
+                    netlogreaders[reader.TravelLogUnit.Name] = lastnfi;
                 }
 
-                if (!netlogreaders.ContainsKey(lastnfi.TravelLogUnit.Name))
+                if (forceReload)
                 {
-                    netlogreaders[lastnfi.TravelLogUnit.Name] = lastnfi;
+                    // Force a reload of the travel log
+                    reader.TravelLogUnit.Size = 0;
                 }
 
-                if (lastnfi.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
+                if (reader.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
                 {
-                    foreach (VisitedSystemsClass ps in ReadData(lastnfi))
+                    readersToUpdate.Add(reader);
+                }
+            }
+
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                for (int i = 0; i < readersToUpdate.Count; i++)
+                {
+                    NetLogFileReader reader = readersToUpdate[i];
+                    updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+
+                    using (DbTransaction tn = cn.BeginTransaction())
                     {
-                        if (!VisitedSystemsClass.Exist(ps.Name, ps.Time))
+                        foreach (VisitedSystemsClass ps in reader.ReadSystems(cancelRequested))
                         {
                             ps.EDSM_sync = false;
                             ps.MapColour = defaultMapColour;
                             ps.Commander = EDDConfig.Instance.CurrentCmdrID;
 
-                            ps.Add();
+                            ps.Add(cn, tn);
                             visitedSystems.Add(ps);
                         }
+
+                        reader.TravelLogUnit.Update(cn, tn);
+
+                        tn.Commit();
                     }
 
-                    lastnfi.TravelLogUnit.Update();
+                    if (updateProgress != null)
+                    {
+                        updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+                    }
+
+                    lastnfi = reader;
                 }
             }
 
-            // update the VSC with data from the db
-            VisitedSystemsClass.UpdateSys(visitedSystems, EDDiscoveryForm.EDDConfig.UseDistances);
             return visitedSystems;
         }
 
-        private NetLogFileReader OpenFileReader(FileInfo fi)
+        private NetLogFileReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null, Dictionary<string, List<VisitedSystemsClass>> vsc_lookup = null)
         {
             NetLogFileReader reader;
+            TravelLogUnit tlu;
+            List<VisitedSystemsClass> vsclist = null;
+
+            if (vsc_lookup != null && vsc_lookup.ContainsKey(fi.Name))
+            {
+                vsclist = vsc_lookup[fi.Name];
+            }
 
             if (netlogreaders.ContainsKey(fi.Name))
             {
                 reader = netlogreaders[fi.Name];
             }
-            else if (m_travelogUnits.ContainsKey(fi.Name))
+            else if (tlu_lookup != null && tlu_lookup.ContainsKey(fi.Name))
             {
-                var tlu = m_travelogUnits[fi.Name];
+                tlu = tlu_lookup[fi.Name];
                 tlu.Path = fi.DirectoryName;
-                reader = new NetLogFileReader(tlu);
+                reader = new NetLogFileReader(tlu, vsclist);
+                netlogreaders[fi.Name] = reader;
+            }
+            else if (TravelLogUnit.TryGet(fi.Name, out tlu))
+            {
+                tlu.Path = fi.DirectoryName;
+                reader = new NetLogFileReader(tlu, vsclist);
+                netlogreaders[fi.Name] = reader;
             }
             else
             {
                 reader = new NetLogFileReader(fi.FullName);
+                netlogreaders[fi.Name] = reader;
             }
 
             return reader;
         }
 
-        private IEnumerable<VisitedSystemsClass> ReadData(NetLogFileReader sr)
-        {
-            long startpos = sr.filePos;
-
-            if (sr.TimeZone == null)
-            {
-                if (!sr.ReadHeader())  // may be empty if we read it too fast.. don't worry, monitor will pick it up
-                {
-                    System.Diagnostics.Trace.WriteLine("File was empty (for now) " + sr.FileName);
-                    yield break;
-                }
-            }
-
-            VisitedSystemsClass ps;
-            while (sr.ReadNetLogSystem(out ps))
-            {
-                VisitedSystemsClass last = VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time);
-                if (last != null && ps.Name.Equals(last.Name, StringComparison.InvariantCultureIgnoreCase))
-                    continue;
-
-                if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
-                    yield return ps;
-            }
-
-            Console.WriteLine("Parse ReadData " + sr.FileName + " from " + startpos + " to " + sr.filePos);
-        }
-
         public void StartMonitor()
         {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
             if (m_Watcher == null)
             {
                 try
@@ -290,6 +288,11 @@ namespace EDDiscovery
 
                         EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
 
+                        m_worker = new System.ComponentModel.BackgroundWorker();
+                        m_worker.DoWork += ScanTickWorker;
+                        m_worker.RunWorkerCompleted += ScanTickDone;
+                        m_worker.WorkerSupportsCancellation = true;
+
                         m_scantimer = new System.Windows.Forms.Timer();
                         m_scantimer.Interval = 2000;
                         m_scantimer.Tick += ScanTick;
@@ -309,16 +312,25 @@ namespace EDDiscovery
 
         public void StopMonitor()
         {
+            if (m_scantimer != null)
+            {
+                m_scantimer.Stop();
+                m_scantimer = null;
+            }
+
+            if (m_worker != null)
+            {
+                m_worker.CancelAsync();
+                m_worker = null;
+            }
+
             if (m_Watcher != null)
             {
                 EDDConfig.Instance.NetLogDirChanged -= EDDConfig_NetLogDirChanged;
 
-                m_scantimer.Stop();
-                m_scantimer = null;
                 m_Watcher.EnableRaisingEvents = false;
                 m_Watcher.Dispose();
                 m_Watcher = null;
-                m_netLogFileQueue = null;
 
                 Console.WriteLine("Stop Monitor");
             }
@@ -333,11 +345,38 @@ namespace EDDiscovery
             }
         }
 
+        private void ScanTickDone(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            if (e.Error == null && !e.Cancelled)
+            {
+                List<VisitedSystemsClass> entries = (List<VisitedSystemsClass>)e.Result;
+
+                foreach (var ent in entries)
+                {
+                    OnNewPosition(ent);
+                }
+            }
+        }
+
         private void ScanTick(object sender, EventArgs e)
         {
-            var timer = sender as System.Windows.Forms.Timer;
-
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            if (m_worker != null && !m_worker.IsBusy)
+            {
+                m_worker.RunWorkerAsync();
+            }
+        }
+
+        private void ScanTickWorker(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            var worker = sender as System.ComponentModel.BackgroundWorker;
+            var entries = new List<VisitedSystemsClass>();
+            e.Result = entries;
+            int netlogpos = 0;
+            NetLogFileReader nfi = null;
 
             try
             {
@@ -347,24 +386,45 @@ namespace EDDiscovery
                 }
 
                 string filename = null;
-                NetLogFileReader nfi = null;
 
-                int nrsystems = visitedSystems.Count;
                 if (m_netLogFileQueue.TryDequeue(out filename))      // if a new one queued, we swap to using it
                 {
                     nfi = OpenFileReader(new FileInfo(filename));
                     lastnfi = nfi;
                 }
-
-                if (lastnfi != null)
+                else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
                 {
-                    if (lastnfi.TimeZone == null)
+                    HashSet<string> tlunames = new HashSet<string>(TravelLogUnit.GetAllNames());
+                    string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories)
+                                                  .Select(s => new { name = Path.GetFileName(s), fullname = s })
+                                                  .Where(s => !tlunames.Contains(s.name))
+                                                  .OrderBy(s => s.name)
+                                                  .Select(s => s.fullname)
+                                                  .ToArray();
+                    foreach (var name in filenames)
                     {
-                        lastnfi.ReadHeader();
-                        lastnfi.TravelLogUnit.Add();
+                        nfi = OpenFileReader(new FileInfo(name));
+                        lastnfi = nfi;
+                        break;
+                    }
+                }
+                else
+                {
+                    nfi = lastnfi;
+                }
+
+                if (nfi != null)
+                {
+                    if (nfi.TimeZone == null)
+                    {
+                        nfi.ReadHeader();
+                        if (nfi.TravelLogUnit.id == 0)
+                            nfi.TravelLogUnit.Add();
                     }
 
-                    foreach(VisitedSystemsClass dbsys in ReadData(lastnfi))
+                    netlogpos = nfi.TravelLogUnit.Size;
+
+                    foreach(VisitedSystemsClass dbsys in nfi.ReadSystems())
                     {
                         dbsys.EDSM_sync = false;
                         dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
@@ -373,23 +433,34 @@ namespace EDDiscovery
 
                         // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..
 
-                        VisitedSystemsClass item2 = visitedSystems.LastOrDefault();
+                        VisitedSystemsClass item2 = VisitedSystemsClass.GetLast(dbsys.Commander, dbsys.Time);
                         VisitedSystemsClass.UpdateVisitedSystemsEntries(dbsys, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
-                        visitedSystems.Add(dbsys);
-                        OnNewPosition(dbsys);
-                        lastnfi.TravelLogUnit.Update();
+                        entries.Add(dbsys);
 
-                        if (!timer.Enabled)
+                        if (worker.CancellationPending)
                         {
                             break;
                         }
                     }
+                    nfi.TravelLogUnit.Update();
+                }
+
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
                 }
             }
             catch (Exception ex)
             {
+                // Revert and re-read the failed entries
+                if (nfi != null && nfi.TravelLogUnit != null)
+                {
+                    nfi.TravelLogUnit.Size = netlogpos;
+                }
+
                 System.Diagnostics.Trace.WriteLine("Net tick exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                throw;
             }
         }
 

@@ -97,7 +97,7 @@ namespace EDDiscovery.DB
 
         public static bool Delete(DistancsEnum distsource)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 using (DbCommand cmd = cn.CreateCommand("Delete from Distances where Status=@Status"))
                 {
@@ -111,7 +111,7 @@ namespace EDDiscovery.DB
 
         public bool Store()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 bool ret;
                 ret = Store(cn);
@@ -130,7 +130,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private bool Store(SQLiteConnectionED cn, DbTransaction tn = null)
+        private bool Store(SQLiteConnectionSystem cn, DbTransaction tn = null)
         {
             if (CommanderCreate == null)
                 CommanderCreate = "";
@@ -154,13 +154,13 @@ namespace EDDiscovery.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnectionED cn, DbTransaction tn = null)
+        private bool Update(SQLiteConnectionSystem cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Update Distances  set NameA=@NameA, NameB=@NameB, Dist=@Dist, commandercreate=@commandercreate, CreateTime=@CreateTime, status=@status, id_edsm=@id_edsm  where ID=@id",tn))
             {
@@ -184,7 +184,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select Count(*) from Distances"))
                     {
@@ -208,13 +208,13 @@ namespace EDDiscovery.DB
 
         public bool Delete()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 return Delete(cn);
             }
         }
 
-        private bool Delete(SQLiteConnectionED cn)
+        private bool Delete(SQLiteConnectionSystem cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Delete From  Distances where ID=@id"))
             {
@@ -232,7 +232,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("SELECT * FROM Distances WHERE (NameA = @NameA and NameB = @NameB) OR (NameA = @NameB and NameB = @NameA) limit 1"))
                     {
@@ -271,7 +271,7 @@ namespace EDDiscovery.DB
 
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from Distances WHERE status='" + status.ToString() + "'"))
                     {
@@ -301,7 +301,7 @@ namespace EDDiscovery.DB
         {
             try
             {
-                using (SQLiteConnectionED cn = new SQLiteConnectionED())
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
                     DbCommand cmd = cn.CreateCommand("SELECT * FROM Distances WHERE(NameA = @NameA and NameB = @NameB) OR(NameA = @NameB and NameB = @NameA) limit 1");
 
@@ -363,7 +363,7 @@ namespace EDDiscovery.DB
 
             bool emptydatabase = GetTotalDistances() == 0;            // if empty database, we can skip the lookup
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())  // open the db 
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())  // open the db 
             {
                 int c = 0;
 
@@ -437,7 +437,7 @@ namespace EDDiscovery.DB
                 }
             }
 
-            using (SQLiteConnectionED cn2 = new SQLiteConnectionED())  // open the db
+            using (SQLiteConnectionSystem cn2 = new SQLiteConnectionSystem())  // open the db
             {
                 if (toupdate.Count > 0)
                 {

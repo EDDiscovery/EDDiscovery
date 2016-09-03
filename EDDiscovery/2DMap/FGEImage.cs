@@ -14,11 +14,13 @@ namespace EDDiscovery2
     {
         public string FilePath;
         
-        public Point TopLeft, TopRight, BottomLeft, BottomRight;
-        public Point pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight;
+        public Point TopLeft, TopRight, BottomLeft, BottomRight; // galaxy loc
+        public double Area;                                         
+
+        public Point pxTopLeft, pxTopRight, pxBottomLeft, pxBottomRight;        // bitmap
+
         public List<Point> Yaxispoints;
         private List<Double> polynoms; 
-
 
         public FGEImage(string filename)
         {
@@ -300,9 +302,24 @@ namespace EDDiscovery2
 
                         fgeimg.BottomRight = new Point(pfile["x2"].Value<int>(), pfile["y2"].Value<int>());
                         fgeimg.pxBottomRight = new Point(pfile["px2"].Value<int>(), pfile["py2"].Value<int>());
+
+                        fgeimg.Area = (double)(fgeimg.TopRight.X - fgeimg.TopLeft.X) * (double)(fgeimg.TopLeft.Y - fgeimg.BottomRight.Y);
+                        //Console.WriteLine("img {0} {1}", fgeimg.FileName, fgeimg.Area);
+
                         fgeimages.Add(fgeimg);
                     }
                 }
+
+                fgeimages.Sort(delegate (FGEImage p1, FGEImage p2)      // biggest first.. name if same.. 
+                {
+                    if (p1.Area == p2.Area)
+                        return p1.FileName.CompareTo(p2.FileName);
+                    else if (p1.Area < p2.Area)
+                        return 1;
+                    else
+                        return -1;
+                }
+                );
             }
 
             return fgeimages;

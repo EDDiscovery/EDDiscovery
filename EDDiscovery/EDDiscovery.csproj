@@ -167,15 +167,26 @@
     <Compile Include="2DMap\ImageViewer.Designer.cs">
       <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="3DMap\CameraDirectionMovement.cs" />
+    <Compile Include="3DMap\PositionDirection.cs" />
+    <Compile Include="3DMap\MapRecorder.cs" />
+    <Compile Include="3DMap\Polygon.cs" />
     <Compile Include="3DMap\Data3DSetClass.cs" />
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
     <Compile Include="3DMap\KeyboardActions.cs" />
+    <Compile Include="3DMap\StarGrid.cs" />
+    <Compile Include="3DMap\StarNamesList.cs" />
+    <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\LabelExt.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="DB\SQLiteConnectionED.cs" />
+    <Compile Include="DB\SqLiteDBSchema.cs" />
+    <Compile Include="DB\SQLiteDBSystemClass.cs" />
+    <Compile Include="DB\SQLiteDBUserClass.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DistanceParser.cs" />
     <Compile Include="Controls\SplitContainerCustom.cs">
@@ -188,6 +199,8 @@
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnhandled.cs" />
@@ -212,11 +225,29 @@
     <Compile Include="Forms\DistanceForm.Designer.cs">
       <DependentUpon>DistanceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SplashForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SplashForm.Designer.cs">
+      <DependentUpon>SplashForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TimedMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TimedMessage.Designer.cs">
+      <DependentUpon>TimedMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\InfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\InfoForm.Designer.cs">
       <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RecordStep.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RecordStep.Designer.cs">
+      <DependentUpon>RecordStep.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SummaryPopOut.cs">
       <SubType>Form</SubType>
@@ -425,10 +456,6 @@
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
     <Compile Include="TravelHistoryFilter.cs" />
-    <Compile Include="Trilateration\ReferencesSector.cs" />
-    <Compile Include="Trilateration\ReferenceSystem.cs" />
-    <Compile Include="Trilateration\SuggestedReferences.cs" />
-    <Compile Include="Trilateration\Trilateration.cs" />
     <Compile Include="Trilateration\TrilaterationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -443,14 +470,35 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="App.Portable.config" />
     <None Include="Resources\YellowDot.png" />
     <None Include="Resources\OrangeDot.png" />
+    <None Include="Resources\3dmaphelp.txt" />
+    <None Include="Resources\comet.PNG" />
+    <None Include="Resources\ExplorationHazard.png" />
+    <None Include="Resources\Blackhole.PNG" />
     <None Include="Resources\bookmarkbrightred.png" />
     <None Include="Resources\bookmarkgreen.png" />
-    <None Include="Resources\3dmaphelp.txt" />
-    <None Include="Resources\bookmarkyellow.png" />
     <None Include="Resources\bookmarktarget.png" />
+    <None Include="Resources\bookmarkyellow.png" />
+    <None Include="Resources\floppy.png" />
+    <None Include="Resources\eye.png" />
+    <None Include="Resources\goto.png" />
     <Content Include="Resources\imgCheck.png" />
+    <None Include="Resources\stellaremnant.PNG" />
+    <None Include="Resources\nebula.PNG" />
+    <None Include="Resources\pulsar.PNG" />
+    <None Include="Resources\PlanetaryNebula.PNG" />
+    <None Include="Resources\starcluster.PNG" />
+    <None Include="Resources\pointofinterest.png" />
+    <None Include="Resources\selectedmarker.png" />
+    <None Include="Resources\PauseNormalRed.png" />
+    <None Include="Resources\RecordPressed.png" />
+    <None Include="Resources\StopNormalRed.png" />
+    <None Include="Resources\PlayNormal.png" />
+    <None Include="Resources\StopNormalBlue.png" />
+    <None Include="Resources\VideoRecorder.png" />
+    <None Include="Resources\pauseblue.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
@@ -489,11 +537,20 @@
     <EmbeddedResource Include="Forms\BookmarkForm.resx">
       <DependentUpon>BookmarkForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SplashForm.resx">
+      <DependentUpon>SplashForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TimedMessage.resx">
+      <DependentUpon>TimedMessage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DistanceForm.resx">
       <DependentUpon>DistanceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RecordStep.resx">
+      <DependentUpon>RecordStep.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SummaryPopOut.resx">
       <DependentUpon>SummaryPopOut.cs</DependentUpon>
@@ -593,6 +650,40 @@
     <Folder Include="Maps\" />
     <Folder Include="SQLite\" />
   </ItemGroup>
+  <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <OutputFilename ParameterType="System.String" Required="true" />
+      <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.IO.Compression" />
+      <Using Namespace="System.IO.Compression" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        try
+        {
+          using (Stream zipStream = new FileStream(Path.GetFullPath(OutputFilename), FileMode.Create, FileAccess.Write))
+          using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+          {
+              foreach (ITaskItem fileItem in Files)
+              {
+                  string filename = fileItem.ItemSpec;
+                  string name = fileItem.GetMetadata("Name");
+                  if (String.IsNullOrEmpty(name)) name = Path.GetFileName(filename);
+                  using (Stream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                      using (Stream fileStreamInZip = archive.CreateEntry(name).Open())
+                          fileStream.CopyTo(fileStreamInZip);
+              }
+          }
+          return true;
+        }
+        catch (Exception ex)
+        {
+          Log.LogErrorFromException(ex);
+          return false;
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
@@ -609,7 +700,28 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild" Condition=" '$(OS)' != 'Unix' ">
+    <ItemGroup>
+      <ZipFiles Include="$(OutputPath)\EDDiscovery.exe" />
+      <ZipFiles Include="$(ProjectDir)\App.Portable.config">
+        <Name>EDDiscovery.exe.config</Name>
+      </ZipFiles>
+      <ZipFiles Include="$(OutputPath)\fround.js" />
+      <ZipFiles Include="$(OutputPath)\trilateration.js" />
+      <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />
+      <ZipFiles Include="$(OutputPath)\OpenTK.GLControl.dll" />
+      <ZipFiles Include="$(OutputPath)\OpenTK.dll" />
+      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.dll" />
+      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.Linq.dll" />
+      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.xml" />
+      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\x86\SQLite.Interop.dll">
+        <Name>x86\SQLite.Interop.dll</Name>
+      </ZipFiles>
+      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\x64\SQLite.Interop.dll">
+        <Name>x64\SQLite.Interop.dll</Name>
+      </ZipFiles>
+    </ItemGroup>
+    <Zip OutputFileName="$(OutputPath)\EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
+  </Target>
 </Project>

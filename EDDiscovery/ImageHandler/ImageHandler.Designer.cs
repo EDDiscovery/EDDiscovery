@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageHandler));
             this.groupBox_Preview = new ExtendedControls.GroupBoxCustom();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox_Prevcontrols = new ExtendedControls.GroupBoxCustom();
+            this.label10 = new System.Windows.Forms.Label();
             this.groupBoxCropSettings = new ExtendedControls.GroupBoxCustom();
             this.numericUpDownHeight = new ExtendedControls.NumericUpDownCustom();
             this.numericUpDownWidth = new ExtendedControls.NumericUpDownCustom();
@@ -42,6 +42,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.checkBoxCropImage = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCopyClipboard = new ExtendedControls.CheckBoxCustom();
             this.checkBoxPreview = new ExtendedControls.CheckBoxCustom();
             this.groupBox_Controls = new ExtendedControls.GroupBoxCustom();
             this.checkBoxAutoConvert = new ExtendedControls.CheckBoxCustom();
@@ -60,7 +61,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.comboBoxScanFor = new ExtendedControls.ComboBoxCustom();
             this.comboBoxFormat = new ExtendedControls.ComboBoxCustom();
-            this.label10 = new System.Windows.Forms.Label();
             this.groupBox_Preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox_Prevcontrols.SuspendLayout();
@@ -106,6 +106,7 @@
             this.groupBox_Prevcontrols.Controls.Add(this.label10);
             this.groupBox_Prevcontrols.Controls.Add(this.groupBoxCropSettings);
             this.groupBox_Prevcontrols.Controls.Add(this.checkBoxCropImage);
+            this.groupBox_Prevcontrols.Controls.Add(this.checkBoxCopyClipboard);
             this.groupBox_Prevcontrols.Controls.Add(this.checkBoxPreview);
             this.groupBox_Prevcontrols.Dock = System.Windows.Forms.DockStyle.Left;
             this.groupBox_Prevcontrols.FillClientAreaWithAlternateColor = false;
@@ -116,6 +117,14 @@
             this.groupBox_Prevcontrols.TabStop = false;
             this.groupBox_Prevcontrols.TextPadding = 0;
             this.groupBox_Prevcontrols.TextStartPosition = -1;
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(8, 252);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(100, 65);
+            this.label10.TabIndex = 11;
+            this.label10.Text = "For Steam, select Scan For JPG and turn off remove orginals";
             // 
             // groupBoxCropSettings
             // 
@@ -132,7 +141,7 @@
             this.groupBoxCropSettings.Controls.Add(this.label6);
             this.groupBoxCropSettings.Controls.Add(this.label5);
             this.groupBoxCropSettings.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCropSettings.Location = new System.Drawing.Point(6, 65);
+            this.groupBoxCropSettings.Location = new System.Drawing.Point(6, 89);
             this.groupBoxCropSettings.Name = "groupBoxCropSettings";
             this.groupBoxCropSettings.Size = new System.Drawing.Size(126, 143);
             this.groupBoxCropSettings.TabIndex = 9;
@@ -256,7 +265,7 @@
             this.checkBoxCropImage.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCropImage.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCropImage.FontNerfReduction = 0.5F;
-            this.checkBoxCropImage.Location = new System.Drawing.Point(8, 19);
+            this.checkBoxCropImage.Location = new System.Drawing.Point(8, 65);
             this.checkBoxCropImage.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCropImage.Name = "checkBoxCropImage";
             this.checkBoxCropImage.Size = new System.Drawing.Size(80, 17);
@@ -266,6 +275,23 @@
             this.checkBoxCropImage.UseVisualStyleBackColor = true;
             this.checkBoxCropImage.CheckedChanged += new System.EventHandler(this.checkBoxCropImage_CheckedChanged);
             // 
+            // checkBoxCopyClipboard
+            // 
+            this.checkBoxCopyClipboard.AutoSize = true;
+            this.checkBoxCopyClipboard.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCopyClipboard.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCopyClipboard.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCopyClipboard.FontNerfReduction = 0.5F;
+            this.checkBoxCopyClipboard.Location = new System.Drawing.Point(8, 42);
+            this.checkBoxCopyClipboard.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCopyClipboard.Name = "checkBoxCopyClipboard";
+            this.checkBoxCopyClipboard.Size = new System.Drawing.Size(109, 17);
+            this.checkBoxCopyClipboard.TabIndex = 10;
+            this.checkBoxCopyClipboard.Text = "Copy to Clipboard";
+            this.checkBoxCopyClipboard.TickBoxReductionSize = 10;
+            this.checkBoxCopyClipboard.UseVisualStyleBackColor = true;
+            this.checkBoxCopyClipboard.CheckedChanged += new System.EventHandler(this.checkBoxCopyClipboard_CheckedChanged);
+            // 
             // checkBoxPreview
             // 
             this.checkBoxPreview.AutoSize = true;
@@ -273,7 +299,7 @@
             this.checkBoxPreview.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxPreview.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxPreview.FontNerfReduction = 0.5F;
-            this.checkBoxPreview.Location = new System.Drawing.Point(8, 42);
+            this.checkBoxPreview.Location = new System.Drawing.Point(8, 19);
             this.checkBoxPreview.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxPreview.Name = "checkBoxPreview";
             this.checkBoxPreview.Size = new System.Drawing.Size(64, 17);
@@ -337,10 +363,11 @@
             this.textBoxScreenshotsDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.textBoxScreenshotsDir.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxScreenshotsDir.BorderColorScaling = 0.5F;
-            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(198, 42);
+            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(214, 42);
             this.textBoxScreenshotsDir.Name = "textBoxScreenshotsDir";
-            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(297, 20);
+            this.textBoxScreenshotsDir.Size = new System.Drawing.Size(281, 20);
             this.textBoxScreenshotsDir.TabIndex = 1;
+            this.textBoxScreenshotsDir.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxScreenshotsDir_KeyUp);
             this.textBoxScreenshotsDir.Leave += new System.EventHandler(this.textBoxScreenshotsDir_Leave);
             // 
             // checkBoxHires
@@ -365,9 +392,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(15, 45);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(160, 13);
+            this.label1.Size = new System.Drawing.Size(157, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "ED/Stream Screenshot directory";
+            this.label1.Text = "ED/Steam Screenshot directory";
             // 
             // textBoxFileNameExample
             // 
@@ -377,7 +404,7 @@
             this.textBoxFileNameExample.Location = new System.Drawing.Point(448, 117);
             this.textBoxFileNameExample.Name = "textBoxFileNameExample";
             this.textBoxFileNameExample.ReadOnly = true;
-            this.textBoxFileNameExample.Size = new System.Drawing.Size(184, 20);
+            this.textBoxFileNameExample.Size = new System.Drawing.Size(220, 20);
             this.textBoxFileNameExample.TabIndex = 13;
             this.textBoxFileNameExample.TabStop = false;
             // 
@@ -408,10 +435,11 @@
             this.textBoxOutputDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
             this.textBoxOutputDir.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxOutputDir.BorderColorScaling = 0.5F;
-            this.textBoxOutputDir.Location = new System.Drawing.Point(198, 68);
+            this.textBoxOutputDir.Location = new System.Drawing.Point(214, 68);
             this.textBoxOutputDir.Name = "textBoxOutputDir";
-            this.textBoxOutputDir.Size = new System.Drawing.Size(297, 20);
+            this.textBoxOutputDir.Size = new System.Drawing.Size(281, 20);
             this.textBoxOutputDir.TabIndex = 3;
+            this.textBoxOutputDir.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxOutputDir_KeyUp);
             this.textBoxOutputDir.Leave += new System.EventHandler(this.textBoxOutputDir_Leave);
             // 
             // comboBoxFileNameFormat
@@ -420,13 +448,13 @@
             this.comboBoxFileNameFormat.BorderColor = System.Drawing.Color.Red;
             this.comboBoxFileNameFormat.ButtonColorScaling = 0.5F;
             this.comboBoxFileNameFormat.DataSource = null;
-            this.comboBoxFileNameFormat.DisplayMember = null;
+            this.comboBoxFileNameFormat.DisplayMember = "";
             this.comboBoxFileNameFormat.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxFileNameFormat.DropDownHeight = 200;
+            this.comboBoxFileNameFormat.DropDownWidth = 218;
             this.comboBoxFileNameFormat.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxFileNameFormat.ItemHeight = 20;
-            this.comboBoxFileNameFormat.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxFileNameFormat.Items")));
-            this.comboBoxFileNameFormat.Location = new System.Drawing.Point(183, 117);
+            this.comboBoxFileNameFormat.ItemHeight = 13;
+            this.comboBoxFileNameFormat.Location = new System.Drawing.Point(218, 117);
             this.comboBoxFileNameFormat.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxFileNameFormat.Name = "comboBoxFileNameFormat";
             this.comboBoxFileNameFormat.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -434,9 +462,10 @@
             this.comboBoxFileNameFormat.ScrollBarWidth = 16;
             this.comboBoxFileNameFormat.SelectedIndex = -1;
             this.comboBoxFileNameFormat.SelectedItem = null;
-            this.comboBoxFileNameFormat.Size = new System.Drawing.Size(218, 21);
+            this.comboBoxFileNameFormat.SelectedValue = null;
+            this.comboBoxFileNameFormat.Size = new System.Drawing.Size(220, 21);
             this.comboBoxFileNameFormat.TabIndex = 7;
-            this.comboBoxFileNameFormat.ValueMember = null;
+            this.comboBoxFileNameFormat.ValueMember = "";
             this.comboBoxFileNameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileNameFormat_SelectedIndexChanged);
             // 
             // label2
@@ -502,12 +531,12 @@
             this.comboBoxScanFor.BorderColor = System.Drawing.Color.Red;
             this.comboBoxScanFor.ButtonColorScaling = 0.5F;
             this.comboBoxScanFor.DataSource = null;
-            this.comboBoxScanFor.DisplayMember = null;
+            this.comboBoxScanFor.DisplayMember = "";
             this.comboBoxScanFor.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxScanFor.DropDownHeight = 200;
+            this.comboBoxScanFor.DropDownWidth = 161;
             this.comboBoxScanFor.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxScanFor.ItemHeight = 20;
-            this.comboBoxScanFor.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxScanFor.Items")));
+            this.comboBoxScanFor.ItemHeight = 13;
             this.comboBoxScanFor.Location = new System.Drawing.Point(652, 69);
             this.comboBoxScanFor.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxScanFor.Name = "comboBoxScanFor";
@@ -516,9 +545,10 @@
             this.comboBoxScanFor.ScrollBarWidth = 16;
             this.comboBoxScanFor.SelectedIndex = -1;
             this.comboBoxScanFor.SelectedItem = null;
-            this.comboBoxScanFor.Size = new System.Drawing.Size(113, 21);
+            this.comboBoxScanFor.SelectedValue = null;
+            this.comboBoxScanFor.Size = new System.Drawing.Size(135, 21);
             this.comboBoxScanFor.TabIndex = 5;
-            this.comboBoxScanFor.ValueMember = null;
+            this.comboBoxScanFor.ValueMember = "";
             this.comboBoxScanFor.SelectedIndexChanged += new System.EventHandler(this.comboBoxScanFor_SelectedIndexChanged);
             // 
             // comboBoxFormat
@@ -527,12 +557,12 @@
             this.comboBoxFormat.BorderColor = System.Drawing.Color.Red;
             this.comboBoxFormat.ButtonColorScaling = 0.5F;
             this.comboBoxFormat.DataSource = null;
-            this.comboBoxFormat.DisplayMember = null;
+            this.comboBoxFormat.DisplayMember = "";
             this.comboBoxFormat.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxFormat.DropDownHeight = 200;
+            this.comboBoxFormat.DropDownWidth = 161;
             this.comboBoxFormat.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxFormat.ItemHeight = 20;
-            this.comboBoxFormat.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxFormat.Items")));
+            this.comboBoxFormat.ItemHeight = 13;
             this.comboBoxFormat.Location = new System.Drawing.Point(652, 42);
             this.comboBoxFormat.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxFormat.Name = "comboBoxFormat";
@@ -541,18 +571,11 @@
             this.comboBoxFormat.ScrollBarWidth = 16;
             this.comboBoxFormat.SelectedIndex = -1;
             this.comboBoxFormat.SelectedItem = null;
-            this.comboBoxFormat.Size = new System.Drawing.Size(113, 21);
+            this.comboBoxFormat.SelectedValue = null;
+            this.comboBoxFormat.Size = new System.Drawing.Size(135, 21);
             this.comboBoxFormat.TabIndex = 5;
-            this.comboBoxFormat.ValueMember = null;
+            this.comboBoxFormat.ValueMember = "";
             this.comboBoxFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFormat_SelectedIndexChanged);
-            // 
-            // label10
-            // 
-            this.label10.Location = new System.Drawing.Point(8, 252);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(100, 65);
-            this.label10.TabIndex = 11;
-            this.label10.Text = "For Steam, select Scan For JPG and turn off remove orginals";
             // 
             // ImageHandler
             // 
@@ -610,5 +633,6 @@
         private System.Windows.Forms.Label label9;
         private ExtendedControls.ComboBoxCustom comboBoxScanFor;
         private System.Windows.Forms.Label label10;
+        private ExtendedControls.CheckBoxCustom checkBoxCopyClipboard;
     }
 }

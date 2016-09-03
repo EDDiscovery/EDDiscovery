@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
             ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
@@ -76,6 +77,12 @@
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this._syncWorker = new System.ComponentModel.BackgroundWorker();
+            this._checkSystemsWorker = new System.ComponentModel.BackgroundWorker();
+            this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -85,6 +92,7 @@
             this.tabPageRoute.SuspendLayout();
             this.tabPageRoutesExpeditions.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -211,7 +219,7 @@
             // 
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to first commander";
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to current commander";
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click);
             // 
             // debugBetaFixHiddenLogToolStripMenuItem
@@ -514,6 +522,9 @@
             // 
             // statusStrip1
             //
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripProgressBar1,
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 722);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(993, 22);
@@ -522,6 +533,44 @@
             this.statusStrip1.SizingGrip = true;
             this.statusStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            // 
+            // _syncWorker
+            // 
+            this._syncWorker.WorkerReportsProgress = true;
+            this._syncWorker.WorkerSupportsCancellation = true;
+            this._syncWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._syncWorker_DoWork);
+            this._syncWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._syncWorker_ProgressChanged);
+            this._syncWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._syncWorker_RunWorkerCompleted);
+            // 
+            // _checkSystemsWorker
+            // 
+            this._checkSystemsWorker.WorkerReportsProgress = true;
+            this._checkSystemsWorker.WorkerSupportsCancellation = true;
+            this._checkSystemsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this._checkSystemsWorker_DoWork);
+            this._checkSystemsWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this._checkSystemsWorker_ProgressChanged);
+            this._checkSystemsWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._checkSystemsWorker_RunWorkerCompleted);
+            // 
+            // edsmRefreshTimer
+            // 
+            this.edsmRefreshTimer.Interval = 900000;
+            this.edsmRefreshTimer.Tick += new System.EventHandler(this.edsmRefreshTimer_Tick);
+            // 
+            // reloadAllLogsForCurrentCommanderToolStripMenuItem
+            // 
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Name = "reloadAllLogsForCurrentCommanderToolStripMenuItem";
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Size = new System.Drawing.Size(277, 22);
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Text = "Reload all logs for current commander";
+            this.reloadAllLogsForCurrentCommanderToolStripMenuItem.Click += new System.EventHandler(this.reloadAllLogsForCurrentCommanderToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -560,6 +609,8 @@
             this.tabPageRoute.ResumeLayout(false);
             this.tabPageRoutesExpeditions.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -613,6 +664,12 @@
         private System.Windows.Forms.ToolStripMenuItem debugBetaFixHiddenLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem synchroniseWithEDSMDistancesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.ComponentModel.BackgroundWorker _syncWorker;
+        private System.ComponentModel.BackgroundWorker _checkSystemsWorker;
+        private System.Windows.Forms.Timer edsmRefreshTimer;
+        private System.Windows.Forms.ToolStripMenuItem reloadAllLogsForCurrentCommanderToolStripMenuItem;
     }
 }
 

@@ -112,13 +112,20 @@ namespace EDDiscovery
         {
             try
             {
-                string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
+                if (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true")
+                {
+                    return Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Data");
+                }
+                else
+                {
+                    string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
 
-                if (!Directory.Exists(datapath))
-                    Directory.CreateDirectory(datapath);
+                    if (!Directory.Exists(datapath))
+                        Directory.CreateDirectory(datapath);
 
 
-                return datapath;
+                    return datapath;
+                }
             }
             catch (Exception ex)
             {
@@ -159,6 +166,13 @@ namespace EDDiscovery
             return jToken.Value<string>();
         }
 
+        static public string GetStringOrDefault(JToken jToken,string def)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return def;
+            return jToken.Value<string>();
+        }
+
 
         static public  bool IsNullOrEmptyT(JToken token)
         {
@@ -169,6 +183,92 @@ namespace EDDiscovery
                    (token.Type == JTokenType.Null);
         }
 
+        static public string WordWrap(string input, int linelen )
+        {
+            String[] split = input.Split(new char[] { ' '});
 
+            string ans = "";
+            int l = 0;
+            for( int i = 0; i < split.Length; i++ )
+            {
+                ans += split[i];
+                l += split[i].Length;
+                if (l > linelen)
+                {
+                    ans += Environment.NewLine;
+                    l = 0;
+                }
+                else
+                    ans += " ";
+            }
+
+            return ans;
+        }
+
+        static public string StackTrace(string trace, string enclosingfunc, int lines )
+        {
+            int offset = trace.IndexOf(enclosingfunc);
+
+            string ret = "";
+
+            if (offset != -1)
+            {
+                CutLine(ref trace, offset);
+
+                while (lines-- > 0)
+                {
+                    string l = CutLine(ref trace, 0);
+                    if (l != "")
+                    {
+                        if (ret != "")
+                            ret = ret + Environment.NewLine + l;
+                        else
+                            ret = l;
+                    }
+                    else
+                        break;
+                }
+            }
+            else
+                ret = trace;
+
+            return ret;
+        }
+
+        static public string CutLine( ref string trace, int offset )
+        {
+            int nloffset = trace.IndexOf(Environment.NewLine, offset);
+            string ret;
+            if ( nloffset != -1 )
+            {
+                ret = trace.Substring(offset, nloffset - offset);
+                trace = trace.Substring(nloffset);
+                if (trace.Length >= Environment.NewLine.Length)
+                    trace = trace.Substring(Environment.NewLine.Length);
+            }
+            else
+            {
+                ret = trace;
+                trace = "";
+            }
+
+            return ret;
+        }
+
+        static StreamWriter debugout = null;
+        static Stopwatch debugtimer = null;
+
+        static public void LogToFile( string s )
+        {
+            if (debugout == null)
+            {
+                debugout = new StreamWriter(Path.Combine(Tools.GetAppDataDirectory(), "debuglog-" + DateTime.Now.ToString("yyyy-dd-MM-HH-mm-ss") + ".log"));
+                debugtimer = new Stopwatch();
+                debugtimer.Start();
+            }
+
+            debugout.WriteLine((debugtimer.ElapsedMilliseconds%100000) + ":" + s);
+            debugout.Flush();
+        }
     }
 }
