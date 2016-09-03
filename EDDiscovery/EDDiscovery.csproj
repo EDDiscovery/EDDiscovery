@@ -199,6 +199,8 @@
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnhandled.cs" />

@@ -200,6 +200,10 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalFSDJump(jo);
                     break;
 
+                case "Location":
+                    je = new JournalLocation(jo);
+                    break;
+
                 case "LoadGame":
                     je = new JournalLoadGame(jo);
                     break;
@@ -241,7 +245,6 @@ namespace EDDiscovery.EliteDangerous
                 case "LaunchFighter":
                 case "LaunchSRV":
                 case "Liftoff":
-                case "Location":
                 case "MarketBuy":
                 case "MarketSell":
                 case "MaterialCollected":
