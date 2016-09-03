@@ -26,6 +26,7 @@ namespace EDDiscovery.DB
         public bool _commandExecuting = false;
         private bool _isLongRunning = false;
         private string _commandText = null;
+        private bool _longRunningLogged = false;
 
         #region Constructor and Destructor
         public SQLiteTxnLockED()
@@ -82,10 +83,11 @@ namespace EDDiscovery.DB
             this._commandText = cmd.CommandText;
             this._commandExecuting = true;
 
-            if (this._isLongRunning)
+            if (this._isLongRunning && !this._longRunningLogged)
             {
                 this._isLongRunning = false;
                 DebugLongRunningOperation(new WeakReference(this));
+                this._longRunningLogged = true;
             }
         }
 
