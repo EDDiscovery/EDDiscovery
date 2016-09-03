@@ -41,6 +41,7 @@
             this.toolStripComboBoxOrder = new System.Windows.Forms.ToolStripComboBox();
             this.labelExt_NoSystems = new ExtendedControls.LabelExt();
             this.panel_grip = new ExtendedControls.DrawnPanel();
+            this.blackBoxAroundTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripConfig.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,9 +55,10 @@
             this.showNotesToolStripMenuItem,
             this.showXYZToolStripMenuItem,
             this.showTargetToolStripMenuItem,
+            this.blackBoxAroundTextToolStripMenuItem,
             this.toolStripComboBoxOrder});
             this.contextMenuStripConfig.Name = "contextMenuStripConfig";
-            this.contextMenuStripConfig.Size = new System.Drawing.Size(261, 185);
+            this.contextMenuStripConfig.Size = new System.Drawing.Size(261, 229);
             // 
             // toolStripMenuItemTargetLine
             // 
@@ -165,6 +167,16 @@
             this.panel_grip.TabIndex = 17;
             this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
             // 
+            // blackBoxAroundTextToolStripMenuItem
+            // 
+            this.blackBoxAroundTextToolStripMenuItem.Checked = true;
+            this.blackBoxAroundTextToolStripMenuItem.CheckOnClick = true;
+            this.blackBoxAroundTextToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.blackBoxAroundTextToolStripMenuItem.Name = "blackBoxAroundTextToolStripMenuItem";
+            this.blackBoxAroundTextToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+            this.blackBoxAroundTextToolStripMenuItem.Text = "Black box around text";
+            this.blackBoxAroundTextToolStripMenuItem.Click += new System.EventHandler(this.blackBoxAroundTextToolStripMenuItem_Click);
+            // 
             // SummaryPopOut
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -199,5 +211,6 @@
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxOrder;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemTargetLine;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemTime;
+        private System.Windows.Forms.ToolStripMenuItem blackBoxAroundTextToolStripMenuItem;
     }
 }

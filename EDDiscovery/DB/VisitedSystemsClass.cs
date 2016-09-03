@@ -104,16 +104,16 @@ namespace EDDiscovery2.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 bool ret = Add(cn);
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnectionED cn)
+        public bool Add(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z, id_edsm_assigned) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z, @id_edsm_assigned)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into VisitedSystems (Name, Time, Unit, Commander, Source, edsm_sync, map_colour, X, Y, Z, id_edsm_assigned) values (@name, @time, @unit, @commander, @source, @edsm_sync, @map_colour, @x, @y, @z, @id_edsm_assigned)", tn))
             {
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@time", Time);
@@ -139,13 +139,13 @@ namespace EDDiscovery2.DB
 
         public new bool Update()
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 return Update(cn);
             }
         }
 
-        private bool Update(SQLiteConnectionED cn)
+        private bool Update(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Update VisitedSystems set Name=@Name, Time=@Time, Unit=@Unit, Commander=@commander, Source=@Source, edsm_sync=@edsm_sync, map_colour=@map_colour, X=@x, Y=@y, Z=@z, id_edsm_assigned=@id_edsm_assigned where ID=@id"))
             {
@@ -176,7 +176,7 @@ namespace EDDiscovery2.DB
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time "))
                 {
@@ -201,7 +201,7 @@ namespace EDDiscovery2.DB
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems where commander=@commander Order by Time "))
                 {
@@ -222,11 +222,31 @@ namespace EDDiscovery2.DB
             }
         }
 
+        public static List<VisitedSystemsClass> GetAll(TravelLogUnit tlu)
+        {
+            List<VisitedSystemsClass> vsc = new List<VisitedSystemsClass>();
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM VisitedSystems WHERE Source = @source ORDER BY Time ASC"))
+                {
+                    cmd.AddParameterWithValue("@source", tlu.id);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            vsc.Add(new VisitedSystemsClass(reader));
+                        }
+                    }
+                }
+            }
+            return vsc;
+        }
+
         static public VisitedSystemsClass GetLast()
         {
             List<VisitedSystemsClass> list = new List<VisitedSystemsClass>();
 
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems Order by Time DESC Limit 1"))
                 {
@@ -244,7 +264,7 @@ namespace EDDiscovery2.DB
 
         public static VisitedSystemsClass GetLast(int cmdrid, DateTime before)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM VisitedSystems WHERE Commander = @commander AND Time < @before ORDER BY Time DESC LIMIT 1"))
                 {
@@ -265,7 +285,7 @@ namespace EDDiscovery2.DB
 
         internal static bool Exist(string name, DateTime time)
         {
-            using (SQLiteConnectionED cn = new SQLiteConnectionED())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from VisitedSystems where name=@name and Time=@time  Order by Time DESC Limit 1"))
                 {
@@ -281,7 +301,7 @@ namespace EDDiscovery2.DB
         {
             double dist;
             double dx, dy, dz;
-            Dictionary<long, ISystem> systems = distlist.Values.ToDictionary(s => s.id);
+            Dictionary<long, ISystem> systems = distlist.Values.GroupBy(s => s.id).ToDictionary(g => g.Key, g => g.First());
 
             foreach (VisitedSystemsClass pos in vs)
             {
@@ -348,9 +368,10 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb)          // oldest system is lowest index
+        public static void UpdateSys(List<VisitedSystemsClass> visitedSystems, bool usedistancedb, bool matchsystems)          // oldest system is lowest index
         {
-            SystemClass.FillVisitedSystems(visitedSystems);                 // first try and populate with SystemClass info
+            if (matchsystems)
+                SystemClass.FillVisitedSystems(visitedSystems);                 // first try and populate with SystemClass info
 
             foreach (VisitedSystemsClass vsc in visitedSystems)
             {
@@ -366,7 +387,8 @@ namespace EDDiscovery2.DB
                     }
                 }
 
-                vsc.strDistance = "";                                       // set empty, must have a string in there.
+                if (vsc.strDistance == null)
+                    vsc.strDistance = "";                                       // set empty, must have a string in there.
             }
 
             DistanceClass.FillVisitedSystems(visitedSystems, usedistancedb);    // finally fill in the distances, indicating if can use db or not
@@ -464,6 +486,31 @@ namespace EDDiscovery2.DB
         public static double Distance(VisitedSystemsClass s1, Point3D p)
         {
             return Distance(s1, p.X, p.Y, p.Z);
+        }
+
+        public static VisitedSystemsClass FindByPos(List<VisitedSystemsClass> visitedSystems, Point3D p, double limit)     // go thru setting the lastknowsystem
+        {
+            if (visitedSystems != null)
+            {
+                VisitedSystemsClass vs = visitedSystems.FindLast(x => x.curSystem.HasCoordinate &&
+                                                Math.Abs(x.curSystem.x - p.X) < limit &&
+                                                Math.Abs(x.curSystem.y - p.Y) < limit &&
+                                                Math.Abs(x.curSystem.z - p.Z) < limit);
+                return vs;
+            }
+            else
+                return null;
+        }
+
+        public static VisitedSystemsClass FindByName(List<VisitedSystemsClass> visitedSystems, string name )    
+        {
+            if (visitedSystems != null)
+            {
+                VisitedSystemsClass vs = visitedSystems.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                return vs;
+            }
+            else
+                return null;
         }
     }
 }

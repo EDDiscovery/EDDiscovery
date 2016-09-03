@@ -29,7 +29,7 @@ namespace EDDiscovery2.ImageHandler
             "DD-MM-YYYY HH-MM-SS Sysname",
             "MM-DD-YYYY HH-MM-SS Sysname",
             "Keep original"});
-            this.comboBoxScanFor.Items.AddRange(new string[] { "bmp -ED Launcher", "jpg -Steam" });
+            this.comboBoxScanFor.Items.AddRange(new string[] { "bmp -ED Launcher", "jpg -Steam" , "png -Steam" });
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -53,7 +53,9 @@ namespace EDDiscovery2.ImageHandler
 
             try
             {
+                comboBoxScanFor.Enabled = false;    // to prevent the select change from actually doing any work here
                 comboBoxScanFor.SelectedIndex = SQLiteDBClass.GetSettingInt("comboBoxScanFor", 0);
+                comboBoxScanFor.Enabled = true;
             }
             catch { }
 
@@ -64,6 +66,7 @@ namespace EDDiscovery2.ImageHandler
             textBoxOutputDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", OutputDirdefault);
             textBoxScreenshotsDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerScreenshotsDir", ScreenshotsDirdefault);
 
+            checkBoxCopyClipboard.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerClipboard", false);
             checkBoxPreview.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerPreview", false);
             checkBoxCropImage.Checked = SQLiteDBClass.GetSettingBool("ImageHandlerCropImage", false);      // fires the checked handler which sets the readonly mode of the controls
             numericUpDownTop.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropTop", 0);
@@ -76,28 +79,35 @@ namespace EDDiscovery2.ImageHandler
             numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = checkBoxCropImage.Checked;
         }
 
-        public void StartWatcher()
+        public bool StartWatcher()
         {
-            try
+            if (watchfolder != null )                           // if there, delete
             {
-                if (watchfolder != null)
-                {
-                    watchfolder.EnableRaisingEvents = false;
-                    watchfolder = null;
-                }
+                watchfolder.EnableRaisingEvents = false;
+                watchfolder = null;
+            }
 
+            string watchedfolder = textBoxScreenshotsDir.Text;
+
+            if (Directory.Exists(watchedfolder))
+            {
                 watchfolder = new System.IO.FileSystemWatcher();
-                watchfolder.Path = textBoxScreenshotsDir.Text;
+                watchfolder.Path = watchedfolder;
 
-                watchfolder.Filter = "*." + comboBoxScanFor.Text.Substring(0,comboBoxScanFor.Text.IndexOf(" "));
+                string ext = comboBoxScanFor.Text.Substring(0, comboBoxScanFor.Text.IndexOf(" "));
+
+                watchfolder.Filter = "*." + ext;
                 watchfolder.NotifyFilter = NotifyFilters.FileName;
                 watchfolder.Created += watcher;
                 watchfolder.EnableRaisingEvents = true;
+
+                _discoveryForm.LogLine("Scanning for " + ext + " screenshots in " + watchedfolder );
+                return true;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Exception in imageWatcher:" + ex.Message);
-            }
+            else
+                _discoveryForm.LogLineHighlight("Folder specified for image conversion does not exist, check settings in the Screenshots tab");
+
+            return false;
         }
 
         private void watcher(object sender, System.IO.FileSystemEventArgs e)
@@ -143,6 +153,7 @@ namespace EDDiscovery2.ImageHandler
                 string extension = null;
                 bool cannotexecute = false;
                 string inputext = null;
+                bool copyclipboard = false;
 
                 Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
                 {                                                   // I've tested that this is required..      
@@ -158,6 +169,7 @@ namespace EDDiscovery2.ImageHandler
                     extension = "." + comboBoxFormat.Text;
                     inputext = comboBoxScanFor.Text.Substring(0, comboBoxScanFor.Text.IndexOf(" "));
                     cannotexecute = textBoxOutputDir.Text.Equals(textBoxScreenshotsDir.Text) && comboBoxFormat.Text.Equals(inputext);
+                    copyclipboard = checkBoxCopyClipboard.Checked;
                 });
 
                 if ( cannotexecute )                                // cannot store BMPs into the Elite dangerous folder as it creates a circular condition
@@ -176,7 +188,7 @@ namespace EDDiscovery2.ImageHandler
 
                 FileStream testfile = null;
 
-                for (int tries = 20; tries-- > 0;)          // wait 10 seconds and then try it anyway.. first time ED converts I've seen 2+ seconds.
+                for (int tries = 60; tries-- > 0;)          // wait 30 seconds and then try it anyway.. 32K hires shots take a while to write.
                 {
                     System.Threading.Thread.Sleep(500);     // every 500ms see if we can read the file, if we can, go, else wait..
                     try
@@ -194,7 +206,6 @@ namespace EDDiscovery2.ImageHandler
                 System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(inputfile);
                 System.Drawing.Bitmap croppedbmp = null;
 
-                /* MKW - crop image */
                 if (cropimage)
                 {
                     /* check that crop settings are within the image, otherwise adjust. */
@@ -227,6 +238,14 @@ namespace EDDiscovery2.ImageHandler
                 }
                 else
                     croppedbmp = bmp;               // just copy reference..
+
+                if (copyclipboard)
+                {
+                    Invoke((MethodInvoker)delegate                      // pick it in a delegate as we are in another thread..
+                    {                                                   // I've tested that this is required..    
+                        Clipboard.SetImage(croppedbmp);
+                    });
+                }
 
                 if (extension.Equals(".jpg"))
                 {
@@ -271,7 +290,7 @@ namespace EDDiscovery2.ImageHandler
                 System.Diagnostics.Trace.WriteLine("Exception watcher: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
 
-                MessageBox.Show("Error in executing image conversion, try another screenshot. (Exception " + ex.Message + ")");
+                MessageBox.Show("Error in executing image conversion, try another screenshot, check output path settings. (Exception " + ex.Message + ")");
             }
         }
                                                             // thread safe - no picking up of dialog data.
@@ -343,16 +362,6 @@ namespace EDDiscovery2.ImageHandler
             textBoxFileNameExample.Text = CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked);
         }
 
-        private void textBoxScreenshotsDir_Leave(object sender, EventArgs e)
-        {
-            SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
-        }
-
-        private void textBoxOutputDir_Leave(object sender, EventArgs e)
-        {
-            SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
-        }
-
         private void checkBoxCropImage_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox cb = sender as CheckBox;
@@ -411,7 +420,26 @@ namespace EDDiscovery2.ImageHandler
             {
                 textBoxScreenshotsDir.Text = dlg.SelectedPath;
                 SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+
                 StartWatcher();
+            }
+        }
+
+        private void textBoxScreenshotsDir_Leave(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", textBoxScreenshotsDir.Text);
+
+            if (!StartWatcher())
+            {
+                MessageBox.Show("Folder specified does not exist, image conversion is now off");
+            }
+        }
+
+        private void textBoxScreenshotsDir_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                textBoxScreenshotsDir_Leave(sender, e);
             }
         }
 
@@ -429,12 +457,31 @@ namespace EDDiscovery2.ImageHandler
             }
         }
 
+        private void textBoxOutputDir_Leave(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", textBoxOutputDir.Text);
+        }
+
+        private void textBoxOutputDir_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                textBoxOutputDir_Leave(sender, e);
+            }
+        }
+
         private void comboBoxScanFor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt("comboBoxScanFor", comboBoxScanFor.SelectedIndex);
-
-            if ( watchfolder != null )      // if already watching, restart it
+            if (comboBoxScanFor.Enabled)            // BUG: stop StarWatcher starting too soon
+            {
+                SQLiteDBClass.PutSettingInt("comboBoxScanFor", comboBoxScanFor.SelectedIndex);
                 StartWatcher();
+            }
+        }
+
+        private void checkBoxCopyClipboard_CheckedChanged(object sender, EventArgs e)
+        {
+             SQLiteDBClass.PutSettingBool("ImageHandlerClipboard", checkBoxCopyClipboard.Checked);
         }
     }
 }
