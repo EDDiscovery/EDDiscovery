@@ -596,6 +596,7 @@ namespace EDDiscovery.DB
                 if (dbver < 101)
                     UpgradeUserDB101(conn);
 
+                CreateUserDBTableIndexes();
 
                 return true;
             }
@@ -615,6 +616,8 @@ namespace EDDiscovery.DB
                 dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
                 if (dbver < 100)
                     UpgradeSystemsDB101(conn);
+
+                CreateSystemDBTableIndexes();
 
                 return true;
             }
@@ -689,8 +692,6 @@ namespace EDDiscovery.DB
                 if (dbver < 20)
                     UpgradeDB20(conn);
 
-                CreateUserDBTableIndexes();
-                CreateSystemDBTableIndexes();
 
                 return true;
             }
@@ -960,7 +961,6 @@ namespace EDDiscovery.DB
         {
             string[] queries = new[]
             {
-                "CREATE INDEX IF NOT EXISTS DistanceName ON Distances (NameA ASC, NameB ASC)",
                 "CREATE INDEX IF NOT EXISTS stationIndex ON Stations (system_id ASC)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)",
                 "CREATE INDEX IF NOT EXISTS station_commodities_index ON station_commodities (station_id ASC, commodity_id ASC, type ASC)",
@@ -991,6 +991,7 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS SystemAliases_name ON SystemAliases (name)",
                 "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
                 "CREATE INDEX IF NOT EXISTS Distances_EDSM_ID_Index ON Distances (id_edsm ASC)",
+                "CREATE INDEX IF NOT EXISTS DistanceName ON Distances (NameA ASC, NameB ASC)",
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
@@ -1098,7 +1099,6 @@ namespace EDDiscovery.DB
                     DropSystemsTableIndexes();
                     using (var txn = conn.BeginTransaction())
                     { 
-                        DropSystemsTableIndexes();
                         ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
                         ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems");
                         txn.Commit();
