@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RouteControl));
             this.comboBoxRoutingMetric = new ExtendedControls.ComboBoxCustom();
             this.richTextBox_routeresult = new ExtendedControls.RichTextBoxScroll();
             this.groupBox_Entries = new ExtendedControls.GroupBoxCustom();
-            this.textBoxCurrent = new ExtendedControls.TextBoxBorder();
-            this.label5 = new System.Windows.Forms.Label();
+            this.buttonExtTravelTo = new ExtendedControls.ButtonExt();
+            this.buttonExtTravelFrom = new ExtendedControls.ButtonExt();
+            this.buttonExtTargetTo = new ExtendedControls.ButtonExt();
+            this.buttonTargetFrom = new ExtendedControls.ButtonExt();
             this.cmd3DMap = new ExtendedControls.ButtonExt();
             this.textBox_From = new ExtendedControls.TextBoxBorder();
             this.textBox_Range = new ExtendedControls.TextBoxBorder();
@@ -62,14 +63,14 @@
             this.comboBoxRoutingMetric.BorderColor = System.Drawing.Color.Red;
             this.comboBoxRoutingMetric.ButtonColorScaling = 0.5F;
             this.comboBoxRoutingMetric.DataSource = null;
-            this.comboBoxRoutingMetric.DisplayMember = null;
+            this.comboBoxRoutingMetric.DisplayMember = "";
             this.comboBoxRoutingMetric.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxRoutingMetric.DropDownHeight = 200;
+            this.comboBoxRoutingMetric.DropDownWidth = 234;
             this.comboBoxRoutingMetric.Enabled = false;
             this.comboBoxRoutingMetric.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxRoutingMetric.ItemHeight = 20;
-            this.comboBoxRoutingMetric.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("comboBoxRoutingMetric.Items")));
-            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(326, 76);
+            this.comboBoxRoutingMetric.ItemHeight = 13;
+            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(57, 105);
             this.comboBoxRoutingMetric.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
             this.comboBoxRoutingMetric.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -77,9 +78,10 @@
             this.comboBoxRoutingMetric.ScrollBarWidth = 16;
             this.comboBoxRoutingMetric.SelectedIndex = -1;
             this.comboBoxRoutingMetric.SelectedItem = null;
+            this.comboBoxRoutingMetric.SelectedValue = null;
             this.comboBoxRoutingMetric.Size = new System.Drawing.Size(234, 21);
             this.comboBoxRoutingMetric.TabIndex = 9;
-            this.comboBoxRoutingMetric.ValueMember = null;
+            this.comboBoxRoutingMetric.ValueMember = "";
             this.comboBoxRoutingMetric.SelectedIndexChanged += new System.EventHandler(this.comboBoxRoutingMetric_SelectedIndexChanged);
             // 
             // richTextBox_routeresult
@@ -89,11 +91,11 @@
             this.richTextBox_routeresult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_routeresult.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox_routeresult.HideScrollBar = true;
-            this.richTextBox_routeresult.Location = new System.Drawing.Point(0, 105);
+            this.richTextBox_routeresult.Location = new System.Drawing.Point(0, 137);
             this.richTextBox_routeresult.Name = "richTextBox_routeresult";
             this.richTextBox_routeresult.ScrollBarWidth = 20;
             this.richTextBox_routeresult.ShowLineCount = false;
-            this.richTextBox_routeresult.Size = new System.Drawing.Size(897, 324);
+            this.richTextBox_routeresult.Size = new System.Drawing.Size(897, 292);
             this.richTextBox_routeresult.TabIndex = 11;
             // 
             // groupBox_Entries
@@ -102,8 +104,11 @@
             this.groupBox_Entries.BackColorScaling = 0.5F;
             this.groupBox_Entries.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox_Entries.BorderColorScaling = 0.5F;
-            this.groupBox_Entries.Controls.Add(this.textBoxCurrent);
-            this.groupBox_Entries.Controls.Add(this.label5);
+            this.groupBox_Entries.Controls.Add(this.comboBoxRoutingMetric);
+            this.groupBox_Entries.Controls.Add(this.buttonExtTravelTo);
+            this.groupBox_Entries.Controls.Add(this.buttonExtTravelFrom);
+            this.groupBox_Entries.Controls.Add(this.buttonExtTargetTo);
+            this.groupBox_Entries.Controls.Add(this.buttonTargetFrom);
             this.groupBox_Entries.Controls.Add(this.cmd3DMap);
             this.groupBox_Entries.Controls.Add(this.textBox_From);
             this.groupBox_Entries.Controls.Add(this.textBox_Range);
@@ -127,35 +132,63 @@
             this.groupBox_Entries.FillClientAreaWithAlternateColor = false;
             this.groupBox_Entries.Location = new System.Drawing.Point(0, 0);
             this.groupBox_Entries.Name = "groupBox_Entries";
-            this.groupBox_Entries.Size = new System.Drawing.Size(897, 105);
+            this.groupBox_Entries.Size = new System.Drawing.Size(897, 137);
             this.groupBox_Entries.TabIndex = 24;
             this.groupBox_Entries.TabStop = false;
             this.groupBox_Entries.TextPadding = 0;
             this.groupBox_Entries.TextStartPosition = -1;
             // 
-            // textBoxCurrent
+            // buttonExtTravelTo
             // 
-            this.textBoxCurrent.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBoxCurrent.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBoxCurrent.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCurrent.BorderColorScaling = 0.5F;
-            this.textBoxCurrent.Location = new System.Drawing.Point(57, 76);
-            this.textBoxCurrent.Name = "textBoxCurrent";
-            this.textBoxCurrent.ReadOnly = true;
-            this.textBoxCurrent.Size = new System.Drawing.Size(125, 20);
-            this.textBoxCurrent.TabIndex = 12;
-            this.textBoxCurrent.TabStop = false;
-            this.textBoxCurrent.Click += new System.EventHandler(this.textBoxCurrent_DoubleClick);
-            this.textBoxCurrent.DoubleClick += new System.EventHandler(this.textBoxCurrent_DoubleClick);
+            this.buttonExtTravelTo.BorderColorScaling = 1.25F;
+            this.buttonExtTravelTo.ButtonColorScaling = 0.5F;
+            this.buttonExtTravelTo.ButtonDisabledScaling = 0.5F;
+            this.buttonExtTravelTo.Location = new System.Drawing.Point(326, 73);
+            this.buttonExtTravelTo.Name = "buttonExtTravelTo";
+            this.buttonExtTravelTo.Size = new System.Drawing.Size(53, 23);
+            this.buttonExtTravelTo.TabIndex = 25;
+            this.buttonExtTravelTo.Text = "Travel";
+            this.buttonExtTravelTo.UseVisualStyleBackColor = true;
+            this.buttonExtTravelTo.Click += new System.EventHandler(this.buttonExtTravelTo_Click);
             // 
-            // label5
+            // buttonExtTravelFrom
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 77);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(37, 13);
-            this.label5.TabIndex = 23;
-            this.label5.Text = "Travel";
+            this.buttonExtTravelFrom.BorderColorScaling = 1.25F;
+            this.buttonExtTravelFrom.ButtonColorScaling = 0.5F;
+            this.buttonExtTravelFrom.ButtonDisabledScaling = 0.5F;
+            this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 73);
+            this.buttonExtTravelFrom.Name = "buttonExtTravelFrom";
+            this.buttonExtTravelFrom.Size = new System.Drawing.Size(53, 23);
+            this.buttonExtTravelFrom.TabIndex = 25;
+            this.buttonExtTravelFrom.Text = "Travel";
+            this.buttonExtTravelFrom.UseVisualStyleBackColor = true;
+            this.buttonExtTravelFrom.Click += new System.EventHandler(this.buttonExtTravelFrom_Click);
+            // 
+            // buttonExtTargetTo
+            // 
+            this.buttonExtTargetTo.BorderColorScaling = 1.25F;
+            this.buttonExtTargetTo.ButtonColorScaling = 0.5F;
+            this.buttonExtTargetTo.ButtonDisabledScaling = 0.5F;
+            this.buttonExtTargetTo.Location = new System.Drawing.Point(403, 73);
+            this.buttonExtTargetTo.Name = "buttonExtTargetTo";
+            this.buttonExtTargetTo.Size = new System.Drawing.Size(53, 23);
+            this.buttonExtTargetTo.TabIndex = 25;
+            this.buttonExtTargetTo.Text = "Target";
+            this.buttonExtTargetTo.UseVisualStyleBackColor = true;
+            this.buttonExtTargetTo.Click += new System.EventHandler(this.buttonTargetTo_Click);
+            // 
+            // buttonTargetFrom
+            // 
+            this.buttonTargetFrom.BorderColorScaling = 1.25F;
+            this.buttonTargetFrom.ButtonColorScaling = 0.5F;
+            this.buttonTargetFrom.ButtonDisabledScaling = 0.5F;
+            this.buttonTargetFrom.Location = new System.Drawing.Point(135, 74);
+            this.buttonTargetFrom.Name = "buttonTargetFrom";
+            this.buttonTargetFrom.Size = new System.Drawing.Size(53, 23);
+            this.buttonTargetFrom.TabIndex = 25;
+            this.buttonTargetFrom.Text = "Target";
+            this.buttonTargetFrom.UseVisualStyleBackColor = true;
+            this.buttonTargetFrom.Click += new System.EventHandler(this.buttonTargetFrom_Click);
             // 
             // cmd3DMap
             // 
@@ -188,7 +221,7 @@
             // 
             this.textBox_Range.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_Range.BorderColorScaling = 0.5F;
-            this.textBox_Range.Location = new System.Drawing.Point(624, 19);
+            this.textBox_Range.Location = new System.Drawing.Point(631, 19);
             this.textBox_Range.Name = "textBox_Range";
             this.textBox_Range.ReadOnly = true;
             this.textBox_Range.Size = new System.Drawing.Size(57, 20);
@@ -213,7 +246,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(687, 23);
+            this.label1.Location = new System.Drawing.Point(694, 23);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(14, 13);
             this.label1.TabIndex = 18;
@@ -222,7 +255,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(687, 49);
+            this.label9.Location = new System.Drawing.Point(694, 49);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(14, 13);
             this.label9.TabIndex = 18;
@@ -234,7 +267,7 @@
             this.textBox_Distance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_Distance.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_Distance.BorderColorScaling = 0.5F;
-            this.textBox_Distance.Location = new System.Drawing.Point(624, 47);
+            this.textBox_Distance.Location = new System.Drawing.Point(631, 47);
             this.textBox_Distance.Name = "textBox_Distance";
             this.textBox_Distance.ReadOnly = true;
             this.textBox_Distance.Size = new System.Drawing.Size(57, 20);
@@ -245,7 +278,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(300, 20);
+            this.label4.Location = new System.Drawing.Point(297, 20);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(20, 13);
             this.label4.TabIndex = 21;
@@ -317,11 +350,11 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(244, 77);
+            this.label6.Location = new System.Drawing.Point(8, 107);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(76, 13);
+            this.label6.Size = new System.Drawing.Size(36, 13);
             this.label6.TabIndex = 19;
-            this.label6.Text = "Routing Metric";
+            this.label6.Text = "Metric";
             // 
             // textBox_FromZ
             // 
@@ -395,7 +428,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.comboBoxRoutingMetric);
             this.Controls.Add(this.richTextBox_routeresult);
             this.Controls.Add(this.groupBox_Entries);
             this.Name = "RouteControl";
@@ -416,8 +448,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
         internal ExtendedControls.TextBoxBorder textBox_To;
-        internal ExtendedControls.TextBoxBorder textBoxCurrent;
-        private System.Windows.Forms.Label label5;
         internal ExtendedControls.TextBoxBorder textBox_Range;
         internal ExtendedControls.TextBoxBorder textBox_FromX;
         internal ExtendedControls.TextBoxBorder textBox_FromY;
@@ -432,5 +462,9 @@
         private System.Windows.Forms.Label label9;
         private ExtendedControls.GroupBoxCustom groupBox_Entries;
         private ExtendedControls.ButtonExt cmd3DMap;
+        private ExtendedControls.ButtonExt buttonTargetFrom;
+        private ExtendedControls.ButtonExt buttonExtTravelFrom;
+        private ExtendedControls.ButtonExt buttonExtTravelTo;
+        private ExtendedControls.ButtonExt buttonExtTargetTo;
     }
 }
