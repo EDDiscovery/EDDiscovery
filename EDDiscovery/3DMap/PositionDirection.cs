@@ -341,23 +341,22 @@ namespace EDDiscovery2._3DMap
                 Vector3 eye, normal;
                 CalculateEyePosition(_zoom, out eye, out normal);
                 preinverted = Matrix4.LookAt(eye, _viewtargetpos, normal);   // from eye, look at target, with up giving the rotation of the look
+                _modelmatrix = Matrix4.Mult(flipy, preinverted);    //ORDER VERY important this one took longer to work out the order! replaces GL.Scale(1.0, -1.0, 1.0);
             }
             else
             {                                                               // replace open gl computation with our own.
                 Matrix4 scale = Matrix4.CreateScale(_zoom);
                 Matrix4 offset = Matrix4.CreateTranslation(-_viewtargetpos.X, -_viewtargetpos.Y, -_viewtargetpos.Z);
                 Matrix4 rotcam = Matrix4.Identity;
-                rotcam *= Matrix4.CreateRotationX((float)(_cameraDir.X * Math.PI / 180.0f));
-                rotcam *= Matrix4.CreateRotationY((float)(_cameraDir.Y * Math.PI / 180.0f));
+                rotcam *= Matrix4.CreateRotationY((float)(-_cameraDir.Y * Math.PI / 180.0f));
+                rotcam *= Matrix4.CreateRotationX((float)((_cameraDir.X - 90) * Math.PI / 180.0f));
                 rotcam *= Matrix4.CreateRotationZ((float)(_cameraDir.Z * Math.PI / 180.0f));
-                Matrix4 rotX = Matrix4.CreateRotationX((float)(-90.0F / 180.0F * Math.PI));
 
                 preinverted = Matrix4.Mult(offset,scale);
                 preinverted = Matrix4.Mult(preinverted, rotcam);
-                preinverted = Matrix4.Mult(preinverted,rotX);
+                _modelmatrix = preinverted;
             }
 
-            _modelmatrix = Matrix4.Mult(flipy, preinverted);    //ORDER VERY important this one took longer to work out the order! replaces GL.Scale(1.0, -1.0, 1.0);          
         }
 
         public Matrix4 GetResMat
