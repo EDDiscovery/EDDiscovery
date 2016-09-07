@@ -1,4 +1,4 @@
-# EDDSystems.PopulatedSystems table
+# EDDSystems.EddbSystems table
 
 ```sql
 CREATE TABLE EddbSystems (
