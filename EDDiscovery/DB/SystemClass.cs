@@ -201,7 +201,7 @@ namespace EDDiscovery.DB
                         SystemNameToEdsmIdTable.Clear();
                         while (rdr.Read())
                         {
-                            string name = (string)rdr["Name"];
+                            string name = String.Intern((string)rdr["Name"]);
                             long edsmid = (long)rdr["EdsmId"];
 
                             if (SystemNameToEdsmIdTable.ContainsKey(name))
@@ -377,7 +377,7 @@ namespace EDDiscovery.DB
                         {
                             while (reader.Read())
                             {
-                                asc.Add((string)reader["name"]);
+                                asc.Add(String.Intern((string)reader["name"]));
                             }
                         }
                     }
