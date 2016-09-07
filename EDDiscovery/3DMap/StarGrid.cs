@@ -88,9 +88,14 @@ namespace EDDiscovery2
 
             foreach (VisitedSystemsClass vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
-                if (vs.curSystem != null && vs.curSystem.status != SystemStatusEnum.EDSC && vs.curSystem.HasCoordinate )
+                if (vs.HasTravelCoordinates)
                 {
-                    carray[total] = cx;      // Visited systems grid does not use the carray as its overriden, but starnames does
+                    carray[total] = unchecked((uint)vs.MapColour);
+                    array[total++] = new Vector3((float)vs.X, (float)vs.Y, (float)vs.Z);
+                }
+                else if (vs.curSystem != null && vs.curSystem.HasCoordinate)
+                {
+                    carray[total] = unchecked((uint)vs.MapColour);
                     array[total++] = new Vector3((float)vs.curSystem.x, (float)vs.curSystem.y, (float)vs.curSystem.z);
                     //Console.WriteLine("Added {0} due to not being in star database", vs.Name);
                 }
@@ -600,6 +605,8 @@ namespace EDDiscovery2
             {
                 populatedgrid.Draw(control);
             }
+
+            visitedsystemsgrid.Draw(control);
         }
 
 #endregion
