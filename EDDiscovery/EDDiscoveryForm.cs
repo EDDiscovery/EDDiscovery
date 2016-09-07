@@ -115,11 +115,6 @@ namespace EDDiscovery
             InitializeComponent();
             ProcessCommandLineOptions();
 
-            theme = new EDDTheme();
-
-            EDDConfig = EDDConfig.Instance;
-            galacticMapping = new GalacticMapping();
-
             string logpath = "";
             try
             {
@@ -151,6 +146,11 @@ namespace EDDiscovery
                 Trace.WriteLine($"Unable to create the folder '{logpath}'");
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
+
+            theme = new EDDTheme();
+
+            EDDConfig = EDDConfig.Instance;
+            galacticMapping = new GalacticMapping();
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
             theme.LoadThemes();                                         // default themes and ones on disk loaded
