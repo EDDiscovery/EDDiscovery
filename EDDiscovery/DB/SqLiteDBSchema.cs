@@ -432,7 +432,7 @@ namespace EDDiscovery.DB
                 bool id_edsm_isset = false;
 
                 // Reset EDSM / EDDB update time if no systems have their id_edsm set
-                using (DbCommand cmd = cn.CreateCommand("SELECT COUNT(id_edsm) FROM Systems"))
+                using (DbCommand cmd = cn.CreateCommand("SELECT COUNT(EdsmId) FROM EdsmSystems"))
                 {
                     id_edsm_isset = (long)cmd.ExecuteScalar() != 0;
                 }

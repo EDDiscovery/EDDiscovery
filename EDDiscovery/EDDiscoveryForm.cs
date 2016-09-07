@@ -594,6 +594,7 @@ namespace EDDiscovery
 
                 reportProgress(-1, "Creating name list of systems");
                 SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
+                SystemClass.CacheSystemNames();
                 galacticMapping.GetSystemNames(ref SystemNames);      // add on GMO names..
             }
         }
@@ -754,6 +755,7 @@ namespace EDDiscovery
                         LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
                         reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
                         SQLiteDBClass.ReplaceSystemsTable();
+                        SystemClass.CacheSystemNames();
                         reportProgress(-1, "");
                     }
                     else
@@ -916,18 +918,6 @@ namespace EDDiscovery
                     LogLine("Checking for new EDSM systems (may take a few moments).");
                     EDSMClass edsm = new EDSMClass();
                     long updates = edsm.GetNewSystems(this, cancelRequested, reportProgress);
-
-                    // Delete systems without an EDSM ID
-                    if (!cancelRequested())
-                    {
-                        using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
-                        {
-                            using (DbCommand cmd = cn.CreateCommand("DELETE FROM Systems WHERE id_edsm IS NULL or id_edsm = 0"))
-                            {
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-                    }
                     LogLine("EDSM updated " + updates + " systems.");
                 }
             }
