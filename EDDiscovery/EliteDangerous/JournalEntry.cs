@@ -212,7 +212,18 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalLoadGame(jo);
                     break;
 
-               
+                case "Scan":
+                    je = new JournalScan(jo);
+                    break;
+
+                case "Died":
+                    je = new JournalDied(jo);
+                    break;
+
+                case "SellExplorationData":
+                    je = new JournalSellExplorationData(jo);
+                    break;
+
                 case "Bounty":
                 case "BuyAmmo":
                 case "BuyDrones":
@@ -226,7 +237,6 @@ namespace EDDiscovery.EliteDangerous
                 case "CommunityGoalJoin":
                 case "CommunityGoalReward":
                 case "DatalinkScan":
-                case "Died":
                 case "DockFighter":
                 case "DockingCancelled":
                 case "DockingDenied":
@@ -285,11 +295,9 @@ namespace EDDiscovery.EliteDangerous
                 case "Repair":
                 case "RestockVehicle":
                 case "Resurrect":
-                case "Scan":
                 case "Screenshot":
                 case "SelfDestruct":
                 case "SellDrones":
-                case "SellExplorationData":
                 case "SendText":
                 case "ShieldState":
                 case "ShipyardBuy":
