@@ -199,6 +199,12 @@
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalDockingCancelled.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalDockingDenied.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalDockingGranted.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalDockingRequested.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalDockingTimeout.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
@@ -206,6 +212,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalUndocked.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnhandled.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnknown.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />

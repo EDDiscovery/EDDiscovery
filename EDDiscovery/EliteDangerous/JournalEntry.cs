@@ -27,6 +27,7 @@ namespace EDDiscovery.EliteDangerous
         CommunityGoalReward = 120,
         DatalinkScan = 130,
         Died = 140,
+        Docked = 145,
         DockFighter = 150,
         DockingCancelled = 160,
         DockingDenied = 170,
@@ -196,6 +197,14 @@ namespace EDDiscovery.EliteDangerous
 
             switch (Eventstr)
             {
+                case "Docked":
+                    je = new JournalDocked(jo);
+                    break;
+
+                case "Died":
+                    je = new JournalDied(jo);
+                    break;
+
                 case "fileheader":
                     je = new JournalFileHeader(jo);
                     break;
@@ -216,13 +225,37 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalScan(jo);
                     break;
 
-                case "Died":
-                    je = new JournalDied(jo);
-                    break;
 
                 case "SellExplorationData":
                     je = new JournalSellExplorationData(jo);
                     break;
+
+                case "Undocked":
+                    je = new JournalUndocked(jo);
+                    break;
+
+                case "DockingCancelled":
+                    je = new JournalDockingCancelled(jo);
+                    break;
+
+                case "DockingDenied":
+                    je = new JournalDockingDenied(jo);
+                    break;
+                case "DockingGranted":
+                    je = new JournalDockingGranted(jo);
+                    break;
+
+                case "DockingRequested":
+                    je = new JournalDockingRequested(jo);
+                    break;
+
+                case "DockingTimeout":
+                    je = new JournalDockingTimeout(jo);
+                    break;
+
+
+
+
 
                 case "Bounty":
                 case "BuyAmmo":
@@ -238,11 +271,6 @@ namespace EDDiscovery.EliteDangerous
                 case "CommunityGoalReward":
                 case "DatalinkScan":
                 case "DockFighter":
-                case "DockingCancelled":
-                case "DockingDenied":
-                case "DockingGranted":
-                case "DockingRequested":
-                case "DockingTimeout":
                 case "DockSRV":
                 case "EjectCargo":
                 case "EngineerApply":
@@ -309,7 +337,6 @@ namespace EDDiscovery.EliteDangerous
                 case "SupercruiseExit":
                 case "Synthesis":
                 case "Touchdown":
-                case "Undocked":
                 case "USSDrop":
                 case "VehicleSwitch":
                 case "WingAdd":
