@@ -203,6 +203,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnhandled.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnknown.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />

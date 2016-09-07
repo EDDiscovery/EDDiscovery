@@ -3,6 +3,7 @@ using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -174,6 +175,9 @@ namespace EDDiscovery.EliteDangerous
         {
             jEventData = jo;
             eventType = jtype;
+
+            eventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+
         }
 
 
