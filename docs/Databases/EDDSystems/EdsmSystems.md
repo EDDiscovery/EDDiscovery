@@ -1,24 +1,24 @@
-# EDDSystems.Systems table
+# EDDSystems.EdsmSystems table
 
 ```sql
 CREATE TABLE EdsmSystems (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  SystemEdsmId INTEGER NOT NULL,
-  SystemEddbId INTEGER,                            -- NULL means unpopulated
+  EdsmId INTEGER NOT NULL,
+  EddbId INTEGER,                                  -- NULL means unpopulated
   UpdateTimestamp INTEGER NOT NULL,                -- Seconds since 2015-01-01 00:00:00 UTC
   CreateTimestamp INTEGER NOT NULL,                -- Seconds since 2015-01-01 00:00:00 UTC
   VersionTimestamp INTEGER NOT NULL,               -- Seconds since 2015-01-01 00:00:00 UTC
-  X INTEGER,                                       -- X coordinate in 1/128ly units
-  Y INTEGER,                                       -- Y coordinate in 1/128ly units
-  Z INTEGER,                                       -- Z coordinate in 1/128ly units
-  GridId INTEGER NOT NULL,
-  RandomId INTEGET NOT NULL
+  X INTEGER NOT NULL,                              -- X coordinate in 1/128ly units
+  Y INTEGER NOT NULL,                              -- Y coordinate in 1/128ly units
+  Z INTEGER NOT NULL,                              -- Z coordinate in 1/128ly units
+  GridId INTEGER NOT NULL DEFAULT -1,
+  RandomId INTEGET NOT NULL DEFAULT -1
 )
-CREATE INDEX System_EdsmId ON Systems (SystemEdsmId)
-CREATE INDEX System_EddbId ON Systems (SystemEddbId)
-CREATE INDEX System_Coords ON Systems (Z, X, Y)
-CREATE INDEX System_GridId on Systems (GridId)
-CREATE INDEX System_RandomId on Systems (RandomId)
+CREATE INDEX EdsmSystems_EdsmId ON EdsmSystems (EdsmId)
+CREATE INDEX EdsmSystems_EddbId ON EdsmSystems (EddbId)
+CREATE INDEX EdsmSystems_Coords ON EdsmSystems (Z, X, Y)
+CREATE INDEX EdsmSystems_GridId on EdsmSystems (GridId)
+CREATE INDEX EdsmSystems_RandomId on EdsmSystems (RandomId)
 ```
 
 Re-imported from EDSM dump.  Grid ID and RandomID are used for new 3dmap star painting system.  Grid ID is assigned based on x/z position, RandomID is 0 to 99 inclusive.
