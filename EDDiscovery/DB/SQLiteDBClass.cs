@@ -1060,7 +1060,8 @@ namespace EDDiscovery.DB
                 "DROP INDEX IF EXISTS EddbSystems_EddbId",
                 "DROP INDEX IF EXISTS EdsmSystems_Position",
                 "DROP INDEX IF EXISTS EdsmSystems_GridId",
-                "DROP INDEX IF EXISTS EdsmSystems_RandomId"
+                "DROP INDEX IF EXISTS EdsmSystems_RandomId",
+                "DROP INDEX IF EXISTS SystemNames_EdsmId"
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
@@ -1084,7 +1085,8 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS EddbSystems_EddbId ON EddbSystems (EddbId ASC)",
                 "CREATE INDEX IF NOT EXISTS EdsmSystems_Position ON EdsmSystems (Z, X, Y)",
                 "CREATE INDEX IF NOT EXISTS EdsmSystems_GridId ON EdsmSystems (gridid)",
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_RandomId ON EdsmSystems (randomid)"
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_RandomId ON EdsmSystems (randomid)",
+                "CREATE INDEX IF NOT EXISTS SystemNames_EdsmId ON SystemNames (EdsmId)"
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
