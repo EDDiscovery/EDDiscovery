@@ -1331,8 +1331,6 @@ namespace EDDiscovery.DB
                                                     id_edsm = edsmid
                                                 };
 
-                                                string searchname = dbsys.name.ToLower();
-
                                                 if (System.DBNull.Value == reader["x"])
                                                 {
                                                     dbsys.x = double.NaN;
