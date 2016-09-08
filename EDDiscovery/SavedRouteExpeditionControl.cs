@@ -150,6 +150,15 @@ namespace EDDiscovery
             UpdateSystemRows();
         }
 
+        public void AppendRows(params string[] sysnames)
+        {
+            foreach (var row in sysnames)
+            {
+                dataGridViewRouteSystems.Rows.Add(row, "", "");
+            }
+            UpdateSystemRows();
+        }
+
         private float CalculateRouteMaxDistFromOrigin()
         {
             if (dataGridViewRouteSystems.Rows.Count < 2)
