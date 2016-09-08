@@ -1331,8 +1331,6 @@ namespace EDDiscovery.DB
                                                     id_edsm = edsmid
                                                 };
 
-                                                string searchname = dbsys.name.ToLower();
-
                                                 if (System.DBNull.Value == reader["x"])
                                                 {
                                                     dbsys.x = double.NaN;
@@ -1474,6 +1472,7 @@ namespace EDDiscovery.DB
                             Console.Write("Remove " + edsmid);
                             using (DbCommand cmd = cn2.CreateCommand("DELETE FROM EdsmSystems WHERE EdsmId=@EdsmId", txn))
                             {
+                                cmd.AddParameterWithValue("@EdsmId", edsmid);
                                 cmd.ExecuteNonQuery();
                             }
 
