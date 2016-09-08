@@ -524,6 +524,7 @@ namespace EDDiscovery.DB
                 {
                     using (DbCommand cmd = cn.CreateCommand("SELECT Name FROM SystemNames WHERE EdsmId = @EdsmId LIMIT 1"))
                     {
+                        cmd.AddParameterWithValue("@EdsmId", sys.id_edsm);
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
