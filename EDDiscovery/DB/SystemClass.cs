@@ -984,7 +984,7 @@ namespace EDDiscovery.DB
                                 {
                                     foreach (long alt_edsmid in aliasesByName[vsc.Name])
                                     {
-                                        SystemClass sys = GetSystem(alt_edsmid);
+                                        SystemClass sys = GetSystem(alt_edsmid, cn, SystemIDType.EdsmId);
                                         if (sys != null)
                                         {
                                             altmatches[sys.id] = sys;
