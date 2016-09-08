@@ -1474,6 +1474,7 @@ namespace EDDiscovery.DB
                             Console.Write("Remove " + edsmid);
                             using (DbCommand cmd = cn2.CreateCommand("DELETE FROM EdsmSystems WHERE EdsmId=@EdsmId", txn))
                             {
+                                cmd.AddParameterWithValue("@EdsmId", edsmid);
                                 cmd.ExecuteNonQuery();
                             }
 
