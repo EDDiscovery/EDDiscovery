@@ -659,7 +659,7 @@
         private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
-        private SavedRouteExpeditionControl savedRouteExpeditionControl1;
+        public SavedRouteExpeditionControl savedRouteExpeditionControl1;
         private ExtendedControls.StatusStripCustom statusStrip1;
         private System.Windows.Forms.ToolStripMenuItem debugBetaFixHiddenLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem synchroniseWithEDSMDistancesToolStripMenuItem;
