@@ -1552,6 +1552,23 @@ namespace EDDiscovery
             }
         }
 
+
+        private void routeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<VisitedSystemsClass> toAdd = new List<VisitedSystemsClass>();
+
+            foreach (DataGridViewCell cell in dataGridViewTravel.SelectedCells)
+            {
+                VisitedSystemsClass vsc = (VisitedSystemsClass)cell.OwningRow.Cells[TravelHistoryColumns.SystemName].Tag;
+                if (!toAdd.Any(v => v.id == vsc.id))
+                {
+                    toAdd.Add(vsc);
+                }
+            }
+
+            _discoveryForm.savedRouteExpeditionControl1.AppendRows(toAdd.Select(v => v.Name).ToArray());
+        }
+
         #endregion
     }
 }
