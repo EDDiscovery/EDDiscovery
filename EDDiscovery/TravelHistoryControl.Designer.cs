@@ -38,6 +38,7 @@
             this.trilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.routeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterDistanceToPreviousStarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -172,7 +173,8 @@
             this.addToTrilaterationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.trilaterationToolStripMenuItem,
             this.wantedSystemsToolStripMenuItem,
-            this.bothToolStripMenuItem});
+            this.bothToolStripMenuItem,
+            this.routeToolStripMenuItem});
             this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
             this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.addToTrilaterationToolStripMenuItem.Text = "Add to ...";
@@ -197,6 +199,13 @@
             this.bothToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.bothToolStripMenuItem.Text = "Both";
             this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
+            //
+            // routeToolStripMenuItem
+            //
+            this.routeToolStripMenuItem.Name = "routeToolStripMenuItem";
+            this.routeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.routeToolStripMenuItem.Text = "Saved Route";
+            this.routeToolStripMenuItem.Click += new System.EventHandler(this.routeToolStripMenuItem_Click);
             // 
             // viewOnEDSMToolStripMenuItem
             // 
@@ -1178,6 +1187,7 @@
         private System.Windows.Forms.ToolStripMenuItem trilaterationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wantedSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem routeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
