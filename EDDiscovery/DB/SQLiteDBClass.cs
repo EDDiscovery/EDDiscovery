@@ -619,6 +619,9 @@ namespace EDDiscovery.DB
                 if (dbver < 100)
                     UpgradeSystemsDB101(conn);
 
+                if (dbver < 102)
+                    UpgradeSystemsDB102(conn);
+
                 CreateSystemDBTableIndexes();
 
                 return true;
@@ -955,7 +958,40 @@ namespace EDDiscovery.DB
             });
         }
 
-
+        private static void UpgradeSystemsDB102(SQLiteConnectionED conn)
+        {
+            string query1 = "CREATE TABLE SystemNames (" +
+                "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "Name TEXT NOT NULL, " +
+                "EdsmId INTEGER NOT NULL UNIQUE)";
+            string query2 = "CREATE TABLE EdsmSystems (" +
+                "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "EdsmId INTEGER NOT NULL, " +
+                "EddbId INTEGER, " +
+                "X INTEGER NOT NULL, " +
+                "Y INTEGER NOT NULL, " +
+                "Z INTEGER NOT NULL, " +
+                "CreateTimestamp INTEGER NOT NULL, " + // Seconds since 2015-01-01 00:00:00 UTC
+                "UpdateTimestamp INTEGER NOT NULL, " + // Seconds since 2015-01-01 00:00:00 UTC
+                "VersionTimestamp INTEGER NOT NULL, " + // Seconds since 2015-01-01 00:00:00 UTC
+                "GridId INTEGER NOT NULL DEFAULT -1, " +
+                "RandomId INTEGER NOT NULL DEFAULT -1)";
+            string query3 = "CREATE TABLE EddbSystems (" +
+                "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "Name TEXT NOT NULL, " +
+                "EdsmId INTEGER NOT NULL, " +
+                "EddbId INTEGER NOT NULL, " +
+                "Population INTEGER , " +
+                "Faction TEXT, " +
+                "GovernmentId Integer, " +
+                "AllegianceId Integer, " +
+                "PrimaryEconomyId Integer, " +
+                "Security Integer, " +
+                "EddbUpdatedAt Integer, " + // Seconds since 1970-01-01 00:00:00 UTC
+                "State Integer, " +
+                "NeedsPermit Integer)";
+            PerformUpgrade(conn, 102, true, false, new[] { query1, query2, query3 });
+        }
 
 
 
@@ -1017,7 +1053,15 @@ namespace EDDiscovery.DB
                 "DROP INDEX IF EXISTS IDX_Systems_versiondate",
                 "DROP INDEX IF EXISTS Systems_position",
                 "DROP INDEX IF EXISTS SystemGridId",
-                "DROP INDEX IF EXISTS SystemRandomId"
+                "DROP INDEX IF EXISTS SystemRandomId",
+                "DROP INDEX IF EXISTS EdsmSystems_EdsmId",
+                "DROP INDEX IF EXISTS EdsmSystems_EddbId",
+                "DROP INDEX IF EXISTS EddbSystems_EdsmId",
+                "DROP INDEX IF EXISTS EddbSystems_EddbId",
+                "DROP INDEX IF EXISTS EdsmSystems_Position",
+                "DROP INDEX IF EXISTS EdsmSystems_GridId",
+                "DROP INDEX IF EXISTS EdsmSystems_RandomId",
+                "DROP INDEX IF EXISTS SystemNames_EdsmId"
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
@@ -1035,13 +1079,14 @@ namespace EDDiscovery.DB
         {
             string[] queries = new[]
             {
-                "CREATE INDEX IF NOT EXISTS SystemsIndex ON Systems (name ASC)",
-                "CREATE INDEX IF NOT EXISTS Systems_EDSM_ID_Index ON Systems (id_edsm ASC)",
-                "CREATE INDEX IF NOT EXISTS Systems_EDDB_ID_Index ON Systems (id_eddb ASC)",
-                "CREATE INDEX IF NOT EXISTS IDX_Systems_versiondate ON Systems (versiondate ASC)",
-                "CREATE INDEX IF NOT EXISTS Systems_position ON Systems (X, Y, Z)",
-                "CREATE INDEX IF NOT EXISTS SystemGridId ON Systems (gridid)",
-                "CREATE INDEX IF NOT EXISTS SystemRandomId ON Systems (randomid)"
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_EdsmId ON EdsmSystems (EdsmId ASC)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_EddbId ON EdsmSystems (EddbId ASC)",
+                "CREATE INDEX IF NOT EXISTS EddbSystems_EdsmId ON EddbSystems (EdsmId ASC)",
+                "CREATE INDEX IF NOT EXISTS EddbSystems_EddbId ON EddbSystems (EddbId ASC)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_Position ON EdsmSystems (Z, X, Y)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_GridId ON EdsmSystems (gridid)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_RandomId ON EdsmSystems (randomid)",
+                "CREATE INDEX IF NOT EXISTS SystemNames_EdsmId ON SystemNames (EdsmId)"
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
@@ -1059,36 +1104,26 @@ namespace EDDiscovery.DB
         {
             using (var conn = new SQLiteConnectionSystem())
             {
-                ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems_temp");
+                ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems_temp");
+                ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames_temp");
                 ExecuteQuery(conn,
-                    "CREATE TABLE Systems_temp (" +
-                        "id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , " +
-                        "name TEXT NOT NULL COLLATE NOCASE , " +
-                        "x FLOAT, " +
-                        "y FLOAT, " +
-                        "z FLOAT, " +
-                        "cr INTEGER, " +
-                        "commandercreate TEXT, " +
-                        "createdate DATETIME, " +
-                        "commanderupdate TEXT, " +
-                        "updatedate DATETIME, " +
-                        "status INTEGER, " +
-                        "population INTEGER , " +
-                        "Note TEXT, " +
-                        "id_eddb Integer, " +
-                        "faction TEXT, " +
-                        "government_id Integer, " +
-                        "allegiance_id Integer, " +
-                        "primary_economy_id Integer, " +
-                        "security Integer, " +
-                        "eddb_updated_at Integer, " +
-                        "state Integer, " +
-                        "needs_permit Integer, " +
-                        "FirstDiscovery BOOL, " +
-                        "versiondate DATETIME, " +
-                        "id_edsm Integer, " +
-                        "gridid Integer NOT NULL DEFAULT -1, " +
-                        "randomid Integer NOT NULL DEFAULT -1)");
+                    "CREATE TABLE SystemNames_temp (" +
+                        "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                        "Name TEXT NOT NULL, " +
+                        "EdsmId INTEGER NOT NULL)");
+                ExecuteQuery(conn,
+                    "CREATE TABLE EdsmSystems_temp (" +
+                        "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                        "EdsmId INTEGER NOT NULL, " +
+                        "EddbId INTEGER, " +
+                        "X INTEGER NOT NULL, " +
+                        "Y INTEGER NOT NULL, " +
+                        "Z INTEGER NOT NULL, " +
+                        "CreateTimestamp INTEGER NOT NULL, " + // Seconds since 2015-01-01 00:00:00 UTC
+                        "UpdateTimestamp INTEGER NOT NULL, " + // Seconds since 2015-01-01 00:00:00 UTC
+                        "VersionTimestamp INTEGER NOT NULL, " + // Seconds since 2015-01-01 00:00:00 UTC
+                        "GridId INTEGER NOT NULL DEFAULT -1, " +
+                        "RandomId INTEGER NOT NULL DEFAULT -1)");
             }
         }
 
@@ -1102,7 +1137,10 @@ namespace EDDiscovery.DB
                     using (var txn = conn.BeginTransaction())
                     { 
                         ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
-                        ExecuteQuery(conn, "ALTER TABLE Systems_temp RENAME TO Systems");
+                        ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems");
+                        ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames");
+                        ExecuteQuery(conn, "ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
+                        ExecuteQuery(conn, "ALTER TABLE SystemNames_temp RENAME TO SystemNames");
                         txn.Commit();
                     }
                     ExecuteQuery(conn, "VACUUM");
