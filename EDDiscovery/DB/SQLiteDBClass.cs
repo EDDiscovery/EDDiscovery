@@ -597,6 +597,8 @@ namespace EDDiscovery.DB
                 dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
                 if (dbver < 101)
                     UpgradeUserDB101(conn);
+                if (dbver < 102)
+                    UpgradeUserDB102(conn);
 
                 CreateUserDBTableIndexes();
 
@@ -940,6 +942,12 @@ namespace EDDiscovery.DB
             });
         }
 
+        private static void UpgradeUserDB102(SQLiteConnectionED conn)
+        {
+            string query1 = "CREATE TABLE Commanders (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, EdsmApiKey TEXT NOT NULL, NetLogDir TEXT, Deleted INTEGER NOT NULL)";
+
+            PerformUpgrade(conn, 102, true, false, new[] { query1 });
+        }
 
         private static void UpgradeSystemsDB101(SQLiteConnectionED conn)
         {
