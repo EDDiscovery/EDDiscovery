@@ -1594,6 +1594,7 @@ namespace EDDiscovery.DB
 
                                     updateSysCmd.Parameters["@EdsmId"].Value = system.id_edsm;
                                     updateSysCmd.Parameters["@EddbId"].Value = system.id_eddb;
+                                    updateSysCmd.ExecuteNonQuery();
 
                                     if (eddbid != 0)
                                     {
