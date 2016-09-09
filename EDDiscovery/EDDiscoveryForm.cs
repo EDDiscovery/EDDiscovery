@@ -1249,7 +1249,7 @@ namespace EDDiscovery
         {
             try
             {
-                Process.Start(travelHistoryControl1.netlog.GetNetLogPath());
+                Process.Start(travelHistoryControl1.netlog.GetNetLogDir());
             }
             catch (Exception ex)
             {
