@@ -59,7 +59,7 @@
             this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNetLogPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnNetLogDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new ExtendedControls.GroupBoxCustom();
             this.button_Browse = new ExtendedControls.ButtonExt();
             this.textBoxNetLogDir = new ExtendedControls.TextBoxBorder();
@@ -447,7 +447,7 @@
             this.ColumnNr,
             this.ColumnCommander,
             this.ColumnEDSMAPIKey,
-            this.ColumnNetLogPath});
+            this.ColumnNetLogDir});
             this.dataGridViewCommanders.Location = new System.Drawing.Point(11, 45);
             this.dataGridViewCommanders.MultiSelect = false;
             this.dataGridViewCommanders.Name = "dataGridViewCommanders";
@@ -483,13 +483,13 @@
             this.ColumnEDSMAPIKey.MinimumWidth = 150;
             this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
             // 
-            // ColumnNetLogPath
+            // ColumnNetLogDir
             // 
-            this.ColumnNetLogPath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnNetLogPath.DataPropertyName = "NetLogPath";
-            this.ColumnNetLogPath.HeaderText = "NetLog path";
-            this.ColumnNetLogPath.MinimumWidth = 150;
-            this.ColumnNetLogPath.Name = "ColumnNetLogPath";
+            this.ColumnNetLogDir.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnNetLogDir.DataPropertyName = "NetLogDir";
+            this.ColumnNetLogDir.HeaderText = "NetLog directory";
+            this.ColumnNetLogDir.MinimumWidth = 150;
+            this.ColumnNetLogDir.Name = "ColumnNetLogDir";
             // 
             // groupBox1
             // 
@@ -646,7 +646,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogPath;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDir;
         private ExtendedControls.ButtonExt btnDeleteCommander;
     }
 }
