@@ -342,20 +342,20 @@ namespace EDDiscovery.DB
         }
 
 
-        public static long ParseEDSMUpdateDistancesString(string json, ref string date, bool removenonedsmids)
+        public static long ParseEDSMUpdateDistancesString(string json, ref string date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             JsonTextReader jr = new JsonTextReader(new StringReader(json));
-            return ParseEDSMUpdateDistancesReader(jr, ref date, removenonedsmids);
+            return ParseEDSMUpdateDistancesReader(jr, ref date, removenonedsmids, cancelRequested, reportProgress);
         }
 
-        public static long ParseEDSMUpdateDistancesFile(string filename, ref string date, bool removenonedsmids)
+        public static long ParseEDSMUpdateDistancesFile(string filename, ref string date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             StreamReader sr = new StreamReader(filename);         // read directly from file..
             JsonTextReader jr = new JsonTextReader(sr);
-            return ParseEDSMUpdateDistancesReader(jr, ref date, removenonedsmids);
+            return ParseEDSMUpdateDistancesReader(jr, ref date, removenonedsmids, cancelRequested, reportProgress);
         }
 
-        private static long ParseEDSMUpdateDistancesReader(JsonTextReader jr, ref string date , bool removenonedsmids)
+        private static long ParseEDSMUpdateDistancesReader(JsonTextReader jr, ref string date , bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
             List<DistanceClass> toupdate = new List<DistanceClass>();
             List<DistanceClass> newpairs = new List<DistanceClass>();
@@ -375,7 +375,7 @@ namespace EDDiscovery.DB
                 {
                     cmd = cn.CreateCommand("select * from Distances where id_edsm=@id limit 1");   // 1 return matching
 
-                    while (jr.Read())
+                    while (jr.Read() && !cancelRequested())
                     {
                         if (jr.TokenType == JsonToken.StartObject)
                         {
@@ -389,6 +389,7 @@ namespace EDDiscovery.DB
                             if (++c % 10000 == 0)
                             {
                                 Console.WriteLine("Dist Count " + c + " Delta " + (Environment.TickCount - lasttc) + " newpairs " + newpairs.Count + " update " + toupdate.Count());
+                                reportProgress(-1, $"Reading EDSM distances: {c} processed, {newpairs.Count} new, {toupdate.Count} to update");
                                 lasttc = Environment.TickCount;
                             }
 
@@ -437,10 +438,16 @@ namespace EDDiscovery.DB
                 }
             }
 
+            if (cancelRequested())
+            {
+                return 0;
+            }
+
             using (SQLiteConnectionED cn2 = new SQLiteConnectionED())  // open the db
             {
                 if (toupdate.Count > 0)
                 {
+                    reportProgress(-1, $"Updating EDSM distances: {toupdate.Count} distances to update");
                     using (DbTransaction transaction = cn2.BeginTransaction())
                     {
                         foreach (DistanceClass dc in toupdate)
@@ -448,6 +455,11 @@ namespace EDDiscovery.DB
 
                         transaction.Commit();
                     }
+                }
+
+                if (cancelRequested())
+                {
+                    return toupdate.Count();
                 }
 
                 if (newpairs.Count > 0)
@@ -466,14 +478,21 @@ namespace EDDiscovery.DB
                                     break;
                             }
 
+                            reportProgress(count * 100 / newpairs.Count, $"Adding EDSM distances: {count} added");
                             Console.WriteLine("EDSM Dist Store Count " + count);
                             transaction.Commit();
+                        }
+
+                        if (cancelRequested())
+                        {
+                            return toupdate.Count() + count;
                         }
                     }
                 }
 
                 if (removenonedsmids)                            // done on a full sync..
                 {
+                    reportProgress(-1, "Removing distances without an ID");
                     Console.WriteLine("Delete old ones");
                     using (DbCommand cmddel = cn2.CreateCommand("Delete from Distances where id_edsm is null"))
                     {
