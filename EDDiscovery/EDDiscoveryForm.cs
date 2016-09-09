@@ -839,7 +839,7 @@ namespace EDDiscovery
                     if (filename != null)
                     {
                         LogLine("Updating all distances with EDSM distance data.");
-                        long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist, true);
+                        long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist, true, cancelRequested, reportProgress);
                         numbertotal += numberx;
                         SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
                         LogLine("Local database updated with EDSM Distance data, " + numberx + " distances updated.");
@@ -856,9 +856,12 @@ namespace EDDiscovery
                     LogLine("No response from EDSM Distance server.");
                 else
                 {
-                    long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false);
+                    long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false, cancelRequested, reportProgress);
                     numbertotal += number;
                 }
+
+                if (cancelRequested())
+                    return false;
 
                 LogLine("Local database updated with EDSM Distance data, " + numbertotal + " distances updated.");
                 SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
@@ -878,6 +881,13 @@ namespace EDDiscovery
         {
             reportProgress(-1, "");
             syncwasfirstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
+
+            // Force a full sync if newest data is more than 14 days old
+            if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTime()).TotalDays >= 14)
+            {
+                performedsmsync = true;
+            }
+
             bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
 
             if (performedsmsync || performeddbsync)
