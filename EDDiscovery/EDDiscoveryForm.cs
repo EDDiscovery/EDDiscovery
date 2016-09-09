@@ -874,6 +874,13 @@ namespace EDDiscovery
         {
             reportProgress(-1, "");
             syncwasfirstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
+
+            // Force a full sync if newest data is more than 14 days old
+            if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTime()).TotalDays >= 14)
+            {
+                performedsmsync = true;
+            }
+
             bool edsmoreddbsync = performedsmsync || performeddbsync;           // remember if we are syncing
 
             if (performedsmsync || performeddbsync)
