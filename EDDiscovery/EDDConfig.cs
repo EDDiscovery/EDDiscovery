@@ -370,7 +370,7 @@ namespace EDDiscovery2
 
                         for (int i = 0; i < 100; i++)
                         {
-                            EDCommander cmdr = new EDCommander(0,
+                            EDCommander cmdr = new EDCommander(i,
                                 SQLiteDBClass.GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
                                 SQLiteDBClass.GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn));
                             cmdr.NetLogDir = SQLiteDBClass.GetSettingString("EDCommanderNetLogDir" + i.ToString(), null, conn);
