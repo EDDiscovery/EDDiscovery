@@ -373,7 +373,7 @@ namespace EDDiscovery2
                             EDCommander cmdr = new EDCommander(i,
                                 SQLiteDBClass.GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
                                 SQLiteDBClass.GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn));
-                            cmdr.NetLogDir = SQLiteDBClass.GetSettingString("EDCommanderNetLogDir" + i.ToString(), null, conn);
+                            cmdr.NetLogDir = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
                             bool deleted = SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn);
 
                             if (cmdr.Name != "")
