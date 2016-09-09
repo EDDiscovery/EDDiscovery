@@ -1414,6 +1414,11 @@ namespace EDDiscovery.DB
                 }
             }
 
+            if (cancelRequested())
+            {
+                throw new OperationCanceledException();
+            }
+
             return updatecount + insertcount;
         }
 
