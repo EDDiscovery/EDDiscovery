@@ -66,6 +66,8 @@ namespace EDDiscovery.DB
         // causes the program to become unresponsive during big DB updates
         private DbConnection _cn;
 
+        public string DBFile { get; private set; }
+
         public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
         {
             bool locktaken = false;
@@ -76,7 +78,21 @@ namespace EDDiscovery.DB
 
                 // System.Threading.Monitor.Enter(monitor);
                 //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
-                _cn = SQLiteDBClass.CreateCN(maindb ?? SQLiteDBClass.DefaultMainDatabase, selector);
+                DBFile = GetSQLiteDBFile(maindb ?? SQLiteDBClass.DefaultMainDatabase);
+                _cn = SQLiteDBClass.CreateCN();
+
+                // Use the database selected by maindb as the 'main' database
+                _cn.ConnectionString = "Data Source=" + DBFile + ";Pooling=true;";
+                _cn.Open();
+
+                // Attach any other requested databases under their appropriate names
+                foreach (var dbflag in new[] { EDDSqlDbSelection.EDDiscovery, EDDSqlDbSelection.EDDUser, EDDSqlDbSelection.EDDSystem })
+                {
+                    if (selector.HasFlag(dbflag))
+                    {
+                        AttachDatabase(dbflag, dbflag.ToString());
+                    }
+                }
             }
             catch
             {
@@ -89,12 +105,54 @@ namespace EDDiscovery.DB
             }
         }
 
-        public string DBFile
+        public static string GetSQLiteDBFile(EDDSqlDbSelection selector)
         {
-            get
+            if (selector == EDDSqlDbSelection.None)
             {
-                SQLiteConnection sqlite = (SQLiteConnection) _cn;
-                return sqlite.FileName;
+                // Use an in-memory database if no database is selected
+                return ":memory:";
+            }
+            else if (selector.HasFlag(EDDSqlDbSelection.EDDUser))
+            {
+                // Get the EDDUser database path
+                return System.IO.Path.Combine(Tools.GetAppDataDirectory(), "EDDUser.sqlite");
+            }
+            else if (selector.HasFlag(EDDSqlDbSelection.EDDSystem))
+            {
+                // Get the EDDSystem database path
+                return System.IO.Path.Combine(Tools.GetAppDataDirectory(), "EDDSystem.sqlite");
+            }
+            else
+            {
+                // Get the old EDDiscovery database path
+                return System.IO.Path.Combine(Tools.GetAppDataDirectory(), "EDDiscovery.sqlite");
+            }
+        }
+
+        private void AttachDatabase(EDDSqlDbSelection dbflag, string name)
+        {
+            // Check if the connection is already connected to the selected database
+            using (DbCommand cmd = _cn.CreateCommand("PRAGMA database_list"))
+            {
+                using (DbDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var dbname = reader["name"] as string;
+                        if (dbname == name)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // Attach to the selected database under the given schema name
+            using (DbCommand cmd = _cn.CreateCommand("ATTACH DATABASE @dbfile AS @dbname"))
+            {
+                cmd.AddParameterWithValue("@dbfile", GetSQLiteDBFile(dbflag));
+                cmd.AddParameterWithValue("@dbname", name);
+                cmd.ExecuteNonQuery();
             }
         }
 

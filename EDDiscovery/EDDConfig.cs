@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Data.Common;
+using System.Data;
 
 namespace EDDiscovery2
 {
@@ -325,76 +327,149 @@ namespace EDDiscovery2
         {
             _listCommanders.Clear();
 
-            // Migrate old settigns.
-            string apikey =  SQLiteDBClass.GetSettingString("EDSMApiKey", "");
-            string commanderName =  SQLiteDBClass.GetSettingString("CommanderName", "");
+            int maxnr = -1;
 
-
-            EDCommander cmdr = null;
-
-            if (!SQLiteDBClass.GetSettingBool("EDCommanderDeleted0", false))
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                cmdr = new EDCommander(0, SQLiteDBClass.GetSettingString("EDCommanderName0", commanderName), SQLiteDBClass.GetSettingString("EDCommanderApiKey0", apikey));
-                cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath0", null);
-                _listCommanders.Add(cmdr);
+                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int id = (int)(long)reader["Id"];
+                            string name = (string)reader["Name"];
+                            string edsmapikey = (string)reader["EdsmApiKey"];
+
+                            if (id > maxnr)
+                                maxnr = id;
+
+                            if ((long)reader["Deleted"] == 0)
+                            {
+                                EDCommander edcmdr = new EDCommander(id, name, edsmapikey);
+                                edcmdr.NetLogPath = (string)reader["NetLogPath"];
+                                _listCommanders.Add(edcmdr);
+                            }
+                        }
+                    }
+                }
+
+                if (maxnr == -1)
+                {
+                    using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmApiKey, NetLogPath, Deleted) VALUES (@Id, @Name, @EdsmApiKey, @NetLogPath, @Deleted)"))
+                    {
+                        cmd.AddParameter("@Id", DbType.Int32);
+                        cmd.AddParameter("@Name", DbType.String);
+                        cmd.AddParameter("@EdsmApiKey", DbType.String);
+                        cmd.AddParameter("@NetLogPath", DbType.String);
+                        cmd.AddParameter("@Deleted", DbType.Boolean);
+
+                        // Migrate old settigns.
+                        string apikey = SQLiteDBClass.GetSettingString("EDSMApiKey", "", conn);
+                        string commanderName = SQLiteDBClass.GetSettingString("CommanderName", "", conn);
+
+                        for (int i = 0; i < 100; i++)
+                        {
+                            EDCommander cmdr = new EDCommander(0,
+                                SQLiteDBClass.GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
+                                SQLiteDBClass.GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn));
+                            cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
+                            bool deleted = SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn);
+
+                            if (cmdr.Name != "")
+                            {
+                                cmd.Parameters["@Id"].Value = cmdr.Nr;
+                                cmd.Parameters["@Name"].Value = cmdr.Name;
+                                cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
+                                cmd.Parameters["@NetLogPath"].Value = cmdr.NetLogPath;
+                                cmd.Parameters["@Deleted"].Value = deleted;
+                                cmd.ExecuteNonQuery();
+
+                                if (!deleted)
+                                    _listCommanders.Add(cmdr);
+                            }
+
+                            commanderName = "";
+                            apikey = "";
+                        }
+                    }
+                }
             }
 
-            for (int ii = 1; ii < 100; ii++)
+            if (_listCommanders.Count == 0)
             {
-                bool deleted = SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + ii.ToString(), false);
-                if (!deleted)
-                {
-                    cmdr = new EDCommander(ii, SQLiteDBClass.GetSettingString("EDCommanderName" + ii.ToString(), ""), SQLiteDBClass.GetSettingString("EDCommanderApiKey" + ii.ToString(), ""));
-                    cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + ii.ToString(), null);
-                    if (!cmdr.Name.Equals(""))
-                        _listCommanders.Add(cmdr);
-                }
+                _listCommanders.Add(GetNewCommander());
             }
         }
 
         public void StoreCommanders(IEnumerable<EDCommander> dictcmdr)
         {
-            foreach (EDCommander cmdr in dictcmdr)
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                SQLiteDBClass.PutSettingString("EDCommanderName" + cmdr.Nr.ToString(), cmdr.Name);
-                SQLiteDBClass.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);
-                SQLiteDBClass.PutSettingString("EDCommanderNetLogPath" + cmdr.Nr.ToString(), cmdr.NetLogPath);
+                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmApiKey=@EdsmApiKey, NetLogPath=@NetLogPath WHERE Id=@Id"))
+                {
+                    cmd.AddParameter("@Id", DbType.Int32);
+                    cmd.AddParameter("@Name", DbType.String);
+                    cmd.AddParameter("@EdsmApiKey", DbType.String);
+                    cmd.AddParameter("@NetLogPath", DbType.String);
+
+                    foreach (EDCommander edcmdr in _listCommanders)
+                    {
+                        cmd.Parameters["@Id"].Value = edcmdr.Nr;
+                        cmd.Parameters["@Name"].Value = edcmdr.Name;
+                        cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey;
+                        cmd.Parameters["@NetLogPath"].Value = edcmdr.NetLogPath;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
             }
 
             LoadCommanders();
         }
 
-        internal EDCommander GetNewCommander()
+        internal EDCommander GetNewCommander(string name = null)
         {
-            int maxnr = 0;
-            foreach (EDCommander _cmdr in _listCommanders)
+            EDCommander cmdr;
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                maxnr = Math.Max(_cmdr.Nr, maxnr);
+                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name) VALUES (@Name)"))
+                {
+                    cmd.AddParameterWithValue("@Name", name ?? "");
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (DbCommand cmd = conn.CreateCommand("SELECT Id FROM Commanders WHERE rowid = last_insert_rowid()"))
+                {
+                    int nr = (int)cmd.ExecuteScalar();
+                    cmdr = new EDCommander(nr, name ?? ("CMDR " + nr.ToString()), "");
+                }
+
+                if (name == null)
+                {
+                    using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name = @Name"))
+                    {
+                        cmd.AddParameterWithValue("@Name", cmdr.Name);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
             }
-
-            maxnr++;
-
-            if (SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + maxnr.ToString(), false))
-            {
-                SQLiteDBClass.PutSettingBool("EDCommanderDeleted" + maxnr.ToString(), false);
-            }
-
-            var cmdr = new EDCommander(maxnr, "CMDR "+maxnr.ToString(), "");
 
             _listCommanders.Add(cmdr);
-
-            SQLiteDBClass.PutSettingString("EDCommanderName" + cmdr.Nr.ToString(), cmdr.Name);
-            SQLiteDBClass.PutSettingString("EDCommanderApiKey" + cmdr.Nr.ToString(), cmdr.APIKey);
-            SQLiteDBClass.PutSettingString("EDCommanderNetLogPath" + cmdr.Nr.ToString(), cmdr.NetLogPath);
-
-            LoadCommanders();
 
             return cmdr;
         }
 
         public void DeleteCommander(EDCommander cmdr)
         {
-            SQLiteDBClass.PutSettingBool("EDCommanderDeleted" + cmdr.Nr.ToString(), true);
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Deleted = 1 WHERE Id = @Id"))
+                {
+                    cmd.AddParameterWithValue("@Id", cmdr.Nr);
+                    cmd.ExecuteNonQuery();
+                }
+            }
 
             LoadCommanders();
         }

@@ -516,9 +516,9 @@ namespace EDDiscovery.DB
         #region Database Initialization
         private static void InitializeDatabase()
         {
-            string dbv4file = GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
-            string dbuserfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
-            string dbsystemsfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
+            string dbv4file = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+            string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
+            string dbsystemsfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
             DbFactory = GetSqliteProviderFactory();
 
             try
@@ -571,9 +571,9 @@ namespace EDDiscovery.DB
 
         private static bool SplitDataBase()
         {
-            string dbfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
-            string dbuserfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
-            string dbsystemsfile = GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
+            string dbfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
+            string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
+            string dbsystemsfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem);
 
             try
             {
@@ -597,6 +597,8 @@ namespace EDDiscovery.DB
                 dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
                 if (dbver < 101)
                     UpgradeUserDB101(conn);
+                if (dbver < 102)
+                    UpgradeUserDB102(conn);
 
                 CreateUserDBTableIndexes();
 
@@ -940,6 +942,12 @@ namespace EDDiscovery.DB
             });
         }
 
+        private static void UpgradeUserDB102(SQLiteConnectionED conn)
+        {
+            string query1 = "CREATE TABLE Commanders (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, EdsmApiKey TEXT NOT NULL, NetLogDir TEXT, Deleted INTEGER NOT NULL)";
+
+            PerformUpgrade(conn, 102, true, false, new[] { query1 });
+        }
 
         private static void UpgradeSystemsDB101(SQLiteConnectionED conn)
         {
@@ -1234,7 +1242,7 @@ namespace EDDiscovery.DB
         #endregion
 
         #region Database access
-        public static DbConnection CreateCN(EDDSqlDbSelection maindb, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
+        public static DbConnection CreateCN()
         {
             lock (lockDBInit)                                           // one at a time chaps
             {
@@ -1244,73 +1252,7 @@ namespace EDDiscovery.DB
                 }
             }
 
-            DbConnection cn = DbFactory.CreateConnection();
-
-            // Use the database selected by maindb as the 'main' database
-            cn.ConnectionString = "Data Source=" + GetSQLiteDBFile(maindb) + ";Pooling=true;";
-            cn.Open();
-
-            // Attach any other requested databases under their appropriate names
-            foreach (var dbflag in new[] { EDDSqlDbSelection.EDDiscovery, EDDSqlDbSelection.EDDUser, EDDSqlDbSelection.EDDSystem })
-            {
-                if (selector.HasFlag(dbflag))
-                {
-                    AttachDatabase(cn, dbflag, dbflag.ToString());
-                }
-            }
-
-            return cn;
-        }
-
-        public static string GetSQLiteDBFile(EDDSqlDbSelection selector)
-        {
-            if (selector == EDDSqlDbSelection.None)
-            {
-                // Use an in-memory database if no database is selected
-                return ":memory:";
-            }
-            if (selector.HasFlag(EDDSqlDbSelection.EDDUser))
-            {
-                // Get the EDDUser database path
-                return Path.Combine(Tools.GetAppDataDirectory(), "EDDUser.sqlite");
-            }
-            else if (selector.HasFlag(EDDSqlDbSelection.EDDSystem))
-            {
-                // Get the EDDSystem database path
-                return Path.Combine(Tools.GetAppDataDirectory(), "EDDSystem.sqlite");
-            }
-            else
-            {
-                // Get the old EDDiscovery database path
-                return Path.Combine(Tools.GetAppDataDirectory(), "EDDiscovery.sqlite");
-            }
-        }
-
-        private static void AttachDatabase(DbConnection conn, EDDSqlDbSelection dbflag, string name)
-        {
-            // Check if the connection is already connected to the selected database
-            using (DbCommand cmd = conn.CreateCommand("PRAGMA database_list"))
-            {
-                using (DbDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var dbname = reader["name"] as string;
-                        if (dbname == name)
-                        {
-                            return;
-                        }
-                    }
-                }
-            }
-
-            // Attach to the selected database under the given schema name
-            using (DbCommand cmd = conn.CreateCommand("ATTACH DATABASE @dbfile AS @dbname"))
-            {
-                cmd.AddParameterWithValue("@dbfile", GetSQLiteDBFile(dbflag));
-                cmd.AddParameterWithValue("@dbname", name);
-                cmd.ExecuteNonQuery();
-            }
+            return DbFactory.CreateConnection();
         }
 
         ///----------------------------
