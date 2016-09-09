@@ -26,26 +26,37 @@ namespace EDDiscovery.Forms
         private static void _ShowForm(object param)
         {
             BlockingCollection<SplashForm> queue = (BlockingCollection<SplashForm>)param;
-            SplashForm splash = new SplashForm();
-            queue.Add(splash);
-            Application.Run(splash);
+            using (SplashForm splash = new SplashForm())
+            {
+                queue.Add(splash);
+                Application.Run(splash);
+            }
         }
 
         public void CloseForm()
         {
-            if (this.InvokeRequired)
+            if (!this.IsDisposed)
             {
-                this.Invoke(new Action(() => this.CloseForm()));
-            }
-            else
-            {
-                this.Close();
-                Application.ExitThread();
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new Action(() => this.CloseForm()));
+                }
+                else
+                {
+                    this.Close();
+                    Application.ExitThread();
+                }
             }
         }
 
         public static SplashForm ShowAsync()
         {
+            // Mono doesn't support having forms running on multiple threads.
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                return null;
+            }
+
             BlockingCollection<SplashForm> queue = new BlockingCollection<SplashForm>();
             Thread thread = new Thread(_ShowForm);
             thread.Start(queue);
