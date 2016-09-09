@@ -170,7 +170,11 @@ namespace EDDiscovery
             this.TopMost = EDDConfig.KeepOnTop;
 
             ApplyTheme(false);
-            splashform.CloseForm();
+
+            if (splashform != null)
+            {
+                splashform.CloseForm();
+            }
         }
 
         // We can't prevent an unhandled exception from killing the application.
