@@ -38,7 +38,7 @@ namespace EDDiscovery
         {
         }
 
-        public string GetNetLogPath()
+        public string GetNetLogDir()
         {
             try
             {
@@ -96,7 +96,7 @@ namespace EDDiscovery
                 else
                 {
                     datapath = EDDConfig.Instance.NetLogDir;
-                    string cmdrpath = EDDConfig.Instance.CurrentCommander.NetLogPath;
+                    string cmdrpath = EDDConfig.Instance.CurrentCommander.NetLogDir;
                     if (cmdrpath != null && cmdrpath != "" && Directory.Exists(cmdrpath))
                     {
                         datapath = cmdrpath;
@@ -107,7 +107,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                MessageBox.Show("GetNetLogPath exception: " + ex.Message);
+                MessageBox.Show("GetNetLogDir exception: " + ex.Message);
                 return null;
             }
         }
@@ -118,7 +118,7 @@ namespace EDDiscovery
         {
             error = null;
 
-            string datapath = GetNetLogPath();
+            string datapath = GetNetLogDir();
 
             if (datapath == null)
             {
@@ -272,7 +272,7 @@ namespace EDDiscovery
             {
                 try
                 {
-                    string logpath = GetNetLogPath();
+                    string logpath = GetNetLogDir();
 
                     if (Directory.Exists(logpath))
                     {
@@ -392,10 +392,10 @@ namespace EDDiscovery
                     nfi = OpenFileReader(new FileInfo(filename));
                     lastnfi = nfi;
                 }
-                else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
+                else if (lastnfi != null && (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length))
                 {
                     HashSet<string> tlunames = new HashSet<string>(TravelLogUnit.GetAllNames());
-                    string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories)
+                    string[] filenames = Directory.EnumerateFiles(GetNetLogDir(), "netLog.*.log", SearchOption.AllDirectories)
                                                   .Select(s => new { name = Path.GetFileName(s), fullname = s })
                                                   .Where(s => !tlunames.Contains(s.name))
                                                   .OrderBy(s => s.name)

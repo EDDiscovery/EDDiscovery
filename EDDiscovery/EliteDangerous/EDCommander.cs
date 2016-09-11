@@ -10,7 +10,7 @@ namespace EDDiscovery2
         private int nr;
         private string name;
         private string apikey;
-        private string netLogPath;
+        private string netLogDir;
 
         public EDCommander(int id, string Name, string APIKey)
         {
@@ -58,16 +58,16 @@ namespace EDDiscovery2
             }
         }
 
-        public string NetLogPath
+        public string NetLogDir
         {
             get
             {
-                return netLogPath;
+                return netLogDir;
             }
 
             set
             {
-                netLogPath = value;
+                netLogDir = value;
             }
         }
     }
