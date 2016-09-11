@@ -221,16 +221,25 @@ namespace EDDiscovery2.HTTP
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
                         var data = getResponseData(httpResponse);
+
+      
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
-                        System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
-                        System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
+                        if (httpResponse != null)
+                        {
+                            System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
+                            System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
+                        }
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         if (EDDiscoveryForm.EDDConfig.EDSMLog)
                         {
                             WriteLog("WebException" + ex.Message, "");
-                            WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
-                            WriteLog($"HTTP Error body: {data.Body}", "");
+                            if (httpResponse != null)
+                            {
+
+                                WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                                WriteLog($"HTTP Error body: {data.Body}", "");
+                            }
                         }
                         return data;
                     }
@@ -359,6 +368,9 @@ namespace EDDiscovery2.HTTP
         }
         private ResponseData getResponseData(HttpWebResponse response)
         {
+            if (response == null)
+                return null;
+
             var dataStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
             var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
