@@ -229,7 +229,7 @@ namespace EDDiscovery2.EDSM
                 catch (WebException ex)
                 {
                     reportProgress(-1, $"EDSM request failed");
-                    if (ex.Status == WebExceptionStatus.ProtocolError)
+                    if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null && ex.Response is HttpWebResponse)
                     {
                         string status = ((HttpWebResponse)ex.Response).StatusDescription;
                         discoveryform.LogLine($"Download of EDSM systems from the server failed ({status}), will try next time program is run");
