@@ -775,55 +775,61 @@ namespace EDDiscovery
                 return;
             }
 
-            var dists = DistanceClass.GetDistancesByStatus((int)DistancsEnum.EDDiscovery);
-
-            EDSMClass edsm = new EDSMClass();
-
-            foreach (var dist in dists)
+            try
             {
-                string json;
+                var dists = DistanceClass.GetDistancesByStatus((int)DistancsEnum.EDDiscovery);
 
-                if (dist.Dist > 0)
+                EDSMClass edsm = new EDSMClass();
+
+                foreach (var dist in dists)
                 {
-                    LogText("Add distance: " + dist.NameA + " => " + dist.NameB + " :" + dist.Dist.ToString("0.00") + "ly" + Environment.NewLine);
-                    json = edsm.SubmitDistances(EDDiscoveryForm.EDDConfig.CurrentCommander.Name, dist.NameA, dist.NameB, dist.Dist);
-                }
-                else
-                {
-                    if (dist.Dist < 0)  // Can removedistance by adding negative value
-                        dist.Delete();
-                    else
+                    string json;
+
+                    if (dist.Dist > 0)
                     {
-                        dist.Status = DistancsEnum.EDDiscoverySubmitted;
-                        dist.Update();
-                    }
-                    json = null;
-                }
-                if (json != null)
-                {
-                    string str="";
-                    bool trilok;
-                    if (edsm.ShowDistanceResponse(json, out str, out trilok))
-                    {
-                        LogText("EDSM Response " + str);
-                        dist.Status = DistancsEnum.EDDiscoverySubmitted;
-                        dist.Update();
+                        LogText("Add distance: " + dist.NameA + " => " + dist.NameB + " :" + dist.Dist.ToString("0.00") + "ly" + Environment.NewLine);
+                        json = edsm.SubmitDistances(EDDiscoveryForm.EDDConfig.CurrentCommander.Name, dist.NameA, dist.NameB, dist.Dist);
                     }
                     else
                     {
-                        LogText("EDSM Response " + str);
+                        if (dist.Dist < 0)  // Can removedistance by adding negative value
+                            dist.Delete();
+                        else
+                        {
+                            dist.Status = DistancsEnum.EDDiscoverySubmitted;
+                            dist.Update();
+                        }
+                        json = null;
+                    }
+                    if (json != null)
+                    {
+                        string str = "";
+                        bool trilok;
+                        if (edsm.ShowDistanceResponse(json, out str, out trilok))
+                        {
+                            LogText("EDSM Response " + str);
+                            dist.Status = DistancsEnum.EDDiscoverySubmitted;
+                            dist.Update();
+                        }
+                        else
+                        {
+                            LogText("EDSM Response " + str);
+                        }
                     }
                 }
-            }
 
-            if (EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey.Equals(""))
+                if (EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey.Equals(""))
+                {
+                    MessageBox.Show("Please enter EDSM api key (In settings) before sending travel history to EDSM!");
+                    return;
+
+                }
+                sync.StartSync(EDSMSyncTo, EDSMSyncFrom, defaultMapColour);
+            }
+            catch (Exception ex)
             {
-                MessageBox.Show("Please enter EDSM api key (In settings) before sending travel history to EDSM!");
-                return;
-
+                _discoveryForm.LogLine($"Distance submission failed: {ex.Message}");
             }
-            sync.StartSync(EDSMSyncTo, EDSMSyncFrom,defaultMapColour);
-
         }
 
         internal void RefreshEDSMEvent(object source)
