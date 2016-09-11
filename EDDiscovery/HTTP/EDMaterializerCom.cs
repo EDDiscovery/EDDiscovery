@@ -96,7 +96,7 @@ namespace EDDiscovery2.HTTP
 
         private ResponseData ManagedRequest(string json, 
                                             string action, 
-                                            Func<string, string, NameValueCollection, ResponseData> requestMethod)
+                                            Func<string, string, NameValueCollection, bool, ResponseData> requestMethod)
         {
             var commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
             JObject jo = JObject.Parse(json);
@@ -107,7 +107,7 @@ namespace EDDiscovery2.HTTP
             // Attempt #1 with existing tokens
             if (_authTokens != null)
             {
-                response = requestMethod(json, action, _authTokens);
+                response = requestMethod(json, action, _authTokens, true);
                 if (response.StatusCode == HttpStatusCode.Unauthorized ||
                     response.StatusCode == HttpStatusCode.BadRequest)
                 {
@@ -124,20 +124,20 @@ namespace EDDiscovery2.HTTP
                 response = SignIn();
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    response = requestMethod(json, action, _authTokens);
+                    response = requestMethod(json, action, _authTokens, true);
                 }
             }
             return response;
         }
 
-        private ResponseData RequestGetWrapper(string json, string action, NameValueCollection headers)
+        private ResponseData RequestGetWrapper(string json, string action, NameValueCollection headers, bool handleException = false)
         {
-            return RequestGet(action, headers);
+            return RequestGet(action, headers, handleException);
         }
 
-        private ResponseData RequestDeleteWrapper(string json, string action, NameValueCollection headers)
+        private ResponseData RequestDeleteWrapper(string json, string action, NameValueCollection headers, bool handleException = false)
         {
-            return RequestDelete(action, headers);
+            return RequestDelete(action, headers, handleException);
         }
 
 
