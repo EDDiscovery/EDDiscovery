@@ -93,7 +93,7 @@ namespace EDDiscovery.EliteDangerous
                 else
                 {
                     datapath = EDDConfig.Instance.NetLogDir;
-                    string cmdrpath = EDDConfig.Instance.CurrentCommander.NetLogPath;
+                    string cmdrpath = EDDConfig.Instance.CurrentCommander.NetLogDir;
                     if (cmdrpath != null && cmdrpath != "" && Directory.Exists(cmdrpath))
                     {
                         datapath = cmdrpath;
