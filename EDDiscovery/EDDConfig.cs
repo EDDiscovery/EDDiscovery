@@ -337,9 +337,9 @@ namespace EDDiscovery2
                     {
                         while (reader.Read())
                         {
-                            int id = (int)(long)reader["Id"];
-                            string name = (string)reader["Name"];
-                            string edsmapikey = (string)reader["EdsmApiKey"];
+                            int id = Convert.ToInt32(reader["Id"]);
+                            string name = Convert.ToString(reader["Name"]);
+                            string edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
 
                             if (id > maxnr)
                                 maxnr = id;
@@ -347,7 +347,7 @@ namespace EDDiscovery2
                             if ((long)reader["Deleted"] == 0)
                             {
                                 EDCommander edcmdr = new EDCommander(id, name, edsmapikey);
-                                edcmdr.NetLogPath = (string)reader["NetLogPath"];
+                                edcmdr.NetLogDir = Convert.ToString(reader["NetLogDir"]);
                                 _listCommanders.Add(edcmdr);
                             }
                         }
@@ -356,12 +356,12 @@ namespace EDDiscovery2
 
                 if (maxnr == -1)
                 {
-                    using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmApiKey, NetLogPath, Deleted) VALUES (@Id, @Name, @EdsmApiKey, @NetLogPath, @Deleted)"))
+                    using (DbCommand cmd = conn.CreateCommand("INSERT OR REPLACE INTO Commanders (Id, Name, EdsmApiKey, NetLogDir, Deleted) VALUES (@Id, @Name, @EdsmApiKey, @NetLogDir, @Deleted)"))
                     {
                         cmd.AddParameter("@Id", DbType.Int32);
                         cmd.AddParameter("@Name", DbType.String);
                         cmd.AddParameter("@EdsmApiKey", DbType.String);
-                        cmd.AddParameter("@NetLogPath", DbType.String);
+                        cmd.AddParameter("@NetLogDir", DbType.String);
                         cmd.AddParameter("@Deleted", DbType.Boolean);
 
                         // Migrate old settigns.
@@ -370,10 +370,10 @@ namespace EDDiscovery2
 
                         for (int i = 0; i < 100; i++)
                         {
-                            EDCommander cmdr = new EDCommander(0,
+                            EDCommander cmdr = new EDCommander(i,
                                 SQLiteDBClass.GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
                                 SQLiteDBClass.GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn));
-                            cmdr.NetLogPath = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
+                            cmdr.NetLogDir = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
                             bool deleted = SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn);
 
                             if (cmdr.Name != "")
@@ -381,7 +381,7 @@ namespace EDDiscovery2
                                 cmd.Parameters["@Id"].Value = cmdr.Nr;
                                 cmd.Parameters["@Name"].Value = cmdr.Name;
                                 cmd.Parameters["@EdsmApiKey"].Value = cmdr.APIKey;
-                                cmd.Parameters["@NetLogPath"].Value = cmdr.NetLogPath;
+                                cmd.Parameters["@NetLogDir"].Value = cmdr.NetLogDir;
                                 cmd.Parameters["@Deleted"].Value = deleted;
                                 cmd.ExecuteNonQuery();
 
@@ -406,19 +406,19 @@ namespace EDDiscovery2
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmApiKey=@EdsmApiKey, NetLogPath=@NetLogPath WHERE Id=@Id"))
+                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir WHERE Id=@Id"))
                 {
                     cmd.AddParameter("@Id", DbType.Int32);
                     cmd.AddParameter("@Name", DbType.String);
                     cmd.AddParameter("@EdsmApiKey", DbType.String);
-                    cmd.AddParameter("@NetLogPath", DbType.String);
+                    cmd.AddParameter("@NetLogDir", DbType.String);
 
                     foreach (EDCommander edcmdr in _listCommanders)
                     {
                         cmd.Parameters["@Id"].Value = edcmdr.Nr;
                         cmd.Parameters["@Name"].Value = edcmdr.Name;
                         cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey;
-                        cmd.Parameters["@NetLogPath"].Value = edcmdr.NetLogPath;
+                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir;
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -427,21 +427,23 @@ namespace EDDiscovery2
             LoadCommanders();
         }
 
-        internal EDCommander GetNewCommander(string name = null)
+        internal EDCommander GetNewCommander(string name = null, string edsmApiKey = null)
         {
             EDCommander cmdr;
 
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name) VALUES (@Name)"))
+                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmApiKey,Deleted) VALUES (@Name,@EdsmApiKey,@Deleted)"))
                 {
                     cmd.AddParameterWithValue("@Name", name ?? "");
+                    cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
+                    cmd.AddParameterWithValue("@Deleted", false);
                     cmd.ExecuteNonQuery();
                 }
 
                 using (DbCommand cmd = conn.CreateCommand("SELECT Id FROM Commanders WHERE rowid = last_insert_rowid()"))
                 {
-                    int nr = (int)cmd.ExecuteScalar();
+                    int nr = Convert.ToInt32(cmd.ExecuteScalar());
                     cmdr = new EDCommander(nr, name ?? ("CMDR " + nr.ToString()), "");
                 }
 

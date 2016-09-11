@@ -332,7 +332,7 @@ namespace EDDiscovery.DB
                                         Array.Resize(ref colours, colours.Length + 8192);
                                     }
 
-                                    Vector3 pos = new Vector3((float)(double)reader["x"], (float)(double)reader["y"], (float)(double)reader["z"]);
+                                    Vector3 pos = new Vector3((float)((long)reader["x"] / 128.0), (float)((long)reader["y"] / 128.0), (float)((long)reader["z"] / 128.0));
 
                                     int rand = (int)(long)reader["randomid"];
                                     Color basec = fixedc[rand&3]; 
@@ -1594,6 +1594,7 @@ namespace EDDiscovery.DB
 
                                     updateSysCmd.Parameters["@EdsmId"].Value = system.id_edsm;
                                     updateSysCmd.Parameters["@EddbId"].Value = system.id_eddb;
+                                    updateSysCmd.ExecuteNonQuery();
 
                                     if (eddbid != 0)
                                     {
