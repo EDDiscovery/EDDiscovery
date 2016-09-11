@@ -141,6 +141,9 @@ namespace EDDiscovery2.EDSM
                 "&enddatetime=" + HttpUtility.UrlEncode(enddate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
                 "&coords=1&submitted=1&known=1&showId=1";
             var response = RequestGet(query);
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+                return null;
+
             return response.Body;
         }
 
