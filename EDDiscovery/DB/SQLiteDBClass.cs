@@ -630,8 +630,7 @@ namespace EDDiscovery.DB
             }
             catch (Exception ex)
             {
-                MessageBox.Show("UpgradeSystemsDB error: " + ex.Message);
-                MessageBox.Show(ex.StackTrace);
+                MessageBox.Show("UpgradeSystemsDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return false;
             }
         }
@@ -704,8 +703,7 @@ namespace EDDiscovery.DB
             }
             catch (Exception ex)
             {
-                MessageBox.Show("UpgradeDB error: " + ex.Message);
-                MessageBox.Show(ex.StackTrace);
+                MessageBox.Show("UpgradeDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return false;
             }
         }
