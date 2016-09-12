@@ -13,7 +13,7 @@ namespace EDDiscovery2.HTTP
 
         public String MimeType { get; set; } = "application/json; charset=utf-8";
 
-        protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null)
+        protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null, bool handleException = false)
         {
             try
             {
@@ -65,6 +65,11 @@ namespace EDDiscovery2.HTTP
                 }
                 catch (WebException ex)
                 {
+                    if (!handleException)
+                    {
+                        throw;
+                    }
+
                     using (WebResponse response = ex.Response)
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
@@ -86,6 +91,11 @@ namespace EDDiscovery2.HTTP
             }
             catch (Exception ex)
             {
+                if (!handleException)
+                {
+                    throw;
+                }
+
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
@@ -97,7 +107,7 @@ namespace EDDiscovery2.HTTP
             }
         }
 
-        protected ResponseData RequestPatch(string json, string action, NameValueCollection headers = null)
+        protected ResponseData RequestPatch(string json, string action, NameValueCollection headers = null, bool handleException = false)
         {
             try
             {
@@ -144,6 +154,11 @@ namespace EDDiscovery2.HTTP
                 }
                 catch (WebException ex)
                 {
+                    if (!handleException)
+                    {
+                        throw;
+                    }
+
                     using (WebResponse response = ex.Response)
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
@@ -165,6 +180,11 @@ namespace EDDiscovery2.HTTP
             }
             catch (Exception ex)
             {
+                if (!handleException)
+                {
+                    throw;
+                }
+
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 if (EDDiscoveryForm.EDDConfig.EDSMLog)
@@ -178,7 +198,7 @@ namespace EDDiscovery2.HTTP
 
 
 
-        protected ResponseData RequestGet(string action, NameValueCollection headers = null)
+        protected ResponseData RequestGet(string action, NameValueCollection headers = null, bool handleException = false)
         {
             try
             {
@@ -217,6 +237,11 @@ namespace EDDiscovery2.HTTP
                 }
                 catch (WebException ex)
                 {
+                    if (!handleException)
+                    {
+                        throw;
+                    }
+
                     using (WebResponse response = ex.Response)
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
@@ -247,6 +272,11 @@ namespace EDDiscovery2.HTTP
             }
             catch (Exception ex)
             {
+                if (!handleException)
+                {
+                    throw;
+                }
+
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
@@ -262,7 +292,7 @@ namespace EDDiscovery2.HTTP
         }
 
 
-        protected ResponseData RequestDelete(string action, NameValueCollection headers = null)
+        protected ResponseData RequestDelete(string action, NameValueCollection headers = null, bool handleException = false)
         {
             try
             {
@@ -300,6 +330,11 @@ namespace EDDiscovery2.HTTP
                 }
                 catch (WebException ex)
                 {
+                    if (!handleException)
+                    {
+                        throw;
+                    }
+
                     using (WebResponse response = ex.Response)
                     {
                         HttpWebResponse httpResponse = (HttpWebResponse)response;
@@ -321,6 +356,11 @@ namespace EDDiscovery2.HTTP
             }
             catch (Exception ex)
             {
+                if (!handleException)
+                {
+                    throw;
+                }
+
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
