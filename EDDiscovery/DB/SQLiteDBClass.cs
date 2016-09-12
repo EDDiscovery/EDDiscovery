@@ -628,7 +628,7 @@ namespace EDDiscovery.DB
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(ex.Message, "Error creating data base file, Exception", System.Windows.Forms.MessageBoxButtons.OK);
+                System.Windows.Forms.MessageBox.Show($"Error creating data base file, Exception: {ex.Message}", "Error creating data base file", System.Windows.Forms.MessageBoxButtons.OK);
             }
         }
 
@@ -711,8 +711,7 @@ namespace EDDiscovery.DB
             }
             catch (Exception ex)
             {
-                MessageBox.Show("UpgradeDB error: " + ex.Message);
-                MessageBox.Show(ex.StackTrace);
+                MessageBox.Show("UpgradeDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return false;
             }
         }
