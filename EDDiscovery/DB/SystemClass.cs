@@ -1496,7 +1496,7 @@ namespace EDDiscovery.DB
         }
 
 
-        static public long ParseEDDBUpdateSystems(string filename)
+        static public long ParseEDDBUpdateSystems(string filename, Action<string> logline)
         {
             StreamReader sr = new StreamReader(filename);         // read directly from file..
 
