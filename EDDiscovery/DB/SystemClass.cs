@@ -950,7 +950,7 @@ namespace EDDiscovery.DB
                                     }
                                 }
 
-                                Dictionary<long, SystemClass> namematches = GetSystemsByName(vsc.Name).ToDictionary(s => s.id, s => s);
+                                Dictionary<long, SystemClass> namematches = GetSystemsByName(vsc.Name).Where(s => s != null).ToDictionary(s => s.id, s => s);
                                 Dictionary<long, SystemClass> posmatches = new Dictionary<long, SystemClass>();
                                 Dictionary<long, SystemClass> nameposmatches = new Dictionary<long, SystemClass>();
 
