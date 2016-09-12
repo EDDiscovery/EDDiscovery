@@ -285,7 +285,7 @@ namespace EDDiscovery
         {
             try
             {
-                EliteDangerous.CheckED();
+                EliteDangerousClass.CheckED();
                 EDDConfig.Update();
                 RepositionForm();
                 InitFormControls();
@@ -384,7 +384,7 @@ namespace EDDiscovery
 
         private void CheckIfEliteDangerousIsRunning()
         {
-            if (EliteDangerous.EDRunning)
+            if (EliteDangerousClass.EDRunning)
             {
                 LogLine("EliteDangerous is running.");
             }
@@ -1254,8 +1254,8 @@ namespace EDDiscovery
         {
             try
             {
-                if (EliteDangerous.EDDirectory != null && !EliteDangerous.EDDirectory.Equals(""))
-                    Process.Start(EliteDangerous.EDDirectory);
+                if (EliteDangerousClass.EDDirectory != null && !EliteDangerousClass.EDDirectory.Equals(""))
+                    Process.Start(EliteDangerousClass.EDDirectory);
 
             }
             catch (Exception ex)

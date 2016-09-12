@@ -88,14 +88,17 @@ namespace EDDiscovery2
 
             foreach (VisitedSystemsClass vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
+                // OpenGL colour byte order is RGBA, while Windows colour byte order is BGRA
+                Color colour = Color.FromArgb(vs.MapColour);
+                uint vscolour = BitConverter.ToUInt32(new byte[] { colour.R, colour.G, colour.B, colour.A }, 0);
                 if (vs.HasTravelCoordinates)
                 {
-                    carray[total] = unchecked((uint)vs.MapColour);
+                    carray[total] = vscolour;
                     array[total++] = new Vector3((float)vs.X, (float)vs.Y, (float)vs.Z);
                 }
                 else if (vs.curSystem != null && vs.curSystem.HasCoordinate)
                 {
-                    carray[total] = unchecked((uint)vs.MapColour);
+                    carray[total] = vscolour;
                     array[total++] = new Vector3((float)vs.curSystem.x, (float)vs.curSystem.y, (float)vs.curSystem.z);
                     //Console.WriteLine("Added {0} due to not being in star database", vs.Name);
                 }
@@ -324,6 +327,7 @@ namespace EDDiscovery2
 
                         if (Color == Color.Transparent)
                         {
+                            GL.Color4(Color.White);
                             GL.EnableClientState(ArrayCap.ColorArray);
                             GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
                             GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
@@ -387,7 +391,7 @@ namespace EDDiscovery2
                 }
             }
 
-            visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Orange, 1.0F);    // grid ID -1 means it won't be filled by the Update task
+            visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Transparent, 1.0F);    // grid ID -1 means it won't be filled by the Update task
             grids.Add(visitedsystemsgrid);
 
             int solid = GridId.Id(0, 0);                                    

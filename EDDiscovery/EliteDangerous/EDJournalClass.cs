@@ -1,44 +1,41 @@
-using EDDiscovery.DB;
-using EDDiscovery2;
+﻿using EDDiscovery2;
 using EDDiscovery2.DB;
+using EDDiscovery.DB;
 using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Drawing;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Globalization;
+using System.Windows.Forms;
 using System.Data.Common;
 
-namespace EDDiscovery
+namespace EDDiscovery.EliteDangerous
 {
-    public class NetLogClass
+    public class EDJournalClass
     {
-        public delegate void NetLogEventHandler(VisitedSystemsClass vsc);
+        public delegate void NewSystemEventHandler(VisitedSystemsClass vsc);
 
-        public event NetLogEventHandler OnNewPosition;          // called in foreground, no need for invoke
+        public event NewSystemEventHandler OnNewPosition;          // called in foreground, no need for invoke
 
-        Dictionary<string, NetLogFileReader> netlogreaders = new Dictionary<string, NetLogFileReader>();
+        Dictionary<string, EDJournalReader> netlogreaders = new Dictionary<string, EDJournalReader>();
 
         FileSystemWatcher m_Watcher;
         ConcurrentQueue<string> m_netLogFileQueue;
         System.Windows.Forms.Timer m_scantimer;
         System.ComponentModel.BackgroundWorker m_worker;
 
-        NetLogFileReader lastnfi = null;          // last one read..
+        EDJournalReader lastnfi = null;          // last one read..
 
 
-        public NetLogClass(EDDiscoveryForm ds)
+        public EDJournalClass(EDDiscoveryForm ds)
         {
         }
 
-        public string GetNetLogDir()
+        public string GetNetLogPath()
         {
             try
             {
@@ -107,7 +104,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("GetNetLogDir exception: " + ex.Message);
+                MessageBox.Show("GetNetLogPath exception: " + ex.Message);
                 return null;
             }
         }
@@ -118,7 +115,7 @@ namespace EDDiscovery
         {
             error = null;
 
-            string datapath = GetNetLogDir();
+            string datapath = GetNetLogPath();
 
             if (datapath == null)
             {
@@ -160,7 +157,7 @@ namespace EDDiscovery
             // order by file write time so we end up on the last one written
             FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "netLog.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
 
-            List<NetLogFileReader> readersToUpdate = new List<NetLogFileReader>();
+            List<EDJournalReader> readersToUpdate = new List<EDJournalReader>();
 
             for (int i = 0; i < allFiles.Length; i++)
             {
@@ -195,19 +192,32 @@ namespace EDDiscovery
             {
                 for (int i = 0; i < readersToUpdate.Count; i++)
                 {
-                    NetLogFileReader reader = readersToUpdate[i];
+                    EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
                     using (DbTransaction tn = cn.BeginTransaction())
                     {
-                        foreach (VisitedSystemsClass ps in reader.ReadSystems(cancelRequested))
+                        foreach (JournalEntry je in reader.ReadJournalLog())
                         {
-                            ps.EDSM_sync = false;
-                            ps.MapColour = defaultMapColour;
-                            ps.Commander = EDDConfig.Instance.CurrentCmdrID;
+                            if (je is JournalEvents.JournalLocOrJump)
+                            {
+                                JournalEvents.JournalLocOrJump jl = (JournalEvents.JournalLocOrJump)je;
+                                VisitedSystemsClass vsc = new VisitedSystemsClass();
+                                vsc.EDSM_sync = false;
+                                vsc.MapColour = defaultMapColour;
+                                vsc.Commander = EDDConfig.Instance.CurrentCmdrID;
+                                vsc.Name = jl.StarSystem;
+                                vsc.X = jl.StarPos.X;
+                                vsc.Y = jl.StarPos.Y;
+                                vsc.Z = jl.StarPos.Z;
+                                vsc.Unit = reader.TravelLogUnit.Name;
+                                vsc.Source = reader.TravelLogUnit.id;
+                                vsc.Time = je.EventTimeLocal;
+                                vsc.Add(cn, tn);
+                                visitedSystems.Add(vsc);
+                            }
 
-                            ps.Add(cn, tn);
-                            visitedSystems.Add(ps);
+                            // TODO: Save journal entry to database
                         }
 
                         reader.TravelLogUnit.Update(cn, tn);
@@ -227,9 +237,9 @@ namespace EDDiscovery
             return visitedSystems;
         }
 
-        private NetLogFileReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null, Dictionary<string, List<VisitedSystemsClass>> vsc_lookup = null)
+        private EDJournalReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null, Dictionary<string, List<VisitedSystemsClass>> vsc_lookup = null)
         {
-            NetLogFileReader reader;
+            EDJournalReader reader;
             TravelLogUnit tlu;
             List<VisitedSystemsClass> vsclist = null;
 
@@ -246,18 +256,18 @@ namespace EDDiscovery
             {
                 tlu = tlu_lookup[fi.Name];
                 tlu.Path = fi.DirectoryName;
-                reader = new NetLogFileReader(tlu, vsclist);
+                reader = new EDJournalReader(tlu, vsclist);
                 netlogreaders[fi.Name] = reader;
             }
             else if (TravelLogUnit.TryGet(fi.Name, out tlu))
             {
                 tlu.Path = fi.DirectoryName;
-                reader = new NetLogFileReader(tlu, vsclist);
+                reader = new EDJournalReader(tlu, vsclist);
                 netlogreaders[fi.Name] = reader;
             }
             else
             {
-                reader = new NetLogFileReader(fi.FullName);
+                reader = new EDJournalReader(fi.FullName);
                 netlogreaders[fi.Name] = reader;
             }
 
@@ -272,7 +282,7 @@ namespace EDDiscovery
             {
                 try
                 {
-                    string logpath = GetNetLogDir();
+                    string logpath = GetNetLogPath();
 
                     if (Directory.Exists(logpath))
                     {
@@ -303,6 +313,7 @@ namespace EDDiscovery
                 }
                 catch (Exception ex)
                 {
+                    System.Windows.Forms.MessageBox.Show("Start Monitor exception : " + ex.Message, "EDDiscovery Error");
                     System.Diagnostics.Trace.WriteLine("Start Monitor exception : " + ex.Message);
                     System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 }
@@ -375,7 +386,7 @@ namespace EDDiscovery
             var entries = new List<VisitedSystemsClass>();
             e.Result = entries;
             int netlogpos = 0;
-            NetLogFileReader nfi = null;
+            EDJournalReader nfi = null;
 
             try
             {
@@ -391,10 +402,10 @@ namespace EDDiscovery
                     nfi = OpenFileReader(new FileInfo(filename));
                     lastnfi = nfi;
                 }
-                else if (lastnfi != null && (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length))
+                else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
                 {
                     HashSet<string> tlunames = new HashSet<string>(TravelLogUnit.GetAllNames());
-                    string[] filenames = Directory.EnumerateFiles(GetNetLogDir(), "netLog.*.log", SearchOption.AllDirectories)
+                    string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories)
                                                   .Select(s => new { name = Path.GetFileName(s), fullname = s })
                                                   .Where(s => !tlunames.Contains(s.name))
                                                   .OrderBy(s => s.name)
@@ -414,33 +425,46 @@ namespace EDDiscovery
 
                 if (nfi != null)
                 {
-                    if (nfi.TimeZone == null)
+                    if (nfi.TravelLogUnit.id == 0)
                     {
-                        nfi.ReadHeader();
-                        if (nfi.TravelLogUnit.id == 0)
-                            nfi.TravelLogUnit.Add();
+                        nfi.TravelLogUnit.Add();
                     }
 
                     netlogpos = nfi.TravelLogUnit.Size;
 
-                    foreach(VisitedSystemsClass dbsys in nfi.ReadSystems())
+                    foreach (JournalEntry je in nfi.ReadJournalLog())
                     {
-                        dbsys.EDSM_sync = false;
-                        dbsys.MapColour = EDDConfig.Instance.DefaultMapColour;
-                        dbsys.Commander = EDDConfig.Instance.CurrentCmdrID;
-                        dbsys.Add();
-
-                        // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..
-
-                        VisitedSystemsClass item2 = VisitedSystemsClass.GetLast(dbsys.Commander, dbsys.Time);
-                        VisitedSystemsClass.UpdateVisitedSystemsEntries(dbsys, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
-                        entries.Add(dbsys);
-
-                        if (worker.CancellationPending)
+                        if (je is JournalEvents.JournalLocOrJump)
                         {
-                            break;
+                            JournalEvents.JournalLocOrJump jl = (JournalEvents.JournalLocOrJump)je;
+                            VisitedSystemsClass vsc = new VisitedSystemsClass();
+                            vsc.EDSM_sync = false;
+                            vsc.MapColour = EDDConfig.Instance.DefaultMapColour;
+                            vsc.Commander = EDDConfig.Instance.CurrentCmdrID;
+                            vsc.Name = jl.StarSystem;
+                            vsc.X = jl.StarPos.X;
+                            vsc.Y = jl.StarPos.Y;
+                            vsc.Z = jl.StarPos.Z;
+                            vsc.Unit = nfi.TravelLogUnit.Name;
+                            vsc.Source = nfi.TravelLogUnit.id;
+                            vsc.Time = je.EventTimeLocal;
+                            vsc.Add();
+
+                            // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..
+
+                            VisitedSystemsClass item2 = VisitedSystemsClass.GetLast(vsc.Commander, vsc.Time);
+                            VisitedSystemsClass.UpdateVisitedSystemsEntries(vsc, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
+                            entries.Add(vsc);
+
+                            if (worker.CancellationPending)
+                            {
+                                break;
+                            }
                         }
+
+                        // TODO: Save journal entry to database
                     }
+
                     nfi.TravelLogUnit.Update();
                 }
 

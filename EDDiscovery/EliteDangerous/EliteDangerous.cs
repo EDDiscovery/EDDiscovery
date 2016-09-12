@@ -100,7 +100,7 @@ namespace EDDiscovery2
 
 
 
-    public class EliteDangerous
+    public class EliteDangerousClass
     {
         static public string EDDirectory;
         static public bool EDRunning = false;
