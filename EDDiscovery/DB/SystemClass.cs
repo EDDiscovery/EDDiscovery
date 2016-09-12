@@ -1744,7 +1744,7 @@ namespace EDDiscovery.DB
         }
 
 
-        static public long ParseEDDBUpdateSystems(string filename)
+        static public long ParseEDDBUpdateSystems(string filename, Action<string> logline)
         {
             StreamReader sr = new StreamReader(filename);         // read directly from file..
 
@@ -1830,8 +1830,8 @@ namespace EDDiscovery.DB
                 }
                 catch
                 {
-                    MessageBox.Show("There is a problem using the EDDB systems file." + Environment.NewLine +
-                                    "Please perform a manual EDDB sync (see Admin menu) next time you run the program ", "EDDB Sync Error");
+                     logline("There is a problem using the EDDB systems file." + Environment.NewLine +
+                                    "Please perform a manual EDDB sync (see Admin menu) next time you run the program ");
                 }
                 finally
                 {
