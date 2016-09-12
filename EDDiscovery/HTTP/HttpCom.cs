@@ -409,7 +409,7 @@ namespace EDDiscovery2.HTTP
         private ResponseData getResponseData(HttpWebResponse response)
         {
             if (response == null)
-                return null;
+                return new ResponseData(HttpStatusCode.NotFound);
 
             var dataStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
