@@ -342,20 +342,20 @@ namespace EDDiscovery.DB
         }
 
 
-        public static long ParseEDSMUpdateDistancesString(string json, ref string date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        public static long ParseEDSMUpdateDistancesString(string json, ref string date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logline)
         {
             JsonTextReader jr = new JsonTextReader(new StringReader(json));
-            return ParseEDSMUpdateDistancesReader(jr, ref date, removenonedsmids, cancelRequested, reportProgress);
+            return ParseEDSMUpdateDistancesReader(jr, ref date, removenonedsmids, cancelRequested, reportProgress, logline);
         }
 
-        public static long ParseEDSMUpdateDistancesFile(string filename, ref string date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        public static long ParseEDSMUpdateDistancesFile(string filename, ref string date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logline)
         {
             StreamReader sr = new StreamReader(filename);         // read directly from file..
             JsonTextReader jr = new JsonTextReader(sr);
-            return ParseEDSMUpdateDistancesReader(jr, ref date, removenonedsmids, cancelRequested, reportProgress);
+            return ParseEDSMUpdateDistancesReader(jr, ref date, removenonedsmids, cancelRequested, reportProgress, logline);
         }
 
-        private static long ParseEDSMUpdateDistancesReader(JsonTextReader jr, ref string date , bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress)
+        private static long ParseEDSMUpdateDistancesReader(JsonTextReader jr, ref string date , bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logline)
         {
             List<DistanceClass> toupdate = new List<DistanceClass>();
             List<DistanceClass> newpairs = new List<DistanceClass>();
@@ -429,8 +429,8 @@ namespace EDDiscovery.DB
                 }
                 catch
                 {
-                    MessageBox.Show("There is a problem using the EDSM distance file." + Environment.NewLine +
-                                    "Please perform a manual EDSM distance sync (see Admin menu) next time you run the program ", "ESDM Sync Error");
+                    logline("There is a problem using the EDSM distance file." + Environment.NewLine +
+                                    "Please perform a manual EDSM distance sync (see Admin menu) next time you run the program ");
                 }
                 finally
                 {
