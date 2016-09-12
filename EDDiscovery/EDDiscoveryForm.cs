@@ -855,13 +855,34 @@ namespace EDDiscovery
 
                 LogLine("Updating distances with latest EDSM data.");
 
-                string json = edsm.RequestDistances(lstdist);
-                if (json == null)
-                    LogLine("No response from EDSM Distance server.");
-                else
+                string json = null;
+                try
                 {
-                    long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false, cancelRequested, reportProgress);
-                    numbertotal += number;
+                    json = edsm.RequestDistances(lstdist);
+
+                    if (json == null)
+                        LogLine("No response from EDSM Distance server.");
+                    else
+                    {
+                        long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false, cancelRequested, reportProgress);
+                        numbertotal += number;
+                    }
+                }
+                catch (WebException ex)
+                {
+                    if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null && ex.Response is HttpWebResponse)
+                    {
+                        string status = ((HttpWebResponse)ex.Response).StatusDescription;
+                        LogLine($"Download of EDSM distances from the server failed ({status})");
+                    }
+                    else
+                    {
+                        LogLine($"Download of EDSM distances from the server failed ({ex.Status.ToString()})");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogLine($"Download of EDSM distances from the server failed ({ex.Message})");
                 }
 
                 if (cancelRequested())
