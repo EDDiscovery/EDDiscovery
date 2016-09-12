@@ -190,12 +190,23 @@ namespace EDDiscovery2.EDSM
 
         internal static bool SendTravelLog(EDSMClass edsm, VisitedSystemsClass system, EDDiscoveryForm mainform)
         {
-            string json;
+            string json = null;
 
-            if (!system.HasTravelCoordinates)
-                json = edsm.SetLog(system.Name, system.Time);
-            else
-                json = edsm.SetLogWithPos(system.Name, system.Time, system.X, system.Y, system.Z);
+            try
+            {
+
+                if (!system.HasTravelCoordinates)
+                    json = edsm.SetLog(system.Name, system.Time);
+                else
+                    json = edsm.SetLogWithPos(system.Name, system.Time, system.X, system.Y, system.Z);
+            }
+            catch (Exception ex )
+            {
+                if (mainform != null)
+                    mainform.LogLine("EDSM sync error, connection to server failed");
+
+                System.Diagnostics.Trace.WriteLine("EDSM Sync error:" + ex.ToString());
+            }
 
             if (json != null)
             {
@@ -203,7 +214,6 @@ namespace EDDiscovery2.EDSM
 
                 int msgnum = msg["msgnum"].Value<int>();
                 string msgstr = msg["msg"].Value<string>();
-
 
                 if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
                 {
@@ -213,18 +223,14 @@ namespace EDDiscovery2.EDSM
                 }
                 else
                 {
-                    if (mainform!=null)
+                    if (mainform != null)
                         mainform.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr);
 
                     System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name);
-                    return false; 
                 }
-
             }
-            else
-                return false;
 
-
+            return false;
         }
     }
 }
