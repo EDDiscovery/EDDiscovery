@@ -301,8 +301,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message);
-                System.Windows.Forms.MessageBox.Show("Trace: " + ex.StackTrace);
+                System.Windows.Forms.MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message + "\n" + "Trace: " + ex.StackTrace);
             }
         }
 
@@ -476,7 +475,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                MessageBox.Show("DownloadImages exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
+                LogLineHighlight("DownloadImages exception: " + ex.Message);
                 var tcs = new TaskCompletionSource<bool>();
                 tcs.SetException(ex);
                 return tcs.Task;
@@ -608,8 +607,7 @@ namespace EDDiscovery
             ReportProgress(-1, "");
             if (e.Error != null)
             {
-                System.Windows.Forms.MessageBox.Show("Check Systems exception: " + e.Error.Message);
-                System.Windows.Forms.MessageBox.Show("Trace: " + e.Error.StackTrace);
+                LogLineHighlight("Check Systems exception: " + e.Error.Message + "\nTrace: " + e.Error.StackTrace);
             }
             else if (!e.Cancelled && !PendingClose)
             {
@@ -785,7 +783,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                MessageBox.Show("GetAllEDSMSystems exception:" + ex.Message);
+                LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
             }
 
             return (updates > 0);
@@ -806,7 +804,7 @@ namespace EDDiscovery
 
                     LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
 
-                    long number = SystemClass.ParseEDDBUpdateSystems(eddb.SystemFileName);
+                    long number = SystemClass.ParseEDDBUpdateSystems(eddb.SystemFileName, LogLineHighlight);
 
                     LogLine("Local database updated with EDDB data, " + number + " systems updated");
                     SQLiteDBClass.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
@@ -819,7 +817,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                MessageBox.Show("GetEDDBUpdate exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
+                LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
             }
         }
 
@@ -843,7 +841,7 @@ namespace EDDiscovery
                     if (filename != null)
                     {
                         LogLine("Updating all distances with EDSM distance data.");
-                        long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist, true, cancelRequested, reportProgress);
+                        long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist, true, cancelRequested, reportProgress, LogLineHighlight);
                         numbertotal += numberx;
                         SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
                         LogLine("Local database updated with EDSM Distance data, " + numberx + " distances updated.");
@@ -855,13 +853,34 @@ namespace EDDiscovery
 
                 LogLine("Updating distances with latest EDSM data.");
 
-                string json = edsm.RequestDistances(lstdist);
-                if (json == null)
-                    LogLine("No response from EDSM Distance server.");
-                else
+                string json = null;
+                try
                 {
-                    long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false, cancelRequested, reportProgress);
-                    numbertotal += number;
+                    json = edsm.RequestDistances(lstdist);
+
+                    if (json == null)
+                        LogLine("No response from EDSM Distance server.");
+                    else
+                    {
+                        long number = DistanceClass.ParseEDSMUpdateDistancesString(json, ref lstdist, false, cancelRequested, reportProgress, LogLineHighlight);
+                        numbertotal += number;
+                    }
+                }
+                catch (WebException ex)
+                {
+                    if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null && ex.Response is HttpWebResponse)
+                    {
+                        string status = ((HttpWebResponse)ex.Response).StatusDescription;
+                        LogLine($"Download of EDSM distances from the server failed ({status})");
+                    }
+                    else
+                    {
+                        LogLine($"Download of EDSM distances from the server failed ({ex.Status.ToString()})");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogLine($"Download of EDSM distances from the server failed ({ex.Message})");
                 }
 
                 if (cancelRequested())
@@ -875,7 +894,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                MessageBox.Show("GetEDSMDistances exception: " + ex.Message, "ERROR", MessageBoxButtons.OK);
+                LogLineHighlight("GetEDSMDistances exception: " + ex.Message);
             }
 
             return (numbertotal != 0);
@@ -996,6 +1015,7 @@ namespace EDDiscovery
         {
             try
             {
+                Trace.WriteLine(text);
                 Invoke((MethodInvoker)delegate
                 {
                     travelHistoryControl1.LogTextHighlight(text + Environment.NewLine);
