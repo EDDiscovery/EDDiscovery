@@ -166,13 +166,13 @@ namespace EDDiscovery.DB
                     if (jo["population"].Type == JTokenType.Integer)
                         population = jo["population"].Value<long>();
 
-                    government = EliteDangerous.Government2ID(jo["government"]);
-                    allegiance = EliteDangerous.Allegiance2ID(jo["allegiance"]);
+                    government = EliteDangerousClass.Government2ID(jo["government"]);
+                    allegiance = EliteDangerousClass.Allegiance2ID(jo["allegiance"]);
 
-                    state = EliteDangerous.EDState2ID(jo["state"]);
-                    security = EliteDangerous.EDSecurity2ID(jo["security"]);
+                    state = EliteDangerousClass.EDState2ID(jo["state"]);
+                    security = EliteDangerousClass.EDSecurity2ID(jo["security"]);
 
-                    primary_economy = EliteDangerous.EDEconomy2ID(jo["primary_economy"]);
+                    primary_economy = EliteDangerousClass.EDEconomy2ID(jo["primary_economy"]);
 
                     if (jo["needs_permit"].Type == JTokenType.Integer)
                         needs_permit = jo["needs_permit"].Value<int>();
@@ -332,7 +332,7 @@ namespace EDDiscovery.DB
                                         Array.Resize(ref colours, colours.Length + 8192);
                                     }
 
-                                    Vector3 pos = new Vector3((float)(double)reader["x"], (float)(double)reader["y"], (float)(double)reader["z"]);
+                                    Vector3 pos = new Vector3((float)((long)reader["x"] / 128.0), (float)((long)reader["y"] / 128.0), (float)((long)reader["z"] / 128.0));
 
                                     int rand = (int)(long)reader["randomid"];
                                     Color basec = fixedc[rand&3]; 
@@ -1594,6 +1594,7 @@ namespace EDDiscovery.DB
 
                                     updateSysCmd.Parameters["@EdsmId"].Value = system.id_edsm;
                                     updateSysCmd.Parameters["@EddbId"].Value = system.id_eddb;
+                                    updateSysCmd.ExecuteNonQuery();
 
                                     if (eddbid != 0)
                                     {

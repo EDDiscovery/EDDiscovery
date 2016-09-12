@@ -8,8 +8,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     public class JournalFileHeader : JournalEntry
     {
-        public JournalFileHeader(JObject jo) : base(jo, JournalTypeEnum.FileHeader)
+        public JournalFileHeader(JObject evt) : base(evt, JournalTypeEnum.FileHeader)
         {
+
+            GameVersion = evt.Value<string>("gameversion");
+            Build = evt.Value<string>("build");
+            Language = evt.Value<string>("language");
         }
+
+        public string GameVersion { get; set; }
+        public string Build { get; set; }
+        public string Language { get; set; }
     }
 }

@@ -141,6 +141,9 @@ namespace EDDiscovery2.EDSM
                 "&enddatetime=" + HttpUtility.UrlEncode(enddate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
                 "&coords=1&submitted=1&known=1&showId=1";
             var response = RequestGet(query);
+            if ((int)response.StatusCode >= 400)
+                return null;
+
             return response.Body;
         }
 
@@ -294,6 +297,11 @@ namespace EDDiscovery2.EDSM
                 query = "?sysname=" + HttpUtility.UrlEncode(systemname) + "&coords=1&distances=1&submitted=1";
 
                 var response = RequestGet("api-v1/system" + query);
+
+                if ((int)response.StatusCode >= 400)
+                    return listDistances;
+
+
                 var json = response.Body;
 
                 //https://www.edsm.net/api-v1/system?sysname=Col+359+Sector+CP-Y+c1-18&coords=1&include_hidden=1&distances=1&submitted=1
@@ -360,6 +368,11 @@ namespace EDDiscovery2.EDSM
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query);
+
+            if ((int)response.StatusCode >= 400)
+                return null;
+
+
             return response.Body;
         }
 
@@ -370,6 +383,10 @@ namespace EDDiscovery2.EDSM
             query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName);
 
             var response = RequestGet("api-logs-v1/" + query);
+
+            if ((int)response.StatusCode >= 400)
+                return null;
+
             return response.Body;
         }
 
@@ -378,6 +395,10 @@ namespace EDDiscovery2.EDSM
             string query;
             query = "set-comment?systemName=" + HttpUtility.UrlEncode(sn.Name) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(sn.Note);
             var response = RequestGet("api-logs-v1/" + query);
+
+            if ((int)response.StatusCode >= 400)
+                return null;
+
             return response.Body;
         }
 
@@ -388,6 +409,10 @@ namespace EDDiscovery2.EDSM
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
             var response = RequestGet("api-logs-v1/" + query);
+
+            if ((int)response.StatusCode >= 400)
+                return null;
+
             return response.Body;
         }
 
@@ -400,6 +425,10 @@ namespace EDDiscovery2.EDSM
                  "&x=" + HttpUtility.UrlEncode(x.ToString(culture)) + "&y=" + HttpUtility.UrlEncode(y.ToString(culture)) + "&z=" + HttpUtility.UrlEncode(z.ToString(culture)) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
             var response = RequestGet("api-logs-v1/" + query);
+
+            if ((int)response.StatusCode >= 400)
+                return null;
+
             return response.Body;
         }
 
@@ -410,6 +439,10 @@ namespace EDDiscovery2.EDSM
             string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query);
+
+            if ((int)response.StatusCode >= 400)
+                return 0;
+
             var json = response.Body;
 
             if (json == null)
@@ -457,6 +490,10 @@ namespace EDDiscovery2.EDSM
             string query = "api-v1/systems?pushed=1";
 
             var response = RequestGet(query);
+            if ((int)response.StatusCode >= 400)
+                return null;
+
+
             var json = response.Body;
             if (json == null)
                 return systems;

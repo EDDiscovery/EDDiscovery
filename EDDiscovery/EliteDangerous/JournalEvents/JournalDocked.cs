@@ -1,20 +1,29 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-    public class JournalFSDJump : JournalLocOrJump
+    //When written: when landing at landing pad in a space station, outpost, or surface settlement
+    //Parameters:
+    //•	StationName: name of station
+    //•	StationType: type of station
+    //•	StarSystem: name of system
+    //•	CockpitBreach:true (only if landing with breached cockpit)
+    //•	Faction: station’s controlling faction
+    //•	FactionState
+    //•	Allegiance
+    //•	Economy
+    //•	Government
+    //•	Security
+    public class JournalDocked : JournalEntry
     {
-        public JournalFSDJump(JObject evt) : base(evt, JournalTypeEnum.FSDJump)
+
+
+        public JournalDocked(JObject evt) : base(evt, JournalTypeEnum.Docked)
         {
-            Body = evt.Value<string>("Body");
-            JumpDist = evt.Value<double>("JumpDist");
-            FuelUsed = evt.Value<double>("FuelUsed");
-            FuelLevel = evt.Value<double>("FuelLevel");
-            BoostUsed = evt.Value<bool>("BoostUsed");
+            StationName = evt.Value<string>("StationName");
+            StationType = evt.Value<string>("StationType");
+            CockpitBreach = evt.Value<bool?>("CockpitBreach");
             Faction = evt.Value<string>("Faction");
             FactionState = evt.Value<string>("FactionState");
             Allegiance = evt.Value<string>("Allegiance");
@@ -25,12 +34,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Security = evt.Value<string>("Security");
             Security_Localised = evt.Value<string>("Security_Localised");
         }
-
-        public string Body { get; set; }
-        public double JumpDist { get; set; }
-        public double FuelUsed { get; set; }
-        public double FuelLevel { get; set; }
-        public bool BoostUsed { get; set; }
+        public string StationName { get; set; }
+        public string StationType { get; set; }
+        public bool? CockpitBreach { get; set; }
         public string Faction { get; set; }
         public string FactionState { get; set; }
         public string Allegiance { get; set; }
@@ -40,6 +46,5 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Government_Localised { get; set; }
         public string Security { get; set; }
         public string Security_Localised { get; set; }
-
     }
 }
