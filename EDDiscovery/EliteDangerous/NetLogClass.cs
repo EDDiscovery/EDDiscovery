@@ -107,7 +107,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                MessageBox.Show("GetNetLogPath exception: " + ex.Message);
+                Trace.WriteLine("GetNetLogPath exception: " + ex.Message);
                 return null;
             }
         }
@@ -303,7 +303,6 @@ namespace EDDiscovery
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show("Start Monitor exception : " + ex.Message, "EDDiscovery Error");
                     System.Diagnostics.Trace.WriteLine("Start Monitor exception : " + ex.Message);
                     System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 }
