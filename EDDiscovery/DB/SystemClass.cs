@@ -463,7 +463,11 @@ namespace EDDiscovery.DB
 
             foreach (long edsmid in GetEdsmIdsFromName(name))
             {
-                systems.Add(GetSystem(edsmid, cn, SystemIDType.EdsmId));
+                SystemClass sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
+                if (sys != null)
+                {
+                    systems.Add(sys);
+                }
             }
 
             return systems;
