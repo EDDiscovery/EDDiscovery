@@ -591,9 +591,6 @@ namespace EDDiscovery.DB
                 if (dbver < 4)
                     UpgradeUserDB4(conn);
 
-                if (dbver < 5)
-                    UpgradeUserDB5(conn);
-
                 if (dbver < 6)
                     UpgradeUserDB6(conn);
 
@@ -740,9 +737,8 @@ namespace EDDiscovery.DB
         private static void UpgradeUserDB2(SQLiteConnectionED conn)
         {
             string query4 = "CREATE TABLE SystemNote (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL )";
-            string query6 = "CREATE  TABLE VisitedSystems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL , SystemID INTEGER, Dist FLOAT)";
 
-            PerformUpgrade(conn, 2, false, false, new[] { query4, query6 });
+            PerformUpgrade(conn, 2, false, false, new[] { query4 });
         }
 
         /*
@@ -757,14 +753,6 @@ namespace EDDiscovery.DB
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN Note TEXT";
             PerformUpgrade(conn, 4, true, true, new[] { query1 });
-        }
-
-        private static void UpgradeUserDB5(SQLiteConnectionED conn)
-        {
-            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Unit TEXT";
-            string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Commander Integer";
-            string query4 = "CREATE INDEX VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)";
-            PerformUpgrade(conn, 5, true, true, new[] {query1, query3, query4});
         }
 
         private static void UpgradeSystemsDB6(SQLiteConnectionED conn)
