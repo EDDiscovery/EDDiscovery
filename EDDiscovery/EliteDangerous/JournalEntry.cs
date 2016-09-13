@@ -366,7 +366,7 @@ namespace EDDiscovery.EliteDangerous
                     break;
 
                 default:
-                    je = new JournalUnknown(jo);
+                    je = new JournalUnknown(jo, Eventstr, reader);
                     break;
             }
 
