@@ -585,14 +585,14 @@ namespace EDDiscovery.DB
             {
                 ExecuteQuery(conn, "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
                 dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
+
+                DropOldUserTables(conn);
+
                 if (dbver < 2)
                     UpgradeUserDB2(conn);
 
                 if (dbver < 4)
                     UpgradeUserDB4(conn);
-
-                if (dbver < 6)
-                    UpgradeUserDB6(conn);
 
                 if (dbver < 7)
                     UpgradeUserDB7(conn);
@@ -648,6 +648,9 @@ namespace EDDiscovery.DB
             {
                 ExecuteQuery(conn, "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
                 dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
+
+                DropOldSystemTables(conn);
+
                 if (dbver < 2)
                     UpgradeSystemsDB2(conn);
 
@@ -768,14 +771,6 @@ namespace EDDiscovery.DB
             string query9 = "ALTER TABLE Systems ADD COLUMN state Integer";
             string query10 = "ALTER TABLE Systems ADD COLUMN needs_permit Integer";
             string query11 = "DROP TABLE Stations";
-
-            PerformUpgrade(conn, 6, true, true, new[] {
-                query1, query2, query4, query5, query6, query7, query8, query9, query10,
-                query11 });
-        }
-
-        private static void UpgradeUserDB6(SQLiteConnectionED conn)
-        {
             string query12 = "CREATE TABLE Stations (id INTEGER PRIMARY KEY  NOT NULL ,system_id INTEGER, name TEXT NOT NULL ,  " +
                 " max_landing_pad_size INTEGER, distance_to_star INTEGER, faction Text, government_id INTEGER, allegiance_id Integer,  state_id INTEGER, type_id Integer, " +
                 "has_commodities BOOL DEFAULT (null), has_refuel BOOL DEFAULT (null), has_repair BOOL DEFAULT (null), has_rearm BOOL DEFAULT (null), " +
@@ -786,8 +781,10 @@ namespace EDDiscovery.DB
             string query15 = "CREATE INDEX StationsIndex_ID  ON Stations (id ASC)";
             string query16 = "CREATE INDEX StationsIndex_system_ID  ON Stations (system_id ASC)";
             string query17 = "CREATE INDEX StationsIndex_system_Name  ON Stations (Name ASC)";
-            PerformUpgrade(conn, 6, true, true, new[] { query12, query13, query14, query15, query16, query17 });
 
+            PerformUpgrade(conn, 6, true, true, new[] {
+                query1, query2, query4, query5, query6, query7, query8, query9, query10,
+                query11, query12, query13, query14, query15, query16, query17 });
         }
 
         private static void UpgradeUserDB7(SQLiteConnectionED conn)
@@ -986,18 +983,54 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 102, true, false, new[] { query1, query2, query3 });
         }
 
+        private static void DropOldUserTables(SQLiteConnectionUser conn)
+        {
+            string[] queries = new[]
+            {
+                "DROP TABLE IF EXISTS Systems",
+                "DROP TABLE IF EXISTS SystemAliases",
+                "DROP TABLE IF EXISTS Distances",
+                "DROP TABLE IF EXISTS Stations",
+                "DROP TABLE IF EXISTS station_commodities",
+            };
 
+            foreach (string query in queries)
+            {
+                using (DbCommand cmd = conn.CreateCommand(query))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private static void DropOldSystemTables(SQLiteConnectionSystem conn)
+        {
+            string[] queries = new[]
+            {
+                "DROP TABLE IF EXISTS Bookmarks",
+                "DROP TABLE IF EXISTS SystemNote",
+                "DROP TABLE IF EXISTS TravelLogUnit",
+                "DROP TABLE IF EXISTS VisitedSystems",
+                "DROP TABLE IF EXISTS route_Systems",
+                "DROP TABLE IF EXISTS routes_expeditions",
+                "DROP TABLE IF EXISTS Objects",
+                "DROP TABLE IF EXISTS wanted_systems",
+            };
+
+            foreach (string query in queries)
+            {
+                using (DbCommand cmd = conn.CreateCommand(query))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
         private static void CreateUserDBTableIndexes()
         {
             string[] queries = new[]
             {
-                "CREATE INDEX IF NOT EXISTS stationIndex ON Stations (system_id ASC)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)",
-                "CREATE INDEX IF NOT EXISTS station_commodities_index ON station_commodities (station_id ASC, commodity_id ASC, type ASC)",
-                "CREATE INDEX IF NOT EXISTS StationsIndex_ID  ON Stations (id ASC)",
-                "CREATE INDEX IF NOT EXISTS StationsIndex_system_ID  ON Stations (system_id ASC)",
-                "CREATE INDEX IF NOT EXISTS StationsIndex_system_Name  ON Stations (Name ASC)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_position ON VisitedSystems (X, Y, Z)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)"
@@ -1023,6 +1056,11 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
                 "CREATE INDEX IF NOT EXISTS Distances_EDSM_ID_Index ON Distances (id_edsm ASC)",
                 "CREATE INDEX IF NOT EXISTS DistanceName ON Distances (NameA ASC, NameB ASC)",
+                "CREATE INDEX IF NOT EXISTS stationIndex ON Stations (system_id ASC)",
+                "CREATE INDEX IF NOT EXISTS station_commodities_index ON station_commodities (station_id ASC, commodity_id ASC, type ASC)",
+                "CREATE INDEX IF NOT EXISTS StationsIndex_ID  ON Stations (id ASC)",
+                "CREATE INDEX IF NOT EXISTS StationsIndex_system_ID  ON Stations (system_id ASC)",
+                "CREATE INDEX IF NOT EXISTS StationsIndex_system_Name  ON Stations (Name ASC)",
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
