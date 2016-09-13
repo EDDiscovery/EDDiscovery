@@ -204,9 +204,11 @@ namespace EDDiscovery.EliteDangerous
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
+                    List<JournalEntry> entries = reader.ReadJournalLog().ToList();
+
                     using (DbTransaction tn = cn.BeginTransaction())
                     {
-                        foreach (JournalEntry je in reader.ReadJournalLog())
+                        foreach (JournalEntry je in entries)
                         {
                             if (je is JournalEvents.JournalLocOrJump)
                             {
