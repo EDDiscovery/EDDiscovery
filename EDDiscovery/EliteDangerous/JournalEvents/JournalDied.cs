@@ -20,7 +20,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public string Rank;
         }
 
-        public JournalDied(JObject evt) : base(evt, JournalTypeEnum.Died)
+        public JournalDied(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Died, reader)
         {
             string killerName = evt.Value<string>("KillerName");
             if (string.IsNullOrEmpty(killerName))
