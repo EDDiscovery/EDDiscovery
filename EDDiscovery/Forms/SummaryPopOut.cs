@@ -29,6 +29,7 @@ namespace EDDiscovery2
             return message.Result;
         }
 
+        public bool IsFormClosed { get; set; } = false;
         private Color transparentkey = Color.Red;
         private Timer autofade = new Timer();
         private ControlTable lt;
@@ -297,8 +298,11 @@ namespace EDDiscovery2
             }
         }
 
+
         private void SummaryPopOut_FormClosing(object sender, FormClosingEventArgs e)
         {
+            IsFormClosed = true;
+
             SQLiteDBClass.PutSettingInt("PopOutFormWidth", this.Width);
             SQLiteDBClass.PutSettingInt("PopOutFormHeight", this.Height);
             SQLiteDBClass.PutSettingInt("PopOutFormTop", this.Top);
