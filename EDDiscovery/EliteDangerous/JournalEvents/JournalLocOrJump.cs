@@ -22,6 +22,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             StarSystem = jo.Value<string>("StarSystem");
             JArray coords = jo["StarPos"] as JArray;
+
+            StarPos = new Coords();
             StarPos.X = coords[0].Value<double>();
             StarPos.Y = coords[1].Value<double>();
             StarPos.Z = coords[2].Value<double>();
