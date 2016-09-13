@@ -19,7 +19,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
 
 
-        public JournalDocked(JObject evt) : base(evt, JournalTypeEnum.Docked)
+        public JournalDocked(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Docked, reader)
         {
             StationName = evt.Value<string>("StationName");
             StationType = evt.Value<string>("StationType");

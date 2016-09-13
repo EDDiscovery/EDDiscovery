@@ -8,7 +8,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StationName: name of station
     public class JournalDockingTimeout : JournalEntry
     {
-        public JournalDockingTimeout(JObject evt) : base(evt, JournalTypeEnum.DockingTimeout)
+        public JournalDockingTimeout(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockingTimeout, reader)
         {
             StationName = evt.Value<string>("StationName");
         }

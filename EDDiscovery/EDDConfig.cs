@@ -74,6 +74,8 @@ namespace EDDiscovery2
         {
             { "Netlogdir", () => System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments", "Products") },
             { "NetlogDirAutoMode", () => true },
+            { "JournalDir", () => EDDiscovery.EliteDangerous.EDJournalClass.GetDefaultJournalDir() },
+            { "JournalDirAutoMode", () => true },
             { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() },
             { "MapColour_CoarseGridLines", () => System.Drawing.ColorTranslator.FromHtml("#296A6C").ToArgb() },
             { "MapColour_FineGridLines", () => System.Drawing.ColorTranslator.FromHtml("#202020").ToArgb() },
@@ -210,6 +212,9 @@ namespace EDDiscovery2
 
         public string NetLogDir { get { return GetSettingString("Netlogdir"); } set { PutSettingString("Netlogdir", value); } }
         public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
+        public string JournalDir { get { return GetSettingString("JournalDir"); } set { PutSettingString("JournalDir", value); } }
+        public bool JournalDirAutoMode { get { return GetSettingBool("JournalDirAutoMode"); } set { PutSettingBool("JournalDirAutoMode", value); } }
+
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
         public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
 

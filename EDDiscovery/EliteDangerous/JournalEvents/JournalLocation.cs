@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalLocation : JournalLocOrJump
     {
-        public JournalLocation(JObject evt) : base(evt, JournalTypeEnum.Location)
+        public JournalLocation(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Location, reader)
         {
             Body = evt.Value<string>("Body");
             Docked = evt.Value<bool?>("Docked") ?? false;
