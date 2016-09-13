@@ -23,4 +23,4 @@ CREATE INDEX EdsmSystems_RandomId on EdsmSystems (RandomId)
 
 Re-imported from EDSM dump.  Grid ID and RandomID are used for new 3dmap star painting system.  Grid ID is assigned based on x/z position, RandomID is 0 to 99 inclusive.
 
-The X, Y and Z coordinates are stored in 1/64ly (or 1/32ly) units from Sol, resulting in a 24-bit integer for all stars within the galaxy, and a 16-bit integer for stars within 512ly (or 1024ly) of Sol.
+The X, Y and Z coordinates are stored in 1/128ly units from Sol, resulting in a 24-bit integer for most stars within the galaxy, and a 16-bit integer for stars within 256ly of Sol.
