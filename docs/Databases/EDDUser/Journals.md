@@ -16,6 +16,6 @@ CREATE INDEX Journal_Commander ON Journals (CommanderId)
 Migrated from [`EDDiscovery.TravelLogUnit`](https://github.com/EDDiscovery/EDDiscovery/wiki/Databases-in-EDD#travellogunit) table.
 
 Type:
-* `NetLog`: travel log is a netlog
-* `EDSM`: travel log was fetched from EDSM
-* `Journal`: travel log is a E:D 2.2 journal
+* `NetLog`: 1 : travel log is a netlog
+* `EDSM`: 2 :travel log was fetched from EDSM
+* `Journal`: 3 :travel log is a E:D 2.2 journal
