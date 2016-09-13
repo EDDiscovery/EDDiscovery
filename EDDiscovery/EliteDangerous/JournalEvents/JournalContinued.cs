@@ -9,7 +9,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
     public class JournalContinued : JournalEntry
     {
-        public JournalContinued(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Undocked, reader)
+        public JournalContinued(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Continued, reader)
         {
             Part = evt.Value<int>("Part");
         }
