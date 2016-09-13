@@ -215,6 +215,8 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseExit.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUndocked.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnhandled.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnknown.cs" />
