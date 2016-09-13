@@ -4,17 +4,17 @@
 CREATE TABLE JournalEntries (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   JournalId INTEGER NOT NULL REFERENCES Journals (Id),
-  EventType TEXT NOT NULL,
+  EventTypeId INTEGER NOT NULL,
+  EventType TEXT,
   EventTime DATETIME NOT NULL,
   EventData TEXT, -- JSON String of complete line
-  CommanderId INTEGER NOT NULL REFERENCES Commanders (Id),
   Synced INTEGER,
 )
 
 CREATE INDEX JournalEntry_JournalId ON JournalEntries (JournalId)
+CREATE INDEX JournalEntry_EventTypeId ON JournalEntries (EventTypeId)
 CREATE INDEX JournalEntry_EventType ON JournalEntries (EventType)
 CREATE INDEX JournalEntry_EventTime ON JournalEntries (EventTime)
-CREATE INDEX JournalEntry_CommanderId ON JournalEntries (CommanderId)
 ```
 
 This table contains entries from the journal or converted entries from the pre-2.2 netlogs.
