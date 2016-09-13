@@ -1185,9 +1185,10 @@ namespace EDDiscovery
                 summaryPopOut.Show();
             }
             else
-            { 
-                summaryPopOut.Close();
+            {
+                var popout = summaryPopOut;
                 summaryPopOut = null;
+                popout.Close();
             }
 
             return (summaryPopOut != null);     // on screen?

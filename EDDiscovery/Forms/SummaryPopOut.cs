@@ -35,6 +35,7 @@ namespace EDDiscovery2
         private Font butfont = new Font("Microsoft Sans Serif", 8.25F);
         private int statictoplines = 0;
         private double tabscalar = 1.0;
+        private bool isClosed = false;
 
         public event EventHandler RequiresRefresh;
 
@@ -81,6 +82,11 @@ namespace EDDiscovery2
 
         public void SetGripperColour(Color grip)
         {
+            if (isClosed)
+            {
+                return;
+            }
+
             if (grip.GetBrightness() < 0.15)       // override if its too dark..
                 grip = Color.Orange;
 
@@ -97,6 +103,11 @@ namespace EDDiscovery2
         
         public void ResetForm(DataGridView vsc)
         {
+            if (isClosed)
+            {
+                return;
+            }
+
             SuspendLayout();
 
             ControlTable ltold = lt;
@@ -136,6 +147,11 @@ namespace EDDiscovery2
 
         public void RefreshTarget(DataGridView vsc, List<VisitedSystemsClass> vscl)
         {
+            if (isClosed)
+            {
+                return;
+            }
+
             SuspendLayout();
 
             string name;
@@ -181,6 +197,11 @@ namespace EDDiscovery2
 
         public void RefreshRow(DataGridView vsc, DataGridViewRow vscrow, bool addattop = false )
         {
+            if (isClosed)
+            {
+                return;
+            }
+
             SuspendLayout();
 
             Point3D tpos;
@@ -299,6 +320,8 @@ namespace EDDiscovery2
 
         private void SummaryPopOut_FormClosing(object sender, FormClosingEventArgs e)
         {
+            isClosed = true;
+
             SQLiteDBClass.PutSettingInt("PopOutFormWidth", this.Width);
             SQLiteDBClass.PutSettingInt("PopOutFormHeight", this.Height);
             SQLiteDBClass.PutSettingInt("PopOutFormTop", this.Top);
