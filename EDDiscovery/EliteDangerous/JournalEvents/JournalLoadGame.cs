@@ -10,6 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLoadGame(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.LoadGame, reader)
         {
+            Commander = evt.Value<string>("Commander");
             Ship = evt.Value<string>("Ship");
             ShipId = evt.Value<int>("ShipID");
             StartLanded = evt.Value<bool>("StartLanded");
@@ -19,21 +20,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Credits = evt.Value<int>("Credits");
             Loan = evt.Value<int>("Loan");
 
-            string cmdrname = evt.Value<string>("Commander");
             var cmdr = reader.Commander;
 
-            if (cmdr == null || cmdr.Name != cmdrname)
+            if (cmdr == null || cmdr.Name != Commander)
             {
-                cmdr = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(cmdrname, StringComparison.InvariantCultureIgnoreCase));
+                cmdr = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(Commander, StringComparison.InvariantCultureIgnoreCase));
                 if (cmdr == null)
                 {
-                    cmdr = EDDiscovery2.EDDConfig.Instance.GetNewCommander(cmdrname);
+                    cmdr = EDDiscovery2.EDDConfig.Instance.GetNewCommander(Commander);
                 }
-                commander = cmdr;
                 reader.Commander = cmdr;
             }
         }
 
+        public string Commander { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public bool StartLanded { get; set; }
