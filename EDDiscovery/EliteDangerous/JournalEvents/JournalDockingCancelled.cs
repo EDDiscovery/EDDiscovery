@@ -8,7 +8,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	StationName: name of station
     public class JournalDockingCancelled : JournalEntry
     {
-        public JournalDockingCancelled(JObject evt) : base(evt, JournalTypeEnum.DockingCancelled)
+        public JournalDockingCancelled(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockingCancelled, reader)
         {
             StationName = evt.Value<string>("StationName");
         }
