@@ -225,6 +225,7 @@ namespace EDDiscovery.EliteDangerous
                     break;
 
                 case "fileheader":
+                case "Fileheader":
                     je = new JournalFileHeader(jo, reader);
                     break;
 
