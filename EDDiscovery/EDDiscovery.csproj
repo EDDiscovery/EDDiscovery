@@ -198,6 +198,7 @@
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalContinued.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingCancelled.cs" />

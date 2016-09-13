@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalUndocked : JournalEntry
     {
-        public JournalUndocked(JObject evt) : base(evt, JournalTypeEnum.Undocked)
+        public JournalUndocked(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Undocked, reader)
         {
             StationName = evt.Value<string>("StationName");
         

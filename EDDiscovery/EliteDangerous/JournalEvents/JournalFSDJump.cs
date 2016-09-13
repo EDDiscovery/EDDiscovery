@@ -8,7 +8,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     public class JournalFSDJump : JournalLocOrJump
     {
-        public JournalFSDJump(JObject evt) : base(evt, JournalTypeEnum.FSDJump)
+        public JournalFSDJump(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.FSDJump, reader)
         {
             Body = evt.Value<string>("Body");
             JumpDist = evt.Value<double>("JumpDist");
