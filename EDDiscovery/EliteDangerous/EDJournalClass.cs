@@ -216,7 +216,7 @@ namespace EDDiscovery.EliteDangerous
                                 VisitedSystemsClass vsc = new VisitedSystemsClass();
                                 vsc.EDSM_sync = false;
                                 vsc.MapColour = defaultMapColour;
-                                vsc.Commander = EDDConfig.Instance.CurrentCmdrID;
+                                vsc.Commander = (reader.Commander ?? EDDConfig.Instance.CurrentCommander).Nr;
                                 vsc.Name = jl.StarSystem;
                                 vsc.X = jl.StarPos.X;
                                 vsc.Y = jl.StarPos.Y;
@@ -475,7 +475,7 @@ namespace EDDiscovery.EliteDangerous
                             VisitedSystemsClass vsc = new VisitedSystemsClass();
                             vsc.EDSM_sync = false;
                             vsc.MapColour = EDDConfig.Instance.DefaultMapColour;
-                            vsc.Commander = (jl.Commander ?? EDDConfig.Instance.CurrentCommander).Nr;
+                            vsc.Commander = (nfi.Commander ?? EDDConfig.Instance.CurrentCommander).Nr;
                             vsc.Name = jl.StarSystem;
                             vsc.X = jl.StarPos.X;
                             vsc.Y = jl.StarPos.Y;
