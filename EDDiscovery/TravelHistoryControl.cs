@@ -1166,36 +1166,39 @@ namespace EDDiscovery
                 toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
             }
 
-            if (summaryPopOut != null)
+            if (IsSummaryPopOutReady)
                 summaryPopOut.RefreshTarget(dataGridViewTravel,visitedSystems);
         }
 
-        #endregion 
+        #endregion
 
         #region Summary Pop out
+        
+        public bool IsSummaryPopOutReady { get { return summaryPopOut != null && !summaryPopOut.IsFormClosed; } }
 
-        public bool IsSummaryPopOutOn {  get { return summaryPopOut != null; } }
         public bool ToggleSummaryPopOut()
         {
-            if (summaryPopOut == null )
+            if (summaryPopOut == null || summaryPopOut.IsFormClosed)
             {
-                summaryPopOut = new SummaryPopOut();
-                summaryPopOut.RequiresRefresh += SummaryRefreshRequested;
-                RedrawSummary();
-                summaryPopOut.Show();
+                SummaryPopOut p = new SummaryPopOut();
+                p.RequiresRefresh += SummaryRefreshRequested;
+                p.SetGripperColour(_discoveryForm.theme.LabelColor);
+                p.ResetForm(dataGridViewTravel);
+                p.RefreshTarget(dataGridViewTravel, visitedSystems); 
+                p.Show();
+                summaryPopOut = p;          // do it like this in case of race conditions 
+                return true;
             }
             else
             { 
-                summaryPopOut.Close();
-                summaryPopOut = null;
+                summaryPopOut.Close();      // there is no point null it, as if the user closes it, it never gets the chance to be nulled
+                return false;
             }
-
-            return (summaryPopOut != null);     // on screen?
         }
 
         public void RedrawSummary()
         {
-            if (summaryPopOut != null)
+            if (IsSummaryPopOutReady)
             {
                 summaryPopOut.SetGripperColour(_discoveryForm.theme.LabelColor);
                 summaryPopOut.ResetForm(dataGridViewTravel);
@@ -1210,7 +1213,7 @@ namespace EDDiscovery
 
         public void RefreshSummaryRow(DataGridViewRow row , bool add = false )
         {
-            if (summaryPopOut != null)
+            if (IsSummaryPopOutReady)
                 summaryPopOut.RefreshRow(dataGridViewTravel, row, add);
         }
 
