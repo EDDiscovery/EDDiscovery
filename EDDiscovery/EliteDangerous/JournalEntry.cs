@@ -352,7 +352,14 @@ namespace EDDiscovery.EliteDangerous
                     break;
                     
                 case "Progress":
-                    je = new JournalProgress(jo, reader);
+                    je = new JournalRank(jo, reader);
+                    break;
+
+                case "SupercruiseEntry":
+                    je = new JournalSupercruiseEntry(jo, reader);
+                    break;
+                case "SupercruiseExit":
+                    je = new JournalSupercruiseExit(jo, reader);
                     break;
 
 
@@ -431,8 +438,6 @@ namespace EDDiscovery.EliteDangerous
                 case "ShipyardSell":
                 case "ShipyardSwap":
                 case "ShipyardTransfer":
-                case "SupercruiseEntry":
-                case "SupercruiseExit":
                 case "Synthesis":
                 case "Touchdown":
                 case "USSDrop":
