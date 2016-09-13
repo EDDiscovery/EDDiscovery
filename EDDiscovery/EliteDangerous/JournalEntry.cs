@@ -126,7 +126,6 @@ namespace EDDiscovery.EliteDangerous
         public int Id;
         public int JournalId;
         protected string eventTypeStr;
-        protected EDCommander commander;
         private JournalTypeEnum eventType;
         private DateTime eventTimeUTC;
         private JObject jEventData;
@@ -174,29 +173,12 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public int CommanderID
-        {
-            get
-            {
-                return Commander.Nr;
-            }
-        }
-
-        public EDCommander Commander
-        {
-            get
-            {
-                return commander;
-            }
-        }
-
         public JournalEntry(JObject jo, JournalTypeEnum jtype, EDJournalReader reader)
         {
             jEventData = jo;
             eventType = jtype;
 
             eventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-            commander = reader.Commander;
             JournalId = reader.JournalId;
         }
 
