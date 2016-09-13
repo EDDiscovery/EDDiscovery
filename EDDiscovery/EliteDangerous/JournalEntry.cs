@@ -195,7 +195,7 @@ namespace EDDiscovery.EliteDangerous
             jEventData = jo;
             eventType = jtype;
 
-            eventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+            eventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
             commander = reader.Commander;
             JournalId = reader.JournalId;
         }
