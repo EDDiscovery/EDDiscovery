@@ -968,7 +968,7 @@ namespace EDDiscovery.DB
             string query1 = "CREATE TABLE SystemNames (" +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "Name TEXT NOT NULL, " +
-                "EdsmId INTEGER NOT NULL UNIQUE)";
+                "EdsmId INTEGER NOT NULL)";
             string query2 = "CREATE TABLE EdsmSystems (" +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "EdsmId INTEGER NOT NULL, " +
@@ -1066,7 +1066,8 @@ namespace EDDiscovery.DB
                 "DROP INDEX IF EXISTS EdsmSystems_Position",
                 "DROP INDEX IF EXISTS EdsmSystems_GridId",
                 "DROP INDEX IF EXISTS EdsmSystems_RandomId",
-                "DROP INDEX IF EXISTS SystemNames_EdsmId"
+                "DROP INDEX IF EXISTS SystemNames_EdsmId",
+                "DROP INDEX IF EXISTS sqlite_autoindex_SystemNames_1"
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
