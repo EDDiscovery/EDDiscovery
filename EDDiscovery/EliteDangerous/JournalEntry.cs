@@ -272,8 +272,9 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalDockingTimeout(jo, reader);
                     break;
 
-
-
+                case "Continued":
+                    je = new JournalContinued(jo, reader);
+                    break;
 
 
                 case "Bounty":
