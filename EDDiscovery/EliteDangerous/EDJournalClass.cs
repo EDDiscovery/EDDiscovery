@@ -140,7 +140,7 @@ namespace EDDiscovery.EliteDangerous
             List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(EDDConfig.Instance.CurrentCmdrID);
 
             List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
-            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
+            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
             Dictionary<string, List<VisitedSystemsClass>> vsc_lookup = VisitedSystemsClass.GetAll().GroupBy(v => v.Unit).ToDictionary(g => g.Key, g => g.ToList());
 
             if (vsSystemsList != null)
@@ -176,6 +176,7 @@ namespace EDDiscovery.EliteDangerous
                 if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
                 {
                     m_travelogUnits[reader.TravelLogUnit.Name] = reader.TravelLogUnit;
+                    reader.TravelLogUnit.type = 3;
                     reader.TravelLogUnit.Add();
                 }
 
@@ -458,6 +459,7 @@ namespace EDDiscovery.EliteDangerous
                 {
                     if (nfi.TravelLogUnit.id == 0)
                     {
+                        nfi.TravelLogUnit.type = 3;
                         nfi.TravelLogUnit.Add();
                     }
 
