@@ -1,4 +1,5 @@
-﻿using EDDiscovery2.DB;
+﻿using EDDiscovery2;
+using EDDiscovery2.DB;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,8 @@ namespace EDDiscovery.EliteDangerous
 {
     public class EDJournalReader : LogReaderBase
     {
+        protected EDCommander _commander;
+
         // Cached list of previous travel log entries
         protected List<VisitedSystemsClass> systems;
 
@@ -19,6 +22,12 @@ namespace EDDiscovery.EliteDangerous
         public DateTime LastLogTime { get; set; }
         public TimeZoneInfo TimeZone { get; set; }
         public TimeSpan TimeZoneOffset { get; set; }
+
+        // Commander
+        public EDCommander Commander { get { return _commander; } set { _commander = value; } }
+
+        // Journal ID
+        public int JournalId { get { return (int)TravelLogUnit.id; } }
 
         public EDJournalReader(string filename) : base(filename)
         {
@@ -42,7 +51,7 @@ namespace EDDiscovery.EliteDangerous
             string line;
             while (this.ReadLine(out line))
             {
-                je = JournalEntry.CreateJournalEntry(line);
+                je = JournalEntry.CreateJournalEntry(line, this);
                 je.JournalId = (int)TravelLogUnit.id;
                 return true;
             }

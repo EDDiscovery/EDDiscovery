@@ -44,7 +44,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //
     public class JournalScan : JournalEntry
     {
-        public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
+        public JournalScan(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Scan, reader)
         {
             BodyName = evt.Value<string>("BodyName");
             StarType = evt.Value<string>("StarType");

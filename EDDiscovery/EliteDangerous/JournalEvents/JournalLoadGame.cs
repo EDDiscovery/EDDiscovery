@@ -8,7 +8,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     public class JournalLoadGame : JournalEntry
     {
-        public JournalLoadGame(JObject evt) : base(evt, JournalTypeEnum.LoadGame)
+        public JournalLoadGame(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.LoadGame, reader)
         {
             Commander = evt.Value<string>("Commander");
             Ship = evt.Value<string>("Ship");
@@ -19,7 +19,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Group = evt.Value<string>("Group");
             Credits = evt.Value<int>("Credits");
             Loan = evt.Value<int>("Loan");
+
+            var cmdr = reader.Commander;
+
+            if (cmdr == null || cmdr.Name != Commander)
+            {
+                cmdr = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(Commander, StringComparison.InvariantCultureIgnoreCase));
+                if (cmdr == null)
+                {
+                    cmdr = EDDiscovery2.EDDConfig.Instance.GetNewCommander(Commander);
+                }
+                reader.Commander = cmdr;
+            }
         }
+
         public string Commander { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }

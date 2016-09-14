@@ -17,7 +17,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalDockingGranted : JournalEntry
     {
-        public JournalDockingGranted(JObject evt) : base(evt, JournalTypeEnum.DockingGranted)
+        public JournalDockingGranted(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockingGranted, reader)
         {
             StationName = evt.Value<string>("StationName");
             LandingPad = evt.Value<int>("LandingPad");

@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
     public class JournalDockingDenied : JournalEntry
     {
-        public JournalDockingDenied(JObject evt) : base(evt, JournalTypeEnum.DockingDenied)
+        public JournalDockingDenied(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockingDenied, reader)
         {
             StationName = evt.Value<string>("StationName");
             Reason = evt.Value<string>("Reason");

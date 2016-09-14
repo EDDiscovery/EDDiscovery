@@ -12,11 +12,23 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Data.Common;
+using System.Runtime.InteropServices;
 
 namespace EDDiscovery.EliteDangerous
 {
     public class EDJournalClass
     {
+        private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");
+        [DllImport("Shell32.dll")]
+        private static extern uint SHGetKnownFolderPath(
+            [MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
+            uint dwFlags,
+            IntPtr hToken,
+            out IntPtr pszPath  // API uses CoTaskMemAlloc
+        );
+
+        private static string journalPath;
+
         public delegate void NewSystemEventHandler(VisitedSystemsClass vsc);
 
         public event NewSystemEventHandler OnNewPosition;          // called in foreground, no need for invoke
@@ -30,81 +42,77 @@ namespace EDDiscovery.EliteDangerous
 
         EDJournalReader lastnfi = null;          // last one read..
 
+        private static Regex journalNamePrefixRe = new Regex("(?<prefix>.*)[.]0*(?<part>[0-9][0-9]*)[.]log");
+
 
         public EDJournalClass(EDDiscoveryForm ds)
         {
         }
 
-        public string GetNetLogPath()
+        public static string GetDefaultJournalDir()
+        {
+            string path;
+
+            // Windows Saved Games path (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6)
+            {
+                IntPtr pszPath;
+                if (SHGetKnownFolderPath(Win32FolderId_SavedGames, 0, IntPtr.Zero, out pszPath) == 0)
+                {
+                    path = Marshal.PtrToStringUni(pszPath);
+                    Marshal.FreeCoTaskMem(pszPath);
+                    return Path.Combine(path, "Frontier Developments", "Elite Dangerous");
+                }
+            }
+
+            // OS X ApplicationSupportDirectory path (Darwin 12.0 == OS X 10.8)
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Environment.OSVersion.Version.Major >= 12)
+            {
+                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "Frontier Developments", "Elite Dangerous");
+
+                if (Directory.Exists(path))
+                {
+                    return path;
+                }
+            }
+
+            return null;
+        }
+
+        public string GetJournalDir()
         {
             try
             {
-                string netlogdirstored = EDDConfig.Instance.NetLogDir;
-                string datapath = null;
-                if (EDDConfig.Instance.NetLogDirAutoMode)
+                string journaldirstored = EDDConfig.Instance.JournalDir;
+                string datapath = journaldirstored;
+
+                if (EDDConfig.Instance.JournalDirAutoMode)
                 {
-                    if (EliteDangerousClass.EDDirectory != null && EliteDangerousClass.EDDirectory.Length > 0)
+                    if (journalPath == null)
                     {
-                        datapath = Path.Combine(EliteDangerousClass.EDDirectory, "Logs");
-                        if (!netlogdirstored.Equals(datapath))
-                            EDDConfig.Instance.NetLogDir = datapath;
-                        return datapath;
+                        journalPath = GetDefaultJournalDir();
                     }
 
-                    datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments", "Products"); // \\FORC-FDEV-D-1001\\Logs\\";
-
-                    // Find the right subdirectory....
-
-                    DirectoryInfo dirInfo = new DirectoryInfo(datapath);
-                    FileInfo[] allFiles = null;
-
-                    try
+                    if (journalPath != null)
                     {
-                        allFiles = dirInfo.GetFiles("netLog*.log", SearchOption.AllDirectories);
-                    }
-                    catch
-                    {
+                        datapath = journalPath;
                     }
 
-                    if (allFiles == null)
+                    if (datapath != journaldirstored)
                     {
-                        return null;
-                    }
-
-                    DateTime newtime = new DateTime(2000, 10, 10);
-                    FileInfo newfi = null;
-
-                    foreach (FileInfo fi in allFiles)
-                    {
-                        if (fi.CreationTimeUtc > newtime)
-                        {
-                            newtime = fi.CreationTimeUtc;
-                            newfi = fi;
-                        }
-                    }
-
-                    if (newfi != null)
-                    {
-                        EDDConfig.Instance.NetLogDir = newfi.DirectoryName;
-                        EDDConfig.Instance.NetLogDirAutoMode = false;
-                        datapath = newfi.DirectoryName;
+                        EDDConfig.Instance.JournalDir = datapath;
                     }
                 }
                 else
                 {
-                    datapath = EDDConfig.Instance.NetLogDir;
-                    string cmdrpath = EDDConfig.Instance.CurrentCommander.NetLogDir;
-                    if (cmdrpath != null && cmdrpath != "" && Directory.Exists(cmdrpath))
-                    {
-                        datapath = cmdrpath;
-                    }
+                    datapath = journaldirstored;
                 }
 
                 return datapath;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("GetNetLogPath exception: " + ex.Message);
+                MessageBox.Show("GetJournalDir exception: " + ex.Message);
                 return null;
             }
         }
@@ -115,24 +123,24 @@ namespace EDDiscovery.EliteDangerous
         {
             error = null;
 
-            string datapath = GetNetLogPath();
+            string datapath = GetJournalDir();
 
             if (datapath == null)
             {
-                error = "Netlog directory not found!" + Environment.NewLine + "Specify location in settings tab";
+                error = "Journal directory not found!" + Environment.NewLine + "Specify location in settings tab";
                 return null;
             }
 
             if (!Directory.Exists(datapath))   // if logfiles directory is not found
             {
-                error = "Netlog directory is not present!" + Environment.NewLine + "Specify location in settings tab";
+                error = "Journal directory is not present!" + Environment.NewLine + "Specify location in settings tab";
                 return null;
             }
 
             List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(EDDConfig.Instance.CurrentCmdrID);
 
             List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
-            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
+            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
             Dictionary<string, List<VisitedSystemsClass>> vsc_lookup = VisitedSystemsClass.GetAll().GroupBy(v => v.Unit).ToDictionary(g => g.Key, g => g.ToList());
 
             if (vsSystemsList != null)
@@ -155,7 +163,7 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
             // order by file write time so we end up on the last one written
-            FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "netLog.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+            FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "Journal.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
 
             List<EDJournalReader> readersToUpdate = new List<EDJournalReader>();
 
@@ -168,6 +176,7 @@ namespace EDDiscovery.EliteDangerous
                 if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
                 {
                     m_travelogUnits[reader.TravelLogUnit.Name] = reader.TravelLogUnit;
+                    reader.TravelLogUnit.type = 3;
                     reader.TravelLogUnit.Add();
                 }
 
@@ -195,9 +204,11 @@ namespace EDDiscovery.EliteDangerous
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
+                    List<JournalEntry> entries = reader.ReadJournalLog().ToList();
+
                     using (DbTransaction tn = cn.BeginTransaction())
                     {
-                        foreach (JournalEntry je in reader.ReadJournalLog())
+                        foreach (JournalEntry je in entries)
                         {
                             if (je is JournalEvents.JournalLocOrJump)
                             {
@@ -205,7 +216,7 @@ namespace EDDiscovery.EliteDangerous
                                 VisitedSystemsClass vsc = new VisitedSystemsClass();
                                 vsc.EDSM_sync = false;
                                 vsc.MapColour = defaultMapColour;
-                                vsc.Commander = EDDConfig.Instance.CurrentCmdrID;
+                                vsc.Commander = (reader.Commander ?? EDDConfig.Instance.CurrentCommander).Nr;
                                 vsc.Name = jl.StarSystem;
                                 vsc.X = jl.StarPos.X;
                                 vsc.Y = jl.StarPos.Y;
@@ -268,6 +279,29 @@ namespace EDDiscovery.EliteDangerous
             else
             {
                 reader = new EDJournalReader(fi.FullName);
+
+                // Bring over the commander from the previous log if possible
+                Match match = journalNamePrefixRe.Match(fi.Name);
+                if (match.Success)
+                {
+                    string prefix = match.Groups["prefix"].Value;
+                    string partstr = match.Groups["part"].Value;
+                    int part;
+                    if (Int32.TryParse(partstr, NumberStyles.Integer, CultureInfo.InvariantCulture, out part) && part > 1)
+                    {
+                        EDCommander lastcmdr = EDDConfig.Instance.CurrentCommander;
+                        var lastreader = netlogreaders.Where(kvp => kvp.Key.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
+                                                      .Select(k => k.Value)
+                                                      .FirstOrDefault();
+                        if (lastreader != null)
+                        {
+                            lastcmdr = lastreader.Commander;
+                        }
+
+                        reader.Commander = lastcmdr;
+                    }
+                }
+
                 netlogreaders[fi.Name] = reader;
             }
 
@@ -282,14 +316,14 @@ namespace EDDiscovery.EliteDangerous
             {
                 try
                 {
-                    string logpath = GetNetLogPath();
+                    string logpath = GetJournalDir();
 
                     if (Directory.Exists(logpath))
                     {
                         m_netLogFileQueue = new ConcurrentQueue<string>();
                         m_Watcher = new System.IO.FileSystemWatcher();
                         m_Watcher.Path = logpath + Path.DirectorySeparatorChar;
-                        m_Watcher.Filter = "netLog*.log";
+                        m_Watcher.Filter = "Journal.*.log";
                         m_Watcher.IncludeSubdirectories = false;
                         m_Watcher.NotifyFilter = NotifyFilters.FileName;
                         m_Watcher.Changed += new FileSystemEventHandler(OnNewFile);
@@ -405,7 +439,7 @@ namespace EDDiscovery.EliteDangerous
                 else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
                 {
                     HashSet<string> tlunames = new HashSet<string>(TravelLogUnit.GetAllNames());
-                    string[] filenames = Directory.EnumerateFiles(GetNetLogPath(), "netLog.*.log", SearchOption.AllDirectories)
+                    string[] filenames = Directory.EnumerateFiles(GetJournalDir(), "Journal.*.log", SearchOption.AllDirectories)
                                                   .Select(s => new { name = Path.GetFileName(s), fullname = s })
                                                   .Where(s => !tlunames.Contains(s.name))
                                                   .OrderBy(s => s.name)
@@ -427,6 +461,7 @@ namespace EDDiscovery.EliteDangerous
                 {
                     if (nfi.TravelLogUnit.id == 0)
                     {
+                        nfi.TravelLogUnit.type = 3;
                         nfi.TravelLogUnit.Add();
                     }
 
@@ -440,14 +475,14 @@ namespace EDDiscovery.EliteDangerous
                             VisitedSystemsClass vsc = new VisitedSystemsClass();
                             vsc.EDSM_sync = false;
                             vsc.MapColour = EDDConfig.Instance.DefaultMapColour;
-                            vsc.Commander = EDDConfig.Instance.CurrentCmdrID;
+                            vsc.Commander = (nfi.Commander ?? EDDConfig.Instance.CurrentCommander).Nr;
                             vsc.Name = jl.StarSystem;
                             vsc.X = jl.StarPos.X;
                             vsc.Y = jl.StarPos.Y;
                             vsc.Z = jl.StarPos.Z;
                             vsc.Unit = nfi.TravelLogUnit.Name;
                             vsc.Source = nfi.TravelLogUnit.id;
-                            vsc.Time = je.EventTimeLocal;
+                            vsc.Time = jl.EventTimeLocal;
                             vsc.Add();
 
                             // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..

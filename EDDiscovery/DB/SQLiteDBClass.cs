@@ -523,24 +523,8 @@ namespace EDDiscovery.DB
 
             try
             {
-                bool fileexist = File.Exists(dbv4file);
-                bool UseV5Databases;
-
-                UseV5Databases = File.Exists(dbuserfile);
-
-                if (!fileexist && UseV5Databases==false)                                         // no file, create it
-                    SQLiteConnection.CreateFile(dbv4file);
-
-                if (UseV5Databases == false)
+                if (File.Exists(dbv4file))
                 {
-                    using (var conn = new SQLiteConnectionOld())
-                    {
-                        if (!fileexist)                                       // first time, create the register
-                            ExecuteQuery(conn, "CREATE TABLE Register (ID TEXT PRIMARY KEY  NOT NULL  UNIQUE , \"ValueInt\" INTEGER, \"ValueDouble\" DOUBLE, \"ValueString\" TEXT, \"ValueBlob\" BLOB)");
-
-                        UpgradeDB(conn);                                            // upgrade it
-                    }
-
                     SplitDataBase();
                 }
 
@@ -553,8 +537,6 @@ namespace EDDiscovery.DB
                 {
                     UpgradeSystemsDB(conn);                                            // upgrade it
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -577,8 +559,15 @@ namespace EDDiscovery.DB
 
             try
             {
-                File.Copy(dbfile, dbuserfile);
-                File.Copy(dbfile, dbsystemsfile);
+                if (!File.Exists(dbuserfile))
+                {
+                    File.Copy(dbfile, dbuserfile);
+                }
+
+                if (!File.Exists(dbsystemsfile))
+                {
+                    File.Copy(dbfile, dbsystemsfile);
+                }
             }
             catch (Exception ex)
             {
@@ -594,7 +583,47 @@ namespace EDDiscovery.DB
             int dbver;
             try
             {
+                ExecuteQuery(conn, "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
                 dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
+
+                DropOldUserTables(conn);
+
+                if (dbver < 2)
+                    UpgradeUserDB2(conn);
+
+                if (dbver < 4)
+                    UpgradeUserDB4(conn);
+
+                if (dbver < 7)
+                    UpgradeUserDB7(conn);
+
+                if (dbver < 8)
+                    UpgradeUserDB8(conn);
+
+                if (dbver < 9)
+                    UpgradeUserDB9(conn);
+
+                if (dbver < 10)
+                    UpgradeUserDB10(conn);
+
+                if (dbver < 11)
+                    UpgradeUserDB11(conn);
+
+                if (dbver < 12)
+                    UpgradeUserDB12(conn);
+
+                if (dbver < 14)
+                    UpgradeUserDB14(conn);
+
+                if (dbver < 16)
+                    UpgradeUserDB16(conn);
+
+                if (dbver < 17)
+                    UpgradeUserDB17(conn);
+
+                if (dbver < 18)
+                    UpgradeUserDB18(conn);
+
                 if (dbver < 101)
                     UpgradeUserDB101(conn);
                 if (dbver < 102)
@@ -617,7 +646,32 @@ namespace EDDiscovery.DB
             int dbver;
             try
             {
+                ExecuteQuery(conn, "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
                 dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
+
+                DropOldSystemTables(conn);
+
+                if (dbver < 2)
+                    UpgradeSystemsDB2(conn);
+
+                if (dbver < 6)
+                    UpgradeSystemsDB6(conn);
+
+                if (dbver < 11)
+                    UpgradeSystemsDB11(conn);
+
+                if (dbver < 15)
+                    UpgradeSystemsDB15(conn);
+
+                if (dbver < 17)
+                    UpgradeSystemsDB17(conn);
+
+                if (dbver < 19)
+                    UpgradeSystemsDB19(conn);
+
+                if (dbver < 20)
+                    UpgradeSystemsDB20(conn);
+
                 if (dbver < 100)
                     UpgradeSystemsDB101(conn);
 
@@ -631,79 +685,6 @@ namespace EDDiscovery.DB
             catch (Exception ex)
             {
                 MessageBox.Show("UpgradeSystemsDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
-                return false;
-            }
-        }
-
-
-        private static bool UpgradeDB(SQLiteConnectionED conn)
-        {
-            int dbver;
-            try
-            {
-                dbver = GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
-                if (dbver < 2)
-                    UpgradeDB2(conn);
-
-                if (dbver < 3)
-                    UpgradeDB3(conn);
-
-                if (dbver < 4)
-                    UpgradeDB4(conn);
-
-                if (dbver < 5)
-                    UpgradeDB5(conn);
-
-                if (dbver < 6)
-                    UpgradeDB6(conn);
-
-                if (dbver < 7)
-                    UpgradeDB7(conn);
-
-                if (dbver < 8)
-                    UpgradeDB8(conn);
-
-                if (dbver < 9)
-                    UpgradeDB9(conn);
-
-                if (dbver < 10)
-                    UpgradeDB10(conn);
-
-                if (dbver < 11)
-                    UpgradeDB11(conn);
-
-                if (dbver < 12)
-                    UpgradeDB12(conn);
-
-                // 15 remove due to conflict between 2 branches...
-
-                if (dbver < 14)
-                    UpgradeDB14(conn);
-
-                if (dbver < 15)
-                    UpgradeDB15(conn);
-
-                if (dbver < 16)
-                    UpgradeDB16(conn);
-
-                if (dbver < 17)
-                    UpgradeDB17(conn);
-
-                if (dbver < 18)
-                    UpgradeDB18(conn);
-
-                if (dbver < 19)
-                    UpgradeDB19(conn);
-
-                if (dbver < 20)
-                    UpgradeDB20(conn);
-
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("UpgradeDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return false;
             }
         }
@@ -747,40 +728,37 @@ namespace EDDiscovery.DB
             PutSettingInt("DBVer", newVersion, conn);
         }
 
-        private static void UpgradeDB2(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB2(SQLiteConnectionED conn)
         {
             string query = "CREATE TABLE Systems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , name TEXT NOT NULL COLLATE NOCASE , x FLOAT, y FLOAT, z FLOAT, cr INTEGER, commandercreate TEXT, createdate DATETIME, commanderupdate TEXT, updatedate DATETIME, status INTEGER, population INTEGER )";
             string query3 = "CREATE TABLE Distances (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  UNIQUE , NameA TEXT NOT NULL , NameB TEXT NOT NULL , Dist FLOAT NOT NULL , CommanderCreate TEXT NOT NULL , CreateTime DATETIME NOT NULL , Status INTEGER NOT NULL )";
-            string query4 = "CREATE TABLE SystemNote (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL )";
             string query5 = "CREATE INDEX DistanceName ON Distances (NameA ASC, NameB ASC)";
-            string query6 = "CREATE  TABLE VisitedSystems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL , SystemID INTEGER, Dist FLOAT)";
-            string query7 = "CREATE TABLE Stations (station_id INTEGER PRIMARY KEY  NOT NULL ,system_id INTEGER REFERENCES Systems(id), name TEXT NOT NULL ,blackmarket BOOL DEFAULT (null) ,max_landing_pad_size INTEGER,distance_to_star INTEGER,type TEXT,faction TEXT,shipyard BOOL,outfitting BOOL, commodities_market BOOL)";
-            string query8 = "CREATE  INDEX stationIndex ON Stations (system_id ASC)";
 
-            PerformUpgrade(conn, 2, false, false, new[] { query, query3, query4, query5, query6, query7, query8 });
+            PerformUpgrade(conn, 2, false, false, new[] { query, query3, query5 });
         }
 
+        private static void UpgradeUserDB2(SQLiteConnectionED conn)
+        {
+            string query4 = "CREATE TABLE SystemNote (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL )";
+
+            PerformUpgrade(conn, 2, false, false, new[] { query4 });
+        }
+
+        /*
         private static void UpgradeDB3(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN Note TEXT";
             PerformUpgrade(conn, 3, false, false, new[] { query1 });
         }
+         */
 
-        private static void UpgradeDB4(SQLiteConnectionED conn)
+        private static void UpgradeUserDB4(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN Note TEXT";
             PerformUpgrade(conn, 4, true, true, new[] { query1 });
         }
 
-        private static void UpgradeDB5(SQLiteConnectionED conn)
-        {
-            string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Unit TEXT";
-            string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Commander Integer";
-            string query4 = "CREATE INDEX VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)";
-            PerformUpgrade(conn, 5, true, true, new[] {query1, query3, query4});
-        }
-
-        private static void UpgradeDB6(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB6(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_eddb Integer";
             string query2 = "ALTER TABLE Systems ADD COLUMN faction TEXT";
@@ -809,8 +787,7 @@ namespace EDDiscovery.DB
                 query11, query12, query13, query14, query15, query16, query17 });
         }
 
-
-        private static void UpgradeDB7(SQLiteConnectionED conn)
+        private static void UpgradeUserDB7(SQLiteConnectionED conn)
         {
             string query1 = "DROP TABLE VisitedSystems";
             string query2 = "CREATE TABLE VisitedSystems(id INTEGER PRIMARY KEY  NOT NULL, Name TEXT NOT NULL, Time DATETIME NOT NULL, Unit Text, Commander Integer, Source Integer, edsm_sync BOOL DEFAULT (null))";
@@ -818,35 +795,40 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 7, true, true, new[] { query1, query2, query3 });
         }
 
-        private static void UpgradeDB8(SQLiteConnectionED conn)
+        private static void UpgradeUserDB8(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Map_colour INTEGER DEFAULT (-65536)";
             PerformUpgrade(conn, 8, true, true, new[] { query1 });
         }
 
-        private static void UpgradeDB9(SQLiteConnectionED conn)
+        private static void UpgradeUserDB9(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE Objects (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , SystemName TEXT NOT NULL , ObjectName TEXT NOT NULL , ObjectType INTEGER NOT NULL , ArrivalPoint Float, Gravity FLOAT, Atmosphere Integer, Vulcanism Integer, Terrain INTEGER, Carbon BOOL, Iron BOOL, Nickel BOOL, Phosphorus BOOL, Sulphur BOOL, Arsenic BOOL, Chromium BOOL, Germanium BOOL, Manganese BOOL, Selenium BOOL NOT NULL , Vanadium BOOL, Zinc BOOL, Zirconium BOOL, Cadmium BOOL, Mercury BOOL, Molybdenum BOOL, Niobium BOOL, Tin BOOL, Tungsten BOOL, Antimony BOOL, Polonium BOOL, Ruthenium BOOL, Technetium BOOL, Tellurium BOOL, Yttrium BOOL, Commander  Text, UpdateTime DATETIME, Status INTEGER )";
             PerformUpgrade(conn, 9, true, true, new[] { query1 });
         }
 
-        private static void UpgradeDB10(SQLiteConnectionED conn)
+        private static void UpgradeUserDB10(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE wanted_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, systemname TEXT UNIQUE NOT NULL)";
             PerformUpgrade(conn, 10, true, true, new[] { query1 });
         }
 
-        private static void UpgradeDB11(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB11(SQLiteConnectionED conn)
         {
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
+            PerformUpgrade(conn, 11, true, true, new[] { query1 });
+        }
+
+        private static void UpgradeUserDB11(SQLiteConnectionED conn)
+        {
             string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
             string query3 = "ALTER TABLE Objects ADD COLUMN terraform Integer";
             string query4 = "ALTER TABLE VisitedSystems ADD COLUMN Status BOOL";
-            PerformUpgrade(conn, 11, true, true, new[] { query1, query2, query3, query4 });
+            PerformUpgrade(conn, 11, true, true, new[] { query2, query3, query4 });
         }
 
-        private static void UpgradeDB12(SQLiteConnectionED conn)
+        private static void UpgradeUserDB12(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE routes_expeditions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT UNIQUE NOT NULL, start DATETIME, end DATETIME)";
             string query2 = "CREATE TABLE route_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, routeid INTEGER NOT NULL, systemname TEXT NOT NULL)";
@@ -854,7 +836,7 @@ namespace EDDiscovery.DB
         }
 
 
-        private static bool UpgradeDB14(SQLiteConnectionED conn)
+        private static bool UpgradeUserDB14(SQLiteConnectionED conn)
         {
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN X double";
@@ -865,7 +847,7 @@ namespace EDDiscovery.DB
             return true;
         }
 
-        private static void UpgradeDB15(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB15(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN versiondate DATETIME";
             string query2 = "UPDATE Systems SET versiondate = datetime('now')";
@@ -873,20 +855,25 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 15, true, true, new[] { query1, query2 });
         }
 
-        private static void UpgradeDB16(SQLiteConnectionED conn)
+        private static void UpgradeUserDB16(SQLiteConnectionED conn)
         {
             string query = "CREATE TABLE Bookmarks (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , StarName TEXT, x double NOT NULL, y double NOT NULL, z double NOT NULL, Time DATETIME NOT NULL, Heading TEXT, Note TEXT NOT Null )";
             PerformUpgrade(conn, 16, true, true, new[] { query });
         }
 
-        private static void UpgradeDB17(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB17(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_edsm Integer";
             string query4 = "ALTER TABLE Distances ADD COLUMN id_edsm Integer";
             string query5 = "CREATE INDEX Distances_EDSM_ID_Index ON Distances (id_edsm ASC)";
-            string query6 = "Update VisitedSystems set x=null, y=null, z=null where x=0 and y=0 and z=0 and name!=\"Sol\"";
 
-            PerformUpgrade(conn, 17, true, true, new[] { query1,query4,query5,query6 }, () =>
+            PerformUpgrade(conn, 17, true, true, new[] { query1,query4,query5 });
+        }
+
+        private static void UpgradeUserDB17(SQLiteConnectionED conn)
+        {
+            string query6 = "Update VisitedSystems set x=null, y=null, z=null where x=0 and y=0 and z=0 and name!=\"Sol\"";
+            PerformUpgrade(conn, 17, true, true, new[] { query6 }, () =>
             {
                 PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
                 PutSettingString("EDDBSystemsTime", "0", conn);                               // force EDDB
@@ -894,7 +881,7 @@ namespace EDDiscovery.DB
             });
         }
 
-        private static void UpgradeDB18(SQLiteConnectionED conn)
+        private static void UpgradeUserDB18(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN id_edsm_assigned Integer";
             string query2 = "CREATE INDEX VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)";
@@ -903,7 +890,7 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 18, true, true, new[] { query1, query2, query3 });
         }
 
-        private static void UpgradeDB19(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB19(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE SystemAliases (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT, id_edsm INTEGER, id_edsm_mergedto INTEGER)";
             string query2 = "CREATE INDEX SystemAliases_name ON SystemAliases (name)";
@@ -913,7 +900,7 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 19, true, true, new[] { query1, query2, query3, query4 });
         }
 
-        private static void UpgradeDB20(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB20(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN gridid Integer NOT NULL DEFAULT -1";
             string query2 = "ALTER TABLE Systems ADD COLUMN randomid Integer NOT NULL DEFAULT -1";
@@ -923,9 +910,6 @@ namespace EDDiscovery.DB
                 PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
             });
         }
-
-        
-
 
         private static void UpgradeUserDB101(SQLiteConnectionED conn)
         {
@@ -969,7 +953,7 @@ namespace EDDiscovery.DB
             string query1 = "CREATE TABLE SystemNames (" +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "Name TEXT NOT NULL, " +
-                "EdsmId INTEGER NOT NULL UNIQUE)";
+                "EdsmId INTEGER NOT NULL)";
             string query2 = "CREATE TABLE EdsmSystems (" +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "EdsmId INTEGER NOT NULL, " +
@@ -999,18 +983,54 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 102, true, false, new[] { query1, query2, query3 });
         }
 
+        private static void DropOldUserTables(SQLiteConnectionUser conn)
+        {
+            string[] queries = new[]
+            {
+                "DROP TABLE IF EXISTS Systems",
+                "DROP TABLE IF EXISTS SystemAliases",
+                "DROP TABLE IF EXISTS Distances",
+                "DROP TABLE IF EXISTS Stations",
+                "DROP TABLE IF EXISTS station_commodities",
+            };
 
+            foreach (string query in queries)
+            {
+                using (DbCommand cmd = conn.CreateCommand(query))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private static void DropOldSystemTables(SQLiteConnectionSystem conn)
+        {
+            string[] queries = new[]
+            {
+                "DROP TABLE IF EXISTS Bookmarks",
+                "DROP TABLE IF EXISTS SystemNote",
+                "DROP TABLE IF EXISTS TravelLogUnit",
+                "DROP TABLE IF EXISTS VisitedSystems",
+                "DROP TABLE IF EXISTS route_Systems",
+                "DROP TABLE IF EXISTS routes_expeditions",
+                "DROP TABLE IF EXISTS Objects",
+                "DROP TABLE IF EXISTS wanted_systems",
+            };
+
+            foreach (string query in queries)
+            {
+                using (DbCommand cmd = conn.CreateCommand(query))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
         private static void CreateUserDBTableIndexes()
         {
             string[] queries = new[]
             {
-                "CREATE INDEX IF NOT EXISTS stationIndex ON Stations (system_id ASC)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)",
-                "CREATE INDEX IF NOT EXISTS station_commodities_index ON station_commodities (station_id ASC, commodity_id ASC, type ASC)",
-                "CREATE INDEX IF NOT EXISTS StationsIndex_ID  ON Stations (id ASC)",
-                "CREATE INDEX IF NOT EXISTS StationsIndex_system_ID  ON Stations (system_id ASC)",
-                "CREATE INDEX IF NOT EXISTS StationsIndex_system_Name  ON Stations (Name ASC)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_position ON VisitedSystems (X, Y, Z)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)"
@@ -1036,6 +1056,11 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)",
                 "CREATE INDEX IF NOT EXISTS Distances_EDSM_ID_Index ON Distances (id_edsm ASC)",
                 "CREATE INDEX IF NOT EXISTS DistanceName ON Distances (NameA ASC, NameB ASC)",
+                "CREATE INDEX IF NOT EXISTS stationIndex ON Stations (system_id ASC)",
+                "CREATE INDEX IF NOT EXISTS station_commodities_index ON station_commodities (station_id ASC, commodity_id ASC, type ASC)",
+                "CREATE INDEX IF NOT EXISTS StationsIndex_ID  ON Stations (id ASC)",
+                "CREATE INDEX IF NOT EXISTS StationsIndex_system_ID  ON Stations (system_id ASC)",
+                "CREATE INDEX IF NOT EXISTS StationsIndex_system_Name  ON Stations (Name ASC)",
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
@@ -1067,7 +1092,8 @@ namespace EDDiscovery.DB
                 "DROP INDEX IF EXISTS EdsmSystems_Position",
                 "DROP INDEX IF EXISTS EdsmSystems_GridId",
                 "DROP INDEX IF EXISTS EdsmSystems_RandomId",
-                "DROP INDEX IF EXISTS SystemNames_EdsmId"
+                "DROP INDEX IF EXISTS SystemNames_EdsmId",
+                "DROP INDEX IF EXISTS sqlite_autoindex_SystemNames_1"
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {

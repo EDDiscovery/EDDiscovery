@@ -8,7 +8,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     public class JournalFileHeader : JournalEntry
     {
-        public JournalFileHeader(JObject evt) : base(evt, JournalTypeEnum.FileHeader)
+        public JournalFileHeader(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.FileHeader, reader)
         {
 
             GameVersion = evt.Value<string>("gameversion");

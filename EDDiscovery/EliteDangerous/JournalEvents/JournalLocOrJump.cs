@@ -18,7 +18,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string StarSystem { get; set; }
         public Coords StarPos { get; set; }
 
-        protected JournalLocOrJump(JObject jo, JournalTypeEnum jtype) : base(jo, jtype)
+        protected JournalLocOrJump(JObject jo, JournalTypeEnum jtype, EDJournalReader reader) : base(jo, jtype, reader)
         {
             StarSystem = jo.Value<string>("StarSystem");
             JArray coords = jo["StarPos"] as JArray;

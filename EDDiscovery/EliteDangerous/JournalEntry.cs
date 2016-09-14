@@ -1,5 +1,6 @@
 ﻿using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
+using EDDiscovery2;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace EDDiscovery.EliteDangerous
         CommitCrime = 100,
         CommunityGoalJoin = 110,
         CommunityGoalReward = 120,
+        Continued = 125,
         DatalinkScan = 130,
         Died = 140,
         Docked = 145,
@@ -123,11 +125,10 @@ namespace EDDiscovery.EliteDangerous
     {
         public int Id;
         public int JournalId;
-        private string eventTypeStr;
+        protected string eventTypeStr;
         private JournalTypeEnum eventType;
         private DateTime eventTimeUTC;
         private JObject jEventData;
-        public int CommanderID;
         public int Synced;
 
 
@@ -152,7 +153,7 @@ namespace EDDiscovery.EliteDangerous
         {
             get
             {
-                return eventTypeStr;
+                return eventTypeStr ?? eventType.ToString();
             }
         }
 
@@ -172,17 +173,17 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public JournalEntry(JObject jo, JournalTypeEnum jtype)
+        public JournalEntry(JObject jo, JournalTypeEnum jtype, EDJournalReader reader)
         {
             jEventData = jo;
             eventType = jtype;
 
             eventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-
+            JournalId = reader.JournalId;
         }
 
 
-        static public JournalEntry CreateJournalEntry(string text)
+        static public JournalEntry CreateJournalEntry(string text, EDJournalReader reader)
         {
             JournalEntry je=null;
 
@@ -198,63 +199,64 @@ namespace EDDiscovery.EliteDangerous
             switch (Eventstr)
             {
                 case "Docked":
-                    je = new JournalDocked(jo);
+                    je = new JournalDocked(jo, reader);
                     break;
 
                 case "Died":
-                    je = new JournalDied(jo);
+                    je = new JournalDied(jo, reader);
                     break;
 
                 case "fileheader":
-                    je = new JournalFileHeader(jo);
+                    je = new JournalFileHeader(jo, reader);
                     break;
 
                 case "FSDJump":
-                    je = new JournalFSDJump(jo);
+                    je = new JournalFSDJump(jo, reader);
                     break;
 
                 case "Location":
-                    je = new JournalLocation(jo);
+                    je = new JournalLocation(jo, reader);
                     break;
 
                 case "LoadGame":
-                    je = new JournalLoadGame(jo);
+                    je = new JournalLoadGame(jo, reader);
                     break;
 
                 case "Scan":
-                    je = new JournalScan(jo);
+                    je = new JournalScan(jo, reader);
                     break;
 
 
                 case "SellExplorationData":
-                    je = new JournalSellExplorationData(jo);
+                    je = new JournalSellExplorationData(jo, reader);
                     break;
 
                 case "Undocked":
-                    je = new JournalUndocked(jo);
+                    je = new JournalUndocked(jo, reader);
                     break;
 
                 case "DockingCancelled":
-                    je = new JournalDockingCancelled(jo);
+                    je = new JournalDockingCancelled(jo, reader);
                     break;
 
                 case "DockingDenied":
-                    je = new JournalDockingDenied(jo);
+                    je = new JournalDockingDenied(jo, reader);
                     break;
                 case "DockingGranted":
-                    je = new JournalDockingGranted(jo);
+                    je = new JournalDockingGranted(jo, reader);
                     break;
 
                 case "DockingRequested":
-                    je = new JournalDockingRequested(jo);
+                    je = new JournalDockingRequested(jo, reader);
                     break;
 
                 case "DockingTimeout":
-                    je = new JournalDockingTimeout(jo);
+                    je = new JournalDockingTimeout(jo, reader);
                     break;
 
-
-
+                case "Continued":
+                    je = new JournalContinued(jo, reader);
+                    break;
 
 
                 case "Bounty":
@@ -342,11 +344,11 @@ namespace EDDiscovery.EliteDangerous
                 case "WingAdd":
                 case "WingJoin":
                 case "WingLeave":
-                    je = new JournalUnhandled(jo, Eventstr);
+                    je = new JournalUnhandled(jo, Eventstr, reader);
                     break;
 
                 default:
-                    je = new JournalUnknown(jo);
+                    je = new JournalUnknown(jo, Eventstr, reader);
                     break;
             }
 

@@ -6,13 +6,13 @@ using System.Text;
 
 namespace EDDiscovery.DB
 {
-     public static partial class SQLiteDBClass
+    public static partial class SQLiteDBClass
     {
 
         #region Database Schemas
         private static readonly dynamic Schema = new
         {
-            EDDiscovery = new
+            EDDUser = new
             {
                 #region Tables
                 Tables = new
@@ -30,17 +30,14 @@ namespace EDDiscovery.DB
                         Note = "TEXT NOT NULL"
                     },
                     #endregion
-                    #region Distances
-                    Distances = new
+                    #region Commanders
+                    Commanders = new
                     {
-                        id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE",
-                        NameA = "TEXT NOT NULL",
-                        NameB = "TEXT NOT NULL",
-                        Dist = "FLOAT NOT NULL",
-                        CommanderCreate = "TEXT NOT NULL",
-                        CreateTime = "DATETIME NOT NULL",
-                        Status = "INTEGER NOT NULL",
-                        id_edsm = "INTEGER NOT NULL"
+                        Id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
+                        Name = "TEXT NOT NULL",
+                        EdsmApiKey = "TEXT NOT NULL",
+                        NetLogDir = "TEXT",
+                        Deleted = "INTEGER NOT NULL"
                     },
                     #endregion
                     #region Objects
@@ -120,13 +117,12 @@ namespace EDDiscovery.DB
                         eddb_updated_at = "INTEGER"
                     },
                     #endregion
-                    #region SystemAliases
-                    SystemAliases = new
+                    #region station_commodities
+                    station_commodities = new
                     {
-                        id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
-                        name = "TEXT",
-                        id_edsm = "INTEGER",
-                        id_edsm_mergedto = "INTEGER"
+                        station_id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
+                        commodity_id = "INTEGER",
+                        type = "INTEGER"
                     },
                     #endregion
                     #region SystemNote
@@ -136,38 +132,6 @@ namespace EDDiscovery.DB
                         Name = "TEXT NOT NULL",
                         Time = "DATETIME NOT NULL",
                         Note = "TEXT" // v4
-                    },
-                    #endregion
-                    #region Systems
-                    Systems = new // v2
-                    {
-                        id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE",
-                        name = "TEXT NOT NULL COLLATE NOCASE",
-                        x = "FLOAT",
-                        y = "FLOAT",
-                        z = "FLOAT",
-                        cr = "INTEGER",
-                        commandercreate = "TEXT",
-                        dreatedate = "DATETIME",
-                        commanderupdate = "TEXT",
-                        updatedate = "DATETIME",
-                        status = "INTEGER",
-                        population = "INTEGER",
-                        Note = "TEXT", // v3
-                        id_eddb = "INTEGER", // v6
-                        faction = "TEXT",
-                        government_id = "INTEGER",
-                        allegiance_id = "INTEGER",
-                        primary_economy_id = "INTEGER",
-                        security = "INTEGER",
-                        eddb_updated_at = "INTEGER",
-                        state = "INTEGER",
-                        needs_permit = "INTEGER",
-                        FirstDiscovery = "BOOL", // v11
-                        versiondate = "DATETIME DEFAULT CURRENT_TIMESTAMP", // v15
-                        id_edsm = "INTEGER", // v17
-                        gridid = "INTEGER NOT NULL DEFAULT -1", // v20
-                        randomid = "INTEGER NOT NULL DEFAULT -1",
                     },
                     #endregion
                     #region TravelLogUnit
@@ -215,19 +179,110 @@ namespace EDDiscovery.DB
                         end = "DATETIME"
                     },
                     #endregion
-                    #region station_commodities
-                    station_commodities = new
-                    {
-                        station_id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
-                        commodity_id = "INTEGER",
-                        type = "INTEGER"
-                    },
-                    #endregion
                     #region wanted_systems
                     wanted_systems = new
                     {
                         id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
                         systemname = "TEXT NOT NULL UNIQUE"
+                    },
+                    #endregion
+                },
+                #endregion
+                #region Unique Indexes
+                UniqueIndexes = new
+                {
+                },
+                #endregion
+                #region Indexes
+                Indexes = new
+                {
+                    TravelLogUnit_Name = "TravelLogUnit (Name)",
+                    VisitedSystems_Commander = "VisitedSystems (Commander)",
+                    VisitedSystems_Name = "VisitedSystems (Name)",
+                    VisitedSystems_Source = "VisitedSystems (Source)",
+                    VisitedSystems_Time = "VisitedSystems (Time)",
+                    VisitedSystems_id_edsm_assigned = "VisitedSystems (id_edsm_assigned)",
+                    VisitedSystems_position = "VisitedSystems (X, Y, Z)",
+                },
+                #endregion
+            },
+            EDDSystem = new
+            {
+                #region Tables
+                Tables = new
+                {
+                    #region Distances
+                    Distances = new
+                    {
+                        id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE",
+                        NameA = "TEXT NOT NULL",
+                        NameB = "TEXT NOT NULL",
+                        Dist = "FLOAT NOT NULL",
+                        CommanderCreate = "TEXT NOT NULL",
+                        CreateTime = "DATETIME NOT NULL",
+                        Status = "INTEGER NOT NULL",
+                        id_edsm = "INTEGER NOT NULL"
+                    },
+                    #endregion
+                    #region Register
+                    Register = new // Added in Schema v1
+                    {
+                        ID = "TEXT NOT NULL PRIMARY KEY UNIQUE",
+                        ValueInt = "INTEGER",
+                        ValueDouble = "DOUBLE",
+                        ValueString = "TEXT",
+                        ValueBlob = "BLOB"
+                    },
+                    #endregion
+                    #region SystemAliases
+                    SystemAliases = new
+                    {
+                        id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
+                        name = "TEXT",
+                        id_edsm = "INTEGER",
+                        id_edsm_mergedto = "INTEGER"
+                    },
+                    #endregion
+                    #region SystemNames
+                    SystemNames = new
+                    {
+                        Id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
+                        Name = "TEXT NOT NULL",
+                        EdsmId = "INTEGER NOT NULL"
+                    },
+                    #endregion
+                    #region EdsmSystems
+                    EdsmSystems = new
+                    {
+                        Id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
+                        EdsmId = "INTEGER NOT NULL",
+                        EddbId = "INTEGER",
+                        X = "INTEGER NOT NULL",
+                        Y = "INTEGER NOT NULL",
+                        Z = "INTEGER NOT NULL",
+                        CreateTimestamp = "INTEGER NOT NULL", // Seconds since 2015-01-01 00:00:00 UTC
+                        UpdateTimestamp = "INTEGER NOT NULL", // Seconds since 2015-01-01 00:00:00 UTC
+                        VersionTimestamp = "INTEGER NOT NULL", // Seconds since 2015-01-01 00:00:00 UTC
+                        GridId = "INTEGER NOT NULL DEFAULT -1",
+                        RandomId = "INTEGER NOT NULL DEFAULT -1"
+                    },
+                    #endregion
+                    #region EddbSystems
+                    EddbSystems = new
+                    {
+                        Id = "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
+                        Name = "TEXT NOT NULL",
+                        EdsmId = "INTEGER NOT NULL",
+                        EddbId = "INTEGER NOT NULL",
+                        Population = "INTEGER NOT NULL",
+                        Faction = "TEXT NOT NULL",
+                        GovernmentId = "INTEGER NOT NULL",
+                        AllegianceId = "INTEGER NOT NULL",
+                        PrimaryEconomyId = "INTEGER NOT NULL",
+                        Security = "INTEGER NOT NULL",
+                        EddbUpdatedAt = "INTEGER NOT NULL", // Seconds since 1970-01-01 00:00:00 UTC
+                        State = "INTEGER NOT NULL",
+                        NeedsPermit = "INTEGER NOT NULL"
                     },
                     #endregion
                 },
@@ -249,56 +304,7 @@ namespace EDDiscovery.DB
                     StationsIndex_system_Name = "Stations (Name ASC)",
                     SystemAliases_id_edsm_mergedto = "SystemAliases (id_edsm_mergedto)",
                     SystemAliases_name = "SystemAliases (name)",
-                    TravelLogUnit_Name = "TravelLogUnit (Name)",
-                    VisitedSystems_Commander = "VisitedSystems (Commander)",
-                    VisitedSystems_Name = "VisitedSystems (Name)",
-                    VisitedSystems_Source = "VisitedSystems (Source)",
-                    VisitedSystems_Time = "VisitedSystems (Time)",
-                    VisitedSystems_id_edsm_assigned = "VisitedSystems (id_edsm_assigned)",
-                    VisitedSystems_position = "VisitedSystems (X, Y, Z)",
                     station_commodities_index = "station_commodities (station_id ASC, commodity_id ASC, type ASC)"
-                }
-                #endregion
-            },
-            EDDUser = new
-            {
-                #region Tables
-                Tables = new
-                {
-
-                },
-                #endregion
-                #region Unique Indexes
-                UniqueIndexes = new
-                {
-
-                },
-                #endregion
-                #region Indexes
-                Indexes = new
-                {
-
-                },
-                #endregion
-            },
-            EDDSystem = new
-            {
-                #region Tables
-                Tables = new
-                {
-
-                },
-                #endregion
-                #region Unique Indexes
-                UniqueIndexes = new
-                {
-
-                },
-                #endregion
-                #region Indexes
-                Indexes = new
-                {
-
                 },
                 #endregion
             }
@@ -425,17 +431,21 @@ namespace EDDiscovery.DB
 
         private static void UpdateSchema()
         {
-            using (SQLiteConnectionOld cn = new SQLiteConnectionOld())
+            bool id_edsm_isset = false;
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
-                UpdateDbSchema(cn, Schema.EDDiscovery);
-
-                bool id_edsm_isset = false;
+                UpdateDbSchema(cn, Schema.EDDSystem);
 
                 // Reset EDSM / EDDB update time if no systems have their id_edsm set
                 using (DbCommand cmd = cn.CreateCommand("SELECT COUNT(EdsmId) FROM EdsmSystems"))
                 {
                     id_edsm_isset = (long)cmd.ExecuteScalar() != 0;
                 }
+            }
+
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                UpdateDbSchema(cn, Schema.EDDUser);
 
                 if (!id_edsm_isset)
                 {
@@ -450,16 +460,6 @@ namespace EDDiscovery.DB
                 {
                     cmd.ExecuteNonQuery();
                 }
-            }
-
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
-            {
-                UpdateDbSchema(cn, Schema.EDDSystem);
-            }
-
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                UpdateDbSchema(cn, Schema.EDDUser);
             }
         }
     }
