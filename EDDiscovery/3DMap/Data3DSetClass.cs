@@ -45,20 +45,28 @@ namespace EDDiscovery2._3DMap
             Pos.Z = (float)z;
         }
 
-        public PointData(float x, float y, float z, float sz)
+        public PointData(float x, float y, float z, Color c)
         {
             Pos.X = x;
             Pos.Y = y;
             Pos.Z = z;
-            this.Size = sz;
+            this.Color = c;
         }
 
-        public PointData(float x, float y, float z, float sz, Color c)
+        public PointData(float x, float y, float z, float size, Color c)
         {
             Pos.X = x;
             Pos.Y = y;
             Pos.Z = z;
-            this.Size = sz;
+            this.Size = size;
+            this.Color = c;
+        }
+
+        public PointData(double x, double y, double z, Color c)     
+        {
+            Pos.X = (float)x;
+            Pos.Y = (float)y;
+            Pos.Z = (float)z;
             this.Color = c;
         }
 
@@ -87,11 +95,15 @@ namespace EDDiscovery2._3DMap
     public class PointDataCollection : Data3DSetClass<PointData>, IList<PointData>, IDisposable
     {
         protected Vector3[] Vertices;
+        private uint[] carray;
         protected int NumVertices;
         protected int VtxVboID;
+        protected int VtxColorVboId = 0;
         protected GLControl GLContext;
 
-        public PointDataCollection(string name, Color color, float pointsize)
+        private bool UsePointDataColour { get { return this.Color == Color.Transparent; } }
+
+        public PointDataCollection(string name, Color color, float pointsize)       // Color Transparent to use Point Data colours.
             : base(name, color, pointsize)
         {
             Primatives = this;
@@ -108,8 +120,11 @@ namespace EDDiscovery2._3DMap
                 else
                 {
                     GL.DeleteBuffer(VtxVboID);
+                    if (VtxColorVboId != 0)
+                        GL.DeleteBuffer(VtxColorVboId);
                     GLContext = null;
                     VtxVboID = 0;
+                    VtxColorVboId = 0;
                 }
             }
         }
@@ -121,11 +136,18 @@ namespace EDDiscovery2._3DMap
             if (Vertices == null)
             {
                 Vertices = new Vector3[1024];
+                if (UsePointDataColour)
+                    carray = new uint[1024];
             }
             else if (NumVertices == Vertices.Length)
             {
                 Array.Resize(ref Vertices, Vertices.Length * 2);
+                if (UsePointDataColour)
+                    Array.Resize(ref carray, Vertices.Length * 2);
             }
+
+            if (UsePointDataColour)
+                carray[NumVertices] = BitConverter.ToUInt32(new byte[] { primative.Color.R, primative.Color.G, primative.Color.B, primative.Color.A }, 0);
 
             Vertices[NumVertices++] = primative.Pos;
         }
@@ -148,16 +170,36 @@ namespace EDDiscovery2._3DMap
                     GL.GenBuffers(1, out VtxVboID);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
                     GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(Vertices)), Vertices, BufferUsageHint.StaticDraw);
+
+                    if (UsePointDataColour)
+                    {
+                        GL.GenBuffers(1, out VtxColorVboId);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                        GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(carray)), carray, BufferUsageHint.StaticDraw);
+                    }
+
                     GLContext = control;
                 }
 
-                int vbosize = NumVertices;
                 GL.EnableClientState(ArrayCap.VertexArray);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
                 GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
-                GL.PointSize(pointSize);
-                GL.Color3(color);
-                GL.DrawArrays(PrimitiveType.Points, 0, vbosize);
+                GL.PointSize(this.Size);
+
+                if (UsePointDataColour)
+                {
+                    GL.EnableClientState(ArrayCap.ColorArray);
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
+                    GL.DrawArrays(PrimitiveType.Points, 0, NumVertices);
+                    GL.DisableClientState(ArrayCap.ColorArray);
+                }
+                else
+                {
+                    GL.Color4(this.Color);
+                    GL.DrawArrays(PrimitiveType.Points, 0, NumVertices);
+                }
+
                 GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
@@ -266,7 +308,7 @@ namespace EDDiscovery2._3DMap
             for (int i = 0; i < NumVertices; i++)
             {
                 var v = Vertices[i];
-                yield return new PointData(v.X, v.Y, v.Z) { Color = color, Size = pointSize };
+                yield return new PointData(v.X, v.Y, v.Z) { Color = this.Color, Size = this.Size };
             }
         }
 
@@ -285,7 +327,7 @@ namespace EDDiscovery2._3DMap
                 }
 
                 var v = Vertices[index];
-                return new PointData(v.X, v.Y, v.Z) { Color = color, Size = pointSize };
+                return new PointData(v.X, v.Y, v.Z) { Color = this.Color, Size = this.Size };
             }
             set
             {
@@ -321,10 +363,24 @@ namespace EDDiscovery2._3DMap
             p2 = new Vector3(p2x, p2y, p2z);
         }
 
+        public LineData(float p1x, float p1y, float p1z, float p2x, float p2y, float p2z, Color c)
+        {
+            p1 = new Vector3(p1x, p1y, p1z);
+            p2 = new Vector3(p2x, p2y, p2z);
+            this.Color = c;
+        }
+
         public LineData(double p1x, double p1y, double p1z, double p2x, double p2y, double p2z)         // BC
         {
             p1 = new Vector3((float)p1x, (float)p1y, (float)p1z);
             p2 = new Vector3((float)p2x, (float)p2y, (float)p2z);
+        }
+
+        public LineData(double p1x, double p1y, double p1z, double p2x, double p2y, double p2z, Color c)         // BC
+        {
+            p1 = new Vector3((float)p1x, (float)p1y, (float)p1z);
+            p2 = new Vector3((float)p2x, (float)p2y, (float)p2z);
+            this.Color = c;
         }
 
         public PrimitiveType Type { get { return PrimitiveType.Lines; } }
@@ -352,11 +408,15 @@ namespace EDDiscovery2._3DMap
     public class LineDataCollection : Data3DSetClass<LineData>, IList<LineData>, IDisposable
     {
         protected Vector3[] Vertices;
+        private uint[] carray;
         protected int NumVertices;
         protected int VtxVboID;
+        protected int VtxColorVboId = 0;
         protected GLControl GLContext;
 
-        public LineDataCollection(string name, Color color, float pointsize)
+        private bool UseLineDataColour { get { return this.Color == Color.Transparent; } }
+
+        public LineDataCollection(string name, Color color, float pointsize) // Color Transparent to use Line Data colours
             : base(name, color, pointsize)
         {
             this.Primatives = this;
@@ -373,8 +433,12 @@ namespace EDDiscovery2._3DMap
                 else
                 {
                     GL.DeleteBuffer(VtxVboID);
+                    if (VtxColorVboId != 0)
+                        GL.DeleteBuffer(VtxColorVboId);
+
                     GLContext = null;
                     VtxVboID = 0;
+                    VtxColorVboId = 0;
                 }
             }
         }
@@ -386,11 +450,18 @@ namespace EDDiscovery2._3DMap
             if (Vertices == null)
             {
                 Vertices = new Vector3[1024];
+                if (UseLineDataColour)
+                    carray = new uint[1024];
             }
             else if (NumVertices+2 > Vertices.Length)
             {
                 Array.Resize(ref Vertices, Vertices.Length * 2);
+                if (UseLineDataColour)
+                    Array.Resize(ref carray, Vertices.Length * 2);
             }
+
+            if (UseLineDataColour)
+                carray[NumVertices] = carray[NumVertices + 1] = BitConverter.ToUInt32(new byte[] { primative.Color.R, primative.Color.G, primative.Color.B, primative.Color.A }, 0);
 
             Vertices[NumVertices++] = primative.p1;
             Vertices[NumVertices++] = primative.p2;
@@ -414,15 +485,35 @@ namespace EDDiscovery2._3DMap
                     GL.GenBuffers(1, out VtxVboID);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
                     GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(Vertices)), Vertices, BufferUsageHint.StaticDraw);
+
+                    if (UseLineDataColour)
+                    {
+                        GL.GenBuffers(1, out VtxColorVboId);
+                        GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                        GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(NumVertices * BlittableValueType.StrideOf(carray)), carray, BufferUsageHint.StaticDraw);
+                    }
                 }
 
-                int vbosize = NumVertices;
                 GL.EnableClientState(ArrayCap.VertexArray);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);
                 GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
-                GL.PointSize(pointSize);
-                GL.Color3(color);
-                GL.DrawArrays(PrimitiveType.Lines, 0, vbosize);
+                GL.PointSize(this.Size);
+
+                if (UseLineDataColour)
+                {
+                    GL.EnableClientState(ArrayCap.ColorArray);
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
+                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
+                    GL.DrawArrays(PrimitiveType.Lines, 0, NumVertices);
+                    GL.DisableClientState(ArrayCap.ColorArray);
+                }
+                else
+                {
+                    //Console.WriteLine("Draw " + this.Name + " at " + this.Color);
+                    GL.Color4(this.Color);
+                    GL.DrawArrays(PrimitiveType.Lines, 0, NumVertices);
+                }
+
                 GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
@@ -555,7 +646,7 @@ namespace EDDiscovery2._3DMap
                 var v1 = Vertices[index * 2];
                 var v2 = Vertices[index * 2 + 1];
 
-                return new LineData(v1.X, v1.Y, v1.Z, v2.X, v2.Y, v2.Z) { Color = color, Size = pointSize };
+                return new LineData(v1.X, v1.Y, v1.Z, v2.X, v2.Y, v2.Z) { Color = this.Color, Size = this.Size };
             }
             set
             {
@@ -824,7 +915,7 @@ namespace EDDiscovery2._3DMap
                 GL.EnableClientState(ArrayCap.TextureCoordArray);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, TexVboID);
                 GL.TexCoordPointer(4, TexCoordPointerType.Float, 0, 0);
-                GL.Color4(Color);
+                GL.Color4(Color);           // used to set the alpha
                 GL.DrawArrays(PrimitiveType.Triangles, 0, vbosize);
                 GL.DisableClientState(ArrayCap.TextureCoordArray);
                 GL.DisableClientState(ArrayCap.VertexArray);
@@ -1004,7 +1095,7 @@ namespace EDDiscovery2._3DMap
             }
             else if (!BaseTextures.Contains(primative.Parent))
             {
-                primative.Parent.Color = this.color;
+                primative.Parent.Color = this.Color;
                 BaseTextures.Add(primative.Parent);
             }
 
@@ -1033,6 +1124,14 @@ namespace EDDiscovery2._3DMap
             foreach (var primitive in BaseTextures)
             {
                 primitive.FreeTexture(false);
+            }
+        }
+
+        public void SetColour(Color c)
+        {
+            foreach (var primitive in BaseTextures)
+            {
+                primitive.Color = c;
             }
         }
     }
@@ -1177,7 +1276,7 @@ namespace EDDiscovery2._3DMap
                 GL.EnableClientState(ArrayCap.VertexArray);                     // MEASUREMENTS are showing this can for some reason take 40ms to draw.. at random times
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxVboID);              // Maybe we should tesselate the polygons to triangles 
                 GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
-                GL.PointSize(pointSize);
+                GL.PointSize(this.Size);
 
                 GL.EnableClientState(ArrayCap.ColorArray);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColourVboId);
@@ -1203,24 +1302,24 @@ namespace EDDiscovery2._3DMap
     {
         public string Name { get; set; }
         public IList<T> Primatives { get; protected set; }
-        protected readonly Color color;
-        protected readonly float pointSize;
+        public Color Color;
+        public float Size;
 
         public bool Visible;
 
         protected Data3DSetClass(string name, Color color, float pointsize)
         {
             Name = name;
-            this.color = color;
-            pointSize = pointsize;
+            this.Color = color;
+            Size = pointsize;
             Primatives = new List<T>();
             Visible = true;
         }
 
         public virtual void Add(T primative)
         {
-            primative.Color = color;
-            primative.Size = pointSize;
+            primative.Color = this.Color;
+            primative.Size = Size;
             Primatives.Add(primative);
         }
 
