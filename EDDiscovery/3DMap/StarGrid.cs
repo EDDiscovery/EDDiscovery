@@ -93,12 +93,7 @@ namespace EDDiscovery2
             {                                                               // all vs stars which are not in edsm and have co-ords.
                 if (vs.curSystem != null && vs.curSystem.status != SystemStatusEnum.EDSC && vs.curSystem.HasCoordinate )
                 {
-                    carray[total] = unchecked((uint)vs.MapColour);
-                    array[total++] = new Vector3((float)vs.X, (float)vs.Y, (float)vs.Z);
-                }
-                else if (vs.curSystem != null && vs.curSystem.HasCoordinate)
-                {
-                    carray[total] = unchecked((uint)vs.MapColour);
+                    carray[total] = cx;
                     array[total++] = new Vector3((float)vs.curSystem.x, (float)vs.curSystem.y, (float)vs.curSystem.z);
                     //Console.WriteLine("Added {0} due to not being in star database", vs.Name);
                 }
