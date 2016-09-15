@@ -770,7 +770,7 @@ namespace EDDiscovery.DB
             string query8 = "ALTER TABLE Systems ADD COLUMN eddb_updated_at Integer";
             string query9 = "ALTER TABLE Systems ADD COLUMN state Integer";
             string query10 = "ALTER TABLE Systems ADD COLUMN needs_permit Integer";
-            string query11 = "DROP TABLE Stations";
+            string query11 = "DROP TABLE IF EXISTS Stations";
             string query12 = "CREATE TABLE Stations (id INTEGER PRIMARY KEY  NOT NULL ,system_id INTEGER, name TEXT NOT NULL ,  " +
                 " max_landing_pad_size INTEGER, distance_to_star INTEGER, faction Text, government_id INTEGER, allegiance_id Integer,  state_id INTEGER, type_id Integer, " +
                 "has_commodities BOOL DEFAULT (null), has_refuel BOOL DEFAULT (null), has_repair BOOL DEFAULT (null), has_rearm BOOL DEFAULT (null), " +
@@ -789,7 +789,7 @@ namespace EDDiscovery.DB
 
         private static void UpgradeUserDB7(SQLiteConnectionED conn)
         {
-            string query1 = "DROP TABLE VisitedSystems";
+            string query1 = "DROP TABLE IF EXISTS VisitedSystems";
             string query2 = "CREATE TABLE VisitedSystems(id INTEGER PRIMARY KEY  NOT NULL, Name TEXT NOT NULL, Time DATETIME NOT NULL, Unit Text, Commander Integer, Source Integer, edsm_sync BOOL DEFAULT (null))";
             string query3 = "CREATE TABLE TravelLogUnit(id INTEGER PRIMARY KEY  NOT NULL, type INTEGER NOT NULL, name TEXT NOT NULL, size INTEGER, path TEXT)";
             PerformUpgrade(conn, 7, true, true, new[] { query1, query2, query3 });
@@ -952,7 +952,7 @@ namespace EDDiscovery.DB
         {
             string query1 = "CREATE TABLE SystemNames (" +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                "Name TEXT NOT NULL, " +
+                "Name TEXT NOT NULL COLLATE NOCASE, " +
                 "EdsmId INTEGER NOT NULL)";
             string query2 = "CREATE TABLE EdsmSystems (" +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -1093,6 +1093,8 @@ namespace EDDiscovery.DB
                 "DROP INDEX IF EXISTS EdsmSystems_GridId",
                 "DROP INDEX IF EXISTS EdsmSystems_RandomId",
                 "DROP INDEX IF EXISTS SystemNames_EdsmId",
+                "DROP INDEX IF EXISTS SystemNames_IdName",
+                "DROP INDEX IF EXISTS SystemNames_NameId",
                 "DROP INDEX IF EXISTS sqlite_autoindex_SystemNames_1"
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
@@ -1111,14 +1113,14 @@ namespace EDDiscovery.DB
         {
             string[] queries = new[]
             {
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_EdsmId ON EdsmSystems (EdsmId ASC)",
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_EddbId ON EdsmSystems (EddbId ASC)",
-                "CREATE INDEX IF NOT EXISTS EddbSystems_EdsmId ON EddbSystems (EdsmId ASC)",
-                "CREATE INDEX IF NOT EXISTS EddbSystems_EddbId ON EddbSystems (EddbId ASC)",
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_Position ON EdsmSystems (Z, X, Y)",
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_GridId ON EdsmSystems (gridid)",
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_RandomId ON EdsmSystems (randomid)",
-                "CREATE INDEX IF NOT EXISTS SystemNames_EdsmId ON SystemNames (EdsmId)"
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_EdsmId ON EdsmSystems (EdsmId ASC, EddbId, X, Y, Z)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_EddbId ON EdsmSystems (EddbId ASC, EdsmId)",
+                "CREATE INDEX IF NOT EXISTS EddbSystems_EdsmId ON EddbSystems (EdsmId ASC, EddbId)",
+                "CREATE INDEX IF NOT EXISTS EddbSystems_EddbId ON EddbSystems (EddbId ASC, EdsmId)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_PosId ON EdsmSystems (Z, X, Y, EdsmId)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_StarGrid ON EdsmSystems (GridId, RandomId, EdsmId, EddbId, X, Y, Z)",
+                "CREATE INDEX IF NOT EXISTS SystemNames_IdName ON SystemNames (EdsmId,Name)",
+                "CREATE INDEX IF NOT EXISTS SystemNames_NameId ON SystemNames (Name,EdsmId)",
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
@@ -1141,7 +1143,7 @@ namespace EDDiscovery.DB
                 ExecuteQuery(conn,
                     "CREATE TABLE SystemNames_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                        "Name TEXT NOT NULL, " +
+                        "Name TEXT NOT NULL COLLATE NOCASE, " +
                         "EdsmId INTEGER NOT NULL)");
                 ExecuteQuery(conn,
                     "CREATE TABLE EdsmSystems_temp (" +
