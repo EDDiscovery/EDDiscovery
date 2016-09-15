@@ -80,6 +80,9 @@ namespace EDDiscovery2
 
         private int FillFromVS( ref Vector3[] array, ref uint[] carray, List<VisitedSystemsClass> cls, Color basecolour)
         {
+            // DONT confuse this with the visited systems lines/dots option. This is just to fill in systems which are not in the EDSM
+            // system table.  So only missing EDSM stars are added here.  See Datasetbuilder for the visiting system line/dot system
+
             carray = new uint[cls.Count];
             array = new Vector3[cls.Count];     // can't have any more than this 
             int total = 0;
@@ -88,17 +91,9 @@ namespace EDDiscovery2
 
             foreach (VisitedSystemsClass vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
-                // OpenGL colour byte order is RGBA, while Windows colour byte order is BGRA
-                Color colour = Color.FromArgb(vs.MapColour);
-                uint vscolour = BitConverter.ToUInt32(new byte[] { colour.R, colour.G, colour.B, colour.A }, 0);
-                if (vs.HasTravelCoordinates)
+                if (vs.curSystem != null && vs.curSystem.status != SystemStatusEnum.EDSC && vs.curSystem.HasCoordinate )
                 {
-                    carray[total] = vscolour;
-                    array[total++] = new Vector3((float)vs.X, (float)vs.Y, (float)vs.Z);
-                }
-                else if (vs.curSystem != null && vs.curSystem.HasCoordinate)
-                {
-                    carray[total] = vscolour;
+                    carray[total] = cx;
                     array[total++] = new Vector3((float)vs.curSystem.x, (float)vs.curSystem.y, (float)vs.curSystem.z);
                     //Console.WriteLine("Added {0} due to not being in star database", vs.Name);
                 }
@@ -327,7 +322,6 @@ namespace EDDiscovery2
 
                         if (Color == Color.Transparent)
                         {
-                            GL.Color4(Color.White);
                             GL.EnableClientState(ArrayCap.ColorArray);
                             GL.BindBuffer(BufferTarget.ArrayBuffer, VtxColorVboId);
                             GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
@@ -391,7 +385,7 @@ namespace EDDiscovery2
                 }
             }
 
-            visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Transparent, 1.0F);    // grid ID -1 means it won't be filled by the Update task
+            visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Orange, 1.0F);    // grid ID -1 means it won't be filled by the Update task
             grids.Add(visitedsystemsgrid);
 
             int solid = GridId.Id(0, 0);                                    
@@ -525,7 +519,8 @@ namespace EDDiscovery2
                     for( int i=grids.Count-1;i>=0;i--)              // go backwards thru the list, so the ones painted last gets considered first
                     {
                         StarGrid gcheck = grids[i];
-                        if (gcheck.Id >= 0 && !gcheck.Working)                                     // if not a special grid
+
+                        if (gcheck.Id >= 0 && !gcheck.Working )                                     // if not a special grid
                         {
                             float dist = gcheck.DistanceFrom(curx, curz);
 
@@ -609,8 +604,6 @@ namespace EDDiscovery2
             {
                 populatedgrid.Draw(control);
             }
-
-            visitedsystemsgrid.Draw(control);
         }
 
 #endregion
