@@ -1093,6 +1093,8 @@ namespace EDDiscovery.DB
                 "DROP INDEX IF EXISTS EdsmSystems_GridId",
                 "DROP INDEX IF EXISTS EdsmSystems_RandomId",
                 "DROP INDEX IF EXISTS SystemNames_EdsmId",
+                "DROP INDEX IF EXISTS SystemNames_IdName",
+                "DROP INDEX IF EXISTS SystemNames_NameId",
                 "DROP INDEX IF EXISTS sqlite_autoindex_SystemNames_1"
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
@@ -1111,14 +1113,14 @@ namespace EDDiscovery.DB
         {
             string[] queries = new[]
             {
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_EdsmId ON EdsmSystems (EdsmId ASC)",
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_EddbId ON EdsmSystems (EddbId ASC)",
-                "CREATE INDEX IF NOT EXISTS EddbSystems_EdsmId ON EddbSystems (EdsmId ASC)",
-                "CREATE INDEX IF NOT EXISTS EddbSystems_EddbId ON EddbSystems (EddbId ASC)",
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_Position ON EdsmSystems (Z, X, Y)",
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_GridId ON EdsmSystems (gridid)",
-                "CREATE INDEX IF NOT EXISTS EdsmSystems_RandomId ON EdsmSystems (randomid)",
-                "CREATE INDEX IF NOT EXISTS SystemNames_EdsmId ON SystemNames (EdsmId)"
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_EdsmId ON EdsmSystems (EdsmId ASC, EddbId, X, Y, Z)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_EddbId ON EdsmSystems (EddbId ASC, EdsmId)",
+                "CREATE INDEX IF NOT EXISTS EddbSystems_EdsmId ON EddbSystems (EdsmId ASC, EddbId)",
+                "CREATE INDEX IF NOT EXISTS EddbSystems_EddbId ON EddbSystems (EddbId ASC, EdsmId)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_PosId ON EdsmSystems (Z, X, Y, EdsmId)",
+                "CREATE INDEX IF NOT EXISTS EdsmSystems_StarGrid ON EdsmSystems (GridId, RandomId, EdsmId, EddbId, X, Y, Z)",
+                "CREATE INDEX IF NOT EXISTS SystemNames_IdName ON SystemNames (EdsmId,Name)",
+                "CREATE INDEX IF NOT EXISTS SystemNames_NameId ON SystemNames (Name,EdsmId)",
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
