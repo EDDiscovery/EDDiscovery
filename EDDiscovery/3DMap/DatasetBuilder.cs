@@ -534,6 +534,8 @@ namespace EDDiscovery2._3DMap
 
         #region Routes
 
+        // DotColour = transparent, use the map colour associated with each entry.  Else use this colour for all
+
         public List<IData3DSet> BuildVisitedSystems(bool DrawLines, bool DrawDots, Color DotColour, List<VisitedSystemsClass> VisitedSystems)
         {
             // we use the expanded capability of Line and Point to holds colours for each element instead of the previous sorting system

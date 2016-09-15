@@ -671,7 +671,7 @@ namespace EDDiscovery2._3DMap
         public Vector3[] Vertices;                 // as passed
         public Vector4[] Texcoords;
         public Bitmap Texture;
-        public Color Color { get; set; }
+        public Color Color { get; set; }            // use Color to set Alpha only
         public float Size { get; set; }     // not used
         public PrimitiveType Type { get { return PrimitiveType.Quads; } }
         public Object Tag { get; set; }     // optional tag 
@@ -712,7 +712,7 @@ namespace EDDiscovery2._3DMap
             this.Vertices = vertices;
             this.Texcoords = texcoords;
             this.Texture = texture;
-            this.Color = Color.White;
+            this.Color = Color.White;           // ENSUREs alpha is 255.. use Color to set Alpha only
         }
 
         public TexturedQuadData(Vector3[] vertices, Vector4[] texcoords, TexturedQuadData texture)
@@ -727,7 +727,7 @@ namespace EDDiscovery2._3DMap
 
             texture._childTextures.Add(this);
             this._parentTexture = texture;
-            this.Color = Color.White;
+            this.Color = Color.White;           // ENSUREs alpha is 255.. use Color to set Alpha only
         }
 
         public void Dispose()
@@ -1082,7 +1082,7 @@ namespace EDDiscovery2._3DMap
     {
         public HashSet<TexturedQuadData> BaseTextures = new HashSet<TexturedQuadData>();
 
-        public TexturedQuadDataCollection(string name, Color color, float pointsize)
+        public TexturedQuadDataCollection(string name, Color color, float pointsize)       
             : base(name, color, pointsize)
         {
         }
