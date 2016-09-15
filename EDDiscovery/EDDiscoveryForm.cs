@@ -613,8 +613,6 @@ namespace EDDiscovery
             {
                 Console.WriteLine("Systems Loaded");                    // in the worker thread they were, now in UI
 
-                routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
-                routeControl1.textBox_To.AutoCompleteCustomSource = SystemNames;
                 travelHistoryControl1.textBoxTarget.AutoCompleteCustomSource = SystemNames;
                 settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
 
