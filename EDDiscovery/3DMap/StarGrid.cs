@@ -80,6 +80,9 @@ namespace EDDiscovery2
 
         private int FillFromVS( ref Vector3[] array, ref uint[] carray, List<VisitedSystemsClass> cls, Color basecolour)
         {
+            // DONT confuse this with the visited systems lines/dots option. This is just to fill in systems which are not in the EDSM
+            // system table.  So only missing EDSM stars are added here.  See Datasetbuilder for the visiting system line/dot system
+
             carray = new uint[cls.Count];
             array = new Vector3[cls.Count];     // can't have any more than this 
             int total = 0;
@@ -88,7 +91,7 @@ namespace EDDiscovery2
 
             foreach (VisitedSystemsClass vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
-                if (vs.HasTravelCoordinates)
+                if (vs.curSystem != null && vs.curSystem.status != SystemStatusEnum.EDSC && vs.curSystem.HasCoordinate )
                 {
                     carray[total] = unchecked((uint)vs.MapColour);
                     array[total++] = new Vector3((float)vs.X, (float)vs.Y, (float)vs.Z);
@@ -521,7 +524,8 @@ namespace EDDiscovery2
                     for( int i=grids.Count-1;i>=0;i--)              // go backwards thru the list, so the ones painted last gets considered first
                     {
                         StarGrid gcheck = grids[i];
-                        if (gcheck.Id >= 0 && !gcheck.Working)                                     // if not a special grid
+
+                        if (gcheck.Id >= 0 && !gcheck.Working )                                     // if not a special grid
                         {
                             float dist = gcheck.DistanceFrom(curx, curz);
 
@@ -605,8 +609,6 @@ namespace EDDiscovery2
             {
                 populatedgrid.Draw(control);
             }
-
-            visitedsystemsgrid.Draw(control);
         }
 
 #endregion
