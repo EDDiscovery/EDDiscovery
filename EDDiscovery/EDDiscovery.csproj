@@ -495,6 +495,9 @@
     <None Include="Resources\floppy.png" />
     <None Include="Resources\eye.png" />
     <None Include="Resources\goto.png" />
+    <None Include="Resources\ImageTravel.png" />
+    <None Include="Resources\ImageStarDisc.png" />
+    <None Include="Resources\ImageStarDiscWhite.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

@@ -173,6 +173,36 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ImageStarDisc {
+            get {
+                object obj = ResourceManager.GetObject("ImageStarDisc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ImageStarDiscWhite {
+            get {
+                object obj = ResourceManager.GetObject("ImageStarDiscWhite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ImageTravel {
+            get {
+                object obj = ResourceManager.GetObject("ImageTravel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap imgCheck {
             get {
                 object obj = ResourceManager.GetObject("imgCheck", resourceCulture);
@@ -184,22 +214,21 @@ namespace EDDiscovery.Properties {
         ///   Looks up a localized string similar to Help for 3D star Map.
         ///
         ///Keyboard:
-        ///	WASD	Move forward, left, back, right (use Shift to increase speed by 2)
+        ///	WASD	Move forward, left, back, right 
         ///	Arrow Pad	Move forward, left, back, right 
         ///	RF	Move up and down
+        ///	Shift	Increase moving speed by 2, used in conjunction with above keys
         ///	+ or Z	Zoom in
         ///	- or X	Zoom out
+        ///	1 to 9	Zoom in (1) to out (9) in increments
         ///	Keypad 4	Yaw left
         ///	Keypad 6	Yaw right
         ///	Keypad 8	Pitch up
         ///	Keypad 5 or 2	Pitch down
         ///	Q or Keypad 7	Roll left
         ///	E or Keypad 9	Roll right
-        ///	F1 F2	Increase or decrease the light year limit for displaying star names
-        ///
-        ///Mouse:
-        ///	Move Mouse	Over star to get its information in a popup.
-        ///	Left Button	Se [rest of string was truncated]&quot;;.
+        ///	F1 ?	This help
+        ///	F3 F4	Increase or decrease the light year limit for displ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string maphelp3d {
             get {
