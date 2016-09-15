@@ -151,7 +151,10 @@ namespace EDDiscovery2
             _plannedRoute = null;
 
             toolStripShowAllStars.Renderer = new MyRenderer();
-            toolStripButtonDrawLines.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", true);
+
+            drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", true);
+            drawADiscOnStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelDisc", true);
+            useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelWhiteDisc", true);
             showStarstoolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DAllStars", true);
             showStationsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonStations", true);
             toolStripButtonPerspective.Checked = SQLiteDBClass.GetSettingBool("Map3DPerspective", false);
@@ -412,7 +415,9 @@ namespace EDDiscovery2
             }
 
             SQLiteDBClass.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DDrawLines", toolStripButtonDrawLines.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DDrawLines", drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DDrawTravelDisc", drawADiscOnStarsWithPositionToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DDrawTravelWhiteDisc", useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool("Map3DButtonColours", enableColoursToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
@@ -861,6 +866,11 @@ namespace EDDiscovery2
             UpdateDataSetsDueToZoomOrFlip(true);
         }
 
+        private float GetBitmapOnScreenSizeX() { return (float)Math.Min(Math.Max(2, 80.0 / zoomfov.Zoom), 400); }
+        private float GetBitmapOnScreenSizeY() { return (float)Math.Min(Math.Max(2 * 1.2F, 100.0 / zoomfov.Zoom), 400); }
+        private float GetBitmapOnScreenSizeXSel() { return (float)Math.Min(Math.Max(2, 80.0 / zoomfov.Zoom), 800); }
+        private float GetBitmapOnScreenSizeYSel() { return (float)Math.Min(Math.Max(2 * 1.2F, 100.0 / zoomfov.Zoom), 800); }
+
         private void UpdateDataSetsDueToZoomOrFlip(bool zoommoved)
         {
             //Console.WriteLine("Update due to zoom {0} or flip ", zoommoved);
@@ -885,7 +895,7 @@ namespace EDDiscovery2
                 builder.UpdateBookmarks(ref _datasets_notedsystems, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
 
             if (_clickedGMO != null || _clickedSystem != null)              // if markers
-                builder.UpdateSelected(ref _datasets_selectedsystems, _clickedSystem, _clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+                builder.UpdateSelected(ref _datasets_selectedsystems, _clickedSystem, _clickedGMO, GetBitmapOnScreenSizeXSel(), GetBitmapOnScreenSizeYSel(), _lastcameranorm.Rotation);
         }
 
         private void GenerateDataSetsMaps()
@@ -908,7 +918,10 @@ namespace EDDiscovery2
 
             List<VisitedSystemsClass> filtered = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null;
 
-            _datasets_visitedsystems = builder.BuildVisitedSystems(toolStripButtonDrawLines.Checked, filtered);
+            _datasets_visitedsystems = builder.BuildVisitedSystems(drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked, 
+                            drawADiscOnStarsWithPositionToolStripMenuItem.Checked, 
+                            useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked ? Color.White : Color.Transparent, 
+                            filtered);
         }
 
         private void GenerateDataSetsRouteTri()
@@ -918,7 +931,7 @@ namespace EDDiscovery2
 
             DatasetBuilder builder = new DatasetBuilder();
 
-            _datasets_routetri = builder.BuildRouteTri(_centerSystem, _plannedRoute);
+            _datasets_routetri = builder.BuildRouteTri(_plannedRoute);
         }
 
         private void GenerateDataSetsSelectedSystems()
@@ -1196,7 +1209,19 @@ namespace EDDiscovery2
                 MessageBox.Show("No travel history is available");
         }
 
-        private void toolStripButtonDrawLines_Click(object sender, EventArgs e)
+        private void drawLinesBetweenStarsWithPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GenerateDataSetsVisitedSystems();
+            RequestPaint();
+        }
+
+        private void drawADiscOnStarsWithPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GenerateDataSetsVisitedSystems();
+            RequestPaint();
+        }
+
+        private void useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GenerateDataSetsVisitedSystems();
             RequestPaint();
@@ -1986,9 +2011,6 @@ namespace EDDiscovery2
             newcursysdistz = 0;
             return false;
         }
-
-        private float GetBitmapOnScreenSizeX() { return (float)Math.Min(Math.Max(7, 80.0 / zoomfov.Zoom), 400); }
-        private float GetBitmapOnScreenSizeY() { return (float)Math.Min(Math.Max(8, 100.0 / zoomfov.Zoom), 400); }
 
         private BookmarkClass GetMouseOverBookmark(int x, int y, out float cursysdistz)
         {
