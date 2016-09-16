@@ -24,6 +24,7 @@ namespace ExtendedControls
         public float GradientColorScaling { get; set; } = 0.5F;
         public Color ScrollBarColor { get; set; } = Color.LightGray;    // not system
         public Color ScrollBarButtonColor { get; set; } = Color.LightGray;    // not system
+        public Color MouseOverBackgroundColor { get; set; } = Color.Silver;
 
         public int SelectedIndex { get; set; } = -1;
 
@@ -159,6 +160,14 @@ namespace ExtendedControls
                         }
                         else
                         {
+                            if (offset == mouseoverindex)
+                            {
+                                using (Brush highlight = new SolidBrush(MouseOverBackgroundColor))
+                                {
+                                    e.Graphics.FillRectangle(highlight, pos);
+                                }
+                            }
+
                             e.Graphics.DrawString(s, this.Font, textb, pos);
                         }
 
@@ -231,6 +240,16 @@ namespace ExtendedControls
                 GoDownOne();
         }
 
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            int y = e.Location.Y;
+            int index = (y / ItemHeight) + firstindex;
+            mouseoverindex = index;
+            Invalidate();
+        }
+
         protected override bool IsInputKey(Keys keyData)
         {
             if (keyData == Keys.Up || keyData == Keys.Down)        // grab these nav keys
@@ -266,6 +285,7 @@ namespace ExtendedControls
         private int itemslayoutestimatedon = -1;
         private int displayableitems = -1;
         private int firstindex = -1;
+        private int mouseoverindex = -1;
     }
 }
 
