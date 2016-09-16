@@ -38,10 +38,10 @@
             this.showNotesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showXYZToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.blackBoxAroundTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBoxOrder = new System.Windows.Forms.ToolStripComboBox();
             this.labelExt_NoSystems = new ExtendedControls.LabelExt();
             this.panel_grip = new ExtendedControls.DrawnPanel();
-            this.blackBoxAroundTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripConfig.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,7 +58,7 @@
             this.blackBoxAroundTextToolStripMenuItem,
             this.toolStripComboBoxOrder});
             this.contextMenuStripConfig.Name = "contextMenuStripConfig";
-            this.contextMenuStripConfig.Size = new System.Drawing.Size(261, 229);
+            this.contextMenuStripConfig.Size = new System.Drawing.Size(261, 207);
             // 
             // toolStripMenuItemTargetLine
             // 
@@ -130,6 +130,16 @@
             this.showTargetToolStripMenuItem.Text = "Show Target Distance per Star";
             this.showTargetToolStripMenuItem.Click += new System.EventHandler(this.showTargetPerStarToolStripMenuItem_Click);
             // 
+            // blackBoxAroundTextToolStripMenuItem
+            // 
+            this.blackBoxAroundTextToolStripMenuItem.Checked = true;
+            this.blackBoxAroundTextToolStripMenuItem.CheckOnClick = true;
+            this.blackBoxAroundTextToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.blackBoxAroundTextToolStripMenuItem.Name = "blackBoxAroundTextToolStripMenuItem";
+            this.blackBoxAroundTextToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+            this.blackBoxAroundTextToolStripMenuItem.Text = "Black box around text";
+            this.blackBoxAroundTextToolStripMenuItem.Click += new System.EventHandler(this.blackBoxAroundTextToolStripMenuItem_Click);
+            // 
             // toolStripComboBoxOrder
             // 
             this.toolStripComboBoxOrder.Items.AddRange(new object[] {
@@ -166,16 +176,6 @@
             this.panel_grip.Size = new System.Drawing.Size(20, 20);
             this.panel_grip.TabIndex = 17;
             this.panel_grip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_grip_MouseDown);
-            // 
-            // blackBoxAroundTextToolStripMenuItem
-            // 
-            this.blackBoxAroundTextToolStripMenuItem.Checked = true;
-            this.blackBoxAroundTextToolStripMenuItem.CheckOnClick = true;
-            this.blackBoxAroundTextToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.blackBoxAroundTextToolStripMenuItem.Name = "blackBoxAroundTextToolStripMenuItem";
-            this.blackBoxAroundTextToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
-            this.blackBoxAroundTextToolStripMenuItem.Text = "Black box around text";
-            this.blackBoxAroundTextToolStripMenuItem.Click += new System.EventHandler(this.blackBoxAroundTextToolStripMenuItem_Click);
             // 
             // SummaryPopOut
             // 
