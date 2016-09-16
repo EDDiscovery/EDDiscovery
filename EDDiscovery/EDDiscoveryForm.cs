@@ -602,6 +602,7 @@ namespace EDDiscovery
             }
         }
 
+
         private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             ReportProgress(-1, "");
@@ -612,6 +613,9 @@ namespace EDDiscovery
             else if (!e.Cancelled && !PendingClose)
             {
                 Console.WriteLine("Systems Loaded");                    // in the worker thread they were, now in UI
+
+
+                routeControl1.textBox_From.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
                 travelHistoryControl1.textBoxTarget.AutoCompleteCustomSource = SystemNames;
                 settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;

@@ -36,7 +36,7 @@
             this.buttonExtTargetTo = new ExtendedControls.ButtonExt();
             this.buttonTargetFrom = new ExtendedControls.ButtonExt();
             this.cmd3DMap = new ExtendedControls.ButtonExt();
-            this.textBox_From = new ExtendedControls.dbAutoCompleteTextBox();
+            this.textBox_From = new ExtendedControls.AutoCompleteTextBox();
             this.textBox_Range = new ExtendedControls.TextBoxBorder();
             this.textBox_To = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
@@ -441,7 +441,7 @@
         #endregion
 
         private ExtendedControls.RichTextBoxScroll richTextBox_routeresult;
-        internal ExtendedControls.dbAutoCompleteTextBox textBox_From;
+        internal ExtendedControls.AutoCompleteTextBox textBox_From;
         private System.Windows.Forms.Label label3;
         private ExtendedControls.ButtonExt button_Route;
         private System.Windows.Forms.Label label2;
