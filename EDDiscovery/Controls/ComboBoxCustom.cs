@@ -18,6 +18,7 @@ namespace ExtendedControls
         public event EventHandler DropDown;
         public event EventHandler SelectedIndexChanged;
 
+        public Color MouseOverBackgroundColor { get { return _listcontrol.MouseOverBackgroundColor; } set { _listcontrol.MouseOverBackgroundColor = value; } }
         public int SelectedIndex { get { return _listcontrol.SelectedIndex; } set { _listcontrol.SelectedIndex = value; } }
         public Color SelectionBackColor { get { return _listcontrol.SelectionBackColor; } set { _listcontrol.SelectionBackColor = value; this.BackColor = value; } }
         public List<string> Items { get { return _listcontrol.Items; } set { _listcontrol.Items = value; } }
@@ -392,20 +393,20 @@ namespace ExtendedControls
             }
         }
 
-        protected Form GetParentForm(Control parent, out Point location)
+        protected override void OnMouseEnter(EventArgs eventargs)
         {
-            if (parent is Form)
-            {
-                location = parent.Location;
-                return (Form)parent;
-            }
-            else
-            {
-                Point _location;
-                Form form = GetParentForm(parent.Parent, out _location);
-                location = new Point(_location.X + parent.Location.X, _location.Y + parent.Location.Y);
-                return form;
-            }
+            base.OnMouseEnter(eventargs);
+            mouseover = true;
+            if (this.FlatStyle != FlatStyle.System)
+                Invalidate();
+        }
+
+        protected override void OnMouseLeave(EventArgs eventargs)
+        {
+            base.OnMouseEnter(eventargs);
+            mouseover = false;
+            if (this.FlatStyle != FlatStyle.System)
+                Invalidate();
         }
 
         protected override void OnClick(EventArgs e)
@@ -427,6 +428,7 @@ namespace ExtendedControls
             _cbdropdown.Size = new Size(this.DropDownWidth, fittableitems * this.ItemHeight + 4);
 
             _cbdropdown.SelectionBackColor = this.DropDownBackgroundColor;
+            _cbdropdown.MouseOverBackgroundColor = this.MouseOverBackgroundColor;
             _cbdropdown.ForeColor = this.ForeColor;
             _cbdropdown.BackColor = this.BorderColor;
             _cbdropdown.BorderColor = this.BorderColor;
@@ -459,8 +461,7 @@ namespace ExtendedControls
 
         private void _cbdropdown_DropDown(object sender, EventArgs e)
         {
-            Point location;
-            var _parentForm = GetParentForm(this, out location);
+            Point location = this.PointToScreen(new Point(0, 0));
             _cbdropdown.Location = new Point(location.X, location.Y + this.Height);
             isActivated = true;
             this.Invalidate(true);
