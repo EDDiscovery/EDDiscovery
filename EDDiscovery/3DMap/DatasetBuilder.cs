@@ -452,11 +452,11 @@ namespace EDDiscovery2._3DMap
         public List<IData3DSet> AddFineGridLines()
         {
             int smallUnitSize = gridunitSize / 10;
-            var smalldatasetGrid = Data3DSetClass<LineData>.Create("gridLOD0", MapColours.FineGridLines, 0.6f);
+            var smalldatasetGrid = Data3DSetClass<LineData>.Create("gridFine", MapColours.FineGridLines, 0.6f);
 
             for (float x = MinGridPos.X; x <= MaxGridPos.X; x += smallUnitSize)
             {
-                smalldatasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x, 0, MaxGridPos.Y));
+                smalldatasetGrid.Add(new LineData(x, 0, MinGridPos.Y, x, 0, MaxGridPos.Y ));
             }
 
             for (float z = MinGridPos.Y; z <= MaxGridPos.Y; z += smallUnitSize)
@@ -470,7 +470,7 @@ namespace EDDiscovery2._3DMap
 
         public List<IData3DSet> AddCoarseGridLines()
         {
-            var datasetGridLOD1 = Data3DSetClass<LineData>.Create("gridLOD1", MapColours.CoarseGridLines, 0.6f);
+            var datasetGridLOD1 = Data3DSetClass<LineData>.Create("gridNormal", MapColours.CoarseGridLines, 0.6f);
 
             for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
             {
@@ -484,7 +484,7 @@ namespace EDDiscovery2._3DMap
 
             _datasets.Add(datasetGridLOD1);
 
-            var datasetGridLOD2 = Data3DSetClass<LineData>.Create("gridLOD2", MapColours.CoarseGridLines, 0.6f);
+            var datasetGridLOD2 = Data3DSetClass<LineData>.Create("gridCoarse", MapColours.CoarseGridLines, 0.6f);
 
             for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize * 10)
             {
@@ -502,44 +502,31 @@ namespace EDDiscovery2._3DMap
 
         public void UpdateGridZoom(ref List<IData3DSet> _datasets, float zoom)
         {
-            float LOD1fade = (float)Math.Max(Math.Min((zoom / 0.1 - 1.0) / 5.0, 1.0), 0.5);
+            IData3DSet grid = _datasets.SingleOrDefault(s => s.Name == "gridNormal");
 
-            var gridLOD1 = _datasets.SingleOrDefault(s => s.Name == "gridLOD1");
-            if (gridLOD1 != null)
+            if ( grid != null )
             {
+                LineDataCollection ldc = grid as LineDataCollection;
                 var colour = MapColours.CoarseGridLines;
-                //Console.WriteLine("LOD1 fade"+ LOD1fade);
-                colour = Color.FromArgb((int)(colour.R * LOD1fade), (int)(colour.G * LOD1fade), (int)(colour.B * LOD1fade));
-                var newgrid = Data3DSetClass<LineData>.Create("gridLOD1", colour, 0.6f);
-
-                foreach (var line in ((Data3DSetClass<LineData>)gridLOD1).Primatives)
-                {
-                    newgrid.Add(line);
-                }
-
-                int index = _datasets.IndexOf(gridLOD1);
-                _datasets.Remove(gridLOD1);
-                ((IDisposable)gridLOD1).Dispose();
-                _datasets.Insert(index, newgrid);
+                float LODfade = (float)Math.Max(Math.Min((zoom / 0.1 - 1.0) / 5.0, 1.0), 0.5);
+                ldc.Color = Color.FromArgb((int)(colour.R * LODfade), (int)(colour.G * LODfade), (int)(colour.B * LODfade));
+                //Console.WriteLine("LOD {0} fade {1} Color {2}", ldc.Name, LODfade, ldc.Color);
             }
         }
 
         public void UpdateGridCoordZoom(ref List<IData3DSet> _datasets, float zoom)
         {
-            float LOD2fade = (float)Math.Max(Math.Min((0.2 / zoom - 1.0) / 2.0, 1.0), 0.0);
+            IData3DSet gridLOD2 = _datasets.SingleOrDefault(s => s.Name == "text bitmap LOD2");
 
-            var gridLOD2 = _datasets.SingleOrDefault(s => s.Name == "text bitmap LOD2");
             if (gridLOD2 != null)
             {
-                //Console.WriteLine("LOD2 fade" + LOD2fade);
-                var newgrid = Data3DSetClass<TexturedQuadData>.Create("text bitmap LOD2", Color.FromArgb((int)(255 * LOD2fade), Color.White), 1.0f);
-                foreach (var tex in ((Data3DSetClass<TexturedQuadData>)gridLOD2).Primatives)
-                {
-                    newgrid.Add(tex);
-                }
+                TexturedQuadDataCollection tqdc = gridLOD2 as TexturedQuadDataCollection;
 
-                _datasets.Remove(gridLOD2);
-                _datasets.Add(newgrid);
+                float LODfade = (float)Math.Max(Math.Min((0.2 / zoom - 1.0) / 2.0, 1.0), 0.0);
+                Color calpha = Color.FromArgb((int)(255 * LODfade), Color.White);
+
+                tqdc.SetColour(calpha);
+                //Console.WriteLine("LOD {0} fade {1} Color {2}", tqdc.Name, LODfade, calpha);
             }
         }
 
@@ -547,53 +534,60 @@ namespace EDDiscovery2._3DMap
 
         #region Routes
 
-        public List<IData3DSet> BuildVisitedSystems(bool drawlines, List<VisitedSystemsClass> VisitedSystems)
-        {
-            AddVisitedSystemsInformation(drawlines, VisitedSystems);
-            return _datasets;
-        }
+        // DotColour = transparent, use the map colour associated with each entry.  Else use this colour for all
 
-        private void AddVisitedSystemsInformation(bool DrawLines, List<VisitedSystemsClass> VisitedSystems)
+        public List<IData3DSet> BuildVisitedSystems(bool DrawLines, bool DrawDots, Color DotColour, List<VisitedSystemsClass> VisitedSystems)
         {
-            // we used to draw the star points, but the star grids make sure all stars, visited systems or in the systems db are painted if selected
-            // so just the connecting lines
+            // we use the expanded capability of Line and Point to holds colours for each element instead of the previous sorting system
+            // This means less submissions to GL.
 
-            if (VisitedSystems != null && VisitedSystems.Any() && DrawLines )
+            if (VisitedSystems != null && VisitedSystems.Any() )
             {
-                VisitedSystemsClass.SetLastKnownSystemPosition(VisitedSystems);
-
-                IEnumerable<IGrouping<int, VisitedSystemsClass>> colours =
-                    from VisitedSystemsClass sysPos in VisitedSystems 
-                    group sysPos by sysPos.MapColour;
-
-                if (colours!=null)
+                if (DrawLines)
                 {
-                    foreach (IGrouping<int, VisitedSystemsClass> colour in colours)
+                    var datasetl = Data3DSetClass<LineData>.Create("visitedstarslines", Color.Transparent, 2.0f);
+                    VisitedSystemsClass.SetLastKnownSystemPosition(VisitedSystems);
+
+                    foreach (VisitedSystemsClass sp in VisitedSystems)
                     {
-                        var datasetl = Data3DSetClass<LineData>.Create("visitedstars" + colour.Key.ToString(), Color.FromArgb(colour.Key), 1.0f);
-                        foreach (VisitedSystemsClass sp in colour)
+                        if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
                         {
-                            if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
-                            {
-                                datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
-                                    sp.lastKnownSystem.x, sp.lastKnownSystem.y, sp.lastKnownSystem.z));
+                            Color c = Color.FromArgb(255, Color.FromArgb(sp.MapColour));         // convert to colour, ensure alpha is 255 (some time in the past this value could have been screwed up)
+                            if (c.GetBrightness() < 0.05)                                        // and ensure it shows
+                                c = Color.Red;
 
-                            }
+                            datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
+                                sp.lastKnownSystem.x, sp.lastKnownSystem.y, sp.lastKnownSystem.z , c));
                         }
-
-                        _datasets.Add(datasetl);
                     }
+
+                    _datasets.Add(datasetl);
+                }
+
+                if ( DrawDots )
+                {
+                    var datasetp = Data3DSetClass<PointData>.Create("visitedstarsdots", DotColour, 2.0f);
+
+                    foreach (VisitedSystemsClass vs in VisitedSystems)
+                    {
+                        if (vs.curSystem != null && vs.curSystem.HasCoordinate)
+                        {
+                            Color c = Color.FromArgb(255, Color.FromArgb(vs.MapColour));         // convert to colour, ensure alpha is 255 (some time in the past this value could have been screwed up)
+                            if (c.GetBrightness() < 0.05)                                        // and ensure it shows
+                                c = Color.Red;
+
+                            datasetp.Add(new PointData(vs.curSystem.x, vs.curSystem.y, vs.curSystem.z, c));
+                        }
+                    }
+
+                    _datasets.Add(datasetp);
                 }
             }
-        }
 
-        public List<IData3DSet> BuildRouteTri(ISystem centersystem, List<SystemClass> planned)
-        {
-            AddRoutePlannerInfoToDataset(planned);
             return _datasets;
         }
 
-        private void AddRoutePlannerInfoToDataset(List<SystemClass> PlannedRoute)
+        public List<IData3DSet> BuildRouteTri(List<SystemClass> PlannedRoute)
         {
             if (PlannedRoute != null && PlannedRoute.Any())
             {
@@ -606,11 +600,12 @@ namespace EDDiscovery2._3DMap
                 }
                 _datasets.Add(routeLines);
             }
+            return _datasets;
         }
 
-#endregion
+        #endregion
 
-#region Systems
+        #region Systems
 
         public List<IData3DSet> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation )
         {

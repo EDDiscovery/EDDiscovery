@@ -16,7 +16,7 @@ namespace EDDiscovery2._3DMap
         private float _cameraFov = (float)(Math.PI / 2.0f);     // Camera, in radians, 180/2 = 90 degrees
 
         private const float ZoomMax = 300F;
-        private const float ZoomMin = 0.02F;
+        private const float ZoomMin = 0.01F;        // Iain special ;-)
         private const float ZoomFact = 1.258925F;
 
         private float _defaultZoom = 1F;

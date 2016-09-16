@@ -49,7 +49,10 @@ namespace EDDiscovery2
             this.toolStripButtonHistory = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonTarget = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonDrawLines = new System.Windows.Forms.ToolStripButton();
+            this.toolStripDropDownButtonVisitedStars = new System.Windows.Forms.ToolStripDropDownButton();
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.drawADiscOnStarsWithPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButtonFilterStars = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.showStarstoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -159,7 +162,7 @@ namespace EDDiscovery2
             this.toolStripButtonHistory,
             this.toolStripButtonTarget,
             this.toolStripSeparator5,
-            this.toolStripButtonDrawLines,
+            this.toolStripDropDownButtonVisitedStars,
             this.toolStripDropDownButtonFilterStars,
             this.toolStripDropDownButtonNameStars,
             this.toolStripDropDownButtonBookmarks,
@@ -265,17 +268,56 @@ namespace EDDiscovery2
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(6, 40);
             // 
-            // toolStripButtonDrawLines
+            // toolStripDropDownButtonVisitedStars
             // 
-            this.toolStripButtonDrawLines.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDrawLines.BackgroundImage")));
-            this.toolStripButtonDrawLines.CheckOnClick = true;
-            this.toolStripButtonDrawLines.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonDrawLines.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDrawLines.Image")));
-            this.toolStripButtonDrawLines.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonDrawLines.Name = "toolStripButtonDrawLines";
-            this.toolStripButtonDrawLines.Size = new System.Drawing.Size(23, 37);
-            this.toolStripButtonDrawLines.Text = "Draw travel lines between visited systems with coordinates";
-            this.toolStripButtonDrawLines.Click += new System.EventHandler(this.toolStripButtonDrawLines_Click);
+            this.toolStripDropDownButtonVisitedStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButtonVisitedStars.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem,
+            this.drawADiscOnStarsWithPositionToolStripMenuItem,
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem});
+            this.toolStripDropDownButtonVisitedStars.Image = global::EDDiscovery.Properties.Resources.ImageTravel;
+            this.toolStripDropDownButtonVisitedStars.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButtonVisitedStars.Name = "toolStripDropDownButtonVisitedStars";
+            this.toolStripDropDownButtonVisitedStars.Size = new System.Drawing.Size(29, 37);
+            this.toolStripDropDownButtonVisitedStars.Text = "toolStripDropDownButtonVisitedStars";
+            this.toolStripDropDownButtonVisitedStars.ToolTipText = "Select how your travel history is displayed";
+            // 
+            // drawLinesBetweenStarsWithPositionToolStripMenuItem
+            // 
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked = true;
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.CheckOnClick = true;
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.ImageTravel;
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Name = "drawLinesBetweenStarsWithPositionToolStripMenuItem";
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Text = "Draw lines between stars with position";
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.ToolTipText = "Lines connect, in the Map Colour, the stars with known position";
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Click += new System.EventHandler(this.drawLinesBetweenStarsWithPositionToolStripMenuItem_Click);
+            // 
+            // drawADiscOnStarsWithPositionToolStripMenuItem
+            // 
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.Checked = true;
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.CheckOnClick = true;
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.ImageStarDisc;
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.Name = "drawADiscOnStarsWithPositionToolStripMenuItem";
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.Text = "Draw a disc on stars with position";
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.ToolTipText = "Stars with position are shown as discs";
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.Click += new System.EventHandler(this.drawADiscOnStarsWithPositionToolStripMenuItem_Click);
+            // 
+            // useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem
+            // 
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked = true;
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.CheckOnClick = true;
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.ImageStarDiscWhite;
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Name = "useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem";
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Text = "Use White for discs instead of assigned map colour";
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.ToolTipText = "Instead of using the map colour, use white. Useful when you have the lines on at " +
+    "the same time";
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Click += new System.EventHandler(this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem_Click);
             // 
             // toolStripDropDownButtonFilterStars
             // 
@@ -345,7 +387,7 @@ namespace EDDiscovery2
             // showDiscsToolStripMenuItem
             // 
             this.showDiscsToolStripMenuItem.CheckOnClick = true;
-            this.showDiscsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showDiscsToolStripMenuItem.Image")));
+            this.showDiscsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.ImageStarDisc;
             this.showDiscsToolStripMenuItem.Name = "showDiscsToolStripMenuItem";
             this.showDiscsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.showDiscsToolStripMenuItem.Text = "Show Discs";
@@ -541,7 +583,7 @@ namespace EDDiscovery2
             this.toolStripDropDownRecord.Image = global::EDDiscovery.Properties.Resources.VideoRecorder;
             this.toolStripDropDownRecord.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownRecord.Name = "toolStripDropDownRecord";
-            this.toolStripDropDownRecord.Size = new System.Drawing.Size(29, 37);
+            this.toolStripDropDownRecord.Size = new System.Drawing.Size(29, 20);
             this.toolStripDropDownRecord.Text = "toolStripDropDownButton1";
             this.toolStripDropDownRecord.ToolTipText = "Record or Playback videos";
             this.toolStripDropDownRecord.DropDownOpening += new System.EventHandler(this.toolStripDropDownRecord_DropDownOpening);
@@ -753,7 +795,6 @@ namespace EDDiscovery2
             private Label labelSystemCoords;
         private ToolStrip toolStripShowAllStars;
         private ToolStripButton toolStripButtonLastKnownPosition;
-        private ToolStripButton toolStripButtonDrawLines;
         private ToolStripButton toolStripButtonGrid;
         private StatusStrip statusStrip;
         private ToolStripStatusLabel statusLabel;
@@ -807,5 +848,9 @@ namespace EDDiscovery2
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripMenuItem toolStripMenuItemClearRecording;
         private ToolStripMenuItem newRecordStepToolStripMenuItem;
+        private ToolStripDropDownButton toolStripDropDownButtonVisitedStars;
+        private ToolStripMenuItem drawLinesBetweenStarsWithPositionToolStripMenuItem;
+        private ToolStripMenuItem drawADiscOnStarsWithPositionToolStripMenuItem;
+        private ToolStripMenuItem useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem;
     }
     }
