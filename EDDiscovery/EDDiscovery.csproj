@@ -179,7 +179,7 @@
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Controls\DataGridViewExtensions.cs" />
-    <Compile Include="Controls\dbAutoCompleteTextBox.cs">
+    <Compile Include="Controls\AutoCompleteTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\LabelExt.cs">

@@ -314,37 +314,47 @@ namespace EDDiscovery.DB
 
                         if (percentage < 100)
                             cmd.CommandText += " and randomid<" + percentage;
+                        Stopwatch ws = new Stopwatch();  ws.Start();
+
+                        Object[] array = new Object[5];     // to the number of items above queried
+
+                        vertices = new Vector3[250000];
+                        colours = new uint[250000];
 
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                if (System.DBNull.Value != reader["x"])
+                                reader.GetValues(array);
+
+                                long id = (long)array[0];
+                                long x = (long)array[1];
+                                long y = (long)array[2];
+                                long z = (long)array[3];
+                                int rand = (int)(long)array[4];
+
+                                if (numvertices == vertices.Length)
                                 {
-                                    if (vertices == null)
-                                    {
-                                        vertices = new Vector3[1024];
-                                        colours = new uint[1024];
-                                    }
-                                    else if (numvertices == vertices.Length)
-                                    {
-                                        Array.Resize(ref vertices, vertices.Length + 8192);
-                                        Array.Resize(ref colours, colours.Length + 8192);
-                                    }
-
-                                    Vector3 pos = new Vector3((float)((long)reader["x"] / 128.0), (float)((long)reader["y"] / 128.0), (float)((long)reader["z"] / 128.0));
-
-                                    int rand = (int)(long)reader["randomid"];
-                                    Color basec = fixedc[rand&3]; 
-                                    int fade = 100 - ((rand>>2)&7) * 8;
-                                    byte red = (byte)(basec.R * fade / 100);
-                                    byte green = (byte)(basec.G * fade / 100);
-                                    byte blue = (byte)(basec.B * fade / 100);
-                                    colours[numvertices] = BitConverter.ToUInt32(new byte[] { red, green, blue, 255 }, 0);
-                                    vertices[numvertices++] = pos;
+                                    Array.Resize(ref vertices, vertices.Length + 32768);
+                                    Array.Resize(ref colours, colours.Length + 32768);
                                 }
+
+                                Vector3 pos = new Vector3((float)(x / 128.0), (float)(y / 128.0), (float)(z / 128.0));
+
+                                Color basec = fixedc[rand&3]; 
+                                int fade = 100 - ((rand>>2)&7) * 8;
+                                byte red = (byte)(basec.R * fade / 100);
+                                byte green = (byte)(basec.G * fade / 100);
+                                byte blue = (byte)(basec.B * fade / 100);
+                                colours[numvertices] = BitConverter.ToUInt32(new byte[] { red, green, blue, 255 }, 0);
+                                vertices[numvertices++] = pos;
                             }
                         }
+
+                        Array.Resize(ref vertices, numvertices);
+                        Array.Resize(ref colours, numvertices);
+
+                        Console.WriteLine("Query {0} grid {1} ret {2} took {3}", cmd.CommandText, gridid, numvertices, ws.ElapsedMilliseconds);
 
                         if (gridid == 810 && vertices!=null)    // BODGE do here, better once on here than every star for every grid..
                         {                       // replace when we have a better naming system
@@ -1669,6 +1679,17 @@ namespace EDDiscovery.DB
 
             return updated + inserted;
         }
+
+        public static List<string> ReturnSystemListForAutoComplete(string input)
+        {
+            List<string> f = new List<string>();
+            f.Add("one");
+            f.Add("two");
+            f.Add("three");
+            f.Add("four");
+            f.Add("five");
+            return f;
+        }
     }
 
     public class GridId
@@ -1755,5 +1776,6 @@ namespace EDDiscovery.DB
 
             return false;
         }
+
     }
 }
