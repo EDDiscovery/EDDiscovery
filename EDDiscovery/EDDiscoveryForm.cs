@@ -161,6 +161,7 @@ namespace EDDiscovery
             travelHistoryControl1.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);
+            journalViewControl1.InitControl(this);
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
 
@@ -1540,5 +1541,10 @@ namespace EDDiscovery
             travelHistoryControl1.RefreshHistoryAsync(forceReload: true);
         }
         #endregion
+
+        private void journalViewControl1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

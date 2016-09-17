@@ -11,3 +11,4 @@ packages
 */*Secrets.config
 /EDDiscovery.v12.suo
 *.ncrunch*
+/test

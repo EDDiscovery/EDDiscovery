@@ -270,6 +270,14 @@ namespace EDDiscovery.EliteDangerous
             JournalId = reader.JournalId;
         }
 
+        public string ToShortString()
+        {
+            JObject jo = JObject.Parse(EventDataString);  // Create a clone
+
+            jo.Property("timestamp").Remove();
+            jo.Property("event").Remove();
+            return jo.ToString().Replace("{", "").Replace("}", "").Replace("\"", "");
+        }
 
         static public JournalEntry CreateJournalEntry(string text, EDJournalReader reader)
         {
