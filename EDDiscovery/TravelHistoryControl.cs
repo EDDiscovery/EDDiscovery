@@ -181,8 +181,6 @@ namespace EDDiscovery
 
             var vsclist = netlog.ParseFiles(out errmsg, defaultMapColour, () => worker.CancellationPending, (p,s) => worker.ReportProgress(p,s), forceReload);   // Parse files stop monitor..
 
-            EDJournalClass journal = new EDJournalClass(_discoveryForm);
-            var vsclist2 = journal.ParseFiles(out errmsg, defaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), forceReload);   // Parse files stop monitor..
 
 
             if (worker.CancellationPending)

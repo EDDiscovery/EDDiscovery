@@ -477,6 +477,12 @@
     <Compile Include="Trilateration\TrilaterationControl.Designer.cs">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="JournalViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="JournalViewControl.Designer.cs">
+      <DependentUpon>JournalViewControl.cs</DependentUpon>
+    </Compile>
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -581,6 +587,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MoveToCommander.resx">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JournalViewControl.resx">
+      <DependentUpon>JournalViewControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PlanetSystems\PlanetsForm.resx">
       <DependentUpon>PlanetsForm.cs</DependentUpon>

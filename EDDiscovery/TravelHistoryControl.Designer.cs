@@ -45,63 +45,38 @@
             this.label2 = new System.Windows.Forms.Label();
             this.labelclosests = new System.Windows.Forms.Label();
             this.panel_system = new System.Windows.Forms.Panel();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label_Z = new System.Windows.Forms.Label();
-            this.labelDistEnter = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.labelCMDR = new System.Windows.Forms.Label();
-            this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
-            this.panelRight = new System.Windows.Forms.Panel();
-            this.panel_bottomright = new System.Windows.Forms.Panel();
-            this.closestContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel_topright = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.panelBottom = new System.Windows.Forms.Panel();
-            this.panelMain = new System.Windows.Forms.Panel();
-            this.TopPanel = new System.Windows.Forms.Panel();
-            this._refreshWorker = new System.ComponentModel.BackgroundWorker();
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
-            this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
-            this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
-            this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
-            this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
-            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonEDSM = new ExtendedControls.DrawnPanel();
+            this.label14 = new System.Windows.Forms.Label();
             this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
             this.buttonRoss = new ExtendedControls.DrawnPanel();
             this.buttonEDDB = new ExtendedControls.DrawnPanel();
             this.textBoxState = new ExtendedControls.TextBoxBorder();
             this.textBoxEconomy = new ExtendedControls.TextBoxBorder();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.textBoxGovernment = new ExtendedControls.TextBoxBorder();
             this.textBoxAllegiance = new ExtendedControls.TextBoxBorder();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.textBoxVisits = new ExtendedControls.TextBoxBorder();
+            this.label8 = new System.Windows.Forms.Label();
             this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
+            this.label_Z = new System.Windows.Forms.Label();
             this.textBoxZ = new ExtendedControls.TextBoxBorder();
+            this.labelDistEnter = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.textBoxY = new ExtendedControls.TextBoxBorder();
             this.textBoxX = new ExtendedControls.TextBoxBorder();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.textBoxTargetDist = new ExtendedControls.TextBoxBorder();
             this.textBoxTarget = new ExtendedControls.TextBoxBorder();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
+            this.labelCMDR = new System.Windows.Forms.Label();
+            this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
+            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.button_RefreshHistory = new ExtendedControls.ButtonExt();
             this.checkBoxEDSMSyncFrom = new ExtendedControls.CheckBoxCustom();
             this.buttonMap2D = new ExtendedControls.ButtonExt();
@@ -110,19 +85,44 @@
             this.buttonExtSummaryPopOut = new ExtendedControls.ButtonExt();
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
+            this.panelRight = new System.Windows.Forms.Panel();
+            this.panel_bottomright = new System.Windows.Forms.Panel();
+            this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
+            this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
+            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.closestContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel_topright = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panelBottom = new System.Windows.Forms.Panel();
+            this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
+            this.panelMain = new System.Windows.Forms.Panel();
+            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TopPanel = new System.Windows.Forms.Panel();
+            this._refreshWorker = new System.ComponentModel.BackgroundWorker();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
             this.panel_bottomright.SuspendLayout();
+            this.dataViewScrollerPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
             this.closestContextMenu.SuspendLayout();
             this.panel_topright.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.panelMain.SuspendLayout();
-            this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
-            this.dataViewScrollerPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
+            this.TopPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // historyContextMenu
@@ -199,9 +199,9 @@
             this.bothToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.bothToolStripMenuItem.Text = "Both";
             this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
-            //
+            // 
             // routeToolStripMenuItem
-            //
+            // 
             this.routeToolStripMenuItem.Name = "routeToolStripMenuItem";
             this.routeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.routeToolStripMenuItem.Text = "Saved Route";
@@ -283,476 +283,6 @@
             this.panel_system.Size = new System.Drawing.Size(297, 208);
             this.panel_system.TabIndex = 6;
             // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(22, 84);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(22, 13);
-            this.label14.TabIndex = 43;
-            this.label14.Text = "Sol";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(144, 84);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(32, 13);
-            this.label12.TabIndex = 38;
-            this.label12.Text = "State";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(149, 102);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(27, 13);
-            this.label13.TabIndex = 36;
-            this.label13.Text = "Gov";
-            this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(125, 66);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(51, 13);
-            this.label11.TabIndex = 34;
-            this.label11.Text = "Economy";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(120, 48);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(56, 13);
-            this.label10.TabIndex = 32;
-            this.label10.Text = "Allegiance";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(145, 30);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(31, 13);
-            this.label9.TabIndex = 30;
-            this.label9.Text = "Visits";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 107);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(30, 13);
-            this.label8.TabIndex = 28;
-            this.label8.Text = "Note";
-            // 
-            // label_Z
-            // 
-            this.label_Z.AutoSize = true;
-            this.label_Z.Location = new System.Drawing.Point(30, 66);
-            this.label_Z.Name = "label_Z";
-            this.label_Z.Size = new System.Drawing.Size(14, 13);
-            this.label_Z.TabIndex = 20;
-            this.label_Z.Text = "Z";
-            this.label_Z.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // labelDistEnter
-            // 
-            this.labelDistEnter.AutoSize = true;
-            this.labelDistEnter.ForeColor = System.Drawing.Color.Black;
-            this.labelDistEnter.Location = new System.Drawing.Point(30, 48);
-            this.labelDistEnter.Name = "labelDistEnter";
-            this.labelDistEnter.Size = new System.Drawing.Size(14, 13);
-            this.labelDistEnter.TabIndex = 18;
-            this.labelDistEnter.Text = "Y";
-            this.labelDistEnter.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(30, 30);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(14, 13);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "X";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1, 180);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 13);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "Target";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1, 10);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(41, 13);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "System";
-            // 
-            // labelCMDR
-            // 
-            this.labelCMDR.AutoSize = true;
-            this.labelCMDR.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCMDR.Location = new System.Drawing.Point(77, 9);
-            this.labelCMDR.Name = "labelCMDR";
-            this.labelCMDR.Size = new System.Drawing.Size(31, 13);
-            this.labelCMDR.TabIndex = 17;
-            this.labelCMDR.Text = "Cmdr";
-            // 
-            // panelRight
-            // 
-            this.panelRight.Controls.Add(this.panel_bottomright);
-            this.panelRight.Controls.Add(this.panel_system);
-            this.panelRight.Controls.Add(this.panel_topright);
-            this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelRight.Location = new System.Drawing.Point(594, 0);
-            this.panelRight.Name = "panelRight";
-            this.panelRight.Size = new System.Drawing.Size(297, 650);
-            this.panelRight.TabIndex = 1;
-            // 
-            // panel_bottomright
-            // 
-            this.panel_bottomright.Controls.Add(this.dataViewScrollerPanel2);
-            this.panel_bottomright.Controls.Add(this.labelclosests);
-            this.panel_bottomright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_bottomright.Location = new System.Drawing.Point(0, 308);
-            this.panel_bottomright.Name = "panel_bottomright";
-            this.panel_bottomright.Size = new System.Drawing.Size(297, 342);
-            this.panel_bottomright.TabIndex = 25;
-            // 
-            // closestContextMenu
-            // 
-            this.closestContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToTrilaterationToolStripMenuItem1,
-            this.viewOnEDSMToolStripMenuItem1});
-            this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(178, 48);
-            // 
-            // addToTrilaterationToolStripMenuItem1
-            // 
-            this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
-            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
-            this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
-            this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
-            // 
-            // viewOnEDSMToolStripMenuItem1
-            // 
-            this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
-            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
-            this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
-            this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
-            // 
-            // panel_topright
-            // 
-            this.panel_topright.Controls.Add(this.button_RefreshHistory);
-            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncFrom);
-            this.panel_topright.Controls.Add(this.buttonMap2D);
-            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncTo);
-            this.panel_topright.Controls.Add(this.comboBoxCommander);
-            this.panel_topright.Controls.Add(this.labelCMDR);
-            this.panel_topright.Controls.Add(this.buttonExtSummaryPopOut);
-            this.panel_topright.Controls.Add(this.buttonMap);
-            this.panel_topright.Controls.Add(this.buttonSync);
-            this.panel_topright.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_topright.Location = new System.Drawing.Point(0, 0);
-            this.panel_topright.Name = "panel_topright";
-            this.panel_topright.Size = new System.Drawing.Size(297, 100);
-            this.panel_topright.TabIndex = 26;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(220, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Search";
-            // 
-            // panelBottom
-            // 
-            this.panelBottom.Controls.Add(this.richTextBox_History);
-            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 548);
-            this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(594, 102);
-            this.panelBottom.TabIndex = 2;
-            // 
-            // panelMain
-            // 
-            this.panelMain.Controls.Add(this.dataViewScrollerPanel1);
-            this.panelMain.Controls.Add(this.TopPanel);
-            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMain.Location = new System.Drawing.Point(0, 0);
-            this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(594, 548);
-            this.panelMain.TabIndex = 0;
-            // 
-            // TopPanel
-            // 
-            this.TopPanel.Controls.Add(this.textBoxFilter);
-            this.TopPanel.Controls.Add(this.label1);
-            this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
-            this.TopPanel.Controls.Add(this.label2);
-            this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TopPanel.Location = new System.Drawing.Point(0, 0);
-            this.TopPanel.Name = "TopPanel";
-            this.TopPanel.Size = new System.Drawing.Size(594, 32);
-            this.TopPanel.TabIndex = 26;
-            // 
-            // _refreshWorker
-            // 
-            this._refreshWorker.WorkerReportsProgress = true;
-            this._refreshWorker.WorkerSupportsCancellation = true;
-            this._refreshWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RefreshHistoryWorker);
-            this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
-            this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
-            // 
-            // dataViewScrollerPanel1
-            // 
-            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewTravel);
-            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
-            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(594, 516);
-            this.dataViewScrollerPanel1.TabIndex = 25;
-            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
-            // 
-            // vScrollBarCustom1
-            // 
-            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom1.HideScrollBar = true;
-            this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(571, 21);
-            this.vScrollBarCustom1.Maximum = -1;
-            this.vScrollBarCustom1.Minimum = 0;
-            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 495);
-            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom1.SmallChange = 1;
-            this.vScrollBarCustom1.TabIndex = 4;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -1;
-            this.vScrollBarCustom1.ValueLimited = -1;
-            // 
-            // dataGridViewTravel
-            // 
-            this.dataGridViewTravel.AllowUserToAddRows = false;
-            this.dataGridViewTravel.AllowUserToDeleteRows = false;
-            this.dataGridViewTravel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnTime,
-            this.ColumnSystem,
-            this.ColumnDistance,
-            this.ColumnNote,
-            this.mapColour});
-            this.dataGridViewTravel.ContextMenuStrip = this.historyContextMenu;
-            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewTravel.Name = "dataGridViewTravel";
-            this.dataGridViewTravel.RowHeadersWidth = 50;
-            this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(571, 516);
-            this.dataGridViewTravel.TabIndex = 3;
-            this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
-            this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellContentDoubleClick);
-            this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
-            this.dataGridViewTravel.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewTravel_ColumnWidthChanged);
-            this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
-            this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.MinimumWidth = 100;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 140;
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.MinimumWidth = 100;
-            this.ColumnSystem.Name = "ColumnSystem";
-            this.ColumnSystem.ReadOnly = true;
-            this.ColumnSystem.Width = 150;
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.MinimumWidth = 50;
-            this.ColumnDistance.Name = "ColumnDistance";
-            this.ColumnDistance.ReadOnly = true;
-            this.ColumnDistance.Width = 70;
-            // 
-            // ColumnNote
-            // 
-            this.ColumnNote.FillWeight = 150F;
-            this.ColumnNote.HeaderText = "Note";
-            this.ColumnNote.MinimumWidth = 10;
-            this.ColumnNote.Name = "ColumnNote";
-            this.ColumnNote.ReadOnly = true;
-            this.ColumnNote.Width = 137;
-            // 
-            // mapColour
-            // 
-            this.mapColour.HeaderText = "Map";
-            this.mapColour.MinimumWidth = 40;
-            this.mapColour.Name = "mapColour";
-            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
-            this.mapColour.Width = 40;
-            // 
-            // textBoxFilter
-            // 
-            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxFilter.BorderColorScaling = 0.5F;
-            this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
-            this.textBoxFilter.Name = "textBoxFilter";
-            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
-            this.textBoxFilter.TabIndex = 1;
-            this.toolTipEddb.SetToolTip(this.textBoxFilter, "Enter text to filter travel history on text");
-            this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
-            // 
-            // comboBoxHistoryWindow
-            // 
-            this.comboBoxHistoryWindow.ArrowWidth = 1;
-            this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
-            this.comboBoxHistoryWindow.DataSource = null;
-            this.comboBoxHistoryWindow.DisplayMember = "";
-            this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxHistoryWindow.DropDownHeight = 200;
-            this.comboBoxHistoryWindow.DropDownWidth = 94;
-            this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxHistoryWindow.ItemHeight = 13;
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
-            this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
-            this.comboBoxHistoryWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.ScrollBarWidth = 16;
-            this.comboBoxHistoryWindow.SelectedIndex = -1;
-            this.comboBoxHistoryWindow.SelectedItem = null;
-            this.comboBoxHistoryWindow.SelectedValue = null;
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
-            this.comboBoxHistoryWindow.TabIndex = 0;
-            this.toolTipEddb.SetToolTip(this.comboBoxHistoryWindow, "Select the limit of age for travel history entries to show");
-            this.comboBoxHistoryWindow.ValueMember = "";
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
-            // 
-            // richTextBox_History
-            // 
-            this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBox_History.BorderColorScaling = 0.5F;
-            this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox_History.HideScrollBar = true;
-            this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox_History.Name = "richTextBox_History";
-            this.richTextBox_History.ScrollBarWidth = 20;
-            this.richTextBox_History.ShowLineCount = false;
-            this.richTextBox_History.Size = new System.Drawing.Size(594, 102);
-            this.richTextBox_History.TabIndex = 0;
-            // 
-            // dataViewScrollerPanel2
-            // 
-            this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
-            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
-            this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 13);
-            this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(297, 329);
-            this.dataViewScrollerPanel2.TabIndex = 24;
-            this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
-            // 
-            // vScrollBarCustom2
-            // 
-            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom2.HideScrollBar = true;
-            this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(277, 21);
-            this.vScrollBarCustom2.Maximum = -1;
-            this.vScrollBarCustom2.Minimum = 0;
-            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 308);
-            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom2.SmallChange = 1;
-            this.vScrollBarCustom2.TabIndex = 24;
-            this.vScrollBarCustom2.Text = "vScrollBarCustom2";
-            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -1;
-            this.vScrollBarCustom2.ValueLimited = -1;
-            // 
-            // dataGridViewNearest
-            // 
-            this.dataGridViewNearest.AllowUserToAddRows = false;
-            this.dataGridViewNearest.AllowUserToDeleteRows = false;
-            this.dataGridViewNearest.AllowUserToResizeColumns = false;
-            this.dataGridViewNearest.AllowUserToResizeRows = false;
-            this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col1,
-            this.Distance});
-            this.dataGridViewNearest.ContextMenuStrip = this.closestContextMenu;
-            this.dataGridViewNearest.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewNearest.Name = "dataGridViewNearest";
-            this.dataGridViewNearest.RowHeadersVisible = false;
-            this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(277, 329);
-            this.dataGridViewNearest.TabIndex = 23;
-            // 
-            // Col1
-            // 
-            this.Col1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Col1.HeaderText = "Name";
-            this.Col1.Name = "Col1";
-            // 
-            // Distance
-            // 
-            this.Distance.HeaderText = "Distance";
-            this.Distance.Name = "Distance";
-            // 
             // buttonEDSM
             // 
             this.buttonEDSM.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -767,6 +297,16 @@
             this.buttonEDSM.TabIndex = 23;
             this.toolTipEddb.SetToolTip(this.buttonEDSM, "Click to show system on EDSM");
             this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(22, 84);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(22, 13);
+            this.label14.TabIndex = 43;
+            this.label14.Text = "Sol";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // textBoxSolDist
             // 
@@ -836,6 +376,26 @@
             this.textBoxEconomy.TabIndex = 33;
             this.textBoxEconomy.TabStop = false;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(144, 84);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(32, 13);
+            this.label12.TabIndex = 38;
+            this.label12.Text = "State";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(149, 102);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(27, 13);
+            this.label13.TabIndex = 36;
+            this.label13.Text = "Gov";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // textBoxGovernment
             // 
             this.textBoxGovernment.BorderColor = System.Drawing.Color.Transparent;
@@ -858,6 +418,36 @@
             this.textBoxAllegiance.TabIndex = 31;
             this.textBoxAllegiance.TabStop = false;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(125, 66);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(51, 13);
+            this.label11.TabIndex = 34;
+            this.label11.Text = "Economy";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(120, 48);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(56, 13);
+            this.label10.TabIndex = 32;
+            this.label10.Text = "Allegiance";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(145, 30);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(31, 13);
+            this.label9.TabIndex = 30;
+            this.label9.Text = "Visits";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // textBoxVisits
             // 
             this.textBoxVisits.BorderColor = System.Drawing.Color.Transparent;
@@ -868,6 +458,15 @@
             this.textBoxVisits.Size = new System.Drawing.Size(66, 20);
             this.textBoxVisits.TabIndex = 29;
             this.textBoxVisits.TabStop = false;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 107);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(30, 13);
+            this.label8.TabIndex = 28;
+            this.label8.Text = "Note";
             // 
             // richTextBoxNote
             // 
@@ -883,6 +482,16 @@
             this.richTextBoxNote.TextChanged += new System.EventHandler(this.richTextBoxNote_TextChanged);
             this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
             // 
+            // label_Z
+            // 
+            this.label_Z.AutoSize = true;
+            this.label_Z.Location = new System.Drawing.Point(30, 66);
+            this.label_Z.Name = "label_Z";
+            this.label_Z.Size = new System.Drawing.Size(14, 13);
+            this.label_Z.TabIndex = 20;
+            this.label_Z.Text = "Z";
+            this.label_Z.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // textBoxZ
             // 
             this.textBoxZ.BorderColor = System.Drawing.Color.Transparent;
@@ -893,6 +502,27 @@
             this.textBoxZ.Size = new System.Drawing.Size(67, 20);
             this.textBoxZ.TabIndex = 19;
             this.textBoxZ.TabStop = false;
+            // 
+            // labelDistEnter
+            // 
+            this.labelDistEnter.AutoSize = true;
+            this.labelDistEnter.ForeColor = System.Drawing.Color.Black;
+            this.labelDistEnter.Location = new System.Drawing.Point(30, 48);
+            this.labelDistEnter.Name = "labelDistEnter";
+            this.labelDistEnter.Size = new System.Drawing.Size(14, 13);
+            this.labelDistEnter.TabIndex = 18;
+            this.labelDistEnter.Text = "Y";
+            this.labelDistEnter.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(30, 30);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(14, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "X";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // textBoxY
             // 
@@ -915,6 +545,24 @@
             this.textBoxX.Size = new System.Drawing.Size(67, 20);
             this.textBoxX.TabIndex = 17;
             this.textBoxX.TabStop = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1, 180);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "Target";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(1, 10);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "System";
             // 
             // textBoxTargetDist
             // 
@@ -952,6 +600,54 @@
             this.textBoxSystem.Size = new System.Drawing.Size(152, 20);
             this.textBoxSystem.TabIndex = 15;
             this.textBoxSystem.TabStop = false;
+            // 
+            // labelCMDR
+            // 
+            this.labelCMDR.AutoSize = true;
+            this.labelCMDR.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCMDR.Location = new System.Drawing.Point(77, 9);
+            this.labelCMDR.Name = "labelCMDR";
+            this.labelCMDR.Size = new System.Drawing.Size(31, 13);
+            this.labelCMDR.TabIndex = 17;
+            this.labelCMDR.Text = "Cmdr";
+            // 
+            // textBoxFilter
+            // 
+            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFilter.BorderColorScaling = 0.5F;
+            this.textBoxFilter.Location = new System.Drawing.Point(279, 6);
+            this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
+            this.textBoxFilter.TabIndex = 1;
+            this.toolTipEddb.SetToolTip(this.textBoxFilter, "Enter text to filter travel history on text");
+            this.textBoxFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFilter_KeyUp);
+            // 
+            // comboBoxHistoryWindow
+            // 
+            this.comboBoxHistoryWindow.ArrowWidth = 1;
+            this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
+            this.comboBoxHistoryWindow.DataSource = null;
+            this.comboBoxHistoryWindow.DisplayMember = "";
+            this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxHistoryWindow.DropDownHeight = 200;
+            this.comboBoxHistoryWindow.DropDownWidth = 94;
+            this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxHistoryWindow.ItemHeight = 13;
+            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(102, 4);
+            this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
+            this.comboBoxHistoryWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxHistoryWindow.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxHistoryWindow.ScrollBarWidth = 16;
+            this.comboBoxHistoryWindow.SelectedIndex = -1;
+            this.comboBoxHistoryWindow.SelectedItem = null;
+            this.comboBoxHistoryWindow.SelectedValue = null;
+            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(94, 20);
+            this.comboBoxHistoryWindow.TabIndex = 0;
+            this.toolTipEddb.SetToolTip(this.comboBoxHistoryWindow, "Select the limit of age for travel history entries to show");
+            this.comboBoxHistoryWindow.ValueMember = "";
+            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // button_RefreshHistory
             // 
@@ -1089,6 +785,310 @@
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
+            // panelRight
+            // 
+            this.panelRight.Controls.Add(this.panel_bottomright);
+            this.panelRight.Controls.Add(this.panel_system);
+            this.panelRight.Controls.Add(this.panel_topright);
+            this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panelRight.Location = new System.Drawing.Point(594, 0);
+            this.panelRight.Name = "panelRight";
+            this.panelRight.Size = new System.Drawing.Size(297, 650);
+            this.panelRight.TabIndex = 1;
+            // 
+            // panel_bottomright
+            // 
+            this.panel_bottomright.Controls.Add(this.dataViewScrollerPanel2);
+            this.panel_bottomright.Controls.Add(this.labelclosests);
+            this.panel_bottomright.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_bottomright.Location = new System.Drawing.Point(0, 308);
+            this.panel_bottomright.Name = "panel_bottomright";
+            this.panel_bottomright.Size = new System.Drawing.Size(297, 342);
+            this.panel_bottomright.TabIndex = 25;
+            // 
+            // dataViewScrollerPanel2
+            // 
+            this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
+            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
+            this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 13);
+            this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
+            this.dataViewScrollerPanel2.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(297, 329);
+            this.dataViewScrollerPanel2.TabIndex = 24;
+            this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom2
+            // 
+            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom2.HideScrollBar = true;
+            this.vScrollBarCustom2.LargeChange = 0;
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(277, 21);
+            this.vScrollBarCustom2.Maximum = -1;
+            this.vScrollBarCustom2.Minimum = 0;
+            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 308);
+            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SmallChange = 1;
+            this.vScrollBarCustom2.TabIndex = 24;
+            this.vScrollBarCustom2.Text = "vScrollBarCustom2";
+            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom2.Value = -1;
+            this.vScrollBarCustom2.ValueLimited = -1;
+            // 
+            // dataGridViewNearest
+            // 
+            this.dataGridViewNearest.AllowUserToAddRows = false;
+            this.dataGridViewNearest.AllowUserToDeleteRows = false;
+            this.dataGridViewNearest.AllowUserToResizeColumns = false;
+            this.dataGridViewNearest.AllowUserToResizeRows = false;
+            this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col1,
+            this.Distance});
+            this.dataGridViewNearest.ContextMenuStrip = this.closestContextMenu;
+            this.dataGridViewNearest.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewNearest.Name = "dataGridViewNearest";
+            this.dataGridViewNearest.RowHeadersVisible = false;
+            this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewNearest.Size = new System.Drawing.Size(277, 329);
+            this.dataGridViewNearest.TabIndex = 23;
+            // 
+            // Col1
+            // 
+            this.Col1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Col1.HeaderText = "Name";
+            this.Col1.Name = "Col1";
+            // 
+            // Distance
+            // 
+            this.Distance.HeaderText = "Distance";
+            this.Distance.Name = "Distance";
+            // 
+            // closestContextMenu
+            // 
+            this.closestContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToTrilaterationToolStripMenuItem1,
+            this.viewOnEDSMToolStripMenuItem1});
+            this.closestContextMenu.Name = "closestContextMenu";
+            this.closestContextMenu.Size = new System.Drawing.Size(177, 48);
+            // 
+            // addToTrilaterationToolStripMenuItem1
+            // 
+            this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
+            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+            this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
+            this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem1
+            // 
+            this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+            this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
+            // 
+            // panel_topright
+            // 
+            this.panel_topright.Controls.Add(this.button_RefreshHistory);
+            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncFrom);
+            this.panel_topright.Controls.Add(this.buttonMap2D);
+            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncTo);
+            this.panel_topright.Controls.Add(this.comboBoxCommander);
+            this.panel_topright.Controls.Add(this.labelCMDR);
+            this.panel_topright.Controls.Add(this.buttonExtSummaryPopOut);
+            this.panel_topright.Controls.Add(this.buttonMap);
+            this.panel_topright.Controls.Add(this.buttonSync);
+            this.panel_topright.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_topright.Location = new System.Drawing.Point(0, 0);
+            this.panel_topright.Name = "panel_topright";
+            this.panel_topright.Size = new System.Drawing.Size(297, 100);
+            this.panel_topright.TabIndex = 26;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(220, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 13);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "Search";
+            // 
+            // panelBottom
+            // 
+            this.panelBottom.Controls.Add(this.richTextBox_History);
+            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelBottom.Location = new System.Drawing.Point(0, 548);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(594, 102);
+            this.panelBottom.TabIndex = 2;
+            // 
+            // richTextBox_History
+            // 
+            this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
+            this.richTextBox_History.BorderColorScaling = 0.5F;
+            this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox_History.HideScrollBar = true;
+            this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox_History.Name = "richTextBox_History";
+            this.richTextBox_History.ScrollBarWidth = 20;
+            this.richTextBox_History.ShowLineCount = false;
+            this.richTextBox_History.Size = new System.Drawing.Size(594, 102);
+            this.richTextBox_History.TabIndex = 0;
+            // 
+            // panelMain
+            // 
+            this.panelMain.Controls.Add(this.dataViewScrollerPanel1);
+            this.panelMain.Controls.Add(this.TopPanel);
+            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMain.Location = new System.Drawing.Point(0, 0);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(594, 548);
+            this.panelMain.TabIndex = 0;
+            // 
+            // dataViewScrollerPanel1
+            // 
+            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
+            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewTravel);
+            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(594, 516);
+            this.dataViewScrollerPanel1.TabIndex = 25;
+            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom1
+            // 
+            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.HideScrollBar = true;
+            this.vScrollBarCustom1.LargeChange = 0;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(571, 21);
+            this.vScrollBarCustom1.Maximum = -1;
+            this.vScrollBarCustom1.Minimum = 0;
+            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 495);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SmallChange = 1;
+            this.vScrollBarCustom1.TabIndex = 4;
+            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom1.Value = -1;
+            this.vScrollBarCustom1.ValueLimited = -1;
+            // 
+            // dataGridViewTravel
+            // 
+            this.dataGridViewTravel.AllowUserToAddRows = false;
+            this.dataGridViewTravel.AllowUserToDeleteRows = false;
+            this.dataGridViewTravel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnTime,
+            this.ColumnSystem,
+            this.ColumnDistance,
+            this.ColumnNote,
+            this.mapColour});
+            this.dataGridViewTravel.ContextMenuStrip = this.historyContextMenu;
+            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewTravel.Name = "dataGridViewTravel";
+            this.dataGridViewTravel.RowHeadersWidth = 50;
+            this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTravel.Size = new System.Drawing.Size(571, 516);
+            this.dataGridViewTravel.TabIndex = 3;
+            this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
+            this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellContentDoubleClick);
+            this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
+            this.dataGridViewTravel.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewTravel_ColumnWidthChanged);
+            this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
+            this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.MinimumWidth = 100;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.Width = 140;
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.MinimumWidth = 100;
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.ReadOnly = true;
+            this.ColumnSystem.Width = 150;
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.MinimumWidth = 50;
+            this.ColumnDistance.Name = "ColumnDistance";
+            this.ColumnDistance.ReadOnly = true;
+            this.ColumnDistance.Width = 70;
+            // 
+            // ColumnNote
+            // 
+            this.ColumnNote.FillWeight = 150F;
+            this.ColumnNote.HeaderText = "Note";
+            this.ColumnNote.MinimumWidth = 10;
+            this.ColumnNote.Name = "ColumnNote";
+            this.ColumnNote.ReadOnly = true;
+            this.ColumnNote.Width = 137;
+            // 
+            // mapColour
+            // 
+            this.mapColour.HeaderText = "Map";
+            this.mapColour.MinimumWidth = 40;
+            this.mapColour.Name = "mapColour";
+            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
+            this.mapColour.Width = 40;
+            // 
+            // TopPanel
+            // 
+            this.TopPanel.Controls.Add(this.textBoxFilter);
+            this.TopPanel.Controls.Add(this.label1);
+            this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
+            this.TopPanel.Controls.Add(this.label2);
+            this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.TopPanel.Location = new System.Drawing.Point(0, 0);
+            this.TopPanel.Name = "TopPanel";
+            this.TopPanel.Size = new System.Drawing.Size(594, 32);
+            this.TopPanel.TabIndex = 26;
+            // 
+            // _refreshWorker
+            // 
+            this._refreshWorker.WorkerReportsProgress = true;
+            this._refreshWorker.WorkerSupportsCancellation = true;
+            this._refreshWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RefreshHistoryWorker);
+            this._refreshWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RefreshHistoryWorkerProgressChanged);
+            this._refreshWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RefreshHistoryWorkerCompleted);
+            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1106,17 +1106,17 @@
             this.panelRight.ResumeLayout(false);
             this.panel_bottomright.ResumeLayout(false);
             this.panel_bottomright.PerformLayout();
+            this.dataViewScrollerPanel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
             this.closestContextMenu.ResumeLayout(false);
             this.panel_topright.ResumeLayout(false);
             this.panel_topright.PerformLayout();
             this.panelBottom.ResumeLayout(false);
             this.panelMain.ResumeLayout(false);
-            this.TopPanel.ResumeLayout(false);
-            this.TopPanel.PerformLayout();
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();
-            this.dataViewScrollerPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
+            this.TopPanel.ResumeLayout(false);
+            this.TopPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
