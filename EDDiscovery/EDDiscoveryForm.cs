@@ -566,7 +566,7 @@ namespace EDDiscovery
                 galacticMapping.DownloadFromEDSM();
 
                 // Skip EDSM full update if update has been performed in last 4 days
-                if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTime()).TotalDays > 4 ||
+                if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTimeFast()).TotalDays > 4 ||
                     DateTime.UtcNow.Subtract(edsmdate).TotalDays > 28)
                 {
                     performedsmsync = true;
@@ -904,10 +904,10 @@ namespace EDDiscovery
         private void PerformSync(Func<bool> cancelRequested, Action<int, string> reportProgress)           // big check.. done in a thread.
         {
             reportProgress(-1, "");
-            syncwasfirstrun = SystemClass.GetTotalSystems() == 0;                 // remember if DB is empty
+            syncwasfirstrun = SystemClass.IsSystemsTableEmpty();                 // remember if DB is empty
 
             // Force a full sync if newest data is more than 14 days old
-            if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTime()).TotalDays >= 14)
+            if (DateTime.UtcNow.Subtract(SystemClass.GetLastSystemModifiedTimeFast()).TotalDays >= 14)
             {
                 performedsmsync = true;
             }
