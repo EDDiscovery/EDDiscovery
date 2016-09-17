@@ -189,14 +189,14 @@ namespace EDDiscovery2.EDSM
             // First system in EDSM is from 2015-05-01 00:39:40
             DateTime gammadate = new DateTime(2015, 5, 1, 0, 0, 0, DateTimeKind.Utc);
 
-            if (SystemClass.GetTotalSystems() == 0)
+            if (SystemClass.IsSystemsTableEmpty())
             {
                 lstsystdate = gammadate;
             }
             else
             {
                 // Get the most recent modify time returned from EDSM
-                lstsystdate = SystemClass.GetLastSystemModifiedTime() - TimeSpan.FromSeconds(1);
+                lstsystdate = SystemClass.GetLastSystemModifiedTimeFast() - TimeSpan.FromSeconds(1);
 
                 if (lstsystdate < gammadate)
                 {
