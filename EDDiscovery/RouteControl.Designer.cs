@@ -36,9 +36,9 @@
             this.buttonExtTargetTo = new ExtendedControls.ButtonExt();
             this.buttonTargetFrom = new ExtendedControls.ButtonExt();
             this.cmd3DMap = new ExtendedControls.ButtonExt();
-            this.textBox_From = new ExtendedControls.TextBoxBorder();
+            this.textBox_From = new ExtendedControls.AutoCompleteTextBox();
             this.textBox_Range = new ExtendedControls.TextBoxBorder();
-            this.textBox_To = new ExtendedControls.TextBoxBorder();
+            this.textBox_To = new ExtendedControls.AutoCompleteTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.textBox_Distance = new ExtendedControls.TextBoxBorder();
@@ -441,13 +441,13 @@
         #endregion
 
         private ExtendedControls.RichTextBoxScroll richTextBox_routeresult;
-        internal ExtendedControls.TextBoxBorder textBox_From;
+        internal ExtendedControls.AutoCompleteTextBox textBox_From;
         private System.Windows.Forms.Label label3;
         private ExtendedControls.ButtonExt button_Route;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
-        internal ExtendedControls.TextBoxBorder textBox_To;
+        internal ExtendedControls.AutoCompleteTextBox textBox_To;
         internal ExtendedControls.TextBoxBorder textBox_Range;
         internal ExtendedControls.TextBoxBorder textBox_FromX;
         internal ExtendedControls.TextBoxBorder textBox_FromY;

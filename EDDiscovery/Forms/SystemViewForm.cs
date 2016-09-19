@@ -13,7 +13,6 @@ namespace EDDiscovery2
 {
     public partial class SystemViewForm : Form
     {
-        private readonly AutoCompleteStringCollection _systemNames;
         public readonly EDDiscoveryForm _eddiscoveryForm;
 
         public SystemViewForm()
@@ -24,7 +23,6 @@ namespace EDDiscovery2
         public SystemViewForm(EDDiscoveryForm frm)
         {
             _eddiscoveryForm = frm;
-            _systemNames = frm.SystemNames;
             InitializeComponent();
         }
 
@@ -69,7 +67,6 @@ namespace EDDiscovery2
 
         private void SystemViewForm_Load(object sender, EventArgs e)
         {
-            textBox_From.AutoCompleteCustomSource = _systemNames;
         }
     }
 }

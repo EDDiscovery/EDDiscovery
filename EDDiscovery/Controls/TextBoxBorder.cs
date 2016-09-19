@@ -12,6 +12,7 @@ namespace ExtendedControls
     {
         public Color BorderColor { get; set; } = Color.Transparent;
         public float BorderColorScaling { get; set; } = 0.5F;           // Popup style only
+        public int BorderOffset = 3;
 
         public TextBoxBorder() : base()
         {
@@ -29,7 +30,7 @@ namespace ExtendedControls
                 {
                     Graphics g = Parent.CreateGraphics();
 
-                    Rectangle clientborder = new Rectangle(Location.X - 3, Location.Y - 3, ClientRectangle.Width + 6, ClientRectangle.Height + 6);
+                    Rectangle clientborder = new Rectangle(Location.X - BorderOffset, Location.Y - BorderOffset, ClientRectangle.Width + BorderOffset*2, ClientRectangle.Height + BorderOffset*2);
 
                     Color color1 = BorderColor;
                     Color color2 = Multiply(BorderColor, BorderColorScaling);

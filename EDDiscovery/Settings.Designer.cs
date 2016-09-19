@@ -44,7 +44,7 @@
             this.radioButtonCentreHome = new ExtendedControls.RadioButtonCustom();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBoxHomeSystem = new ExtendedControls.TextBoxBorder();
+            this.textBoxHomeSystem = new ExtendedControls.AutoCompleteTextBox();
             this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
             this.groupBox3 = new ExtendedControls.GroupBoxCustom();
             this.checkBoxFocusNewSystem = new ExtendedControls.CheckBoxCustom();
@@ -632,7 +632,7 @@
         private ExtendedControls.RadioButtonCustom radioButtonCentreHome;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        public ExtendedControls.TextBoxBorder textBoxHomeSystem;
+        private ExtendedControls.AutoCompleteTextBox textBoxHomeSystem;
         private ExtendedControls.ComboBoxCustom comboBoxTheme;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panel_defaultmapcolor;

@@ -222,7 +222,6 @@ namespace EDDiscovery2._3DMap
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     RecordStep(frm.Pos, frm.Dir, frm.Zoom, frm.Elapsed, frm.FlyTime, frm.PanTime, frm.ZoomTime, frm.Msg, frm.MsgTime, frm.WaitForComplete, frm.DisplayMessageWhenComplete);
-                    //TBD       SaveToFile("C:\\code\\temp.flight");
                 }
             }
         }

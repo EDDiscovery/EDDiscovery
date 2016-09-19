@@ -378,7 +378,7 @@ namespace EDDiscovery2.DB
                 if (vsc.curSystem == null)                                  // if no systemclass info, make a dummy
                 {
                     vsc.curSystem = new SystemClass(vsc.Name);
-                    //TBD vsc.HasTravelCoordinates
+
                     if (vsc.HasTravelCoordinates)
                     {
                         vsc.curSystem.x = vsc.X;
