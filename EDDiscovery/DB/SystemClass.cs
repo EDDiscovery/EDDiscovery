@@ -847,7 +847,7 @@ namespace EDDiscovery.DB
 
                         if (nrows == 0)
                         {
-                            Console.WriteLine("Populating system aliases table");
+                            //Console.WriteLine("Populating system aliases table");
                             RemoveHiddenSystems();
                         }
                     }
@@ -912,6 +912,8 @@ namespace EDDiscovery.DB
                                     }
                                 }
 
+                                //Stopwatch sw2 = new Stopwatch(); sw2.Start(); //long t2 = sw2.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query names in {0}", t2));
+
                                 Dictionary<long, SystemClass> namematches = GetSystemsByName(vsc.Name).Where(s => s != null).ToDictionary(s => s.id, s => s);
                                 Dictionary<long, SystemClass> posmatches = new Dictionary<long, SystemClass>();
                                 Dictionary<long, SystemClass> nameposmatches = new Dictionary<long, SystemClass>();
@@ -922,8 +924,12 @@ namespace EDDiscovery.DB
                                     selectByPosCmd.Parameters["@Y"].Value = (long)(vsc.Y * XYZScalar);
                                     selectByPosCmd.Parameters["@Z"].Value = (long)(vsc.Z * XYZScalar);
 
-                                    using (DbDataReader reader = selectByPosCmd.ExecuteReader())
+                                    //Stopwatch sw = new Stopwatch(); sw.Start(); long t1 = sw.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query pos in {0}", t1));
+
+                                    using (DbDataReader reader = selectByPosCmd.ExecuteReader())        // MEASURED very fast, <1ms
                                     {
+                                        
+
                                         while (reader.Read())
                                         {
                                             long pos_edsmid = (long)reader["EdsmId"];
@@ -1655,7 +1661,7 @@ namespace EDDiscovery.DB
 
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("SELECT Name,EdsmId FROM SystemNames WHERE Name>=@first AND Name<=@second"))
+                    using (DbCommand cmd = cn.CreateCommand("SELECT Name,EdsmId FROM SystemNames WHERE Name>=@first AND Name<=@second LIMIT 1000"))
                     {
                         cmd.AddParameterWithValue("first", input);
                         cmd.AddParameterWithValue("second", input + "~");
