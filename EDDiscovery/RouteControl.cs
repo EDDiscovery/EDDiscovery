@@ -328,7 +328,7 @@ namespace EDDiscovery
 
             if (textBox_From.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (FindSystem(textBox_From.Text) == null)
+                if (VisitedSystemsClass.FindSystem(_discoveryForm.VisitedSystems, EDDiscoveryForm.galacticMapping, SystemNameOnly(textBox_From.Text)) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -338,7 +338,7 @@ namespace EDDiscovery
             }
             if (textBox_To.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (FindSystem(textBox_To.Text) == null)
+                if (VisitedSystemsClass.FindSystem(_discoveryForm.VisitedSystems, EDDiscoveryForm.galacticMapping, SystemNameOnly(textBox_To.Text)) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -363,30 +363,6 @@ namespace EDDiscovery
             textBox_FromZ.ReadOnly = !coords;
         }
 
-        private ISystem FindSystem(string name)
-        {
-            EDDiscovery2.DB.ISystem ds1 = SystemClass.GetSystem(SystemNameOnly(name));
-
-            if ( ds1 == null )
-            {
-                VisitedSystemsClass vs = VisitedSystemsClass.FindByName(_discoveryForm.VisitedSystems, name);
-
-                if (vs != null && vs.HasTravelCoordinates)
-                    ds1 = vs.curSystem;
-                else
-                {
-                    GalacticMapObject gmo = EDDiscoveryForm.galacticMapping.Find(name, true, true);
-
-                    if ( gmo != null && gmo.points.Count>0 )
-                    {
-                        return new SystemClass(gmo.name, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);        // fudge it into a system
-                    }
-                }
-            }
-
-            return ds1;
-        }
-
 
         private void UpdateFrom(bool updatename)
         {
@@ -394,7 +370,7 @@ namespace EDDiscovery
 
             if (textBox_From.ReadOnly == false)                // if entering system name..
             {
-                EDDiscovery2.DB.ISystem ds1 = FindSystem(textBox_From.Text);
+                EDDiscovery2.DB.ISystem ds1 = VisitedSystemsClass.FindSystem(_discoveryForm.VisitedSystems, EDDiscoveryForm.galacticMapping, SystemNameOnly(textBox_From.Text));
 
                 if (ds1 != null)
                 {
@@ -527,7 +503,7 @@ namespace EDDiscovery
 
             if (textBox_To.ReadOnly == false)                // if entering system name..
             {
-                EDDiscovery2.DB.ISystem ds1 = FindSystem(textBox_To.Text);
+                EDDiscovery2.DB.ISystem ds1 = VisitedSystemsClass.FindSystem(_discoveryForm.VisitedSystems, EDDiscoveryForm.galacticMapping, SystemNameOnly(textBox_To.Text));
 
                 if (ds1 != null)
                 {

@@ -41,22 +41,16 @@ namespace EDDiscovery
         private const string SingleCoordinateFormat = "0.#####";
 
         private static EDDiscoveryForm _discoveryForm;
-        public int defaultMapColour;
         public EDSMSync sync;
 
-        internal List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
         internal bool EDSMSyncTo = true;
         internal bool EDSMSyncFrom = true;
 
-        public NetLogClass netlog;
         private VisitedSystemsClass currentSysPos = null;
 
         SummaryPopOut summaryPopOut = null;
 
-        private int activecommander = 0;
         List<EDCommander> commanders = null;
-
-        public event EventHandler HistoryRefreshed;
 
         public TravelHistoryControl()
         {
@@ -66,9 +60,7 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            netlog = new NetLogClass(_discoveryForm);
             sync = new EDSMSync(_discoveryForm);
-            defaultMapColour = EDDConfig.Instance.DefaultMapColour;
             EDSMSyncTo = SQLiteDBClass.GetSettingBool("EDSMSyncTo", true);
             EDSMSyncFrom = SQLiteDBClass.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
@@ -102,22 +94,24 @@ namespace EDDiscovery
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
         }
 
+        internal void RefreshEDSMEvent(object source)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                _discoveryForm.RefreshHistoryAsync();
+            });
+        }
+
+
+        public void RefreshButton(bool state)
+        {
+            button_RefreshHistory.Enabled = state;
+        }
+
         private void button_RefreshHistory_Click(object sender, EventArgs e)
         {
-            visitedSystems.Clear();
-            try
-            {
-                LogText("Refresh History." + Environment.NewLine);
-                RefreshHistoryAsync();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-                LogTextHighlight("Exception : " + ex.Message);
-                LogTextHighlight(ex.StackTrace);
-            }
+            LogText("Refresh History." + Environment.NewLine);
+            _discoveryForm.RefreshHistoryAsync();
         }
 
         public void LogText(string text)
@@ -141,111 +135,10 @@ namespace EDDiscovery
             richTextBox_History.AppendText(text, color);
         }
 
-        private class RefreshHistoryParameters
+        public void DisplayVS( List<VisitedSystemsClass> vs)
         {
-            public bool ForceReload;
-        }
-
-        public void RefreshHistoryAsync(bool forceReload = false)
-        {
-            // Put this in to speed up testing of other systems - TBD return;
-
-            if (_discoveryForm.PendingClose)
-            {
-                return;
-            }
-
-            if (activecommander >= 0)
-            {
-                if (!_refreshWorker.IsBusy)
-                {
-                    button_RefreshHistory.Enabled = false;
-                    _refreshWorker.RunWorkerAsync(new RefreshHistoryParameters { ForceReload = forceReload });
-                }
-            }
-            else
-            {
-                RefreshHistory(VisitedSystemsClass.GetAll(activecommander));
-            }
-        }
-
-        public void CancelHistoryRefresh()
-        {
-            _refreshWorker.CancelAsync();
-        }
-
-        private void RefreshHistoryWorker(object sender, DoWorkEventArgs e)
-        {
-            var worker = (BackgroundWorker)sender;
-            RefreshHistoryParameters param = e.Argument as RefreshHistoryParameters ?? new RefreshHistoryParameters();
-            bool forceReload = param.ForceReload;
-
-            string errmsg;
-            netlog.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-
-            var vsclist = netlog.ParseFiles(out errmsg, defaultMapColour, () => worker.CancellationPending, (p,s) => worker.ReportProgress(p,s), forceReload);   // Parse files stop monitor..
-
-
-
-            if (worker.CancellationPending)
-            {
-                e.Cancel = true;
-                e.Result = null;
-                return;
-            }
-
-            if (errmsg != null)
-            {
-                throw new InvalidOperationException(errmsg);
-            }
-
-            e.Result = vsclist;
-        }
-
-        private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (!e.Cancelled && !_discoveryForm.PendingClose)
-            {
-                if (e.Error != null)
-                {
-                    LogTextHighlight("History Refresh Error: " + e.Error.Message + Environment.NewLine);
-                }
-                else if (e.Result != null)
-                {
-                    RefreshHistory((List<VisitedSystemsClass>)e.Result);
-                    _discoveryForm.ReportProgress(-1, "");
-                    LogText("Refresh Complete." + Environment.NewLine);
-                }
-                button_RefreshHistory.Enabled = true;
-
-                netlog.StartMonitor();
-
-                if (HistoryRefreshed != null)
-                    HistoryRefreshed(this, EventArgs.Empty);
-            }
-        }
-
-        private void RefreshHistoryWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            string name = (string)e.UserState;
-            _discoveryForm.ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
-        }
-
-        private void RefreshHistory(List<VisitedSystemsClass> vsc)
-        {
-            visitedSystems = vsc;
-
-            if (visitedSystems == null)
-                return;
-
-            VisitedSystemsClass.UpdateSys(visitedSystems, true, true);   // always use db distances
-
-            var filter = (TravelHistoryFilter) comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
-            List<VisitedSystemsClass> result = filter.Filter(visitedSystems);
-
-            // Don't start adding travel history if we're closing
-            if (_discoveryForm.PendingClose)
-                return;
+            var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+            List<VisitedSystemsClass> result = filter.Filter(vs);
 
             dataGridViewTravel.Rows.Clear();
 
@@ -256,19 +149,19 @@ namespace EDDiscovery
 
             if (dataGridViewTravel.Rows.Count > 0)
             {
-                ShowSystemInformation((VisitedSystemsClass)(dataGridViewTravel.Rows[0].Cells[TravelHistoryColumns.SystemName].Tag));
+                ShowSystemInformation();
             }
 
-            if (textBoxFilter.TextLength>0)
+            if (textBoxFilter.TextLength > 0)
                 FilterGridView();
 
             RedrawSummary();
             RefreshTargetInfo();
             UpdateDependentsWithSelection();
-            _discoveryForm.Map.UpdateVisited(visitedSystems);           // update map
+            _discoveryForm.Map.UpdateVisited(vs);           // update map
         }
 
-        private void AddNewHistoryRow(bool insert, VisitedSystemsClass item)            // second part of add history row, adds item to view.
+        public void AddNewHistoryRow(bool insert, VisitedSystemsClass item)            // second part of add history row, adds item to view.
         {
             object[] rowobj = { item.Time, item.Name, item.strDistance, SystemNoteClass.GetSystemNoteOrEmpty(item.curSystem.name), "█" };
             int rownr;
@@ -306,8 +199,12 @@ namespace EDDiscovery
             cell.Style.ForeColor = Color.FromArgb(item.MapColour);
         }
 
+        public void ShowSystemInformation()
+        {
+            ShowSystemInformation((VisitedSystemsClass)(dataGridViewTravel.Rows[0].Cells[TravelHistoryColumns.SystemName].Tag));
+        }
 
-        private void ShowSystemInformation(VisitedSystemsClass syspos)
+        public void ShowSystemInformation(VisitedSystemsClass syspos)
         {
             if (syspos == null || syspos.Name==null)
                 return;
@@ -339,7 +236,7 @@ namespace EDDiscovery
                 textBoxSolDist.Text = Math.Sqrt(syspos.X * syspos.X + syspos.Y * syspos.Y + syspos.Z * syspos.Z).ToString("0.00");
             }
 
-            int count = GetVisitsCount(syspos.curSystem.name);
+            int count = VisitedSystemsClass.GetVisitsCount(_discoveryForm.VisitedSystems, syspos.curSystem.name);
             textBoxVisits.Text = count.ToString();
 
             bool enableedddross = (currentSysPos.curSystem.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
@@ -431,7 +328,7 @@ namespace EDDiscovery
 
                     Invoke((MethodInvoker)delegate      // being paranoid about threads..
                     {
-                        VisitedSystemsClass.CalculateSqDistances(visitedSystems, closestsystemlist, x, y, z, 50, true);
+                        VisitedSystemsClass.CalculateSqDistances(_discoveryForm.VisitedSystems, closestsystemlist, x, y, z, 50, true);
                     });
 
                     cursys = vsc;
@@ -476,20 +373,6 @@ namespace EDDiscovery
                 return ((VisitedSystemsClass)dataGridViewTravel.CurrentRow.Cells[TravelHistoryColumns.SystemName].Tag);
             }
         }
-
-
-        public ISystem GetLatestSystem
-        {
-            get
-            {
-                if (visitedSystems == null || visitedSystems.Count == 0)
-                {
-                    return null;
-                }
-                return (from systems in visitedSystems orderby systems.Time descending select systems.curSystem).First();
-            }
-        }
-
 
         private void TravelHistoryControl_Load(object sender, EventArgs e)
         {
@@ -589,10 +472,7 @@ namespace EDDiscovery
             comboBoxCommander.DisplayMember = "Name";
 
             EDCommander currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander;
-
             comboBoxCommander.SelectedIndex = commanders.IndexOf(currentcmdr);
-            activecommander = currentcmdr.Nr;
-
             comboBoxCommander.Enabled = true;
         }
                 
@@ -601,22 +481,21 @@ namespace EDDiscovery
             if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled )     // DONT trigger during LoadCommandersListBox
             {
                 var itm = (EDCommander)comboBoxCommander.SelectedItem;
-                activecommander = itm.Nr;
+                _discoveryForm.DisplayedCommander = itm.Nr;
                 if (itm.Nr >= 0)
                     EDDiscoveryForm.EDDConfig.CurrentCmdrID = itm.Nr;
-                if (visitedSystems != null)
-                    visitedSystems.Clear();
-                RefreshHistoryAsync();
+
+                _discoveryForm.RefreshHistoryAsync();
+
                 if (_discoveryForm.Map != null)
-                    _discoveryForm.Map.UpdateVisited(visitedSystems);
+                    _discoveryForm.Map.UpdateVisited(_discoveryForm.VisitedSystems);
             }
         }
 
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (visitedSystems != null)
-                RefreshHistoryAsync();
+            DisplayVS(_discoveryForm.VisitedSystems);
 
             SQLiteDBClass.PutSettingInt("EDUIHistory", comboBoxHistoryWindow.SelectedIndex);
         }
@@ -653,7 +532,7 @@ namespace EDDiscovery
 
             map.Prepare(selectedSys, _discoveryForm.settings.MapHomeSystem,
                         _discoveryForm.settings.MapCentreOnSelection ? selectedSys?.curSystem : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
-                        _discoveryForm.settings.MapZoom, visitedSystems);
+                        _discoveryForm.settings.MapZoom, _discoveryForm.VisitedSystems);
             map.Show();
             this.Cursor = Cursors.Default;
         }
@@ -825,7 +704,8 @@ namespace EDDiscovery
                     return;
 
                 }
-                sync.StartSync(EDSMSyncTo, EDSMSyncFrom, defaultMapColour);
+
+                sync.StartSync(EDSMSyncTo, EDSMSyncFrom, EDDConfig.Instance.DefaultMapColour);
             }
             catch (Exception ex)
             {
@@ -833,22 +713,10 @@ namespace EDDiscovery
             }
         }
 
-        internal void RefreshEDSMEvent(object source)
-        {
-            Invoke((MethodInvoker)delegate
-            {
-                if( visitedSystems != null)
-                {
-                    visitedSystems.Clear();
-                }
-                RefreshHistoryAsync();
-            });
-        }
-
         public void NewPosition(VisitedSystemsClass item)         // in UI Thread..
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
-            visitedSystems.Add(item);
+            _discoveryForm.VisitedSystems.Add(item);
 
             try
             {
@@ -860,7 +728,7 @@ namespace EDDiscovery
                 else
                     LogText(name);
 
-                int count = GetVisitsCount(name);
+                int count = VisitedSystemsClass.GetVisitsCount(_discoveryForm.VisitedSystems, name);
 
                 LogText(", Visit No. " + count.ToString() + Environment.NewLine);
                 System.Diagnostics.Trace.WriteLine("Arrived at system: " + name + " " + count.ToString() + ":th visit.");
@@ -878,7 +746,7 @@ namespace EDDiscovery
 
                 StoreSystemNote();
 
-                _discoveryForm.Map.UpdateVisited(visitedSystems);           // update map
+                _discoveryForm.Map.UpdateVisited(_discoveryForm.VisitedSystems);           // update map
 
                 RefreshSummaryRow(dataGridViewTravel.Rows[0], true);         //Tell the summary new row has been added
                 RefreshTargetInfo();                                        // tell the target system its changed the latest system
@@ -896,23 +764,6 @@ namespace EDDiscovery
             {
                 System.Diagnostics.Trace.WriteLine("Exception NewPosition: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-        }
-
-        private int GetVisitsCount(string name)
-        {
-            try
-            {
-                int count = (from row in visitedSystems
-                             where row.Name == name
-                             select row).Count();
-                return count;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception GetVisitsCount: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                return 0;
             }
         }
 
@@ -987,8 +838,12 @@ namespace EDDiscovery
             UpdateDependentsWithSelection();
         }
 
-        private void FilterGridView()
+
+        public void FilterGridView()
         {
+            if (textBoxFilter.TextLength <= 0)
+                return;
+
             string searchstr = textBoxFilter.Text.Trim();
             dataGridViewTravel.SuspendLayout();
 
@@ -1073,7 +928,7 @@ namespace EDDiscovery
             {
                 string sn = textBoxTarget.Text;
                 SystemClass sc = SystemClass.GetSystem(sn);
-                VisitedSystemsClass vsc = visitedSystems.Find(x => x.Name.Equals(sn, StringComparison.InvariantCultureIgnoreCase));
+                VisitedSystemsClass vsc = _discoveryForm.VisitedSystems.Find(x => x.Name.Equals(sn, StringComparison.InvariantCultureIgnoreCase));
                 string msgboxtext = null;
 
                 if ((sc != null && sc.HasCoordinate) || (vsc != null && vsc.HasTravelCoordinates))
@@ -1154,7 +1009,7 @@ namespace EDDiscovery
                 textBoxTarget.Text = name;
                 textBoxTargetDist.Text = "No Pos";
 
-                SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(visitedSystems);
+                SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(_discoveryForm.VisitedSystems);
                 if ( cs != null )
                     textBoxTargetDist.Text = SystemClass.Distance(cs, x, y, z).ToString("0.00");
 
@@ -1168,7 +1023,7 @@ namespace EDDiscovery
             }
 
             if (IsSummaryPopOutReady)
-                summaryPopOut.RefreshTarget(dataGridViewTravel,visitedSystems);
+                summaryPopOut.RefreshTarget(dataGridViewTravel, _discoveryForm.VisitedSystems);
         }
 
         #endregion
@@ -1185,7 +1040,7 @@ namespace EDDiscovery
                 p.RequiresRefresh += SummaryRefreshRequested;
                 p.SetGripperColour(_discoveryForm.theme.LabelColor);
                 p.ResetForm(dataGridViewTravel);
-                p.RefreshTarget(dataGridViewTravel, visitedSystems); 
+                p.RefreshTarget(dataGridViewTravel, _discoveryForm.VisitedSystems); 
                 p.Show();
                 summaryPopOut = p;          // do it like this in case of race conditions 
                 return true;
@@ -1203,7 +1058,7 @@ namespace EDDiscovery
             {
                 summaryPopOut.SetGripperColour(_discoveryForm.theme.LabelColor);
                 summaryPopOut.ResetForm(dataGridViewTravel);
-                summaryPopOut.RefreshTarget(dataGridViewTravel, visitedSystems);
+                summaryPopOut.RefreshTarget(dataGridViewTravel, _discoveryForm.VisitedSystems);
             }
         }
 
@@ -1340,7 +1195,7 @@ namespace EDDiscovery
                     VisitedSystemsClass sp = null;
                     sp = (VisitedSystemsClass)r.Cells[TravelHistoryColumns.SystemName].Tag;
                     if (sp == null)
-                        sp = visitedSystems.First(s => s.Name.ToUpperInvariant() == sysName.ToUpperInvariant());
+                        sp = _discoveryForm.VisitedSystems.First(s => s.Name.ToUpperInvariant() == sysName.ToUpperInvariant());
 
                     {
                         sp.MapColour = mapColorDialog.Color.ToArgb();
@@ -1557,7 +1412,7 @@ namespace EDDiscovery
                     rightclicksystem.id_edsm_assigned = form.AssignedEdsmId;
                     rightclicksystem.curSystem = form.AssignedSystem;
                     rightclicksystem.Update();
-                    RefreshHistoryAsync();
+                    _discoveryForm.RefreshHistoryAsync();
                 }
             }
         }

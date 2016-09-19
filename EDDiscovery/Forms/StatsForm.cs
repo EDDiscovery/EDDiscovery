@@ -12,7 +12,7 @@ namespace EDDiscovery2
 {
     public partial class StatsForm : Form
     {
-        public TravelHistoryControl travelhistoryctrl;
+        public EDDiscoveryForm _discoveryForm;
 
         public StatsForm()
         {
@@ -20,10 +20,7 @@ namespace EDDiscovery2
 
             chart1.Dock = DockStyle.Fill;
             dataGridView1.Dock = DockStyle.Fill;
-            
         }
-
-
 
         private void StatsForm_Load(object sender, EventArgs e)
         {
@@ -91,17 +88,17 @@ namespace EDDiscovery2
 
             int nr;
 
-            nr = travelhistoryctrl.visitedSystems.Count;
+            nr = _discoveryForm.VisitedSystems.Count;
 
             LogText("Total Nr of jumps: " + nr + Environment.NewLine);
 
-            var queryres = from a in travelhistoryctrl.visitedSystems where a.Time > DateTime.Now.AddDays(-30) select a;
+            var queryres = from a in _discoveryForm.VisitedSystems where a.Time > DateTime.Now.AddDays(-30) select a;
             LogText("Last 30 days: " + queryres.Count().ToString() + Environment.NewLine);
 
-            queryres = from a in travelhistoryctrl.visitedSystems where a.Time > DateTime.Now.AddDays(-7) select a;
+            queryres = from a in _discoveryForm.VisitedSystems where a.Time > DateTime.Now.AddDays(-7) select a;
             LogText("Last week: " + queryres.Count().ToString() + Environment.NewLine);
 
-            queryres = from a in travelhistoryctrl.visitedSystems where a.Time > DateTime.Now.AddDays(-1) select a;
+            queryres = from a in _discoveryForm.VisitedSystems where a.Time > DateTime.Now.AddDays(-1) select a;
             LogText("Last 24 hours: " + queryres.Count().ToString() + Environment.NewLine);
 
 
@@ -121,9 +118,9 @@ namespace EDDiscovery2
             dataGridView1.Columns.Add("Name", "System");
             dataGridView1.Columns.Add("Vists", "Visits");
 
-            nr = travelhistoryctrl.visitedSystems.Count;
+            nr = _discoveryForm.VisitedSystems.Count;
 
-            var groupeddata = from data in travelhistoryctrl.visitedSystems
+            var groupeddata = from data in _discoveryForm.VisitedSystems
                               group data by data.Name
                                   into grouped
                                   select new

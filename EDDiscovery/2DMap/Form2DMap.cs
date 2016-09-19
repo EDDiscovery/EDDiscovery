@@ -128,14 +128,14 @@ namespace EDDiscovery2
 
         private void DrawTravelHistory()
         {
-            if (_eddiscoveryForm.TravelControl.visitedSystems == null)
+            if (_eddiscoveryForm.VisitedSystems == null)
                 return;
 
             DateTime start = startDate;
 
             int currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
-            var history = from systems in _eddiscoveryForm.TravelControl.visitedSystems where systems.Time > start && systems.Time<endDate  && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.Time  select systems;
+            var history = from systems in _eddiscoveryForm.VisitedSystems where systems.Time > start && systems.Time<endDate  && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.Time  select systems;
             List<VisitedSystemsClass> listHistory = history.ToList<VisitedSystemsClass>();
             Graphics gfx = Graphics.FromImage(imageViewer1.Image);
             
