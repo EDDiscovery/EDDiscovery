@@ -17,7 +17,8 @@ namespace ExtendedControls
         public bool FitToItemsHeight { get; set; } = true;                    // if set, move the border to integer of item height.
         public int ScrollBarWidth { get; set; } = 16;
         public int ItemHeight { get; set; } = 20;
-        public FlatStyle FlatStyle { get; set; } = FlatStyle.System;
+        public FlatStyle FlatStyle { get { return flatstyle; } set { SetFlatStyle(value); } }
+        FlatStyle flatstyle = FlatStyle.System;
 
         public Color SelectionBackColor { get; set; } = Color.Gray;     // the area actually used (Not system)
         public Color BorderColor { get; set; } = Color.Red;             // not system
@@ -37,6 +38,8 @@ namespace ExtendedControls
         public delegate void OnAnyOtherKeyPressed(object sender, KeyEventArgs e);
         public event OnAnyOtherKeyPressed OtherKeyPressed;
 
+        ListBox lbsys;
+
         #region Implementation
 
         public ListControlCustom() : base()
@@ -49,11 +52,28 @@ namespace ExtendedControls
             Controls.Add(vScrollBar);
             vScrollBar.Visible = false;
             vScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(vScroll);
+
+            lbsys = new ListBox();
+            this.Controls.Add(lbsys);
+            lbsys.SelectedIndexChanged += lbsys_SelectedIndexChanged;
+        }
+
+        public void SetFlatStyle( FlatStyle v)
+        {
+            flatstyle = v;
+            lbsys.Visible = (flatstyle == FlatStyle.System);
+            this.Invalidate();
+            lbsys.Items.AddRange(this.Items.ToArray());
         }
 
         protected override void OnLayout(LayoutEventArgs levent)
         {
             base.OnLayout(levent);
+            if (lbsys != null && flatstyle == FlatStyle.System && this.Width > 0)
+            {
+                lbsys.Width = this.Width;
+                lbsys.Height = this.Height;
+            }
         }
 
         private void CalculateLayout()
@@ -100,6 +120,9 @@ namespace ExtendedControls
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (this.FlatStyle == FlatStyle.System)
+                return;
+
             if (Items != null && itemslayoutestimatedon != Items.Count())  // item count changed, rework it out.
                 CalculateLayout();
             if (firstindex < 0)                                           // if invalid (at start)
@@ -123,29 +146,26 @@ namespace ExtendedControls
 
             focusindex = (focusindex >= 0) ? focusindex : ((SelectedIndex > 0) ? SelectedIndex : 0);
 
-            if (FlatStyle != FlatStyle.System || !ComboBoxRenderer.IsSupported)
+            Pen p = new Pen(this.BorderColor);
+            for (int i = 0; i < bordersize; i++)
             {
-                Pen p = new Pen(this.BorderColor);
-                for (int i = 0; i < bordersize; i++)
-                {
-                    var brect = new Rectangle(borderrect.Left + i, borderrect.Top + i, borderrect.Width - i * 2, borderrect.Height - i * 2);
-                    e.Graphics.DrawRectangle(p, borderrect);
-                }
-                p.Dispose();
+                var brect = new Rectangle(borderrect.Left + i, borderrect.Top + i, borderrect.Width - i * 2, borderrect.Height - i * 2);
+                e.Graphics.DrawRectangle(p, borderrect);
+            }
+            p.Dispose();
 
-                Brush backb;
+            Brush backb;
 
-                if ( this.SelectionBackColor != Color.Transparent)
-                {
-                    Color c1 = SelectionBackColor;
-                    if (FlatStyle == FlatStyle.Popup)
-                        backb = new System.Drawing.Drawing2D.LinearGradientBrush(mainarea, c1, Multiply(c1, GradientColorScaling), 90);
-                    else
-                        backb = new SolidBrush(c1);
+            if ( this.SelectionBackColor != Color.Transparent)
+            {
+                Color c1 = SelectionBackColor;
+                if (FlatStyle == FlatStyle.Popup)
+                    backb = new System.Drawing.Drawing2D.LinearGradientBrush(mainarea, c1, Multiply(c1, GradientColorScaling), 90);
+                else
+                    backb = new SolidBrush(c1);
 
-                    e.Graphics.FillRectangle(backb, mainarea);
-                    backb.Dispose();
-                }
+                e.Graphics.FillRectangle(backb, mainarea);
+                backb.Dispose();
             }
 
             if (Items != null && Items.Count > 0)
@@ -162,24 +182,15 @@ namespace ExtendedControls
                 {   // if not fitting to items height, 
                     if (offset >= firstindex && offset < firstindex + displayableitems + (FitToItemsHeight ? 0:1))
                     {
-                        if (FlatStyle == FlatStyle.System && ComboBoxRenderer.IsSupported)
+                        if (offset == focusindex)
                         {
-                            ComboBoxState cs = (focusindex == offset) ? ComboBoxState.Hot : ComboBoxState.Normal;       // No effect I can see.
-                            TextFormatFlags tf = (focusindex == offset) ? TextFormatFlags.Left: TextFormatFlags.Right;
-                            ComboBoxRenderer.DrawTextBox(e.Graphics, pos, s, this.Font, tf, cs);
-                        }
-                        else
-                        {
-                            if (offset == focusindex)
+                            using (Brush highlight = new SolidBrush(MouseOverBackgroundColor))
                             {
-                                using (Brush highlight = new SolidBrush(MouseOverBackgroundColor))
-                                {
-                                    e.Graphics.FillRectangle(highlight, pos);
-                                }
+                                e.Graphics.FillRectangle(highlight, pos);
                             }
-
-                            e.Graphics.DrawString(s, this.Font, textb, pos);
                         }
+
+                        e.Graphics.DrawString(s, this.Font, textb, pos);
 
                         pos.Y += ItemHeight;
                     }
@@ -266,6 +277,9 @@ namespace ExtendedControls
         {
             base.OnMouseWheel(e);
 
+            if (flatstyle == FlatStyle.System)
+                return;
+
             if (e.Delta > 0)
                 ScrollUpOne();
             else
@@ -275,6 +289,9 @@ namespace ExtendedControls
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
+
+            if (flatstyle == FlatStyle.System)
+                return;
 
             int y = e.Location.Y;
             int index = (y / ItemHeight) + firstindex;
@@ -299,18 +316,22 @@ namespace ExtendedControls
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
+
             //Console.WriteLine("Key press " + e.KeyCode + " Focus " + Focused );
 
-            if (e.KeyCode == Keys.Enter || ( e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) ) )
+            if (flatstyle != FlatStyle.System)
             {
-                SelectedIndex = focusindex;
-                if (SelectedIndexChanged != null)
-                    SelectedIndexChanged(this, new EventArgs());
+                if (e.KeyCode == Keys.Enter || (e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)))
+                {
+                    SelectedIndex = focusindex;
+                    if (SelectedIndexChanged != null)
+                        SelectedIndexChanged(this, new EventArgs());
+                }
+                else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Right)
+                    FocusDownOne();
+                else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
+                    FocusUpOne();
             }
-            else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Right)
-                FocusDownOne();
-            else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
-                FocusUpOne();
 
             if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
             {
@@ -318,6 +339,14 @@ namespace ExtendedControls
                     OtherKeyPressed(this, e);
             }
         }
+
+        private void lbsys_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectedIndex = lbsys.SelectedIndex;
+            if (SelectedIndexChanged != null)
+                SelectedIndexChanged(this, new EventArgs());
+        }
+
 
         public void Repaint()
         {
