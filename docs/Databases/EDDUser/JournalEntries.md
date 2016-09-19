@@ -8,6 +8,7 @@ CREATE TABLE JournalEntries (
   EventType TEXT,
   EventTime DATETIME NOT NULL,
   EventData TEXT, -- JSON String of complete line
+  EdsmId INTEGER, -- 0 if not set yet.
   Synced INTEGER,
 )
 
