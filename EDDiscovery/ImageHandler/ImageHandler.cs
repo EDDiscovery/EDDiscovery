@@ -127,7 +127,7 @@ namespace EDDiscovery2.ImageHandler
             });
 
             string cur_sysname = "Unknown System";
-            ISystem cursys = _discoveryForm.TravelControl.GetLatestSystem;
+            ISystem cursys = VisitedSystemsClass.GetLatestSystem(_discoveryForm.VisitedSystems);
 
             if (cursys != null)
                 cur_sysname = cursys.name;

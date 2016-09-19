@@ -1,4 +1,5 @@
 ﻿using EDDiscovery.DB;
+using EDDiscovery.EDSM;
 using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;
@@ -512,6 +513,49 @@ namespace EDDiscovery2.DB
             else
                 return null;
         }
+
+        public static ISystem GetLatestSystem(List<VisitedSystemsClass> visitedSystems)
+        {
+            if (visitedSystems != null && visitedSystems.Count > 0)
+                return (from systems in visitedSystems orderby systems.Time descending select systems.curSystem).First();
+            else
+                return null;
+        }
+
+        public static int GetVisitsCount(List<VisitedSystemsClass> visitedSystems, string name)
+        {
+            if (visitedSystems != null && visitedSystems.Count > 0)
+                return (from row in visitedSystems where row.Name == name select row).Count();
+            else
+                return 0;
+        }
+
+
+        public  static ISystem FindSystem(List<VisitedSystemsClass> visitedSystems, GalacticMapping glist , string name)        // in system or name
+        {
+            EDDiscovery2.DB.ISystem ds1 = SystemClass.GetSystem(name);
+
+            if (ds1 == null)
+            {
+                VisitedSystemsClass vs = VisitedSystemsClass.FindByName(visitedSystems, name);
+
+                if (vs != null && vs.HasTravelCoordinates)
+                    ds1 = vs.curSystem;
+                else
+                {
+                    GalacticMapObject gmo = glist.Find(name, true, true);
+
+                    if (gmo != null && gmo.points.Count > 0)
+                    {
+                        return new SystemClass(gmo.name, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);        // fudge it into a system
+                    }
+                }
+            }
+
+            return ds1;
+        }
+
+
     }
 }
 
