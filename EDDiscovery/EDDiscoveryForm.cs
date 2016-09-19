@@ -24,6 +24,7 @@ using System.Configuration;
 using EDDiscovery.EDSM;
 using System.Threading.Tasks;
 using System.Text;
+using System.ComponentModel;
 
 namespace EDDiscovery
 {
@@ -67,12 +68,16 @@ namespace EDDiscovery
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
         public RouteControl RouteControl { get { return routeControl1;  } }
-        public List<VisitedSystemsClass> VisitedSystems { get { return travelHistoryControl1.visitedSystems; } }
+        public List<VisitedSystemsClass> VisitedSystems = new List<VisitedSystemsClass>();
 
         public bool option_nowindowreposition { get; set;  }  = false;                             // Cmd line options
         public bool option_debugoptions { get; set; } = false;
 
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
+
+        public int DisplayedCommander = 0;
+
+        public event EventHandler HistoryRefreshed;
 
         static public GalacticMapping galacticMapping;
 
@@ -85,6 +90,7 @@ namespace EDDiscovery
         Task<bool> downloadMapsTask = null;
         Task checkInstallerTask = null;
         private string logname = "";
+        public NetLogClass netlog;
 
         private bool CanSkipSlowUpdates()
         {
@@ -165,6 +171,8 @@ namespace EDDiscovery
 
             Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition,travelHistoryControl1);
 
+            netlog = new NetLogClass(this);
+
             this.TopMost = EDDConfig.KeepOnTop;
 
             ApplyTheme(false);
@@ -173,6 +181,8 @@ namespace EDDiscovery
             {
                 splashform.CloseForm();
             }
+
+            DisplayedCommander = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
         }
 
         // We can't prevent an unhandled exception from killing the application.
@@ -412,8 +422,8 @@ namespace EDDiscovery
 
             theme.ApplyColors(this);
 
-            if (refreshhistory)
-                travelHistoryControl1.RefreshHistoryAsync();             // so we repaint this with correct colours.
+            //TBD better way please if (refreshhistory)
+                //TBDtravelHistoryControl1.RefreshHistoryAsync();             // so we repaint this with correct colours.
 
             TravelControl.RedrawSummary();
         }
@@ -629,14 +639,14 @@ namespace EDDiscovery
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                travelHistoryControl1.netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(travelHistoryControl1.NewPosition);
+                netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(travelHistoryControl1.NewPosition);
                 travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
 
                 panelInfo.Visible = false;
 
                 LogLine("Reading travel history");
-                travelHistoryControl1.HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
-                travelHistoryControl1.RefreshHistoryAsync();
+                HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
+                RefreshHistoryAsync();
 
                 DeleteOldLogFiles();
 
@@ -646,7 +656,7 @@ namespace EDDiscovery
 
         private void _travelHistoryControl1_InitialRefreshDone(object sender, EventArgs e)
         {
-            travelHistoryControl1.HistoryRefreshed -= _travelHistoryControl1_InitialRefreshDone;
+            HistoryRefreshed -= _travelHistoryControl1_InitialRefreshDone;
 
             if (!PendingClose)
             {
@@ -662,6 +672,7 @@ namespace EDDiscovery
                 }
             }
         }
+
 
         private void _checkSystemsWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
@@ -774,8 +785,8 @@ namespace EDDiscovery
             if (performhistoryrefresh)
             {
                 LogLine("Update visited systems due to update");
-                travelHistoryControl1.HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
-                travelHistoryControl1.RefreshHistoryAsync();
+                HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
+                RefreshHistoryAsync();
             }
 
             edsmRefreshTimer.Enabled = true;
@@ -783,7 +794,7 @@ namespace EDDiscovery
 
         private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)
         {
-            travelHistoryControl1.HistoryRefreshed -= TravelHistoryControl1_HistoryRefreshed;
+            HistoryRefreshed -= TravelHistoryControl1_HistoryRefreshed;
             LogLine("Refreshing complete.");
 
             if (syncwasfirstrun)
@@ -1160,7 +1171,7 @@ namespace EDDiscovery
                 e.Cancel = true;
                 edsmRefreshTimer.Enabled = false;
                 CancellationTokenSource.Cancel();
-                travelHistoryControl1.CancelHistoryRefresh();
+                CancelHistoryRefresh();
                 _syncWorker.CancelAsync();
                 _checkSystemsWorker.CancelAsync();
                 if (cancelDownloadMaps != null)
@@ -1196,7 +1207,7 @@ namespace EDDiscovery
                 _syncWorkerCompletedEvent.WaitOne();
 
             Console.WriteLine("Stopping discrete threads");
-            travelHistoryControl1.netlog.StopMonitor();
+            netlog.StopMonitor();
 
             if (travelHistoryControl1.sync != null)
                 travelHistoryControl1.sync.StopSync();
@@ -1274,7 +1285,7 @@ namespace EDDiscovery
         {
             try
             {
-                Process.Start(travelHistoryControl1.netlog.GetNetLogDir());
+                Process.Start(netlog.GetNetLogDir());
             }
             catch (Exception ex)
             {
@@ -1286,7 +1297,7 @@ namespace EDDiscovery
         {
             StatsForm frm = new StatsForm();
 
-            frm.travelhistoryctrl = travelHistoryControl1;
+            frm._discoveryForm = this;
             frm.Show();
 
         }
@@ -1542,7 +1553,7 @@ namespace EDDiscovery
 
         private void reloadAllLogsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            travelHistoryControl1.RefreshHistoryAsync(forceReload: true);
+            RefreshHistoryAsync(forceReload: true);
         }
         #endregion
 
@@ -1550,5 +1561,117 @@ namespace EDDiscovery
         {
 
         }
+
+        #region Update Views with new commander 
+
+        private class RefreshHistoryParameters
+        {
+            public bool ForceReload;
+        }
+
+        public void RefreshHistoryAsync(bool forceReload = false)
+        {
+            // Put this in to speed up testing of other systems - TBD return;
+
+            if (PendingClose)
+            {
+                return;
+            }
+
+            if (DisplayedCommander >= 0)
+            {
+                if (!_refreshWorker.IsBusy)
+                {
+                    travelHistoryControl1.RefreshButton(false);
+
+                    _refreshWorker.RunWorkerAsync(new RefreshHistoryParameters { ForceReload = forceReload });
+                }
+            }
+            else
+            {
+                RefreshHistory(VisitedSystemsClass.GetAll(DisplayedCommander));
+            }
+        }
+
+        public void CancelHistoryRefresh()
+        {
+            _refreshWorker.CancelAsync();
+        }
+
+        private void RefreshHistoryWorker(object sender, DoWorkEventArgs e)
+        {
+            var worker = (BackgroundWorker)sender;
+            RefreshHistoryParameters param = e.Argument as RefreshHistoryParameters ?? new RefreshHistoryParameters();
+            bool forceReload = param.ForceReload;
+
+            string errmsg;
+            netlog.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+
+            var vsclist = netlog.ParseFiles(out errmsg, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), forceReload);   // Parse files stop monitor..
+
+            if (worker.CancellationPending)
+            {
+                e.Cancel = true;
+                e.Result = null;
+                return;
+            }
+
+            if (errmsg != null)
+            {
+                throw new InvalidOperationException(errmsg);
+            }
+
+            e.Result = vsclist;
+        }
+
+        private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled && !PendingClose)
+            {
+                if (e.Error != null)
+                {
+                    LogLineHighlight("History Refresh Error: " + e.Error.Message + Environment.NewLine);
+                }
+                else if (e.Result != null)
+                {
+                    RefreshHistory((List<VisitedSystemsClass>)e.Result);
+                    ReportProgress(-1, "");
+                    LogLine("Refresh Complete." + Environment.NewLine);
+                }
+
+
+                travelHistoryControl1.RefreshButton(true);
+
+                netlog.StartMonitor();
+
+                if (HistoryRefreshed != null)
+                    HistoryRefreshed(this, EventArgs.Empty);
+            }
+        }
+
+        private void RefreshHistoryWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            string name = (string)e.UserState;
+            ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
+        }
+
+        private void RefreshHistory(List<VisitedSystemsClass> vsc)
+        {
+            VisitedSystems = vsc;
+
+            if (VisitedSystems == null)
+                return;
+
+            VisitedSystemsClass.UpdateSys(VisitedSystems, true, true);   // always use db distances
+
+            if (PendingClose)
+                return;
+
+            travelHistoryControl1.DisplayVS(VisitedSystems);
+        }
+
+        #endregion
+
+
     }
 }

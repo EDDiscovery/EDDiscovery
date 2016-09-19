@@ -533,10 +533,9 @@ namespace EDDiscovery
                 {
                     Invoke((MethodInvoker)delegate
                    {
-                    //Visible = false;
-                    UnfreezeTrilaterationUI();
-                    travelHistoryControl.RefreshHistoryAsync();
-                       checkForUnknownSystemsNowKnown();
+                        UnfreezeTrilaterationUI();
+                        _discoveryForm.RefreshHistoryAsync();
+                        checkForUnknownSystemsNowKnown();
                    });
                 }
                 else
