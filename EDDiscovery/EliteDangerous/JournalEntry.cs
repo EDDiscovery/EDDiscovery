@@ -117,7 +117,95 @@ namespace EDDiscovery.EliteDangerous
 
     }
 
+    public enum CombatRank
+    {
+        Harmless = 0,
+        MostlyHarmless,
+        Novice,
+        Competent,
+        Expert,
+        Master,
+        Dangerous,
+        Deadly,
+        Elite
+    }
 
+    public enum TradeRank
+    {
+        Penniless = 0,
+        MostlyPenniless,
+        Peddler,
+        Dealer,
+        Merchant,
+        Broker,
+        Entrepreneur,
+        Tycoon,
+        Elite
+    }
+
+    public enum ExplorationRank
+    {
+        Aimless = 0,
+        MostlyAimless,
+        Scout,
+        Surveyor,
+        Explorer,
+        Pathfinder,
+        Ranger,
+        Pioneer,
+        Elite
+    }
+
+    public enum FederationRank
+    {
+        None = 0,
+        Recruit,
+        Cadet,
+        Midshipman,
+        PettyOfficer,
+        ChiefPettyOfficer,
+        WarrantOfficer,
+        Ensign,
+        Lieutenant,
+        LtCommander,
+        PostCommander,
+        PostCaptain,
+        RearAdmiral,
+        ViceAdmiral,
+        Admiral
+    }
+
+    public enum EmpireRank
+    {
+        None = 0,
+        Outsider,
+        Serf,
+        Master,
+        Squire,
+        Knight,
+        Lord,
+        Baron,
+        Viscount,
+        Count,
+        Earl,
+        Marquis,
+        Duke,
+        Prince,
+        King
+    }
+
+    public enum CQCRank
+    {
+        Helpless = 0,
+        MostlyHelpless,
+        Amateur,
+        SemiProfessional,
+        Professional,
+        Champion,
+        Hero,
+        Legend,
+        Elite
+    }
 
 
 
@@ -182,6 +270,14 @@ namespace EDDiscovery.EliteDangerous
             JournalId = reader.JournalId;
         }
 
+        public string ToShortString()
+        {
+            JObject jo = JObject.Parse(EventDataString);  // Create a clone
+
+            jo.Property("timestamp").Remove();
+            jo.Property("event").Remove();
+            return jo.ToString().Replace("{", "").Replace("}", "").Replace("\"", "");
+        }
 
         static public JournalEntry CreateJournalEntry(string text, EDJournalReader reader)
         {
@@ -207,6 +303,7 @@ namespace EDDiscovery.EliteDangerous
                     break;
 
                 case "fileheader":
+                case "Fileheader":
                     je = new JournalFileHeader(jo, reader);
                     break;
 
@@ -256,6 +353,21 @@ namespace EDDiscovery.EliteDangerous
 
                 case "Continued":
                     je = new JournalContinued(jo, reader);
+                    break;
+
+                case "Rank":
+                    je = new JournalRank(jo, reader);
+                    break;
+                    
+                case "Progress":
+                    je = new JournalRank(jo, reader);
+                    break;
+
+                case "SupercruiseEntry":
+                    je = new JournalSupercruiseEntry(jo, reader);
+                    break;
+                case "SupercruiseExit":
+                    je = new JournalSupercruiseExit(jo, reader);
                     break;
 
 
@@ -314,9 +426,8 @@ namespace EDDiscovery.EliteDangerous
                 case "PowerplaySalary":
                 case "PowerplayVote":
                 case "PowerplayVoucher":
-                case "Progress":
+
                 case "Promotion":
-                case "Rank":
                 case "RebootRepair":
                 case "ReceiveText":
                 case "RedeemVoucher":
@@ -335,8 +446,6 @@ namespace EDDiscovery.EliteDangerous
                 case "ShipyardSell":
                 case "ShipyardSwap":
                 case "ShipyardTransfer":
-                case "SupercruiseEntry":
-                case "SupercruiseExit":
                 case "Synthesis":
                 case "Touchdown":
                 case "USSDrop":

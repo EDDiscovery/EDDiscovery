@@ -393,7 +393,7 @@ namespace EDDiscovery2
             populatedgrid.dBAsk = SystemClass.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);   // add last so shown last
 
-            long total = SystemClass.GetTotalSystems();
+            long total = SystemClass.GetTotalSystemsFast();
 
             total = Math.Min(total, 10000000);                  // scaling limit at 10mil
             long offset = (total - 1000000) / 100000;           // scale down slowly.. experimental!
