@@ -97,6 +97,8 @@ namespace EDDiscovery
 
             closestthread = new Thread(CalculateClosestSystems) { Name = "Closest Calc", IsBackground = true };
             closestthread.Start();
+
+            textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
         }
 
         private void button_RefreshHistory_Click(object sender, EventArgs e)
@@ -145,6 +147,8 @@ namespace EDDiscovery
 
         public void RefreshHistoryAsync(bool forceReload = false)
         {
+            // Put this in to speed up testing of other systems - TBD return;
+
             if (_discoveryForm.PendingClose)
             {
                 return;
@@ -624,12 +628,6 @@ namespace EDDiscovery
 
         public void buttonMap_Click(object sender, EventArgs e)
         {
-            if (textBoxTarget.AutoCompleteCustomSource.Count == 0)         // wait till told system names is complete..
-            {
-                MessageBox.Show("Systems have not been loaded yet or none were available at program start, please wait or restart", "No Systems Available", MessageBoxButtons.OK);
-                return;
-            }
-
             var map = _discoveryForm.Map;
             var selectedLine = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                            .Select(cell => cell.OwningRow)
@@ -652,7 +650,7 @@ namespace EDDiscovery
 
             map.Prepare(selectedSys, _discoveryForm.settings.MapHomeSystem,
                         _discoveryForm.settings.MapCentreOnSelection ? selectedSys?.curSystem : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
-                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames, visitedSystems);
+                        _discoveryForm.settings.MapZoom, visitedSystems);
             map.Show();
             this.Cursor = Cursors.Default;
         }

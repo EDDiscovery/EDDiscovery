@@ -711,6 +711,23 @@ namespace EDDiscovery2
                     MyDgv.BorderColor = currentsettings.colors[Settings.CI.textbox_border];
 
                 myControl.Font = fnt;
+
+                if (myControl is AutoCompleteTextBox) // derived from text box
+                {
+                    AutoCompleteTextBox actb = myControl as AutoCompleteTextBox;
+                    actb.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
+                    actb.DropDownBorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                    actb.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
+                    actb.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
+                    actb.DropDownMouseOverBackgroundColor = ButtonExt.Multiply(currentsettings.colors[Settings.CI.button_back], mouseoverscaling);
+
+                    if (currentsettings.buttonstyle.Equals(ButtonStyles[0]))
+                        actb.FlatStyle = FlatStyle.System;
+                    else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                        actb.FlatStyle = FlatStyle.Flat;
+                    else
+                        actb.FlatStyle = FlatStyle.Popup;
+                }
             }
             else if (myControl is ButtonExt)
             {
