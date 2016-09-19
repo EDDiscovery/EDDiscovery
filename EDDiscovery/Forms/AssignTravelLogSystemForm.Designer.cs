@@ -34,11 +34,11 @@
             this.cbSystemLink = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tbLogSystemName = new System.Windows.Forms.TextBox();
-            this.tbDateVisited = new System.Windows.Forms.TextBox();
+            this.tbVisitedDate = new System.Windows.Forms.TextBox();
             this.tbLogCoordX = new System.Windows.Forms.TextBox();
             this.tbLogCoordY = new System.Windows.Forms.TextBox();
             this.tbLogCoordZ = new System.Windows.Forms.TextBox();
-            this.tbManualSystemName = new System.Windows.Forms.TextBox();
+            this.tbManualSystemName = new ExtendedControls.AutoCompleteTextBox();
             this.tbSysCoordX = new System.Windows.Forms.TextBox();
             this.tbSysCoordY = new System.Windows.Forms.TextBox();
             this.tbSysCoordZ = new System.Windows.Forms.TextBox();
@@ -104,13 +104,13 @@
             this.tbLogSystemName.Size = new System.Drawing.Size(216, 20);
             this.tbLogSystemName.TabIndex = 7;
             // 
-            // tbDateVisited
+            // tbVisitedDate
             // 
-            this.tbDateVisited.Location = new System.Drawing.Point(151, 36);
-            this.tbDateVisited.Name = "tbDateVisited";
-            this.tbDateVisited.ReadOnly = true;
-            this.tbDateVisited.Size = new System.Drawing.Size(216, 20);
-            this.tbDateVisited.TabIndex = 8;
+            this.tbVisitedDate.Location = new System.Drawing.Point(151, 36);
+            this.tbVisitedDate.Name = "tbVisitedDate";
+            this.tbVisitedDate.ReadOnly = true;
+            this.tbVisitedDate.Size = new System.Drawing.Size(216, 20);
+            this.tbVisitedDate.TabIndex = 8;
             // 
             // tbLogCoordX
             // 
@@ -141,6 +141,17 @@
             // 
             // tbManualSystemName
             // 
+            this.tbManualSystemName.BorderColor = System.Drawing.Color.Transparent;
+            this.tbManualSystemName.BorderColorScaling = 0.5F;
+            this.tbManualSystemName.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.tbManualSystemName.DropDownBorderColor = System.Drawing.Color.Green;
+            this.tbManualSystemName.DropDownHeight = 200;
+            this.tbManualSystemName.DropDownItemHeight = 20;
+            this.tbManualSystemName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.tbManualSystemName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.tbManualSystemName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.tbManualSystemName.DropDownWidth = 0;
+            this.tbManualSystemName.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tbManualSystemName.Location = new System.Drawing.Point(151, 116);
             this.tbManualSystemName.Name = "tbManualSystemName";
             this.tbManualSystemName.Size = new System.Drawing.Size(135, 20);
@@ -250,7 +261,7 @@
             this.Controls.Add(this.tbLogCoordZ);
             this.Controls.Add(this.tbLogCoordY);
             this.Controls.Add(this.tbLogCoordX);
-            this.Controls.Add(this.tbDateVisited);
+            this.Controls.Add(this.tbVisitedDate);
             this.Controls.Add(this.tbLogSystemName);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cbSystemLink);
@@ -272,11 +283,11 @@
         private System.Windows.Forms.ComboBox cbSystemLink;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbLogSystemName;
-        private System.Windows.Forms.TextBox tbDateVisited;
+        private System.Windows.Forms.TextBox tbVisitedDate;
         private System.Windows.Forms.TextBox tbLogCoordX;
         private System.Windows.Forms.TextBox tbLogCoordY;
         private System.Windows.Forms.TextBox tbLogCoordZ;
-        private System.Windows.Forms.TextBox tbManualSystemName;
+        private ExtendedControls.AutoCompleteTextBox tbManualSystemName;
         private System.Windows.Forms.TextBox tbSysCoordX;
         private System.Windows.Forms.TextBox tbSysCoordY;
         private System.Windows.Forms.TextBox tbSysCoordZ;

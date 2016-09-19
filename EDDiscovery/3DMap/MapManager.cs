@@ -23,21 +23,21 @@ namespace EDDiscovery2._3DMap
         public bool Is3DMapsRunning { get { return _formMap.Is3DMapsRunning; } }
 
         public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
-                            AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+                            List<VisitedSystemsClass> visited)
         {
-            _formMap.Prepare(historysel, homesys, centersys, zoom, sysname, visited);
+            _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
         }
 
         public void Prepare(VisitedSystemsClass historysel, string homesys, ISystem centersys, float zoom,
-                            AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+                            List<VisitedSystemsClass> visited)
         {
-            _formMap.Prepare(historysel, homesys, centersys, zoom, sysname, visited);
+            _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
-                            AutoCompleteStringCollection sysname , List<VisitedSystemsClass> visited )
+                            List<VisitedSystemsClass> visited )
         {
-            _formMap.Prepare(historysel, homesys, centersys, zoom, sysname, visited);
+            _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
         }
 
         public void SetPlanned(List<SystemClass> plannedr)

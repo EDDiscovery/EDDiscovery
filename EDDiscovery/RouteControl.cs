@@ -58,6 +58,9 @@ namespace EDDiscovery
             toupdatetimer = new System.Windows.Forms.Timer();
             toupdatetimer.Interval = 500;
             toupdatetimer.Tick += ToUpdateTick;
+
+            textBox_From.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+            textBox_To.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
         }
 
         private Thread ThreadRoute;
@@ -233,6 +236,7 @@ namespace EDDiscovery
 
         public void SaveSettings()
         {
+            //Console.WriteLine("Save {0} {1} {2}", textBox_From.Text, textBox_To.Text , Environment.StackTrace);
             SQLiteDBClass.PutSettingString("RouteFrom", textBox_From.Text);
             SQLiteDBClass.PutSettingString("RouteTo", textBox_To.Text);
             SQLiteDBClass.PutSettingString("RouteRange", textBox_Range.Text);
@@ -251,6 +255,7 @@ namespace EDDiscovery
         {
             textBox_From.Text = SQLiteDBClass.GetSettingString("RouteFrom", "");
             textBox_To.Text = SQLiteDBClass.GetSettingString("RouteTo", "");
+            //Console.WriteLine("Load {0} {1}", textBox_From.Text, textBox_To.Text);
             textBox_Range.Text = SQLiteDBClass.GetSettingString("RouteRange", "30");
             if (textBox_Range.Text == "")
                 textBox_Range.Text = "30";
@@ -609,12 +614,6 @@ namespace EDDiscovery
 
         private void cmd3DMap_Click(object sender, EventArgs e)
         {
-            if (textBox_From.AutoCompleteCustomSource.Count == 0)
-            {
-                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
-                return;
-            }
-
             var map = _discoveryForm.Map;
 
             if (routeSystems != null && routeSystems.Any())
@@ -623,7 +622,7 @@ namespace EDDiscovery
                 if (zoom < 0.01) zoom = 0.01f;
                 if (zoom > 50) zoom = 50f;
 
-                map.Prepare(routeSystems.First(), _discoveryForm.settings.MapHomeSystem, routeSystems.First(), zoom, _discoveryForm.SystemNames, _discoveryForm.VisitedSystems);
+                map.Prepare(routeSystems.First(), _discoveryForm.settings.MapHomeSystem, routeSystems.First(), zoom, _discoveryForm.VisitedSystems);
                 map.SetPlanned(routeSystems);
                 map.Show();
             }

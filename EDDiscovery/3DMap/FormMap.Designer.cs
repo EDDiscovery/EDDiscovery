@@ -38,7 +38,7 @@ namespace EDDiscovery2
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMap));
             this.glControl = new OpenTK.GLControl();
-            this.textboxFrom = new System.Windows.Forms.TextBox();
+            this.textboxFrom = new ExtendedControls.AutoCompleteTextBox();
             this.labelSystemCoords = new System.Windows.Forms.Label();
             this.toolStripShowAllStars = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonGoBackward = new System.Windows.Forms.ToolStripButton();
@@ -791,7 +791,7 @@ namespace EDDiscovery2
             #endregion
 
             private OpenTK.GLControl glControl;
-            internal TextBox textboxFrom;
+            internal ExtendedControls.AutoCompleteTextBox textboxFrom;
             private Label labelSystemCoords;
         private ToolStrip toolStripShowAllStars;
         private ToolStripButton toolStripButtonLastKnownPosition;

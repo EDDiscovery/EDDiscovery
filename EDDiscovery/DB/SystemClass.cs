@@ -31,13 +31,11 @@ namespace EDDiscovery.DB
     [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
     public class SystemClass : EDDiscovery2.DB.InMemory.SystemClass
     {
-        private static List<List<long>> EdsmIdArray = new List<List<long>>();
-        private static Dictionary<string, long> SystemNameToEdsmIdTable = new Dictionary<string, long>(StringComparer.InvariantCultureIgnoreCase);
+        const float XYZScalar = 128.0F;     // scaling between DB stored values and floats
 
         public SystemClass()
         {
         }
-
 
         public SystemClass(string Name)
         {
@@ -187,79 +185,6 @@ namespace EDDiscovery.DB
             catch { }           // since we don't have control of outside formats, we fail quietly.
         }
 
-        public enum SystemIDType { id, EdsmId, EddbId };       // which ID to match?
-
-        public static void CacheSystemNames()
-        {
-
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
-            {
-                using (DbCommand cmd = cn.CreateCommand("SELECT Name, EdsmId FROM SystemNames"))
-                {
-                    using (DbDataReader rdr = cmd.ExecuteReader())
-                    {
-                        SystemNameToEdsmIdTable.Clear();
-                        while (rdr.Read())
-                        {
-                            string name = String.Intern((string)rdr["Name"]);
-                            long edsmid = (long)rdr["EdsmId"];
-
-                            if (SystemNameToEdsmIdTable.ContainsKey(name))
-                            {
-                                long index = SystemNameToEdsmIdTable[name];
-
-                                if (index < 0)
-                                {
-                                    index = -index;
-                                }
-                                else
-                                {
-                                    index = EdsmIdArray.Count;
-                                    EdsmIdArray.Add(new List<long>());
-                                    SystemNameToEdsmIdTable[name] = -index;
-                                }
-
-                                EdsmIdArray[(int)index].Add(SystemNameToEdsmIdTable[name]);
-                            }
-                            else
-                            {
-                                SystemNameToEdsmIdTable[name] = edsmid;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        public static long[] GetEdsmIdsFromName(string name)
-        {
-            lock (SystemNameToEdsmIdTable)
-            {
-                if (SystemNameToEdsmIdTable.Count == 0)
-                {
-                    CacheSystemNames();
-                }
-            }
-
-            if (SystemNameToEdsmIdTable.ContainsKey(name.ToLowerInvariant()))
-            {
-                long index = SystemNameToEdsmIdTable[name.ToLowerInvariant()];
-
-                if (index >= 0)
-                {
-                    return new long[] { index };
-                }
-                else
-                {
-                    return EdsmIdArray[(int)(-index)].ToArray();
-                }
-            }
-            else
-            {
-                return new long[0];
-            }
-        }
-
         public static double Distance(EDDiscovery2.DB.ISystem s1, EDDiscovery2.DB.ISystem s2)
         {
             if (s1 != null && s2 != null && s1.HasCoordinate && s2.HasCoordinate)
@@ -315,36 +240,47 @@ namespace EDDiscovery.DB
                         if (percentage < 100)
                             cmd.CommandText += " and randomid<" + percentage;
 
+                        //Stopwatch ws = new Stopwatch();  ws.Start();
+
+                        Object[] array = new Object[5];     // to the number of items above queried
+
+                        vertices = new Vector3[250000];
+                        colours = new uint[250000];
+
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                if (System.DBNull.Value != reader["x"])
+                                reader.GetValues(array);
+
+                                long id = (long)array[0];
+                                long x = (long)array[1];
+                                long y = (long)array[2];
+                                long z = (long)array[3];
+                                int rand = (int)(long)array[4];
+
+                                if (numvertices == vertices.Length)
                                 {
-                                    if (vertices == null)
-                                    {
-                                        vertices = new Vector3[1024];
-                                        colours = new uint[1024];
-                                    }
-                                    else if (numvertices == vertices.Length)
-                                    {
-                                        Array.Resize(ref vertices, vertices.Length + 8192);
-                                        Array.Resize(ref colours, colours.Length + 8192);
-                                    }
-
-                                    Vector3 pos = new Vector3((float)((long)reader["x"] / 128.0), (float)((long)reader["y"] / 128.0), (float)((long)reader["z"] / 128.0));
-
-                                    int rand = (int)(long)reader["randomid"];
-                                    Color basec = fixedc[rand&3]; 
-                                    int fade = 100 - ((rand>>2)&7) * 8;
-                                    byte red = (byte)(basec.R * fade / 100);
-                                    byte green = (byte)(basec.G * fade / 100);
-                                    byte blue = (byte)(basec.B * fade / 100);
-                                    colours[numvertices] = BitConverter.ToUInt32(new byte[] { red, green, blue, 255 }, 0);
-                                    vertices[numvertices++] = pos;
+                                    Array.Resize(ref vertices, vertices.Length + 32768);
+                                    Array.Resize(ref colours, colours.Length + 32768);
                                 }
+
+                                Vector3 pos = new Vector3((float)(x / XYZScalar), (float)(y / XYZScalar), (float)(z / XYZScalar));
+
+                                Color basec = fixedc[rand&3]; 
+                                int fade = 100 - ((rand>>2)&7) * 8;
+                                byte red = (byte)(basec.R * fade / 100);
+                                byte green = (byte)(basec.G * fade / 100);
+                                byte blue = (byte)(basec.B * fade / 100);
+                                colours[numvertices] = BitConverter.ToUInt32(new byte[] { red, green, blue, 255 }, 0);
+                                vertices[numvertices++] = pos;
                             }
                         }
+
+                        Array.Resize(ref vertices, numvertices);
+                        Array.Resize(ref colours, numvertices);
+
+                        //Console.WriteLine("Query {0} grid {1} ret {2} took {3}", cmd.CommandText, gridid, numvertices, ws.ElapsedMilliseconds);
 
                         if (gridid == 810 && vertices!=null)    // BODGE do here, better once on here than every star for every grid..
                         {                       // replace when we have a better naming system
@@ -365,32 +301,6 @@ namespace EDDiscovery.DB
             return numvertices;
         }
 
-        public static void GetSystemNames(ref AutoCompleteStringCollection asc)
-        {
-            try
-            {
-                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
-                {
-                    using (DbCommand cmd = cn.CreateCommand("select name from SystemNames"))
-                    {
-                        using (DbDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                asc.Add(String.Intern((string)reader["name"]));
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-            }
-        }
-
-
         public static List<Point3D> GetStarPositions()  // return star positions..
         {
             List<Point3D> list = new List<Point3D>();
@@ -406,7 +316,7 @@ namespace EDDiscovery.DB
                             while (reader.Read())
                             {
                                 if (System.DBNull.Value != reader["x"])
-                                    list.Add(new Point3D((double)((long)reader["x"] / 128.0), (double)((long)reader["y"] / 128.0), (double)((long)reader["z"] / 128.0)));
+                                    list.Add(new Point3D(((double)(long)reader["x"]) / XYZScalar, ((double)(long)reader["y"]) / XYZScalar, ((double)(long)reader["z"]) / XYZScalar));
                             }
                         }
                     }
@@ -420,37 +330,34 @@ namespace EDDiscovery.DB
             return list;
         }
 
-        public static Dictionary<string, int> GetSystemNamesUpperCase()  // return a dictionary, in upper case, id is the row ID in the table, duplicates ignored.
-        {
-            Dictionary<string, int> dict = new Dictionary<string, int>(StringComparer.CurrentCultureIgnoreCase);
 
-            try
+        public static List<long> GetEdsmIdsFromName(string name)
+        {
+            List<long> ret = new List<long>();
+
+            if (name.Length > 0)
             {
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select name from SystemNames"))
+                    using (DbCommand cmd = cn.CreateCommand("SELECT Name,EdsmId FROM SystemNames WHERE Name==@first"))
                     {
-                        using (DbDataReader reader = cmd.ExecuteReader())
+                        cmd.AddParameterWithValue("first", name);
+                        //Console.WriteLine("Look up {0}", name);
+
+                        using (DbDataReader rdr = cmd.ExecuteReader())
                         {
-                            while (reader.Read())
+                            while (rdr.Read())
                             {
-                                string name = ((string)reader["name"]).ToUpper();
-                                if (!dict.ContainsKey(name))
-                                    dict.Add(name, (int)reader["id"]);
+                                ret.Add((long)rdr[1]);
                             }
                         }
-
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-            }
 
-            return dict;
+            return ret;
         }
+
 
         public static SystemClass GetSystem(string name, SQLiteConnectionSystem cn = null)      // with an open database, case insensitive
         {
@@ -461,7 +368,9 @@ namespace EDDiscovery.DB
         {
             List<SystemClass> systems = new List<SystemClass>();
 
-            foreach (long edsmid in GetEdsmIdsFromName(name))
+            List<long> edsmidlist = GetEdsmIdsFromName(name);
+
+            foreach (long edsmid in edsmidlist )
             {
                 SystemClass sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
                 if (sys != null)
@@ -473,7 +382,9 @@ namespace EDDiscovery.DB
             return systems;
         }
 
-        public static SystemClass GetSystem(long id, SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id)      // using an id
+        public enum SystemIDType { id, EdsmId, EddbId };       // which ID to match?
+
+        public static SystemClass GetSystem(long id,  SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id)      // using an id
         {
             SystemClass sys = null;
             bool closeit = false;
@@ -516,9 +427,9 @@ namespace EDDiscovery.DB
                             }
                             else
                             {
-                                sys.x = (double)((long)reader["x"] / 128.0);
-                                sys.y = (double)((long)reader["y"] / 128.0);
-                                sys.z = (double)((long)reader["z"] / 128.0);
+                                sys.x = ((double)(long)reader["x"]) / XYZScalar;
+                                sys.y = ((double)(long)reader["y"]) / XYZScalar;
+                                sys.z = ((double)(long)reader["z"]) / XYZScalar;
                             }
                         }
                     }
@@ -708,33 +619,6 @@ namespace EDDiscovery.DB
             return lasttime;
         }
 
-        public static DateTime GetLastSystemModifiedTime()
-        {
-            DateTime lasttime = new DateTime(2010, 1, 1, 0, 0, 0);
-
-            try
-            {
-                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
-                {
-                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateTimestamp FROM EdsmSystems ORDER BY UpdateTimestamp DESC LIMIT 1"))
-                    {
-                        using (DbDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read() && System.DBNull.Value != reader["UpdateTimestamp"])
-                                lasttime = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-            }
-
-            return lasttime;
-        }
-
         // Systems in data dumps are now sorted by modify time ascending, so
         // the last inserted system should be the most recently modified system.
         public static DateTime GetLastSystemModifiedTimeFast()
@@ -764,19 +648,6 @@ namespace EDDiscovery.DB
             return lasttime;
         }
 
-        public static void TouchSystem(SQLiteConnectionSystem cn, string systemName)
-        {
-            foreach (long edsmid in GetEdsmIdsFromName(systemName))
-            {
-                using (DbCommand cmd = cn.CreateCommand("UPDATE EdsmSystems SET VersionTimestamp = @VersionTimestamp where EdsmId=@EdsmId"))
-                {
-                    cmd.AddParameterWithValue("@EdsmId", edsmid);
-                    cmd.AddParameterWithValue("@VersionTimestamp", DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
         public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar, 
                                                     double maxdist = 200 , SQLiteConnectionSystem cn = null)
         {
@@ -802,23 +673,23 @@ namespace EDDiscovery.DB
                     "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
                     "LIMIT @max"))
                 {
-                    cmd.AddParameterWithValue("xv", x * 128);
-                    cmd.AddParameterWithValue("yv", y * 128);
-                    cmd.AddParameterWithValue("zv", z * 128);
+                    cmd.AddParameterWithValue("xv", (long)(x * XYZScalar));
+                    cmd.AddParameterWithValue("yv", (long)(y * XYZScalar));
+                    cmd.AddParameterWithValue("zv", (long)(z * XYZScalar));
                     cmd.AddParameterWithValue("max", maxitems + 1);     // 1 more, because if we are on a star, that will be returned
-                    cmd.AddParameterWithValue("maxdist", maxdist * 128);
+                    cmd.AddParameterWithValue("maxdist", (long)(maxdist * XYZScalar));
 
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read() && distlist.Count < maxitems)           // already sorted, and already limited to max items
                         {
-                            long edsmid = (long)reader["EdsmId"];
+                            long edsmid = (long)reader[0];
 
-                            if (System.DBNull.Value != reader["x"])                 // paranoid check for null
+                            if (System.DBNull.Value != reader[1])                 // paranoid check for null
                             {
-                                double dx = (double)((long)reader["x"] / 128.0) - x;
-                                double dy = (double)((long)reader["y"] / 128.0) - y;
-                                double dz = (double)((long)reader["z"] / 128.0) - z;
+                                double dx = ((double)(long)reader[1]) / XYZScalar - x;
+                                double dy = ((double)(long)reader[2]) / XYZScalar - y;
+                                double dz = ((double)(long)reader[3]) / XYZScalar - z;
 
                                 double dist = dx * dx + dy * dy + dz * dz;
                                 if (dist > 0.001 || !removezerodiststar)
@@ -865,8 +736,8 @@ namespace EDDiscovery.DB
             {
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
-                    string sqlquery = "SELECT EdsmId, x, y, z " +
-                                      "FROM EdsmSystems " +
+                    string sqlquery = "SELECT EdsmId, x, y, z " +                   // DO a square test for speed, then double check its within the circle later..
+                                      "FROM EdsmSystems " +            
                                       "WHERE x >= @xc - @maxfromcurpos " +
                                       "AND x <= @xc + @maxfromcurpos " +
                                       "AND y >= @yc - @maxfromcurpos " +
@@ -882,72 +753,75 @@ namespace EDDiscovery.DB
 
                     using (DbCommand cmd = cn.CreateCommand(sqlquery))
                     {
-                        cmd.AddParameterWithValue("@xw", wantedpos.X);
-                        cmd.AddParameterWithValue("@yw", wantedpos.Y);
-                        cmd.AddParameterWithValue("@zw", wantedpos.Z);
-                        cmd.AddParameterWithValue("@maxfromwanted", maxfromwanted * maxfromwanted);     //squared
+                        cmd.AddParameterWithValue("xw", (long)(wantedpos.X * XYZScalar));
+                        cmd.AddParameterWithValue("yw", (long)(wantedpos.Y * XYZScalar));
+                        cmd.AddParameterWithValue("zw", (long)(wantedpos.Z * XYZScalar));
+                        cmd.AddParameterWithValue("maxfromwanted", (long)(maxfromwanted * XYZScalar));     //squared
 
-                        cmd.AddParameterWithValue("@xc", curpos.X);
-                        cmd.AddParameterWithValue("@yc", curpos.Y);
-                        cmd.AddParameterWithValue("@zc", curpos.Z);
-                        cmd.AddParameterWithValue("@maxfromcurrent", maxfromcurpos * maxfromcurpos);     //squared
+                        cmd.AddParameterWithValue("xc", (long)(curpos.X * XYZScalar));
+                        cmd.AddParameterWithValue("yc", (long)(curpos.Y * XYZScalar));
+                        cmd.AddParameterWithValue("zc", (long)(curpos.Z * XYZScalar));
+                        cmd.AddParameterWithValue("maxfromcurpos", (long)(maxfromcurpos * XYZScalar));     //squared
 
                         double bestmindistance = double.MaxValue;
+                        long nearestedsmid = -1;
 
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                string name = (string)reader["name"];
-                                long id = (long)reader["id"];
+                                long edsmid = (long)reader[0];
+
+                                //SystemClass sys = GetSystem(edsmid, null, SystemIDType.EdsmId);  Console.WriteLine("FOund {0} at {1} {2} {3}", sys.name, sys.x, sys.y, sys.z);
 
                                 if (System.DBNull.Value != reader["x"]) // paranoid check, it could be null in db
                                 {
-
-                                    Point3D syspos = new Point3D((double)reader["x"], (double)reader["y"], (double)reader["z"]);
+                                    Point3D syspos = new Point3D(((double)(long)reader[1])/XYZScalar, ((double)(long)reader[2])/XYZScalar, ((double)(long)reader[3])/XYZScalar);
 
                                     double distancefromwantedx2 = Point3D.DistanceBetweenX2(wantedpos, syspos); // range between the wanted point and this, ^2
                                     double distancefromcurposx2 = Point3D.DistanceBetweenX2(curpos, syspos);    // range between the wanted point and this, ^2
 
-                                    if (routemethod == metric_nearestwaypoint)
+                                                                                                                // ENSURE its withing the circles now
+                                    if (distancefromcurposx2 <= (maxfromcurpos * maxfromcurpos) && distancefromwantedx2 <= (maxfromwanted * maxfromwanted))
                                     {
-                                        if (distancefromwantedx2 < bestmindistance)
+                                        if (routemethod == metric_nearestwaypoint)
                                         {
-                                            nearestsystem = GetSystem(id);
-                                            bestmindistance = distancefromwantedx2;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Point3D interceptpoint = curpos.InterceptPoint(wantedpos, syspos);      // work out where the perp. intercept point is..
-                                        double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
-                                        double metric = 1E39;
-
-                                        if (routemethod == metric_mindevfrompath)
-                                            metric = deviation;
-                                        else if (routemethod == metric_maximum100ly)
-                                            metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
-                                        else if (routemethod == metric_maximum250ly)
-                                            metric = (deviation <= 250) ? distancefromwantedx2 : metric;
-                                        else if (routemethod == metric_maximum500ly)
-                                            metric = (deviation <= 500) ? distancefromwantedx2 : metric;
-                                        else if (routemethod == metric_waypointdev2)
-                                            metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
-
-                                        if (metric < bestmindistance)
-                                        {
-                                            nearestsystem = GetSystem(id);
-                                            bestmindistance = metric;
-                                            //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0") + " *");
+                                            if (distancefromwantedx2 < bestmindistance)
+                                            {
+                                                nearestedsmid = edsmid;
+                                                bestmindistance = distancefromwantedx2;
+                                            }
                                         }
                                         else
                                         {
-                                            //Console.WriteLine("System " + syscheck.name + " way " + deviation.ToString("0.0") + " metric " + metric.ToString("0.0"));
+                                            Point3D interceptpoint = curpos.InterceptPoint(wantedpos, syspos);      // work out where the perp. intercept point is..
+                                            double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
+                                            double metric = 1E39;
+
+                                            if (routemethod == metric_mindevfrompath)
+                                                metric = deviation;
+                                            else if (routemethod == metric_maximum100ly)
+                                                metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
+                                            else if (routemethod == metric_maximum250ly)
+                                                metric = (deviation <= 250) ? distancefromwantedx2 : metric;
+                                            else if (routemethod == metric_maximum500ly)
+                                                metric = (deviation <= 500) ? distancefromwantedx2 : metric;
+                                            else if (routemethod == metric_waypointdev2)
+                                                metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
+
+                                            if (metric < bestmindistance)
+                                            {
+                                                nearestedsmid = edsmid;
+                                                bestmindistance = metric;
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+
+                        if (nearestedsmid != -1)
+                            nearestsystem = GetSystem(nearestedsmid, cn, SystemIDType.EdsmId);
                     }
                 }
             }
@@ -973,7 +847,7 @@ namespace EDDiscovery.DB
 
                         if (nrows == 0)
                         {
-                            Console.WriteLine("Populating system aliases table");
+                            //Console.WriteLine("Populating system aliases table");
                             RemoveHiddenSystems();
                         }
                     }
@@ -1001,13 +875,13 @@ namespace EDDiscovery.DB
                     }
 
                     using (DbCommand selectByPosCmd = cn.CreateCommand(
-                            "SELECT s.EdsmId FROM EdsmSystems s " +
-                            "WHERE s.X >= @X - 0.125 " +
-                            "AND s.X <= @X + 0.125 " +
-                            "AND s.Y >= @Y - 0.125 " +
-                            "AND s.Y <= @Y + 0.125 " +
-                            "AND s.Z >= @Z - 0.125 " +
-                            "AND s.Z <= @Z + 0.125"))
+                            "SELECT s.EdsmId FROM EdsmSystems s " +         // 16 is 0.125 of 1/128, so pick system near this one
+                            "WHERE s.X >= @X - 16 " +
+                            "AND s.X <= @X + 16 " +
+                            "AND s.Y >= @Y - 16 " +
+                            "AND s.Y <= @Y + 16 " +
+                            "AND s.Z >= @Z - 16 " +
+                            "AND s.Z <= @Z + 16"))
                     {
                         selectByPosCmd.AddParameter("@X", DbType.Int64);
                         selectByPosCmd.AddParameter("@Y", DbType.Int64);
@@ -1015,8 +889,6 @@ namespace EDDiscovery.DB
 
                         foreach (VisitedSystemsClass vsc in visitedSystems)
                         {
-                            SystemClass[] systemsByName = GetSystemsByName(vsc.Name, cn).ToArray();
-
                             if (vsc.curSystem == null || vsc.curSystem.id_edsm == 0)                                              // if not set before, look it up
                             {
                                 Dictionary<long, SystemClass> altmatches = new Dictionary<long, SystemClass>();
@@ -1040,18 +912,24 @@ namespace EDDiscovery.DB
                                     }
                                 }
 
+                                //Stopwatch sw2 = new Stopwatch(); sw2.Start(); //long t2 = sw2.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query names in {0}", t2));
+
                                 Dictionary<long, SystemClass> namematches = GetSystemsByName(vsc.Name).Where(s => s != null).ToDictionary(s => s.id, s => s);
                                 Dictionary<long, SystemClass> posmatches = new Dictionary<long, SystemClass>();
                                 Dictionary<long, SystemClass> nameposmatches = new Dictionary<long, SystemClass>();
 
                                 if (hastravcoords)
                                 {
-                                    selectByPosCmd.Parameters["@X"].Value = vsc.X;
-                                    selectByPosCmd.Parameters["@Y"].Value = vsc.Y;
-                                    selectByPosCmd.Parameters["@Z"].Value = vsc.Z;
+                                    selectByPosCmd.Parameters["@X"].Value = (long)(vsc.X * XYZScalar);
+                                    selectByPosCmd.Parameters["@Y"].Value = (long)(vsc.Y * XYZScalar);
+                                    selectByPosCmd.Parameters["@Z"].Value = (long)(vsc.Z * XYZScalar);
 
-                                    using (DbDataReader reader = selectByPosCmd.ExecuteReader())
+                                    //Stopwatch sw = new Stopwatch(); sw.Start(); long t1 = sw.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query pos in {0}", t1));
+
+                                    using (DbDataReader reader = selectByPosCmd.ExecuteReader())        // MEASURED very fast, <1ms
                                     {
+                                        
+
                                         while (reader.Read())
                                         {
                                             long pos_edsmid = (long)reader["EdsmId"];
@@ -1237,9 +1115,9 @@ namespace EDDiscovery.DB
                         }
                         else
                         {
-                            sys.x = (double)((long)reader["x"] / 128.0);
-                            sys.y = (double)((long)reader["y"] / 128.0);
-                            sys.z = (double)((long)reader["z"] / 128.0);
+                            sys.x = ((double)(long)reader["x"]) / XYZScalar;
+                            sys.y = ((double)(long)reader["y"]) / XYZScalar;
+                            sys.z = ((double)(long)reader["z"]) / XYZScalar;
                         }
 
                         sys.id_edsm = (long)reader["EdsmId"];
@@ -1419,9 +1297,9 @@ namespace EDDiscovery.DB
                                                 }
                                                 else
                                                 {
-                                                    dbsys.x = (double)((long)reader["X"] / 128.0);
-                                                    dbsys.y = (double)((long)reader["Y"] / 128.0);
-                                                    dbsys.z = (double)((long)reader["Z"] / 128.0);
+                                                    dbsys.x = ((double)(long)reader["X"]) / XYZScalar;
+                                                    dbsys.y = ((double)(long)reader["Y"]) / XYZScalar;
+                                                    dbsys.z = ((double)(long)reader["Z"]) / XYZScalar;
                                                 }
 
                                                 dbsys.id_edsm = edsmid;
@@ -1459,9 +1337,9 @@ namespace EDDiscovery.DB
                                         Math.Abs(dbsys.z - z) > 0.01 ||
                                         dbsys.gridid != gridid)  // position changed
                                     {
-                                        updateSysCmd.Parameters["@X"].Value = (long)(x * 128);
-                                        updateSysCmd.Parameters["@Y"].Value = (long)(y * 128);
-                                        updateSysCmd.Parameters["@Z"].Value = (long)(z * 128);
+                                        updateSysCmd.Parameters["@X"].Value = (long)(x * XYZScalar);
+                                        updateSysCmd.Parameters["@Y"].Value = (long)(y * XYZScalar);
+                                        updateSysCmd.Parameters["@Z"].Value = (long)(z * XYZScalar);
                                         updateSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
                                         updateSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
                                         updateSysCmd.Parameters["@GridId"].Value = gridid;
@@ -1477,9 +1355,9 @@ namespace EDDiscovery.DB
                                     insertNameCmd.Parameters["@EdsmId"].Value = edsmid;
                                     insertNameCmd.ExecuteNonQuery();
                                     insertSysCmd.Parameters["@EdsmId"].Value = edsmid;
-                                    insertSysCmd.Parameters["@X"].Value = (long)(x * 128);
-                                    insertSysCmd.Parameters["@Y"].Value = (long)(y * 128);
-                                    insertSysCmd.Parameters["@Z"].Value = (long)(z * 128);
+                                    insertSysCmd.Parameters["@X"].Value = (long)(x * XYZScalar);
+                                    insertSysCmd.Parameters["@Y"].Value = (long)(y * XYZScalar);
+                                    insertSysCmd.Parameters["@Z"].Value = (long)(z * XYZScalar);
                                     insertSysCmd.Parameters["@CreateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
                                     insertSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
                                     insertSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
@@ -1755,6 +1633,52 @@ namespace EDDiscovery.DB
 
             return updated + inserted;
         }
+
+        public static List<string> AutoCompleteAdditionalList = new List<string>();
+
+        public static void AddToAutoComplete( List<string> t )
+        {
+            lock (AutoCompleteAdditionalList)
+            {
+                AutoCompleteAdditionalList.AddRange(t);
+            }
+        }
+
+        public static List<string> ReturnSystemListForAutoComplete(string input)
+        {
+            List<string> ret = new List<string>();
+
+            if (input.Length > 0)
+            {
+                lock (AutoCompleteAdditionalList)
+                {
+                    foreach (string other in AutoCompleteAdditionalList)
+                    {
+                        if (other.StartsWith(input, StringComparison.InvariantCultureIgnoreCase))
+                            ret.Add(other);
+                    }
+                }
+
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("SELECT Name,EdsmId FROM SystemNames WHERE Name>=@first AND Name<=@second LIMIT 1000"))
+                    {
+                        cmd.AddParameterWithValue("first", input);
+                        cmd.AddParameterWithValue("second", input + "~");
+
+                        using (DbDataReader rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                ret.Add((string)rdr[0]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ret;
+        }
     }
 
     public class GridId
@@ -1841,5 +1765,7 @@ namespace EDDiscovery.DB
 
             return false;
         }
+
     }
 }
+

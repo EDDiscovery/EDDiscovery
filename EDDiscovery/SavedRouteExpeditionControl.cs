@@ -408,12 +408,6 @@ namespace EDDiscovery
 
         private void toolStripButtonShowOn3DMap_Click(object sender, EventArgs e)
         {
-            if (_discoveryForm.SystemNames.Count == 0)
-            {
-                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
-                return;
-            }
-
             var map = _discoveryForm.Map;
 
             var route = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>().Select(s => s.Cells[0].Tag as SystemClass).Where(s => s != null && s.HasCoordinate).ToList();
@@ -424,7 +418,7 @@ namespace EDDiscovery
                 if (zoom < 0.01) zoom = 0.01f;
                 if (zoom > 50) zoom = 50f;
 
-                map.Prepare(route[0], _discoveryForm.settings.MapHomeSystem, route[0], zoom, _discoveryForm.SystemNames, _discoveryForm.VisitedSystems);
+                map.Prepare(route[0], _discoveryForm.settings.MapHomeSystem, route[0], zoom, _discoveryForm.VisitedSystems);
                 map.SetPlanned(route);
                 map.Show();
             }
@@ -474,9 +468,7 @@ namespace EDDiscovery
                 return;
             }
 
-            textbox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            textbox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            textbox.AutoCompleteCustomSource = _discoveryForm.SystemNames;
+            //TBD this used to have an autocomplete, but now we don't have systemnames we are lacking it
         }
 
         private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)

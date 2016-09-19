@@ -48,8 +48,6 @@ namespace EDDiscovery2
         StarGrids _stargrids;                   // holds stars
         StarNamesList _starnameslist;           // holds named stars
 
-        private AutoCompleteStringCollection _systemNames;      // holds that awful auto complete list
-
         private ISystem _centerSystem;          // some systems remembered
         private ISystem _homeSystem;
         private ISystem _historySelection;
@@ -115,21 +113,21 @@ namespace EDDiscovery2
         #region External Interface
 
         public void Prepare(VisitedSystemsClass historysel, string homesys, ISystem centersys, float zoom,
-                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+                                List<VisitedSystemsClass> visited)
         {
             _visitedSystems = visited;
-            Prepare((historysel != null) ? FindSystem(historysel.Name) : null, homesys, centersys, zoom, sysname, visited);
+            Prepare((historysel != null) ? FindSystem(historysel.Name) : null, homesys, centersys, zoom, visited);
         }
 
         public void Prepare(string historysel, string homesys, string centersys, float zoom,
-                                AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+                                List<VisitedSystemsClass> visited)
         {
             _visitedSystems = visited;
-            Prepare(FindSystem(historysel), homesys, FindSystem(centersys), zoom, sysname, visited);
+            Prepare(FindSystem(historysel), homesys, FindSystem(centersys), zoom, visited);
         }
 
         public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
-                            AutoCompleteStringCollection sysname, List<VisitedSystemsClass> visited)
+                            List<VisitedSystemsClass> visited)
         {
             _visitedSystems = visited;
 
@@ -143,8 +141,6 @@ namespace EDDiscovery2
                 _stargrids.Initialise();                        // bring up the class..
                 _starnameslist = new StarNamesList(_stargrids, this, glControl);
             }
-
-            _systemNames = sysname;
 
             zoomfov.SetDefaultZoom(zoom);
 
@@ -169,8 +165,6 @@ namespace EDDiscovery2
             toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false);
             enableColoursToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonColours", true);
             _stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
-
-            textboxFrom.AutoCompleteCustomSource = _systemNames;
 
             _stargrids.FillVisitedSystems(_visitedSystems);     // to ensure its updated
             _stargrids.Start();
@@ -341,6 +335,8 @@ namespace EDDiscovery2
             _mousehovertick.Interval = 250;
 
             SetCenterSystemTo(_centerSystem);                   // move to this..
+
+            textboxFrom.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
 
         }
 

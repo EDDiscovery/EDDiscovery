@@ -58,7 +58,7 @@ namespace EDDiscovery.Forms
             this._linkSystem = vsc.curSystem;
 
             this.tbLogSystemName.Text = vsc.Name;
-            this.tbDateVisited.Text = vsc.Time.ToString();
+            this.tbVisitedDate.Text = vsc.Time.ToString();
             this.tbLogCoordX.Text = vsc.HasTravelCoordinates ? vsc.X.ToString("0.000") : "?";
             this.tbLogCoordY.Text = vsc.HasTravelCoordinates ? vsc.Y.ToString("0.000") : "?";
             this.tbLogCoordZ.Text = vsc.HasTravelCoordinates ? vsc.Z.ToString("0.000") : "?";
@@ -69,9 +69,8 @@ namespace EDDiscovery.Forms
             UpdateLinkedSystemList(vsc.curSystem);
             tbManualSystemName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             tbManualSystemName.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            AutoCompleteStringCollection autocomplete = new AutoCompleteStringCollection();
-            SystemClass.GetSystemNames(ref autocomplete);
-            tbManualSystemName.AutoCompleteCustomSource = autocomplete;
+
+            tbManualSystemName.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
         }
 
         protected void UpdateLinkedSystemList(ISystem focus = null, List<ISystem> othersystems = null)
