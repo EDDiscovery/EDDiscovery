@@ -34,6 +34,8 @@ namespace EDDiscovery2
 
             ResetThemeList();
             SetEntryThemeComboBox();
+
+            textBoxHomeSystem.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
         }
 
         void SetEntryThemeComboBox()
@@ -187,7 +189,7 @@ namespace EDDiscovery2
         {
             EDCommander cmdr = EDDiscoveryForm.EDDConfig.GetNewCommander();
             //dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
-            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;   // can't solve it, TBD
+            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;   
             dataGridViewCommanders.Update();
             _discoveryForm.TravelControl.LoadCommandersListBox();
         }
@@ -333,7 +335,7 @@ namespace EDDiscovery2
                 {
                     EDDConfig.Instance.DeleteCommander(row);
                     //dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
-                    dataGridViewCommanders.DataSource = EDDConfig.Instance.listCommanders;   // can't solve it, TBD
+                    dataGridViewCommanders.DataSource = EDDConfig.Instance.listCommanders;
                     dataGridViewCommanders.Update();
                     _discoveryForm.TravelControl.LoadCommandersListBox();
 

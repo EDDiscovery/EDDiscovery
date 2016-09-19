@@ -17,6 +17,8 @@ namespace ExtendedControls
 
         public event EventHandler DropDown;
         public event EventHandler SelectedIndexChanged;
+        public event KeyPressEventHandler KeyPressed;
+        public event KeyEventHandler OtherKeyPressed;
 
         public Color MouseOverBackgroundColor { get { return _listcontrol.MouseOverBackgroundColor; } set { _listcontrol.MouseOverBackgroundColor = value; } }
         public int SelectedIndex { get { return _listcontrol.SelectedIndex; } set { _listcontrol.SelectedIndex = value; } }
@@ -30,16 +32,18 @@ namespace ExtendedControls
 
         public int ItemHeight { get { return _listcontrol.ItemHeight; } set { _listcontrol.ItemHeight = value; } }
 
-
-        public ComboBoxCustomDropdown()
+        public ComboBoxCustomDropdown(string name = "")
         {
             this.FormBorderStyle = FormBorderStyle.None;
             this.ShowInTaskbar = false;
             this._listcontrol = new ListControlCustom();
+            this.Name = this._listcontrol.Name = name;
             this._listcontrol.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this._listcontrol.Dock = DockStyle.Fill;
             this._listcontrol.Visible = true;
             this._listcontrol.SelectedIndexChanged += _listcontrol_SelectedIndexChanged;
+            this._listcontrol.KeyPressed += _listcontrol_KeyPressed;
+            this._listcontrol.OtherKeyPressed += _listcontrol_OtherKeyPressed;
             this._listcontrol.Margin = new Padding(0);
             this.Padding = new Padding(0);
             this.Controls.Add(this._listcontrol);
@@ -53,8 +57,21 @@ namespace ExtendedControls
 
         private void _listcontrol_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SelectedIndexChanged(this, e);
+            if ( SelectedIndexChanged!=null)
+                SelectedIndexChanged(this, e);
             this.Close();
+        }
+
+        private void _listcontrol_KeyPressed(object sender, KeyPressEventArgs e)
+        {
+            if ( KeyPressed != null )
+                KeyPressed(this, e);
+        }
+
+        private void _listcontrol_OtherKeyPressed(object sender, KeyEventArgs e)
+        {
+            if (OtherKeyPressed != null)
+                OtherKeyPressed(this, e);
         }
 
         protected override void OnDeactivate(EventArgs e)
@@ -253,28 +270,9 @@ namespace ExtendedControls
             this._cbsystem = new ComboBox();
             this._cbsystem.Dock = DockStyle.Fill;
             this._cbsystem.SelectedIndexChanged += _cbsystem_SelectedIndexChanged;
+            this._cbsystem.DropDownStyle = ComboBoxStyle.DropDownList;
             this._items = new ObjectCollection(this._cbsystem);
             this.Controls.Add(this._cbsystem);
-        }
-
-        private void _cbdropdown_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int selectedindex = _cbdropdown.SelectedIndex;
-            _cbdropdown.Close();
-            isActivated = false;
-            this.Invalidate(true);
-            _cbsystem.SelectedIndex = selectedindex;
-        }
-
-        private void _cbsystem_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.Text = _cbsystem.Text;
-            this.Invalidate(true);
-
-            if (this.Enabled && SelectedIndexChanged != null)
-            {
-                SelectedIndexChanged(this, e);
-            }
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -409,11 +407,52 @@ namespace ExtendedControls
                 Invalidate();
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            //Console.WriteLine("Key press " + e.KeyCode + " Focus " + Focused );
+
+            if (this.FlatStyle != FlatStyle.System)
+            {
+                if (SelectedIndex < 0)
+                    SelectedIndex = 0;
+
+                if (e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down))
+                    Activate();
+                else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
+                {
+                    if ( SelectedIndex>0)
+                    {
+                        _cbsystem.SelectedIndex = SelectedIndex-1;            // triggers _cbsystem_SelectedIndexChanged
+                    }
+                }
+                else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Right)
+                {
+                    if ( SelectedIndex<this.Items.Count-1)
+                    {
+                        _cbsystem.SelectedIndex = SelectedIndex+1;            // triggers _cbsystem_SelectedIndexChanged
+                    }
+                }
+            }
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            if (this.FlatStyle != FlatStyle.System && (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Left || keyData == Keys.Right))        // grab these nav keys
+                return true;
+            else
+                return base.IsInputKey(keyData);
+        }
+
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
+            Activate();
+        }
 
-            _cbdropdown = new ComboBoxCustomDropdown();
+        private void Activate()
+        { 
+            _cbdropdown = new ComboBoxCustomDropdown(this.Name);
 
             int fittableitems = this.DropDownHeight / this.ItemHeight;
 
@@ -442,6 +481,7 @@ namespace ExtendedControls
 
             _cbdropdown.DropDown += _cbdropdown_DropDown;
             _cbdropdown.SelectedIndexChanged += _cbdropdown_SelectedIndexChanged;
+            _cbdropdown.OtherKeyPressed += _cbdropdown_OtherKeyPressed;
             _cbdropdown.Deactivate += _cbdropdown_Deactivate;
 
             Control parent = this.Parent;
@@ -467,6 +507,36 @@ namespace ExtendedControls
             this.Invalidate(true);
         }
 
+        private void _cbdropdown_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int selectedindex = _cbdropdown.SelectedIndex;
+            _cbdropdown.Close();
+            isActivated = false;
+            this.Invalidate(true);
+            _cbsystem.SelectedIndex = selectedindex;            // triggers _cbsystem_SelectedIndexChanged
+            Focus();
+        }
+
+        private void _cbdropdown_OtherKeyPressed(object sender, KeyEventArgs e)
+        {
+            if ( e.KeyCode == Keys.Escape )
+            {
+                _cbdropdown.Close();
+                isActivated = false;
+                this.Invalidate(true);
+            }
+        }
+
+        private void _cbsystem_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.Text = _cbsystem.Text;
+            this.Invalidate(true);
+
+            if (this.Enabled && SelectedIndexChanged != null)
+            {
+                SelectedIndexChanged(this, e);
+            }
+        }
         private byte limit(float a) { if (a > 255F) return 255; else return (byte)a; }
         public Color Multiply(Color from, float m) { return Color.FromArgb(from.A, limit((float)from.R * m), limit((float)from.G * m), limit((float)from.B * m)); }
     }

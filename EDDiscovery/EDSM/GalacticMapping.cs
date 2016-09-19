@@ -126,15 +126,19 @@ namespace EDDiscovery.EDSM
             return null;
         }
 
-        public void GetSystemNames(ref System.Windows.Forms.AutoCompleteStringCollection asc)
+        public List<string> GetGMONames()
         {
+            List<string> ret = new List<string>();
+
             if (galacticMapObjects != null)
             {
                 foreach (GalacticMapObject gmo in galacticMapObjects)
                 {
-                    asc.Add(gmo.name);
+                    ret.Add(gmo.name);
                 }
             }
+
+            return ret;
         }
             
     }

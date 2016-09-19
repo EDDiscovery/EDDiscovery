@@ -71,7 +71,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxTargetDist = new ExtendedControls.TextBoxBorder();
-            this.textBoxTarget = new ExtendedControls.TextBoxBorder();
+            this.textBoxTarget = new ExtendedControls.AutoCompleteTextBox();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.labelCMDR = new System.Windows.Forms.Label();
             this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
@@ -1195,7 +1195,7 @@
         private ExtendedControls.DrawnPanel buttonEDSM;
         private System.Windows.Forms.Label label3;
         private ExtendedControls.TextBoxBorder textBoxTargetDist;
-        public ExtendedControls.TextBoxBorder textBoxTarget;
+        private ExtendedControls.AutoCompleteTextBox textBoxTarget;
         private ExtendedControls.ButtonExt buttonExtSummaryPopOut;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;

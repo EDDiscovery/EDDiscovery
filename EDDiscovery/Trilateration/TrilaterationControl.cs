@@ -98,9 +98,7 @@ namespace EDDiscovery
                     return;
                 }
 
-                textbox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                textbox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                textbox.AutoCompleteCustomSource = _discoveryForm.SystemNames;  // had to simplify this..  previously had it making it up dynamically from global system data.
+                // TBD Used to be an autocomplete..
             }
             catch (Exception ex)
             {
@@ -613,17 +611,7 @@ namespace EDDiscovery
         
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            if (_discoveryForm.SystemNames.Count == 0)
-            {
-                MessageBox.Show("Systems have not been loaded yet, please wait", "No Systems Available", MessageBoxButtons.OK);
-                return;
-            }
-
             Set(CurrentSystem);
-
-            //for (int i = 0; i < 100; i++)     // use this to test the docking is right
-              //  LogText("Hello " + i.ToString() + Environment.NewLine);
-
         }
 
         private void toolStripButtonMap_Click(object sender, EventArgs e)
@@ -633,7 +621,7 @@ namespace EDDiscovery
             var map = _discoveryForm.Map;
 
             map.Prepare(centerSystem, _discoveryForm.settings.MapHomeSystem, centerSystem,
-                        _discoveryForm.settings.MapZoom, _discoveryForm.SystemNames,_discoveryForm.VisitedSystems);
+                        _discoveryForm.settings.MapZoom,_discoveryForm.VisitedSystems);
 
             map.Show();
         }

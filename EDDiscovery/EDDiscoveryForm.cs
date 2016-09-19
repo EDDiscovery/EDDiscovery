@@ -62,8 +62,6 @@ namespace EDDiscovery
         private Point _window_dragWindowPos = Point.Empty;
         public EDDTheme theme;
 
-        public AutoCompleteStringCollection SystemNames;       
-
         public string CommanderName { get; private set; }
         static public EDDConfig EDDConfig { get; private set; }
 
@@ -164,7 +162,6 @@ namespace EDDiscovery
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
 
-            SystemNames = new AutoCompleteStringCollection();
             Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition,travelHistoryControl1);
 
             this.TopMost = EDDConfig.KeepOnTop;
@@ -582,6 +579,7 @@ namespace EDDiscovery
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
+                SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
 
                 LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
@@ -596,9 +594,6 @@ namespace EDDiscovery
                     performedsmdistsync = true;
 
                 reportProgress(-1, "Creating name list of systems");
-                SystemClass.GetSystemNames(ref SystemNames);            // fill this up, used to speed up if system is present..
-                SystemClass.CacheSystemNames();
-                galacticMapping.GetSystemNames(ref SystemNames);      // add on GMO names..
             }
         }
 
@@ -613,12 +608,6 @@ namespace EDDiscovery
             else if (!e.Cancelled && !PendingClose)
             {
                 Console.WriteLine("Systems Loaded");                    // in the worker thread they were, now in UI
-
-
-                routeControl1.textBox_From.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
-
-                travelHistoryControl1.textBoxTarget.AutoCompleteCustomSource = SystemNames;
-                settings.textBoxHomeSystem.AutoCompleteCustomSource = SystemNames;
 
                 imageHandler1.StartWatcher();
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
@@ -759,7 +748,6 @@ namespace EDDiscovery
                         LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
                         reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
                         SQLiteDBClass.ReplaceSystemsTable();
-                        SystemClass.CacheSystemNames();
                         reportProgress(-1, "");
                     }
                     else
@@ -1218,6 +1206,7 @@ namespace EDDiscovery
                 closeTimer.Start();
             else
             {
+                closeTimer.Stop();      // stop timer now. So it won't try to save it multiple times during close down if it takes a while - this caused a bug in saving some settings
                 SaveSettings();         // do close now
                 Close();
                 Application.Exit();

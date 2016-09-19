@@ -31,6 +31,12 @@ namespace ExtendedControls
         public delegate void OnSelectedIndexChanged(object sender, EventArgs e);
         public event OnSelectedIndexChanged SelectedIndexChanged;
 
+        public delegate void OnKeyPressed(object sender, KeyPressEventArgs e);
+        public event OnKeyPressed KeyPressed;
+
+        public delegate void OnAnyOtherKeyPressed(object sender, KeyEventArgs e);
+        public event OnAnyOtherKeyPressed OtherKeyPressed;
+
         #region Implementation
 
         public ListControlCustom() : base()
@@ -51,7 +57,7 @@ namespace ExtendedControls
         }
 
         private void CalculateLayout()
-        { 
+        {
             bordersize = 0;
 
             if (FlatStyle != FlatStyle.System && BorderColor != Color.Transparent)
@@ -115,6 +121,7 @@ namespace ExtendedControls
                 vScrollBar.Value = firstindex;
             }
 
+            focusindex = (focusindex >= 0) ? focusindex : ((SelectedIndex > 0) ? SelectedIndex : 0);
 
             if (FlatStyle != FlatStyle.System || !ComboBoxRenderer.IsSupported)
             {
@@ -150,17 +157,20 @@ namespace ExtendedControls
                 Brush textb = new SolidBrush(this.ForeColor);
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
+               // Console.WriteLine("Paint {0} {1}", focusindex, firstindex);
                 foreach (string s in Items)
                 {   // if not fitting to items height, 
                     if (offset >= firstindex && offset < firstindex + displayableitems + (FitToItemsHeight ? 0:1))
                     {
                         if (FlatStyle == FlatStyle.System && ComboBoxRenderer.IsSupported)
                         {
-                            ComboBoxRenderer.DrawTextBox(e.Graphics, pos, s, this.Font, ComboBoxState.Pressed);
+                            ComboBoxState cs = (focusindex == offset) ? ComboBoxState.Hot : ComboBoxState.Normal;       // No effect I can see.
+                            TextFormatFlags tf = (focusindex == offset) ? TextFormatFlags.Left: TextFormatFlags.Right;
+                            ComboBoxRenderer.DrawTextBox(e.Graphics, pos, s, this.Font, tf, cs);
                         }
                         else
                         {
-                            if (offset == mouseoverindex)
+                            if (offset == focusindex)
                             {
                                 using (Brush highlight = new SolidBrush(MouseOverBackgroundColor))
                                 {
@@ -211,7 +221,7 @@ namespace ExtendedControls
             }
         }
 
-        protected void GoUpOne()
+        protected void ScrollUpOne()
         {
             if (firstindex > 0)
             {
@@ -220,7 +230,7 @@ namespace ExtendedControls
                 Invalidate();
             }
         }
-        protected void GoDownOne()
+        protected void ScrollDownOne()
         {
             if (Items != null && firstindex < Items.Count() - displayableitems)
             {
@@ -230,14 +240,36 @@ namespace ExtendedControls
             }
         }
 
+        protected void FocusUpOne()
+        {
+            if (focusindex > 0)
+            {
+                focusindex--;
+                Invalidate();
+                if (focusindex < firstindex)
+                    ScrollUpOne();
+            }
+        }
+
+        protected void FocusDownOne()
+        {
+            if (Items != null && focusindex < Items.Count()-1)
+            {
+                focusindex++;
+                Invalidate();
+                if (focusindex >= firstindex + displayableitems)
+                    ScrollDownOne();
+            }
+        }
+
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
 
             if (e.Delta > 0)
-                GoUpOne();
+                ScrollUpOne();
             else
-                GoDownOne();
+                ScrollDownOne();
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -246,16 +278,22 @@ namespace ExtendedControls
 
             int y = e.Location.Y;
             int index = (y / ItemHeight) + firstindex;
-            mouseoverindex = index;
+            focusindex = index;
             Invalidate();
         }
 
         protected override bool IsInputKey(Keys keyData)
         {
-            if (keyData == Keys.Up || keyData == Keys.Down)        // grab these nav keys
+            if (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Left || keyData == Keys.Right)        // grab these nav keys
                 return true;
             else
                 return base.IsInputKey(keyData);
+        }
+
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            if (KeyPressed != null)
+               KeyPressed(this, e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -263,10 +301,22 @@ namespace ExtendedControls
             base.OnKeyDown(e);
             //Console.WriteLine("Key press " + e.KeyCode + " Focus " + Focused );
 
-            if (e.KeyCode == Keys.Down)
-                GoDownOne();
-            else if (e.KeyCode == Keys.Up)
-                GoUpOne();
+            if (e.KeyCode == Keys.Enter || ( e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down) ) )
+            {
+                SelectedIndex = focusindex;
+                if (SelectedIndexChanged != null)
+                    SelectedIndexChanged(this, new EventArgs());
+            }
+            else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Right)
+                FocusDownOne();
+            else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
+                FocusUpOne();
+
+            if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+            {
+                if (OtherKeyPressed != null)
+                    OtherKeyPressed(this, e);
+            }
         }
 
         public void Repaint()
@@ -285,7 +335,7 @@ namespace ExtendedControls
         private int itemslayoutestimatedon = -1;
         private int displayableitems = -1;
         private int firstindex = -1;
-        private int mouseoverindex = -1;
+        private int focusindex = -1;
     }
 }
 
