@@ -30,18 +30,19 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
-            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openEliteDangerousDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.prospectingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.show3DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.prospectingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +60,6 @@
             this.labelPanelText = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this.show3DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.travelHistoryControl1 = new EDDiscovery.TravelHistoryControl();
@@ -73,6 +73,8 @@
             this.savedRouteExpeditionControl1 = new EDDiscovery.SavedRouteExpeditionControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery2.Settings();
+            this.tabPageJournal = new System.Windows.Forms.TabPage();
+            this.journalViewControl1 = new EDDiscovery.JournalViewControl();
             this.button_test = new ExtendedControls.ButtonExt();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
@@ -92,6 +94,7 @@
             this.tabPageRoute.SuspendLayout();
             this.tabPageRoutesExpeditions.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
+            this.tabPageJournal.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,7 +107,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(247, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(154, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseDown);
@@ -122,7 +125,7 @@
             this.exitToolStripMenuItem,
             this.prospectingToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // openEliteDangerousDirectoryToolStripMenuItem
@@ -146,13 +149,12 @@
             this.show2DMapsToolStripMenuItem.Text = "Show 2D maps";
             this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
             // 
-            // prospectingToolStripMenuItem
+            // show3DMapsToolStripMenuItem
             // 
-            this.prospectingToolStripMenuItem.Name = "prospectingToolStripMenuItem";
-            this.prospectingToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.prospectingToolStripMenuItem.Text = "(DEBUG) Prospecting";
-            this.prospectingToolStripMenuItem.Visible = false;
-            this.prospectingToolStripMenuItem.Click += new System.EventHandler(this.prospectingToolStripMenuItem_Click);
+            this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
+            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.show3DMapsToolStripMenuItem.Text = "Show 3D maps";
+            this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
             // 
             // statisticsToolStripMenuItem
             // 
@@ -182,6 +184,14 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // prospectingToolStripMenuItem
+            // 
+            this.prospectingToolStripMenuItem.Name = "prospectingToolStripMenuItem";
+            this.prospectingToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.prospectingToolStripMenuItem.Text = "(DEBUG) Prospecting";
+            this.prospectingToolStripMenuItem.Visible = false;
+            this.prospectingToolStripMenuItem.Click += new System.EventHandler(this.prospectingToolStripMenuItem_Click);
+            // 
             // adminToolStripMenuItem
             // 
             this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -197,35 +207,35 @@
             // forceEDDBUpdateToolStripMenuItem
             // 
             this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
-            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.forceEDDBUpdateToolStripMenuItem.Text = "Synchronise with EDDB";
             this.forceEDDBUpdateToolStripMenuItem.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
             // 
             // syncEDSMSystemsToolStripMenuItem
             // 
             this.syncEDSMSystemsToolStripMenuItem.Name = "syncEDSMSystemsToolStripMenuItem";
-            this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.syncEDSMSystemsToolStripMenuItem.Text = "Synchronise with EDSM Stars";
             this.syncEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
             // synchroniseWithEDSMDistancesToolStripMenuItem
             // 
             this.synchroniseWithEDSMDistancesToolStripMenuItem.Name = "synchroniseWithEDSMDistancesToolStripMenuItem";
-            this.synchroniseWithEDSMDistancesToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.synchroniseWithEDSMDistancesToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.synchroniseWithEDSMDistancesToolStripMenuItem.Text = "Synchronise with EDSM Distances";
             this.synchroniseWithEDSMDistancesToolStripMenuItem.Click += new System.EventHandler(this.synchroniseWithEDSMDistancesToolStripMenuItem_Click);
             // 
             // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
             // 
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to current commander";
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click);
             // 
             // debugBetaFixHiddenLogToolStripMenuItem
             // 
             this.debugBetaFixHiddenLogToolStripMenuItem.Name = "debugBetaFixHiddenLogToolStripMenuItem";
-            this.debugBetaFixHiddenLogToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.debugBetaFixHiddenLogToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.debugBetaFixHiddenLogToolStripMenuItem.Text = "Fix hidden log entries for BETA";
             this.debugBetaFixHiddenLogToolStripMenuItem.Click += new System.EventHandler(this.debugBetaFixHiddenLogToolStripMenuItem_Click);
             // 
@@ -325,23 +335,17 @@
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
             // 
-            // show3DMapsToolStripMenuItem
-            // 
-            this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
-            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.show3DMapsToolStripMenuItem.Text = "Show 3D maps";
-            this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
-            // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageTravelHistory);
             this.tabControl1.Controls.Add(this.tabPageTriletaration);
             this.tabControl1.Controls.Add(this.tabPageScreenshots);
             this.tabControl1.Controls.Add(this.tabPageRoute);
             this.tabControl1.Controls.Add(this.tabPageRoutesExpeditions);
+            this.tabControl1.Controls.Add(this.tabPageJournal);
             this.tabControl1.Controls.Add(this.tabPageSettings);
             this.tabControl1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControl1.Location = new System.Drawing.Point(0, 28);
@@ -358,7 +362,7 @@
             this.tabControl1.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControl1.TabOpaque = 100F;
             this.tabControl1.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControl1.TabStyle = tabStyleSquare2;
+            this.tabControl1.TabStyle = tabStyleSquare1;
             this.tabControl1.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControl1.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             // 
@@ -397,7 +401,7 @@
             this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
             this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(186, 68);
+            this.trilaterationControl.Size = new System.Drawing.Size(979, 665);
             this.trilaterationControl.TabIndex = 21;
             // 
             // tabPageScreenshots
@@ -416,7 +420,7 @@
             this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageHandler1.Location = new System.Drawing.Point(0, 0);
             this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(192, 74);
+            this.imageHandler1.Size = new System.Drawing.Size(985, 671);
             this.imageHandler1.TabIndex = 0;
             // 
             // tabPageRoute
@@ -435,7 +439,7 @@
             this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.routeControl1.Location = new System.Drawing.Point(3, 3);
             this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(186, 68);
+            this.routeControl1.Size = new System.Drawing.Size(979, 665);
             this.routeControl1.TabIndex = 0;
             // 
             // tabPageRoutesExpeditions
@@ -454,7 +458,7 @@
             this.savedRouteExpeditionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.savedRouteExpeditionControl1.Location = new System.Drawing.Point(3, 3);
             this.savedRouteExpeditionControl1.Name = "savedRouteExpeditionControl1";
-            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(186, 68);
+            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(979, 665);
             this.savedRouteExpeditionControl1.TabIndex = 0;
             // 
             // tabPageSettings
@@ -473,8 +477,28 @@
             this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.settings.Location = new System.Drawing.Point(3, 3);
             this.settings.Name = "settings";
-            this.settings.Size = new System.Drawing.Size(186, 68);
+            this.settings.Size = new System.Drawing.Size(979, 665);
             this.settings.TabIndex = 0;
+            // 
+            // tabPageJournal
+            // 
+            this.tabPageJournal.Controls.Add(this.journalViewControl1);
+            this.tabPageJournal.Location = new System.Drawing.Point(4, 22);
+            this.tabPageJournal.Name = "tabPageJournal";
+            this.tabPageJournal.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageJournal.Size = new System.Drawing.Size(985, 671);
+            this.tabPageJournal.TabIndex = 7;
+            this.tabPageJournal.Text = "Journal";
+            this.tabPageJournal.UseVisualStyleBackColor = true;
+            // 
+            // journalViewControl1
+            // 
+            this.journalViewControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.journalViewControl1.Location = new System.Drawing.Point(3, 3);
+            this.journalViewControl1.Name = "journalViewControl1";
+            this.journalViewControl1.Size = new System.Drawing.Size(979, 665);
+            this.journalViewControl1.TabIndex = 0;
+            this.journalViewControl1.Load += new System.EventHandler(this.journalViewControl1_Load);
             // 
             // button_test
             // 
@@ -496,6 +520,7 @@
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.Image = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageText = null;
             this.panel_minimize.Location = new System.Drawing.Point(941, 1);
             this.panel_minimize.MarginSize = 6;
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
@@ -511,6 +536,7 @@
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = ExtendedControls.DrawnPanel.ImageType.Close;
+            this.panel_close.ImageText = null;
             this.panel_close.Location = new System.Drawing.Point(966, 1);
             this.panel_close.MarginSize = 6;
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
@@ -521,18 +547,17 @@
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // statusStrip1
-            //
+            // 
+            this.statusStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.toolStripStatusLabel1});
+            this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.statusStrip1.Location = new System.Drawing.Point(0, 722);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(993, 22);
             this.statusStrip1.TabIndex = 22;
             this.statusStrip1.Text = "statusStrip1";
-            this.statusStrip1.SizingGrip = true;
-            this.statusStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
-            this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             // 
             // toolStripProgressBar1
             // 
@@ -609,6 +634,7 @@
             this.tabPageRoute.ResumeLayout(false);
             this.tabPageRoutesExpeditions.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
+            this.tabPageJournal.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -670,6 +696,8 @@
         private System.ComponentModel.BackgroundWorker _checkSystemsWorker;
         private System.Windows.Forms.Timer edsmRefreshTimer;
         private System.Windows.Forms.ToolStripMenuItem reloadAllLogsForCurrentCommanderToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPageJournal;
+        private JournalViewControl journalViewControl1;
     }
 }
 

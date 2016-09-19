@@ -14,6 +14,7 @@ using EDDiscovery.Controls;
 using System.Threading;
 using System.Collections.Concurrent;
 using EDDiscovery.EDSM;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery
 {
@@ -183,6 +184,8 @@ namespace EDDiscovery
             netlog.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
 
             var vsclist = netlog.ParseFiles(out errmsg, defaultMapColour, () => worker.CancellationPending, (p,s) => worker.ReportProgress(p,s), forceReload);   // Parse files stop monitor..
+
+
 
             if (worker.CancellationPending)
             {

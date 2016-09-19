@@ -214,8 +214,12 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseExit.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUndocked.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnhandled.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnknown.cs" />
@@ -476,6 +480,12 @@
     <Compile Include="Trilateration\TrilaterationControl.Designer.cs">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="JournalViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="JournalViewControl.Designer.cs">
+      <DependentUpon>JournalViewControl.cs</DependentUpon>
+    </Compile>
     <Content Include="AppConfigLocal.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -580,6 +590,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MoveToCommander.resx">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JournalViewControl.resx">
+      <DependentUpon>JournalViewControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PlanetSystems\PlanetsForm.resx">
       <DependentUpon>PlanetsForm.cs</DependentUpon>

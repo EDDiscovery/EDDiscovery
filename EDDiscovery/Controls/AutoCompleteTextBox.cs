@@ -56,14 +56,14 @@ namespace ExtendedControls
             {
                 if (!inautocomplete)
                 {
-                    Console.WriteLine("{0} Start timer", Environment.TickCount % 10000);
+                    //Console.WriteLine("{0} Start timer", Environment.TickCount % 10000);
                     waitforautotimer.Stop();
                     waitforautotimer.Start();
                     autocompletestring = String.Copy(this.Text);    // a copy in case the text box changes it after complete starts
                 }
                 else
                 {
-                    Console.WriteLine("{0} in ac, go again", Environment.TickCount % 10000);
+                    //Console.WriteLine("{0} in ac, go again", Environment.TickCount % 10000);
                     autocompletestring = String.Copy(this.Text);
                     restartautocomplete = true;
                 }
@@ -84,20 +84,20 @@ namespace ExtendedControls
         {
             do
             {
-                Console.WriteLine("{0} Begin AC", Environment.TickCount % 10000);
+                //Console.WriteLine("{0} Begin AC", Environment.TickCount % 10000);
                 restartautocomplete = false;
                 autocompletestrings = func(string.Copy(autocompletestring));    // pass a copy, in case we change it out from under it
-                Console.WriteLine("{0} finish func ret {1} restart {2}", Environment.TickCount % 10000, autocompletestrings.Count, restartautocomplete);
+                //Console.WriteLine("{0} finish func ret {1} restart {2}", Environment.TickCount % 10000, autocompletestrings.Count, restartautocomplete);
             } while (restartautocomplete == true);
 
-            Console.WriteLine("{0} Finish AC", Environment.TickCount % 10000);
+            //Console.WriteLine("{0} Finish AC", Environment.TickCount % 10000);
             Invoke((MethodInvoker)delegate { AutoCompleteFinished(); });
         }
 
 
         private void AutoCompleteFinished()
         {
-            Console.WriteLine("{0} Show results {1}", Environment.TickCount % 10000, autocompletestrings.Count);
+            //Console.WriteLine("{0} Show results {1}", Environment.TickCount % 10000, autocompletestrings.Count);
             inautocomplete = false;
 
             if (autocompletestrings.Count > 0)

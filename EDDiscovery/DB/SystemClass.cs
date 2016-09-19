@@ -31,7 +31,7 @@ namespace EDDiscovery.DB
     [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
     public class SystemClass : EDDiscovery2.DB.InMemory.SystemClass
     {
-        const float XYZScalar = 128.0F;
+        const float XYZScalar = 128.0F;     // scaling between DB stored values and floats
 
         public SystemClass()
         {
@@ -508,6 +508,36 @@ namespace EDDiscovery.DB
             return sys;
         }
 
+        // Only hidden systems are deleted, and the table is re-synced every
+        // 14 days, so the maximum Id should be very close to the total
+        // system count.
+        public static long GetTotalSystemsFast()
+        {
+            long value = 0;
+
+            try
+            {
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("select MAX(Id) from EdsmSystems"))
+                    {
+                        using (DbDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                value = (long)reader["MAX(Id)"];
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+
+            return value;
+        }
+
         public static long GetTotalSystems()
         {
             long value = 0;
@@ -533,6 +563,33 @@ namespace EDDiscovery.DB
             }
 
             return value;
+        }
+
+        public static bool IsSystemsTableEmpty()
+        {
+            bool isempty = true;
+
+            try
+            {
+                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+                {
+                    using (DbCommand cmd = cn.CreateCommand("select Id from EdsmSystems LIMIT 1"))
+                    {
+                        using (DbDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                isempty = false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
+                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+            }
+
+            return isempty;
         }
 
         public static DateTime GetLastSystemEntryTime()
@@ -562,7 +619,9 @@ namespace EDDiscovery.DB
             return lasttime;
         }
 
-        public static DateTime GetLastSystemModifiedTime()
+        // Systems in data dumps are now sorted by modify time ascending, so
+        // the last inserted system should be the most recently modified system.
+        public static DateTime GetLastSystemModifiedTimeFast()
         {
             DateTime lasttime = new DateTime(2010, 1, 1, 0, 0, 0);
 
@@ -570,7 +629,7 @@ namespace EDDiscovery.DB
             {
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateTimestamp FROM EdsmSystems ORDER BY UpdateTimestamp DESC LIMIT 1"))
+                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateTimestamp FROM EdsmSystems ORDER BY Id DESC LIMIT 1"))
                     {
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {

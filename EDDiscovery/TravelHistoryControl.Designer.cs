@@ -807,6 +807,162 @@
             this.panel_bottomright.TabIndex = 25;
             // 
             // dataViewScrollerPanel2
+            this.button_RefreshHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_RefreshHistory.BorderColorScaling = 1.25F;
+            this.button_RefreshHistory.ButtonColorScaling = 0.5F;
+            this.button_RefreshHistory.ButtonDisabledScaling = 0.5F;
+            this.button_RefreshHistory.Location = new System.Drawing.Point(6, 6);
+            this.button_RefreshHistory.Name = "button_RefreshHistory";
+            this.button_RefreshHistory.Size = new System.Drawing.Size(65, 23);
+            this.button_RefreshHistory.TabIndex = 2;
+            this.button_RefreshHistory.Text = "Refresh";
+            this.toolTipEddb.SetToolTip(this.button_RefreshHistory, "Perform an EDSM synchronisation then refresh the list");
+            this.button_RefreshHistory.UseVisualStyleBackColor = true;
+            this.button_RefreshHistory.Click += new System.EventHandler(this.button_RefreshHistory_Click);
+            // 
+            // checkBoxEDSMSyncFrom
+            // 
+            this.checkBoxEDSMSyncFrom.AutoSize = true;
+            this.checkBoxEDSMSyncFrom.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEDSMSyncFrom.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSMSyncFrom.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSMSyncFrom.FontNerfReduction = 0.5F;
+            this.checkBoxEDSMSyncFrom.Location = new System.Drawing.Point(214, 51);
+            this.checkBoxEDSMSyncFrom.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSMSyncFrom.Name = "checkBoxEDSMSyncFrom";
+            this.checkBoxEDSMSyncFrom.Size = new System.Drawing.Size(83, 17);
+            this.checkBoxEDSMSyncFrom.TabIndex = 22;
+            this.checkBoxEDSMSyncFrom.Text = "From EDSM";
+            this.checkBoxEDSMSyncFrom.TickBoxReductionSize = 10;
+            this.toolTipEddb.SetToolTip(this.checkBoxEDSMSyncFrom, "Receive data from EDSM");
+            this.checkBoxEDSMSyncFrom.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMSyncFrom.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncFrom_CheckedChanged);
+            // 
+            // buttonMap2D
+            // 
+            this.buttonMap2D.BorderColorScaling = 1.25F;
+            this.buttonMap2D.ButtonColorScaling = 0.5F;
+            this.buttonMap2D.ButtonDisabledScaling = 0.5F;
+            this.buttonMap2D.Location = new System.Drawing.Point(6, 37);
+            this.buttonMap2D.Name = "buttonMap2D";
+            this.buttonMap2D.Size = new System.Drawing.Size(65, 23);
+            this.buttonMap2D.TabIndex = 3;
+            this.buttonMap2D.Text = "2D map";
+            this.toolTipEddb.SetToolTip(this.buttonMap2D, "Open the 2D Map");
+            this.buttonMap2D.UseVisualStyleBackColor = true;
+            this.buttonMap2D.Click += new System.EventHandler(this.button2DMap_Click);
+            // 
+            // checkBoxEDSMSyncTo
+            // 
+            this.checkBoxEDSMSyncTo.AutoSize = true;
+            this.checkBoxEDSMSyncTo.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEDSMSyncTo.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSMSyncTo.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSMSyncTo.FontNerfReduction = 0.5F;
+            this.checkBoxEDSMSyncTo.Location = new System.Drawing.Point(214, 32);
+            this.checkBoxEDSMSyncTo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSMSyncTo.Name = "checkBoxEDSMSyncTo";
+            this.checkBoxEDSMSyncTo.Size = new System.Drawing.Size(73, 17);
+            this.checkBoxEDSMSyncTo.TabIndex = 21;
+            this.checkBoxEDSMSyncTo.Text = "To EDSM";
+            this.checkBoxEDSMSyncTo.TickBoxReductionSize = 10;
+            this.toolTipEddb.SetToolTip(this.checkBoxEDSMSyncTo, "Send data to EDSM");
+            this.checkBoxEDSMSyncTo.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMSyncTo.CheckedChanged += new System.EventHandler(this.checkBoxEDSMSyncTo_CheckedChanged);
+            // 
+            // comboBoxCommander
+            // 
+            this.comboBoxCommander.ArrowWidth = 1;
+            this.comboBoxCommander.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxCommander.ButtonColorScaling = 0.5F;
+            this.comboBoxCommander.DataSource = null;
+            this.comboBoxCommander.DisplayMember = "";
+            this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCommander.DropDownHeight = 200;
+            this.comboBoxCommander.DropDownWidth = 173;
+            this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCommander.ItemHeight = 13;
+            this.comboBoxCommander.Location = new System.Drawing.Point(114, 6);
+            this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCommander.Name = "comboBoxCommander";
+            this.comboBoxCommander.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCommander.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCommander.ScrollBarWidth = 16;
+            this.comboBoxCommander.SelectedIndex = -1;
+            this.comboBoxCommander.SelectedItem = null;
+            this.comboBoxCommander.SelectedValue = null;
+            this.comboBoxCommander.Size = new System.Drawing.Size(173, 23);
+            this.comboBoxCommander.TabIndex = 0;
+            this.toolTipEddb.SetToolTip(this.comboBoxCommander, "Select your commander. Use Settings page to configure and add additional commande" +
+        "rs");
+            this.comboBoxCommander.ValueMember = "";
+            this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
+            // 
+            // buttonExtSummaryPopOut
+            // 
+            this.buttonExtSummaryPopOut.BorderColorScaling = 1.25F;
+            this.buttonExtSummaryPopOut.ButtonColorScaling = 0.5F;
+            this.buttonExtSummaryPopOut.ButtonDisabledScaling = 0.5F;
+            this.buttonExtSummaryPopOut.Location = new System.Drawing.Point(77, 71);
+            this.buttonExtSummaryPopOut.Name = "buttonExtSummaryPopOut";
+            this.buttonExtSummaryPopOut.Size = new System.Drawing.Size(65, 23);
+            this.buttonExtSummaryPopOut.TabIndex = 4;
+            this.buttonExtSummaryPopOut.Text = "S-Panel";
+            this.toolTipEddb.SetToolTip(this.buttonExtSummaryPopOut, "Turn on and off the Status Panel Pop Out. Right click on it to set its format. Dr" +
+        "ag this popout over your Elite Dangerous window");
+            this.buttonExtSummaryPopOut.UseVisualStyleBackColor = true;
+            this.buttonExtSummaryPopOut.Click += new System.EventHandler(this.buttonExtSummaryPopOut_Click);
+            // 
+            // buttonMap
+            // 
+            this.buttonMap.BorderColorScaling = 1.25F;
+            this.buttonMap.ButtonColorScaling = 0.5F;
+            this.buttonMap.ButtonDisabledScaling = 0.5F;
+            this.buttonMap.Location = new System.Drawing.Point(6, 71);
+            this.buttonMap.Name = "buttonMap";
+            this.buttonMap.Size = new System.Drawing.Size(65, 23);
+            this.buttonMap.TabIndex = 4;
+            this.buttonMap.Text = "3D map";
+            this.toolTipEddb.SetToolTip(this.buttonMap, "Open the 3D Map");
+            this.buttonMap.UseVisualStyleBackColor = true;
+            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
+            // 
+            // buttonSync
+            // 
+            this.buttonSync.BorderColorScaling = 1.25F;
+            this.buttonSync.ButtonColorScaling = 0.5F;
+            this.buttonSync.ButtonDisabledScaling = 0.5F;
+            this.buttonSync.Location = new System.Drawing.Point(116, 37);
+            this.buttonSync.Name = "buttonSync";
+            this.buttonSync.Size = new System.Drawing.Size(92, 23);
+            this.buttonSync.TabIndex = 4;
+            this.buttonSync.Text = "EDSM Sync";
+            this.toolTipEddb.SetToolTip(this.buttonSync, "Send history to your EDSM account (make sure the EDSM ID is set in settings)");
+            this.buttonSync.UseVisualStyleBackColor = true;
+            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
+            // 
+            // panelRight
+            // 
+            this.panelRight.Controls.Add(this.panel_bottomright);
+            this.panelRight.Controls.Add(this.panel_system);
+            this.panelRight.Controls.Add(this.panel_topright);
+            this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panelRight.Location = new System.Drawing.Point(594, 0);
+            this.panelRight.Name = "panelRight";
+            this.panelRight.Size = new System.Drawing.Size(297, 650);
+            this.panelRight.TabIndex = 1;
+            // 
+            // panel_bottomright
+            // 
+            this.panel_bottomright.Controls.Add(this.dataViewScrollerPanel2);
+            this.panel_bottomright.Controls.Add(this.labelclosests);
+            this.panel_bottomright.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_bottomright.Location = new System.Drawing.Point(0, 308);
+            this.panel_bottomright.Name = "panel_bottomright";
+            this.panel_bottomright.Size = new System.Drawing.Size(297, 342);
+            this.panel_bottomright.TabIndex = 25;
+            // 
+            // dataViewScrollerPanel2
             // 
             this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
@@ -897,6 +1053,53 @@
             // 
             this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
             this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+            this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
+            // 
+            // panel_topright
+            // 
+            this.panel_topright.Controls.Add(this.button_RefreshHistory);
+            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncFrom);
+            this.panel_topright.Controls.Add(this.buttonMap2D);
+            this.panel_topright.Controls.Add(this.checkBoxEDSMSyncTo);
+            this.panel_topright.Controls.Add(this.comboBoxCommander);
+            this.panel_topright.Controls.Add(this.labelCMDR);
+            this.panel_topright.Controls.Add(this.buttonExtSummaryPopOut);
+            this.panel_topright.Controls.Add(this.buttonMap);
+            this.panel_topright.Controls.Add(this.buttonSync);
+            this.panel_topright.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_topright.Location = new System.Drawing.Point(0, 0);
+            this.panel_topright.Name = "panel_topright";
+            this.panel_topright.Size = new System.Drawing.Size(297, 100);
+            this.panel_topright.TabIndex = 26;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(220, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 13);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "Search";
+            // 
+            // 
+            this.closestContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToTrilaterationToolStripMenuItem1,
+            this.viewOnEDSMToolStripMenuItem1});
+            this.closestContextMenu.Name = "closestContextMenu";
+            this.closestContextMenu.Size = new System.Drawing.Size(177, 48);
+            // 
+            // addToTrilaterationToolStripMenuItem1
+            // 
+            this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
+            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
+            this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
+            this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem1
+            // 
+            this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
             this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
