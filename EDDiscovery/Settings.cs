@@ -237,7 +237,7 @@ namespace EDDiscovery2
                 _discoveryForm.theme.SetCustom();                                   // go to custom theme..
 
             SetEntryThemeComboBox();
-            _discoveryForm.ApplyTheme(true);
+            _discoveryForm.ApplyTheme();
         }
 
         private void buttonSaveTheme_Click(object sender, EventArgs e)

@@ -95,17 +95,17 @@ namespace EDDiscovery2._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, float widthly, float heightly, Vector3 rotation, List<VisitedSystemsClass> VisitedSystems)
+        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, float widthly, float heightly, Vector3 rotation, List<HistoryEntry> syslists)
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
 
             long bookmarknoted = TargetClass.GetTargetNotedSystem();
 
-            if (VisitedSystems != null)
+            if (syslists != null)
             {
-                foreach (VisitedSystemsClass vs in VisitedSystems)
+                foreach (HistoryEntry vs in syslists)
                 {
-                    SystemNoteClass notecs = SystemNoteClass.GetSystemNoteClass(vs.Name);
+                    SystemNoteClass notecs = SystemNoteClass.GetSystemNoteClass(vs.System.name);
 
                     if (notecs != null)         // if we have a note..
                     {
@@ -113,7 +113,7 @@ namespace EDDiscovery2._3DMap
 
                         if (note.Length > 0)
                         {
-                            PointData pd = new PointData((vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x, (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y, (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z);
+                            PointData pd = new PointData(vs.System.x, vs.System.y, vs.System.z);
 
                             Bitmap touse = (notecs.id == bookmarknoted) ? maptarget : map;
                             TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly, 0, heightly / 2);
@@ -144,8 +144,8 @@ namespace EDDiscovery2._3DMap
                     PointData pd;
                     if ( (int)tqd.Tag2 == 1)
                     {
-                        VisitedSystemsClass vs = (VisitedSystemsClass)tqd.Tag;
-                        pd = new PointData((vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x, (vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y, (vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z);
+                        HistoryEntry vs = (HistoryEntry)tqd.Tag;
+                        pd = new PointData(vs.System.x, vs.System.y, vs.System.z);
                     }
                     else
                     {
@@ -536,28 +536,34 @@ namespace EDDiscovery2._3DMap
 
         // DotColour = transparent, use the map colour associated with each entry.  Else use this colour for all
 
-        public List<IData3DSet> BuildVisitedSystems(bool DrawLines, bool DrawDots, Color DotColour, List<VisitedSystemsClass> VisitedSystems)
+        public List<IData3DSet> BuildSystems(bool DrawLines, bool DrawDots, Color DotColour, List<HistoryEntry> syslists)
         {
             // we use the expanded capability of Line and Point to holds colours for each element instead of the previous sorting system
             // This means less submissions to GL.
 
-            if (VisitedSystems != null && VisitedSystems.Any() )
+            if (syslists.Any() )
             {
                 if (DrawLines)
                 {
                     var datasetl = Data3DSetClass<LineData>.Create("visitedstarslines", Color.Transparent, 2.0f);
-                    VisitedSystemsClass.SetLastKnownSystemPosition(VisitedSystems);
 
-                    foreach (VisitedSystemsClass sp in VisitedSystems)
+                    Vector3d? lastpos = null;
+
+                    foreach (HistoryEntry sp in syslists)
                     {
-                        if (sp.curSystem != null && sp.curSystem.HasCoordinate && sp.lastKnownSystem != null && sp.lastKnownSystem.HasCoordinate)
+                        if ( sp.System.HasCoordinate )
                         {
-                            Color c = Color.FromArgb(255, Color.FromArgb(sp.MapColour));         // convert to colour, ensure alpha is 255 (some time in the past this value could have been screwed up)
-                            if (c.GetBrightness() < 0.05)                                        // and ensure it shows
-                                c = Color.Red;
+                            if (lastpos.HasValue)
+                            {
+                                Color c = Color.FromArgb(255, Color.FromArgb(sp.MapColour));         // convert to colour, ensure alpha is 255 (some time in the past this value could have been screwed up)
+                                if (c.GetBrightness() < 0.05)                                        // and ensure it shows
+                                    c = Color.Red;
 
-                            datasetl.Add(new LineData(sp.curSystem.x, sp.curSystem.y, sp.curSystem.z,
-                                sp.lastKnownSystem.x, sp.lastKnownSystem.y, sp.lastKnownSystem.z , c));
+                                datasetl.Add(new LineData(sp.System.x, sp.System.y, sp.System.z,
+                                                    lastpos.Value.X, lastpos.Value.Y , lastpos.Value.Z, c));
+                            }
+
+                            lastpos = new Vector3d(sp.System.x, sp.System.y, sp.System.z);
                         }
                     }
 
@@ -568,15 +574,15 @@ namespace EDDiscovery2._3DMap
                 {
                     var datasetp = Data3DSetClass<PointData>.Create("visitedstarsdots", DotColour, 2.0f);
 
-                    foreach (VisitedSystemsClass vs in VisitedSystems)
+                    foreach (HistoryEntry vs in syslists)
                     {
-                        if (vs.curSystem != null && vs.curSystem.HasCoordinate)
+                        if (vs.System.HasCoordinate)
                         {
                             Color c = Color.FromArgb(255, Color.FromArgb(vs.MapColour));         // convert to colour, ensure alpha is 255 (some time in the past this value could have been screwed up)
                             if (c.GetBrightness() < 0.05)                                        // and ensure it shows
                                 c = Color.Red;
 
-                            datasetp.Add(new PointData(vs.curSystem.x, vs.curSystem.y, vs.curSystem.z, c));
+                            datasetp.Add(new PointData(vs.System.x, vs.System.y, vs.System.z, c));
                         }
                     }
 

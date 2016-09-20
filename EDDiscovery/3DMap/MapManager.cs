@@ -22,20 +22,7 @@ namespace EDDiscovery2._3DMap
 
         public bool Is3DMapsRunning { get { return _formMap.Is3DMapsRunning; } }
 
-        public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
-                            List<VisitedSystemsClass> visited)
-        {
-            _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
-        }
-
-        public void Prepare(VisitedSystemsClass historysel, string homesys, ISystem centersys, float zoom,
-                            List<VisitedSystemsClass> visited)
-        {
-            _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
-        }
-
-        public void Prepare(string historysel, string homesys, string centersys, float zoom,
-                            List<VisitedSystemsClass> visited )
+        public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom, List<HistoryEntry> visited)
         {
             _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
         }
@@ -45,29 +32,19 @@ namespace EDDiscovery2._3DMap
             _formMap.SetPlannedRoute(plannedr);
         }
 
-        public void UpdateVisited(List<VisitedSystemsClass> visited)
+        public void UpdateSystemList(List<HistoryEntry> visited)
         {
-            _formMap.UpdateVisitedSystems(visited);
+            _formMap.UpdateSystemList(visited);
         }
 
-        public void UpdateHistorySystem(string historysel)
-        {
-            _formMap.UpdateHistorySystem(historysel);
-        }
-
-        public void UpdateHistorySystem(VisitedSystemsClass historysel)
+        public void UpdateHistorySystem(ISystem historysel)
         {
             _formMap.UpdateHistorySystem(historysel);
         }
 
-        public bool MoveToSystem(VisitedSystemsClass system)
+        public bool MoveToSystem(ISystem system)
         {
             return _formMap.SetCenterSystemTo(system);
-        }
-
-        public bool MoveToSystem(string sysname)
-        {
-            return _formMap.SetCenterSystemTo(sysname);
         }
 
         public void UpdateNote()

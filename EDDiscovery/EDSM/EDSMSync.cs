@@ -11,10 +11,7 @@ using System.Text;
 using System.Threading;
 
 namespace EDDiscovery2.EDSM
-{
-    public delegate void EDSMNewSystemEventHandler(object source);
-
-
+{  
     public class EDSMSync
     {
         Thread ThreadEDSMSync;
@@ -24,7 +21,9 @@ namespace EDDiscovery2.EDSM
         bool _syncFrom = false;
         int _defmapcolour = 0;
         private EDDiscoveryForm mainForm;
-        public event EDSMNewSystemEventHandler OnNewEDSMTravelLog;
+
+        //TBDpublic delegate void EDSMNewSystemEventHandler(object source);         // used for sync from not supported yet.
+        //TBD removed public event EDSMNewSystemEventHandler OnNewEDSMTravelLog;
 
         public EDSMSync(EDDiscoveryForm frm)
         {
@@ -45,7 +44,6 @@ namespace EDDiscovery2.EDSM
 
             return true;
         }
-
 
         public void StopSync()
         {
@@ -69,22 +67,17 @@ namespace EDDiscovery2.EDSM
                 edsm.apiKey =  EDDiscoveryForm.EDDConfig.CurrentCommander.APIKey;
                 edsm.commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
 
-                //string comments =  edsm.GetComments(new DateTime(2015, 1, 1));
-                List<VisitedSystemsClass> log;
-                List<SystemNoteClass> notes;
-                int ret = edsm.GetLogs(new DateTime(2011, 1, 1), out log);
-                int nret = edsm.GetComments(new DateTime(2011, 1, 1), out notes);
-
+                List<HistoryEntry> log;
+                edsm.GetLogs(new DateTime(2011, 1, 1), out log);
                 if (log == null)
-                    log = new List<VisitedSystemsClass>();
+                    log = new List<HistoryEntry>();
 
-
-                if (_syncTo)
+                if (_syncTo)        // send systems to EDSM..
                 {
-                    // Send Unsynced system to EDSM.
+                    List<HistoryEntry> systems = mainForm.history.FilterByNotEDSMSyncedAndFSD;        // unsynced and FSD jumps only
 
-                    List<VisitedSystemsClass> systems = (from s in mainForm.VisitedSystems where s.EDSM_sync == false && s.Commander == EDDiscoveryForm.EDDConfig.CurrentCommander.Nr select s).ToList<VisitedSystemsClass>();
                     mainForm.LogLine("EDSM: Sending " + systems.Count.ToString() + " flightlog entries");
+
                     foreach (var system in systems)
                     {
                         if (Exit)
@@ -93,30 +86,35 @@ namespace EDDiscovery2.EDSM
                             return;
                         }
 
-                        if ( system.EDSM_sync == false)
+                        if ( system.EdsmSync == false)
                         {
-                            // check if it exist in EDSM
-                            VisitedSystemsClass ps2 = (from c in log where c.Name == system.Name && c.Time.Ticks == system.Time.Ticks select c).FirstOrDefault<VisitedSystemsClass>();
-                            if (ps2 != null)
-                            {
-                                system.EDSM_sync = true;
-                                system.Update();
+                            // check if it exist in EDSM Log we just downloaded..
+                            HistoryEntry ps2 = (from c in log where c.System.name == system.System.name && c.EventTime.Ticks == system.EventTime.Ticks select c).FirstOrDefault();
 
+                            if (ps2 != null)                // it did, just make sure EDSM sync flag is set..
+                            {
+                                system.UpdateEdsmSync();
                             }
                             else
                             {
-                                SendTravelLog(edsm, system, mainForm);
-
+                                SendTravelLog(edsm, system, mainForm);  // else send it
                             }
                         }
                     }
                 }
+
+#if false
+                //TBD removed..
 
                 TravelLogUnit tlu = null;
 
                 bool newsystem = false;
                 if (_syncFrom)
                 {
+                    List<SystemNoteClass> notes;
+                    int nret = edsm.GetComments(new DateTime(2011, 1, 1), out notes);
+
+                
                     // Check for new systems from EDSM
                     foreach (var system in log)
                     {
@@ -179,26 +177,30 @@ namespace EDDiscovery2.EDSM
 
                 if (newsystem)
                     OnNewEDSMTravelLog(this);
+#endif
+
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
                 mainForm.LogLineHighlight("EDSM sync Exception " + ex.Message);
             }
-
         }
 
-        internal static bool SendTravelLog(EDSMClass edsm, VisitedSystemsClass system, EDDiscoveryForm mainform)
+        internal static bool SendTravelLog(EDSMClass edsm, HistoryEntry he, EDDiscoveryForm mainform)
         {
+            if (he.EdsmSync == true)        // no action if true..
+                return true;
+
             string json = null;
 
             try
             {
 
-                if (!system.HasTravelCoordinates)
-                    json = edsm.SetLog(system.Name, system.Time);
+                if (!he.System.HasCoordinate)
+                    json = edsm.SetLog(he.System.name, he.EventTime);
                 else
-                    json = edsm.SetLogWithPos(system.Name, system.Time, system.X, system.Y, system.Z);
+                    json = edsm.SetLogWithPos(he.System.name, he.EventTime, he.System.x, he.System.y, he.System.z);
             }
             catch (Exception ex )
             {
@@ -217,8 +219,7 @@ namespace EDDiscovery2.EDSM
 
                 if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
                 {
-                    system.EDSM_sync = true;
-                    system.Update();
+                    he.UpdateEdsmSync();
                     return true;
                 }
                 else
@@ -226,7 +227,7 @@ namespace EDDiscovery2.EDSM
                     if (mainform != null)
                         mainform.LogLine("EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr);
 
-                    System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + system.Name);
+                    System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + he.System.name);
                 }
             }
 

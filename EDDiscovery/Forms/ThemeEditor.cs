@@ -121,13 +121,13 @@ namespace EDDiscovery2
         private void trackBar_theme_opacity_MouseCaptureChanged(object sender, EventArgs e)
         {
             _discoveryForm.theme.Opacity = (double)trackBar_theme_opacity.Value;
-            _discoveryForm.ApplyTheme(true);
+            _discoveryForm.ApplyTheme();
         }
 
         private void checkBox_theme_windowframe_MouseClick(object sender, MouseEventArgs e)
         {
             _discoveryForm.theme.WindowsFrame = checkBox_theme_windowframe.Checked;
-            _discoveryForm.ApplyTheme(true);
+            _discoveryForm.ApplyTheme();
         }
 
         private void panel_theme_Click(object sender, EventArgs e)
@@ -136,7 +136,7 @@ namespace EDDiscovery2
 
             if (_discoveryForm.theme.EditColor(ci))
             {
-                _discoveryForm.ApplyTheme(true);
+                _discoveryForm.ApplyTheme();
                 UpdatePatchesEtc();
             }
         }
@@ -160,7 +160,7 @@ namespace EDDiscovery2
                     _discoveryForm.theme.FontName = fd.Font.Name;
                     _discoveryForm.theme.FontSize = fd.Font.Size;
                     UpdatePatchesEtc();
-                    _discoveryForm.ApplyTheme(true);
+                    _discoveryForm.ApplyTheme();
                 }
                 else
                     MessageBox.Show("Font does not have regular style");
@@ -171,14 +171,13 @@ namespace EDDiscovery2
         private void comboBox_TextBorder_SelectionChangeCommitted(object sender, EventArgs e)
         {
             _discoveryForm.theme.TextBlockBorderStyle = (string)comboBox_TextBorder.SelectedItem;
-            _discoveryForm.ApplyTheme(true);
-
+            _discoveryForm.ApplyTheme();
         }
 
         private void comboBox_ButtonStyle_SelectionChangeCommitted(object sender, EventArgs e)
         {
             _discoveryForm.theme.ButtonStyle = (string)comboBox_ButtonStyle.SelectedItem;
-            _discoveryForm.ApplyTheme(true);
+            _discoveryForm.ApplyTheme();
         }
 
     }

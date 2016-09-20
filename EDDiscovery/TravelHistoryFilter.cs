@@ -55,20 +55,19 @@ namespace EDDiscovery
             return new TravelHistoryFilter(number, $"last {number}");
         }
 
-        public List<VisitedSystemsClass> Filter(List<VisitedSystemsClass> input)
+        public List<HistoryEntry> Filter(HistoryList hl )
         {
             if (MaximumNumberOfItems.HasValue)
             {
-                return input.OrderByDescending(s => s.Time).Take(MaximumNumberOfItems.Value).ToList();
+                return hl.FilterByNumber(MaximumNumberOfItems.Value);
             }
-            else if(MaximumDataAge.HasValue)
+            else if (MaximumDataAge.HasValue)
             {
-                var oldestData = DateTime.Now.Subtract(MaximumDataAge.Value);
-                return (from systems in input where systems.Time > oldestData orderby systems.Time descending select systems).ToList();
+                return hl.FilterByDate(MaximumDataAge.Value);
             }
             else
             {
-                return input.OrderByDescending(s => s.Time).ToList();
+                return hl.OrderByDate;
             }
         }
     }

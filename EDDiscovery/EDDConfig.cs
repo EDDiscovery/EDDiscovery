@@ -422,8 +422,8 @@ namespace EDDiscovery2
                     {
                         cmd.Parameters["@Id"].Value = edcmdr.Nr;
                         cmd.Parameters["@Name"].Value = edcmdr.Name;
-                        cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey;
-                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir;
+                        cmd.Parameters["@EdsmApiKey"].Value = edcmdr.APIKey != null ? edcmdr.APIKey : "";
+                        cmd.Parameters["@NetLogDir"].Value = edcmdr.NetLogDir != null ? edcmdr.NetLogDir : "" ;
                         cmd.ExecuteNonQuery();
                     }
                 }

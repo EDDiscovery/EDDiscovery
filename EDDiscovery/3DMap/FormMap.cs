@@ -38,7 +38,7 @@ namespace EDDiscovery2
         private List<IData3DSet> _datasets_gridlinecoords;
         private List<IData3DSet> _datasets_maps;
         private List<IData3DSet> _datasets_selectedsystems;
-        private List<IData3DSet> _datasets_visitedsystems;
+        private List<IData3DSet> _datasets_systems;
         private List<IData3DSet> _datasets_routetri;
         private List<IData3DSet> _datasets_bookedmarkedsystems;
         private List<IData3DSet> _datasets_notedsystems;
@@ -83,7 +83,7 @@ namespace EDDiscovery2
         Timer _mousehovertick = new Timer();
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
 
-        public List<VisitedSystemsClass> _visitedSystems { get; set; }
+        public List<HistoryEntry> _systemlist { get; set; }
         private List<SystemClass> _plannedRoute { get; set; }
 
         public List<FGEImage> fgeimages = new List<FGEImage>();
@@ -112,24 +112,10 @@ namespace EDDiscovery2
 
         #region External Interface
 
-        public void Prepare(VisitedSystemsClass historysel, string homesys, ISystem centersys, float zoom,
-                                List<VisitedSystemsClass> visited)
-        {
-            _visitedSystems = visited;
-            Prepare((historysel != null) ? FindSystem(historysel.Name) : null, homesys, centersys, zoom, visited);
-        }
-
-        public void Prepare(string historysel, string homesys, string centersys, float zoom,
-                                List<VisitedSystemsClass> visited)
-        {
-            _visitedSystems = visited;
-            Prepare(FindSystem(historysel), homesys, FindSystem(centersys), zoom, visited);
-        }
-
         public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
-                            List<VisitedSystemsClass> visited)
+                            List<HistoryEntry> visited)
         {
-            _visitedSystems = visited;
+            _systemlist = visited;
 
             _historySelection = SafeSystem(historysel);
             _homeSystem = SafeSystem((homesys != null) ? FindSystem(homesys) : null);
@@ -166,7 +152,7 @@ namespace EDDiscovery2
             enableColoursToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonColours", true);
             _stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
 
-            _stargrids.FillVisitedSystems(_visitedSystems);     // to ensure its updated
+            _stargrids.FillSystemListGrid(_systemlist);     // to ensure its updated
             _stargrids.Start();
 
             if (toolStripDropDownButtonGalObjects.DropDownItems.Count == 0)
@@ -218,48 +204,30 @@ namespace EDDiscovery2
             RequestPaint();
         }
 
-        public void UpdateVisitedSystems(List<VisitedSystemsClass> visited)
+        public void UpdateSystemList(List<HistoryEntry> visited)
         {
             if (Is3DMapsRunning && visited != null )         // if null, we are not up and running.  visited should never be null, but being defensive
             {
-                _visitedSystems = visited;
-                _stargrids.FillVisitedSystems(_visitedSystems);          // update visited systems, will be displayed on next update of star grids
-                GenerateDataSetsVisitedSystems();
+                _systemlist = visited;
+                _stargrids.FillSystemListGrid(_systemlist);          // update visited systems, will be displayed on next update of star grids
+                GenerateDataSetsSystemList();
                 RequestPaint();
 
                 if (toolStripButtonAutoForward.Checked)             // auto forward?
                 {
-                    VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+                    HistoryEntry vs = _systemlist.FindLast(x => x.System.HasCoordinate );
 
                     if ( vs != null )
-                        SetCenterSystemTo(vs.Name);
+                        SetCenterSystemTo(vs.System.name);
                 }
             }
         }
 
-        public void UpdateHistorySystem(string historysel)
+        public void UpdateHistorySystem(ISystem historysel)
         {
-            if (Is3DMapsRunning)         // if null, we are not up and running
+            if (Is3DMapsRunning && historysel != null )         // if null, we are not up and running
             {
-                ISystem newhist = FindSystem(historysel);
-
-                if (newhist != null)
-                {
-                    _historySelection = newhist;        // only override if found in starmap (meaning it has co-ords)
-                }
-            }
-        }
-
-        public void UpdateHistorySystem(VisitedSystemsClass historysel)
-        {
-            if (Is3DMapsRunning)         // if null, we are not up and running
-            {
-                ISystem newhist = historysel.curSystem;
-
-                if (newhist != null)
-                {
-                    _historySelection = newhist;        // only override if found in starmap (meaning it has co-ords)
-                }
+                _historySelection = historysel;       
             }
         }
 
@@ -328,7 +296,7 @@ namespace EDDiscovery2
             GenerateDataSets();
             GenerateDataSetsMaps();
             GenerateDataSetsSelectedSystems();
-            GenerateDataSetsVisitedSystems();
+            GenerateDataSetsSystemList();
             GenerateDataSetsRouteTri();
 
             _mousehovertick.Tick += new EventHandler(MouseHoverTick);
@@ -801,10 +769,10 @@ namespace EDDiscovery2
                     dataset.DrawAll(glControl);
             }
 
-            Debug.Assert(_datasets_visitedsystems != null);
-            if (_datasets_visitedsystems != null)
+            Debug.Assert(_datasets_systems != null);
+            if (_datasets_systems != null)
             {
-                foreach (var dataset in _datasets_visitedsystems)
+                foreach (var dataset in _datasets_systems)
                     dataset.DrawAll(glControl);
             }
 
@@ -905,16 +873,16 @@ namespace EDDiscovery2
             _datasets_maps = builder.AddMapImages(_selected);
         }
 
-        private void GenerateDataSetsVisitedSystems()
+        private void GenerateDataSetsSystemList()
         {
-            DeleteDataset(ref _datasets_visitedsystems);
-            _datasets_visitedsystems = null;
+            DeleteDataset(ref _datasets_systems);
+            _datasets_systems = null;
 
             DatasetBuilder builder = new DatasetBuilder();
 
-            List<VisitedSystemsClass> filtered = (_visitedSystems != null) ? _visitedSystems.Where(s => s.Time >= startTime && s.Time <= endTime).OrderBy(s => s.Time).ToList() : null;
+            List<HistoryEntry> filtered = _systemlist.Where(s => s.EventTime >= startTime && s.EventTime <= endTime).OrderBy(s => s.EventTime).ToList();
 
-            _datasets_visitedsystems = builder.BuildVisitedSystems(drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked, 
+            _datasets_systems = builder.BuildSystems(drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked, 
                             drawADiscOnStarsWithPositionToolStripMenuItem.Checked, 
                             useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked ? Color.White : Color.Transparent, 
                             filtered);
@@ -954,7 +922,7 @@ namespace EDDiscovery2
 
             List<IData3DSet> oldnotedsystems = _datasets_notedsystems;
             DatasetBuilder builder2 = new DatasetBuilder();
-            _datasets_notedsystems = builder2.AddNotedBookmarks(mapnotedbkmark, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _visitedSystems);
+            _datasets_notedsystems = builder2.AddNotedBookmarks(mapnotedbkmark, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _systemlist);
             DeleteDataset(ref oldnotedsystems);
 
             DatasetBuilder builder3 = new DatasetBuilder();
@@ -997,25 +965,6 @@ namespace EDDiscovery2
                 labelSystemCoords.Text = "No centre system";
         }
 
-        public bool SetCenterSystemTo(VisitedSystemsClass system)
-        {
-            if (Is3DMapsRunning)
-            {
-                ISystem sys = system.curSystem;
-
-                if (sys != null)
-                {
-                    return SetCenterSystemTo(sys);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-                return false;
-        }
-
         public bool SetCenterSystemTo(string name)
         {
             if (Is3DMapsRunning)                         // if null, we are not up and running
@@ -1024,7 +973,7 @@ namespace EDDiscovery2
                 return false;
         }
 
-        private bool SetCenterSystemTo(ISystem sys)
+        public bool SetCenterSystemTo(ISystem sys)
         {
             if (sys != null)
             {
@@ -1048,14 +997,14 @@ namespace EDDiscovery2
         private void EndPicker_ValueChanged(object sender, EventArgs e)
         {
             endTime = endPicker.Value;
-            GenerateDataSetsVisitedSystems();
+            GenerateDataSetsSystemList();
             RequestPaint();
         }
 
         private void StartPicker_ValueChanged(object sender, EventArgs e)
         {
             startTime = startPicker.Value;
-            GenerateDataSetsVisitedSystems();
+            GenerateDataSetsSystemList();
             RequestPaint();
         }
 
@@ -1079,7 +1028,7 @@ namespace EDDiscovery2
             endPickerHost.Visible = true;
             startPicker.Value = startTime;
             endPicker.Value = endTime;
-            GenerateDataSetsVisitedSystems();
+            GenerateDataSetsSystemList();
             RequestPaint();
         }
 
@@ -1097,7 +1046,7 @@ namespace EDDiscovery2
             endTime = endfunc == null ? DateTime.Now.AddDays(1) : endfunc();
             startPickerHost.Visible = false;
             endPickerHost.Visible = false;
-            GenerateDataSetsVisitedSystems();
+            GenerateDataSetsSystemList();
             RequestPaint();
         }
 
@@ -1138,10 +1087,10 @@ namespace EDDiscovery2
 
         private void toolStripButtonGoBackward_Click(object sender, EventArgs e)
         {
-            if (_visitedSystems != null)
+            if (_systemlist != null)
             {
-                string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, -1, _centerSystem.name);
-                SetCenterSystemTo(name);
+                HistoryEntry he = HistoryList.FindNextSystem(_systemlist, _centerSystem.name, -1);
+                SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
             }
             else
                 MessageBox.Show("No travel history is available");
@@ -1177,10 +1126,10 @@ namespace EDDiscovery2
         
         private void toolStripButtonGoForward_Click(object sender, EventArgs e)
         {
-            if (_visitedSystems != null)
+            if (_systemlist != null)
             {
-                string name = VisitedSystemsClass.FindNextVisitedSystem(_visitedSystems, _centerSystem.name, 1, _centerSystem.name);
-                SetCenterSystemTo(name);
+                HistoryEntry he = HistoryList.FindNextSystem(_systemlist, _centerSystem.name, 1);
+                SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
             }
             else
                 MessageBox.Show("No travel history is available");
@@ -1192,12 +1141,12 @@ namespace EDDiscovery2
 
         private void toolStripLastKnownPosition_Click(object sender, EventArgs e)
         {
-            if (_visitedSystems != null)
+            if (_systemlist != null)
             {
-                VisitedSystemsClass vs = _visitedSystems.FindLast(x => x.HasTravelCoordinates || (x.curSystem != null && x.curSystem.HasCoordinate));
+                HistoryEntry he = HistoryList.FindLastFSDKnownPosition(_systemlist);
 
-                if (vs != null )
-                    SetCenterSystemTo(FindSystem(vs.Name));
+                if (he != null )
+                    SetCenterSystemTo(FindSystem(he.System.name));
                 else
                     MessageBox.Show("No stars with defined co-ordinates available in travel history");
             }
@@ -1207,19 +1156,19 @@ namespace EDDiscovery2
 
         private void drawLinesBetweenStarsWithPositionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GenerateDataSetsVisitedSystems();
+            GenerateDataSetsSystemList();
             RequestPaint();
         }
 
         private void drawADiscOnStarsWithPositionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GenerateDataSetsVisitedSystems();
+            GenerateDataSetsSystemList();
             RequestPaint();
         }
 
         private void useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GenerateDataSetsVisitedSystems();
+            GenerateDataSetsSystemList();
             RequestPaint();
         }
 
@@ -2058,39 +2007,42 @@ namespace EDDiscovery2
             SystemClass cursys = null;
             cursysdistz = float.MaxValue;
 
-            if (_visitedSystems == null)
+            if (_systemlist == null)
                 return null;
 
             Matrix4 resmat = posdir.GetResMat;
 
-            foreach (VisitedSystemsClass vs in _visitedSystems)
+            foreach (HistoryEntry vs in _systemlist)
             {
-                SystemNoteClass notecs = SystemNoteClass.GetSystemNoteClass(vs.Name);
+                if ( vs.System.HasCoordinate)
+                { 
+                    SystemNoteClass notecs = SystemNoteClass.GetSystemNoteClass(vs.System.name);
 
-                if (notecs!=null)
-                {
-                    string note = notecs.Note.Trim();
-
-                    if (note.Length > 0)
+                    if (notecs!=null )
                     {
-                        float lx = (float)((vs.HasTravelCoordinates) ? vs.X : vs.curSystem.x);
-                        float ly = (float)((vs.HasTravelCoordinates) ? vs.Y : vs.curSystem.y);
-                        float lz = (float)((vs.HasTravelCoordinates) ? vs.Z : vs.curSystem.z);
+                        string note = notecs.Note.Trim();
 
-                        Matrix4 area = new Matrix4(
-                            new Vector4(rotvert[0].X + lx, rotvert[0].Y + ly, rotvert[0].Z + lz, 1),    // top left
-                            new Vector4(rotvert[1].X + lx, rotvert[1].Y + ly, rotvert[1].Z + lz, 1),
-                            new Vector4(rotvert[2].X + lx, rotvert[2].Y + ly, rotvert[2].Z + lz, 1),
-                            new Vector4(rotvert[3].X + lx, rotvert[3].Y + ly, rotvert[3].Z + lz, 1)    // bot left
-                            );
+                        if (note.Length > 0)
+                        {
+                            float lx = (float)(vs.System.x);
+                            float ly = (float)(vs.System.y);
+                            float lz = (float)(vs.System.z);
 
-                        float newcursysdistz;
-                        if (IsWithinRectangle(area, x, y, out newcursysdistz,ref resmat))
-                        { 
-                            if (newcursysdistz < cursysdistz)
+                            Matrix4 area = new Matrix4(
+                                new Vector4(rotvert[0].X + lx, rotvert[0].Y + ly, rotvert[0].Z + lz, 1),    // top left
+                                new Vector4(rotvert[1].X + lx, rotvert[1].Y + ly, rotvert[1].Z + lz, 1),
+                                new Vector4(rotvert[2].X + lx, rotvert[2].Y + ly, rotvert[2].Z + lz, 1),
+                                new Vector4(rotvert[3].X + lx, rotvert[3].Y + ly, rotvert[3].Z + lz, 1)    // bot left
+                                );
+
+                            float newcursysdistz;
+                            if (IsWithinRectangle(area, x, y, out newcursysdistz, ref resmat))
                             {
-                                cursysdistz = newcursysdistz;
-                                cursys = (SystemClass)vs.curSystem;
+                                if (newcursysdistz < cursysdistz)
+                                {
+                                    cursysdistz = newcursysdistz;
+                                    cursys = (SystemClass)vs.System;
+                                }
                             }
                         }
                     }
@@ -2233,12 +2185,12 @@ namespace EDDiscovery2
 
         public ISystem FindSystem(string name, SQLiteConnectionSystem cn = null)    // nice wrapper for this
         {
-            if (_visitedSystems != null)
+            if (_systemlist != null)
             {
-                VisitedSystemsClass sys = _visitedSystems.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                HistoryEntry sys = _systemlist.FindLast(x => x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
                 if (sys != null)
-                    return sys.curSystem;
+                    return sys.System;
             }
 
             ISystem isys = SystemClass.GetSystem(name,cn);
@@ -2247,12 +2199,12 @@ namespace EDDiscovery2
 
         public ISystem FindSystem(Vector3 pos, SQLiteConnectionSystem cn = null )
         {
-            if (_visitedSystems != null)
+            if (_systemlist != null)
             {
-                VisitedSystemsClass vsc = VisitedSystemsClass.FindByPos(_visitedSystems, new EMK.LightGeometry.Point3D(pos.X, pos.Y, pos.Z), 0.1);
+                HistoryEntry vsc = HistoryList.FindByPos(_systemlist, pos, 0.1);
 
                 if (vsc != null)
-                    return vsc.curSystem;
+                    return vsc.System;
             }
 
             return SystemClass.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);

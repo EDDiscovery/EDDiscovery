@@ -70,17 +70,17 @@ namespace EDDiscovery2
                 array1vertices = SystemClass.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage);
         }
 
-        public void FillFromVS(List<VisitedSystemsClass> cls) // does not affect the display object
+        public void FillFromSystemList(List<HistoryEntry> cls) // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = FillFromVS(ref array2, ref carray2, cls, this.Color);
+                array2vertices = FillFromSystemList(ref array2, ref carray2, cls, this.Color);
             else
-                array1vertices = FillFromVS(ref array1, ref carray1, cls, this.Color);
+                array1vertices = FillFromSystemList(ref array1, ref carray1, cls, this.Color);
         }
 
-        private int FillFromVS( ref Vector3[] array, ref uint[] carray, List<VisitedSystemsClass> cls, Color basecolour)
+        private int FillFromSystemList( ref Vector3[] array, ref uint[] carray, List<HistoryEntry> cls, Color basecolour)
         {
-            // DONT confuse this with the visited systems lines/dots option. This is just to fill in systems which are not in the EDSM
+            // DONT confuse this with the systems lines/dots option. This is just to fill in systems which are not in the EDSM
             // system table.  So only missing EDSM stars are added here.  See Datasetbuilder for the visiting system line/dot system
 
             carray = new uint[cls.Count];
@@ -89,12 +89,12 @@ namespace EDDiscovery2
 
             uint cx = BitConverter.ToUInt32(new byte[] { basecolour.R, basecolour.G, basecolour.B, basecolour.A }, 0);
 
-            foreach (VisitedSystemsClass vs in cls)
+            foreach (HistoryEntry vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
-                if (vs.curSystem != null && vs.curSystem.status != SystemStatusEnum.EDSC && vs.curSystem.HasCoordinate )
+                if (vs.System.status != SystemStatusEnum.EDSC && vs.System.HasCoordinate )
                 {
                     carray[total] = cx;
-                    array[total++] = new Vector3((float)vs.curSystem.x, (float)vs.curSystem.y, (float)vs.curSystem.z);
+                    array[total++] = new Vector3((float)vs.System.x, (float)vs.System.y, (float)vs.System.z);
                     //Console.WriteLine("Added {0} due to not being in star database", vs.Name);
                 }
             }
@@ -349,7 +349,7 @@ namespace EDDiscovery2
         private BlockingCollection<StarGrid> computed = new BlockingCollection<StarGrid>();
         private List<StarGrid> grids = new List<StarGrid>();        // unpopulated grid stars
         private StarGrid populatedgrid;
-        private StarGrid visitedsystemsgrid;
+        private StarGrid systemlistgrid;
         private System.Threading.Thread computeThread;
         private bool computeExit = false;
         private EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -385,8 +385,8 @@ namespace EDDiscovery2
                 }
             }
 
-            visitedsystemsgrid = new StarGrid(-1, 0, 0, Color.Orange, 1.0F);    // grid ID -1 means it won't be filled by the Update task
-            grids.Add(visitedsystemsgrid);
+            systemlistgrid = new StarGrid(-1, 0, 0, Color.Orange, 1.0F);    // grid ID -1 means it won't be filled by the Update task
+            grids.Add(systemlistgrid);
 
             int solid = GridId.Id(0, 0);                                    
             populatedgrid = new StarGrid(solid, 0, 0, Color.Transparent, 1.0F);      // Duplicate grid id but asking for populated stars
@@ -429,12 +429,12 @@ namespace EDDiscovery2
             }
         }
 
-        public void FillVisitedSystems(List<VisitedSystemsClass> cls)
+        public void FillSystemListGrid(List<HistoryEntry> cls)
         {
             if (cls != null)
             {
-                visitedsystemsgrid.FillFromVS(cls);     // recompute it into the other array
-                computed.Add(visitedsystemsgrid);       // add to list to display when ready
+                systemlistgrid.FillFromSystemList(cls);     // recompute it into the other array
+                computed.Add(systemlistgrid);       // add to list to display when ready
             }
         }
 
@@ -594,7 +594,7 @@ namespace EDDiscovery2
             {
                 foreach (StarGrid grd in grids)
                 {
-                    if (grd != populatedgrid && grd != visitedsystemsgrid)
+                    if (grd != populatedgrid && grd != systemlistgrid)
                         grd.Color = (ForceWhite) ? Color.FromArgb(255, 212, 212, 212) : Color.Transparent;
 
                     grd.Draw(control);              // populated grid is in this list, so will be drawn..
@@ -648,7 +648,7 @@ namespace EDDiscovery2
                 }
             }
 
-            visitedsystemsgrid.GetSystemsInView(ref list, ti);          // this can be anywhere in space.. so must check
+            systemlistgrid.GetSystemsInView(ref list, ti);          // this can be anywhere in space.. so must check
         }
 
 
