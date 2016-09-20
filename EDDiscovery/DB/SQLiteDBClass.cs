@@ -1071,8 +1071,8 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTypeId ON JournalEntries (EventTypeId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventType ON JournalEntries (EventType)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTime ON JournalEntries (EventTime)",
-                "CREATE INDEX Journal_Name ON Journals(Name)",
-                "CREATE INDEX Journal_Commander ON Journals(CommanderId)",
+                "CREATE INDEX IF NOT EXISTS Journal_Name ON Journals(Name)",
+                "CREATE INDEX IF NOT EXISTS Journal_Commander ON Journals(CommanderId)",
             };
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
