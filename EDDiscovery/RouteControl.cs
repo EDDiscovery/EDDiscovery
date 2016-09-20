@@ -328,7 +328,7 @@ namespace EDDiscovery
 
             if (textBox_From.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (VisitedSystemsClass.FindSystem(_discoveryForm.VisitedSystems, EDDiscoveryForm.galacticMapping, SystemNameOnly(textBox_From.Text)) == null)
+                if (_discoveryForm.history.FindSystem(SystemNameOnly(textBox_From.Text), EDDiscoveryForm.galacticMapping) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -338,7 +338,7 @@ namespace EDDiscovery
             }
             if (textBox_To.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (VisitedSystemsClass.FindSystem(_discoveryForm.VisitedSystems, EDDiscoveryForm.galacticMapping, SystemNameOnly(textBox_To.Text)) == null)
+                if (_discoveryForm.history.FindSystem(SystemNameOnly(textBox_To.Text), EDDiscoveryForm.galacticMapping) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -370,7 +370,7 @@ namespace EDDiscovery
 
             if (textBox_From.ReadOnly == false)                // if entering system name..
             {
-                EDDiscovery2.DB.ISystem ds1 = VisitedSystemsClass.FindSystem(_discoveryForm.VisitedSystems, EDDiscoveryForm.galacticMapping, SystemNameOnly(textBox_From.Text));
+                ISystem ds1 = _discoveryForm.history.FindSystem(SystemNameOnly(textBox_From.Text), EDDiscoveryForm.galacticMapping);
 
                 if (ds1 != null)
                 {
@@ -503,7 +503,7 @@ namespace EDDiscovery
 
             if (textBox_To.ReadOnly == false)                // if entering system name..
             {
-                EDDiscovery2.DB.ISystem ds1 = VisitedSystemsClass.FindSystem(_discoveryForm.VisitedSystems, EDDiscoveryForm.galacticMapping, SystemNameOnly(textBox_To.Text));
+                ISystem ds1 = _discoveryForm.history.FindSystem(SystemNameOnly(textBox_To.Text), EDDiscoveryForm.galacticMapping);
 
                 if (ds1 != null)
                 {
@@ -594,11 +594,8 @@ namespace EDDiscovery
 
             if (routeSystems != null && routeSystems.Any())
             {
-                float zoom = 400 / float.Parse(textBox_Distance.Text) ;
-                if (zoom < 0.01) zoom = 0.01f;
-                if (zoom > 50) zoom = 50f;
-
-                map.Prepare(routeSystems.First(), _discoveryForm.settings.MapHomeSystem, routeSystems.First(), zoom, _discoveryForm.VisitedSystems);
+                _discoveryForm.history.FillInPositionsFSDJumps();
+                map.Prepare(routeSystems.First(), _discoveryForm.settings.MapHomeSystem, routeSystems.First(), 400 / float.Parse(textBox_Distance.Text) , _discoveryForm.history.FilterByFSDAndPosition);
                 map.SetPlanned(routeSystems);
                 map.Show();
             }

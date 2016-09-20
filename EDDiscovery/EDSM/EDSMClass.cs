@@ -432,9 +432,9 @@ namespace EDDiscovery2.EDSM
             return response.Body;
         }
 
-        public int GetLogs(DateTime starttime, out List<VisitedSystemsClass> log)
+        public int GetLogs(DateTime starttime, out List<HistoryEntry> log)
         {
-            log = new List<VisitedSystemsClass>();
+            log = new List<HistoryEntry>();
 
             string query = "get-logs?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             //string query = "get-logs?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
@@ -457,16 +457,15 @@ namespace EDDiscovery2.EDSM
             {
                 foreach (JObject jo in logs)
                 {
-                    VisitedSystemsClass pos = new VisitedSystemsClass();
+                    string name = jo["system"].Value<string>();
+                    string ts = jo["date"].Value<string>();
+                    DateTime et = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
+                    SystemClass sc = new SystemClass(name);
 
-                    pos.Name = jo["system"].Value<string>();
-                    string str = jo["date"].Value<string>();
-
-                    pos.Time = DateTime.ParseExact(str, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-
-                    log.Add(pos);
-              
+                    HistoryEntry he = new HistoryEntry();
+                    he.MakeVSEntry(sc, et, EDDConfig.Instance.DefaultMapColour, "");       // FSD jump entry
+                    log.Add(he);
                 }
             }
 

@@ -1,4 +1,5 @@
-﻿using EDDiscovery.DB;
+﻿using EDDiscovery;
+using EDDiscovery.DB;
 using EDDiscovery2.DB;
 using EDDiscovery2.EDSM;
 using EMK.LightGeometry;
@@ -135,7 +136,7 @@ namespace EDDiscovery2
         }
 
 
-        public void RefreshTarget(DataGridView vsc, List<VisitedSystemsClass> vscl)
+        public void RefreshTarget(DataGridView vsc, HistoryEntry lastknownpos )
         {
             SuspendLayout();
 
@@ -145,8 +146,7 @@ namespace EDDiscovery2
 
             if (vsc != null && targetpresent && ( config & Configuration.showTargetLine) != 0 )
             {
-                SystemClass cs = VisitedSystemsClass.GetSystemClassFirstPosition(vscl);
-                string dist = (cs != null) ? SystemClass.Distance(cs, x, y, z).ToString("0.00") : "Unknown";
+                string dist = (lastknownpos != null) ? SystemClass.Distance(lastknownpos.System, x, y, z).ToString("0.00") : "Unknown";
 
                 List<ControlEntryProperties> cep = new List<ControlEntryProperties>();
                 int pos = 4 + (((config & Configuration.showEDSMButton)!=0) ? (int)(40*tabscalar) : 0);
@@ -222,16 +222,16 @@ namespace EDDiscovery2
             if (toolStripComboBoxOrder.SelectedIndex == 0 && (config & Configuration.showNotes) != 0)
                 cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), ref pos, 150 * tabscalar, rowc, (string)vscrow.Cells[3].Value));
 
-            VisitedSystemsClass vscentry = (VisitedSystemsClass)vscrow.Cells[EDDiscovery.TravelHistoryControl.TravelHistoryColumns.SystemName].Tag;
+            HistoryEntry he = (HistoryEntry)vscrow.Cells[EDDiscovery.TravelHistoryControl.TravelHistoryColumns.SystemName].Tag;
 
             if (toolStripComboBoxOrder.SelectedIndex == 2 && (config & Configuration.showDistancePerStar) != 0)
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, DistToStar(vscentry, tpos)));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, DistToStar(he, tpos)));
 
-            if ((config & Configuration.showXYZ) != 0 && vscentry != null)
+            if ((config & Configuration.showXYZ) != 0 )
             {
-                string xv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.x.ToString("0.00") : "-";
-                string yv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.y.ToString("0.00") : "-";
-                string zv = (vscentry.curSystem.HasCoordinate) ? vscentry.curSystem.z.ToString("0.00") : "-";
+                string xv = (he.System.HasCoordinate) ? he.System.x.ToString("0.00") : "-";
+                string yv = (he.System.HasCoordinate) ? he.System.y.ToString("0.00") : "-";
+                string zv = (he.System.HasCoordinate) ? he.System.z.ToString("0.00") : "-";
 
                 cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, xv));
                 cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[0].DefaultCellStyle.Font, vsc.Font), ref pos, 50 * tabscalar, rowc, yv));
@@ -242,7 +242,7 @@ namespace EDDiscovery2
                 cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), ref pos, 150 * tabscalar, rowc, (string)vscrow.Cells[3].Value));
 
             if (toolStripComboBoxOrder.SelectedIndex < 2 && (config & Configuration.showDistancePerStar) != 0)
-                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, DistToStar(vscentry, tpos)));
+                cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, DistToStar(he, tpos)));
 
             if (addit)
             {
@@ -255,12 +255,12 @@ namespace EDDiscovery2
             }
         }
 
-        private string DistToStar(VisitedSystemsClass vscentry, Point3D tpos)
+        private string DistToStar(HistoryEntry he, Point3D tpos)
         {
             string res = "";
             if (!double.IsNaN(tpos.X))
             {
-                double dist = VisitedSystemsClass.Distance(vscentry, tpos);
+                double dist = SystemClass.Distance(he.System, tpos.X,tpos.Y,tpos.Z);
                 if (dist >= 0)
                     res = dist.ToString("0.00");
             }

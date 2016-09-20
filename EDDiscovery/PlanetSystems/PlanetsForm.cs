@@ -135,8 +135,8 @@ namespace EDDiscovery2.PlanetSystems
 
         private void SetCurrentSystem()
         {
-            if (edForm.TravelControl.CurrentSystemSelected!=null)
-                SetSystem(edForm.TravelControl.CurrentSystemSelected.curSystem.name);
+           if (edForm.TravelControl.CurrentSystemSelected!=null)
+                 SetSystem(edForm.TravelControl.CurrentSystemSelected.System.name);
         }
 
         private void SetSystem(string systemname)
