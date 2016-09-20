@@ -43,30 +43,23 @@ namespace EDDiscovery2
                 StatGeneral();
             else if (comboBox1.SelectedIndex == 1)
                 StatMostVisits();
-            
-        
         }
 
-
-         public void LogText(string text)
+        public void LogText(string text)
         {
             LogText(text, Color.Black);
         }
 
-         public void LogText(string text, Color color)
+        public void LogText(string text, Color color)
         {
             try
             {
-
                 richTextBox1.SelectionStart = richTextBox1.TextLength;
                 richTextBox1.SelectionLength = 0;
 
                 richTextBox1.SelectionColor = color;
                 richTextBox1.AppendText(text);
                 richTextBox1.SelectionColor = richTextBox1.ForeColor;
-
-
-
 
                 richTextBox1.SelectionStart = richTextBox1.Text.Length;
                 richTextBox1.SelectionLength = 0;
@@ -86,22 +79,11 @@ namespace EDDiscovery2
             richTextBox1.Clear();
             richTextBox1.Visible = true;
 
-            int nr;
-
-            nr = _discoveryForm.VisitedSystems.Count;
-
-            LogText("Total Nr of jumps: " + nr + Environment.NewLine);
-
-            var queryres = from a in _discoveryForm.VisitedSystems where a.Time > DateTime.Now.AddDays(-30) select a;
-            LogText("Last 30 days: " + queryres.Count().ToString() + Environment.NewLine);
-
-            queryres = from a in _discoveryForm.VisitedSystems where a.Time > DateTime.Now.AddDays(-7) select a;
-            LogText("Last week: " + queryres.Count().ToString() + Environment.NewLine);
-
-            queryres = from a in _discoveryForm.VisitedSystems where a.Time > DateTime.Now.AddDays(-1) select a;
-            LogText("Last 24 hours: " + queryres.Count().ToString() + Environment.NewLine);
-
-
+            LogText("Total No of jumps: " + _discoveryForm.history.GetFSDJumps(new TimeSpan(10000, 0, 0, 0)) + Environment.NewLine);
+            LogText("Last 24 hours: " + _discoveryForm.history.GetFSDJumps(new TimeSpan(1, 0, 0, 0)) + Environment.NewLine);
+            LogText("Last Week: " + _discoveryForm.history.GetFSDJumps(new TimeSpan(7, 0, 0, 0)) + Environment.NewLine);
+            LogText("Last 30 days: " + _discoveryForm.history.GetFSDJumps(new TimeSpan(30, 0, 0, 0)) + Environment.NewLine);
+            LogText("Last year: " + _discoveryForm.history.GetFSDJumps(new TimeSpan(365, 0, 0, 0)) + Environment.NewLine);
         }
 
 
@@ -109,26 +91,22 @@ namespace EDDiscovery2
         {
             dataGridView1.Visible = true;
 
-            int nr;
-
-
             dataGridView1.Columns.Clear();
             dataGridView1.Rows.Clear();
 
             dataGridView1.Columns.Add("Name", "System");
             dataGridView1.Columns.Add("Vists", "Visits");
 
-            nr = _discoveryForm.VisitedSystems.Count;
+            //nr = _discoveryForm.history.GetFSDJumps(new TimeSpan(10000, 0, 0, 0));
 
-            var groupeddata = from data in _discoveryForm.VisitedSystems
-                              group data by data.Name
+            var groupeddata = from data in _discoveryForm.history.OrderByDate
+                              group data by data.System.name
                                   into grouped
                                   select new
                                   {
                                       Title = grouped.Key,
                                       Count = grouped.Count()
                                   };
-            nr = 0;
             foreach (var data in from a in groupeddata orderby a.Count descending select a)
             {
                 if (data.Count <= 1)
@@ -138,14 +116,10 @@ namespace EDDiscovery2
                 dataGridView1.Rows.Add(rowobj);
                 //LogText(data.Title + "\t Count=" + data.Count + Environment.NewLine);
             }
-
         }
-
-
 
         private void chart1_Click(object sender, EventArgs e)
         {
-
         }
 
     }

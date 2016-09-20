@@ -39,13 +39,14 @@ namespace EDDiscovery
         
         public void Set(ISystem system)
         {
-            if (TargetSystem == null || !TargetSystem.Equals(system))
+            if (TargetSystem == null || system == null || !TargetSystem.Equals(system))
             {
                 TargetSystem = system;
                 ClearDataGridViewDistancesRows();
             }
 
-            if (TargetSystem == null) return;
+            if (TargetSystem == null)
+                return;
 
             textBoxSystemName.Text = TargetSystem.name;
 
@@ -375,32 +376,6 @@ namespace EDDiscovery
             }
         }
 
-        public ISystem LastKnownSystem
-        {
-            get
-            {
-                var lastKnown = (from systems
-                    in _discoveryForm.VisitedSystems
-                    where systems.curSystem != null && systems.curSystem.HasCoordinate
-                    orderby systems.Time descending
-                    select systems.curSystem).FirstOrDefault();
-                return lastKnown;
-            }
-        }
-
-
-        public ISystem CurrentSystem
-        {
-            get
-            {
-                var currentKnown = (from systems
-                    in _discoveryForm.VisitedSystems
-                                 orderby systems.Time descending
-                                 select systems.curSystem).FirstOrDefault();
-                return currentKnown;
-            }
-        }
-
         private void dataGridViewClosestSystems_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -610,17 +585,21 @@ namespace EDDiscovery
         
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            Set(CurrentSystem);
+            HistoryEntry he = _discoveryForm.history.GetLastFSD;
+            if ( he != null )
+                Set(he.System);
         }
 
         private void toolStripButtonMap_Click(object sender, EventArgs e)
         {
             var centerSystem = TargetSystem;
-            if (centerSystem == null || !centerSystem.HasCoordinate) centerSystem = LastKnownSystem;
+            if (centerSystem == null || !centerSystem.HasCoordinate)
+                centerSystem = _discoveryForm.history.GetLastWithPosition.System;
+
             var map = _discoveryForm.Map;
 
             map.Prepare(centerSystem, _discoveryForm.settings.MapHomeSystem, centerSystem,
-                        _discoveryForm.settings.MapZoom,_discoveryForm.VisitedSystems);
+                        _discoveryForm.settings.MapZoom, _discoveryForm.history.FilterByFSDAndPosition);
 
             map.Show();
         }

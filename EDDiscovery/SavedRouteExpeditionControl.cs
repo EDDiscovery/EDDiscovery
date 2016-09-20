@@ -414,11 +414,8 @@ namespace EDDiscovery
 
             if (route.Count >= 2)
             {
-                float zoom = 400 / CalculateRouteMaxDistFromOrigin();
-                if (zoom < 0.01) zoom = 0.01f;
-                if (zoom > 50) zoom = 50f;
-
-                map.Prepare(route[0], _discoveryForm.settings.MapHomeSystem, route[0], zoom, _discoveryForm.VisitedSystems);
+                _discoveryForm.history.FillInPositionsFSDJumps();
+                map.Prepare(route[0], _discoveryForm.settings.MapHomeSystem, route[0], 400 / CalculateRouteMaxDistFromOrigin(), _discoveryForm.history.FilterByFSDAndPosition);
                 map.SetPlanned(route);
                 map.Show();
             }
