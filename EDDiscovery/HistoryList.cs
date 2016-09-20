@@ -11,8 +11,8 @@ namespace EDDiscovery
 {
     public class HistoryEntry
     {                                   // DONT store commander ID.. this history is externally filtered on it.
-        EliteDangerous.JournalTypeEnum EntryType;
-        long journalid;
+        public EliteDangerous.JournalTypeEnum EntryType;
+        public long Journalid;
 
         public ISystem System;         // Must be set! All entries, even if they are not FSD entries.
                                        // The Minimum is name and edsm_id 
@@ -43,17 +43,17 @@ namespace EDDiscovery
             EntryType = EliteDangerous.JournalTypeEnum.FSDJump;
             System = sys;
             EventTime = eventt;
-            EventSummary = ">>" + System.name;
+            EventSummary = "Jump to " + System.name;
             EventDescription = "Hyperspace jump to system " + System.name + " on " + eventt.ToLocalTime();
             FSDJumpDistance = dist;
             MapColour = m;
-            journalid = 0;
+            Journalid = 0;
             EdsmSync = true; // TBD for now
         }
 
         public void MakeJournalEntry(EliteDangerous.JournalTypeEnum type, long id , ISystem sys, DateTime eventt, string summary , string descr, string fsdjump , int m, bool edss)
         {
-            EntryType = type; journalid = id; System = sys; EventTime = eventt; EventSummary = summary; EventDescription = descr; FSDJumpDistance = fsdjump; MapColour = m; EdsmSync = edss;
+            EntryType = type; Journalid = id; System = sys; EventTime = eventt; EventSummary = summary; EventDescription = descr; FSDJumpDistance = fsdjump; MapColour = m; EdsmSync = edss;
         }
 
         public bool EnsureSystemEDSM()        // fill in from EDSM
@@ -82,7 +82,7 @@ namespace EDDiscovery
         public bool UpdateMapColour(int v)
         {
             MapColour = v;
-            if (journalid != 0)
+            if (Journalid != 0)
             {
                 //TBD Update journal
             }
@@ -92,7 +92,7 @@ namespace EDDiscovery
         public bool UpdateCommanderID(int v)
         {
             //TBD how do we do this..
-            if (journalid != 0)
+            if (Journalid != 0)
             {
             }
             return false;
@@ -101,7 +101,7 @@ namespace EDDiscovery
         public bool UpdateEdsmSync()
         {
             //TBD how do we do this..
-            if (journalid != 0)
+            if (Journalid != 0)
             {
             }
             EdsmSync = true;

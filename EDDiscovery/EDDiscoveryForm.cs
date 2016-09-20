@@ -1663,11 +1663,24 @@ namespace EDDiscovery
 
             history.Clear();
 
+            int loop = 0;
+
             foreach (VisitedSystemsClass v in vsc)
             {
                 HistoryEntry he = new HistoryEntry();
                 he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance);
                 history.Add(he);
+
+                if ( ( ++loop % 3 ) == 0 )
+                {
+                    he = new HistoryEntry();
+                    he.MakeJournalEntry(EliteDangerous.JournalTypeEnum.Docked, 0, v.curSystem, v.Time.AddSeconds(30), "Docked to station Halley", "Docked to station Halley in system " + v.curSystem.name, "", 0, false);
+                    history.Add(he);
+                    he = new HistoryEntry();
+                    he.MakeJournalEntry(EliteDangerous.JournalTypeEnum.Undocked, 0, v.curSystem, v.Time.AddSeconds(35), "Exited station Halley", "Exited station Halley" + v.curSystem.name, "", 0, false);
+                    history.Add(he);
+                }
+
             }
 
             if (PendingClose)

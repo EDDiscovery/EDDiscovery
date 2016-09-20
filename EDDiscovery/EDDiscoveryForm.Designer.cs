@@ -375,7 +375,7 @@
             this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageTravelHistory.Size = new System.Drawing.Size(985, 671);
             this.tabPageTravelHistory.TabIndex = 0;
-            this.tabPageTravelHistory.Text = "Travel history";
+            this.tabPageTravelHistory.Text = "History";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
             // 
             // travelHistoryControl1
