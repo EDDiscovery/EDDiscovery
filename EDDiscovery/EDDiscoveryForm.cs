@@ -64,18 +64,19 @@ namespace EDDiscovery
         public EDDTheme theme;
 
         public string CommanderName { get; private set; }
+        public int DisplayedCommander = 0;
+
+        public HistoryList history = new HistoryList();
+
         static public EDDConfig EDDConfig { get; private set; }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
-        public RouteControl RouteControl { get { return routeControl1;  } }
-        public List<VisitedSystemsClass> VisitedSystems = new List<VisitedSystemsClass>();
+        public RouteControl RouteControl { get { return routeControl1; } }
 
-        public bool option_nowindowreposition { get; set;  }  = false;                             // Cmd line options
+        public bool option_nowindowreposition { get; set; } = false;                             // Cmd line options
         public bool option_debugoptions { get; set; } = false;
 
         public EDDiscovery2._3DMap.MapManager Map { get; private set; }
-
-        public int DisplayedCommander = 0;
 
         public event EventHandler HistoryRefreshed;
 
@@ -169,13 +170,13 @@ namespace EDDiscovery
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
 
-            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition,travelHistoryControl1);
+            Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, travelHistoryControl1);
 
             netlog = new NetLogClass(this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-            ApplyTheme(false);
+            ApplyTheme();
 
             if (splashform != null)
             {
@@ -279,7 +280,7 @@ namespace EDDiscovery
             option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1);
 
             int pos = cmdline.IndexOf("-Appfolder", 0, StringComparison.InvariantCultureIgnoreCase);
-            if ( pos != -1 )
+            if (pos != -1)
             {
                 string[] nextwords = cmdline.Substring(pos + 10).Trim().Split(' ');
                 if (nextwords.Length > 0)
@@ -360,7 +361,7 @@ namespace EDDiscovery
         private void RepositionForm()
         {
             var top = SQLiteDBClass.GetSettingInt("FormTop", -1);
-            if (top >= 0 && option_nowindowreposition == false )
+            if (top >= 0 && option_nowindowreposition == false)
             {
                 var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
                 var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
@@ -368,11 +369,11 @@ namespace EDDiscovery
 
                 // Adjust so window fits on screen; just in case user unplugged a monitor or something
 
-                var screen = SystemInformation.VirtualScreen; 
-                if( height > screen.Height ) height = screen.Height;
-                if( top + height > screen.Height + screen.Top) top = screen.Height + screen.Top - height;
-                if( width > screen.Width ) width = screen.Width;
-                if( left + width > screen.Width + screen.Left ) left = screen.Width + screen.Left - width;
+                var screen = SystemInformation.VirtualScreen;
+                if (height > screen.Height) height = screen.Height;
+                if (top + height > screen.Height + screen.Top) top = screen.Height + screen.Top - height;
+                if (width > screen.Width) width = screen.Width;
+                if (left + width > screen.Width + screen.Left) left = screen.Width + screen.Left - width;
                 if (top < screen.Top) top = screen.Top;
                 if (left < screen.Left) left = screen.Left;
 
@@ -406,7 +407,7 @@ namespace EDDiscovery
         {
         }
 
-        public void ApplyTheme(bool refreshhistory)
+        public void ApplyTheme()
         {
             ToolStripManager.Renderer = theme.toolstripRenderer;
             this.FormBorderStyle = theme.WindowsFrame ? FormBorderStyle.Sizable : FormBorderStyle.None;
@@ -416,14 +417,13 @@ namespace EDDiscovery
             label_version.Visible = !theme.WindowsFrame;
             label_version.Text = "Version " + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
             if (Tools.appfolder != "EDDiscovery")
-                label_version.Text += " (Using " + Tools.appfolder +")";
+                label_version.Text += " (Using " + Tools.appfolder + ")";
 
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
             theme.ApplyColors(this);
 
-            //TBD better way please if (refreshhistory)
-                //TBDtravelHistoryControl1.RefreshHistoryAsync();             // so we repaint this with correct colours.
+            travelHistoryControl1.Display();                         // so we repaint this with correct colours.
 
             TravelControl.RedrawSummary();
         }
@@ -477,7 +477,7 @@ namespace EDDiscovery
                     "Formidine.json",
                     "Formidine trans.png",
                     "Formidine trans.json"
-                }, 
+                },
                 (s) => LogLine("Map check complete."),
                 registerCancelCallback);
             }
@@ -639,8 +639,8 @@ namespace EDDiscovery
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(travelHistoryControl1.NewPosition);
-                travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
+                netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(NewPosition);
+                //TBD REMOVED - sync from not working   travelHistoryControl1.sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(travelHistoryControl1.RefreshEDSMEvent);
 
                 panelInfo.Visible = false;
 
@@ -667,7 +667,7 @@ namespace EDDiscovery
                     string databases = (performedsmsync && performeddbsync) ? "EDSM and EDDB" : ((performedsmsync) ? "EDSM" : "EDDB");
 
                     LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
-                                    "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine + 
+                                    "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
                                     "Please continue running ED Discovery until refresh is complete.");
                 }
             }
@@ -1018,7 +1018,7 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    travelHistoryControl1.LogText(text + Environment.NewLine);
+                    travelHistoryControl1.LogLine(text);
                 });
             }
             catch
@@ -1033,7 +1033,7 @@ namespace EDDiscovery
                 Trace.WriteLine(text);
                 Invoke((MethodInvoker)delegate
                 {
-                    travelHistoryControl1.LogTextHighlight(text + Environment.NewLine);
+                    travelHistoryControl1.LogLineHighlight(text);
 
                 });
             }
@@ -1048,7 +1048,7 @@ namespace EDDiscovery
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    travelHistoryControl1.LogTextSuccess(text + Environment.NewLine);
+                    travelHistoryControl1.LogLineSuccess(text);
 
                 });
             }
@@ -1139,9 +1139,9 @@ namespace EDDiscovery
             tabControl1.SelectedIndex = 1;
         }
 
-#endregion
+        #endregion
 
-#region Closing
+        #region Closing
 
         private void SaveSettings()
         {
@@ -1162,7 +1162,7 @@ namespace EDDiscovery
         Thread safeClose;
         System.Windows.Forms.Timer closeTimer;
 
-        public bool PendingClose { get { return safeClose != null; }  }           // we want to close boys!
+        public bool PendingClose { get { return safeClose != null; } }           // we want to close boys!
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -1225,7 +1225,7 @@ namespace EDDiscovery
             });
         }
 
-        void CloseItFinally(Object sender, EventArgs e )        
+        void CloseItFinally(Object sender, EventArgs e)
         {
             if (safeClose.IsAlive)      // still alive, try again
                 closeTimer.Start();
@@ -1304,7 +1304,7 @@ namespace EDDiscovery
 
         private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormSagCarinaMission frm = new FormSagCarinaMission(this);
+            FormSagCarinaMission frm = new FormSagCarinaMission(history.FilterByFSDAndPosition);
             frm.Nowindowreposition = option_nowindowreposition;
             frm.Show();
         }
@@ -1639,7 +1639,6 @@ namespace EDDiscovery
                     LogLine("Refresh Complete." + Environment.NewLine);
                 }
 
-
                 travelHistoryControl1.RefreshButton(true);
 
                 netlog.StartMonitor();
@@ -1657,21 +1656,39 @@ namespace EDDiscovery
 
         private void RefreshHistory(List<VisitedSystemsClass> vsc)
         {
-            VisitedSystems = vsc;
-
-            if (VisitedSystems == null)
+            if (vsc == null)
                 return;
 
-            VisitedSystemsClass.UpdateSys(VisitedSystems, true, true);   // always use db distances
+            VisitedSystemsClass.UpdateSys(vsc, true, true);   // always use db distances
+
+            history.Clear();
+
+            foreach (VisitedSystemsClass v in vsc)
+            {
+                HistoryEntry he = new HistoryEntry();
+                he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance);
+                history.Add(he);
+            }
 
             if (PendingClose)
                 return;
 
-            travelHistoryControl1.DisplayVS(VisitedSystems);
+            travelHistoryControl1.Display();
+        }
+
+
+        public void NewPosition(VisitedSystemsClass v)
+        {
+            Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
+
+            HistoryEntry he = new HistoryEntry();
+            he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance);
+            history.Add(he);
+
+            travelHistoryControl1.AddNewEntry(he);
         }
 
         #endregion
-
 
     }
 }

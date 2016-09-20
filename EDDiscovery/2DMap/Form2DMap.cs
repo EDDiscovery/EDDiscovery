@@ -19,7 +19,6 @@ namespace EDDiscovery2
     {
         public List<FGEImage> fgeimages;
         private FGEImage currentFGEImage;
-        public readonly EDDiscoveryForm _eddiscoveryForm;
         
         private DateTime startDate, endDate;
         public bool Test = false;
@@ -28,14 +27,15 @@ namespace EDDiscovery2
         ToolStripControlHost host1, host2;
         List<Point3D> starpositions = null;
 
+        List<HistoryEntry> syslist;
+
         public bool Nowindowreposition { get; set; } = false;
 
-        public FormSagCarinaMission(EDDiscoveryForm frm)
+        public FormSagCarinaMission(List<HistoryEntry> sl)
         {
-            _eddiscoveryForm = frm;
+            syslist = sl;
             InitializeComponent();
         }
-
 
         bool initdone = false;
         private void FormSagCarinaMission_Load(object sender, EventArgs e)
@@ -128,15 +128,13 @@ namespace EDDiscovery2
 
         private void DrawTravelHistory()
         {
-            if (_eddiscoveryForm.VisitedSystems == null)
-                return;
-
             DateTime start = startDate;
 
             int currentcmdr = EDDiscoveryForm.EDDConfig.CurrentCommander.Nr;
 
-            var history = from systems in _eddiscoveryForm.VisitedSystems where systems.Time > start && systems.Time<endDate  && systems.curSystem!=null && systems.curSystem.HasCoordinate == true  orderby systems.Time  select systems;
-            List<VisitedSystemsClass> listHistory = history.ToList<VisitedSystemsClass>();
+            var history = from systems in syslist where systems.EventTime > start && systems.EventTime<endDate && systems.System.HasCoordinate == true  orderby systems.EventTime  select systems;
+            List<HistoryEntry> listHistory = history.ToList();
+
             Graphics gfx = Graphics.FromImage(imageViewer1.Image);
             
             if (listHistory.Count > 1)
@@ -153,7 +151,8 @@ namespace EDDiscovery2
                             pen.Color = Color.FromArgb(255, pen.Color);
                         
                     }
-                    DrawLine(gfx, pen, listHistory[ii - 1].curSystem, listHistory[ii].curSystem);
+
+                    DrawLine(gfx, pen, listHistory[ii - 1].System, listHistory[ii].System);
                 }
             }
 

@@ -126,11 +126,8 @@ namespace EDDiscovery2.ImageHandler
                 checkboxpreview = checkBoxPreview.Checked;
             });
 
-            string cur_sysname = "Unknown System";
-            ISystem cursys = VisitedSystemsClass.GetLatestSystem(_discoveryForm.VisitedSystems);
-
-            if (cursys != null)
-                cur_sysname = cursys.name;
+            HistoryEntry he = _discoveryForm.history.GetLastFSD;
+            string cur_sysname = ( he != null ) ? he.System.name : "Unknown System";
 
             Convert(e.FullPath,cur_sysname,checkboxremove,checkboxpreview);
         }

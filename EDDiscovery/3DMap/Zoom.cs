@@ -30,6 +30,8 @@ namespace EDDiscovery2._3DMap
 
         public void SetDefaultZoom(float x)
         {
+            x = Math.Max(x, ZoomMin);
+            x = Math.Min(x, ZoomMax);
             _defaultZoom = x;
         }
 

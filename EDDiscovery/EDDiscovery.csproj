@@ -273,6 +273,7 @@
     <Compile Include="Forms\SummaryPopOut.Designer.cs">
       <DependentUpon>SummaryPopOut.cs</DependentUpon>
     </Compile>
+    <Compile Include="HistoryList.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
