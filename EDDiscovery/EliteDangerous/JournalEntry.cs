@@ -51,6 +51,8 @@ namespace EDDiscovery.EliteDangerous
         HullDamage = 330,
         Interdicted = 340,
         Interdiction = 350,
+        JetConeBoost = 354,
+        JetConeDamage = 355,
         LaunchFighter = 360,
         LaunchSRV = 370,
         Liftoff = 380,
@@ -294,6 +296,18 @@ namespace EDDiscovery.EliteDangerous
 
             switch (Eventstr)
             {
+                case "BuyAmmo":
+                    je = new JournalBuyAmmo(jo, reader);
+                    break;
+                case "BuyDrones":
+                    je = new JournalBuyDrones(jo, reader);
+                    break;
+                case "BuyExplorationData":
+                    je = new JournalBuyExplorationData(jo, reader);
+                    break;
+                case "BuyTradeData":
+                    je = new JournalBuyTradeData(jo, reader);
+                    break;
                 case "Docked":
                     je = new JournalDocked(jo, reader);
                     break;
@@ -351,6 +365,29 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalDockingTimeout(jo, reader);
                     break;
 
+
+                case "EngineerApply":
+                    je = new JournalEngineerApply(jo, reader);
+                    break;
+                case "EngineerCraft":
+                    je = new JournalEngineerCraft(jo, reader);
+                    break;
+                case "EngineerProgress":
+                    je = new JournalEngineerProgress(jo, reader);
+                    break;
+
+                case "FuelScoop":
+                    je = new JournalFuelScoop(jo, reader);
+                    break;
+
+                case "JetConeBoost":
+                    je = new JournalJetConeBoost(jo, reader);
+                    break;
+                case "JetConeDamage":
+                    je = new JournalJetConeDamage(jo, reader);
+                    break;
+
+
                 case "Continued":
                     je = new JournalContinued(jo, reader);
                     break;
@@ -370,12 +407,62 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalSupercruiseExit(jo, reader);
                     break;
 
+                case "ModuleBuy":
+                    je = new JournalModuleBuy(jo, reader);
+                    break;
+                case "ModuleSell":
+                    je = new JournalModuleSell(jo, reader);
+                    break;
+                case "ModuleSwap":
+                    je = new JournalModuleSwap(jo, reader);
+                    break;
+
+                case "RefuelAll":
+                    je = new JournalRefuelAll(jo, reader);
+                    break;
+                case "RefuelPartial":
+                    je = new JournalRefuelPartial(jo, reader);
+                    break;
+                case "Repair":
+                    je = new JournalRepair(jo, reader);
+                    break;
+                case "RestockVehicle":
+                    je = new JournalRestockVehicle(jo, reader);
+                    break;
+
+                case "Resurrect":
+                    je = new JournalResurrect(jo, reader);
+                    break;
+
+                case "Screenshot":
+                    je = new JournalScreenshot(jo, reader);
+                    break;
+                case "SelfDestruct":
+                    je = new JournalShieldState(jo, reader);
+                    break;
+                case "ShieldState":
+                    je = new JournalSelfDestruct(jo, reader);
+                    break;
+                case "ShipyardBuy":
+                    je = new JournalShipyardBuy(jo, reader);
+                    break;
+                case "ShipyardNew":
+                    je = new JournalShipyardNew(jo, reader);
+                    break;
+                case "ShipyardSell":
+                    je = new JournalShipyardSell(jo, reader);
+                    break;
+                case "ShipyardSwap":
+                    je = new JournalShipyardSwap(jo, reader);
+                    break;
+                case "ShipyardTransfer":
+                    je = new JournalShipyardTransfer(jo, reader);
+                    break;
+
+
 
                 case "Bounty":
-                case "BuyAmmo":
-                case "BuyDrones":
-                case "BuyExplorationData":
-                case "BuyTradeData":
+              
                 case "CapShipBond":
                 case "ClearSavedGame":
                 case "CockpitBreached":
@@ -387,17 +474,14 @@ namespace EDDiscovery.EliteDangerous
                 case "DockFighter":
                 case "DockSRV":
                 case "EjectCargo":
-                case "EngineerApply":
-                case "EngineerCraft":
-                case "EngineerProgress":
                 case "EscapeInterdiction":
                 case "FactionKillBond":
-                case "FuelScoop":
                 case "HeatDamage":
                 case "HeatWarning":
                 case "HullDamage":
                 case "Interdicted":
                 case "Interdiction":
+
                 case "LaunchFighter":
                 case "LaunchSRV":
                 case "Liftoff":
@@ -411,9 +495,6 @@ namespace EDDiscovery.EliteDangerous
                 case "MissionAccepted":
                 case "MissionCompleted":
                 case "MissionFailed":
-                case "ModuleBuy":
-                case "ModuleSell":
-                case "ModuleSwap":
                 case "NewCommander":
                 case "PayFines":
                 case "PayLegacyFines":
@@ -431,21 +512,13 @@ namespace EDDiscovery.EliteDangerous
                 case "RebootRepair":
                 case "ReceiveText":
                 case "RedeemVoucher":
-                case "RefuelAll":
-                case "RefuelPartial":
-                case "Repair":
-                case "RestockVehicle":
-                case "Resurrect":
-                case "Screenshot":
-                case "SelfDestruct":
+
+
+
                 case "SellDrones":
                 case "SendText":
-                case "ShieldState":
-                case "ShipyardBuy":
-                case "ShipyardNew":
-                case "ShipyardSell":
-                case "ShipyardSwap":
-                case "ShipyardTransfer":
+
+          
                 case "Synthesis":
                 case "Touchdown":
                 case "USSDrop":

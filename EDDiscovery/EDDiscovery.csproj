@@ -189,6 +189,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="DB\JournalsClass.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
     <Compile Include="DB\SqLiteDBSchema.cs" />
     <Compile Include="DB\SQLiteDBSystemClass.cs" />
@@ -204,6 +205,10 @@
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyAmmo.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyDrones.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyTradeData.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalContinued.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
@@ -212,15 +217,37 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingGranted.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingRequested.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingTimeout.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerApply.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerCraft.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalFuelScope.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeBoost.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeDamage.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalModuleBuy.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSell.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSwap.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelAll.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelPartial.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRepair.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRestockVehicle.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalResurrect.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalScreenshot.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSelfDestruct.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShieldState.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardBuy.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardNew.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSell.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSwap.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardTransfer.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseEntry.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseExit.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUndocked.cs" />
@@ -637,6 +664,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TravelHistoryControl.resx">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Trilateration\TrilaterationControl.resx">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
