@@ -308,6 +308,24 @@ namespace EDDiscovery.EliteDangerous
                 case "BuyTradeData":
                     je = new JournalBuyTradeData(jo, reader);
                     break;
+
+
+                case "CockpitBreached":
+                    je = new JournalCockpitBreached(jo, reader);
+                    break;
+                case "CollectCargo":
+                    je = new JournalCollectCargo(jo, reader);
+                    break;
+                case "CommitCrime":
+                    je = new JournalCommitCrime(jo, reader);
+                    break;
+                case "CommunityGoalJoin":
+                    je = new JournalCommunityGoalJoin(jo, reader);
+                    break;
+                case "CommunityGoalReward":
+                    je = new JournalCommunityGoalReward(jo, reader);
+                    break;
+
                 case "Docked":
                     je = new JournalDocked(jo, reader);
                     break;
@@ -412,6 +430,20 @@ namespace EDDiscovery.EliteDangerous
                     break;
 
 
+                case "LaunchSRV":
+                    je = new JournalLaunchSRV(jo, reader);
+                    break;
+                case "Liftoff":
+                    je = new JournalLiftoff(jo, reader);
+                    break;
+                case "MarketBuy":
+                    je = new JournalMarketBuy(jo, reader);
+                    break;
+                case "MarketSell":
+                    je = new JournalMarketSell(jo, reader);
+                    break;
+
+
                 case "Continued":
                     je = new JournalContinued(jo, reader);
                     break;
@@ -483,26 +515,41 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalShipyardTransfer(jo, reader);
                     break;
 
+                case "Synthesis":
+                    je = new JournalSynthesis(jo, reader);
+                    break;
+                case "Touchdown":
+                    je = new JournalTouchdown(jo, reader);
+                    break;
+                case "USSDrop":
+                    je = new JournalUSSDrop(jo, reader);
+                    break;
+                case "VehicleSwitch":
+                    je = new JournalVehicleSwitch(jo, reader);
+                    break;
+                case "WingAdd":
+                    je = new JournalWingAdd(jo, reader);
+                    break;
+                case "WingJoin":
+                    je = new JournalWingJoin(jo, reader);
+                    break;
+                case "WingLeave":
+                    je = new JournalWingLeave(jo, reader);
+                    break;
+
 
 
                 case "Bounty":
               
                 case "CapShipBond":
                 case "ClearSavedGame":
-                case "CockpitBreached":
-                case "CollectCargo":
-                case "CommitCrime":
-                case "CommunityGoalJoin":
-                case "CommunityGoalReward":
+              
                 case "DatalinkScan":
                 case "DockFighter":
                 case "DockSRV":
                 case "EjectCargo":
                 case "LaunchFighter":
-                case "LaunchSRV":
-                case "Liftoff":
-                case "MarketBuy":
-                case "MarketSell":
+ 
                 case "MaterialCollected":
                 case "MaterialDiscarded":
                 case "MaterialDiscovered":
@@ -535,13 +582,7 @@ namespace EDDiscovery.EliteDangerous
                 case "SendText":
 
           
-                case "Synthesis":
-                case "Touchdown":
-                case "USSDrop":
-                case "VehicleSwitch":
-                case "WingAdd":
-                case "WingJoin":
-                case "WingLeave":
+           
                     je = new JournalUnhandled(jo, Eventstr, reader);
                     break;
 
