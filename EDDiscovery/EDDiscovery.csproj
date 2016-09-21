@@ -217,8 +217,15 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerApply.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerCraft.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerProgress.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEscapeInterdiction.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalFactionKillBond.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFuelScope.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalHeatDamage.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalHeatWarning.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalHullDamage.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalInterdicted.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalInterdiction.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalJetConeBoost.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalJetConeDamage.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />

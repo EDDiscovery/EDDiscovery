@@ -376,6 +376,30 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalEngineerProgress(jo, reader);
                     break;
 
+                case "EscapeInterdiction":
+                    je = new JournalEscapeInterdiction(jo, reader);
+                    break;
+                case "FactionKillBond":
+                    je = new JournalFactionKillBond(jo, reader);
+                    break;
+                case "HeatDamage":
+                    je = new JournalHeatDamage(jo, reader);
+                    break;
+                case "HeatWarning":
+                    je = new JournalHeatWarning(jo, reader);
+                    break;
+                case "HullDamage":
+                    je = new JournalHullDamage(jo, reader);
+                    break;
+                case "Interdicted":
+                    je = new JournalInterdicted(jo, reader);
+                    break;
+                case "Interdiction":
+                    je = new JournalInterdiction(jo, reader);
+                    break;
+
+
+
                 case "FuelScoop":
                     je = new JournalFuelScoop(jo, reader);
                     break;
@@ -474,14 +498,6 @@ namespace EDDiscovery.EliteDangerous
                 case "DockFighter":
                 case "DockSRV":
                 case "EjectCargo":
-                case "EscapeInterdiction":
-                case "FactionKillBond":
-                case "HeatDamage":
-                case "HeatWarning":
-                case "HullDamage":
-                case "Interdicted":
-                case "Interdiction":
-
                 case "LaunchFighter":
                 case "LaunchSRV":
                 case "Liftoff":
