@@ -202,6 +202,10 @@
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyAmmo.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyDrones.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyTradeData.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalContinued.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
