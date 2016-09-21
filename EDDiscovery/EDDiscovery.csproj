@@ -178,6 +178,9 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="Controls\CheckedListControlCustom.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\AutoCompleteTextBox.cs">
       <SubType>Component</SubType>
@@ -661,6 +664,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TravelHistoryControl.resx">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Trilateration\TrilaterationControl.resx">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
