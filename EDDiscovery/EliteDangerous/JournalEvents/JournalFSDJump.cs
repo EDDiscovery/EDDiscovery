@@ -41,5 +41,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Security { get; set; }
         public string Security_Localised { get; set; }
 
+        public override void FillInformation(out string summary, out string info, out string detailed)
+        {
+            summary = Tools.SplitCapsWord(EventType.ToString());
+            info = "Fuel Used " + FuelUsed.ToString("0.0"); 
+            detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", "")); 
+        }
     }
 }
