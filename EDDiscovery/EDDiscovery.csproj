@@ -215,6 +215,8 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFuelScope.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeBoost.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeDamage.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
@@ -224,6 +226,10 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleSwap.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelAll.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelPartial.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRepair.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRestockVehicle.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalResurrect.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScreenshot.cs" />
