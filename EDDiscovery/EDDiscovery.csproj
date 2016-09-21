@@ -178,6 +178,9 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="Controls\CheckedListControlCustom.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Controls\DataGridViewExtensions.cs" />
     <Compile Include="Controls\AutoCompleteTextBox.cs">
       <SubType>Component</SubType>
@@ -202,6 +205,15 @@
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyAmmo.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyDrones.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalBuyTradeData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCockpitBreached.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCollectCargo.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCommitCrime.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalJoin.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalReward.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalContinued.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
@@ -210,20 +222,60 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingGranted.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingRequested.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingTimeout.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerApply.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerCraft.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerProgress.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEscapeInterdiction.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalFactionKillBond.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalFuelScope.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalHeatDamage.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalHeatWarning.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalHullDamage.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalInterdicted.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalInterdiction.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeBoost.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeDamage.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLaunchSRV.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalLiftoff.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalMarketBuy.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalMarketSell.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalModuleBuy.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSell.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSwap.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelAll.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelPartial.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRepair.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRestockVehicle.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalResurrect.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalScreenshot.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSelfDestruct.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShieldState.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardBuy.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardNew.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSell.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSwap.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardTransfer.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseEntry.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseExit.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSynthesis.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalTouchdown.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUndocked.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnhandled.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalUnknown.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalUSSDrop.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalVehicleSwitch.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalWingAdd.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalWingJoin.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalWingLeave.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
@@ -635,6 +687,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TravelHistoryControl.resx">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Trilateration\TrilaterationControl.resx">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>

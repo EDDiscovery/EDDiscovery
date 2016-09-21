@@ -66,6 +66,7 @@ namespace EDDiscovery2
             this.BackColor = transparentkey;
             this.TransparencyKey = transparentkey;
             this.ContextMenuStrip = contextMenuStripConfig;
+            this.ShowInTaskbar = false;
 
             config = (Configuration)SQLiteDBClass.GetSettingInt("SummaryPanelOptions", (int)config);
             toolStripMenuItemTargetLine.Checked = (config & Configuration.showTargetLine) != 0;
@@ -222,7 +223,7 @@ namespace EDDiscovery2
             if (toolStripComboBoxOrder.SelectedIndex == 0 && (config & Configuration.showNotes) != 0)
                 cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[3].DefaultCellStyle.Font, vsc.Font), ref pos, 150 * tabscalar, rowc, (string)vscrow.Cells[3].Value));
 
-            HistoryEntry he = (HistoryEntry)vscrow.Cells[EDDiscovery.TravelHistoryControl.TravelHistoryColumns.SystemName].Tag;
+            HistoryEntry he = (HistoryEntry)vscrow.Cells[EDDiscovery.TravelHistoryControl.TravelHistoryColumns.Description].Tag;
 
             if (toolStripComboBoxOrder.SelectedIndex == 2 && (config & Configuration.showDistancePerStar) != 0)
                 cep.Add(new ControlEntryProperties(FontSel(vsc.Columns[2].DefaultCellStyle.Font, vsc.Font), ref pos, 60 * tabscalar, rowc, DistToStar(he, tpos)));
