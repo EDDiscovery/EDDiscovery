@@ -51,6 +51,8 @@ namespace EDDiscovery.EliteDangerous
         HullDamage = 330,
         Interdicted = 340,
         Interdiction = 350,
+        JetConeBoost = 354,
+        JetConeDamage = 355,
         LaunchFighter = 360,
         LaunchSRV = 370,
         Liftoff = 380,
@@ -366,6 +368,14 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalFuelScoop(jo, reader);
                     break;
 
+                case "JetConeBoost":
+                    je = new JournalJetConeBoost(jo, reader);
+                    break;
+                case "JetConeDamage":
+                    je = new JournalJetConeDamage(jo, reader);
+                    break;
+
+
                 case "Continued":
                     je = new JournalContinued(jo, reader);
                     break;
@@ -393,6 +403,19 @@ namespace EDDiscovery.EliteDangerous
                     break;
                 case "ModuleSwap":
                     je = new JournalModuleSwap(jo, reader);
+                    break;
+
+                case "RefuelAll":
+                    je = new JournalRefuelAll(jo, reader);
+                    break;
+                case "RefuelPartial":
+                    je = new JournalRefuelPartial(jo, reader);
+                    break;
+                case "Repair":
+                    je = new JournalRepair(jo, reader);
+                    break;
+                case "RestockVehicle":
+                    je = new JournalRestockVehicle(jo, reader);
                     break;
 
                 case "Resurrect":
@@ -449,6 +472,7 @@ namespace EDDiscovery.EliteDangerous
                 case "HullDamage":
                 case "Interdicted":
                 case "Interdiction":
+
                 case "LaunchFighter":
                 case "LaunchSRV":
                 case "Liftoff":
@@ -479,10 +503,7 @@ namespace EDDiscovery.EliteDangerous
                 case "RebootRepair":
                 case "ReceiveText":
                 case "RedeemVoucher":
-                case "RefuelAll":
-                case "RefuelPartial":
-                case "Repair":
-                case "RestockVehicle":
+
 
 
                 case "SellDrones":
