@@ -72,6 +72,11 @@
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
@@ -104,11 +109,7 @@
             this.buttonExtSummaryPopOut = new ExtendedControls.ButtonExt();
             this.buttonMap = new ExtendedControls.ButtonExt();
             this.buttonSync = new ExtendedControls.ButtonExt();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mapColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonFilter = new ExtendedControls.ButtonExt();
             this.historyContextMenu.SuspendLayout();
             this.panel_system.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -500,6 +501,7 @@
             // 
             // TopPanel
             // 
+            this.TopPanel.Controls.Add(this.buttonFilter);
             this.TopPanel.Controls.Add(this.textBoxFilter);
             this.TopPanel.Controls.Add(this.label1);
             this.TopPanel.Controls.Add(this.comboBoxHistoryWindow);
@@ -561,10 +563,10 @@
             this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
+            this.Icon,
             this.ColumnSystem,
             this.ColumnDistance,
-            this.ColumnNote,
-            this.mapColour});
+            this.ColumnNote});
             this.dataGridViewTravel.ContextMenuStrip = this.historyContextMenu;
             this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
@@ -574,10 +576,52 @@
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
             this.dataGridViewTravel.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellContentDoubleClick);
+            this.dataGridViewTravel.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellDoubleClick);
             this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_ColumnHeaderMouseClick);
             this.dataGridViewTravel.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewTravel_ColumnWidthChanged);
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView1_RowPostPaint);
             this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.MinimumWidth = 100;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.Width = 140;
+            // 
+            // Icon
+            // 
+            this.Icon.HeaderText = "Event";
+            this.Icon.MinimumWidth = 50;
+            this.Icon.Name = "Icon";
+            this.Icon.ReadOnly = true;
+            this.Icon.Width = 50;
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "Description";
+            this.ColumnSystem.MinimumWidth = 100;
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.ReadOnly = true;
+            this.ColumnSystem.Width = 150;
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.HeaderText = "Information";
+            this.ColumnDistance.MinimumWidth = 50;
+            this.ColumnDistance.Name = "ColumnDistance";
+            this.ColumnDistance.ReadOnly = true;
+            this.ColumnDistance.Width = 70;
+            // 
+            // ColumnNote
+            // 
+            this.ColumnNote.FillWeight = 150F;
+            this.ColumnNote.HeaderText = "Note";
+            this.ColumnNote.MinimumWidth = 10;
+            this.ColumnNote.Name = "ColumnNote";
+            this.ColumnNote.ReadOnly = true;
+            this.ColumnNote.Width = 137;
             // 
             // textBoxFilter
             // 
@@ -1047,47 +1091,19 @@
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
-            // ColumnTime
+            // buttonFilter
             // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.MinimumWidth = 100;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.Width = 140;
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.HeaderText = "Event";
-            this.ColumnSystem.MinimumWidth = 100;
-            this.ColumnSystem.Name = "ColumnSystem";
-            this.ColumnSystem.ReadOnly = true;
-            this.ColumnSystem.Width = 150;
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.MinimumWidth = 50;
-            this.ColumnDistance.Name = "ColumnDistance";
-            this.ColumnDistance.ReadOnly = true;
-            this.ColumnDistance.Width = 70;
-            // 
-            // ColumnNote
-            // 
-            this.ColumnNote.FillWeight = 150F;
-            this.ColumnNote.HeaderText = "Note";
-            this.ColumnNote.MinimumWidth = 10;
-            this.ColumnNote.Name = "ColumnNote";
-            this.ColumnNote.ReadOnly = true;
-            this.ColumnNote.Width = 137;
-            // 
-            // mapColour
-            // 
-            this.mapColour.HeaderText = "Map";
-            this.mapColour.MinimumWidth = 40;
-            this.mapColour.Name = "mapColour";
-            this.mapColour.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.mapColour.ToolTipText = "Colour used for this sytem in the 3D star map if shown";
-            this.mapColour.Width = 40;
+            this.buttonFilter.BorderColorScaling = 1.25F;
+            this.buttonFilter.ButtonColorScaling = 0.5F;
+            this.buttonFilter.ButtonDisabledScaling = 0.5F;
+            this.buttonFilter.Location = new System.Drawing.Point(458, 3);
+            this.buttonFilter.Name = "buttonFilter";
+            this.buttonFilter.Size = new System.Drawing.Size(75, 23);
+            this.buttonFilter.TabIndex = 25;
+            this.buttonFilter.Text = "Event Filter";
+            this.toolTipEddb.SetToolTip(this.buttonFilter, "Select what events are shown");
+            this.buttonFilter.UseVisualStyleBackColor = true;
+            this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
             // TravelHistoryControl
             // 
@@ -1199,9 +1215,10 @@
         private ExtendedControls.ButtonExt buttonExtSummaryPopOut;
         private System.Windows.Forms.ToolStripMenuItem selectCorrectSystemToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Icon;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mapColour;
+        private ExtendedControls.ButtonExt buttonFilter;
     }
 }

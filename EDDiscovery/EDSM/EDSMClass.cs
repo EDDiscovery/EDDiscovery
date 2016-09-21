@@ -464,7 +464,7 @@ namespace EDDiscovery2.EDSM
                     SystemClass sc = new SystemClass(name);
 
                     HistoryEntry he = new HistoryEntry();
-                    he.MakeVSEntry(sc, et, EDDConfig.Instance.DefaultMapColour, "");       // FSD jump entry
+                    he.MakeVSEntry(sc, et, EDDConfig.Instance.DefaultMapColour, "","");       // FSD jump entry
                     log.Add(he);
                 }
             }
