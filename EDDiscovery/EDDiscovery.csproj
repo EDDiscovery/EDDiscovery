@@ -209,6 +209,11 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalBuyDrones.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalBuyExplorationData.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalBuyTradeData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCockpitBreached.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCollectCargo.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCommitCrime.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalJoin.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalReward.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalContinued.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
