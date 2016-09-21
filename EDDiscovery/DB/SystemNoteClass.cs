@@ -11,10 +11,10 @@ namespace EDDiscovery2.DB
     public class SystemNoteClass
     {
         public long id;
-        public string Name;
+        public long Journalid;              //Journalid = 0, Name set, system marker
+        public string Name;                 //Journalid <>0, Name clear, journal marker
         public DateTime Time;
         public string Note;
-
 
         public SystemNoteClass()
         {
@@ -23,6 +23,7 @@ namespace EDDiscovery2.DB
         public SystemNoteClass(DataRow dr)
         {
             id = (long)dr["id"];
+            Journalid = (long)dr["journalid"];
             Name = (string)dr["Name"];
             Time = (DateTime)dr["Time"];
             Note = (string)dr["Note"];
@@ -40,11 +41,12 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note, journalid) values (@name, @time, @note, @journalid)")) //TBD
             {
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@time", Time);
                 cmd.AddParameterWithValue("@note", Note);
+                cmd.AddParameterWithValue("@journalid", Journalid);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -52,8 +54,8 @@ namespace EDDiscovery2.DB
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
-                
-                globalSystemNotes[Name.ToLower()]= this;
+
+                globalSystemNotes.Add(this);
                 return true;
             }
         }
@@ -68,21 +70,23 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note, Journalid=@journalid  where ID=@id")) //TBD
             {
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@Name", Name);
                 cmd.AddParameterWithValue("@Note", Note);
                 cmd.AddParameterWithValue("@Time", Time);
+                cmd.AddParameterWithValue("@journalid", Journalid);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
-                globalSystemNotes[Name.ToLower()] = this;
-
-                return true;
             }
+
+            GetAllSystemNotes();
+
+            return true;
         }
 
-        public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
+        public static List<SystemNoteClass> globalSystemNotes = new List<SystemNoteClass>();
 
         public static bool GetAllSystemNotes()
         {
@@ -103,7 +107,7 @@ namespace EDDiscovery2.DB
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
                             SystemNoteClass sys = new SystemNoteClass(dr);
-                            globalSystemNotes[sys.Name.ToLower()] = sys;
+                            globalSystemNotes.Add(sys);
                         }
 
                         return true;
@@ -117,32 +121,19 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static string GetSystemNote(string name)      // case insensitive.. null if not there
+        public static SystemNoteClass GetNoteOnSystem(string name)      // case insensitive.. null if not there  matches journalid=0,
         {
-            string lname = name.ToLower();
-            if (globalSystemNotes.ContainsKey(lname))
-                return globalSystemNotes[lname].Note;
+            return globalSystemNotes.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && x.Journalid == 0 );
+        }
+
+        public static SystemNoteClass GetNoteOnJournalEntry(long jid)   
+        {
+            if (jid > 0)
+                return globalSystemNotes.FindLast(x => x.Journalid == jid);
             else
                 return null;
         }
 
-        public static string GetSystemNoteOrEmpty(string name)      // case insensitive.. empty string if not there
-        {
-            string lname = name.ToLower();
-            if (globalSystemNotes.ContainsKey(lname))
-                return globalSystemNotes[lname].Note;
-            else
-                return "";
-        }
-
-        public static SystemNoteClass GetSystemNoteClass(string name)      // case insensitive.. null if not there
-        {
-            string lname = name.ToLower();
-            if (globalSystemNotes.ContainsKey(lname))
-                return globalSystemNotes[lname];
-            else
-                return null;
-        }
 
     }
 }

@@ -229,7 +229,8 @@ namespace EDDiscovery
 
                 if (sys != null)
                 {
-                    dataGridViewRouteSystems[2, rowindex].Value = SystemNoteClass.GetSystemNoteOrEmpty(sys.name);
+                    SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.name);
+                    dataGridViewRouteSystems[2, rowindex].Value = sn != null ? sn.Note : "";
                 }
 
                 if (sys == null && sysname != "")
