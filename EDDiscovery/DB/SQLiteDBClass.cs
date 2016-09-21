@@ -633,6 +633,9 @@ namespace EDDiscovery.DB
                 if (dbver < 103)
                     UpgradeUserDB103(conn);
 
+                if (dbver < 104)
+                    UpgradeUserDB104(conn);
+
                 CreateUserDBTableIndexes();
 
                 return true;
@@ -681,7 +684,6 @@ namespace EDDiscovery.DB
 
                 if (dbver < 102)
                     UpgradeSystemsDB102(conn);
-
 
                 CreateSystemDBTableIndexes();
 
@@ -988,7 +990,6 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 102, true, false, new[] { query1, query2, query3 });
         }
 
-
         private static void UpgradeUserDB103(SQLiteConnectionUser conn)
         {
             string query1 = "CREATE TABLE Journals ( " +
@@ -1015,6 +1016,11 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 103, true, false, new[] { query1, query2 });
         }
 
+        private static void UpgradeUserDB104(SQLiteConnectionED conn)
+        {
+            string query1 = "ALTER TABLE SystemNote ADD COLUMN journalid Integer NOT NULL DEFAULT 0";
+            PerformUpgrade(conn, 104, true, false, new[] { query1 });
+        }
 
         private static void DropOldUserTables(SQLiteConnectionUser conn)
         {

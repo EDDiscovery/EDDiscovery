@@ -11,8 +11,8 @@ namespace EDDiscovery2.DB
     public class SystemNoteClass
     {
         public long id;
-        public long Journalid;
-        public string Name;
+        public long Journalid;              //Journalid = 0, Name set, system marker
+        public string Name;                 //Journalid <>0, Name clear, journal marker
         public DateTime Time;
         public string Note;
 
@@ -23,10 +23,10 @@ namespace EDDiscovery2.DB
         public SystemNoteClass(DataRow dr)
         {
             id = (long)dr["id"];
+            Journalid = (long)dr["journalid"];
             Name = (string)dr["Name"];
             Time = (DateTime)dr["Time"];
             Note = (string)dr["Note"];
-            Journalid = 0; // TBD
         }
 
 
@@ -41,11 +41,12 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)")) //TBD
+            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note, journalid) values (@name, @time, @note, @journalid)")) //TBD
             {
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@time", Time);
                 cmd.AddParameterWithValue("@note", Note);
+                cmd.AddParameterWithValue("@journalid", Journalid);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -69,12 +70,13 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id")) //TBD
+            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note, Journalid=@journalid  where ID=@id")) //TBD
             {
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@Name", Name);
                 cmd.AddParameterWithValue("@Note", Note);
                 cmd.AddParameterWithValue("@Time", Time);
+                cmd.AddParameterWithValue("@journalid", Journalid);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
             }
@@ -119,30 +121,19 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static SystemNoteClass GetSystemNote(string name)      // case insensitive.. null if not there  matches journalid=0,
+        public static SystemNoteClass GetNoteOnSystem(string name)      // case insensitive.. null if not there  matches journalid=0,
         {
-            return globalSystemNotes.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return globalSystemNotes.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && x.Journalid == 0 );
         }
 
-        public static SystemNoteClass GetSystemNote(long jid, string name)      // case insensitive.. null if not there  matches journalid=0,
+        public static SystemNoteClass GetNoteOnJournalEntry(long jid)   
         {
-            SystemNoteClass nc = (jid != 0) ? globalSystemNotes.FindLast(x => x.Journalid == jid) : null;
-            if (nc == null)
-                nc = globalSystemNotes.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-            return nc;
+            if (jid > 0)
+                return globalSystemNotes.FindLast(x => x.Journalid == jid);
+            else
+                return null;
         }
 
-        public static string GetSystemNoteNotNull(long jid, string name)      // case insensitive.. empty string if not there
-        {                                                                     // if jid matches, you get that, if name matches, you get that
-            SystemNoteClass nc = GetSystemNote(jid, name);
-            return (nc != null) ? nc.Note : "";
-        }
-
-        public static string GetSystemNoteString(string name)      // case insensitive.. empty string if not there
-        {                                                                     // if jid matches, you get that, if name matches, you get that
-            SystemNoteClass nc = GetSystemNote(name);
-            return (nc != null) ? nc.Note : null;
-        }
 
     }
 }
