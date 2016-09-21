@@ -370,6 +370,34 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalSupercruiseExit(jo, reader);
                     break;
 
+                case "ModuleBuy":
+                    je = new JournalModuleBuy(jo, reader);
+                    break;
+                case "ModuleSell":
+                    je = new JournalModuleSell(jo, reader);
+                    break;
+                case "ModuleSwap":
+                    je = new JournalModuleSwap(jo, reader);
+                    break;
+
+
+                case "ShipyardBuy":
+                    je = new JournalShipyardBuy(jo, reader);
+                    break;
+                case "ShipyardNew":
+                    je = new JournalShipyardNew(jo, reader);
+                    break;
+                case "ShipyardSell":
+                    je = new JournalShipyardSell(jo, reader);
+                    break;
+                case "ShipyardSwap":
+                    je = new JournalShipyardSwap(jo, reader);
+                    break;
+                case "ShipyardTransfer":
+                    je = new JournalShipyardTransfer(jo, reader);
+                    break;
+
+
 
                 case "Bounty":
                 case "BuyAmmo":
@@ -411,9 +439,6 @@ namespace EDDiscovery.EliteDangerous
                 case "MissionAccepted":
                 case "MissionCompleted":
                 case "MissionFailed":
-                case "ModuleBuy":
-                case "ModuleSell":
-                case "ModuleSwap":
                 case "NewCommander":
                 case "PayFines":
                 case "PayLegacyFines":
@@ -441,11 +466,7 @@ namespace EDDiscovery.EliteDangerous
                 case "SellDrones":
                 case "SendText":
                 case "ShieldState":
-                case "ShipyardBuy":
-                case "ShipyardNew":
-                case "ShipyardSell":
-                case "ShipyardSwap":
-                case "ShipyardTransfer":
+          
                 case "Synthesis":
                 case "Touchdown":
                 case "USSDrop":
