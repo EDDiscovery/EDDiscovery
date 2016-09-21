@@ -210,6 +210,9 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingGranted.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingRequested.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDockingTimeout.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerApply.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerCraft.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFileHeader.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
@@ -221,7 +224,10 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalScreenshot.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSelfDestruct.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalShieldState.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardBuy.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardNew.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSell.cs" />

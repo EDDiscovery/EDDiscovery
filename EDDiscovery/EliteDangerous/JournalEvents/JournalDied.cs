@@ -25,7 +25,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             string killerName = evt.Value<string>("KillerName");
             if (string.IsNullOrEmpty(killerName))
             {
-                Killers = evt["Killers"].ToObject<Killer[]>();
+                if (evt["Killers"]!=null)
+                    Killers = evt["Killers"].ToObject<Killer[]>();
             }
             else
             {
