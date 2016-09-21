@@ -1562,14 +1562,14 @@ namespace EDDiscovery2
                 if (cursystem != null || curbookmark != null)      // if we have a system or a bookmark..
                 {                                                   // try and find the associated bookmark..
                     BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
-                    string note = (cursystem != null) ? SystemNoteClass.GetSystemNote(cursystem.name) : null;   // may be null
+                    string note = (cursystem != null) ? SystemNoteClass.GetSystemNoteString(cursystem.name) : null;   // may be null
 
                     BookmarkForm frm = new BookmarkForm();
 
                     if (notedsystem && bkmark == null)              // note on a system
                     {
                         long targetid = TargetClass.GetTargetNotedSystem();      // who is the target of a noted system (0=none)
-                        long noteid = SystemNoteClass.GetSystemNoteClass(cursystem.name).id;
+                        long noteid = SystemNoteClass.GetSystemNote(cursystem.name).id;
 
                         frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
                         frm.NotedSystem(cursystem.name, note, noteid == targetid);       // note may be passed in null
@@ -1864,7 +1864,7 @@ namespace EDDiscovery2
                     info += Environment.NewLine + "Distance from " + _clickedGMO.name + ": " + dist.ToString("0.0");
                 }
 
-                string note = SystemNoteClass.GetSystemNote(sysname);   // may be null
+                string note = SystemNoteClass.GetSystemNoteNotNull(0,sysname);   // may be null
                 if (note != null && note.Trim().Length>0 )
                 {
                     info += Environment.NewLine + "Notes: " + note.Trim();
@@ -2016,7 +2016,7 @@ namespace EDDiscovery2
             {
                 if ( vs.System.HasCoordinate)
                 { 
-                    SystemNoteClass notecs = SystemNoteClass.GetSystemNoteClass(vs.System.name);
+                    SystemNoteClass notecs = SystemNoteClass.GetSystemNote(vs.System.name);
 
                     if (notecs!=null )
                     {

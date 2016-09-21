@@ -11,10 +11,10 @@ namespace EDDiscovery2.DB
     public class SystemNoteClass
     {
         public long id;
+        public long Journalid;
         public string Name;
         public DateTime Time;
         public string Note;
-
 
         public SystemNoteClass()
         {
@@ -26,6 +26,7 @@ namespace EDDiscovery2.DB
             Name = (string)dr["Name"];
             Time = (DateTime)dr["Time"];
             Note = (string)dr["Note"];
+            Journalid = 0; // TBD
         }
 
 
@@ -40,7 +41,7 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note) values (@name, @time, @note)")) //TBD
             {
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@time", Time);
@@ -52,8 +53,8 @@ namespace EDDiscovery2.DB
                 {
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
-                
-                globalSystemNotes[Name.ToLower()]= this;
+
+                globalSystemNotes.Add(this);
                 return true;
             }
         }
@@ -68,7 +69,7 @@ namespace EDDiscovery2.DB
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note  where ID=@id")) //TBD
             {
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@Name", Name);
@@ -76,13 +77,14 @@ namespace EDDiscovery2.DB
                 cmd.AddParameterWithValue("@Time", Time);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
-                globalSystemNotes[Name.ToLower()] = this;
-
-                return true;
             }
+
+            GetAllSystemNotes();
+
+            return true;
         }
 
-        public static Dictionary<string, SystemNoteClass> globalSystemNotes = new Dictionary<string, SystemNoteClass>();
+        public static List<SystemNoteClass> globalSystemNotes = new List<SystemNoteClass>();
 
         public static bool GetAllSystemNotes()
         {
@@ -103,7 +105,7 @@ namespace EDDiscovery2.DB
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
                             SystemNoteClass sys = new SystemNoteClass(dr);
-                            globalSystemNotes[sys.Name.ToLower()] = sys;
+                            globalSystemNotes.Add(sys);
                         }
 
                         return true;
@@ -117,31 +119,29 @@ namespace EDDiscovery2.DB
             }
         }
 
-        public static string GetSystemNote(string name)      // case insensitive.. null if not there
+        public static SystemNoteClass GetSystemNote(string name)      // case insensitive.. null if not there  matches journalid=0,
         {
-            string lname = name.ToLower();
-            if (globalSystemNotes.ContainsKey(lname))
-                return globalSystemNotes[lname].Note;
-            else
-                return null;
+            return globalSystemNotes.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public static string GetSystemNoteOrEmpty(string name)      // case insensitive.. empty string if not there
+        public static SystemNoteClass GetSystemNote(long jid, string name)      // case insensitive.. null if not there  matches journalid=0,
         {
-            string lname = name.ToLower();
-            if (globalSystemNotes.ContainsKey(lname))
-                return globalSystemNotes[lname].Note;
-            else
-                return "";
+            SystemNoteClass nc = (jid != 0) ? globalSystemNotes.FindLast(x => x.Journalid == jid) : null;
+            if (nc == null)
+                nc = globalSystemNotes.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return nc;
         }
 
-        public static SystemNoteClass GetSystemNoteClass(string name)      // case insensitive.. null if not there
-        {
-            string lname = name.ToLower();
-            if (globalSystemNotes.ContainsKey(lname))
-                return globalSystemNotes[lname];
-            else
-                return null;
+        public static string GetSystemNoteNotNull(long jid, string name)      // case insensitive.. empty string if not there
+        {                                                                     // if jid matches, you get that, if name matches, you get that
+            SystemNoteClass nc = GetSystemNote(jid, name);
+            return (nc != null) ? nc.Note : "";
+        }
+
+        public static string GetSystemNoteString(string name)      // case insensitive.. empty string if not there
+        {                                                                     // if jid matches, you get that, if name matches, you get that
+            SystemNoteClass nc = GetSystemNote(name);
+            return (nc != null) ? nc.Note : null;
         }
 
     }

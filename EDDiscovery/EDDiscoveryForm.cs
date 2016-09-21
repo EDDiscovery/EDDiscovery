@@ -1663,11 +1663,28 @@ namespace EDDiscovery
 
             history.Clear();
 
+            int loop = 0;
+
             foreach (VisitedSystemsClass v in vsc)
             {
                 HistoryEntry he = new HistoryEntry();
-                he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance);
+                he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance + " ly","More info about the FSD, fuel use, etc");
                 history.Add(he);
+
+                if ( ( ++loop % 3 ) == 0 )
+                {
+                    he = new HistoryEntry();
+
+                    string dinfo = "Faction:Fred's faction Economy:Industrial Population:2000000" + Environment.NewLine +
+                                   "Station Type:Outpost Faction State:Civil War Allegiance:Federation";
+                    he.MakeJournalEntry(EliteDangerous.JournalTypeEnum.Docked, 0, v.curSystem, v.Time.AddSeconds(30), "Docked at Halley Outpost",
+                        "Federation Industrial Civil War", dinfo, 0, false);
+                    history.Add(he);
+                    he = new HistoryEntry();
+                    he.MakeJournalEntry(EliteDangerous.JournalTypeEnum.Undocked, 0, v.curSystem, v.Time.AddSeconds(35), "Exited station Halley", "Other info about the docking " + v.curSystem.name, dinfo, 0, false);
+                    history.Add(he);
+                }
+
             }
 
             if (PendingClose)
@@ -1682,7 +1699,7 @@ namespace EDDiscovery
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
             HistoryEntry he = new HistoryEntry();
-            he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance);
+            he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance + " ly" ,"More info");
             history.Add(he);
 
             travelHistoryControl1.AddNewEntry(he);

@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace EDDiscovery
@@ -269,6 +270,15 @@ namespace EDDiscovery
 
             debugout.WriteLine((debugtimer.ElapsedMilliseconds%100000) + ":" + s);
             debugout.Flush();
+        }
+
+        public static string SplitCapsWord(string capslower)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(
+                   System.Text.RegularExpressions.Regex.Replace(
+                   Regex.Replace(capslower, @"([A-Z]+)([A-Z][a-z])", "$1 $2"), 
+                   @"([a-z\d])([A-Z])", "$1 $2"), 
+                   @"[-\s]", " ");
         }
     }
 }
