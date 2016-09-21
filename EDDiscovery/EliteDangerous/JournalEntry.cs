@@ -275,7 +275,7 @@ namespace EDDiscovery.EliteDangerous
 
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {
-            summary = Tools.SplitCapsWord(eventType.ToString());
+            summary = Tools.SplitCapsWord(EventType.ToString());
             info = "Event"; // TO do.. pick first three?
             detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", ""));  // something like this..
         }
@@ -449,7 +449,7 @@ namespace EDDiscovery.EliteDangerous
         static public JournalEntry CreateJournalEntry(DataRow dr)
         {
             string EDataString = (string)dr["EventData"];
-            EDJournalReader edjr;
+            EDJournalReader edjr = new EDJournalReader("");  // TODO hack
 
             JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString, edjr);
         
@@ -465,7 +465,7 @@ namespace EDDiscovery.EliteDangerous
         static public JournalEntry CreateJournalEntry(DbDataReader dr)
         {
             string EDataString = (string)dr["EventData"];
-            EDJournalReader edjr;
+            EDJournalReader edjr = new EDJournalReader("");  // TODO hack;
 
             JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString, edjr);
 
@@ -491,6 +491,9 @@ namespace EDDiscovery.EliteDangerous
 
             switch (Eventstr)
             {
+                case "Bounty":
+                    je = new JournalBounty(jo, reader);
+                    break;
                 case "BuyAmmo":
                     je = new JournalBuyAmmo(jo, reader);
                     break;
@@ -519,6 +522,16 @@ namespace EDDiscovery.EliteDangerous
                     break;
                 case "CommunityGoalReward":
                     je = new JournalCommunityGoalReward(jo, reader);
+                    break;
+
+                case "DatalinkScan":
+                    je = new JournalDatalinkScan(jo, reader);
+                    break;
+                case "DockFighter":
+                    je = new JournalDockFighter(jo, reader);
+                    break;
+                case "DockSRV":
+                    je = new JournalDockSRV(jo, reader);
                     break;
 
                 case "Docked":
@@ -639,6 +652,35 @@ namespace EDDiscovery.EliteDangerous
                     break;
 
 
+                case "MaterialCollected":
+                    je = new JournalMaterialCollected(jo, reader);
+                    break;
+                case "MaterialDiscarded":
+                    je = new JournalMaterialDiscarded(jo, reader);
+                    break;
+                case "MaterialDiscovered":
+                    je = new JournalMaterialDiscovered(jo, reader);
+                    break;
+                case "MiningRefined":
+                    je = new JournalMiningRefined(jo, reader);
+                    break;
+
+                case "MissionAbandoned":
+                    je = new JournalMissionAbandoned(jo, reader);
+                    break;
+                case "MissionAccepted":
+                    je = new JournalMissionAccepted(jo, reader);
+                    break;
+                case "MissionCompleted":
+                    je = new JournalMissionCompleted(jo, reader);
+                    break;
+                case "MissionFailed":
+                    je = new JournalMissionFailed(jo, reader);
+                    break;
+                case "NewCommander":
+                    je = new JournalNewCommander(jo, reader);
+                    break;
+
                 case "Continued":
                     je = new JournalContinued(jo, reader);
                     break;
@@ -734,26 +776,16 @@ namespace EDDiscovery.EliteDangerous
 
 
 
-                case "Bounty":
+                
               
                 case "CapShipBond":
                 case "ClearSavedGame":
               
-                case "DatalinkScan":
-                case "DockFighter":
-                case "DockSRV":
+              
                 case "EjectCargo":
                 case "LaunchFighter":
  
-                case "MaterialCollected":
-                case "MaterialDiscarded":
-                case "MaterialDiscovered":
-                case "MiningRefined":
-                case "MissionAbandoned":
-                case "MissionAccepted":
-                case "MissionCompleted":
-                case "MissionFailed":
-                case "NewCommander":
+
                 case "PayFines":
                 case "PayLegacyFines":
                 case "PowerplayCollect":
