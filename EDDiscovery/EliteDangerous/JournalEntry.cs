@@ -351,6 +351,21 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalDockingTimeout(jo, reader);
                     break;
 
+
+                case "EngineerApply":
+                    je = new JournalEngineerApply(jo, reader);
+                    break;
+                case "EngineerCraft":
+                    je = new JournalEngineerCraft(jo, reader);
+                    break;
+                case "EngineerProgress":
+                    je = new JournalEngineerProgress(jo, reader);
+                    break;
+
+                case "FuelScoop":
+                    je = new JournalFuelScoop(jo, reader);
+                    break;
+
                 case "Continued":
                     je = new JournalContinued(jo, reader);
                     break;
@@ -380,7 +395,19 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalModuleSwap(jo, reader);
                     break;
 
+                case "Resurrect":
+                    je = new JournalResurrect(jo, reader);
+                    break;
 
+                case "Screenshot":
+                    je = new JournalScreenshot(jo, reader);
+                    break;
+                case "SelfDestruct":
+                    je = new JournalShieldState(jo, reader);
+                    break;
+                case "ShieldState":
+                    je = new JournalSelfDestruct(jo, reader);
+                    break;
                 case "ShipyardBuy":
                     je = new JournalShipyardBuy(jo, reader);
                     break;
@@ -415,12 +442,8 @@ namespace EDDiscovery.EliteDangerous
                 case "DockFighter":
                 case "DockSRV":
                 case "EjectCargo":
-                case "EngineerApply":
-                case "EngineerCraft":
-                case "EngineerProgress":
                 case "EscapeInterdiction":
                 case "FactionKillBond":
-                case "FuelScoop":
                 case "HeatDamage":
                 case "HeatWarning":
                 case "HullDamage":
@@ -460,12 +483,11 @@ namespace EDDiscovery.EliteDangerous
                 case "RefuelPartial":
                 case "Repair":
                 case "RestockVehicle":
-                case "Resurrect":
-                case "Screenshot":
-                case "SelfDestruct":
+
+
                 case "SellDrones":
                 case "SendText":
-                case "ShieldState":
+
           
                 case "Synthesis":
                 case "Touchdown":
