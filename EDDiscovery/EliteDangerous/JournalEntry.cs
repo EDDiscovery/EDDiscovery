@@ -263,6 +263,13 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        public virtual void FillInformation(out string summary, out string info, out string detailed)
+        {
+            summary = Tools.SplitCapsWord(eventType.ToString());
+            info = "Event"; // TO do.. pick first three?
+            detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", ""));  // something like this..
+        }
+
         public JournalEntry(JObject jo, JournalTypeEnum jtype, EDJournalReader reader)
         {
             jEventData = jo;
@@ -291,8 +298,6 @@ namespace EDDiscovery.EliteDangerous
 
             if (Eventstr == null)  // Should normaly not happend unless corrupt string.
                 return null;
-
-
 
             switch (Eventstr)
             {
