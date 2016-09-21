@@ -296,6 +296,18 @@ namespace EDDiscovery.EliteDangerous
 
             switch (Eventstr)
             {
+                case "BuyAmmo":
+                    je = new JournalBuyAmmo(jo, reader);
+                    break;
+                case "BuyDrones":
+                    je = new JournalBuyDrones(jo, reader);
+                    break;
+                case "BuyExplorationData":
+                    je = new JournalBuyExplorationData(jo, reader);
+                    break;
+                case "BuyTradeData":
+                    je = new JournalBuyTradeData(jo, reader);
+                    break;
                 case "Docked":
                     je = new JournalDocked(jo, reader);
                     break;
@@ -450,10 +462,7 @@ namespace EDDiscovery.EliteDangerous
 
 
                 case "Bounty":
-                case "BuyAmmo":
-                case "BuyDrones":
-                case "BuyExplorationData":
-                case "BuyTradeData":
+              
                 case "CapShipBond":
                 case "ClearSavedGame":
                 case "CockpitBreached":
