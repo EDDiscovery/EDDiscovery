@@ -27,33 +27,38 @@ namespace EDDiscovery
         public DateTime EventTime;
         public string EventSummary;
         public string EventDescription;
+        public string EventDetailedInfo;
 
-        public string FSDJumpDistance;  // on FSD, set distance
         public int MapColour;
-
         public bool EdsmSync;           // synced FSDJump with EDSM?  TBD where is it stored.
-
-        //System.Drawing.Bitmap EventIcon;
 
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
 
-        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist)
+        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info)
         {
             Debug.Assert(sys != null);
             EntryType = EliteDangerous.JournalTypeEnum.FSDJump;
             System = sys;
             EventTime = eventt;
             EventSummary = "Jump to " + System.name;
-            EventDescription = "Hyperspace jump to system " + System.name + " on " + eventt.ToLocalTime();
-            FSDJumpDistance = dist;
+            EventDescription = dist;
+            EventDetailedInfo = info;
             MapColour = m;
             Journalid = 0;
             EdsmSync = true; // TBD for now
         }
 
-        public void MakeJournalEntry(EliteDangerous.JournalTypeEnum type, long id , ISystem sys, DateTime eventt, string summary , string descr, string fsdjump , int m, bool edss)
+        public void MakeJournalEntry(EliteDangerous.JournalTypeEnum type, long id , ISystem sys, DateTime eventt, string summary , string descr, string info, int m, bool edss)
         {
-            EntryType = type; Journalid = id; System = sys; EventTime = eventt; EventSummary = summary; EventDescription = descr; FSDJumpDistance = fsdjump; MapColour = m; EdsmSync = edss;
+            EntryType = type; Journalid = id; System = sys; EventTime = eventt; EventSummary = summary; EventDescription = descr; EventDetailedInfo = info;
+            MapColour = m; EdsmSync = edss;
+        }
+
+        public System.Drawing.Bitmap GetIcon
+        {  get
+            { 
+              return EDDiscovery.Properties.Resources.floppy;
+            }
         }
 
         public bool EnsureSystemEDSM()        // fill in from EDSM
@@ -66,7 +71,7 @@ namespace EDDiscovery
                 s = SystemClass.GetSystem(System.id_edsm, null, SystemClass.SystemIDType.EdsmId);
             else if (System.id_edsm == -1)                          // if -1, means no edsm match, try a name match
             {
-                System.id_edsm = 0;
+                System.id_edsm = 0;                                 // mark we tried..
                 s = SystemClass.GetSystem(System.name);
             }
 
@@ -338,6 +343,17 @@ namespace EDDiscovery
                                             Math.Abs(x.System.x - p.X) < limit &&
                                             Math.Abs(x.System.y - p.Y) < limit &&
                                             Math.Abs(x.System.z - p.Z) < limit);
+        }
+
+        public static List<HistoryEntry> FilterByJournalEvent(List<HistoryEntry> he , string eventstring)
+        {
+            if (eventstring.Equals("All"))
+                return he;
+            else
+            {
+                string[] events = eventstring.Split(';');
+                return (from systems in he where events.Contains(Tools.SplitCapsWord(systems.EntryType.ToString())) select systems).ToList();
+            }
         }
 
 
