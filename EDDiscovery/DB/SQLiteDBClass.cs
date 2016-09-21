@@ -626,8 +626,12 @@ namespace EDDiscovery.DB
 
                 if (dbver < 101)
                     UpgradeUserDB101(conn);
+
                 if (dbver < 102)
                     UpgradeUserDB102(conn);
+
+                if (dbver < 103)
+                    UpgradeUserDB103(conn);
 
                 CreateUserDBTableIndexes();
 
@@ -677,6 +681,7 @@ namespace EDDiscovery.DB
 
                 if (dbver < 102)
                     UpgradeSystemsDB102(conn);
+
 
                 CreateSystemDBTableIndexes();
 
@@ -983,6 +988,34 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 102, true, false, new[] { query1, query2, query3 });
         }
 
+
+        private static void UpgradeUserDB103(SQLiteConnectionUser conn)
+        {
+            string query1 = "CREATE TABLE Journals ( " +
+                "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "Type INTEGER NOT NULL, " +
+                "Name TEXT NOT NULL COLLATE NOCASE, " +
+                "CommanderId INTEGER REFERENCES Commanders(Id), " +
+                "Path TEXT COLLATE NOCASE, " +
+                "Size INTEGER " +
+                ") ";
+
+
+            string query2 = "CREATE TABLE JournalEntries ( " +
+                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                 "JournalId INTEGER NOT NULL REFERENCES Journals(Id), " +
+                 "EventTypeId INTEGER NOT NULL, " +
+                 "EventType TEXT, " +
+                 "EventTime DATETIME NOT NULL, " +
+                 "EventData TEXT, " + //--JSON String of complete line" +
+                 "EdsmId INTEGER, " + //--0 if not set yet." +
+                 "Synced INTEGER " +
+                 ")";
+      
+            PerformUpgrade(conn, 103, true, false, new[] { query1, query2 });
+        }
+
+
         private static void DropOldUserTables(SQLiteConnectionUser conn)
         {
             string[] queries = new[]
@@ -1033,7 +1066,13 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS VisitedSystemIndex ON VisitedSystems (Name ASC, Time ASC)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_position ON VisitedSystems (X, Y, Z)",
-                "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)"
+                "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)",
+                "CREATE INDEX IF NOT EXISTS JournalEntry_JournalId ON JournalEntries (JournalId)",
+                "CREATE INDEX IF NOT EXISTS JournalEntry_EventTypeId ON JournalEntries (EventTypeId)",
+                "CREATE INDEX IF NOT EXISTS JournalEntry_EventType ON JournalEntries (EventType)",
+                "CREATE INDEX IF NOT EXISTS JournalEntry_EventTime ON JournalEntries (EventTime)",
+                "CREATE INDEX IF NOT EXISTS Journal_Name ON Journals(Name)",
+                "CREATE INDEX IF NOT EXISTS Journal_Commander ON Journals(CommanderId)",
             };
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {

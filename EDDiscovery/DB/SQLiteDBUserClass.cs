@@ -7,5 +7,7 @@ namespace EDDiscovery.DB
 {
     static public class SQLiteDBUserClass   //: SQLiteDBClass
     {
+
+
     }
 }
