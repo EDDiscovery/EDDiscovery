@@ -30,6 +30,9 @@ namespace EDDiscovery
             public const int Description = 2;
             public const int Information = 3;
             public const int Note = 4;
+
+            public const int HistoryTag = Description;      // where the tags are used
+            public const int NoteTag = Note;
         }
 
         public class ClosestSystemsColumns
@@ -47,7 +50,7 @@ namespace EDDiscovery
         internal bool EDSMSyncTo = true;
         internal bool EDSMSyncFrom = true;
 
-        private HistoryEntry currentSysPos = null;
+        DataGridViewRow currentSysPos = null;
 
         SummaryPopOut summaryPopOut = null;
 
@@ -154,10 +157,8 @@ namespace EDDiscovery
                 AddNewHistoryRow(false, result[ii]);      // for every one in filter, add a row.
             }
 
-            if (dataGridViewTravel.Rows.Count > 0)
-            {
-                ShowSystemInformation();
-            }
+            if (dataGridViewTravel.Rows.Count>0)
+                ShowSystemInformation(dataGridViewTravel.Rows[0]);
 
             if (textBoxFilter.TextLength > 0)
                 FilterGridView();
@@ -170,12 +171,13 @@ namespace EDDiscovery
 
         public void AddNewHistoryRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
         {
-            object[] rowobj = { item.EventTime, "", item.EventSummary, item.EventDescription, SystemNoteClass.GetSystemNoteNotNull(item.Journalid, item.System.name)};
+            SystemNoteClass snc = SystemNoteClass.GetNoteOnJournalEntry(item.Journalid);
+            if ( snc == null && item.IsFSDJump )
+                snc = SystemNoteClass.GetNoteOnSystem(item.System.name);
+
+            object[] rowobj = { item.EventTime, "", item.EventSummary, item.EventDescription, (snc != null) ? snc.Note : "" };
 
             int rownr;
-
-//TBD removed            if (item.System != null && item.System.name.ToLower() != item.Name.ToLower()) rowobj[1] = $"{item.Name} ({item.curSystem.name})";
-
             if (insert)
             {
                 dataGridViewTravel.Rows.Insert(0, rowobj);
@@ -187,9 +189,8 @@ namespace EDDiscovery
                 rownr = dataGridViewTravel.Rows.Count - 1;
             }
 
-            var cell = dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.Description];
-
-            cell.Tag = item;
+            dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.HistoryTag].Tag = item;
+            dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.NoteTag].Tag = snc;
 
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
 
@@ -205,6 +206,8 @@ namespace EDDiscovery
         {
             try
             {
+                StoreSystemNote();
+
                 if (he.IsFSDJump)
                 {
                     int count = _discoveryForm.history.GetVisitsCount(he.System.name);
@@ -224,8 +227,6 @@ namespace EDDiscovery
 
                 AddNewHistoryRow(true, he);
 
-                StoreSystemNote();
-
                 if (he.IsFSDJump)
                     _discoveryForm.Map.UpdateSystemList(_discoveryForm.history.FilterByFSDAndPosition);           // update map - only cares about FSD changes
 
@@ -237,7 +238,7 @@ namespace EDDiscovery
                 {
                     dataGridViewTravel.ClearSelection();
                     dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
-                    ShowSystemInformation(he);
+                    ShowSystemInformation(dataGridViewTravel.Rows[0]);
                     UpdateDependentsWithSelection();
                 }
             }
@@ -249,19 +250,18 @@ namespace EDDiscovery
 
         }
 
-        public void ShowSystemInformation()
+        public void ShowSystemInformation(DataGridViewRow rw)
         {
-            ShowSystemInformation((HistoryEntry)(dataGridViewTravel.Rows[0].Cells[TravelHistoryColumns.Description].Tag));
-        }
+            currentSysPos = rw;
 
-        public void ShowSystemInformation(HistoryEntry syspos)
-        {
+            HistoryEntry syspos = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+            SystemNoteClass note = rw.Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass;
+
             Debug.Assert(syspos != null);
 
             syspos.EnsureSystemEDSM();               // Lazy load of data..
 
-            currentSysPos = syspos;
-            textBoxSystem.Text = currentSysPos.System.name;
+            textBoxSystem.Text = syspos.System.name;
             
             if (syspos.System.HasCoordinate)         // cursystem has them?
             {
@@ -282,7 +282,7 @@ namespace EDDiscovery
             int count = _discoveryForm.history.GetVisitsCount(syspos.System.name);
             textBoxVisits.Text = count.ToString();
 
-            bool enableedddross = (currentSysPos.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
+            bool enableedddross = (syspos.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
 
             buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
 
@@ -290,7 +290,7 @@ namespace EDDiscovery
             textBoxEconomy.Text = EnumStringFormat(syspos.System.primary_economy.ToString());
             textBoxGovernment.Text = EnumStringFormat(syspos.System.government.ToString());
             textBoxState.Text = EnumStringFormat(syspos.System.state.ToString());
-            richTextBoxNote.Text = EnumStringFormat(SystemNoteClass.GetSystemNoteNotNull(syspos.Journalid,syspos.System.name));
+            richTextBoxNote.Text = EnumStringFormat(note != null ? note.Note : "");
 
             closestsystem_queue.Add(syspos.System);
         }
@@ -380,7 +380,7 @@ namespace EDDiscovery
             if (closestthread != null && closestthread.IsAlive)
             {
                 ShutdownEDD = true;
-                closestsystem_queue.Add(currentSysPos.System);
+                closestsystem_queue.Add(null);
                 closestthread.Join();
 
             }
@@ -392,7 +392,7 @@ namespace EDDiscovery
             {
                 if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null)
                     return null;
-                return ((HistoryEntry)dataGridViewTravel.CurrentRow.Cells[TravelHistoryColumns.Description].Tag);
+                return ((HistoryEntry)dataGridViewTravel.CurrentRow.Cells[TravelHistoryColumns.HistoryTag].Tag);
             }
         }
 
@@ -549,9 +549,8 @@ namespace EDDiscovery
         {
             if (e.RowIndex >= 0)
             {
-                HistoryEntry currentsys = (HistoryEntry)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.Description].Tag);
+                ShowSystemInformation(dataGridViewTravel.Rows[e.RowIndex]);
 
-                ShowSystemInformation(currentsys);
                 UpdateDependentsWithSelection();
 
                 if (e.ColumnIndex == TravelHistoryColumns.Note)
@@ -570,7 +569,7 @@ namespace EDDiscovery
                 int rowi = dataGridViewTravel.CurrentCell.RowIndex;
                 if (rowi >= 0)
                 {
-                    HistoryEntry currentsys = (HistoryEntry)(dataGridViewTravel.Rows[rowi].Cells[TravelHistoryColumns.Description].Tag);
+                    HistoryEntry currentsys = dataGridViewTravel.Rows[rowi].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
                     _discoveryForm.Map.UpdateHistorySystem(currentsys.System);
                     _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.System.name);
                 }
@@ -581,8 +580,7 @@ namespace EDDiscovery
         {
             if (e.RowIndex >= 0)
             {
-                HistoryEntry currentsys = (HistoryEntry)(dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.Description].Tag);
-                ShowSystemInformation(currentsys);
+                ShowSystemInformation(dataGridViewTravel.Rows[e.RowIndex]);
                 UpdateDependentsWithSelection();
             }
         }
@@ -605,9 +603,10 @@ namespace EDDiscovery
 
             try
             {
-                string txt = richTextBoxNote.Text.Trim();
+                HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                SystemNoteClass sn = currentSysPos.Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass;
 
-                SystemNoteClass sn = SystemNoteClass.GetSystemNote(currentSysPos.Journalid, currentSysPos.System.name);
+                string txt = richTextBoxNote.Text.Trim();
 
                 if ( (sn == null && txt.Length>0) || (sn!=null && !sn.Note.Equals(txt))) // if no system note, and text,  or system not is not text
                 {
@@ -615,21 +614,22 @@ namespace EDDiscovery
                     { 
                         sn.Note = txt;
                         sn.Time = DateTime.Now;
-                        sn.Journalid = currentSysPos.Journalid;
+                        sn.Name = (sys.IsFSDJump) ? sys.System.name : "";
+                        sn.Journalid = (sys.IsFSDJump) ? 0 : sys.Journalid;
                         sn.Update();
                     }
                     else
                     {
                         sn = new SystemNoteClass();
-                        sn.Name = currentSysPos.System.name;
                         sn.Note = txt;
                         sn.Time = DateTime.Now;
-                        sn.Journalid = currentSysPos.Journalid;
+                        sn.Name = (sys.IsFSDJump) ? sys.System.name : "";
+                        sn.Journalid = (sys.IsFSDJump) ? 0 : sys.Journalid;
                         sn.Add();
+                        currentSysPos.Cells[TravelHistoryColumns.NoteTag].Tag = sn;
                     }
 
-                    if (dataGridViewTravel.SelectedCells.Count > 0)          // if we have selected (we should!)
-                        dataGridViewTravel.Rows[dataGridViewTravel.SelectedCells[0].OwningRow.Index].Cells[TravelHistoryColumns.Note].Value = txt;
+                    currentSysPos.Cells[TravelHistoryColumns.Note].Value = txt;
 
                     EDSMClass edsm = new EDSMClass();
 
@@ -749,7 +749,7 @@ namespace EDDiscovery
             int pos = grid.RowHeadersWidth + grid.Columns[0].Width;
             int padding = 4;
 
-            HistoryEntry he = (HistoryEntry)grid.Rows[e.RowIndex].Cells[TravelHistoryColumns.Description].Tag;
+            HistoryEntry he = (HistoryEntry)grid.Rows[e.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag;
 
             e.Graphics.DrawImage(he.GetIcon, new Rectangle(pos, top, size, size));
 
@@ -765,30 +765,36 @@ namespace EDDiscovery
 
         private void buttonEDDB_Click(object sender, EventArgs e)
         {
-            if ( currentSysPos!= null && currentSysPos.System.id_eddb>0)
-                Process.Start("http://eddb.io/system/" + currentSysPos.System.id_eddb.ToString());
+            HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+
+            if ( currentSysPos!= null && sys.System.id_eddb>0)
+                Process.Start("http://eddb.io/system/" + sys.System.id_eddb.ToString());
         }
 
         private void buttonRoss_Click(object sender, EventArgs e)
         {
-            if (currentSysPos!= null && currentSysPos.System.id_eddb>0)
-                Process.Start("http://ross.eddb.io/system/update/" + currentSysPos.System.id_eddb.ToString());
+            HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+
+            if (currentSysPos!= null && sys.System.id_eddb>0)
+                Process.Start("http://ross.eddb.io/system/update/" + sys.System.id_eddb.ToString());
         }
 
         private void buttonEDSM_Click(object sender, EventArgs e)
         {
-            if (currentSysPos != null && currentSysPos.System != null) // solve a possible exception
+            HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+
+            if (currentSysPos != null && sys.System != null) // solve a possible exception
             {
-                if (!String.IsNullOrEmpty(currentSysPos.System.name))
+                if (!String.IsNullOrEmpty(sys.System.name))
                 {
-                    long? id_edsm = currentSysPos.System.id_edsm;
+                    long? id_edsm = sys.System.id_edsm;
                     if (id_edsm == 0)
                     {
                         id_edsm = null;
                     }
 
                     EDSMClass edsm = new EDSMClass();
-                    string url = edsm.GetUrlToEDSMSystem(currentSysPos.System.name, id_edsm);
+                    string url = edsm.GetUrlToEDSMSystem(sys.System.name, id_edsm);
 
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         Process.Start(url);
@@ -882,7 +888,9 @@ namespace EDDiscovery
         {
             foreach (DataGridViewRow item in dataGridViewTravel.Rows)
             {
-                string s = (string)item.Cells[TravelHistoryColumns.Description].Value;
+                HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                string s = sys.System.name;
+
                 if (s.Equals(sysname) && item.Visible)
                 {
                     dataGridViewTravel.ClearSelection();
@@ -905,7 +913,7 @@ namespace EDDiscovery
 
                 if (sc != null && sc.HasCoordinate)
                 {
-                    SystemNoteClass nc = SystemNoteClass.GetSystemNote(sn);        // has it got a note?
+                    SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sn);        // has it got a note?
 
                     if (nc != null)
                     {
@@ -1121,12 +1129,12 @@ namespace EDDiscovery
                     if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
                     {
                         rightclickrow = hti.RowIndex;
-                        rightclicksystem = (HistoryEntry)dataGridViewTravel.Rows[hti.RowIndex].Cells[TravelHistoryColumns.Description].Tag;
+                        rightclicksystem = (HistoryEntry)dataGridViewTravel.Rows[hti.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag;
                     }
                     if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
                     {
                         leftclickrow = hti.RowIndex;
-                        leftclicksystem = (HistoryEntry)dataGridViewTravel.Rows[hti.RowIndex].Cells[TravelHistoryColumns.Description].Tag;
+                        leftclicksystem = (HistoryEntry)dataGridViewTravel.Rows[hti.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag;
                     }
                 }
             }
@@ -1207,7 +1215,7 @@ namespace EDDiscovery
             ColorDialog mapColorDialog = new ColorDialog();
             mapColorDialog.AllowFullOpen = true;
             mapColorDialog.FullOpen = true;
-            HistoryEntry sp2 = (HistoryEntry)selectedRows.First().Cells[TravelHistoryColumns.Description].Tag;
+            HistoryEntry sp2 = (HistoryEntry)selectedRows.First().Cells[TravelHistoryColumns.HistoryTag].Tag;
             mapColorDialog.Color = Color.FromArgb(sp2.MapColour);
 
             if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
@@ -1216,7 +1224,7 @@ namespace EDDiscovery
 
                 foreach (DataGridViewRow r in selectedRows)
                 {
-                    HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.Description].Tag;
+                    HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                     Debug.Assert(sp != null);
                     sp.UpdateMapColour(mapColorDialog.Color.ToArgb());
                 }
@@ -1236,7 +1244,7 @@ namespace EDDiscovery
 
             foreach (DataGridViewRow r in selectedRows)
             {
-                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.Description].Tag;
+                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 Debug.Assert(sp != null);
                 sp.UpdateCommanderID(-1);
             }
@@ -1268,7 +1276,7 @@ namespace EDDiscovery
             this.Cursor = Cursors.WaitCursor;
             foreach (DataGridViewRow r in selectedRows)
             {
-                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.Description].Tag;
+                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 Debug.Assert(sp != null);
                 listsyspos.Add(sp);
             }
@@ -1306,7 +1314,7 @@ namespace EDDiscovery
             this.Cursor = Cursors.WaitCursor;
             foreach (DataGridViewRow r in selectedRows)
             {
-                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.Description].Tag;
+                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 tctrl.AddWantedSystem(sp.System.name);
             }
 
@@ -1325,7 +1333,7 @@ namespace EDDiscovery
             this.Cursor = Cursors.WaitCursor;
             foreach (DataGridViewRow r in selectedRows)
             {
-                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.Description].Tag;
+                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 tctrl.AddSystemToDataGridViewDistances(sp.System.name);
                 tctrl.AddWantedSystem(sp.System.name);
             }
@@ -1345,7 +1353,7 @@ namespace EDDiscovery
             this.Cursor = Cursors.WaitCursor;
             foreach (DataGridViewRow r in selectedRows)
             {
-                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.Description].Tag;
+                HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 tctrl.AddSystemToDataGridViewDistances(sp.System.name);
             }
 
@@ -1430,13 +1438,14 @@ namespace EDDiscovery
         }
 
 
+
         private void routeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> toAdd = new List<HistoryEntry>();
 
             foreach (DataGridViewCell cell in dataGridViewTravel.SelectedCells)
             {
-                HistoryEntry vsc = (HistoryEntry)cell.OwningRow.Cells[TravelHistoryColumns.Description].Tag;
+                HistoryEntry vsc = (HistoryEntry)cell.OwningRow.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 if (!toAdd.Any(v => !v.System.name.Equals(vsc.System.name)))
                 {
                     toAdd.Add(vsc);
