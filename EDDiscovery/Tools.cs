@@ -117,6 +117,10 @@ namespace EDDiscovery
                 {
                     return Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Data");
                 }
+                else if ( appfolder.Contains(":") || appfolder.Contains("\\"))
+                {
+                    return appfolder;
+                }
                 else
                 {
                     string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
