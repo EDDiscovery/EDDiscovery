@@ -129,7 +129,7 @@ namespace EDDiscovery
                 {
                     Directory.CreateDirectory(logpath);
                 }
-
+#if false
                 if (!Debugger.IsAttached)
                 {
                     logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
@@ -146,13 +146,13 @@ namespace EDDiscovery
                 }
                 // Log first-chance exceptions to help diagnose errors
                 Register_FirstChanceException_Handler();
+#endif
             }
             catch (Exception ex)
             {
                 Trace.WriteLine($"Unable to create the folder '{logpath}'");
                 Trace.WriteLine($"Exception: {ex.Message}");
             }
-
             theme = new EDDTheme();
 
             EDDConfig = EDDConfig.Instance;
@@ -428,9 +428,9 @@ namespace EDDiscovery
             TravelControl.RedrawSummary();
         }
 
-        #endregion
+#endregion
 
-        #region Information Downloads
+#region Information Downloads
 
         public Task<bool> DownloadMaps(Action<Action> registerCancelCallback)          // ASYNC process
         {
@@ -545,9 +545,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region Initial Check Systems
+#region Initial Check Systems
 
         bool performedsmsync = false;
         bool performeddbsync = false;
@@ -679,9 +679,9 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
-        #endregion
+#endregion
 
-        #region Async EDSM/EDDB Full Sync
+#region Async EDSM/EDDB Full Sync
 
         private void AsyncPerformSync()
         {
@@ -810,9 +810,9 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
-        #endregion
+#endregion
 
-        #region EDSM and EDDB syncs code
+#region EDSM and EDDB syncs code
 
         private bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
@@ -1008,9 +1008,9 @@ namespace EDDiscovery
             AsyncPerformSync();
         }
 
-        #endregion
+#endregion
 
-        #region Logging
+#region Logging
 
         public void LogLine(string text)
         {
@@ -1112,9 +1112,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region JSONandMisc
+#region JSONandMisc
         static public string LoadJsonFile(string filename)
         {
             string json = null;
@@ -1139,9 +1139,9 @@ namespace EDDiscovery
             tabControl1.SelectedIndex = 1;
         }
 
-        #endregion
+#endregion
 
-        #region Closing
+#region Closing
 
         private void SaveSettings()
         {
@@ -1238,9 +1238,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region ButtonsAndMouse
+#region ButtonsAndMouse
 
         private void button_test_Click(object sender, EventArgs e)
         {
@@ -1555,14 +1555,14 @@ namespace EDDiscovery
         {
             RefreshHistoryAsync(forceReload: true);
         }
-        #endregion
+#endregion
 
         private void journalViewControl1_Load(object sender, EventArgs e)
         {
 
         }
 
-        #region Update Views with new commander 
+#region Update Views with new commander 
 
         private class RefreshHistoryParameters
         {
@@ -1677,7 +1677,7 @@ namespace EDDiscovery
 
                     string dinfo = "Faction:Fred's faction Economy:Industrial Population:2000000" + Environment.NewLine +
                                    "Station Type:Outpost Faction State:Civil War Allegiance:Federation";
-                    he.MakeJournalEntry(EliteDangerous.JournalTypeEnum.Docked, 0, v.curSystem, v.Time.AddSeconds(30), "Docked at Halley Outpost",
+                    he.MakeJournalEntry(EliteDangerous.JournalTypeEnum.Docked, loop, v.curSystem, v.Time.AddSeconds(30), "Docked at Halley Outpost",
                         "Federation Industrial Civil War", dinfo, 0, false);
                     history.Add(he);
                     he = new HistoryEntry();
@@ -1705,7 +1705,7 @@ namespace EDDiscovery
             travelHistoryControl1.AddNewEntry(he);
         }
 
-        #endregion
+#endregion
 
     }
 }
