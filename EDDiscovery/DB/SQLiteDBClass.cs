@@ -636,6 +636,10 @@ namespace EDDiscovery.DB
                 if (dbver < 104)
                     UpgradeUserDB104(conn);
 
+                if (dbver < 105)
+                    UpgradeUserDB105(conn);
+
+
                 CreateUserDBTableIndexes();
 
                 return true;
@@ -996,8 +1000,8 @@ namespace EDDiscovery.DB
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "Type INTEGER NOT NULL, " +
                 "Name TEXT NOT NULL COLLATE NOCASE, " +
-                "CommanderId INTEGER REFERENCES Commanders(Id), " +
                 "Path TEXT COLLATE NOCASE, " +
+                "CommanderId INTEGER REFERENCES Commanders(Id), " +
                 "Size INTEGER " +
                 ") ";
 
@@ -1022,6 +1026,26 @@ namespace EDDiscovery.DB
             PerformUpgrade(conn, 104, true, false, new[] { query1 });
         }
 
+        private static void UpgradeUserDB105(SQLiteConnectionED conn)
+        {
+            string query1 = "ALTER TABLE TravelLogUnit ADD COLUMN CommanderId INTEGER REFERENCES Commanders(Id) ";
+            string query2 = "DROP TABLE IF EXISTS JournalEntries";
+            string query3 = "CREATE TABLE JournalEntries ( " +
+                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                 "TravelLogId INTEGER NOT NULL REFERENCES TravelLogUnit(Id), " +
+                 "EventTypeId INTEGER NOT NULL, " +
+                 "EventType TEXT, " +
+                 "EventTime DATETIME NOT NULL, " +
+                 "EventData TEXT, " + //--JSON String of complete line" +
+                 "EdsmId INTEGER, " + //--0 if not set yet." +
+                 "Synced INTEGER " +
+                 ")";
+
+
+            PerformUpgrade(conn, 105, true, false, new[] { query1, query2, query3 });
+        }
+
+
         private static void DropOldUserTables(SQLiteConnectionUser conn)
         {
             string[] queries = new[]
@@ -1031,6 +1055,7 @@ namespace EDDiscovery.DB
                 "DROP TABLE IF EXISTS Distances",
                 "DROP TABLE IF EXISTS Stations",
                 "DROP TABLE IF EXISTS station_commodities",
+                "DROP TABLE IF EXISTS Journals",
             };
 
             foreach (string query in queries)
@@ -1073,12 +1098,11 @@ namespace EDDiscovery.DB
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)",
                 "CREATE INDEX IF NOT EXISTS VisitedSystems_position ON VisitedSystems (X, Y, Z)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)",
-                "CREATE INDEX IF NOT EXISTS JournalEntry_JournalId ON JournalEntries (JournalId)",
+                "CREATE INDEX IF NOT EXISTS TravelLogUnit_Commander ON TravelLogUnit(CommanderId)",
+                "CREATE INDEX IF NOT EXISTS JournalEntry_TravelLogId ON JournalEntries (TravelLogId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTypeId ON JournalEntries (EventTypeId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventType ON JournalEntries (EventType)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTime ON JournalEntries (EventTime)",
-                "CREATE INDEX IF NOT EXISTS Journal_Name ON Journals(Name)",
-                "CREATE INDEX IF NOT EXISTS Journal_Commander ON Journals(CommanderId)",
             };
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
