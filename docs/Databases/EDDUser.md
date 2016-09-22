@@ -5,7 +5,7 @@ This database (`EDDUser.sqlite`) contains user settings, journal entries, saved 
 It contains the following tables:
 * [`Register`](EDDUser/Register.md): user settings
 * [`Commanders`](EDDUser/Commanders.md): commander name, logpath and API key
-* [`TravelLogUnit`](EDDUser/Journals.md): Journal/Netlog file info
+* [`TravelLogUnit`](EDDUser/TravelLogUnit.md): Journal/Netlog file info
 * [`JournalEntries`](EDDUser/JournalEntries.md): Journal entry data
 * [`JournalProperties`](EDDUser/JournalProperties.md): Exported properties from journal entry data
 * [`JournalTravelEntries`](EDDUser/JournalTravelEntries.md): Travel log
