@@ -342,11 +342,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageTravelHistory);
+            this.tabControl1.Controls.Add(this.tabPageJournal);
             this.tabControl1.Controls.Add(this.tabPageTriletaration);
             this.tabControl1.Controls.Add(this.tabPageScreenshots);
             this.tabControl1.Controls.Add(this.tabPageRoute);
             this.tabControl1.Controls.Add(this.tabPageRoutesExpeditions);
-            this.tabControl1.Controls.Add(this.tabPageJournal);
             this.tabControl1.Controls.Add(this.tabPageSettings);
             this.tabControl1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControl1.Location = new System.Drawing.Point(0, 28);

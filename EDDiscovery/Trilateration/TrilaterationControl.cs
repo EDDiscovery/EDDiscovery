@@ -443,7 +443,7 @@ namespace EDDiscovery
                 var travelHistoryControl = _discoveryForm.TravelControl;
                 if (string.IsNullOrEmpty(edsm.commanderName))
                 {
-                    string commanderName = travelHistoryControl.GetCommanderName();
+                    string commanderName = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
 
                     if (string.IsNullOrEmpty(commanderName))
                     {

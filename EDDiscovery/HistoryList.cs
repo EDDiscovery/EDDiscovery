@@ -141,6 +141,8 @@ namespace EDDiscovery
             return (from systems in historylist where systems.EventTime >= oldestData orderby systems.EventTime descending select systems).ToList();
         }
 
+        public int Count { get { return historylist.Count;  } }
+
         public List<HistoryEntry> OrderByDate
         {
             get
