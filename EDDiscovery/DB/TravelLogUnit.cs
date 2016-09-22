@@ -16,7 +16,7 @@ namespace EDDiscovery2.DB
         public int type;
         public int Size;
         public string Path;
-
+        public int? CommanderId;
 
         public TravelLogUnit()
         {
@@ -24,21 +24,36 @@ namespace EDDiscovery2.DB
 
         public TravelLogUnit(DataRow dr)
         {
+            Object obj;
             id = (long)dr["id"];
             Name = (string)dr["Name"];
             type = (int)(long)dr["type"];
             Size = (int)(long)dr["size"];
             Path = (string)dr["Path"];
+             obj = dr["CommanderId"];
+
+            if (obj == DBNull.Value)
+                CommanderId = null; 
+            else
+                CommanderId = (int)(long)dr["CommanderId"];
 
         }
 
         public TravelLogUnit(DbDataReader dr)
         {
+            Object obj;
             id = (long)dr["id"];
             Name = (string)dr["Name"];
             type = (int)(long)dr["type"];
             Size = (int)(long)dr["size"];
             Path = (string)dr["Path"];
+            obj =dr["CommanderId"];
+
+            if (obj == DBNull.Value)
+                CommanderId = null;  // TODO  use better default value?
+            else
+                CommanderId = (int)(long)dr["CommanderId"];
+
         }
 
         public bool Beta
@@ -68,12 +83,13 @@ namespace EDDiscovery2.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path) values (@name, @type, @size, @Path)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path, CommanderID) values (@name, @type, @size, @Path, @CommanderID)"))
             {
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@type", type);
                 cmd.AddParameterWithValue("@size", Size);
                 cmd.AddParameterWithValue("@Path", Path);
+                cmd.AddParameterWithValue("@CommanderID", CommanderId);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -96,13 +112,14 @@ namespace EDDiscovery2.DB
 
         public bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path  where ID=@id", tn))
+            using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path, CommanderID=@CommanderID  where ID=@id", tn))
             {
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@Name", Name);
                 cmd.AddParameterWithValue("@Type", type);
                 cmd.AddParameterWithValue("@size", Size);
                 cmd.AddParameterWithValue("@Path", Path);
+                cmd.AddParameterWithValue("@CommanderID", CommanderId);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
