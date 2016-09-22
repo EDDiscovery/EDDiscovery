@@ -584,10 +584,13 @@ namespace EDDiscovery.EliteDangerous
           
            
                     je = new JournalUnhandled(jo, Eventstr, reader);
+                    System.Diagnostics.Trace.WriteLine("Unhandled event: " + Eventstr);
                     break;
 
                 default:
                     je = new JournalUnknown(jo, Eventstr, reader);
+                    System.Diagnostics.Trace.WriteLine("Unknown event: " + Eventstr);
+
                     break;
             }
 
