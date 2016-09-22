@@ -3,7 +3,7 @@
 ```sql
 CREATE TABLE JournalEntries (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  JournalId INTEGER NOT NULL REFERENCES Journals (Id),
+  TravelLogId INTEGER NOT NULL REFERENCES TravelLogUnit (Id),
   EventTypeId INTEGER NOT NULL,
   EventType TEXT,
   EventTime DATETIME NOT NULL,
