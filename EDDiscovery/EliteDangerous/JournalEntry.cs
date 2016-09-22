@@ -1,9 +1,12 @@
-﻿using EDDiscovery.EliteDangerous;
+﻿using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -216,9 +219,10 @@ namespace EDDiscovery.EliteDangerous
         public int Id;
         public int JournalId;
         protected string eventTypeStr;
-        private JournalTypeEnum eventType;
+        private JournalTypeEnum eventTypeID;
         private DateTime eventTimeUTC;
         private JObject jEventData;
+        public int EdsmID;
         public int Synced;
 
 
@@ -243,7 +247,7 @@ namespace EDDiscovery.EliteDangerous
         {
             get
             {
-                return eventTypeStr ?? eventType.ToString();
+                return eventTypeStr ?? eventTypeID.ToString();
             }
         }
 
@@ -251,7 +255,7 @@ namespace EDDiscovery.EliteDangerous
         {
             get
             {
-                return eventType;
+                return eventTypeID;
             }
         }
 
@@ -261,11 +265,17 @@ namespace EDDiscovery.EliteDangerous
             {
                 return jEventData.ToString();
             }
+            set
+            {
+                jEventData = (JObject)JObject.Parse(value);
+            }
+
+
         }
 
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {
-            summary = Tools.SplitCapsWord(eventType.ToString());
+            summary = Tools.SplitCapsWord(EventType.ToString());
             info = "Event"; // TO do.. pick first three?
             detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", ""));  // something like this..
         }
@@ -273,11 +283,159 @@ namespace EDDiscovery.EliteDangerous
         public JournalEntry(JObject jo, JournalTypeEnum jtype, EDJournalReader reader)
         {
             jEventData = jo;
-            eventType = jtype;
-
+            eventTypeID = jtype;
+            
             eventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
             JournalId = reader.JournalId;
         }
+
+
+        public JournalEntry(DbDataReader dr)
+        {
+            Id = (int)(long)dr["Id"];
+            eventTimeUTC = (DateTime)dr["EventTime"];
+            JournalId = (int)(long)dr["JournalId "];
+            eventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
+            EventDataString = (string)dr["EventData"];
+            EdsmID = (int)(long)dr["EdsmID"];
+        }
+
+
+        public bool Add()
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                bool ret = Add(cn);
+                return ret;
+            }
+        }
+
+        public bool Add(SQLiteConnectionUser cn, DbTransaction tn = null)
+        {
+            using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, JournalID, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @JournalID, @EventTypeId , @EventType, @EventData, @EdsmId, @Synced)", tn))
+            {
+                cmd.AddParameterWithValue("@EventTime", eventTimeUTC);
+                cmd.AddParameterWithValue("@JournalID", JournalId);
+                cmd.AddParameterWithValue("@EventTypeId", eventTypeID);
+                cmd.AddParameterWithValue("@EventType", EventType);
+                cmd.AddParameterWithValue("@EventData", EventDataString);
+                cmd.AddParameterWithValue("@EdsmId", EdsmID);
+                cmd.AddParameterWithValue("@Synced", Synced);
+
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from JournalEntries"))
+                {
+                    Id = (int)(long)SQLiteDBClass.SQLScalar(cn, cmd2);
+                }
+                return true;
+            }
+        }
+
+        public new bool Update()
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                return Update(cn);
+            }
+        }
+
+        private bool Update(SQLiteConnectionUser cn)
+        {
+            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, JournalID=@JournalID, EventTypeId=@EventTypeId, EventType=@EventType, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id"))
+            {
+                cmd.AddParameterWithValue("@ID", Id);
+                cmd.AddParameterWithValue("@EventTime", eventTimeUTC);
+                cmd.AddParameterWithValue("@JournalID", JournalId);
+                cmd.AddParameterWithValue("@EventTypeId", eventTypeID);
+                cmd.AddParameterWithValue("@EventType", EventType);
+                cmd.AddParameterWithValue("@EventData", EventDataString);
+                cmd.AddParameterWithValue("@EdsmId", EdsmID);
+                cmd.AddParameterWithValue("@Synced", Synced);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+
+                return true;
+            }
+        }
+
+
+
+
+
+
+        static public List<JournalEntry> GetAll()
+        {
+            List<JournalEntry> list = new List<JournalEntry>();
+
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries Order by Time "))
+                {
+                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+
+                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                        return list;
+
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        JournalEntry sys = JournalEntry.CreateJournalEntry(dr);
+                        list.Add(sys);
+                    }
+
+                    return list;
+                }
+            }
+        }
+
+
+        static public List<JournalEntry> GetAll(int commander)
+        {
+            List<JournalEntry> list = new List<JournalEntry>();
+
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where commander=@commander Order by Time "))
+                {
+                    cmd.AddParameterWithValue("@commander", commander);
+
+                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                        return list;
+
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        JournalEntry sys = JournalEntry.CreateJournalEntry(dr);
+                        list.Add(sys);
+                    }
+
+                    return list;
+                }
+            }
+        }
+
+        public static List<JournalEntry> GetAll(JournalsClass tlu)
+        {
+            List<JournalEntry> vsc = new List<JournalEntry>();
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE JournalId  = @source ORDER BY Time ASC"))
+                {
+                    cmd.AddParameterWithValue("@source", tlu.id);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            vsc.Add(JournalEntry.CreateJournalEntry(reader));
+                        }
+                    }
+                }
+            }
+            return vsc;
+        }
+
+
+
+
 
         public string ToShortString()
         {
@@ -286,6 +444,38 @@ namespace EDDiscovery.EliteDangerous
             jo.Property("timestamp").Remove();
             jo.Property("event").Remove();
             return jo.ToString().Replace("{", "").Replace("}", "").Replace("\"", "");
+        }
+
+        static public JournalEntry CreateJournalEntry(DataRow dr)
+        {
+            string EDataString = (string)dr["EventData"];
+            EDJournalReader edjr = new EDJournalReader("");  // TODO hack
+
+            JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString, edjr);
+        
+            jr.Id = (int)(long)dr["Id"];
+            jr.eventTimeUTC = (DateTime)dr["EventTime"];
+            jr.JournalId = (int)(long)dr["JournalId "];
+            jr.eventTypeID = (JournalTypeEnum)(long)dr["eventTypeID "];
+            jr.EdsmID = (int)(long)dr["EdsmID"];
+
+            return jr;
+        }
+
+        static public JournalEntry CreateJournalEntry(DbDataReader dr)
+        {
+            string EDataString = (string)dr["EventData"];
+            EDJournalReader edjr = new EDJournalReader("");  // TODO hack;
+
+            JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString, edjr);
+
+            jr.Id = (int)(long)dr["Id"];
+            jr.eventTimeUTC = (DateTime)dr["EventTime"];
+            jr.JournalId = (int)(long)dr["JournalId "];
+            jr.eventTypeID = (JournalTypeEnum)(long)dr["eventTypeID "];
+            jr.EdsmID = (int)(long)dr["EdsmID"];
+
+            return jr;
         }
 
         static public JournalEntry CreateJournalEntry(string text, EDJournalReader reader)
@@ -301,6 +491,9 @@ namespace EDDiscovery.EliteDangerous
 
             switch (Eventstr)
             {
+                case "Bounty":
+                    je = new JournalBounty(jo, reader);
+                    break;
                 case "BuyAmmo":
                     je = new JournalBuyAmmo(jo, reader);
                     break;
@@ -329,6 +522,16 @@ namespace EDDiscovery.EliteDangerous
                     break;
                 case "CommunityGoalReward":
                     je = new JournalCommunityGoalReward(jo, reader);
+                    break;
+
+                case "DatalinkScan":
+                    je = new JournalDatalinkScan(jo, reader);
+                    break;
+                case "DockFighter":
+                    je = new JournalDockFighter(jo, reader);
+                    break;
+                case "DockSRV":
+                    je = new JournalDockSRV(jo, reader);
                     break;
 
                 case "Docked":
@@ -449,6 +652,35 @@ namespace EDDiscovery.EliteDangerous
                     break;
 
 
+                case "MaterialCollected":
+                    je = new JournalMaterialCollected(jo, reader);
+                    break;
+                case "MaterialDiscarded":
+                    je = new JournalMaterialDiscarded(jo, reader);
+                    break;
+                case "MaterialDiscovered":
+                    je = new JournalMaterialDiscovered(jo, reader);
+                    break;
+                case "MiningRefined":
+                    je = new JournalMiningRefined(jo, reader);
+                    break;
+
+                case "MissionAbandoned":
+                    je = new JournalMissionAbandoned(jo, reader);
+                    break;
+                case "MissionAccepted":
+                    je = new JournalMissionAccepted(jo, reader);
+                    break;
+                case "MissionCompleted":
+                    je = new JournalMissionCompleted(jo, reader);
+                    break;
+                case "MissionFailed":
+                    je = new JournalMissionFailed(jo, reader);
+                    break;
+                case "NewCommander":
+                    je = new JournalNewCommander(jo, reader);
+                    break;
+
                 case "Continued":
                     je = new JournalContinued(jo, reader);
                     break;
@@ -544,26 +776,16 @@ namespace EDDiscovery.EliteDangerous
 
 
 
-                case "Bounty":
+                
               
                 case "CapShipBond":
                 case "ClearSavedGame":
               
-                case "DatalinkScan":
-                case "DockFighter":
-                case "DockSRV":
+              
                 case "EjectCargo":
                 case "LaunchFighter":
  
-                case "MaterialCollected":
-                case "MaterialDiscarded":
-                case "MaterialDiscovered":
-                case "MiningRefined":
-                case "MissionAbandoned":
-                case "MissionAccepted":
-                case "MissionCompleted":
-                case "MissionFailed":
-                case "NewCommander":
+
                 case "PayFines":
                 case "PayLegacyFines":
                 case "PowerplayCollect":
@@ -589,10 +811,13 @@ namespace EDDiscovery.EliteDangerous
           
            
                     je = new JournalUnhandled(jo, Eventstr, reader);
+                    System.Diagnostics.Trace.WriteLine("Unhandled event: " + Eventstr);
                     break;
 
                 default:
                     je = new JournalUnknown(jo, Eventstr, reader);
+                    System.Diagnostics.Trace.WriteLine("Unknown event: " + Eventstr);
+
                     break;
             }
 
