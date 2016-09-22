@@ -20,9 +20,6 @@ namespace EDDiscovery
 {
     public partial class TravelHistoryControl : UserControl
     {
-        private const int MaximumJumpRange = 45; // max jump range is ~42Ly
-        private bool ShutdownEDD = false;
-
         public class TravelHistoryColumns
         {
             public const int Time = 0;
@@ -40,21 +37,30 @@ namespace EDDiscovery
             public const int SystemName = 0;
         }
 
-        private const int DefaultTravelHistoryFilterIndex = 8;
-        private const string SingleCoordinateFormat = "0.#####";
-        private string EventFilter;
+        private const string SingleCoordinateFormat = "0.##";
 
         private static EDDiscoveryForm _discoveryForm;
-        public EDSMSync sync;
 
         internal bool EDSMSyncTo = true;
         internal bool EDSMSyncFrom = true;
 
-        DataGridViewRow currentSysPos = null;
-
+        DataGridViewRow currentGridRow = null;
         SummaryPopOut summaryPopOut = null;
-
         List<EDCommander> commanders = null;
+
+        EventFilterSelector cfs = new EventFilterSelector();
+
+        private bool ShutdownEDD = false;
+        
+        public HistoryEntry CurrentSystemSelected
+        {
+            get
+            {
+                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null)
+                    return null;
+                return ((HistoryEntry)dataGridViewTravel.CurrentRow.Cells[TravelHistoryColumns.HistoryTag].Tag);
+            }
+        }
 
         public TravelHistoryControl()
         {
@@ -64,32 +70,14 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            sync = new EDSMSync(_discoveryForm);
+
             EDSMSyncTo = SQLiteDBClass.GetSettingBool("EDSMSyncTo", true);
             EDSMSyncFrom = SQLiteDBClass.GetSettingBool("EDSMSyncFrom", true);
             checkBoxEDSMSyncTo.Checked = EDSMSyncTo;
             checkBoxEDSMSyncFrom.Checked = EDSMSyncFrom;
-            comboBoxHistoryWindow.Enabled = false;
-            comboBoxHistoryWindow.DataSource = new[]
-            {
-                TravelHistoryFilter.FromHours(6),
-                TravelHistoryFilter.FromHours(12),
-                TravelHistoryFilter.FromHours(24),
-                TravelHistoryFilter.FromDays(3),
-                TravelHistoryFilter.FromWeeks(1),
-                TravelHistoryFilter.FromWeeks(2),
-                TravelHistoryFilter.LastMonth(),
-                TravelHistoryFilter.Last(20),
-                TravelHistoryFilter.NoFilter,
-            };
 
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, "EDUIHistory");
             richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
-
-            comboBoxHistoryWindow.DisplayMember = nameof(TravelHistoryFilter.Label);
-
-            comboBoxHistoryWindow.SelectedIndex = SQLiteDBClass.GetSettingInt("EDUIHistory", DefaultTravelHistoryFilterIndex);
-            EventFilter = SQLiteDBClass.GetSettingString("TravelHistoryControlEventFilter", "All");
-            comboBoxHistoryWindow.Enabled = true;
 
             LoadCommandersListBox();
 
@@ -97,59 +85,25 @@ namespace EDDiscovery
             closestthread.Start();
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+
+            cfs.Changed += EventFilterChanged;
         }
 
-        internal void RefreshEDSMEvent(object source)
+        private void TravelHistoryControl_Load(object sender, EventArgs e)
         {
-            Invoke((MethodInvoker)delegate
-            {
-                _discoveryForm.RefreshHistoryAsync();
-            });
-        }
-
-
-        public void RefreshButton(bool state)
-        {
-            button_RefreshHistory.Enabled = state;
-        }
-
-        private void button_RefreshHistory_Click(object sender, EventArgs e)
-        {
-            LogLine("Refresh History.");
-            _discoveryForm.RefreshHistoryAsync();
-        }
-
-        public void LogLine(string text)
-        {
-            LogLineColor(text, _discoveryForm.theme.TextBlockColor );
-        }
-
-        public void LogLineHighlight(string text)
-        {
-            LogLineColor(text, _discoveryForm.theme.TextBlockHighlightColor);
-        }
-
-        public void LogLineSuccess(string text)
-        {
-            LogLineColor(text, _discoveryForm.theme.TextBlockSuccessColor);
-        }
-
-        public void LogLineColor( string text, Color color)
-        {
-            //Console.WriteLine("Text <" + text + "> from " + Environment.StackTrace);
-            richTextBox_History.AppendText(text + Environment.NewLine, color);
+            dataGridViewTravel.MakeDoubleBuffered();
         }
 
         public void Display()
         {
-            currentSysPos = null;
+            currentGridRow = null;
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
             List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
 
-            result = HistoryList.FilterByJournalEvent(result, EventFilter);
-            
+            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString("TravelHistoryControlEventFilter", "All"));
+
             dataGridViewTravel.Rows.Clear();
 
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
@@ -160,8 +114,7 @@ namespace EDDiscovery
             if (dataGridViewTravel.Rows.Count>0)
                 ShowSystemInformation(dataGridViewTravel.Rows[0]);
 
-            if (textBoxFilter.TextLength > 0)
-                FilterGridView();
+            StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
 
             RedrawSummary();
             RefreshTargetInfo();
@@ -202,7 +155,7 @@ namespace EDDiscovery
             dataGridViewTravel.Rows[rownr].Cells[4].ToolTipText = tip;
         }
 
-        public void AddNewEntry( HistoryEntry he )
+        public void AddNewEntry(HistoryEntry he)
         {
             try
             {
@@ -252,7 +205,7 @@ namespace EDDiscovery
 
         public void ShowSystemInformation(DataGridViewRow rw)
         {
-            currentSysPos = rw;
+            currentGridRow = rw;
 
             HistoryEntry syspos = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
             SystemNoteClass note = rw.Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass;
@@ -304,6 +257,8 @@ namespace EDDiscovery
 
             return str.Replace("_", " ");
         }
+
+        #region Closest System
 
         public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
         {
@@ -386,20 +341,9 @@ namespace EDDiscovery
             }
         }
 
-        public HistoryEntry CurrentSystemSelected
-        {
-            get
-            {
-                if (dataGridViewTravel == null || dataGridViewTravel.CurrentRow == null)
-                    return null;
-                return ((HistoryEntry)dataGridViewTravel.CurrentRow.Cells[TravelHistoryColumns.HistoryTag].Tag);
-            }
-        }
+        #endregion
 
-        private void TravelHistoryControl_Load(object sender, EventArgs e)
-        {
-            dataGridViewTravel.MakeDoubleBuffered();
-        }
+        #region Grid Layout
 
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
@@ -481,6 +425,8 @@ namespace EDDiscovery
             }
         }
 
+        #endregion
+
         public void LoadCommandersListBox()
         {
             comboBoxCommander.Enabled = false;
@@ -515,7 +461,6 @@ namespace EDDiscovery
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             Display();
-
             SQLiteDBClass.PutSettingInt("EDUIHistory", comboBoxHistoryWindow.SelectedIndex);
         }
 
@@ -598,13 +543,13 @@ namespace EDDiscovery
 
         private void StoreSystemNote()
         {
-            if (currentSysPos == null )
+            if (currentGridRow == null )
                 return;
 
             try
             {
-                HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                SystemNoteClass sn = currentSysPos.Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass;
+                HistoryEntry sys = currentGridRow.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                SystemNoteClass sn = currentGridRow.Cells[TravelHistoryColumns.NoteTag].Tag as SystemNoteClass;
 
                 string txt = richTextBoxNote.Text.Trim();
 
@@ -626,10 +571,10 @@ namespace EDDiscovery
                         sn.Name = (sys.IsFSDJump) ? sys.System.name : "";
                         sn.Journalid = (sys.IsFSDJump) ? 0 : sys.Journalid;
                         sn.Add();
-                        currentSysPos.Cells[TravelHistoryColumns.NoteTag].Tag = sn;
+                        currentGridRow.Cells[TravelHistoryColumns.NoteTag].Tag = sn;
                     }
 
-                    currentSysPos.Cells[TravelHistoryColumns.Note].Value = txt;
+                    currentGridRow.Cells[TravelHistoryColumns.Note].Value = txt;
 
                     EDSMClass edsm = new EDSMClass();
 
@@ -714,7 +659,7 @@ namespace EDDiscovery
 
                 }
 
-              //TBD  sync.StartSync(EDSMSyncTo, EDSMSyncFrom, EDDConfig.Instance.DefaultMapColour);
+              //TBD  _discoveryForm.EdsmSync.StartSync(EDSMSyncTo, EDSMSyncFrom, EDDConfig.Instance.DefaultMapColour);
             }
             catch (Exception ex)
             {
@@ -723,14 +668,23 @@ namespace EDDiscovery
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-        {           
-            var grid = sender as DataGridView;
-            string rowIdx;
+        {
+            DataGridView grid = sender as DataGridView;
+            PaintEventColumn(grid, e ,
+                            _discoveryForm.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag ,
+                            grid.RowHeadersWidth + grid.Columns[0].Width , grid.Columns[1].Width , true);
+        }
 
-            if (_discoveryForm.settings.OrderRowsInverted )
-                rowIdx = (dataGridViewTravel.Rows.Count - e.RowIndex).ToString();
+        public static void PaintEventColumn( DataGridView grid, DataGridViewRowPostPaintEventArgs e, 
+                                             int totalentries, HistoryEntry he , 
+                                           int hpos, int colwidth , bool showfsdmapcolour )
+        {
+            string rowIdx; 
+
+            if (_discoveryForm.settings.OrderRowsInverted)
+                 rowIdx = he.Journalid.ToString();            // oldest has the highest index
             else
-                rowIdx = (e.RowIndex + 1).ToString();
+                rowIdx = (totalentries - he.Journalid + 1).ToString();
 
             var centerFormat = new StringFormat()
             {
@@ -744,46 +698,47 @@ namespace EDDiscovery
             using ( Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
                 e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br , headerBounds, centerFormat);
 
-            int size = 18;
-            int top = (e.RowBounds.Top + e.RowBounds.Bottom) / 2 - size / 2;
-            int pos = grid.RowHeadersWidth + grid.Columns[0].Width;
+            int noicons = (he.IsFSDJump && showfsdmapcolour) ? 2 : 1;
+
             int padding = 4;
+            int size = 18;
+            int hstart = (hpos + colwidth / 2) - size / 2 * noicons - padding / 2 * (noicons - 1);
 
-            HistoryEntry he = (HistoryEntry)grid.Rows[e.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag;
+            int top = (e.RowBounds.Top + e.RowBounds.Bottom) / 2 - size / 2;
 
-            e.Graphics.DrawImage(he.GetIcon, new Rectangle(pos, top, size, size));
+            e.Graphics.DrawImage(he.GetIcon, new Rectangle(hstart, top, size, size));
+            hstart += size + padding;
 
-            if ( he.IsFSDJump )
+            if (he.IsFSDJump && showfsdmapcolour)
             {
                 using (Brush b = new SolidBrush(Color.FromArgb(he.MapColour)))
                 {
-                    e.Graphics.FillEllipse(b, new Rectangle(pos + size + padding, top, size, size));
+                    e.Graphics.FillEllipse(b, new Rectangle(hstart+2, top+2, size-4, size-4));
                 }
             }
-
         }
 
         private void buttonEDDB_Click(object sender, EventArgs e)
         {
-            HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+            HistoryEntry sys = currentGridRow.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
 
-            if ( currentSysPos!= null && sys.System.id_eddb>0)
+            if ( currentGridRow!= null && sys.System.id_eddb>0)
                 Process.Start("http://eddb.io/system/" + sys.System.id_eddb.ToString());
         }
 
         private void buttonRoss_Click(object sender, EventArgs e)
         {
-            HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+            HistoryEntry sys = currentGridRow.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
 
-            if (currentSysPos!= null && sys.System.id_eddb>0)
+            if (currentGridRow!= null && sys.System.id_eddb>0)
                 Process.Start("http://ross.eddb.io/system/update/" + sys.System.id_eddb.ToString());
         }
 
         private void buttonEDSM_Click(object sender, EventArgs e)
         {
-            HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+            HistoryEntry sys = currentGridRow.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
 
-            if (currentSysPos != null && sys.System != null) // solve a possible exception
+            if (currentGridRow != null && sys.System != null) // solve a possible exception
             {
                 if (!String.IsNullOrEmpty(sys.System.name))
                 {
@@ -804,66 +759,24 @@ namespace EDDiscovery
             }
         }
 
-        public string GetCommanderName()
+        public void RefreshButton(bool state)
         {
-            var value = EDDiscoveryForm.EDDConfig.CurrentCommander.Name;
-            return !string.IsNullOrEmpty(value) ? value : null;
+            button_RefreshHistory.Enabled = state;
+        }
+
+        private void button_RefreshHistory_Click(object sender, EventArgs e)
+        {
+            LogLine("Refresh History.");
+            _discoveryForm.RefreshHistoryAsync();
         }
 
         private void textBoxFilter_KeyUp(object sender, KeyEventArgs e)
         {
-            FilterGridView();
+            StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
             RedrawSummary();
             UpdateDependentsWithSelection();
         }
 
-
-        public void FilterGridView()
-        {
-            if (textBoxFilter.TextLength <= 0)
-                return;
-
-            string searchstr = textBoxFilter.Text.Trim();
-            dataGridViewTravel.SuspendLayout();
-
-            DataGridViewRow[] theRows = new DataGridViewRow[dataGridViewTravel.Rows.Count];
-            dataGridViewTravel.Rows.CopyTo(theRows, 0);
-            dataGridViewTravel.Rows.Clear();
-
-            for (int loop = 0; loop < theRows.Length; loop++)
-            {
-                bool found = false;
-
-                if (searchstr.Length < 1)
-                    found = true;
-                else
-                {
-                    foreach (DataGridViewCell cell in theRows[loop].Cells)
-                    {
-                        if (cell.Value != null)
-                            if (cell.Value.ToString().IndexOf(searchstr, 0, StringComparison.CurrentCultureIgnoreCase) >= 0)
-                            {
-                                found = true;
-                                break;
-                            }
-                    }
-                }
-                theRows[loop].Visible = found;
-            }
-            dataGridViewTravel.Rows.AddRange(theRows);
-            dataGridViewTravel.ResumeLayout();
-        }
-
-
-        private void textBoxPrevSystem_Enter(object sender, EventArgs e)
-        {
-            /* Automatically copy the contents to the clipboard whenever this control is activated */
-            TextBox tb = sender as TextBox;
-            if (tb != null && tb.Text != null)
-            {
-                Clipboard.SetText(tb.Text);
-            }
-        }
 
         private void checkBoxEDSMSyncTo_CheckedChanged(object sender, EventArgs e)
         {
@@ -884,25 +797,6 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
         
-        public bool SetTravelHistoryPosition(string sysname)
-        {
-            foreach (DataGridViewRow item in dataGridViewTravel.Rows)
-            {
-                HistoryEntry sys = currentSysPos.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                string s = sys.System.name;
-
-                if (s.Equals(sysname) && item.Visible)
-                {
-                    dataGridViewTravel.ClearSelection();
-                    item.Selected = true;           // select row
-                    dataGridViewTravel.CurrentCell = item.Cells[TravelHistoryColumns.Description];       // and ensure visible.
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         private void textBoxTarget_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -1437,8 +1331,6 @@ namespace EDDiscovery
             //}
         }
 
-
-
         private void routeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> toAdd = new List<HistoryEntry>();
@@ -1460,75 +1352,50 @@ namespace EDDiscovery
 
         #region Event Filter
 
-        ExtendedControls.CheckedListControlCustom cc;
-
         private void buttonFilter_Click(object sender, EventArgs e)
         {
-            if (cc == null)
-            {
-                Button b = sender as Button;
-                cc = new ExtendedControls.CheckedListControlCustom();
-                cc.Items.Add("All");
-                cc.Items.Add("None");
-                cc.Items.Add("Travel");
-
-                foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum)))
-                {
-                    cc.Items.Add(Tools.SplitCapsWord(jte.ToString()));
-                }
-
-                cc.SetChecked(EventFilter);
-                SetFilterSet();
-
-                cc.FormClosed += FilterClosed;
-                cc.CheckedChanged += FilterCheckChanged;
-                cc.PositionBelow(b, new Size(b.Width*2, 400));
-                cc.SetColour(_discoveryForm.theme.TextBackColor, _discoveryForm.theme.TextBlockColor);
-                cc.Show();
-            }
-            else
-                cc.Close();
+            Button b = sender as Button;
+            cfs.FilterButton("TravelHistoryControlEventFilter", b,
+                             _discoveryForm.theme.TextBackColor, _discoveryForm.theme.TextBlockColor);
         }
 
-        private void SetFilterSet()
+        private void EventFilterChanged(object sender, EventArgs e)
         {
-            string list = cc.GetChecked(3);
-            //Console.WriteLine("List {0}", list);
-            cc.SetChecked(list.Equals("All"), 0, 1);
-            cc.SetChecked(list.Equals("None"), 1, 1);
-            cc.SetChecked(list.Equals("Docked;FSD Jump;Undocked;"), 2, 1);
-        }
-
-        private void FilterCheckChanged(Object sender, ItemCheckEventArgs e)
-        {
-            //Console.WriteLine("Changed " + e.Index);
-
-            cc.SetChecked(e.NewValue == CheckState.Checked, e.Index, 1);        // force check now (its done after it) so our functions work..
-
-            if (e.Index == 0 && e.NewValue == CheckState.Checked)
-                cc.SetChecked(true, 3);
-
-            if ((e.Index == 1 && e.NewValue == CheckState.Checked) || (e.Index <= 2 && e.NewValue == CheckState.Unchecked) )
-                cc.SetChecked(false, 3);
-
-            if ( e.Index == 2 && e.NewValue == CheckState.Checked) 
-            {
-                cc.SetChecked(false, 3);
-                cc.SetChecked("Docked;FSD Jump;Undocked;");
-            }
-
-            SetFilterSet();
-        }
-
-        private void FilterClosed(Object sender, FormClosedEventArgs e)
-        {
-            EventFilter = cc.GetChecked(3);
-            SQLiteDBClass.PutSettingString("TravelHistoryControlEventFilter", EventFilter);
-            Console.WriteLine("Eventfilter {0}", EventFilter);
-            cc = null;
             Display();
         }
 
         #endregion
+
+        #region LogOut
+
+        public void LogLine(string text)
+        {
+            LogLineColor(text, _discoveryForm.theme.TextBlockColor);
+        }
+
+        public void LogLineHighlight(string text)
+        {
+            LogLineColor(text, _discoveryForm.theme.TextBlockHighlightColor);
+        }
+
+        public void LogLineSuccess(string text)
+        {
+            LogLineColor(text, _discoveryForm.theme.TextBlockSuccessColor);
+        }
+
+        public void LogLineColor(string text, Color color)
+        {
+            try
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    richTextBox_History.AppendText(text + Environment.NewLine, color);
+                });
+            }
+            catch { }
+        }
+
+        #endregion
+
     }
 }

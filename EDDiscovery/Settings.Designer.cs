@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
             this.checkBoxKeepOnTop = new ExtendedControls.CheckBoxCustom();
@@ -53,6 +52,7 @@
             this.checkBoxEDSMLog = new ExtendedControls.CheckBoxCustom();
             this.checkboxSkipSlowUpdates = new ExtendedControls.CheckBoxCustom();
             this.groupBox4 = new ExtendedControls.GroupBoxCustom();
+            this.btnDeleteCommander = new ExtendedControls.ButtonExt();
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.label2 = new System.Windows.Forms.Label();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
@@ -65,7 +65,6 @@
             this.textBoxNetLogDir = new ExtendedControls.TextBoxBorder();
             this.radioButton_Manual = new ExtendedControls.RadioButtonCustom();
             this.radioButton_Auto = new ExtendedControls.RadioButtonCustom();
-            this.btnDeleteCommander = new ExtendedControls.ButtonExt();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -118,11 +117,12 @@
             this.comboBoxTheme.BorderColor = System.Drawing.Color.Red;
             this.comboBoxTheme.ButtonColorScaling = 0.5F;
             this.comboBoxTheme.DataSource = null;
-            this.comboBoxTheme.DisplayMember = null;
+            this.comboBoxTheme.DisplayMember = "";
             this.comboBoxTheme.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxTheme.DropDownHeight = 100;
+            this.comboBoxTheme.DropDownWidth = 267;
             this.comboBoxTheme.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxTheme.ItemHeight = 20;
+            this.comboBoxTheme.ItemHeight = 13;
             this.comboBoxTheme.Location = new System.Drawing.Point(7, 19);
             this.comboBoxTheme.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTheme.Name = "comboBoxTheme";
@@ -131,9 +131,10 @@
             this.comboBoxTheme.ScrollBarWidth = 16;
             this.comboBoxTheme.SelectedIndex = -1;
             this.comboBoxTheme.SelectedItem = null;
+            this.comboBoxTheme.SelectedValue = null;
             this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
             this.comboBoxTheme.TabIndex = 0;
-            this.comboBoxTheme.ValueMember = null;
+            this.comboBoxTheme.ValueMember = "";
             // 
             // button_edittheme
             // 
@@ -272,6 +273,15 @@
             this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBoxHomeSystem.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxHomeSystem.BorderColorScaling = 0.5F;
+            this.textBoxHomeSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.textBoxHomeSystem.DropDownBorderColor = System.Drawing.Color.Green;
+            this.textBoxHomeSystem.DropDownHeight = 200;
+            this.textBoxHomeSystem.DropDownItemHeight = 20;
+            this.textBoxHomeSystem.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.textBoxHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.textBoxHomeSystem.DropDownWidth = 0;
+            this.textBoxHomeSystem.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxHomeSystem.Location = new System.Drawing.Point(120, 19);
             this.textBoxHomeSystem.Name = "textBoxHomeSystem";
             this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
@@ -353,9 +363,9 @@
             this.checkBoxOrderRowsInverted.Location = new System.Drawing.Point(17, 64);
             this.checkBoxOrderRowsInverted.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxOrderRowsInverted.Name = "checkBoxOrderRowsInverted";
-            this.checkBoxOrderRowsInverted.Size = new System.Drawing.Size(171, 17);
+            this.checkBoxOrderRowsInverted.Size = new System.Drawing.Size(196, 17);
             this.checkBoxOrderRowsInverted.TabIndex = 2;
-            this.checkBoxOrderRowsInverted.Text = "Order Rows By Visited Number";
+            this.checkBoxOrderRowsInverted.Text = "Number Rows Lastest Entry Highest";
             this.checkBoxOrderRowsInverted.TickBoxReductionSize = 10;
             this.checkBoxOrderRowsInverted.UseVisualStyleBackColor = true;
             // 
@@ -412,6 +422,19 @@
             this.groupBox4.Text = "Commanders";
             this.groupBox4.TextPadding = 0;
             this.groupBox4.TextStartPosition = -1;
+            // 
+            // btnDeleteCommander
+            // 
+            this.btnDeleteCommander.BorderColorScaling = 1.25F;
+            this.btnDeleteCommander.ButtonColorScaling = 0.5F;
+            this.btnDeleteCommander.ButtonDisabledScaling = 0.5F;
+            this.btnDeleteCommander.Location = new System.Drawing.Point(680, 16);
+            this.btnDeleteCommander.Name = "btnDeleteCommander";
+            this.btnDeleteCommander.Size = new System.Drawing.Size(121, 23);
+            this.btnDeleteCommander.TabIndex = 3;
+            this.btnDeleteCommander.Text = "Delete Commander";
+            this.btnDeleteCommander.UseVisualStyleBackColor = true;
+            this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
             // 
             // buttonAddCommander
             // 
@@ -570,19 +593,6 @@
             this.radioButton_Auto.Text = "Auto";
             this.radioButton_Auto.UseVisualStyleBackColor = true;
             this.radioButton_Auto.CheckedChanged += new System.EventHandler(this.radioButton_Auto_CheckedChanged);
-            // 
-            // btnDeleteCommander
-            // 
-            this.btnDeleteCommander.BorderColorScaling = 1.25F;
-            this.btnDeleteCommander.ButtonColorScaling = 0.5F;
-            this.btnDeleteCommander.ButtonDisabledScaling = 0.5F;
-            this.btnDeleteCommander.Location = new System.Drawing.Point(680, 16);
-            this.btnDeleteCommander.Name = "btnDeleteCommander";
-            this.btnDeleteCommander.Size = new System.Drawing.Size(121, 23);
-            this.btnDeleteCommander.TabIndex = 3;
-            this.btnDeleteCommander.Text = "Delete Commander";
-            this.btnDeleteCommander.UseVisualStyleBackColor = true;
-            this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
             // 
             // Settings
             // 
