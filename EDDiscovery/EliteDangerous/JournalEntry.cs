@@ -216,8 +216,8 @@ namespace EDDiscovery.EliteDangerous
 
     public abstract class JournalEntry
     {
-        public int Id;
-        public int JournalId;
+        public int Id;                          // this is the entry ID
+        public int JournalId;                   // this ID of the journal tlu
         protected string eventTypeStr;
         private JournalTypeEnum eventTypeID;
         private DateTime eventTimeUTC;
@@ -332,7 +332,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public new bool Update()
+        public bool Update()
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
@@ -358,37 +358,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-
-
-
-
-
-        static public List<JournalEntry> GetAll()
-        {
-            List<JournalEntry> list = new List<JournalEntry>();
-
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries Order by Time "))
-                {
-                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
-
-                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-                        return list;
-
-                    foreach (DataRow dr in ds.Tables[0].Rows)
-                    {
-                        JournalEntry sys = JournalEntry.CreateJournalEntry(dr);
-                        list.Add(sys);
-                    }
-
-                    return list;
-                }
-            }
-        }
-
-
-        static public List<JournalEntry> GetAll(int commander)
+        static public List<JournalEntry> GetAll(int commander = -999)
         {
             List<JournalEntry> list = new List<JournalEntry>();
 
@@ -396,9 +366,13 @@ namespace EDDiscovery.EliteDangerous
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where commander=@commander Order by Time "))
                 {
+                    if (commander == -999)
+                        cmd.CommandText = "select * from JournalEntries Order by Time ";
+
                     cmd.AddParameterWithValue("@commander", commander);
 
                     DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+
                     if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         return list;
 
@@ -416,6 +390,7 @@ namespace EDDiscovery.EliteDangerous
         public static List<JournalEntry> GetAll(JournalsClass tlu)
         {
             List<JournalEntry> vsc = new List<JournalEntry>();
+
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE JournalId  = @source ORDER BY Time ASC"))
