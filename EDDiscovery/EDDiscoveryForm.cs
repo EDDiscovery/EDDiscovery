@@ -25,6 +25,7 @@ using EDDiscovery.EDSM;
 using System.Threading.Tasks;
 using System.Text;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace EDDiscovery
 {
@@ -281,17 +282,21 @@ namespace EDDiscovery
         private void ProcessCommandLineOptions()
         {
             string cmdline = Environment.CommandLine;
-            option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1);
+            List<string> parts = Regex.Matches(cmdline, @"[\""].+?[\""]|[^ ]+")
+                            .Cast<Match>()
+                            .Select(m => m.Value)
+                            .ToList();
 
-            int pos = cmdline.IndexOf("-Appfolder", 0, StringComparison.InvariantCultureIgnoreCase);
-            if (pos != -1)
+            option_nowindowreposition = parts.FindIndex(x => x.Equals("-NoRepositionWindow", StringComparison.InvariantCultureIgnoreCase)) != -1 ||
+                parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
+
+            int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
+            if ( ai != -1 && ai < parts.Count )
             {
-                string[] nextwords = cmdline.Substring(pos + 10).Trim().Split(' ');
-                if (nextwords.Length > 0)
-                    Tools.appfolder = nextwords[0];
+                Tools.appfolder = parts[ai + 1].Replace("\"","");
             }
 
-            option_debugoptions = cmdline.IndexOf("-Debug", 0, StringComparison.InvariantCultureIgnoreCase) != -1;
+            option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
         }
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
@@ -569,6 +574,7 @@ namespace EDDiscovery
                 if (worker.CancellationPending)
                     e.Cancel = true;
             }
+            catch { }       // any exceptions, ignore
             finally
             {
                 _checkSystemsWorkerCompletedEvent.Set();
@@ -716,6 +722,7 @@ namespace EDDiscovery
                 if (worker.CancellationPending)
                     e.Cancel = true;
             }
+            catch { }       // ignore any excepctions
             finally
             {
                 _syncWorkerCompletedEvent.Set();
@@ -1368,18 +1375,6 @@ namespace EDDiscovery
             this.WindowState = FormWindowState.Minimized;
         }
 
-        /*
-        private void panel_grip_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                panel_grip.Captured();           // tell it, doing this royally screws up the MD/MU/ME/ML calls to it
-                panel_grip.Capture = false;
-                SendMessage(WM_NCL_RESIZE, (IntPtr)HT_RESIZE, IntPtr.Zero);
-            }
-        }
-         */
-
         private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             settings.panel_defaultmapcolor_Click(sender, e);
@@ -1596,11 +1591,6 @@ namespace EDDiscovery
                 return;
             }
 
-            if (errmsg != null)
-            {
-                throw new InvalidOperationException(errmsg);
-            }
-
             e.Result = vsclist;
         }
 
@@ -1610,13 +1600,13 @@ namespace EDDiscovery
             {
                 if (e.Error != null)
                 {
-                    travelHistoryControl1.LogLineHighlight("History Refresh Error: " + e.Error.Message + Environment.NewLine);
+                    travelHistoryControl1.LogLineHighlight("History Refresh Error: " + e.Error.Message );
                 }
                 else if (e.Result != null)
                 {
                     RefreshHistory((List<VisitedSystemsClass>)e.Result);
                     ReportProgress(-1, "");
-                    travelHistoryControl1.LogLine("Refresh Complete." + Environment.NewLine);
+                    travelHistoryControl1.LogLine("Refresh Complete." );
                 }
 
                 travelHistoryControl1.RefreshButton(true);
