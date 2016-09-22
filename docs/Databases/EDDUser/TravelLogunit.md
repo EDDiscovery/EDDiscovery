@@ -1,6 +1,23 @@
 # EDDUser.Journals table
 
+We use the old TravelLogunit table. but with added commander ID.   Everything named Journals was confusing. 
+
 ```sql
+
+TravelLogUnit
+
+CREATE TABLE TravelLogUnit(
+  id INTEGER PRIMARY KEY  NOT NULL,
+  type INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  size INTEGER,
+  path TEXT,
+  CommanderId INTEGER REFERENCES Commanders (Id),
+)
+Names of netlog files searched by ED
+
+
+
 CREATE TABLE Journals (
   Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   Type INTEGER NOT NULL,
