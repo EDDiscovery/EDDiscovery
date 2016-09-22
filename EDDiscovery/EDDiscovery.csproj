@@ -189,7 +189,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
-    <Compile Include="DB\JournalsClass.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
     <Compile Include="DB\SqLiteDBSchema.cs" />
     <Compile Include="DB\SQLiteDBSystemClass.cs" />

@@ -2,6 +2,7 @@
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery2;
+using EDDiscovery2.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -387,7 +388,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public static List<JournalEntry> GetAll(JournalsClass tlu)
+        public static List<JournalEntry> GetAll(TravelLogUnit tlu)
         {
             List<JournalEntry> vsc = new List<JournalEntry>();
 
