@@ -140,38 +140,42 @@ namespace EDDiscovery
         }
 
 
-
-        static public bool GetBool(JToken jToken)
+        static public bool GetBool(JToken jToken, bool def = false)
         {
             if (IsNullOrEmptyT(jToken))
-                return false;
+                return def;
             return jToken.Value<bool>();
         }
 
-        static public float GetFloat(JToken jToken)
+        static public float GetFloat(JToken jToken, float def = 0)
         {
             if (IsNullOrEmptyT(jToken))
-                return 0f;
+                return def;
             return jToken.Value<float>();
         }
 
-
-        static public int GetInt(JToken jToken)
+        static public double GetDouble(JToken jToken, double def = 0)
         {
             if (IsNullOrEmptyT(jToken))
-                return 0;
+                return def;
+            return jToken.Value<double>();
+        }
+
+        static public int GetInt(JToken jToken, int def = 0)
+        {
+            if (IsNullOrEmptyT(jToken))
+                return def;
             return jToken.Value<int>();
         }
 
-
-        static public string GetString(JToken jToken)
+        static public string GetStringNull(JToken jToken)
         {
             if (IsNullOrEmptyT(jToken))
                 return null;
             return jToken.Value<string>();
         }
 
-        static public string GetStringOrDefault(JToken jToken,string def)
+        static public string GetStringDef(JToken jToken,string def = "")
         {
             if (IsNullOrEmptyT(jToken))
                 return def;

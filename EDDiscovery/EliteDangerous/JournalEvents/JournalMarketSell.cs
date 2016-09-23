@@ -18,22 +18,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMarketSell(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MarketSell, reader)
         {
-            Type = evt.Value<string>("Type");
-            Count = evt.Value<int>("Count");
-            SellPrice = evt.Value<int>("SellPrice");
-            TotalSale = evt.Value<int>("TotalSale");
-            AvgPricePaid = evt.Value<int>("AvgPricePaid");
-            IllegalGoods = evt.Value<bool?>("IllegalGoods");
-            StolenGoods = evt.Value<bool?>("StolenGoods");
-            BlackMarket = evt.Value<bool?>("BlackMarket");
+            Type = Tools.GetStringDef("Type");
+            Count = Tools.GetInt("Count");
+            SellPrice = Tools.GetInt("SellPrice");
+            TotalSale = Tools.GetInt("TotalSale");
+            AvgPricePaid = Tools.GetInt("AvgPricePaid");
+            IllegalGoods = Tools.GetBool("IllegalGoods");
+            StolenGoods = Tools.GetBool("StolenGoods");
+            BlackMarket = Tools.GetBool("BlackMarket");
         }
         public string Type { get; set; }
         public int Count { get; set; }
         public int SellPrice { get; set; }
         public int TotalSale { get; set; }
         public int AvgPricePaid { get; set; }
-        public bool? IllegalGoods { get; set; }
-        public bool? StolenGoods { get; set; }
-        public bool? BlackMarket { get; set; }
+        public bool IllegalGoods { get; set; }
+        public bool StolenGoods { get; set; }
+        public bool BlackMarket { get; set; }
     }
 }

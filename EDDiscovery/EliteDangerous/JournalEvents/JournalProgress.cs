@@ -17,12 +17,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalProgress(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Progress, reader)
         {
-            Combat = evt.Value<int>("Combat");
-            Trade = evt.Value<int>("Trade");
-            Explore = evt.Value<int>("Explore");
-            Empire = evt.Value<int>("Empire");
-            Federation = evt.Value<int>("Federation");
-            CQC = evt.Value<int>("CQC");
+            Combat = Tools.GetInt("Combat");
+            Trade = Tools.GetInt("Trade");
+            Explore = Tools.GetInt("Explore");
+            Empire = Tools.GetInt("Empire");
+            Federation = Tools.GetInt("Federation");
+            CQC = Tools.GetInt("CQC");
 
         }
         public int Combat { get; set; }

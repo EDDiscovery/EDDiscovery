@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDockingRequested(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockingRequested, reader)
         {
-            StationName = evt.Value<string>("StationName");
+            StationName = Tools.GetStringDef("StationName");
         }
         public string StationName { get; set; }
     }

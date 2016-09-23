@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDockingCancelled(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockingCancelled, reader)
         {
-            StationName = evt.Value<string>("StationName");
+            StationName = Tools.GetStringDef("StationName");
         }
         public string StationName { get; set; }
     }

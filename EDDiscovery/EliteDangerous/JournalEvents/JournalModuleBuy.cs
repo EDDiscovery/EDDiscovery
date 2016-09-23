@@ -16,12 +16,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalModuleBuy(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ModuleBuy, reader)
         {
-            Slot = evt.Value<string>("Slot");
-            BuyItem = evt.Value<string>("BuyItem");
-            BuyPrice = evt.Value<int>("BuyPrice");
-            Ship = evt.Value<string>("Ship");
-            ShipId = evt.Value<int>("ShipId");
-            SellItem = evt.Value<string>("SellItem");
+            Slot = Tools.GetStringDef("Slot");
+            BuyItem = Tools.GetStringDef("BuyItem");
+            BuyPrice = Tools.GetInt("BuyPrice");
+            Ship = Tools.GetStringDef("Ship");
+            ShipId = Tools.GetInt("ShipId");
+            SellItem = Tools.GetStringDef("SellItem");
             SellPrice = evt.Value<int?>("SellPrice");
 
         }

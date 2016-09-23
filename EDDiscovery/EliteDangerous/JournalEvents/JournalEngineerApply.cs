@@ -13,10 +13,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalEngineerApply(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.EngineerApply, reader)
         {
-            Engineer = evt.Value<string>("Engineer");
-            Blueprint = evt.Value<string>("Blueprint");
-            Level = evt.Value<int>("Level");
-            Override = evt.Value<bool?>("Override");
+            Engineer = Tools.GetStringDef("Engineer");
+            Blueprint = Tools.GetStringDef("Blueprint");
+            Level = Tools.GetInt("Level");
+            Override = Tools.GetBool("Override");
 
         }
         public string Engineer { get; set; }

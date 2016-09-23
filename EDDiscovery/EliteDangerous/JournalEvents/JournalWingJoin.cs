@@ -10,9 +10,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalWingJoin(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.WingJoin, reader)
         {
-            Others = evt.Value<JArray>("Others").Values<string>().ToArray();
+            if (!Tools.IsNullOrEmptyT(evt["Others"]))
+                Others = evt.Value<JArray>("Others").Values<string>().ToArray();
 
         }
+
         public string[] Others { get; set; }
 
     }

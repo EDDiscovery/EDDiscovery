@@ -9,7 +9,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalHullDamage(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.HullDamage, reader)
         {
-            Health = evt.Value<double>("Health");
+            Health = Tools.GetDouble("Health");
 
         }
         public double Health { get; set; }

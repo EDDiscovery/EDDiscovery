@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMiningRefined(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MiningRefined, reader)
         {
-            Type = evt.Value<string>("Type");
+            Type = Tools.GetStringDef("Type");
 
         }
         public string Type { get; set; }
