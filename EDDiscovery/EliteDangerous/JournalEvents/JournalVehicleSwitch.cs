@@ -8,9 +8,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	To: ( Mothership/Fighter)
     public class JournalVehicleSwitch : JournalEntry
     {
-        public JournalVehicleSwitch(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.VehicleSwitch, reader)
+        public JournalVehicleSwitch(JObject evt ) : base(evt, JournalTypeEnum.VehicleSwitch)
         {
-            To = Tools.GetStringDef("To");
+            To = Tools.GetStringDef(evt["To"]);
         }
         public string To { get; set; }
 

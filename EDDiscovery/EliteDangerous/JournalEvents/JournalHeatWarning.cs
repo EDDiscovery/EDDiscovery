@@ -7,7 +7,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters: 
     public class JournalHeatWarning : JournalEntry
     {
-        public JournalHeatWarning(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.HeatWarning, reader)
+        public JournalHeatWarning(JObject evt ) : base(evt, JournalTypeEnum.HeatWarning)
         {
 
 

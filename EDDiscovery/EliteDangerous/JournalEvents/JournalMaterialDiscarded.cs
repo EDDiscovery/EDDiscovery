@@ -7,11 +7,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
     public class JournalMaterialDiscarded : JournalEntry
     {
-        public JournalMaterialDiscarded(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MaterialDiscarded, reader)
+        public JournalMaterialDiscarded(JObject evt ) : base(evt, JournalTypeEnum.MaterialDiscarded)
         {
-            Category = Tools.GetStringDef("Category");
-            Name = Tools.GetStringDef("Name");
-            Count = Tools.GetInt("Count");
+            Category = Tools.GetStringDef(evt["Category"]);
+            Name = Tools.GetStringDef(evt["Name"]);
+            Count = Tools.GetInt(evt["Count"]);
 
         }
         public string Category { get; set; }

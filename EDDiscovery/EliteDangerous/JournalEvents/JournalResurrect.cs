@@ -10,11 +10,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Bankrupt: whether the commander declared bankruptcy
     public class JournalResurrect : JournalEntry
     {
-        public JournalResurrect(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Resurrect, reader)
+        public JournalResurrect(JObject evt ) : base(evt, JournalTypeEnum.Resurrect)
         {
-            Option = Tools.GetStringDef("Option");
-            Cost = Tools.GetInt("Cost");
-            Bankrupt = Tools.GetBool("Bankrupt");
+            Option = Tools.GetStringDef(evt["Option"]);
+            Cost = Tools.GetInt(evt["Cost"]);
+            Bankrupt = Tools.GetBool(evt["Bankrupt"]);
 
         }
         public string Option { get; set; }

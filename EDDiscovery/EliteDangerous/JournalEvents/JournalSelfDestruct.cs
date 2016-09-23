@@ -11,7 +11,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalSelfDestruct: JournalEntry
     {
-        public JournalSelfDestruct(JObject evt, EDJournalReader reader) : base(evt,   JournalTypeEnum.SelfDestruct, reader)
+        public JournalSelfDestruct(JObject evt ) : base(evt,   JournalTypeEnum.SelfDestruct)
         {
 
 

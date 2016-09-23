@@ -1494,17 +1494,7 @@ namespace EDDiscovery
         {
             if (MessageBox.Show("Confirm you wish to reset all travelled history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
-                int cmdr = EDDConfig.CurrentCommander.Nr;
-
-                foreach (VisitedSystemsClass vs in vsall)
-                {
-                    if (vs.Commander != cmdr)
-                    {
-                        vs.Commander = cmdr;
-                        vs.Update();
-                    }
-                }
+                EliteDangerous.JournalEntry.ResetCommanderID(-1, EDDConfig.CurrentCommander.Nr);
             }
         }
 
@@ -1512,17 +1502,7 @@ namespace EDDiscovery
         {
             if (MessageBox.Show("Confirm you wish to reset all hidden (duplicate) entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                List<VisitedSystemsClass> vsall = VisitedSystemsClass.GetAll();
-                int cmdr = EDDConfig.CurrentCommander.Nr;
-
-                foreach (VisitedSystemsClass vs in vsall)
-                {
-                    if (vs.Commander == -2)
-                    {
-                        vs.Commander = cmdr;
-                        vs.Update();
-                    }
-                }
+                EliteDangerous.JournalEntry.ResetCommanderID(-2, EDDConfig.CurrentCommander.Nr);
             }
         }
 

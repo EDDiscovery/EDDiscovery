@@ -10,9 +10,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalScreenshot : JournalEntry
     {
-        public JournalScreenshot(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Screenshot, reader)
+        public JournalScreenshot(JObject evt ) : base(evt, JournalTypeEnum.Screenshot)
         {
-            StationName = Tools.GetStringDef("StationName");
+            StationName = Tools.GetStringDef(evt["StationName"]);
 
         }
         public string StationName { get; set; }

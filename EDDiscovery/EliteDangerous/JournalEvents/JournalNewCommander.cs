@@ -10,9 +10,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Package: selected starter package
     public class JournalNewCommander : JournalEntry
     {
-        public JournalNewCommander(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.NewCommander, reader)
+        public JournalNewCommander(JObject evt ) : base(evt, JournalTypeEnum.NewCommander)
         {
-            Package = Tools.GetStringDef("Package");
+            Package = Tools.GetStringDef(evt["Package"]);
         }
 
         public string Name { get; set; }

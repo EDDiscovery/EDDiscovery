@@ -10,11 +10,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Reward
     public class JournalCommunityGoalReward : JournalEntry
     {
-        public JournalCommunityGoalReward(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.CommunityGoalReward, reader)
+        public JournalCommunityGoalReward(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalReward)
         {
-            Name = Tools.GetStringDef("Name");
-            System = Tools.GetStringDef("System");
-            Reward = Tools.GetInt("Reward");
+            Name = Tools.GetStringDef(evt["Name"]);
+            System = Tools.GetStringDef(evt["System"]);
+            Reward = Tools.GetInt(evt["Reward"]);
         }
         public string Name { get; set; }
         public string System { get; set; }

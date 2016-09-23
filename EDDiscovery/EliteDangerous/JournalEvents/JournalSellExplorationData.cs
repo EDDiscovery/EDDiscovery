@@ -11,7 +11,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Bonus: bonus for first discoveries
     public class JournalSellExplorationData : JournalEntry
     {
-        public JournalSellExplorationData(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.SellExplorationData, reader)
+        public JournalSellExplorationData(JObject evt ) : base(evt, JournalTypeEnum.SellExplorationData)
         {
             if (!Tools.IsNullOrEmptyT(evt["Systems"]))
                 Systems = evt.Value<JArray>("Systems").Values<string>().ToArray();
@@ -19,8 +19,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (!Tools.IsNullOrEmptyT(evt["Discovered"]))
                 Discovered = evt.Value<JArray>("Discovered").Values<string>().ToArray();
 
-            BaseValue = Tools.GetInt("BaseValue");
-            Bonus = Tools.GetInt("Bonus");
+            BaseValue = Tools.GetInt(evt["BaseValue"]);
+            Bonus = Tools.GetInt(evt["Bonus"]);
         }
         public string[] Systems { get; set; }
         public string[] Discovered { get; set; }

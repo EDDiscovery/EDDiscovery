@@ -12,14 +12,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Ship
     public class JournalModuleSwap : JournalEntry
     {
-        public JournalModuleSwap(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ModuleSwap, reader)
+        public JournalModuleSwap(JObject evt ) : base(evt, JournalTypeEnum.ModuleSwap)
         {
-            FromSlot = Tools.GetStringDef("FromSlot");
-            ToSlot = Tools.GetStringDef("ToSlot");
-            FromItem = Tools.GetStringDef("FromItem");
-            ToItem = Tools.GetStringDef("ToItem");
-            Ship = Tools.GetStringDef("Ship");
-            ShipId = Tools.GetInt("ShipId");
+            FromSlot = Tools.GetStringDef(evt["FromSlot"]);
+            ToSlot = Tools.GetStringDef(evt["ToSlot"]);
+            FromItem = Tools.GetStringDef(evt["FromItem"]);
+            ToItem = Tools.GetStringDef(evt["ToItem"]);
+            Ship = Tools.GetStringDef(evt["Ship"]);
+            ShipId = Tools.GetInt(evt["ShipId"]);
 
         }
         public string FromSlot { get; set; }

@@ -18,22 +18,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	PermitsAwarded:[] (names of any permits awarded, as a JSON array)
     public class JournalMissionCompleted : JournalEntry
     {
-        public JournalMissionCompleted(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MissionCompleted, reader)
+        public JournalMissionCompleted(JObject evt ) : base(evt, JournalTypeEnum.MissionCompleted)
         {
-            Name = Tools.GetStringDef("Name");
-            Faction = Tools.GetStringDef("Faction");
-            Commodity = Tools.GetStringDef("Commodity");
+            Name = Tools.GetStringDef(evt["Name"]);
+            Faction = Tools.GetStringDef(evt["Faction"]);
+            Commodity = Tools.GetStringDef(evt["Commodity"]);
             Count = evt.Value<int?>("Count");
-            Target = Tools.GetStringDef("Target");
-            TargetType = Tools.GetStringDef("TargetType");
-            TargetFaction = Tools.GetStringDef("TargetFaction");
+            Target = Tools.GetStringDef(evt["Target"]);
+            TargetType = Tools.GetStringDef(evt["TargetType"]);
+            TargetFaction = Tools.GetStringDef(evt["TargetFaction"]);
             Reward = evt.Value<int?>("Reward") ?? 0;
             Donation = evt.Value<int?>("Donation");
 
             if ( !Tools.IsNullOrEmptyT( evt["PermitsAwarded"]))
                 PermitsAwarded = evt.Value<JArray>("PermitsAwarded").Values<string>().ToArray();
 
-            MissionId = Tools.GetInt("MissionID");
+            MissionId = Tools.GetInt(evt["MissionID"]);
         }
         public string Name { get; set; }
         public string Faction { get; set; }

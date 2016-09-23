@@ -15,16 +15,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	TargetFaction: target’s faction
     public class JournalMissionAccepted : JournalEntry
     {
-        public JournalMissionAccepted(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MissionAccepted, reader)
+        public JournalMissionAccepted(JObject evt ) : base(evt, JournalTypeEnum.MissionAccepted)
         {
-            Name = Tools.GetStringDef("Name");
-            Faction = Tools.GetStringDef("Faction");
-            Commodity = Tools.GetStringDef("Commodity");
+            Name = Tools.GetStringDef(evt["Name"]);
+            Faction = Tools.GetStringDef(evt["Faction"]);
+            Commodity = Tools.GetStringDef(evt["Commodity"]);
             Count = evt.Value<int?>("Count");
-            Target = Tools.GetStringDef("Target");
-            TargetType = Tools.GetStringDef("TargetType");
-            TargetFaction = Tools.GetStringDef("TargetFaction");
-            MissionId = Tools.GetInt("MissionID");
+            Target = Tools.GetStringDef(evt["Target"]);
+            TargetType = Tools.GetStringDef(evt["TargetType"]);
+            TargetFaction = Tools.GetStringDef(evt["TargetFaction"]);
+            MissionId = Tools.GetInt(evt["MissionID"]);
         }
         public string Name { get; set; }
         public string Faction { get; set; }

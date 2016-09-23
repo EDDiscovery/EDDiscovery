@@ -19,13 +19,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Note: the new ship’s ShipID will be logged in a separate event after the purchase    
     public class JournalShipyardBuy : JournalEntry
     {
-        public JournalShipyardBuy(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ShipyardBuy, reader)
+        public JournalShipyardBuy(JObject evt ) : base(evt, JournalTypeEnum.ShipyardBuy)
         {
-            ShipType = Tools.GetStringDef("ShipType");
-            ShipPrice = Tools.GetInt("ShipPrice");
-            StoreOldShip = Tools.GetStringDef("StoreOldShip");
+            ShipType = Tools.GetStringDef(evt["ShipType"]);
+            ShipPrice = Tools.GetInt(evt["ShipPrice"]);
+            StoreOldShip = Tools.GetStringDef(evt["StoreOldShip"]);
             StoreShipId = evt.Value<int?>("StoreShipID");
-            SellOldShip = Tools.GetStringDef("SellOldShip");
+            SellOldShip = Tools.GetStringDef(evt["SellOldShip"]);
             SellShipId = evt.Value<int?>("SellShipID");
             SellPrice = evt.Value<int?>("SellPrice");
 

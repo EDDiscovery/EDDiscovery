@@ -8,9 +8,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Starsystem
     public class JournalSupercruiseEntry : JournalEntry
     {
-        public JournalSupercruiseEntry(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.SupercruiseEntry, reader)
+        public JournalSupercruiseEntry(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseEntry)
         {
-            StarSystem = Tools.GetStringDef("StarSystem");
+            StarSystem = Tools.GetStringDef(evt["StarSystem"]);
 
         }
         public string StarSystem { get; set; }
