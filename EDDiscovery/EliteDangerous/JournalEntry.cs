@@ -277,7 +277,7 @@ namespace EDDiscovery.EliteDangerous
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {
             summary = Tools.SplitCapsWord(EventType.ToString());
-            info = "Event"; // TO do.. pick first three?
+            info = "Event";
             detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", ""));  // something like this..
         }
 
@@ -286,6 +286,7 @@ namespace EDDiscovery.EliteDangerous
             JObject jo = JObject.Parse(EventDataString);  // Create a clone
             jo.Property("timestamp").Remove();
             jo.Property("event").Remove();
+            jo.Property("EDDMapColor").Remove();
             return jo.ToString().Replace("{", "").Replace("}", "").Replace("\"", "");
         }
 
@@ -396,7 +397,7 @@ namespace EDDiscovery.EliteDangerous
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where CommanderID=@commander Order by Time "))
+                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where CommanderID=@commander Order by EventTime ASC"))
                 {
                     if (commander == -999)
                         cmd.CommandText = "select * from JournalEntries Order by Time ";
