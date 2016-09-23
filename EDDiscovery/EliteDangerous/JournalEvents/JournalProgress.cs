@@ -15,14 +15,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     public class JournalProgress : JournalEntry
     {
 
-        public JournalProgress(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Progress, reader)
+        public JournalProgress(JObject evt ) : base(evt, JournalTypeEnum.Progress)
         {
-            Combat = Tools.GetInt("Combat");
-            Trade = Tools.GetInt("Trade");
-            Explore = Tools.GetInt("Explore");
-            Empire = Tools.GetInt("Empire");
-            Federation = Tools.GetInt("Federation");
-            CQC = Tools.GetInt("CQC");
+            Combat = Tools.GetInt(evt["Combat"]);
+            Trade = Tools.GetInt(evt["Trade"]);
+            Explore = Tools.GetInt(evt["Explore"]);
+            Empire = Tools.GetInt(evt["Empire"]);
+            Federation = Tools.GetInt(evt["Federation"]);
+            CQC = Tools.GetInt(evt["CQC"]);
 
         }
         public int Combat { get; set; }

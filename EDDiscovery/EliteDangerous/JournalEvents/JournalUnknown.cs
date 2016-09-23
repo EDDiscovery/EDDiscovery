@@ -9,7 +9,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     // For "new" unknown event EDD  not knows. 
     public class JournalUnknown : JournalEntry
     {
-        public JournalUnknown(JObject jo, string typestr, EDJournalReader reader) : base(jo, JournalTypeEnum.Unknown, reader)
+        public JournalUnknown(JObject jo, string typestr ) : base(jo, JournalTypeEnum.Unknown)
         {
             eventTypeStr = typestr;
         }

@@ -8,9 +8,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Type: cargo type
     public class JournalMiningRefined : JournalEntry
     {
-        public JournalMiningRefined(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MiningRefined, reader)
+        public JournalMiningRefined(JObject evt ) : base(evt, JournalTypeEnum.MiningRefined)
         {
-            Type = Tools.GetStringDef("Type");
+            Type = Tools.GetStringDef(evt["Type"]);
 
         }
         public string Type { get; set; }

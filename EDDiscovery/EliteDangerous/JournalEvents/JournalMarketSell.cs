@@ -16,16 +16,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	BlackMarket: (not always present) whether selling in a black market
     public class JournalMarketSell : JournalEntry
     {
-        public JournalMarketSell(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MarketSell, reader)
+        public JournalMarketSell(JObject evt ) : base(evt, JournalTypeEnum.MarketSell)
         {
-            Type = Tools.GetStringDef("Type");
-            Count = Tools.GetInt("Count");
-            SellPrice = Tools.GetInt("SellPrice");
-            TotalSale = Tools.GetInt("TotalSale");
-            AvgPricePaid = Tools.GetInt("AvgPricePaid");
-            IllegalGoods = Tools.GetBool("IllegalGoods");
-            StolenGoods = Tools.GetBool("StolenGoods");
-            BlackMarket = Tools.GetBool("BlackMarket");
+            Type = Tools.GetStringDef(evt["Type"]);
+            Count = Tools.GetInt(evt["Count"]);
+            SellPrice = Tools.GetInt(evt["SellPrice"]);
+            TotalSale = Tools.GetInt(evt["TotalSale"]);
+            AvgPricePaid = Tools.GetInt(evt["AvgPricePaid"]);
+            IllegalGoods = Tools.GetBool(evt["IllegalGoods"]);
+            StolenGoods = Tools.GetBool(evt["StolenGoods"]);
+            BlackMarket = Tools.GetBool(evt["BlackMarket"]);
         }
         public string Type { get; set; }
         public int Count { get; set; }

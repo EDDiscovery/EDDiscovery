@@ -7,7 +7,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters: none
     public class JournalDockSRV : JournalEntry
     {
-        public JournalDockSRV(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockSRV, reader)
+        public JournalDockSRV(JObject evt ) : base(evt, JournalTypeEnum.DockSRV)
         {
 
         }

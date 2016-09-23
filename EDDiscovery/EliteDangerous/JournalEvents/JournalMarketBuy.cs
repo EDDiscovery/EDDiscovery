@@ -11,12 +11,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	TotalCost: total cost
     public class JournalMarketBuy : JournalEntry
     {
-        public JournalMarketBuy(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MarketBuy, reader)
+        public JournalMarketBuy(JObject evt ) : base(evt, JournalTypeEnum.MarketBuy)
         {
-            Type = Tools.GetStringDef("Type");
-            Count = Tools.GetInt("Count");
-            BuyPrice = Tools.GetInt("BuyPrice");
-            TotalCost = Tools.GetInt("TotalCost");
+            Type = Tools.GetStringDef(evt["Type"]);
+            Count = Tools.GetInt(evt["Count"]);
+            BuyPrice = Tools.GetInt(evt["BuyPrice"]);
+            TotalCost = Tools.GetInt(evt["TotalCost"]);
 
         }
         public string Type { get; set; }

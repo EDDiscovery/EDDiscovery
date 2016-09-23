@@ -10,11 +10,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	VictimFaction
     public class JournalFactionKillBond : JournalEntry
     {
-        public JournalFactionKillBond(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.FactionKillBond, reader)
+        public JournalFactionKillBond(JObject evt ) : base(evt, JournalTypeEnum.FactionKillBond)
         {
-            AwardingFaction = Tools.GetStringDef("AwardingFaction");
-            VictimFaction = Tools.GetStringDef("VictimFaction");
-            Reward = Tools.GetInt("Reward");
+            AwardingFaction = Tools.GetStringDef(evt["AwardingFaction"]);
+            VictimFaction = Tools.GetStringDef(evt["VictimFaction"]);
+            Reward = Tools.GetInt(evt["Reward"]);
         }
         public string AwardingFaction { get; set; }
         public string VictimFaction { get; set; }

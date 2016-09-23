@@ -9,10 +9,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	IsPlayer: whether player or npc
     public class JournalEscapeInterdiction : JournalEntry
     {
-        public JournalEscapeInterdiction(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.EscapeInterdiction, reader)
+        public JournalEscapeInterdiction(JObject evt ) : base(evt, JournalTypeEnum.EscapeInterdiction)
         {
-            Interdictor = Tools.GetStringDef("Interdictor");
-            IsPlayer = Tools.GetBool("IsPlayer");
+            Interdictor = Tools.GetStringDef(evt["Interdictor"]);
+            IsPlayer = Tools.GetBool(evt["IsPlayer"]);
         }
         public string Interdictor { get; set; }
         public bool IsPlayer { get; set; }

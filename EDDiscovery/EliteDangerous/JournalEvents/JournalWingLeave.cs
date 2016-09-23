@@ -7,7 +7,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters: none
     public class JournalWingLeave : JournalEntry
     {
-        public JournalWingLeave(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.WingLeave, reader)
+        public JournalWingLeave(JObject evt ) : base(evt, JournalTypeEnum.WingLeave)
         {
 
         }

@@ -11,12 +11,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalBuyDrones : JournalEntry
     {
-        public JournalBuyDrones(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.BuyDrones, reader)
+        public JournalBuyDrones(JObject evt ) : base(evt, JournalTypeEnum.BuyDrones)
         {
-            Type = Tools.GetStringDef("Type");
-            Count = Tools.GetInt("Count");
-            BuyPrice = Tools.GetInt("BuyPrice");
-            TotalCost = Tools.GetInt("TotalCost");
+            Type = Tools.GetStringDef(evt["Type"]);
+            Count = Tools.GetInt(evt["Count"]);
+            BuyPrice = Tools.GetInt(evt["BuyPrice"]);
+            TotalCost = Tools.GetInt(evt["TotalCost"]);
 
         }
         public string Type { get; set; }

@@ -17,10 +17,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalDockingGranted : JournalEntry
     {
-        public JournalDockingGranted(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockingGranted, reader)
+        public JournalDockingGranted(JObject evt ) : base(evt, JournalTypeEnum.DockingGranted)
         {
-            StationName = Tools.GetStringDef("StationName");
-            LandingPad = Tools.GetInt("LandingPad");
+            StationName = Tools.GetStringDef(evt["StationName"]);
+            LandingPad = Tools.GetInt(evt["LandingPad"]);
         }
         public string StationName { get; set; }
         public int LandingPad { get; set; }

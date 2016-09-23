@@ -8,12 +8,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     public class JournalFileHeader : JournalEntry
     {
-        public JournalFileHeader(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.FileHeader, reader)
+        public JournalFileHeader(JObject evt ) : base(evt, JournalTypeEnum.FileHeader)
         {
 
-            GameVersion = Tools.GetStringDef("gameversion");
-            Build = Tools.GetStringDef("build");
-            Language = Tools.GetStringDef("language");
+            GameVersion = Tools.GetStringDef(evt["gameversion"]);
+            Build = Tools.GetStringDef(evt["build"]);
+            Language = Tools.GetStringDef(evt["language"]);
         }
 
         public string GameVersion { get; set; }

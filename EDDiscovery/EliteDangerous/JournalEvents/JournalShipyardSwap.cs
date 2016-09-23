@@ -16,13 +16,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellShipID  
     public class JournalShipyardSwap : JournalEntry
     {
-        public JournalShipyardSwap(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ShipyardSwap, reader)
+        public JournalShipyardSwap(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSwap)
         {
-            ShipType = Tools.GetStringDef("ShipType");
-            ShipId = Tools.GetInt("ShipID");
-            StoreOldShip = Tools.GetStringDef("StoreOldShip");
+            ShipType = Tools.GetStringDef(evt["ShipType"]);
+            ShipId = Tools.GetInt(evt["ShipID"]);
+            StoreOldShip = Tools.GetStringDef(evt["StoreOldShip"]);
             StoreShipId = evt.Value<int?>("StoreShipID");
-            SellOldShip = Tools.GetStringDef("SellOldShip");
+            SellOldShip = Tools.GetStringDef(evt["SellOldShip"]);
             SellShipId = evt.Value<int?>("SellShipID");
             SellPrice = evt.Value<int?>("SellPrice");
         }

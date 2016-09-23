@@ -44,22 +44,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //
     public class JournalScan : JournalEntry
     {
-        public JournalScan(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Scan, reader)
+        public JournalScan(JObject evt ) : base(evt, JournalTypeEnum.Scan)
         {
-            BodyName = Tools.GetStringDef("BodyName");
-            StarType = Tools.GetStringDef("StarType");
+            BodyName = Tools.GetStringDef(evt["BodyName"]);
+            StarType = Tools.GetStringDef(evt["StarType"]);
             StellarMass = evt.Value<double?>("StellarMass");
             Radius = evt.Value<double?>("StellarMass");
             AbsoluteMagnitude = evt.Value<double?>("StellarMass");
-            OrbitalPeriod = Tools.GetDouble("StellarMass");
-            RotationPeriod = Tools.GetDouble("StellarMass");
+            OrbitalPeriod = Tools.GetDouble(evt["StellarMass"]);
+            RotationPeriod = Tools.GetDouble(evt["StellarMass"]);
             Rings = evt["Rings"]?.ToObject<PlanetRing[]>();
 
             TidalLock = evt.Value<bool?>("TidalLock") ?? false;
-            TerraformState = Tools.GetStringDef("TerraformState");
-            PlanetClass = Tools.GetStringDef("PlanetClass");
-            Atmosphere = Tools.GetStringDef("Atmosphere");
-            Volcanism = Tools.GetStringDef("Volcanism");
+            TerraformState = Tools.GetStringDef(evt["TerraformState"]);
+            PlanetClass = Tools.GetStringDef(evt["PlanetClass"]);
+            Atmosphere = Tools.GetStringDef(evt["Atmosphere"]);
+            Volcanism = Tools.GetStringDef(evt["Volcanism"]);
             MassEM = evt.Value<double?>("MassEM");
             SurfaceGravity = evt.Value<double?>("SurfaceGravity");
             SurfaceTemperature = evt.Value<double?>("SurfaceTemperature");

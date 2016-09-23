@@ -48,11 +48,27 @@ namespace EDDiscovery.EliteDangerous
 
         public bool ReadJournalLog(out JournalEntry je)
         {
+            int cmdrid = (_commander!= null)  ? _commander.Nr : -1;
+
             string line;
             while (this.ReadLine(out line))
             {
-                je = JournalEntry.CreateJournalEntry(line, this);
+                je = JournalEntry.CreateJournalEntry(line);
+                if ( je.EventType == JournalTypeEnum.LoadGame )
+                {
+                    string newname = (je as JournalEvents.JournalLoadGame).LoadGameCommander;
+
+                    _commander = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (_commander == null)
+                        _commander= EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname);
+
+                    cmdrid = _commander.Nr;
+                }
+
                 je.JournalId = (int)TravelLogUnit.id;
+                je.CommanderId = cmdrid;
+
                 return true;
             }
 
