@@ -8,32 +8,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     public class JournalLoadGame : JournalEntry
     {
-        public JournalLoadGame(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.LoadGame, reader)
+        public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
-            Commander = Tools.GetStringDef("Commander");
-            Ship = Tools.GetStringDef("Ship");
-            ShipId = Tools.GetInt("ShipID");
-            StartLanded = Tools.GetBool("StartLanded");
-            StartDead = Tools.GetBool("StartDead");
-            GameMode = Tools.GetStringDef("GameMode");
-            Group = Tools.GetStringDef("Group");
-            Credits = Tools.GetInt("Credits");
-            Loan = Tools.GetInt("Loan");
-
-            var cmdr = reader.Commander;
-
-            if (cmdr == null || cmdr.Name != Commander)
-            {
-                cmdr = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(Commander, StringComparison.InvariantCultureIgnoreCase));
-                if (cmdr == null)
-                {
-                    cmdr = EDDiscovery2.EDDConfig.Instance.GetNewCommander(Commander);
-                }
-                reader.Commander = cmdr;
-            }
+            LoadGameCommander = Tools.GetStringDef(evt["Commander"]);
+            Ship = Tools.GetStringDef(evt["Ship"]);
+            ShipId = Tools.GetInt(evt["ShipID"]);
+            StartLanded = Tools.GetBool(evt["StartLanded"]);
+            StartDead = Tools.GetBool(evt["StartDead"]);
+            GameMode = Tools.GetStringDef(evt["GameMode"]);
+            Group = Tools.GetStringDef(evt["Group"]);
+            Credits = Tools.GetInt(evt["Credits"]);
+            Loan = Tools.GetInt(evt["Loan"]);
         }
 
-        public string Commander { get; set; }
+        public string LoadGameCommander { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public bool StartLanded { get; set; }
