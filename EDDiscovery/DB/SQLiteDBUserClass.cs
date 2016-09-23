@@ -245,6 +245,7 @@ namespace EDDiscovery.DB
             string query3 = "CREATE TABLE JournalEntries ( " +
                  "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                  "TravelLogId INTEGER NOT NULL REFERENCES TravelLogUnit(Id), " +
+                 "CommanderId INTEGER NOT NULL DEFAULT 0," +
                  "EventTypeId INTEGER NOT NULL, " +
                  "EventType TEXT, " +
                  "EventTime DATETIME NOT NULL, " +
@@ -353,10 +354,11 @@ namespace EDDiscovery.DB
                     foreach (Object[] array in ehl)
                     {
                         using (DbCommand cmd = conn.CreateCommand(
-                            "Insert into JournalEntries (TravelLogId,EventTypeId,EventType,EventTime,EventData,EdsmId,Synced) " +
-                            "values (@tli,@eti,@et,@etime,@edata,@edsmid,@synced)", txn))
+                            "Insert into JournalEntries (TravelLogId,CommanderId,EventTypeId,EventType,EventTime,EventData,EdsmId,Synced) " +
+                            "values (@tli,@cid,@eti,@et,@etime,@edata,@edsmid,@synced)", txn))
                         {
                             cmd.AddParameterWithValue("@tli", (long)array[15]);
+                            cmd.AddParameterWithValue("@cid", (long)array[3]);
                             cmd.AddParameterWithValue("@eti", EDDiscovery.EliteDangerous.JournalTypeEnum.FSDJump);
                             cmd.AddParameterWithValue("@et", "FSDJump");
                             cmd.AddParameterWithValue("@etime", (DateTime)array[1]);
