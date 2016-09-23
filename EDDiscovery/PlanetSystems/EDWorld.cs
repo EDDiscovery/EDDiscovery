@@ -133,13 +133,13 @@ namespace EDDiscovery2.PlanetSystems
             rockPct = Tools.GetFloat(attributes["rock-pct"]);
             metalPct = Tools.GetFloat(attributes["metal-pct"]);
             icePct = Tools.GetFloat(attributes["ice-pct"]);
-            Reserve = Tools.GetString(attributes["reserve"]);
+            Reserve = Tools.GetStringNull(attributes["reserve"]);
 
             arrivalPoint = Tools.GetFloat(attributes["arrival-point"]);
-            terraformable = Tools.GetString(attributes["terraformable"]);
-            notes = Tools.GetString(attributes["notes"]);
+            terraformable = Tools.GetStringNull(attributes["terraformable"]);
+            notes = Tools.GetStringNull(attributes["notes"]);
             atmosphere = (AtmosphereEnum)AtmosphereStr2Enum(attributes["atmosphere-type"].Value<string>());
-            imageUrl = Tools.GetString(attributes["image-url"]);
+            imageUrl = Tools.GetStringNull(attributes["image-url"]);
 
             var relationships = (JObject) jo["relationships"];
             var data = relationships["world-survey"]["data"] as JObject;

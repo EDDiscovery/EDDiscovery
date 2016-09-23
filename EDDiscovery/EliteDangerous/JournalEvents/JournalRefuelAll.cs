@@ -12,8 +12,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalRefuelAll(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.RefuelAll, reader)
         {
-            Cost = evt.Value<int>("Cost");
-            Amount = evt.Value<int>("Amount");
+            Cost = Tools.GetInt("Cost");
+            Amount = Tools.GetInt("Amount");
         }
         public int Cost { get; set; }
         public int Amount { get; set; }

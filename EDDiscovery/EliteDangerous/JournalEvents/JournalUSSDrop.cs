@@ -11,8 +11,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalUSSDrop(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.USSDrop, reader)
         {
-            USSType = evt.Value<string>("USSType");
-            USSThreat = evt.Value<int>("USSThreat");
+            USSType = Tools.GetStringDef("USSType");
+            USSThreat = Tools.GetInt("USSThreat");
         }
         public string USSType { get; set; }
         public int USSThreat { get; set; }

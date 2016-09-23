@@ -11,9 +11,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalFileHeader(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.FileHeader, reader)
         {
 
-            GameVersion = evt.Value<string>("gameversion");
-            Build = evt.Value<string>("build");
-            Language = evt.Value<string>("language");
+            GameVersion = Tools.GetStringDef("gameversion");
+            Build = Tools.GetStringDef("build");
+            Language = Tools.GetStringDef("language");
         }
 
         public string GameVersion { get; set; }

@@ -13,15 +13,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalBounty(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Bounty,  reader)
         {
-            Faction = evt.Value<string>("Faction");
-            Reward = evt.Value<int>("Reward");
-            VictimFaction = evt.Value<string>("VictimFaction");
-            SharedWithOthers = evt.Value<bool?>("SharedWithOthers");
+            Faction = Tools.GetStringDef("Faction");
+            Reward = Tools.GetInt("Reward");
+            VictimFaction = Tools.GetStringDef("VictimFaction");
+            SharedWithOthers = Tools.GetBool("SharedWithOthers",false);
 
         }
         public string Faction { get; set; }
         public int Reward { get; set; }
         public string VictimFaction { get; set; }
-        public bool? SharedWithOthers { get; set; }
+        public bool SharedWithOthers { get; set; }
     }
 }

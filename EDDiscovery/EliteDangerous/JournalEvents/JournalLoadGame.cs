@@ -10,15 +10,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLoadGame(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.LoadGame, reader)
         {
-            Commander = evt.Value<string>("Commander");
-            Ship = evt.Value<string>("Ship");
-            ShipId = evt.Value<int>("ShipID");
-            StartLanded = evt.Value<bool>("StartLanded");
-            StartDead = evt.Value<bool>("StartDead");
-            GameMode = evt.Value<string>("GameMode");
-            Group = evt.Value<string>("Group");
-            Credits = evt.Value<int>("Credits");
-            Loan = evt.Value<int>("Loan");
+            Commander = Tools.GetStringDef("Commander");
+            Ship = Tools.GetStringDef("Ship");
+            ShipId = Tools.GetInt("ShipID");
+            StartLanded = Tools.GetBool("StartLanded");
+            StartDead = Tools.GetBool("StartDead");
+            GameMode = Tools.GetStringDef("GameMode");
+            Group = Tools.GetStringDef("Group");
+            Credits = Tools.GetInt("Credits");
+            Loan = Tools.GetInt("Loan");
 
             var cmdr = reader.Commander;
 

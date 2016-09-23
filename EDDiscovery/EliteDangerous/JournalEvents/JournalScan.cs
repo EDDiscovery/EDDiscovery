@@ -46,20 +46,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalScan(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Scan, reader)
         {
-            BodyName = evt.Value<string>("BodyName");
-            StarType = evt.Value<string>("StarType");
+            BodyName = Tools.GetStringDef("BodyName");
+            StarType = Tools.GetStringDef("StarType");
             StellarMass = evt.Value<double?>("StellarMass");
             Radius = evt.Value<double?>("StellarMass");
             AbsoluteMagnitude = evt.Value<double?>("StellarMass");
-            OrbitalPeriod = evt.Value<double>("StellarMass");
-            RotationPeriod = evt.Value<double>("StellarMass");
+            OrbitalPeriod = Tools.GetDouble("StellarMass");
+            RotationPeriod = Tools.GetDouble("StellarMass");
             Rings = evt["Rings"]?.ToObject<PlanetRing[]>();
 
             TidalLock = evt.Value<bool?>("TidalLock") ?? false;
-            TerraformState = evt.Value<string>("TerraformState");
-            PlanetClass = evt.Value<string>("PlanetClass");
-            Atmosphere = evt.Value<string>("Atmosphere");
-            Volcanism = evt.Value<string>("Volcanism");
+            TerraformState = Tools.GetStringDef("TerraformState");
+            PlanetClass = Tools.GetStringDef("PlanetClass");
+            Atmosphere = Tools.GetStringDef("Atmosphere");
+            Volcanism = Tools.GetStringDef("Volcanism");
             MassEM = evt.Value<double?>("MassEM");
             SurfaceGravity = evt.Value<double?>("SurfaceGravity");
             SurfaceTemperature = evt.Value<double?>("SurfaceTemperature");
@@ -79,7 +79,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double RotationPeriod { get; set; }
         public PlanetRing[] Rings { get; set; }
 
-        public bool? TidalLock { get; set; }
+        public bool TidalLock { get; set; }
         public string TerraformState { get; set; }
         public string PlanetClass { get; set; }
         public string Atmosphere { get; set; }

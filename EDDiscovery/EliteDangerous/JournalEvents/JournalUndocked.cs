@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalUndocked(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Undocked, reader)
         {
-            StationName = evt.Value<string>("StationName");
+            StationName = Tools.GetStringDef("StationName");
         
         }
         public string StationName { get; set; }

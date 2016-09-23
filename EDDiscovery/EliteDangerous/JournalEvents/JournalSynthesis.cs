@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSynthesis(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Synthesis, reader)
         {
-            Name = evt.Value<string>("Name");
+            Name = Tools.GetStringDef("Name");
             Materials = evt["Materials"]?.ToObject<Dictionary<string, int>>();
         }
         public string Name { get; set; }

@@ -22,7 +22,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalDied(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Died, reader)
         {
-            string killerName = evt.Value<string>("KillerName");
+            string killerName = Tools.GetStringDef("KillerName");
             if (string.IsNullOrEmpty(killerName))
             {
                 if (evt["Killers"]!=null)
@@ -36,8 +36,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                         new Killer
                         {
                             Name = killerName,
-                            Ship = evt.Value<string>("KillerShip"),
-                            Rank = evt.Value<string>("KillerRank")
+                            Ship = Tools.GetStringDef("KillerShip"),
+                            Rank = Tools.GetStringDef("KillerRank")
                         }
                 };
             }

@@ -12,8 +12,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalBuyExplorationData(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.BuyExplorationData, reader)
         {
-            System = evt.Value<string>("System");
-            Cost = evt.Value<int>("Cost");
+            System = Tools.GetStringDef("System");
+            Cost = Tools.GetInt("Cost");
 
         }
         public string System { get; set; }
