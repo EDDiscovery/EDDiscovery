@@ -19,8 +19,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDockingGranted(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockingGranted, reader)
         {
-            StationName = evt.Value<string>("StationName");
-            LandingPad = evt.Value<int>("LandingPad");
+            StationName = Tools.GetStringDef("StationName");
+            LandingPad = Tools.GetInt("LandingPad");
         }
         public string StationName { get; set; }
         public int LandingPad { get; set; }

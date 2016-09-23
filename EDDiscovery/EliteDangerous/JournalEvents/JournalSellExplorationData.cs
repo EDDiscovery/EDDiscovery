@@ -13,10 +13,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSellExplorationData(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.SellExplorationData, reader)
         {
-            Systems = evt.Value<JArray>("Systems").Values<string>().ToArray();
-            Discovered = evt.Value<JArray>("Discovered").Values<string>().ToArray();
-            BaseValue = evt.Value<int>("BaseValue");
-            Bonus = evt.Value<int>("Bonus");
+            if (!Tools.IsNullOrEmptyT(evt["Systems"]))
+                Systems = evt.Value<JArray>("Systems").Values<string>().ToArray();
+
+            if (!Tools.IsNullOrEmptyT(evt["Discovered"]))
+                Discovered = evt.Value<JArray>("Discovered").Values<string>().ToArray();
+
+            BaseValue = Tools.GetInt("BaseValue");
+            Bonus = Tools.GetInt("Bonus");
         }
         public string[] Systems { get; set; }
         public string[] Discovered { get; set; }

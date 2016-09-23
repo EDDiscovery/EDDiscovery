@@ -11,8 +11,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMaterialCollected(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MaterialCollected, reader)
         {
-            Category = evt.Value<string>("Category");
-            Name = evt.Value<string>("Name");
+            Category = Tools.GetStringDef("Category");
+            Name = Tools.GetStringDef("Name");
         }
         public string Category { get; set; }
         public string Name { get; set; }

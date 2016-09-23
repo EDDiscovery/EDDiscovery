@@ -25,12 +25,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public JournalRank(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Rank, reader)
         {
-            Combat = (CombatRank)evt.Value<int>("Combat");
-            Trade = (TradeRank)evt.Value<int>("Trade");
-            Explore = (ExplorationRank)evt.Value<int>("Explore");
-            Empire = (EmpireRank)evt.Value<int>("Empire");
-            Federation = (FederationRank)evt.Value<int>("Federation");
-            CQC = (CQCRank)evt.Value<int>("CQC");
+            Combat = (CombatRank)Tools.GetInt("Combat");
+            Trade = (TradeRank)Tools.GetInt("Trade");
+            Explore = (ExplorationRank)Tools.GetInt("Explore");
+            Empire = (EmpireRank)Tools.GetInt("Empire");
+            Federation = (FederationRank)Tools.GetInt("Federation");
+            CQC = (CQCRank)Tools.GetInt("CQC");
   
         }
         public CombatRank Combat { get; set; }

@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalDatalinkScan(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DatalinkScan, reader)
         {
-            Message = evt.Value<string>("Message");
+            Message = Tools.GetStringDef("Message");
 
         }
         public string Message { get; set; }

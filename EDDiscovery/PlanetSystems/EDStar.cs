@@ -35,10 +35,10 @@ namespace EDDiscovery2.PlanetSystems
             star_age = Tools.GetFloat(attributes["star-age"]);
             orbitPeriod = Tools.GetFloat(attributes["orbit-period"]);
             arrivalPoint = Tools.GetFloat(attributes["arrival-point"]);
-            notes = Tools.GetString(attributes["notes"]);
-            subclass = Tools.GetString(attributes["spectral-subclass"]);
-            luminosity = Tools.GetString(attributes["luminosity"]);
-            imageUrl = Tools.GetString(attributes["image-url"]);
+            notes = Tools.GetStringNull(attributes["notes"]);
+            subclass = Tools.GetStringNull(attributes["spectral-subclass"]);
+            luminosity = Tools.GetStringNull(attributes["luminosity"]);
+            imageUrl = Tools.GetStringNull(attributes["image-url"]);
 
             return true;
         }

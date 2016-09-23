@@ -11,8 +11,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionAbandoned(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MissionAbandoned, reader)
         {
-            Name = evt.Value<string>("Name");
-            MissionId = evt.Value<int>("MissionID");
+            Name = Tools.GetStringDef("Name");
+            MissionId = Tools.GetInt("MissionID");
         }
         public string Name { get; set; }
         public int MissionId { get; set; }

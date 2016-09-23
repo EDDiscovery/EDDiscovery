@@ -10,7 +10,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalJetConeBoost(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.JetConeBoost, reader)
         {
-            BoostValue = evt.Value<double>("BoostValue");
+            BoostValue = Tools.GetDouble("BoostValue");
 
         }
         public double BoostValue { get; set; }

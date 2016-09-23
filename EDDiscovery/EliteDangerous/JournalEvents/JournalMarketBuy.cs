@@ -13,10 +13,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMarketBuy(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MarketBuy, reader)
         {
-            Type = evt.Value<string>("Type");
-            Count = evt.Value<int>("Count");
-            BuyPrice = evt.Value<int>("BuyPrice");
-            TotalCost = evt.Value<int>("TotalCost");
+            Type = Tools.GetStringDef("Type");
+            Count = Tools.GetInt("Count");
+            BuyPrice = Tools.GetInt("BuyPrice");
+            TotalCost = Tools.GetInt("TotalCost");
 
         }
         public string Type { get; set; }

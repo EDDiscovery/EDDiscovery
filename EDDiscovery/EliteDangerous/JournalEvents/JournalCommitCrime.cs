@@ -15,8 +15,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalCommitCrime(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.CommitCrime, reader)
         {
-            CrimeType = evt.Value<string>("CrimeType");
-            Faction = evt.Value<string>("Faction");
+            CrimeType = Tools.GetStringDef("CrimeType");
+            Faction = Tools.GetStringDef("Faction");
             Fine = evt.Value<int?>("Fine");
             Bounty = evt.Value<int?>("Bounty");
         }

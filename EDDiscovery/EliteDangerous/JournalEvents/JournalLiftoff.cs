@@ -11,8 +11,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLiftoff(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Liftoff, reader)
         {
-            Latitude = evt.Value<double>("Latitude");
-            Longitude = evt.Value<double>("Longitude");
+            Latitude = Tools.GetDouble("Latitude");
+            Longitude = Tools.GetDouble("Longitude");
         }
         public double Latitude { get; set; }
         public double Longitude { get; set; }

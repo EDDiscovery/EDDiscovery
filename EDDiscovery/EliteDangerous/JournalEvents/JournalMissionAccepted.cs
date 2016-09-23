@@ -17,14 +17,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalMissionAccepted(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MissionAccepted, reader)
         {
-            Name = evt.Value<string>("Name");
-            Faction = evt.Value<string>("Faction");
-            Commodity = evt.Value<string>("Commodity");
+            Name = Tools.GetStringDef("Name");
+            Faction = Tools.GetStringDef("Faction");
+            Commodity = Tools.GetStringDef("Commodity");
             Count = evt.Value<int?>("Count");
-            Target = evt.Value<string>("Target");
-            TargetType = evt.Value<string>("TargetType");
-            TargetFaction = evt.Value<string>("TargetFaction");
-            MissionId = evt.Value<int>("MissionID");
+            Target = Tools.GetStringDef("Target");
+            TargetType = Tools.GetStringDef("TargetType");
+            TargetFaction = Tools.GetStringDef("TargetFaction");
+            MissionId = Tools.GetInt("MissionID");
         }
         public string Name { get; set; }
         public string Faction { get; set; }
