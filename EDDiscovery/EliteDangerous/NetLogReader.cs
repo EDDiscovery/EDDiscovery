@@ -266,12 +266,38 @@ namespace EDDiscovery
 
         public bool ReadHeader()
         {
+            DateTime lastlog;
+            TimeZoneInfo tzinfo;
+            TimeSpan tzoffset;
+            bool ret = ReadLogTimeInfo(TravelLogUnit, out lastlog, out tzinfo, out tzoffset);
+            if (ret)
+            {
+                LastLogTime = lastlog;
+                TimeZone = tzinfo;
+                TimeZoneOffset = tzoffset;
+                TravelLogUnit.type = 1;
+            }
+            return ret;
+        }
+
+        public static bool ReadLogTimeInfo(TravelLogUnit tlu, out DateTime lastlog, out TimeZoneInfo tzi, out TimeSpan tzoffset)
+        {
             string line = null;
+            string filename = Path.Combine(tlu.Path, tlu.Name);
+
+            lastlog = DateTime.UtcNow;
+            tzi = TimeZoneInfo.Local;
+            tzoffset = tzi.GetUtcOffset(lastlog);
+
+            if (!File.Exists(filename))
+            {
+                return false;
+            }
 
             // Try to read the first line of the log file
             try
             {
-                using (Stream stream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (Stream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (TextReader reader = new StreamReader(stream))
                     {
@@ -299,13 +325,18 @@ namespace EDDiscovery
 
                 DateTime localtime = DateTime.MinValue;
                 TimeSpan gmtime = TimeSpan.MinValue;
-                TimeZoneInfo tzi = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(t => t.DaylightName.Trim() == timezonename || t.StandardName.Trim() == timezonename);
+                tzi = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(t => t.DaylightName.Trim() == timezonename || t.StandardName.Trim() == timezonename);
+
+                if (tzi != null)
+                {
+                    tzoffset = tzi.GetUtcOffset(lastlog);
+                }
 
                 if (DateTime.TryParseExact(localtimestr, "yy-MM-dd-HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out localtime) &&
                     TimeSpan.TryParseExact(gmtimestr, "h\\:mm", CultureInfo.InvariantCulture, out gmtime))
                 {
                     // Grab the timezone offset
-                    TimeSpan tzoffset = localtime.TimeOfDay - gmtime;
+                    tzoffset = localtime.TimeOfDay - gmtime;
 
                     if (tzi != null)
                     {
@@ -345,10 +376,7 @@ namespace EDDiscovery
                     }
 
                     // Set the start time, timezone info and timezone offset
-                    LastLogTime = localtime - tzoffset;
-                    TimeZone = tzi;
-                    TimeZoneOffset = tzoffset;
-                    TravelLogUnit.type = 1;
+                    lastlog = localtime - tzoffset;
                 }
 
                 return true;
