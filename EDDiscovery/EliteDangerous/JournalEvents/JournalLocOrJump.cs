@@ -12,7 +12,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string StarSystem { get; set; }
         public Vector3 StarPos { get; set; }
 
-        bool HasCoordinate { get { return !float.IsNaN(StarPos.X); } }
+        public bool HasCoordinate { get { return !float.IsNaN(StarPos.X); } }
 
         protected JournalLocOrJump(JObject jo, JournalTypeEnum jtype ) : base(jo, jtype)
         {
@@ -20,7 +20,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
             Vector3 pos = new Vector3();
 
-            if (Tools.IsNullOrEmptyT(jo["StarPos"]))            // if its an old VS entry, may not have co-ords
+            if (!Tools.IsNullOrEmptyT(jo["StarPos"]))            // if its an old VS entry, may not have co-ords
             {
                 JArray coords = jo["StarPos"] as JArray;
                 pos.X = coords[0].Value<float>();

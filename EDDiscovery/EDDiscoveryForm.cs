@@ -94,7 +94,7 @@ namespace EDDiscovery
         Task<bool> downloadMapsTask = null;
         Task checkInstallerTask = null;
         private string logname = "";
-        public NetLogClass netlog;
+        //TBD public NetLogClass netlog;
 
         private bool CanSkipSlowUpdates()
         {
@@ -177,7 +177,7 @@ namespace EDDiscovery
 
             Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, travelHistoryControl1);
 
-            netlog = new NetLogClass(this);
+            //TBD netlog = new NetLogClass(this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
@@ -651,7 +651,7 @@ namespace EDDiscovery
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                netlog.OnNewPosition += new NetLogClass.NetLogEventHandler(NewPosition);
+                //TBDnetlog.OnNewPosition += new NetLogClass.NetLogEventHandler(NewPosition);
                 //TBD REMOVED - sync from not working   sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(RefreshEDSMEvent);
 
                 panelInfo.Visible = false;
@@ -1194,7 +1194,7 @@ namespace EDDiscovery
                 _syncWorkerCompletedEvent.WaitOne();
 
             Console.WriteLine("Stopping discrete threads");
-            netlog.StopMonitor();
+            //TBDnetlog.StopMonitor();
 
             if (EdsmSync != null)
                 EdsmSync.StopSync();
@@ -1272,7 +1272,7 @@ namespace EDDiscovery
         {
             try
             {
-                Process.Start(netlog.GetNetLogDir());
+                //TBDProcess.Start(netlog.GetNetLogDir());
             }
             catch (Exception ex)
             {
@@ -1545,7 +1545,7 @@ namespace EDDiscovery
             }
             else
             {
-                RefreshHistory(VisitedSystemsClass.GetAll(DisplayedCommander));
+                //TBDRefreshHistory(VisitedSystemsClass.GetAll(DisplayedCommander));
             }
         }
 
@@ -1560,10 +1560,9 @@ namespace EDDiscovery
             RefreshHistoryParameters param = e.Argument as RefreshHistoryParameters ?? new RefreshHistoryParameters();
             bool forceReload = param.ForceReload;
 
-            string errmsg;
-            netlog.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+            //TBDnetlog.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
 
-            var vsclist = netlog.ParseFiles(out errmsg, EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s), forceReload);   // Parse files stop monitor..
+            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander);
 
             if (worker.CancellationPending)
             {
@@ -1572,7 +1571,7 @@ namespace EDDiscovery
                 return;
             }
 
-            e.Result = vsclist;
+            e.Result = jlist;
         }
 
         private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1585,7 +1584,7 @@ namespace EDDiscovery
                 }
                 else if (e.Result != null)
                 {
-                    RefreshHistory((List<VisitedSystemsClass>)e.Result);
+                    TransferToFrontEnd((List<EliteDangerous.JournalEntry>)e.Result);
                     ReportProgress(-1, "");
                     travelHistoryControl1.LogLine("Refresh Complete." );
                 }
@@ -1593,7 +1592,7 @@ namespace EDDiscovery
                 travelHistoryControl1.RefreshButton(true);
                 journalViewControl1.RefreshButton(true);
 
-                netlog.StartMonitor();
+                //TBDnetlog.StartMonitor();
 
                 if (HistoryRefreshed != null)
                     HistoryRefreshed(this, EventArgs.Empty);
@@ -1606,38 +1605,62 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
-        private void RefreshHistory(List<VisitedSystemsClass> vsc)
+        private void TransferToFrontEnd(List<EliteDangerous.JournalEntry> jlist)
         {
-            if (vsc == null)
+            if (jlist == null)
                 return;
-
-            VisitedSystemsClass.UpdateSys(vsc, true, true);   // always use db distances
 
             history.Clear();
 
-            int loop = 1;
+            ISystem isys = new SystemClass("Unknown");
 
-            foreach (VisitedSystemsClass v in vsc)
+            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
-                HistoryEntry he = new HistoryEntry();
-                he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance + " ly","More info about the FSD, fuel use, etc");
-                he.Journalid = loop++;
-                history.Add(he);
-
-                if ( ( loop % 3 ) == 0 )
+                foreach (EliteDangerous.JournalEntry je in jlist)
                 {
-                    he = new HistoryEntry();
+                    HistoryEntry he = new HistoryEntry();
+                    string summary, info, detailed;
+                    je.FillInformation(out summary, out info, out detailed);
 
-                    string dinfo = "Faction:Fred's faction Economy:Industrial Population:2000000" + Environment.NewLine +
-                                   "Station Type:Outpost Faction State:Civil War Allegiance:Federation";
-                    he.MakeJournalEntry(EliteDangerous.JournalTypeEnum.Docked, loop++, v.curSystem, v.Time.AddSeconds(30), "Docked at Halley Outpost",
-                        "Federation Industrial Civil War", dinfo, 0, false);
-                    history.Add(he);
-                    he = new HistoryEntry();
-                    he.MakeJournalEntry(EliteDangerous.JournalTypeEnum.Undocked, loop++, v.curSystem, v.Time.AddSeconds(35), "Exited station Halley", "Other info about the docking " + v.curSystem.name, dinfo, 0, false);
+                    int mapcolour = 0;
+
+                    if (je.EventType == EliteDangerous.JournalTypeEnum.Location || je.EventType == EliteDangerous.JournalTypeEnum.FSDJump)
+                    {
+                        EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
+                        EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
+
+                        ISystem newsys;
+
+                        if (jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
+                        {
+                            newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
+                        }
+                        else
+                        {                           // try and find it, preferably thru id, else thru name
+                            ISystem edsm = (jl.EdsmID > 0) ? SystemClass.GetSystem(jl.EdsmID, conn, SystemClass.SystemIDType.EdsmId) :
+                                                                   SystemClass.GetSystem(jl.StarSystem, conn);
+
+                            if (edsm != null)
+                                newsys = edsm;
+                            else
+                                newsys = new SystemClass(jl.StarSystem);
+                        }
+
+                        newsys.id_edsm = jl.EdsmID;       // pass across the EDSMID for the lazy load process.
+
+                        if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate ) // if no JDist, its a really old entry, and if previous has a co-ord
+                            info += SystemClass.Distance(isys, newsys).ToString("0.00") + " ly";
+
+                        if (jfsd != null)
+                            mapcolour = jfsd.MapColor;
+
+                        isys = newsys;
+                    }
+
+                    he.MakeJournalEntry(je.EventType, je.Id, isys, je.EventTimeLocal, summary, info, detailed, mapcolour, je.SyncedEDSM);
+
                     history.Add(he);
                 }
-
             }
 
             if (PendingClose)

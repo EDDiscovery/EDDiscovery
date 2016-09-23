@@ -44,9 +44,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public override void FillInformation(out string summary, out string info, out string detailed)
         {
-            summary = Tools.SplitCapsWord(EventType.ToString());
-            info = "Fuel Used " + FuelUsed.ToString("0.0"); 
-            detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", "")); 
+            summary = "Jump to " + StarSystem;
+            info = "";
+            if (JumpDist > 0)
+                info += JumpDist.ToString("0.00") + " ly";
+            if ( FuelUsed > 0 )
+                info += " Fuel " + FuelUsed.ToString("0.0");
+            detailed = ToShortString();
         }
 
         public int MapColor
