@@ -228,7 +228,7 @@ namespace EDDiscovery.EliteDangerous
         protected string eventTypeStr;
         private JournalTypeEnum eventTypeID;
         private DateTime eventTimeUTC;
-        private JObject jEventData;
+        protected JObject jEventData;
         public int EdsmID;
         private int Synced;
 
