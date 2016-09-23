@@ -214,6 +214,12 @@ namespace EDDiscovery.EliteDangerous
     }
 
 
+    enum SyncFlags
+    {
+        EDSM = 0x01,
+        EDDN = 0x02,
+        Future = 0x04,
+    };
 
     public abstract class JournalEntry
     {
@@ -224,7 +230,7 @@ namespace EDDiscovery.EliteDangerous
         private DateTime eventTimeUTC;
         private JObject jEventData;
         public int EdsmID;
-        public int Synced;
+        private int Synced;
 
 
         public DateTime EventTimeUTC
@@ -274,6 +280,37 @@ namespace EDDiscovery.EliteDangerous
 
         }
 
+        public bool SyncedEDSM
+        {
+            get
+            {
+                return (Synced & (int)SyncFlags.EDSM) == (int)SyncFlags.EDSM;
+            }
+
+            set
+            {
+                if (value == true)
+                    Synced |= (int)SyncFlags.EDSM;
+                else
+                    Synced &= (int)(~SyncFlags.EDSM);
+            }
+        }
+        public bool SyncedEDDN
+        {
+            get
+            {
+                return (Synced & (int)SyncFlags.EDDN) == (int)SyncFlags.EDDN;
+            }
+
+            set
+            {
+                if (value == true)
+                    Synced |= (int)SyncFlags.EDDN;
+                else
+                    Synced &= (int)(~SyncFlags.EDDN);
+            }
+        }
+
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {
             summary = Tools.SplitCapsWord(EventType.ToString());
@@ -291,16 +328,50 @@ namespace EDDiscovery.EliteDangerous
         }
 
 
+        static public JournalEntry CreateJournalEntry(DataRow dr)
+        {
+            string EDataString = (string)dr["EventData"];
+            EDJournalReader edjr = new EDJournalReader("");  // TODO hack
+
+            JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString, edjr);
+
+            jr.Id = (int)(long)dr["Id"];
+            jr.eventTimeUTC = (DateTime)dr["EventTime"];
+            jr.JournalId = (int)(long)dr["JournalId "];
+            jr.eventTypeID = (JournalTypeEnum)(long)dr["eventTypeID "];
+            jr.EdsmID = (int)(long)dr["EdsmID"];
+            jr.Synced = (int)(long)dr["Synced"];
+            return jr;
+        }
+
+        static public JournalEntry CreateJournalEntry(DbDataReader dr)
+        {
+            string EDataString = (string)dr["EventData"];
+            EDJournalReader edjr = new EDJournalReader("");  // TODO hack;
+
+            JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString, edjr);
+
+            jr.Id = (int)(long)dr["Id"];
+            jr.eventTimeUTC = (DateTime)dr["EventTime"];
+            jr.JournalId = (int)(long)dr["JournalId "];
+            jr.EdsmID = (int)(long)dr["EdsmID"];
+            jr.Synced = (int)(long)dr["Synced"];
+            return jr;
+        }
+
+        /*
         public JournalEntry(DbDataReader dr)
         {
             Id = (int)(long)dr["Id"];
-            eventTimeUTC = (DateTime)dr["EventTime"];
-            JournalId = (int)(long)dr["JournalId "];
+            eventTimeUTC = (DateTime)dr["EventTime"];  // Todo fix UTC
+            JournalId = (int)(long)dr["TravelLogId "];
             eventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
+            eventTypeStr = (string)dr["EventType"];
             EventDataString = (string)dr["EventData"];
             EdsmID = (int)(long)dr["EdsmID"];
+            Synced = (int)(long)dr["Synced"];
         }
-
+        */
 
         public bool Add()
         {
@@ -422,37 +493,7 @@ namespace EDDiscovery.EliteDangerous
             return jo.ToString().Replace("{", "").Replace("}", "").Replace("\"", "");
         }
 
-        static public JournalEntry CreateJournalEntry(DataRow dr)
-        {
-            string EDataString = (string)dr["EventData"];
-            EDJournalReader edjr = new EDJournalReader("");  // TODO hack
-
-            JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString, edjr);
-        
-            jr.Id = (int)(long)dr["Id"];
-            jr.eventTimeUTC = (DateTime)dr["EventTime"];
-            jr.JournalId = (int)(long)dr["JournalId "];
-            jr.eventTypeID = (JournalTypeEnum)(long)dr["eventTypeID "];
-            jr.EdsmID = (int)(long)dr["EdsmID"];
-
-            return jr;
-        }
-
-        static public JournalEntry CreateJournalEntry(DbDataReader dr)
-        {
-            string EDataString = (string)dr["EventData"];
-            EDJournalReader edjr = new EDJournalReader("");  // TODO hack;
-
-            JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString, edjr);
-
-            jr.Id = (int)(long)dr["Id"];
-            jr.eventTimeUTC = (DateTime)dr["EventTime"];
-            jr.JournalId = (int)(long)dr["JournalId "];
-            jr.eventTypeID = (JournalTypeEnum)(long)dr["eventTypeID "];
-            jr.EdsmID = (int)(long)dr["EdsmID"];
-
-            return jr;
-        }
+    
 
         static public JournalEntry CreateJournalEntry(string text, EDJournalReader reader)
         {
