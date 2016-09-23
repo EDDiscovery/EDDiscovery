@@ -615,7 +615,7 @@ namespace EDDiscovery
 
             if (!cancelRequested())
             {
-                SQLiteDBClass.CreateSystemsTableIndexes();
+                SQLiteDBSystemClass.CreateSystemsTableIndexes();
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
@@ -760,7 +760,7 @@ namespace EDDiscovery
                 if (!cancelRequested())
                 {
                     travelHistoryControl1.LogLine("Indexing systems table");
-                    SQLiteDBClass.CreateSystemsTableIndexes();
+                    SQLiteDBSystemClass.CreateSystemsTableIndexes();
 
                     PerformEDDBFullSync(cancelRequested, reportProgress);
                     performhistoryrefresh = true;
@@ -777,7 +777,7 @@ namespace EDDiscovery
             if (!cancelRequested())
             {
                 travelHistoryControl1.LogLine("Indexing systems table");
-                SQLiteDBClass.CreateSystemsTableIndexes();
+                SQLiteDBSystemClass.CreateSystemsTableIndexes();
 
                 if (CanSkipSlowUpdates())
                 {
@@ -870,7 +870,7 @@ namespace EDDiscovery
                 bool newfile;
                 bool success = EDDBClass.DownloadFile("https://www.edsm.net/dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
                 {
-                    SQLiteDBClass.CreateTempSystemsTable();
+                    SQLiteDBSystemClass.CreateTempSystemsTable();
 
                     string rwsysfiletime = "2014-01-01 00:00:00";
                     using (var reader = new StreamReader(s))
@@ -880,7 +880,7 @@ namespace EDDiscovery
                         SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
                         travelHistoryControl1.LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
                         reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
-                        SQLiteDBClass.ReplaceSystemsTable();
+                        SQLiteDBSystemClass.ReplaceSystemsTable();
                         reportProgress(-1, "");
                     }
                     else
