@@ -11,12 +11,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SharedWithOthers: whether shared with other players
     public class JournalBounty : JournalEntry
     {
-        public JournalBounty(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Bounty,  reader)
+        public JournalBounty(JObject evt ) : base(evt, JournalTypeEnum.Bounty)
         {
-            Faction = Tools.GetStringDef("Faction");
-            Reward = Tools.GetInt("Reward");
-            VictimFaction = Tools.GetStringDef("VictimFaction");
-            SharedWithOthers = Tools.GetBool("SharedWithOthers",false);
+            Faction = Tools.GetStringDef(evt["Faction"]);
+            Reward = Tools.GetInt(evt["Reward"]);
+            VictimFaction = Tools.GetStringDef(evt["VictimFaction"]);
+            SharedWithOthers = Tools.GetBool(evt["SharedWithOthers"],false);
 
         }
         public string Faction { get; set; }
