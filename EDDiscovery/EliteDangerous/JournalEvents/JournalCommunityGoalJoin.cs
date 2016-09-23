@@ -9,10 +9,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	System
     public class JournalCommunityGoalJoin : JournalEntry
     {
-        public JournalCommunityGoalJoin(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.CommunityGoalJoin, reader)
+        public JournalCommunityGoalJoin(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalJoin)
         {
-            Name = Tools.GetStringDef("Name");
-            System = Tools.GetStringDef("System");
+            Name = Tools.GetStringDef(evt["Name"]);
+            System = Tools.GetStringDef(evt["System"]);
         }
         public string Name { get; set; }
         public string System { get; set; }

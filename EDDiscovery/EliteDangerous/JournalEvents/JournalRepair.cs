@@ -9,10 +9,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Cost: cost of repair
     public class JournalRepair : JournalEntry
     {
-        public JournalRepair(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Repair, reader)
+        public JournalRepair(JObject evt ) : base(evt, JournalTypeEnum.Repair)
         {
-            Item = Tools.GetStringDef("Item");
-            Cost = Tools.GetInt("Cost");
+            Item = Tools.GetStringDef(evt["Item"]);
+            Cost = Tools.GetInt(evt["Cost"]);
 
         }
         public string Item { get; set; }

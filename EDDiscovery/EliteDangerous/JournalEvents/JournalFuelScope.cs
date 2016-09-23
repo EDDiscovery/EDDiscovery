@@ -10,10 +10,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Total: total fuel level after scooping
     public class JournalFuelScoop : JournalEntry
     {
-        public JournalFuelScoop(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.FuelScoop, reader)
+        public JournalFuelScoop(JObject evt ) : base(evt, JournalTypeEnum.FuelScoop)
         {
-            Scooped = Tools.GetDouble("Scooped");
-            Total = Tools.GetDouble("Total");
+            Scooped = Tools.GetDouble(evt["Scooped"]);
+            Total = Tools.GetDouble(evt["Total"]);
         }
         public double Scooped { get; set; }
         public double Total { get; set; }

@@ -8,9 +8,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Loadout
     public class JournalLaunchSRV : JournalEntry
     {
-        public JournalLaunchSRV(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.LaunchSRV, reader)
+        public JournalLaunchSRV(JObject evt ) : base(evt, JournalTypeEnum.LaunchSRV)
         {
-            Loadout = Tools.GetStringDef("Loadout");
+            Loadout = Tools.GetStringDef(evt["Loadout"]);
 
         }
         public string Loadout { get; set; }

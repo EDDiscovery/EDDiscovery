@@ -14,14 +14,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	SellPrice: sale price
     public class JournalModuleBuy : JournalEntry
     {
-        public JournalModuleBuy(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ModuleBuy, reader)
+        public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {
-            Slot = Tools.GetStringDef("Slot");
-            BuyItem = Tools.GetStringDef("BuyItem");
-            BuyPrice = Tools.GetInt("BuyPrice");
-            Ship = Tools.GetStringDef("Ship");
-            ShipId = Tools.GetInt("ShipId");
-            SellItem = Tools.GetStringDef("SellItem");
+            Slot = Tools.GetStringDef(evt["Slot"]);
+            BuyItem = Tools.GetStringDef(evt["BuyItem"]);
+            BuyPrice = Tools.GetInt(evt["BuyPrice"]);
+            Ship = Tools.GetStringDef(evt["Ship"]);
+            ShipId = Tools.GetInt(evt["ShipId"]);
+            SellItem = Tools.GetStringDef(evt["SellItem"]);
             SellPrice = evt.Value<int?>("SellPrice");
 
         }

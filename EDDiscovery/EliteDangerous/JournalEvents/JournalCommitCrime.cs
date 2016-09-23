@@ -13,10 +13,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Bounty
     public class JournalCommitCrime : JournalEntry
     {
-        public JournalCommitCrime(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.CommitCrime, reader)
+        public JournalCommitCrime(JObject evt ) : base(evt, JournalTypeEnum.CommitCrime)
         {
-            CrimeType = Tools.GetStringDef("CrimeType");
-            Faction = Tools.GetStringDef("Faction");
+            CrimeType = Tools.GetStringDef(evt["CrimeType"]);
+            Faction = Tools.GetStringDef(evt["Faction"]);
             Fine = evt.Value<int?>("Fine");
             Bounty = evt.Value<int?>("Bounty");
         }

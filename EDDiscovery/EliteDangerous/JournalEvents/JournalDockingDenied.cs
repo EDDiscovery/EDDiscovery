@@ -12,10 +12,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
     public class JournalDockingDenied : JournalEntry
     {
-        public JournalDockingDenied(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockingDenied, reader)
+        public JournalDockingDenied(JObject evt ) : base(evt, JournalTypeEnum.DockingDenied)
         {
-            StationName = Tools.GetStringDef("StationName");
-            Reason = Tools.GetStringDef("Reason");
+            StationName = Tools.GetStringDef(evt["StationName"]);
+            Reason = Tools.GetStringDef(evt["Reason"]);
         }
         public string StationName { get; set; }
         public string Reason { get; set; }

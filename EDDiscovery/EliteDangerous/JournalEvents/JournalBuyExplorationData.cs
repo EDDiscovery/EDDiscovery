@@ -10,10 +10,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Cost
     public class JournalBuyExplorationData : JournalEntry
     {
-        public JournalBuyExplorationData(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.BuyExplorationData, reader)
+        public JournalBuyExplorationData(JObject evt ) : base(evt, JournalTypeEnum.BuyExplorationData)
         {
-            System = Tools.GetStringDef("System");
-            Cost = Tools.GetInt("Cost");
+            System = Tools.GetStringDef(evt["System"]);
+            Cost = Tools.GetInt(evt["Cost"]);
 
         }
         public string System { get; set; }

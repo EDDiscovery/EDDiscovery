@@ -13,16 +13,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Power: if npc working for a power
     public class JournalInterdicted : JournalEntry
     {
-        public JournalInterdicted(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Interdicted, reader)
+        public JournalInterdicted(JObject evt ) : base(evt, JournalTypeEnum.Interdicted)
         {
-            Submitted = Tools.GetBool("Submitted");
-            Interdictor = Tools.GetStringDef("Interdictor");
-            IsPlayer = Tools.GetBool("IsPlayer");
+            Submitted = Tools.GetBool(evt["Submitted"]);
+            Interdictor = Tools.GetStringDef(evt["Interdictor"]);
+            IsPlayer = Tools.GetBool(evt["IsPlayer"]);
             CombatRank = CombatRank.Harmless;
             if (!Tools.IsNullOrEmptyT(evt["CombatRank"]))
                 CombatRank = (CombatRank)(evt.Value<int?>("CombatRank"));
-            Faction = Tools.GetStringDef("Faction");
-            Power = Tools.GetStringDef("Power");
+            Faction = Tools.GetStringDef(evt["Faction"]);
+            Power = Tools.GetStringDef(evt["Power"]);
         }
         public bool Submitted { get; set; }
         public string Interdictor { get; set; }

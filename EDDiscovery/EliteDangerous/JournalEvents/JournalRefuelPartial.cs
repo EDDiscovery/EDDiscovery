@@ -10,10 +10,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalRefuelPartial : JournalEntry
     {
-        public JournalRefuelPartial(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.RefuelPartial, reader)
+        public JournalRefuelPartial(JObject evt ) : base(evt, JournalTypeEnum.RefuelPartial)
         {
-            Cost = Tools.GetInt("Cost");
-            Amount = Tools.GetInt("Amount");
+            Cost = Tools.GetInt(evt["Cost"]);
+            Amount = Tools.GetInt(evt["Amount"]);
         }
         public int Cost { get; set; }
         public int Amount { get; set; }

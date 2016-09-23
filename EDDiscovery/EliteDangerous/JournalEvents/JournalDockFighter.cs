@@ -7,7 +7,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters: none
     public class JournalDockFighter : JournalEntry
     {
-        public JournalDockFighter(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DockFighter, reader)
+        public JournalDockFighter(JObject evt ) : base(evt, JournalTypeEnum.DockFighter)
         {
 
 

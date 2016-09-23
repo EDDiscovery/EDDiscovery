@@ -9,10 +9,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Name: name of mission
     public class JournalMissionAbandoned : JournalEntry
     {
-        public JournalMissionAbandoned(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MissionAbandoned, reader)
+        public JournalMissionAbandoned(JObject evt ) : base(evt, JournalTypeEnum.MissionAbandoned)
         {
-            Name = Tools.GetStringDef("Name");
-            MissionId = Tools.GetInt("MissionID");
+            Name = Tools.GetStringDef(evt["Name"]);
+            MissionId = Tools.GetInt(evt["MissionID"]);
         }
         public string Name { get; set; }
         public int MissionId { get; set; }

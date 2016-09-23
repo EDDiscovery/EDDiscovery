@@ -12,10 +12,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	ShipID
     public class JournalShipyardNew : JournalEntry
     {
-        public JournalShipyardNew(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ShipyardNew, reader)
+        public JournalShipyardNew(JObject evt ) : base(evt, JournalTypeEnum.ShipyardNew)
         {
-            ShipType = Tools.GetStringDef("ShipType");
-            ShipId = Tools.GetInt("ShipID");
+            ShipType = Tools.GetStringDef(evt["ShipType"]);
+            ShipId = Tools.GetInt(evt["ShipID"]);
 
         }
         public string ShipType { get; set; }

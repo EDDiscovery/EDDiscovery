@@ -8,9 +8,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Message: message from data link
     public class JournalDatalinkScan : JournalEntry
     {
-        public JournalDatalinkScan(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.DatalinkScan, reader)
+        public JournalDatalinkScan(JObject evt ) : base(evt, JournalTypeEnum.DatalinkScan)
         {
-            Message = Tools.GetStringDef("Message");
+            Message = Tools.GetStringDef(evt["Message"]);
 
         }
         public string Message { get; set; }

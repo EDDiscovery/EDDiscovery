@@ -8,9 +8,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Module: the name of the module that has taken some damage
     public class JournalJetConeDamage : JournalEntry
     {
-        public JournalJetConeDamage(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.JetConeDamage, reader)
+        public JournalJetConeDamage(JObject evt ) : base(evt, JournalTypeEnum.JetConeDamage)
         {
-            Module = Tools.GetStringDef("Module");
+            Module = Tools.GetStringDef(evt["Module"]);
 
         }
         public string Module { get; set; }

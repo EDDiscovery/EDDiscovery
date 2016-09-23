@@ -11,12 +11,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Count: number of vehicles purchased
     public class JournalRestockVehicle : JournalEntry
     {
-        public JournalRestockVehicle(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.RestockVehicle, reader)
+        public JournalRestockVehicle(JObject evt ) : base(evt, JournalTypeEnum.RestockVehicle)
         {
-            Type = Tools.GetStringDef("Type");
-            Loadout = Tools.GetStringDef("Loadout");
-            Cost = Tools.GetInt("Cost");
-            Count = Tools.GetInt("Count");
+            Type = Tools.GetStringDef(evt["Type"]);
+            Loadout = Tools.GetStringDef(evt["Loadout"]);
+            Cost = Tools.GetInt(evt["Cost"]);
+            Count = Tools.GetInt(evt["Count"]);
         }
         public string Type { get; set; }
         public string Loadout { get; set; }

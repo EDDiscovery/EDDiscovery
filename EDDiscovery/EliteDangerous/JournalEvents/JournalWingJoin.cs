@@ -8,7 +8,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Others: JSON array of other player names already in wing
     public class JournalWingJoin : JournalEntry
     {
-        public JournalWingJoin(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.WingJoin, reader)
+        public JournalWingJoin(JObject evt ) : base(evt, JournalTypeEnum.WingJoin)
         {
             if (!Tools.IsNullOrEmptyT(evt["Others"]))
                 Others = evt.Value<JArray>("Others").Values<string>().ToArray();

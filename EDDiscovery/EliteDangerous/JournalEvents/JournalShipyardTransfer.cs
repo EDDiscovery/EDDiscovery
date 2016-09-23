@@ -15,13 +15,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	TransferPrice: cost of transfer   
     public class JournalShipyardTransfer : JournalEntry
     {
-        public JournalShipyardTransfer(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ShipyardTransfer, reader)
+        public JournalShipyardTransfer(JObject evt ) : base(evt, JournalTypeEnum.ShipyardTransfer)
         {
-            ShipType = Tools.GetStringDef("ShipType");
-            ShipId = Tools.GetInt("ShipID");
-            System = Tools.GetStringDef("System");
-            Distance = Tools.GetDouble("Distance");
-            TransferPrice = Tools.GetInt("TransferPrice");
+            ShipType = Tools.GetStringDef(evt["ShipType"]);
+            ShipId = Tools.GetInt(evt["ShipID"]);
+            System = Tools.GetStringDef(evt["System"]);
+            Distance = Tools.GetDouble(evt["Distance"]);
+            TransferPrice = Tools.GetInt(evt["TransferPrice"]);
 
 
         }
