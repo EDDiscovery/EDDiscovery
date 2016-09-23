@@ -19,20 +19,20 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
 
 
-        public JournalDocked(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Docked, reader)
+        public JournalDocked(JObject evt ) : base(evt, JournalTypeEnum.Docked)
         {
-            StationName = Tools.GetStringDef("StationName");
-            StationType = Tools.GetStringDef("StationType");
-            CockpitBreach = Tools.GetBool("CockpitBreach");
-            Faction = Tools.GetStringDef("Faction");
-            FactionState = Tools.GetStringDef("FactionState");
-            Allegiance = Tools.GetStringDef("Allegiance");
-            Economy = Tools.GetStringDef("Economy");
-            Economy_Localised = Tools.GetStringDef("Economy_Localised");
-            Government = Tools.GetStringDef("Government");
-            Government_Localised = Tools.GetStringDef("Government_Localised");
-            Security = Tools.GetStringDef("Security");
-            Security_Localised = Tools.GetStringDef("Security_Localised");
+            StationName = Tools.GetStringDef(evt["StationName"]);
+            StationType = Tools.GetStringDef(evt["StationType"]);
+            CockpitBreach = Tools.GetBool(evt["CockpitBreach"]);
+            Faction = Tools.GetStringDef(evt["Faction"]);
+            FactionState = Tools.GetStringDef(evt["FactionState"]);
+            Allegiance = Tools.GetStringDef(evt["Allegiance"]);
+            Economy = Tools.GetStringDef(evt["Economy"]);
+            Economy_Localised = Tools.GetStringDef(evt["Economy_Localised"]);
+            Government = Tools.GetStringDef(evt["Government"]);
+            Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
+            Security = Tools.GetStringDef(evt["Security"]);
+            Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
         }
 
         public string StationName { get; set; }

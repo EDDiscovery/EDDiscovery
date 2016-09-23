@@ -11,12 +11,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Override: whether overriding special effect
     public class JournalEngineerApply : JournalEntry
     {
-        public JournalEngineerApply(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.EngineerApply, reader)
+        public JournalEngineerApply(JObject evt ) : base(evt, JournalTypeEnum.EngineerApply)
         {
-            Engineer = Tools.GetStringDef("Engineer");
-            Blueprint = Tools.GetStringDef("Blueprint");
-            Level = Tools.GetInt("Level");
-            Override = Tools.GetBool("Override");
+            Engineer = Tools.GetStringDef(evt["Engineer"]);
+            Blueprint = Tools.GetStringDef(evt["Blueprint"]);
+            Level = Tools.GetInt(evt["Level"]);
+            Override = Tools.GetBool(evt["Override"]);
 
         }
         public string Engineer { get; set; }

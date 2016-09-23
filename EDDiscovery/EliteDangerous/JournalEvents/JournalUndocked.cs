@@ -10,9 +10,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalUndocked : JournalEntry
     {
-        public JournalUndocked(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Undocked, reader)
+        public JournalUndocked(JObject evt ) : base(evt, JournalTypeEnum.Undocked)
         {
-            StationName = Tools.GetStringDef("StationName");
+            StationName = Tools.GetStringDef(evt["StationName"]);
         
         }
         public string StationName { get; set; }

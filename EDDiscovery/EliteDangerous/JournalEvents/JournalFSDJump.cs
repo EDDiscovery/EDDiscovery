@@ -9,22 +9,22 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 {
     public class JournalFSDJump : JournalLocOrJump
     {
-        public JournalFSDJump(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.FSDJump, reader)
+        public JournalFSDJump(JObject evt ) : base(evt, JournalTypeEnum.FSDJump)
         {
             Body = Tools.GetStringDef(evt["body"], "Unknown");
-            JumpDist = Tools.GetDouble("JumpDist");
-            FuelUsed = Tools.GetDouble("FuelUsed");
-            FuelLevel = Tools.GetDouble("FuelLevel");
-            BoostUsed = Tools.GetBool("BoostUsed");
-            Faction = Tools.GetStringDef("Faction","");
-            FactionState = Tools.GetStringDef("FactionState", "");
-            Allegiance = Tools.GetStringDef("Allegiance", "");
-            Economy = Tools.GetStringDef("Economy", "");
-            Economy_Localised = Tools.GetStringDef("Economy_Localised", "");
-            Government = Tools.GetStringDef("Government", "");
-            Government_Localised = Tools.GetStringDef("Government_Localised", "");
-            Security = Tools.GetStringDef("Security", "");
-            Security_Localised = Tools.GetStringDef("Security_Localised", "");
+            JumpDist = Tools.GetDouble(evt["JumpDist"]);
+            FuelUsed = Tools.GetDouble(evt["FuelUsed"]);
+            FuelLevel = Tools.GetDouble(evt["FuelLevel"]);
+            BoostUsed = Tools.GetBool(evt["BoostUsed"]);
+            Faction = Tools.GetStringDef(evt["Faction"]);
+            FactionState = Tools.GetStringDef(evt["FactionState"]);
+            Allegiance = Tools.GetStringDef(evt["Allegiance"]);
+            Economy = Tools.GetStringDef(evt["Economy"]);
+            Economy_Localised = Tools.GetStringDef(evt["Economy_Localised"]);
+            Government = Tools.GetStringDef(evt["Government"]);
+            Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
+            Security = Tools.GetStringDef(evt["Security"]);
+            Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
         }
 
         public string Body { get; set; }

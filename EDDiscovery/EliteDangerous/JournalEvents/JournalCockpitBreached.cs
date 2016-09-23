@@ -7,7 +7,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //Parameters: none
     public class JournalCockpitBreached : JournalEntry
     {
-        public JournalCockpitBreached(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.CockpitBreached, reader)
+        public JournalCockpitBreached(JObject evt ) : base(evt, JournalTypeEnum.CockpitBreached)
         {
 
         }

@@ -10,9 +10,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalEngineerProgress : JournalEntry
     {
-        public JournalEngineerProgress(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.EngineerProgress, reader)
+        public JournalEngineerProgress(JObject evt ) : base(evt, JournalTypeEnum.EngineerProgress)
         {
-            StationName = Tools.GetStringDef("StationName");
+            StationName = Tools.GetStringDef(evt["StationName"]);
 
         }
         public string StationName { get; set; }

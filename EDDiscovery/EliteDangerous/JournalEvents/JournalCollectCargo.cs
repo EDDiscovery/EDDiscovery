@@ -9,10 +9,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Stolen: whether stolen goods
     public class JournalCollectCargo : JournalEntry
     {
-        public JournalCollectCargo(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.CollectCargo, reader)
+        public JournalCollectCargo(JObject evt ) : base(evt, JournalTypeEnum.CollectCargo)
         {
-            Type = Tools.GetStringDef("Type");
-            Stolen = Tools.GetBool("Stolen");
+            Type = Tools.GetStringDef(evt["Type"]);
+            Stolen = Tools.GetBool(evt["Stolen"]);
         }
         public string Type { get; set; }
         public bool Stolen { get; set; }

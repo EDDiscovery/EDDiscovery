@@ -9,10 +9,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	USSThreat: threat level
     public class JournalUSSDrop : JournalEntry
     {
-        public JournalUSSDrop(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.USSDrop, reader)
+        public JournalUSSDrop(JObject evt ) : base(evt, JournalTypeEnum.USSDrop)
         {
-            USSType = Tools.GetStringDef("USSType");
-            USSThreat = Tools.GetInt("USSThreat");
+            USSType = Tools.GetStringDef(evt["USSType"]);
+            USSThreat = Tools.GetInt(evt["USSThreat"]);
         }
         public string USSType { get; set; }
         public int USSThreat { get; set; }

@@ -8,10 +8,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Name: name of mission
     public class JournalMissionFailed : JournalEntry
     {
-        public JournalMissionFailed(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MissionFailed, reader)
+        public JournalMissionFailed(JObject evt ) : base(evt, JournalTypeEnum.MissionFailed)
         {
-            Name = Tools.GetStringDef("Name");
-            MissionId = Tools.GetInt("MissionID");
+            Name = Tools.GetStringDef(evt["Name"]);
+            MissionId = Tools.GetInt(evt["MissionID"]);
         }
 
         public string Name { get; set; }

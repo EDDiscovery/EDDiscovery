@@ -9,10 +9,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Name: name of material
     public class JournalMaterialCollected : JournalEntry
     {
-        public JournalMaterialCollected(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MaterialCollected, reader)
+        public JournalMaterialCollected(JObject evt ) : base(evt, JournalTypeEnum.MaterialCollected)
         {
-            Category = Tools.GetStringDef("Category");
-            Name = Tools.GetStringDef("Name");
+            Category = Tools.GetStringDef(evt["Category"]);
+            Name = Tools.GetStringDef(evt["Name"]);
         }
         public string Category { get; set; }
         public string Name { get; set; }

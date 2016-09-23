@@ -11,11 +11,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalMaterialDiscovered : JournalEntry
     {
-        public JournalMaterialDiscovered(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.MaterialDiscovered, reader)
+        public JournalMaterialDiscovered(JObject evt ) : base(evt, JournalTypeEnum.MaterialDiscovered)
         {
-            Category = Tools.GetStringDef("Category");
-            Name = Tools.GetStringDef("Name");
-            DiscoveryNumber = Tools.GetInt("DiscoveryNumber");
+            Category = Tools.GetStringDef(evt["Category"]);
+            Name = Tools.GetStringDef(evt["Name"]);
+            DiscoveryNumber = Tools.GetInt(evt["DiscoveryNumber"]);
         }
         public string Category { get; set; }
         public string Name { get; set; }

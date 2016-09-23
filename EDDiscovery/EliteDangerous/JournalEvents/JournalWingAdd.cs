@@ -8,9 +8,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Name
     public class JournalWingAdd : JournalEntry
     {
-        public JournalWingAdd(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.WingAdd, reader)
+        public JournalWingAdd(JObject evt ) : base(evt, JournalTypeEnum.WingAdd)
         {
-            Name = Tools.GetStringDef("Name");
+            Name = Tools.GetStringDef(evt["Name"]);
 
         }
         public string Name { get; set; }

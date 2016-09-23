@@ -11,9 +11,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Security
     public class JournalShieldState : JournalEntry
     {
-        public JournalShieldState(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ShieldState, reader)
+        public JournalShieldState(JObject evt ) : base(evt, JournalTypeEnum.ShieldState)
         {
-            ShieldsUp = Tools.GetBool("ShieldsUp");
+            ShieldsUp = Tools.GetBool(evt["ShieldsUp"]);
 
         }
         public bool ShieldsUp { get; set; }

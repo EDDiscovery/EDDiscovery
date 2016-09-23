@@ -8,10 +8,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Longitude
     public class JournalTouchdown : JournalEntry
     {
-        public JournalTouchdown(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Touchdown, reader)
+        public JournalTouchdown(JObject evt ) : base(evt, JournalTypeEnum.Touchdown)
         {
-            Latitude = Tools.GetDouble("Latitude");
-            Longitude = Tools.GetDouble("Longitude");
+            Latitude = Tools.GetDouble(evt["Latitude"]);
+            Longitude = Tools.GetDouble(evt["Longitude"]);
         }
         public double Latitude { get; set; }
         public double Longitude { get; set; }

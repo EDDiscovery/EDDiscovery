@@ -14,9 +14,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         bool HasCoordinate { get { return !float.IsNaN(StarPos.X); } }
 
-        protected JournalLocOrJump(JObject jo, JournalTypeEnum jtype, EDJournalReader reader) : base(jo, jtype, reader)
+        protected JournalLocOrJump(JObject jo, JournalTypeEnum jtype ) : base(jo, jtype)
         {
-            StarSystem = Tools.GetStringDef("StarSystem","Unknown!");
+            StarSystem = Tools.GetStringDef(jo["StarSystem"],"Unknown!");
 
             Vector3 pos = new Vector3();
 

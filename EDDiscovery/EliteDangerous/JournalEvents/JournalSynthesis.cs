@@ -10,9 +10,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Materials: JSON object listing materials used and quantities
     public class JournalSynthesis : JournalEntry
     {
-        public JournalSynthesis(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Synthesis, reader)
+        public JournalSynthesis(JObject evt ) : base(evt, JournalTypeEnum.Synthesis)
         {
-            Name = Tools.GetStringDef("Name");
+            Name = Tools.GetStringDef(evt["Name"]);
             Materials = evt["Materials"]?.ToObject<Dictionary<string, int>>();
         }
         public string Name { get; set; }

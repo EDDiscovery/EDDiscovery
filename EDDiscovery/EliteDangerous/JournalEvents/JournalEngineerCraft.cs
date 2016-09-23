@@ -12,11 +12,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     //•	Ingredients: JSON object with names and quantities of materials required
     public class JournalEngineerCraft : JournalEntry
     {
-        public JournalEngineerCraft(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.EngineerCraft, reader)
+        public JournalEngineerCraft(JObject evt ) : base(evt, JournalTypeEnum.EngineerCraft)
         {
-            Engineer = Tools.GetStringDef("Engineer");
-            Blueprint = Tools.GetStringDef("Blueprint");
-            Level = Tools.GetInt("Level");
+            Engineer = Tools.GetStringDef(evt["Engineer"]);
+            Blueprint = Tools.GetStringDef(evt["Blueprint"]);
+            Level = Tools.GetInt(evt["Level"]);
             Ingredients = evt["Ingredients"]?.ToObject<Dictionary<string, int>>();
         }
         public string Engineer { get; set; }
