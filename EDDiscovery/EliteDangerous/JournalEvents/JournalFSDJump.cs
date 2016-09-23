@@ -47,5 +47,17 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             info = "Fuel Used " + FuelUsed.ToString("0.0"); 
             detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", "")); 
         }
+
+        public int MapColor
+        {
+            get
+            {
+                return Tools.GetInt(jEventData["EDDMapColor"]);
+            }
+            set
+            {
+                jEventData["EDDMapColor"] = value;
+            }
+        }
     }
 }
