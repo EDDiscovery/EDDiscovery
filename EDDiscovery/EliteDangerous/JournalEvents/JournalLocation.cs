@@ -24,19 +24,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalLocation(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.Location, reader)
         {
-            Body = evt.Value<string>("Body");
-            Docked = evt.Value<bool?>("Docked") ?? false;
-            StationName = evt.Value<string>("StationName");
-            StationType = evt.Value<string>("StationType");
-            Faction = evt.Value<string>("Faction");
-            FactionState = evt.Value<string>("FactionState");
-            Allegiance = evt.Value<string>("Allegiance");
-            Economy = evt.Value<string>("Economy");
-            Economy_Localised = evt.Value<string>("Economy_Localised");
-            Government = evt.Value<string>("Government");
-            Government_Localised = evt.Value<string>("Government_Localised");
-            Security = evt.Value<string>("Security");
-            Security_Localised = evt.Value<string>("Security_Localised");
+            Body = Tools.GetStringDef("Body");
+            Docked = evt.Value < bool ?>("Docked") ?? false;
+            StationName = Tools.GetStringDef("StationName");
+            StationType = Tools.GetStringDef("StationType");
+            Faction = Tools.GetStringDef("Faction");
+            FactionState = Tools.GetStringDef("FactionState");
+            Allegiance = Tools.GetStringDef("Allegiance");
+            Economy = Tools.GetStringDef("Economy");
+            Economy_Localised = Tools.GetStringDef("Economy_Localised");
+            Government = Tools.GetStringDef("Government");
+            Government_Localised = Tools.GetStringDef("Government_Localised");
+            Security = Tools.GetStringDef("Security");
+            Security_Localised = Tools.GetStringDef("Security_Localised");
         }
 
         public string Body { get; set; }

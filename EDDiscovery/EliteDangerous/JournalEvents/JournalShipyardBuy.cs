@@ -21,11 +21,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardBuy(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ShipyardBuy, reader)
         {
-            ShipType = evt.Value<string>("ShipType");
-            ShipPrice = evt.Value<int>("ShipPrice");
-            StoreOldShip = evt.Value<string>("StoreOldShip");
+            ShipType = Tools.GetStringDef("ShipType");
+            ShipPrice = Tools.GetInt("ShipPrice");
+            StoreOldShip = Tools.GetStringDef("StoreOldShip");
             StoreShipId = evt.Value<int?>("StoreShipID");
-            SellOldShip = evt.Value<string>("SellOldShip");
+            SellOldShip = Tools.GetStringDef("SellOldShip");
             SellShipId = evt.Value<int?>("SellShipID");
             SellPrice = evt.Value<int?>("SellPrice");
 

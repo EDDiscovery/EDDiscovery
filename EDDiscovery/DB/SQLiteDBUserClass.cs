@@ -305,7 +305,95 @@ namespace EDDiscovery.DB
             }
         }
 
+        public static void TranferVisitedSystemstoJournalTableIfRequired()
+        {
+            if (SQLiteDBClass.GetSettingBool("ImportVisitedSystems", false) == false )
+            {
+                TranferVisitedSystemstoJournalTable();
+                SQLiteDBClass.PutSettingBool("ImportVisitedSystems", true);
+            }
+        }
 
+        public static void TranferVisitedSystemstoJournalTable()        // DONE purposely without using any VisitedSystem code.. so we can blow it away later.
+        {
+            List<Object[]> ehl = new List<Object[]>();
 
+            List<EDDiscovery2.DB.TravelLogUnit> tlus = EDDiscovery2.DB.TravelLogUnit.GetAll();
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            {
+                                                               // 0    1    2    3         4         5          6 7 8 9
+                using (DbCommand cmd = conn.CreateCommand("Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z,id_edsm_assigned From VisitedSystems Order By Time"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Object[] array = new Object[16];
+                            reader.GetValues(array);                    // love this call.
+
+                            string tluname = (string)array[2];          // 2 is in terms of its name.. look it up
+                            EDDiscovery2.DB.TravelLogUnit tlu = tlus.Find(x => x.Name.Equals(tluname, StringComparison.InvariantCultureIgnoreCase));
+
+                            if (tlu != null)                            // found it, assign to slot 15 the id.
+                                array[15] = (long)tlu.id;
+                            else
+                            {
+                                array[15] = (long)0;
+                                Console.WriteLine("Entry with tluname {0} not found in TLU list", tluname);
+                            }
+
+                            ehl.Add(array);
+                        }
+                    }
+                }
+
+                using (DbTransaction txn = conn.BeginTransaction())
+                {
+                    foreach (Object[] array in ehl)
+                    {
+                        using (DbCommand cmd = conn.CreateCommand(
+                            "Insert into JournalEntries (TravelLogId,EventTypeId,EventType,EventTime,EventData,EdsmId,Synced) " +
+                            "values (@tli,@eti,@et,@etime,@edata,@edsmid,@synced)", txn))
+                        {
+                            cmd.AddParameterWithValue("@tli", (long)array[15]);
+                            cmd.AddParameterWithValue("@eti", EDDiscovery.EliteDangerous.JournalTypeEnum.FSDJump);
+                            cmd.AddParameterWithValue("@et", "FSDJump");
+                            cmd.AddParameterWithValue("@etime", (DateTime)array[1]);
+
+                            string json = "{";
+                            json += "\"timestamp\":\"" + ((DateTime)array[1]).ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'") + "\"";
+                            json += ", \"event\":\"FSDJump\"";
+                            json += ", \"StarSystem\":\"" + ((string)array[0]) + "\"";
+
+                            if (System.DBNull.Value != array[6] && System.DBNull.Value != array[7] && System.DBNull.Value != array[8])
+                            {
+                                double x = (double)array[6];
+                                double y = (double)array[7];
+                                double z = (double)array[8];
+                                json += ", \"StarPos\":[" + x.ToString("0.000") + "," + y.ToString("0.000") + "," + z.ToString("0.000") + "]";
+                            }
+
+                            json += ", \"EDDMapColor\":\"" + ((long)array[5]) + "\"";
+
+                            cmd.AddParameterWithValue("@edata", json + "}");    // order number - look at the dbcommand above
+
+                            long edsmid = 0;
+                            if (System.DBNull.Value != array[9])
+                                edsmid = (long)array[9];
+
+                            cmd.AddParameterWithValue("@edsmid", edsmid);    // order number - look at the dbcommand above
+                            cmd.AddParameterWithValue("@synced", ((bool)array[4] == true) ? 1 : 0);
+
+                            SQLiteDBClass.SQLNonQueryText(conn, cmd);
+                        }
+                    }
+
+                    txn.Commit();
+                    Console.WriteLine("Converted VS->JT");
+                }
+            }
+
+        }
     }
 }

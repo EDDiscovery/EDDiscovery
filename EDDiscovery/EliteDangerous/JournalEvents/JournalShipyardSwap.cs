@@ -18,11 +18,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalShipyardSwap(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.ShipyardSwap, reader)
         {
-            ShipType = evt.Value<string>("ShipType");
-            ShipId = evt.Value<int>("ShipID");
-            StoreOldShip = evt.Value<string>("StoreOldShip");
+            ShipType = Tools.GetStringDef("ShipType");
+            ShipId = Tools.GetInt("ShipID");
+            StoreOldShip = Tools.GetStringDef("StoreOldShip");
             StoreShipId = evt.Value<int?>("StoreShipID");
-            SellOldShip = evt.Value<string>("SellOldShip");
+            SellOldShip = Tools.GetStringDef("SellOldShip");
             SellShipId = evt.Value<int?>("SellShipID");
             SellPrice = evt.Value<int?>("SellPrice");
         }

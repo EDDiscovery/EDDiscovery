@@ -30,13 +30,13 @@ namespace EDDiscovery.EDSM
         public GalacticMapObject(JObject jo)
         {
             id = Tools.GetInt(jo["id"]);
-            type = Tools.GetStringOrDefault(jo["type"],"Not Set");
-            name = Tools.GetStringOrDefault(jo["name"],"No name set");
-            galMapSearch = Tools.GetStringOrDefault(jo["galMapSearch"],"");
-            galMapUrl = Tools.GetStringOrDefault(jo["galMapUrl"],"");
-            colour = Tools.GetStringOrDefault(jo["color"],"Orange");
-            description = Tools.GetStringOrDefault(jo["descriptionMardown"],"No description");
-            descriptionhtml = Tools.GetStringOrDefault(jo["descriptionHtml"],"");
+            type = Tools.GetStringDef(jo["type"],"Not Set");
+            name = Tools.GetStringDef(jo["name"],"No name set");
+            galMapSearch = Tools.GetStringDef(jo["galMapSearch"],"");
+            galMapUrl = Tools.GetStringDef(jo["galMapUrl"],"");
+            colour = Tools.GetStringDef(jo["color"],"Orange");
+            description = Tools.GetStringDef(jo["descriptionMardown"],"No description");
+            descriptionhtml = Tools.GetStringDef(jo["descriptionHtml"],"");
             
             points = new List<Vector3>();
 

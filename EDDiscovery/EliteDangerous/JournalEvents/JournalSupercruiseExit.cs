@@ -11,8 +11,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalSupercruiseExit(JObject evt, EDJournalReader reader) : base(evt, JournalTypeEnum.SupercruiseExit, reader)
         {
-            StarSystem = evt.Value<string>("StarSystem");
-            Body = evt.Value<string>("Body");
+            StarSystem = Tools.GetStringDef("StarSystem");
+            Body = Tools.GetStringDef("Body");
 
         }
         public string StarSystem { get; set; }
