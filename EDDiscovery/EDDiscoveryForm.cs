@@ -570,7 +570,7 @@ namespace EDDiscovery
                 if (worker.CancellationPending)
                     e.Cancel = true;
             }
-            catch { }       // any exceptions, ignore
+            catch (Exception ex) { e.Result = ex; }       // any exceptions, ignore
             finally
             {
                 _checkSystemsWorkerCompletedEvent.Set();
@@ -634,13 +634,15 @@ namespace EDDiscovery
 
         private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
+            Exception ex = e.Cancelled ? null : (e.Error ?? e.Result as Exception);
             ReportProgress(-1, "");
-            if (e.Error != null)
+            if (!e.Cancelled && !PendingClose)
             {
-                travelHistoryControl1.LogLineHighlight("Check Systems exception: " + e.Error.Message + "\nTrace: " + e.Error.StackTrace);
-            }
-            else if (!e.Cancelled && !PendingClose)
-            {
+                if (ex != null)
+                {
+                    travelHistoryControl1.LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                }
+
                 Console.WriteLine("Systems Loaded");                    // in the worker thread they were, now in UI
 
                 imageHandler1.StartWatcher();
@@ -719,7 +721,7 @@ namespace EDDiscovery
                 if (worker.CancellationPending)
                     e.Cancel = true;
             }
-            catch { }       // ignore any excepctions
+            catch (Exception ex) { e.Result = ex; }       // ignore any excepctions
             finally
             {
                 _syncWorkerCompletedEvent.Set();
@@ -795,19 +797,28 @@ namespace EDDiscovery
 
         private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            long totalsystems = SystemClass.GetTotalSystems();
-            travelHistoryControl1.LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
-
+            Exception ex = e.Cancelled ? null : (e.Error ?? e.Result as Exception);
             ReportProgress(-1, "");
 
-            if (performhistoryrefresh)
+            if (!e.Cancelled && !PendingClose)
             {
-                travelHistoryControl1.LogLine("Update visited systems due to update");
-                HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
-                RefreshHistoryAsync();
-            }
+                if (ex != null)
+                {
+                    travelHistoryControl1.LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                }
 
-            edsmRefreshTimer.Enabled = true;
+                long totalsystems = SystemClass.GetTotalSystems();
+                travelHistoryControl1.LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+
+                if (performhistoryrefresh)
+                {
+                    travelHistoryControl1.LogLine("Update visited systems due to update");
+                    HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
+                    RefreshHistoryAsync();
+                }
+
+                edsmRefreshTimer.Enabled = true;
+            }
         }
 
         private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)
