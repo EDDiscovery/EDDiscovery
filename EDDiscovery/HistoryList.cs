@@ -2,6 +2,7 @@
 using EDDiscovery2.DB;
 using OpenTK;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -106,7 +107,7 @@ namespace EDDiscovery
     }
 
 
-    public class HistoryList
+    public class HistoryList : IEnumerable<HistoryEntry>
     {
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
 
@@ -284,6 +285,19 @@ namespace EDDiscovery
             return null;
         }
 
+        public IEnumerator<HistoryEntry> GetEnumerator()
+        {
+            foreach (var e in historylist)
+            {
+                yield return e;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         public static HistoryEntry FindNextSystem(List<HistoryEntry> syslist, string sysname, int dir)
         {
             int index = syslist.FindIndex(x => x.System.name.Equals(sysname));
@@ -347,7 +361,5 @@ namespace EDDiscovery
                 return (from systems in he where events.Contains(Tools.SplitCapsWord(systems.EntryType.ToString())) select systems).ToList();
             }
         }
-
-
     }
 }
