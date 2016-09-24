@@ -106,26 +106,31 @@ namespace EDDiscovery
             }
         }
 
-        public static string appfolder = "EDDiscovery";
+        public static string appfolder = (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true" ? "Data" : "EDDiscovery");
 
         static internal string GetAppDataDirectory()
         {
             try
             {
-                if (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true")
+                string datapath;
+
+                if (Path.IsPathRooted(appfolder))
                 {
-                    return Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Data");
+                    datapath = appfolder;
+                }
+                else if (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true")
+                {
+                    datapath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
                 }
                 else
                 {
-                    string datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
-
-                    if (!Directory.Exists(datapath))
-                        Directory.CreateDirectory(datapath);
-
-
-                    return datapath;
+                    datapath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder) + Path.DirectorySeparatorChar;
                 }
+
+                if (!Directory.Exists(datapath))
+                    Directory.CreateDirectory(datapath);
+
+                return datapath;
             }
             catch (Exception ex)
             {
