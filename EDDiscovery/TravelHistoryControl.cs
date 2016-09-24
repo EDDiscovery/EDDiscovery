@@ -189,10 +189,12 @@ namespace EDDiscovery
 
             if (errmsg != null)
             {
-                throw new InvalidOperationException(errmsg);
+                e.Result = errmsg;
             }
-
-            e.Result = vsclist;
+            else
+            {
+                e.Result = vsclist;
+            }
         }
 
         private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -201,14 +203,23 @@ namespace EDDiscovery
             {
                 if (e.Error != null)
                 {
-                    LogTextHighlight("History Refresh Error: " + e.Error.Message + Environment.NewLine);
+                    LogTextHighlight("History Refresh Error: " + e.Error.Message);
                 }
                 else if (e.Result != null)
                 {
-                    RefreshHistory((List<VisitedSystemsClass>)e.Result);
+                    if (e.Result is string)
+                    {
+                        LogTextHighlight("History Refresh Error: " + (string)e.Result);
+                    }
+                    else if (e.Result is List<VisitedSystemsClass>)
+                    {
+                        RefreshHistory((List<VisitedSystemsClass>)e.Result);
+                    }
+
                     _discoveryForm.ReportProgress(-1, "");
-                    LogText("Refresh Complete." + Environment.NewLine);
+                    LogText("Refresh Complete.");
                 }
+
                 button_RefreshHistory.Enabled = true;
 
                 netlog.StartMonitor();

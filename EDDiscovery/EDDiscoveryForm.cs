@@ -261,18 +261,19 @@ namespace EDDiscovery
 
         private void ProcessCommandLineOptions()
         {
-            string cmdline = Environment.CommandLine;
-            option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1);
+            //string cmdline = Environment.CommandLine;
+            List<string> parts = Environment.GetCommandLineArgs().ToList();
 
-            int pos = cmdline.IndexOf("-Appfolder", 0, StringComparison.InvariantCultureIgnoreCase);
-            if ( pos != -1 )
+            option_nowindowreposition = parts.FindIndex(x => x.Equals("-NoRepositionWindow", StringComparison.InvariantCultureIgnoreCase)) != -1 ||
+                                        parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
+
+            int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
+            if (ai != -1 && ai < parts.Count - 1)
             {
-                string[] nextwords = cmdline.Substring(pos + 10).Trim().Split(' ');
-                if (nextwords.Length > 0)
-                    Tools.appfolder = nextwords[0];
+                Tools.appfolder = parts[ai + 1];
             }
 
-            option_debugoptions = cmdline.IndexOf("-Debug", 0, StringComparison.InvariantCultureIgnoreCase) != -1;
+            option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
         }
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
@@ -597,13 +598,16 @@ namespace EDDiscovery
 
         private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
+            Exception ex = e.Cancelled ? null : e.Error;
             ReportProgress(-1, "");
-            if (e.Error != null)
+            if (!e.Cancelled && !PendingClose)
             {
-                LogLineHighlight("Check Systems exception: " + e.Error.Message + "\nTrace: " + e.Error.StackTrace);
-            }
-            else if (!e.Cancelled && !PendingClose)
-            {
+                if (ex != null)
+                {
+                    LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                    return;
+                }
+
                 Console.WriteLine("Systems Loaded");                    // in the worker thread they were, now in UI
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
@@ -965,11 +969,21 @@ namespace EDDiscovery
 
         private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            long totalsystems = SystemClass.GetTotalSystems();
-            LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+            Exception ex = e.Cancelled ? null : e.Error;
+            if (!e.Cancelled && !PendingClose)
+            {
+                if (ex != null)
+                {
+                    LogLineHighlight("System Sync exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                    return;
+                }
 
-            travelHistoryControl1.HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
-            travelHistoryControl1.RefreshHistoryAsync();
+                long totalsystems = SystemClass.GetTotalSystems();
+                LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+
+                travelHistoryControl1.HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
+                travelHistoryControl1.RefreshHistoryAsync();
+            }
         }
 
         private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)
