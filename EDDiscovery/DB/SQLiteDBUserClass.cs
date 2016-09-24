@@ -370,24 +370,12 @@ namespace EDDiscovery.DB
                             je["event"] = "FSDJump";
                             je["StarSystem"] = ((string)array[0]);
 
-                            //string json = "{";
-                            //json += "\"timestamp\":\"" + ((DateTime)array[1]).ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'") + "\"";
-                            //json += ", \"event\":\"FSDJump\"";
-                            //json += ", \"StarSystem\":\"" + ((string)array[0]) + "\"";
-
                             if (System.DBNull.Value != array[6] && System.DBNull.Value != array[7] && System.DBNull.Value != array[8])
                             {
-                                //double x = (double)array[6];
-                                //double y = (double)array[7];
-                                //double z = (double)array[8];
                                 je["StarPos"] = new JArray() {array[6], array[7], array[8] };
-
-                                //json += ", \"StarPos\":[" + x.ToString("0.000") + "," + y.ToString("0.000") + "," + z.ToString("0.000") + "]";
                             }
 
                             je["EDDMapColor"] = ((long)array[5]);
-                            // json += ", \"EDDMapColor\":\"" + ((long)array[5]) + "\"";
-
                             cmd.AddParameterWithValue("@edata", je.ToString());    // order number - look at the dbcommand above
 
                             long edsmid = 0;
