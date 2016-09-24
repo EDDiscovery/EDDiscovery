@@ -138,6 +138,7 @@ namespace EDDiscovery2._3DMap
             while (N >= 3)
             {
                 var convPolygon = new List<Vector2>();          // BUG in original code.. need a fresh one every time.
+                int loop_ind = begin_ind;
 
                 while (PMSquare(    tempPolygon[begin_ind],     // FIND next ear to remove, point +2 needs to be on the right, and not inside the triangle                   
                                     tempPolygon[(begin_ind + 1) % N],
@@ -147,6 +148,11 @@ namespace EDDiscovery2._3DMap
                 {
                     begin_ind++;
                     begin_ind %= N;
+
+                    if (begin_ind == loop_ind)
+                    {
+                        break;  // Break out if no ears can be found
+                    }
                 }
 
                 int cur_ind = (begin_ind + 1) % N;
