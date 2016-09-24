@@ -120,95 +120,11 @@ namespace EDDiscovery.EliteDangerous
         // called during start up and if refresh history is pressed
         public List<JournalEntry> ParseJournalFiles(out string error, bool forceReload = false)
         {
-            error = null;
-
-            string datapath = GetJournalDir();
-
-            if (datapath == null)
-            {
-                error = "Journal directory not found!" + Environment.NewLine + "Specify location in settings tab";
-                return null;
-            }
-
-            if (!Directory.Exists(datapath))   // if logfiles directory is not found
-            {
-                error = "Journal directory is not present!" + Environment.NewLine + "Specify location in settings tab";
-                return null;
-            }
-
-            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
-            List<JournalEntry> journalEntries = new List<JournalEntry>();
-
-            // order by file write time so we end up on the last one written
-            FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "Journal.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
-
-            List<EDJournalReader> readersToUpdate = new List<EDJournalReader>();
-
-            for (int i = 0; i < allFiles.Length; i++)
-            {
-                FileInfo fi = allFiles[i];
-
-                var reader = OpenFileReader(fi, m_travelogUnits);
-
-                if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
-                {
-                    m_travelogUnits[reader.TravelLogUnit.Name] = reader.TravelLogUnit;
-                    reader.TravelLogUnit.type = 3;
-                    reader.TravelLogUnit.Add();
-                }
-
-                if (!netlogreaders.ContainsKey(reader.TravelLogUnit.Name))
-                {
-                    netlogreaders[reader.TravelLogUnit.Name] = lastnfi;
-                }
-
-                if (forceReload)
-                {
-                    // Force a reload of the travel log
-                    reader.TravelLogUnit.Size = 0;
-                }
-
-                if (reader.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
-                {
-                    readersToUpdate.Add(reader);
-                }
-            }
-
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                for (int i = 0; i < readersToUpdate.Count; i++)
-                {
-                    EDJournalReader reader = readersToUpdate[i];
-                    //updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
-
-                    List<JournalEntry> entries = reader.ReadJournalLog().ToList();
-
-                    using (DbTransaction tn = cn.BeginTransaction())
-                    {
-                        foreach (JournalEntry je in entries)
-                        {
-                            journalEntries.Add(je);
-                        }
-
-                        reader.TravelLogUnit.Update(cn, tn);
-
-                        tn.Commit();
-                    }
-
-                    //if (updateProgress != null)
-                    //{
-                    //    updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
-                    //}
-
-                    lastnfi = reader;
-                }
-            }
-
-            return journalEntries;
+            return ParseJournalFiles(out error, EDDConfig.Instance.DefaultMapColour, () => false, (p, s) => { }, forceReload);
         }
 
 
-        public List<JournalEntry> ParseFiles(out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
+        public List<JournalEntry> ParseJournalFiles(out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
             error = null;
 
@@ -295,7 +211,7 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
 
-            return journalentries.Values.SelectMany(j => j).ToList();
+            return journalentries.OrderBy(kvp => kvp.Key).SelectMany(kvp => kvp.Value).OrderBy(j => j.EventTimeUTC).ToList();
         }
 
         private EDJournalReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null)
