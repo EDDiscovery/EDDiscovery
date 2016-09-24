@@ -598,13 +598,16 @@ namespace EDDiscovery
 
         private void _checkSystemsWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
+            Exception ex = e.Cancelled ? null : e.Error;
             ReportProgress(-1, "");
-            if (e.Error != null)
+            if (!e.Cancelled && !PendingClose)
             {
-                LogLineHighlight("Check Systems exception: " + e.Error.Message + "\nTrace: " + e.Error.StackTrace);
-            }
-            else if (!e.Cancelled && !PendingClose)
-            {
+                if (ex != null)
+                {
+                    LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                    return;
+                }
+
                 Console.WriteLine("Systems Loaded");                    // in the worker thread they were, now in UI
 
                 routeControl1.textBox_From.AutoCompleteCustomSource = SystemNames;
@@ -966,11 +969,21 @@ namespace EDDiscovery
 
         private void _syncWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            long totalsystems = SystemClass.GetTotalSystems();
-            LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+            Exception ex = e.Cancelled ? null : e.Error;
+            if (!e.Cancelled && !PendingClose)
+            {
+                if (ex != null)
+                {
+                    LogLineHighlight("System Sync exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                    return;
+                }
 
-            travelHistoryControl1.HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
-            travelHistoryControl1.RefreshHistoryAsync();
+                long totalsystems = SystemClass.GetTotalSystems();
+                LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+
+                travelHistoryControl1.HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
+                travelHistoryControl1.RefreshHistoryAsync();
+            }
         }
 
         private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)
