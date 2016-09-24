@@ -12,9 +12,6 @@ namespace EDDiscovery.EliteDangerous
     {
         protected EDCommander _commander;
 
-        // Cached list of previous travel log entries
-        protected List<VisitedSystemsClass> systems;
-
         // Close Quarters Combat
         public bool CQC { get; set; }
 
@@ -31,19 +28,10 @@ namespace EDDiscovery.EliteDangerous
 
         public EDJournalReader(string filename) : base(filename)
         {
-            systems = new List<VisitedSystemsClass>();
         }
 
-        public EDJournalReader(TravelLogUnit tlu, List<VisitedSystemsClass> vsclist = null) : base(tlu)
+        public EDJournalReader(TravelLogUnit tlu) : base(tlu)
         {
-            if (vsclist != null)
-            {
-                systems = vsclist;
-            }
-            else
-            {
-                systems = VisitedSystemsClass.GetAll(tlu);
-            }
         }
 
         public bool ReadJournalLog(out JournalEntry je)

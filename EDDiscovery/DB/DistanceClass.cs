@@ -297,6 +297,7 @@ namespace EDDiscovery.DB
             return ldist;
         }
 
+        /*
         public static void FillVisitedSystems(List<VisitedSystemsClass> visitedSystems, bool usedb)
         {
             try
@@ -340,7 +341,7 @@ namespace EDDiscovery.DB
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
         }
-
+        */
 
         public static long ParseEDSMUpdateDistancesString(string json, ref string date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logline)
         {

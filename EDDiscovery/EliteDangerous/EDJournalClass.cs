@@ -29,9 +29,9 @@ namespace EDDiscovery.EliteDangerous
 
         private static string journalPath;
 
-        public delegate void NewSystemEventHandler(VisitedSystemsClass vsc);
+        public delegate void NewJournalEntryHandler(JournalEntry je);
 
-        public event NewSystemEventHandler OnNewPosition;          // called in foreground, no need for invoke
+        public event NewJournalEntryHandler OnNewJournalEntry;
 
         Dictionary<string, EDJournalReader> netlogreaders = new Dictionary<string, EDJournalReader>();
 
@@ -120,95 +120,11 @@ namespace EDDiscovery.EliteDangerous
         // called during start up and if refresh history is pressed
         public List<JournalEntry> ParseJournalFiles(out string error, bool forceReload = false)
         {
-            error = null;
-
-            string datapath = GetJournalDir();
-
-            if (datapath == null)
-            {
-                error = "Journal directory not found!" + Environment.NewLine + "Specify location in settings tab";
-                return null;
-            }
-
-            if (!Directory.Exists(datapath))   // if logfiles directory is not found
-            {
-                error = "Journal directory is not present!" + Environment.NewLine + "Specify location in settings tab";
-                return null;
-            }
-
-            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
-            List<JournalEntry> journalEntries = new List<JournalEntry>();
-
-            // order by file write time so we end up on the last one written
-            FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "Journal.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
-
-            List<EDJournalReader> readersToUpdate = new List<EDJournalReader>();
-
-            for (int i = 0; i < allFiles.Length; i++)
-            {
-                FileInfo fi = allFiles[i];
-
-                var reader = OpenFileReader(fi, m_travelogUnits, null);
-
-                if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
-                {
-                    m_travelogUnits[reader.TravelLogUnit.Name] = reader.TravelLogUnit;
-                    reader.TravelLogUnit.type = 3;
-                    reader.TravelLogUnit.Add();
-                }
-
-                if (!netlogreaders.ContainsKey(reader.TravelLogUnit.Name))
-                {
-                    netlogreaders[reader.TravelLogUnit.Name] = lastnfi;
-                }
-
-                if (forceReload)
-                {
-                    // Force a reload of the travel log
-                    reader.TravelLogUnit.Size = 0;
-                }
-
-                if (reader.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
-                {
-                    readersToUpdate.Add(reader);
-                }
-            }
-
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                for (int i = 0; i < readersToUpdate.Count; i++)
-                {
-                    EDJournalReader reader = readersToUpdate[i];
-                    //updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
-
-                    List<JournalEntry> entries = reader.ReadJournalLog().ToList();
-
-                    using (DbTransaction tn = cn.BeginTransaction())
-                    {
-                        foreach (JournalEntry je in entries)
-                        {
-                            journalEntries.Add(je);
-                        }
-
-                        reader.TravelLogUnit.Update(cn, tn);
-
-                        tn.Commit();
-                    }
-
-                    //if (updateProgress != null)
-                    //{
-                    //    updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
-                    //}
-
-                    lastnfi = reader;
-                }
-            }
-
-            return journalEntries;
+            return ParseJournalFiles(out error, EDDConfig.Instance.DefaultMapColour, () => false, (p, s) => { }, forceReload);
         }
 
 
-        public List<VisitedSystemsClass> ParseFiles(out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
+        public List<JournalEntry> ParseJournalFiles(out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
             error = null;
 
@@ -226,31 +142,9 @@ namespace EDDiscovery.EliteDangerous
                 return null;
             }
 
-            List<VisitedSystemsClass> vsSystemsList = VisitedSystemsClass.GetAll(EDDConfig.Instance.CurrentCmdrID);
-
-            List<VisitedSystemsClass> visitedSystems = new List<VisitedSystemsClass>();
+            Dictionary<int, List<JournalEntry>> journalentries = JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).GroupBy(e => e.JournalId).ToDictionary(g => g.Key, g => g.ToList());
             Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
-            Dictionary<string, List<VisitedSystemsClass>> vsc_lookup = VisitedSystemsClass.GetAll().GroupBy(v => v.Unit).ToDictionary(g => g.Key, g => g.ToList());
 
-            if (vsSystemsList != null)
-            {
-                foreach (VisitedSystemsClass vs in vsSystemsList)
-                {
-                    if (visitedSystems.Count == 0)
-                        visitedSystems.Add(vs);
-                    else if (!visitedSystems.Last<VisitedSystemsClass>().Name.Equals(vs.Name))  // Avoid duplicate if times exist in same system from different files.
-                        visitedSystems.Add(vs);
-                    else
-                    {
-                        VisitedSystemsClass vs2 = (VisitedSystemsClass)visitedSystems.Last<VisitedSystemsClass>();
-                        if (vs2.id != vs.id)
-                        {
-                            vs.Commander = -2; // Move to dupe user
-                            vs.Update();
-                        }
-                    }
-                }
-            }
             // order by file write time so we end up on the last one written
             FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "Journal.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
 
@@ -260,7 +154,7 @@ namespace EDDiscovery.EliteDangerous
             {
                 FileInfo fi = allFiles[i];
 
-                var reader = OpenFileReader(fi, m_travelogUnits, vsc_lookup);
+                var reader = OpenFileReader(fi, m_travelogUnits);
 
                 if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
                 {
@@ -271,7 +165,7 @@ namespace EDDiscovery.EliteDangerous
 
                 if (!netlogreaders.ContainsKey(reader.TravelLogUnit.Name))
                 {
-                    netlogreaders[reader.TravelLogUnit.Name] = lastnfi;
+                    netlogreaders[reader.TravelLogUnit.Name] = reader;
                 }
 
                 if (forceReload)
@@ -299,25 +193,8 @@ namespace EDDiscovery.EliteDangerous
                     {
                         foreach (JournalEntry je in entries)
                         {
-                            if (je is JournalEvents.JournalLocOrJump)
-                            {
-                                JournalEvents.JournalLocOrJump jl = (JournalEvents.JournalLocOrJump)je;
-                                VisitedSystemsClass vsc = new VisitedSystemsClass();
-                                vsc.EDSM_sync = false;
-                                vsc.MapColour = defaultMapColour;
-                                vsc.Commander = (reader.Commander ?? EDDConfig.Instance.CurrentCommander).Nr;
-                                vsc.Name = jl.StarSystem;
-                                vsc.X = jl.StarPos.X;
-                                vsc.Y = jl.StarPos.Y;
-                                vsc.Z = jl.StarPos.Z;
-                                vsc.Unit = reader.TravelLogUnit.Name;
-                                vsc.Source = reader.TravelLogUnit.id;
-                                vsc.Time = je.EventTimeLocal;
-                                vsc.Add(cn, tn);
-                                visitedSystems.Add(vsc);
-                            }
-
-                            // TODO: Save journal entry to database
+                            journalentries[je.JournalId].Add(je);
+                            je.Add(cn, tn);
                         }
 
                         reader.TravelLogUnit.Update(cn, tn);
@@ -334,19 +211,13 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
 
-            return visitedSystems;
+            return journalentries.OrderBy(kvp => kvp.Key).SelectMany(kvp => kvp.Value).OrderBy(j => j.EventTimeUTC).ToList();
         }
 
-        private EDJournalReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null, Dictionary<string, List<VisitedSystemsClass>> vsc_lookup = null)
+        private EDJournalReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null)
         {
             EDJournalReader reader;
             TravelLogUnit tlu;
-            List<VisitedSystemsClass> vsclist = null;
-
-            if (vsc_lookup != null && vsc_lookup.ContainsKey(fi.Name))
-            {
-                vsclist = vsc_lookup[fi.Name];
-            }
 
             if (netlogreaders.ContainsKey(fi.Name))
             {
@@ -356,13 +227,13 @@ namespace EDDiscovery.EliteDangerous
             {
                 tlu = tlu_lookup[fi.Name];
                 tlu.Path = fi.DirectoryName;
-                reader = new EDJournalReader(tlu, vsclist);
+                reader = new EDJournalReader(tlu);
                 netlogreaders[fi.Name] = reader;
             }
             else if (TravelLogUnit.TryGet(fi.Name, out tlu))
             {
                 tlu.Path = fi.DirectoryName;
-                reader = new EDJournalReader(tlu, vsclist);
+                reader = new EDJournalReader(tlu);
                 netlogreaders[fi.Name] = reader;
             }
             else
@@ -484,11 +355,11 @@ namespace EDDiscovery.EliteDangerous
 
             if (e.Error == null && !e.Cancelled)
             {
-                List<VisitedSystemsClass> entries = (List<VisitedSystemsClass>)e.Result;
+                List<JournalEntry> entries = (List<JournalEntry>)e.Result;
 
                 foreach (var ent in entries)
                 {
-                    OnNewPosition(ent);
+                    OnNewJournalEntry(ent);
                 }
             }
         }
@@ -506,7 +377,7 @@ namespace EDDiscovery.EliteDangerous
         private void ScanTickWorker(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             var worker = sender as System.ComponentModel.BackgroundWorker;
-            var entries = new List<VisitedSystemsClass>();
+            var entries = new List<JournalEntry>();
             e.Result = entries;
             int netlogpos = 0;
             EDJournalReader nfi = null;
@@ -558,35 +429,13 @@ namespace EDDiscovery.EliteDangerous
 
                     foreach (JournalEntry je in nfi.ReadJournalLog())
                     {
-                        if (je is JournalEvents.JournalLocOrJump)
+                        entries.Add(je);
+                        je.Add();
+
+                        if (worker.CancellationPending)
                         {
-                            JournalEvents.JournalLocOrJump jl = (JournalEvents.JournalLocOrJump)je;
-                            VisitedSystemsClass vsc = new VisitedSystemsClass();
-                            vsc.EDSM_sync = false;
-                            vsc.MapColour = EDDConfig.Instance.DefaultMapColour;
-                            vsc.Commander = (nfi.Commander ?? EDDConfig.Instance.CurrentCommander).Nr;
-                            vsc.Name = jl.StarSystem;
-                            vsc.X = jl.StarPos.X;
-                            vsc.Y = jl.StarPos.Y;
-                            vsc.Z = jl.StarPos.Z;
-                            vsc.Unit = nfi.TravelLogUnit.Name;
-                            vsc.Source = nfi.TravelLogUnit.id;
-                            vsc.Time = jl.EventTimeLocal;
-                            vsc.Add();
-
-                            // here we need to make sure the cursystem is set up.. need to do it here because OnNewPosition expects all cursystems to be non null..
-
-                            VisitedSystemsClass item2 = VisitedSystemsClass.GetLast(vsc.Commander, vsc.Time);
-                            VisitedSystemsClass.UpdateVisitedSystemsEntries(vsc, item2, EDDiscoveryForm.EDDConfig.UseDistances);       // ensure they have system classes behind them..
-                            entries.Add(vsc);
-
-                            if (worker.CancellationPending)
-                            {
-                                break;
-                            }
+                            break;
                         }
-
-                        // TODO: Save journal entry to database
                     }
 
                     nfi.TravelLogUnit.Update();

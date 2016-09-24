@@ -8,6 +8,9 @@ using EDDiscovery2.DB;
 using System.IO;
 using EDDiscovery2;
 using System.Threading;
+using EDDiscovery.EliteDangerous;
+using EDDiscovery.EliteDangerous.JournalEvents;
+using Newtonsoft.Json.Linq;
 
 namespace EDDiscovery
 {
@@ -20,7 +23,7 @@ namespace EDDiscovery
         DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
 
         // Cached list of previous travel log entries
-        protected List<VisitedSystemsClass> systems;
+        protected List<JournalLocOrJump> systems;
 
         // Close Quarters Combat
         public bool CQC { get; set; }
@@ -32,10 +35,10 @@ namespace EDDiscovery
 
         public NetLogFileReader(string filename) : base(filename)
         {
-            systems = new List<VisitedSystemsClass>();
+            systems = new List<JournalLocOrJump>();
         }
 
-        public NetLogFileReader(TravelLogUnit tlu, List<VisitedSystemsClass> vsclist = null) : base(tlu)
+        public NetLogFileReader(TravelLogUnit tlu, List<JournalLocOrJump> vsclist = null) : base(tlu)
         {
             if (vsclist != null)
             {
@@ -43,7 +46,7 @@ namespace EDDiscovery
             }
             else
             {
-                systems = VisitedSystemsClass.GetAll(tlu);
+                systems = JournalEntry.GetAllByTLU(tlu.id).OfType<JournalLocOrJump>().ToList();
             }
         }
 
@@ -92,9 +95,12 @@ namespace EDDiscovery
             return false;
         }
 
-        protected bool ParseVisitedSystem(DateTime time, TimeSpan tzoffset, string line, out VisitedSystemsClass sp)
+        protected bool ParseVisitedSystem(DateTime time, TimeSpan tzoffset, string line, out JObject jo, out JournalLocOrJump je)
         {
-            sp = new VisitedSystemsClass();
+            jo = new JObject();
+            jo["timestamp"] = time.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
+            jo["event"] = "FSDJump";
+            je = null;
 
             try
             {
@@ -139,30 +145,28 @@ namespace EDDiscovery
                     if (match != null && match.Success)
                     {
                         //sp.Nr = int.Parse(match.Groups["Body"].Value);
-                        sp.Name = match.Groups["SystemName"].Value;
+                        jo["StarSystem"] = match.Groups["SystemName"].Value;
                         string pos = match.Groups["Pos"].Value;
                         try
                         {
                             string[] xyzpos = pos.Split(',');
-                            var culture = new System.Globalization.CultureInfo("en-US");
-                            sp.X = double.Parse(xyzpos[0], culture);
-                            sp.Y = double.Parse(xyzpos[1], culture);
-                            sp.Z = double.Parse(xyzpos[2], culture);
+                            jo["StarPos"] = new JArray(
+                                double.Parse(xyzpos[0], CultureInfo.InvariantCulture),
+                                double.Parse(xyzpos[1], CultureInfo.InvariantCulture),
+                                double.Parse(xyzpos[2], CultureInfo.InvariantCulture)
+                            );
                         }
                         catch
                         {
-                            sp.X = double.NaN;
-                            sp.Y = double.NaN;
-                            sp.Z = double.NaN;
+                            System.Diagnostics.Trace.WriteLine("System parse error 1:" + line);
+                            return false;
                         }
-
                     }
                     else
                     {
                         System.Diagnostics.Trace.WriteLine("System parse error 1:" + line);
                         return false;
                     }
-
                 }
                 else
                 {
@@ -172,10 +176,8 @@ namespace EDDiscovery
                     if (match != null && match.Success)
                     {
                         //sp.Nr = int.Parse(match.Groups["Body"].Value);
-                        sp.Name = match.Groups["SystemName"].Value;
-                        sp.X = Double.NaN;
-                        sp.Y = Double.NaN;
-                        sp.Z = Double.NaN;
+
+                        jo["StarSystem"] = match.Groups["SystemName"].Value;
                     }
                     else
                     {
@@ -184,7 +186,7 @@ namespace EDDiscovery
                     }
                 }
 
-                sp.Time = time + tzoffset;
+                je = new JournalFSDJump(jo);
 
                 return true;
             }
@@ -195,7 +197,7 @@ namespace EDDiscovery
             }
         }
 
-        public bool ReadNetLogSystem(out VisitedSystemsClass vsc, Func<bool> cancelRequested = null, Stream stream = null, bool ownstream = false)
+        public bool ReadNetLogSystem(out JObject jo, out JournalLocOrJump je, Func<bool> cancelRequested = null, Stream stream = null, bool ownstream = false)
         {
             if (cancelRequested == null)
                 cancelRequested = () => false;
@@ -235,18 +237,14 @@ namespace EDDiscovery
                         if (line.Contains("ProvingGround"))
                             continue;
 
-                        VisitedSystemsClass ps;
-                        if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 10), out ps))
+                        if (ParseVisitedSystem(this.LastLogTime, this.TimeZoneOffset, line.Substring(offset + 10), out jo, out je))
                         {   // Remove some training systems
-                            if (ps.Name.Equals("Training"))
+                            if (je.StarSystem.Equals("Training", StringComparison.CurrentCultureIgnoreCase))
                                 continue;
-                            if (ps.Name.Equals("Destination"))
+                            if (je.StarSystem.Equals("Destination", StringComparison.CurrentCultureIgnoreCase))
                                 continue;
-                            if (ps.Name.Equals("Altiris"))
+                            if (je.StarSystem.Equals("Altiris", StringComparison.CurrentCultureIgnoreCase))
                                 continue;
-                            ps.Source = TravelLogUnit.id;
-                            ps.Unit = TravelLogUnit.Name;
-                            vsc = ps;
                             return true;
                         }
                     }
@@ -260,7 +258,8 @@ namespace EDDiscovery
                 }
             }
 
-            vsc = null;
+            jo = null;
+            je = null;
             return false;
         }
 
@@ -385,12 +384,17 @@ namespace EDDiscovery
             return false;
         }
 
-        public IEnumerable<VisitedSystemsClass> ReadSystems(Func<bool> cancelRequested = null)
+        public IEnumerable<JObject> ReadSystems(Func<bool> cancelRequested = null, int cmdrid = -1)
         {
             if (cancelRequested == null)
                 cancelRequested = () => false;
 
-            VisitedSystemsClass last = null;
+            if (cmdrid < 0)
+            {
+                cmdrid = EDDConfig.Instance.CurrentCmdrID;
+            }
+
+            JournalLocOrJump last = null;
             long startpos = filePos;
 
             if (TimeZone == null)
@@ -402,16 +406,17 @@ namespace EDDiscovery
                 }
             }
 
-            VisitedSystemsClass ps;
+            JObject jo;
+            JournalLocOrJump je;
             using (Stream stream = File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                while (!cancelRequested() && ReadNetLogSystem(out ps, cancelRequested, stream))
+                while (!cancelRequested() && ReadNetLogSystem(out jo, out je, cancelRequested, stream))
                 {
                     if (last == null)
                     {
                         if (systems.Count == 0)
                         {
-                            last = VisitedSystemsClass.GetLast(EDDConfig.Instance.CurrentCmdrID, ps.Time);
+                            last = JournalEntry.GetLast<JournalLocOrJump>(cmdrid, je.EventTimeUTC);
                         }
                         else
                         {
@@ -419,14 +424,14 @@ namespace EDDiscovery
                         }
                     }
 
-                    if (last != null && ps.Name.Equals(last.Name, StringComparison.InvariantCultureIgnoreCase))
+                    if (last != null && je.StarSystem.Equals(last.StarSystem, StringComparison.InvariantCultureIgnoreCase))
                         continue;
 
-                    if (ps.Time.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
+                    if (je.EventTimeUTC.Subtract(gammastart).TotalMinutes > 0)  // Ta bara med efter gamma.
                     {
-                        systems.Add(ps);
-                        yield return ps;
-                        last = ps;
+                        systems.Add(je);
+                        yield return jo;
+                        last = je;
                     }
                 }
             }

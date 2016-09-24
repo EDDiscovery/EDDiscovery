@@ -46,27 +46,29 @@ namespace EDDiscovery.Forms
 
         private TravelHistoryControl _travelHistory;
         private ISystem _linkSystem;
-        private VisitedSystemsClass _travelLogEntry;
+        private List<ISystem> _alternatives;
+        private string _namestatus;
+        private EliteDangerous.JournalEvents.JournalLocOrJump _travelLogEntry;
         private Dictionary<long, SystemLink> _systemLinks;
         private List<SystemLink> _systemLinkList;
 
-        public AssignTravelLogSystemForm(TravelHistoryControl travelHistory, VisitedSystemsClass vsc)
+        public AssignTravelLogSystemForm(TravelHistoryControl travelHistory, EliteDangerous.JournalEvents.JournalLocOrJump vsc)
         {
             InitializeComponent();
             this._travelHistory = travelHistory;
             this._travelLogEntry = vsc;
-            this._linkSystem = vsc.curSystem;
+            SystemClass.GetSystemAndAlternatives(vsc, out _linkSystem, out _alternatives, out _namestatus);
 
-            this.tbLogSystemName.Text = vsc.Name;
-            this.tbVisitedDate.Text = vsc.Time.ToString();
-            this.tbLogCoordX.Text = vsc.HasTravelCoordinates ? vsc.X.ToString("0.000") : "?";
-            this.tbLogCoordY.Text = vsc.HasTravelCoordinates ? vsc.Y.ToString("0.000") : "?";
-            this.tbLogCoordZ.Text = vsc.HasTravelCoordinates ? vsc.Z.ToString("0.000") : "?";
-            this.tbLogCoordX.TextAlign = vsc.HasTravelCoordinates ? HorizontalAlignment.Right : HorizontalAlignment.Center;
-            this.tbLogCoordY.TextAlign = vsc.HasTravelCoordinates ? HorizontalAlignment.Right : HorizontalAlignment.Center;
-            this.tbLogCoordZ.TextAlign = vsc.HasTravelCoordinates ? HorizontalAlignment.Right : HorizontalAlignment.Center;
+            this.tbLogSystemName.Text = vsc.StarSystem;
+            this.tbVisitedDate.Text = vsc.EventTimeLocal.ToString();
+            this.tbLogCoordX.Text = vsc.HasCoordinate ? vsc.StarPos[0].ToString("0.000") : "?";
+            this.tbLogCoordY.Text = vsc.HasCoordinate ? vsc.StarPos[1].ToString("0.000") : "?";
+            this.tbLogCoordZ.Text = vsc.HasCoordinate ? vsc.StarPos[2].ToString("0.000") : "?";
+            this.tbLogCoordX.TextAlign = vsc.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
+            this.tbLogCoordY.TextAlign = vsc.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
+            this.tbLogCoordZ.TextAlign = vsc.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
 
-            UpdateLinkedSystemList(vsc.curSystem);
+            UpdateLinkedSystemList(_linkSystem);
             tbManualSystemName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             tbManualSystemName.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
@@ -79,9 +81,9 @@ namespace EDDiscovery.Forms
             _systemLinks = new Dictionary<long, SystemLink>();
             _systemLinkList.Add(new SystemLink { Name = "None", Id = 0, EdsmId = 0, LinkSystem = null });
 
-            if (_travelLogEntry.alternatives != null)
+            if (_alternatives != null)
             {
-                foreach (var sys in _travelLogEntry.alternatives)
+                foreach (var sys in _alternatives)
                 {
                     var syslink = new SystemLink { Name = sys.name, Id = sys.id, EdsmId = sys.id_edsm, LinkSystem = sys };
                     _systemLinkList.Add(syslink);
