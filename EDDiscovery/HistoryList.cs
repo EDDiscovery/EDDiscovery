@@ -35,7 +35,7 @@ namespace EDDiscovery
 
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
 
-        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info)
+        public void MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0)
         {
             Debug.Assert(sys != null);
             EntryType = EliteDangerous.JournalTypeEnum.FSDJump;
@@ -45,14 +45,47 @@ namespace EDDiscovery
             EventDescription = dist;
             EventDetailedInfo = info;
             MapColour = m;
-            Journalid = 0;
+            Journalid = journalid;
             EdsmSync = true; // TBD for now
+        }
+
+        public static HistoryEntry FromVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0)
+        {
+            Debug.Assert(sys != null);
+            return new HistoryEntry
+            {
+                EntryType = EliteDangerous.JournalTypeEnum.FSDJump,
+                System = sys,
+                EventTime = eventt,
+                EventSummary = "Jump to " + sys.name,
+                EventDescription = dist,
+                EventDetailedInfo = info,
+                MapColour = m,
+                Journalid = journalid,
+                EdsmSync = true // TBD for now
+            };
         }
 
         public void MakeJournalEntry(EliteDangerous.JournalTypeEnum type, long id , ISystem sys, DateTime eventt, string summary , string descr, string info, int m, bool edss)
         {
             EntryType = type; Journalid = id; System = sys; EventTime = eventt; EventSummary = summary; EventDescription = descr; EventDetailedInfo = info;
             MapColour = m; EdsmSync = edss;
+        }
+
+        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalTypeEnum type, long id, ISystem sys, DateTime eventt, string summary, string descr, string info, int m, bool edss)
+        {
+            return new HistoryEntry
+            {
+                EntryType = type,
+                Journalid = id,
+                System = sys,
+                EventTime = eventt,
+                EventSummary = summary,
+                EventDescription = descr,
+                EventDetailedInfo = info,
+                MapColour = m,
+                EdsmSync = edss
+            };
         }
 
         public System.Drawing.Bitmap GetIcon
