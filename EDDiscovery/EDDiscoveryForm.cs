@@ -281,19 +281,15 @@ namespace EDDiscovery
 
         private void ProcessCommandLineOptions()
         {
-            string cmdline = Environment.CommandLine;
-            List<string> parts = Regex.Matches(cmdline, @"[\""].+?[\""]|[^ ]+")
-                            .Cast<Match>()
-                            .Select(m => m.Value)
-                            .ToList();
+            List<string> parts = Environment.GetCommandLineArgs().ToList();
 
             option_nowindowreposition = parts.FindIndex(x => x.Equals("-NoRepositionWindow", StringComparison.InvariantCultureIgnoreCase)) != -1 ||
                 parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
 
             int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
-            if ( ai != -1 && ai < parts.Count )
+            if ( ai != -1 && ai < parts.Count - 1)
             {
-                Tools.appfolder = parts[ai + 1].Replace("\"","");
+                Tools.appfolder = parts[ai + 1];
             }
 
             option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
