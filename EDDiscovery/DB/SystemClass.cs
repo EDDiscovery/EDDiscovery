@@ -1699,14 +1699,14 @@ namespace EDDiscovery.DB
                 if (system == null && s.HasCoordinate)
                 {
                     // look up by pos, TBD
-                    // if found write back edsm_id to journal AND change the JSON to have the co-ord, so we won't call this again
+                    // if found write back edsm_id to journal for next time
                 }
 
                 if (system == null)
                 {
                     system = SystemClass.GetSystem(s.name, conn);
                     // look up by pos, TBD
-                    // if found write back edsm_id to journal AND change the JSON to have the co-ord, so we won't call this again
+                    // if found write back edsm_id to journal AND change the JSON to have the co-ord, so we don't have to do this on load
                 }
             }
 
