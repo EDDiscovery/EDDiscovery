@@ -112,9 +112,13 @@ namespace EDDiscovery
         {
             try
             {
-                if (System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true")
+                if (appfolder == "EDDiscovery" && System.Configuration.ConfigurationManager.AppSettings["StoreDataInProgramDirectory"] == "true")
                 {
                     return Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Data");
+                }
+                else if (Path.IsPathRooted(appfolder))
+                {
+                    return appfolder;
                 }
                 else
                 {

@@ -261,18 +261,19 @@ namespace EDDiscovery
 
         private void ProcessCommandLineOptions()
         {
-            string cmdline = Environment.CommandLine;
-            option_nowindowreposition = (cmdline.IndexOf("-NoRepositionWindow", 0, StringComparison.InvariantCultureIgnoreCase) != -1 || cmdline.IndexOf("-NRW", 0, StringComparison.InvariantCultureIgnoreCase) != -1);
+            //string cmdline = Environment.CommandLine;
+            List<string> parts = Environment.GetCommandLineArgs().ToList();
 
-            int pos = cmdline.IndexOf("-Appfolder", 0, StringComparison.InvariantCultureIgnoreCase);
-            if ( pos != -1 )
+            option_nowindowreposition = parts.FindIndex(x => x.Equals("-NoRepositionWindow", StringComparison.InvariantCultureIgnoreCase)) != -1 ||
+                                        parts.FindIndex(x => x.Equals("-NRW", StringComparison.InvariantCultureIgnoreCase)) != -1;
+
+            int ai = parts.FindIndex(x => x.Equals("-Appfolder", StringComparison.InvariantCultureIgnoreCase));
+            if (ai != -1 && ai < parts.Count - 1)
             {
-                string[] nextwords = cmdline.Substring(pos + 10).Trim().Split(' ');
-                if (nextwords.Length > 0)
-                    Tools.appfolder = nextwords[0];
+                Tools.appfolder = parts[ai + 1];
             }
 
-            option_debugoptions = cmdline.IndexOf("-Debug", 0, StringComparison.InvariantCultureIgnoreCase) != -1;
+            option_debugoptions = parts.FindIndex(x => x.Equals("-Debug", StringComparison.InvariantCultureIgnoreCase)) != -1;
         }
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
