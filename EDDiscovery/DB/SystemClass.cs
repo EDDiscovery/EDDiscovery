@@ -1706,7 +1706,9 @@ namespace EDDiscovery.DB
                 {
                     system = SystemClass.GetSystem(s.name, conn);
                     // look up by pos, TBD
-                    // if found write back edsm_id to journal AND change the JSON to have the co-ord, so we don't have to do this on load
+                    // if found write back edsm_id to journal 
+                    // if !s.HasCoordinate 
+                    //   change the JSON to have the co-ord, so we don't have to do this on load
                 }
             }
 
