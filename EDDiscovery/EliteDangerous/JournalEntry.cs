@@ -426,7 +426,7 @@ namespace EDDiscovery.EliteDangerous
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE TravelLog = @source ORDER BY Time ASC"))
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE TravelLogId = @source ORDER BY Time ASC"))
                 {
                     cmd.AddParameterWithValue("@source", tluid);
                     using (DbDataReader reader = cmd.ExecuteReader())
@@ -441,6 +441,31 @@ namespace EDDiscovery.EliteDangerous
             return vsc;
         }
 
+        public static T GetLast<T>(int cmdrid, DateTime before)
+            where T : JournalEntry
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND Time < @time ORDER BY Time DESC"))
+                {
+                    cmd.AddParameterWithValue("@cmdrid", cmdrid);
+                    cmd.AddParameterWithValue("@time", before);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            JournalEntry ent = CreateJournalEntry(reader);
+                            if (ent is T)
+                            {
+                                return (T)ent;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
 
 
         static public JournalEntry CreateJournalEntry(string text)

@@ -1669,7 +1669,7 @@ namespace EDDiscovery
             journalViewControl1.Display();
         }
 
-
+        /*
         public void NewPosition(VisitedSystemsClass v)
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
@@ -1681,6 +1681,7 @@ namespace EDDiscovery
             travelHistoryControl1.AddNewEntry(he);
             journalViewControl1.AddNewEntry(he);
         }
+        */
 
 #endregion
 
