@@ -1679,6 +1679,44 @@ namespace EDDiscovery.DB
 
             return ret;
         }
+
+        public static SystemClass EDSMAssign(ISystem s, long journalid, SQLiteConnectionSystem conn = null)
+        {
+            SystemClass system = null;
+            bool closeit = false;
+
+            if (conn == null)
+            {
+                closeit = true;
+                conn = new SQLiteConnectionSystem();
+            }
+
+            if (s.status != SystemStatusEnum.EDSC)
+            {
+                if (s.id_edsm > 0)  // TBD optimise for a look up based on id_edsm OR position..?
+                    system = SystemClass.GetSystem(s.id_edsm, conn, SystemClass.SystemIDType.EdsmId);
+
+                if (system == null && s.HasCoordinate)
+                {
+                    // look up by pos, TBD
+                    // if found write back edsm_id to journal AND change the JSON to have the co-ord, so we won't call this again
+                }
+
+                if (system == null)
+                {
+                    system = SystemClass.GetSystem(s.name, conn);
+                    // look up by pos, TBD
+                    // if found write back edsm_id to journal AND change the JSON to have the co-ord, so we won't call this again
+                }
+            }
+
+            if (closeit && conn != null)
+            {
+                conn.Dispose();
+            }
+
+            return system;
+        }
     }
 
     public class GridId
@@ -1765,7 +1803,7 @@ namespace EDDiscovery.DB
 
             return false;
         }
-
+       
     }
 }
 

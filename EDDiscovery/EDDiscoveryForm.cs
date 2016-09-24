@@ -1634,19 +1634,18 @@ namespace EDDiscovery
                         if (jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
                         {
                             newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
+                            newsys.id_edsm = jl.EdsmID;       // pass across the EDSMID for the lazy load process.
                         }
                         else
                         {                           // try and find it, preferably thru id, else thru name
-                            ISystem edsm = (jl.EdsmID > 0) ? SystemClass.GetSystem(jl.EdsmID, conn, SystemClass.SystemIDType.EdsmId) :
-                                                                   SystemClass.GetSystem(jl.StarSystem, conn);
+                            newsys = new SystemClass(jl.StarSystem);
+                            newsys.id_edsm = jl.EdsmID;
 
-                            if (edsm != null)
-                                newsys = edsm;
-                            else
-                                newsys = new SystemClass(jl.StarSystem);
+                            SystemClass s = SystemClass.EDSMAssign(newsys, jl.Id,conn);      // has no co-ord, did we find it?
+
+                            if (s != null)                                              // yes, use
+                                newsys = s;
                         }
-
-                        newsys.id_edsm = jl.EdsmID;       // pass across the EDSMID for the lazy load process.
 
                         if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate ) // if no JDist, its a really old entry, and if previous has a co-ord
                             info += SystemClass.Distance(isys, newsys).ToString("0.00") + " ly";

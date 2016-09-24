@@ -61,27 +61,17 @@ namespace EDDiscovery
             }
         }
 
-        public bool EnsureSystemEDSM()        // fill in from EDSM
+        public void EnsureSystemEDSM()        // fill in from EDSM
         {
-            SystemClass s = null;
-
-            if (System.status == SystemStatusEnum.EDSC)             // if loaded, okay
-                return true;
-            else if (System.id_edsm > 0)                            // if id, load
-                s = SystemClass.GetSystem(System.id_edsm, null, SystemClass.SystemIDType.EdsmId);
-            else if (System.id_edsm == -1)                          // if -1, means no edsm match, try a name match
+            if (System.id_edsm >= 0)         // if never tried..
             {
-                System.id_edsm = 0;                                 // mark we tried..
-                s = SystemClass.GetSystem(System.name);
-            }
+                SystemClass s = SystemClass.EDSMAssign(System, Journalid);
 
-            if (s != null)
-            {
-                System = s;
-                return true;
+                if (s != null)
+                    System = s;
+                else
+                    System.id_edsm = -1;    // don't try again
             }
-            else
-                return false;
         }
 
         public bool UpdateMapColour(int v)
