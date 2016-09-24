@@ -323,7 +323,7 @@ namespace EDDiscovery.EliteDangerous
             JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString);
 
             jr.Id = (int)(long)dr["Id"];
-            jr.JournalId = (int)(long)dr["JournalId "];
+            jr.JournalId = (int)(long)dr["TravelLogId"];
             jr.CommanderId = (int)(long)dr["CommanderId"];
             jr.eventTimeUTC = (DateTime)dr["EventTime"];
             jr.eventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
@@ -343,10 +343,10 @@ namespace EDDiscovery.EliteDangerous
 
         public bool Add(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, JournalID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @JournalID, @CommanderID, @EventTypeId , @EventType, @EventData, @EdsmId, @Synced)", tn))
+            using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, TravelLogID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @TravelLogID, @CommanderID, @EventTypeId , @EventType, @EventData, @EdsmId, @Synced)", tn))
             {
                 cmd.AddParameterWithValue("@EventTime", eventTimeUTC);
-                cmd.AddParameterWithValue("@JournalID", JournalId);
+                cmd.AddParameterWithValue("@TravelLogID", JournalId);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
                 cmd.AddParameterWithValue("@EventTypeId", eventTypeID);
                 cmd.AddParameterWithValue("@EventType", EventType);
@@ -374,11 +374,11 @@ namespace EDDiscovery.EliteDangerous
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, JournalID=@JournalID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventType, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventType, EventData=@EventData, EdsmId=@EdsmId, Synced=@Synced where ID=@id"))
             {
                 cmd.AddParameterWithValue("@ID", Id);
                 cmd.AddParameterWithValue("@EventTime", eventTimeUTC);
-                cmd.AddParameterWithValue("@JournalID", JournalId);
+                cmd.AddParameterWithValue("@TravelLogID", JournalId);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
                 cmd.AddParameterWithValue("@EventTypeId", eventTypeID);
                 cmd.AddParameterWithValue("@EventType", EventType);
@@ -426,7 +426,7 @@ namespace EDDiscovery.EliteDangerous
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE JournalId  = @source ORDER BY Time ASC"))
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE TravelLog = @source ORDER BY Time ASC"))
                 {
                     cmd.AddParameterWithValue("@source", tluid);
                     using (DbDataReader reader = cmd.ExecuteReader())
