@@ -583,7 +583,7 @@ namespace EDDiscovery
 
             CommanderName = EDDConfig.CurrentCommander.Name;
 
-            string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
             DateTime edsmdate;
 
             if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
@@ -605,7 +605,7 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    SQLiteDBClass.PutSettingString("EDSMLastSystems", DateTime.Now.ToString(CultureInfo.InvariantCulture));
+                    SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", DateTime.Now.ToString(CultureInfo.InvariantCulture));
                 }
             }
 
@@ -620,12 +620,12 @@ namespace EDDiscovery
 
                 travelHistoryControl1.LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
-                string timestr = SQLiteDBClass.GetSettingString("EDDBSystemsTime", "0");
+                string timestr = SQLiteConnectionSystem.GetSettingString("EDDBSystemsTime", "0");
                 DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
                 if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
                     performeddbsync = true;
 
-                string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                string lstdist = SQLiteConnectionSystem.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                 DateTime timed = DateTime.Parse(lstdist, new CultureInfo("sv-SE"));
                 if (DateTime.UtcNow.Subtract(timed).TotalDays > 28)     // Get EDDB data once every month
                     performedsmdistsync = true;
@@ -845,7 +845,7 @@ namespace EDDiscovery
 
         private bool PerformEDSMFullSync(EDDiscoveryForm discoveryform, Func<bool> cancelRequested, Action<int, string> reportProgress)
         {
-            string rwsystime = SQLiteDBClass.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
             DateTime edsmdate;
 
             if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
@@ -858,8 +858,8 @@ namespace EDDiscovery
             try
             {
                 // Delete all old systems
-                SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
-                SQLiteDBClass.PutSettingString("EDDBSystemsTime", "0");
+                SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
+                SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", "0");
 
                 EDSMClass edsm = new EDSMClass();
 
@@ -885,7 +885,7 @@ namespace EDDiscovery
                         updates = SystemClass.ParseEDSMUpdateSystemsStream(reader, ref rwsysfiletime, true, discoveryform, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
                     if (!cancelRequested())       // abort, without saving time, to make it do it again
                     {
-                        SQLiteDBClass.PutSettingString("EDSMLastSystems", rwsysfiletime);
+                        SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);
                         travelHistoryControl1.LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
                         reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
                         SQLiteDBSystemClass.ReplaceSystemsTable();
@@ -938,7 +938,7 @@ namespace EDDiscovery
                     long number = SystemClass.ParseEDDBUpdateSystems(eddb.SystemFileName, travelHistoryControl1.LogLineHighlight);
 
                     travelHistoryControl1.LogLine("Local database updated with EDDB data, " + number + " systems updated");
-                    SQLiteDBClass.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
+                    SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
                 }
                 else
                     travelHistoryControl1.LogLineHighlight("Failed to download EDDB Systems. Will try again next run.");
@@ -958,7 +958,7 @@ namespace EDDiscovery
 
             try
             {
-                string lstdist = SQLiteDBClass.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
+                string lstdist = SQLiteConnectionSystem.GetSettingString("EDSCLastDist", "2010-01-01 00:00:00");
                 EDSMClass edsm = new EDSMClass();
 
                 if (performedsmdistsync)
@@ -974,7 +974,7 @@ namespace EDDiscovery
                         travelHistoryControl1.LogLine("Updating all distances with EDSM distance data.");
                         long numberx = DistanceClass.ParseEDSMUpdateDistancesFile(filename, ref lstdist, true, cancelRequested, reportProgress, travelHistoryControl1.LogLineHighlight);
                         numbertotal += numberx;
-                        SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
+                        SQLiteConnectionSystem.PutSettingString("EDSCLastDist", lstdist);
                         travelHistoryControl1.LogLine("Local database updated with EDSM Distance data, " + numberx + " distances updated.");
                     }
                 }
@@ -1018,7 +1018,7 @@ namespace EDDiscovery
                     return false;
 
                 travelHistoryControl1.LogLine("Local database updated with EDSM Distance data, " + numbertotal + " distances updated.");
-                SQLiteDBClass.PutSettingString("EDSCLastDist", lstdist);
+                SQLiteConnectionSystem.PutSettingString("EDSCLastDist", lstdist);
 
                 performedsmdistsync = false;
                 GC.Collect();

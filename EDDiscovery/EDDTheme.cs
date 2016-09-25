@@ -258,7 +258,7 @@ namespace EDDiscovery2
                     return;
             }
 
-            if (SQLiteDBClass.keyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
+            if (SQLiteConnectionUser.keyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
             {
                 currentsettings.name = SQLiteDBClass.GetSettingString("ThemeNameOf", "Custom");
                 currentsettings.windowsframe = SQLiteDBClass.GetSettingBool("ThemeWindowsFrame", true);
