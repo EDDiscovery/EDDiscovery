@@ -72,8 +72,6 @@ namespace EDDiscovery2
         private Dictionary<string, object> settings = new Dictionary<string, object>();
         private Dictionary<string, Func<object>> defaults = new Dictionary<string, Func<object>>
         {
-            { "Netlogdir", () => System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier_Developments", "Products") },
-            { "NetlogDirAutoMode", () => true },
             { "JournalDir", () => EDDiscovery.EliteDangerous.EDJournalClass.GetDefaultJournalDir() },
             { "JournalDirAutoMode", () => true },
             { "DefaultMap", () => System.Drawing.Color.Red.ToArgb() },
@@ -89,12 +87,6 @@ namespace EDDiscovery2
             { "MapColour_PlannedRoute", () => System.Drawing.Color.Green.ToArgb() },
             { "MapColour_NamedStar", () => System.Drawing.Color.Yellow.ToArgb() },
             { "MapColour_NamedStarUnpop", () => System.Drawing.Color.FromArgb(255,192,192,0).ToArgb() }
-        };
-
-        private Dictionary<string, Action> onchange = new Dictionary<string, Action>
-        {
-            { "Netlogdir", () => { } },
-            { "NetlogDirAutoMode", () => { } }
         };
 
         private EDDConfig()
@@ -210,16 +202,11 @@ namespace EDDiscovery2
             }
         }
 
-        public string NetLogDir { get { return GetSettingString("Netlogdir"); } set { PutSettingString("Netlogdir", value); } }
-        public bool NetLogDirAutoMode { get { return GetSettingBool("NetlogDirAutoMode"); } set { PutSettingBool("NetlogDirAutoMode", value); } }
         public string JournalDir { get { return GetSettingString("JournalDir"); } set { PutSettingString("JournalDir", value); } }
         public bool JournalDirAutoMode { get { return GetSettingBool("JournalDirAutoMode"); } set { PutSettingBool("JournalDirAutoMode", value); } }
 
         public int DefaultMapColour { get { return GetSettingInt("DefaultMap"); } set { PutSettingInt("DefaultMap", value); } }
         public MapColoursClass MapColours { get; private set; } = new EDDConfig.MapColoursClass();
-
-        public event Action NetLogDirChanged { add { onchange["Netlogdir"] += value; } remove { onchange["Netlogdir"] -= value; } }
-        public event Action NetLogDirAutoModeChanged { add { onchange["NetlogDirAutoMode"] += value; } remove { onchange["NetlogDirAutoMode"] -= value; } }
 
         private bool GetSettingBool(string key)
         {
@@ -283,11 +270,6 @@ namespace EDDiscovery2
 
             if (setter(key, value))
             {
-                if (onchange.ContainsKey(key))
-                {
-                    onchange[key]();
-                }
-
                 return true;
             }
             else

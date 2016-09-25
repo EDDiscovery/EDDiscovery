@@ -60,17 +60,11 @@
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNetLogDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupBox1 = new ExtendedControls.GroupBoxCustom();
-            this.button_Browse = new ExtendedControls.ButtonExt();
-            this.textBoxNetLogDir = new ExtendedControls.TextBoxBorder();
-            this.radioButton_Manual = new ExtendedControls.RadioButtonCustom();
-            this.radioButton_Auto = new ExtendedControls.RadioButtonCustom();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxTheme
@@ -510,89 +504,9 @@
             // 
             this.ColumnNetLogDir.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnNetLogDir.DataPropertyName = "NetLogDir";
-            this.ColumnNetLogDir.HeaderText = "NetLog directory";
+            this.ColumnNetLogDir.HeaderText = "Unused";
             this.ColumnNetLogDir.MinimumWidth = 150;
             this.ColumnNetLogDir.Name = "ColumnNetLogDir";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBox1.BackColorScaling = 0.5F;
-            this.groupBox1.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBox1.BorderColorScaling = 0.5F;
-            this.groupBox1.Controls.Add(this.button_Browse);
-            this.groupBox1.Controls.Add(this.textBoxNetLogDir);
-            this.groupBox1.Controls.Add(this.radioButton_Manual);
-            this.groupBox1.Controls.Add(this.radioButton_Auto);
-            this.groupBox1.FillClientAreaWithAlternateColor = false;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(819, 87);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Elite Dangerous netlog location (Set to manual to use folder below or commander s" +
-    "pecific netlog path)";
-            this.groupBox1.TextPadding = 0;
-            this.groupBox1.TextStartPosition = -1;
-            // 
-            // button_Browse
-            // 
-            this.button_Browse.BorderColorScaling = 1.25F;
-            this.button_Browse.ButtonColorScaling = 0.5F;
-            this.button_Browse.ButtonDisabledScaling = 0.5F;
-            this.button_Browse.Location = new System.Drawing.Point(728, 46);
-            this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(75, 23);
-            this.button_Browse.TabIndex = 3;
-            this.button_Browse.Text = "Browse";
-            this.button_Browse.UseVisualStyleBackColor = true;
-            this.button_Browse.Click += new System.EventHandler(this.button_Browse_Click);
-            // 
-            // textBoxNetLogDir
-            // 
-            this.textBoxNetLogDir.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxNetLogDir.BorderColorScaling = 0.5F;
-            this.textBoxNetLogDir.Location = new System.Drawing.Point(97, 48);
-            this.textBoxNetLogDir.Name = "textBoxNetLogDir";
-            this.textBoxNetLogDir.Size = new System.Drawing.Size(623, 20);
-            this.textBoxNetLogDir.TabIndex = 2;
-            this.textBoxNetLogDir.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxNetLogDir_Validating);
-            this.textBoxNetLogDir.Validated += new System.EventHandler(this.textBoxNetLogDir_Validated);
-            // 
-            // radioButton_Manual
-            // 
-            this.radioButton_Manual.AutoSize = true;
-            this.radioButton_Manual.FontNerfReduction = 0.5F;
-            this.radioButton_Manual.Location = new System.Drawing.Point(17, 49);
-            this.radioButton_Manual.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButton_Manual.Name = "radioButton_Manual";
-            this.radioButton_Manual.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButton_Manual.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButton_Manual.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButton_Manual.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButton_Manual.Size = new System.Drawing.Size(60, 17);
-            this.radioButton_Manual.TabIndex = 1;
-            this.radioButton_Manual.TabStop = true;
-            this.radioButton_Manual.Text = "Manual";
-            this.radioButton_Manual.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_Auto
-            // 
-            this.radioButton_Auto.AutoSize = true;
-            this.radioButton_Auto.FontNerfReduction = 0.5F;
-            this.radioButton_Auto.Location = new System.Drawing.Point(17, 26);
-            this.radioButton_Auto.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButton_Auto.Name = "radioButton_Auto";
-            this.radioButton_Auto.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButton_Auto.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButton_Auto.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButton_Auto.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButton_Auto.Size = new System.Drawing.Size(47, 17);
-            this.radioButton_Auto.TabIndex = 0;
-            this.radioButton_Auto.TabStop = true;
-            this.radioButton_Auto.Text = "Auto";
-            this.radioButton_Auto.UseVisualStyleBackColor = true;
-            this.radioButton_Auto.CheckedChanged += new System.EventHandler(this.radioButton_Auto_CheckedChanged);
             // 
             // Settings
             // 
@@ -602,7 +516,6 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox1);
             this.Name = "Settings";
             this.Size = new System.Drawing.Size(937, 725);
             this.groupBoxTheme.ResumeLayout(false);
@@ -614,19 +527,11 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private ExtendedControls.GroupBoxCustom groupBox1;
-        private ExtendedControls.ButtonExt button_Browse;
-        private ExtendedControls.TextBoxBorder textBoxNetLogDir;
-        private ExtendedControls.RadioButtonCustom radioButton_Manual;
-        private ExtendedControls.RadioButtonCustom radioButton_Auto;
         private ExtendedControls.GroupBoxCustom groupBox4;
         private ExtendedControls.ButtonExt buttonAddCommander;
         private System.Windows.Forms.Label label2;
@@ -653,10 +558,10 @@
         private ExtendedControls.CheckBoxCustom checkBoxOrderRowsInverted;
         private ExtendedControls.CheckBoxCustom checkBoxFocusNewSystem;
         private ExtendedControls.CheckBoxCustom checkBoxKeepOnTop;
+        private ExtendedControls.ButtonExt btnDeleteCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDir;
-        private ExtendedControls.ButtonExt btnDeleteCommander;
     }
 }
