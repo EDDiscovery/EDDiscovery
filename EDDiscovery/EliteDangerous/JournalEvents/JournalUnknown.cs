@@ -11,7 +11,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     {
         public JournalUnknown(JObject jo, string typestr ) : base(jo, JournalTypeEnum.Unknown)
         {
-            eventTypeStr = typestr;
+            EventTypeStr = typestr;
         }
     }
 

@@ -1497,6 +1497,24 @@ namespace EDDiscovery
             Close();
         }
 
+        private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
+
+            DialogResult dlgResult = dirdlg.ShowDialog();
+
+            if (dlgResult == DialogResult.OK)
+            {
+                string errstr = null;
+                string logpath = dirdlg.SelectedPath;
+                //string logpath = "c:\\games\\edlaunch\\products\\elite-dangerous-64\\logs";
+                this.Cursor = Cursors.WaitCursor;
+                NetLogClass.ParseFiles(logpath, out errstr, EDDConfig.Instance.DefaultMapColour, () => false, (p, s) => { }, false);
+                RefreshHistoryAsync();
+                this.Cursor = Cursors.Default;
+            }
+        }
+
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Confirm you wish to reset all travelled history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
@@ -1634,7 +1652,7 @@ namespace EDDiscovery
 
                     int mapcolour = 0;
 
-                    if (je.EventType == EliteDangerous.JournalTypeEnum.Location || je.EventType == EliteDangerous.JournalTypeEnum.FSDJump)
+                    if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
                     {
                         EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
                         EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
@@ -1666,7 +1684,7 @@ namespace EDDiscovery
                         isys = newsys;
                     }
 
-                    he.MakeJournalEntry(je.EventType, je.Id, isys, je.EventTimeLocal, summary, info, detailed, mapcolour, je.SyncedEDSM);
+                    he.MakeJournalEntry(je.EventTypeID, je.Id, isys, je.EventTimeLocal, summary, info, detailed, mapcolour, je.SyncedEDSM);
 
                     history.Add(he);
                 }
@@ -1695,22 +1713,7 @@ namespace EDDiscovery
 
         #endregion
 
-        private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-
-            DialogResult dlgResult = dirdlg.ShowDialog();
-
-            if (dlgResult == DialogResult.OK)
-            {
-                NetLogClass.ParseFiles(dirdlg.SelectedPath,errstr, EDDConfig.Instance.DefaultMapColour , 
-
-
-                textBoxNetLogDir.Text = dirdlg.SelectedPath;
-                //TBD
-            }
-        }
 
     }
 }
-}
+
