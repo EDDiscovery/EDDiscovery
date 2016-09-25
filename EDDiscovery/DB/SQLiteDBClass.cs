@@ -15,7 +15,8 @@ namespace EDDiscovery.DB
 {
     // This class uses a monitor to ensure only one can be
     // active at any one time
-    public class SQLiteTxnLockED : IDisposable
+    public class SQLiteTxnLockED<TConn> : IDisposable
+        where TConn : SQLiteConnectionED
     {
         private static object _transactionLock = new object();
         private static System.Threading.Timer _locktimer;
@@ -46,7 +47,7 @@ namespace EDDiscovery.DB
 
             if (weakref != null)
             {
-                SQLiteTxnLockED txnlock = weakref.Target as SQLiteTxnLockED;
+                SQLiteTxnLockED<TConn> txnlock = weakref.Target as SQLiteTxnLockED<TConn>;
 
                 if (txnlock != null)
                 {
@@ -192,13 +193,14 @@ namespace EDDiscovery.DB
     // This class wraps a DbTransaction to work around
     // SQLite not using a monitor or mutex when locking
     // the database
-    public class SQLiteTransactionED : DbTransaction
+    public class SQLiteTransactionED<TConn> : DbTransaction
+        where TConn : SQLiteConnectionED
     {
-        private SQLiteTxnLockED _transactionLock = null;
+        private SQLiteTxnLockED<TConn> _transactionLock = null;
 
         public DbTransaction InnerTransaction { get; private set; }
 
-        public SQLiteTransactionED(DbTransaction txn, SQLiteTxnLockED txnlock)
+        public SQLiteTransactionED(DbTransaction txn, SQLiteTxnLockED<TConn> txnlock)
         {
             _transactionLock = txnlock;
             InnerTransaction = txn;
@@ -250,15 +252,16 @@ namespace EDDiscovery.DB
     // above transaction lock, and to work around SQLite
     // not using a monitor or mutex when locking the
     // database
-    public class SQLiteDataReaderED : DbDataReader
+    public class SQLiteDataReaderED<TConn> : DbDataReader
+        where TConn : SQLiteConnectionED
     {
         // This is the wrapped reader
         protected DbDataReader InnerReader { get; set; }
         protected DbCommand _command;
-        protected SQLiteTransactionED _transaction;
-        protected SQLiteTxnLockED _txnlock;
+        protected SQLiteTransactionED<TConn> _transaction;
+        protected SQLiteTxnLockED<TConn> _txnlock;
 
-        public SQLiteDataReaderED(DbCommand cmd, CommandBehavior behaviour, SQLiteTransactionED txn = null, SQLiteTxnLockED txnlock = null)
+        public SQLiteDataReaderED(DbCommand cmd, CommandBehavior behaviour, SQLiteTransactionED<TConn> txn = null, SQLiteTxnLockED<TConn> txnlock = null)
         {
             this._command = cmd;
             this.InnerReader = cmd.ExecuteReader(behaviour);
@@ -361,10 +364,11 @@ namespace EDDiscovery.DB
     // above transaction wrapper, and to work around
     // SQLite not using a monitor or mutex when locking
     // the database
-    public class SQLiteCommandED : DbCommand
+    public class SQLiteCommandED<TConn> : DbCommand
+        where TConn : SQLiteConnectionED
     {
         // This is the wrapped transaction
-        protected SQLiteTransactionED _transaction;
+        protected SQLiteTransactionED<TConn> _transaction;
 
         public SQLiteCommandED(DbCommand cmd, DbTransaction txn = null)
         {
@@ -397,15 +401,15 @@ namespace EDDiscovery.DB
             if (this._transaction != null)
             {
                 // The transaction should already have the transaction lock
-                return new SQLiteDataReaderED(this.InnerCommand, behavior, txn: this._transaction);
+                return new SQLiteDataReaderED<TConn>(this.InnerCommand, behavior, txn: this._transaction);
             }
             else
             {
                 // Take the transaction lock for the duration of this command
-                using (var txnlock = new SQLiteTxnLockED())
+                using (var txnlock = new SQLiteTxnLockED<TConn>())
                 {
                     txnlock.Open();
-                    return new SQLiteDataReaderED(this.InnerCommand, behavior, txnlock: txnlock);
+                    return new SQLiteDataReaderED<TConn>(this.InnerCommand, behavior, txnlock: txnlock);
                 }
             }
         }
@@ -423,7 +427,7 @@ namespace EDDiscovery.DB
             else
             {
                 // Take the transaction lock for the duration of this command
-                using (var txnlock = new SQLiteTxnLockED())
+                using (var txnlock = new SQLiteTxnLockED<TConn>())
                 {
                     txnlock.Open();
                     txnlock.BeginCommand(this);
@@ -447,7 +451,7 @@ namespace EDDiscovery.DB
             else
             {
                 // Take the transaction lock for the duration of this command
-                using (var txnlock = new SQLiteTxnLockED())
+                using (var txnlock = new SQLiteTxnLockED<TConn>())
                 {
                     txnlock.Open();
                     txnlock.BeginCommand(this);
@@ -477,14 +481,14 @@ namespace EDDiscovery.DB
         protected void SetTransaction(DbTransaction txn)
         {
             // We only accept wrapped transactions in order to avoid deadlocks
-            if (txn == null || txn is SQLiteTransactionED)
+            if (txn == null || txn is SQLiteTransactionED<TConn>)
             {
-                _transaction = (SQLiteTransactionED)txn;
+                _transaction = (SQLiteTransactionED<TConn>)txn;
                 InnerCommand.Transaction = _transaction.InnerTransaction;
             }
             else
             {
-                throw new InvalidOperationException(String.Format("Expected a {0}; got a {1}", typeof(SQLiteTransactionED).FullName, txn.GetType().FullName));
+                throw new InvalidOperationException(String.Format("Expected a {0}; got a {1}", typeof(SQLiteTransactionED<TConn>).FullName, txn.GetType().FullName));
             }
         }
     }
@@ -563,11 +567,6 @@ namespace EDDiscovery.DB
                 {
                     File.Copy(dbfile, dbuserfile);
                 }
-
-                if (!File.Exists(dbsystemsfile))
-                {
-                    File.Copy(dbfile, dbsystemsfile);
-                }
             }
             catch (Exception ex)
             {
@@ -616,7 +615,7 @@ namespace EDDiscovery.DB
 
             doAfterQueries?.Invoke();
 
-            PutSettingInt("DBVer", newVersion, conn);
+            conn.PutSettingIntCN("DBVer", newVersion);
         }
 
 
@@ -821,343 +820,49 @@ namespace EDDiscovery.DB
         ///----------------------------
         /// STATIC functions for discrete values
 
-        static public bool keyExists(string sKey)                   
+        static public bool keyExists(string sKey)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return keyExists(sKey, cn);
-            }
+            return SQLiteConnectionUser.keyExists(sKey);
         }
 
-        static public bool keyExists(string sKey, SQLiteConnectionED cn)
+        static public int GetSettingInt(string key, int defaultvalue)
         {
-            try
-            {
-                using (DbCommand cmd = cn.CreateCommand("select ID from Register WHERE ID=@key"))
-                {
-                    cmd.AddParameterWithValue("@key", sKey);
-
-                    DataSet ds = SQLQueryText(cn, cmd);
-
-                    return (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0);        // got a value, true
-                }
-            }
-            catch
-            {
-            }
-
-            return false;
-        }
-
-        static public int GetSettingInt(string key, int defaultvalue)     
-        {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return GetSettingInt(key, defaultvalue, cn);
-            }
-        }
-
-        static public int GetSettingInt(string key, int defaultvalue, SQLiteConnectionED cn )
-        { 
-            try
-            {
-                using (DbCommand cmd = cn.CreateCommand("SELECT ValueInt from Register WHERE ID = @ID"))
-                {
-                    cmd.AddParameterWithValue("@ID", key);
-
-                    object ob = SQLScalar(cn, cmd);
-
-                    if (ob == null)
-                        return defaultvalue;
-
-                    int val = Convert.ToInt32(ob);
-
-                    return val;
-                }
-            }
-            catch 
-            {
-                return defaultvalue;
-            }
+            return SQLiteConnectionUser.GetSettingInt(key, defaultvalue);
         }
 
         static public bool PutSettingInt(string key, int intvalue)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                bool ret = PutSettingInt(key, intvalue, cn);
-                return ret;
-            }
-        }
-
-        static public bool PutSettingInt(string key, int intvalue, SQLiteConnectionED cn )
-        {
-            try
-            {
-                if (keyExists(key,cn))
-                {
-                    using (DbCommand cmd = cn.CreateCommand("Update Register set ValueInt = @ValueInt Where ID=@ID"))
-                    {
-                        cmd.AddParameterWithValue("@ID", key);
-                        cmd.AddParameterWithValue("@ValueInt", intvalue);
-
-                        SQLNonQueryText(cn, cmd);
-
-                        return true;
-                    }
-                }
-                else
-                {
-                    using (DbCommand cmd = cn.CreateCommand("Insert into Register (ID, ValueInt) values (@ID, @valint)"))
-                    {
-                        cmd.AddParameterWithValue("@ID", key);
-                        cmd.AddParameterWithValue("@valint", intvalue);
-
-                        SQLNonQueryText(cn, cmd);
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
+            return SQLiteConnectionUser.PutSettingInt(key, intvalue);
         }
 
         static public double GetSettingDouble(string key, double defaultvalue)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return GetSettingDouble(key, defaultvalue, cn);
-            }
-        }
-
-        static public double GetSettingDouble(string key, double defaultvalue , SQLiteConnectionED cn )
-        {
-            try
-            {
-                using (DbCommand cmd = cn.CreateCommand("SELECT ValueDouble from Register WHERE ID = @ID"))
-                {
-                    cmd.AddParameterWithValue("@ID", key);
-
-                    object ob = SQLScalar(cn, cmd);
-
-                    if (ob == null)
-                        return defaultvalue;
-
-                    double val = Convert.ToDouble(ob);
-
-                    return val;
-                }
-            }
-            catch
-            {
-                return defaultvalue;
-            }
+            return SQLiteConnectionUser.GetSettingDouble(key, defaultvalue);
         }
 
         static public bool PutSettingDouble(string key, double doublevalue)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                bool ret = PutSettingDouble(key, doublevalue, cn);
-                return ret;
-            }
-        }
-
-        static public bool PutSettingDouble(string key, double doublevalue, SQLiteConnectionED cn)
-        {
-            try
-            {
-                if (keyExists(key,cn))
-                {
-                    using (DbCommand cmd = cn.CreateCommand("Update Register set ValueDouble = @ValueDouble Where ID=@ID"))
-                    {
-                        cmd.AddParameterWithValue("@ID", key);
-                        cmd.AddParameterWithValue("@ValueDouble", doublevalue);
-
-                        SQLNonQueryText(cn, cmd);
-
-                        return true;
-                    }
-                }
-                else
-                {
-                    using (DbCommand cmd = cn.CreateCommand("Insert into Register (ID, ValueDouble) values (@ID, @valdbl)"))
-                    {
-                        cmd.AddParameterWithValue("@ID", key);
-                        cmd.AddParameterWithValue("@valdbl", doublevalue);
-
-                        SQLNonQueryText(cn, cmd);
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
+            return SQLiteConnectionUser.PutSettingDouble(key, doublevalue);
         }
 
         static public bool GetSettingBool(string key, bool defaultvalue)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return GetSettingBool(key, defaultvalue, cn);
-            }
+            return SQLiteConnectionUser.GetSettingBool(key, defaultvalue);
         }
-
-        static public bool GetSettingBool(string key, bool defaultvalue,SQLiteConnectionED cn)
-        {
-            try
-            {
-                using (DbCommand cmd = cn.CreateCommand("SELECT ValueInt from Register WHERE ID = @ID"))
-                {
-                    cmd.AddParameterWithValue("@ID", key);
-
-                    object ob = SQLScalar(cn, cmd);
-
-                    if (ob == null)
-                        return defaultvalue;
-
-                    int val = Convert.ToInt32(ob);
-
-                    if (val == 0)
-                        return false;
-                    else
-                        return true;
-                }
-            }
-            catch
-            {
-                return defaultvalue;
-            }
-        }
-
 
         static public bool PutSettingBool(string key, bool boolvalue)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                bool ret = PutSettingBool(key, boolvalue, cn);
-                return ret;
-            }
-        }
-
-        static public bool PutSettingBool(string key, bool boolvalue, SQLiteConnectionED cn)
-        {
-            try
-            {
-                int intvalue = 0;
-
-                if (boolvalue == true)
-                    intvalue = 1;
-
-                if (keyExists(key,cn))
-                {
-                    using (DbCommand cmd = cn.CreateCommand("Update Register set ValueInt = @ValueInt Where ID=@ID"))
-                    {
-                        cmd.AddParameterWithValue("@ID", key);
-                        cmd.AddParameterWithValue("@ValueInt", intvalue);
-
-                        SQLNonQueryText(cn, cmd);
-
-                        return true;
-                    }
-                }
-                else
-                {
-                    using (DbCommand cmd = cn.CreateCommand("Insert into Register (ID, ValueInt) values (@ID, @valint)"))
-                    {
-                        cmd.AddParameterWithValue("@ID", key);
-                        cmd.AddParameterWithValue("@valint", intvalue);
-
-                        SQLNonQueryText(cn, cmd);
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
+            return SQLiteConnectionUser.PutSettingBool(key, boolvalue);
         }
 
         static public string GetSettingString(string key, string defaultvalue)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return GetSettingString(key, defaultvalue, cn);
-            }
+            return SQLiteConnectionUser.GetSettingString(key, defaultvalue);
         }
 
-        static public string GetSettingString(string key, string defaultvalue, SQLiteConnectionED cn)
+        static public bool PutSettingString(string key, string strvalue)
         {
-            try
-            {
-                using (DbCommand cmd = cn.CreateCommand("SELECT ValueString from Register WHERE ID = @ID"))
-                {
-                    cmd.AddParameterWithValue("@ID", key);
-                    object ob = SQLScalar(cn, cmd);
-
-                    if (ob == null)
-                        return defaultvalue;
-
-                    if (ob == System.DBNull.Value)
-                        return defaultvalue;
-
-                    string val = (string)ob;
-
-                    return val;
-                }
-            }
-            catch 
-            {
-                return defaultvalue;
-            }
-        }
-
-        static public bool PutSettingString(string key, string strvalue)        // public IF
-        {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                bool ret = PutSettingString(key, strvalue, cn);
-                return ret;
-            }
-        }
-
-        static public bool PutSettingString(string key, string strvalue , SQLiteConnectionED cn )
-        {
-            try
-            {
-                if (keyExists(key,cn))
-                {
-                    using (DbCommand cmd = cn.CreateCommand("Update Register set ValueString = @ValueString Where ID=@ID"))
-                    {
-                        cmd.AddParameterWithValue("@ID", key);
-                        cmd.AddParameterWithValue("@ValueString", strvalue);
-
-                        SQLNonQueryText(cn, cmd);
-
-                        return true;
-                    }
-                }
-                else
-                {
-                    using (DbCommand cmd = cn.CreateCommand("Insert into Register (ID, ValueString) values (@ID, @valint)"))
-                    {
-                        cmd.AddParameterWithValue("@ID", key);
-                        cmd.AddParameterWithValue("@valint", strvalue);
-
-                        SQLNonQueryText(cn, cmd);
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
+            return SQLiteConnectionUser.PutSettingString(key, strvalue);
         }
         #endregion
     }
