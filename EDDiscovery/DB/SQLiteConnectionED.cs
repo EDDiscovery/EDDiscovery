@@ -30,19 +30,124 @@ namespace EDDiscovery.DB
         }
     }
 
-    public class SQLiteConnectionCombined : SQLiteConnectionED
+    /*
+    public class SQLiteConnectionCombined : SQLiteConnectionED<SQLiteConnectionCombined>
     {
         public SQLiteConnectionCombined() : base(EDDSqlDbSelection.None, EDDSqlDbSelection.EDDUser | EDDSqlDbSelection.EDDSystem)
         {
         }
     }
+     */
 
     public abstract class SQLiteConnectionED<TConn> : SQLiteConnectionED
         where TConn : SQLiteConnectionED, new()
     {
-        public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
-            : base(maindb, selector)
+        private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
+        public class SchemaLock : IDisposable
         {
+            public SchemaLock()
+            {
+                if (_schemaLock.RecursiveReadCount != 0)
+                {
+                    throw new InvalidOperationException("Cannot take a schema lock while holding an open database connection");
+                }
+
+                _schemaLock.EnterWriteLock();
+            }
+
+            public void Dispose()
+            {
+                if (_schemaLock.IsWriteLockHeld)
+                {
+                    _schemaLock.ExitWriteLock();
+                }
+            }
+        }
+
+        public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
+        {
+            bool locktaken = false;
+            try
+            {
+                _schemaLock.EnterReadLock();
+                locktaken = true;
+
+                // System.Threading.Monitor.Enter(monitor);
+                //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
+                DBFile = GetSQLiteDBFile(maindb ?? SQLiteDBClass.DefaultMainDatabase);
+                _cn = SQLiteDBClass.CreateCN();
+
+                // Use the database selected by maindb as the 'main' database
+                _cn.ConnectionString = "Data Source=" + DBFile + ";Pooling=true;";
+                _cn.Open();
+
+                // Attach any other requested databases under their appropriate names
+                foreach (var dbflag in new[] { EDDSqlDbSelection.EDDiscovery, EDDSqlDbSelection.EDDUser, EDDSqlDbSelection.EDDSystem })
+                {
+                    if (selector.HasFlag(dbflag))
+                    {
+                        AttachDatabase(dbflag, dbflag.ToString());
+                    }
+                }
+            }
+            catch
+            {
+                if (locktaken)
+                {
+                    _schemaLock.ExitReadLock();
+                }
+
+                throw;
+            }
+        }
+
+        public override DbCommand CreateCommand(string cmd, DbTransaction tn = null)
+        {
+            return new SQLiteCommandED<TConn>(_cn.CreateCommand(cmd), tn);
+        }
+
+        public override DbTransaction BeginTransaction(IsolationLevel isolevel)
+        {
+            // Take the transaction lock before beginning the
+            // transaction to avoid a deadlock
+            var txnlock = new SQLiteTxnLockED<TConn>();
+            txnlock.Open();
+            return new SQLiteTransactionED<TConn>(_cn.BeginTransaction(isolevel), txnlock);
+        }
+
+        public override DbTransaction BeginTransaction()
+        {
+            // Take the transaction lock before beginning the
+            // transaction to avoid a deadlock
+            var txnlock = new SQLiteTxnLockED<TConn>();
+            txnlock.Open();
+            return new SQLiteTransactionED<TConn>(_cn.BeginTransaction(), txnlock);
+        }
+
+        public override void Dispose()
+        {
+            Dispose(true);
+        }
+
+        // disposing: true if Dispose() was called, false
+        // if being finalized by the garbage collector
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_cn != null)
+                {
+                    _cn.Close();
+                    _cn.Dispose();
+                    _cn = null;
+                }
+
+                if (_schemaLock.IsReadLockHeld)
+                {
+                    _schemaLock.ExitReadLock();
+                }
+            }
         }
 
         #region Settings
@@ -130,71 +235,11 @@ namespace EDDiscovery.DB
 
     public abstract class SQLiteConnectionED : IDisposable              // USE this for connections.. 
     {
-        private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-
-        public class SchemaLock : IDisposable
-        {
-            public SchemaLock()
-            {
-                if (_schemaLock.RecursiveReadCount != 0)
-                {
-                    throw new InvalidOperationException("Cannot take a schema lock while holding an open database connection");
-                }
-
-                _schemaLock.EnterWriteLock();
-            }
-
-            public void Dispose()
-            {
-                if (_schemaLock.IsWriteLockHeld)
-                {
-                    _schemaLock.ExitWriteLock();
-                }
-            }
-        }
-
         //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
         // causes the program to become unresponsive during big DB updates
-        private DbConnection _cn;
+        protected DbConnection _cn;
 
-        public string DBFile { get; private set; }
-
-        public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
-        {
-            bool locktaken = false;
-            try
-            {
-                _schemaLock.EnterReadLock();
-                locktaken = true;
-
-                // System.Threading.Monitor.Enter(monitor);
-                //Console.WriteLine("Connection open " + System.Threading.Thread.CurrentThread.Name);
-                DBFile = GetSQLiteDBFile(maindb ?? SQLiteDBClass.DefaultMainDatabase);
-                _cn = SQLiteDBClass.CreateCN();
-
-                // Use the database selected by maindb as the 'main' database
-                _cn.ConnectionString = "Data Source=" + DBFile + ";Pooling=true;";
-                _cn.Open();
-
-                // Attach any other requested databases under their appropriate names
-                foreach (var dbflag in new[] { EDDSqlDbSelection.EDDiscovery, EDDSqlDbSelection.EDDUser, EDDSqlDbSelection.EDDSystem })
-                {
-                    if (selector.HasFlag(dbflag))
-                    {
-                        AttachDatabase(dbflag, dbflag.ToString());
-                    }
-                }
-            }
-            catch
-            {
-                if (locktaken)
-                {
-                    _schemaLock.ExitReadLock();
-                }
-
-                throw;
-            }
-        }
+        public string DBFile { get; protected set; }
 
         public static string GetSQLiteDBFile(EDDSqlDbSelection selector)
         {
@@ -220,7 +265,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private void AttachDatabase(EDDSqlDbSelection dbflag, string name)
+        protected void AttachDatabase(EDDSqlDbSelection dbflag, string name)
         {
             // Check if the connection is already connected to the selected database
             using (DbCommand cmd = _cn.CreateCommand("PRAGMA database_list"))
@@ -247,53 +292,11 @@ namespace EDDiscovery.DB
             }
         }
 
-        public DbCommand CreateCommand(string cmd, DbTransaction tn = null)
-        {
-            return new SQLiteCommandED(_cn.CreateCommand(cmd), tn);
-        }
+        public abstract DbCommand CreateCommand(string cmd, DbTransaction tn = null);
+        public abstract DbTransaction BeginTransaction(IsolationLevel isolevel);
+        public abstract DbTransaction BeginTransaction();
+        public abstract void Dispose();
 
-        public DbTransaction BeginTransaction(IsolationLevel isolevel)
-        {
-            // Take the transaction lock before beginning the
-            // transaction to avoid a deadlock
-            var txnlock = new SQLiteTxnLockED();
-            txnlock.Open();
-            return new SQLiteTransactionED(_cn.BeginTransaction(isolevel), txnlock);
-        }
-
-        public DbTransaction BeginTransaction()
-        {
-            // Take the transaction lock before beginning the
-            // transaction to avoid a deadlock
-            var txnlock = new SQLiteTxnLockED();
-            txnlock.Open();
-            return new SQLiteTransactionED(_cn.BeginTransaction(), txnlock);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        // disposing: true if Dispose() was called, false
-        // if being finalized by the garbage collector
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_cn != null)
-                {
-                    _cn.Close();
-                    _cn.Dispose();
-                    _cn = null;
-                }
-
-                if (_schemaLock.IsReadLockHeld)
-                {
-                    _schemaLock.ExitReadLock();
-                }
-            }
-        }
 
         #region Settings
         ///----------------------------

@@ -15,7 +15,8 @@ namespace EDDiscovery.DB
 {
     // This class uses a monitor to ensure only one can be
     // active at any one time
-    public class SQLiteTxnLockED : IDisposable
+    public class SQLiteTxnLockED<TConn> : IDisposable
+        where TConn : SQLiteConnectionED
     {
         private static object _transactionLock = new object();
         private static System.Threading.Timer _locktimer;
@@ -46,7 +47,7 @@ namespace EDDiscovery.DB
 
             if (weakref != null)
             {
-                SQLiteTxnLockED txnlock = weakref.Target as SQLiteTxnLockED;
+                SQLiteTxnLockED<TConn> txnlock = weakref.Target as SQLiteTxnLockED<TConn>;
 
                 if (txnlock != null)
                 {
@@ -192,13 +193,14 @@ namespace EDDiscovery.DB
     // This class wraps a DbTransaction to work around
     // SQLite not using a monitor or mutex when locking
     // the database
-    public class SQLiteTransactionED : DbTransaction
+    public class SQLiteTransactionED<TConn> : DbTransaction
+        where TConn : SQLiteConnectionED
     {
-        private SQLiteTxnLockED _transactionLock = null;
+        private SQLiteTxnLockED<TConn> _transactionLock = null;
 
         public DbTransaction InnerTransaction { get; private set; }
 
-        public SQLiteTransactionED(DbTransaction txn, SQLiteTxnLockED txnlock)
+        public SQLiteTransactionED(DbTransaction txn, SQLiteTxnLockED<TConn> txnlock)
         {
             _transactionLock = txnlock;
             InnerTransaction = txn;
@@ -250,15 +252,16 @@ namespace EDDiscovery.DB
     // above transaction lock, and to work around SQLite
     // not using a monitor or mutex when locking the
     // database
-    public class SQLiteDataReaderED : DbDataReader
+    public class SQLiteDataReaderED<TConn> : DbDataReader
+        where TConn : SQLiteConnectionED
     {
         // This is the wrapped reader
         protected DbDataReader InnerReader { get; set; }
         protected DbCommand _command;
-        protected SQLiteTransactionED _transaction;
-        protected SQLiteTxnLockED _txnlock;
+        protected SQLiteTransactionED<TConn> _transaction;
+        protected SQLiteTxnLockED<TConn> _txnlock;
 
-        public SQLiteDataReaderED(DbCommand cmd, CommandBehavior behaviour, SQLiteTransactionED txn = null, SQLiteTxnLockED txnlock = null)
+        public SQLiteDataReaderED(DbCommand cmd, CommandBehavior behaviour, SQLiteTransactionED<TConn> txn = null, SQLiteTxnLockED<TConn> txnlock = null)
         {
             this._command = cmd;
             this.InnerReader = cmd.ExecuteReader(behaviour);
@@ -361,10 +364,11 @@ namespace EDDiscovery.DB
     // above transaction wrapper, and to work around
     // SQLite not using a monitor or mutex when locking
     // the database
-    public class SQLiteCommandED : DbCommand
+    public class SQLiteCommandED<TConn> : DbCommand
+        where TConn : SQLiteConnectionED
     {
         // This is the wrapped transaction
-        protected SQLiteTransactionED _transaction;
+        protected SQLiteTransactionED<TConn> _transaction;
 
         public SQLiteCommandED(DbCommand cmd, DbTransaction txn = null)
         {
@@ -397,15 +401,15 @@ namespace EDDiscovery.DB
             if (this._transaction != null)
             {
                 // The transaction should already have the transaction lock
-                return new SQLiteDataReaderED(this.InnerCommand, behavior, txn: this._transaction);
+                return new SQLiteDataReaderED<TConn>(this.InnerCommand, behavior, txn: this._transaction);
             }
             else
             {
                 // Take the transaction lock for the duration of this command
-                using (var txnlock = new SQLiteTxnLockED())
+                using (var txnlock = new SQLiteTxnLockED<TConn>())
                 {
                     txnlock.Open();
-                    return new SQLiteDataReaderED(this.InnerCommand, behavior, txnlock: txnlock);
+                    return new SQLiteDataReaderED<TConn>(this.InnerCommand, behavior, txnlock: txnlock);
                 }
             }
         }
@@ -423,7 +427,7 @@ namespace EDDiscovery.DB
             else
             {
                 // Take the transaction lock for the duration of this command
-                using (var txnlock = new SQLiteTxnLockED())
+                using (var txnlock = new SQLiteTxnLockED<TConn>())
                 {
                     txnlock.Open();
                     txnlock.BeginCommand(this);
@@ -447,7 +451,7 @@ namespace EDDiscovery.DB
             else
             {
                 // Take the transaction lock for the duration of this command
-                using (var txnlock = new SQLiteTxnLockED())
+                using (var txnlock = new SQLiteTxnLockED<TConn>())
                 {
                     txnlock.Open();
                     txnlock.BeginCommand(this);
@@ -477,14 +481,14 @@ namespace EDDiscovery.DB
         protected void SetTransaction(DbTransaction txn)
         {
             // We only accept wrapped transactions in order to avoid deadlocks
-            if (txn == null || txn is SQLiteTransactionED)
+            if (txn == null || txn is SQLiteTransactionED<TConn>)
             {
-                _transaction = (SQLiteTransactionED)txn;
+                _transaction = (SQLiteTransactionED<TConn>)txn;
                 InnerCommand.Transaction = _transaction.InnerTransaction;
             }
             else
             {
-                throw new InvalidOperationException(String.Format("Expected a {0}; got a {1}", typeof(SQLiteTransactionED).FullName, txn.GetType().FullName));
+                throw new InvalidOperationException(String.Format("Expected a {0}; got a {1}", typeof(SQLiteTransactionED<TConn>).FullName, txn.GetType().FullName));
             }
         }
     }

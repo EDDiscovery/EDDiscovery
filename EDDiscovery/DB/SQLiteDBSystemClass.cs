@@ -332,7 +332,7 @@ namespace EDDiscovery.DB
 
         public static void ReplaceSystemsTable()
         {
-            using (var slock = new SQLiteConnectionED.SchemaLock())
+            using (var slock = new SQLiteConnectionSystem.SchemaLock())
             {
                 using (var conn = new SQLiteConnectionSystem())
                 {
