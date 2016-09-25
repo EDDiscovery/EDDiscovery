@@ -1693,7 +1693,24 @@ namespace EDDiscovery
         }
         */
 
-#endregion
+        #endregion
+
+        private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
+
+            DialogResult dlgResult = dirdlg.ShowDialog();
+
+            if (dlgResult == DialogResult.OK)
+            {
+                NetLogClass.ParseFiles(dirdlg.SelectedPath,errstr, EDDConfig.Instance.DefaultMapColour , 
+
+
+                textBoxNetLogDir.Text = dirdlg.SelectedPath;
+                //TBD
+            }
+        }
 
     }
+}
 }
