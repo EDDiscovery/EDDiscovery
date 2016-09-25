@@ -563,11 +563,6 @@ namespace EDDiscovery.DB
                 {
                     File.Copy(dbfile, dbuserfile);
                 }
-
-                if (!File.Exists(dbsystemsfile))
-                {
-                    File.Copy(dbfile, dbsystemsfile);
-                }
             }
             catch (Exception ex)
             {
