@@ -348,7 +348,7 @@ namespace EDDiscovery
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
             ignorewidthchange = true;
-            if (SQLiteDBClass.keyExists("TravelControlDGVCol1"))        // if stored values, set back to what they were..
+            if (SQLiteConnectionUser.keyExists("TravelControlDGVCol1"))        // if stored values, set back to what they were..
             {
                 for (int i = 0; i < dataGridViewTravel.Columns.Count; i++)
                 {
@@ -483,8 +483,8 @@ namespace EDDiscovery
 
             _discoveryForm.history.FillInPositionsFSDJumps();
 
-            map.Prepare(he.System, _discoveryForm.settings.MapHomeSystem,
-                        _discoveryForm.settings.MapCentreOnSelection ? he.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
+            map.Prepare(he?.System, _discoveryForm.settings.MapHomeSystem,
+                        _discoveryForm.settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
                         _discoveryForm.settings.MapZoom, _discoveryForm.history.FilterByFSDAndPosition);
             map.Show();
             this.Cursor = Cursors.Default;
