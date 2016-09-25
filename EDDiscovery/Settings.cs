@@ -55,22 +55,6 @@ namespace EDDiscovery2
 
         public void InitSettingsTab()
         {
-            bool auto = EDDConfig.Instance.NetLogDirAutoMode;
-
-            if (auto)
-            {
-                radioButton_Auto.Checked = auto;
-            }
-            else
-            {
-                radioButton_Manual.Checked = true;
-            }
-
-            textBoxNetLogDir.Text = EDDConfig.Instance.NetLogDir;
-
-            EDDConfig.Instance.NetLogDirAutoModeChanged += EDDConfig_NetLogDirAutoModeChanged;
-            EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
-
             checkBox_Distances.Enabled = false;         // disable over checked to indicate its not a user thing
             checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
             checkBox_Distances.Enabled = true;
@@ -105,8 +89,6 @@ namespace EDDiscovery2
 
         public void SaveSettings()
         {
-            EDDConfig.Instance.NetLogDirAutoMode = radioButton_Auto.Checked;
-            EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
             SQLiteDBClass.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
             double zoom = 1;
             SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.TryParse(textBoxDefaultZoom.Text, out zoom) ? zoom : 1.0);
@@ -136,54 +118,6 @@ namespace EDDiscovery2
             }
         }
 
-        private void textBoxNetLogDir_Validating(object sender, CancelEventArgs e)
-        {
-            var path = textBoxNetLogDir.Text;
-            if (!Directory.Exists(path))
-            {
-                e.Cancel = true;
-            }
-        }
-
-        private void textBoxNetLogDir_Validated(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
-        }
-
-        private void radioButton_Auto_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.NetLogDirAutoMode = radioButton_Auto.Checked;
-        }
-
-        private void EDDConfig_NetLogDirChanged()
-        {
-            if (EDDConfig.Instance.NetLogDir != textBoxNetLogDir.Text)
-            {
-                textBoxNetLogDir.Text = EDDConfig.Instance.NetLogDir;
-            }
-        }
-
-        private void EDDConfig_NetLogDirAutoModeChanged()
-        {
-            if (EDDConfig.Instance.NetLogDirAutoMode != radioButton_Auto.Checked)
-            {
-                radioButton_Auto.Checked = EDDConfig.Instance.NetLogDirAutoMode;
-                radioButton_Manual.Checked = !EDDConfig.Instance.NetLogDirAutoMode;
-            }
-        }
-
-        private void button_Browse_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-
-            DialogResult dlgResult = dirdlg.ShowDialog();
-
-            if (dlgResult == DialogResult.OK)
-            {
-                textBoxNetLogDir.Text = dirdlg.SelectedPath;
-                EDDConfig.Instance.NetLogDir = textBoxNetLogDir.Text;
-            }
-        }
 
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {

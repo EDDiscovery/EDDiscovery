@@ -290,8 +290,6 @@ namespace EDDiscovery.EliteDangerous
                         m_Watcher.Created += new FileSystemEventHandler(OnNewFile);
                         m_Watcher.EnableRaisingEvents = true;
 
-                        EDDConfig.Instance.NetLogDirChanged += EDDConfig_NetLogDirChanged;
-
                         m_worker = new System.ComponentModel.BackgroundWorker();
                         m_worker.DoWork += ScanTickWorker;
                         m_worker.RunWorkerCompleted += ScanTickDone;
@@ -330,8 +328,6 @@ namespace EDDiscovery.EliteDangerous
 
             if (m_Watcher != null)
             {
-                EDDConfig.Instance.NetLogDirChanged -= EDDConfig_NetLogDirChanged;
-
                 m_Watcher.EnableRaisingEvents = false;
                 m_Watcher.Dispose();
                 m_Watcher = null;
@@ -340,6 +336,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        /*
         private void EDDConfig_NetLogDirChanged()
         {
             if (m_Watcher != null)       // get this during close down, so only do it if we are running already.
@@ -348,6 +345,7 @@ namespace EDDiscovery.EliteDangerous
                 StartMonitor();
             }
         }
+        */
 
         private void ScanTickDone(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -384,7 +382,7 @@ namespace EDDiscovery.EliteDangerous
 
             try
             {
-                if (EDDConfig.Instance.NetLogDirAutoMode)
+                if (EDDConfig.Instance.JournalDirAutoMode)
                 {
                     EliteDangerousClass.CheckED();
                 }
