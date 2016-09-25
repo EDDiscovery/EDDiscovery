@@ -102,7 +102,7 @@ namespace EDDiscovery.DB
         private static void UpgradeUserDB4(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN Note TEXT";
-            SQLiteDBClass.PerformUpgrade(conn, 4, true, true, new[] { query1 });
+            SQLiteDBClass.PerformUpgrade(conn, 4, true, false, new[] { query1 });
         }
 
         private static void UpgradeUserDB7(SQLiteConnectionED conn)
@@ -110,25 +110,25 @@ namespace EDDiscovery.DB
             string query1 = "DROP TABLE IF EXISTS VisitedSystems";
             string query2 = "CREATE TABLE VisitedSystems(id INTEGER PRIMARY KEY  NOT NULL, Name TEXT NOT NULL, Time DATETIME NOT NULL, Unit Text, Commander Integer, Source Integer, edsm_sync BOOL DEFAULT (null))";
             string query3 = "CREATE TABLE TravelLogUnit(id INTEGER PRIMARY KEY  NOT NULL, type INTEGER NOT NULL, name TEXT NOT NULL, size INTEGER, path TEXT)";
-            SQLiteDBClass.PerformUpgrade(conn, 7, true, true, new[] { query1, query2, query3 });
+            SQLiteDBClass.PerformUpgrade(conn, 7, true, false, new[] { query1, query2, query3 });
         }
 
         private static void UpgradeUserDB8(SQLiteConnectionED conn)
         {
             string query1 = "ALTER TABLE VisitedSystems ADD COLUMN Map_colour INTEGER DEFAULT (-65536)";
-            SQLiteDBClass.PerformUpgrade(conn, 8, true, true, new[] { query1 });
+            SQLiteDBClass.PerformUpgrade(conn, 8, true, false, new[] { query1 });
         }
 
         private static void UpgradeUserDB9(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE Objects (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , SystemName TEXT NOT NULL , ObjectName TEXT NOT NULL , ObjectType INTEGER NOT NULL , ArrivalPoint Float, Gravity FLOAT, Atmosphere Integer, Vulcanism Integer, Terrain INTEGER, Carbon BOOL, Iron BOOL, Nickel BOOL, Phosphorus BOOL, Sulphur BOOL, Arsenic BOOL, Chromium BOOL, Germanium BOOL, Manganese BOOL, Selenium BOOL NOT NULL , Vanadium BOOL, Zinc BOOL, Zirconium BOOL, Cadmium BOOL, Mercury BOOL, Molybdenum BOOL, Niobium BOOL, Tin BOOL, Tungsten BOOL, Antimony BOOL, Polonium BOOL, Ruthenium BOOL, Technetium BOOL, Tellurium BOOL, Yttrium BOOL, Commander  Text, UpdateTime DATETIME, Status INTEGER )";
-            SQLiteDBClass.PerformUpgrade(conn, 9, true, true, new[] { query1 });
+            SQLiteDBClass.PerformUpgrade(conn, 9, true, false, new[] { query1 });
         }
 
         private static void UpgradeUserDB10(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE wanted_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, systemname TEXT UNIQUE NOT NULL)";
-            SQLiteDBClass.PerformUpgrade(conn, 10, true, true, new[] { query1 });
+            SQLiteDBClass.PerformUpgrade(conn, 10, true, false, new[] { query1 });
         }
 
 
@@ -137,14 +137,14 @@ namespace EDDiscovery.DB
             string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
             string query3 = "ALTER TABLE Objects ADD COLUMN terraform Integer";
             string query4 = "ALTER TABLE VisitedSystems ADD COLUMN Status BOOL";
-            SQLiteDBClass.PerformUpgrade(conn, 11, true, true, new[] { query2, query3, query4 });
+            SQLiteDBClass.PerformUpgrade(conn, 11, true, false, new[] { query2, query3, query4 });
         }
 
         private static void UpgradeUserDB12(SQLiteConnectionED conn)
         {
             string query1 = "CREATE TABLE routes_expeditions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT UNIQUE NOT NULL, start DATETIME, end DATETIME)";
             string query2 = "CREATE TABLE route_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, routeid INTEGER NOT NULL, systemname TEXT NOT NULL)";
-            SQLiteDBClass.PerformUpgrade(conn, 12, true, true, new[] { query1, query2 });
+            SQLiteDBClass.PerformUpgrade(conn, 12, true, false, new[] { query1, query2 });
         }
 
 
@@ -155,21 +155,21 @@ namespace EDDiscovery.DB
             string query2 = "ALTER TABLE VisitedSystems ADD COLUMN Y double";
             string query3 = "ALTER TABLE VisitedSystems ADD COLUMN Z double";
 
-            SQLiteDBClass.PerformUpgrade(conn, 14, true, true, new[] { query1, query2, query3 });
+            SQLiteDBClass.PerformUpgrade(conn, 14, true, false, new[] { query1, query2, query3 });
             return true;
         }
 
         private static void UpgradeUserDB16(SQLiteConnectionED conn)
         {
             string query = "CREATE TABLE Bookmarks (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , StarName TEXT, x double NOT NULL, y double NOT NULL, z double NOT NULL, Time DATETIME NOT NULL, Heading TEXT, Note TEXT NOT Null )";
-            SQLiteDBClass.PerformUpgrade(conn, 16, true, true, new[] { query });
+            SQLiteDBClass.PerformUpgrade(conn, 16, true, false, new[] { query });
         }
 
 
         private static void UpgradeUserDB17(SQLiteConnectionED conn)
         {
             string query6 = "Update VisitedSystems set x=null, y=null, z=null where x=0 and y=0 and z=0 and name!=\"Sol\"";
-            SQLiteDBClass.PerformUpgrade(conn, 17, true, true, new[] { query6 }, () =>
+            SQLiteDBClass.PerformUpgrade(conn, 17, true, false, new[] { query6 }, () =>
             {
                 conn.PutSettingStringCN("EDSMLastSystems", "2010 - 01 - 01 00:00:00");        // force EDSM sync..
                 conn.PutSettingStringCN("EDDBSystemsTime", "0");                               // force EDDB
@@ -183,7 +183,7 @@ namespace EDDiscovery.DB
             string query2 = "CREATE INDEX VisitedSystems_id_edsm_assigned ON VisitedSystems (id_edsm_assigned)";
             string query3 = "CREATE INDEX VisitedSystems_position ON VisitedSystems (X, Y, Z)";
 
-            SQLiteDBClass.PerformUpgrade(conn, 18, true, true, new[] { query1, query2, query3 });
+            SQLiteDBClass.PerformUpgrade(conn, 18, true, false, new[] { query1, query2, query3 });
         }
 
 
