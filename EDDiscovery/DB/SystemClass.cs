@@ -727,6 +727,35 @@ namespace EDDiscovery.DB
         public const int metric_maximum500ly = 4;
         public const int metric_waypointdev2 = 5;
 
+        public static SystemClass GetSystemNearestTo(double x, double y, double z, SQLiteConnectionSystem conn)
+        {
+            using (DbCommand selectByPosCmd = conn.CreateCommand(
+                "SELECT s.EdsmId FROM EdsmSystems s " +         // 16 is 0.125 of 1/128, so pick system near this one
+                "WHERE s.X >= @X - 16 " +
+                "AND s.X <= @X + 16 " +
+                "AND s.Y >= @Y - 16 " +
+                "AND s.Y <= @Y + 16 " +
+                "AND s.Z >= @Z - 16 " +
+                "AND s.Z <= @Z + 16 LIMIT 1"))
+            {
+                selectByPosCmd.AddParameterWithValue("@X", (long)(x * XYZScalar));
+                selectByPosCmd.AddParameterWithValue("@Y", (long)(y * XYZScalar));
+                selectByPosCmd.AddParameterWithValue("@Z", (long)(z * XYZScalar));
+
+                using (DbDataReader reader = selectByPosCmd.ExecuteReader())        // MEASURED very fast, <1ms
+                {
+                    while (reader.Read())
+                    {
+                        long pos_edsmid = (long)reader["EdsmId"];
+                        SystemClass sys = GetSystem(pos_edsmid, conn, SystemIDType.EdsmId);
+                        return sys;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public static SystemClass GetSystemNearestTo(Point3D curpos, Point3D wantedpos, double maxfromcurpos, double maxfromwanted,
                                     int routemethod)
         {
@@ -1694,22 +1723,27 @@ namespace EDDiscovery.DB
 
             if (s.status != SystemStatusEnum.EDSC)
             {
-                if (s.id_edsm > 0)  // TBD optimise for a look up based on id_edsm OR position..?
+                if (s.id_edsm > 0) 
                     system = SystemClass.GetSystem(s.id_edsm, conn, SystemClass.SystemIDType.EdsmId);
 
-                if (system == null && s.HasCoordinate)
+                if ( system == null )       // not found, so  try
                 {
-                    // look up by pos, TBD
-                    // if found write back edsm_id to journal for next time
-                }
+                    if (s.HasCoordinate)      // if has co-ord, its cardinal, only match on this
+                    {
+                        system = SystemClass.GetSystemNearestTo(s.x, s.y, s.z, conn);       // find it
 
-                if (system == null)
-                {
-                    system = SystemClass.GetSystem(s.name, conn);
-                    // look up by pos, TBD
-                    // if found write back edsm_id to journal 
-                    // if !s.HasCoordinate 
-                    //   change the JSON to have the co-ord, so we don't have to do this on load
+                        if (system != null)                                                 // if found, update the journal with the edsm_id
+                            EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(journalid, system, false); // no need to update JSON POS
+                    }
+                    else
+                    {
+                        system = SystemClass.GetSystem(s.name, conn);   // find on name
+
+                        if (system != null)                                                 // if found, update the journal with the edsm_id
+                        {
+                            EliteDangerous.JournalEntry.UpdateEDSMIDAndPos(journalid, system, true); // found a name, and we don't have a co-ord, so introduce it
+                        }
+                    }
                 }
             }
 
