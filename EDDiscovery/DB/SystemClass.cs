@@ -1405,49 +1405,61 @@ namespace EDDiscovery.DB
             {
                 using (DbTransaction txn = cn2.BeginTransaction())
                 {
-                    while (jr.Read())
+                    DbCommand infoinscmd = null;
+                    DbCommand infodelcmd = null;
+                    DbCommand namedelcmd = null;
+
+                    try
                     {
-                        if (jr.TokenType == JsonToken.StartObject)
+                        infoinscmd = cn2.CreateCommand("INSERT OR IGNORE INTO SystemAliases (name, id_edsm, id_edsm_mergedto) VALUES (@name, @id_edsm, @id_edsm_mergedto)", txn);
+                        infoinscmd.AddParameter("@name", DbType.String);
+                        infoinscmd.AddParameter("@id_edsm", DbType.Int64);
+                        infoinscmd.AddParameter("@id_edsm_mergedto", DbType.Int64);
+                        infodelcmd = cn2.CreateCommand("DELETE FROM EdsmSystems WHERE EdsmId=@EdsmId", txn);
+                        infodelcmd.AddParameter("@EdsmId", DbType.Int64);
+                        namedelcmd = cn2.CreateCommand("DELETE FROM SystemNames WHERE EdsmId=@EdsmId", txn);
+                        namedelcmd.AddParameter("@EdsmId", DbType.Int64);
+
+                        while (jr.Read())
                         {
-                            JObject jo = JObject.Load(jr);
-
-                            long edsmid = (long)jo["id"];
-                            string name = (string)jo["system"];
-                            string action = (string)jo["action"];
-                            long mergedto = 0;
-
-                            if (jo["mergedTo"] != null)
+                            if (jr.TokenType == JsonToken.StartObject)
                             {
-                                mergedto = (long)jo["mergedTo"];
-                            }
+                                JObject jo = JObject.Load(jr);
 
-                            Console.Write("Remove " + edsmid);
-                            using (DbCommand cmd = cn2.CreateCommand("DELETE FROM EdsmSystems WHERE EdsmId=@EdsmId", txn))
-                            {
-                                cmd.AddParameterWithValue("@EdsmId", edsmid);
-                                cmd.ExecuteNonQuery();
-                            }
+                                long edsmid = (long)jo["id"];
+                                string name = (string)jo["system"];
+                                string action = (string)jo["action"];
+                                long mergedto = 0;
 
-                            if (mergedto > 0)
-                            {
-                                using (DbCommand cmd = cn2.CreateCommand("INSERT OR IGNORE INTO SystemNames (Name, EdsmId) VALUES (@Name, @EdsmId)", txn))
+                                if (jo["mergedTo"] != null)
                                 {
-                                    cmd.AddParameterWithValue("@Name", name);
-                                    cmd.AddParameterWithValue("@EdsmId", edsmid);
-                                    cmd.ExecuteNonQuery();
+                                    mergedto = (long)jo["mergedTo"];
                                 }
-                                using (DbCommand cmd = cn2.CreateCommand("INSERT OR IGNORE INTO SystemAliases (name, id_edsm, id_edsm_mergedto) VALUES (@name, @id_edsm, @id_edsm_mergedto)", txn))
+
+                                Console.Write("Remove " + edsmid);
+                                infodelcmd.Parameters["@EdsmId"].Value = edsmid;
+                                infodelcmd.ExecuteNonQuery();
+                                namedelcmd.Parameters["@EdsmId"].Value = edsmid;
+                                namedelcmd.ExecuteNonQuery();
+
+                                if (mergedto > 0)
                                 {
-                                    cmd.AddParameterWithValue("@name", name);
-                                    cmd.AddParameterWithValue("@id_edsm", edsmid);
-                                    cmd.AddParameterWithValue("@id_edsm_mergedto", mergedto);
-                                    cmd.ExecuteNonQuery();
+                                    infoinscmd.Parameters["@name"].Value = name;
+                                    infoinscmd.Parameters["@id_edsm"].Value = edsmid;
+                                    infoinscmd.Parameters["@id_edsm_mergedto"].Value = mergedto;
+                                    infoinscmd.ExecuteNonQuery();
                                 }
                             }
                         }
-                    }
 
-                    txn.Commit();
+                        txn.Commit();
+                    }
+                    finally
+                    {
+                        if (infoinscmd != null) infoinscmd.Dispose();
+                        if (infodelcmd != null) infodelcmd.Dispose();
+                        if (namedelcmd != null) namedelcmd.Dispose();
+                    }
                 }
             }
         }
