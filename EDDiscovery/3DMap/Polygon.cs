@@ -124,7 +124,96 @@ namespace EDDiscovery2._3DMap
             return (p3.X - p1.X) * (p2.Y - p1.Y) - (p2.X - p1.X) * (p3.Y - p1.Y);
         }
 
+        static List<List<Vector2>> SplitSelfJoiningPolygons(List<Vector2> Polygon)
+        {
+            int N = Polygon.Count;
+
+            if (N >= 6)
+            {
+                for (int i = 0; i < N - 1; i++)
+                {
+                    for (int j = i + 1; j < N; j++)
+                    {
+                        if (Polygon[i].Equals(Polygon[j]))
+                        {
+                            // Split the polygon on the midpoint between the self-connection points
+                            int start = i;
+                            int end = j;
+
+                            if (j - i >= N / 2)
+                            {
+                                start = j;
+                                end = i + N;
+                            }
+
+                            if (end - start >= 4)
+                            {
+                                int mid = (start + end) / 2;
+                                int outmid = (start + end + N) / 2;
+                                int innerlen = (end - start);
+                                int outerlen = N - innerlen;
+                                int mp1 = start + 1;
+                                int mp2 = end + 1;
+                                float mindist = float.MaxValue;
+                                float maxdist = 0;
+
+                                // Find the nearest seam opposite this seam
+                                for (int k = 1; k <= (mid - start); k++)
+                                {
+                                    for (int l = 1; l <= (outmid - end); l++)
+                                    {
+                                        float dist1 = (Polygon[(start + k) % N] - Polygon[(end + l) % N]).Length;
+                                        float dist2 = (Polygon[(end - k) % N] - Polygon[(start + N - l) % N]).Length;
+
+                                        if (dist1 > maxdist)
+                                        {
+                                            maxdist = dist1;
+                                        }
+
+                                        if (dist2 > maxdist)
+                                        {
+                                            maxdist = dist2;
+                                        }
+
+                                        // Avoid picking up points near the first seam
+                                        if (dist1 < maxdist / 2 && dist1 < mindist)
+                                        {
+                                            mindist = dist1;
+                                            mp1 = (start + k) % N;
+                                            mp2 = (end + l) % N;
+                                        }
+
+                                        if (dist2 < maxdist / 2 && dist2 < mindist)
+                                        {
+                                            mindist = dist2;
+                                            mp1 = (end - k) % N;
+                                            mp2 = ((start + N) - l) % N;
+                                        }
+                                    }
+                                }
+
+                                int mp2l = (mp2 + N - mp1) % N;
+
+                                var poly1 = Enumerable.Range(0, mp2l + 1).Select(n => Polygon[(n + mp1) % N]).ToList();
+                                var poly2 = Enumerable.Range(mp2l, N - mp2l + 1).Select(n => Polygon[(n + mp1) % N]).ToList();
+
+                                return SplitSelfJoiningPolygons(poly1).Concat(SplitSelfJoiningPolygons(poly2)).ToList();
+                            }
+                        }
+                    }
+                }
+            }
+
+            return new List<List<Vector2>> { Polygon };
+        }
+
         public static List<List<Vector2>> Triangulate(List<Vector2> Polygon, bool triangulate = false)
+        {
+            var splitpolys = SplitSelfJoiningPolygons(Polygon);
+            return splitpolys.SelectMany(p => _Triangulate(p, triangulate)).ToList();
+        }
+
+        static List<List<Vector2>> _Triangulate(List<Vector2> Polygon, bool triangulate = false)
         {
             var result = new List<List<Vector2>>();
             var tempPolygon = new List<Vector2>(Polygon);       // copy since we need to modify
