@@ -15,7 +15,7 @@ namespace EDDiscovery.DB
             try
             {
                 SQLiteDBClass.ExecuteQuery(conn, "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
-                dbver = SQLiteDBClass.GetSettingInt("DBVer", 1, conn);        // use the constring one, as don't want to go back into ConnectionString code
+                dbver = conn.GetSettingIntCN("DBVer", 1);        // use the constring one, as don't want to go back into ConnectionString code
 
                 DropOldSystemTables(conn);
 
@@ -136,7 +136,7 @@ namespace EDDiscovery.DB
 
             SQLiteDBClass.PerformUpgrade(conn, 20, true, true, new[] { query1, query2 }, () =>
             {
-                SQLiteDBClass.PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
+                conn.PutSettingStringCN("EDSMLastSystems", "2010 - 01 - 01 00:00:00");        // force EDSM sync..
             });
         }
 
