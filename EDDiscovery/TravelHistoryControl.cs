@@ -483,8 +483,8 @@ namespace EDDiscovery
 
             _discoveryForm.history.FillInPositionsFSDJumps();
 
-            map.Prepare(he.System, _discoveryForm.settings.MapHomeSystem,
-                        _discoveryForm.settings.MapCentreOnSelection ? he.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
+            map.Prepare(he?.System, _discoveryForm.settings.MapHomeSystem,
+                        _discoveryForm.settings.MapCentreOnSelection ? he?.System : SystemClass.GetSystem(String.IsNullOrEmpty(HomeSystem) ? "Sol" : HomeSystem),
                         _discoveryForm.settings.MapZoom, _discoveryForm.history.FilterByFSDAndPosition);
             map.Show();
             this.Cursor = Cursors.Default;
