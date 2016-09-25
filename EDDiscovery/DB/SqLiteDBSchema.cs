@@ -441,25 +441,27 @@ namespace EDDiscovery.DB
                 {
                     id_edsm_isset = (long)cmd.ExecuteScalar() != 0;
                 }
+
+                if (!id_edsm_isset)
+                {
+                    System.Diagnostics.Trace.WriteLine("Resetting EDSM and EDDB last update time");
+                    cn.PutSettingStringCN("EDSMLastSystems", "2010-01-01 00:00:00");        // force EDSM sync..
+                    cn.PutSettingStringCN("EDDBSystemsTime", "0");                               // force EDDB
+                    cn.PutSettingStringCN("EDSCLastDist", "2010-01-01 00:00:00");                // force distances
+                }
             }
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
                 UpdateDbSchema(cn, Schema.EDDUser);
 
-                if (!id_edsm_isset)
-                {
-                    System.Diagnostics.Trace.WriteLine("Resetting EDSM and EDDB last update time");
-                    PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00", cn);        // force EDSM sync..
-                    PutSettingString("EDDBSystemsTime", "0", cn);                               // force EDDB
-                    PutSettingString("EDSCLastDist", "2010-01-01 00:00:00", cn);                // force distances
-                }
-
                 // Null out any coordinates where (x,y,z) = (0,0,0) and the system is not Sol
+                /*
                 using (DbCommand cmd = cn.CreateCommand("Update VisitedSystems set x=null, y=null, z=null where x=0 and y=0 and z=0 and name!=\"Sol\""))
                 {
                     cmd.ExecuteNonQuery();
                 }
+                 */
             }
         }
     }

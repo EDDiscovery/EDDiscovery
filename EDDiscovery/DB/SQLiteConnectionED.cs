@@ -9,35 +9,38 @@ using System.Threading;
 
 namespace EDDiscovery.DB
 {
-    public class SQLiteConnectionOld : SQLiteConnectionED
+    public class SQLiteConnectionOld : SQLiteConnectionED<SQLiteConnectionOld>
     {
         public SQLiteConnectionOld() : base(EDDSqlDbSelection.EDDiscovery)
         {
         }
     }
 
-    public class SQLiteConnectionUser : SQLiteConnectionED
+    public class SQLiteConnectionUser : SQLiteConnectionED<SQLiteConnectionUser>
     {
         public SQLiteConnectionUser() : base(SQLiteDBClass.UserDatabase)
         {
         }
     }
 
-    public class SQLiteConnectionSystem : SQLiteConnectionED
+    public class SQLiteConnectionSystem : SQLiteConnectionED<SQLiteConnectionSystem>
     {
         public SQLiteConnectionSystem() : base(SQLiteDBClass.SystemDatabase)
         {
         }
     }
 
-    public class SQLiteConnectionCombined : SQLiteConnectionED
+    /*
+    public class SQLiteConnectionCombined : SQLiteConnectionED<SQLiteConnectionCombined>
     {
         public SQLiteConnectionCombined() : base(EDDSqlDbSelection.None, EDDSqlDbSelection.EDDUser | EDDSqlDbSelection.EDDSystem)
         {
         }
     }
+     */
 
-    public abstract class SQLiteConnectionED : IDisposable              // USE this for connections.. 
+    public abstract class SQLiteConnectionED<TConn> : SQLiteConnectionED
+        where TConn : SQLiteConnectionED, new()
     {
         private static ReaderWriterLockSlim _schemaLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
@@ -61,12 +64,6 @@ namespace EDDiscovery.DB
                 }
             }
         }
-
-        //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
-        // causes the program to become unresponsive during big DB updates
-        private DbConnection _cn;
-
-        public string DBFile { get; private set; }
 
         public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
         {
@@ -105,6 +102,145 @@ namespace EDDiscovery.DB
             }
         }
 
+        public override DbCommand CreateCommand(string cmd, DbTransaction tn = null)
+        {
+            return new SQLiteCommandED<TConn>(_cn.CreateCommand(cmd), tn);
+        }
+
+        public override DbTransaction BeginTransaction(IsolationLevel isolevel)
+        {
+            // Take the transaction lock before beginning the
+            // transaction to avoid a deadlock
+            var txnlock = new SQLiteTxnLockED<TConn>();
+            txnlock.Open();
+            return new SQLiteTransactionED<TConn>(_cn.BeginTransaction(isolevel), txnlock);
+        }
+
+        public override DbTransaction BeginTransaction()
+        {
+            // Take the transaction lock before beginning the
+            // transaction to avoid a deadlock
+            var txnlock = new SQLiteTxnLockED<TConn>();
+            txnlock.Open();
+            return new SQLiteTransactionED<TConn>(_cn.BeginTransaction(), txnlock);
+        }
+
+        public override void Dispose()
+        {
+            Dispose(true);
+        }
+
+        // disposing: true if Dispose() was called, false
+        // if being finalized by the garbage collector
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_cn != null)
+                {
+                    _cn.Close();
+                    _cn.Dispose();
+                    _cn = null;
+                }
+
+                if (_schemaLock.IsReadLockHeld)
+                {
+                    _schemaLock.ExitReadLock();
+                }
+            }
+        }
+
+        #region Settings
+        ///----------------------------
+        /// STATIC functions for discrete values
+
+        static public bool keyExists(string sKey)
+        {
+            using (TConn cn = new TConn())
+            {
+                return cn.keyExistsCN(sKey);
+            }
+        }
+
+        static public int GetSettingInt(string key, int defaultvalue)
+        {
+            using (TConn cn = new TConn())
+            {
+                return cn.GetSettingIntCN(key, defaultvalue);
+            }
+        }
+
+        static public bool PutSettingInt(string key, int intvalue)
+        {
+            using (TConn cn = new TConn())
+            {
+                bool ret = cn.PutSettingIntCN(key, intvalue);
+                return ret;
+            }
+        }
+
+        static public double GetSettingDouble(string key, double defaultvalue)
+        {
+            using (TConn cn = new TConn())
+            {
+                return cn.GetSettingDoubleCN(key, defaultvalue);
+            }
+        }
+
+        static public bool PutSettingDouble(string key, double doublevalue)
+        {
+            using (TConn cn = new TConn())
+            {
+                bool ret = cn.PutSettingDoubleCN(key, doublevalue);
+                return ret;
+            }
+        }
+
+        static public bool GetSettingBool(string key, bool defaultvalue)
+        {
+            using (TConn cn = new TConn())
+            {
+                return cn.GetSettingBoolCN(key, defaultvalue);
+            }
+        }
+
+
+        static public bool PutSettingBool(string key, bool boolvalue)
+        {
+            using (TConn cn = new TConn())
+            {
+                bool ret = cn.PutSettingBoolCN(key, boolvalue);
+                return ret;
+            }
+        }
+
+        static public string GetSettingString(string key, string defaultvalue)
+        {
+            using (TConn cn = new TConn())
+            {
+                return cn.GetSettingStringCN(key, defaultvalue);
+            }
+        }
+
+        static public bool PutSettingString(string key, string strvalue)        // public IF
+        {
+            using (TConn cn = new TConn())
+            {
+                bool ret = cn.PutSettingStringCN(key, strvalue);
+                return ret;
+            }
+        }
+        #endregion
+    }
+
+    public abstract class SQLiteConnectionED : IDisposable              // USE this for connections.. 
+    {
+        //static Object monitor = new Object();                 // monitor disabled for now - it will prevent SQLite DB locked errors but 
+        // causes the program to become unresponsive during big DB updates
+        protected DbConnection _cn;
+
+        public string DBFile { get; protected set; }
+
         public static string GetSQLiteDBFile(EDDSqlDbSelection selector)
         {
             if (selector == EDDSqlDbSelection.None)
@@ -129,7 +265,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        private void AttachDatabase(EDDSqlDbSelection dbflag, string name)
+        protected void AttachDatabase(EDDSqlDbSelection dbflag, string name)
         {
             // Check if the connection is already connected to the selected database
             using (DbCommand cmd = _cn.CreateCommand("PRAGMA database_list"))
@@ -156,52 +292,198 @@ namespace EDDiscovery.DB
             }
         }
 
-        public DbCommand CreateCommand(string cmd, DbTransaction tn = null)
-        {
-            return new SQLiteCommandED(_cn.CreateCommand(cmd), tn);
-        }
+        public abstract DbCommand CreateCommand(string cmd, DbTransaction tn = null);
+        public abstract DbTransaction BeginTransaction(IsolationLevel isolevel);
+        public abstract DbTransaction BeginTransaction();
+        public abstract void Dispose();
 
-        public DbTransaction BeginTransaction(IsolationLevel isolevel)
-        {
-            // Take the transaction lock before beginning the
-            // transaction to avoid a deadlock
-            var txnlock = new SQLiteTxnLockED();
-            txnlock.Open();
-            return new SQLiteTransactionED(_cn.BeginTransaction(isolevel), txnlock);
-        }
 
-        public DbTransaction BeginTransaction()
-        {
-            // Take the transaction lock before beginning the
-            // transaction to avoid a deadlock
-            var txnlock = new SQLiteTxnLockED();
-            txnlock.Open();
-            return new SQLiteTransactionED(_cn.BeginTransaction(), txnlock);
-        }
+        #region Settings
+        ///----------------------------
+        /// STATIC functions for discrete values
 
-        public void Dispose()
+        public bool keyExistsCN(string sKey)
         {
-            Dispose(true);
-        }
-
-        // disposing: true if Dispose() was called, false
-        // if being finalized by the garbage collector
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
+            using (DbCommand cmd = CreateCommand("select ID from Register WHERE ID=@key"))
             {
-                if (_cn != null)
-                {
-                    _cn.Close();
-                    _cn.Dispose();
-                    _cn = null;
-                }
-
-                if (_schemaLock.IsReadLockHeld)
-                {
-                    _schemaLock.ExitReadLock();
-                }
+                cmd.AddParameterWithValue("@key", sKey);
+                return cmd.ExecuteScalar() != null;
             }
         }
+
+        public int GetSettingIntCN(string key, int defaultvalue)
+        {
+            try
+            {
+                using (DbCommand cmd = CreateCommand("SELECT ValueInt from Register WHERE ID = @ID"))
+                {
+                    cmd.AddParameterWithValue("@ID", key);
+
+                    object ob = cmd.ExecuteScalar();
+
+                    if (ob == null || ob == DBNull.Value)
+                        return defaultvalue;
+
+                    int val = Convert.ToInt32(ob);
+
+                    return val;
+                }
+            }
+            catch
+            {
+                return defaultvalue;
+            }
+        }
+
+        public bool PutSettingIntCN(string key, int intvalue)
+        {
+            try
+            {
+                if (keyExistsCN(key))
+                {
+                    using (DbCommand cmd = CreateCommand("Update Register set ValueInt = @ValueInt Where ID=@ID"))
+                    {
+                        cmd.AddParameterWithValue("@ID", key);
+                        cmd.AddParameterWithValue("@ValueInt", intvalue);
+                        cmd.ExecuteNonQuery();
+                        return true;
+                    }
+                }
+                else
+                {
+                    using (DbCommand cmd = CreateCommand("Insert into Register (ID, ValueInt) values (@ID, @valint)"))
+                    {
+                        cmd.AddParameterWithValue("@ID", key);
+                        cmd.AddParameterWithValue("@valint", intvalue);
+                        cmd.ExecuteNonQuery();
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public double GetSettingDoubleCN(string key, double defaultvalue)
+        {
+            try
+            {
+                using (DbCommand cmd = CreateCommand("SELECT ValueDouble from Register WHERE ID = @ID"))
+                {
+                    cmd.AddParameterWithValue("@ID", key);
+
+                    object ob = cmd.ExecuteScalar();
+
+                    if (ob == null || ob == DBNull.Value)
+                        return defaultvalue;
+
+                    double val = Convert.ToDouble(ob);
+
+                    return val;
+                }
+            }
+            catch
+            {
+                return defaultvalue;
+            }
+        }
+
+        public bool PutSettingDoubleCN(string key, double doublevalue)
+        {
+            try
+            {
+                if (keyExistsCN(key))
+                {
+                    using (DbCommand cmd = CreateCommand("Update Register set ValueDouble = @ValueDouble Where ID=@ID"))
+                    {
+                        cmd.AddParameterWithValue("@ID", key);
+                        cmd.AddParameterWithValue("@ValueDouble", doublevalue);
+                        cmd.ExecuteNonQuery();
+                        return true;
+                    }
+                }
+                else
+                {
+                    using (DbCommand cmd = CreateCommand("Insert into Register (ID, ValueDouble) values (@ID, @valdbl)"))
+                    {
+                        cmd.AddParameterWithValue("@ID", key);
+                        cmd.AddParameterWithValue("@valdbl", doublevalue);
+                        cmd.ExecuteNonQuery();
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool GetSettingBoolCN(string key, bool defaultvalue)
+        {
+            return GetSettingIntCN(key, defaultvalue ? 1 : 0) != 0;
+        }
+
+        public bool PutSettingBoolCN(string key, bool boolvalue)
+        {
+            return PutSettingIntCN(key, boolvalue ? 1 : 0);
+        }
+
+        public string GetSettingStringCN(string key, string defaultvalue)
+        {
+            try
+            {
+                using (DbCommand cmd = CreateCommand("SELECT ValueString from Register WHERE ID = @ID"))
+                {
+                    cmd.AddParameterWithValue("@ID", key);
+                    object ob = cmd.ExecuteScalar();
+
+                    if (ob == null || ob == DBNull.Value)
+                        return defaultvalue;
+
+                    string val = (string)ob;
+
+                    return val;
+                }
+            }
+            catch
+            {
+                return defaultvalue;
+            }
+        }
+
+        public bool PutSettingStringCN(string key, string strvalue)
+        {
+            try
+            {
+                if (keyExistsCN(key))
+                {
+                    using (DbCommand cmd = CreateCommand("Update Register set ValueString = @ValueString Where ID=@ID"))
+                    {
+                        cmd.AddParameterWithValue("@ID", key);
+                        cmd.AddParameterWithValue("@ValueString", strvalue);
+                        cmd.ExecuteNonQuery();
+                        return true;
+                    }
+                }
+                else
+                {
+                    using (DbCommand cmd = CreateCommand("Insert into Register (ID, ValueString) values (@ID, @valint)"))
+                    {
+                        cmd.AddParameterWithValue("@ID", key);
+                        cmd.AddParameterWithValue("@valint", strvalue);
+                        cmd.ExecuteNonQuery();
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
     }
 }
