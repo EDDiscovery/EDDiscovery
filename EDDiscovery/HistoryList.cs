@@ -10,8 +10,10 @@ using System.Text;
 
 namespace EDDiscovery
 {
-    public class HistoryEntry
-    {                                   // DONT store commander ID.. this history is externally filtered on it.
+    public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
+    {                                   
+        public int Indexno;            // for display purposes.
+
         public EliteDangerous.JournalTypeEnum EntryType;
         public long Journalid;
 
@@ -46,7 +48,7 @@ namespace EDDiscovery
             EventDetailedInfo = info;
             MapColour = m;
             Journalid = journalid;
-            EdsmSync = true; // TBD for now
+            EdsmSync = true; 
         }
 
         public static HistoryEntry FromVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0)
@@ -62,7 +64,7 @@ namespace EDDiscovery
                 EventDetailedInfo = info,
                 MapColour = m,
                 Journalid = journalid,
-                EdsmSync = true // TBD for now
+                EdsmSync = true 
             };
         }
 

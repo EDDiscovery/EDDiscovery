@@ -682,9 +682,9 @@ namespace EDDiscovery
             string rowIdx; 
 
             if (_discoveryForm.settings.OrderRowsInverted)
-                 rowIdx = he.Journalid.ToString();            // oldest has the highest index
+                 rowIdx = he.Indexno.ToString();            // oldest has the highest index
             else
-                rowIdx = (totalentries - he.Journalid + 1).ToString();
+                rowIdx = (totalentries - he.Indexno + 1).ToString();
 
             var centerFormat = new StringFormat()
             {

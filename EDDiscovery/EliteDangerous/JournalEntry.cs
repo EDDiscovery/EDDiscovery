@@ -391,6 +391,43 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        public static void UpdateEDSMIDAndPos(long journalid, ISystem system, bool jsonpos)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid"))
+                {
+                    cmd.AddParameterWithValue("@journalid", journalid);
+
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            JournalEntry ent = CreateJournalEntry(reader);
+
+                            JObject jo = (JObject)JObject.Parse(ent.EventDataString);
+
+                            if (jsonpos)
+                            {
+                                jo["StarPos"] = new JArray() { system.x, system.y, system.z };
+                            }
+
+                            using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID"))
+                            {
+                                cmd2.AddParameterWithValue("@ID", journalid);
+                                cmd2.AddParameterWithValue("@EventData", jo.ToString());
+                                cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
+
+                                Console.WriteLine("Update journal ID {0}", journalid);
+                                SQLiteDBClass.SQLNonQueryText(cn, cmd2);
+                                Console.WriteLine("Complete {0}", journalid);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         static public List<JournalEntry> GetAll(int commander = -999)
         {
             List<JournalEntry> list = new List<JournalEntry>();

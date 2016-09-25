@@ -1623,9 +1623,12 @@ namespace EDDiscovery
 
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
+                int indexno = 1;
                 foreach (EliteDangerous.JournalEntry je in jlist)
                 {
                     HistoryEntry he = new HistoryEntry();
+                    he.Indexno = indexno++;
+                     
                     string summary, info, detailed;
                     je.FillInformation(out summary, out info, out detailed);
 
