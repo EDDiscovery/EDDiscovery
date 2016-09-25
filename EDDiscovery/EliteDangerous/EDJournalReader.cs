@@ -42,7 +42,7 @@ namespace EDDiscovery.EliteDangerous
             while (this.ReadLine(out line))
             {
                 je = JournalEntry.CreateJournalEntry(line);
-                if ( je.EventType == JournalTypeEnum.LoadGame )
+                if ( je.EventTypeID == JournalTypeEnum.LoadGame )
                 {
                     string newname = (je as JournalEvents.JournalLoadGame).LoadGameCommander;
 
