@@ -370,16 +370,16 @@ namespace EDDiscovery2
                         cmd.AddParameter("@Deleted", DbType.Boolean);
 
                         // Migrate old settigns.
-                        string apikey = SQLiteDBClass.GetSettingString("EDSMApiKey", "", conn);
-                        string commanderName = SQLiteDBClass.GetSettingString("CommanderName", "", conn);
+                        string apikey = conn.GetSettingStringCN("EDSMApiKey", "");
+                        string commanderName = conn.GetSettingStringCN("CommanderName", "");
 
                         for (int i = 0; i < 100; i++)
                         {
                             EDCommander cmdr = new EDCommander(i,
-                                SQLiteDBClass.GetSettingString("EDCommanderName" + i.ToString(), commanderName, conn),
-                                SQLiteDBClass.GetSettingString("EDCommanderApiKey" + i.ToString(), apikey, conn));
-                            cmdr.NetLogDir = SQLiteDBClass.GetSettingString("EDCommanderNetLogPath" + i.ToString(), null, conn);
-                            bool deleted = SQLiteDBClass.GetSettingBool("EDCommanderDeleted" + i.ToString(), false, conn);
+                                conn.GetSettingStringCN("EDCommanderName" + i.ToString(), commanderName),
+                                conn.GetSettingStringCN("EDCommanderApiKey" + i.ToString(), apikey));
+                            cmdr.NetLogDir = conn.GetSettingStringCN("EDCommanderNetLogPath" + i.ToString(), null);
+                            bool deleted = conn.GetSettingBoolCN("EDCommanderDeleted" + i.ToString(), false);
 
                             if (cmdr.Name != "")
                             {

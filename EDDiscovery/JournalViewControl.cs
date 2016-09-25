@@ -94,7 +94,7 @@ namespace EDDiscovery
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
             ignorewidthchange = true;
-            if (SQLiteDBClass.keyExists("JournalControlDGVCol1"))        // if stored values, set back to what they were..
+            if (SQLiteConnectionUser.keyExists("JournalControlDGVCol1"))        // if stored values, set back to what they were..
             {
                 for (int i = 0; i < dataGridViewJournal.Columns.Count; i++)
                 {
