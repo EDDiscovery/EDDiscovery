@@ -46,6 +46,9 @@ namespace EDDiscovery.EliteDangerous
             string line;
             while (this.ReadLine(out line))
             {
+                if (line.Length == 0)
+                    continue;
+
                 System.Diagnostics.Trace.WriteLine(string.Format("Read line {0} from {1}", line, this.FileName));
 
                 je = JournalEntry.CreateJournalEntry(line);
