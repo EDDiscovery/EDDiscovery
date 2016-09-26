@@ -271,6 +271,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalRefuelAll.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRefuelPartial.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRepair.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRepairAll.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRestockVehicle.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalResurrect.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />

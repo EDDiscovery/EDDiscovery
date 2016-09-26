@@ -896,9 +896,12 @@ namespace EDDiscovery.EliteDangerous
 
 
                 case "CapShipBond":
+                    je = new JournalCapShipBond(jo);
+                    break;
                 case "ClearSavedGame":
-              
-              
+                    je = new JournalClearSavedGame(jo);
+                    break;
+
                 case "EjectCargo":
                 case "LaunchFighter":
 
