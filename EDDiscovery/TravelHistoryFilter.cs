@@ -71,7 +71,7 @@ namespace EDDiscovery
             }
             else
             {
-                return hl.OrderByDate;
+                return hl.LastFirst;
             }
         }
 
