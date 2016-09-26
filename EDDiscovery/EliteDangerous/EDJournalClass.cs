@@ -151,7 +151,7 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
 
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
             {
                 for (int i = 0; i < readersToUpdate.Count; i++)
                 {
@@ -172,9 +172,8 @@ namespace EDDiscovery.EliteDangerous
                             je.Add(cn, tn);
                         }
 
-                        reader.TravelLogUnit.Update(cn, tn);
-
                         tn.Commit();
+                        reader.TravelLogUnit.Update();
                     }
 
                     if (updateProgress != null)
@@ -217,6 +216,7 @@ namespace EDDiscovery.EliteDangerous
             {
                 reader = new EDJournalReader(fi.FullName);
 
+#if false
                 // Bring over the commander from the previous log if possible
                 Match match = journalNamePrefixRe.Match(fi.Name);
                 if (match.Success)
@@ -226,19 +226,19 @@ namespace EDDiscovery.EliteDangerous
                     int part;
                     if (Int32.TryParse(partstr, NumberStyles.Integer, CultureInfo.InvariantCulture, out part) && part > 1)
                     {
-                        EDCommander lastcmdr = EDDConfig.Instance.CurrentCommander;
+                        //EDCommander lastcmdr = EDDConfig.Instance.CurrentCommander;
                         var lastreader = netlogreaders.Where(kvp => kvp.Key.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
                                                       .Select(k => k.Value)
                                                       .FirstOrDefault();
-                        if (lastreader != null)
-                        {
-                            lastcmdr = lastreader.Commander;
-                        }
+                        //if (lastreader != null)
+                        //{
+                            //lastcmdr = lastreader.Commander;
+                        //}
 
-                        reader.Commander = lastcmdr;
+                        //reader.Commander = lastcmdr;
                     }
                 }
-
+#endif
                 netlogreaders[fi.Name] = reader;
             }
 
@@ -409,7 +409,7 @@ namespace EDDiscovery.EliteDangerous
 
                     netlogpos = nfi.TravelLogUnit.Size;
 
-                    using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+                    using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
                     {
                         using (DbTransaction txn = cn.BeginTransaction())
                         {

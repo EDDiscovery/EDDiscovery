@@ -10,8 +10,6 @@ namespace EDDiscovery.EliteDangerous
 {
     public class EDJournalReader : LogReaderBase
     {
-        protected EDCommander _commander;
-
         // Close Quarters Combat
         public bool CQC { get; set; }
 
@@ -21,7 +19,8 @@ namespace EDDiscovery.EliteDangerous
         public TimeSpan TimeZoneOffset { get; set; }
 
         // Commander
-        public EDCommander Commander { get { return _commander; } set { _commander = value; } }
+        //protected EDCommander _commander;
+        //public EDCommander Commander { get { return _commander; } set { _commander = value; } }
 
         // Journal ID
         public int JournalId { get { return (int)TravelLogUnit.id; } }
@@ -36,24 +35,37 @@ namespace EDDiscovery.EliteDangerous
 
         public bool ReadJournalLog(out JournalEntry je)
         {
-            int cmdrid = (_commander!= null)  ? _commander.Nr : -1;
+            int cmdrid = -1;
+
+            if (TravelLogUnit.CommanderId.HasValue)
+            {
+                cmdrid = TravelLogUnit.CommanderId.Value;
+                System.Diagnostics.Trace.WriteLine(string.Format("TLU says commander {0} ", cmdrid));
+            }
 
             string line;
             while (this.ReadLine(out line))
             {
-                System.Diagnostics.Trace.WriteLine(string.Format("Read line {0} from {1}", line, this.FileName ));
+                System.Diagnostics.Trace.WriteLine(string.Format("Read line {0} from {1}", line, this.FileName));
 
                 je = JournalEntry.CreateJournalEntry(line);
                 if ( je.EventTypeID == JournalTypeEnum.LoadGame )
                 {
                     string newname = (je as JournalEvents.JournalLoadGame).LoadGameCommander;
 
-                    _commander = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
+                    EDCommander _commander = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
 
                     if (_commander == null)
                         _commander= EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname);
 
                     cmdrid = _commander.Nr;
+
+                    if (!TravelLogUnit.CommanderId.HasValue )
+                    {
+                        TravelLogUnit.CommanderId = cmdrid;
+                        TravelLogUnit.Update();
+                        System.Diagnostics.Trace.WriteLine(string.Format("TLU {0} updated with commander {1}", TravelLogUnit.Path, cmdrid));
+                    }
                 }
 
                 je.JournalId = (int)TravelLogUnit.id;
