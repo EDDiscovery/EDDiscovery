@@ -90,6 +90,65 @@ namespace EDDiscovery
             };
         }
 
+        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, SQLiteConnectionSystem conn = null)
+        {
+            ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
+            int indexno = prev == null ? 1 : prev.Indexno + 1;
+
+            string summary, info, detailed;
+            je.FillInformation(out summary, out info, out detailed);
+
+            int mapcolour = 0;
+
+            if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
+            {
+                EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
+                EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
+
+                ISystem newsys;
+
+                if (jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
+                {
+                    newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
+                    newsys.id_edsm = jl.EdsmID;       // pass across the EDSMID for the lazy load process.
+                }
+                else
+                {                           // try and find it, preferably thru id, else thru name
+                    newsys = new SystemClass(jl.StarSystem);
+                    newsys.id_edsm = jl.EdsmID;
+
+                    SystemClass s = SystemClass.EDSMAssign(newsys, jl.Id, conn);      // has no co-ord, did we find it?
+
+                    if (s != null)                                              // yes, use
+                        newsys = s;
+                }
+
+                if (jfsd != null)
+                {
+                    if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
+                        info += SystemClass.Distance(isys, newsys).ToString("0.00") + " ly";
+
+                    mapcolour = jfsd.MapColor;
+                }
+
+                isys = newsys;
+            }
+
+            return new HistoryEntry
+            {
+                Indexno = indexno,
+                EntryType = je.EventTypeID,
+                Journalid = je.JournalId,
+                System = isys,
+                EventTime = je.EventTimeLocal,
+                MapColour = mapcolour,
+                EdsmSync = je.SyncedEDSM,
+                EventSummary = summary,
+                EventDescription = info,
+                EventDetailedInfo = detailed
+            };
+        }
+
         public System.Drawing.Bitmap GetIcon
         {  get
             { 
