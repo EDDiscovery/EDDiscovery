@@ -223,8 +223,8 @@ namespace EDDiscovery.EliteDangerous
 
     public abstract class JournalEntry
     {
-        public int Id;                          // this is the entry ID
-        public int JournalId;                   // this ID of the journal tlu (aka TravelLogId)
+        public long Id;                          // this is the entry ID
+        public long JournalId;                   // this ID of the journal tlu (aka TravelLogId)
         public int CommanderId;                 // commander Id of entry
 
         public string EventTypeStr;          // these two duplicate each other, string if for debuggin in the db view of a browser
@@ -285,14 +285,25 @@ namespace EDDiscovery.EliteDangerous
             string[] r2 = removedefault.Split(';');
 
             JObject jo = JObject.Parse(EventDataString);  // Create a clone
+            List <JToken> tokens = jo.Children().ToList();  // token list
 
             string outstr = "";
 
-            foreach (JToken jt in jo.Children())
+            foreach (JToken jt in tokens)
             {
                 if (!r1.Contains(jt.Path) && !r2.Contains(jt.Path))     // don't print these
                 {
-                    outstr += jt.Path + ":";
+                    string pname = jt.Path;
+
+                    if (tokens.FindIndex(x => x.Path.Equals(pname + "_Localised")) >= 0)  // if we have a localised version, don't print this
+                        continue;
+
+                    int localisedindex = pname.IndexOf("_Localised");
+
+                    if (localisedindex >= 0)
+                        pname = pname.Substring(0, localisedindex);     // cut out all past there.
+
+                    outstr += pname + ":";
 
                     //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Path));
 
@@ -302,7 +313,7 @@ namespace EDDiscovery.EliteDangerous
                         {
                             if (jc.HasValues)
                             {
-                                outstr += "[";
+                                outstr += "(";
                                 bool first = true;
                                 foreach (JToken jd in jc.Children())
                                 {
@@ -313,7 +324,7 @@ namespace EDDiscovery.EliteDangerous
                                     outstr += jd.Value<string>();
                                 }
 
-                                outstr += "]";
+                                outstr += ")";
                             }
                             else
                             {
@@ -378,6 +389,17 @@ namespace EDDiscovery.EliteDangerous
             {
                 bool ret = Add(cn);
                 return ret;
+            }
+        }
+
+        public long LastID()
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from JournalEntries"))
+                {
+                    return (long)SQLiteDBClass.SQLScalar(cn, cmd2);
+                }
             }
         }
 

@@ -41,6 +41,8 @@ namespace EDDiscovery.EliteDangerous
             string line;
             while (this.ReadLine(out line))
             {
+                System.Diagnostics.Trace.WriteLine(string.Format("Read line {0} from {1}", line, this.FileName ));
+
                 je = JournalEntry.CreateJournalEntry(line);
                 if ( je.EventTypeID == JournalTypeEnum.LoadGame )
                 {

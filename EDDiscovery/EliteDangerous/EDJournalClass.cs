@@ -18,32 +18,19 @@ namespace EDDiscovery.EliteDangerous
 {
     public class EDJournalClass
     {
-        private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");
-        [DllImport("Shell32.dll")]
-        private static extern uint SHGetKnownFolderPath(
-            [MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
-            uint dwFlags,
-            IntPtr hToken,
-            out IntPtr pszPath  // API uses CoTaskMemAlloc
-        );
-
         public delegate void NewJournalEntryHandler(JournalEntry je);
-
         public event NewJournalEntryHandler OnNewJournalEntry;
 
         Dictionary<string, EDJournalReader> netlogreaders = new Dictionary<string, EDJournalReader>();
-
         FileSystemWatcher m_Watcher;
         string m_watcherfolder;
         ConcurrentQueue<string> m_netLogFileQueue;
         System.Windows.Forms.Timer m_scantimer;
         System.ComponentModel.BackgroundWorker m_worker;
-
         EDJournalReader lastnfi = null;          // last one read..
-
         private static Regex journalNamePrefixRe = new Regex("(?<prefix>.*)[.]0*(?<part>[0-9][0-9]*)[.]log");
 
-        public EDJournalClass(EDDiscoveryForm ds)
+        public EDJournalClass()
         {
         }
 
@@ -113,25 +100,20 @@ namespace EDDiscovery.EliteDangerous
         }
 
         // called during start up and if refresh history is pressed
-        public List<JournalEntry> ParseJournalFiles(out string error, bool forceReload = false)
+        public List<JournalEntry> ParseJournalFiles(bool forceReload = false)
         {
-            return ParseJournalFiles(out error, EDDConfig.Instance.DefaultMapColour, () => false, (p, s) => { }, forceReload);
+            return ParseJournalFiles(EDDConfig.Instance.DefaultMapColour, () => false, (p, s) => { }, forceReload);
         }
 
 
-        public List<JournalEntry> ParseJournalFiles(out string error, int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
+        public List<JournalEntry> ParseJournalFiles(int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
-            error = null;
-
             string datapath = GetJournalDir();  // ensures folder is there, else null.
 
             if (datapath == null)
-            {
-                error = "Journal directory not found!" + Environment.NewLine + "Specify location in settings tab";
                 return null;
-            }
 
-            Dictionary<int, List<JournalEntry>> journalentries = JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).GroupBy(e => e.JournalId).ToDictionary(g => g.Key, g => g.ToList());
+            Dictionary<long, List<JournalEntry>> journalentries = JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).GroupBy(e => e.JournalId).ToDictionary(g => g.Key, g => g.ToList());
             Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
 
             // order by file write time so we end up on the last one written
@@ -182,6 +164,10 @@ namespace EDDiscovery.EliteDangerous
                     {
                         foreach (JournalEntry je in entries)
                         {
+                            if (!journalentries.ContainsKey(je.JournalId))                      //Rob added
+                                journalentries.Add(je.JournalId, new List<JournalEntry>());
+
+                            System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", je.EventTimeUTC, je.EventTypeStr));
                             journalentries[je.JournalId].Add(je);
                             je.Add(cn, tn);
                         }
@@ -200,13 +186,15 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
 
-            return journalentries.OrderBy(kvp => kvp.Key).SelectMany(kvp => kvp.Value).OrderBy(j => j.EventTimeUTC).ToList();
+            return journalentries.OrderBy(kvp => kvp.Key).SelectMany(kvp => kvp.Value).OrderBy(j => j.EventTimeUTC).OrderBy(j=>j.Id).ToList();
         }
 
         private EDJournalReader OpenFileReader(FileInfo fi, Dictionary<string, TravelLogUnit> tlu_lookup = null)
         {
             EDJournalReader reader;
             TravelLogUnit tlu;
+
+            System.Diagnostics.Trace.WriteLine(string.Format("File Read {0}", fi.FullName));
 
             if (netlogreaders.ContainsKey(fi.Name))
             {
@@ -259,6 +247,10 @@ namespace EDDiscovery.EliteDangerous
 
         public void StartMonitor()
         {
+            return;
+
+            // BUGS in scanning.. basically the reader does not know the commander ID if it has just reopened the file.
+
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
             if (m_Watcher == null)
@@ -290,7 +282,7 @@ namespace EDDiscovery.EliteDangerous
                         m_scantimer.Tick += ScanTick;
                         m_scantimer.Start();
 
-                        Console.WriteLine("Start Monitor");
+                        System.Diagnostics.Trace.WriteLine("Start Monitor");
                     }
                 }
                 catch (Exception ex)
@@ -322,11 +314,11 @@ namespace EDDiscovery.EliteDangerous
                 m_Watcher.Dispose();
                 m_Watcher = null;
 
-                Console.WriteLine("Stop Monitor");
+                System.Diagnostics.Trace.WriteLine("Stop Monitor");
             }
         }
 
-        private void NetLogDirChanged() // call from owner of scanner.
+        public void NetLogDirChanged() // call from owner of scanner.
         {
             if (m_Watcher != null)       
             {
@@ -345,6 +337,7 @@ namespace EDDiscovery.EliteDangerous
 
                 foreach (var ent in entries)
                 {
+                    System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
                     OnNewJournalEntry(ent);
                 }
             }
@@ -381,9 +374,12 @@ namespace EDDiscovery.EliteDangerous
                 {
                     nfi = OpenFileReader(new FileInfo(filename));
                     lastnfi = nfi;
+                    System.Diagnostics.Trace.WriteLine(string.Format("Change in file, scan {0}", lastnfi.FileName));
                 }
-                else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
+                else if (lastnfi != null && (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length))
                 {
+                    System.Diagnostics.Trace.WriteLine(string.Format("Change in length {0}, scan files {1} {2}", lastnfi.FileName, lastnfi.filePos, new FileInfo(lastnfi.FileName).Length));
+
                     HashSet<string> tlunames = new HashSet<string>(TravelLogUnit.GetAllNames());
                     string[] filenames = Directory.EnumerateFiles(m_watcherfolder, "Journal.*.log", SearchOption.AllDirectories)
                                                   .Select(s => new { name = Path.GetFileName(s), fullname = s })
@@ -413,14 +409,17 @@ namespace EDDiscovery.EliteDangerous
 
                     netlogpos = nfi.TravelLogUnit.Size;
 
-                    foreach (JournalEntry je in nfi.ReadJournalLog())
+                    using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
                     {
-                        entries.Add(je);
-                        je.Add();
-
-                        if (worker.CancellationPending)
+                        using (DbTransaction txn = cn.BeginTransaction())
                         {
-                            break;
+                            foreach (JournalEntry je in nfi.ReadJournalLog())
+                            {
+                                entries.Add(je);
+                                je.Add(cn, txn);
+                            }
+
+                            txn.Commit();
                         }
                     }
 
@@ -451,5 +450,15 @@ namespace EDDiscovery.EliteDangerous
             string filename = e.FullPath;
             m_netLogFileQueue.Enqueue(filename);
         }
+
+        private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");
+        [DllImport("Shell32.dll")]
+        private static extern uint SHGetKnownFolderPath(
+            [MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
+            uint dwFlags,
+            IntPtr hToken,
+            out IntPtr pszPath  // API uses CoTaskMemAlloc
+        );
+
     }
 }
