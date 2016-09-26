@@ -412,7 +412,7 @@ namespace EDDiscovery.EliteDangerous
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
                 cmd.AddParameterWithValue("@EventTypeId", EventTypeID);
                 cmd.AddParameterWithValue("@EventStrName", EventTypeStr);
-                cmd.AddParameterWithValue("@EventData", EventDataString);
+                ////cmd.AddParameterWithValue("@EventData", EventDataString);
                 cmd.AddParameterWithValue("@EdsmId", EdsmID);
                 cmd.AddParameterWithValue("@Synced", Synced);
 

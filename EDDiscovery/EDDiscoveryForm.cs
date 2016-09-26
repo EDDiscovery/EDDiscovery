@@ -1676,13 +1676,14 @@ namespace EDDiscovery
                             if (s != null)                                              // yes, use
                                 newsys = s;
                         }
-
-                        if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate ) // if no JDist, its a really old entry, and if previous has a co-ord
-                            info += SystemClass.Distance(isys, newsys).ToString("0.00") + " ly";
-
                         if (jfsd != null)
-                            mapcolour = jfsd.MapColor;
+                        {
+                            if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
+                                info += SystemClass.Distance(isys, newsys).ToString("0.00") + " ly";
 
+
+                            mapcolour = jfsd.MapColor;
+                        }
                         isys = newsys;
                     }
 
