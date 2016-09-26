@@ -779,7 +779,7 @@ namespace EDDiscovery.EliteDangerous
                     break;
                     
                 case "Progress":
-                    je = new JournalRank(jo);
+                    je = new JournalProgress(jo);
                     break;
 
                 case "SupercruiseEntry":
@@ -820,10 +820,10 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalScreenshot(jo);
                     break;
                 case "SelfDestruct":
-                    je = new JournalShieldState(jo);
+                    je = new JournalSelfDestruct(jo);
                     break;
                 case "ShieldState":
-                    je = new JournalSelfDestruct(jo);
+                    je = new JournalShieldState(jo);
                     break;
                 case "ShipyardBuy":
                     je = new JournalShipyardBuy(jo);
