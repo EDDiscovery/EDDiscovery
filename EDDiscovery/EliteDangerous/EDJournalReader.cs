@@ -78,7 +78,7 @@ namespace EDDiscovery.EliteDangerous
 
                     return true;
                 }
-                catch (  Exception e )          // CreateJournal Entry may except, in which case, the line is crap
+                catch (  Exception )          // CreateJournal Entry may except, in which case, the line is crap
                 {
 
                 }
