@@ -248,7 +248,7 @@ namespace EDDiscovery.EliteDangerous
 
         public void StartMonitor()
         {
-            return;
+            //return;
 
             // BUGS in scanning.. basically the reader does not know the commander ID if it has just reopened the file.
 
