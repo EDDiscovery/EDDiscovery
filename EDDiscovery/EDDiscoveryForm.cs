@@ -94,7 +94,8 @@ namespace EDDiscovery
         Task<bool> downloadMapsTask = null;
         Task checkInstallerTask = null;
         private string logname = "";
-        //TBD public NetLogClass netlog;
+
+        EliteDangerous.EDJournalClass journalmonitor;
 
         private bool CanSkipSlowUpdates()
         {
@@ -177,7 +178,7 @@ namespace EDDiscovery
 
             Map = new EDDiscovery2._3DMap.MapManager(option_nowindowreposition, travelHistoryControl1);
 
-            //TBD netlog = new NetLogClass(this);
+            journalmonitor = new EliteDangerous.EDJournalClass();
 
             this.TopMost = EDDConfig.KeepOnTop;
 
@@ -593,7 +594,7 @@ namespace EDDiscovery
 
             if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
             {
-                // Also update galactic mapping from EDSM (MOVED here for now since we don't use this yet..)
+                // Also update galactic mapping from EDSM 
                 travelHistoryControl1.LogLine("Get galactic mapping from EDSM.");
                 galacticMapping.DownloadFromEDSM();
 
@@ -649,13 +650,14 @@ namespace EDDiscovery
                 routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
                 routeControl1.travelhistorycontrol1 = travelHistoryControl1;
-                //TBDnetlog.OnNewPosition += new NetLogClass.NetLogEventHandler(NewPosition);
-                //TBD REMOVED - sync from not working   sync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(RefreshEDSMEvent);
+                journalmonitor.OnNewJournalEntry += NewPosition;
+                //TBD REMOVED - EDSM sync from not working   EDSMsync.OnNewEDSMTravelLog += new EDSMNewSystemEventHandler(RefreshEDSMEvent);
 
                 panelInfo.Visible = false;
 
                 travelHistoryControl1.LogLine("Reading travel history");
                 HistoryRefreshed += _travelHistoryControl1_InitialRefreshDone;
+
                 RefreshHistoryAsync();
 
                 DeleteOldLogFiles();
@@ -812,8 +814,8 @@ namespace EDDiscovery
 
                 if (performhistoryrefresh)
                 {
-                    travelHistoryControl1.LogLine("Update visited systems due to update");
-                    HistoryRefreshed += TravelHistoryControl1_HistoryRefreshed;
+                    travelHistoryControl1.LogLine("Refresh due to updating systems");
+                    HistoryRefreshed += HistoryFinishedRefreshing;
                     RefreshHistoryAsync();
                 }
 
@@ -821,9 +823,9 @@ namespace EDDiscovery
             }
         }
 
-        private void TravelHistoryControl1_HistoryRefreshed(object sender, EventArgs e)
+        private void HistoryFinishedRefreshing(object sender, EventArgs e)
         {
-            HistoryRefreshed -= TravelHistoryControl1_HistoryRefreshed;
+            HistoryRefreshed -= HistoryFinishedRefreshing;
             travelHistoryControl1.LogLine("Refreshing complete.");
 
             if (syncwasfirstrun)
@@ -1201,7 +1203,7 @@ namespace EDDiscovery
                 _syncWorkerCompletedEvent.WaitOne();
 
             Console.WriteLine("Stopping discrete threads");
-            //TBDnetlog.StopMonitor();
+            journalmonitor.StopMonitor();
 
             if (EdsmSync != null)
                 EdsmSync.StopSync();
@@ -1279,7 +1281,7 @@ namespace EDDiscovery
         {
             try
             {
-                //TBDProcess.Start(netlog.GetNetLogDir());
+                Process.Start(EliteDangerous.EDJournalClass.GetJournalDir());
             }
             catch (Exception ex)
             {
@@ -1585,9 +1587,9 @@ namespace EDDiscovery
             RefreshHistoryParameters param = e.Argument as RefreshHistoryParameters ?? new RefreshHistoryParameters();
             bool forceReload = param.ForceReload;
 
-            //TBDnetlog.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+            journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
 
-            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander);
+            List<EliteDangerous.JournalEntry> jlist = journalmonitor.ParseJournalFiles(EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
 
             if (worker.CancellationPending)
             {
@@ -1617,7 +1619,7 @@ namespace EDDiscovery
                 travelHistoryControl1.RefreshButton(true);
                 journalViewControl1.RefreshButton(true);
 
-                //TBDnetlog.StartMonitor();
+                journalmonitor.StartMonitor();
 
                 if (HistoryRefreshed != null)
                     HistoryRefreshed(this, EventArgs.Empty);
@@ -1700,22 +1702,20 @@ namespace EDDiscovery
         public void ChangedJournalSettings()
         {
             Console.WriteLine("Journal changed");
-            // TBD when the journal scanner is turned on, stop/start it here due to change in folder..
+            journalmonitor.NetLogDirChanged();
         }
 
-        /*
-        public void NewPosition(VisitedSystemsClass v)
+        public void NewPosition(EliteDangerous.JournalEntry je)
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
-            HistoryEntry he = new HistoryEntry();
-            he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance + " ly" ,"More info");
-            history.Add(he);
+            //HistoryEntry he = new HistoryEntry();
+            //he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance + " ly" ,"More info");
+            //history.Add(he);
 
-            travelHistoryControl1.AddNewEntry(he);
-            journalViewControl1.AddNewEntry(he);
+            //travelHistoryControl1.AddNewEntry(he);
+            //journalViewControl1.AddNewEntry(he);
         }
-        */
 
         #endregion
 
