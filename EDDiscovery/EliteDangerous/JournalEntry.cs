@@ -18,6 +18,7 @@ namespace EDDiscovery.EliteDangerous
     {
         Unknown = 0,
 
+        ApproachSettlement = 5,
         Bounty = 10,
         BuyAmmo = 20,
         BuyDrones = 30,
@@ -580,6 +581,9 @@ namespace EDDiscovery.EliteDangerous
 
             switch (Eventstr)
             {
+                case "ApproachSettlement":
+                    je = new JournalApproachSettlement(jo);
+                    break;
                 case "Bounty":
                     je = new JournalBounty(jo);
                     break;
@@ -863,20 +867,37 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalWingLeave(jo);
                     break;
 
+                case "ReceiveText":
+                    je = new JournalReceiveText(jo);
+                    break;
+                case "SendText":
+                    je = new JournalSendText(jo);
+                    break;
+
+                case "PayFines":
+                    je = new JournalPayFines(jo);
+                    break;
+                case "PayLegacyFines":
+                    je = new JournalPayLegacyFines(jo);
+                    break;
+                case "Promotion":
+                    je = new JournalPromotion(jo);
+                    break;
+                case "RebootRepair":
+                    je = new JournalRebootRepair(jo);
+                    break;
+                case "RedeemVoucher":
+                    je = new JournalRedeemVoucher(jo);
+                    break;
 
 
-                
-              
                 case "CapShipBond":
                 case "ClearSavedGame":
               
               
                 case "EjectCargo":
                 case "LaunchFighter":
- 
 
-                case "PayFines":
-                case "PayLegacyFines":
                 case "PowerplayCollect":
                 case "PowerplayDefect":
                 case "PowerplayDeliver":
@@ -887,13 +908,8 @@ namespace EDDiscovery.EliteDangerous
                 case "PowerplayVote":
                 case "PowerplayVoucher":
 
-                case "Promotion":
-                case "RebootRepair":
-                case "ReceiveText":
-                case "RedeemVoucher":
-
                 case "SellDrones":
-                case "SendText":
+    
                     je = new JournalUnhandled(jo, Eventstr);
                     System.Diagnostics.Trace.WriteLine("Unhandled event: " + Eventstr);
                     break;
