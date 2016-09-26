@@ -97,6 +97,7 @@ namespace EDDiscovery.EliteDangerous
         RefuelAll = 720,
         RefuelPartial = 730,
         Repair = 740,
+        RepairAll = 745,
         RestockVehicle = 750,
         Resurrect = 760,
         Scan = 770,
@@ -811,6 +812,9 @@ namespace EDDiscovery.EliteDangerous
                     break;
                 case "Repair":
                     je = new JournalRepair(jo);
+                    break;
+                case "RepairAll":
+                    je = new JournalRepairAll(jo);
                     break;
                 case "RestockVehicle":
                     je = new JournalRestockVehicle(jo);
