@@ -50,7 +50,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 info += JumpDist.ToString("0.00") + " ly";
             if ( FuelUsed > 0 )
                 info += " Fuel " + FuelUsed.ToString("0.0");
-            detailed = ToShortString();
+            detailed = ToShortString("StarSystem;JumpDist;FuelUsed");       // don't repeat these.
         }
 
         public int MapColor

@@ -21,7 +21,7 @@ namespace EDDiscovery2
         public string MapHomeSystem { get { return textBoxHomeSystem.Text; } }
         public float MapZoom { get { return float.Parse(textBoxDefaultZoom.Text); } }
         public bool MapCentreOnSelection { get { return radioButtonHistorySelection.Checked; } }
-        public bool OrderRowsInverted {  get { return checkBoxOrderRowsInverted.Checked; } }
+        public bool OrderRowsInverted { get { return checkBoxOrderRowsInverted.Checked; } }
 
         public Settings()
         {
@@ -55,6 +55,23 @@ namespace EDDiscovery2
 
         public void InitSettingsTab()
         {
+            radioButton_Auto.Enabled = textBoxNetLogDir.Enabled = false;
+
+            bool auto = EDDConfig.Instance.JournalDirAutoMode;
+
+            if (auto)
+            {
+                radioButton_Auto.Checked = auto;
+            }
+            else
+            {
+                radioButton_Manual.Checked = true;
+            }
+
+            textBoxNetLogDir.Text = EDDConfig.Instance.JournalDir;
+
+            radioButton_Auto.Enabled = textBoxNetLogDir.Enabled = true;
+
             checkBox_Distances.Enabled = false;         // disable over checked to indicate its not a user thing
             checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
             checkBox_Distances.Enabled = true;
@@ -89,6 +106,9 @@ namespace EDDiscovery2
 
         public void SaveSettings()
         {
+            EDDConfig.Instance.JournalDirAutoMode = radioButton_Auto.Checked;
+            EDDConfig.Instance.JournalDir = textBoxNetLogDir.Text;
+
             SQLiteDBClass.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
             double zoom = 1;
             SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.TryParse(textBoxDefaultZoom.Text, out zoom) ? zoom : 1.0);
@@ -112,7 +132,7 @@ namespace EDDiscovery2
         {
             var value = textBoxDefaultZoom.Text.Trim();
             double parseout = 0;
-            if (!Double.TryParse(value, out parseout) || parseout < 0.01 || parseout > 50.0 )
+            if (!Double.TryParse(value, out parseout) || parseout < 0.01 || parseout > 50.0)
             {
                 textBoxDefaultZoom.Text = "1";
             }
@@ -123,7 +143,7 @@ namespace EDDiscovery2
         {
             EDCommander cmdr = EDDiscoveryForm.EDDConfig.GetNewCommander();
             //dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
-            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;   
+            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
             dataGridViewCommanders.Update();
             _discoveryForm.TravelControl.LoadCommandersListBox();
         }
@@ -192,7 +212,7 @@ namespace EDDiscovery2
 
                 int curindex = _discoveryForm.theme.GetIndexOfCurrentTheme();       // get theme index.. may be -1 if theme not loaded back
 
-                if ( curindex == -1 )                                   // if not loaded, back to custom
+                if (curindex == -1)                                   // if not loaded, back to custom
                     _discoveryForm.theme.SetCustom();   // custom
 
                 SetEntryThemeComboBox();
@@ -274,6 +294,48 @@ namespace EDDiscovery2
                     _discoveryForm.TravelControl.LoadCommandersListBox();
 
                 }
+            }
+        }
+
+        private void button_Browse_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
+
+            DialogResult dlgResult = dirdlg.ShowDialog();
+
+            if (dlgResult == DialogResult.OK && EDDConfig.Instance.JournalDir != dirdlg.SelectedPath)
+                SetManualJournal(dirdlg.SelectedPath);
+        }
+
+        private void radioButton_Auto_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton_Auto.Enabled)
+            {
+                EDDConfig.Instance.JournalDirAutoMode = radioButton_Auto.Checked;
+                _discoveryForm.ChangedJournalSettings();
+                System.Diagnostics.Trace.WriteLine("Journal folder " + EDDiscovery.EliteDangerous.EDJournalClass.GetJournalDir());
+            }
+        }
+
+        private void textBoxNetLogDir_Validated(object sender, EventArgs e)
+        {
+            if (textBoxNetLogDir.Enabled && EDDConfig.Instance.JournalDir != textBoxNetLogDir.Text)
+            {
+                SetManualJournal(textBoxNetLogDir.Text);
+            }
+        }
+
+        private void SetManualJournal(string s)
+        {
+            EDDConfig.Instance.JournalDir = textBoxNetLogDir.Text = s;
+            radioButton_Manual.Checked = true;      // no trigger
+
+            if (radioButton_Auto.Checked)
+                radioButton_Auto.Checked = false;        // triggers off the check function Checked change
+            else
+            {
+                _discoveryForm.ChangedJournalSettings();
+                System.Diagnostics.Trace.WriteLine("Journal folder " + EDDiscovery.EliteDangerous.EDJournalClass.GetJournalDir());
             }
         }
     }

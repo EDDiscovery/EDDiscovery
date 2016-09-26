@@ -64,7 +64,10 @@ namespace EDDiscovery
 
         private void AddNewJournalRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
         {
-            string detail = item.EventDescription + Environment.NewLine + item.EventDetailedInfo;
+            string detail = "";
+            if (item.EventDescription.Length > 0)
+                detail = item.EventDescription + Environment.NewLine;
+            detail += item.EventDetailedInfo;
 
             object[] rowobj = { item.EventTime, "", item.EventSummary, detail };
 

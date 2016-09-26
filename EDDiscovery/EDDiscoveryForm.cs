@@ -1697,6 +1697,12 @@ namespace EDDiscovery
             journalViewControl1.Display();
         }
 
+        public void ChangedJournalSettings()
+        {
+            Console.WriteLine("Journal changed");
+            // TBD when the journal scanner is turned on, stop/start it here due to change in folder..
+        }
+
         /*
         public void NewPosition(VisitedSystemsClass v)
         {
