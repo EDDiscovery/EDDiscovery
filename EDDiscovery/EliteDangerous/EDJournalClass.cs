@@ -27,8 +27,6 @@ namespace EDDiscovery.EliteDangerous
             out IntPtr pszPath  // API uses CoTaskMemAlloc
         );
 
-        private static string journalPath;
-
         public delegate void NewJournalEntryHandler(JournalEntry je);
 
         public event NewJournalEntryHandler OnNewJournalEntry;
@@ -36,6 +34,7 @@ namespace EDDiscovery.EliteDangerous
         Dictionary<string, EDJournalReader> netlogreaders = new Dictionary<string, EDJournalReader>();
 
         FileSystemWatcher m_Watcher;
+        string m_watcherfolder;
         ConcurrentQueue<string> m_netLogFileQueue;
         System.Windows.Forms.Timer m_scantimer;
         System.ComponentModel.BackgroundWorker m_worker;
@@ -43,7 +42,6 @@ namespace EDDiscovery.EliteDangerous
         EDJournalReader lastnfi = null;          // last one read..
 
         private static Regex journalNamePrefixRe = new Regex("(?<prefix>.*)[.]0*(?<part>[0-9][0-9]*)[.]log");
-
 
         public EDJournalClass(EDDiscoveryForm ds)
         {
@@ -79,36 +77,33 @@ namespace EDDiscovery.EliteDangerous
             return null;
         }
 
-        public string GetJournalDir()
+        public static string GetJournalDir()        // MAY return null if folder does not exist..
         {
             try
             {
                 string journaldirstored = EDDConfig.Instance.JournalDir;
-                string datapath = journaldirstored;
+                string autopath = GetDefaultJournalDir();
 
-                if (EDDConfig.Instance.JournalDirAutoMode)
+                string datapath;
+
+                if (EDDConfig.Instance.JournalDirAutoMode && autopath != null )
                 {
-                    if (journalPath == null)
-                    {
-                        journalPath = GetDefaultJournalDir();
-                    }
-
-                    if (journalPath != null)
-                    {
-                        datapath = journalPath;
-                    }
-
-                    if (datapath != journaldirstored)
-                    {
-                        EDDConfig.Instance.JournalDir = datapath;
-                    }
+                    datapath = autopath;
                 }
                 else
                 {
-                    datapath = journaldirstored;
+                    string cmdrpath = EDDConfig.Instance.CurrentCommander.NetLogDir;
+
+                    if (cmdrpath != null && cmdrpath != "" && Directory.Exists(cmdrpath))
+                        datapath = cmdrpath;
+                    else
+                        datapath = journaldirstored;
                 }
 
-                return datapath;
+                if (Directory.Exists(datapath))   // if logfiles directory is not found
+                    return datapath;
+                else
+                    return null;
             }
             catch (Exception ex)
             {
@@ -128,17 +123,11 @@ namespace EDDiscovery.EliteDangerous
         {
             error = null;
 
-            string datapath = GetJournalDir();
+            string datapath = GetJournalDir();  // ensures folder is there, else null.
 
             if (datapath == null)
             {
                 error = "Journal directory not found!" + Environment.NewLine + "Specify location in settings tab";
-                return null;
-            }
-
-            if (!Directory.Exists(datapath))   // if logfiles directory is not found
-            {
-                error = "Journal directory is not present!" + Environment.NewLine + "Specify location in settings tab";
                 return null;
             }
 
@@ -278,8 +267,9 @@ namespace EDDiscovery.EliteDangerous
                 {
                     string logpath = GetJournalDir();
 
-                    if (Directory.Exists(logpath))
+                    if (logpath!=null)
                     {
+                        m_watcherfolder = string.Copy(logpath); // being paranoid.  keep our own copy, in case it gets changed out from under us
                         m_netLogFileQueue = new ConcurrentQueue<string>();
                         m_Watcher = new System.IO.FileSystemWatcher();
                         m_Watcher.Path = logpath + Path.DirectorySeparatorChar;
@@ -336,16 +326,14 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        /*
-        private void EDDConfig_NetLogDirChanged()
+        private void NetLogDirChanged() // call from owner of scanner.
         {
-            if (m_Watcher != null)       // get this during close down, so only do it if we are running already.
+            if (m_Watcher != null)       
             {
                 StopMonitor();
                 StartMonitor();
             }
         }
-        */
 
         private void ScanTickDone(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -397,7 +385,7 @@ namespace EDDiscovery.EliteDangerous
                 else if (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)
                 {
                     HashSet<string> tlunames = new HashSet<string>(TravelLogUnit.GetAllNames());
-                    string[] filenames = Directory.EnumerateFiles(GetJournalDir(), "Journal.*.log", SearchOption.AllDirectories)
+                    string[] filenames = Directory.EnumerateFiles(m_watcherfolder, "Journal.*.log", SearchOption.AllDirectories)
                                                   .Select(s => new { name = Path.GetFileName(s), fullname = s })
                                                   .Where(s => !tlunames.Contains(s.name))
                                                   .OrderBy(s => s.name)

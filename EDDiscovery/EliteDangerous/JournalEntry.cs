@@ -279,13 +279,55 @@ namespace EDDiscovery.EliteDangerous
             detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", ""));  // something like this..
         }
 
-        public string ToShortString()
+        public string ToShortString(string removeitems = "", string removedefault = "timestamp;event;EDDMapColor")
         {
+            string[] r1 = removeitems.Split(';');
+            string[] r2 = removedefault.Split(';');
+
             JObject jo = JObject.Parse(EventDataString);  // Create a clone
-            jo.Property("timestamp").Remove();
-            jo.Property("event").Remove();
-            jo.Property("EDDMapColor").Remove();
-            return jo.ToString().Replace("{", "").Replace("}", "").Replace("\"", "");
+
+            string outstr = "";
+
+            foreach (JToken jt in jo.Children())
+            {
+                if (!r1.Contains(jt.Path) && !r2.Contains(jt.Path))     // don't print these
+                {
+                    outstr += jt.Path + ":";
+
+                    //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Path));
+
+                    if (jt.HasValues)
+                    {
+                        foreach (JToken jc in jt.Children())
+                        {
+                            if (jc.HasValues)
+                            {
+                                outstr += "[";
+                                bool first = true;
+                                foreach (JToken jd in jc.Children())
+                                {
+                                    if (!first)
+                                        outstr += ",";
+                                    first = false;
+
+                                    outstr += jd.Value<string>();
+                                }
+
+                                outstr += "]";
+                            }
+                            else
+                            {
+                                outstr += jc.Value<string>();
+                                //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jc.Value<string>()));
+                            }
+                        }
+                    }
+
+                    outstr += " ";
+                }
+            }
+
+            return outstr;
         }
 
 
