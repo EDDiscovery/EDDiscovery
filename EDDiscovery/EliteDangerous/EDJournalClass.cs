@@ -29,6 +29,7 @@ namespace EDDiscovery.EliteDangerous
         System.ComponentModel.BackgroundWorker m_worker;
         EDJournalReader lastnfi = null;          // last one read..
         private static Regex journalNamePrefixRe = new Regex("(?<prefix>.*)[.]0*(?<part>[0-9][0-9]*)[.]log");
+        private int ticksNoActivity = 0;
 
         public EDJournalClass()
         {
@@ -376,9 +377,20 @@ namespace EDDiscovery.EliteDangerous
                     lastnfi = nfi;
                     System.Diagnostics.Trace.WriteLine(string.Format("Change in file, scan {0}", lastnfi.FileName));
                 }
-                else if (lastnfi != null && (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length))
+                else if (ticksNoActivity >= 30 && (lastnfi == null || (!File.Exists(lastnfi.FileName) || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length)))
                 {
-                    System.Diagnostics.Trace.WriteLine(string.Format("Change in length {0}, scan files {1} {2}", lastnfi.FileName, lastnfi.filePos, new FileInfo(lastnfi.FileName).Length));
+                    if (lastnfi == null)
+                    {
+                        Trace.Write($"No last file - scanning for journals");
+                    }
+                    else if (!File.Exists(lastnfi.FileName))
+                    {
+                        Trace.WriteLine($"File {lastnfi.FileName} not found - scanning for journals");
+                    }
+                    else
+                    {
+                        Trace.WriteLine($"No activity on {lastnfi.FileName} for 60 seconds ({lastnfi.filePos} >= {new FileInfo(lastnfi.FileName).Length} - scanning for new journals");
+                    }
 
                     HashSet<string> tlunames = new HashSet<string>(TravelLogUnit.GetAllNames());
                     string[] filenames = Directory.EnumerateFiles(m_watcherfolder, "Journal.*.log", SearchOption.AllDirectories)
@@ -387,6 +399,7 @@ namespace EDDiscovery.EliteDangerous
                                                   .OrderBy(s => s.name)
                                                   .Select(s => s.fullname)
                                                   .ToArray();
+                    ticksNoActivity = 0;
                     foreach (var name in filenames)
                     {
                         nfi = OpenFileReader(new FileInfo(name));
@@ -398,6 +411,8 @@ namespace EDDiscovery.EliteDangerous
                 {
                     nfi = lastnfi;
                 }
+
+                ticksNoActivity++;
 
                 if (nfi != null)
                 {
@@ -417,6 +432,7 @@ namespace EDDiscovery.EliteDangerous
                             {
                                 entries.Add(je);
                                 je.Add(cn, txn);
+                                ticksNoActivity = 0;
                             }
 
                             txn.Commit();
