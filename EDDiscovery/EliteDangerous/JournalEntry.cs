@@ -303,12 +303,12 @@ namespace EDDiscovery.EliteDangerous
                     if (localisedindex >= 0)
                         pname = pname.Substring(0, localisedindex);     // cut out all past there.
 
-                    outstr += pname + ":";
-
                     //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Path));
 
                     if (jt.HasValues)
                     {
+                        outstr += pname + ":";
+
                         foreach (JToken jc in jt.Children())
                         {
                             if (jc.HasValues)
@@ -332,9 +332,9 @@ namespace EDDiscovery.EliteDangerous
                                 //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jc.Value<string>()));
                             }
                         }
-                    }
 
-                    outstr += " ";
+                        outstr += " ";
+                    }
                 }
             }
 

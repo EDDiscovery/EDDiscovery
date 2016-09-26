@@ -52,5 +52,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Government_Localised { get; set; }
         public string Security { get; set; }
         public string Security_Localised { get; set; }
+
+        public override void FillInformation(out string summary, out string info, out string detailed)
+        {
+            summary = "At " + StarSystem;
+            info = "";
+            if (StationName.Length>0)
+                info += "Docked at " + StationType + " " + StationName;
+            detailed = ToShortString("StarSystem;StationName;StationType");       // don't repeat these.
+        }
+
     }
 }
