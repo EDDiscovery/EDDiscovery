@@ -281,63 +281,105 @@ namespace EDDiscovery.EliteDangerous
             detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", ""));  // something like this..
         }
 
+        void ExpandTokens(JToken jt, ref string outstr, ref int linelen, int childno)
+        {
+            if (jt.HasValues)
+            {
+                //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Type.ToString()));
+
+                if ( !(jt is JObject || jt is JArray )) // not interested in printing these names
+                {
+                    if ( linelen>=0 && outstr.Length - linelen > 40 )       // not too many on one line.
+                    {
+                        outstr += Environment.NewLine;
+                        linelen = outstr.Length;
+                    }
+
+                    string name = jt.Path;
+
+                    int localisedindex = name.IndexOf("_Localised");
+
+                    if (localisedindex >= 0)
+                        name = name.Substring(0, localisedindex);     // cut out all past there.
+
+                    int dot = name.IndexOf('.');                            // any dot notation remove
+                    if (dot >= 0)
+                        name = name.Substring(dot + 1);
+                    outstr += name + ":";
+                }
+
+                int c = 0;
+                foreach (JToken jc in jt.Children())        // too late in the day, count won't work.. bodge
+                    c++;
+
+                if (jt is JObject && childno>1)             // objects, indent if second or more child
+                {
+                    outstr += "    ";
+                }
+
+                if (c > 1)
+                    outstr += "(";
+
+                int cno = 1;
+
+                foreach (JToken jc in jt.Children())
+                {
+                    if (jc.HasValues)
+                    {
+                        int linelenoff = -1;                // children don't do the line break part. keep them together
+                        ExpandTokens(jc, ref outstr, ref linelenoff, cno++);
+                    }
+                    else
+                    {
+                        outstr += jc.Value<string>() + ",";     // Not right, need to fix..
+                    }
+                }
+
+                if (c > 1)
+                {
+                    outstr = outstr.TrimEnd() + ") ";        // remove any trailing spaces before end
+                }
+
+                if (jt is JObject)
+                {
+                    outstr += Environment.NewLine;          // objects LF at end.
+                }
+            }
+        }
+
+
         public string ToShortString(string removeitems = "", string removedefault = "timestamp;event;EDDMapColor")
         {
             string[] r1 = removeitems.Split(';');
             string[] r2 = removedefault.Split(';');
 
-            JObject jo = JObject.Parse(EventDataString);  // Create a clone
-            List <JToken> tokens = jo.Children().ToList();  // token list
-
             string outstr = "";
 
-            foreach (JToken jt in tokens)
+            try
             {
-                if (!r1.Contains(jt.Path) && !r2.Contains(jt.Path))     // don't print these
+                JObject jo = JObject.Parse(EventDataString);  // Create a clone
+                List<JToken> tokens = jo.Children().ToList();  // token list
+
+                int linelen = 0;
+
+                foreach (JToken jt in tokens)
                 {
-                    string pname = jt.Path;
-
-                    if (tokens.FindIndex(x => x.Path.Equals(pname + "_Localised")) >= 0)  // if we have a localised version, don't print this
-                        continue;
-
-                    int localisedindex = pname.IndexOf("_Localised");
-
-                    if (localisedindex >= 0)
-                        pname = pname.Substring(0, localisedindex);     // cut out all past there.
-
-                    //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Path));
-
-                    if (jt.HasValues)
+                    if (!r1.Contains(jt.Path) && !r2.Contains(jt.Path))     // don't print these
                     {
-                        outstr += pname + ":";
+                        string pname = jt.Path;
 
-                        foreach (JToken jc in jt.Children())
-                        {
-                            if (jc.HasValues)
-                            {
-                                outstr += "(";
-                                bool first = true;
-                                foreach (JToken jd in jc.Children())
-                                {
-                                    if (!first)
-                                        outstr += ",";
-                                    first = false;
+                        if (tokens.FindIndex(x => x.Path.Equals(pname + "_Localised")) >= 0)  // if we have a localised version, don't print this
+                            continue;
 
-                                    outstr += jd.Value<string>();
-                                }
+                        //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Path));
 
-                                outstr += ")";
-                            }
-                            else
-                            {
-                                outstr += jc.Value<string>();
-                                //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jc.Value<string>()));
-                            }
-                        }
-
-                        outstr += " ";
+                        ExpandTokens(jt, ref outstr, ref linelen, 1);
                     }
                 }
+            }
+            catch( Exception )
+            {
+                outstr = "Report problem to EDDiscovery team, event " + EventTypeStr + " did not print properly";
             }
 
             return outstr;
@@ -784,12 +826,13 @@ namespace EDDiscovery.EliteDangerous
                     break;
                     
                 case "Progress":
-                    je = new JournalRank(jo);
+                    je = new JournalProgress(jo);
                     break;
 
                 case "SupercruiseEntry":
                     je = new JournalSupercruiseEntry(jo);
                     break;
+
                 case "SupercruiseExit":
                     je = new JournalSupercruiseExit(jo);
                     break;
@@ -828,10 +871,10 @@ namespace EDDiscovery.EliteDangerous
                     je = new JournalScreenshot(jo);
                     break;
                 case "SelfDestruct":
-                    je = new JournalShieldState(jo);
+                    je = new JournalSelfDestruct(jo);
                     break;
                 case "ShieldState":
-                    je = new JournalSelfDestruct(jo);
+                    je = new JournalShieldState(jo);
                     break;
                 case "ShipyardBuy":
                     je = new JournalShipyardBuy(jo);
