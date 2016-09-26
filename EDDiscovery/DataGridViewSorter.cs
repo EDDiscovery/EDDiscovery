@@ -7,14 +7,6 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    // How to use thi
-
-    //   private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-    //{
-    //    DataGridViewSorter.DataGridSort(dataGridView1, e.ColumnIndex);
-    //}
-
-
     public class DataGridViewSorter
     {
         public static void DataGridSort(DataGridView dgv, int column)
@@ -127,11 +119,8 @@ namespace EDDiscovery
                     {
                         mySortTypeCode = TypeCode.String;
 
-                        if (ColumnIndex == 0)
+                        if (ColumnIndex == 0)           // 0 is date time on all views which use this.. bodge
                             mySortTypeCode = TypeCode.DateTime;
-
-                        if (ColumnIndex == 2)
-                            mySortTypeCode = TypeCode.Double;
                     }
                     catch
                     {

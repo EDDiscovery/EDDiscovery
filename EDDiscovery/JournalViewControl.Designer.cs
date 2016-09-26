@@ -204,6 +204,7 @@
             this.dataGridViewJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewJournal.Size = new System.Drawing.Size(892, 548);
             this.dataGridViewJournal.TabIndex = 0;
+            this.dataGridViewJournal.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewJournal_ColumnHeaderMouseClick);
             this.dataGridViewJournal.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridViewJournal_ColumnWidthChanged);
             this.dataGridViewJournal.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewJournal_RowPostPaint);
             this.dataGridViewJournal.Resize += new System.EventHandler(this.dataGridViewJournal_Resize);
