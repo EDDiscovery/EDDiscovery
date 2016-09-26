@@ -1643,53 +1643,11 @@ namespace EDDiscovery
 
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
-                int indexno = 1;
+                HistoryEntry prev = null;
                 foreach (EliteDangerous.JournalEntry je in jlist)
                 {
-                    HistoryEntry he = new HistoryEntry();
-                    he.Indexno = indexno++;
-                     
-                    string summary, info, detailed;
-                    je.FillInformation(out summary, out info, out detailed);
-
-                    int mapcolour = 0;
-
-                    if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
-                    {
-                        EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
-                        EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
-
-                        ISystem newsys;
-
-                        if (jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
-                        {
-                            newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
-                            newsys.id_edsm = jl.EdsmID;       // pass across the EDSMID for the lazy load process.
-                        }
-                        else
-                        {                           // try and find it, preferably thru id, else thru name
-                            newsys = new SystemClass(jl.StarSystem);
-                            newsys.id_edsm = jl.EdsmID;
-
-                            SystemClass s = SystemClass.EDSMAssign(newsys, jl.Id,conn);      // has no co-ord, did we find it?
-
-                            if (s != null)                                              // yes, use
-                                newsys = s;
-                        }
-
-                        if (jfsd != null)
-                        {
-                            if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
-                                info += SystemClass.Distance(isys, newsys).ToString("0.00") + " ly";
-
-                            mapcolour = jfsd.MapColor;
-                        }
-
-                        isys = newsys;
-                    }
-
-                    he.MakeJournalEntry(je.EventTypeID, je.Id, isys, je.EventTimeLocal, summary, info, detailed, mapcolour, je.SyncedEDSM);
-
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, conn);
+                    prev = he;
                     history.Add(he);
                 }
             }
@@ -1711,12 +1669,11 @@ namespace EDDiscovery
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
-            //HistoryEntry he = new HistoryEntry();
-            //he.MakeVSEntry(v.curSystem, v.Time, v.MapColour, v.strDistance + " ly" ,"More info");
-            //history.Add(he);
+            HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast);
+            history.Add(he);
 
-            //travelHistoryControl1.AddNewEntry(he);
-            //journalViewControl1.AddNewEntry(he);
+            travelHistoryControl1.AddNewEntry(he);
+            journalViewControl1.AddNewEntry(he);
         }
 
         #endregion
