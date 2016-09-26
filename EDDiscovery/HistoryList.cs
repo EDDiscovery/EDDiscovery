@@ -169,6 +169,22 @@ namespace EDDiscovery
 
         public int Count { get { return historylist.Count;  } }
 
+        public List<HistoryEntry> EntryOrder
+        {
+            get
+            {
+                return historylist;
+            }
+        }
+
+        public List<HistoryEntry> LastFirst
+        {
+            get
+            {
+                return historylist.OrderByDescending(s => s.Indexno).ToList();
+            }
+        }
+
         public List<HistoryEntry> OrderByDate
         {
             get

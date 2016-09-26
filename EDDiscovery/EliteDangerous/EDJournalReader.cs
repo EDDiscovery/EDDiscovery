@@ -51,30 +51,37 @@ namespace EDDiscovery.EliteDangerous
 
                 System.Diagnostics.Trace.WriteLine(string.Format("Read line {0} from {1}", line, this.FileName));
 
-                je = JournalEntry.CreateJournalEntry(line);
-                if ( je.EventTypeID == JournalTypeEnum.LoadGame )
+                try
                 {
-                    string newname = (je as JournalEvents.JournalLoadGame).LoadGameCommander;
-
-                    EDCommander _commander = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
-
-                    if (_commander == null)
-                        _commander= EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname);
-
-                    cmdrid = _commander.Nr;
-
-                    if (!TravelLogUnit.CommanderId.HasValue )
+                    je = JournalEntry.CreateJournalEntry(line);
+                    if (je.EventTypeID == JournalTypeEnum.LoadGame)
                     {
-                        TravelLogUnit.CommanderId = cmdrid;
-                        TravelLogUnit.Update();
-                        System.Diagnostics.Trace.WriteLine(string.Format("TLU {0} updated with commander {1}", TravelLogUnit.Path, cmdrid));
+                        string newname = (je as JournalEvents.JournalLoadGame).LoadGameCommander;
+
+                        EDCommander _commander = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
+
+                        if (_commander == null)
+                            _commander = EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname);
+
+                        cmdrid = _commander.Nr;
+
+                        if (!TravelLogUnit.CommanderId.HasValue)
+                        {
+                            TravelLogUnit.CommanderId = cmdrid;
+                            TravelLogUnit.Update();
+                            System.Diagnostics.Trace.WriteLine(string.Format("TLU {0} updated with commander {1}", TravelLogUnit.Path, cmdrid));
+                        }
                     }
+
+                    je.JournalId = (int)TravelLogUnit.id;
+                    je.CommanderId = cmdrid;
+
+                    return true;
                 }
+                catch (  Exception e )          // CreateJournal Entry may except, in which case, the line is crap
+                {
 
-                je.JournalId = (int)TravelLogUnit.id;
-                je.CommanderId = cmdrid;
-
-                return true;
+                }
             }
 
             je = null;
