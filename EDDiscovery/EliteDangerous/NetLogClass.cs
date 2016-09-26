@@ -120,7 +120,7 @@ namespace EDDiscovery
                 }
             }
 
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
             {
                 for (int i = 0; i < readersToUpdate.Count; i++)
                 {
@@ -144,9 +144,9 @@ namespace EDDiscovery
                             visitedSystems.Add(je);
                         }
 
-                        reader.TravelLogUnit.Update(cn, tn);
-
                         tn.Commit();
+
+                        reader.TravelLogUnit.Update();
                     }
 
                     if (updateProgress != null)

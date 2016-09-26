@@ -23,6 +23,13 @@ namespace EDDiscovery.DB
         }
     }
 
+    public class SQLiteConnectionUserUTC : SQLiteConnectionED<SQLiteConnectionUser> // THIS passes a message that times in the db are in UTC. So when we read it out, we get UTC.
+    {
+        public SQLiteConnectionUserUTC() : base(SQLiteDBClass.UserDatabase,EDDSqlDbSelection.None,true)
+        {
+        }
+    }
+
     public class SQLiteConnectionSystem : SQLiteConnectionED<SQLiteConnectionSystem>
     {
         public SQLiteConnectionSystem() : base(SQLiteDBClass.SystemDatabase)
@@ -65,7 +72,7 @@ namespace EDDiscovery.DB
             }
         }
 
-        public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None)
+        public SQLiteConnectionED(EDDSqlDbSelection? maindb = null, EDDSqlDbSelection selector = EDDSqlDbSelection.None, bool utctimeindicator = false )
         {
             bool locktaken = false;
             try
@@ -80,6 +87,10 @@ namespace EDDiscovery.DB
 
                 // Use the database selected by maindb as the 'main' database
                 _cn.ConnectionString = "Data Source=" + DBFile + ";Pooling=true;";
+
+                if (utctimeindicator)   // indicate treat dates as UTC.
+                    _cn.ConnectionString += "DateTimeKind=Utc;";
+
                 _cn.Open();
 
                 // Attach any other requested databases under their appropriate names
