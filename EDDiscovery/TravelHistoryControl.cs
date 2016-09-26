@@ -467,9 +467,12 @@ namespace EDDiscovery
 
         private void dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
-            RedrawSummary();
-            UpdateDependentsWithSelection();
+            if (e.ColumnIndex != TravelHistoryColumns.Icon)
+            {
+                DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
+                RedrawSummary();
+                UpdateDependentsWithSelection();
+            }
         }
 
         public void buttonMap_Click(object sender, EventArgs e)

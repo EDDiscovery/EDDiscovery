@@ -223,5 +223,14 @@ namespace EDDiscovery
             Display();
             SQLiteDBClass.PutSettingInt("JournalTimeHistory", comboBoxJournalWindow.SelectedIndex);
         }
+
+        private void dataGridViewJournal_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex != JournalHistoryColumns.Event)
+            {
+                DataGridViewSorter.DataGridSort(dataGridViewJournal, e.ColumnIndex);
+            }
+
+        }
     }
 }
