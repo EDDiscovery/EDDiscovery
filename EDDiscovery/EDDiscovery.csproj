@@ -204,6 +204,7 @@
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalApproachSettlement.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalBounty.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalBuyAmmo.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalBuyDrones.cs" />
@@ -259,8 +260,14 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleSell.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleSwap.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalNewCommander.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPayFines.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPayLegacyFines.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPromotion.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRebootRepair.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalReceiveText.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalRedeemVoucher.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRefuelAll.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRefuelPartial.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRepair.cs" />
@@ -270,6 +277,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalScreenshot.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSelfDestruct.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalSendText.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShieldState.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardBuy.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalShipyardNew.cs" />
