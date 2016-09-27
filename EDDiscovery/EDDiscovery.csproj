@@ -218,6 +218,9 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalJoin.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalReward.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalContinued.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewAssign.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewFire.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalCrewHire.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDatalinkScan.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
