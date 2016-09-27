@@ -187,7 +187,7 @@ namespace EDDiscovery
 
             jc.AddScale("Health", 100.0, "'Health' 0.0'%'", "");
 
-            jc.AddScale("Distance", 1.0, "'Distance' 0.0'ly'", "", "ShipyardTransfer");
+            jc.AddScale("Distance", 1.0 / 299792458.0 / 365 / 24 / 60 / 60, "'Distance' 0.0'ly'", "", "ShipyardTransfer");
             jc.AddPrePostfix("TransferPrice", "; credits", "", "ShipyardTransfer");
 
             return jc;
