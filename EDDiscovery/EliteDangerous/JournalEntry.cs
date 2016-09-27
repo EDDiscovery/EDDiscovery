@@ -283,114 +283,19 @@ namespace EDDiscovery.EliteDangerous
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {
             summary = Tools.SplitCapsWord(EventTypeStr);
-            info = "Event";
-            detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", ""));  // something like this..
+            info = ToShortString();
+            detailed = "";
         }
 
-        void ExpandTokens(JToken jt, ref string outstr, ref int linelen, int childno)
+
+        public string ToShortString(string removeitems = "", JSONConverters jc = null, string removedefault = "timestamp;event;EDDMapColor")
         {
-            if (jt.HasValues)
-            {
-                //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Type.ToString()));
+            if (jc == null)
+                jc = JSONConverters.StandardConverters();
 
-                if ( !(jt is JObject || jt is JArray )) // not interested in printing these names
-                {
-                    if ( linelen>=0 && outstr.Length - linelen > 40 )       // not too many on one line.
-                    {
-                        outstr += Environment.NewLine;
-                        linelen = outstr.Length;
-                    }
-
-                    string name = jt.Path;
-
-                    int localisedindex = name.IndexOf("_Localised");
-
-                    if (localisedindex >= 0)
-                        name = name.Substring(0, localisedindex);     // cut out all past there.
-
-                    int dot = name.IndexOf('.');                            // any dot notation remove
-                    if (dot >= 0)
-                        name = name.Substring(dot + 1);
-                    outstr += name + ":";
-                }
-
-                int c = 0;
-                foreach (JToken jc in jt.Children())        // too late in the day, count won't work.. bodge
-                    c++;
-
-                if (jt is JObject && childno>1)             // objects, indent if second or more child
-                {
-                    outstr += "    ";
-                }
-
-                if (c > 1)
-                    outstr += "(";
-
-                int cno = 1;
-
-                foreach (JToken jc in jt.Children())
-                {
-                    if (jc.HasValues)
-                    {
-                        int linelenoff = -1;                // children don't do the line break part. keep them together
-                        ExpandTokens(jc, ref outstr, ref linelenoff, cno++);
-                    }
-                    else
-                    {
-                        outstr += jc.Value<string>() + ",";     // Not right, need to fix..
-                    }
-                }
-
-                if (c > 1)
-                {
-                    outstr = outstr.TrimEnd() + ") ";        // remove any trailing spaces before end
-                }
-
-                if (jt is JObject)
-                {
-                    outstr += Environment.NewLine;          // objects LF at end.
-                }
-            }
+            JSONPrettyPrint jpp = new JSONPrettyPrint(jc,removeitems+removedefault,"_localised");
+            return jpp.PrettyPrint(EventDataString);
         }
-
-
-        public string ToShortString(string removeitems = "", string removedefault = "timestamp;event;EDDMapColor")
-        {
-            string[] r1 = removeitems.Split(';');
-            string[] r2 = removedefault.Split(';');
-
-            string outstr = "";
-
-            try
-            {
-                JObject jo = JObject.Parse(EventDataString);  // Create a clone
-                List<JToken> tokens = jo.Children().ToList();  // token list
-
-                int linelen = 0;
-
-                foreach (JToken jt in tokens)
-                {
-                    if (!r1.Contains(jt.Path) && !r2.Contains(jt.Path))     // don't print these
-                    {
-                        string pname = jt.Path;
-
-                        if (tokens.FindIndex(x => x.Path.Equals(pname + "_Localised")) >= 0)  // if we have a localised version, don't print this
-                            continue;
-
-                        //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Path));
-
-                        ExpandTokens(jt, ref outstr, ref linelen, 1);
-                    }
-                }
-            }
-            catch( Exception )
-            {
-                outstr = "Report problem to EDDiscovery team, event " + EventTypeStr + " did not print properly";
-            }
-
-            return outstr;
-        }
-
 
         public JournalEntry(JObject jo, JournalTypeEnum jtype)
         {
