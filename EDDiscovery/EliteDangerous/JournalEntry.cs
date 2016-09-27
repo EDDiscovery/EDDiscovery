@@ -946,7 +946,15 @@ namespace EDDiscovery.EliteDangerous
                     break;
 
                 case "EjectCargo":
+                    je = new JournalEjectCargo(jo);
+                    break;
                 case "LaunchFighter":
+                    je = new JournalLaunchFighter(jo);
+                    break;
+                case "SellDrones":
+                    je = new JournalSellDrones(jo);
+                    break;
+
 
                 case "PowerplayCollect":
                 case "PowerplayDefect":
@@ -958,7 +966,6 @@ namespace EDDiscovery.EliteDangerous
                 case "PowerplayVote":
                 case "PowerplayVoucher":
 
-                case "SellDrones":
     
                     je = new JournalUnhandled(jo, Eventstr);
                     System.Diagnostics.Trace.WriteLine("Unhandled event: " + Eventstr);
