@@ -19,7 +19,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             FromItem = Tools.GetStringDef(evt["FromItem"]);
             ToItem = Tools.GetStringDef(evt["ToItem"]);
             Ship = Tools.GetStringDef(evt["Ship"]);
-            ShipId = Tools.GetInt(evt["ShipId"]);
+            ShipId = Tools.GetInt(evt["ShipID"]);
 
         }
         public string FromSlot { get; set; }
@@ -28,5 +28,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string ToItem { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
+
+        public override string DefaultRemoveItems()
+        {
+            return base.DefaultRemoveItems() + ";ShipID";
+        }
+
     }
 }

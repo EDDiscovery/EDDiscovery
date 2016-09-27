@@ -56,10 +56,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)
         {
             summary = "At " + StarSystem;
-            info = "";
-            if (StationName.Length>0)
-                info += "Docked at " + StationType + " " + StationName;
-            detailed = ToShortString("StarSystem;StationName;StationType");       // don't repeat these.
+            if (Docked)
+                info = "Docked at " + StationName + " " + StationType + " Type (" + Economy_Localised + ")";
+            else
+                info = "In space";
+
+            detailed = ToShortString("StarSystem;StationName;StationType;Docked;Economy_Localised");      
         }
 
     }

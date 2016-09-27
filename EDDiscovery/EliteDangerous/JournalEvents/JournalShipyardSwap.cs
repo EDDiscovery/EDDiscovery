@@ -33,5 +33,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string SellOldShip { get; set; }
         public int? SellShipId { get; set; }
         public int? SellPrice { get; set; }
+
+        public override string DefaultRemoveItems()
+        {
+            return base.DefaultRemoveItems() + ";ShipID;SellShipID;StoreShipID";
+        }
+
     }
 }

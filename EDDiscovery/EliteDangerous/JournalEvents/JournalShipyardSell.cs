@@ -27,5 +27,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public int ShipPrice { get; set; }
         public string System { get; set; }
 
+        public override string DefaultRemoveItems()
+        {
+            return base.DefaultRemoveItems() + ";SellShipID";
+        }
     }
 }
