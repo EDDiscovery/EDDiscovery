@@ -61,7 +61,7 @@ namespace EDDiscovery.EliteDangerous
                         EDCommander _commander = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
 
                         if (_commander == null)
-                            _commander = EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname);
+                            _commander = EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname,null,(cmdrid>=0) ? EDDConfig.Instance.Commander(cmdrid).NetLogDir : null);
 
                         cmdrid = _commander.Nr;
 
