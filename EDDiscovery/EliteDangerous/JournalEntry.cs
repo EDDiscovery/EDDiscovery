@@ -77,7 +77,9 @@ namespace EDDiscovery.EliteDangerous
         MissionCompleted = 490,
         MissionFailed = 500,
         ModuleBuy = 510,
+        ModuleRetrieve = 515,
         ModuleSell = 520,
+        ModuleStore = 525,
         ModuleSwap = 530,
         NewCommander = 540,
         PayFines = 550,
@@ -855,9 +857,19 @@ namespace EDDiscovery.EliteDangerous
                 case "ModuleBuy":
                     je = new JournalModuleBuy(jo);
                     break;
+
+                case "ModuleRetrieve":
+                    je = new JournalModuleRetrieve(jo);
+                    break;
+
                 case "ModuleSell":
                     je = new JournalModuleSell(jo);
                     break;
+
+                case "ModuleStore":
+                    je = new JournalModuleStore(jo);
+                    break;
+
                 case "ModuleSwap":
                     je = new JournalModuleSwap(jo);
                     break;

@@ -264,7 +264,9 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalMissionCompleted.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalMissionFailed.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleBuy.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalModuleRetrieve.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleSell.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalModuleStore.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalModuleSwap.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalNewCommander.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPayFines.cs" />
