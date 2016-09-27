@@ -95,6 +95,7 @@ namespace EDDiscovery.EliteDangerous
         PowerplayVoucher = 650,
         Progress = 660,
         Promotion = 670,
+        PVPKill = 675,
         Rank = 680,
         RebootRepair = 690,
         ReceiveText = 700,
@@ -872,6 +873,10 @@ namespace EDDiscovery.EliteDangerous
 
                 case "ModuleSwap":
                     je = new JournalModuleSwap(jo);
+                    break;
+
+                case "PVPKill":
+                    je = new JournalPVPKill(jo);
                     break;
 
                 case "RefuelAll":

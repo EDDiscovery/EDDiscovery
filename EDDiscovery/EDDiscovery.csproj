@@ -282,6 +282,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayVoucher.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPromotion.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPVPKill.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRebootRepair.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalReceiveText.cs" />
