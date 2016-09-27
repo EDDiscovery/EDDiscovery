@@ -266,6 +266,15 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalNewCommander.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPayFines.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPayLegacyFines.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayCollect.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayDefect.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayDeliver.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayFastTrack.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayJoin.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayLeave.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplaySalary.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayVote.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayVoucher.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalPromotion.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />

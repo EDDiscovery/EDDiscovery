@@ -957,19 +957,36 @@ namespace EDDiscovery.EliteDangerous
 
 
                 case "PowerplayCollect":
-                case "PowerplayDefect":
-                case "PowerplayDeliver":
-                case "PowerplayFastTrack":
-                case "PowerplayJoin":
-                case "PowerplayLeave":
-                case "PowerplaySalary":
-                case "PowerplayVote":
-                case "PowerplayVoucher":
-
-    
-                    je = new JournalUnhandled(jo, Eventstr);
-                    System.Diagnostics.Trace.WriteLine("Unhandled event: " + Eventstr);
+                    je = new JournalPowerplayCollect(jo);
                     break;
+                case "PowerplayDefect":
+                    je = new JournalPowerplayDefect(jo);
+                    break;
+                case "PowerplayDeliver":
+                    je = new JournalPowerplayDeliver(jo);
+                    break;
+                case "PowerplayFastTrack":
+                    je = new JournalPowerplayFastTrack(jo);
+                    break;
+                case "PowerplayJoin":
+                    je = new JournalPowerplayJoin(jo);
+                    break;
+                case "PowerplayLeave":
+                    je = new JournalPowerplayLeave(jo);
+                    break;
+                case "PowerplaySalary":
+                    je = new JournalPowerplaySalary(jo);
+                    break;
+                case "PowerplayVote":
+                    je = new JournalPowerplayVote(jo);
+                    break;
+                case "PowerplayVoucher":
+                    je = new JournalPowerplayVoucher(jo);
+                    break;
+
+                    //je = new JournalUnhandled(jo, Eventstr);
+                    //System.Diagnostics.Trace.WriteLine("Unhandled event: " + Eventstr);
+                    //break;
 
                 default:
                     je = new JournalUnknown(jo, Eventstr);
