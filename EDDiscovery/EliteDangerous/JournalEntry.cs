@@ -287,14 +287,18 @@ namespace EDDiscovery.EliteDangerous
             detailed = "";
         }
 
+        public virtual string DefaultRemoveItems()
+        {
+            return "timestamp;event;EDDMapColor";
+        }
 
-        public string ToShortString(string removeitems = "", JSONConverters jc = null, string removedefault = "timestamp;event;EDDMapColor")
+        public string ToShortString(string additionalremoves = null, JSONConverters jc = null)
         {
             if (jc == null)
                 jc = JSONConverters.StandardConverters();
 
-            JSONPrettyPrint jpp = new JSONPrettyPrint(jc,removeitems+removedefault,"_localised");
-            return jpp.PrettyPrint(EventDataString);
+            JSONPrettyPrint jpp = new JSONPrettyPrint(jc,DefaultRemoveItems() + ((additionalremoves!= null) ? (";" + additionalremoves) : ""),"_Localised",EventTypeStr);
+            return jpp.PrettyPrint(EventDataString,40);
         }
 
         public JournalEntry(JObject jo, JournalTypeEnum jtype)
