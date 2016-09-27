@@ -133,9 +133,16 @@ namespace EDDiscovery2
                 if (currentCmdrID >= listCommanders.Count)
                     currentCmdrID = listCommanders.Count - 1;
 
-
                 return listCommanders[currentCmdrID];
             }
+        }
+
+        public EDCommander Commander( int i )
+        {
+            if (i >= listCommanders.Count)
+                i = listCommanders.Count - 1;
+
+            return listCommanders[i];
         }
 
         public bool EDSMLog
@@ -414,7 +421,7 @@ namespace EDDiscovery2
             LoadCommanders();
         }
 
-        internal EDCommander GetNewCommander(string name = null, string edsmApiKey = null)
+        internal EDCommander GetNewCommander(string name = null, string edsmApiKey = null, string overridepath = null)
         {
             EDCommander cmdr;
 
@@ -424,6 +431,7 @@ namespace EDDiscovery2
                 {
                     cmd.AddParameterWithValue("@Name", name ?? "");
                     cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
+                    cmd.AddParameterWithValue("@NetLogDir", overridepath ?? "");
                     cmd.AddParameterWithValue("@Deleted", false);
                     cmd.ExecuteNonQuery();
                 }
