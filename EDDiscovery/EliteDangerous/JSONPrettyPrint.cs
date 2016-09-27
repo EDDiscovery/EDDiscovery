@@ -23,6 +23,11 @@ namespace EDDiscovery
             eventqual = new List<string>();
         }
 
+        // name = list of id's to match "one;two;three" or just a single "one"
+        // nmane = replace name with this, or null keep name, or "" no name
+        // eventq = limit to these events, "one;two;three" or a single "one"
+        // Scale - f can be a full format string "'hello' 0.0 'postfix'"
+
         public void AddScale(string name, double s, string f = "0.0", string nname = null, string eventq = null)
         {
             names.Add(name);
@@ -50,6 +55,8 @@ namespace EDDiscovery
             eventqual.Add(eventq);
         }
 
+        // prepostfix "Prefix;postfix"   ;postfix can be not given.
+
         public void AddPrePostfix(string name, string prepostfix, string nname = null, string eventq = null)    // adds an postfix string to the value and allows the name to be removed
         {
             names.Add(name);
@@ -59,13 +66,16 @@ namespace EDDiscovery
             eventqual.Add(eventq);
         }
 
+
         public string Convert(string pname, string value , bool noname , string eventname)
         {
             string displayname = Tools.SplitCapsWord(pname); 
 
             for ( int i = names.Count-1; i>=0; i--)
             {
-                if (pname.Equals(names[i]) && ( eventqual[i] == null || eventqual[i].Contains(eventname) ))
+                string[] ids = names[i].Split(';');
+
+                if (Array.FindIndex(ids, x => x.Equals(pname)) != -1 && ( eventqual[i] == null || Array.FindIndex(eventname.Split(';'),x=>x.Equals(eventname))!=-1 ))
                 {
                     if (format[i][0] == 'B')        // BOOLEAN
                     {
@@ -130,8 +140,7 @@ namespace EDDiscovery
             jc.AddScale("Radius", 1.0 / 1000, "0.0'km'");
             jc.AddScale("InnerRad", 1.0 / 1000, "0.0'km'", "Inner Radius");
             jc.AddScale("OuterRad", 1.0 / 1000, "0.0'km'", "Outer Radius");
-            jc.AddScale("OrbitalPeriod", 1.0 / 86400, "0.0' days'");
-            jc.AddScale("RotationPeriod", 1.0 / 86400, "0.0' days'");
+            jc.AddScale("OrbitalPeriod;RotationPeriod", 1.0 / 86400, "0.0' days'");
             jc.AddScale("SurfaceGravity", 1.0 / 9.8, "0.0'g'");
             jc.AddScale("SurfaceTemperature", 1.0, "0.0'K'");
             jc.AddScale("Scooped", 1.0, "'Scooped '0.0't'", "", "FuelScoop");
@@ -148,8 +157,7 @@ namespace EDDiscovery
             jc.AddPrePostfix("StationType", "; Type", "");
             jc.AddPrePostfix("StationName", "; Station", "");
             jc.AddPrePostfix("DestinationSystem", "; Star System", "");
-            jc.AddPrePostfix("StarSystem", "; Star System", "");    
-            jc.AddPrePostfix("System", "; Star System", "");        
+            jc.AddPrePostfix("StarSystem;System", "; Star System", "");    
             jc.AddPrePostfix("Allegiance", "; Allegiance", "");
             jc.AddPrePostfix("Security", "; Security", "");
             jc.AddPrePostfix("Faction", "; Faction", "");
@@ -169,9 +177,9 @@ namespace EDDiscovery
 
             jc.AddPrePostfix("Role", "; role", "", "CrewAssign");
             jc.AddPrePostfix("Name", "", "", "MissionAccepted;MissionAbandoned;MissionCompleted;MissionFailed");
-            jc.AddPrePostfix("Cost", "; credits", "");
+            jc.AddPrePostfix("Cost;ShipPrice", "; credits", "");
             jc.AddPrePostfix("Amount", "; credits", "", "PayLegacyFines");
-            jc.AddPrePostfix("BuyPrice", "Bought for ; credits","");
+            jc.AddPrePostfix("BuyPrice", "Bought for ; credits", "");
             jc.AddPrePostfix("SellPrice", "Sold for ; credits","");
 
             jc.AddPrePostfix("LandingPad", "On pad ", "");
@@ -180,9 +188,7 @@ namespace EDDiscovery
             jc.AddPrePostfix("SellItem", "; sold", "");
 
             jc.AddPrePostfix("Credits", "; credits", "", "LoadGame");
-            jc.AddPrePostfix("Ship", "Ship ;", "");
-            jc.AddPrePostfix("ShipType", "Ship ;", "");
-            jc.AddPrePostfix("ShipPrice", "; credits", "");
+            jc.AddPrePostfix("Ship;ShipType", "Ship ;", "");
             jc.AddPrePostfix("StoreOldShip", "; stored", "");
 
             jc.AddScale("Health", 100.0, "'Health' 0.0'%'", "");
