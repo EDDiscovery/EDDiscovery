@@ -298,7 +298,7 @@ namespace EDDiscovery.EliteDangerous
                 jc = JSONConverters.StandardConverters();
 
             JSONPrettyPrint jpp = new JSONPrettyPrint(jc,DefaultRemoveItems() + ((additionalremoves!= null) ? (";" + additionalremoves) : ""),"_Localised",EventTypeStr);
-            return jpp.PrettyPrint(EventDataString,40);
+            return jpp.PrettyPrint(EventDataString,80);
         }
 
         public JournalEntry(JObject jo, JournalTypeEnum jtype)
