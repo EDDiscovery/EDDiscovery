@@ -32,6 +32,9 @@ namespace EDDiscovery.EliteDangerous
         CommunityGoalJoin = 110,
         CommunityGoalReward = 120,
         Continued = 125,
+        CrewAssign = 126,
+        CrewFire = 127,
+        CrewHire = 128,
         DatalinkScan = 130,
         Died = 140,
         Docked = 145,
@@ -659,6 +662,18 @@ namespace EDDiscovery.EliteDangerous
                 case "CommunityGoalReward":
                     je = new JournalCommunityGoalReward(jo);
                     break;
+
+                case "CrewAssign":
+                    je = new JournalCrewAssign(jo);
+                    break;
+                case "CrewFire":
+                    je = new JournalCrewFire(jo);
+                    break;
+                case "CrewHire":
+                    je = new JournalCrewHire(jo);
+                    break;
+
+
 
                 case "DatalinkScan":
                     je = new JournalDatalinkScan(jo);
