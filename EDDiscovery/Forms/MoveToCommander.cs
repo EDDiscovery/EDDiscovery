@@ -33,12 +33,11 @@ namespace EDDiscovery2
 
         private void MoveToCommander_Load(object sender, EventArgs e)
         {
-            BindingList<EDCommander>  commanders = EDDiscovery.EDDiscoveryForm.EDDConfig.listCommanders;
+            List<EDCommander>  commanders = EDDiscovery.EDDiscoveryForm.EDDConfig.ListOfCommanders;
 
             comboBoxCommanders.DataSource = commanders;
             comboBoxCommanders.DisplayMember = "Name";
             comboBoxCommanders.ValueMember = "Nr";
-
         }
 
         private void comboBoxCommanders_SelectedIndexChanged(object sender, EventArgs e)

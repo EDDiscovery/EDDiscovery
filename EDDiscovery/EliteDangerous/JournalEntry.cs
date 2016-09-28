@@ -480,6 +480,20 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
+        public static void UpdateCommanderID(long journalid, int cmdrid)
+        {
+            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            {
+                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set CommanderID = @cmdrid where ID=@journalid"))
+                {
+                    cmd.AddParameterWithValue("@journalid", journalid);
+                    cmd.AddParameterWithValue("@cmdrid", cmdrid);
+                    System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with map colour", journalid));
+                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                }
+            }
+        }
+
         static public List<JournalEntry> GetAll(int commander = -999)
         {
             List<JournalEntry> list = new List<JournalEntry>();
