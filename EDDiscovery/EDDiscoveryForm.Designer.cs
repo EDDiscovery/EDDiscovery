@@ -192,7 +192,7 @@
             this.prospectingToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.prospectingToolStripMenuItem.Text = "(DEBUG) Prospecting";
             this.prospectingToolStripMenuItem.Visible = false;
-            this.prospectingToolStripMenuItem.Click += new System.EventHandler(this.prospectingToolStripMenuItem_Click);
+
             // 
             // adminToolStripMenuItem
             // 
