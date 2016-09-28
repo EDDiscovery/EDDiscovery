@@ -174,8 +174,9 @@ namespace EDDiscovery.EliteDangerous
                         }
 
                         tn.Commit();
-                        reader.TravelLogUnit.Update();
                     }
+
+                    reader.TravelLogUnit.Update();
 
                     if (updateProgress != null)
                     {
