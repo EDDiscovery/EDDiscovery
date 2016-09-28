@@ -1598,7 +1598,7 @@ namespace EDDiscovery
                 return;
             }
 
-            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID);
+            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             e.Result = jlist;
         }
 
