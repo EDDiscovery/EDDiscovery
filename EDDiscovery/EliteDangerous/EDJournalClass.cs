@@ -115,7 +115,7 @@ namespace EDDiscovery.EliteDangerous
                 return null;
 
             Dictionary<long, List<JournalEntry>> journalentries = JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).GroupBy(e => e.JournalId).ToDictionary(g => g.Key, g => g.ToList());
-            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
+            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => (t.type & 0xFF) == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
 
             // order by file write time so we end up on the last one written
             FileInfo[] allFiles = Directory.EnumerateFiles(datapath, "Journal.*.log", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
