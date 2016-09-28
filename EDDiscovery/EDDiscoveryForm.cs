@@ -1565,7 +1565,7 @@ namespace EDDiscovery
             }
             else
             {
-                //TBDRefreshHistory(VisitedSystemsClass.GetAll(DisplayedCommander));
+                TransferToFrontEnd();
             }
         }
 
@@ -1590,9 +1590,6 @@ namespace EDDiscovery
                 e.Result = null;
                 return;
             }
-
-            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
-            e.Result = jlist;
         }
 
         private void RefreshHistoryWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1603,12 +1600,10 @@ namespace EDDiscovery
                 {
                     travelHistoryControl1.LogLineHighlight("History Refresh Error: " + e.Error.Message );
                 }
-                else if (e.Result != null)
-                {
-                    TransferToFrontEnd((List<EliteDangerous.JournalEntry>)e.Result);
-                    ReportProgress(-1, "");
-                    travelHistoryControl1.LogLine("Refresh Complete." );
-                }
+
+                TransferToFrontEnd();
+                ReportProgress(-1, "");
+                travelHistoryControl1.LogLine("Refresh Complete." );
 
                 travelHistoryControl1.RefreshButton(true);
                 journalViewControl1.RefreshButton(true);
@@ -1626,10 +1621,9 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
-        private void TransferToFrontEnd(List<EliteDangerous.JournalEntry> jlist)
+        private void TransferToFrontEnd()
         {
-            if (jlist == null)
-                return;
+            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
 
             history.Clear();
 
@@ -1663,11 +1657,14 @@ namespace EDDiscovery
         {
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
-            HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast);
-            history.Add(he);
+            if (je.CommanderId == DisplayedCommander)
+            {
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, history.GetLast);
+                history.Add(he);
 
-            travelHistoryControl1.AddNewEntry(he);
-            journalViewControl1.AddNewEntry(he);
+                travelHistoryControl1.AddNewEntry(he);
+                journalViewControl1.AddNewEntry(he);
+            }
         }
 
         #endregion
