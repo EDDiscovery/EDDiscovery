@@ -4,7 +4,6 @@ using EDDiscovery2.DB;
 using EDDiscovery2.EDDB;
 using EDDiscovery2.EDSM;
 using EDDiscovery2.Forms;
-using EDDiscovery2.PlanetSystems;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -1310,13 +1309,7 @@ namespace EDDiscovery
             TravelControl.buttonMap_Click(sender, e);
         }
 
-        private void prospectingToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PlanetsForm frm = new PlanetsForm();
 
-            frm.InitForm(this);
-            frm.Show();
-        }
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {

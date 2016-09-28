@@ -473,27 +473,6 @@
     <Compile Include="Forms\MoveToCommander.Designer.cs">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlanetSystems\AddMaterialNodeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PlanetSystems\AddMaterialNodeControl.Designer.cs">
-      <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PlanetSystems\EDBasecamp.cs" />
-    <Compile Include="PlanetSystems\EDSurvey.cs" />
-    <Compile Include="PlanetSystems\EDWorldSurvey.cs" />
-    <Compile Include="PlanetSystems\Repositories\Basecamp.cs" />
-    <Compile Include="PlanetSystems\Repositories\EdMaterializer.cs" />
-    <Compile Include="PlanetSystems\EDMaterials.cs" />
-    <Compile Include="PlanetSystems\EDWorld.cs" />
-    <Compile Include="PlanetSystems\EDStar.cs" />
-    <Compile Include="PlanetSystems\FormProspecting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PlanetSystems\FormProspecting.Designer.cs">
-      <DependentUpon>FormProspecting.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PlanetSystems\Material.cs" />
     <Compile Include="EMK\Arc.cs" />
     <Compile Include="EMK\AStar.cs" />
     <Compile Include="EMK\Graph.cs" />
@@ -515,18 +494,6 @@
     <Compile Include="ImageHandler\ImageHandler.Designer.cs">
       <DependentUpon>ImageHandler.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlanetSystems\ObjectsType.cs" />
-    <Compile Include="PlanetSystems\EDObject.cs" />
-    <Compile Include="PlanetSystems\PlanetsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PlanetSystems\PlanetsForm.Designer.cs">
-      <DependentUpon>PlanetsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PlanetSystems\Repositories\Star.cs" />
-    <Compile Include="PlanetSystems\Repositories\Survey.cs" />
-    <Compile Include="PlanetSystems\Repositories\World.cs" />
-    <Compile Include="PlanetSystems\Repositories\WorldSurvey.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteControl.cs">
@@ -687,9 +654,6 @@
     <EmbeddedResource Include="JournalViewControl.resx">
       <DependentUpon>JournalViewControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PlanetSystems\PlanetsForm.resx">
-      <DependentUpon>PlanetsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -703,12 +667,6 @@
     <Content Include="fge-logo-001-dark.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="PlanetSystems\AddMaterialNodeControl.resx">
-      <DependentUpon>AddMaterialNodeControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PlanetSystems\FormProspecting.resx">
-      <DependentUpon>FormProspecting.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </EmbeddedResource>
