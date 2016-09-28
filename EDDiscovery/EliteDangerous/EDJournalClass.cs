@@ -423,12 +423,13 @@ namespace EDDiscovery.EliteDangerous
                     }
 
                     netlogpos = nfi.TravelLogUnit.Size;
+                    List<JournalEntry> ents = nfi.ReadJournalLog().ToList();
 
                     using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
                     {
                         using (DbTransaction txn = cn.BeginTransaction())
                         {
-                            foreach (JournalEntry je in nfi.ReadJournalLog())
+                            foreach (JournalEntry je in ents)
                             {
                                 entries.Add(je);
                                 je.Add(cn, txn);
