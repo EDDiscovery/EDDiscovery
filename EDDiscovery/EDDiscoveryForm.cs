@@ -1555,10 +1555,19 @@ namespace EDDiscovery
 
             if (!_refreshWorker.IsBusy)
             {
-                travelHistoryControl1.RefreshButton(false);
-                journalViewControl1.RefreshButton(false);
+                if (DisplayedCommander >= 0)
+                {
+                    travelHistoryControl1.RefreshButton(false);
+                    journalViewControl1.RefreshButton(false);
 
-                _refreshWorker.RunWorkerAsync(new RefreshHistoryParameters { ForceReload = forceReload });
+                    journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
+
+                    _refreshWorker.RunWorkerAsync(new RefreshHistoryParameters { ForceReload = forceReload });
+                }
+                else
+                {
+                    TransferToFrontEnd();
+                }
             }
         }
 
@@ -1574,8 +1583,6 @@ namespace EDDiscovery
                 var worker = (BackgroundWorker)sender;
                 RefreshHistoryParameters param = e.Argument as RefreshHistoryParameters ?? new RefreshHistoryParameters();
                 bool forceReload = param.ForceReload;
-
-                journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
 
                 journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
 
@@ -1600,8 +1607,7 @@ namespace EDDiscovery
                     travelHistoryControl1.CheckCommandersListBox();             // in case a new commander has been detected
                     settings.UpdateCommandersListBox();
 
-                    List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
-                    TransferToFrontEnd(jlist);
+                    TransferToFrontEnd();
                     ReportProgress(-1, "");
                     travelHistoryControl1.LogLine("Refresh Complete." );
                 }
@@ -1609,10 +1615,10 @@ namespace EDDiscovery
                 travelHistoryControl1.RefreshButton(true);
                 journalViewControl1.RefreshButton(true);
 
-                journalmonitor.StartMonitor();
-
                 if (HistoryRefreshed != null)
                     HistoryRefreshed(this, EventArgs.Empty);
+
+                journalmonitor.StartMonitor();
             }
         }
 
@@ -1622,10 +1628,9 @@ namespace EDDiscovery
             ReportProgress(e.ProgressPercentage, $"Processing log file {name}");
         }
 
-        private void TransferToFrontEnd(List<EliteDangerous.JournalEntry> jlist)
+        private void TransferToFrontEnd()
         {
-            if (jlist == null)
-                return;
+            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(DisplayedCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
 
             history.Clear();
 
