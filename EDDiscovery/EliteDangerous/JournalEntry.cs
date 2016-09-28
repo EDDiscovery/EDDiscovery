@@ -232,7 +232,7 @@ namespace EDDiscovery.EliteDangerous
     public abstract class JournalEntry
     {
         public long Id;                          // this is the entry ID
-        public long JournalId;                   // this ID of the journal tlu (aka TravelLogId)
+        public long TLUId;                       // this ID of the journal tlu (aka TravelLogId)
         public int CommanderId;                 // commander Id of entry
 
         public string EventTypeStr;          // these two duplicate each other, string if for debuggin in the db view of a browser
@@ -283,114 +283,23 @@ namespace EDDiscovery.EliteDangerous
         public virtual void FillInformation(out string summary, out string info, out string detailed)
         {
             summary = Tools.SplitCapsWord(EventTypeStr);
-            info = "Event";
-            detailed = Tools.SplitCapsWord(ToShortString().Replace("\"", ""));  // something like this..
+            info = ToShortString();
+            detailed = "";
         }
 
-        void ExpandTokens(JToken jt, ref string outstr, ref int linelen, int childno)
+        public virtual string DefaultRemoveItems()
         {
-            if (jt.HasValues)
-            {
-                //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Type.ToString()));
-
-                if ( !(jt is JObject || jt is JArray )) // not interested in printing these names
-                {
-                    if ( linelen>=0 && outstr.Length - linelen > 40 )       // not too many on one line.
-                    {
-                        outstr += Environment.NewLine;
-                        linelen = outstr.Length;
-                    }
-
-                    string name = jt.Path;
-
-                    int localisedindex = name.IndexOf("_Localised");
-
-                    if (localisedindex >= 0)
-                        name = name.Substring(0, localisedindex);     // cut out all past there.
-
-                    int dot = name.IndexOf('.');                            // any dot notation remove
-                    if (dot >= 0)
-                        name = name.Substring(dot + 1);
-                    outstr += name + ":";
-                }
-
-                int c = 0;
-                foreach (JToken jc in jt.Children())        // too late in the day, count won't work.. bodge
-                    c++;
-
-                if (jt is JObject && childno>1)             // objects, indent if second or more child
-                {
-                    outstr += "    ";
-                }
-
-                if (c > 1)
-                    outstr += "(";
-
-                int cno = 1;
-
-                foreach (JToken jc in jt.Children())
-                {
-                    if (jc.HasValues)
-                    {
-                        int linelenoff = -1;                // children don't do the line break part. keep them together
-                        ExpandTokens(jc, ref outstr, ref linelenoff, cno++);
-                    }
-                    else
-                    {
-                        outstr += jc.Value<string>() + ",";     // Not right, need to fix..
-                    }
-                }
-
-                if (c > 1)
-                {
-                    outstr = outstr.TrimEnd() + ") ";        // remove any trailing spaces before end
-                }
-
-                if (jt is JObject)
-                {
-                    outstr += Environment.NewLine;          // objects LF at end.
-                }
-            }
+            return "timestamp;event;EDDMapColor";
         }
 
-
-        public string ToShortString(string removeitems = "", string removedefault = "timestamp;event;EDDMapColor")
+        public string ToShortString(string additionalremoves = null, JSONConverters jc = null)
         {
-            string[] r1 = removeitems.Split(';');
-            string[] r2 = removedefault.Split(';');
+            if (jc == null)
+                jc = JSONConverters.StandardConverters();
 
-            string outstr = "";
-
-            try
-            {
-                JObject jo = JObject.Parse(EventDataString);  // Create a clone
-                List<JToken> tokens = jo.Children().ToList();  // token list
-
-                int linelen = 0;
-
-                foreach (JToken jt in tokens)
-                {
-                    if (!r1.Contains(jt.Path) && !r2.Contains(jt.Path))     // don't print these
-                    {
-                        string pname = jt.Path;
-
-                        if (tokens.FindIndex(x => x.Path.Equals(pname + "_Localised")) >= 0)  // if we have a localised version, don't print this
-                            continue;
-
-                        //System.Diagnostics.Trace.WriteLine(string.Format("{0}", jt.Path));
-
-                        ExpandTokens(jt, ref outstr, ref linelen, 1);
-                    }
-                }
-            }
-            catch( Exception )
-            {
-                outstr = "Report problem to EDDiscovery team, event " + EventTypeStr + " did not print properly";
-            }
-
-            return outstr;
+            JSONPrettyPrint jpp = new JSONPrettyPrint(jc,DefaultRemoveItems() + ((additionalremoves!= null) ? (";" + additionalremoves) : ""),"_Localised",EventTypeStr);
+            return jpp.PrettyPrint(EventDataString,80);
         }
-
 
         public JournalEntry(JObject jo, JournalTypeEnum jtype)
         {
@@ -398,7 +307,7 @@ namespace EDDiscovery.EliteDangerous
             EventTypeID = jtype;
             EventTypeStr = jtype.ToString();
             EventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-            JournalId = 0;
+            TLUId = 0;
         }
 
         static public JournalEntry CreateJournalEntry(DataRow dr)
@@ -408,7 +317,7 @@ namespace EDDiscovery.EliteDangerous
             JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString);     // this sets EventTypeId, EventTypeStr and UTC via constructor above.. 
 
             jr.Id = (int)(long)dr["Id"];
-            jr.JournalId = (int)(long)dr["TravelLogId"];
+            jr.TLUId = (int)(long)dr["TravelLogId"];
             jr.CommanderId = (int)(long)dr["CommanderId"];
             jr.EventTimeUTC = (DateTime)dr["EventTime"];
             jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
@@ -424,7 +333,7 @@ namespace EDDiscovery.EliteDangerous
             JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString);
 
             jr.Id = (int)(long)dr["Id"];
-            jr.JournalId = (int)(long)dr["TravelLogId"];
+            jr.TLUId = (int)(long)dr["TravelLogId"];
             jr.CommanderId = (int)(long)dr["CommanderId"];
             jr.EventTimeUTC = (DateTime)dr["EventTime"];
             jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
@@ -458,7 +367,7 @@ namespace EDDiscovery.EliteDangerous
             using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, TravelLogID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @TravelLogID, @CommanderID, @EventTypeId , @EventStrName, @EventData, @EdsmId, @Synced)", tn))
             {
                 cmd.AddParameterWithValue("@EventTime", EventTimeUTC);           // MUST use UTC connection
-                cmd.AddParameterWithValue("@TravelLogID", JournalId);
+                cmd.AddParameterWithValue("@TravelLogID", TLUId);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
                 cmd.AddParameterWithValue("@EventTypeId", EventTypeID);
                 cmd.AddParameterWithValue("@EventStrName", EventTypeStr);
@@ -490,7 +399,7 @@ namespace EDDiscovery.EliteDangerous
             {
                 cmd.AddParameterWithValue("@ID", Id);
                 cmd.AddParameterWithValue("@EventTime", EventTimeUTC);  // MUST use UTC connection
-                cmd.AddParameterWithValue("@TravelLogID", JournalId);
+                cmd.AddParameterWithValue("@TravelLogID", TLUId);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
                 cmd.AddParameterWithValue("@EventTypeId", EventTypeID);
                 cmd.AddParameterWithValue("@EventStrName", EventTypeStr);
@@ -530,9 +439,40 @@ namespace EDDiscovery.EliteDangerous
                                 cmd2.AddParameterWithValue("@EventData", jo.ToString());
                                 cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
 
-                                Console.WriteLine("Update journal ID {0}", journalid);
+                                System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid", journalid));
                                 SQLiteDBClass.SQLNonQueryText(cn, cmd2);
-                                Console.WriteLine("Complete {0}", journalid);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void UpdateMapColour(long journalid, int mapcolour)
+        {
+            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            {
+                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid"))
+                {
+                    cmd.AddParameterWithValue("@journalid", journalid);
+
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            JournalEntry ent = CreateJournalEntry(reader);
+
+                            JObject jo = (JObject)JObject.Parse(ent.EventDataString);
+
+                            jo["EDDMapColor"] = mapcolour;
+
+                            using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData where ID = @ID"))
+                            {
+                                cmd2.AddParameterWithValue("@ID", journalid);
+                                cmd2.AddParameterWithValue("@EventData", jo.ToString());
+
+                                System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with map colour", journalid));
+                                SQLiteDBClass.SQLNonQueryText(cn, cmd2);
                             }
                         }
                     }

@@ -54,9 +54,23 @@ namespace EDDiscovery.EliteDangerous
                 try
                 {
                     je = JournalEntry.CreateJournalEntry(line);
-                    if (je.EventTypeID == JournalTypeEnum.LoadGame)
+                    if (je.EventTypeID == JournalTypeEnum.FileHeader)
+                    {
+                        JournalEvents.JournalFileHeader header = (JournalEvents.JournalFileHeader)je;
+
+                        if (header.Beta)
+                        {
+                            TravelLogUnit.type |= 0x8000;
+                        }
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.LoadGame)
                     {
                         string newname = (je as JournalEvents.JournalLoadGame).LoadGameCommander;
+
+                        if ((TravelLogUnit.type & 0x8000) == 0x8000)
+                        {
+                            newname = "[BETA] " + newname;
+                        }
 
                         EDCommander _commander = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
 
@@ -73,7 +87,7 @@ namespace EDDiscovery.EliteDangerous
                         }
                     }
 
-                    je.JournalId = (int)TravelLogUnit.id;
+                    je.TLUId = (int)TravelLogUnit.id;
                     je.CommanderId = cmdrid;
 
                     return true;

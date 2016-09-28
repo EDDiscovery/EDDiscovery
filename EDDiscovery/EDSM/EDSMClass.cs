@@ -45,7 +45,6 @@ namespace EDDiscovery2.EDSM
 
         public string SubmitDistances(string cmdr, string from, Dictionary<string, double> distances)
         {
-            CultureInfo culture = new CultureInfo("en-US");
             string query = "{\"ver\":2," + " \"commander\":\"" + cmdr + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
 
             var counter = 0;
@@ -57,7 +56,7 @@ namespace EDDiscovery2.EDSM
                 }
 
                 var to = item.Key;
-                var distance = item.Value.ToString("0.00", culture);
+                var distance = item.Value.ToString("0.00", CultureInfo.InvariantCulture);
 
                 query += " { \"name\": \"" + to + "\",  \"dist\": " + distance + " } ";
             }
@@ -418,11 +417,10 @@ namespace EDDiscovery2.EDSM
 
         public string SetLogWithPos(string systemName, DateTime dateVisited, double x, double y, double z)
         {
-            var culture = new System.Globalization.CultureInfo("en-US");
             string query;
             query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
-                 "&x=" + HttpUtility.UrlEncode(x.ToString(culture)) + "&y=" + HttpUtility.UrlEncode(y.ToString(culture)) + "&z=" + HttpUtility.UrlEncode(z.ToString(culture)) +
+                 "&x=" + HttpUtility.UrlEncode(x.ToString(CultureInfo.InvariantCulture)) + "&y=" + HttpUtility.UrlEncode(y.ToString(CultureInfo.InvariantCulture)) + "&z=" + HttpUtility.UrlEncode(z.ToString(CultureInfo.InvariantCulture)) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisited.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
             var response = RequestGet("api-logs-v1/" + query);
 

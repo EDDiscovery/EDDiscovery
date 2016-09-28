@@ -34,6 +34,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string TargetType { get; set; }
         public string TargetFaction { get; set; }
         public int MissionId { get; set; }
+
+        public override string DefaultRemoveItems()
+        {
+            return base.DefaultRemoveItems() + ";MissionID";
+        }
+
     }
 
 }
