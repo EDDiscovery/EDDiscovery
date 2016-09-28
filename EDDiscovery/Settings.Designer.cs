@@ -54,13 +54,13 @@
             this.groupBox4 = new ExtendedControls.GroupBoxCustom();
             this.btnDeleteCommander = new ExtendedControls.ButtonExt();
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
+            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.ColumnNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEDSMAPIKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNetLogDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBoxTheme.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -445,14 +445,24 @@
             this.buttonAddCommander.UseVisualStyleBackColor = true;
             this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(133, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(416, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Leave Override Journal Location blank to use the standard Frontier location for j" +
+    "ournals";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(134, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(309, 13);
+            this.label2.Size = new System.Drawing.Size(354, 13);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Get Api key from https://www.edsm.net in  \"My account\" menu.";
+            this.label2.Text = "Get an EDSM API key from https://www.edsm.net in \"My account\" menu";
             // 
             // dataGridViewCommanders
             // 
@@ -488,7 +498,6 @@
             // 
             // ColumnCommander
             // 
-            this.ColumnCommander.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnCommander.DataPropertyName = "Name";
             this.ColumnCommander.HeaderText = "Commander";
             this.ColumnCommander.MinimumWidth = 150;
@@ -496,9 +505,8 @@
             // 
             // ColumnEDSMAPIKey
             // 
-            this.ColumnEDSMAPIKey.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnEDSMAPIKey.DataPropertyName = "APIKey";
-            this.ColumnEDSMAPIKey.HeaderText = "EDSM api key";
+            this.ColumnEDSMAPIKey.HeaderText = "EDSM API key";
             this.ColumnEDSMAPIKey.MinimumWidth = 150;
             this.ColumnEDSMAPIKey.Name = "ColumnEDSMAPIKey";
             // 
@@ -507,17 +515,8 @@
             this.ColumnNetLogDir.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnNetLogDir.DataPropertyName = "NetLogDir";
             this.ColumnNetLogDir.HeaderText = "Override Journal Location";
-            this.ColumnNetLogDir.MinimumWidth = 150;
+            this.ColumnNetLogDir.MinimumWidth = 50;
             this.ColumnNetLogDir.Name = "ColumnNetLogDir";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(133, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(370, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Leave Journal Location blank to use the standard frontier location for journals";
             // 
             // Settings
             // 
@@ -570,10 +569,10 @@
         private ExtendedControls.CheckBoxCustom checkBoxFocusNewSystem;
         private ExtendedControls.CheckBoxCustom checkBoxKeepOnTop;
         private ExtendedControls.ButtonExt btnDeleteCommander;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNr;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEDSMAPIKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNetLogDir;
-        private System.Windows.Forms.Label label1;
     }
 }

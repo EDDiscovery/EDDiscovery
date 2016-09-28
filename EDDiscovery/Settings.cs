@@ -81,6 +81,7 @@ namespace EDDiscovery2
             }
 
             dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.ListOfCommanders;
+            dataGridViewCommanders.AutoGenerateColumns = false;
 
             panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
 
