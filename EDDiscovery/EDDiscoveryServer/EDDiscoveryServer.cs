@@ -183,11 +183,9 @@ namespace EDDiscovery
 
         public string SubmitDistances(string cmdr, string from, string to, double dist)
         {
-            CultureInfo culture = new CultureInfo("en-US");
-            string diststr = dist.ToString("0.00", culture);
+            string diststr = dist.ToString("0.00", CultureInfo.InvariantCulture);
             //string query = "{ver:2, test:true, commander:\"" +cmdr + "\", p0: { name: \"" + from + "\" },   refs: [ { name: \"" + to + "\",  dist: " + diststr + "}  ] } ";
             string query = "{ver:2, commander:\"" + cmdr + "\", p0: { name: \"" + from + "\" },   refs: [ { name: \"" + to + "\",  dist: " + diststr + "}  ] } ";
-
             return Post(query, "SubmitDistances");
         }
 
