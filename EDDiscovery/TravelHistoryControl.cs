@@ -1083,7 +1083,6 @@ namespace EDDiscovery
 
             HistoryEntry prev = _discoveryForm.history.PreviousFrom(rightclicksystem, true);    // null can be passed in safely
 
-            starMapColourToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.IsFSDJump);
             enterDistanceToPreviousStarToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.IsFSDJump && prev != null);
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
@@ -1127,7 +1126,7 @@ namespace EDDiscovery
                 }
 
                 this.Cursor = Cursors.Default;
-                dataGridViewTravel.Invalidate();
+                Display();
             }
         }
 
