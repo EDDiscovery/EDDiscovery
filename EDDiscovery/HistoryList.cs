@@ -51,45 +51,6 @@ namespace EDDiscovery
             EdsmSync = true; 
         }
 
-        public static HistoryEntry FromVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0)
-        {
-            Debug.Assert(sys != null);
-            return new HistoryEntry
-            {
-                EntryType = EliteDangerous.JournalTypeEnum.FSDJump,
-                System = sys,
-                EventTime = eventt,
-                EventSummary = "Jump to " + sys.name,
-                EventDescription = dist,
-                EventDetailedInfo = info,
-                MapColour = m,
-                Journalid = journalid,
-                EdsmSync = true 
-            };
-        }
-
-        public void MakeJournalEntry(EliteDangerous.JournalTypeEnum type, long id , ISystem sys, DateTime eventt, string summary , string descr, string info, int m, bool edss)
-        {
-            EntryType = type; Journalid = id; System = sys; EventTime = eventt; EventSummary = summary; EventDescription = descr; EventDetailedInfo = info;
-            MapColour = m; EdsmSync = edss;
-        }
-
-        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalTypeEnum type, long id, ISystem sys, DateTime eventt, string summary, string descr, string info, int m, bool edss)
-        {
-            return new HistoryEntry
-            {
-                EntryType = type,
-                Journalid = id,
-                System = sys,
-                EventTime = eventt,
-                EventSummary = summary,
-                EventDescription = descr,
-                EventDetailedInfo = info,
-                MapColour = m,
-                EdsmSync = edss
-            };
-        }
-
         public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, SQLiteConnectionSystem conn = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
@@ -138,7 +99,7 @@ namespace EDDiscovery
             {
                 Indexno = indexno,
                 EntryType = je.EventTypeID,
-                Journalid = je.JournalId,
+                Journalid = je.Id,
                 System = isys,
                 EventTime = je.EventTimeLocal,
                 MapColour = mapcolour,
@@ -169,14 +130,14 @@ namespace EDDiscovery
             }
         }
 
-        public bool UpdateMapColour(int v)
+        public void UpdateMapColour(int v)
         {
-            MapColour = v;
-            if (Journalid != 0)
+            if (EntryType == EliteDangerous.JournalTypeEnum.FSDJump)
             {
-                //TBD Update journal
+                MapColour = v;
+                if (Journalid != 0)
+                    EliteDangerous.JournalEntry.UpdateMapColour(Journalid, v);
             }
-            return true;
         }
 
         public bool UpdateCommanderID(int v)

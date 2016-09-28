@@ -87,7 +87,7 @@ namespace EDDiscovery.EliteDangerous
                         }
                     }
 
-                    je.JournalId = (int)TravelLogUnit.id;
+                    je.TLUId = (int)TravelLogUnit.id;
                     je.CommanderId = cmdrid;
 
                     return true;

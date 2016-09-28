@@ -232,7 +232,7 @@ namespace EDDiscovery.EliteDangerous
     public abstract class JournalEntry
     {
         public long Id;                          // this is the entry ID
-        public long JournalId;                   // this ID of the journal tlu (aka TravelLogId)
+        public long TLUId;                       // this ID of the journal tlu (aka TravelLogId)
         public int CommanderId;                 // commander Id of entry
 
         public string EventTypeStr;          // these two duplicate each other, string if for debuggin in the db view of a browser
@@ -307,7 +307,7 @@ namespace EDDiscovery.EliteDangerous
             EventTypeID = jtype;
             EventTypeStr = jtype.ToString();
             EventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-            JournalId = 0;
+            TLUId = 0;
         }
 
         static public JournalEntry CreateJournalEntry(DataRow dr)
@@ -317,7 +317,7 @@ namespace EDDiscovery.EliteDangerous
             JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString);     // this sets EventTypeId, EventTypeStr and UTC via constructor above.. 
 
             jr.Id = (int)(long)dr["Id"];
-            jr.JournalId = (int)(long)dr["TravelLogId"];
+            jr.TLUId = (int)(long)dr["TravelLogId"];
             jr.CommanderId = (int)(long)dr["CommanderId"];
             jr.EventTimeUTC = (DateTime)dr["EventTime"];
             jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
@@ -333,7 +333,7 @@ namespace EDDiscovery.EliteDangerous
             JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString);
 
             jr.Id = (int)(long)dr["Id"];
-            jr.JournalId = (int)(long)dr["TravelLogId"];
+            jr.TLUId = (int)(long)dr["TravelLogId"];
             jr.CommanderId = (int)(long)dr["CommanderId"];
             jr.EventTimeUTC = (DateTime)dr["EventTime"];
             jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
@@ -367,7 +367,7 @@ namespace EDDiscovery.EliteDangerous
             using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, TravelLogID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @TravelLogID, @CommanderID, @EventTypeId , @EventStrName, @EventData, @EdsmId, @Synced)", tn))
             {
                 cmd.AddParameterWithValue("@EventTime", EventTimeUTC);           // MUST use UTC connection
-                cmd.AddParameterWithValue("@TravelLogID", JournalId);
+                cmd.AddParameterWithValue("@TravelLogID", TLUId);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
                 cmd.AddParameterWithValue("@EventTypeId", EventTypeID);
                 cmd.AddParameterWithValue("@EventStrName", EventTypeStr);
@@ -399,7 +399,7 @@ namespace EDDiscovery.EliteDangerous
             {
                 cmd.AddParameterWithValue("@ID", Id);
                 cmd.AddParameterWithValue("@EventTime", EventTimeUTC);  // MUST use UTC connection
-                cmd.AddParameterWithValue("@TravelLogID", JournalId);
+                cmd.AddParameterWithValue("@TravelLogID", TLUId);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
                 cmd.AddParameterWithValue("@EventTypeId", EventTypeID);
                 cmd.AddParameterWithValue("@EventStrName", EventTypeStr);
@@ -439,9 +439,40 @@ namespace EDDiscovery.EliteDangerous
                                 cmd2.AddParameterWithValue("@EventData", jo.ToString());
                                 cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
 
-                                Console.WriteLine("Update journal ID {0}", journalid);
+                                System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid", journalid));
                                 SQLiteDBClass.SQLNonQueryText(cn, cmd2);
-                                Console.WriteLine("Complete {0}", journalid);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void UpdateMapColour(long journalid, int mapcolour)
+        {
+            using (SQLiteConnectionUserUTC cn = new SQLiteConnectionUserUTC())
+            {
+                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid"))
+                {
+                    cmd.AddParameterWithValue("@journalid", journalid);
+
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            JournalEntry ent = CreateJournalEntry(reader);
+
+                            JObject jo = (JObject)JObject.Parse(ent.EventDataString);
+
+                            jo["EDDMapColor"] = mapcolour;
+
+                            using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData where ID = @ID"))
+                            {
+                                cmd2.AddParameterWithValue("@ID", journalid);
+                                cmd2.AddParameterWithValue("@EventData", jo.ToString());
+
+                                System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with map colour", journalid));
+                                SQLiteDBClass.SQLNonQueryText(cn, cmd2);
                             }
                         }
                     }

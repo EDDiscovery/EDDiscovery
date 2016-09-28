@@ -100,21 +100,14 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        // called during start up and if refresh history is pressed
-        public List<JournalEntry> ParseJournalFiles(bool forceReload = false)
-        {
-            return ParseJournalFiles(EDDConfig.Instance.DefaultMapColour, () => false, (p, s) => { }, forceReload);
-        }
-
-
-        public List<JournalEntry> ParseJournalFiles(int defaultMapColour, Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
+        public List<JournalEntry> ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
             string datapath = GetJournalDir();  // ensures folder is there, else null.
 
             if (datapath == null)
                 return null;
 
-            Dictionary<long, List<JournalEntry>> journalentries = JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).GroupBy(e => e.JournalId).ToDictionary(g => g.Key, g => g.ToList());
+            Dictionary<long, List<JournalEntry>> journalentries = JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).GroupBy(e => e.TLUId).ToDictionary(g => g.Key, g => g.ToList());
             Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => (t.type & 0xFF) == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
 
             // order by file write time so we end up on the last one written
@@ -165,11 +158,11 @@ namespace EDDiscovery.EliteDangerous
                     {
                         foreach (JournalEntry je in entries)
                         {
-                            if (!journalentries.ContainsKey(je.JournalId))                      //Rob added
-                                journalentries.Add(je.JournalId, new List<JournalEntry>());
+                            if (!journalentries.ContainsKey(je.TLUId))                      // Added because i had a situation with a TLU but no entries
+                                journalentries.Add(je.TLUId, new List<JournalEntry>());
 
                             System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", je.EventTimeUTC, je.EventTypeStr));
-                            journalentries[je.JournalId].Add(je);
+                            journalentries[je.TLUId].Add(je);
                             je.Add(cn, tn);
                         }
 
@@ -249,10 +242,6 @@ namespace EDDiscovery.EliteDangerous
 
         public void StartMonitor()
         {
-            //return;
-
-            // BUGS in scanning.. basically the reader does not know the commander ID if it has just reopened the file.
-
             Debug.Assert(Application.MessageLoop);              // ensure.. paranoia
 
             if (m_Watcher == null)

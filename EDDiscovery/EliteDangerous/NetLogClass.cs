@@ -60,9 +60,9 @@ namespace EDDiscovery
             List<JournalLocOrJump> visitedSystems = new List<JournalLocOrJump>();
             Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
             Dictionary<long, string> travellogunitid2name = m_travelogUnits.Values.ToDictionary(t => t.id, t => t.Name);
-            Dictionary<string, List<JournalLocOrJump>> vsc_lookup = JournalEntry.GetAll().OfType<JournalLocOrJump>().GroupBy(v => v.JournalId).Where(g => travellogunitid2name.ContainsKey(g.Key)).ToDictionary(g => travellogunitid2name[g.Key], g => g.ToList());
+            Dictionary<string, List<JournalLocOrJump>> vsc_lookup = JournalEntry.GetAll().OfType<JournalLocOrJump>().GroupBy(v => v.TLUId).Where(g => travellogunitid2name.ContainsKey(g.Key)).ToDictionary(g => travellogunitid2name[g.Key], g => g.ToList());
             HashSet<long> journalids = new HashSet<long>(m_travelogUnits.Values.Select(t => t.id).ToList());
-            List<JournalLocOrJump> vsSystemsList = JournalEntry.GetAll(currentcmdrid).OfType<JournalLocOrJump>().Where(j => journalids.Contains(j.JournalId)).ToList();
+            List<JournalLocOrJump> vsSystemsList = JournalEntry.GetAll(currentcmdrid).OfType<JournalLocOrJump>().Where(j => journalids.Contains(j.TLUId)).ToList();
 
             if (vsSystemsList != null)
             {
@@ -135,7 +135,7 @@ namespace EDDiscovery
 
                             JournalLocOrJump je = new JournalFSDJump(jo)
                             {
-                                JournalId = (int)reader.TravelLogUnit.id,
+                                TLUId = (int)reader.TravelLogUnit.id,
                                 SyncedEDSM = false,
                                 CommanderId = currentcmdrid,
                             };

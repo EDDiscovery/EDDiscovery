@@ -1589,7 +1589,7 @@ namespace EDDiscovery
 
             journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
 
-            List<EliteDangerous.JournalEntry> jlist = journalmonitor.ParseJournalFiles(EDDConfig.Instance.DefaultMapColour, () => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
+            List<EliteDangerous.JournalEntry> jlist = journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
 
             if (worker.CancellationPending)
             {

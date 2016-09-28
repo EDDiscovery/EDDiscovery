@@ -25,6 +25,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
             Security = Tools.GetStringDef(evt["Security"]);
             Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
+
+            JToken jm = jEventData["EDDMapColor"];
+            if (Tools.IsNullOrEmptyT(jm))
+                MapColor = EDDiscovery2.EDDConfig.Instance.DefaultMapColour;      // new entries get this default map colour if its not already there
         }
 
         public string Body { get; set; }
