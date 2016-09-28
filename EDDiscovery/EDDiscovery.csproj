@@ -317,6 +317,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalWingAdd.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingJoin.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingLeave.cs" />
+    <Compile Include="EliteDangerous\JSONPrettyPrint.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">

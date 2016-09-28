@@ -25,6 +25,10 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Government_Localised = Tools.GetStringDef(evt["Government_Localised"]);
             Security = Tools.GetStringDef(evt["Security"]);
             Security_Localised = Tools.GetStringDef(evt["Security_Localised"]);
+
+            JToken jm = jEventData["EDDMapColor"];
+            if (Tools.IsNullOrEmptyT(jm))
+                MapColor = EDDiscovery2.EDDConfig.Instance.DefaultMapColour;      // new entries get this default map colour if its not already there
         }
 
         public string Body { get; set; }
@@ -49,7 +53,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (JumpDist > 0)
                 info += JumpDist.ToString("0.00") + " ly";
             if ( FuelUsed > 0 )
-                info += " Fuel " + FuelUsed.ToString("0.0");
+                info += " Fuel " + FuelUsed.ToString("0.0") + "t";
             detailed = ToShortString("StarSystem;JumpDist;FuelUsed");       // don't repeat these.
         }
 

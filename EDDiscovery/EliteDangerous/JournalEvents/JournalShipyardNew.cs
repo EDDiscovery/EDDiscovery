@@ -15,11 +15,15 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalShipyardNew(JObject evt ) : base(evt, JournalTypeEnum.ShipyardNew)
         {
             ShipType = Tools.GetStringDef(evt["ShipType"]);
-            ShipId = Tools.GetInt(evt["ShipID"]);
+            ShipId = Tools.GetInt(evt["NewShipID"]);
 
         }
         public string ShipType { get; set; }
         public int ShipId { get; set; }
 
+        public override string DefaultRemoveItems()
+        {
+            return base.DefaultRemoveItems() + ";ShipID;NewShipID";
+        }
     }
 }

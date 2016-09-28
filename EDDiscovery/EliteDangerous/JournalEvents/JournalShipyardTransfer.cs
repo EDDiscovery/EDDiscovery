@@ -31,5 +31,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double Distance { get; set; }
         public int TransferPrice { get; set; }
 
+        public override string DefaultRemoveItems()
+        {
+            return base.DefaultRemoveItems() + ";ShipID";
+        }
     }
 }

@@ -443,7 +443,7 @@ namespace EDDiscovery2.PlanetSystems
                 planet.objectName = textBoxName.Text;
                 planet.ObjectType = obj.String2ObjectType(comboBoxType.Text);
 
-                var culture = new CultureInfo("en-US");
+                var culture = CultureInfo.InvariantCulture;
                 planet.mass = float.Parse(textBoxMass.Text.Replace(",", "."), culture);
                 planet.gravity = float.Parse(textBoxGravity.Text.Replace(",", "."), culture);
                 planet.radius = float.Parse(textBoxRadius.Text.Replace(",", "."), culture);
@@ -467,7 +467,7 @@ namespace EDDiscovery2.PlanetSystems
                 star.ObjectType = obj.String2ObjectType(comboBoxStarType.Text);
                 star.subclass = textBoxStarSubClass.Text;
 
-                var culture = new CultureInfo("en-US");
+                var culture = CultureInfo.InvariantCulture;
                 star.mass = float.Parse(textBoxStarMass.Text.Replace(",", "."), culture); 
                 star.radius = float.Parse(textBoxS_Radius.Text.Replace(",", "."), culture);
                 star.arrivalPoint = float.Parse(textBoxS_ArrivalPoint.Text.Replace(",", "."), culture);

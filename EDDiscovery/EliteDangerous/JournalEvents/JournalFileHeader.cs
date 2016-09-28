@@ -19,5 +19,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string GameVersion { get; set; }
         public string Build { get; set; }
         public string Language { get; set; }
+
+        public bool Beta
+        {
+            get
+            {
+                if (GameVersion.Contains("Beta"))
+                    return true;
+
+                if (GameVersion.Equals("2.2") && Build.Contains("r121645/r0"))
+                    return true;
+
+                return false;
+            }
+        }
     }
 }

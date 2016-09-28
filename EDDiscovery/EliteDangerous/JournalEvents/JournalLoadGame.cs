@@ -30,5 +30,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Group { get; set; }
         public int Credits { get; set; }
         public int Loan { get; set; }
+
+        public override string DefaultRemoveItems()
+        {
+            return base.DefaultRemoveItems() + ";ShipID";
+        }
+
     }
 }
