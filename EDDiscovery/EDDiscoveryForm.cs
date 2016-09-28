@@ -1582,7 +1582,7 @@ namespace EDDiscovery
 
             journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
 
-            List<EliteDangerous.JournalEntry> jlist = journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
+            journalmonitor.ParseJournalFiles(() => worker.CancellationPending, (p, s) => worker.ReportProgress(p, s));   // Parse files stop monitor..
 
             if (worker.CancellationPending)
             {
@@ -1591,6 +1591,7 @@ namespace EDDiscovery
                 return;
             }
 
+            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(EDDConfig.Instance.CurrentCmdrID).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             e.Result = jlist;
         }
 
