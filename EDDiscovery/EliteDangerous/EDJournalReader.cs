@@ -18,10 +18,6 @@ namespace EDDiscovery.EliteDangerous
         public TimeZoneInfo TimeZone { get; set; }
         public TimeSpan TimeZoneOffset { get; set; }
 
-        // Commander
-        //protected EDCommander _commander;
-        //public EDCommander Commander { get { return _commander; } set { _commander = value; } }
-
         // Journal ID
         public int JournalId { get { return (int)TravelLogUnit.id; } }
 
@@ -35,12 +31,12 @@ namespace EDDiscovery.EliteDangerous
 
         public bool ReadJournalLog(out JournalEntry je)
         {
-            int cmdrid = -1;
+            int cmdrid = -2;        //-1 is hidden, -2 is never shown
 
             if (TravelLogUnit.CommanderId.HasValue)
             {
                 cmdrid = TravelLogUnit.CommanderId.Value;
-                System.Diagnostics.Trace.WriteLine(string.Format("TLU says commander {0} ", cmdrid));
+               // System.Diagnostics.Trace.WriteLine(string.Format("TLU says commander {0} at {1}", cmdrid, TravelLogUnit.Name));
             }
 
             string line;
@@ -72,7 +68,7 @@ namespace EDDiscovery.EliteDangerous
                             newname = "[BETA] " + newname;
                         }
 
-                        EDCommander _commander = EDDiscovery2.EDDConfig.Instance.listCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
+                        EDCommander _commander = EDDiscovery2.EDDConfig.Instance.ListOfCommanders.FirstOrDefault(c => c.Name.Equals(newname, StringComparison.InvariantCultureIgnoreCase));
 
                         if (_commander == null)
                             _commander = EDDiscovery2.EDDConfig.Instance.GetNewCommander(newname,null,(cmdrid>=0) ? EDDConfig.Instance.Commander(cmdrid).NetLogDir : null);

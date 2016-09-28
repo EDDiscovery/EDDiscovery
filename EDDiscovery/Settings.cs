@@ -55,23 +55,6 @@ namespace EDDiscovery2
 
         public void InitSettingsTab()
         {
-            radioButton_Auto.Enabled = textBoxNetLogDir.Enabled = false;
-
-            bool auto = EDDConfig.Instance.JournalDirAutoMode;
-
-            if (auto)
-            {
-                radioButton_Auto.Checked = auto;
-            }
-            else
-            {
-                radioButton_Manual.Checked = true;
-            }
-
-            textBoxNetLogDir.Text = EDDConfig.Instance.JournalDir;
-
-            radioButton_Auto.Enabled = textBoxNetLogDir.Enabled = true;
-
             checkBox_Distances.Enabled = false;         // disable over checked to indicate its not a user thing
             checkBox_Distances.Checked = EDDiscoveryForm.EDDConfig.UseDistances;
             checkBox_Distances.Enabled = true;
@@ -97,7 +80,8 @@ namespace EDDiscovery2
                 radioButtonCentreHome.Checked = true;
             }
 
-            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
+            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.ListOfCommanders;
+            dataGridViewCommanders.AutoGenerateColumns = false;
 
             panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
 
@@ -106,9 +90,6 @@ namespace EDDiscovery2
 
         public void SaveSettings()
         {
-            EDDConfig.Instance.JournalDirAutoMode = radioButton_Auto.Checked;
-            EDDConfig.Instance.JournalDir = textBoxNetLogDir.Text;
-
             SQLiteDBClass.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
             double zoom = 1;
             SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.TryParse(textBoxDefaultZoom.Text, out zoom) ? zoom : 1.0);
@@ -120,12 +101,6 @@ namespace EDDiscovery2
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
             EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
             EDDiscoveryForm.EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
-
-            BindingList<EDCommander> edcommanders = (BindingList<EDCommander>)dataGridViewCommanders.DataSource;
-            EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
-            dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
-            dataGridViewCommanders.Update();
         }
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -138,21 +113,52 @@ namespace EDDiscovery2
             }
         }
 
+        public void UpdateCommandersListBox()
+        {
+            dataGridViewCommanders.DataSource = null;
+            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.ListOfCommanders;
+            dataGridViewCommanders.Update();
+        }
 
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
-            EDCommander cmdr = EDDiscoveryForm.EDDConfig.GetNewCommander();
-            //dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
-            dataGridViewCommanders.DataSource = EDDiscoveryForm.EDDConfig.listCommanders;
-            dataGridViewCommanders.Update();
+            EDDiscoveryForm.EDDConfig.GetNewCommander();
+            UpdateCommandersListBox();
             _discoveryForm.TravelControl.LoadCommandersListBox();
         }
 
         private void dataGridViewCommanders_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            BindingList<EDCommander> edcommanders = (BindingList<EDCommander>)dataGridViewCommanders.DataSource;
-            EDDiscoveryForm.EDDConfig.StoreCommanders(edcommanders);
+            List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+            EDDiscoveryForm.EDDConfig.UpdateCommanders(edcommanders);
             _discoveryForm.TravelControl.LoadCommandersListBox();
+        }
+
+        private void btnDeleteCommander_Click(object sender, EventArgs e)
+        {
+            var cells = dataGridViewCommanders.SelectedCells;
+
+            HashSet<int> rowindexes = new HashSet<int>();
+
+            foreach (var cell in cells.OfType<DataGridViewCell>())
+            {
+                if (!rowindexes.Contains(cell.RowIndex))
+                {
+                    rowindexes.Add(cell.RowIndex);
+                }
+            }
+
+            if (rowindexes.Count == 1)
+            {
+                var row = dataGridViewCommanders.Rows[rowindexes.Single()].DataBoundItem as EDCommander;
+                var result = MessageBox.Show("Do you wish to delete commander " + row.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (result == DialogResult.Yes)
+                {
+                    EDDConfig.Instance.DeleteCommander(row);
+                    UpdateCommandersListBox();
+                    _discoveryForm.TravelControl.LoadCommandersListBox();
+                }
+            }
         }
 
         public void panel_defaultmapcolor_Click(object sender, EventArgs e)
@@ -267,76 +273,6 @@ namespace EDDiscovery2
             }
         }
 
-        private void btnDeleteCommander_Click(object sender, EventArgs e)
-        {
-            var cells = dataGridViewCommanders.SelectedCells;
 
-            HashSet<int> rowindexes = new HashSet<int>();
-
-            foreach (var cell in cells.OfType<DataGridViewCell>())
-            {
-                if (!rowindexes.Contains(cell.RowIndex))
-                {
-                    rowindexes.Add(cell.RowIndex);
-                }
-            }
-
-            if (rowindexes.Count == 1)
-            {
-                var row = dataGridViewCommanders.Rows[rowindexes.Single()].DataBoundItem as EDCommander;
-                var result = MessageBox.Show("Do you wish to delete commander " + row.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (result == DialogResult.Yes)
-                {
-                    EDDConfig.Instance.DeleteCommander(row);
-                    //dataGridViewCommanders.DataSource = null;           // changing data source ends up, after this, screwing the column sizing..
-                    dataGridViewCommanders.DataSource = EDDConfig.Instance.listCommanders;
-                    dataGridViewCommanders.Update();
-                    _discoveryForm.TravelControl.LoadCommandersListBox();
-
-                }
-            }
-        }
-
-        private void button_Browse_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-
-            DialogResult dlgResult = dirdlg.ShowDialog();
-
-            if (dlgResult == DialogResult.OK && EDDConfig.Instance.JournalDir != dirdlg.SelectedPath)
-                SetManualJournal(dirdlg.SelectedPath);
-        }
-
-        private void radioButton_Auto_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton_Auto.Enabled)
-            {
-                EDDConfig.Instance.JournalDirAutoMode = radioButton_Auto.Checked;
-                _discoveryForm.ChangedJournalSettings();
-                System.Diagnostics.Trace.WriteLine("Journal folder " + EDDiscovery.EliteDangerous.EDJournalClass.GetJournalDir());
-            }
-        }
-
-        private void textBoxNetLogDir_Validated(object sender, EventArgs e)
-        {
-            if (textBoxNetLogDir.Enabled && EDDConfig.Instance.JournalDir != textBoxNetLogDir.Text)
-            {
-                SetManualJournal(textBoxNetLogDir.Text);
-            }
-        }
-
-        private void SetManualJournal(string s)
-        {
-            EDDConfig.Instance.JournalDir = textBoxNetLogDir.Text = s;
-            radioButton_Manual.Checked = true;      // no trigger
-
-            if (radioButton_Auto.Checked)
-                radioButton_Auto.Checked = false;        // triggers off the check function Checked change
-            else
-            {
-                _discoveryForm.ChangedJournalSettings();
-                System.Diagnostics.Trace.WriteLine("Journal folder " + EDDiscovery.EliteDangerous.EDJournalClass.GetJournalDir());
-            }
-        }
     }
 }
