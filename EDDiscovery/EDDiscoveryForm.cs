@@ -1565,7 +1565,7 @@ namespace EDDiscovery
             }
             else
             {
-                //TBDRefreshHistory(VisitedSystemsClass.GetAll(DisplayedCommander));
+                TransferToFrontEnd();
             }
         }
 
